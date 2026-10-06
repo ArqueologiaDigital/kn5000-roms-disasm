@@ -1123,6 +1123,7 @@ SqTrAs_CondCheck:
 	pop xhl
 	pop xde
 	jr SqSngName_ReturnZero
+SqSngSelTtlFunc_Case3:
 	push	xde
 	push	xhl
 	push	xix
@@ -1163,6 +1164,7 @@ SQTR_DISPATCH_TABLE_1:
 	pop xhl
 	pop xde
 	jr SqTrAs_ReturnZero
+SqSngNameTtlFunc_Case3:
 	push xde
 	push xhl
 	push xix
@@ -1362,6 +1364,7 @@ SqTrAsPsTtl_Dispatch:
 	ld	xde, 0:i3
 	call	ApPostEvent
 	jr SqTrAsPsTtl_ReturnZero
+SqTrAsPsTtlFunc_Case3:
 	push xde
 	push xhl
 	push xix
@@ -1452,6 +1455,7 @@ SqTrAsPsTtl_CaseF_Skip:
 	pop	xix
 	pop	xhl
 	pop	xde
+SqTrAsPsTtl_CaseF_Case0:
 	ret
 
 SqMdlyPlyTtlFunc:
@@ -1480,6 +1484,7 @@ SqMdlyPlyTtl_Dispatch:
 	pop xhl
 	pop xde
 	jr SqMdlyPly_ReturnZero
+SqMdlyPlyTtlFunc_Case3:
 	push xde
 	push xhl
 	push xix
@@ -1559,6 +1564,7 @@ DkMdlyPlyTtl_Dispatch:
 	pop xhl
 	pop xde
 	jr DkMdlyPly_ReturnZero
+DkMdlyPlyTtlFunc_Case3:
 	push xde
 	push xhl
 	push xix
@@ -1707,10 +1713,12 @@ DisplayMode_BatchEventSend:
 	ld	xbc, EVT_SET_PARAM
 	ld	xde, 0:i3
 	jrl	DisplayMode_DispatchEvents_Join
+DisplayMode_DispatchEvents_Case115:
 	ld	xwa, 0x73000c
 	ld	xbc, EVT_SET_PARAM
 	ld	xde, 0:i3
 	jrl	DisplayMode_DispatchEvents_Join
+DisplayMode_DispatchEvents_Case112:
 	ld	xwa, 0x700007
 	ld	xbc, EVT_SET_PARAM
 	ld	xde, 0:i3
@@ -1723,6 +1731,7 @@ DisplayMode_BatchEventSend:
 	ld	xbc, EVT_SET_PARAM
 	ld	xde, 0:i3
 	jr	DisplayMode_DispatchEvents_Join
+DisplayMode_DispatchEvents_Case116:
 	ld	xwa, 0x74000a
 	ld	xbc, EVT_SET_PARAM
 	ld	xde, 0:i3
@@ -1735,6 +1744,7 @@ DisplayMode_BatchEventSend:
 	ld	xbc, EVT_SET_PARAM
 	ld	xde, 0:i3
 	jr	DisplayMode_DispatchEvents_Join
+DisplayMode_DispatchEvents_Case113:
 	ld	xwa, 0x710007
 	ld	xbc, EVT_SET_PARAM
 	ld	xde, 0:i3
@@ -1743,6 +1753,7 @@ DisplayMode_BatchEventSend:
 	ld	xbc, EVT_SET_PARAM
 	ld	xde, 0:i3
 	jr	DisplayMode_DispatchEvents_Join
+DisplayMode_DispatchEvents_Case117:
 	ld	xwa, 0x750009
 	ld	xbc, EVT_SET_PARAM
 	ld	xde, 0:i3
@@ -1752,6 +1763,7 @@ DisplayMode_BatchEventSend:
 	ld	xde, 0:i3
 DisplayMode_DispatchEvents_Join:
 	call	ApPostEvent
+DisplayMode_DispatchEvents_Case114:
 	ret
 
 DisplayMode_RefreshState:
@@ -1790,6 +1802,7 @@ DpMdlyDocTtl_Dispatch:
 	pop	xhl
 	pop xde
 	jr DpMdlyDoc_ReturnZero
+DpMdlyDocTtlFunc_Case3:
 	push xde
 	push xhl
 	push xix
@@ -1883,6 +1896,7 @@ DpMdlyPdTtl_Dispatch:
 	pop	xhl
 	pop xde
 	jr DpMdlyPd_ReturnZero
+DpMdlyPdTtlFunc_Case3:
 	push xde
 	push xhl
 	push xix
@@ -1980,6 +1994,7 @@ DpMdlySmfTtlFunc_Skip:
 	pop xhl
 	pop xde
 	jr DpMdlySmf_ReturnZero
+DpMdlySmfTtlFunc_Case3:
 	push xde
 	push xhl
 	push xix
@@ -2095,6 +2110,7 @@ DpMdlySmfLyrTtlFunc_Join:
 	ld	xbc, EVT_LYRICS_ALL_DRAW
 	ld	xde, 0:i3
 	jr	t, DpMdlySmfLyrTtlFunc_Join2
+DpMdlySmfLyrTtlFunc_Case3:
 	push xde
 	push xhl
 	push xix
@@ -2106,6 +2122,7 @@ DpMdlySmfLyrTtlFunc_Join:
 	pop xde
 	calr	SqTrAsPsTtl_CaseF
 	jr DpMdlySmfLyr_ReturnZero
+DpMdlySmfLyrTtlFunc_Case5:
 	ld xwa, 7274534
 	ld	xbc, EVT_LYRICS_ALL_DRAW
 	ld	xde, 0:i3
@@ -2190,6 +2207,7 @@ NameGetFuncCall_Dispatch:
 	ld	xbc, EVT_CUR_SONG_NAME
 	ld	xde, 0:i3
 	jrl	NameGetFuncCall_Join2
+NameGetFuncCall_OnGetDiskFileName:
 	call	GetCurrentFileIndex
 	ld	wa, hl
 	call	GetFileEntryPtr
@@ -2208,6 +2226,7 @@ NameGetFuncCall_Dispatch:
 	ld	xbc, EVT_DISK_FILE_NAME
 	ld	xde, 0:i3
 	jrl	NameGetFuncCall_Join2
+NameGetFuncCall_OnGetSmfFileName:
 	call	GetFirstPageBase
 	ld	wa, hl
 	call	GetRecordPtrForFile
@@ -2228,6 +2247,7 @@ NameGetFuncCall_Dispatch:
 	ld	xbc, EVT_SMF_FILE_NAME
 	ld	xde, 0:i3
 	jrl	NameGetFuncCall_Join2
+NameGetFuncCall_OnGetSmfSongName:
 	pushw	20
 	call	GetFirstPageBase
 	ld	wa, hl
@@ -2253,6 +2273,7 @@ NameGetFuncCall_Skip2:
 	ld	xbc, EVT_SMF_SONG_NAME
 	ld	xde, 0:i3
 	jrl	NameGetFuncCall_Join2
+NameGetFuncCall_OnGetDocFileNo:
 	call	FileIO_GetCurrentFileIndex_Alt
 	inc	1, hl
 	pushw	hl
@@ -2267,6 +2288,7 @@ NameGetFuncCall_Skip2:
 	ld	xbc, EVT_DOC_FILE_NO
 	ld	xde, 0:i3
 	jrl	NameGetFuncCall_Join2
+NameGetFuncCall_OnGetDocSongName:
 	pushw	12
 	call	FileIO_GetCurrentFileIndex_Alt
 	ld	wa, hl
@@ -2292,6 +2314,7 @@ NameGetFuncCall_Skip3:
 	ld	xbc, EVT_DOC_SONG_NAME
 	ld	xde, 0:i3
 	jrl	NameGetFuncCall_Join2
+NameGetFuncCall_OnGetPdFileNo:
 	call	GetCurrentFileIndexAlt
 	inc	1, hl
 	pushw	hl
@@ -2306,6 +2329,7 @@ NameGetFuncCall_Skip3:
 	ld	xbc, EVT_PD_FILE_NO
 	ld	xde, 0:i3
 	jrl	NameGetFuncCall_Join2
+NameGetFuncCall_OnGetPdSongName:
 	call	GetCurrentFileIndexAlt
 	ld	wa, hl
 	call	GetFileRecordPtr
@@ -2330,6 +2354,7 @@ NameGetFuncCall_Skip4:
 	ld	xbc, EVT_PD_SONG_NAME
 	ld	xde, 0:i3
 	jrl	NameGetFuncCall_Join2
+NameGetFuncCall_OnGetLyricsSongName:
 	call	GetFirstPageBase
 	ld	wa, hl
 	call	GetFileEntryByIndex
@@ -2360,6 +2385,7 @@ NameGetFuncCall_Skip5:
 	ld	xbc, EVT_SONG_WRITE
 	ld	xde, 0:i3
 	jr	NameGetFuncCall_Join2
+NameGetFuncCall_OnGetComposerName:
 	call	GetFirstPageBase
 	ld	wa, hl
 	call	GetFileEntryByIndex
@@ -2874,6 +2900,7 @@ DpDocTtl_Dispatch:
 	calr	DisplayMode_DispatchEvents
 	calr	CDlikeSwTtl_ShowDocTitle
 	jrl	DpDocTtl_ReturnZero
+DpDocTtlFunc_Case3:
 	call	SeqState_GetFlags
 	bit	0, hl
 	jr	z, DpDocTtlFunc_Skip
@@ -2939,8 +2966,10 @@ DpDoc_CaseE:
 DpDoc_NavigateBackward:
 	calr CDlikeSwTtl_DocNavDispatch
 	jr DpDocTtl_ReturnZero
+DpDocTtlFunc_Switch2_Case138:
 	ldw wa, 0xa5
 	jr DpDoc_CaseF
+DpDocTtlFunc_Switch2_Case137:
 	ldw wa, 0xd6
 
 ; DpDocTtl case F
@@ -3001,6 +3030,7 @@ DpPdTtl_Dispatch:
 	calr	DisplayMode_DispatchEvents
 	calr	CDlikeSwTtl_ShowPdTitle
 	jrl	DpPdTtl_ReturnZero
+DpPdTtlFunc_Case3:
 	call	SeqState_GetFlags
 	bit	0, hl
 	jr	z, DpPdTtlFunc_Skip
@@ -3066,8 +3096,10 @@ DpPd_CaseE:
 DpPd_NavigateBackward:
 	calr CDlikeSwTtl_PdNavDispatch
 	jr DpPdTtl_ReturnZero
+DpPdTtlFunc_Switch2_Case138:
 	ldw wa, 0xa5
 	jr DpPd_CaseF
+DpPdTtlFunc_Switch2_Case137:
 	ldw wa, 0xd6
 
 ; DpPdTtl case F
@@ -3131,6 +3163,7 @@ DpSmfTtl_Dispatch:
 	calr	DisplayMode_DispatchEvents
 	calr	CDlikeSwTtl_ShowSongTitle
 	jrl	DpSmfTtl_ReturnZero
+DpSmfTtlFunc_Case3:
 	cp	(CURRENT_TITLE:16), 114
 	jrl	z, DpSmfTtl_ReturnZero
 	call	SeqState_GetFlags
@@ -3202,8 +3235,10 @@ DpSmf_CaseE:
 DpSmf_NavigateBackward:
 	calr CDlikeSwTtl_SongNavDispatch
 	jr DpSmfTtl_ReturnZero
+DpSmfTtlFunc_Switch2_Case138:
 	ldw wa, 0xa5
 	jr DpSmf_CaseF
+DpSmfTtlFunc_Switch2_Case137:
 	ldw wa, 0xd6
 
 ; DpSmfTtl case F
@@ -3263,8 +3298,10 @@ DpSmfLyrTtl_Dispatch:
 	ld	xbc, EVT_LYRICS_ALL_DRAW
 	ld	xde, 0:i3
 	jr	DpSmfLyrTtlFunc_Join
+DpSmfLyrTtlFunc_Case3:
 	calr	SqTrAsPsTtl_CaseF
 	jrl	SeqStep_ReturnZero
+DpSmfLyrTtlFunc_Case5:
 	ld	xwa, 0x6f0026
 	ld	xbc, EVT_LYRICS_ALL_DRAW
 	ld	xde, 0:i3
@@ -3412,6 +3449,7 @@ SqTrSelTtl_Dispatch:
 	pop xhl
 	pop xde
 	jr SqTrSelTtl_ReturnZero
+SqTrSelTtlFunc_Case3:
 	push	xde
 	push	xhl
 	push	xix

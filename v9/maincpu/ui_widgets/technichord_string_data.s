@@ -1249,7 +1249,16 @@ IvSdpart_GetText_Data:	.incbin "includes/generated/naka_technichord_strings.bin"
 ; [nakarest] Readers: source references IvSdpartProc (ui/drawbar_panel_ui.s: `add xwa,
 ; [nakarest] IvSdpartProc_Data`).
 IvSdpartProc_Data:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0xF602, 0x14
+	.short	IvSdpartProc_Evt1C00017 - IvSdpart_Init
+	.short	IvSdpartProc_Evt1C00017 - IvSdpart_Init
+	.short	IvSdpartProc_Evt1C00017 - IvSdpart_Init
+	.short	IvSdpartProc_Evt1C00017 - IvSdpart_Init
+	.short	IvSdpart_ForwardToBase - IvSdpart_Init
+	.short	IvSdpartProc_Evt1C0001C - IvSdpart_Init
+	.short	IvSdpart_ForwardToBase - IvSdpart_Init
+	.short	IvSdpart_ForwardToBase - IvSdpart_Init
+	.short	IvSdpart_ForwardToBase - IvSdpart_Init
+	.short	IvSdpartProc_Evt1C00020 - IvSdpart_Init
 ; [nakarest] naka_technichord_strings+0xf616  +0xf616..+0xf63e (0xe95564, 40 B)
 ; [nakarest] Text (40 B at 0xe95564), first string " ------ "; no registered NAKA table points
 ; [nakarest] into it; reached through source references SdpartUpdatePartUI_Confirm
@@ -3583,7 +3592,19 @@ AcWelcomScreen_Activate_Data:
 ; Typed as int16_t WelcomeScript_OpJumpOffsets[13].
 ; -----------------------------------------------------------------------------
 AcWelcomScreen_Select_Data:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x191B4, 0x1A
+	.short	AcWelcomScreen_RenderBytecode - AcWelcomScreen_RenderBytecode
+	.short	AcWelcomScreen_Select_NextStep - AcWelcomScreen_RenderBytecode
+	.short	AcWelcomScreen_Select_Case2 - AcWelcomScreen_RenderBytecode
+	.short	AcWelcomScreen_Select_Case3 - AcWelcomScreen_RenderBytecode
+	.short	AcWelcomScreen_Select_Case4 - AcWelcomScreen_RenderBytecode
+	.short	AcWelcomScreen_Select_Case5 - AcWelcomScreen_RenderBytecode
+	.short	AcWelcomScreen_Select_Case6 - AcWelcomScreen_RenderBytecode
+	.short	AcWelcomScreen_Select_Case7 - AcWelcomScreen_RenderBytecode
+	.short	AcWelcomScreen_Select_Case8 - AcWelcomScreen_RenderBytecode
+	.short	AcWelcomScreen_Select_Case9 - AcWelcomScreen_RenderBytecode
+	.short	AcWelcomScreen_Select_Case10 - AcWelcomScreen_RenderBytecode
+	.short	AcWelcomScreen_Select_Case11 - AcWelcomScreen_RenderBytecode
+	.short	AcWelcomScreen_Select_Case9 - AcWelcomScreen_RenderBytecode
 ; -----------------------------------------------------------------------------
 ; [nakarest_retype] PsMixer_ControlProcTable
 ; PsMixer_ControlProcTable  --  11 x u32 code addresses
@@ -4430,7 +4451,16 @@ PsMixer_ControlCommon_Str_RIGHT_1_Sound_Name_xxxxx:	.incbin "includes/generated/
 ; [nakarest] Readers: source references PsMixerControlProc (ui/drawbar_panel_ui.s: `add xbc,
 ; [nakarest] PsMixerControlProc_Data`).
 PsMixerControlProc_Data:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1965A, 0x14
+	.short	PsMixer_ControlCase8 - PsMixer_ControlHandler
+	.short	PsMixer_ControlCase8 - PsMixer_ControlHandler
+	.short	PsMixer_ControlCase8 - PsMixer_ControlHandler
+	.short	PsMixer_ControlCase8 - PsMixer_ControlHandler
+	.short	PsMixer_ControlReturn - PsMixer_ControlHandler
+	.short	PsMixerControlProc_Evt1C0001C - PsMixer_ControlHandler
+	.short	PsMixer_ControlReturn - PsMixer_ControlHandler
+	.short	PsMixerControlProc_Evt1C0001E - PsMixer_ControlHandler
+	.short	PsMixer_ControlReturn - PsMixer_ControlHandler
+	.short	PsMixerControlProc_Evt1C00020 - PsMixer_ControlHandler
 ; [nakarest] naka_technichord_strings+0x1966e  +0x1966e..+0x19722 (0xe9f5bc, 180 B)
 ; [nakarest] purpose not established: layout of 180 B at 0xe9f5bc not derived; readers below
 ; [nakarest] Readers: source references PartMixer_Init (ui/drawbar_panel_ui.s: `ld xwa,
@@ -4752,13 +4782,23 @@ DrawbarBitmapHelper_Data_2:
 ; [nakarest] Readers: source references DemoMenu_WorkspaceFunc (ui/drawbar_panel_ui.s: `lda xix,
 ; [nakarest] (DemoMenu_WorkspaceFunc_Data:24)`).
 DemoMenu_WorkspaceFunc_Data:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x19A36, 0xC
+	.short	DemoMenu_WorkspaceDispatch - DemoMenu_WorkspaceDispatch
+	.short	DemoMenu_WorkspaceFunc_Case10 - DemoMenu_WorkspaceDispatch
+	.short	DemoMenu_WorkspaceFunc_Case11 - DemoMenu_WorkspaceDispatch
+	.short	DemoMenu_WorkspaceFunc_Case12 - DemoMenu_WorkspaceDispatch
+	.short	DemoMenu_WorkspaceFunc_Case13 - DemoMenu_WorkspaceDispatch
+	.short	DemoMenu_WorkspaceFunc_Case14 - DemoMenu_WorkspaceDispatch
 ; [nakarest] naka_technichord_strings+0x19a42  +0x19a42..+0x19a64 (0xe9f990, 34 B)
 ; [nakarest] purpose not established: layout of 34 B at 0xe9f990 not derived; readers below
 ; [nakarest] Readers: source references DemoMenu_DescriptorFunc (ui/drawbar_panel_ui.s: `lda
 ; [nakarest] xix, (DemoMenu_DescriptorFunc_Data:24)`).
 DemoMenu_DescriptorFunc_Data:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x19A42, 0xC
+	.short	DemoDesc_DispatchTable - DemoDesc_DispatchTable
+	.short	DemoMenu_DescriptorFunc_Case10 - DemoDesc_DispatchTable
+	.short	DemoMenu_DescriptorFunc_Case11 - DemoDesc_DispatchTable
+	.short	DemoMenu_DescriptorFunc_Case12 - DemoDesc_DispatchTable
+	.short	DemoMenu_DescriptorFunc_Case13 - DemoDesc_DispatchTable
+	.short	DemoMenu_DescriptorFunc_Case14 - DemoDesc_DispatchTable
 PsVari_GetText_Str_EditSw_Fmtd:	.incbin "includes/generated/naka_technichord_strings.bin", 0x19A4E, 0xA	; "EditSw%d"
 Demofeat1_GetText_Str_Fdm1:	.incbin "includes/generated/naka_technichord_strings.bin", 0x19A58, 0x6	; "Fdm1"
 Demofeat2_GetText_Str_Fdm2:	.incbin "includes/generated/naka_technichord_strings.bin", 0x19A5E, 0x6	; "Fdm2"
@@ -4767,7 +4807,17 @@ Demofeat2_GetText_Str_Fdm2:	.incbin "includes/generated/naka_technichord_strings
 ; [nakarest] Readers: source references AcPresentationControlProc (ui/drawbar_panel_ui.s: `add
 ; [nakarest] xbc, AcPresentationControlProc_Data`).
 AcPresentationControlProc_Data:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x19A64, 0x16
+	.short	AcPresCtrl_EventDispatch - AcPresCtrl_EventDispatch
+	.short	AcPresCtrl_DefaultCase - AcPresCtrl_EventDispatch
+	.short	AcPresCtrl_DefaultCase - AcPresCtrl_EventDispatch
+	.short	AcPresCtrl_DefaultCase - AcPresCtrl_EventDispatch
+	.short	AcPresentationControlProc_Evt1C00006 - AcPresCtrl_EventDispatch
+	.short	AcPresentationControlProc_Evt1C00007 - AcPresCtrl_EventDispatch
+	.short	AcPresentationControlProc_Evt1C00007 - AcPresCtrl_EventDispatch
+	.short	AcPresentationControlProc_Evt1C00007 - AcPresCtrl_EventDispatch
+	.short	AcPresCtrl_DefaultCase - AcPresCtrl_EventDispatch
+	.short	AcPresent_ReturnZeroJmp - AcPresCtrl_EventDispatch
+	.short	AcPresent_ReturnZeroJmp - AcPresCtrl_EventDispatch
 ; [nakarest] DemoDisk_LangPromptTable  +0x19a7a..+0x19a92 (0xe9f9c8, 24 B)
 ; [nakarest] purpose not established: layout of 24 B at 0xe9f9c8 not derived; readers below
 ; [nakarest] Readers: source references FDemoText (demo/fdemotext_routines.s: `lda xhl,
@@ -4862,7 +4912,14 @@ FDemoText_ByteData_VoiceProbeC_Data_2:
 ; [nakarest] SystemConfig_PointerTable`), VoiceInit_Dispatch (boot/screen_group_dispatch.s: `ld
 ; [nakarest] xbc, SystemConfig_PointerTable`).
 FDemoText_ByteData_VoiceProbeC_Data_3:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x19D86, 0x1E
+	.short	FDemoText_ByteData_VoiceProbeC_Code - FDemoText_ByteData_VoiceProbeC_Code
+	.short	FDemoText_ByteData_VoiceProbeC_Code - FDemoText_ByteData_VoiceProbeC_Code
+	.short	FDemoText_ByteData_VoiceProbeC_Case3 - FDemoText_ByteData_VoiceProbeC_Code
+	.short	FDemoText_ByteData_VoiceProbeC_Case3 - FDemoText_ByteData_VoiceProbeC_Code
+	.short	FDemoText_ByteData_VoiceProbeC_Case3 - FDemoText_ByteData_VoiceProbeC_Code
+	.short	FDemoText_ByteData_VoiceProbeC_Case3 - FDemoText_ByteData_VoiceProbeC_Code
+	.short	FDemoText_ByteData_VoiceProbeC_Case7 - FDemoText_ByteData_VoiceProbeC_Code
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x19d94, 0x10
 ; [nakarest] naka_technichord_strings+0x19da4  +0x19da4..+0x19da8 (0xe9fcf2, 4 B)
 ; [nakarest] purpose not established: layout of 4 B at 0xe9fcf2 not derived; readers below
 ; [nakarest] Readers: source references FDemoText_ProcessMarkup_LookupTag
@@ -5165,13 +5222,29 @@ FDemo_DisplayResourceData_Str_rb:	.incbin "includes/generated/naka_technichord_s
 ; [nakarest] Readers: source references MainPreControl (demo/file_demo_proc.s: `add xbc,
 ; [nakarest] MainPreControl_Data`).
 MainPreControl_Data:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A12C, 0x16
+	.short	FDemo_DisplayCtrlJumpHandler - MainPreControl_Dispatch
+	.short	MainPreControl_OnReadActionReq - MainPreControl_Dispatch
+	.short	MainPreControl_OnReadSongReq - MainPreControl_Dispatch
+	.short	MainPreControl_OnStartPresentation - MainPreControl_Dispatch
+	.short	MainPreControl_ReturnNull - MainPreControl_Dispatch
+	.short	MainPreControl_ReturnNull - MainPreControl_Dispatch
+	.short	MainPreControl_ReturnNull - MainPreControl_Dispatch
+	.short	MainPreControl_ReturnNull - MainPreControl_Dispatch
+	.short	MainPreControl_OnExistPresentation - MainPreControl_Dispatch
+	.short	MainPreControl_Dispatch - MainPreControl_Dispatch
+	.short	MainPreControl_OnExitPresentation - MainPreControl_Dispatch
 ; [nakarest] naka_technichord_strings+0x1a142  +0x1a142..+0x1a150 (0xea0090, 14 B)
 ; [nakarest] purpose not established: layout of 14 B at 0xea0090 not derived; readers below
 ; [nakarest] Readers: source references ApPreControl (demo/file_demo_proc.s: `add xwa,
 ; [nakarest] ApPreControl_Data`).
 ApPreControl_Data:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A142, 0xE
+	.short	ApPreControl_OnReadPresentation - Seq_PostMelodyEvent
+	.short	ApPreControl_OnReadAction - Seq_PostMelodyEvent
+	.short	ApPreControl_OnReadSong - Seq_PostMelodyEvent
+	.short	ApPreControl_ReturnNull - Seq_PostMelodyEvent
+	.short	ApPreControl_OnStartSong - Seq_PostMelodyEvent
+	.short	ApPreControl_ReturnNull - Seq_PostMelodyEvent
+	.short	Seq_StartWithFullInit - Seq_PostMelodyEvent
 ; [nakarest] naka_technichord_strings+0x1a150  +0x1a150..+0x1a15a (0xea009e, 10 B)
 ; [nakarest] Text (10 B at 0xea009e), first string "FEATURE "; no registered NAKA table points
 ; [nakarest] into it; reached through source references FDemo_LoadRegsAndPostEvent
@@ -6219,7 +6292,12 @@ SmfFN_UpdateFilenameField_Str_MID:	.incbin "includes/generated/naka_technichord_
 ; [nakarest] Readers: source references FmmSmfFileNameFunc (file_io/smf_operations.s: `add xde,
 ; [nakarest] FmmSmfFileNameFunc_Data`).
 FmmSmfFileNameFunc_Data:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A850, 0xC
+	.short	FmmSmfFileNameFunc_OnSetSelectedFileNumber - SmfFN_JumpTable
+	.short	FmmSmfFileNameFunc_OnGetSelectedFileNumber - SmfFN_JumpTable
+	.short	SmfFN_JumpTable - SmfFN_JumpTable
+	.short	FmmSmfFileNameFunc_OnOnWindow - SmfFN_JumpTable
+	.short	FmmSmfFileNameFunc_OnOffWindow - SmfFN_JumpTable
+	.short	FmmSmfFileNameFunc_OnWhichWindow - SmfFN_JumpTable
 ; [nakarest] naka_technichord_strings+0x1a85c  +0x1a85c..+0x1a860 (0xea07aa, 4 B)
 ; [nakarest] purpose not established: layout of 4 B at 0xea07aa not derived; readers below
 ; [nakarest] Readers: source references WPScan_CheckAvail (file_io/wallpaper.s: `ld xbc,

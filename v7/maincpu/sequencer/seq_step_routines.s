@@ -71,8 +71,10 @@ SeqStep_NoteCases_Join:
 	ld	a, (9688:16)
 	extz	wa
 	jr	SeqStep_NoteCases_Join
+SeqStep_NoteReadEvent_Case132:
 	ldib_erp	249, 0
 	jr	SeqStep_NoteConsumeInit
+SeqStep_NoteReadEvent_Case133:	; cases 133, 134
 	ldib_erp	249, 1
 	jr	SeqStep_NoteConsumeInit
 
@@ -254,8 +256,10 @@ SeqStep_EventPosAdvance:
 	cp (SEQ_ERROR_CODE:16), 0
 	jr z, SeqStep_EventPosUpdate
 	jrl SeqStep_EventExit
+SeqStep_EventPosConsumeAdvance_Case132:
 	ldib_erp 0xfa, 0
 	jr SeqStep_EventPosSetNote
+SeqStep_EventPosConsumeAdvance_Case133:	; cases 133, 134
 	ldib_erp 0xfa, 1
 	jr SeqStep_EventPosSetNote
 
@@ -442,10 +446,13 @@ SeqStep_DeleteEvent:
 	jrl nz, SeqStep_DeletePopReturn
 	bit 0, (0x287b:16)
 	jrl nz, SeqStep_DeleteDone
+SeqStep_DeleteDone_Case130:
 	calr SeqStep_InsertEvent
 	jrl SeqStep_DeleteExitRestore
+SeqStep_DeleteDone_Case132:
 	ldib_erp 0xfa, 0
 	jr SeqStep_DeleteConsumeInit
+SeqStep_DeleteDone_Case133:	; cases 133, 134
 	ldib_erp 0xfa, 1
 	jr SeqStep_DeleteConsumeInit
 

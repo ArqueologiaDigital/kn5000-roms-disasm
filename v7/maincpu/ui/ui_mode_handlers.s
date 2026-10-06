@@ -2906,6 +2906,7 @@ MasterSetup_ScrollUp_Search_Done:
 	ld	xbc, EVT_INDEXSW_DOWN
 	ld	xde, (xsp+66)
 	jrl	SeqFile_CallApFunc
+AcMstStyleAlp_Boundary_OnIndexswUp:	; cases 29360151, 29360153
 	ld	xwa, (xsp+74)
 	ld	xbc, (xsp+70)
 	ld	xde, (xsp+66)
@@ -3114,6 +3115,7 @@ MasterSetup_FallbackEvent:
 	call	SetDialDown
 	ld	wa, 1:i3
 	jrl	MasterSetup_SetDialEnable
+AcMstStyleAlp_Boundary_OnIndexswDown:	; cases 29360152, 29360154
 	ld	xwa, (xsp+74)
 	ld	xbc, (xsp+70)
 	ld	xde, (xsp+66)

@@ -371,12 +371,21 @@ TitleFunc_LifecycleTable_Data_6:
 	.byte 0x0a
 	.asciz "Debug Test"
 TitleFunc_LifecycleDispatch_Data:
-	.byte 0x00, 0x00
-	.byte 0x0e, 0x00, 0x30, 0x00, 0x58, 0x00, 0x65, 0x00
-	.byte	0x72, 0x00, 0x7f, 0x00, 0x82, 0x00
-TestTitleFunc_Data:	.byte	0x00, 0x00
-	.byte 0x0b, 0x00, 0x21, 0x00, 0x16, 0x00, 0x2c, 0x00
-	.byte 0x37, 0x00
+	.short	TitleFunc_LifecycleTable - TitleFunc_LifecycleTable
+	.short	TitleFunc_LifecycleDispatch_Case1 - TitleFunc_LifecycleTable
+	.short	TitleFunc_LifecycleDispatch_Case2 - TitleFunc_LifecycleTable
+	.short	TitleFunc_LifecycleDispatch_Case3 - TitleFunc_LifecycleTable
+	.short	TitleFunc_LifecycleDispatch_Case4 - TitleFunc_LifecycleTable
+	.short	TitleFunc_LifecycleDispatch_Case5 - TitleFunc_LifecycleTable
+	.short	TitleFunc_LifecycleDispatch_Case6 - TitleFunc_LifecycleTable
+	.short	TitleFunc_Return - TitleFunc_LifecycleTable
+TestTitleFunc_Data:
+	.short	TitleFunc_ActionDispatch - TitleFunc_ActionDispatch
+	.short	TestTitleFunc_Case3 - TitleFunc_ActionDispatch
+	.short	TestTitleFunc_Case4 - TitleFunc_ActionDispatch
+	.short	TestTitleFunc_Case5 - TitleFunc_ActionDispatch
+	.short	TestTitleFunc_Case6 - TitleFunc_ActionDispatch
+	.short	TestTitleFunc_Case7 - TitleFunc_ActionDispatch
 ListDir2_Entry_Str_A_HAMA_LSW:
 	aligned_string "A:\\HAMA\\*.LSW"
 RunTestCounters_Display_Data:
@@ -435,7 +444,13 @@ FDListDirectory_Str_Star_Dot_Star:	.byte	0x2a, 0x2e, 0x2a, 0x00
 FDTestDlg_FormatDisplay_Str_File_Name_20_charact:
 	aligned_string "File Name 20 charact"
 FDTestDialogProc_Data:
-	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x33, 0x00, 0x00, 0x00, 0x00, 0x00
+	.short	FDTestDlg_DefaultCase - FDTestDlg_DefaultCase
+	.short	FDTestDlg_DefaultCase - FDTestDlg_DefaultCase
+	.short	FDTestDlg_DefaultCase - FDTestDlg_DefaultCase
+	.short	FDTestDlg_DefaultCase - FDTestDlg_DefaultCase
+	.short	FDTestDlg_Unhandled - FDTestDlg_DefaultCase
+	.short	FDTestDlg_DefaultCase - FDTestDlg_DefaultCase
+	.short	FDTestDlg_DefaultCase - FDTestDlg_DefaultCase
 RegHamaTitle1_Entry_Str_TEST_HAMA:
 	aligned_string "TEST_HAMA"
 RegHamaTitle2_Entry_Str_TESTHAMA2HD:

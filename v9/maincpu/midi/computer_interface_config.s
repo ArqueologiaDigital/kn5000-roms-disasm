@@ -300,16 +300,20 @@ SetupLoadOptionJumpTable:
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	MdSetupLoad_Epilogue
+MdSetupLoadFunc_OnGetLargeStep:	; cases 31457342, 31457343
 	ld	xhl, 2:i3
 	jr	MdSetupLoad_Epilogue
+MdSetupLoadFunc_OnGetMax:
 	ld	xhl, 3:i3
 	jr	MdSetupLoad_Epilogue
 
 SetupLoadInvalidIndex:
 	ld xhl, 0:i3
 	jr MdSetupLoad_Epilogue
+MdSetupLoadFunc_OnGetRamAddress:
 	lda xhl, (0x00ffc0:24)
 	jr MdSetupLoad_Epilogue
+MdSetupLoadFunc_OnGetRamSize:
 	ld xhl, 1:i3
 
 MdSetupLoad_Epilogue:

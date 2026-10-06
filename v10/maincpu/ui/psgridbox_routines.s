@@ -881,6 +881,7 @@ PsGridBox_Scroll:
 	ld XWA, (xsp + 0x014e)
 	ld xbc, EVT_SET_SELECTED_CEL
 	jrl PsGridBox_DispatchEvent
+PsGridBoxProc_OnGridDraw:
 	ld XWA, (xsp + 0x014e)
 	call GetViewInstance
 	ld (xsp + 20), xhl
@@ -987,6 +988,7 @@ PsGridBox_Scroll_Render:
 	ld xwa, xhl
 	call DrawStringReverse
 	jrl PsGridBox_ReturnZero
+PsGridBoxProc_OnRequestGridDraw:
 	lda xde, (xsp + 24)
 	ld XWA, (xsp + 0x0146)
 	srl xwa, 16
@@ -1008,8 +1010,10 @@ PsGridBox_Scroll_Render:
 	ld XWA, (xsp + 0x014e)
 	ld xbc, EVT_GRID_DRAW
 	jrl PsGridBox_DispatchEvent
+PsGridBoxProc_OnGetFixedColStr:
 	ld xwa, PsGridBox_Scroll_Render_Str_PART_CHANNEL_OCTAVE_LOCAL
 	jr PsGridBox_Scroll_CopyStr
+PsGridBoxProc_OnGetFixedRowStr:
 	ld xwa, PsGridBox_Scroll_Render_Str_RIGHT1_RIGHT2_LEFT_PART4_PART5
 
 PsGridBox_Scroll_CopyStr:
@@ -1019,6 +1023,7 @@ PsGridBox_Scroll_CopyStr:
 	call Strcpy
 	inc 8, xsp
 	jrl PsGridBox_ReturnZero
+PsGridBoxProc_OnSetSelectedCel:
 	ld XWA, (xsp + 0x014e)
 	call GetViewInstance
 	ld (xsp + 20), xhl
@@ -1105,6 +1110,7 @@ PsGridBox_Scroll_SendNewCell:
 PsGridBox_DispatchEvent:
 	call SendEvent
 	jrl PsGridBox_ReturnZero
+PsGridBoxProc_OnGetSelectedCel:
 	ld XWA, (xsp + 0x014e)
 	call GetViewInstance
 	ld xwa, (xhl + 42)
@@ -1117,6 +1123,7 @@ PsGridBox_DispatchEvent:
 	add xwa, xbc
 	ld xhl, xwa
 	jr PsGridBox_Return
+PsGridBoxProc_OnCheckGridIndex:
 	ld XWA, (xsp + 0x014e)
 	call GetViewInstance
 	ld de, (xhl + 26)

@@ -99,8 +99,10 @@ ExcDotFunc_Skip2:
 	ld	(xix), 0
 	ld	xhl, xwa
 	ret
+ExcDotFunc_OnGetLargeStep:	; cases 31457342, 31457343, 31457350
 	ld	xhl, 1:i3
 	ret
+ExcDotFunc_OnGetMax:
 	ld	xhl, 32
 	ret
 
@@ -138,14 +140,17 @@ ExcPmemFunc_HandlerJumpTable:
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	ExcPmemFunc_Return
+ExcPmemFunc_OnGetLargeStep:	; cases 31457342, 31457343, 31457350
 	ld	xhl, 1:i3
 	jr	ExcPmemFunc_Return
+ExcPmemFunc_OnGetMax:
 	ld	xhl, 3:i3
 	jr	ExcPmemFunc_Return
 
 ExcPmemFunc_InvalidIndex_Exit:
 	ld xhl, 0:i3
 	jr ExcPmemFunc_Return
+ExcPmemFunc_OnGetRamAddress:
 	lda xhl, (0x024760:24)
 
 ExcPmemFunc_Return:
@@ -178,14 +183,17 @@ ExcSmemFunc_HandlerJumpTable:
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	ExcSmemFunc_Return
+ExcSmemFunc_OnGetLargeStep:	; cases 31457342, 31457343, 31457350
 	ld	xhl, 1:i3
 	jr	ExcSmemFunc_Return
+ExcSmemFunc_OnGetMax:
 	ld	xhl, 3:i3
 	jr	ExcSmemFunc_Return
 
 ExcSmemFunc_InvalidIndex_Exit:
 	ld xhl, 0:i3
 	jr ExcSmemFunc_Return
+ExcSmemFunc_OnGetRamAddress:
 	lda xhl, (0x024762:24)
 
 ExcSmemFunc_Return:
@@ -218,14 +226,17 @@ ExcCompFunc_HandlerJumpTable:
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	ExcCompFunc_Return
+ExcCompFunc_OnGetLargeStep:	; cases 31457342, 31457343, 31457350
 	ld	xhl, 1:i3
 	jr	ExcCompFunc_Return
+ExcCompFunc_OnGetMax:
 	ld	xhl, 3:i3
 	jr	ExcCompFunc_Return
 
 ExcCompFunc_InvalidIndex_Exit:
 	ld xhl, 0:i3
 	jr ExcCompFunc_Return
+ExcCompFunc_OnGetRamAddress:
 	lda xhl, (0x024764:24)
 
 ExcCompFunc_Return:
@@ -258,14 +269,17 @@ ExcSeqFunc_HandlerJumpTable:
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	ExcSeqFunc_Return
+ExcSeqFunc_OnGetLargeStep:	; cases 31457342, 31457343, 31457350
 	ld	xhl, 1:i3
 	jr	ExcSeqFunc_Return
+ExcSeqFunc_OnGetMax:
 	ld	xhl, 3:i3
 	jr	ExcSeqFunc_Return
 
 ExcSeqFunc_InvalidIndex_Exit:
 	ld xhl, 0:i3
 	jr ExcSeqFunc_Return
+ExcSeqFunc_OnGetRamAddress:
 	lda xhl, (0x024766:24)
 
 ExcSeqFunc_Return:
@@ -298,14 +312,17 @@ ExcMspFunc_HandlerJumpTable:
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	ExcMspFunc_Return
+ExcMspFunc_OnGetLargeStep:	; cases 31457342, 31457343, 31457350
 	ld	xhl, 1:i3
 	jr	ExcMspFunc_Return
+ExcMspFunc_OnGetMax:
 	ld	xhl, 3:i3
 	jr	ExcMspFunc_Return
 
 ExcMspFunc_InvalidIndex_Exit:
 	ld xhl, 0:i3
 	jr ExcMspFunc_Return
+ExcMspFunc_OnGetRamAddress:
 	lda xhl, (0x024768:24)
 
 ExcMspFunc_Return:

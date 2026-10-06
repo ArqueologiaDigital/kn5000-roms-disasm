@@ -3134,8 +3134,10 @@ CtrlPanel_DispatchByIndex:
 CtrlPanel_FrameDispatchTable:
 	ld	xde, 4:i3
 	jr	CtrlPanel_ApplyMarginLoop
+GetClientBox2_Case26:	; cases 26, 33
 	ld	xde, 3:i3
 	jr	CtrlPanel_ApplyMarginLoop
+GetClientBox2_Case28:
 	ld	xde, 1:i3
 	decm	2, (xiz+4)
 	ld	wa, 2:i3
@@ -3167,26 +3169,32 @@ CtrlPanel_MarginAdjustStep:
 
 CtrlPanel_MarginDone:
 	jrl CtrlPanel_FrameReturn
+GetClientBox2_Case38:
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x1c
 	jr CtrlFrame_AddLeftMargin
+GetClientBox2_Case47:
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x17
 	jr CtrlFrame_SubRightMargin
+GetClientBox2_Case39:
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x1d
 	jr CtrlFrame_AddLeftMargin
+GetClientBox2_Case48:
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x18
 	jr CtrlFrame_SubRightMargin
+GetClientBox2_Case42:
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x20
 	jr CtrlFrame_AddLeftMargin
+GetClientBox2_Case43:
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x21
@@ -3196,10 +3204,12 @@ CtrlFrame_AddLeftMargin:
 	ld wa, (xsp + 6)
 	add (xiz), wa
 	jr CtrlPanel_AfterLeftMargin
+GetClientBox2_Case51:
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x24
 	jr CtrlFrame_SubRightMargin
+GetClientBox2_Case52:
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x25
@@ -3212,38 +3222,47 @@ CtrlFrame_SubRightMargin:
 CtrlPanel_AfterLeftMargin:
 	ld xde, 2:i3
 	jrl CtrlPanel_ApplyMarginLoop
+GetClientBox2_Case27:
 	ld xde, 1:i3
 	decm 1, (xiz + 4)
 	ld wa, 1:i3
 	jrl CtrlPanel_SubFrameOffset
+GetClientBox2_Case35:
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x19
 	jr CtrlPanel_Frame_AddLeftMargin
+GetClientBox2_Case44:
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x14
 	jr CtrlPanel_Frame_SubtractTopMargin
+GetClientBox2_Case36:
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x1a
 	jr CtrlPanel_Frame_AddLeftMargin
+GetClientBox2_Case45:
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x15
 	jr CtrlPanel_Frame_SubtractTopMargin
+GetClientBox2_Case37:
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x1b
 	jr CtrlPanel_Frame_AddLeftMargin
+GetClientBox2_Case46:
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x16
 	jr CtrlPanel_Frame_SubtractTopMargin
+GetClientBox2_Case40:
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x1e
 	jr CtrlPanel_Frame_AddLeftMargin
+GetClientBox2_Case41:
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x1f
@@ -3253,10 +3272,12 @@ CtrlPanel_Frame_AddLeftMargin:
 	ld wa, (xsp + 6)
 	add (xiz), wa
 	jr CtrlPanel_AfterTopMargin
+GetClientBox2_Case49:
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x22
 	jr CtrlPanel_Frame_SubtractTopMargin
+GetClientBox2_Case50:
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 4)
 	ldw wa, 0x23
@@ -3890,6 +3911,7 @@ GroupBox_StateCompare_Default:
 	ld xbc, EVT_CHANGE_MODE
 	ld xde, NAKA_MODE_MD_NORMAL
 	jrl GroupBox_NavDispatch
+GroupBoxProc_Case7:
 	ld xwa, (xsp + 38)
 	call SetCurrentTarget
 	ldw (DIAL_ENABLE:24), 0x0000
@@ -3923,6 +3945,7 @@ GroupBox_Nav_SendEventAndUpdate:
 	call UpdateScreen
 	ld wa, 0:i3
 	jrl GroupBox_DisableDisplay
+GroupBoxProc_Case8:
 	ld wa, 0:i3
 	calr SetDialEnable
 	ld xwa, 0xffffffff
@@ -3945,6 +3968,7 @@ GroupBox_Nav_ClearWidgetFlags:
 	ld xbc, (xsp + 34)
 	calr BoxProc
 	jrl GroupBox_ReturnZero
+GroupBoxProc_Case12:
 	ld xwa, (xsp + 38)
 	ld xbc, EVT_PAINT
 	ld xde, 0:i3
@@ -3985,6 +4009,7 @@ GroupBox_CursorNav_UpdateScreen:
 	call UpdateScreen
 	ld wa, 0:i3
 	jrl GroupBox_DisableDisplay
+GroupBoxProc_Case10:
 	ld xde, (xsp + 30)
 	ld xwa, (xsp + 38)
 	ld xbc, (xsp + 34)
@@ -4038,6 +4063,7 @@ GroupBox_KeyPress_CheckRange:
 	ld xde, (xsp + 46)
 	call SetApTimer
 	jrl GroupBox_ReturnZero
+GroupBoxProc_Case11:
 	ld xde, (xsp + 30)
 	ld xwa, (xsp + 38)
 	ld xbc, (xsp + 34)
@@ -4092,6 +4118,7 @@ GroupBox_KeyRelease_CheckRange:
 	ld xde, (xsp + 46)
 	call KillApTimer
 	jrl GroupBox_ReturnZero
+GroupBoxProc_Case9:
 	ld xde, (xsp + 30)
 	ld xwa, (xsp + 38)
 	ld xbc, (xsp + 34)

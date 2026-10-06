@@ -9345,12 +9345,15 @@ GetDiskFreeSpace:
 GetDiskFreeSpace_JumpTable:
 	ld	hl, 0:i3
 	jr	GetDiskFreeSpace_Epilogue
+GetDiskFreeSpace_Case2:
 	ld	xwa, 0xb2400
 	ld	(xiz), xwa
 	jr	FileIO_ReadFreeSpaceViaFAT
+GetDiskFreeSpace_Case3:
 	ld	xwa, 0x163e00
 	ld	(xiz), xwa
 	jr	FileIO_ReadFreeSpaceViaFAT
+GetDiskFreeSpace_Case4:
 	ld	xwa, 737280
 	ld	(xiz), xwa
 

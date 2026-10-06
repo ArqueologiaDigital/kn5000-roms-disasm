@@ -926,7 +926,15 @@ Voice_InitChannelLoop_Data:
 ; [nakarest] (audio/tonegen_fileio_handlers.s: `lda xix,
 ; [nakarest] (DSPCfg_Init_BoundsCheck_Data:24)`).
 DSPCfg_Init_BoundsCheck_Data:
-	.incbin "includes/generated/naka_extension_device.bin", 0x2B3E, 0x12
+	.short	DSPCfg_InitDispatch - DSPCfg_InitDispatch
+	.short	DSPCfg_Init_BoundsCheck_Case1 - DSPCfg_InitDispatch
+	.short	DSPCfg_Init_BoundsCheck_Case2 - DSPCfg_InitDispatch
+	.short	DSPCfg_Init_BoundsCheck_Case3 - DSPCfg_InitDispatch
+	.short	DSPCfg_Init_BoundsCheck_Case4 - DSPCfg_InitDispatch
+	.short	DSPCfg_Init_BoundsCheck_Case5 - DSPCfg_InitDispatch
+	.short	DSPCfg_Init_BoundsCheck_Case6 - DSPCfg_InitDispatch
+	.short	DSPCfg_Init_BoundsCheck_Case7 - DSPCfg_InitDispatch
+	.short	DSPCfg_Init_BoundsCheck_Case8 - DSPCfg_InitDispatch
 ToneGen_FlashWriteAll_Data_3:	.incbin "includes/generated/naka_extension_device.bin", 0x2B50, 0x4
 ToneGen_FlashWriteAll_Data_4:	.incbin "includes/generated/naka_extension_device.bin", 0x2B54, 0x4
 ToneGen_FlashWriteAll_Data_5:	.incbin "includes/generated/naka_extension_device.bin", 0x2B58, 0xC
@@ -957,13 +965,29 @@ ToneGen_FlashWriteAll_Data_2:
 ; [nakarest] (audio/tonegen_fileio_handlers.s: `lda xix,
 ; [nakarest] (CtrlPanel_IndicatorJumpTable_Data:24)`).
 CtrlPanel_IndicatorJumpTable_Data:
-	.incbin "includes/generated/naka_extension_device.bin", 0x2E3C, 0x12
+	.short	DSPCfg_Param_CaseC - DSPCfg_Param_CaseC
+	.short	DSPCfg_Param_CaseC - DSPCfg_Param_CaseC
+	.short	DSPCfg_Param_CaseC - DSPCfg_Param_CaseC
+	.short	DSPCfg_Param_CaseC - DSPCfg_Param_CaseC
+	.short	CtrlPanel_IndicatorJumpTable_Case4 - DSPCfg_Param_CaseC
+	.short	CtrlPanel_IndicatorJumpTable_Case5 - DSPCfg_Param_CaseC
+	.short	CtrlPanel_IndicatorJumpTable_Case6 - DSPCfg_Param_CaseC
+	.short	CtrlPanel_IndicatorJumpTable_Case7 - DSPCfg_Param_CaseC
+	.short	CtrlPanel_IndicatorJumpTable_Case8 - DSPCfg_Param_CaseC
 ; [nakarest] naka_extension_device+0x2e4e  +0x2e4e..+0x2e60 (0xed961a, 18 B)
 ; [nakarest] purpose not established: layout of 18 B at 0xed961a not derived; readers below
 ; [nakarest] Readers: source references Audio_DispatchCommand (audio/tonegen_fileio_handlers.s:
 ; [nakarest] `lda xix, (Audio_DispatchCommand_Data:24)`).
 Audio_DispatchCommand_Data:
-	.incbin "includes/generated/naka_extension_device.bin", 0x2E4E, 0x12
+	.short	DSPCfg_Param_CaseD - DSPCfg_Param_CaseD
+	.short	DSPCfg_Param_CaseD - DSPCfg_Param_CaseD
+	.short	DSPCfg_Param_CaseD - DSPCfg_Param_CaseD
+	.short	DSPCfg_Param_CaseD - DSPCfg_Param_CaseD
+	.short	Audio_DispatchCommand_Case4 - DSPCfg_Param_CaseD
+	.short	Audio_DispatchCommand_Case5 - DSPCfg_Param_CaseD
+	.short	Audio_DispatchCommand_Case6 - DSPCfg_Param_CaseD
+	.short	Audio_DispatchCommand_Case7 - DSPCfg_Param_CaseD
+	.short	Audio_DispatchCommand_Case8 - DSPCfg_Param_CaseD
 ; [nakarest] naka_extension_device+0x2e60  +0x2e60..+0x3452 (0xed962c, 1522 B)
 ; [nakarest] purpose not established: layout of 1522 B at 0xed962c not derived; readers below
 ; [nakarest] Readers: source references PanelDisplay_DispatchByMode
@@ -976,7 +1000,16 @@ Audio_DispatchCommand_Data:
 ; [nakarest] by Encoder_PrepareCallback (audio/tonegen_fileio_handlers.s: `ld xwa,
 ; [nakarest] Encoder_PrepareCallback_PtrTable_2`).
 PanelDisplay_DispatchByMode_Data:
-	.incbin "includes/generated/naka_extension_device.bin", 0x2E60, 0x5F2
+	.short	DSPCfg_Param_Default - PanelDisplay_DispatchData
+	.short	DSPCfg_Param_Default - PanelDisplay_DispatchData
+	.short	DSPCfg_Param_Default - PanelDisplay_DispatchData
+	.short	DSPCfg_Param_Default - PanelDisplay_DispatchData
+	.short	PanelDisplay_DispatchData - PanelDisplay_DispatchData
+	.short	PanelDisplay_DispatchByMode_Case5 - PanelDisplay_DispatchData
+	.short	PanelDisplay_DispatchByMode_Case6 - PanelDisplay_DispatchData
+	.short	PanelDisplay_DispatchByMode_Case7 - PanelDisplay_DispatchData
+	.short	PanelDisplay_DispatchByMode_Case8 - PanelDisplay_DispatchData
+	.incbin "includes/generated/naka_extension_device.bin", 0x2e72, 0x5e0
 ; [nakarest] naka_extension_device+0x3452  +0x3452..+0x34d2 (0xed9c1e, 128 B)
 ; [nakarest] purpose not established: layout of 128 B at 0xed9c1e not derived; readers below
 ; [nakarest] Readers: source references Encoder_PrepareCallback

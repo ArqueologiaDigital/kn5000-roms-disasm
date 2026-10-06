@@ -3303,18 +3303,23 @@ DSPCfg_WriteAllSlots_Combined_Code:
 	ld	xiz, 0x4900
 	ld	wa, 0:i3
 	jr	DSPCfg_Data_ParamDispatch_Join3
+EffEdit_DSPConfigBlock_Helper_Case98:
 	ld	xiz, 0x4a00
 	jr	DSPCfg_Data_ParamDispatch_Join2
+EffEdit_DSPConfigBlock_Helper_Case99:
 	ld	xiz, 0x4b00
 DSPCfg_Data_ParamDispatch_Join2:
 	ld	wa, 1:i3
 	jr	DSPCfg_Data_ParamDispatch_Join3
+EffEdit_DSPConfigBlock_Helper_Case100:
 	ld	xiz, 0x4c00
 	ld	wa, 4:i3
 	jr	DSPCfg_Data_ParamDispatch_Join3
+EffEdit_DSPConfigBlock_Helper_Case101:
 	ld	xiz, 0x4d00
 	ld	wa, 2:i3
 	jr	DSPCfg_Data_ParamDispatch_Join3
+EffEdit_DSPConfigBlock_Helper_Case102:
 	ld	xiz, 0x4e00
 	ld	wa, 3:i3
 	jr	DSPCfg_Data_ParamDispatch_Join3
@@ -3680,6 +3685,7 @@ DspConfig_EventDispatch:
 AssSwb_SwapEntriesAndDispatch:
 	ldw	(xsp + 4), 0xffff
 	jrl	DSPCfg_Epilogue
+DSPCfg_ApplyParamStructFull_Case31:
 	ld	c, (xwa)
 	ld	(xsp + 6), c
 	lda	xix, (xwa + 1)
@@ -3697,6 +3703,7 @@ AssSwb_SwapEntriesAndDispatch:
 	ld	xwa, (xsp + 60)
 	ld	(xwa), 0x0
 	jrl	DSPCfg_Epilogue
+DSPCfg_ApplyParamStructFull_Case32:
 	ld	c, (xwa)
 	ld	(xsp + 6), c
 	lda	xix, (xwa + 1)
@@ -3714,6 +3721,7 @@ AssSwb_SwapEntriesAndDispatch:
 	ld	xwa, (xsp + 60)
 	ld	(xwa), 0x1
 	jrl	DSPCfg_Epilogue
+DSPCfg_ApplyParamStructFull_Case34:
 	ld	c, (xwa)
 	ld	(xsp + 6), c
 	lda	xhl, (xwa + 1)
@@ -3735,6 +3743,7 @@ AssSwb_SwapEntriesAndDispatch:
 	ld	xwa, (xsp + 48)
 	ld	(xwa), 0x1
 	jrl	DSPCfg_Epilogue
+DSPCfg_ApplyParamStructFull_Case38:
 	ld	c, (xwa)
 	ld	(xsp + 6), c
 	lda	xhl, (xwa + 1)
@@ -3785,6 +3794,7 @@ AssSwb_SwapEntriesAndDispatch:
 	ld	xwa, (xsp + 32)
 	ld	(xwa), e
 	jrl	DSPCfg_Epilogue
+DSPCfg_ApplyParamStructFull_Case18:
 	ld	c, (xwa)
 	ld	(xsp + 6), c
 	lda	xix, (xwa + 1)
@@ -3802,6 +3812,7 @@ AssSwb_SwapEntriesAndDispatch:
 	ld	xwa, (xsp + 60)
 	ld	(xwa), l
 	jrl	DSPCfg_Epilogue
+DSPCfg_ApplyParamStructFull_Case19:
 	ld	c, (xwa)
 	ld	(xsp + 6), c
 	lda	xbc, (xwa + 1)
@@ -3843,6 +3854,7 @@ DSPCfg_EventType36_ClampResult:
 	ld	c, (xsp + 48)
 	ld	(xwa + 6), c
 	jrl	DSPCfg_Epilogue
+DSPCfg_ApplyParamStructFull_Case21:
 	ld	c, (xwa)
 	ld	(xsp + 6), c
 	lda	xix, (xwa + 1)
@@ -3868,6 +3880,7 @@ DSPCfg_EventType36_ClampResult:
 	ld	xwa, (xsp + 48)
 	ld	(xwa), e
 	jrl	DSPCfg_Epilogue
+DSPCfg_ApplyParamStructFull_Case22:
 	ld	c, (xwa)
 	ld	(xsp + 6), c
 	lda	xix, (xwa + 1)
@@ -4017,6 +4030,7 @@ DSPCfg_EventType36:
 DSPCfg_EventType36_StoreTail:
 	ld	(xwa + 4), l
 	jrl	DSPCfg_Epilogue
+DSPCfg_ApplyParamStructFull_Case23:
 	ld	c, (xwa)
 	ld	(xsp + 6), c
 	lda	xix, (xwa + 1)
@@ -4034,6 +4048,7 @@ DSPCfg_EventType36_StoreTail:
 	ld	xwa, (xsp + 60)
 	ld	(xwa), l
 	jrl	DSPCfg_Epilogue
+DSPCfg_ApplyParamStructFull_Case26:
 	ld	c, (xwa)
 	ld	(xsp + 6), c
 	lda	xhl, (xwa + 1)
@@ -5010,6 +5025,7 @@ AudioDispatch_CheckStereoMode_Code_Join2:
 	orw	(0xc4fe:16), 0x2000
 	orw	(0xc4f8:16), 4
 	jrl	UIStateEvt_ParamEdit_Data_Epilogue
+UIStateEvt_TransposeUpdate_Clear_Case4:
 	bit	6, (SWBTWR_PAYLOAD_3:16)
 	jr	z, AudioDispatch_CheckStereoMode_Code_Skip8
 	bit	6, (SWBTWR_PAYLOAD_2:16)
@@ -5084,6 +5100,7 @@ AudioDispatch_CheckStereoMode_Code_Join5:
 AudioDispatch_CheckStereoMode_Code_Skip13:
 	ld	(0xc504:16), 16
 	jr	UIStateEvt_ParamEdit_Data_Epilogue
+UIStateEvt_TransposeUpdate_Clear_Case5:
 	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 252
 	jr	z, AudioDispatch_CheckStereoMode_Code_Skip28
@@ -5109,6 +5126,7 @@ AudioDispatch_CheckStereoMode_Code_Skip29:
 	orw	(0xc4f8:16), 4
 	.set	UIStateEvt_PartRouting, . + 1	; v7 name kept for its references in other v7 files; it sits inside this instruction (the v7 label drift)
 	jr	UIStateEvt_ParamEdit_Data_Epilogue
+UIStateEvt_TransposeUpdate_Clear_Case6:
 	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 252
 	jr	z, UIStateEvt_ParamEdit_Data_Epilogue
@@ -5153,6 +5171,7 @@ UIStateEvt_PartRouting_Code_Skip:
 	ld	(0xc162:16), 0
 	orw	(0xc4fe:16), 4
 	ret
+UIStateEvt_TransposeUpdate_Clear_Switch2_Case1:
 	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 31
 	jr	z, AudioDispatch_CheckStereoMode_Code_Skip15
@@ -5180,6 +5199,7 @@ AudioDispatch_CheckStereoMode_Code_Skip15:
 	ld	(0xc162:16), 0
 	orw	(0xc4fe:16), 4
 	ret
+UIStateEvt_TransposeUpdate_Clear_Switch2_Case3:
 	bit	0, (SWBTWR_PAYLOAD_3:16)
 	jr	z, UIStateEvt_VolumeMixer_Data_Entry2
 	bit	0, (SWBTWR_PAYLOAD_2:16)
@@ -5202,6 +5222,7 @@ AudioDispatch_CheckStereoMode_Code_Skip16:
 AudioDispatch_CheckStereoMode_Code_Join8:
 	orw	(0xc4f8:16), 4
 	ret
+UIStateEvt_TransposeUpdate_Clear_Switch2_Case4:
 	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 255
 	ret	z
@@ -5244,11 +5265,13 @@ UIStateEvt_VolumeMixer_Data_Join:
 AudioDispatch_CheckStereoMode_Code_Skip18:
 	orw	(0xc4f8:16), 4
 	ret
+UIStateEvt_TransposeUpdate_Clear_Switch2_Case5:
 	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 255
 	ret	z
 	orw	(0xc4f8:16), 4
 	ret
+UIStateEvt_TransposeUpdate_Clear_Switch2_Case2:
 	ret
 ; v10 name for this address: UIStateEvt_EffectSelect_Data -- not a label here: v7 defines that name outside this span (= 0xFDE2C6)
 	ldb_d8	a, (SWBTWR_PAYLOAD_1)

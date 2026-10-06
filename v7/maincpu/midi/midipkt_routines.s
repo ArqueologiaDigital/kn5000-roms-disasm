@@ -889,10 +889,15 @@ MidiPkt_SysExBulkTransfer_Data:
 	jp	t, (xix+hl)
 MidiPkt_SendBankSelect_Send_Code:
 	jr	MidiPkt_SysExBulkTransfer_Data_Join
+MidiPkt_SendBankSelect_Send_Case2:
 	jrl	MidiPkt_SysExBulkTransfer_Data_Join3
+MidiPkt_SendBankSelect_Send_Case3:
 	jrl	MidiPkt_SysExBulkTransfer_Data_Join4
+MidiPkt_SendBankSelect_Send_Case4:
 	jrl	MidiPkt_SysExBulkTransfer_Data_Helper2_Join
+MidiPkt_SendBankSelect_Send_Case5:
 	jrl	MidiPkt_SysExBulkTransfer_Data_Helper2_Join2
+MidiPkt_SendBankSelect_Send_Case6:
 	calr	MidiPkt_SendBankSelect_Helper
 	ret
 MidiPkt_SysExBulkTransfer_Data_Helper:
@@ -1300,30 +1305,37 @@ SysEx_DispatchByChannel_Code:
 	ret	nc
 	ld	xwa, SysEx4B_ChannelWords0
 	jr	SysEx_DispatchByChannel_Entry
+SysEx_DispatchByChannel_Case1:
 	cp	c, 7:i3
 	ret	nc
 	ld	xwa, SysEx4B_ChannelWords1
 	jr	SysEx_DispatchByChannel_Entry
+SysEx_DispatchByChannel_Case2:
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, SysEx4B_ChannelWords2
 	jr	SysEx_DispatchByChannel_Entry
+SysEx_DispatchByChannel_Case3:
 	cp	c, 7:i3
 	ret	nc
 	ld	xwa, SysEx4B_ChannelWords3
 	jr	SysEx_DispatchByChannel_Entry
+SysEx_DispatchByChannel_Case4:
 	cp	c, 8
 	ret	nc
 	ld	xwa, SysEx4B_ChannelWords4
 	jr	SysEx_DispatchByChannel_Entry
+SysEx_DispatchByChannel_Case5:
 	cp	c, 8
 	ret	nc
 	ld	xwa, SysEx4B_ChannelWords5
 	jr	SysEx_DispatchByChannel_Entry
+SysEx_DispatchByChannel_Case6:
 	cp	c, 7:i3
 	ret	nc
 	ld	xwa, SysEx4B_ChannelWords6
 	jr	SysEx_DispatchByChannel_Entry
+SysEx_DispatchByChannel_Case7:
 	cp	c, 7:i3
 	ret	nc
 	ld	xwa, SysEx4B_ChannelWords7
@@ -1350,30 +1362,37 @@ SysEx_DispatchByChannel_49_Code:
 	ret	nc
 	ld	xwa, SysEx49_ChannelWords0
 	jr	SysEx_DispatchByChannel_49_Entry
+SysEx_DispatchByChannel_49_Case1:
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, SysEx49_ChannelWords1
 	jr	SysEx_DispatchByChannel_49_Entry
+SysEx_DispatchByChannel_49_Case2:
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, SysEx49_ChannelWords2
 	jr	SysEx_DispatchByChannel_49_Entry
+SysEx_DispatchByChannel_49_Case3:
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, SysEx49_ChannelWords3
 	jr	SysEx_DispatchByChannel_49_Entry
+SysEx_DispatchByChannel_49_Case4:
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, SysEx49_ChannelWords4
 	jr	SysEx_DispatchByChannel_49_Entry
+SysEx_DispatchByChannel_49_Case5:
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, SysEx49_ChannelWords5
 	jr	SysEx_DispatchByChannel_49_Entry
+SysEx_DispatchByChannel_49_Case6:
 	cp	c, 6:i3
 	ret	nc
 	ld	xwa, SysEx49_ChannelWords6
 	jr	SysEx_DispatchByChannel_49_Entry
+SysEx_DispatchByChannel_49_Case7:
 	cp	c, 6:i3
 	ret	nc
 	ld	xwa, SysEx49_ChannelWords7

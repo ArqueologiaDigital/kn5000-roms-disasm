@@ -1287,8 +1287,40 @@ MidiSysEx_SendControlChange1_Data:	.incbin "includes/generated/sound_config_look
 MidiSysEx_SendProgramChange_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x1776, 0x2
 MidiSysEx_SendPartChanLoop_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x1778, 0xE
 MidiSysEx_CopyParamToBuffer_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x1786, 0x30
-MIDI_ReadChannelParam_Data:		.incbin "includes/generated/sound_config_lookup.bin", 0x17B6, 0x20
-SeqData_ReadFieldByIndex_Data:		.incbin "includes/generated/sound_config_lookup.bin", 0x17D6, 0x20
+MIDI_ReadChannelParam_Data:
+	.short	MidiChan_ParamDispatch - MidiChan_ParamDispatch
+	.short	MIDI_ReadChannelParam_Case1 - MidiChan_ParamDispatch
+	.short	MIDI_ReadChannelParam_Case2 - MidiChan_ParamDispatch
+	.short	MIDI_ReadChannelParam_Case3 - MidiChan_ParamDispatch
+	.short	MIDI_ReadChannelParam_Case4 - MidiChan_ParamDispatch
+	.short	MIDI_ReadChannelParam_Case5 - MidiChan_ParamDispatch
+	.short	MIDI_ReadChannelParam_Case6 - MidiChan_ParamDispatch
+	.short	MIDI_ReadChannelParam_Case7 - MidiChan_ParamDispatch
+	.short	MIDI_ReadChannelParam_Case8 - MidiChan_ParamDispatch
+	.short	MIDI_ReadChannelParam_Case9 - MidiChan_ParamDispatch
+	.short	MIDI_ReadChannelParam_Case10 - MidiChan_ParamDispatch
+	.short	MIDI_ReadChannelParam_Case11 - MidiChan_ParamDispatch
+	.short	MIDI_ReadChannelParam_Case12 - MidiChan_ParamDispatch
+	.short	MIDI_ReadChannelParam_Case13 - MidiChan_ParamDispatch
+	.short	MIDI_ReadChannelParam_Case14 - MidiChan_ParamDispatch
+	.short	MIDI_ReadChannelParam_Case15 - MidiChan_ParamDispatch
+SeqData_ReadFieldByIndex_Data:
+	.short	SeqData_FieldDispatch - SeqData_FieldDispatch
+	.short	SeqData_ReadFieldByIndex_Case1 - SeqData_FieldDispatch
+	.short	SeqData_ReadFieldByIndex_Case2 - SeqData_FieldDispatch
+	.short	SeqData_ReadFieldByIndex_Case3 - SeqData_FieldDispatch
+	.short	SeqData_ReadFieldByIndex_Case4 - SeqData_FieldDispatch
+	.short	SeqData_ReadFieldByIndex_Case5 - SeqData_FieldDispatch
+	.short	SeqData_ReadFieldByIndex_Case6 - SeqData_FieldDispatch
+	.short	SeqData_ReadFieldByIndex_Case7 - SeqData_FieldDispatch
+	.short	SeqData_ReadFieldByIndex_Case8 - SeqData_FieldDispatch
+	.short	SeqData_ReadFieldByIndex_Case9 - SeqData_FieldDispatch
+	.short	SeqData_ReadFieldByIndex_Case10 - SeqData_FieldDispatch
+	.short	SeqData_ReadFieldByIndex_Case11 - SeqData_FieldDispatch
+	.short	SeqData_ReadFieldByIndex_Case12 - SeqData_FieldDispatch
+	.short	SeqData_ReadFieldByIndex_Case13 - SeqData_FieldDispatch
+	.short	SeqData_ReadFieldByIndex_Case14 - SeqData_FieldDispatch
+	.short	SeqData_ReadFieldByIndex_Case15 - SeqData_FieldDispatch
 ArpQueue_ComputeAndEnqueue_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x17F6, 0x2
 ; 39 x u32 routine pointers; MidiTable_DispatchHelper (0xFD7AF5): `lda xbc,(<this>); ld xhl, (xbc+wa); call (xhl)`.
 ; Extent: to the next object's base (loaded by its own reader).
@@ -1442,7 +1474,13 @@ VoiceData_SyncCodeList:
 ; 7 x s16 switch offsets.  SysEx_InitiateSend (0xFD8CAE): `ld_rrw ..,xix,..;
 ; lda xix,(0xFD8CF1); jp_rr 8,xix,..` -- targets 0xFD8CF1 (SysEx_SendDispatch) + offset (no labels yet).
 SysExSend_SwitchOffsets:
-	.short 0, 21, 27, 33, 39, 45, 51
+	.short	SysEx_SendDispatch - SysEx_SendDispatch
+	.short	SysEx_DispatchCalls_Data - SysEx_SendDispatch
+	.short	SysEx_InitiateSend_Case2 - SysEx_SendDispatch
+	.short	SysEx_InitiateSend_Case3 - SysEx_SendDispatch
+	.short	SysEx_InitiateSend_Case4 - SysEx_SendDispatch
+	.short	SysEx_InitiateSend_Case5 - SysEx_SendDispatch
+	.short	SysEx_InitiateSend_Case6 - SysEx_SendDispatch
 ; 39 x u32 routine pointers; SeqData_DispatchHandler (0xFD8DB4): `lda xbc,(<this>); ld xhl, (xbc+hl); call (xhl)`.
 ; Extent: to the next object's base (loaded by its own reader).
 SeqData_Handlers:
@@ -1493,11 +1531,23 @@ SeqData_OutTemplate:
 ; 7 x s16 switch offsets.  SeqData_FormatOutput_Data (0xFD8F2A): `ld_rrw ..,xix,..;
 ; lda xix,(0xFD8F7E); jp_rr 8,xix,..` -- targets 0xFD8F7E + offset (no labels yet).
 SeqDataFmt_SwitchOffsets:
-	.short 0, 2, 4, 7, 10, 13, 16
+	.short	SeqData_FormatOutput_Default_Code - SeqData_FormatOutput_Default_Code
+	.short	SeqData_FormatOutput_Data_Helper_Case2 - SeqData_FormatOutput_Default_Code
+	.short	SeqData_FormatOutput_Data_Helper_Case3 - SeqData_FormatOutput_Default_Code
+	.short	SeqData_FormatOutput_Data_Helper_Case4 - SeqData_FormatOutput_Default_Code
+	.short	SeqData_FormatOutput_Data_Helper_Case5 - SeqData_FormatOutput_Default_Code
+	.short	SeqData_FormatOutput_Data_Helper_Case6 - SeqData_FormatOutput_Default_Code
+	.short	SeqData_FormatOutput_Data_Helper_Case7 - SeqData_FormatOutput_Default_Code
 ; 7 x s16 switch offsets.  VoiceParam_AssSwb_MultiBlock_Data (0xFD9A0C): `ld_rrw ..,xix,..;
 ; lda xix,(0xFD9A3E); jp_rr 8,xix,..` -- targets 0xFD9A3E + offset (no labels yet).
 AssSwbMulti_SwitchOffsets:
-	.short 0, 2, 4, 7, 10, 13, 16
+	.short	VoiceParam_MultiMode_StubRet_Code - VoiceParam_MultiMode_StubRet_Code
+	.short	VoiceParam_AssSwb_MultiBlock_Data_Case2 - VoiceParam_MultiMode_StubRet_Code
+	.short	VoiceParam_AssSwb_MultiBlock_Data_Case3 - VoiceParam_MultiMode_StubRet_Code
+	.short	VoiceParam_AssSwb_MultiBlock_Data_Case4 - VoiceParam_MultiMode_StubRet_Code
+	.short	VoiceParam_AssSwb_MultiBlock_Data_Case5 - VoiceParam_MultiMode_StubRet_Code
+	.short	VoiceParam_AssSwb_MultiBlock_Data_Case6 - VoiceParam_MultiMode_StubRet_Code
+	.short	VoiceParam_AssSwb_MultiBlock_Data_Case7 - VoiceParam_MultiMode_StubRet_Code
 ; 4-byte template: MidiPkt_BuildControl (0xFD9DA0) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+6); ldi85; ldiw` -- 3 bytes).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 MidiPkt_ControlTemplate:
@@ -1740,7 +1790,12 @@ MidiPkt_MsgTemplate_336C:
 ; 6 x s16 switch offsets.  MidiPkt_SysExBulkTransfer_Data (0xFDA921): `ld_rrw ..,xix,..;
 ; lda xix,(0xFDA94D); jp_rr 8,xix,..` -- targets 0xFDA94D + offset (no labels yet).
 SysExBulk_SwitchOffsets:
-	.short 0, 2, 5, 8, 11, 14
+	.short	MidiPkt_SendBankSelect_Send_Code - MidiPkt_SendBankSelect_Send_Code
+	.short	MidiPkt_SysExBulkTransfer_Data_Case2 - MidiPkt_SendBankSelect_Send_Code
+	.short	MidiPkt_SysExBulkTransfer_Data_Case3 - MidiPkt_SendBankSelect_Send_Code
+	.short	MidiPkt_SysExBulkTransfer_Data_Case4 - MidiPkt_SendBankSelect_Send_Code
+	.short	MidiPkt_SysExBulkTransfer_Data_Case5 - MidiPkt_SendBankSelect_Send_Code
+	.short	MidiPkt_SysExBulkTransfer_Data_Case6 - MidiPkt_SendBankSelect_Send_Code
 ; 16 x u8 (15, 0..8, 10..14, 9).  MidiPkt_SysExBulkTransfer_Data_Join (0xFDA9B1):
 ; `lda xbc,(<this>); ld a, (xbc+wa)`.
 SysExBulk_SlotMap:
@@ -1842,7 +1897,14 @@ SysEx4B_ChannelWords7:
 ; 8 x s16 switch offsets.  SysEx_DispatchByChannel (0xFDACEA): `ld_rrw ..,xix,..;
 ; lda xix,(0xFDAD13); jp_rr 8,xix,..` -- targets 0xFDAD13 (SysEx_ChannelHandler_4B_Data) + offset (no labels yet).
 SysEx4B_ChannelSwitch:
-	.short 0, 11, 22, 33, 44, 56, 68, 79
+	.short	SysEx_ChannelHandler_4B_Data - SysEx_ChannelHandler_4B_Data
+	.short	SysEx_DispatchByChannel_Case1 - SysEx_ChannelHandler_4B_Data
+	.short	SysEx_DispatchByChannel_Case2 - SysEx_ChannelHandler_4B_Data
+	.short	SysEx_DispatchByChannel_Case3 - SysEx_ChannelHandler_4B_Data
+	.short	SysEx_DispatchByChannel_Case4 - SysEx_ChannelHandler_4B_Data
+	.short	SysEx_DispatchByChannel_Case5 - SysEx_ChannelHandler_4B_Data
+	.short	SysEx_DispatchByChannel_Case6 - SysEx_ChannelHandler_4B_Data
+	.short	SysEx_DispatchByChannel_Case7 - SysEx_ChannelHandler_4B_Data
 ; 5 x s16 (count pinned by the `cp c,5; ret nc` guard): case 0 of
 ; SysEx_ChannelHandler_49_Data (0xFDAD9A) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld hl, (xwa+de)`).
@@ -1886,7 +1948,14 @@ SysEx49_ChannelWords7:
 ; 8 x s16 switch offsets.  SysEx_DispatchByChannel_49 (0xFDAD71): `ld_rrw ..,xix,..;
 ; lda xix,(0xFDAD9A); jp_rr 8,xix,..` -- targets 0xFDAD9A (SysEx_ChannelHandler_49_Data) + offset (no labels yet).
 SysEx49_ChannelSwitch:
-	.short 0, 11, 22, 33, 44, 55, 66, 77
+	.short	SysEx_ChannelHandler_49_Data - SysEx_ChannelHandler_49_Data
+	.short	SysEx_DispatchByChannel_49_Case1 - SysEx_ChannelHandler_49_Data
+	.short	SysEx_DispatchByChannel_49_Case2 - SysEx_ChannelHandler_49_Data
+	.short	SysEx_DispatchByChannel_49_Case3 - SysEx_ChannelHandler_49_Data
+	.short	SysEx_DispatchByChannel_49_Case4 - SysEx_ChannelHandler_49_Data
+	.short	SysEx_DispatchByChannel_49_Case5 - SysEx_ChannelHandler_49_Data
+	.short	SysEx_DispatchByChannel_49_Case6 - SysEx_ChannelHandler_49_Data
+	.short	SysEx_DispatchByChannel_49_Case7 - SysEx_ChannelHandler_49_Data
 ; MIDI system-exclusive bytes (0xF0 ...) sent by MidiTable_FlushArpNotes (0xFD7B2F): `ld xwa,<this>;
 ; ld bc,5; call SeqBuf_FlushNoteOffs` queues the first 5 bytes; the rest is 0xFF padding.
 SysEx_Msg_3594:
@@ -4481,15 +4550,40 @@ DspCfg_ResolveFallback_WordTable:	.short 0, 2, 4, 5, 3
 ; jumped to as 0xFDCCD3 + offset by the code after DSPCfg_Data_ParamDispatch
 ; (`jp t, (xix+wa)`).  The targets have no labels yet, so the offsets stay
 ; numeric: 0xFDCCD3, 0xFDCCDC, 0xFDCCE3, 0xFDCCEC, 0xFDCCF5, 0xFDCCFE (v10).
-DspCfg_OpLetter_JumpOffsets:	.short 0, 9, 16, 25, 34, 43
+DspCfg_OpLetter_JumpOffsets:
+	.short	DSPCfg_Data_ParamDispatch_Code - DSPCfg_Data_ParamDispatch_Code
+	.short	EffEdit_DSPConfigBlock_Helper_Case98 - DSPCfg_Data_ParamDispatch_Code
+	.short	EffEdit_DSPConfigBlock_Helper_Case99 - DSPCfg_Data_ParamDispatch_Code
+	.short	EffEdit_DSPConfigBlock_Helper_Case100 - DSPCfg_Data_ParamDispatch_Code
+	.short	EffEdit_DSPConfigBlock_Helper_Case101 - DSPCfg_Data_ParamDispatch_Code
+	.short	EffEdit_DSPConfigBlock_Helper_Case102 - DSPCfg_Data_ParamDispatch_Code
 ; switch table: u16 offset from AssSwb_SwapEntriesAndDispatch, 21 entries,
 ; used by DspConfig_EventDispatch (0xFDD29D: index = type-1 for 0..8, or
 ; type-1-0x12 for 9..20; `add bc,bc`, `ld r, (xrr+rr)`, `jp t, (xrr+rr)`).  Offset 0 is the
 ; default (AssSwb_SwapEntriesAndDispatch itself); the other targets have no
 ; labels yet.
-DspConfig_EventDispatch_JumpOffsets:	.short 285, 328, 0, 436, 501, 878, 0
-	.short 0, 921, 0, 0, 0, 0, 8
-	.short 51, 0, 94, 0, 0, 0, 151
+DspConfig_EventDispatch_JumpOffsets:
+	.short	DSPCfg_ApplyParamStructFull_Case18 - AssSwb_SwapEntriesAndDispatch
+	.short	DSPCfg_ApplyParamStructFull_Case19 - AssSwb_SwapEntriesAndDispatch
+	.short	AssSwb_SwapEntriesAndDispatch - AssSwb_SwapEntriesAndDispatch
+	.short	DSPCfg_ApplyParamStructFull_Case21 - AssSwb_SwapEntriesAndDispatch
+	.short	DSPCfg_ApplyParamStructFull_Case22 - AssSwb_SwapEntriesAndDispatch
+	.short	DSPCfg_ApplyParamStructFull_Case23 - AssSwb_SwapEntriesAndDispatch
+	.short	AssSwb_SwapEntriesAndDispatch - AssSwb_SwapEntriesAndDispatch
+	.short	AssSwb_SwapEntriesAndDispatch - AssSwb_SwapEntriesAndDispatch
+	.short	DSPCfg_ApplyParamStructFull_Case26 - AssSwb_SwapEntriesAndDispatch
+	.short	AssSwb_SwapEntriesAndDispatch - AssSwb_SwapEntriesAndDispatch
+	.short	AssSwb_SwapEntriesAndDispatch - AssSwb_SwapEntriesAndDispatch
+	.short	AssSwb_SwapEntriesAndDispatch - AssSwb_SwapEntriesAndDispatch
+	.short	AssSwb_SwapEntriesAndDispatch - AssSwb_SwapEntriesAndDispatch
+	.short	DSPCfg_ApplyParamStructFull_Case31 - AssSwb_SwapEntriesAndDispatch
+	.short	DSPCfg_ApplyParamStructFull_Case32 - AssSwb_SwapEntriesAndDispatch
+	.short	AssSwb_SwapEntriesAndDispatch - AssSwb_SwapEntriesAndDispatch
+	.short	DSPCfg_ApplyParamStructFull_Case34 - AssSwb_SwapEntriesAndDispatch
+	.short	AssSwb_SwapEntriesAndDispatch - AssSwb_SwapEntriesAndDispatch
+	.short	AssSwb_SwapEntriesAndDispatch - AssSwb_SwapEntriesAndDispatch
+	.short	AssSwb_SwapEntriesAndDispatch - AssSwb_SwapEntriesAndDispatch
+	.short	DSPCfg_ApplyParamStructFull_Case38 - AssSwb_SwapEntriesAndDispatch
 ; =============================================================================
 ; DSP EFFECT PARAMETER-WRITE RECORDS  (0xEE63BA-0xEE75F5, 59 lists, 4668 bytes)
 ; =============================================================================
@@ -7282,11 +7376,22 @@ ParamEdit_WordTable:
 ; 7 x u16 switch offsets.  UIStateEvt_ParamEdit_Data (0xFDE2A8): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFDE2CF); jp_rr 8,xix,wa` -- targets 0xFDE2CF + offset (no labels yet).
 ParamEdit_SwitchOffsets:
-	.short 579, 579, 579, 0, 235, 469, 540
+	.short	UIStateEvt_ParamEdit_Data_Epilogue - UIStateEvt_TransposeUpdate_Apply_Code
+	.short	UIStateEvt_ParamEdit_Data_Epilogue - UIStateEvt_TransposeUpdate_Apply_Code
+	.short	UIStateEvt_ParamEdit_Data_Epilogue - UIStateEvt_TransposeUpdate_Apply_Code
+	.short	UIStateEvt_TransposeUpdate_Apply_Code - UIStateEvt_TransposeUpdate_Apply_Code
+	.short	UIStateEvt_ParamEdit_Data_Case4 - UIStateEvt_TransposeUpdate_Apply_Code
+	.short	UIStateEvt_ParamEdit_Data_Case5 - UIStateEvt_TransposeUpdate_Apply_Code
+	.short	UIStateEvt_ParamEdit_Data_Case6 - UIStateEvt_TransposeUpdate_Apply_Code
 ; 6 x u16 switch offsets.  UIStateEvt_VolumeMixer_Data (0xFDE514): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFDE538); jp_rr` -- targets 0xFDE538 + offset (no labels yet).
 VolumeMixer_SwitchOffsets:
-	.short 0, 52, 324, 140, 205, 308
+	.short	UIStateEvt_TransposeUpdate_Apply_Code_2 - UIStateEvt_TransposeUpdate_Apply_Code_2
+	.short	UIStateEvt_VolumeMixer_Data_Case1 - UIStateEvt_TransposeUpdate_Apply_Code_2
+	.short	UIStateEvt_VolumeMixer_Data_Case2 - UIStateEvt_TransposeUpdate_Apply_Code_2
+	.short	UIStateEvt_VolumeMixer_Data_Case3 - UIStateEvt_TransposeUpdate_Apply_Code_2
+	.short	UIStateEvt_VolumeMixer_Data_Case4 - UIStateEvt_TransposeUpdate_Apply_Code_2
+	.short	UIStateEvt_VolumeMixer_Data_Case5 - UIStateEvt_TransposeUpdate_Apply_Code_2
 ; 32 x u8: 0..15 then 16 x 0xFF (no mapping).  AudioInit_ConfigStereoVoice
 ; (0xFDE9AE, two sites) and AudioInit_LoadGroupVoice index it with
 ; `extz xwa; add xwa,xbc` after `lda xbc,(<this>)`.
@@ -7356,8 +7461,20 @@ RhythmMidi_SeqEvtMap:
 ; 14 x u16 switch offsets.  VoiceEvent_TypeDispatch (0xFE131B): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFE127D); jp_rr` -- targets 0xFE127D + offset (no labels yet).
 VoiceEvent_SwitchOffsets:
-	.short 0, 15, 30, 45, 59, 73, 87
-	.short 101, 115, 129, 143, 157, 157, 171
+	.short	VoiceEvent_Dispatch - VoiceEvent_Dispatch
+	.short	VoiceEvtHandler_Type1 - VoiceEvent_Dispatch
+	.short	VoiceEvtHandler_Type2 - VoiceEvent_Dispatch
+	.short	VoiceEvtHandler_Type3 - VoiceEvent_Dispatch
+	.short	VoiceEvtHandler_Type4 - VoiceEvent_Dispatch
+	.short	VoiceEvtHandler_Type5 - VoiceEvent_Dispatch
+	.short	VoiceEvtHandler_Type6 - VoiceEvent_Dispatch
+	.short	VoiceEvtHandler_Type7 - VoiceEvent_Dispatch
+	.short	VoiceEvtHandler_Type8 - VoiceEvent_Dispatch
+	.short	VoiceEvtHandler_Type9 - VoiceEvent_Dispatch
+	.short	VoiceEvtHandler_Type10 - VoiceEvent_Dispatch
+	.short	VoiceEvtHandler_Type11 - VoiceEvent_Dispatch
+	.short	VoiceEvtHandler_Type11 - VoiceEvent_Dispatch
+	.short	VoiceEvtHandler_Type12 - VoiceEvent_Dispatch
 ; 3 x u32 RAM addresses (0xCF5F, 0xCF77, 0xCE66).  NoteMap_InitVoiceSlots (0xFE3D2A)
 ; and a NoteMap_* sibling: `sla wa,2; lda xbc,(<this>)`, a 32-bit indexed load
 ; (`ld r, (xrr+rr)`) into xiz, then `cpw (xiz),0`.
@@ -7424,11 +7541,25 @@ Rhythm_EventMapB:
 ; 9 x u16 switch offsets.  RhythmBuf_EventDispatchLoop (0xFE83DD): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFE8633); jp_rr` -- targets 0xFE8633 + offset (no labels yet).
 RhythmBuf_SwitchOffsets:
-	.short 415, -86, -86, -86, 595, 595, 595, 595, 595
+	.short	SeqPart_EmitNoteOn_Full_Case208 - Rhythm_ProcessEventDispatch
+	.short	RhythmBuf_EventDispatchLoop - Rhythm_ProcessEventDispatch
+	.short	RhythmBuf_EventDispatchLoop - Rhythm_ProcessEventDispatch
+	.short	RhythmBuf_EventDispatchLoop - Rhythm_ProcessEventDispatch
+	.short	SeqPart_EmitNoteOn_Full_Case212 - Rhythm_ProcessEventDispatch
+	.short	SeqPart_EmitNoteOn_Full_Case212 - Rhythm_ProcessEventDispatch
+	.short	SeqPart_EmitNoteOn_Full_Case212 - Rhythm_ProcessEventDispatch
+	.short	SeqPart_EmitNoteOn_Full_Case212 - Rhythm_ProcessEventDispatch
+	.short	SeqPart_EmitNoteOn_Full_Case212 - Rhythm_ProcessEventDispatch
 ; 7 x u16 switch offsets.  SeqEvtBuf_NoteDispatch (0xFE894D): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFE8BA8); jp_rr` -- targets 0xFE8BA8 + offset (no labels yet).
 SeqEvtBuf_SwitchOffsets:
-	.short 0, 28, 85, 115, 145, 205, 175
+	.short	SeqPerformance_EventDispatch - SeqPerformance_EventDispatch
+	.short	SeqEvtBuf_NoteDispatch_Case2 - SeqPerformance_EventDispatch
+	.short	SeqEvtBuf_NoteDispatch_Case3 - SeqPerformance_EventDispatch
+	.short	SeqEvtBuf_NoteDispatch_Case4 - SeqPerformance_EventDispatch
+	.short	SeqEvtBuf_NoteDispatch_Case5 - SeqPerformance_EventDispatch
+	.short	SeqPerformance_Event_Block - SeqPerformance_EventDispatch
+	.short	SeqEvtBuf_NoteDispatch_Case7 - SeqPerformance_EventDispatch
 ; 28 rows x 12 columns x 1 byte = 336 bytes.  SoundFX_Handler_2 (0xFE8E38): row = RAM byte
 ; 0xCEDF - 1 (`muls wa,0xc`), column = (0xCEAA - 0xCEE0 + VoiceBank_MapNoteToOffset
 ; + 1) mod 12 (`div a,0xc`); each byte is subtracted from RAM 0xCEAA and the
@@ -8440,21 +8571,58 @@ NoteMask9_ClassTable:
 ; 13 x s16 switch offsets.  UIState_ProcessKeyEvent (0xFEA812): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFEA84F); jp_rr 8,xix,wa` -- targets 0xFEA84F + offset (no labels yet).
 KeyEvent_SwitchOffsets:
-	.short 0, 44, 454, 90, 110, 202, 454, 235
-	.short 268, 314, 346, 375, 406
+	.short	UIState_ProcessKeyEvent_Code - UIState_ProcessKeyEvent_Code
+	.short	UIState_ProcessKeyEvent_Case1 - UIState_ProcessKeyEvent_Code
+	.short	SndParam_ProcessEntry_Epilogue - UIState_ProcessKeyEvent_Code
+	.short	UIState_ProcessKeyEvent_Case3 - UIState_ProcessKeyEvent_Code
+	.short	UIState_ProcessKeyEvent_Case4 - UIState_ProcessKeyEvent_Code
+	.short	UIState_ProcessKeyEvent_Case5 - UIState_ProcessKeyEvent_Code
+	.short	SndParam_ProcessEntry_Epilogue - UIState_ProcessKeyEvent_Code
+	.short	UIState_ProcessKeyEvent_Case7 - UIState_ProcessKeyEvent_Code
+	.short	UIState_ProcessKeyEvent_Case8 - UIState_ProcessKeyEvent_Code
+	.short	UIState_ProcessKeyEvent_Case9 - UIState_ProcessKeyEvent_Code
+	.short	UIState_ProcessKeyEvent_Case10 - UIState_ProcessKeyEvent_Code
+	.short	UIState_ProcessKeyEvent_Case11 - UIState_ProcessKeyEvent_Code
+	.short	UIState_ProcessKeyEvent_Case12 - UIState_ProcessKeyEvent_Code
 ; 8 x s16 switch offsets.  HdaeRom_TableEntry2 (0xFEABD9): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFEAC14); jp_rr 8,xix,wa` -- targets 0xFEAC14 + offset (no labels yet).
 HdaeRomEntry2_SwitchOffsets:
-	.short 106, 106, 106, 0, 106, 106, 106, 58
+	.short	HdaeRom_TableEntry2_Epilogue - HdaeRom_TableEntry2_Code
+	.short	HdaeRom_TableEntry2_Epilogue - HdaeRom_TableEntry2_Code
+	.short	HdaeRom_TableEntry2_Epilogue - HdaeRom_TableEntry2_Code
+	.short	HdaeRom_TableEntry2_Code - HdaeRom_TableEntry2_Code
+	.short	HdaeRom_TableEntry2_Epilogue - HdaeRom_TableEntry2_Code
+	.short	HdaeRom_TableEntry2_Epilogue - HdaeRom_TableEntry2_Code
+	.short	HdaeRom_TableEntry2_Epilogue - HdaeRom_TableEntry2_Code
+	.short	HdaeRom_TableEntry2_Case7 - HdaeRom_TableEntry2_Code
 ; 15 x s16 switch offsets.  SendEpilogue_Data_Skip14 (0xFEB4C6): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFEB4EE); jp_rr 8,xix,wa` -- targets 0xFEB4EE + offset (no labels yet).
 SendEpilogueA_SwitchOffsets:
-	.short 0, 30, 147, 266, 330, 396, 462, 528
-	.short 594, 660, 726, 792, 858, 925, 991
+	.short	MIDI_SendEpilogue_Code_2 - MIDI_SendEpilogue_Code_2
+	.short	SendEpilogue_Data_Switch2_Case129 - MIDI_SendEpilogue_Code_2
+	.short	SendEpilogue_Data_Switch2_Case130 - MIDI_SendEpilogue_Code_2
+	.short	SendEpilogue_Data_Switch2_Case131 - MIDI_SendEpilogue_Code_2
+	.short	SendEpilogue_Data_Switch2_Case132 - MIDI_SendEpilogue_Code_2
+	.short	SendEpilogue_Data_Switch2_Case133 - MIDI_SendEpilogue_Code_2
+	.short	SendEpilogue_Data_Switch2_Case134 - MIDI_SendEpilogue_Code_2
+	.short	SendEpilogue_Data_Switch2_Case135 - MIDI_SendEpilogue_Code_2
+	.short	SendEpilogue_Data_Switch2_Case136 - MIDI_SendEpilogue_Code_2
+	.short	SendEpilogue_Data_Switch2_Case137 - MIDI_SendEpilogue_Code_2
+	.short	SendEpilogue_Data_Switch2_Case138 - MIDI_SendEpilogue_Code_2
+	.short	SendEpilogue_Data_Switch2_Case139 - MIDI_SendEpilogue_Code_2
+	.short	SendEpilogue_Data_Switch2_Case140 - MIDI_SendEpilogue_Code_2
+	.short	SendEpilogue_Data_Switch2_Case141 - MIDI_SendEpilogue_Code_2
+	.short	SendEpilogue_Data_Switch2_Case142 - MIDI_SendEpilogue_Code_2
 ; 7 x s16 switch offsets.  SendEpilogue_Data_Skip7 (0xFEB3DC): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFEB40D); jp_rr 8,xix,wa` -- targets 0xFEB40D + offset (no labels yet).
 SendEpilogueB_SwitchOffsets:
-	.short 0, 12, 24, 31, 38, 45, 57
+	.short	MIDI_SendEpilogue_Code - MIDI_SendEpilogue_Code
+	.short	SendEpilogue_Data_Case1 - MIDI_SendEpilogue_Code
+	.short	SendEpilogue_Data_Case2 - MIDI_SendEpilogue_Code
+	.short	SendEpilogue_Data_Case3 - MIDI_SendEpilogue_Code
+	.short	SendEpilogue_Data_Case4 - MIDI_SendEpilogue_Code
+	.short	SendEpilogue_Data_Case5 - MIDI_SendEpilogue_Code
+	.short	SendEpilogue_Data_Case6 - MIDI_SendEpilogue_Code
 ; 12-byte per-semitone tables (one byte per pitch class C..B; 0x80 = centre).
 ; SeqVoice_CheckAndRet_Data (0xFEBC56) maps its selector byte (0x80, 5, 4, 3,
 ; 0x40-0x42, 0, 0x10-0x16 through SeqVoiceSel_SwitchOffsets) to one of them
@@ -8537,16 +8705,35 @@ SemitoneBias_TableN:
 ; 7 x s16 switch offsets.  SeqVoice_CheckAndRet_Data (0xFEBC56): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFEBCA0); jp_rr 8,xix,wa` -- targets 0xFEBCA0 + offset (no labels yet).
 SeqVoiceSel_SwitchOffsets:
-	.short 49, 56, 63, 70, 77, 84, 91
+	.short	SeqVoice_CheckAndRet_Data_Case16 - SeqVoice_CheckAndRet_Data_Skip
+	.short	SeqVoice_CheckAndRet_Data_Case17 - SeqVoice_CheckAndRet_Data_Skip
+	.short	SeqVoice_CheckAndRet_Data_Case18 - SeqVoice_CheckAndRet_Data_Skip
+	.short	SeqVoice_CheckAndRet_Data_Case19 - SeqVoice_CheckAndRet_Data_Skip
+	.short	SeqVoice_CheckAndRet_Data_Case20 - SeqVoice_CheckAndRet_Data_Skip
+	.short	SeqVoice_CheckAndRet_Data_Case21 - SeqVoice_CheckAndRet_Data_Skip
+	.short	SeqVoice_CheckAndRet_Data_Case22 - SeqVoice_CheckAndRet_Data_Skip
 ; 7 x s16 switch offsets.  SendEpilogue_Data_Helper (0xFEBD0E): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFEBD57); jp_rr 8,xix,wa` -- targets 0xFEBD57 + offset (no labels yet).
 SendEpilogueC_SwitchOffsets:
-	.short 31, 36, 41, 46, 51, 56, 61
+	.short	SendEpilogue_Data_Helper_Case16 - SeqVoice_CheckAndRet_Data_Skip10
+	.short	SendEpilogue_Data_Helper_Case17 - SeqVoice_CheckAndRet_Data_Skip10
+	.short	SendEpilogue_Data_Helper_Case18 - SeqVoice_CheckAndRet_Data_Skip10
+	.short	SendEpilogue_Data_Helper_Case19 - SeqVoice_CheckAndRet_Data_Skip10
+	.short	SendEpilogue_Data_Helper_Case20 - SeqVoice_CheckAndRet_Data_Skip10
+	.short	SendEpilogue_Data_Helper_Case21 - SeqVoice_CheckAndRet_Data_Skip10
+	.short	SendEpilogue_Data_Helper_Case22 - SeqVoice_CheckAndRet_Data_Skip10
 ; 9 x s16 switch offsets.  MIDI_WriteChannelData_Block (0xFEBF1D): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFEBF45); jp_rr 8,xix,wa` -- targets 0xFEBF45 + offset (no labels yet).
 ChannelData_SwitchOffsets:
-	.short 0, 0, 0, 0, 0, 2, 2, 0
-	.short 0
+	.short	SendAllSoundOff_Flush_Code - SendAllSoundOff_Flush_Code
+	.short	SendAllSoundOff_Flush_Code - SendAllSoundOff_Flush_Code
+	.short	SendAllSoundOff_Flush_Code - SendAllSoundOff_Flush_Code
+	.short	SendAllSoundOff_Flush_Code - SendAllSoundOff_Flush_Code
+	.short	SendAllSoundOff_Flush_Code - SendAllSoundOff_Flush_Code
+	.short	MIDI_WriteChannelData_Block_Case21 - SendAllSoundOff_Flush_Code
+	.short	MIDI_WriteChannelData_Block_Case21 - SendAllSoundOff_Flush_Code
+	.short	SendAllSoundOff_Flush_Code - SendAllSoundOff_Flush_Code
+	.short	SendAllSoundOff_Flush_Code - SendAllSoundOff_Flush_Code
 ; 16 x u16 1<<i template: MIDI_SendSinglePacket (0xFEC505) copies it into its
 ; frame with `ld xiy,<this>; lda xix,(xsp+4); ldw bc,16; ldirw`.
 SendPacket_BitMaskTemplateA:
@@ -8580,8 +8767,22 @@ ESeq_FileSignature:
 ; 16 x s16 switch offsets.  MidiSysMsg_Handler (0xFED63B): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFED772); jp_rr 8,xix,wa` -- targets 0xFED772 + offset (no labels yet).
 MidiSysMsg_SwitchOffsets:
-	.short 0, 23, 52, 58, 111, 349, 349, 349
-	.short 349, 164, 349, 193, 349, 349, 236, 262
+	.short	MidiSysMsg_Dispatch - MidiSysMsg_Dispatch
+	.short	MidiSysMsg_Handler_Case241 - MidiSysMsg_Dispatch
+	.short	MidiSysMsg_Handler_Case242 - MidiSysMsg_Dispatch
+	.short	MidiSysMsg_Handler_Case243 - MidiSysMsg_Dispatch
+	.short	MidiSysMsg_Handler_Case244 - MidiSysMsg_Dispatch
+	.short	Dispatch_InitVal2 - MidiSysMsg_Dispatch
+	.short	Dispatch_InitVal2 - MidiSysMsg_Dispatch
+	.short	Dispatch_InitVal2 - MidiSysMsg_Dispatch
+	.short	Dispatch_InitVal2 - MidiSysMsg_Dispatch
+	.short	MidiSysMsg_Handler_Case249 - MidiSysMsg_Dispatch
+	.short	Dispatch_InitVal2 - MidiSysMsg_Dispatch
+	.short	MidiSysMsg_Handler_Case251 - MidiSysMsg_Dispatch
+	.short	Dispatch_InitVal2 - MidiSysMsg_Dispatch
+	.short	Dispatch_InitVal2 - MidiSysMsg_Dispatch
+	.short	MidiSysMsg_Handler_Case254 - MidiSysMsg_Dispatch
+	.short	MidiSysMsg_Handler_Loop7 - MidiSysMsg_Dispatch
 ; Six 16-byte slot maps (permutations of 0..0x13): SoundParam_InitDefaultBanks
 ; (0xFEDDA2) copies each into its frame (`ld xiy,<map>; lda xix,(xsp+82/66/
 ; 50/34/18/2); ldw bc,8; ldirw`).
@@ -9157,7 +9358,12 @@ SndParam_LogCurve128:
 ; Entries 0-3 pick grid column +0, +4, +8, +12 of SndParam_ValueMapGrid for
 ; SndParam_LoadTableConverge; entries 4-5 use NoteMap_ConvergeMapA / NoteMap_ConvergeMapB.
 SndParamChan_SwitchOffsets:
-	.short 0, 8, 18, 28, 57, 64
+	.short	SndParam_TypeDispatch - SndParam_TypeDispatch
+	.short	SndParam_TypeDispatch_Entry1 - SndParam_TypeDispatch
+	.short	TypeDispatch_Entry1_Extend - SndParam_TypeDispatch
+	.short	TypeDispatch_Entry1_Extend2 - SndParam_TypeDispatch
+	.short	LoadTableConverge_LoadReg - SndParam_TypeDispatch
+	.short	LoadTableConverge_LoadReg2 - SndParam_TypeDispatch
 ; 6 x s16 switch offsets from 0xFEEB97, indexed by (selector 1..6) - 1:
 ; `lda xix,(<this>)` at 0xFEEB83 (in SndParam_OffsetHandler), `ld de,(xix+de)`,
 ; then `lda xix,(0xFEEB97); jp t,xix+de`.
@@ -9167,7 +9373,12 @@ SndParamChan_SwitchOffsets:
 ; Entries 0-3 pick grid column +16, +20, +8, +12 of SndParam_ValueMapGrid for
 ; SndParam_LookupTableConverge; entries 4-5 use NoteMap_ConvergeMapA / NoteMap_ConvergeMapB.
 SndParamOffs_SwitchOffsets:
-	.short 0, 5, 10, 15, 45, 52
+	.short	SndParam_OffsetDispatch - SndParam_OffsetDispatch
+	.short	OffsetDispatch_SetWord - SndParam_OffsetDispatch
+	.short	OffsetDispatch_SetWord2 - SndParam_OffsetDispatch
+	.short	OffsetDispatch_SetWord3 - SndParam_OffsetDispatch
+	.short	LookupTableConverge_LoadReg - SndParam_OffsetDispatch
+	.short	LookupTableConverge_LoadReg2 - SndParam_OffsetDispatch
 ; 4 x u32 routine pointers: entry 11 of Subsys_HandlerTableList, so
 ; VoiceInit_Dispatch calls one entry of it with every subsystem's table.
 ; (kn5000_v10_program.s also names this address Subsys_HandlerTable11
@@ -9194,7 +9405,13 @@ ParamSx_CaseMapA:
 ; 7 x s16 switch offsets.  Param_SignExtendReturn_Skip3 (0xFEED58): `ld_rrw ..,xix,..; lda xix,(0xFEED91);
 ; jp_rr 8,xix,..` -- targets 0xFEED91 + offset (no labels yet).
 ParamSx_SwitchA:
-	.short 122, 17, 34, 51, 68, 85, 102
+	.short	Param_SignExtendReturn_Skip5 - Param_SignExtendReturn_Skip4
+	.short	Param_SignExtendReturn_Helper3_Switch3_Case1 - Param_SignExtendReturn_Skip4
+	.short	Param_SignExtendReturn_Helper3_Switch3_Case2 - Param_SignExtendReturn_Skip4
+	.short	Param_SignExtendReturn_Helper3_Switch3_Case3 - Param_SignExtendReturn_Skip4
+	.short	Param_SignExtendReturn_Helper3_Switch3_Case4 - Param_SignExtendReturn_Skip4
+	.short	Param_SignExtendReturn_Helper3_Switch3_Case5 - Param_SignExtendReturn_Skip4
+	.short	Param_SignExtendReturn_Helper3_Switch3_Case6 - Param_SignExtendReturn_Skip4
 ; 77 x u8 case numbers 0..6.  Param_SignExtendReturn_Skip (0xFEEC96), same
 ; two-level switch as ParamSx_CaseMapA with ParamSx_SwitchB.
 ParamSx_CaseMapB:
@@ -9211,11 +9428,26 @@ ParamSx_CaseMapB:
 ; 7 x s16 switch offsets.  Param_SignExtendReturn_Skip (0xFEEC96): `ld_rrw ..,xix,..; lda xix,(0xFEECDA);
 ; jp_rr 8,xix,..` -- targets 0xFEECDA + offset (no labels yet).
 ParamSx_SwitchB:
-	.short 0, 18, 36, 305, 54, 72, 90
+	.short	Param_SignExtendReturn_Code - Param_SignExtendReturn_Code
+	.short	Param_SignExtendReturn_Helper3_Switch2_Case1 - Param_SignExtendReturn_Code
+	.short	Param_SignExtendReturn_Helper3_Switch2_Case2 - Param_SignExtendReturn_Code
+	.short	Param_SignExtendReturn_Skip5 - Param_SignExtendReturn_Code
+	.short	Param_SignExtendReturn_Helper3_Switch2_Case4 - Param_SignExtendReturn_Code
+	.short	Param_SignExtendReturn_Helper3_Switch2_Case5 - Param_SignExtendReturn_Code
+	.short	Param_SignExtendReturn_Helper3_Switch2_Case6 - Param_SignExtendReturn_Code
 ; 10 x s16 offsets.  Param_SignExtendReturn_Helper3 (0xFEEC48): `add xhl,<this>;
 ; ld hl,(xhl); lda xix,(0xFEEC84); jp_rr` -- targets 0xFEEC84 + offset.
 ParamSx_SwitchC:
-	.short 0, 0, 0, 0, 391, 0, 391, 0, 391, 0
+	.short	Param_SignExtendReturn_Code2 - Param_SignExtendReturn_Code2
+	.short	Param_SignExtendReturn_Code2 - Param_SignExtendReturn_Code2
+	.short	Param_SignExtendReturn_Code2 - Param_SignExtendReturn_Code2
+	.short	Param_SignExtendReturn_Code2 - Param_SignExtendReturn_Code2
+	.short	Param_SignExtendReturn_Skip5 - Param_SignExtendReturn_Code2
+	.short	Param_SignExtendReturn_Code2 - Param_SignExtendReturn_Code2
+	.short	Param_SignExtendReturn_Skip5 - Param_SignExtendReturn_Code2
+	.short	Param_SignExtendReturn_Code2 - Param_SignExtendReturn_Code2
+	.short	Param_SignExtendReturn_Skip5 - Param_SignExtendReturn_Code2
+	.short	Param_SignExtendReturn_Code2 - Param_SignExtendReturn_Code2
 ; 23 x u8 case numbers 0..2.  Param_SignExtendReturn_Skip10 (0xFEEF73): byte,
 ; then ParamSx_SwitchD.
 ParamSx_CaseMapD:
@@ -9223,7 +9455,9 @@ ParamSx_CaseMapD:
 ; 3 x s16 switch offsets.  Param_SignExtendReturn_Skip10 (0xFEEF73): `ld_rrw ..,xix,..; lda xix,(0xFEEFAA);
 ; jp_rr 8,xix,..` -- targets 0xFEEFAA + offset (no labels yet).
 ParamSx_SwitchD:
-	.short 52, 16, 32
+	.short	Param_SignExtendReturn_Skip12 - Param_SignExtendReturn_Skip11
+	.short	Param_SignExtendReturn_Helper3_Switch6_Case1 - Param_SignExtendReturn_Skip11
+	.short	Param_SignExtendReturn_Helper3_Switch6_Case2 - Param_SignExtendReturn_Skip11
 ; 41 x u8 case numbers 0..6.  Param_SignExtendReturn_Skip7 (0xFEEEB2): byte,
 ; then ParamSx_SwitchE.
 ParamSx_CaseMapE:
@@ -9232,11 +9466,26 @@ ParamSx_CaseMapE:
 ; 7 x s16 switch offsets.  Param_SignExtendReturn_Skip7 (0xFEEEB2): `ld_rrw ..,xix,..; lda xix,(0xFEEEEB);
 ; jp_rr 8,xix,..` -- targets 0xFEEEEB + offset (no labels yet).
 ParamSx_SwitchE:
-	.short 243, 17, 51, 68, 85, 102, 34
+	.short	Param_SignExtendReturn_Skip12 - Param_SignExtendReturn_Skip8
+	.short	Param_SignExtendReturn_Helper3_Switch5_Case1 - Param_SignExtendReturn_Skip8
+	.short	Param_SignExtendReturn_Helper3_Switch5_Case2 - Param_SignExtendReturn_Skip8
+	.short	Param_SignExtendReturn_Helper3_Switch5_Case3 - Param_SignExtendReturn_Skip8
+	.short	Param_SignExtendReturn_Helper3_Switch5_Case4 - Param_SignExtendReturn_Skip8
+	.short	Param_SignExtendReturn_Helper3_Switch5_Case5 - Param_SignExtendReturn_Skip8
+	.short	Param_SignExtendReturn_Helper3_Switch5_Case6 - Param_SignExtendReturn_Skip8
 ; 10 x s16 offsets.  Param_SignExtendReturn_Skip5 (0xFEEE0B): `add xhl,<this>;
 ; ld hl,(xhl); lda xix,(0xFEEE7F); jp_rr` -- targets 0xFEEE7F + offset.
 ParamSx_SwitchF:
-	.short 0, 0, 0, 0, 351, 0, 351, 0, 351, 0
+	.short	Param_SignExtendReturn_Code3 - Param_SignExtendReturn_Code3
+	.short	Param_SignExtendReturn_Code3 - Param_SignExtendReturn_Code3
+	.short	Param_SignExtendReturn_Code3 - Param_SignExtendReturn_Code3
+	.short	Param_SignExtendReturn_Code3 - Param_SignExtendReturn_Code3
+	.short	Param_SignExtendReturn_Skip12 - Param_SignExtendReturn_Code3
+	.short	Param_SignExtendReturn_Code3 - Param_SignExtendReturn_Code3
+	.short	Param_SignExtendReturn_Skip12 - Param_SignExtendReturn_Code3
+	.short	Param_SignExtendReturn_Code3 - Param_SignExtendReturn_Code3
+	.short	Param_SignExtendReturn_Skip12 - Param_SignExtendReturn_Code3
+	.short	Param_SignExtendReturn_Code3 - Param_SignExtendReturn_Code3
 ; 11 x u8 (0,2,4,5,3,0,1,1,4,2,3).  TmFlash_Return_Prologue (0xFEF507):
 ; `ld xbc,<this>; add xbc,xwa; ld a,(xbc)`.
 TmFlash_ByteMap:
@@ -9325,19 +9574,39 @@ SoundRam_DefaultRecord:
 ; 6 x s16 switch offsets.  HdaeRom_DataHandler (0xFF0243): `ld_rrw ..,xix,..; lda xix,(0xFF028F);
 ; jp_rr 8,xix,..` -- targets 0xFF028F + offset (no labels yet).
 HdaeRomData_SwitchOffsets:
-	.short 111, 111, 111, 319, 0, 319
+	.short	HdaeRom_DataHandler_Case1 - HdaeRom_DataDispatch
+	.short	HdaeRom_DataHandler_Case1 - HdaeRom_DataDispatch
+	.short	HdaeRom_DataHandler_Case1 - HdaeRom_DataDispatch
+	.short	HdaeRom_DataHandler_Skip - HdaeRom_DataDispatch
+	.short	HdaeRom_DataDispatch - HdaeRom_DataDispatch
+	.short	HdaeRom_DataHandler_Skip - HdaeRom_DataDispatch
 ; 6 x s16 switch offsets.  HdaeRom_AltHandler (0xFF0437): `ld_rrw ..,xix,..; lda xix,(0xFF0470);
 ; jp_rr 8,xix,..` -- targets 0xFF0470 + offset (no labels yet).
 HdaeRomAlt_SwitchOffsets:
-	.short 12, 12, 12, 0, 12, 8
+	.short	HdaeRom_AltDispatch_SetWord - HdaeRom_AltDispatch
+	.short	HdaeRom_AltDispatch_SetWord - HdaeRom_AltDispatch
+	.short	HdaeRom_AltDispatch_SetWord - HdaeRom_AltDispatch
+	.short	HdaeRom_AltDispatch - HdaeRom_AltDispatch
+	.short	HdaeRom_AltDispatch_SetWord - HdaeRom_AltDispatch
+	.short	HdaeRom_AltHandler_Case6 - HdaeRom_AltDispatch
 ; 6 x s16 switch offsets.  TmFlash_BulkTransferToSubCPU_Skip2 (0xFF079A): `ld_rrw ..,xix,..; lda xix,(0xFF07FB);
 ; jp_rr 8,xix,..` -- targets 0xFF07FB + offset (no labels yet).
 TmFlashBulkA_SwitchOffsets:
-	.short 27, 27, 27, 0, 7, 0
+	.short	TmFlash_BulkTransferToSubCPU_Case1 - VoiceParam_DispatchTable1
+	.short	TmFlash_BulkTransferToSubCPU_Case1 - VoiceParam_DispatchTable1
+	.short	TmFlash_BulkTransferToSubCPU_Case1 - VoiceParam_DispatchTable1
+	.short	VoiceParam_DispatchTable1 - VoiceParam_DispatchTable1
+	.short	TmFlash_BulkTransferToSubCPU_Case5 - VoiceParam_DispatchTable1
+	.short	VoiceParam_DispatchTable1 - VoiceParam_DispatchTable1
 ; 6 x s16 switch offsets.  TmFlash_BulkTransferToSubCPU_Epilogue2 (0xFF085E): `ld_rrw ..,xix,..; lda xix,(0xFF08A9);
 ; jp_rr 8,xix,..` -- targets 0xFF08A9 + offset (no labels yet).
 TmFlashBulkB_SwitchOffsets:
-	.short 66, 66, 66, 0, 33, 0
+	.short	TmFlash_BulkTransferToSubCPU_Switch2_Case1 - VoiceParam_DispatchTable1_Code
+	.short	TmFlash_BulkTransferToSubCPU_Switch2_Case1 - VoiceParam_DispatchTable1_Code
+	.short	TmFlash_BulkTransferToSubCPU_Switch2_Case1 - VoiceParam_DispatchTable1_Code
+	.short	VoiceParam_DispatchTable1_Code - VoiceParam_DispatchTable1_Code
+	.short	TmFlash_BulkTransferToSubCPU_Switch2_Case5 - VoiceParam_DispatchTable1_Code
+	.short	VoiceParam_DispatchTable1_Code - VoiceParam_DispatchTable1_Code
 	.byte 0xff	; pad
 ; 256-entry character-class table in the C-library <ctype.h> layout: 0x01 upper,
 ; 0x02 lower, 0x04 digit, 0x08 space, 0x10 punct, 0x20 control, 0x40 blank,
@@ -9364,9 +9633,28 @@ CType_ClassTable:
 ; 22 x s16 switch offsets.  Sprintf_DispatchType (0xFF11E6): `ld_rrw ..,xix,..; lda xix,(0xFF1237);
 ; jp_rr 8,xix,..` -- targets 0xFF1237 + offset (no labels yet).
 Sprintf_TypeSwitch:
-	.short 0, 269, 1674, 1674, 1674, 1761, 269, 1761
-	.short 1761, 1761, 1761, 1638, 1306, 943, 1761, 1761
-	.short 105, 1761, 697, 1761, 1761, 946
+	.short	Sprintf_Format_Percent - Sprintf_Format_Percent
+	.short	Sprintf_CheckLengthLL_Case100 - Sprintf_Format_Percent
+	.short	Sprintf_FormatFloat_Entry - Sprintf_Format_Percent
+	.short	Sprintf_FormatFloat_Entry - Sprintf_Format_Percent
+	.short	Sprintf_FormatFloat_Entry - Sprintf_Format_Percent
+	.short	Sprintf_MainLoop_ReadNext - Sprintf_Format_Percent
+	.short	Sprintf_CheckLengthLL_Case100 - Sprintf_Format_Percent
+	.short	Sprintf_MainLoop_ReadNext - Sprintf_Format_Percent
+	.short	Sprintf_MainLoop_ReadNext - Sprintf_Format_Percent
+	.short	Sprintf_MainLoop_ReadNext - Sprintf_Format_Percent
+	.short	Sprintf_MainLoop_ReadNext - Sprintf_Format_Percent
+	.short	Sprintf_CheckLengthLL_Case110 - Sprintf_Format_Percent
+	.short	Sprintf_CheckLengthLL_Case111 - Sprintf_Format_Percent
+	.short	Sprintf_CheckLengthLL_Case112 - Sprintf_Format_Percent
+	.short	Sprintf_MainLoop_ReadNext - Sprintf_Format_Percent
+	.short	Sprintf_MainLoop_ReadNext - Sprintf_Format_Percent
+	.short	Sprintf_CheckLengthLL_Case115 - Sprintf_Format_Percent
+	.short	Sprintf_MainLoop_ReadNext - Sprintf_Format_Percent
+	.short	Sprintf_CheckLengthLL_Case117 - Sprintf_Format_Percent
+	.short	Sprintf_MainLoop_ReadNext - Sprintf_Format_Percent
+	.short	Sprintf_MainLoop_ReadNext - Sprintf_Format_Percent
+	.short	Sprintf_Hex_GetArg - Sprintf_Format_Percent
 ; "0123456789abcdef" + pad: Sprintf_HexToStr (0xFF19B4) uses it for %x
 ; (`ld xwa,<this>`; `cpw (xsp+12),120` picks the table).
 Sprintf_HexDigitsLower:

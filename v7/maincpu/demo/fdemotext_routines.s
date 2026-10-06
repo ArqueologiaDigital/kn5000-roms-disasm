@@ -80,9 +80,11 @@ FDemoText_ByteData_VoiceProbeC:
 FDemoText_ByteData_VoiceProbeC_Code:
 	set	6, (0x247ec:24)
 	ret
+FDemoText_ByteData_VoiceProbeC_Case3:	; cases 3, 4, 5, 6
 	ld	xwa, FDemoText_ByteData_VoiceProbeC_Data
 ; differs from v10 here and llvm-objdump cannot read it
 	jr	FDemoText_ByteData_VoiceProbeC_Join
+FDemoText_ByteData_VoiceProbeC_Case7:
 	ld	a, (SWBTWR_PAYLOAD_3:16)
 	and	a, 15
 	jr	z, FDemoText_ByteData_VoiceProbeC_Skip

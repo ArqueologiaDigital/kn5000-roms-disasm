@@ -565,6 +565,7 @@ VoiceParam_ListHandler:
 	call SetDialDown
 	ld wa, 1:i3
 	jrl FadeGrid_SetDialEnable
+AcFadeSetGridBoxProc_OnIndexswUp:	; cases 29360151, 29360153
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -625,6 +626,7 @@ FadeGrid_CheckFadeOut:
 	call SetDialDown
 	ld wa, 1:i3
 	jrl FadeGrid_SetDialEnable
+AcFadeSetGridBoxProc_OnIndexswDown:	; cases 29360152, 29360154
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -708,6 +710,7 @@ FadeGrid_GetViewAndStrcpy:
 	call	Free_Compare2
 	inc	8, xsp
 	jr	AudioMix_ReturnZeroJmp3
+AcFadeSetGridBoxProc_OnLswData:	; cases 29360156, 29360157
 	ld	xwa, xiz
 	call	GetViewInstance
 	ld	xwa, (xhl+70)
@@ -803,6 +806,7 @@ Data_FadeSetGridDispatch:
 	ld	bc, 1:i3
 	ld	de, 2:i3
 	jr	FadeSetGridCheck_Join
+FadeSetGridCheck_OnIndexswDown:	; cases 29360152, 29360154
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, EVT_GET_SELECTED_CEL
@@ -828,6 +832,7 @@ Data_FadeSetGridDispatch:
 FadeSetGridCheck_Join:
 	call	MainLswAdd
 	jrl	SndParam_ReturnZero2
+FadeSetGridCheck_OnLswData:	; cases 29360156, 29360157
 	lda	xhl, (xsp+4)
 	ldw	(xhl), 1
 	lda	xde, (xhl+2)
@@ -1043,6 +1048,7 @@ AcInOutGrid_Init:
 	call	SetDialDown
 	ld	wa, 1:i3
 	jrl	AcInOutGrid_SetScrollBounds
+AcInOutGridBoxProc_OnIndexswUp:	; cases 29360151, 29360153
 	ld	xwa, (xsp+16)
 	ld	xbc, (xsp+12)
 	ld	xde, (xsp+8)
@@ -1120,6 +1126,7 @@ AcInOutGrid_ScrollUp_CheckAlt:
 	call	SetDialDown
 	ld	wa, 1:i3
 	jrl	AcInOutGrid_SetScrollBounds	; -> 0xF755FB
+AcInOutGridBoxProc_OnIndexswDown:	; cases 29360152, 29360154
 	ld	xwa, (xsp+16)
 	ld	xbc, (xsp+12)
 	ld	xde, (xsp+8)
@@ -1233,6 +1240,7 @@ AcInOutGrid_Strcpy:
 	call	Free_Compare2
 	inc	8, xsp
 	jr	AcInOutGrid_ReturnZero
+AcInOutGridBoxProc_OnLswData:	; cases 29360156, 29360157
 	ld	xwa, (xsp+16)
 	call	GetViewInstance
 	ld	xwa, (xhl+70)
@@ -1323,14 +1331,17 @@ Data_InOutGridDispatch_Code:
 	ld	bc, 1:i3
 	ld	de, 1:i3
 	jrl	InOutGridCheck_Join
+InOutGridCheck_Switch2_Case1:
 	ld	xwa, 0x2101
 	ld	bc, 1:i3
 	ld	de, 1:i3
 	jrl	InOutGridCheck_Join
+InOutGridCheck_Switch2_Case2:
 	ld	xwa, 0x5000
 	ld	bc, 1:i3
 	ld	de, 1:i3
 	jrl	InOutGridCheck_Join
+InOutGridCheck_Switch2_Case3:
 	ld	xwa, 0x5000
 	call	AcApcToggleProc_Helper
 	cp	hl, 2:i3
@@ -1346,10 +1357,12 @@ InOutGridCheck_Skip:
 	ld	bc, 1:i3
 	ld	de, 1:i3
 	jrl	InOutGridCheck_Join
+InOutGridCheck_Switch2_Case5:
 	ld	xwa, 0x2181
 	ld	bc, 1:i3
 	ld	de, 1:i3
 	jrl	InOutGridCheck_Join
+InOutGridCheck_Switch2_Case6:
 	ld	xwa, 0x2184
 	ld	bc, 1:i3
 	; v10 does not spell this byte either
@@ -1359,14 +1372,17 @@ InOutGridCheck_Skip:
 	jrl	InOutGridCheck_Join
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
+InOutGridCheck_Switch2_Case7:
 	ld	xwa, 0x2182
 	ld	bc, 1:i3
 	ld	de, 1:i3
 	jrl	InOutGridCheck_Join
+InOutGridCheck_Switch2_Case8:
 	ld	xwa, 0x2183
 	ld	bc, 1:i3
 	ld	de, 1:i3
 	jrl	InOutGridCheck_Join
+InOutGridCheck_OnIndexswDown:	; cases 29360152, 29360154
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, EVT_GET_SELECTED_CEL
@@ -1396,14 +1412,17 @@ Data_InOutGridDispatch_Code_2:
 	ldw	bc, 0xffff
 	ld	de, 1:i3
 	jr	InOutGridCheck_Join
+InOutGridCheck_Switch3_Case1:
 	ld	xwa, 0x2101
 	ldw	bc, 0xffff
 	ld	de, 1:i3
 	jr	InOutGridCheck_Join
+InOutGridCheck_Switch3_Case2:
 	ld	xwa, 0x5000
 	ldw	bc, 0xffff
 	ld	de, 1:i3
 	jr	InOutGridCheck_Join
+InOutGridCheck_Switch3_Case3:
 	ld	xwa, 0x5000
 	call	AcApcToggleProc_Helper
 	cp	hl, 2:i3
@@ -1419,24 +1438,29 @@ InOutGridCheck_Skip2:
 	ldw	bc, 0xffff
 	ld	de, 1:i3
 	jr	InOutGridCheck_Join
+InOutGridCheck_Switch3_Case5:
 	ld	xwa, 0x2181
 	ldw	bc, 0xffff
 	ld	de, 1:i3
 	jr	InOutGridCheck_Join
+InOutGridCheck_Switch3_Case6:
 	ld	xwa, 0x2184
 	ldw	bc, 0xffff
 	ld	de, 1:i3
 	jr	InOutGridCheck_Join
+InOutGridCheck_Switch3_Case7:
 	ld	xwa, 0x2182
 	ldw	bc, 0xffff
 	ld	de, 1:i3
 	jr	InOutGridCheck_Join
+InOutGridCheck_Switch3_Case8:
 	ld	xwa, 0x2183
 	ldw	bc, 0xffff
 	ld	de, 1:i3
 InOutGridCheck_Join:
 	call	MainLswAdd
 	jrl	MdPreset_ReturnZero2
+InOutGridCheck_OnLswData:
 	lda	xwa, (xsp+4)
 	ldw	(xwa), 1
 	ld	xde, xbc
@@ -1714,6 +1738,7 @@ Data_ParaLoadOptDispatch:
 	lda	xde, (xsp+4)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	InOutGridCheck_Join4	; -> 0xF75DF0
+Data_InOutGridDispatch_Case1:
 	ld	xwa, 8449
 	call	AcApcToggleProc_Helper
 	sla	hl, 2
@@ -1729,6 +1754,7 @@ Data_ParaLoadOptDispatch:
 	lda	xde, (xsp+4)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	InOutGridCheck_Join4	; -> 0xF75DF0
+Data_InOutGridDispatch_Case2:
 	ld	xwa, 20480
 	call	AcApcToggleProc_Helper
 	sla	hl, 2
@@ -1798,6 +1824,7 @@ InOutGridCheck_Skip15:
 	lda	xde, (xsp+4)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	InOutGridCheck_Join4	; -> 0xF75DF0
+Data_InOutGridDispatch_Case3:
 	ld	xwa, 20480
 	call	AcApcToggleProc_Helper
 	cp	hl, 2:i3
@@ -1848,6 +1875,7 @@ InOutGridCheck_Skip17:
 	lda	xde, (xsp+4)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	InOutGridCheck_Join4	; -> 0xF75DF0
+Data_InOutGridDispatch_Case5:
 	ld	xwa, 8577
 	call	AcApcToggleProc_Helper
 	sla	hl, 2
@@ -1863,6 +1891,7 @@ InOutGridCheck_Skip17:
 	lda	xde, (xsp+4)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	InOutGridCheck_Join4	; -> 0xF75DF0
+Data_InOutGridDispatch_Case6:
 	ld	xwa, 8580
 	call	AcApcToggleProc_Helper
 	sla	hl, 2
@@ -1878,6 +1907,7 @@ InOutGridCheck_Skip17:
 	lda	xde, (xsp+4)
 	ld	xbc, EVT_GRID_DRAW
 	jr	InOutGridCheck_Join4	; -> 0xF75DF0
+Data_InOutGridDispatch_Case7:
 	ld	xwa, 8578
 	call	AcApcToggleProc_Helper
 	sla	hl, 2
@@ -1893,6 +1923,7 @@ InOutGridCheck_Skip17:
 	lda	xde, (xsp+4)
 	ld	xbc, EVT_GRID_DRAW
 	jr	InOutGridCheck_Join4	; -> 0xF75DF0
+Data_InOutGridDispatch_Case8:
 	ld	xwa, 8579
 	call	AcApcToggleProc_Helper
 	sla	hl, 2

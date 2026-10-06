@@ -260,10 +260,13 @@ GroupBox_NavUpDown:
 	ld xde, (xsp + 30)
 	ld xbc, (xsp + 34)
 	jr GroupBox_NavDispatch
+GroupBoxProc_Case5:
 	call UIRender_RetStub1
 	jrl GroupBox_ReturnZero
+GroupBoxProc_Case6:
 	call UIRender_RetStub2
 	jrl GroupBox_ReturnZero
+GroupBoxProc_Case3:
 	ld wa, 0:i3
 	calr SetDialEnable
 	ld xwa, 0xffffffff
@@ -276,6 +279,7 @@ GroupBox_NavUpDown:
 GroupBox_NavDispatch:
 	call SendEvent
 	jr GroupBox_ReturnZero
+GroupBoxProc_Case4:
 	ld iz, 0:i3
 
 GroupBox_CloseAll_Loop:
@@ -747,6 +751,7 @@ GetEditSwPoint:
 EditSwParam_Mode0:
 	ld wa, 0:i3
 	jr EditSwParam_StoreMode0
+GetEditSwPoint_Case8:
 	ldw wa, 0x13f
 
 EditSwParam_StoreMode0:
@@ -758,6 +763,7 @@ EditSwParam_StoreMode0:
 EditSwParam_Mode1:
 	ld wa, 0:i3
 	jr EditSwParam_StoreMode1
+GetEditSwPoint_Case9:
 	ldw wa, 0x13f
 
 EditSwParam_StoreMode1:
@@ -769,6 +775,7 @@ EditSwParam_StoreMode1:
 EditSwParam_Mode2:
 	ld wa, 0:i3
 	jr EditSwParam_StoreMode2
+GetEditSwPoint_Case10:
 	ldw wa, 0x13f
 
 EditSwParam_StoreMode2:
@@ -780,6 +787,7 @@ EditSwParam_StoreMode2:
 EditSwParam_Mode3:
 	ld wa, 0:i3
 	jr EditSwParam_Mode3_Store
+GetEditSwPoint_Case11:
 	ldw wa, 0x13f
 
 ; GetEditSwPoint: store mode 3 result
@@ -792,6 +800,7 @@ EditSwParam_Mode3_Store:
 EditSwParam_Mode4:
 	ld wa, 0:i3
 	jr EditSwParam_Mode4_Store
+GetEditSwPoint_Case12:
 	ldw wa, 0x13f
 
 ; GetEditSwPoint: store mode 4 result
@@ -803,18 +812,25 @@ EditSwParam_Mode4_Store:
 EditSwParam_TempoTable:
 	ldw	wa, 20
 	jr	GetEditSwPoint_Join
+GetEditSwPoint_Case1:
 	ldw	wa, 60
 	jr	GetEditSwPoint_Join
+GetEditSwPoint_Case2:
 	ldw	wa, 100
 	jr	GetEditSwPoint_Join
+GetEditSwPoint_Case3:
 	ldw	wa, 140
 	jr	GetEditSwPoint_Join
+GetEditSwPoint_Case4:
 	ldw	wa, 180
 	jr	GetEditSwPoint_Join
+GetEditSwPoint_Case5:
 	ldw	wa, 220
 	jr	GetEditSwPoint_Join
+GetEditSwPoint_Case6:
 	ldw	wa, 260
 	jr	GetEditSwPoint_Join
+GetEditSwPoint_Case7:
 	ldw	wa, 300
 GetEditSwPoint_Join:
 	ld	(xbc), wa
@@ -852,6 +868,7 @@ SetWallPaper_CaseData:
 SetWallPaper_Loop:
 	ld	wa, 1:i3
 	jr	SetWallPaper_Join
+SetWallPaper_Case2:
 	cpw	(0x0340fc:24), 0
 	jr	z, SetWallPaper_Loop
 SetWallPaper_Skip:
@@ -1161,11 +1178,13 @@ DirmdEmu_CaseC:
 	call WakeUpMainTask
 	ldw (DIRMD_FLAG:24), 0x0000
 	jrl TaskWake_ZeroReturn
+IvDirmdScreenProc_OnShow:
 	ldw (DIRMD_FLAG:24), 0x0001
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	jr IvDirmd_ForwardToScreen
+IvDirmdScreenProc_OnHide:
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1173,6 +1192,7 @@ DirmdEmu_CaseC:
 	ld wa, 2:i3
 	call ChangePalette
 	jr TaskWake_ZeroReturn
+IvDirmdScreenProc_OnAllPaint:
 	ldw (DIRMD_FLAG:24), 0x0001
 	call GetTitleNow
 	ld xwa, xhl
@@ -1193,6 +1213,7 @@ DirmdEmu_CaseC:
 IvDirmd_ForwardToScreen:
 	calr ScreenProc
 	jr TaskWake_ZeroReturn
+IvDirmdScreenProc_OnParaDraw:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, EVT_GET_TITLE_PROC_ID
@@ -1209,6 +1230,7 @@ IvDirmd_ForwardToScreen:
 TaskWake_ZeroReturn:
 	ld xhl, 0:i3
 	jr IvDirmd_Epilogue
+IvDirmdScreenProc_OnSwIn:
 	ld xwa, (xsp + 4)
 	cp xwa, 0xff
 	jr ugt, IvDirmd_ForwardAndReturn
@@ -1549,6 +1571,7 @@ WindowProc_Skip4:
 	ld	xde, (xsp+16)
 	call	SendEvent
 	jrl	AcNaming_ReturnZero
+WindowProc_OnHide:
 	ld	xwa, (xsp+24)
 	ld	xbc, (xsp+20)
 	ld	xde, (xsp+16)
@@ -1665,6 +1688,7 @@ WindowField_GetChildCount:
 	scc16 nz, hl
 	extz xhl
 	jrl WindowProc_Epilogue
+WindowProc_OnAllPaint:
 	ld xwa, (xsp + 24)
 	call GetViewInstance
 	ld (xsp + 12), xhl
@@ -1704,6 +1728,7 @@ WindowProc_ForwardToGroupBoxes:
 WindowProc_GroupBoxForward:
 	calr GroupBoxProc
 	jrl AcNaming_ReturnZero
+WindowProc_OnSwIn:	; cases 29360135, 29360136, 29360137
 	ld xwa, (xsp + 24)
 	ld xbc, (xsp + 20)
 	ld xde, (xsp + 16)

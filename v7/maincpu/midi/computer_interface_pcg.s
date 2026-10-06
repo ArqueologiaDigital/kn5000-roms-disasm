@@ -97,6 +97,7 @@ PcgOutGridBoxEventDispatch:
 	call SetDialDown
 	ld wa, 1:i3
 	jrl PcgOutGridDialConfirm
+AcPcgOutGridBoxProc_OnIndexswUp:	; cases 29360151, 29360153
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -151,6 +152,7 @@ PcgOutGrid_CheckAltPrev:
 	call SetDialDown
 	ld wa, 1:i3
 	jrl PcgOutGridDialConfirm
+AcPcgOutGridBoxProc_OnIndexswDown:	; cases 29360152, 29360154
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -230,6 +232,7 @@ PcgOutGrid_CopyStrCommon:
 	call	Free_Compare2
 	inc	8, xsp
 	jr	PcgOutGrid_ReturnZero
+AcPcgOutGridBoxProc_OnLswData:	; cases 29360156, 29360157
 	ld	xwa, xiz
 	call	GetViewInstance
 	ld	xwa, (xhl+70)
@@ -386,6 +389,7 @@ PcgOutGridCheckJumpTable_Skip5:
 	ld	(xwa+14), xbc
 PcgOutGridCheckJumpTable_Skip6:
 	jrl	PcgOutGridCheckJumpTable_Join4
+PcgOutGridCheck_OnIndexswDown:	; cases 29360152, 29360154
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, EVT_GET_SELECTED_CEL
@@ -498,6 +502,7 @@ PcgOutGridCheckJumpTable_Skip12:
 PcgOutGridCheckJumpTable_Join4:
 	call	MainRamAdd
 	jrl	PcgOutGridCheckComplete
+PcgOutGridCheck_OnRamData:
 	ldw	(xhl), 1
 	ld	xhl, xiy
 	ld	(xde), xiy

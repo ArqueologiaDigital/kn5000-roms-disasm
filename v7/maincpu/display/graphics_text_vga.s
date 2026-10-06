@@ -4291,6 +4291,7 @@ ToneGen_ParamWriteDispatch:
 	pushw	247
 	ld	xde, ToneGen_ParamWriteDispatch_Str_C_key_IC304_305_C_7eB_key_IC306
 	jrl	ToneGen_WriteParamByIndex_Join
+ToneGen_WriteParamByIndex_Case1:
 	inc	8, xiy
 	lda	xix, (xsp+6)
 	ld	bc, 4:i3
@@ -4325,6 +4326,7 @@ ToneGen_ParamWriteDispatch:
 	pushw	247
 	ld	xde, ToneGen_ParamWriteDispatch_Str_C_key_DIRECT_REV_DSP_C_7eB_key
 	jrl	ToneGen_WriteParamByIndex_Join
+ToneGen_WriteParamByIndex_Case2:
 	lda	xiy, (xiy+16)
 	lda	xix, (xsp+6)
 	ld	bc, 4:i3
@@ -4344,6 +4346,7 @@ ToneGen_ParamWriteDispatch:
 	ld	xwa, xde
 	ld	xde, ToneGen_ParamWriteDispatch_Str_N3_HIGH_SOUND_check_2octave
 	jrl	ToneGen_WriteParamByIndex_Join
+ToneGen_WriteParamByIndex_Case3:
 	lda	xiy, (xiy+24)
 	lda	xix, (xsp+6)
 	ld	bc, 4:i3
@@ -4363,6 +4366,7 @@ ToneGen_ParamWriteDispatch:
 	ld	xwa, xde
 	ld	xde, ToneGen_ParamWriteDispatch_Str_N4_LOW_SOUND_check_2octave
 	jr	ToneGen_WriteParamByIndex_Join
+ToneGen_WriteParamByIndex_Case4:
 	lda	xiy, (xiy+32)
 	lda	xix, (xsp+6)
 	ld	bc, 4:i3
@@ -4382,6 +4386,7 @@ ToneGen_ParamWriteDispatch:
 	ld	xwa, xde
 	ld	xde, ToneGen_ParamWriteDispatch_Str_N5_NORMAL_SOUND_check_with_TOUCH
 	jr	ToneGen_WriteParamByIndex_Join
+ToneGen_WriteParamByIndex_Case5:
 	lda	xiy, (xiy+40)
 	lda	xix, (xsp+6)
 	ld	bc, 4:i3
@@ -4460,6 +4465,7 @@ WallHomeEdit_EventDispatch:
 WallHomeEditCheck_ReturnFalse:
 	ld xhl, 0:i3
 	jr WallHome_PopIzSkip4Ret
+WallHomeEditCheck_OnGetRamString:
 	ld xde, (xiz + 14)
 	lda xwa, (xiz + 18)
 	cp xde, 0x1
@@ -4489,10 +4495,13 @@ WallHomeEdit_CallAudio:
 	inc	8, xsp
 	ld	xhl, (xsp+4)
 	jr	WallHome_PopIzSkip4Ret
+WallHomeEditCheck_OnGetLargeStep:	; cases 31457342, 31457343, 31457347
 	ld	xhl, 1:i3
 	jr	WallHome_PopIzSkip4Ret
+WallHomeEditCheck_OnGetRamAddress:
 	lda	xhl, (213242:24)
 	jr	WallHome_PopIzSkip4Ret
+WallHomeEditCheck_OnGetRamSize:
 	ld	xhl, 2:i3
 WallHome_PopIzSkip4Ret:
 	pop xiz
@@ -4538,10 +4547,13 @@ WallMenuEditCheck_Join:
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	WallMenuEditCheck_Epilogue
+WallMenuEditCheck_OnGetLargeStep:	; cases 31457342, 31457343, 31457347
 	ld	xhl, 1:i3
 	jr	WallMenuEditCheck_Epilogue
+WallMenuEditCheck_OnGetRamAddress:
 	lda	xhl, (213244:24)
 	jr	WallMenuEditCheck_Epilogue
+WallMenuEditCheck_OnGetRamSize:
 	ld	xhl, 2:i3
 	jr	WallMenuEditCheck_Epilogue
 WallOthEditCheck_RetZero:
@@ -4589,10 +4601,13 @@ WallOthEditCheck_Join:
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	WallOthEditCheck_Epilogue
+WallOthEditCheck_OnGetLargeStep:	; cases 31457342, 31457343, 31457347
 	ld	xhl, 1:i3
 	jr	WallOthEditCheck_Epilogue
+WallOthEditCheck_OnGetRamAddress:
 	lda	xhl, (213246:24)
 	jr	WallOthEditCheck_Epilogue
+WallOthEditCheck_OnGetRamSize:
 	ld	xhl, 2:i3
 	jr	WallOthEditCheck_Epilogue
 WallOthCheckLoop_RetZero:

@@ -1185,12 +1185,16 @@ SmfFN_SendOkState:
 	ld XBC,EVT_NOT_POST_AIC
 	ld xde, 0:i3
 	jr t, SmfFN_DispatchFinalEvent
+FmmSmfFileNameFunc_OnOnWindow:
 	ld (0x8108:16), xbc
 	jrl t, SmfFN_ReturnZero
+FmmSmfFileNameFunc_OnOffWindow:
 	ld (0x810c:16), xbc
 	jrl t, SmfFN_ReturnZero
+FmmSmfFileNameFunc_OnWhichWindow:
 	ld (0x8112:16), iz
 	jrl t, SmfFN_ReturnZero
+FmmSmfFileNameFunc_OnSetSelectedFileNumber:
 	cp (MEDLEY_PLAY_FLAG:16), 0x00
 	jrl z, SmfFN_ReturnZero
 	ld WA,IZ
@@ -1206,6 +1210,7 @@ SmfFN_SendOkState:
 SmfFN_DispatchFinalEvent:
 	call	ApPostEvent
 	jrl	SmfFN_ReturnZero
+FmmSmfFileNameFunc_OnGetSelectedFileNumber:
 	ld	hl, (33040:16)
 	exts	xhl
 SmfFN_Return:

@@ -35,6 +35,7 @@ MiddleFuncCall_DispatchData:
 	pop	xhl
 	pop	xde
 	jrl	SqTrSel_CaseC
+MiddleFuncCall_OnSongNameSet:
 	push	xde
 	pushw	0
 	pushw	4441
@@ -50,6 +51,7 @@ MiddleFuncCall_DispatchData:
 	pop	xhl
 	pop	xde
 	jr	SqTrSel_CaseC
+MiddleFuncCall_OnTrAsTrackInc:
 	push	xde
 	push	xhl
 	push	xix
@@ -60,6 +62,7 @@ MiddleFuncCall_DispatchData:
 	pop	xhl
 	pop	xde
 	jr	SqTrSel_CaseC
+MiddleFuncCall_OnTrAsTrackDec:
 	push	xde
 	push	xhl
 	push	xix
@@ -70,6 +73,7 @@ MiddleFuncCall_DispatchData:
 	pop	xhl
 	pop	xde
 	jr	SqTrSel_CaseC
+MiddleFuncCall_OnTrAsPageInc:
 	push	xde
 	push	xhl
 	push	xix
@@ -80,6 +84,7 @@ MiddleFuncCall_DispatchData:
 	pop	xhl
 	pop	xde
 	jr	SqTrSel_CaseC
+MiddleFuncCall_OnTrAsPageDec:
 	push	xde
 	push	xhl
 	push	xix
@@ -90,6 +95,7 @@ MiddleFuncCall_DispatchData:
 	pop	xhl
 	pop	xde
 	jr	SqTrSel_CaseC
+MiddleFuncCall_OnTrAsPartInc:
 	push	xde
 	push	xhl
 	push	xix
@@ -100,6 +106,7 @@ MiddleFuncCall_DispatchData:
 	pop	xhl
 	pop	xde
 	jr	SqTrSel_CaseC
+MiddleFuncCall_OnTrAsPartDec:
 	push	xde
 	push	xhl
 	push	xix
@@ -110,10 +117,13 @@ MiddleFuncCall_DispatchData:
 	pop	xhl
 	pop	xde
 	jr	SqTrSel_CaseC
+MiddleFuncCall_OnAmdCall:
 	call	Audio_CheckSubsystemReady
 	jr	SqTrSel_CaseC
+MiddleFuncCall_OnDirectPlayMute:
 	calr	DisplayMode_RefreshState
 	jr	SqTrSel_CaseC
+MiddleFuncCall_OnTrackMidiCall:
 	call	VoiceChannels_InitPanFromPreset
 	jr	SqTrSel_CaseC
 
@@ -650,7 +660,9 @@ SqTrSel_CaseG:
 SqTrSel_CaseG_JumpTable:
 	; --- Jump table entries + 4 register-save call thunks ---
 	jrl CDlikeSwTtl_SongBit1Check
+SqTrSel_CaseG_Case112:
 	jrl CDlikeSwTtl_DocBitCheck
+SqTrSel_CaseG_Case113:
 	jrl CDlikeSwTtl_PdBitCheck
 SqTrSel_CaseG_Thunk1:
 	push xde

@@ -27263,6 +27263,7 @@ VoiceSlot_Dispatch:
 
 Voice_ClearSlotAndRet:
 	ld (xhl), 0x0
+RhythmParam_Dispatch_Case129:
 	ret
 
 VoiceSlot_DispatchByType:
@@ -29164,6 +29165,7 @@ CmpSetTtl_Dispatch:
 	ld	xde, 4294901761
 	call	ApDeliveryEvent
 	jrl	CmpReal_ReturnZero
+CmpSetTtlFunc_Case3:
 	cp	(CURRENT_TITLE:16), 180
 	jrl	z, CmpReal_ReturnZero
 	call	RhythmConfig_InlineCode2
@@ -29369,6 +29371,7 @@ CmpRealTtl_Dispatch:
 	pop	xde
 	calr	SoundCtrl_SendTempoScaled
 	jrl	CmpBk_ReturnZero
+CmpRealTtlFunc_Case5:
 	push	xde
 	push	xhl
 	push	xix
@@ -29562,8 +29565,10 @@ CmpRealTtl_RhythmVar4:
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	CmpBk_DeliverEvent
+CmpRealTtl_MajorDispatch_Case8:
 	set	1, (0x3433:16)
 	jr	CmpBk_ReturnZero
+CmpRealTtl_MajorDispatch_Case11:
 	push	xde
 	push	xhl
 	push	xix
@@ -29577,6 +29582,7 @@ CmpRealTtl_RhythmVar4:
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	CmpBk_DeliverEvent
+CmpRealTtl_MajorDispatch_Case12:
 	push	xde
 	push	xhl
 	push	xix
@@ -29640,6 +29646,7 @@ CmpBkslTtl_Dispatch:
 	pop	xhl
 	pop	xde
 	jrl	CmpBksl_ReturnZero
+CmpBkslTtlFunc_Case5:
 	push	xde
 	push	xhl
 	push	xix
@@ -29850,8 +29857,10 @@ CmpBkslSTtl_Dispatch_Code:
 	pop	xde
 	ld	(GLOBAL_ERROR_CODE:16), 0
 	jrl	DisplayFunc_ReturnZero
+CmpBksl_STtlFunc_Case3:
 	ld	(13424:16), 0
 	jrl	DisplayFunc_ReturnZero
+CmpBksl_STtlFunc_Case5:
 	push	xde
 	push	xhl
 	push	xix
@@ -30006,6 +30015,7 @@ CmpBkslSTtl_FillIn8:
 	pop XDE
 	ldw WA, 0x00b5
 	jr t, CmpBk_PostModeChange
+CmpBkslSTtl_DirectMode_Case136:
 	cp (0x3470:16), 0x00
 	jr nz, DisplayFunc_ReturnZero
 	cp	(0x340ea:24), 0
@@ -30022,12 +30032,14 @@ CmpBkslSTtl_EventPost:
 	ld	xde, 5:i3
 	call	ApPostEvent
 	jr	DisplayFunc_ReturnZero
+CmpBkslSTtl_DirectMode_Case137:
 	cp	(13424:16), 0
 	jr	nz, DisplayFunc_ReturnZero
 	cp	(13370:16), 12
 	jr	nc, DisplayFunc_ReturnZero
 	ldw	wa, 179
 	jr	CmpBk_PostModeChange
+CmpBkslSTtl_DirectMode_Case138:
 	cp	(13424:16), 0
 	jr	nz, DisplayFunc_ReturnZero
 	ldw	wa, 180
@@ -30084,6 +30096,7 @@ CmpNcpTtl_Dispatch_Code_Skip:
 	call	UI_PostDialValueEvent
 	ldw	wa, 134
 	jr	CmpNcpTtl_Dispatch_Code_Join
+CmpNcpTtlFunc_Case3:
 	ld	wa, 0:i3
 	call	UI_PostDialEnable
 	push	xde
@@ -30096,6 +30109,7 @@ CmpNcpTtl_Dispatch_Code_Skip:
 	pop	xhl
 	pop	xde
 	jrl	CmEsy_ReturnZero
+CmpNcpTtlFunc_Case5:
 	push	xde
 	push	xhl
 	push	xix
@@ -30188,6 +30202,7 @@ CmpNcpTtl_Dispatch_Code_Skip3:
 	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
+CmpNcpTtl_TableDispatch_Case128:	; cases 128, 129
 	ld	wa, 1:i3
 	call	UI_PostEvent_0x6E
 	; v10 does not spell this byte either
@@ -30238,6 +30253,7 @@ CmpNcpTtl_Dispatch_Code_Skip4:
 	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
+CmpNcpTtl_TableDispatch_Case118:	; cases 118, 119
 	ld	wa, 1:i3
 	; v10 does not spell this byte either
 	call	UI_PostEvent_0x6E
@@ -30315,6 +30331,7 @@ CmpNcpTtl_Dispatch_Code_Skip7:
 	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
+CmpNcpTtl_TableDispatch_Case130:	; cases 130, 131
 	ld	wa, 1:i3
 	call	UI_PostEvent_0x6E
 	; v10 does not spell this byte either
@@ -30390,6 +30407,7 @@ CmpNcpTtl_Dispatch_Code_Skip10:
 	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
+CmpNcpTtl_TableDispatch_Case120:	; cases 120, 121
 	push	xde
 	push	xhl
 	push	xix
@@ -30432,6 +30450,7 @@ CmpNcpTtl_Dispatch_Code_Skip13:
 	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
+CmpNcpTtl_TableDispatch_Case132:	; cases 132, 133
 	push	xde	; four pushes and `ld w, 0x80`, spelled as six .byte lines until 2026-10-06
 	push	xhl
 	push	xix
@@ -30474,6 +30493,7 @@ CmpNcpTtl_Dispatch_Code_Skip14:
 	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
+CmpNcpTtl_TableDispatch_Case122:	; cases 122, 123
 	ld	wa, 1:i3
 	call	UI_PostEvent_0x6E
 	push	xde
@@ -30536,6 +30556,7 @@ CmpNcpTtl_Dispatch_Code_Skip11:
 	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
+CmpNcpTtl_TableDispatch_Case134:	; cases 134, 135
 	ld	wa, 1:i3
 	; v10 does not spell this byte either
 	call	UI_PostEvent_0x6E
@@ -30608,6 +30629,7 @@ CmpNcpTtl_Dispatch_Code_Skip12:
 CmpNcpTtl_Dispatch_Code_Join2:
 	call	ApDeliveryEvent
 	jr	CmEsy_ReturnZero
+CmpNcpTtl_TableDispatch_Case127:
 	set	0, (0x3435:16)	; was four .byte lines
 CmEsy_ReturnZero:
 	ld xhl, 0:i3
@@ -30657,6 +30679,7 @@ CmEsyTtlFunc_Entry:
 	ld	xbc, EVT_SET_SELECTED_CEL
 	ld	xde, 4294901762
 	jrl	CmpEsy_DeliverEventAndCheck
+CmEsyTtlFunc_Case3:
 	cp	(14109:16), 255
 	jrl	z, S2cTtl_ReturnZero
 	lda	xiy, (14109:16)
@@ -30698,6 +30721,7 @@ CmEsyTtl_Dispatch2:
 	; --- Multi-branch dispatch subroutine (195 bytes) ---
 	ld	wa, 0:i3
 	jrl t, CmpEsyTtl_SubModeD_Cont
+CmpEsyTtl_Mode2_Case2:
 	push xde
 	push xhl
 	push xix
@@ -30711,6 +30735,7 @@ CmEsyTtl_Dispatch2:
 	ldw wa, 0x00b5
 	call UI_PostModeChangeEvent
 	jrl t, S2cTtl_ReturnZero
+CmpEsyTtl_Mode2_Case3:
 	ld	wa, 1:i3
 	call UI_PostEvent_0x6E
 	push xde
@@ -30727,6 +30752,7 @@ CmEsyTtl_Dispatch2:
 	ld xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr t, CmpEsy_DeliverEventAndCheck
+CmpEsyTtl_Mode2_Case4:
 	ld	wa, 1:i3
 	call UI_PostEvent_0x6E
 	push xde
@@ -30745,6 +30771,7 @@ CmEsyTtl_Dispatch2:
 CmpEsy_DeliverEventAndCheck:
 	call	ApDeliveryEvent
 	jr	S2cTtl_ReturnZero
+CmpEsyTtl_Mode2_Case5:
 	cp	(14124:16), 0
 	jr	z, CmpEsyTtl_SubModeC
 	push	xde
@@ -30824,6 +30851,7 @@ S2cTtl_Dispatch:
 S2cTtl_Dispatch_Code_Skip:
 	call	S2cTtl_InitOnTitleChange
 	jrl	CstmCp_ReturnZero
+S2cTtlFunc_Case5:
 	ld	a, (14811:16)
 	cp	a, 2:i3
 	jr	z, S2cTtl_Dispatch_Code_Skip3
@@ -30954,6 +30982,7 @@ CmpEsy_E_Var2_StoreMeasure:
 	ld XBC,EVT_CLR_GRID_HANTEN
 	ld xde, 0:i3
 	jrl t, TtlFunc_SendEventAndReturn
+CmpEsyTtl_E_Var1_Case1:
 	ld wa, 1:i3
 	call UI_PostEvent_0x6E
 	ld wa, 1:i3
@@ -31032,6 +31061,7 @@ CmpEsy_Main_EndMeasure_Store:
 	ld XBC,EVT_CLR_GRID_HANTEN
 	ld xde, 0:i3
 	jrl t, TtlFunc_SendEventAndReturn
+CmpEsyTtl_E_Var1_Case2:
 	ld wa, 1:i3
 	call UI_PostEvent_0x6E
 	ld wa, 1:i3
@@ -31101,6 +31131,7 @@ CmpEsy_SecQuantize_Store:
 	ld	xbc, EVT_CLR_GRID_HANTEN
 	ld	xde, 0:i3
 	jr	TtlFunc_SendEventAndReturn
+CmpEsyTtl_E_Var1_Case8:
 	ld	wa, 1:i3
 	call	UI_PostEvent_0x6E
 	ld	wa, 0:i3
@@ -31109,6 +31140,7 @@ CmpEsy_SecQuantize_Store:
 	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jr	TtlFunc_SendEventAndReturn
+CmpEsyTtl_E_Var1_Case9:
 	ld	wa, 1:i3
 	call	UI_PostEvent_0x6E
 	ld	wa, 0:i3
@@ -31119,6 +31151,7 @@ CmpEsy_SecQuantize_Store:
 TtlFunc_SendEventAndReturn:
 	call ApDeliveryEvent
 	jr CstmCp_ReturnZero
+CmpEsyTtl_E_Var1_Case11:
 	ld wa, 0:i3
 	call Tempo_EditBPM
 
@@ -31189,6 +31222,7 @@ CstmCpTtl_Dispatch_Code_Skip:
 
 	jrl	CstmCpTtl_Dispatch2_Code_Join
 
+CstmCpTtlFunc_Case5:
 	ld a, (14818:16)
 
 	cp	a, 2:i3
@@ -31265,6 +31299,7 @@ CstmCpTtlFunc_Skip:
 	ld	xbc, EVT_DRAW
 	ld	xde, 0:i3
 	jrl	CstmCpTtlFunc_Join
+CstmCpTtl_RecMode2_Case128:	; cases 128, 129
 	cp	(0x39e2:16), 0
 	jrl	nz, CstmCp_ReturnZero2
 	ld	wa, 1:i3
@@ -31287,6 +31322,7 @@ CstmCpTtlFunc_Skip2:
 	ld	xbc, EVT_DRAW
 	ld	xde, 0:i3
 	jrl	CstmCpTtlFunc_Join
+CstmCpTtl_RecMode2_Case119:	; cases 119, 120, 131, 132
 	cp	(0x39e2:16), 0
 	jrl	nz, CstmCp_ReturnZero2
 	ld	a, (0x391a:16)
@@ -31317,6 +31353,7 @@ CstmCpTtlFunc_Skip2:
 	ld	xbc, EVT_DRAW
 	ld	xde, 0:i3
 	jrl	CstmCpTtlFunc_Join
+CstmCpTtl_RecMode2_Case122:	; cases 122, 123
 	cp	(0x39e2:16), 0
 	jrl	nz, CstmCp_ReturnZero2
 	ld	wa, 1:i3
@@ -31339,6 +31376,7 @@ CstmCpTtlFunc_Skip3:
 	ld	xbc, EVT_DRAW
 	ld	xde, 0:i3
 	jr	CstmCpTtlFunc_Join
+CstmCpTtl_RecMode2_Case134:	; cases 134, 135
 	cp	(0x39e2:16), 0
 	jrl	nz, CstmCp_ReturnZero2
 	ld	wa, 1:i3
@@ -31363,6 +31401,7 @@ CstmCpTtlFunc_Skip4:
 CstmCpTtlFunc_Join:
 	call	ApDeliveryEvent
 	jrl	CstmCp_ReturnZero2
+CstmCpTtl_RecMode2_Case125:
 	ld	a, (0x39e2:16)
 	cp	a, 2:i3
 	jr	z, CstmCpTtlFunc_Skip5
@@ -31383,6 +31422,7 @@ CstmCpTtlFunc_Skip5:
 	ld	(GLOBAL_ERROR_CODE:16), 35
 	ldw	wa, 238
 	jrl	CstmCpTtlFunc_Join2
+CstmCpTtl_RecMode2_Case127:
 	ld	a, (0x39e2:16)
 	cp	a, 2:i3
 	jrl	z, CstmCpTtlFunc_Skip10
@@ -31904,6 +31944,7 @@ MainCmpSet_Dispatch:
 	ld	xwa, 11796494
 	ld	xbc, EVT_REQUEST_GRID_DRAW
 	jrl	MainCmpSetFunc_Code_Join
+MainCmpSetFunc_OnPanDn:
 	ld	xwa, (xsp)
 	sll	xwa, 3
 	add	xwa, 16
@@ -31921,6 +31962,7 @@ MainCmpSet_Dispatch:
 	ld	xwa, 11796494
 	ld	xbc, EVT_REQUEST_GRID_DRAW
 	jrl	MainCmpSetFunc_Code_Join
+MainCmpSetFunc_OnRlmtUp:
 	ld	xwa, (xsp)
 	sll	xwa, 3
 	add	xwa, 16
@@ -31938,6 +31980,7 @@ MainCmpSet_Dispatch:
 	ld	xwa, 11796494
 	ld	xbc, EVT_REQUEST_GRID_DRAW
 	jrl	MainCmpSetFunc_Code_Join
+MainCmpSetFunc_OnRlmtDn:
 	ld	xwa, (xsp)
 	sll	xwa, 3
 	add	xwa, 16
@@ -31955,6 +31998,7 @@ MainCmpSet_Dispatch:
 	ld	xwa, 11796494
 	ld	xbc, EVT_REQUEST_GRID_DRAW
 	jr	MainCmpSetFunc_Code_Join
+MainCmpSetFunc_OnCmpSetP1Up:
 	ld	a, c
 	ld	(13476:16), c
 	cp	c, 2:i3
@@ -31979,6 +32023,7 @@ MainCmpSetFunc_Code_Skip:
 	ld	xwa, 11796487
 	ld	xbc, EVT_REQUEST_GRID_DRAW
 	jr	MainCmpSetFunc_Code_Join
+MainCmpSetFunc_OnCmpSetP1Dn:
 	ld	a, c
 	ld	(13476:16), c
 	cp	c, 2:i3

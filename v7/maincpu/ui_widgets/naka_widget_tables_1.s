@@ -1164,7 +1164,13 @@ TrAsGrid_DirectionLabel2_Str:
 ; AcTrAsGridBoxProc_CaseTable[7].
 ; -----------------------------------------------------------------------------
 AcTrAsGridBoxProc_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x23E4, 0xE
+	.short	AcTrAsGridBoxProc_OnIndexswUp - TrAsGrid_HandleInit
+	.short	AcTrAsGridBoxProc_OnIndexswDown - TrAsGrid_HandleInit
+	.short	AcTrAsGridBoxProc_OnIndexswUp - TrAsGrid_HandleInit
+	.short	AcTrAsGridBoxProc_OnIndexswDown - TrAsGrid_HandleInit
+	.short	TrAsGrid_PassThrough - TrAsGrid_HandleInit
+	.short	TrAsGrid_HandleSelectEvent - TrAsGrid_HandleInit
+	.short	TrAsGrid_HandleSelectEvent - TrAsGrid_HandleInit
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsGrid_LookupTable_Table
 ; TrAsGrid_LookupTable_Table -- read by TrAsGrid_LookupTable (v10/v9
@@ -1388,7 +1394,13 @@ TrAsGridChk_Part3_UpCheckType0_Str:
 ; TrAsGridCheck_CaseTable[7].
 ; -----------------------------------------------------------------------------
 TrAsGridCheck_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x247A, 0xE
+	.short	TrAsGridCheck_Cases - TrAsGridCheck_Cases
+	.short	TrAsGridCheck_OnIndexswDown - TrAsGridCheck_Cases
+	.short	TrAsGridCheck_Cases - TrAsGridCheck_Cases
+	.short	TrAsGridCheck_OnIndexswDown - TrAsGridCheck_Cases
+	.short	TrAsGridChk_ReturnZero - TrAsGridCheck_Cases
+	.short	TrAsGridChk_ReturnZero - TrAsGridCheck_Cases
+	.short	TrAsGridChk_ReturnZero - TrAsGridCheck_Cases
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] VoiceConfig_LookupByScreenType_Table
 ; VoiceConfig_LookupByScreenType_Table -- read by
@@ -1459,7 +1471,16 @@ MuteChSel_Dispatch_Strings:
 ; SmfMuteChSelFunc_CaseTable[10].
 ; -----------------------------------------------------------------------------
 SmfMuteChSelFunc_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x255A, 0x14
+	.short	SmfMuteChSelFunc_OnGetLargeStep - MuteChSel_Dispatch
+	.short	SmfMuteChSelFunc_OnGetLargeStep - MuteChSel_Dispatch
+	.short	MuteChSel_ReturnZero - MuteChSel_Dispatch
+	.short	MuteChSel_ReturnZero - MuteChSel_Dispatch
+	.short	MuteChSel_ReturnZero - MuteChSel_Dispatch
+	.short	SmfMuteChSelFunc_OnGetMax - MuteChSel_Dispatch
+	.short	MuteChSel_ReturnZero - MuteChSel_Dispatch
+	.short	SmfMuteChSelFunc_OnGetRamAddress - MuteChSel_Dispatch
+	.short	SmfMuteChSelFunc_OnGetLargeStep - MuteChSel_Dispatch
+	.short	MuteChSel_Dispatch - MuteChSel_Dispatch
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqTrAsPsSong_Dispatch_PtrTable
 ; SqTrAsPsSong_Dispatch_PtrTable -- 11 u32 addresses, read by
@@ -1493,7 +1514,16 @@ SqTrAsPsSong_Dispatch_Strings:
 ; SqTrAsPsSongFunc_CaseTable[10].
 ; -----------------------------------------------------------------------------
 SqTrAsPsSongFunc_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2608, 0x14
+	.short	SqTrAsPsSongFunc_OnGetLargeStep - SqTrAsPsSong_Dispatch
+	.short	SqTrAsPsSongFunc_OnGetLargeStep - SqTrAsPsSong_Dispatch
+	.short	SqTrAsPsSong_ReturnZero - SqTrAsPsSong_Dispatch
+	.short	SqTrAsPsSong_ReturnZero - SqTrAsPsSong_Dispatch
+	.short	SqTrAsPsSong_ReturnZero - SqTrAsPsSong_Dispatch
+	.short	SqTrAsPsSongFunc_OnGetMax - SqTrAsPsSong_Dispatch
+	.short	SqTrAsPsSong_ReturnZero - SqTrAsPsSong_Dispatch
+	.short	SqTrAsPsSongFunc_OnGetRamAddress - SqTrAsPsSong_Dispatch
+	.short	SqTrAsPsSongFunc_OnGetLargeStep - SqTrAsPsSong_Dispatch
+	.short	SqTrAsPsSong_Dispatch - SqTrAsPsSong_Dispatch
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqAftSetFunc_PtrTable
 ; SqAftSetFunc_PtrTable -- 2 u32 addresses, read by SqAftSetFunc (v10/v9
@@ -1558,7 +1588,16 @@ MuteChSet_Dispatch_Strings:
 ; MuteChSetFunc_CaseTable[10].
 ; -----------------------------------------------------------------------------
 MuteChSetFunc_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2710, 0x14
+	.short	MuteChSetFunc_OnGetLargeStep - MuteChSet_Dispatch
+	.short	MuteChSetFunc_OnGetLargeStep - MuteChSet_Dispatch
+	.short	MuteChSetFunc_Exit - MuteChSet_Dispatch
+	.short	MuteChSetFunc_Exit - MuteChSet_Dispatch
+	.short	MuteChSetFunc_Exit - MuteChSet_Dispatch
+	.short	MuteChSetFunc_OnGetMax - MuteChSet_Dispatch
+	.short	MuteChSetFunc_Exit - MuteChSet_Dispatch
+	.short	MuteChSetFunc_OnGetRamAddress - MuteChSet_Dispatch
+	.short	MuteChSetFunc_OnGetLargeStep - MuteChSet_Dispatch
+	.short	MuteChSet_Dispatch - MuteChSet_Dispatch
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AcDemoMedley_HandleScrollEvent_Str
 ; AcDemoMedley_HandleScrollEvent_Str -- NUL-terminated string(s), 12
@@ -1611,7 +1650,16 @@ DemoMedDsp_Dispatch_Str:
 ; DemoMedDspCheck_CaseTable[10].
 ; -----------------------------------------------------------------------------
 DemoMedDspCheck_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2754, 0x14
+	.short	DemoMedDspCheck_OnGetLargeStep - DemoMedDsp_Dispatch
+	.short	DemoMedDspCheck_OnGetSmallStep - DemoMedDsp_Dispatch
+	.short	DPLoad_DspReturn - DemoMedDsp_Dispatch
+	.short	DPLoad_DspReturn - DemoMedDsp_Dispatch
+	.short	DPLoad_DspReturn - DemoMedDsp_Dispatch
+	.short	DemoMedDspCheck_OnGetMax - DemoMedDsp_Dispatch
+	.short	DemoMedDspCheck_OnGetMin - DemoMedDsp_Dispatch
+	.short	DemoMedDspCheck_OnGetRamAddress - DemoMedDsp_Dispatch
+	.short	DemoMedDspCheck_OnGetSmallStep - DemoMedDsp_Dispatch
+	.short	DemoMedDsp_Dispatch - DemoMedDsp_Dispatch
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] PlayModeStr_Play
 ; PlayModeStr_Play -- NUL-terminated string(s), 6 bytes, used by
@@ -1642,7 +1690,16 @@ DPPlayDsp_Dispatch_Str:
 ; DPPlayDspCheck_CaseTable[10].
 ; -----------------------------------------------------------------------------
 DPPlayDspCheck_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2774, 0x14
+	.short	DPPlayDspCheck_OnGetLargeStep - DPPlayDsp_Dispatch
+	.short	DPPlayDspCheck_OnGetSmallStep - DPPlayDsp_Dispatch
+	.short	DPPlay_DspReturn - DPPlayDsp_Dispatch
+	.short	DPPlay_DspReturn - DPPlayDsp_Dispatch
+	.short	DPPlay_DspReturn - DPPlayDsp_Dispatch
+	.short	DPPlayDspCheck_OnGetMax - DPPlayDsp_Dispatch
+	.short	DPPlayDspCheck_OnGetMin - DPPlayDsp_Dispatch
+	.short	DPPlayDspCheck_OnGetRamAddress - DPPlayDsp_Dispatch
+	.short	DPPlayDspCheck_OnGetSmallStep - DPPlayDsp_Dispatch
+	.short	DPPlayDsp_Dispatch - DPPlayDsp_Dispatch
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] PlayModeStr_Pause
 ; PlayModeStr_Pause -- NUL-terminated string(s), 6 bytes, used by
@@ -1673,7 +1730,16 @@ DPPauseDsp_Dispatch_Str:
 ; DPPauseDspCheck_CaseTable[10].
 ; -----------------------------------------------------------------------------
 DPPauseDspCheck_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2794, 0x14
+	.short	DPPauseDspCheck_OnGetLargeStep - DPPauseDsp_Dispatch
+	.short	DPPauseDspCheck_OnGetSmallStep - DPPauseDsp_Dispatch
+	.short	DPPause_DspReturn - DPPauseDsp_Dispatch
+	.short	DPPause_DspReturn - DPPauseDsp_Dispatch
+	.short	DPPause_DspReturn - DPPauseDsp_Dispatch
+	.short	DPPauseDspCheck_OnGetMax - DPPauseDsp_Dispatch
+	.short	DPPauseDspCheck_OnGetMin - DPPauseDsp_Dispatch
+	.short	DPPauseDspCheck_OnGetRamAddress - DPPauseDsp_Dispatch
+	.short	DPPauseDspCheck_OnGetSmallStep - DPPauseDsp_Dispatch
+	.short	DPPauseDsp_Dispatch - DPPauseDsp_Dispatch
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] DPPauseDspCheck_CaseTable_Strings
 ; DPPauseDspCheck_CaseTable_Strings -- 6 bytes of NUL-terminated strings

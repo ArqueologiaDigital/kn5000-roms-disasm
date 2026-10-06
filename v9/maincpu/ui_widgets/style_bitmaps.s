@@ -316,7 +316,12 @@ EffectMode_UpdateBitFlags_CheckCount_Data:
 ; [nakarest] Readers: source references OneTchFUNC (ui/bitmap_out_routines.s: `add xde,
 ; [nakarest] OneTchFUNC_Data`).
 OneTchFUNC_Data:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xAD6, 0xC
+	.short	BitMapOut_ByteData_WidgetTable - BitMapOut_ByteData_WidgetTable
+	.short	BitMapOut_ApplyWidgetPatch - BitMapOut_ByteData_WidgetTable
+	.short	BitMapOut_ApplyWidgetPatch - BitMapOut_ByteData_WidgetTable
+	.short	BitMapOut_ApplyWidgetPatch - BitMapOut_ByteData_WidgetTable
+	.short	BitMapOut_ApplyWidgetPatch - BitMapOut_ByteData_WidgetTable
+	.short	BitMapOut_ApplyWidgetPatch - BitMapOut_ByteData_WidgetTable
 ; [nakarest] naka_style_bitmaps+0xae2  +0xae2..+0xc6e (0xeb7ca0, 396 B)
 ; [nakarest] Text (396 B at 0xeb7ca0), first string "IModern Vibes Moscow Mandolins\xD5Sing
 ; [nakarest] It, P"; no registered NAKA table points into it; reached through source references
@@ -372,25 +377,45 @@ Test_SRAM_IC21_Data:
 ; [nakarest] Readers: source references TEST2FUNC (ui/ui_mode_handlers.s: `add xde,
 ; [nakarest] TEST2FUNC_Data`).
 TEST2FUNC_Data:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE84, 0xC
+	.short	TEST2FUNC_DispatchReturn - TEST2FUNC_DispatchReturn
+	.short	TableDispatch_Return3 - TEST2FUNC_DispatchReturn
+	.short	TableDispatch_Return3 - TEST2FUNC_DispatchReturn
+	.short	TableDispatch_Return3 - TEST2FUNC_DispatchReturn
+	.short	TableDispatch_Return3 - TEST2FUNC_DispatchReturn
+	.short	TableDispatch_Return3 - TEST2FUNC_DispatchReturn
 ; [nakarest] naka_style_bitmaps+0xe90  +0xe90..+0xe9c (0xeb804e, 12 B)
 ; [nakarest] purpose not established: layout of 12 B at 0xeb804e not derived; readers below
 ; [nakarest] Readers: source references TEST3FUNC (ui/ui_mode_handlers.s: `add xde,
 ; [nakarest] TEST3FUNC_Data`).
 TEST3FUNC_Data:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE90, 0xC
+	.short	TEST3FUNC_DispatchReturn - TEST3FUNC_DispatchReturn
+	.short	TableDispatch_Return4 - TEST3FUNC_DispatchReturn
+	.short	TableDispatch_Return4 - TEST3FUNC_DispatchReturn
+	.short	TableDispatch_Return4 - TEST3FUNC_DispatchReturn
+	.short	TableDispatch_Return4 - TEST3FUNC_DispatchReturn
+	.short	TableDispatch_Return4 - TEST3FUNC_DispatchReturn
 ; [nakarest] naka_style_bitmaps+0xe9c  +0xe9c..+0xea8 (0xeb805a, 12 B)
 ; [nakarest] purpose not established: layout of 12 B at 0xeb805a not derived; readers below
 ; [nakarest] Readers: source references TEST4FUNC (ui/ui_mode_handlers.s: `add xde,
 ; [nakarest] TEST4FUNC_Data`).
 TEST4FUNC_Data:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE9C, 0xC
+	.short	TEST4FUNC_DispatchReturn - TEST4FUNC_DispatchReturn
+	.short	TableDispatch_Return5 - TEST4FUNC_DispatchReturn
+	.short	TableDispatch_Return5 - TEST4FUNC_DispatchReturn
+	.short	TableDispatch_Return5 - TEST4FUNC_DispatchReturn
+	.short	TableDispatch_Return5 - TEST4FUNC_DispatchReturn
+	.short	TableDispatch_Return5 - TEST4FUNC_DispatchReturn
 ; [nakarest] naka_style_bitmaps+0xea8  +0xea8..+0xeb4 (0xeb8066, 12 B)
 ; [nakarest] purpose not established: layout of 12 B at 0xeb8066 not derived; readers below
 ; [nakarest] Readers: source references TEST6FUNC (ui/ui_mode_handlers.s: `add xde,
 ; [nakarest] TEST6FUNC_Data`).
 TEST6FUNC_Data:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xEA8, 0xC
+	.short	TEST6FUNC_DispatchReturn - TEST6FUNC_DispatchReturn
+	.short	TableDispatch_Return - TEST6FUNC_DispatchReturn
+	.short	TableDispatch_Return - TEST6FUNC_DispatchReturn
+	.short	TableDispatch_Return - TEST6FUNC_DispatchReturn
+	.short	TableDispatch_Return - TEST6FUNC_DispatchReturn
+	.short	TableDispatch_Return - TEST6FUNC_DispatchReturn
 ; -----------------------------------------------------------------------------
 ; [nakarest_retype] Bitmap_FadeInPicture
 ; Bitmap_FadeInPicture  --  112 x 25 bitmap, 8 bpp, row stride 112, 2800 bytes

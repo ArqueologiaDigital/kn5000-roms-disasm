@@ -7770,34 +7770,49 @@ MIDI_ReadChannelParam:
 MidiChan_ParamDispatch:
 	ld	(xwa), e
 	ret
+MIDI_ReadChannelParam_Case1:
 	ld	xbc, 1:i3
 	jr	MIDI_ReadChannelParam_Join
+MIDI_ReadChannelParam_Case2:
 	ld	xbc, 2:i3
 	jr	MIDI_ReadChannelParam_Join
+MIDI_ReadChannelParam_Case3:
 	ld	xbc, 3:i3
 	jr	MIDI_ReadChannelParam_Join
+MIDI_ReadChannelParam_Case4:
 	ld	xbc, 4:i3
 	jr	MIDI_ReadChannelParam_Join
+MIDI_ReadChannelParam_Case5:
 	ld	xbc, 5:i3
 	jr	MIDI_ReadChannelParam_Join
+MIDI_ReadChannelParam_Case6:
 	ld	xbc, 6:i3
 	jr	MIDI_ReadChannelParam_Join
+MIDI_ReadChannelParam_Case7:
 	ld	xbc, 7:i3
 	jr	MIDI_ReadChannelParam_Join
+MIDI_ReadChannelParam_Case8:
 	ld	xbc, 8
 	jr	MIDI_ReadChannelParam_Join
+MIDI_ReadChannelParam_Case9:
 	ld	xbc, 9
 	jr	MIDI_ReadChannelParam_Join
+MIDI_ReadChannelParam_Case10:
 	ld	xbc, 10
 	jr	MIDI_ReadChannelParam_Join
+MIDI_ReadChannelParam_Case11:
 	ld	xbc, 11
 	jr	MIDI_ReadChannelParam_Join
+MIDI_ReadChannelParam_Case12:
 	ld	xbc, 12
 	jr	MIDI_ReadChannelParam_Join
+MIDI_ReadChannelParam_Case13:
 	ld	xbc, 13
 	jr	MIDI_ReadChannelParam_Join
+MIDI_ReadChannelParam_Case14:
 	ld	xbc, 14
 	jr	MIDI_ReadChannelParam_Join
+MIDI_ReadChannelParam_Case15:
 	ld	xbc, 15
 MIDI_ReadChannelParam_Join:
 	add	xwa, xbc
@@ -7826,34 +7841,49 @@ SeqData_ReadFieldByIndex:
 SeqData_FieldDispatch:
 	ld	l, (xwa)
 	jr	SeqData_ReadFieldByIndex_Return
+SeqData_ReadFieldByIndex_Case1:
 	ld	xbc, 1:i3
 	jr	SeqData_ReadFieldByIndex_Join
+SeqData_ReadFieldByIndex_Case2:
 	ld	xbc, 2:i3
 	jr	SeqData_ReadFieldByIndex_Join
+SeqData_ReadFieldByIndex_Case3:
 	ld	xbc, 3:i3
 	jr	SeqData_ReadFieldByIndex_Join
+SeqData_ReadFieldByIndex_Case4:
 	ld	xbc, 4:i3
 	jr	SeqData_ReadFieldByIndex_Join
+SeqData_ReadFieldByIndex_Case5:
 	ld	xbc, 5:i3
 	jr	SeqData_ReadFieldByIndex_Join
+SeqData_ReadFieldByIndex_Case6:
 	ld	xbc, 6:i3
 	jr	SeqData_ReadFieldByIndex_Join
+SeqData_ReadFieldByIndex_Case7:
 	ld	xbc, 7:i3
 	jr	SeqData_ReadFieldByIndex_Join
+SeqData_ReadFieldByIndex_Case8:
 	ld	xbc, 8
 	jr	SeqData_ReadFieldByIndex_Join
+SeqData_ReadFieldByIndex_Case9:
 	ld	xbc, 9
 	jr	SeqData_ReadFieldByIndex_Join
+SeqData_ReadFieldByIndex_Case10:
 	ld	xbc, 10
 	jr	SeqData_ReadFieldByIndex_Join
+SeqData_ReadFieldByIndex_Case11:
 	ld	xbc, 11
 	jr	SeqData_ReadFieldByIndex_Join
+SeqData_ReadFieldByIndex_Case12:
 	ld	xbc, 12
 	jr	SeqData_ReadFieldByIndex_Join
+SeqData_ReadFieldByIndex_Case13:
 	ld	xbc, 13
 	jr	SeqData_ReadFieldByIndex_Join
+SeqData_ReadFieldByIndex_Case14:
 	ld	xbc, 14
 	jr	SeqData_ReadFieldByIndex_Join
+SeqData_ReadFieldByIndex_Case15:
 	ld	xbc, 15
 SeqData_ReadFieldByIndex_Join:
 	add	xwa, xbc
@@ -12542,14 +12572,19 @@ SysEx_ResetAndReturn:
 SysEx_DispatchCalls_Data:
 	call	MidiCtrl_SendControlPacket_Helper2
 	jr	SysEx_InitiateSend_Join
+SysEx_InitiateSend_Case2:
 	call	MidiCtrl_SendControlPacket_Helper3
 	jr	SysEx_InitiateSend_Join
+SysEx_InitiateSend_Case3:
 	call	MidiCtrl_SendControlPacket_Helper4
 	jr	SysEx_InitiateSend_Join
+SysEx_InitiateSend_Case4:
 	call	MidiCtrl_SendControlPacket_Helper5
 	jr	SysEx_InitiateSend_Join
+SysEx_InitiateSend_Case5:
 	call	MidiCtrl_SendControlPacket_Helper6
 	jr	SysEx_InitiateSend_Join
+SysEx_InitiateSend_Case6:
 	call	MidiCtrl_SendControlPacket_Helper7
 	jr	SysEx_InitiateSend_Join
 	ret
@@ -12802,11 +12837,17 @@ SeqData_FormatOutput_Data_Helper:
 	jp	t, (xix+hl)
 SeqData_FormatOutput_Default_Code:
 	jr	SeqData_FormatOutput_Data_Helper_Join
+SeqData_FormatOutput_Data_Helper_Case2:
 	jr	SeqData_FormatOutput_Data_Helper_Join2
+SeqData_FormatOutput_Data_Helper_Case3:
 	jrl	SeqData_FormatOutput_Data_Helper_Join3
+SeqData_FormatOutput_Data_Helper_Case4:
 	jrl	SeqData_FormatOutput_Data_Helper_Return
+SeqData_FormatOutput_Data_Helper_Case5:
 	jrl	SeqData_FormatOutput_Data_Helper_Join4
+SeqData_FormatOutput_Data_Helper_Case6:
 	jrl	SeqData_FormatOutput_Data_Helper_Join5
+SeqData_FormatOutput_Data_Helper_Case7:
 	calr	SeqData_FormatOutput_Data_Helper_Helper
 	ret
 SeqData_FormatOutput_Data_Helper_Join:
@@ -13888,11 +13929,17 @@ VoiceParam_MultiMode_StubRet:
 	jp	t, (xix+hl)
 VoiceParam_MultiMode_StubRet_Code:
 	jr	SeqAlt_DescriptorBlock_Data_Join
+VoiceParam_MultiModeDispatch_Case2:
 	jr	SeqAlt_DescriptorBlock_Data_Join2
+VoiceParam_MultiModeDispatch_Case3:
 	jrl	SeqAlt_DescriptorBlock_Data_Join3
+VoiceParam_MultiModeDispatch_Case4:
 	jrl	SeqAlt_DescriptorBlock_Data_Return
+VoiceParam_MultiModeDispatch_Case5:
 	jrl	SeqAlt_DescriptorBlock_Data_Join4
+VoiceParam_MultiModeDispatch_Case6:
 	jrl	SeqAlt_DescriptorBlock_Data_Join5
+VoiceParam_MultiModeDispatch_Case7:
 	calr	SeqAlt_DescriptorBlock_Data_Helper3
 	ret
 SeqAlt_DescriptorBlock_Data_Join:

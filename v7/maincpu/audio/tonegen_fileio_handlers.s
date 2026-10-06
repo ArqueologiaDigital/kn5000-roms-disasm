@@ -301,20 +301,28 @@ DSPCfg_Init_BoundsCheck:
 DSPCfg_InitDispatch:
 	calr	DSPCfg_InitDispatchData
 	jr	DSPCfg_Init_BoundsCheck_Return
+DSPCfg_Init_BoundsCheck_Case1:
 	calr	DSPCfg_Init_BoundsCheck_Helper
 	jr	DSPCfg_Init_BoundsCheck_Return
+DSPCfg_Init_BoundsCheck_Case2:
 	calr	DSPCfg_Init_BoundsCheck_Helper2
 	jr	DSPCfg_Init_BoundsCheck_Return
+DSPCfg_Init_BoundsCheck_Case3:
 	calr	DSPCfg_Init_BoundsCheck_Helper3
 	jr	DSPCfg_Init_BoundsCheck_Return
+DSPCfg_Init_BoundsCheck_Case4:
 	calr	DSPCfg_Init_BoundsCheck_Helper4
 	jr	DSPCfg_Init_BoundsCheck_Return
+DSPCfg_Init_BoundsCheck_Case5:
 	calr	DSPCfg_Init_BoundsCheck_Helper5
 	jr	DSPCfg_Init_BoundsCheck_Return
+DSPCfg_Init_BoundsCheck_Case6:
 	calr	DSPCfg_Init_BoundsCheck_Helper6
 	jr	DSPCfg_Init_BoundsCheck_Return
+DSPCfg_Init_BoundsCheck_Case7:
 	calr	DSPCfg_Init_BoundsCheck_Helper7
 	jr	DSPCfg_Init_BoundsCheck_Return
+DSPCfg_Init_BoundsCheck_Case8:
 	calr	DSPCfg_Init_BoundsCheck_Helper8
 	jr	DSPCfg_Init_BoundsCheck_Return
 ; DSPCfg_InitAllEntries finalize after dispatch
@@ -1024,30 +1032,35 @@ CtrlPanel_IndicatorJumpTable:
 ; DSP config parameter handler C
 DSPCfg_Param_CaseC:
 	ret
+CtrlPanel_IndicatorJumpTable_Case4:
 	ld	xwa, 0x3d3400
 	push	xwa
 	ld	wa, 1:i3
 	ld	xbc, 0x0340e4
 	ld	de, 2:i3
 	jr	CtrlPanel_IndicatorJumpTable_Join
+CtrlPanel_IndicatorJumpTable_Case5:
 	ld	xwa, 0x3d3410
 	push	xwa
 	ld	wa, 1:i3
 	ld	xbc, 0x0340e6
 	ldw	de, 12
 	jr	CtrlPanel_IndicatorJumpTable_Join
+CtrlPanel_IndicatorJumpTable_Case6:
 	ld	xwa, 0x3d3420
 	push	xwa
 	ld	wa, 1:i3
 	ld	xbc, 0x0340f2
 	ld	de, 4:i3
 	jr	CtrlPanel_IndicatorJumpTable_Join
+CtrlPanel_IndicatorJumpTable_Case7:
 	ld	xwa, 0x3d3430
 	push	xwa
 	ld	wa, 1:i3
 	ld	xbc, 0x0340f6
 	ld	de, 4:i3
 	jr	CtrlPanel_IndicatorJumpTable_Join
+CtrlPanel_IndicatorJumpTable_Case8:
 	ld	xwa, 0x3d3440
 	push	xwa
 	ld	wa, 1:i3
@@ -1070,16 +1083,19 @@ Audio_DispatchCommand:
 ; DSP config parameter handler D
 DSPCfg_Param_CaseD:
 	ret
+Audio_DispatchCommand_Case4:
 	pushw	2
 	ld	xwa, 0x3d3400
 	push	xwa
 	ld	xwa, 0x0340e4
 	jr	Audio_DispatchCommand_Join
+Audio_DispatchCommand_Case5:
 	pushw	12
 	ld	xwa, 0x3d3410
 	push	xwa
 	ld	xwa, 0x0340e6
 	jr	Audio_DispatchCommand_Join
+Audio_DispatchCommand_Case6:
 	pushw	4
 	.asciz	"@ 4="
 	push	xwa
@@ -1087,12 +1103,14 @@ DSPCfg_Param_CaseD:
 Audio_DispatchCommand_Join:
 	push	xwa
 	jr	Audio_DispatchCommand_Join2
+Audio_DispatchCommand_Case7:
 	pushw	4
 	ld	xwa, 0x3d3430
 	push	xwa
 	pushw	3
 	pushw	0x40f6
 	jr	Audio_DispatchCommand_Join2
+Audio_DispatchCommand_Case8:
 	pushw	6
 	ld	xwa, 0x3d3440
 	push	xwa
@@ -1125,6 +1143,7 @@ PanelDisplay_DispatchByMode_Loop:
 	cp	bc, 2:i3
 	jr	c, PanelDisplay_DispatchByMode_Loop
 	jr	DSPCfg_Param_Default
+PanelDisplay_DispatchByMode_Case5:
 	ld	xde, 0x3d3410
 	lda	xhl, (0x0340e6:24)
 	ld	bc, 0:i3
@@ -1136,6 +1155,7 @@ PanelDisplay_DispatchByMode_Loop2:
 	cp	bc, 12
 	jr	c, PanelDisplay_DispatchByMode_Loop2
 	jr	DSPCfg_Param_Default
+PanelDisplay_DispatchByMode_Case6:
 	ld	xde, 0x3d3420
 	lda	xhl, (0x0340f2:24)
 	ld	bc, 0:i3
@@ -1147,6 +1167,7 @@ PanelDisplay_DispatchByMode_Loop3:
 	cp	bc, 4:i3
 	jr	c, PanelDisplay_DispatchByMode_Loop3
 	jr	DSPCfg_Param_Default
+PanelDisplay_DispatchByMode_Case7:
 	ld	xde, 0x3d3430
 	lda	xhl, (0x0340f6:24)
 	ld	bc, 0:i3
@@ -1158,6 +1179,7 @@ PanelDisplay_DispatchByMode_Loop4:
 	cp	bc, 4:i3
 	jr	c, PanelDisplay_DispatchByMode_Loop4
 	jr	t, DSPCfg_Param_Default
+PanelDisplay_DispatchByMode_Case8:
 	ld	xde, 0x3d3440	; was .asciz "B@4="
 	lda	xhl, (0x0340fa:24)
 	ld	bc, 0:i3

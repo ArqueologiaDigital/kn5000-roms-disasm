@@ -815,15 +815,40 @@ SeCopyTitleFunc_SwitchHandlers:
 ; data read by SeMenu_CopyWriteUpdate_Epilogue34+0x46 (0xF0DC77)
 ; evidence: `lda xix, (this)` then `ld WA,(XIX+WA) / lda XIX,0xf0dc8b`
 ToneGen_ParamTable_0x2EE:
-	.incbin "includes/generated/tonegen_param_table.bin", 0x2EE, 0x18
+	.short	SeMenu_CopyWriteUpdate_Step3_Code - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeMenu_CopyWriteUpdate_Step3_Code - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeMenu_CopyWriteUpdate_Step3_Code - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeMenu_CopyWriteUpdate_Step3_Code - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeMenu_CopyWriteUpdate_Entry5_Case4 - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeMenu_CopyWriteUpdate_Entry5_Case4 - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeMenu_CopyWriteUpdate_Entry5_Case6 - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeMenu_CopyWriteUpdate_Entry5_Case4 - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeMenu_CopyWriteUpdate_Entry5_Case8 - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeMenu_CopyWriteUpdate_Entry5_Case9 - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeMenu_CopyWriteUpdate_Entry5_Case4 - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeMenu_CopyWriteUpdate_Entry5_Case4 - SeMenu_CopyWriteUpdate_Step3_Code
 ; data read by SeMenu_CopyWriteUpdate_Epilogue35+0x46 (0xF0DD22)
 ; evidence: `lda xix, (this)` then `ld WA,(XIX+WA) / lda XIX,0xf0dd36`
 ToneGen_ParamTable_0x306:
-	.incbin "includes/generated/tonegen_param_table.bin", 0x306, 0x14
+	.short	SeMenu_CopyWriteUpdate_Step3_Code_2 - SeMenu_CopyWriteUpdate_Step3_Code_2
+	.short	SeMenu_CopyWriteUpdate_Step3_Code_2 - SeMenu_CopyWriteUpdate_Step3_Code_2
+	.short	SeMenu_CopyWriteUpdate_Step3_Code_2 - SeMenu_CopyWriteUpdate_Step3_Code_2
+	.short	SeMenu_CopyWriteUpdate_Step3_Code_2 - SeMenu_CopyWriteUpdate_Step3_Code_2
+	.short	SeMenu_CopyWriteUpdate_Step3_Code_2 - SeMenu_CopyWriteUpdate_Step3_Code_2
+	.short	SeMenu_CopyWriteUpdate_Step3_Code_2 - SeMenu_CopyWriteUpdate_Step3_Code_2
+	.short	SeMenu_CopyWriteUpdate_Entry5_Switch2_Case6 - SeMenu_CopyWriteUpdate_Step3_Code_2
+	.short	SeMenu_CopyWriteUpdate_Step3_Code_2 - SeMenu_CopyWriteUpdate_Step3_Code_2
+	.short	SeMenu_CopyWriteUpdate_Entry5_Switch2_Case6 - SeMenu_CopyWriteUpdate_Step3_Code_2
+	.short	SeMenu_CopyWriteUpdate_Entry5_Switch2_Case9 - SeMenu_CopyWriteUpdate_Step3_Code_2
 ; data read by SeMenu_CopyWriteUpdate_Epilogue36+0x44 (0xF0DDB3)
 ; evidence: `lda xix, (this)` then `ld WA,(XIX+WA) / lda XIX,0xf0ddc7`
 ToneGen_ParamTable_0x31A:
-	.incbin "includes/generated/tonegen_param_table.bin", 0x31A, 0xC
+	.short	SeMenu_CopyWriteUpdate_Step3_Code_3 - SeMenu_CopyWriteUpdate_Step3_Code_3
+	.short	SeMenu_CopyWriteUpdate_Step3_Code_3 - SeMenu_CopyWriteUpdate_Step3_Code_3
+	.short	SeMenu_CopyWriteUpdate_Step3_Code_3 - SeMenu_CopyWriteUpdate_Step3_Code_3
+	.short	SeMenu_CopyWriteUpdate_Step3_Code_3 - SeMenu_CopyWriteUpdate_Step3_Code_3
+	.short	SeMenu_CopyWriteUpdate_Entry5_Switch3_Case4 - SeMenu_CopyWriteUpdate_Step3_Code_3
+	.short	SeMenu_CopyWriteUpdate_Entry5_Switch3_Case4 - SeMenu_CopyWriteUpdate_Step3_Code_3
 ; data read by SeMenu_PopupDialog_Close_Data+0x1D (0xF0EA0E)
 ; evidence: `lda xbc, (this)` then `ld XHL,(XBC+WA) / call T,XHL`
 ; data read by SeMenu_ListSelector_HandleInput+0x1A (0xF0EB4E)

@@ -152,18 +152,23 @@ TitleFunc_ActionDispatch:
 	lda xwa, (TitleFunc_ActionDispatch_Data:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
+TestTitleFunc_Case3:
 	lda xwa, (TitleFunc_ActionDispatch_Data_2:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
+TestTitleFunc_Case5:
 	lda xwa, (TitleFunc_ActionDispatch_Data_3:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
+TestTitleFunc_Case4:
 	lda xwa, (TitleFunc_ActionDispatch_Data_4:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
+TestTitleFunc_Case6:
 	lda xwa, (TitleFunc_ActionDispatch_Data_5:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
+TestTitleFunc_Case7:
 	lda xwa, (TitleFunc_ActionDispatch_Data_6:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
@@ -188,6 +193,7 @@ TitleFunc_LifecycleTable:
 	calr FDTest_PrintDiag
 	call TitleFunc_LifecycleTable_Helper
 	jr TitleFunc_Return
+TitleFunc_LifecycleDispatch_Case1:
 	ld xwa, EVT_SW_IN
 	push xwa
 	ld xwa, 2:i3
@@ -200,6 +206,7 @@ TitleFunc_LifecycleTable:
 	calr FDTest_PrintDiag
 	ld wa, 0:i3
 	jr TitleFunc_Return
+TitleFunc_LifecycleDispatch_Case2:
 	lda xwa, (TitleFunc_LifecycleTable_Data_3:24)
 	calr FDTest_PrintDiag
 	calr RunTestCounters_Entry
@@ -213,18 +220,22 @@ TitleFunc_LifecycleTable:
 	call SetApTimer
 	ld wa, 1:i3
 	jr TitleFunc_Return
+TitleFunc_LifecycleDispatch_Case3:
 	lda xwa, (TitleFunc_LifecycleTable_Data_4:24)
 	calr FDTest_PrintDiag
 	calr FDListDirectory
 	jr TitleFunc_Return
+TitleFunc_LifecycleDispatch_Case4:
 	lda xwa, (TitleFunc_LifecycleTable_Data_5:24)
 	calr FDTest_PrintDiag
 	calr RegHamaTitle1_Entry
 	jr TitleFunc_Return
+TitleFunc_LifecycleDispatch_Case5:
 	lda xwa, (TitleFunc_LifecycleTable_Data_6:24)
 	calr FDTest_PrintDiag
 	calr RegHamaTitle2_Entry
 	jr TitleFunc_Return
+TitleFunc_LifecycleDispatch_Case6:
 	calr ListDir2_Entry
 
 TitleFunc_Return:

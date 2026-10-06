@@ -3619,30 +3619,43 @@ ButtonState_DispatchDSP_InlineData:
 	ld	xbc, EVT_GET_STRING
 	call	SendEvent
 	jr	ButtonState_Paint_DrawAligned
+ButtonState_DispatchDSP_Case1:
 	ld	xwa, ButtonState_DispatchDSP_InlineData_Str_N9b
 	jr	ButtonState_PaintProc_Join
+ButtonState_DispatchDSP_Case2:
 	ld	xwa, ButtonState_DispatchDSP_InlineData_Str_N98
 	jr	ButtonState_PaintProc_Join
+ButtonState_DispatchDSP_Case12:
 	ld	xwa, ButtonState_DispatchDSP_InlineData_Str_N85
 	jr	ButtonState_PaintProc_Join
+ButtonState_DispatchDSP_Case13:
 	ld	xwa, ButtonState_DispatchDSP_InlineData_Str_N81
 	jr	ButtonState_PaintProc_Join
+ButtonState_DispatchDSP_Case4:
 	ld	xwa, NakaInst_OK
 	jr	ButtonState_PaintProc_Join
+ButtonState_DispatchDSP_Case5:
 	ld	xwa, ButtonState_DispatchDSP_InlineData_Str_OFF
 	jr	ButtonState_PaintProc_Join
+ButtonState_DispatchDSP_Case6:
 	ld	xwa, ButtonState_DispatchDSP_InlineData_Str_OK
 	jr	ButtonState_PaintProc_Join
+ButtonState_DispatchDSP_Case7:
 	ld	xwa, ButtonState_DispatchDSP_InlineData_Str_Lt
 	jr	ButtonState_PaintProc_Join
+ButtonState_DispatchDSP_Case8:
 	ld	xwa, ButtonState_DispatchDSP_InlineData_Str_Gt
 	jr	ButtonState_PaintProc_Join
+ButtonState_DispatchDSP_Case15:
 	ld	xwa, ButtonState_DispatchDSP_InlineData_Str_N7f
 	jr	ButtonState_PaintProc_Join
+ButtonState_DispatchDSP_Case16:
 	ld	xwa, ButtonState_DispatchDSP_InlineData_Str_N80
 	jr	ButtonState_PaintProc_Join
+ButtonState_DispatchDSP_Case9:
 	ld	xwa, ButtonState_DispatchDSP_InlineData_Str_YES
 	jr	ButtonState_PaintProc_Join
+ButtonState_DispatchDSP_Case10:
 	ld	xwa, Str_No
 ButtonState_PaintProc_Join:
 	push	xwa
@@ -3870,11 +3883,13 @@ ButtonState_PaintProc_Skip:
 	ld	xwa, 0xffffffff
 	ld	xbc, EVT_INDEXSW_UP
 	jrl	AcIndexEdit_SendAndReturn
+AcIndexEdit_OK_AltView_Case1:
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, 0xffffffff
 	ld	xbc, EVT_INDEXSW_UP
 	jrl	AcIndexEdit_SendAndReturn
+AcIndexEdit_OK_AltView_Case2:
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, 0xffffffff

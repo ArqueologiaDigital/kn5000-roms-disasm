@@ -263,6 +263,7 @@ Sprintf_Percent_PadRightLoop:
 	cpw (xsp + 8), 0x0
 	jr gt, Sprintf_Percent_PadRight
 	jrl Sprintf_MainLoop_ReadNext
+Sprintf_CheckLengthLL_Case115:
 	ld xbc, (xsp + 86)
 	ld xwa, 4:i3
 	add (xbc), xwa
@@ -348,6 +349,7 @@ Sprintf_String_PadRightLoop:
 	cp wa, 0:i3
 	jr nz, Sprintf_String_PadRightSpace
 	jrl Sprintf_MainLoop_ReadNext
+Sprintf_CheckLengthLL_Case100:	; cases 100, 105
 	ld wa, (xsp + 6)
 	bit 6, wa
 	jr z, Sprintf_Decimal_GetShortArg
@@ -548,6 +550,7 @@ Sprintf_Decimal_PadRightLoop:
 	cp wa, 0:i3
 	jr nz, Sprintf_Decimal_PadRightSpace
 	jrl Sprintf_MainLoop_ReadNext
+Sprintf_CheckLengthLL_Case117:
 	ld wa, (xsp + 6)
 	bit 6, wa
 	jr z, Sprintf_Unsigned_GetShortArg
@@ -676,6 +679,7 @@ Sprintf_Unsigned_PadRightLoop:
 	cp wa, 0:i3
 	jr nz, Sprintf_Unsigned_PadRightSpace
 	jrl Sprintf_MainLoop_ReadNext
+Sprintf_CheckLengthLL_Case112:
 	setm 6, (xsp + 6)
 
 Sprintf_Hex_GetArg:
@@ -855,6 +859,7 @@ Sprintf_Hex_PadRightLoop:
 	cp wa, 0:i3
 	jr nz, Sprintf_Hex_PadRightSpace
 	jrl Sprintf_MainLoop_ReadNext
+Sprintf_CheckLengthLL_Case111:
 	ld wa, (xsp + 6)
 	bit 6, wa
 	jr z, Sprintf_Octal_GetShortArg
@@ -1022,6 +1027,7 @@ Sprintf_Octal_PadRightLoop:
 	cp wa, 0:i3
 	jr nz, Sprintf_Octal_PadRightSpace
 	jr Sprintf_MainLoop_ReadNext
+Sprintf_CheckLengthLL_Case110:
 	ld xbc, (xsp + 86)
 	ld xwa, 4:i3
 	add (xbc), xwa

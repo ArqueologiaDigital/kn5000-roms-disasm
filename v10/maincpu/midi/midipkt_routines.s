@@ -1332,10 +1332,15 @@ MidiPkt_SysExBulkTransfer_Data:
 	jp	t, (xix+hl)
 MidiPkt_SendBankSelect_Send_Code:
 	jr	MidiPkt_SysExBulkTransfer_Data_Join
+MidiPkt_SysExBulkTransfer_Data_Case2:
 	jrl	MidiPkt_SysExBulkTransfer_Data_Join3
+MidiPkt_SysExBulkTransfer_Data_Case3:
 	jrl	MidiPkt_SysExBulkTransfer_Data_Join4
+MidiPkt_SysExBulkTransfer_Data_Case4:
 	jrl	SysEx_ApplyToSlot4B_Data
+MidiPkt_SysExBulkTransfer_Data_Case5:
 	jrl	SysEx_ApplyToSlot49_Data
+MidiPkt_SysExBulkTransfer_Data_Case6:
 	calr	SysEx_ApplyToSlot49_Format_Data
 	ret
 MidiPkt_SysExBulkTransfer_Data_Helper:

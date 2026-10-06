@@ -1334,8 +1334,14 @@ CmpSetP1_DialGrid_Data:	.byte	0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
 	.byte	0x02, 0x00, 0x03, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
 CmpSetP1_SendAndApplyFunc_Data:	.byte	0x01, 0x00, 0x01, 0x00, 0x03, 0x00
 	.byte	0x02, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
-AcCmpSetGridBoxProc_Data:	.byte	0x6a, 0x00, 0x1c, 0x01
-	.byte 0x6a, 0x00, 0x1c, 0x01, 0x0c, 0x02, 0xf5, 0x01, 0xf5, 0x01
+AcCmpSetGridBoxProc_Data:
+	.short	AcCmpSetGridBoxProc_OnIndexswUp - CmpSetP1_DialGrid
+	.short	AcCmpSetGridBoxProc_OnIndexswDown - CmpSetP1_DialGrid
+	.short	AcCmpSetGridBoxProc_OnIndexswUp - CmpSetP1_DialGrid
+	.short	AcCmpSetGridBoxProc_OnIndexswDown - CmpSetP1_DialGrid
+	.short	CmpSetP1_GridCheck_Case4 - CmpSetP1_DialGrid
+	.short	CmpSetP1_GridCheck_Case3 - CmpSetP1_DialGrid
+	.short	CmpSetP1_GridCheck_Case3 - CmpSetP1_DialGrid
 NoteDataB_Natural:
 	aligned_string "B "
 NoteDataB_Flat:
@@ -1401,9 +1407,22 @@ StrTimeSig_1_2:
 UI_COMPONENT_DISPATCH_Str_Fmtd:			.byte 0x25, 0x64, 0x00, 0xff
 UI_COMPONENT_DISPATCH_CASE1_Str_Fmts_Fmts:	aligned_string "%s (%s)"
 CmpSetP1_GridCheck_EventEnc_Data:
-	.byte 0x00, 0x00, 0x1a, 0x00, 0xa4, 0x00, 0xa4, 0x00, 0x55, 0x00, 0x60, 0x00, 0x7e, 0x00, 0x82, 0x00		; padding
+	.short	UI_COMPONENT_DISPATCH - UI_COMPONENT_DISPATCH
+	.short	UI_COMPONENT_DISPATCH_CASE1 - UI_COMPONENT_DISPATCH
+	.short	WidgetHandler_PostEventAndReturnZero - UI_COMPONENT_DISPATCH
+	.short	WidgetHandler_PostEventAndReturnZero - UI_COMPONENT_DISPATCH
+	.short	UI_COMPONENT_DISPATCH_CASE2 - UI_COMPONENT_DISPATCH
+	.short	UI_COMPONENT_DISPATCH_CASE3 - UI_COMPONENT_DISPATCH
+	.short	UI_COMPONENT_DISPATCH_CASE4 - UI_COMPONENT_DISPATCH
+	.short	UI_COMPONENT_DISPATCH_CASE5 - UI_COMPONENT_DISPATCH
 CmpSetP1GridCheck_Data:
-	.byte 0x00, 0x00, 0x38, 0x00, 0x00, 0x00, 0x38, 0x00, 0x72, 0x01, 0x72, 0x01, 0x72, 0x01		; padding
+	.short	CmpSetP1_GridCheck_EventEnc - CmpSetP1_GridCheck_EventEnc
+	.short	CmpSetP1GridCheck_OnIndexswDown - CmpSetP1_GridCheck_EventEnc
+	.short	CmpSetP1_GridCheck_EventEnc - CmpSetP1_GridCheck_EventEnc
+	.short	CmpSetP1GridCheck_OnIndexswDown - CmpSetP1_GridCheck_EventEnc
+	.short	Widget_PostEvtReturnZero - CmpSetP1_GridCheck_EventEnc
+	.short	Widget_PostEvtReturnZero - CmpSetP1_GridCheck_EventEnc
+	.short	Widget_PostEvtReturnZero - CmpSetP1_GridCheck_EventEnc
 StrPanRight63:	aligned_string "Right 63"
 StrPanRight62:	aligned_string "Right 62"
 StrPanRight61:	aligned_string "Right 61"
@@ -1533,9 +1552,13 @@ StrPanLeft62:	aligned_string " Left 62"
 StrPanLeft63:	aligned_string " Left 63"
 StrPanLeft64:	aligned_string " Left 64"
 CmpSetGridCheck_Data:
-	.byte 0x00, 0x00
-	.byte 0x48, 0x00, 0x00, 0x00, 0x48, 0x00, 0xf3, 0x00
-	.byte	0xf3, 0x00, 0xf3, 0x00
+	.short	GridCheck_Handler0 - GridCheck_Handler0
+	.short	GridCheck_Handler1 - GridCheck_Handler0
+	.short	GridCheck_Handler0 - GridCheck_Handler0
+	.short	GridCheck_Handler1 - GridCheck_Handler0
+	.short	GridCheck_ReturnZero - GridCheck_Handler0
+	.short	GridCheck_ReturnZero - GridCheck_Handler0
+	.short	GridCheck_ReturnZero - GridCheck_Handler0
 S2cMemNoBox_HandleScroll_Data:	.byte	0x7c, 0xd5, 0xe1, 0x00
 PtrTbl_StyleSectShortNames:
 	.long StrStyleSect_A_Vari2
@@ -1752,8 +1775,13 @@ StrTranspose_Minus24:
 StrTranspose_Minus25:
 	.byte 0x2d, 0x32, 0x35, 0x00
 S2cGridBoxProc_Data:
-	.byte 0x76, 0x00, 0x26, 0x01, 0x76, 0x00, 0x26, 0x01
-	.byte	0x3c, 0x02, 0x00, 0x02, 0x00, 0x02
+	.short	S2cGridBoxProc_OnIndexswUp - FdcFormat_DialGrid
+	.short	S2cGridBoxProc_OnIndexswDown - FdcFormat_DialGrid
+	.short	S2cGridBoxProc_OnIndexswUp - FdcFormat_DialGrid
+	.short	S2cGridBoxProc_OnIndexswDown - FdcFormat_DialGrid
+	.short	FdcFormat_GridCheck_Case4 - FdcFormat_DialGrid
+	.short	FdcFormat_GridCheck_Case2 - FdcFormat_DialGrid
+	.short	FdcFormat_GridCheck_Case2 - FdcFormat_DialGrid
 S2c_GridCheck_Dispatch_Data:	.byte	0x91, 0x39
 	.byte 0x00, 0x00, 0x92, 0x39, 0x00, 0x00, 0x93, 0x39
 	.byte 0x00, 0x00, 0x94, 0x39, 0x00, 0x00, 0x95, 0x39
@@ -1784,9 +1812,14 @@ StrBeat02:
 StrBeat01:	.asciz " 1 "
 StrBeatOff:
 	.byte	0x4f, 0x46, 0x46, 0x00
-S2cGridCheck_Data:	.byte	0x00, 0x00
-	.byte 0x38, 0x00, 0x00, 0x00, 0x38, 0x00, 0xce, 0x00
-	.byte	0xce, 0x00, 0xce, 0x00
+S2cGridCheck_Data:
+	.short	S2c_GridCheck_DataBlock - S2c_GridCheck_DataBlock
+	.short	S2cGridCheck_OnIndexswDown - S2c_GridCheck_DataBlock
+	.short	S2c_GridCheck_DataBlock - S2c_GridCheck_DataBlock
+	.short	S2cGridCheck_OnIndexswDown - S2c_GridCheck_DataBlock
+	.short	S2c_GridCheck_EventEnc - S2c_GridCheck_DataBlock
+	.short	S2c_GridCheck_EventEnc - S2c_GridCheck_DataBlock
+	.short	S2c_GridCheck_EventEnc - S2c_GridCheck_DataBlock
 PsCmpCpFPtnBox_HandleEvtBC_Data:	.byte	0xa8, 0xd9, 0xe1, 0x00
 PtrTbl_StylePatternLongNames:
 	.long StrStylePatt_Vari2b
@@ -2112,9 +2145,14 @@ StyleVarGrp_AEnd1:
 	aligned_string "A"
 StyleVarGrp_AEnd2b:
 	.byte	0x41, 0x00
-AcEasyCmpGridBoxProc_Data:	.byte	0x6a, 0x00, 0x0e, 0x01
-	.byte 0x6a, 0x00, 0x0e, 0x01, 0xf0, 0x01, 0xd9, 0x01
-	.byte 0xd9, 0x01
+AcEasyCmpGridBoxProc_Data:
+	.short	AcEasyCmpGridBoxProc_OnIndexswUp - EasyCmp_DialGrid
+	.short	AcEasyCmpGridBoxProc_OnIndexswDown - EasyCmp_DialGrid
+	.short	AcEasyCmpGridBoxProc_OnIndexswUp - EasyCmp_DialGrid
+	.short	AcEasyCmpGridBoxProc_OnIndexswDown - EasyCmp_DialGrid
+	.short	EasyCmp_GridCheck_Case4 - EasyCmp_DialGrid
+	.short	EasyCmp_GridCheck_Case3 - EasyCmp_DialGrid
+	.short	EasyCmp_GridCheck_Case3 - EasyCmp_DialGrid
 StrGenre_Waltz:		aligned_string "     Waltz      "
 StrGenre_RockBallad:	aligned_string "  Rock Ballad   "
 StrGenre_Country:	aligned_string "    Country     "
@@ -2129,9 +2167,14 @@ EasyCmp_GridCheck_EventEnc_Str_OFF:
 	.byte 0x4f, 0x46
 	.byte	0x46, 0x00
 EasyCmp_GridCheck_EventCase2_Str_Fmt3d:	.byte	0x25, 0x33, 0x64, 0x00
-EasyCmpGridCheck_Data:	.byte	0x00, 0x00
-	.byte 0x48, 0x00, 0x00, 0x00, 0x48, 0x00, 0x18, 0x01
-	.byte	0x18, 0x01, 0x18, 0x01
+EasyCmpGridCheck_Data:
+	.short	EasyCmp_GridCheck_DataBlock - EasyCmp_GridCheck_DataBlock
+	.short	EasyCmpGridCheck_OnIndexswDown - EasyCmp_GridCheck_DataBlock
+	.short	EasyCmp_GridCheck_DataBlock - EasyCmp_GridCheck_DataBlock
+	.short	EasyCmpGridCheck_OnIndexswDown - EasyCmp_GridCheck_DataBlock
+	.short	EasyCmp_GridCheck_EventCase4 - EasyCmp_GridCheck_DataBlock
+	.short	EasyCmp_GridCheck_EventCase4 - EasyCmp_GridCheck_DataBlock
+	.short	EasyCmp_GridCheck_EventCase4 - EasyCmp_GridCheck_DataBlock
 MspNameBnkFunc_Data:	.byte	0x52, 0xdf, 0xe1, 0x00
 	.long StrBankShort_User2
 	.long StrBankShort_Compile1
@@ -2141,9 +2184,16 @@ StrBankShort_Compile1:	aligned_string "COMPILE1"
 StrBankShort_User2:	aligned_string "User2   "
 StrBankShort_User1:	aligned_string "User1   "
 MspNameBnkFunc_Data_2:
-	.byte 0x1c, 0x00, 0x1c, 0x00
-	.byte 0x69, 0x00, 0x69, 0x00, 0x69, 0x00, 0x20, 0x00
-	.byte 0x69, 0x00, 0x24, 0x00, 0x1c, 0x00, 0x00, 0x00
+	.short	MspNameBnkFunc_OnGetLargeStep - EasyCmp_GridEvtCase_Default
+	.short	MspNameBnkFunc_OnGetLargeStep - EasyCmp_GridEvtCase_Default
+	.short	MspNaming_CleanupExit - EasyCmp_GridEvtCase_Default
+	.short	MspNaming_CleanupExit - EasyCmp_GridEvtCase_Default
+	.short	MspNaming_CleanupExit - EasyCmp_GridEvtCase_Default
+	.short	MspNameBnkFunc_OnGetMax - EasyCmp_GridEvtCase_Default
+	.short	MspNaming_CleanupExit - EasyCmp_GridEvtCase_Default
+	.short	MspNameBnkFunc_OnGetRamAddress - EasyCmp_GridEvtCase_Default
+	.short	MspNameBnkFunc_OnGetLargeStep - EasyCmp_GridEvtCase_Default
+	.short	EasyCmp_GridEvtCase_Default - EasyCmp_GridEvtCase_Default
 PtrTbl_MspCompileBankLabels:
 	.long StrMspUserBank1Label
 	.long StrMspUserBank2Label
@@ -2225,8 +2275,14 @@ StrMsBankLong2_Effect2:				aligned_string "    Effect 2    "
 StrMsBankLong2_Effect1:				aligned_string "    Effect 1    "
 RgpSetBnk_EvtEnc_SendAudioCmd_Str_PAD_Fmtd:	.byte 0x50, 0x41, 0x44, 0x25
 	.byte	0x64, 0x00
-MspRGrpSetGridCheck_Data:	.byte	0x00, 0x00, 0x48, 0x00, 0x00, 0x00
-	.byte 0x48, 0x00, 0x41, 0x01, 0x41, 0x01, 0x41, 0x01
+MspRGrpSetGridCheck_Data:
+	.short	MspRGrpSetGridCheck_DataBlock - MspRGrpSetGridCheck_DataBlock
+	.short	MspRGrpSetGridCheck_OnIndexswDown - MspRGrpSetGridCheck_DataBlock
+	.short	MspRGrpSetGridCheck_DataBlock - MspRGrpSetGridCheck_DataBlock
+	.short	MspRGrpSetGridCheck_OnIndexswDown - MspRGrpSetGridCheck_DataBlock
+	.short	RgpSetBnk_GridCheck_Return - MspRGrpSetGridCheck_DataBlock
+	.short	RgpSetBnk_GridCheck_Return - MspRGrpSetGridCheck_DataBlock
+	.short	RgpSetBnk_GridCheck_Return - MspRGrpSetGridCheck_DataBlock
 RgpSetBnkBox_HandleEvtBC_Data:
 	.long StrCompileBank1
 	.long StrCompileBank2
@@ -2241,14 +2297,26 @@ MspPlayModeFunc_Data:
 StrSyncToRhythm:	aligned_string "SYNC TO RHYTHM   "
 StrInstantStart:	aligned_string "INSTANT START    "
 MspPlayModeFunc_Data_2:
-	.byte 0x23, 0x00, 0x23, 0x00
-	.byte 0x4c, 0x00, 0x4c, 0x00, 0x4c, 0x00, 0x32, 0x00
-	.byte 0x4c, 0x00, 0x36, 0x00, 0x32, 0x00, 0x00, 0x00
+	.short	MspPlayModeFunc_OnGetLargeStep - MspPlayModeFunc_DataBlock
+	.short	MspPlayModeFunc_OnGetLargeStep - MspPlayModeFunc_DataBlock
+	.short	AcSndArgGrid_BoxCase1 - MspPlayModeFunc_DataBlock
+	.short	AcSndArgGrid_BoxCase1 - MspPlayModeFunc_DataBlock
+	.short	AcSndArgGrid_BoxCase1 - MspPlayModeFunc_DataBlock
+	.short	MspPlayModeFunc_OnGetMax - MspPlayModeFunc_DataBlock
+	.short	AcSndArgGrid_BoxCase1 - MspPlayModeFunc_DataBlock
+	.short	MspPlayModeFunc_OnGetRamAddress - MspPlayModeFunc_DataBlock
+	.short	MspPlayModeFunc_OnGetMax - MspPlayModeFunc_DataBlock
+	.short	MspPlayModeFunc_DataBlock - MspPlayModeFunc_DataBlock
 AcSndArgGridBoxProc_Data:
 	.byte	0x01, 0x02, 0x04, 0x08, 0x10, 0xff
-AcSndArgGridBoxProc_Data_2:	.byte	0x6e, 0x00
-	.byte 0x4c, 0x01, 0x6e, 0x00, 0x4c, 0x01, 0x93, 0x03
-	.byte	0x56, 0x02, 0x6e, 0x03
+AcSndArgGridBoxProc_Data_2:
+	.short	AcSndArgGridBoxProc_OnIndexswUp - AcSndArgGrid_Init
+	.short	AcSndArgGridBoxProc_OnIndexswDown - AcSndArgGrid_Init
+	.short	AcSndArgGridBoxProc_OnIndexswUp - AcSndArgGrid_Init
+	.short	AcSndArgGridBoxProc_OnIndexswDown - AcSndArgGrid_Init
+	.short	AcSndArgGrid_ForwardToBase - AcSndArgGrid_Init
+	.short	AcSndArgGridBoxProc_OnLswData - AcSndArgGrid_Init
+	.short	AcSndArgGrid_ForwardToParent - AcSndArgGrid_Init
 SndArgGridCheck_Data:	.byte	0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00
 	.long Presentation_RootEntry
@@ -2305,9 +2373,16 @@ SLOT_NAME_MEMORY_A:	aligned_string "MEMORY A "
 
 MsgBox_AttentionHeader:
 	; Control codes/header
-	.byte 0x1c, 0x00, 0x1c, 0x00, 0x2d, 0x00, 0x2d, 0x00
-	.byte 0x2d, 0x00, 0x20, 0x00, 0x2d, 0x00, 0x27, 0x00
-	.byte 0x1c, 0x00, 0x00, 0x00
+	.short	StylCnvStorBnkSel_OnGetLargeStep - StylCnvStorBnkSel_DataBlock
+	.short	StylCnvStorBnkSel_OnGetLargeStep - StylCnvStorBnkSel_DataBlock
+	.short	PsSCTxtBox_EventDispatch - StylCnvStorBnkSel_DataBlock
+	.short	PsSCTxtBox_EventDispatch - StylCnvStorBnkSel_DataBlock
+	.short	PsSCTxtBox_EventDispatch - StylCnvStorBnkSel_DataBlock
+	.short	StylCnvStorBnkSel_OnGetMax - StylCnvStorBnkSel_DataBlock
+	.short	PsSCTxtBox_EventDispatch - StylCnvStorBnkSel_DataBlock
+	.short	StylCnvStorBnkSel_OnGetRamAddress - StylCnvStorBnkSel_DataBlock
+	.short	StylCnvStorBnkSel_OnGetLargeStep - StylCnvStorBnkSel_DataBlock
+	.short	StylCnvStorBnkSel_DataBlock - StylCnvStorBnkSel_DataBlock
 	; Localization: Attention (6 languages)
 MSG_ATTENTION_EN:	aligned_string "ATTENTION!"	; English (12 bytes)
 MSG_ATTENTION_DE:	.asciz "ACHTUNG !"	; German (10 bytes)

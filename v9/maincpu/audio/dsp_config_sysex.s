@@ -220,30 +220,37 @@ SysEx_ChannelHandler_4B_Data:
 	ret	nc
 	ld	xwa, SysEx4B_ChannelWords0
 	jr	SysEx_DispatchByChannel_Entry
+SysEx_DispatchByChannel_Case1:
 	cp	c, 7:i3
 	ret	nc
 	ld	xwa, SysEx4B_ChannelWords1
 	jr	SysEx_DispatchByChannel_Entry
+SysEx_DispatchByChannel_Case2:
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, SysEx4B_ChannelWords2
 	jr	SysEx_DispatchByChannel_Entry
+SysEx_DispatchByChannel_Case3:
 	cp	c, 7:i3
 	ret	nc
 	ld	xwa, SysEx4B_ChannelWords3
 	jr	SysEx_DispatchByChannel_Entry
+SysEx_DispatchByChannel_Case4:
 	cp	c, 8
 	ret	nc
 	ld	xwa, SysEx4B_ChannelWords4
 	jr	SysEx_DispatchByChannel_Entry
+SysEx_DispatchByChannel_Case5:
 	cp	c, 8
 	ret	nc
 	ld	xwa, SysEx4B_ChannelWords5
 	jr	SysEx_DispatchByChannel_Entry
+SysEx_DispatchByChannel_Case6:
 	cp	c, 7:i3
 	ret	nc
 	ld	xwa, SysEx4B_ChannelWords6
 	jr	SysEx_DispatchByChannel_Entry
+SysEx_DispatchByChannel_Case7:
 	cp	c, 7:i3
 	ret	nc
 	ld	xwa, SysEx4B_ChannelWords7
@@ -272,30 +279,37 @@ SysEx_ChannelHandler_49_Data:
 	ret	nc
 	ld	xwa, SysEx49_ChannelWords0
 	jr	SysEx_DispatchByChannel_49_Entry
+SysEx_DispatchByChannel_49_Case1:
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, SysEx49_ChannelWords1
 	jr	SysEx_DispatchByChannel_49_Entry
+SysEx_DispatchByChannel_49_Case2:
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, SysEx49_ChannelWords2
 	jr	SysEx_DispatchByChannel_49_Entry
+SysEx_DispatchByChannel_49_Case3:
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, SysEx49_ChannelWords3
 	jr	SysEx_DispatchByChannel_49_Entry
+SysEx_DispatchByChannel_49_Case4:
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, SysEx49_ChannelWords4
 	jr	SysEx_DispatchByChannel_49_Entry
+SysEx_DispatchByChannel_49_Case5:
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, SysEx49_ChannelWords5
 	jr	SysEx_DispatchByChannel_49_Entry
+SysEx_DispatchByChannel_49_Case6:
 	cp	c, 6:i3
 	ret	nc
 	ld	xwa, SysEx49_ChannelWords6
 	jr	SysEx_DispatchByChannel_49_Entry
+SysEx_DispatchByChannel_49_Case7:
 	cp	c, 6:i3
 	ret	nc
 	ld	xwa, SysEx49_ChannelWords7
@@ -4027,18 +4041,23 @@ DSPCfg_Data_ParamDispatch_Code:
 	ld	xiz, 0x4900
 	ld	wa, 0:i3
 	jr	DSPCfg_Data_ParamDispatch_Join3
+EffEdit_DSPConfigBlock_Helper_Case98:
 	ld	xiz, 0x4a00
 	jr	DSPCfg_Data_ParamDispatch_Join2
+EffEdit_DSPConfigBlock_Helper_Case99:
 	ld	xiz, 0x4b00
 DSPCfg_Data_ParamDispatch_Join2:
 	ld	wa, 1:i3
 	jr	DSPCfg_Data_ParamDispatch_Join3
+EffEdit_DSPConfigBlock_Helper_Case100:
 	ld	xiz, 0x4c00
 	ld	wa, 4:i3
 	jr	DSPCfg_Data_ParamDispatch_Join3
+EffEdit_DSPConfigBlock_Helper_Case101:
 	ld	xiz, 0x4d00
 	ld	wa, 2:i3
 	jr	DSPCfg_Data_ParamDispatch_Join3
+EffEdit_DSPConfigBlock_Helper_Case102:
 	ld	xiz, 0x4e00
 	ld	wa, 3:i3
 	jr	DSPCfg_Data_ParamDispatch_Join3
@@ -4427,6 +4446,7 @@ DspConfig_EventDispatch:
 AssSwb_SwapEntriesAndDispatch:
 	ldw (xsp + 4), 0xffff
 	jrl DSPCfg_Epilogue
+DSPCfg_ApplyParamStructFull_Case31:
 	ld c, (xwa)
 	ld (xsp + 6), c
 	lda xix, (xwa + 1)
@@ -4444,6 +4464,7 @@ AssSwb_SwapEntriesAndDispatch:
 	ld xwa, (xsp + 60)
 	ld (xwa), 0x0
 	jrl DSPCfg_Epilogue
+DSPCfg_ApplyParamStructFull_Case32:
 	ld c, (xwa)
 	ld (xsp + 6), c
 	lda xix, (xwa + 1)
@@ -4461,6 +4482,7 @@ AssSwb_SwapEntriesAndDispatch:
 	ld xwa, (xsp + 60)
 	ld (xwa), 0x1
 	jrl DSPCfg_Epilogue
+DSPCfg_ApplyParamStructFull_Case34:
 	ld c, (xwa)
 	ld (xsp + 6), c
 	lda xhl, (xwa + 1)
@@ -4482,6 +4504,7 @@ AssSwb_SwapEntriesAndDispatch:
 	ld xwa, (xsp + 48)
 	ld (xwa), 0x1
 	jrl DSPCfg_Epilogue
+DSPCfg_ApplyParamStructFull_Case38:
 	ld c, (xwa)
 	ld (xsp + 6), c
 	lda xhl, (xwa + 1)
@@ -4532,6 +4555,7 @@ AssSwb_SwapEntriesAndDispatch:
 	ld xwa, (xsp + 32)
 	ld (xwa), e
 	jrl DSPCfg_Epilogue
+DSPCfg_ApplyParamStructFull_Case18:
 	ld c, (xwa)
 	ld (xsp + 6), c
 	lda xix, (xwa + 1)
@@ -4549,6 +4573,7 @@ AssSwb_SwapEntriesAndDispatch:
 	ld xwa, (xsp + 60)
 	ld (xwa), l
 	jrl DSPCfg_Epilogue
+DSPCfg_ApplyParamStructFull_Case19:
 	ld c, (xwa)
 	ld (xsp + 6), c
 	lda xbc, (xwa + 1)
@@ -4591,6 +4616,7 @@ DSPCfg_EventType36_ClampResult:
 	ld c, (xsp + 48)
 	ld (xwa + 6), c
 	jrl DSPCfg_Epilogue
+DSPCfg_ApplyParamStructFull_Case21:
 	ld c, (xwa)
 	ld (xsp + 6), c
 	lda xix, (xwa + 1)
@@ -4616,6 +4642,7 @@ DSPCfg_EventType36_ClampResult:
 	ld xwa, (xsp + 48)
 	ld (xwa), e
 	jrl DSPCfg_Epilogue
+DSPCfg_ApplyParamStructFull_Case22:
 	ld c, (xwa)
 	ld (xsp + 6), c
 	lda xix, (xwa + 1)
@@ -4771,6 +4798,7 @@ DSPCfg_EventType36:
 DSPCfg_EventType36_StoreTail:
 	ld (xwa + 4), l
 	jrl DSPCfg_Epilogue
+DSPCfg_ApplyParamStructFull_Case23:
 	ld c, (xwa)
 	ld (xsp + 6), c
 	lda xix, (xwa + 1)
@@ -4788,6 +4816,7 @@ DSPCfg_EventType36_StoreTail:
 	ld xwa, (xsp + 60)
 	ld (xwa), l
 	jrl DSPCfg_Epilogue
+DSPCfg_ApplyParamStructFull_Case26:
 	ld c, (xwa)
 	ld (xsp + 6), c
 	lda xhl, (xwa + 1)
@@ -5825,6 +5854,7 @@ UIStateEvt_ParamEdit_Data_Join2:
 	orw	(0xc59a:16), 0x2000
 	orw	(0xc594:16), 4
 	jrl	UIStateEvt_ParamEdit_Data_Epilogue
+UIStateEvt_ParamEdit_Data_Case4:
 	bit	6, (SWBTWR_PAYLOAD_3:16)
 	jr	z, UIStateEvt_ParamEdit_Data_Skip8
 	bit	6, (SWBTWR_PAYLOAD_2:16)
@@ -5899,6 +5929,7 @@ UIStateEvt_ParamEdit_Data_Join5:
 UIStateEvt_ParamEdit_Data_Skip13:
 	ld	(0xc5a0:16), 16
 	jr	UIStateEvt_ParamEdit_Data_Epilogue
+UIStateEvt_ParamEdit_Data_Case5:
 	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 252
 	jr	z, UIStateEvt_ParamEdit_Data_Skip15
@@ -5923,6 +5954,7 @@ UIStateEvt_ParamEdit_Data_Skip15:
 UIStateEvt_ParamEdit_Data_Skip16:
 	orw	(0xc594:16), 4
 	jr	UIStateEvt_ParamEdit_Data_Epilogue
+UIStateEvt_ParamEdit_Data_Case6:
 	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 252
 	jr	z, UIStateEvt_ParamEdit_Data_Epilogue
@@ -5967,6 +5999,7 @@ UIStateEvt_VolumeMixer_Data_Skip:
 	ld	(0xc1fe:16), 0
 	orw	(0xc59a:16), 4
 	ret
+UIStateEvt_VolumeMixer_Data_Case1:
 	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 31
 	jr	z, UIStateEvt_VolumeMixer_Data_Skip3
@@ -5994,6 +6027,7 @@ UIStateEvt_VolumeMixer_Data_Skip3:
 	ld	(0xc1fe:16), 0
 	orw	(0xc59a:16), 4
 	ret
+UIStateEvt_VolumeMixer_Data_Case3:
 	bit	0, (SWBTWR_PAYLOAD_3:16)
 	jr	z, UIStateEvt_VolumeMixer_Data_Entry2
 	bit	0, (SWBTWR_PAYLOAD_2:16)
@@ -6016,6 +6050,7 @@ UIStateEvt_VolumeMixer_Data_Skip4:
 UIStateEvt_VolumeMixer_Data_Join4:
 	orw	(0xc594:16), 4
 	ret
+UIStateEvt_VolumeMixer_Data_Case4:
 	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 255
 	ret	z
@@ -6056,11 +6091,13 @@ UIStateEvt_VolumeMixer_Data_Join:
 UIStateEvt_VolumeMixer_Data_Skip6:
 	orw	(0xc594:16), 4
 	ret
+UIStateEvt_VolumeMixer_Data_Case5:
 	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 255
 	ret	z
 	orw	(0xc594:16), 4
 	ret
+UIStateEvt_VolumeMixer_Data_Case2:
 	ret
 UIStateEvt_EffectSelect_Data:
 	ldb_d8	a, (SWBTWR_PAYLOAD_1)

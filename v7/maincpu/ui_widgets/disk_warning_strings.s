@@ -92,7 +92,16 @@ JumpInsert_DispatchBody_PtrTable:	.incbin "includes/generated/naka_disk_warning.
 ; [nakarest] it; reached through source references JumpInsertFunc (file_io/misc_ui.s: `add xbc,
 ; [nakarest] JumpInsertFunc_Data`).
 JumpInsertFunc_Data:
-	.incbin "includes/generated/naka_disk_warning.bin", 0xA38, 0x14
+	.short	JumpInsertFunc_OnGetLargeStep - JumpInsert_DispatchBody
+	.short	JumpInsertFunc_OnGetLargeStep - JumpInsert_DispatchBody
+	.short	JumpInsert_Error - JumpInsert_DispatchBody
+	.short	JumpInsert_Error - JumpInsert_DispatchBody
+	.short	JumpInsert_Error - JumpInsert_DispatchBody
+	.short	JumpInsertFunc_OnGetMax - JumpInsert_DispatchBody
+	.short	JumpInsert_Error - JumpInsert_DispatchBody
+	.short	JumpInsertFunc_OnGetRamAddress - JumpInsert_DispatchBody
+	.short	JumpInsertFunc_OnGetLargeStep - JumpInsert_DispatchBody
+	.short	JumpInsert_DispatchBody - JumpInsert_DispatchBody
 FilePriorityFunc_PtrTable:		.incbin "includes/generated/naka_disk_warning.bin", 0xA4C, 0x20	; 2 x 32-bit pointer
 WaitingFunc_DrawMessage_PtrTable:	.incbin "includes/generated/naka_disk_warning.bin", 0xA6C, 0xDA	; 6 x 32-bit pointer
 ; [nakarest] naka_disk_warning+0xb46  +0xb46..+0xcba (0xea97f2, 372 B)
@@ -104,9 +113,39 @@ IvTimer_HandleEvent3A_Str_N1shot:	.incbin "includes/generated/naka_disk_warning.
 IvIndexSwCtrlProc_Str_ISC:		.incbin "includes/generated/naka_disk_warning.bin", 0xBEE, 0x4	; "ISC"
 IvIndexSwDelayProc_Str_ISD:		.incbin "includes/generated/naka_disk_warning.bin", 0xBF2, 0x4	; "ISD"
 IvWaitWinCtlProc_Str_WWC:		.incbin "includes/generated/naka_disk_warning.bin", 0xBF6, 0x4	; "WWC"
-FDC_WaitReady_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0xBFA, 0xC
-FDC_COMMAND_DISPATCHER_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0xC06, 0x18
-FDC_CommandEntry_CopyParams_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0xC1E, 0x18
+FDC_WaitReady_Data:
+	.short	FDC_CONFIG_VERIFY_Code - FDC_CONFIG_VERIFY_Code
+	.short	FDC_CONFIG_VERIFY_Case1 - FDC_CONFIG_VERIFY_Code
+	.short	FDC_CONFIG_VERIFY_Case2 - FDC_CONFIG_VERIFY_Code
+	.short	FDC_CONFIG_VERIFY_Case3 - FDC_CONFIG_VERIFY_Code
+	.short	FDC_CONFIG_VERIFY_Case4 - FDC_CONFIG_VERIFY_Code
+	.short	FDC_CONFIG_VERIFY_Case5 - FDC_CONFIG_VERIFY_Code
+FDC_COMMAND_DISPATCHER_Data:
+	.short	FDC_CMD_HANDLER_BASE - FDC_CMD_HANDLER_BASE
+	.short	FDC_CheckDriveCount - FDC_CMD_HANDLER_BASE
+	.short	FDC_CheckDriveCount - FDC_CMD_HANDLER_BASE
+	.short	FDC_CheckDriveCount - FDC_CMD_HANDLER_BASE
+	.short	FDC_CheckDriveCount - FDC_CMD_HANDLER_BASE
+	.short	FDC_CheckDriveCount - FDC_CMD_HANDLER_BASE
+	.short	FDC_ReturnZero - FDC_CMD_HANDLER_BASE
+	.short	FDC_ReturnZero - FDC_CMD_HANDLER_BASE
+	.short	FDC_ReturnZero - FDC_CMD_HANDLER_BASE
+	.short	FDC_ErrorInvalidDrive - FDC_CMD_HANDLER_BASE
+	.short	FDC_ReturnZero - FDC_CMD_HANDLER_BASE
+	.short	FDC_CheckDriveCount - FDC_CMD_HANDLER_BASE
+FDC_CommandEntry_CopyParams_Data:
+	.short	FDC_HANDLER_DISPATCH_BASE - FDC_HANDLER_DISPATCH_BASE
+	.short	FDC_HANDLER_01 - FDC_HANDLER_DISPATCH_BASE
+	.short	FDC_HANDLER_02 - FDC_HANDLER_DISPATCH_BASE
+	.short	FDC_HANDLER_03 - FDC_HANDLER_DISPATCH_BASE
+	.short	FDC_HANDLER_04 - FDC_HANDLER_DISPATCH_BASE
+	.short	FDC_HANDLER_05 - FDC_HANDLER_DISPATCH_BASE
+	.short	FDC_HANDLER_06 - FDC_HANDLER_DISPATCH_BASE
+	.short	FDC_HANDLER_07 - FDC_HANDLER_DISPATCH_BASE
+	.short	FDC_HANDLER_08 - FDC_HANDLER_DISPATCH_BASE
+	.short	FDC_HANDLER_09 - FDC_HANDLER_DISPATCH_BASE
+	.short	FDC_HANDLER_10 - FDC_HANDLER_DISPATCH_BASE
+	.short	FDC_HANDLER_11 - FDC_HANDLER_DISPATCH_BASE
 CtrlPanel_HandleSerialPort_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0xC36, 0x84
 ; [nakarest] naka_disk_warning+0xcba  +0xcba..+0xd4c (0xea9966, 146 B)
 ; [nakarest] purpose not established: layout of 146 B at 0xea9966 not derived; readers below
@@ -128,7 +167,49 @@ MainPmanControl_Data:
 ; [nakarest] Readers: source references CtrlPanel_DispatchByIndex (ui/ui_control_panel.s: `lda
 ; [nakarest] xix, (CtrlPanel_DispatchByIndex_Data:24)`).
 CtrlPanel_DispatchByIndex_Data:
-	.incbin "includes/generated/naka_disk_warning.bin", 0xD58, 0x56
+	.short	CtrlPanel_FrameReturn - CtrlPanel_FrameDispatchTable
+	.short	CtrlPanel_AfterTopMargin - CtrlPanel_FrameDispatchTable
+	.short	CtrlPanel_AfterLeftMargin - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_Case26 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_Case27 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_Case28 - CtrlPanel_FrameDispatchTable
+	.short	CtrlPanel_AfterTopMargin - CtrlPanel_FrameDispatchTable
+	.short	CtrlPanel_AfterTopMargin - CtrlPanel_FrameDispatchTable
+	.short	CtrlPanel_AfterTopMargin - CtrlPanel_FrameDispatchTable
+	.short	CtrlPanel_AfterLeftMargin - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_Case26 - CtrlPanel_FrameDispatchTable
+	.short	CtrlPanel_FrameDispatchTable - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_Case35 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_Case36 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_Case37 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_Case38 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_Case39 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_Case40 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_Case41 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_Case42 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_Case43 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_Case44 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_Case45 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_Case46 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_Case47 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_Case48 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_Case49 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_Case50 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_Case51 - CtrlPanel_FrameDispatchTable
+	.short	GetClientBox2_Case52 - CtrlPanel_FrameDispatchTable
+	.short	CtrlPanel_AfterTopMargin - CtrlPanel_FrameDispatchTable
+	.short	CtrlPanel_AfterLeftMargin - CtrlPanel_FrameDispatchTable
+	.short	CtrlPanel_AfterTopMargin - CtrlPanel_FrameDispatchTable
+	.short	CtrlPanel_AfterLeftMargin - CtrlPanel_FrameDispatchTable
+	.short	CtrlPanel_AfterTopMargin - CtrlPanel_FrameDispatchTable
+	.short	CtrlPanel_AfterLeftMargin - CtrlPanel_FrameDispatchTable
+	.short	CtrlPanel_AfterTopMargin - CtrlPanel_FrameDispatchTable
+	.short	CtrlPanel_AfterLeftMargin - CtrlPanel_FrameDispatchTable
+	.short	CtrlPanel_AfterLeftMargin - CtrlPanel_FrameDispatchTable
+	.short	CtrlPanel_AfterLeftMargin - CtrlPanel_FrameDispatchTable
+	.short	CtrlPanel_AfterLeftMargin - CtrlPanel_FrameDispatchTable
+	.short	CtrlPanel_AfterLeftMargin - CtrlPanel_FrameDispatchTable
+	.short	CtrlPanel_AfterLeftMargin - CtrlPanel_FrameDispatchTable
 ; [nakarest] naka_disk_warning+0xdae  +0xdae..+0xe2e (0xea9a5a, 128 B)
 ; [nakarest] purpose not established: layout of 128 B at 0xea9a5a not derived; readers below
 ; [nakarest] Readers: source references GroupBox_HandleStateCompare (ui/ui_control_panel.s: `lda
@@ -146,25 +227,68 @@ CtrlPanel_FuncDispatch_Data:
 ; [nakarest] Readers: source references CtrlPanel_FuncDispatch (ui/ui_control_panel.s: `ld xix,
 ; [nakarest] CtrlPanel_FuncDispatch_Data_2`).
 CtrlPanel_FuncDispatch_Data_2:
-	.incbin "includes/generated/naka_disk_warning.bin", 0xE56, 0x1A
+	.short	GroupBox_NavUpDown - GroupBox_HandlePartChange
+	.short	GroupBox_ForwardToBoxProc - GroupBox_HandlePartChange
+	.short	GroupBox_ReturnZero - GroupBox_HandlePartChange
+	.short	GroupBoxProc_Case3 - GroupBox_HandlePartChange
+	.short	GroupBoxProc_Case4 - GroupBox_HandlePartChange
+	.short	GroupBoxProc_Case5 - GroupBox_HandlePartChange
+	.short	GroupBoxProc_Case6 - GroupBox_HandlePartChange
+	.short	GroupBoxProc_Case7 - GroupBox_HandlePartChange
+	.short	GroupBoxProc_Case8 - GroupBox_HandlePartChange
+	.short	GroupBoxProc_Case9 - GroupBox_HandlePartChange
+	.short	GroupBoxProc_Case10 - GroupBox_HandlePartChange
+	.short	GroupBoxProc_Case11 - GroupBox_HandlePartChange
+	.short	GroupBoxProc_Case12 - GroupBox_HandlePartChange
 ; [nakarest] naka_disk_warning+0xe70  +0xe70..+0xe8a (0xea9b1c, 26 B)
 ; [nakarest] purpose not established: layout of 26 B at 0xea9b1c not derived; readers below
 ; [nakarest] Readers: source references GetEditSwPoint (audio/presentation_sound_nav.s: `lda
 ; [nakarest] xix, (GetEditSwPoint_Data:24)`).
 GetEditSwPoint_Data:
-	.incbin "includes/generated/naka_disk_warning.bin", 0xE70, 0x1A
+	.short	EditSwParam_TempoTable - EditSwParam_Mode0
+	.short	GetEditSwPoint_Case1 - EditSwParam_Mode0
+	.short	GetEditSwPoint_Case2 - EditSwParam_Mode0
+	.short	GetEditSwPoint_Case3 - EditSwParam_Mode0
+	.short	GetEditSwPoint_Case4 - EditSwParam_Mode0
+	.short	GetEditSwPoint_Case5 - EditSwParam_Mode0
+	.short	GetEditSwPoint_Case6 - EditSwParam_Mode0
+	.short	GetEditSwPoint_Case7 - EditSwParam_Mode0
+	.short	GetEditSwPoint_Case8 - EditSwParam_Mode0
+	.short	GetEditSwPoint_Case9 - EditSwParam_Mode0
+	.short	GetEditSwPoint_Case10 - EditSwParam_Mode0
+	.short	GetEditSwPoint_Case11 - EditSwParam_Mode0
+	.short	GetEditSwPoint_Case12 - EditSwParam_Mode0
 ; [nakarest] naka_disk_warning+0xe8a  +0xe8a..+0xe96 (0xea9b36, 12 B)
 ; [nakarest] purpose not established: layout of 12 B at 0xea9b36 not derived; readers below
 ; [nakarest] Readers: source references SetWallPaper (audio/presentation_sound_nav.s: `lda xix,
 ; [nakarest] (SetWallPaper_Data:24)`).
 SetWallPaper_Data:
-	.incbin "includes/generated/naka_disk_warning.bin", 0xE8A, 0xC
+	.short	SetWallPaper_DispatchData - SetWallPaper_DispatchData
+	.short	SetWallPaper_CaseData - SetWallPaper_DispatchData
+	.short	SetWallPaper_Case2 - SetWallPaper_DispatchData
+	.short	SetWallPaper_Default - SetWallPaper_DispatchData
+	.short	SetWallPaper_Loop - SetWallPaper_DispatchData
+	.short	SetWallPaper_Loop - SetWallPaper_DispatchData
 ; [nakarest] naka_disk_warning+0xe96  +0xe96..+0xeb4 (0xea9b42, 30 B)
 ; [nakarest] purpose not established: layout of 30 B at 0xea9b42 not derived; readers below
 ; [nakarest] Readers: source references IvDirmdScreenProc (audio/presentation_sound_nav.s: `add
 ; [nakarest] xbc, IvDirmdScreenProc_Str_K`).
-IvDirmdScreenProc_Str_K:	.incbin "includes/generated/naka_disk_warning.bin", 0xE96, 0x2	; "K"
-	.incbin "includes/generated/naka_disk_warning.bin", 0xE98, 0x1C	; 28 bytes after IvDirmdScreenProc_Str_K's string; unnamed (they sat under its label until 2026-10-03)
+IvDirmdScreenProc_Str_K:
+	.short	IvDirmdScreenProc_OnShow - DirmdEmu_CaseB
+	.short	IvDirmdScreenProc_OnHide - DirmdEmu_CaseB
+	.short	DirmdEmu_CaseE - DirmdEmu_CaseB
+	.short	DirmdEmu_CaseE - DirmdEmu_CaseB
+	.short	DirmdEmu_CaseE - DirmdEmu_CaseB
+	.short	DirmdEmu_CaseE - DirmdEmu_CaseB
+	.short	IvDirmdScreenProc_OnSwIn - DirmdEmu_CaseB
+	.short	DirmdEmu_CaseE - DirmdEmu_CaseB
+	.short	DirmdEmu_CaseE - DirmdEmu_CaseB
+	.short	IvDirmdScreenProc_OnAllPaint - DirmdEmu_CaseB
+	.short	DirmdEmu_CaseE - DirmdEmu_CaseB
+	.short	DirmdEmu_CaseE - DirmdEmu_CaseB
+	.short	TaskWake_ZeroReturn - DirmdEmu_CaseB
+	.short	TaskWake_ZeroReturn - DirmdEmu_CaseB
+	.short	IvDirmdScreenProc_OnParaDraw - DirmdEmu_CaseB
 ; [nakarest] naka_disk_warning+0xeb4  +0xeb4..+0xf12 (0xea9b60, 94 B)
 ; [nakarest] A table of 4 pointers (94 B at 0xea9b60), then text; entry 0 points at
 ; [nakarest] "\xC1\x9C\x8C!\xC1\x9D\x8C\xF1f0\xFF"; no registered NAKA table points into it;
@@ -200,7 +324,16 @@ DirmdEmulator_Data:
 ; [nakarest] Readers: source references WindowProc (audio/presentation_sound_nav.s: `add xbc,
 ; [nakarest] WindowProc_Data`).
 WindowProc_Data:
-	.incbin "includes/generated/naka_disk_warning.bin", 0xF32, 0x14
+	.short	WindowProc_EventDispatch - WindowProc_EventDispatch
+	.short	WindowProc_OnHide - WindowProc_EventDispatch
+	.short	WindowProc_DefaultHandler - WindowProc_EventDispatch
+	.short	WindowProc_DefaultHandler - WindowProc_EventDispatch
+	.short	WindowProc_DefaultHandler - WindowProc_EventDispatch
+	.short	WindowProc_DefaultHandler - WindowProc_EventDispatch
+	.short	WindowProc_OnSwIn - WindowProc_EventDispatch
+	.short	WindowProc_OnSwIn - WindowProc_EventDispatch
+	.short	WindowProc_OnSwIn - WindowProc_EventDispatch
+	.short	WindowProc_OnAllPaint - WindowProc_EventDispatch
 ; [nakarest] naka_disk_warning+0xf46  +0xf46..+0x1154 (0xea9bf2, 526 B)
 ; [nakarest] purpose not established: layout of 526 B at 0xea9bf2 not derived; readers below
 ; [nakarest] Readers: source references WndScroll_SendSelectionEvents (ui/ui_window_procs.s: `ld
@@ -249,7 +382,15 @@ AcNaming_QueryCharSet_PtrTable:	.incbin "includes/generated/naka_disk_warning.bi
 ; [nakarest] Readers: source references WndEvt_DispatchByEventCode (ui/ui_window_procs.s: `add
 ; [nakarest] xwa, WndEvt_DispatchByEventCode_Data`).
 WndEvt_DispatchByEventCode_Data:
-	.incbin "includes/generated/naka_disk_warning.bin", 0x124A, 0x12
+	.short	WndEvt_EventCodeDispatch - WndEvt_EventCodeDispatch
+	.short	WndEvt_DispatchByEventCode_Case1 - WndEvt_EventCodeDispatch
+	.short	WndEvt_DispatchByEventCode_Case2 - WndEvt_EventCodeDispatch
+	.short	WndEvt_DispatchByEventCode_Case3 - WndEvt_EventCodeDispatch
+	.short	WndEvt_DispatchByEventCode_Case4 - WndEvt_EventCodeDispatch
+	.short	WndEvt_DispatchByEventCode_Case5 - WndEvt_EventCodeDispatch
+	.short	WndEvt_DispatchByEventCode_Case6 - WndEvt_EventCodeDispatch
+	.short	WndEvt_DispatchByEventCode_Case7 - WndEvt_EventCodeDispatch
+	.short	WndEvt_DispatchByEventCode_Case8 - WndEvt_EventCodeDispatch
 ModeEdit_HandlePaint_Data:			.incbin "includes/generated/naka_disk_warning.bin", 0x125C, 0xC
 TitleEdit_HandlePaint_Str_N0x_Fmt2X_Fmts:	.incbin "includes/generated/naka_disk_warning.bin", 0x1268, 0xC	; "0x%02X : %s"
 ; [nakarest] naka_disk_warning+0x1274  +0x1274..+0x14c6 (0xea9f20, 594 B)
@@ -289,7 +430,14 @@ PsGridBox_Scroll_Render_Str_RIGHT1_RIGHT2_LEFT_PART4_PART5:	.incbin "includes/ge
 ; [nakarest] Readers: source references PsGridBoxProc (ui/ui_window_procs.s: `add xbc,
 ; [nakarest] PsGridBoxProc_Data`).
 PsGridBoxProc_Data:
-	.incbin "includes/generated/naka_disk_warning.bin", 0x159C, 0x10
+	.short	PsGridBoxProc_OnGetFixedColStr - PsGridBox_Init
+	.short	PsGridBoxProc_OnGetFixedRowStr - PsGridBox_Init
+	.short	PsGridBoxProc_OnGridDraw - PsGridBox_Init
+	.short	PsGridBoxProc_OnRequestGridDraw - PsGridBox_Init
+	.short	PsGridBoxProc_OnSetSelectedCel - PsGridBox_Init
+	.short	PsGridBoxProc_OnGetSelectedCel - PsGridBox_Init
+	.short	PsGridBox_Default - PsGridBox_Init
+	.short	PsGridBoxProc_OnCheckGridIndex - PsGridBox_Init
 ; [nakarest] naka_disk_warning+0x15ac  +0x15ac..+0x15c0 (0xeaa258, 20 B)
 ; [nakarest] purpose not established: layout of 20 B at 0xeaa258 not derived; readers below
 ; [nakarest] Readers: source references AcGridBoxProc (ui/ui_widget_defs.s: `add xwa,
@@ -301,7 +449,13 @@ AcGridBoxProc_Data:
 ; [nakarest] Readers: source references GridCheck (ui/ui_widget_defs.s: `add xwa,
 ; [nakarest] GridCheck_Data`).
 GridCheck_Data:
-	.incbin "includes/generated/naka_disk_warning.bin", 0x15C0, 0xE
+	.short	GridCheck_JumpEnd - GridCheck_JumpEnd
+	.short	GridCheck_JumpEnd - GridCheck_JumpEnd
+	.short	GridCheck_JumpEnd - GridCheck_JumpEnd
+	.short	GridCheck_JumpEnd - GridCheck_JumpEnd
+	.short	GridCheck_Return - GridCheck_JumpEnd
+	.short	GridCheck_JumpEnd - GridCheck_JumpEnd
+	.short	GridCheck_JumpEnd - GridCheck_JumpEnd
 PsNumEditBox_Confirm_Str_Chr25:		.incbin "includes/generated/naka_disk_warning.bin", 0x15CE, 0x2	; "%"
 PsNumEditBox_Confirm_Str_Fmtd:		.incbin "includes/generated/naka_disk_warning.bin", 0x15D0, 0x4	; "%d"
 PsNumEditBox_Confirm_Str_d:		.incbin "includes/generated/naka_disk_warning.bin", 0x15D4, 0x2	; "d"
@@ -317,7 +471,16 @@ RamEditCheck_JumpStart_Str_Fmt3d:	.incbin "includes/generated/naka_disk_warning.
 ; [nakarest] Readers: source references RamEditCheck (ui/ui_widget_defs.s: `add xwa,
 ; [nakarest] RamEditCheck_Data`).
 RamEditCheck_Data:
-	.incbin "includes/generated/naka_disk_warning.bin", 0x160E, 0x14
+	.short	RamEditCheck_Evt1E0003E - RamEditCheck_JumpStart
+	.short	RamEditCheck_Evt1E0003F - RamEditCheck_JumpStart
+	.short	RamEditCheck_NotHandled - RamEditCheck_JumpStart
+	.short	RamEditCheck_NotHandled - RamEditCheck_JumpStart
+	.short	RamEditCheck_NotHandled - RamEditCheck_JumpStart
+	.short	RamEditCheck_Evt1E00043 - RamEditCheck_JumpStart
+	.short	RamEditCheck_Evt1E00044 - RamEditCheck_JumpStart
+	.short	RamEditCheck_Evt1E00045 - RamEditCheck_JumpStart
+	.short	RamEditCheck_Evt1E0003E - RamEditCheck_JumpStart
+	.short	RamEditCheck_JumpStart - RamEditCheck_JumpStart
 BitEditCheck_PtrTable:	.incbin "includes/generated/naka_disk_warning.bin", 0x1622, 0x14	; 2 x 32-bit pointer
 ; [nakarest] naka_disk_warning+0x1636  +0x1636..+0x163a (0xeaa2e2, 4 B)
 ; [nakarest] Text (4 B at 0xeaa2e2), first string "ON"; no registered NAKA table points into it;
@@ -352,7 +515,23 @@ Str_No:
 ; [nakarest] Readers: source references ButtonState_DispatchDSP (ui/ui_widget_defs.s: `lda xix,
 ; [nakarest] (ButtonState_DispatchDSP_Data:24)`).
 ButtonState_DispatchDSP_Data:
-	.incbin "includes/generated/naka_disk_warning.bin", 0x166E, 0x22
+	.short	ButtonState_DispatchDSP_InlineData - ButtonState_DispatchDSP_InlineData
+	.short	ButtonState_DispatchDSP_Case1 - ButtonState_DispatchDSP_InlineData
+	.short	ButtonState_DispatchDSP_Case2 - ButtonState_DispatchDSP_InlineData
+	.short	ButtonState_Paint_DrawAligned - ButtonState_DispatchDSP_InlineData
+	.short	ButtonState_DispatchDSP_Case4 - ButtonState_DispatchDSP_InlineData
+	.short	ButtonState_DispatchDSP_Case5 - ButtonState_DispatchDSP_InlineData
+	.short	ButtonState_DispatchDSP_Case6 - ButtonState_DispatchDSP_InlineData
+	.short	ButtonState_DispatchDSP_Case7 - ButtonState_DispatchDSP_InlineData
+	.short	ButtonState_DispatchDSP_Case8 - ButtonState_DispatchDSP_InlineData
+	.short	ButtonState_DispatchDSP_Case9 - ButtonState_DispatchDSP_InlineData
+	.short	ButtonState_DispatchDSP_Case10 - ButtonState_DispatchDSP_InlineData
+	.short	ButtonState_Paint_DrawAligned - ButtonState_DispatchDSP_InlineData
+	.short	ButtonState_DispatchDSP_Case12 - ButtonState_DispatchDSP_InlineData
+	.short	ButtonState_DispatchDSP_Case13 - ButtonState_DispatchDSP_InlineData
+	.short	ButtonState_Paint_DrawAligned - ButtonState_DispatchDSP_InlineData
+	.short	ButtonState_DispatchDSP_Case15 - ButtonState_DispatchDSP_InlineData
+	.short	ButtonState_DispatchDSP_Case16 - ButtonState_DispatchDSP_InlineData
 ; [nakarest] naka_disk_warning+0x1690  +0x1690..+0x16a2 (0xeaa33c, 18 B)
 ; [nakarest] purpose not established: layout of 18 B at 0xeaa33c not derived; readers below
 ; [nakarest] Readers: source references AcIndexEdit_DispatchDSP (ui/ui_widget_defs.s: `lda xix,
@@ -364,7 +543,9 @@ AcIndexEdit_DispatchDSP_Data:
 ; [nakarest] reached through source references AcIndexEdit_DispatchDSP (ui/ui_widget_defs.s: `ld
 ; [nakarest] xix, AcIndexEdit_DispatchDSP_Data_2`).
 AcIndexEdit_DispatchDSP_Data_2:
-	.incbin "includes/generated/naka_disk_warning.bin", 0x16A2, 0x6
+	.short	AcIndexEdit_DispatchDSP_InlineData - AcIndexEdit_DispatchDSP_InlineData
+	.short	AcIndexEdit_OK_AltView_Case1 - AcIndexEdit_DispatchDSP_InlineData
+	.short	AcIndexEdit_OK_AltView_Case2 - AcIndexEdit_DispatchDSP_InlineData
 PsPageBox_Confirm_DrawValue_Str_PAGE_Fmtd_Fmtd:	.incbin "includes/generated/naka_disk_warning.bin", 0x16A8, 0xC	; "PAGE %d/%d"
 IvPageControl_GetText_Str_PAGE:			.incbin "includes/generated/naka_disk_warning.bin", 0x16B4, 0x6	; "PAGE"
 IvMainEditSw_GetText_Str_MnSw:			.incbin "includes/generated/naka_disk_warning.bin", 0x16BA, 0x6	; "MnSw"
@@ -504,7 +685,26 @@ ObjectProc_Evt1E00018_Str_Empty:	.incbin "includes/generated/naka_disk_warning.b
 ; [nakarest] Readers: source references ObjectProc (ui/ui_widget_defs.s: `add xwa,
 ; [nakarest] ObjectProc_Data`).
 ObjectProc_Data:
-	.incbin "includes/generated/naka_disk_warning.bin", 0x1BF8, 0x28
+	.short	AcTrkSw_Return - AcTrkSw_Return
+	.short	ObjectProc_Evt1E00011 - AcTrkSw_Return
+	.short	ObjectProc_Evt1E00012 - AcTrkSw_Return
+	.short	ObjectProc_Evt1E00013 - AcTrkSw_Return
+	.short	ObjectProc_Evt1E00014 - AcTrkSw_Return
+	.short	ExitWindow_Init - AcTrkSw_Return
+	.short	ExitWindow_Init - AcTrkSw_Return
+	.short	ObjectProc_Evt1E00017 - AcTrkSw_Return
+	.short	ObjectProc_Evt1E00018 - AcTrkSw_Return
+	.short	ObjectProc_Evt1E00019 - AcTrkSw_Return
+	.short	ObjectProc_Evt1E0001A - AcTrkSw_Return
+	.short	ObjectProc_Evt1E0001B - AcTrkSw_Return
+	.short	ObjectProc_Evt1E0001C - AcTrkSw_Return
+	.short	ObjectProc_Evt1E0001D - AcTrkSw_Return
+	.short	ObjectProc_Evt1E0001E - AcTrkSw_Return
+	.short	ObjectProc_Evt1E0001F - AcTrkSw_Return
+	.short	ObjectProc_Evt1E00020 - AcTrkSw_Return
+	.short	ObjectProc_Evt1E00021 - AcTrkSw_Return
+	.short	ObjectProc_Evt1E00022 - AcTrkSw_Return
+	.short	ObjectProc_Evt1E00023 - AcTrkSw_Return
 ; [nakarest] naka_disk_warning+0x1c20  +0x1c20..+0x1c30 (0xeaa8cc, 16 B)
 ; [nakarest] purpose not established: layout of 16 B at 0xeaa8cc not derived; readers below
 ; [nakarest] Readers: source references ExitWindow_Confirm (ui/ui_widget_defs.s: `ld xiy,
@@ -534,12 +734,24 @@ UnRegisterObject_Data:
 ; [nakarest] Readers: source references ClassProc (ui/ui_widget_defs.s: `add xbc,
 ; [nakarest] ClassProc_Data`).
 ClassProc_Data:
-	.incbin "includes/generated/naka_disk_warning.bin", 0x1C4C, 0x10
+	.short	ClassProc_Event_LoadFromWA - ClassProc_Event_LoadFromWA
+	.short	ClassProc_Event_LoadFromHL - ClassProc_Event_LoadFromWA
+	.short	ClassProc_Event_LoadFromIZ - ClassProc_Event_LoadFromWA
+	.short	ClassProc_Evt1E00003 - ClassProc_Event_LoadFromWA
+	.short	ClassProc_Evt1E00004 - ClassProc_Event_LoadFromWA
+	.short	ClassProc_Evt1E00005 - ClassProc_Event_LoadFromWA
+	.short	ClassProc_Evt1E00006 - ClassProc_Event_LoadFromWA
+	.short	ClassProc_Evt1E00007 - ClassProc_Event_LoadFromWA
 ; [nakarest] naka_disk_warning+0x1c5c  +0x1c5c..+0x1c68 (0xeaa908, 12 B)
 ; [nakarest] purpose not established: layout of 12 B at 0xeaa908 not derived; readers below
 ; [nakarest] Readers: source references ModeProc (ui/ui_widget_defs.s: `add xbc, ModeProc_Data`).
 ModeProc_Data:
-	.incbin "includes/generated/naka_disk_warning.bin", 0x1C5C, 0xC
+	.short	ModeProc_Evt1E0002B - NakaWidget_ReturnConst_0x1600006
+	.short	ModeProc_Evt1E0002C - NakaWidget_ReturnConst_0x1600006
+	.short	ModeProc_Evt1E0002D - NakaWidget_ReturnConst_0x1600006
+	.short	ModeProc_Evt1E0002E - NakaWidget_ReturnConst_0x1600006
+	.short	ModeProc_Evt1E0002F - NakaWidget_ReturnConst_0x1600006
+	.short	ModeProc_Evt1E00030 - NakaWidget_ReturnConst_0x1600006
 ; [nakarest] naka_disk_warning+0x1c68  +0x1c68..+0x1c6c (0xeaa914, 4 B)
 ; [nakarest] purpose not established: layout of 4 B at 0xeaa914 not derived; readers below
 ; [nakarest] Readers: source references UnregisteredMode (ui/ui_widget_defs.s: `lda xwa,
@@ -564,8 +776,13 @@ EnumList_HitTest_Data:
 ; [nakarest] purpose not established: layout of 12 B at 0xeaa9c0 not derived; readers below
 ; [nakarest] Readers: source references TitleProc (ui/ui_widget_defs.s: `add xde,
 ; [nakarest] TitleProc_Str_j`).
-TitleProc_Str_j:	.incbin "includes/generated/naka_disk_warning.bin", 0x1D14, 0x2	; "j"
-	.incbin "includes/generated/naka_disk_warning.bin", 0x1D16, 0xA	; 10 bytes after TitleProc_Str_j's string; unnamed (they sat under its label until 2026-10-03)
+TitleProc_Str_j:
+	.short	TitleProc_Evt1E00030 - TitleProc_EventDispatch
+	.short	TitleProc_Evt1E00031 - TitleProc_EventDispatch
+	.short	TitleProc_Evt1E00032 - TitleProc_EventDispatch
+	.short	TitleProc_Evt1E00033 - TitleProc_EventDispatch
+	.short	TitleProc_Evt1E00034 - TitleProc_EventDispatch
+	.short	TitleProc_Evt1E00035 - TitleProc_EventDispatch
 ; [nakarest] naka_disk_warning+0x1d20  +0x1d20..+0x1d3a (0xeaa9cc, 26 B)
 ; [nakarest] purpose not established: layout of 26 B at 0xeaa9cc not derived; readers below
 ; [nakarest] Readers: source references EnumList_Reset (ui/ui_widget_defs.s: `ld xbc,
@@ -577,7 +794,13 @@ EnumList_Reset_Data:
 ; [nakarest] Readers: source references ViewableProc (ui/ui_widget_defs.s: `add xwa,
 ; [nakarest] ViewableProc_Data`).
 ViewableProc_Data:
-	.incbin "includes/generated/naka_disk_warning.bin", 0x1D3A, 0xE
+	.short	ViewableProc_Evt1C0000B - Viewable_GetClassProc
+	.short	ViewableProc_Evt1C0000C - Viewable_GetClassProc
+	.short	Viewable_ReturnZero - Viewable_GetClassProc
+	.short	Viewable_ReturnZero - Viewable_GetClassProc
+	.short	Viewable_ReturnZero - Viewable_GetClassProc
+	.short	Viewable_DefaultDispatch - Viewable_GetClassProc
+	.short	Viewable_ReturnZero - Viewable_GetClassProc
 ; [nakarest] naka_disk_warning+0x1d48  +0x1d48..+0x1d52 (0xeaa9f4, 10 B)
 ; [nakarest] Text (10 B at 0xeaa9f4), first string "bool %s%d"; no registered NAKA table points
 ; [nakarest] into it; reached through source references BoxStyle7_Setup (ui/ui_widget_defs.s:
@@ -754,7 +977,13 @@ CommonIDProc_Evt1E0000A_Data:		.incbin "includes/generated/naka_disk_warning.bin
 ; [nakarest] Readers: source references CommonIDProc (ui/ui_widget_defs.s: `add xde,
 ; [nakarest] CommonIDProc_Data`).
 CommonIDProc_Data:
-	.incbin "includes/generated/naka_disk_warning.bin", 0x1F38, 0xE
+	.short	CommonIDProc_ReturnZero - CommonIDProc_Evt1E0000D
+	.short	CommonIDProc_Evt1E00009 - CommonIDProc_Evt1E0000D
+	.short	CommonIDProc_Evt1E0000A - CommonIDProc_Evt1E0000D
+	.short	CommonIDProc_Evt1E00009 - CommonIDProc_Evt1E0000D
+	.short	CommonIDProc_Evt1E0000C - CommonIDProc_Evt1E0000D
+	.short	CommonIDProc_Evt1E0000D - CommonIDProc_Evt1E0000D
+	.short	CommonIDProc_Evt1E0000E - CommonIDProc_Evt1E0000D
 ; [nakarest] naka_disk_warning+0x1f46  +0x1f46..+0x214a (0xeaabf2, 516 B)
 ; [nakarest] purpose not established: layout of 516 B at 0xeaabf2 not derived; readers below
 ; [nakarest] Readers: source references DrawIcons_Impl_ColLoop (ui/drawing_primitives.s: `lda
@@ -767,13 +996,52 @@ DrawBitmapFile_Impl_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x
 ; [nakarest] Readers: source references DrawPartGroup_DispatchByType (ui/ui_window_procs.s: `lda
 ; [nakarest] xix, (DrawPartGroup_DispatchByType_Data:24)`).
 DrawPartGroup_DispatchByType_Data:
-	.incbin "includes/generated/naka_disk_warning.bin", 0x214A, 0x20
+	.short	DrawDesignBox_PartGroupStyle_Case24 - DrawPartGroup_TableJump_DefaultCase
+	.short	DrawDesignBox_PartGroupStyle_Case25 - DrawPartGroup_TableJump_DefaultCase
+	.short	DrawDesignBox_PartGroupStyle_Case26 - DrawPartGroup_TableJump_DefaultCase
+	.short	DrawDesignBox_PartGroupStyle_Case27 - DrawPartGroup_TableJump_DefaultCase
+	.short	DrawDesignBox_PartGroupStyle_Case28 - DrawPartGroup_TableJump_DefaultCase
+	.short	DrawDesignBox_PartGroupStyle_Case29 - DrawPartGroup_TableJump_DefaultCase
+	.short	DrawDesignBox_PartGroupStyle_Case30 - DrawPartGroup_TableJump_DefaultCase
+	.short	DrawDesignBox_PartGroupStyle_Case31 - DrawPartGroup_TableJump_DefaultCase
+	.short	DrawDesignBox_PartGroupStyle_Case32 - DrawPartGroup_TableJump_DefaultCase
+	.short	DrawDesignBox_PartGroupStyle_Case33 - DrawPartGroup_TableJump_DefaultCase
+	.short	DrawDesignBox_PartGroupStyle_Case34 - DrawPartGroup_TableJump_DefaultCase
+	.short	DrawDesignBox_PartGroupStyle_Case35 - DrawPartGroup_TableJump_DefaultCase
+	.short	DrawDesignBox_PartGroupStyle_Case36 - DrawPartGroup_TableJump_DefaultCase
+	.short	DrawDesignBox_PartGroupStyle_Case37 - DrawPartGroup_TableJump_DefaultCase
+	.short	DrawDesignBox_PartGroupStyle_Case38 - DrawPartGroup_TableJump_DefaultCase
+	.short	DrawDesignBox_PartGroupStyle_Case39 - DrawPartGroup_TableJump_DefaultCase
 ; [nakarest] naka_disk_warning+0x216a  +0x216a..+0x21b6 (0xeaae16, 76 B)
 ; [nakarest] purpose not established: layout of 76 B at 0xeaae16 not derived; readers below
 ; [nakarest] Readers: source references Draw_DispatchByPartType (ui/ui_window_procs.s: `lda xix,
 ; [nakarest] (Draw_DispatchByPartType_Data:24)`).
 Draw_DispatchByPartType_Data:
-	.incbin "includes/generated/naka_disk_warning.bin", 0x216A, 0x32
+	.short	Draw_StyledBoxWithFrame - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_Case181 - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_Case181 - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_Case181 - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_Case184 - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_Case185 - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_IconStyle - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_PartGroupStyle - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_PartGroupStyle - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_PartGroupStyle - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_PartGroupStyle - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_PartGroupStyle - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_Case192 - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_Case193 - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_Case192 - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_Case193 - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_Case196 - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_Case197 - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_Case196 - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_Case197 - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_Case200 - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_Case201 - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_Case201 - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_Case203 - Draw_StyledBoxWithFrame
+	.short	DrawDesignBox_Impl_Case204 - Draw_StyledBoxWithFrame
 Gfx_LoadSplashBMP_Data:		.incbin "includes/generated/naka_disk_warning.bin", 0x219C, 0x4
 CaptureLcd_Str_BM:		.incbin "includes/generated/naka_disk_warning.bin", 0x21A0, 0x4	; "BM"
 CaptureLcd_Str_HKLCD_Fmt3d_BMP:	.incbin "includes/generated/naka_disk_warning.bin", 0x21A4, 0xE	; "HKLCD%03d.BMP"

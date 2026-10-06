@@ -176,6 +176,7 @@ FDemo_DisplayCtrlJumpHandler:
 	ld xbc, EVT_READ_PRESENTATION			; event code
 	ld xde, xhl				; result as param
 	jr FDemo_DispatchEventPost				; dispatch
+MainPreControl_OnReadSongReq:
 	ld xwa, xde				; workspace
 	calr FDemo_DisplayResourceData			; load alternate display resource
 	exts xhl
@@ -183,6 +184,7 @@ FDemo_DisplayCtrlJumpHandler:
 	ld xbc, EVT_READ_SONG			; event code 3
 	ld xde, xhl
 	jr FDemo_DispatchEventPost
+MainPreControl_OnReadActionReq:
 	ld xwa, xde				; workspace
 	calr Seq_LoadNamedResource			; load named display resource
 	exts xhl
@@ -192,13 +194,16 @@ FDemo_DisplayCtrlJumpHandler:
 FDemo_DispatchEventPost:
 	call ApPostEvent				; dispatch event
 	jr MainPreControl_ReturnNull		; return null
+MainPreControl_OnStartPresentation:
 	ld	(DEMO_ACTIVE_ENTRY:16), 19
 	call Demo_SelectEntry_ProcessSongList			; additional handler
 	jr MainPreControl_ReturnNull
+MainPreControl_OnExitPresentation:
 	cpw	(0x251d8:24), 0
 	jr z, MainPreControl_Dispatch			; if zero, clear state
 	call Part_InitFromPreset			; process display state
 	jr MainPreControl_Dispatch
+MainPreControl_OnExistPresentation:
 	ld	hl, (0x251d8:24)
 	exts xhl
 	ret
@@ -247,6 +252,7 @@ Seq_StartWithFullInit:
 	ld	xwa, xiz
 	calr	Seq_InitializeAndStart
 	jr	ApPreControl_ReturnNull
+ApPreControl_OnReadPresentation:
 	ld	(154492:24), de
 	cp	de, 0:i3
 	jr	lt, ApPreControl_ReturnNull
@@ -254,6 +260,7 @@ Seq_StartWithFullInit:
 	ld	bc, 0:i3
 	calr	FDemoText_ProcessTextMarkup
 	jr	ApPreControl_ReturnNull
+ApPreControl_OnReadSong:
 	ld	(154492:24), de
 	cp	de, 0:i3
 	jr	lt, ApPreControl_ReturnNull
@@ -277,6 +284,7 @@ Seq_StartWithFullInit:
 	ld	xbc, EVT_AUTO_FREE
 	ld	xde, xiz
 	jr	Seq_DispatchMainFunc
+ApPreControl_OnReadAction:
 	ld	(154492:24), de
 	cp	de, 0:i3
 	jr	lt, ApPreControl_ReturnNull
@@ -284,6 +292,7 @@ Seq_StartWithFullInit:
 	ld	xbc, EVT_START_PRESENTATION
 	ld	xde, 0:i3
 	jrl	Seq_DispatchMainFunc
+ApPreControl_OnStartSong:
 	ld	xwa, NAKA_VIEW_PleaseWait
 	ld	xbc, EVT_HIDE
 	ld	xde, 0:i3

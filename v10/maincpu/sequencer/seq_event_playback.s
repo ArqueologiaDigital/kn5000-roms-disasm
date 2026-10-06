@@ -2845,6 +2845,7 @@ AcVocalGrid_DialSetup:
 	call SetDialDown
 	ld wa, 1:i3
 	jrl AcVocalGrid_SetDialAndRet
+AcVocalGridBoxProc_OnIndexswUp:	; cases 29360151, 29360153
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -2903,6 +2904,7 @@ AcVocalGrid_CheckEvent91:
 	call SetDialDown
 	ld wa, 1:i3
 	jrl AcVocalGrid_SetDialAndRet
+AcVocalGridBoxProc_OnIndexswDown:	; cases 29360152, 29360154
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -2986,6 +2988,7 @@ AcVocalGrid_CopyViewString:
 	call Strcpy
 	inc 8, xsp
 	jr Vocalist_ReturnZeroJmp
+AcVocalGridBoxProc_OnLswData:	; cases 29360156, 29360157
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 70)
@@ -3090,6 +3093,7 @@ VocalistGridCheck_Skip:
 	ld bc, 1:i3
 	ld de, 2:i3
 	jr	VocalistGridCheck_Join
+VocalistGridCheck_OnIndexswDown:	; cases 29360152, 29360154
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, EVT_GET_SELECTED_CEL
@@ -3128,6 +3132,7 @@ VocalistGridCheck_Skip15:
 VocalistGridCheck_Join:
 	call	MainLswAdd
 	jrl	AcVocalist_ReturnZero
+VocalistGridCheck_OnLswData:
 	ld	(xsp+4), xbc
 	ld	xhl, xiy
 	ldw (xiy), 0
@@ -3212,6 +3217,7 @@ VocalistGridCheck_Join3:
 	lda	xde, (xsp+12)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join12
+VocalistGridCheck_Switch2_Case11522:
 	ld	wa, (xbc)
 	inc	1, wa
 	pushw	wa
@@ -3226,6 +3232,7 @@ VocalistGridCheck_Join3:
 	lda	xde, (xsp+12)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join12
+VocalistGridCheck_Switch2_Case11524:
 	ld	wa, (xbc)
 	inc	1, wa
 	pushw	wa
@@ -3240,6 +3247,7 @@ VocalistGridCheck_Join3:
 	lda	xde, (xsp+12)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join12
+VocalistGridCheck_Switch2_Case11526:
 	ld	wa, (xbc)
 	sla	wa, 2
 	lda	xbc, (MidiPart_NoteNameTable:24)
@@ -3256,6 +3264,7 @@ VocalistGridCheck_Join3:
 	lda	xde, (xsp+12)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join12
+VocalistGridCheck_Switch2_Case11528:
 	ld	wa, (xbc)
 	cp	wa, 3:i3
 	jr	z, VocalistGridCheck_Skip6
@@ -3287,6 +3296,7 @@ VocalistGridCheck_Skip18:
 	lda	xde, (xsp+12)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join12
+VocalistGridCheck_Switch2_Case11530:
 	ld	wa, (xbc)
 	cp	wa, 120
 	jr	z, VocalistGridCheck_Skip7
@@ -3317,6 +3327,7 @@ VocalistGridCheck_Join6:
 	lda	xde, (xsp+12)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join12
+VocalistGridCheck_Switch2_Case11532:	; cases 11532, 11536
 	ld	bc, (xbc)
 	ld	de, bc
 	and	de, 127
@@ -3351,6 +3362,7 @@ VocalistGridCheck_Join6:
 	lda	xde, (xsp+12)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join12
+VocalistGridCheck_Switch2_Case11521:	; cases 11521, 11523, 11525, 11527, 11529, 11531, 11535, 11539
 	ld	xwa, VocalistGrid_DispatchData_Str_9
 	cpw	(xbc), 0
 	jr	z, VocalistGridCheck_Skip19
@@ -3433,6 +3445,7 @@ VocalistGridCheck_Join8:
 	lda	xde, (xsp+12)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join12
+VocalistGrid_DispatchData_Case11522:
 	ld	xwa, 0x2d02
 	call	SndParam_LookupReadOnly
 	inc	1, hl
@@ -3448,6 +3461,7 @@ VocalistGridCheck_Join8:
 	lda	xde, (xsp+12)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join12
+VocalistGrid_DispatchData_Case11524:
 	ld	xwa, 0x2d04
 	call	SndParam_LookupReadOnly
 	inc	1, hl
@@ -3463,6 +3477,7 @@ VocalistGridCheck_Join8:
 	lda	xde, (xsp+12)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join12
+VocalistGrid_DispatchData_Case11526:
 	ld	xwa, 0x2d06
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
@@ -3480,6 +3495,7 @@ VocalistGridCheck_Join8:
 	lda	xde, (xsp+12)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join12
+VocalistGrid_DispatchData_Case11528:
 	ld	xwa, 0x2d08
 	call	SndParam_LookupReadOnly
 	cp	hl, 3:i3
@@ -3512,6 +3528,7 @@ VocalistGridCheck_Skip13:
 	lda	xde, (xsp+12)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join12
+VocalistGrid_DispatchData_Case11530:
 	ld	xwa, 0x2d0a
 	call	SndParam_LookupReadOnly
 	lda	xbc, (xsp+20)
@@ -3545,6 +3562,7 @@ VocalistGridCheck_Join11:
 	lda	xde, (xsp+12)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join12
+VocalistGrid_DispatchData_Case11532:
 	ld	xwa, 0x2d0d
 	call	SndParam_LookupReadOnly
 	exts	xhl
@@ -3579,6 +3597,7 @@ VocalistGridCheck_Join11:
 	lda	xde, (xsp+12)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join12
+VocalistGrid_DispatchData_Case11536:
 	ld	xwa, 0x2d11
 	call	SndParam_LookupReadOnly
 	exts	xhl
@@ -3613,6 +3632,7 @@ VocalistGridCheck_Join11:
 	lda	xde, (xsp+12)
 	ld	xbc, EVT_GRID_DRAW
 	jr	VocalistGridCheck_Join12
+VocalistGrid_DispatchData_Case11521:	; cases 11521, 11523, 11525, 11527, 11529, 11531, 11535, 11539
 	ld	xwa, (xsp+4)
 	ld	wa, (xwa)
 	sla	wa, 2
@@ -3673,6 +3693,7 @@ AcVocalist_ListDispatch:
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 0:i3
 	jr	VocalistGridCheck_Join13
+AcVocalist_ListSetup_Case1:	; cases 1, 3, 5
 	ld	xwa, 0xd7000c
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 1:i3
@@ -3968,6 +3989,7 @@ VocalistPage2OKFunc_Join2:
 	ld	xbc, EVT_INTERRUPT_TITLE
 	ld	xde, TITLE_MESAGE
 	jr	VocalistPage2OKFunc_Join
+MainVocalistPage1OKFunc_Case4:
 	ld	wa, bc
 	call	MidiSysEx_CopyParamToBuffer
 	call	MidiSysEx_SendAllPartChannels
@@ -3997,6 +4019,7 @@ VocalistPage2OKFunc_Join3:
 	ld	xbc, EVT_INTERRUPT_TITLE
 	ld	xde, TITLE_MESAGE
 	jrl	VocalistPage2OKFunc_Join
+MainVocalistPage1OKFunc_Case5:
 	ld	wa, bc
 	call	MidiSysEx_CopyParamToBuffer
 	call	MidiSysEx_SendAllPartChannels

@@ -3062,30 +3062,41 @@ ExtData_VoiceParam_DispatchBytecode:
 ExtData_VoiceParam_DispatchBytecode_Code:
 	setm	7, (xbc)
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue2
+ExtData_VoiceParam_DispatchBytecode_Case14:
 	ld	a, 1:opc
 	jr	ExtData_VoiceParam_DispatchBytecode_Join
+ExtData_VoiceParam_DispatchBytecode_Case17:
 	ld	a, 2:opc
 	jr	ExtData_VoiceParam_DispatchBytecode_Join
+ExtData_VoiceParam_DispatchBytecode_Case8:	; cases 8, 12, 13
 	setm	7, (xde)
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue2
+ExtData_VoiceParam_DispatchBytecode_Case11:
 	ld	xwa, xde
 	setm	7, (xde)
 	cp	(0x26fc:16), 1
 	jr	nz, ExtData_VoiceParam_DispatchBytecode_Epilogue2
 	setm	6, (xwa)
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue2
+ExtData_VoiceParam_DispatchBytecode_Case9:
 	setm	6, (xde)
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue2
+ExtData_VoiceParam_DispatchBytecode_Case2:	; cases 2, 3
 	setm	0, (xiy)
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue2
+ExtData_VoiceParam_DispatchBytecode_Case5:
 	setm	2, (xiy)
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue2
+ExtData_VoiceParam_DispatchBytecode_Case4:
 	setm	1, (xiy)
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue2
+ExtData_VoiceParam_DispatchBytecode_Case6:
 	setm	3, (xiy)
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue2
+ExtData_VoiceParam_DispatchBytecode_Case7:
 	setm	3, (xhl)
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue2
+ExtData_VoiceParam_DispatchBytecode_Case18:
 	ld	a, 4:opc
 ExtData_VoiceParam_DispatchBytecode_Join:
 	scf
@@ -3817,8 +3828,10 @@ UIState_ProcessExtendedMode:
 UIState_ProcessExtendedMode_Cases:	; the switch's base: case k is at +UIState_ProcessExtendedMode_Data[k]
 	orw	(36670:16), 515
 	ret
+UIState_ProcessExtendedMode_Case5:	; cases 5, 6
 	orw	(36670:16), 252
 	ret
+UIState_ProcessExtendedMode_Case3:
 	ld	xwa, 0x028080
 	call	SndParam_LookupReadOnly
 	cp	l, 0:i3
@@ -3827,9 +3840,12 @@ UIState_ProcessExtendedMode_Cases:	; the switch's base: case k is at +UIState_Pr
 UIState_ProcessExtendedMode_Skip:
 	orw	(36670:16), 256
 	ret
+UIState_ProcessExtendedMode_Case4:
 	orw	(36674:16), 16
 	ret
+UIState_ProcessExtendedMode_Case7:
 	orw	(36670:16), 512
+UIState_ProcessExtendedMode_Case1:	; cases 1, 2
 	ret
 UIStateEvt_NullHandler:
 	ret
@@ -4852,17 +4868,27 @@ ExtData_ToneParam_DispatchHandler:
 	jp	t, (xix+wa)
 ExtData_ToneParam_DispatchHandler_Code:
 	jr ExtData_ToneParam_DispatchHandler_Join
+ExtData_ToneParam_DispatchHandler_Case3:
 	jrl	ExtData_Voice_CheckMode3_Helper
+ExtData_ToneParam_DispatchHandler_Case4:
 	jrl	ExtData_ToneParam_DispatchHandler_Join2
+ExtData_ToneParam_DispatchHandler_Case5:
 	jrl	ExtData_ToneParam_DispatchHandler_Join5
+ExtData_ToneParam_DispatchHandler_Case6:
 	jrl	ExtData_Voice_CheckMode3_Helper_Join2
+ExtData_ToneParam_DispatchHandler_Case7:
 	jrl	ExtData_Voice_CheckMode3_Helper_Join3
+ExtData_ToneParam_DispatchHandler_Case8:
 	jrl	ExtData_Voice_CheckMode3_Helper_Join4
+ExtData_ToneParam_DispatchHandler_Case9:
 	jrl	ExtData_Voice_CheckMode3_Helper_Join5
+ExtData_ToneParam_DispatchHandler_Case10:
 	jrl	ExtData_Voice_CheckMode3_Helper_Join6
+ExtData_ToneParam_DispatchHandler_Case11:
 	jrl	ExtData_Voice_CheckMode3_Helper_Join7
 ExtData_ToneParam_DispatchHandler_Skip:
 	calr	ExtData_ToneParam_DispatchHandler_Helper4
+ExtData_ToneParam_DispatchHandler_Case1:	; cases 1, 2
 	ret
 ExtData_ToneParam_DispatchHandler_Join:
 	dec	6, xsp
@@ -5069,8 +5095,11 @@ ExtData_ToneParam_AltDispatch:
 	jp	t, (xix+wa)
 ExtData_ToneParam_AltDispatch_Code:
 	jr ExtData_ToneParam_AltDispatch_Join
+ExtData_ToneParam_AltDispatch_Case1:	; cases 1, 2
 	jr ExtData_ToneParam_AltDispatch_Join2
+ExtData_ToneParam_AltDispatch_Case3:	; cases 3, 4, 5, 6
 	jr	ExtData_ToneParam_AltDispatch_Join3
+ExtData_ToneParam_AltDispatch_Case7:
 	calr	ExtData_ToneParam_AltDispatch_Helper
 	ret
 ExtData_ToneParam_AltDispatch_Join:
@@ -5112,11 +5141,17 @@ ExtData_ToneParam_AltBody:
 	jp	t, (xix+wa)
 ExtData_ToneParam_AltBody_Code:
 	jr ExtData_ToneParam_AltBody_Join
+ExtData_ToneParam_AltBody_Case3:
 	jr ExtData_ToneParam_AltBody_Join2
+ExtData_ToneParam_AltBody_Case4:
 	jrl	ExtData_ToneParam_AltBody_Join3
+ExtData_ToneParam_AltBody_Case5:	; cases 5, 6
 	jrl	ExtData_ToneParam_AltBody_Entry
+ExtData_ToneParam_AltBody_Case7:
 	jrl	ExtData_ToneParam_AltBody_Join4
+ExtData_ToneParam_AltBody_Case8:
 	calr	ExtData_ToneParam_AltBody_Helper2
+ExtData_ToneParam_AltBody_Case1:	; cases 1, 2
 	ret
 ExtData_ToneParam_AltBody_Join:
 	lda	xwa, (0x90ea:16)

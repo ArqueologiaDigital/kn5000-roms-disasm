@@ -74,51 +74,61 @@ ParaLoadOpt_DispatchTable_A:
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jrl	ParaLoadOpt_DispatchTable_A_Join
+ParaLoadOpt_AudioFlagCheck_Case1:
 	ld	(0x024760:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jrl	ParaLoadOpt_DispatchTable_A_Join
+ParaLoadOpt_AudioFlagCheck_Case2:
 	ld	(0x024760:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jrl	ParaLoadOpt_DispatchTable_A_Join
+ParaLoadOpt_AudioFlagCheck_Case3:
 	ld	(0x024762:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jrl	ParaLoadOpt_DispatchTable_A_Join
+ParaLoadOpt_AudioFlagCheck_Case4:
 	ld	(0x024762:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	ParaLoadOpt_DispatchTable_A_Join
+ParaLoadOpt_AudioFlagCheck_Case5:
 	ld	(0x024764:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	ParaLoadOpt_DispatchTable_A_Join
+ParaLoadOpt_AudioFlagCheck_Case6:
 	ld	(0x024764:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	ParaLoadOpt_DispatchTable_A_Join
+ParaLoadOpt_AudioFlagCheck_Case7:
 	ld	(0x024766:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	ParaLoadOpt_DispatchTable_A_Join
+ParaLoadOpt_AudioFlagCheck_Case8:
 	ld	(0x024766:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	ParaLoadOpt_DispatchTable_A_Join
+ParaLoadOpt_AudioFlagCheck_Case11:
 	ld	(0x024768:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	ParaLoadOpt_DispatchTable_A_Join
+ParaLoadOpt_AudioFlagCheck_Case12:
 	ld	(0x024768:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, EVT_PAINT
@@ -195,51 +205,61 @@ ParaLoadOpt_DispatchTable_B:
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jrl	ParaLoadOpt_DispatchTable_B_Join
+ParaLoadOpt_AudioFlagCheck_B_Case1:
 	ld	(0x024760:24), 2
 	ld	xwa, 0x570015
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jrl	ParaLoadOpt_DispatchTable_B_Join
+ParaLoadOpt_AudioFlagCheck_B_Case2:
 	ld	(0x024760:24), 3
 	ld	xwa, 0x570015
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jrl	ParaLoadOpt_DispatchTable_B_Join
+ParaLoadOpt_AudioFlagCheck_B_Case3:
 	ld	(0x024762:24), 2
 	ld	xwa, 0x570015
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jrl	ParaLoadOpt_DispatchTable_B_Join
+ParaLoadOpt_AudioFlagCheck_B_Case4:
 	ld	(0x024762:24), 3
 	ld	xwa, 0x570015
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	ParaLoadOpt_DispatchTable_B_Join
+ParaLoadOpt_AudioFlagCheck_B_Case5:
 	ld	(0x024764:24), 2
 	ld	xwa, 0x570015
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	ParaLoadOpt_DispatchTable_B_Join
+ParaLoadOpt_AudioFlagCheck_B_Case6:
 	ld	(0x024764:24), 3
 	ld	xwa, 0x570015
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	ParaLoadOpt_DispatchTable_B_Join
+ParaLoadOpt_AudioFlagCheck_B_Case7:
 	ld	(0x024766:24), 2
 	ld	xwa, 0x570015
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	ParaLoadOpt_DispatchTable_B_Join
+ParaLoadOpt_AudioFlagCheck_B_Case8:
 	ld	(0x024766:24), 3
 	ld	xwa, 0x570015
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	ParaLoadOpt_DispatchTable_B_Join
+ParaLoadOpt_AudioFlagCheck_B_Case11:
 	ld	(0x024768:24), 2
 	ld	xwa, 0x570015
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	ParaLoadOpt_DispatchTable_B_Join
+ParaLoadOpt_AudioFlagCheck_B_Case12:
 	ld	(0x024768:24), 3
 	ld	xwa, 0x570015
 	ld	xbc, EVT_PAINT
@@ -382,6 +402,7 @@ ParaLoadOpt_GridReturn:
 	ld XDE,(XSP+0x0c)
 	call MainFuncCall
 	jrl t, AccFunc_ReturnZeroJmp
+AcParaLoadOptGridBoxProc_OnIndexswUp:	; cases 29360151, 29360153
 	ld XWA,XIZ
 	ld XBC,(XSP+0x10)
 	ld XDE,(XSP+0x0c)
@@ -439,6 +460,7 @@ ParaLoadOpt_GridDelegateProc:
 	call SetDialDown
 	ld wa, 1:i3
 	jrl ParaLoadOpt_SetDialAndReturn
+AcParaLoadOptGridBoxProc_OnIndexswDown:	; cases 29360152, 29360154
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -522,6 +544,7 @@ ParaLoadOpt_GetViewAndCopy:
 	call	Free_Compare2
 	inc	8, xsp
 	jr	AccFunc_ReturnZeroJmp
+AcParaLoadOptGridBoxProc_OnLswData:	; cases 29360156, 29360157
 	ld	xwa, xiz
 	call	GetViewInstance
 	ld	xwa, (xhl+70)
@@ -657,6 +680,7 @@ ParaLoadOpt_GridDispatch_Skip3:
 	ld	xbc, 3:i3
 	ld	(xwa+6), xbc
 	jrl	ParaLoadOpt_GridDispatch_Join
+ParaLoadOptGridCheck_OnIndexswDown:	; cases 29360152, 29360154
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, EVT_GET_SELECTED_CEL
@@ -731,6 +755,7 @@ ParaLoadOpt_GridDispatch_Skip6:
 ParaLoadOpt_GridDispatch_Join:
 	call	MainRamAdd
 	jrl	ParaLoadOpt_ReturnZero
+ParaLoadOptGridCheck_OnRamData:
 	ld	xix, xhl
 	ldw	(xiy), 1
 	ld	(xsp+16), xbc

@@ -13507,6 +13507,7 @@ ProcessEventDispatch_LoadParam4:
 	ldw bc, 0xb
 	call SndParam_NotifyAndReturn
 	jrl RhythmBuf_EventDispatchLoop
+SeqPart_EmitNoteOn_Full_Case208:
 	call RhythmBuf_ReadAlternate
 	ldfr_werp HL, 0xfa
 	ldto_werp WA, 0xfa
@@ -13571,6 +13572,7 @@ ProcessEventDispatch_LoadIter:
 	cp iz, 0x14
 	jr lt, ProcessEventDispatch_LoadIter
 	jrl RhythmBuf_EventDispatchLoop
+SeqPart_EmitNoteOn_Full_Case212:	; cases 212, 213, 214, 215, 216
 	call RhythmBuf_ReadAlternate
 	ldfr_werp HL, 0xfa
 	ldto_werp WA, 0xfa
@@ -13877,6 +13879,7 @@ SeqPerformance_EventDispatch:
 	ld	bc, 1:i3
 	call	SndParam_NotifyAndReturn
 	jrl	SeqEvtBuf_NonNoteDispatchLoop
+SeqEvtBuf_NoteDispatch_Case2:
 	ld	wa, 0:i3
 	cp	iz, 64
 	jr	lt, ProcessEventDispatch_Prologue_Skip
@@ -13899,6 +13902,7 @@ ProcessEventDispatch_Prologue_Skip:
 	ldw	bc, 432
 	call	SndParam_NotifyAndReturn
 	jrl	SeqEvtBuf_NonNoteDispatchLoop
+SeqEvtBuf_NoteDispatch_Case3:
 	ld	wa, (xsp+4)
 	ld	de, iz
 	ldw	bc, 64
@@ -13909,6 +13913,7 @@ ProcessEventDispatch_Prologue_Skip:
 	ldw	bc, 64
 	call	SndParam_NotifyAndReturn
 	jrl	SeqEvtBuf_NonNoteDispatchLoop
+SeqEvtBuf_NoteDispatch_Case4:
 	ld	wa, (xsp+4)
 	ld	de, iz
 	ldw	bc, 10
@@ -13919,6 +13924,7 @@ ProcessEventDispatch_Prologue_Skip:
 	ldw	bc, 10
 	call	SndParam_NotifyAndReturn
 	jrl	SeqEvtBuf_NonNoteDispatchLoop
+SeqEvtBuf_NoteDispatch_Case5:
 	ld	wa, (xsp+4)
 	ld	de, iz
 	ldw	bc, 11
@@ -13929,6 +13935,7 @@ ProcessEventDispatch_Prologue_Skip:
 	ldw	bc, 11
 	call	SndParam_NotifyAndReturn
 	jrl	SeqEvtBuf_NonNoteDispatchLoop
+SeqEvtBuf_NoteDispatch_Case7:
 	ld	wa, (xsp+4)
 	ld	de, iz
 	ldw	bc, 94
@@ -17179,6 +17186,7 @@ UIState_ProcessKeyEvent_Code:
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jrl	SndParam_ProcessEntry_Epilogue
+UIState_ProcessKeyEvent_Case1:
 	ld	a, (xsp+0x3)
 	.set	SndParam_ProcessEntry, . + 1	; mid-instruction: only a .long in ui_widgets/widget_dispatch.s (bytes 7f a8 fe 00 inside a byte table) names this address
 	res	7, a
@@ -17198,6 +17206,7 @@ UIState_ProcessKeyEvent_Code:
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jrl	SndParam_ProcessEntry_Epilogue
+UIState_ProcessKeyEvent_Case3:
 	ld	a, (xsp+0x3)
 	and	a, 255
 	jrl	z, SndParam_ProcessEntry_Epilogue
@@ -17205,6 +17214,7 @@ UIState_ProcessKeyEvent_Code:
 	ldw	bc, 127
 	calr	UIState_ProcessKeyEvent_Helper
 	jrl	SndParam_ProcessEntry_Epilogue
+UIState_ProcessKeyEvent_Case4:
 	ld	a, (xsp+0x3)
 	and	a, 7
 	jr	z, SndParam_ProcessEntry_Entry
@@ -17244,6 +17254,7 @@ UIState_ProcessKeyEvent_Skip:
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jrl	SndParam_ProcessEntry_Epilogue
+UIState_ProcessKeyEvent_Case5:
 	ld	a, (xsp+0x3)
 	res	7, a
 	cp	a, 0:i3
@@ -17257,6 +17268,7 @@ UIState_ProcessKeyEvent_Skip:
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jrl	SndParam_ProcessEntry_Epilogue
+UIState_ProcessKeyEvent_Case7:
 	ld	a, (xsp+0x3)
 	res	7, a
 	cp	a, 0:i3
@@ -17270,6 +17282,7 @@ UIState_ProcessKeyEvent_Skip:
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jrl	SndParam_ProcessEntry_Epilogue
+UIState_ProcessKeyEvent_Case8:
 	ld	a, (xsp+0x3)
 	res	7, a
 	cp	a, 0:i3
@@ -17288,6 +17301,7 @@ UIState_ProcessKeyEvent_Skip:
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jrl	SndParam_ProcessEntry_Epilogue
+UIState_ProcessKeyEvent_Case9:
 	ld	a, (xsp+0x3)
 	res	7, a
 	cp	a, 0:i3
@@ -17301,6 +17315,7 @@ UIState_ProcessKeyEvent_Skip:
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jr	SndParam_ProcessEntry_Epilogue
+UIState_ProcessKeyEvent_Case10:
 	ld	a, (xsp+0x3)
 	and	a, 255
 	jr	z, SndParam_ProcessEntry_Epilogue
@@ -17313,6 +17328,7 @@ UIState_ProcessKeyEvent_Skip:
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jr	SndParam_ProcessEntry_Epilogue
+UIState_ProcessKeyEvent_Case11:
 	ld	a, (xsp+0x3)
 	res	7, a
 	cp	a, 0:i3
@@ -17326,6 +17342,7 @@ UIState_ProcessKeyEvent_Skip:
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jr	SndParam_ProcessEntry_Epilogue
+UIState_ProcessKeyEvent_Case12:
 	bitm	3, (xsp+0x3)
 	jr	z, UIState_ProcessKeyEvent_Skip2
 	lda	xwa, (xsp)
@@ -17573,6 +17590,7 @@ HdaeRom_TableEntry2_Skip:
 	ld	bc, 7:i3
 	calr	MIDI_SendControlChange
 	jr	HdaeRom_TableEntry2_Epilogue
+HdaeRom_TableEntry2_Case7:
 	ld	a, (xsp+0x3)
 	res	7, a
 	cp	a, 0:i3
@@ -18423,20 +18441,26 @@ MIDI_SendEpilogue_Code:
 	extz	wa
 	call	SendPartDataBlock_Block
 	jrl	SendEpilogue_Data_Join
+SendEpilogue_Data_Case1:
 	ldto_berp a, 248
 	extz	wa
 	call	SendPartDataBlock_Block2
 	jrl	SendEpilogue_Data_Join
+SendEpilogue_Data_Case2:
 	ld	(0xcfca:16), iz
 	jrl	SendEpilogue_Data_Join
+SendEpilogue_Data_Case3:
 	ld	(0xcfc8:16), iz
 	jrl	SendEpilogue_Data_Join
+SendEpilogue_Data_Case4:
 	ld	(0xcfcc:16), iz
 	jrl	SendEpilogue_Data_Join
+SendEpilogue_Data_Case5:
 	ldto_berp	a, 248
 	extz	wa
 	call	SendPartDataBlock_Block3
 	jrl	SendEpilogue_Data_Join
+SendEpilogue_Data_Case6:
 	ldto_berp	a, 248
 	extz	wa
 	call	SendPartDataBlock_Block9
@@ -18511,6 +18535,7 @@ SendEpilogue_Data_Skip15:
 	ldw	bc, 177
 	calr	SeqVoice_CheckAndRet_Prologue
 	jrl	SendEpilogue_Data_Join
+SendEpilogue_Data_Switch2_Case129:
 	ldto_berp	a, 248
 	extz	wa
 	calr	SendEpilogue_Data_Helper
@@ -18554,6 +18579,7 @@ SendEpilogue_Data_Skip16:
 	cp	iz, 12
 	jr	lt, SendEpilogue_Data_Loop
 	jrl	SendEpilogue_Data_Join
+SendEpilogue_Data_Switch2_Case130:
 	ld	xwa, 0x4281
 	call	SndParam_LookupReadOnly
 	ld	a, l
@@ -18596,6 +18622,7 @@ SendEpilogue_Data_Skip17:
 	cp	iz, 12
 	jr	lt, SendEpilogue_Data_Loop2
 	jrl	SendEpilogue_Data_Join
+SendEpilogue_Data_Switch2_Case131:
 	ld	xwa, 0x4281
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
@@ -18618,6 +18645,7 @@ SendEpilogue_Data_Skip18:
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
 	jrl	SendEpilogue_Data_Join
+SendEpilogue_Data_Switch2_Case132:
 	ld	xwa, 0x4281
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
@@ -18641,6 +18669,7 @@ SendEpilogue_Data_Skip19:
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
 	jrl	SendEpilogue_Data_Join
+SendEpilogue_Data_Switch2_Case133:
 	ld	xwa, 0x4281
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
@@ -18664,6 +18693,7 @@ SendEpilogue_Data_Skip20:
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
 	jrl	SendEpilogue_Data_Join
+SendEpilogue_Data_Switch2_Case134:
 	ld	xwa, 0x4281
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
@@ -18687,6 +18717,7 @@ SendEpilogue_Data_Skip21:
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
 	jrl	SendEpilogue_Data_Join
+SendEpilogue_Data_Switch2_Case135:
 	ld	xwa, 0x4281
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
@@ -18710,6 +18741,7 @@ SendEpilogue_Data_Skip22:
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
 	jrl	SendEpilogue_Data_Join
+SendEpilogue_Data_Switch2_Case136:
 	ld	xwa, 0x4281
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
@@ -18733,6 +18765,7 @@ SendEpilogue_Data_Skip23:
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
 	jrl	SendEpilogue_Data_Join
+SendEpilogue_Data_Switch2_Case137:
 	ld	xwa, 0x4281
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
@@ -18756,6 +18789,7 @@ SendEpilogue_Data_Skip24:
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
 	jrl	SendEpilogue_Data_Join
+SendEpilogue_Data_Switch2_Case138:
 	ld	xwa, 0x4281
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
@@ -18779,6 +18813,7 @@ SendEpilogue_Data_Skip25:
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
 	jrl	SendEpilogue_Data_Join
+SendEpilogue_Data_Switch2_Case139:
 	ld	xwa, 0x4281
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
@@ -18802,6 +18837,7 @@ SendEpilogue_Data_Skip26:
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
 	jrl	SendEpilogue_Data_Join
+SendEpilogue_Data_Switch2_Case140:
 	ld	xwa, 0x4281
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
@@ -18825,6 +18861,7 @@ SendEpilogue_Data_Skip27:
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
 	jrl	SendEpilogue_Data_Join
+SendEpilogue_Data_Switch2_Case141:
 	ld	xwa, 0x4281
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
@@ -18848,6 +18885,7 @@ SendEpilogue_Data_Skip28:
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
 	jr	SendEpilogue_Data_Join
+SendEpilogue_Data_Switch2_Case142:
 	ld	xwa, 0x4281
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
@@ -19274,18 +19312,25 @@ SeqVoice_CheckAndRet_Data_Skip6:
 SeqVoice_CheckAndRet_Data_Skip7:
 	lda	xhl, (SemitoneBias_TableG:24)
 	jr	SeqVoice_CheckAndRet_Data_Return
+SeqVoice_CheckAndRet_Data_Case16:
 	lda	xhl, (SemitoneBias_TableH:24)
 	jr	SeqVoice_CheckAndRet_Data_Return
+SeqVoice_CheckAndRet_Data_Case17:
 	lda	xhl, (SemitoneBias_TableI:24)
 	jr	SeqVoice_CheckAndRet_Data_Return
+SeqVoice_CheckAndRet_Data_Case18:
 	lda	xhl, (SemitoneBias_TableJ:24)
 	jr	SeqVoice_CheckAndRet_Data_Return
+SeqVoice_CheckAndRet_Data_Case19:
 	lda	xhl, (SemitoneBias_TableK:24)
 	jr	SeqVoice_CheckAndRet_Data_Return
+SeqVoice_CheckAndRet_Data_Case20:
 	lda	xhl, (SemitoneBias_TableL:24)
 	jr	SeqVoice_CheckAndRet_Data_Return
+SeqVoice_CheckAndRet_Data_Case21:
 	lda	xhl, (SemitoneBias_TableM:24)
 	jr	SeqVoice_CheckAndRet_Data_Return
+SeqVoice_CheckAndRet_Data_Case22:
 	lda	xhl, (SemitoneBias_TableN:24)
 	jr	SeqVoice_CheckAndRet_Data_Return
 SeqVoice_CheckAndRet_Data_Skip8:
@@ -19344,18 +19389,25 @@ SendEpilogue_Data_Helper_Skip5:
 SendEpilogue_Data_Helper_Skip6:
 	ld	hl, 5:i3
 	jr	SeqVoice_CheckAndRet_Data_Return2
+SendEpilogue_Data_Helper_Case16:
 	ldw	hl, 16
 	jr	SeqVoice_CheckAndRet_Data_Return2
+SendEpilogue_Data_Helper_Case17:
 	ldw	hl, 17
 	jr	SeqVoice_CheckAndRet_Data_Return2
+SendEpilogue_Data_Helper_Case18:
 	ldw	hl, 18
 	jr	SeqVoice_CheckAndRet_Data_Return2
+SendEpilogue_Data_Helper_Case19:
 	ldw	hl, 19
 	jr	SeqVoice_CheckAndRet_Data_Return2
+SendEpilogue_Data_Helper_Case20:
 	ldw	hl, 20
 	jr	SeqVoice_CheckAndRet_Data_Return2
+SendEpilogue_Data_Helper_Case21:
 	ldw	hl, 21
 	jr	SeqVoice_CheckAndRet_Data_Return2
+SendEpilogue_Data_Helper_Case22:
 	ldw	hl, 22
 	jr	SeqVoice_CheckAndRet_Data_Return2
 SeqVoice_CheckAndRet_Data_Skip11:
@@ -19559,6 +19611,7 @@ MIDI_WriteChannelData_Block:
 	jp	t, (xix+wa)
 SendAllSoundOff_Flush_Code:
 	ld	l, 1:opc
+MIDI_WriteChannelData_Block_Case21:	; cases 21, 22
 	ret
 
 ; ============================================================================
@@ -22299,6 +22352,7 @@ MidiSysMsg_Handler_Skip:
 	cp	l, 247
 	jr	nz, MidiSysMsg_Dispatch
 	jrl	Dispatch_InitVal2
+MidiSysMsg_Handler_Case241:
 	ld	iz, 0:i3
 	cp	iz, 1:i3
 	jrl	ge, Dispatch_InitVal2
@@ -22313,8 +22367,10 @@ MidiSysMsg_Handler_Skip2:
 	cp	iz, 1:i3
 	jr	lt, MidiSysMsg_Handler_Loop
 	jrl	Dispatch_InitVal2
+MidiSysMsg_Handler_Case242:
 	ldw	hl, 0xfffd
 	jrl	Dispatch_Epilogue
+MidiSysMsg_Handler_Case243:
 	ld	iz, 0:i3
 	cp	iz, 1:i3
 	jr	ge, MidiSysMsg_Handler_Skip4
@@ -22338,6 +22394,7 @@ MidiSysMsg_Handler_Skip4:
 	calr	Dispatch_Data
 	add	(0xe9e7:16), xhl
 	jrl	Dispatch_InitVal2
+MidiSysMsg_Handler_Case244:
 	ld	iz, 0:i3
 	cp	iz, 2:i3
 	jr	ge, MidiSysMsg_Handler_Skip6
@@ -22361,6 +22418,7 @@ MidiSysMsg_Handler_Skip6:
 	calr	Dispatch_Data
 	add	(0xe9e7:16), xhl
 	jrl	Dispatch_InitVal2
+MidiSysMsg_Handler_Case249:
 	ld	iz, 0:i3
 	cp	iz, 2:i3
 	jrl	ge, Dispatch_InitVal2
@@ -22375,6 +22433,7 @@ MidiSysMsg_Handler_Skip7:
 	cp	iz, 2:i3
 	jr	lt, MidiSysMsg_Handler_Loop4
 	jrl	Dispatch_InitVal2
+MidiSysMsg_Handler_Case251:
 	ld	iz, 0:i3
 	cp	iz, 2:i3
 	jr	ge, MidiSysMsg_Handler_Skip9
@@ -22395,6 +22454,7 @@ MidiSysMsg_Handler_Skip9:
 	lda	xwa, (xsp+4)
 	calr	MidiSysMsg_Handler_Helper
 	jr	Dispatch_InitVal2
+MidiSysMsg_Handler_Case254:
 	ld	iz, 0:i3
 	cp	iz, 2:i3
 	jr	ge, Dispatch_InitVal2
@@ -25044,6 +25104,7 @@ Param_SignExtendReturn_Code:
 	ldw	bc, 0xffff
 	ld	de, 0:i3
 	jrl	Param_SignExtendReturn_Join
+Param_SignExtendReturn_Helper3_Switch2_Case1:
 	ld	a, (xsp)
 	exts	wa
 	pushw	128
@@ -25051,6 +25112,7 @@ Param_SignExtendReturn_Code:
 	ldw	bc, 0xffff
 	ld	de, 0:i3
 	jrl	Param_SignExtendReturn_Join
+Param_SignExtendReturn_Helper3_Switch2_Case2:
 	ld	a, (xsp)
 	exts	wa
 	pushw	127
@@ -25058,6 +25120,7 @@ Param_SignExtendReturn_Code:
 	ldw	bc, 0xffff
 	ld	de, 0:i3
 	jrl	Param_SignExtendReturn_Join
+Param_SignExtendReturn_Helper3_Switch2_Case4:
 	ld	a, (xsp)
 	exts	wa
 	pushw	24
@@ -25065,6 +25128,7 @@ Param_SignExtendReturn_Code:
 	ldw	bc, 0xffff
 	ld	de, 0:i3
 	jrl	Param_SignExtendReturn_Join
+Param_SignExtendReturn_Helper3_Switch2_Case5:
 	ld	a, (xsp)
 	exts	wa
 	pushw	50
@@ -25072,6 +25136,7 @@ Param_SignExtendReturn_Code:
 	ldw	bc, 0xffff
 	ld	de, 0:i3
 	jrl	Param_SignExtendReturn_Join
+Param_SignExtendReturn_Helper3_Switch2_Case6:
 	ld	a, (xsp)
 	exts	wa
 	pushw	100
@@ -25107,6 +25172,7 @@ Param_SignExtendReturn_Skip4:
 	ldw	bc, 0xffff
 	ld	de, 0:i3
 	jr	Param_SignExtendReturn_Join
+Param_SignExtendReturn_Helper3_Switch3_Case1:
 	ld	a, (xsp)
 	exts	wa
 	pushw	66
@@ -25114,6 +25180,7 @@ Param_SignExtendReturn_Skip4:
 	ldw	bc, 0xffff
 	ld	de, 0:i3
 	jr	Param_SignExtendReturn_Join
+Param_SignExtendReturn_Helper3_Switch3_Case2:
 	ld	a, (xsp)
 	exts	wa
 	pushw	49
@@ -25121,6 +25188,7 @@ Param_SignExtendReturn_Skip4:
 	ldw	bc, 127
 	ld	de, 0:i3
 	jr	Param_SignExtendReturn_Join
+Param_SignExtendReturn_Helper3_Switch3_Case3:
 	ld	a, (xsp)
 	exts	wa
 	pushw	127
@@ -25128,6 +25196,7 @@ Param_SignExtendReturn_Skip4:
 	ldw	bc, 0xffff
 	ld	de, 0:i3
 	jr	Param_SignExtendReturn_Join
+Param_SignExtendReturn_Helper3_Switch3_Case4:
 	ld	a, (xsp)
 	exts	wa
 	pushw	10
@@ -25135,6 +25204,7 @@ Param_SignExtendReturn_Skip4:
 	ldw	bc, 0xffff
 	ld	de, 0:i3
 	jr	Param_SignExtendReturn_Join
+Param_SignExtendReturn_Helper3_Switch3_Case5:
 	ld	a, (xsp)
 	exts	wa
 	pushw	50
@@ -25142,6 +25212,7 @@ Param_SignExtendReturn_Skip4:
 	ldw	bc, 127
 	ld	de, 0:i3
 	jr	Param_SignExtendReturn_Join
+Param_SignExtendReturn_Helper3_Switch3_Case6:
 	ld	a, (xsp)
 	exts	wa
 	pushw	30
@@ -25229,36 +25300,42 @@ Param_SignExtendReturn_Skip8:
 	ldw	bc, 0xffff
 	ld	de, 0:i3
 	jrl	Param_SignExtendReturn_Join2
+Param_SignExtendReturn_Helper3_Switch5_Case1:
 	pushw	127
 	pushw	0
 	ld	wa, (xsp+10)
 	ldw	bc, 0xffff
 	ld	de, 0:i3
 	jrl	Param_SignExtendReturn_Join2
+Param_SignExtendReturn_Helper3_Switch5_Case6:
 	pushw	50
 	pushw	0
 	ld	wa, (xsp+10)
 	ldw	bc, 0xffff
 	ld	de, 0:i3
 	jrl	Param_SignExtendReturn_Join2
+Param_SignExtendReturn_Helper3_Switch5_Case2:
 	pushw	128
 	pushw	0
 	ld	wa, (xsp+10)
 	ldw	bc, 0xffff
 	ld	de, 0:i3
 	jrl	Param_SignExtendReturn_Join2
+Param_SignExtendReturn_Helper3_Switch5_Case3:
 	pushw	127
 	pushw	0
 	ld	wa, (xsp+10)
 	ldw	bc, 0xffff
 	ld	de, 0:i3
 	jrl	Param_SignExtendReturn_Join2
+Param_SignExtendReturn_Helper3_Switch5_Case4:
 	pushw	50
 	pushw	0xffce
 	ld	wa, (xsp+10)
 	ldw	bc, 0xffff
 	ld	de, 0:i3
 	jrl	Param_SignExtendReturn_Join2
+Param_SignExtendReturn_Helper3_Switch5_Case5:
 	pushw	100
 	pushw	0
 	ld	wa, (xsp+10)
@@ -25292,12 +25369,14 @@ Param_SignExtendReturn_Skip11:
 	ldw	bc, 0xffff
 	ld	de, 0:i3
 	jr	Param_SignExtendReturn_Join2
+Param_SignExtendReturn_Helper3_Switch6_Case1:
 	pushw	49
 	pushw	0
 	ld	wa, (xsp+10)
 	ldw	bc, 127
 	ld	de, 0:i3
 	jr	Param_SignExtendReturn_Join2
+Param_SignExtendReturn_Helper3_Switch6_Case2:
 	pushw	127
 	pushw	0
 	ld	wa, (xsp+10)
@@ -27300,6 +27379,7 @@ HdaeRom_DataHandler_Loop2:
 	subw	(xsp+4), 1
 	jr	nz, HdaeRom_DataHandler_Loop2
 	jrl	HdaeRom_DataHandler_Skip
+HdaeRom_DataHandler_Case1:	; cases 1, 2, 3
 	ld	(xsp+6), xbc
 	cp	(xsp+442), 255
 	jr	nz, HdaeRom_DataHandler_Skip2
@@ -27454,6 +27534,7 @@ HdaeRom_AltHandler:
 HdaeRom_AltDispatch:
 	ld	xwa, 0x1e0000
 	calr	HdaeRom_DataDispatch_Block3
+HdaeRom_AltHandler_Case6:
 	ld	iz, 0:i3
 	jr	HdaeRom_AltHandler_Join
 
@@ -27823,12 +27904,14 @@ TmFlash_BulkTransferToSubCPU_Skip2:
 VoiceParam_DispatchTable1:
 	ld	xbc, 470
 	jr	TmFlash_BulkTransferToSubCPU_Join
+TmFlash_BulkTransferToSubCPU_Case5:
 	ld	xbc, 289
 TmFlash_BulkTransferToSubCPU_Join:
 	call	Math_MultiplyAccumulate
 	add	xhl, 16
 	add	xhl, (xsp+2)
 	jr	TmFlash_BulkTransferToSubCPU_Epilogue
+TmFlash_BulkTransferToSubCPU_Case1:	; cases 1, 2, 3
 	ld	xbc, xwa
 	sll	xbc, 3
 	add	xbc, xwa
@@ -27897,6 +27980,7 @@ VoiceParam_DispatchTable1_Code:
 	ld	(xwa), xhl
 	ldw	wa, 0x1d6
 	jr	TmFlash_BulkTransferToSubCPU_Join2
+TmFlash_BulkTransferToSubCPU_Switch2_Case5:
 	ld	xwa, xbc
 	ld	xbc, 0x121
 	call	Math_MultiplyAccumulate
@@ -27907,6 +27991,7 @@ VoiceParam_DispatchTable1_Code:
 	ld	(xwa), xhl
 	ldw	wa, 0x121
 	jr	TmFlash_BulkTransferToSubCPU_Join2
+TmFlash_BulkTransferToSubCPU_Switch2_Case1:	; cases 1, 2, 3
 	ld	xwa, xbc
 	sll	xwa, 3
 	add	xwa, xbc

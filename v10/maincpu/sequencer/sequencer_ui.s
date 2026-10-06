@@ -2345,6 +2345,7 @@ TrAsGrid_InitDispatch:
 	call SetDialDown
 	ld wa, 1:i3
 	jrl TrAsGrid_CallUpdateSorted
+AcTrAsGridBoxProc_OnIndexswUp:	; cases 29360151, 29360153
 	ld xwa, (xsp + 16)
 	ld xbc, EVT_CHECK_INDEX
 	ld xde, (xsp + 8)
@@ -2469,6 +2470,7 @@ TrAsGrid_HandleOtherEvent:
 	call SetDialDown
 	ld wa, 1:i3
 	jrl TrAsGrid_CallUpdateSorted
+AcTrAsGridBoxProc_OnIndexswDown:	; cases 29360152, 29360154
 	ld xwa, (xsp + 16)
 	ld xbc, EVT_CHECK_INDEX
 	ld xde, (xsp + 8)
@@ -2893,6 +2895,7 @@ TrAsGrid_CheckTrackType_Join2:
 	ld	xbc, EVT_AMD_CALL
 	ld	xde, xiz
 	jrl	TrAsGrid_CheckTrackType_Join5
+TrAsGridCheck_OnIndexswDown:	; cases 29360152, 29360154
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, EVT_GET_SELECTED_CEL
@@ -3608,8 +3611,10 @@ MuteChSel_Dispatch:
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	MuteChSel_Epilogue
+SmfMuteChSelFunc_OnGetLargeStep:	; cases 31457342, 31457343, 31457350
 	ld	xhl, 1:i3
 	jr	MuteChSel_Epilogue
+SmfMuteChSelFunc_OnGetMax:
 	ld	xhl, 15
 	jr	MuteChSel_Epilogue
 
@@ -3617,6 +3622,7 @@ MuteChSel_Dispatch:
 MuteChSel_ReturnZero:
 	ld xhl, 0:i3
 	jr MuteChSel_Epilogue
+SmfMuteChSelFunc_OnGetRamAddress:
 	lda xhl, (0x021084:24)
 
 ; SmfMuteChSelFunc epilogue
@@ -3651,8 +3657,10 @@ SqTrAsPsSong_Dispatch:
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	SqTrAsPsSong_Epilogue
+SqTrAsPsSongFunc_OnGetLargeStep:	; cases 31457342, 31457343, 31457350
 	ld	xhl, 1:i3
 	jr	SqTrAsPsSong_Epilogue
+SqTrAsPsSongFunc_OnGetMax:
 	ld	xhl, 10
 	jr	SqTrAsPsSong_Epilogue
 
@@ -3660,6 +3668,7 @@ SqTrAsPsSong_Dispatch:
 SqTrAsPsSong_ReturnZero:
 	ld xhl, 0:i3
 	jr SqTrAsPsSong_Epilogue
+SqTrAsPsSongFunc_OnGetRamAddress:
 	lda xhl, (3391:16)
 
 SqTrAsPsSong_Epilogue:
@@ -3746,10 +3755,13 @@ MuteChSet_Dispatch:
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	SqAftSet_LookupTableEntry_Epilogue
+MuteChSetFunc_OnGetLargeStep:	; cases 31457342, 31457343, 31457350
 	ld	xhl, 1:i3
 	jr	SqAftSet_LookupTableEntry_Epilogue
+MuteChSetFunc_OnGetMax:
 	ld	xhl, 15
 	jr	SqAftSet_LookupTableEntry_Epilogue
+MuteChSetFunc_OnGetRamAddress:
 	lda	xhl, (0x02108a:24)
 	jr	SqAftSet_LookupTableEntry_Epilogue
 
@@ -4097,14 +4109,19 @@ AcDemoMedleyDispBoxProc_Skip:
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	AcDemoMedleyDispBoxProc_Epilogue
+DemoMedDspCheck_OnGetLargeStep:
 	ld	xhl, 4:i3
 	jr	AcDemoMedleyDispBoxProc_Epilogue
+DemoMedDspCheck_OnGetSmallStep:	; cases 31457343, 31457350
 	ld	xhl, 1:i3
 	jr	AcDemoMedleyDispBoxProc_Epilogue
+DemoMedDspCheck_OnGetMax:
 	ld	xhl, 16
 	jr	AcDemoMedleyDispBoxProc_Epilogue
+DemoMedDspCheck_OnGetMin:
 	ld	xhl, 0xffffffe3
 	jr	AcDemoMedleyDispBoxProc_Epilogue
+DemoMedDspCheck_OnGetRamAddress:
 	lda	xhl, (0x021090:24)
 	jr	AcDemoMedleyDispBoxProc_Epilogue
 
@@ -4146,14 +4163,19 @@ AcDemoMedleyDispBoxProc_Skip2:
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	AcDemoMedleyDispBoxProc_Epilogue2
+DPPlayDspCheck_OnGetLargeStep:
 	ld	xhl, 4:i3
 	jr	AcDemoMedleyDispBoxProc_Epilogue2
+DPPlayDspCheck_OnGetSmallStep:	; cases 31457343, 31457350
 	ld	xhl, 1:i3
 	jr	AcDemoMedleyDispBoxProc_Epilogue2
+DPPlayDspCheck_OnGetMax:
 	ld	xhl, 16
 	jr	AcDemoMedleyDispBoxProc_Epilogue2
+DPPlayDspCheck_OnGetMin:
 	ld	xhl, 0xffffffe3
 	jr	AcDemoMedleyDispBoxProc_Epilogue2
+DPPlayDspCheck_OnGetRamAddress:
 	lda	xhl, (0x021092:24)
 	jr	AcDemoMedleyDispBoxProc_Epilogue2
 
@@ -4195,14 +4217,19 @@ AcDemoMedleyDispBoxProc_Skip3:
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	AcDemoMedleyDispBoxProc_Epilogue3
+DPPauseDspCheck_OnGetLargeStep:
 	ld	xhl, 4:i3
 	jr	AcDemoMedleyDispBoxProc_Epilogue3
+DPPauseDspCheck_OnGetSmallStep:	; cases 31457343, 31457350
 	ld	xhl, 1:i3
 	jr	AcDemoMedleyDispBoxProc_Epilogue3
+DPPauseDspCheck_OnGetMax:
 	ld	xhl, 16
 	jr	AcDemoMedleyDispBoxProc_Epilogue3
+DPPauseDspCheck_OnGetMin:
 	ld	xhl, 0xffffffe3
 	jr	AcDemoMedleyDispBoxProc_Epilogue3
+DPPauseDspCheck_OnGetRamAddress:
 	lda	xhl, (0x021094:24)
 	jr	AcDemoMedleyDispBoxProc_Epilogue3
 
@@ -5831,26 +5858,33 @@ NoteEditBox_EventDispatch1:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_HAKU_STRING
 	jr	NoteEditBoxProc_SetupGridDisplay_Join
+NoteEditBox_SetupGrid_Case2:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_POS_STRING
 	jr	NoteEditBoxProc_SetupGridDisplay_Join
+NoteEditBox_SetupGrid_Case3:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_NOTE_STRING
 	jr	NoteEditBoxProc_SetupGridDisplay_Join
+NoteEditBox_SetupGrid_Case4:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_VEL_STRING
 	jr	NoteEditBoxProc_SetupGridDisplay_Join
+NoteEditBox_SetupGrid_Case5:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_LEN_STRING
 	jr	NoteEditBoxProc_SetupGridDisplay_Join
+NoteEditBox_SetupGrid_Case6:	; cases 6, 9
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_INC_STRING
 	jr	NoteEditBoxProc_SetupGridDisplay_Join
+NoteEditBox_SetupGrid_Case7:	; cases 7, 8
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_INPUT_LEN_STRING
 	jr	NoteEditBoxProc_SetupGridDisplay_Join
+NoteEditBox_SetupGrid_Case10:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_INPUT_VEL_STRING
 	jr	NoteEditBoxProc_SetupGridDisplay_Join
@@ -6037,6 +6071,7 @@ NoteEditBox_EventDispatch2_Skip3:
 	pushw	0xfb	; colour pair for DrawString (by value), not a pointer
 	pushw	0xf5
 	jrl	NoteEditBox_EventDispatch2_Join7
+NoteEditBox_GridDispatch2_Case7:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_LINE_POS
@@ -6057,16 +6092,19 @@ NoteEditBox_EventDispatch2_Skip3:
 	ldw	de, 242
 	call	DrawLine
 	jrl	NoteEdit_ReturnZero
+NoteEditBox_GridDispatch2_Case3:
 	ld	xwa, 0x950014
 	ld	xbc, EVT_DRAW
 	ld	xde, (xsp+90)
 	jr	NoteEditBox_EventDispatch2_Join
+NoteEditBox_GridDispatch2_Case4:
 	ld	xwa, 0x980011
 	ld	xbc, EVT_DRAW
 	ld	xde, (xsp+90)
 NoteEditBox_EventDispatch2_Join:
 	call	SendEvent
 	jrl	NoteEdit_ReturnZero
+NoteEditBox_GridDispatch2_Case8:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_MEAS_TOP_NUM_SV
@@ -6160,6 +6198,7 @@ NoteEditBox_EventDispatch2_Join3:
 	cp_erpb 251, 11
 	jrl c, NoteEditBox_EventDispatch2_Loop
 	jrl	NoteEdit_ReturnZero
+NoteEditBox_GridDispatch2_Case13:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_MEAS_TOP_NUM_SV
@@ -6253,16 +6292,19 @@ NoteEditBox_EventDispatch2_Join5:
 	cp_erpb 251, 8
 	jrl c, NoteEditBox_EventDispatch2_Loop2
 	jrl	NoteEdit_ReturnZero
+NoteEditBox_GridDispatch2_Case9:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_NOTE_BAR_DISP
 	ld	xde, 0:i3
 	jr	NoteEditBox_EventDispatch2_Join6
+NoteEditBox_GridDispatch2_Case10:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_NOTE_BAR_DISP2
 	ld	xde, 0:i3
 	jr	NoteEditBox_EventDispatch2_Join6
+NoteEditBox_GridDispatch2_Case12:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_NOTE_HILIGHT_DISP
@@ -6270,6 +6312,7 @@ NoteEditBox_EventDispatch2_Join5:
 NoteEditBox_EventDispatch2_Join6:
 	call	ApFuncCall
 	jrl	NoteEdit_ReturnZero
+NoteEditBox_GridDispatch2_Case11:
 	lda	xix, (xsp+28)
 	ldw (xix), 5
 	lda	xbc, (xix+2)
@@ -6367,6 +6410,7 @@ NoteEditBox_EventDispatch2_Loop3:
 NoteEditBox_EventDispatch2_Join7:
 	call	DrawStringLeftJustify
 	jrl	NoteEdit_ReturnZero
+NoteEditBox_GridDispatch2_Case14:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_RAM_ADDRESS
@@ -6657,16 +6701,19 @@ NoteEdit_FormatTempoString:
 	call Strcpy
 	inc 8, xsp
 	jrl NoteEdit_RestoreAndReturn
+NoteEditFunc_OnGetHakuString:
 	ld xiz, xde
 	ld wa, (0x2782:16)
 	inc 1, wa
 	pushw wa
 	ld xwa, NoteEdit_FormatTempoString_Str
 	jrl NoteEdit_PushFormatAndCopy
+NoteEditFunc_OnGetPosString:
 	ld xiz, xde
 	push_sd16w 0x84, 0x27
 	ld xwa, NoteEdit_FormatTempoString_Str_2
 	jrl NoteEdit_PushFormatAndCopy
+NoteEditFunc_OnGetNoteString:
 	ld xiz, xde
 	call GetTitleNow
 	ld a, (0x2786:16)
@@ -6689,26 +6736,31 @@ NoteEdit_FormatNoteOther:
 	pushw wa
 	ld xwa, NoteEdit_FormatNoteOther_Str
 	jrl NoteEdit_PushFormatAndCopy
+NoteEditFunc_OnGetVelString:
 	ld xiz, xde
 	ld a, (0x2788:16)
 	extz wa
 	pushw wa
 	ld xwa, NoteEdit_FormatNoteOther_Str_2
 	jrl NoteEdit_PushFormatAndCopy
+NoteEditFunc_OnGetInputVelString:
 	ld xiz, xde
 	ld a, (0x278a:16)
 	extz wa
 	pushw wa
 	ld xwa, NoteEdit_FormatNoteOther_Str_3
 	jrl NoteEdit_PushFormatAndCopy
+NoteEditFunc_OnGetLenString:
 	ld xiz, xde
 	push_sd16w 0x8c, 0x27
 	ld xwa, NoteEdit_FormatNoteOther_Str_4
 	jrl NoteEdit_PushFormatAndCopy
+NoteEditFunc_OnGetInputLenString:
 	ld xiz, xde
 	push_sd16w 0x8e, 0x27
 	ld xwa, NoteEdit_FormatNoteOther_Str_5
 	jrl NoteEdit_PushFormatAndCopy
+NoteEditFunc_OnGetIncString:
 	ld xiz, xde
 	ld de, (0x2792:16)
 	cp de, 0x60
@@ -6827,18 +6879,23 @@ NoteEdit_GetParamValue_Cases:
 	ld	hl, (0x2782:16)
 	extz	xhl
 	jrl	NoteEdit_Epilogue
+NoteEdit_GetParamValue_Case2:
 	ld	hl, (0x2784:16)
 	extz	xhl
 	jrl	NoteEdit_Epilogue
+NoteEdit_GetParamValue_Case3:
 	ld	xhl, 0:i3
 	ld	l, (0x2786:16)
 	jrl	NoteEdit_Epilogue
+NoteEdit_GetParamValue_Case6:	; cases 6, 9
 	ld	hl, (0x2792:16)
 	extz	xhl
 	jrl	NoteEdit_Epilogue
+NoteEdit_GetParamValue_Case11:
 	ld	xhl, 0:i3
 	ld	l, (0x2798:16)
 	jrl	NoteEdit_Epilogue
+NoteEdit_GetParamValue_Case14:
 	ld	xhl, 0:i3
 	ld	l, (0x279e:16)
 	jrl	NoteEdit_Epilogue
@@ -6847,18 +6904,23 @@ NoteEdit_GetTempoValue:
 	ld hl, (0x2744:16)
 	extz xhl
 	jr NoteEdit_Epilogue
+NoteEditFunc_OnGetEndPos:
 	ld hl, (0x27b4:16)
 	extz xhl
 	jr NoteEdit_Epilogue
+NoteEditFunc_OnGetTriPos:
 	ld hl, (0x27b6:16)
 	extz xhl
 	jr NoteEdit_Epilogue
+NoteEditFunc_OnGetLinePos:
 	ld hl, (0x27b8:16)
 	extz xhl
 	jr NoteEdit_Epilogue
+NoteEditFunc_OnGetMeasTopNumSv:
 	ld hl, (0x27b2:16)
 	extz xhl
 	jr NoteEdit_Epilogue
+NoteEditFunc_OnGetMeasCngSv:
 	extz de
 	lda xbc, (0x27a4:16)
 	extz xde
@@ -6866,10 +6928,13 @@ NoteEdit_GetTempoValue:
 	ld xhl, 0:i3
 	ld l, (xde)
 	jr NoteEdit_Epilogue
+NoteEditFunc_OnNoteBarDisp:
 	calr BmDrEdit_ScanForwardInit
 	jr NoteEdit_RestoreAndReturn
+NoteEditFunc_OnNoteBarDisp2:
 	calr BmDrEdit_ScanBackwardInit
 	jr NoteEdit_RestoreAndReturn
+NoteEditFunc_OnNoteHilightDisp:
 	calr BmDrEdit_RenderSecondaryBlock
 	jr NoteEdit_RestoreAndReturn
 
@@ -7292,6 +7357,7 @@ EntGrid_PostMainEvent:
 	call SetDialEnable
 	ld (0x02109e:24), 0x00
 	jrl Entertainer_ReturnZeroJmp
+AcEntertainerGridBoxProc_OnIndexswUp:	; cases 29360151, 29360153
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -7350,6 +7416,7 @@ EntGrid_CheckOverflow1:
 	call SetDialDown
 	ld wa, 1:i3
 	jrl EntGrid_SetDialEnable
+AcEntertainerGridBoxProc_OnIndexswDown:	; cases 29360152, 29360154
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -7433,6 +7500,7 @@ EntGrid_GetViewAndCopy:
 	call Strcpy
 	inc 8, xsp
 	jr Entertainer_ReturnZeroJmp
+AcEntertainerGridBoxProc_OnLswData:	; cases 29360156, 29360157
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 70)
@@ -7581,16 +7649,19 @@ SndParam_Dispatch_Skip:
 SndParam_Dispatch_Join:
 	call	MainLswAdd
 	jrl	SndParam_ReturnZero
+EntertainerGridCheck_Switch2_Case4:
 	ld	xwa, NAKA_MAINFUNC_EffEditMain
 	ld	xbc, EVT_CNG_EFF_TYPE
 	ld	xde, 1:i3
 	jrl	SndParam_Dispatch_Join3
+EntertainerGridCheck_Switch2_Case5:	; cases 5, 6, 7, 8
 	dec	5, de
 	exts	xde
 	add	xde, 256
 	ld	xwa, NAKA_MAINFUNC_EffEditMain
 	ld	xbc, EVT_CNG_EFF_PARA
 	jrl	SndParam_Dispatch_Join3
+EntertainerGridCheck_OnIndexswDown:	; cases 29360152, 29360154
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, EVT_GET_SELECTED_CEL
@@ -7632,10 +7703,12 @@ SndParam_Dispatch_Skip2:
 SndParam_Dispatch_Join2:
 	call	MainLswAdd
 	jrl	SndParam_ReturnZero
+EntertainerGridCheck_Switch3_Case4:
 	ld	xwa, NAKA_MAINFUNC_EffEditMain
 	ld	xbc, EVT_CNG_EFF_TYPE
 	ld	xde, 0xffffffff
 	jr	SndParam_Dispatch_Join3
+EntertainerGridCheck_Switch3_Case5:	; cases 5, 6, 7, 8
 	dec	5, hl
 	exts	xhl
 	add	xhl, 0xffffff00
@@ -7645,6 +7718,7 @@ SndParam_Dispatch_Join2:
 SndParam_Dispatch_Join3:
 	call	MainPostEvent
 	jrl	SndParam_ReturnZero
+EntertainerGridCheck_OnLswData:	; cases 29360156, 29360157
 	lda	xhl, (xsp+40)
 	ldw (xhl), 1
 	lda	xde, (xhl+2)
@@ -8411,21 +8485,27 @@ SqplyVal_ParamCases_Join:
 	pushw	0
 	pushw	255
 	jr	SqplyVal_ParamCases_Join2
+SqplyVal_HandleExtraParams_Case5:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_CYC_SRT_M_STRING
 	jr	SqplyVal_ParamCases_Join
+SqplyVal_HandleExtraParams_Case6:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_CYC_END_M_STRING
 	jr	SqplyVal_ParamCases_Join
+SqplyVal_HandleExtraParams_Case8:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_P_IN_MEAS_STRING
 	jr	SqplyVal_ParamCases_Join
+SqplyVal_HandleExtraParams_Case9:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_P_OUT_MEAS_STRING
 	jr	SqplyVal_ParamCases_Join
+SqplyVal_HandleExtraParams_Case10:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_P_CNT_IN_STRING
 	jr	SqplyVal_ParamCases_Join
+SqplyVal_HandleExtraParams_Case11:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_SOLO_EN_STRING
 	jr	SqplyVal_ParamCases_Join
@@ -8847,58 +8927,72 @@ SqedtVal_ParamCases_Join:
 	pushw	0
 	pushw	255
 	jrl	SqedtVal_ParamCases_Join2
+SqedtVal_ClearDrawBuffer_Case1:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_FM_STRING
 	jr	SqedtVal_ParamCases_Join
+SqedtVal_ClearDrawBuffer_Case2:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_LM_STRING
 	jr	SqedtVal_ParamCases_Join
+SqedtVal_ClearDrawBuffer_Case3:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_ADLY_STRING
 	jr	SqedtVal_ParamCases_Join
+SqedtVal_ClearDrawBuffer_Case4:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_TRNS_STRING
 	jr	SqedtVal_ParamCases_Join
+SqedtVal_ClearDrawBuffer_Case5:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_VELO_STRING
 	jr	SqedtVal_ParamCases_Join
+SqedtVal_ClearDrawBuffer_Case6:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_MERS_STRING
 	jr	SqedtVal_ParamCases_Join
+SqedtVal_ClearDrawBuffer_Case7:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_QTZ_VAL_STRING
 	jrl	SqedtVal_ParamCases_Join
+SqedtVal_ClearDrawBuffer_Case8:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_QTZ_STR_STRING
 	jrl	SqedtVal_ParamCases_Join
+SqedtVal_ClearDrawBuffer_Case9:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_QTZ_WIN_STRING
 	jrl	SqedtVal_ParamCases_Join
+SqedtVal_ClearDrawBuffer_Case10:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_TN_STRING
 	jrl	SqedtVal_ParamCases_Join
+SqedtVal_ClearDrawBuffer_Case11:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_CN_STRING
 	jrl	SqedtVal_ParamCases_Join
+SqedtVal_ClearDrawBuffer_Case12:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_MRG_TR_A_STRING
 	jrl	SqedtVal_ParamCases_Join
+SqedtVal_ClearDrawBuffer_Case13:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_MRG_TR_B_STRING
 	jrl	SqedtVal_ParamCases_Join
+SqedtVal_ClearDrawBuffer_Case14:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+26)
 	ld	xbc, EVT_GET_MRG_TR_C_STRING
@@ -10500,48 +10594,63 @@ AccIll_Dispatch_Join:
 	pushw	0
 	pushw	255
 	jrl	AccIll_Dispatch_Join2
+SqplyVal_ExtraParams_Case16:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_MCP_FM_STRING
 	jr	AccIll_Dispatch_Join
+SqplyVal_ExtraParams_Case17:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_MCP_LM_STRING
 	jr	AccIll_Dispatch_Join
+SqplyVal_ExtraParams_Case18:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_MCP_TR_B_STRING
 	jr	AccIll_Dispatch_Join
+SqplyVal_ExtraParams_Case19:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_MCP_SM_STRING
 	jr	AccIll_Dispatch_Join
+SqplyVal_ExtraParams_Case20:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_MCP_REP_STRING
 	jr	AccIll_Dispatch_Join
+SqplyVal_ExtraParams_Case21:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_MINS_TR_A_STRING
 	jr	AccIll_Dispatch_Join
+SqplyVal_ExtraParams_Case22:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_MINS_FM_STRING
 	jr	AccIll_Dispatch_Join
+SqplyVal_ExtraParams_Case23:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_MINS_LM_STRING
 	jr	AccIll_Dispatch_Join
+SqplyVal_ExtraParams_Case24:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_MINS_TR_B_STRING
 	jrl	AccIll_Dispatch_Join
+SqplyVal_ExtraParams_Case25:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_MINS_SM_STRING
 	jrl	AccIll_Dispatch_Join
+SqplyVal_ExtraParams_Case26:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_MINS_REP_STRING
 	jrl	AccIll_Dispatch_Join
+SqplyVal_ExtraParams_Case27:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_SCP_FSNG_STRING
 	jrl	AccIll_Dispatch_Join
+SqplyVal_ExtraParams_Case28:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_SCP_FTR_STRING
 	jrl	AccIll_Dispatch_Join
+SqplyVal_ExtraParams_Case29:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_SCP_TSNG_STRING
 	jrl	AccIll_Dispatch_Join
+SqplyVal_ExtraParams_Case30:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_SCP_TTR_STRING
 	jrl	AccIll_Dispatch_Join
@@ -12393,21 +12502,27 @@ EffectBox_Dispatch:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_EFF_DLT1_STR
 	jr	EffectBox_Dispatch_Join
+EffectBox_NameSetup_Case2:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_EFF_DLT2_STR
 	jr	EffectBox_Dispatch_Join
+EffectBox_NameSetup_Case3:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_EFF_DLT3_STR
 	jr	EffectBox_Dispatch_Join
+EffectBox_NameSetup_Case4:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_EFF_DLT4_STR
 	jr	EffectBox_Dispatch_Join
+EffectBox_NameSetup_Case5:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_EFF_DLT5_STR
 	jr	EffectBox_Dispatch_Join
+EffectBox_NameSetup_Case6:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_EFF_DLT6_STR
 	jr	EffectBox_Dispatch_Join
+EffectBox_NameSetup_Case7:
 	ld	xwa, (xbc)
 	ld	xbc, EVT_GET_EFF_DLT7_STR
 	jr	EffectBox_Dispatch_Join
@@ -12942,16 +13057,22 @@ EffectBox_StateDispatch:
 SeqAccomp_Dispatch:
 	ld	xbc, EVT_GET_EQ1_STR
 	jr	SeqAccomp_Dispatch_Join
+EffectBox_StateDispatch_Case2:
 	ld	xbc, EVT_GET_EQ2_STR
 	jr SeqAccomp_Dispatch_Join
+EffectBox_StateDispatch_Case3:
 	ld xbc, EVT_GET_EQ3_STR
 	jr SeqAccomp_Dispatch_Join
+EffectBox_StateDispatch_Case4:
 	ld xbc, EVT_GET_EQ4_STR
 	jr	SeqAccomp_Dispatch_Join
+EffectBox_StateDispatch_Case5:
 	ld	xbc, EVT_GET_EQ5_STR
 	jr	SeqAccomp_Dispatch_Join
+EffectBox_StateDispatch_Case6:
 	ld	xbc, EVT_GET_EQ6_STR
 	jr	SeqAccomp_Dispatch_Join
+EffectBox_StateDispatch_Case7:
 	ld	xbc, EVT_GET_EQ7_STR
 	jr	SeqAccomp_Dispatch_Join
 
@@ -13473,6 +13594,7 @@ SqplyFunc_FormatCases_Skip2:
 	pushw	wa
 	ld	xwa, SqplyFunc_ParamFormatData_Str_3
 	jrl	SqplyFunc_PushFormatAddr
+SqplyFunc_OnGetBeatString:
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
 	ld	a, (9010:16)
@@ -13480,6 +13602,7 @@ SqplyFunc_FormatCases_Skip2:
 	pushw	wa
 	ld	xwa, SqplyFunc_ParamFormatData_Str_4
 	jrl	SqplyFunc_PushFormatAddr
+SqplyFunc_OnGetMemString:
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
 	ld	a, (7528:16)
@@ -13487,6 +13610,7 @@ SqplyFunc_FormatCases_Skip2:
 	pushw	wa
 	ld	xwa, SqplyFunc_ParamFormatData_Str_5
 	jrl	SqplyFunc_PushFormatAddr
+SqplyFunc_OnGetCycEnString:
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
 	call	GetTitleNow
@@ -13517,6 +13641,7 @@ SqplyFunc_FormatCases_Join3:
 	push	xwa
 	push	xbc
 	jr	SqplyFunc_FormatCases_Join4
+SqplyFunc_OnGetSoloEnString:
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
 	ld	xwa, SqplyFunc_ParamFormatData_Str_11
@@ -13532,6 +13657,7 @@ SqplyFunc_FormatCases_Join4:
 	call	Strcpy
 	inc	8, xsp
 	jrl	SqplyFunc_RestoreAndReturn
+SqplyFunc_OnGetCycSrtMString:
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
 	call	GetTitleNow
@@ -13545,6 +13671,7 @@ SqplyFunc_FormatCases_Skip7:
 	ld	xwa, SqplyFunc_ParamFormatData_Str_13
 SqplyFunc_FormatCases_Join5:
 	jrl	SqplyFunc_PushFormatAddr
+SqplyFunc_OnGetCycEndMString:
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
 	call	GetTitleNow
@@ -13647,10 +13774,13 @@ SqplyFunc_GetValueDispatch:
 	ld xhl, 0:i3
 	ld l, (0x02109c:24)
 	jrl SqplyFunc_Epilogue
+SqplyFunc_HandleGetValue_Case3:
 	lda xhl, (9832:16)
 	jr SqplyFunc_GetValueReturn
+SqplyFunc_HandleGetValue_Case4:
 	lda xhl, (0x28b1:16)
 	jr SqplyFunc_GetValueDone
+SqplyFunc_HandleGetValue_Case5:
 	call GetTitleNow
 	cp l, 0x82
 	jr nz, SqplyFunc_GetValNonPlay
@@ -13660,6 +13790,7 @@ SqplyFunc_GetValueDispatch:
 SqplyFunc_GetValNonPlay:
 	lda xhl, (9504:16)
 	jr SqplyFunc_GetValueReturn
+SqplyFunc_HandleGetValue_Case6:
 	call GetTitleNow
 	cp l, 0x82
 	jr nz, SqplyFunc_GetValNonPlay2
@@ -13669,14 +13800,19 @@ SqplyFunc_GetValNonPlay:
 SqplyFunc_GetValNonPlay2:
 	lda xhl, (9506:16)
 	jr SqplyFunc_GetValueReturn
+SqplyFunc_HandleGetValue_Case7:
 	lda xhl, (9964:16)
 	jr SqplyFunc_GetValueReturn
+SqplyFunc_HandleGetValue_Case8:
 	lda xhl, (0xf238:16)
 	jr SqplyFunc_GetValueReturn
+SqplyFunc_HandleGetValue_Case9:
 	lda xhl, (0xf23a:16)
 	jr SqplyFunc_GetValueReturn
+SqplyFunc_HandleGetValue_Case10:
 	lda xhl, (0xf23f:16)
 	jr SqplyFunc_GetValueReturn
+SqplyFunc_HandleGetValue_Case11:
 	lda xhl, (0x283a:16)
 
 SqplyFunc_GetValueDone:
@@ -13789,8 +13925,10 @@ SqplyFunc_PartQueryDispatch_Join:
 	scc16	z, hl
 	extz	xhl
 	jr	SqplyFunc_Epilogue
+SqplyFunc_HandlePartQuery_Case5:	; cases 5, 9
 	ld	l, 2:opc
 	jr	SqplyFunc_PartQueryDispatch_Join
+SqplyFunc_HandlePartQuery_Case6:	; cases 6, 10
 	ld	l, 3:opc
 	jr	SqplyFunc_PartQueryDispatch_Join
 
@@ -13857,20 +13995,26 @@ Sqedt_ParamDispatch:
 Sqedt_ParamDispatch_Code:
 	ld	a, (9742:16)
 	jr	Sqedt_ParamDispatch_Join
+SqedtFunc_Switch2_Case157:
 	ld	a, (9756:16)
 	jr	Sqedt_ParamDispatch_Join
+SqedtFunc_Switch2_Case163:
 	ld	a, (0xf1d6:16)
 	jr	Sqedt_ParamDispatch_Join
+SqedtFunc_Switch2_Case161:
 	ld	a, (0xf1db:16)
 	jr	Sqedt_ParamDispatch_Join
+SqedtFunc_Switch2_Case156:
 	ld	a, (0xf1f1:16)
 	jr	Sqedt_ParamDispatch_Join
+SqedtFunc_Switch2_Case158:
 	ld	a, (0xf228:16)
 	jr	Sqedt_ParamDispatch_Join
 Sqedt_ParamDispatch_Skip:
 	ld	a, (9732:16)
 Sqedt_ParamDispatch_Join:
 	jrl	Sqedt_ParamDispatch_Join8
+SqedtFunc_OnGetFmString:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	extz	hl
@@ -13888,18 +14032,23 @@ Sqedt_ParamDispatch_Code_2:
 	pushm (0x2610:16)
 	ld	xwa, Sqedt_ParamDispatch_Str
 	jr	Sqedt_ParamDispatch_Join2
+SqedtFunc_Switch3_Case157:
 	pushm (0x261e:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_2
 	jr	Sqedt_ParamDispatch_Join2
+SqedtFunc_Switch3_Case163:
 	pushm (0xf1d7:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_3
 	jr	Sqedt_ParamDispatch_Join2
+SqedtFunc_Switch3_Case161:
 	pushm (0xf1dc:16)
 	ld xwa, FmtStr_pct3d_4B5E
 	jr	Sqedt_ParamDispatch_Join2
+SqedtFunc_Switch3_Case156:
 	pushm (0xf1f2:16)
 	ld xwa, Sqedt_ParamDispatch_Str_Fmt3d
 	jr	Sqedt_ParamDispatch_Join2
+SqedtFunc_Switch3_Case158:
 	pushm (0xf229:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_4
 	jr	Sqedt_ParamDispatch_Join2
@@ -13908,6 +14057,7 @@ Sqedt_ParamDispatch_Entry:
 	ld	xwa, Sqedt_ParamDispatch_Str_5
 Sqedt_ParamDispatch_Join2:
 	jrl	Sqedt_ParamDispatch_Join10
+SqedtFunc_OnGetLmString:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	extz	hl
@@ -13925,18 +14075,23 @@ Sqedt_ParamDispatch_Code_3:
 	pushm (0x2612:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_6
 	jr	Sqedt_ParamDispatch_Entry2_Join
+Sqedt_ParamDispatch_Case157:
 	pushm (0x2620:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_7
 	jr	Sqedt_ParamDispatch_Entry2_Join
+Sqedt_ParamDispatch_Case163:
 	pushm (0x262c:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_8
 	jr	Sqedt_ParamDispatch_Entry2_Join
+Sqedt_ParamDispatch_Case161:
 	pushm (0x2626:16)
 	ld xwa, NakaInst_3d
 	jr	Sqedt_ParamDispatch_Entry2_Join
+Sqedt_ParamDispatch_Case156:
 	pushm (0x25fc:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_9
 	jr	Sqedt_ParamDispatch_Entry2_Join
+Sqedt_ParamDispatch_Case158:
 	pushm (0x25fa:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_10
 	jr	Sqedt_ParamDispatch_Entry2_Join
@@ -13945,6 +14100,7 @@ Sqedt_ParamDispatch_Entry2:
 	ld	xwa, Sqedt_ParamDispatch_Str_11
 Sqedt_ParamDispatch_Entry2_Join:
 	jrl	Sqedt_ParamDispatch_Join10
+SqedtFunc_OnGetAdlyString:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	ld	e, (9740:16)
@@ -13977,6 +14133,7 @@ Sqedt_ParamDispatch_Skip2:
 	pushw	Sqedt_ParamDispatch_Entry2_Str_Fmt3d@hi16
 	pushw	Sqedt_ParamDispatch_Entry2_Str_Fmt3d@lo16
 	jrl	Sqedt_ParamDispatch_Join9
+SqedtFunc_OnGetTrnsString:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	ld	e, (9762:16)
@@ -14000,6 +14157,7 @@ Sqedt_ParamDispatch_Skip4:
 	ld	xwa, Sqedt_ParamDispatch_Str_12
 Sqedt_ParamDispatch_Join4:
 	jrl	Sqedt_ParamDispatch_Join10
+SqedtFunc_OnGetVeloString:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	ld	e, (0xf22e:16)
@@ -14026,6 +14184,7 @@ Sqedt_ParamDispatch_Join5:
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
 	jrl	Sqedt_ParamDispatch_Join9
+SqedtFunc_OnGetMersString:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	9
@@ -14037,6 +14196,7 @@ Sqedt_ParamDispatch_Join5:
 	add	xwa, xbc
 	push	xwa
 	jrl	SqedtFunc_ModeC_Entry
+SqedtFunc_OnGetQtzValString:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	15
@@ -14048,6 +14208,7 @@ Sqedt_ParamDispatch_Join5:
 	add	xwa, xbc
 	push	xwa
 	jrl	SqedtFunc_ModeC_Entry
+SqedtFunc_OnGetQtzStrString:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	ld	a, (9728:16)
@@ -14055,6 +14216,7 @@ Sqedt_ParamDispatch_Join5:
 	pushw	wa
 	ld	xwa, Sqedt_ParamDispatch_Str_16
 	jrl	Sqedt_ParamDispatch_Join10
+SqedtFunc_OnGetQtzWinString:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	ld	e, (9730:16)
@@ -14081,6 +14243,7 @@ Sqedt_ParamDispatch_Join6:
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
 	jrl	Sqedt_ParamDispatch_Join9
+SqedtFunc_OnGetTnString:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	lda	xbc, (xwa+18)
@@ -14104,6 +14267,7 @@ Sqedt_ParamDispatch_Join6:
 	pushw	wa
 	ld	xwa, Sqedt_ParamDispatch_Str_20
 	jr	Sqedt_ParamDispatch_Join7
+SqedtFunc_OnGetCnString:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	lda	xbc, (xwa+18)
@@ -14133,6 +14297,7 @@ Sqedt_ParamDispatch_Join7:
 	lda	xwa, (xwa+10)
 	push	xwa
 	jrl	SqedtFunc_CheckMode_SendAudio
+SqedtFunc_OnGetMrgTrAString:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	ld	a, (0xf1d3:16)
@@ -14140,6 +14305,7 @@ Sqedt_ParamDispatch_Join7:
 	pushw	wa
 	ld	xwa, Sqedt_ParamDispatch_Str_22
 	jrl	Sqedt_ParamDispatch_Join10
+SqedtFunc_OnGetMrgTrBString:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	ld	a, (0xf1d4:16)
@@ -14150,6 +14316,7 @@ Sqedt_ParamDispatch_Join7:
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
 	jrl	Sqedt_ParamDispatch_Join9
+SqedtFunc_OnGetMrgTrCString:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	ld	a, (0xf1d5:16)
@@ -14157,11 +14324,13 @@ Sqedt_ParamDispatch_Join7:
 	pushw	wa
 	ld	xwa, Sqedt_ParamDispatch_Str_24
 	jrl	Sqedt_ParamDispatch_Join10
+SqedtFunc_OnGetMcpTrAString:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	5
 	ld	a, (0xf1e9:16)
 	jrl	Sqedt_ParamDispatch_Join8
+SqedtFunc_OnGetMcpFmString:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushm (0xf1ea:16)
@@ -14170,16 +14339,19 @@ Sqedt_ParamDispatch_Join7:
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
 	jrl	Sqedt_ParamDispatch_Join9
+SqedtFunc_OnGetMcpLmString:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushm (0x2628:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_26
 	jrl	Sqedt_ParamDispatch_Join10
+SqedtFunc_OnGetMcpTrBString:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	5
 	ld	a, (0xf1ee:16)
 	jr	Sqedt_ParamDispatch_Join8
+SqedtFunc_OnGetMcpSmString:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushm (0xf1ef:16)
@@ -14188,6 +14360,7 @@ Sqedt_ParamDispatch_Join7:
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
 	jrl	Sqedt_ParamDispatch_Join9
+SqedtFunc_OnGetMcpRepString:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	ld	a, (9770:16)
@@ -14195,11 +14368,13 @@ Sqedt_ParamDispatch_Join7:
 	pushw	wa
 	ld	xwa, Sqedt_ParamDispatch_Str_28
 	jrl	Sqedt_ParamDispatch_Join10
+SqedtFunc_OnGetMinsTrAString:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	5
 	ld	a, (0xf1e1:16)
 	jr	Sqedt_ParamDispatch_Join8
+SqedtFunc_OnGetMinsFmString:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushm (0xf1e2:16)
@@ -14208,11 +14383,13 @@ Sqedt_ParamDispatch_Join7:
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
 	jrl	Sqedt_ParamDispatch_Join9
+SqedtFunc_OnGetMinsLmString:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushm (0x262e:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_30
 	jrl	Sqedt_ParamDispatch_Join10
+SqedtFunc_OnGetMinsTrBString:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	5
@@ -14225,6 +14402,7 @@ Sqedt_ParamDispatch_Join8:
 	add	xwa, xbc
 	push	xwa
 	jrl	SqedtFunc_ModeC_Entry
+SqedtFunc_OnGetMinsSmString:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushm (0xf1e7:16)
@@ -14233,6 +14411,7 @@ Sqedt_ParamDispatch_Join8:
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
 	jrl	Sqedt_ParamDispatch_Join9
+SqedtFunc_OnGetMinsRepString:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	ld	a, (9776:16)
@@ -14240,6 +14419,7 @@ Sqedt_ParamDispatch_Join8:
 	pushw	wa
 	ld	xwa, Sqedt_ParamDispatch_Str_31
 	jrl	Sqedt_ParamDispatch_Join10
+SqedtFunc_OnGetScpFsngString:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	ld	a, (9992:16)
@@ -14250,11 +14430,13 @@ Sqedt_ParamDispatch_Join8:
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
 	jrl	Sqedt_ParamDispatch_Join9
+SqedtFunc_OnGetScpFtrString:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	3
 	ld a, (0x270c:16)
 	jr Sqedt_ParamDispatch_Entry2_Join2
+SqedtFunc_OnGetScpTsngString:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	ld	a, (9994:16)
@@ -14262,6 +14444,7 @@ Sqedt_ParamDispatch_Join8:
 	pushw	wa
 	ld	xwa, Sqedt_ParamDispatch_Str_32
 	jrl	Sqedt_ParamDispatch_Join10
+SqedtFunc_OnGetScpTtrString:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	3
@@ -14390,14 +14573,17 @@ SqedtFunc_ModeD:
 	ld xwa, (xsp + 8)
 	calr SqedtFunc_StateChainB
 	jrl SqedtFunc_Epilogue12
+SqedtFunc_OnGetCurPos:
 	ld xhl, 0:i3
 	ld l, (0x02109c:24)
 	jrl SqedtFunc_Epilogue12
+SqedtFunc_OnSetCurPos:
 	ld (0x02109c:24), a
 
 SeqFunc_ReturnZeroJmp:
 	ld xhl, 0:i3
 	jrl SqedtFunc_Epilogue12
+SqedtFunc_OnCurToParam:
 	extz wa
 	cp wa, 0:i3
 	jrl mi, SqedtFunc_ReturnNegOne
@@ -14425,8 +14611,10 @@ Sqedt_ValueDispatch:
 Sqedt_ValueDispatch_Code:
 	ld	l, 0:opc
 	jrl	SqedtFunc_SignExtendAndReturn
+SqedtFunc_ModeD_Case155:
 	ld	l, 12:opc
 	jrl	SqedtFunc_SignExtendAndReturn
+SeqFunc_ReturnZeroJmp_Case1:
 	extz	hl
 	sub	hl, 156
 	cp	hl, 0:i3
@@ -14441,6 +14629,7 @@ Sqedt_ValueDispatch_Code:
 Sqedt_ValueDispatch_Code2:
 	ld	l, 1:opc
 	jr	SqedtFunc_SignExtendAndReturn
+SeqFunc_ReturnZeroJmp_Case2:
 	extz	hl
 	sub	hl, 155
 	cp	hl, 0:i3
@@ -14455,8 +14644,10 @@ Sqedt_ValueDispatch_Code2:
 Sqedt_ValueDispatch_Code3:
 	ld	l, 2:opc
 	jr	SqedtFunc_SignExtendAndReturn
+Sqedt_ValueDispatch_Case155:
 	ld	l, 13:opc
 	jr	SqedtFunc_SignExtendAndReturn
+SeqFunc_ReturnZeroJmp_Case3:
 	cp	l, 156
 	jr	z, Sqedt_ValueDispatch_Skip4
 	cp	l, 161
@@ -14481,6 +14672,7 @@ Sqedt_ValueDispatch_Skip3:
 Sqedt_ValueDispatch_Skip4:
 	ld	l, 7:opc
 	jr	SqedtFunc_SignExtendAndReturn
+SeqFunc_ReturnZeroJmp_Case5:
 	cp	l, 159
 	jr	z, Sqedt_ValueDispatch_Skip5
 	cp	l, 156
@@ -14498,6 +14690,7 @@ SqedtFunc_SignExtendAndReturn:
 	exts hl
 	exts xhl
 	jrl SqedtFunc_Epilogue12
+SeqFunc_ReturnZeroJmp_Case6:
 	cp l, 0x9b
 	jr z, SqedtFunc_SignExtend
 	cp l, 0x9f
@@ -14516,6 +14709,7 @@ SqedtFunc_ReturnNeg1:
 SqedtFunc_SignExtend:
 	ld l, 0xe:opc
 	jr SqedtFunc_SignExtendAndReturn
+SqedtFunc_OnChkCur:
 	extz wa
 	cp wa, 0:i3
 	jrl mi, SeqFunc_ReturnZeroJmp
@@ -14536,26 +14730,36 @@ SeqFormat_DispatchA_Join:
 	scc16	z, hl
 	extz	xhl
 	jrl	SqedtFunc_Epilogue12
+SqedtFunc_SignExtend_Case1:
 	ld	l, 1:opc
 	jr	SeqFormat_DispatchA_Join
+SqedtFunc_SignExtend_Case2:	; cases 2, 13
 	ld	l, 2:opc
 	jr	SeqFormat_DispatchA_Join
+SqedtFunc_SignExtend_Case3:	; cases 3, 4, 5, 6, 7
 	ld	l, 3:opc
 	jr	SeqFormat_DispatchA_Join
+SqedtFunc_SignExtend_Case8:	; cases 8, 10
 	ld	l, 5:opc
 	jr	SeqFormat_DispatchA_Join
+SqedtFunc_SignExtend_Case9:	; cases 9, 11, 14
 	ld	l, 6:opc
 	jr	SeqFormat_DispatchA_Join
+SqedtFunc_OnGetFromCur:
 	ld	xhl, 0:i3
 	ld	l, (0x03e2dc:24)
 	jrl	SqedtFunc_Epilogue12
+SqedtFunc_OnSetFromCur:
 	ld	(0x03e2dc:24), a
 	jrl	SeqFunc_ReturnZeroJmp
+SqedtFunc_OnGetToCur:
 	ld	xhl, 0:i3
 	ld	l, (0x03e2de:24)
 	jrl	SqedtFunc_Epilogue12
+SqedtFunc_OnSetToCur:
 	ld	(0x03e2de:24), a
 	jrl	SeqFunc_ReturnZeroJmp
+SqedtFunc_OnChkCur2:
 	extz	wa
 	sub	wa, 15
 	cp	wa, 0:i3
@@ -14572,18 +14776,22 @@ SeqFormat_DispatchA_Code:
 	jrl	nz, SeqFunc_ReturnZeroJmp
 	ld	xwa, 15
 	jr	SeqFormat_DispatchA_Join2
+SeqFormat_DispatchA_Case18:	; cases 18, 19, 20
 	cp	(0x03e2e0:24), 1
 	jrl	nz, SeqFunc_ReturnZeroJmp
 	ld	xwa, 18
 	jr	SeqFormat_DispatchA_Join3
+SeqFormat_DispatchA_Case21:	; cases 21, 22, 23
 	cp	(0x03e2e0:24), 0
 	jrl	nz, SeqFunc_ReturnZeroJmp
 	ld	xwa, 21
 	jr	SeqFormat_DispatchA_Join2
+SeqFormat_DispatchA_Case24:	; cases 24, 25, 26
 	cp	(0x03e2e0:24), 1
 	jrl	nz, SeqFunc_ReturnZeroJmp
 	ld	xwa, 24
 	jr	SeqFormat_DispatchA_Join3
+SeqFormat_DispatchA_Case27:	; cases 27, 28
 	cp	(0x03e2e0:24), 0
 	jrl	nz, SeqFunc_ReturnZeroJmp
 	ld	xwa, 27
@@ -14596,6 +14804,7 @@ SeqFormat_DispatchA_Join2:
 	scc16	z, hl
 	extz	xhl
 	jr	SqedtFunc_Epilogue12
+SeqFormat_DispatchA_Case29:	; cases 29, 30
 	cp	(0x03e2e0:24), 1
 	jrl	nz, SeqFunc_ReturnZeroJmp
 	ld	xwa, 29
@@ -14664,6 +14873,7 @@ SeqFmt_Field_LoadB:
 SeqFmt_Field_LoadC:
 	lda xhl, (0x2878:16)
 	jrl SqedtFunc_Epilogue
+SqedtFunc_StateChainB_Case159:
 	cp xiz, 0xb
 	jr z, SeqFmt_Field_LoadF
 	cp xiz, 0xa
@@ -14690,6 +14900,7 @@ SeqFmt_Field_LoadF:
 SeqFmt_Field_LoadG:
 	lda xhl, (9742:16)
 	jrl SqedtFunc_Epilogue
+SqedtFunc_StateChainB_Case157:
 	cp xiz, 0x4
 	jr z, SeqFmt_Field_LoadI
 	cp xiz, 0x2
@@ -14710,6 +14921,7 @@ SeqFmt_Field_LoadI:
 SeqFmt_Field_LoadJ:
 	lda xhl, (9756:16)
 	jrl SqedtFunc_Epilogue
+SqedtFunc_StateChainB_Case163:
 	cp xiz, 0x2
 	jr z, SeqFmt_Field_LoadK
 	cp xiz, 0x1
@@ -14724,6 +14936,7 @@ SeqFmt_Field_LoadK:
 SeqFmt_Field_LoadL:
 	lda xhl, (0xf1d6:16)
 	jrl SqedtFunc_Epilogue
+SqedtFunc_StateChainB_Case161:
 	cp xiz, 0x6
 	jr z, SeqFmt_Field_LoadN
 	cp xiz, 0x2
@@ -14744,6 +14957,7 @@ SeqFmt_Field_LoadN:
 SeqFmt_Field_LoadO:
 	lda xhl, (0xf1db:16)
 	jrl SqedtFunc_Epilogue
+SqedtFunc_StateChainB_Case156:
 	cp xiz, 0x9
 	jr z, SeqFmt_Field_LoadS
 	cp xiz, 0x8
@@ -14776,6 +14990,7 @@ SeqFmt_Field_LoadS:
 SeqFmt_Field_LoadT:
 	lda xhl, (0xf1f1:16)
 	jrl SqedtFunc_Epilogue
+SqedtFunc_StateChainB_Case158:
 	cp xiz, 0x5
 	jr z, SeqFmt_Field_LoadV
 	cp xiz, 0x2
@@ -14796,6 +15011,7 @@ SeqFmt_Field_LoadV:
 SeqFmt_Field_LoadW:
 	lda xhl, (0xf228:16)
 	jrl SqedtFunc_Epilogue
+SqedtFunc_StateChainB_Case155:
 	cp xiz, 0xe
 	jr z, SeqFmt_Field_LoadX
 	cp xiz, 0xd
@@ -14810,6 +15026,7 @@ SeqFmt_Field_LoadX:
 SeqFmt_Field_LoadY:
 	lda xhl, (0xf1d3:16)
 	jrl SqedtFunc_Epilogue
+SqedtFunc_StateChainB_Case162:
 	cp xiz, 0x14
 	jr z, SeqFmt_Field_LoadAC
 	cp xiz, 0x13
@@ -14842,6 +15059,7 @@ SeqFmt_Field_LoadAC:
 SeqFmt_Field_LoadAD:
 	lda xhl, (0xf1e9:16)
 	jrl SqedtFunc_Epilogue
+SqedtFunc_StateChainB_Case164:
 	cp xiz, 0x1a
 	jr z, SeqFmt_Field_LoadAH
 	cp xiz, 0x19
@@ -15026,6 +15244,7 @@ DspItem0_DisplayEffectName:
 	call Strcpy
 	inc 8, xsp
 	jrl DspItem0_ExitWithHL
+DspItem0CngFunc_OnGetEffFixString:
 	ld (xsp), xde
 	ldw (xsp + 18), 0x0
 
@@ -15101,34 +15320,42 @@ DspItem0_DisplayParamValues:
 	cpw (xsp + 18), 0x8
 	jr c, DspItem0_DisplayParamValues
 	jr DspItem0_ExitWithHL
+DspItem0CngFunc_OnGetEffDlt0Str:
 	ld (xsp), xde
 	ld xde, (xde + 18)
 	ld wa, bc
 	ld xbc, xde
 	jr DspItem0_FormatParamValue
+DspItem0CngFunc_OnGetEffDlt1Str:
 	ld (xsp), xde
 	ld xbc, (xde + 18)
 	jr DspItem0_FormatParamValue
+DspItem0CngFunc_OnGetEffDlt2Str:
 	ld (xsp), xde
 	ld xbc, (xde + 18)
 	ld wa, (xsp + 8)
 	jr DspItem0_FormatParamValue
+DspItem0CngFunc_OnGetEffDlt3Str:
 	ld (xsp), xde
 	ld xbc, (xde + 18)
 	ld wa, (xsp + 10)
 	jr DspItem0_FormatParamValue
+DspItem0CngFunc_OnGetEffDlt4Str:
 	ld (xsp), xde
 	ld xbc, (xde + 18)
 	ld wa, (xsp + 12)
 	jr DspItem0_FormatParamValue
+DspItem0CngFunc_OnGetEffDlt5Str:
 	ld (xsp), xde
 	ld xbc, (xde + 18)
 	ld wa, (xsp + 14)
 	jr DspItem0_FormatParamValue
+DspItem0CngFunc_OnGetEffDlt6Str:
 	ld (xsp), xde
 	ld xbc, (xde + 18)
 	ld wa, (xsp + 16)
 	jr DspItem0_FormatParamValue
+DspItem0CngFunc_OnGetEffDlt7Str:
 	ld (xsp), xde
 	ld xbc, (xde + 18)
 	ld wa, (xsp + 18)
@@ -15166,40 +15393,48 @@ DspItem0_TypeChangeHandler:
 DspItem0_TypeDispatch:
 	lda xhl, (0x2976:16)
 	jrl DspItem0_Epilogue
+DspItem0_TypeChangeHandler_Case1:
 	sla bc, 1
 	ld xwa, (xsp + 4)
 	lda	xhl, (xwa+bc)
 	jrl DspItem0_Epilogue
+DspItem0_TypeChangeHandler_Case2:
 	sla wa, 1
 	ld bc, wa
 	ld xwa, (xsp + 4)
 	lda	xhl, (xwa+bc)
 	jrl DspItem0_Epilogue
+DspItem0_TypeChangeHandler_Case3:
 	ld bc, (xsp + 8)
 	sla bc, 1
 	ld xwa, (xsp + 4)
 	lda	xhl, (xwa+bc)
 	jrl DspItem0_Epilogue
+DspItem0_TypeChangeHandler_Case4:
 	ld bc, (xsp + 10)
 	add bc, bc
 	ld xwa, (xsp + 4)
 	lda	xhl, (xwa+bc)
 	jr DspItem0_Epilogue
+DspItem0_TypeChangeHandler_Case5:
 	ld bc, (xsp + 12)
 	add bc, bc
 	ld xwa, (xsp + 4)
 	lda	xhl, (xwa+bc)
 	jr DspItem0_Epilogue
+DspItem0_TypeChangeHandler_Case6:
 	ld bc, (xsp + 14)
 	add bc, bc
 	ld xwa, (xsp + 4)
 	lda	xhl, (xwa+bc)
 	jr DspItem0_Epilogue
+DspItem0_TypeChangeHandler_Case7:
 	ld bc, (xsp + 16)
 	add bc, bc
 	ld xwa, (xsp + 4)
 	lda	xhl, (xwa+bc)
 	jr DspItem0_Epilogue
+DspItem0_TypeChangeHandler_Case8:
 	ld bc, (xsp + 18)
 	add bc, bc
 	ld xwa, (xsp + 4)
@@ -15209,25 +15444,31 @@ DspItem0_TypeDispatch:
 DspItem0_HandleType2:
 	ld xhl, 2:i3
 	jr DspItem0_Epilogue
+DspItem0CngFunc_OnGetItemExist:
 	ld xwa, 0:i3
 	ld a, (0x29aa:16)
 	cp xde, xwa
 	scc16 c, hl
 	extz xhl
 	jr DspItem0_Epilogue
+DspItem0CngFunc_OnSetItemOff:
 	ld (0x02109a:24), e
 
 EffectEdit_ReturnZero:
 	ld xhl, 0:i3
 	jr DspItem0_Epilogue
+DspItem0CngFunc_OnGetItemOff:
 	ld xhl, 0:i3
 	ld l, (0x02109a:24)
 	jr DspItem0_Epilogue
+DspItem0CngFunc_OnSetItemTop:
 	ld (0x021098:24), e
 	jr EffectEdit_ReturnZero
+DspItem0CngFunc_OnGetItemTop:
 	ld h, 0x0:opc
 	extz xhl
 	jr DspItem0_Epilogue
+DspItem0CngFunc_Case31981584:
 	ld xhl, 0:i3
 	ld l, (0x29aa:16)
 	jr DspItem0_Epilogue
@@ -15293,6 +15534,7 @@ Equalizer_DispatchB:
 	ld	hl, (xbc)
 	extz	xhl
 	jrl	Equalizer_PopIzRet
+Equalizer_DispatchA_Case3:
 	ld	wa, (0x297c:16)
 	extz	xwa
 	add	xwa, xwa
@@ -15300,6 +15542,7 @@ Equalizer_DispatchB:
 	ld	hl, (xde)
 	extz	xhl
 	jrl	Equalizer_PopIzRet
+Equalizer_DispatchA_Case4:
 	ld	wa, (0x297e:16)
 	extz	xwa
 	add	xwa, xwa
@@ -15307,6 +15550,7 @@ Equalizer_DispatchB:
 	ld	hl, (xbc)
 	extz	xhl
 	jrl	Equalizer_PopIzRet
+Equalizer_DispatchA_Case5:
 	ld	wa, (0x2980:16)
 	extz	xwa
 	add	xwa, xwa
@@ -15314,6 +15558,7 @@ Equalizer_DispatchB:
 	ld	hl, (xde)
 	extz	xhl
 	jrl	Equalizer_PopIzRet
+Equalizer_DispatchA_Case6:
 	ld	wa, (0x2982:16)
 	extz	xwa
 	add	xwa, xwa
@@ -15321,6 +15566,7 @@ Equalizer_DispatchB:
 	ld	hl, (xbc)
 	extz	xhl
 	jrl	Equalizer_PopIzRet
+Equalizer_DispatchA_Case7:
 	ld	wa, (0x2984:16)
 	extz	xwa
 	add	xwa, xwa
@@ -15328,6 +15574,7 @@ Equalizer_DispatchB:
 	ld	hl, (xde)
 	extz	xhl
 	jrl	Equalizer_PopIzRet
+Equalizer_DispatchA_Case8:
 	ld	wa, (0x2986:16)
 	extz	xwa
 	add	xwa, xwa
@@ -15362,29 +15609,36 @@ Equalizer_ParamByIndex:
 Equalizer_ReturnParamAddr:
 	lda xhl, (0x2978:16)
 	jrl Equalizer_PopIzRet
+EqualizerCngFunc_OnGetEq0Str:
 	ld xix, xde
 	pushw 0x5
 	jr Equalizer_LookupParamString
+EqualizerCngFunc_OnGetEq1Str:
 	ld xix, xde
 	pushw 0x5
 	ld wa, 2:i3
 	jr FormatEqParamValue
+EqualizerCngFunc_OnGetEq2Str:
 	ld xix, xde
 	pushw 0x5
 	inc 4, xhl
 	jr Equalizer_LookupParamString
+EqualizerCngFunc_OnGetEq3Str:
 	ld xix, xde
 	pushw 0x5
 	ld wa, 6:i3
 	jr FormatEqParamValue
+EqualizerCngFunc_OnGetEq4Str:
 	ld xix, xde
 	pushw 0x5
 	inc 8, xhl
 	jr Equalizer_LookupParamString
+EqualizerCngFunc_OnGetEq5Str:
 	ld xix, xde
 	pushw 0x5
 	ldw wa, 0xa
 	jr FormatEqParamValue
+EqualizerCngFunc_OnGetEq6Str:
 	ld xix, xde
 	pushw 0x5
 	lda xhl, (xhl + 12)
@@ -15399,6 +15653,7 @@ Equalizer_LookupParamString:
 	add xwa, xbc
 	push xwa
 	jr FormatEqParam_CopyAndReturn
+EqualizerCngFunc_OnGetEq7Str:
 	ld xix, xde
 	pushw 0x5
 	ldw wa, 0xe
@@ -15419,6 +15674,7 @@ FormatEqParam_CopyAndReturn:
 	lda xsp, (xsp + 10)
 	ld xhl, xiz
 	jr Equalizer_PopIzRet
+EqualizerCngFunc_OnGetTtlNow:
 	call GetTitleNow
 	ld h, 0x0:opc
 	extz xhl
@@ -15486,46 +15742,57 @@ Equalizer_CmdCase1:
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	jrl ParamCmd_SendAndReturnZero
+Equalizer_CmdDispatch_Case27263130:
 	ld xwa, 0x9a0006
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	jrl ParamCmd_SendAndReturnZero
+Equalizer_CmdDispatch_Case27263131:
 	ld xwa, 0x9b000f
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	jr ParamCmd_SendAndReturnZero
+Equalizer_CmdDispatch_Case27263132:
 	ld xwa, 0x9c000e
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	jr ParamCmd_SendAndReturnZero
+Equalizer_CmdDispatch_Case27263133:
 	ld xwa, 0x9d000a
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	jr ParamCmd_SendAndReturnZero
+Equalizer_CmdDispatch_Case27263134:
 	ld xwa, 0x9e000a
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	jr ParamCmd_SendAndReturnZero
+Equalizer_CmdDispatch_Case27263135:
 	ld xwa, 0x9f0012
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	jr ParamCmd_SendAndReturnZero
+Equalizer_CmdDispatch_Case27263136:
 	ld xwa, 0xa0000a
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	jr ParamCmd_SendAndReturnZero
+Equalizer_CmdDispatch_Case27263138:
 	ld xwa, 0xa20009
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	jr ParamCmd_SendAndReturnZero
+Equalizer_CmdDispatch_Case27263139:
 	ld xwa, 0xa30009
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	jr ParamCmd_SendAndReturnZero
+Equalizer_CmdDispatch_Case27263140:
 	ld xwa, 0xa40009
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	jr ParamCmd_SendAndReturnZero
+Equalizer_CmdDispatch_Case27263137:
 	ld xwa, 0xa1000a
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
@@ -15594,9 +15861,11 @@ Equalizer_FormatCases:
 	pushw 0x0005
 	ld xwa, EntertainerGridCheck_Data_3
 	jrl FormatParamStr_CopyEnumName
+Equalizer_FormatDispatch_Case10:
 	pushw 0x0005
 	ld xwa, Equalizer_FormatCases_Data
 	jrl FormatParamStr_CopyEnumName
+Equalizer_FormatDispatch_Case11:
 	pushw 0x0005
 	ld xwa, EntertainerGridCheck_Data_2
 	jrl FormatParamStr_CopyEnumName
@@ -15605,9 +15874,11 @@ FormatParamString:
 	pushw 0x5
 	ld xwa, FormatParamString_Data_3
 	jrl FormatParamStr_CopyEnumName
+Equalizer_FormatDispatch_Case9:
 	pushw 0x5
 	ld xwa, FormatParamString_Data_2
 	jrl FormatParamStr_CopyEnumName
+Equalizer_FormatDispatch_Case17:
 	pushw 0x5
 	ld xwa, FormatParamString_Data
 	jrl FormatParamStr_CopyEnumName
@@ -15617,27 +15888,35 @@ Equalizer_FormatDefault:
 	pushw 0x5
 	ld xwa, Equalizer_FormatDefault_Data_8
 	jrl FormatParamStr_CopyEnumName
+Equalizer_FormatDispatch_Case16:
 	pushw 0x5
 	ld xwa, Equalizer_FormatDefault_Data_7
 	jr FormatParamStr_CopyEnumName
+Equalizer_FormatDispatch_Case14:
 	pushw 0x5
 	ld xwa, Equalizer_FormatDefault_Data_6
 	jr FormatParamStr_CopyEnumName
+Equalizer_FormatDispatch_Case4:
 	pushw 0x5
 	ld xwa, Equalizer_FormatDefault_Data_5
 	jr FormatParamStr_CopyEnumName
+Equalizer_FormatDispatch_Case5:
 	pushw 0x5
 	ld xwa, Equalizer_FormatDefault_Data_4
 	jr FormatParamStr_CopyEnumName
+Equalizer_FormatDispatch_Case6:
 	pushw 0x5
 	ld xwa, Equalizer_FormatDefault_Data_3
 	jr FormatParamStr_CopyEnumName
+Equalizer_FormatDispatch_Case7:
 	pushw 0x5
 	ld xwa, Equalizer_FormatDefault_Data_2
 	jr FormatParamStr_CopyEnumName
+Equalizer_FormatDispatch_Case8:
 	pushw 0x5
 	ld xwa, Equalizer_FormatDefault_Data
 	jr FormatParamStr_CopyEnumName
+Equalizer_FormatDispatch_Case12:
 	add bc, bc
 	ld	wa, (xde+bc)
 	cp wa, 0:i3
@@ -15657,9 +15936,11 @@ EqFormat_NegativeValue:
 EqFormat_PositiveValue:
 	ld xwa, EqFormat_PositiveValue_Str
 	jr SendAudioCommand
+Equalizer_FormatDispatch_Case3:
 	pushw 0x5
 	ld xwa, EqFormat_PositiveValue_Data
 	jr FormatParamStr_CopyEnumName
+Equalizer_FormatDispatch_Case2:
 	pushw 0x5
 	ld xwa, NakaData_WidgetDescriptors
 

@@ -4422,12 +4422,15 @@ Draw_StyledBoxWithFrame:
 	ld bc, (xsp + 70)
 	calr DrawBox_Impl
 	jrl DrawFunc_Epilogue74
+DrawDesignBox_Impl_Case185:
 	lda xwa, (xsp + 62)
 	decw	1, (xwa+4)
 	decw	1, (xwa+6)
+DrawDesignBox_Impl_Case184:
 	lda xwa, (xsp + 62)
 	decw	1, (xwa+4)
 	decw	1, (xwa+6)
+DrawDesignBox_Impl_Case181:	; cases 181, 182, 183
 	lda xwa, (xsp + 62)
 	ld bc, (xsp + 70)
 	calr DrawBox_Impl
@@ -4523,8 +4526,10 @@ DrawDesignBox_4FrameCross:
 	ld bc, 0:i3
 	calr DrawFrame_Impl
 	jrl DrawFunc_Epilogue74
+DrawDesignBox_Impl_Case193:	; cases 193, 195
 	ld xwa, 1:i3
 	ld (xsp + 14), xwa
+DrawDesignBox_Impl_Case192:	; cases 192, 194
 	ld xwa, 1:i3
 	add (xsp + 14), xwa
 	cpw (xsp + 72), 0xc0
@@ -4605,8 +4610,10 @@ DrawDesignBox_BorderLoop:
 	cp xwa, (xsp + 14)
 	jrl lt, DrawDesignBox_BorderLoop
 	jrl DrawFunc_Epilogue74
+DrawDesignBox_Impl_Case197:	; cases 197, 199
 	ld xwa, 1:i3
 	ld (xsp + 14), xwa
+DrawDesignBox_Impl_Case196:	; cases 196, 198
 	ld xwa, 1:i3
 	add (xsp + 14), xwa
 	lda xwa, (xsp + 62)
@@ -4945,72 +4952,84 @@ DrawPartGroup_StyleB:
 	ldw (xsp + 10), 0x12
 	ldi_erpw 0xfa, 0x13, 0x00
 	jrl DrawPartGroup_Loop
+DrawDesignBox_PartGroupStyle_Case24:
 	ld iz, 0:i3
 	ldw (xsp + 8), 0x1
 	ldw (xsp + 10), 0x2
 	ldiw_erp 0xfa, 3
 	ldw (xsp + 12), 0x1a
 	jrl DrawPartGroup_WithAltFlag
+DrawDesignBox_PartGroupStyle_Case32:
 	ld iz, 0:i3
 	ldw (xsp + 8), 0x1
 	ldw (xsp + 10), 0x2
 	ldiw_erp 0xfa, 3
 	ldw (xsp + 12), 0x15
 	jrl DrawPartGroup_WithFlag
+DrawDesignBox_PartGroupStyle_Case25:
 	ld iz, 4:i3
 	ldw (xsp + 8), 0x5
 	ldw (xsp + 10), 0x6
 	ldiw_erp 0xfa, 7
 	ldw (xsp + 12), 0x1b
 	jrl DrawPartGroup_WithAltFlag
+DrawDesignBox_PartGroupStyle_Case33:
 	ld iz, 4:i3
 	ldw (xsp + 8), 0x5
 	ldw (xsp + 10), 0x6
 	ldiw_erp 0xfa, 7
 	ldw (xsp + 12), 0x16
 	jrl DrawPartGroup_WithFlag
+DrawDesignBox_PartGroupStyle_Case26:
 	ldw iz, 0x8
 	ldw (xsp + 8), 0x9
 	ldw (xsp + 10), 0xa
 	ldi_erpw 0xfa, 0x0b, 0x00
 	ldw (xsp + 12), 0x1c
 	jrl DrawPartGroup_WithAltFlag
+DrawDesignBox_PartGroupStyle_Case34:
 	ldw iz, 0x8
 	ldw (xsp + 8), 0x9
 	ldw (xsp + 10), 0xa
 	ldi_erpw 0xfa, 0x0b, 0x00
 	ldw (xsp + 12), 0x17
 	jrl DrawPartGroup_WithFlag
+DrawDesignBox_PartGroupStyle_Case27:
 	ldw iz, 0x8
 	ldw (xsp + 8), 0x9
 	ldw (xsp + 10), 0xa
 	ldi_erpw 0xfa, 0x0b, 0x00
 	ldw (xsp + 12), 0x1d
 	jr DrawPartGroup_WithAltFlag
+DrawDesignBox_PartGroupStyle_Case35:
 	ldw iz, 0x8
 	ldw (xsp + 8), 0x9
 	ldw (xsp + 10), 0xa
 	ldi_erpw 0xfa, 0x0b, 0x00
 	ldw (xsp + 12), 0x18
 	jrl DrawPartGroup_WithFlag
+DrawDesignBox_PartGroupStyle_Case28:
 	ld iz, 0:i3
 	ldw (xsp + 8), 0x1
 	ldw (xsp + 10), 0x2
 	ldiw_erp 0xfa, 3
 	ldw (xsp + 12), 0x1e
 	jr DrawPartGroup_WithAltFlag
+DrawDesignBox_PartGroupStyle_Case29:
 	ld iz, 4:i3
 	ldw (xsp + 8), 0x5
 	ldw (xsp + 10), 0x6
 	ldiw_erp 0xfa, 7
 	ldw (xsp + 12), 0x1f
 	jr DrawPartGroup_WithAltFlag
+DrawDesignBox_PartGroupStyle_Case30:
 	ldw iz, 0x8
 	ldw (xsp + 8), 0x9
 	ldw (xsp + 10), 0xa
 	ldi_erpw 0xfa, 0x0b, 0x00
 	ldw (xsp + 12), 0x20
 	jr DrawPartGroup_WithAltFlag
+DrawDesignBox_PartGroupStyle_Case31:
 	ldw iz, 0x8
 	ldw (xsp + 8), 0x9
 	ldw (xsp + 10), 0xa
@@ -5020,24 +5039,28 @@ DrawPartGroup_StyleB:
 DrawPartGroup_WithAltFlag:
 	ldw (xsp + 16), 0x1
 	jr DrawPartGroup_Loop
+DrawDesignBox_PartGroupStyle_Case36:
 	ld iz, 0:i3
 	ldw (xsp + 8), 0x1
 	ldw (xsp + 10), 0x2
 	ldiw_erp 0xfa, 3
 	ldw (xsp + 12), 0x22
 	jr DrawPartGroup_WithFlag
+DrawDesignBox_PartGroupStyle_Case37:
 	ld iz, 4:i3
 	ldw (xsp + 8), 0x5
 	ldw (xsp + 10), 0x6
 	ldiw_erp 0xfa, 7
 	ldw (xsp + 12), 0x23
 	jr DrawPartGroup_WithFlag
+DrawDesignBox_PartGroupStyle_Case38:
 	ldw iz, 0x8
 	ldw (xsp + 8), 0x9
 	ldw (xsp + 10), 0xa
 	ldi_erpw 0xfa, 0x0b, 0x00
 	ldw (xsp + 12), 0x24
 	jr DrawPartGroup_WithFlag
+DrawDesignBox_PartGroupStyle_Case39:
 	ldw iz, 0x8
 	ldw (xsp + 8), 0x9
 	ldw (xsp + 10), 0xa
@@ -5312,6 +5335,7 @@ DrawPartGroup_DrawLeftBorder:
 	ld (xbc), de
 	ld de, 0:i3
 	jrl DrawFunc_DrawLineAndReturn
+DrawDesignBox_Impl_Case201:	; cases 201, 202
 	cpw (xsp + 72), 0xca
 	jr z, DrawPartGroup_StyleCA
 	ldw iz, 0x28
@@ -5532,6 +5556,7 @@ DrawPartGroup_DrawCAFrames:
 	decw	1, (xbc)
 	ld de, (xsp + 6)
 	jrl DrawFunc_DrawLineAndReturn
+DrawDesignBox_Impl_Case203:
 	ldw wa, 0x28
 	ld xbc, xhl
 	ld xde, xiy
@@ -5696,6 +5721,7 @@ DrawPartGroup_DrawCAFrames:
 	decw	1, (xbc)
 	ldw de, 0xf8
 	jrl DrawFunc_DrawLineAndReturn
+DrawDesignBox_Impl_Case204:
 	lda xbc, (xsp + 32)
 	lda xde, (xsp + 24)
 	ldw wa, 0x2a
@@ -5865,6 +5891,7 @@ DrawPartGroup_DrawCAFrames:
 	incw 1, (xwa + 2)
 	ldw de, 0xf8
 	jrl DrawFunc_DrawLineAndReturn
+DrawDesignBox_Impl_Case200:
 	ldw wa, 0x2c
 	ld xbc, xhl
 	ld xde, xiy

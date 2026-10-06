@@ -11503,6 +11503,7 @@ AcWelcomScreen_RenderBytecode:
 	ld	xbc, EVT_SET_KEEP
 	ld	xde, 0:i3
 	jrl	AcWelcomScreen_DispatchEvent
+AcWelcomScreen_Select_Case2:
 	ld	iz, (xbc+10)
 	cp	iz, 2:i3
 	jrl	ge, AcWelcomScreen_Select_NextStep
@@ -11551,11 +11552,13 @@ AcWelcomScreen_RenderBytecode_Skip:
 	ld	bc, 6:i3
 	ldirw
 	jrl	AcWelcomScreen_Select_NextStep
+AcWelcomScreen_Select_Case3:
 	ld	xwa, (xsp+20)
 	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	SendEvent
 	jrl	AcWelcomScreen_Select_NextStep
+AcWelcomScreen_Select_Case4:
 	lda	xix, (xsp+12)
 	ldiw
 	ldiw
@@ -11566,6 +11569,7 @@ AcWelcomScreen_RenderBytecode_Skip:
 	ld	xbc, AcWelcomScreen_RenderBytecode_Data
 	ldw	de, 16
 	jrl	Softver_ShowHide_Code_Join
+AcWelcomScreen_Select_Case5:
 	lda	xix, (xsp+12)
 	ldiw
 	ldiw
@@ -11576,6 +11580,7 @@ AcWelcomScreen_RenderBytecode_Skip:
 	ld	xbc, AcWelcomScreen_RenderBytecode_Data_3
 	ldw	de, 16
 	jrl	Softver_ShowHide_Code_Join
+AcWelcomScreen_Select_Case6:
 	lda	xix, (xsp+12)
 	ldiw
 	ldiw
@@ -11586,6 +11591,7 @@ AcWelcomScreen_RenderBytecode_Skip:
 	ld	xbc, Bitmap_DigitL
 	ldw	de, 16
 	jr	Softver_ShowHide_Code_Join
+AcWelcomScreen_Select_Case11:
 	lda	xix, (xsp+12)
 	ldiw
 	ldiw
@@ -11596,6 +11602,7 @@ AcWelcomScreen_RenderBytecode_Skip:
 	ld	xbc, Bitmap_DigitD
 	ldw	de, 16
 	jr	Softver_ShowHide_Code_Join
+AcWelcomScreen_Select_Case7:
 	lda	xix, (xsp+12)
 	ldiw
 	ldiw
@@ -11606,6 +11613,7 @@ AcWelcomScreen_RenderBytecode_Skip:
 	ld	xbc, Bitmap_DigitR
 	ldw	de, 16
 	jr	Softver_ShowHide_Code_Join
+AcWelcomScreen_Select_Case8:
 	lda	xiy, (xbc+4)
 	lda	xix, (xsp+12)
 	ldiw
@@ -11627,6 +11635,7 @@ AcWelcomScreen_RenderBytecode_Skip:
 Softver_ShowHide_Code_Join:
 	call	DrawBitmapSP2
 	jrl	AcWelcomScreen_Select_NextStep
+AcWelcomScreen_Select_Case9:	; cases 9, 12
 	lda	xhl, (0x03ea24:24)
 	cpw	(xhl+10), 65535
 	jr	z, Softver_ShowHide_Code_Skip2
@@ -11781,6 +11790,7 @@ Softver_ShowHide_Code_Skip3:
 	ld	bc, 6:i3
 	ldirw
 	jr	AcWelcomScreen_Select_NextStep
+AcWelcomScreen_Select_Case10:
 	ld	xwa, NAKA_APFUNC_ApTaskControl
 	ld	xbc, EVT_SLEEP_MAIN_TASK
 	ld	xde, 0:i3
@@ -18161,14 +18171,19 @@ DemoMenu_WorkspaceFunc:
 DemoMenu_WorkspaceDispatch:
 	ld	(0x247e0:24), iz
 	jr	DemoMenu_BuildItemWorkspace_Post
+DemoMenu_BuildItemWorkspace_Case10:
 	ld	(0x247e2:24), iz
 	jr	DemoMenu_BuildItemWorkspace_Post
+DemoMenu_BuildItemWorkspace_Case11:
 	ld	(0x247e4:24), iz
 	jr	DemoMenu_BuildItemWorkspace_Join
+DemoMenu_BuildItemWorkspace_Case12:
 	ld	(0x247e6:24), iz
 	jr	DemoMenu_BuildItemWorkspace_Join
+DemoMenu_BuildItemWorkspace_Case13:
 	ld	(0x247e8:24), iz
 	jr	DemoMenu_BuildItemWorkspace_Join
+DemoMenu_BuildItemWorkspace_Case14:
 	ld	(0x247ea:24), iz
 DemoMenu_BuildItemWorkspace_Join:
 	ld	bc, (xbc)
@@ -18218,14 +18233,19 @@ DemoMenu_DescriptorFunc:
 DemoDesc_DispatchTable:
 	ld	hl, (0x247e0:24)
 	ret
+DemoMenu_DescriptorFunc_Case10:
 	ld	hl, (0x247e2:24)
 	ret
+DemoMenu_DescriptorFunc_Case11:
 	ld	hl, (0x247e4:24)
 	ret
+DemoMenu_DescriptorFunc_Case12:
 	ld	hl, (0x247e6:24)
 	ret
+DemoMenu_DescriptorFunc_Case13:
 	ld	hl, (0x247e8:24)
 	ret
+DemoMenu_DescriptorFunc_Case14:
 	ld	hl, (0x247ea:24)
 	ret
 

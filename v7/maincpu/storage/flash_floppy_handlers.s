@@ -1695,16 +1695,22 @@ PartGrid_ColumnDispatch:
 PartGrid_ColumnJumpTable:
 	ld	xhl, (FLASH_SECTION_PTR_0:16)
 	jr	PartGrid_ColumnDispatch_Return
+PartGrid_ColumnDispatch_Case1:
 	ld	xhl, (FLASH_SECTION_PTR_1:16)
 	jr	PartGrid_ColumnDispatch_Return
+PartGrid_ColumnDispatch_Case2:
 	ld	xhl, (FLASH_SECTION_PTR_2:16)
 	jr	PartGrid_ColumnDispatch_Return
+PartGrid_ColumnDispatch_Case3:
 	ld	xhl, (FLASH_SECTION_PTR_3:16)
 	jr	PartGrid_ColumnDispatch_Return
+PartGrid_ColumnDispatch_Case4:
 	ld	xhl, (FLASH_SECTION_PTR_4:16)
 	jr	PartGrid_ColumnDispatch_Return
+PartGrid_ColumnDispatch_Case5:
 	ld	xhl, (FLASH_SECTION_PTR_5:16)
 	jr	PartGrid_ColumnDispatch_Return
+PartGrid_ColumnDispatch_Case6:
 	ld	xhl, (FLASH_SECTION_PTR_6:16)
 	jr	t, PartGrid_ColumnDispatch_Return
 
@@ -2035,16 +2041,22 @@ NoteEventBuffer_CopyToSlot:
 NOTE_EVENT_DISPATCH_1:
 	ld xbc, (FLASH_SECTION_PTR_0:16); Case 0: Load dest pointer
 	jr NOTE_EVENT_COPY_COMMON
+NoteEventBuffer_CopyToSlot_Case2:
 	ld xbc, (FLASH_SECTION_PTR_1:16); Case 1: Load dest pointer
 	jr NOTE_EVENT_COPY_COMMON
+NoteEventBuffer_CopyToSlot_Case3:
 	ld xbc, (FLASH_SECTION_PTR_2:16); Case 2: Load dest pointer
 	jr NOTE_EVENT_COPY_COMMON
+NoteEventBuffer_CopyToSlot_Case4:
 	ld xbc, (FLASH_SECTION_PTR_3:16); Case 3: Load dest pointer
 	jr NOTE_EVENT_COPY_COMMON
+NoteEventBuffer_CopyToSlot_Case5:
 	ld xbc, (FLASH_SECTION_PTR_4:16); Case 4: Load dest pointer
 	jr NOTE_EVENT_COPY_COMMON
+NoteEventBuffer_CopyToSlot_Case6:
 	ld xbc, (FLASH_SECTION_PTR_5:16); Case 5: Load dest pointer
 	jr NOTE_EVENT_COPY_COMMON
+NoteEventBuffer_CopyToSlot_Case7:
 	ld xbc, (FLASH_SECTION_PTR_6:16); Case 6: Load dest pointer (falls through)
 NOTE_EVENT_COPY_COMMON:	; F1717D - Common handler
 	ld	xiy, xbc	; XIY = destination pointer
@@ -2115,18 +2127,23 @@ Flash_CopyMirrorLoop:
 	sub xde, 0x9800
 	ld wa, 1:i3
 	jr Flash_EraseAndWriteFinal
+NoteEventBuffer_Store_Case3:
 	ld xwa, (FLASH_SECTION_PTR_2:16)
 	ld (xsp + 4), xwa
 	jr Flash_WriteSectorWithMirrorCopy
+NoteEventBuffer_Store_Case4:
 	ld xwa, (FLASH_SECTION_PTR_3:16)
 	ld (xsp + 4), xwa
 	jr Flash_SectorWriteExecute
+NoteEventBuffer_Store_Case5:
 	ld xwa, (FLASH_SECTION_PTR_4:16)
 	ld (xsp + 4), xwa
 	jr Flash_WriteSectorWithMirrorCopy
+NoteEventBuffer_Store_Case6:
 	ld xwa, (FLASH_SECTION_PTR_5:16)
 	ld (xsp + 4), xwa
 	jr Flash_SectorWriteExecute
+NoteEventBuffer_Store_Case7:
 	ld xwa, (FLASH_SECTION_PTR_6:16)
 	ld (xsp + 4), xwa
 	jr Flash_WriteSectorWithMirrorCopy
@@ -6740,6 +6757,7 @@ CmpSetP1_DialGrid:
 	call SetDialDown
 	ld wa, 1:i3
 	jrl CmpSetP1_SetDialEnable
+AcCmpSetGridBoxProc_OnIndexswUp:	; cases 29360151, 29360153
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -6798,6 +6816,7 @@ CmpSetP1_SendAndApplyFunc:
 	call SetDialDown
 	ld wa, 1:i3
 	jrl CmpSetP1_SetDialEnable
+AcCmpSetGridBoxProc_OnIndexswDown:	; cases 29360152, 29360154
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -6944,6 +6963,7 @@ CmpSetP1_GridCheck_EventEnc:
 	ld	xwa, NAKA_MAINFUNC_MainCmpSetFunc
 	ld	xbc, EVT_CMP_SET_P1_UP
 	jr	CmpSetP1GridCheck_Join
+CmpSetP1GridCheck_OnIndexswDown:	; cases 29360152, 29360154
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, EVT_GET_SELECTED_CEL
@@ -7880,6 +7900,7 @@ FdcFormat_DialGrid:
 	call	SetDialDown
 	ld	wa, 1:i3
 	jrl	S2cGrid_SetDialEnable
+S2cGridBoxProc_OnIndexswUp:	; cases 29360151, 29360153
 	ld	xwa, (xsp+16)
 	ld	xbc, xiz
 	ld	xde, (xsp+12)
@@ -7933,6 +7954,7 @@ S2cGrid_DialDownSendApply:
 	call SetDialDown
 	ld wa, 1:i3
 	jrl S2cGrid_SetDialEnable
+S2cGridBoxProc_OnIndexswDown:	; cases 29360152, 29360154
 	ld xwa, (xsp + 16)
 	ld xbc, xiz
 	ld xde, (xsp + 12)

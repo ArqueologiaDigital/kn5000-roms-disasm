@@ -225,30 +225,35 @@ FDC_CONFIG_VERIFY_Code:
 	ld	wa, 2:i3
 	calr	FDC_Write_Data_Entry_Helper
 	jr	FDC_WaitReady_Join
+FDC_CONFIG_VERIFY_Case1:
 	ld	(0x89d0:16), 0
 	ldw	(0x8986:16), 0
 	ldi_erpb	251, 192
 	ld	wa, 2:i3
 	calr	FDC_Write_Data_Entry_Helper
 	jr	FDC_WaitReady_Join
+FDC_CONFIG_VERIFY_Case2:
 	ld	(0x89d0:16), 2
 	ldw	(0x8986:16), 0
 	ldi_erpb	251, 64
 	ld	wa, 0:i3
 	calr	FDC_Write_Data_Entry_Helper
 	jr	FDC_WaitReady_Join
+FDC_CONFIG_VERIFY_Case3:
 	ld	(0x89d0:16), 3
 	ldw	(0x8986:16), 0
 	ldi_erpb	251, 64
 	ld	wa, 0:i3
 	calr	FDC_Write_Data_Entry_Helper
 	jr	FDC_WaitReady_Join
+FDC_CONFIG_VERIFY_Case4:
 	ld	(0x89d0:16), 4
 	ldw	(0x8986:16), 0
 	ldib_erp	251, 0
 	ld	wa, 2:i3
 	calr	FDC_Write_Data_Entry_Helper
 	jr	FDC_WaitReady_Join
+FDC_CONFIG_VERIFY_Case5:
 	ld	(0x89d0:16), 5
 	ldw	(0x8986:16), 0
 	ldib_erp	251, 0

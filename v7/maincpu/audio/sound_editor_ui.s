@@ -6023,16 +6023,20 @@ Scoop_SoundEditorData_Helper_Join11:
 	ld	wa, 3:i3
 	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
 	jr	Scoop_SoundEditorData_Helper_Epilogue9
+SeDigEffTitleFunc_DispatchSwitch_Case4:	; cases 4, 5, 7, 10, 11
 	lda	xwa, (xsp)
 	ld	(xwa+8), 50
 	jr	Scoop_SoundEditorData_Helper_Join12
+SeDigEffTitleFunc_DispatchSwitch_Case6:
 	lda	xwa, (xsp)
 	ld	(xwa+8), 3
 	jr	Scoop_SoundEditorData_Helper_Join12
+SeDigEffTitleFunc_DispatchSwitch_Case8:
 	lda	xwa, (xsp)
 	ld	(xwa+8), 24
 	ld	(xwa+9), 232
 	jr	Scoop_SoundEditorData_Helper_Join11
+SeDigEffTitleFunc_DispatchSwitch_Case9:
 	lda	xwa, (xsp)
 	ld	(xwa+8), 30
 Scoop_SoundEditorData_Helper_Join12:
@@ -6086,9 +6090,11 @@ Scoop_SoundEditorData_Helper_Join13:
 	ld	wa, 4:i3
 	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
 	jr	Scoop_SoundEditorData_Helper_Epilogue10
+SeDigEffTitleFunc_DispatchSwitch_Switch2_Case6:	; cases 6, 8
 	lda	xwa, (xsp)
 	ld	(xwa+8), 100
 	jr	Scoop_SoundEditorData_Helper_Join13
+SeDigEffTitleFunc_DispatchSwitch_Switch2_Case9:
 	lda	xwa, (xsp)
 	ld	(xwa+8), 30
 	jr	Scoop_SoundEditorData_Helper_Join13
@@ -6140,6 +6146,7 @@ Scoop_SoundEditorData_Helper_Join14:
 	ld	wa, 5:i3
 	call	SeMenu_ApplyPartEdit_Entry2_Code_Helper
 	jr	Scoop_SoundEditorData_Helper_Epilogue11
+SeDigEffTitleFunc_DispatchSwitch_Switch3_Case4:	; cases 4, 5
 	lda	xwa, (xsp)
 	ld	(xwa+8), 50
 	ld	(xwa+9), 206
@@ -15533,6 +15540,7 @@ S2c_GridCheck_DataBlock:
 	ld	xwa, NAKA_MAINFUNC_MainS2cFunc
 	ld	xbc, EVT_S2C_TR_UP
 	jr	S2cGridCheck_Join
+S2cGridCheck_OnIndexswDown:	; cases 29360152, 29360154
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, EVT_GET_SELECTED_CEL
@@ -16878,6 +16886,7 @@ EasyCmp_DialGrid:
 	call SetDialDown
 	ld wa, 1:i3
 	jrl EasyCmp_SetDialEnable
+AcEasyCmpGridBoxProc_OnIndexswUp:	; cases 29360151, 29360153
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -16932,6 +16941,7 @@ EasyCmp_SendEvt091:
 	call SetDialDown
 	ld wa, 1:i3
 	jrl EasyCmp_SetDialEnable
+AcEasyCmpGridBoxProc_OnIndexswDown:	; cases 29360152, 29360154
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -17079,6 +17089,7 @@ EasyCmpGridCheck_Skip:
 	ld	xwa, NAKA_MAINFUNC_MainEsCmpFunc
 	ld	xbc, EVT_ES_CMP_VARI_UP
 	jr	EasyCmpGridCheck_Join
+EasyCmpGridCheck_OnIndexswDown:	; cases 29360152, 29360154
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, EVT_GET_SELECTED_CEL
@@ -17207,10 +17218,13 @@ EasyCmp_GridEvtCase_Default:
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	MspNameBnkFunc_Epilogue
+MspNameBnkFunc_OnGetLargeStep:	; cases 31457342, 31457343, 31457350
 	ld	xhl, 1:i3
 	jr	MspNameBnkFunc_Epilogue
+MspNameBnkFunc_OnGetMax:
 	ld	xhl, 3:i3
 	jr	MspNameBnkFunc_Epilogue
+MspNameBnkFunc_OnGetRamAddress:
 	lda	xhl, (32418:16)
 	jr	MspNameBnkFunc_Epilogue
 MspNameBnk_Dispatch:
@@ -18087,6 +18101,7 @@ MspRGrpSetGridCheck_Skip:
 	ld	xwa, NAKA_MAINFUNC_MainMspRgpSetFunc
 	ld	xbc, EVT_RGP_PAD_UP
 	jr	MspRGrpSetGridCheck_Join
+MspRGrpSetGridCheck_OnIndexswDown:	; cases 29360152, 29360154
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, EVT_GET_SELECTED_CEL
@@ -18611,14 +18626,17 @@ MspPlayModeFunc_DataBlock:
 	inc	8, xsp
 	ld	xhl, (xsp+12)
 	jr	MspPlayModeFunc_Epilogue
+MspPlayModeFunc_OnGetLargeStep:	; cases 31457342, 31457343
 	ld	a, (1054:16)
 	and	a, 4
 	cp	a, 4:i3
 	scc16	nz, hl
 	extz	xhl
 	jr	MspPlayModeFunc_Epilogue
+MspPlayModeFunc_OnGetMax:	; cases 31457347, 31457350
 	ld	xhl, 1:i3
 	jr	MspPlayModeFunc_Epilogue
+MspPlayModeFunc_OnGetRamAddress:
 	lda	xhl, (32419:16)
 	jr	MspPlayModeFunc_Epilogue
 AcSndArgGrid_BoxProc:
@@ -18709,6 +18727,7 @@ AcSndArgGrid_Init:
 	call	SetDialDown
 	ld	wa, 1:i3
 	jrl	AcSndArgGrid_ScrollCommit
+AcSndArgGridBoxProc_OnIndexswUp:	; cases 29360151, 29360153
 	ld	xwa, (xsp+22)
 	ld	xbc, xiz
 	ld	xde, (xsp+18)
@@ -18776,6 +18795,7 @@ AcSndArgGrid_ScrollUp_NoCanScroll:
 	call	SetDialDown
 	ld	wa, 1:i3
 	jrl	AcSndArgGrid_ScrollCommit
+AcSndArgGridBoxProc_OnIndexswDown:	; cases 29360152, 29360154
 	ld	xwa, (xsp+22)
 	ld	xbc, xiz
 	ld	xde, (xsp+18)
@@ -18866,6 +18886,7 @@ AcSndArgGrid_CopyText:
 	call	Free_Compare2
 	inc	8, xsp
 	jrl	AcSndArgGrid_ReturnHandled
+AcSndArgGridBoxProc_OnLswData:
 	ld	xwa, (xsp+22)
 	ld	xbc, xiz
 	ld	xde, (xsp+18)
@@ -19388,10 +19409,13 @@ StylCnvStorBnkSel_DataBlock:
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	StylCnvStorBnkSel_Epilogue
+StylCnvStorBnkSel_OnGetLargeStep:	; cases 31457342, 31457343, 31457350
 	ld	xhl, 1:i3
 	jr	StylCnvStorBnkSel_Epilogue
+StylCnvStorBnkSel_OnGetMax:
 	ld	xhl, 22
 	jr	StylCnvStorBnkSel_Epilogue
+StylCnvStorBnkSel_OnGetRamAddress:
 	lda	xhl, (14769:16)
 	jr	StylCnvStorBnkSel_Epilogue
 PsSCTxtBox_EventDispatch:

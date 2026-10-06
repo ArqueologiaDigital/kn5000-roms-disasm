@@ -149,13 +149,34 @@ MSP_Default_VarIndex:		.byte 0, 1, 2		; group 1
 				.byte 0, 1		; group 7 (2 parts)
 
 ; Group offset table A (byte offsets for 7 groups)
-MSP_Default_GroupOffsetA:	.short 0, 6, 12, 18, 24, 30, 36
+MSP_Default_GroupOffsetA:
+	.short	PartGrid_ColumnJumpTable - PartGrid_ColumnJumpTable
+	.short	PartGrid_ColumnDispatch_Case1 - PartGrid_ColumnJumpTable
+	.short	PartGrid_ColumnDispatch_Case2 - PartGrid_ColumnJumpTable
+	.short	PartGrid_ColumnDispatch_Case3 - PartGrid_ColumnJumpTable
+	.short	PartGrid_ColumnDispatch_Case4 - PartGrid_ColumnJumpTable
+	.short	PartGrid_ColumnDispatch_Case5 - PartGrid_ColumnJumpTable
+	.short	PartGrid_ColumnDispatch_Case6 - PartGrid_ColumnJumpTable
 
 ; Group offset table B (duplicate)
-MSP_Default_GroupOffsetB:	.short 0, 6, 12, 18, 24, 30, 36
+MSP_Default_GroupOffsetB:
+	.short	NOTE_EVENT_DISPATCH_1 - NOTE_EVENT_DISPATCH_1
+	.short	NoteEventBuffer_CopyToSlot_Case2 - NOTE_EVENT_DISPATCH_1
+	.short	NoteEventBuffer_CopyToSlot_Case3 - NOTE_EVENT_DISPATCH_1
+	.short	NoteEventBuffer_CopyToSlot_Case4 - NOTE_EVENT_DISPATCH_1
+	.short	NoteEventBuffer_CopyToSlot_Case5 - NOTE_EVENT_DISPATCH_1
+	.short	NoteEventBuffer_CopyToSlot_Case6 - NOTE_EVENT_DISPATCH_1
+	.short	NoteEventBuffer_CopyToSlot_Case7 - NOTE_EVENT_DISPATCH_1
 
 ; Variation size table (cumulative)
-MSP_Default_VarSize:		.short 0, 10, 100, 109, 118, 127, 136	; cumulative
+MSP_Default_VarSize:
+	.short	NOTE_EVENT_DISPATCH_2 - NOTE_EVENT_DISPATCH_2
+	.short	NOTE_EVENT_DISPATCH_2b - NOTE_EVENT_DISPATCH_2
+	.short	NoteEventBuffer_Store_Case3 - NOTE_EVENT_DISPATCH_2
+	.short	NoteEventBuffer_Store_Case4 - NOTE_EVENT_DISPATCH_2
+	.short	NoteEventBuffer_Store_Case5 - NOTE_EVENT_DISPATCH_2
+	.short	NoteEventBuffer_Store_Case6 - NOTE_EVENT_DISPATCH_2
+	.short	NoteEventBuffer_Store_Case7 - NOTE_EVENT_DISPATCH_2
 
 ; Part-to-bank mapping (14 entries)
 MSP_Default_PartBankMap:	.byte 0, 0		; part 0: bank 0.0

@@ -39,13 +39,16 @@ JumpInsert_DispatchBody:
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	JumpInsert_Return
+JumpInsertFunc_OnGetLargeStep:	; cases 31457342, 31457343, 31457350
 	ld	xhl, 1:i3
 	jr	JumpInsert_Return
+JumpInsertFunc_OnGetMax:
 	ld	xhl, 4:i3
 	jr	JumpInsert_Return
 JumpInsert_Error:
 	ld xhl, 0:i3
 	jr JumpInsert_Return
+JumpInsertFunc_OnGetRamAddress:
 	lda xhl, (0x0340f2:24)
 
 JumpInsert_Return:

@@ -1120,7 +1120,13 @@ AcVocalGrid_DialSetup_Table_2:
 ; AcVocalGridBoxProc_CaseTable[7].
 ; -----------------------------------------------------------------------------
 AcVocalGridBoxProc_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x249DE, 0xE
+	.short	AcVocalGridBoxProc_OnIndexswUp - AcVocalGrid_DialSetup
+	.short	AcVocalGridBoxProc_OnIndexswDown - AcVocalGrid_DialSetup
+	.short	AcVocalGridBoxProc_OnIndexswUp - AcVocalGrid_DialSetup
+	.short	AcVocalGridBoxProc_OnIndexswDown - AcVocalGrid_DialSetup
+	.short	AcVocalGrid_FuncCallC - AcVocalGrid_DialSetup
+	.short	AcVocalGridBoxProc_OnLswData - AcVocalGrid_DialSetup
+	.short	AcVocalGridBoxProc_OnLswData - AcVocalGrid_DialSetup
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] VocalistGrid_DispatchData_PtrTable
 ; VocalistGrid_DispatchData_PtrTable -- 2 u32 addresses, read by
@@ -1441,7 +1447,26 @@ VocalistGrid_DispatchData_Str_17:
 ; VocalistGrid_DispatchData_CaseTable[20].
 ; -----------------------------------------------------------------------------
 VocalistGrid_DispatchData_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24CAA, 0x28
+	.short	VocalistGrid_CheckDispData - VocalistGrid_CheckDispData
+	.short	VocalistGrid_DispatchData_Case11521 - VocalistGrid_CheckDispData
+	.short	VocalistGrid_DispatchData_Case11522 - VocalistGrid_CheckDispData
+	.short	VocalistGrid_DispatchData_Case11521 - VocalistGrid_CheckDispData
+	.short	VocalistGrid_DispatchData_Case11524 - VocalistGrid_CheckDispData
+	.short	VocalistGrid_DispatchData_Case11521 - VocalistGrid_CheckDispData
+	.short	VocalistGrid_DispatchData_Case11526 - VocalistGrid_CheckDispData
+	.short	VocalistGrid_DispatchData_Case11521 - VocalistGrid_CheckDispData
+	.short	VocalistGrid_DispatchData_Case11528 - VocalistGrid_CheckDispData
+	.short	VocalistGrid_DispatchData_Case11521 - VocalistGrid_CheckDispData
+	.short	VocalistGrid_DispatchData_Case11530 - VocalistGrid_CheckDispData
+	.short	VocalistGrid_DispatchData_Case11521 - VocalistGrid_CheckDispData
+	.short	VocalistGrid_DispatchData_Case11532 - VocalistGrid_CheckDispData
+	.short	AcVocalist_ReturnZero - VocalistGrid_CheckDispData
+	.short	AcVocalist_ReturnZero - VocalistGrid_CheckDispData
+	.short	VocalistGrid_DispatchData_Case11521 - VocalistGrid_CheckDispData
+	.short	VocalistGrid_DispatchData_Case11536 - VocalistGrid_CheckDispData
+	.short	AcVocalist_ReturnZero - VocalistGrid_CheckDispData
+	.short	AcVocalist_ReturnZero - VocalistGrid_CheckDispData
+	.short	VocalistGrid_DispatchData_Case11521 - VocalistGrid_CheckDispData
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] MidiPart_ColWidthData
 ; MidiPart_ColWidthData -- jump table of a compiled `switch` in
@@ -1452,7 +1477,26 @@ VocalistGrid_DispatchData_CaseTable:
 ; Typed in naka_widget_tables_2.c as uint16_t MidiPart_ColWidthData[20].
 ; -----------------------------------------------------------------------------
 MidiPart_ColWidthData:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24CD2, 0x28
+	.short	VocalistGrid_DispatchData_Code - VocalistGrid_DispatchData_Code
+	.short	VocalistGridCheck_Switch2_Case11521 - VocalistGrid_DispatchData_Code
+	.short	VocalistGridCheck_Switch2_Case11522 - VocalistGrid_DispatchData_Code
+	.short	VocalistGridCheck_Switch2_Case11521 - VocalistGrid_DispatchData_Code
+	.short	VocalistGridCheck_Switch2_Case11524 - VocalistGrid_DispatchData_Code
+	.short	VocalistGridCheck_Switch2_Case11521 - VocalistGrid_DispatchData_Code
+	.short	VocalistGridCheck_Switch2_Case11526 - VocalistGrid_DispatchData_Code
+	.short	VocalistGridCheck_Switch2_Case11521 - VocalistGrid_DispatchData_Code
+	.short	VocalistGridCheck_Switch2_Case11528 - VocalistGrid_DispatchData_Code
+	.short	VocalistGridCheck_Switch2_Case11521 - VocalistGrid_DispatchData_Code
+	.short	VocalistGridCheck_Switch2_Case11530 - VocalistGrid_DispatchData_Code
+	.short	VocalistGridCheck_Switch2_Case11521 - VocalistGrid_DispatchData_Code
+	.short	VocalistGridCheck_Switch2_Case11532 - VocalistGrid_DispatchData_Code
+	.short	AcVocalist_ReturnZero - VocalistGrid_DispatchData_Code
+	.short	AcVocalist_ReturnZero - VocalistGrid_DispatchData_Code
+	.short	VocalistGridCheck_Switch2_Case11521 - VocalistGrid_DispatchData_Code
+	.short	VocalistGridCheck_Switch2_Case11532 - VocalistGrid_DispatchData_Code
+	.short	AcVocalist_ReturnZero - VocalistGrid_DispatchData_Code
+	.short	AcVocalist_ReturnZero - VocalistGrid_DispatchData_Code
+	.short	VocalistGridCheck_Switch2_Case11521 - VocalistGrid_DispatchData_Code
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] VocalistGridCheck_CaseTable
 ; VocalistGridCheck_CaseTable -- jump table of a compiled `switch` in
@@ -1464,7 +1508,13 @@ MidiPart_ColWidthData:
 ; VocalistGridCheck_CaseTable[7].
 ; -----------------------------------------------------------------------------
 VocalistGridCheck_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24CFA, 0xE
+	.short	VocalistGrid_DispatchData - VocalistGrid_DispatchData
+	.short	VocalistGridCheck_OnIndexswDown - VocalistGrid_DispatchData
+	.short	VocalistGrid_DispatchData - VocalistGrid_DispatchData
+	.short	VocalistGridCheck_OnIndexswDown - VocalistGrid_DispatchData
+	.short	AcVocalist_ReturnZero - VocalistGrid_DispatchData
+	.short	VocalistGridCheck_OnLswData - VocalistGrid_DispatchData
+	.short	AcVocalist_ReturnZero - VocalistGrid_DispatchData
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AcVocalist_ListSetup_CaseTable
 ; AcVocalist_ListSetup_CaseTable -- jump table of a compiled `switch` in
@@ -1476,7 +1526,12 @@ VocalistGridCheck_CaseTable:
 ; AcVocalist_ListSetup_CaseTable[6].
 ; -----------------------------------------------------------------------------
 AcVocalist_ListSetup_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24D08, 0xC
+	.short	AcVocalist_ListDispatch - AcVocalist_ListDispatch
+	.short	AcVocalist_ListSetup_Case1 - AcVocalist_ListDispatch
+	.short	AcVocalist_ListDispatch - AcVocalist_ListDispatch
+	.short	AcVocalist_ListSetup_Case1 - AcVocalist_ListDispatch
+	.short	AcVocalist_ListDispatch - AcVocalist_ListDispatch
+	.short	AcVocalist_ListSetup_Case1 - AcVocalist_ListDispatch
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] PsHarm_DrawActiveBox_PtrTable
 ; PsHarm_DrawActiveBox_PtrTable -- 1 u32 addresses, read by
@@ -1531,7 +1586,12 @@ PsHarmOnOffBoxProc_LocalInit_2:
 ; MainVocalistPage1OKFunc_CaseTable[6].
 ; -----------------------------------------------------------------------------
 MainVocalistPage1OKFunc_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24D3C, 0xC
+	.short	VocalistPage1OK_Dispatch - VocalistPage1OK_Dispatch
+	.short	VocalistPage1_DispatchData - VocalistPage1OK_Dispatch
+	.short	VocalistPage1OK_Dispatch - VocalistPage1OK_Dispatch
+	.short	VocalistPage1_DispatchData - VocalistPage1OK_Dispatch
+	.short	MainVocalistPage1OKFunc_Case4 - VocalistPage1OK_Dispatch
+	.short	MainVocalistPage1OKFunc_Case5 - VocalistPage1OK_Dispatch
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] RevSel_HandleConfirm_Str
 ; RevSel_HandleConfirm_Str -- NUL-terminated string(s), 6 bytes, used by
@@ -1905,7 +1965,16 @@ DisplayMode_FormatStr2:			.incbin "includes/generated/naka_widget_tables_2.bin",
 ; MdSetupLoadFunc_CaseTable[10].
 ; -----------------------------------------------------------------------------
 MdSetupLoadFunc_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x2558A, 0x14
+	.short	MdSetupLoadFunc_OnGetLargeStep - SetupLoadOptionJumpTable
+	.short	MdSetupLoadFunc_OnGetLargeStep - SetupLoadOptionJumpTable
+	.short	SetupLoadInvalidIndex - SetupLoadOptionJumpTable
+	.short	SetupLoadInvalidIndex - SetupLoadOptionJumpTable
+	.short	SetupLoadInvalidIndex - SetupLoadOptionJumpTable
+	.short	MdSetupLoadFunc_OnGetMax - SetupLoadOptionJumpTable
+	.short	SetupLoadInvalidIndex - SetupLoadOptionJumpTable
+	.short	MdSetupLoadFunc_OnGetRamAddress - SetupLoadOptionJumpTable
+	.short	MdSetupLoadFunc_OnGetRamSize - SetupLoadOptionJumpTable
+	.short	SetupLoadOptionJumpTable - SetupLoadOptionJumpTable
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] MdSetupLoadFunc_CaseTable_Strings
 ; MdSetupLoadFunc_CaseTable_Strings -- 12 bytes of NUL-terminated
@@ -1952,7 +2021,13 @@ VoiceParam_ListHandler_Table_2:
 ; AcFadeSetGridBoxProc_CaseTable[7].
 ; -----------------------------------------------------------------------------
 AcFadeSetGridBoxProc_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x255C6, 0xE
+	.short	AcFadeSetGridBoxProc_OnIndexswUp - VoiceParam_ListHandler
+	.short	AcFadeSetGridBoxProc_OnIndexswDown - VoiceParam_ListHandler
+	.short	AcFadeSetGridBoxProc_OnIndexswUp - VoiceParam_ListHandler
+	.short	AcFadeSetGridBoxProc_OnIndexswDown - VoiceParam_ListHandler
+	.short	VoiceUI_GridCase3 - VoiceParam_ListHandler
+	.short	AcFadeSetGridBoxProc_OnLswData - VoiceParam_ListHandler
+	.short	AcFadeSetGridBoxProc_OnLswData - VoiceParam_ListHandler
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Data_FadeSetGridDispatch_Table
 ; Data_FadeSetGridDispatch_Table -- read by Data_FadeSetGridDispatch
@@ -2036,7 +2111,13 @@ SndParam_FormatAndDisplay_Str_2:
 ; FadeSetGridCheck_CaseTable[7].
 ; -----------------------------------------------------------------------------
 FadeSetGridCheck_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25634, 0xE
+	.short	Data_FadeSetGridDispatch - Data_FadeSetGridDispatch
+	.short	FadeSetGridCheck_OnIndexswDown - Data_FadeSetGridDispatch
+	.short	Data_FadeSetGridDispatch - Data_FadeSetGridDispatch
+	.short	FadeSetGridCheck_OnIndexswDown - Data_FadeSetGridDispatch
+	.short	SndParam_ReturnZero2 - Data_FadeSetGridDispatch
+	.short	FadeSetGridCheck_OnLswData - Data_FadeSetGridDispatch
+	.short	FadeSetGridCheck_OnLswData - Data_FadeSetGridDispatch
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AcInOutGrid_Init_Table
 ; AcInOutGrid_Init_Table -- read by AcInOutGrid_Init (v10/v9 0xf757bc,
@@ -2127,7 +2208,13 @@ AcInOutGrid_GetRowText_Src2_Str:
 ; AcInOutGridBoxProc_CaseTable[7].
 ; -----------------------------------------------------------------------------
 AcInOutGridBoxProc_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x258E8, 0xE
+	.short	AcInOutGridBoxProc_OnIndexswUp - AcInOutGrid_Init
+	.short	AcInOutGridBoxProc_OnIndexswDown - AcInOutGrid_Init
+	.short	AcInOutGridBoxProc_OnIndexswUp - AcInOutGrid_Init
+	.short	AcInOutGridBoxProc_OnIndexswDown - AcInOutGrid_Init
+	.short	AcInOutGrid_Default - AcInOutGrid_Init
+	.short	AcInOutGridBoxProc_OnLswData - AcInOutGrid_Init
+	.short	AcInOutGridBoxProc_OnLswData - AcInOutGrid_Init
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Data_InOutGridDispatch_PtrTable
 ; Data_InOutGridDispatch_PtrTable -- 2 u32 addresses, read by
@@ -2242,7 +2329,15 @@ Data_ParaLoadOptDispatch_Str_Fmt3d_4:	.incbin "includes/generated/naka_widget_ta
 ; Data_InOutGridDispatch_CaseTable[9].
 ; -----------------------------------------------------------------------------
 Data_InOutGridDispatch_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x2599C, 0x12
+	.short	Data_ParaLoadOptDispatch - Data_ParaLoadOptDispatch
+	.short	Data_InOutGridDispatch_Case1 - Data_ParaLoadOptDispatch
+	.short	Data_InOutGridDispatch_Case2 - Data_ParaLoadOptDispatch
+	.short	Data_InOutGridDispatch_Case3 - Data_ParaLoadOptDispatch
+	.short	MdPreset_ReturnZero2 - Data_ParaLoadOptDispatch
+	.short	Data_InOutGridDispatch_Case5 - Data_ParaLoadOptDispatch
+	.short	Data_InOutGridDispatch_Case6 - Data_ParaLoadOptDispatch
+	.short	Data_InOutGridDispatch_Case7 - Data_ParaLoadOptDispatch
+	.short	Data_InOutGridDispatch_Case8 - Data_ParaLoadOptDispatch
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Data_InOutGridDispatch_CaseTable_2
 ; Data_InOutGridDispatch_CaseTable_2 -- jump table of a compiled
@@ -2254,7 +2349,15 @@ Data_InOutGridDispatch_CaseTable:
 ; Data_InOutGridDispatch_CaseTable_2[9].
 ; -----------------------------------------------------------------------------
 Data_InOutGridDispatch_CaseTable_2:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x259AE, 0x12
+	.short	Data_InOutGridDispatch_Code_2 - Data_InOutGridDispatch_Code_2
+	.short	InOutGridCheck_Switch3_Case1 - Data_InOutGridDispatch_Code_2
+	.short	InOutGridCheck_Switch3_Case2 - Data_InOutGridDispatch_Code_2
+	.short	InOutGridCheck_Switch3_Case3 - Data_InOutGridDispatch_Code_2
+	.short	MdPreset_ReturnZero2 - Data_InOutGridDispatch_Code_2
+	.short	InOutGridCheck_Switch3_Case5 - Data_InOutGridDispatch_Code_2
+	.short	InOutGridCheck_Switch3_Case6 - Data_InOutGridDispatch_Code_2
+	.short	InOutGridCheck_Switch3_Case7 - Data_InOutGridDispatch_Code_2
+	.short	InOutGridCheck_Switch3_Case8 - Data_InOutGridDispatch_Code_2
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Data_InOutGridDispatch_CaseTable_3
 ; Data_InOutGridDispatch_CaseTable_3 -- jump table of a compiled
@@ -2266,7 +2369,15 @@ Data_InOutGridDispatch_CaseTable_2:
 ; Data_InOutGridDispatch_CaseTable_3[9].
 ; -----------------------------------------------------------------------------
 Data_InOutGridDispatch_CaseTable_3:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x259C0, 0x12
+	.short	Data_InOutGridDispatch_Code - Data_InOutGridDispatch_Code
+	.short	InOutGridCheck_Switch2_Case1 - Data_InOutGridDispatch_Code
+	.short	InOutGridCheck_Switch2_Case2 - Data_InOutGridDispatch_Code
+	.short	InOutGridCheck_Switch2_Case3 - Data_InOutGridDispatch_Code
+	.short	MdPreset_ReturnZero2 - Data_InOutGridDispatch_Code
+	.short	InOutGridCheck_Switch2_Case5 - Data_InOutGridDispatch_Code
+	.short	InOutGridCheck_Switch2_Case6 - Data_InOutGridDispatch_Code
+	.short	InOutGridCheck_Switch2_Case7 - Data_InOutGridDispatch_Code
+	.short	InOutGridCheck_Switch2_Case8 - Data_InOutGridDispatch_Code
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] InOutGridCheck_CaseTable
 ; InOutGridCheck_CaseTable -- jump table of a compiled `switch` in
@@ -2278,7 +2389,13 @@ Data_InOutGridDispatch_CaseTable_3:
 ; InOutGridCheck_CaseTable[7].
 ; -----------------------------------------------------------------------------
 InOutGridCheck_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x259D2, 0xE
+	.short	Data_InOutGridDispatch - Data_InOutGridDispatch
+	.short	InOutGridCheck_OnIndexswDown - Data_InOutGridDispatch
+	.short	Data_InOutGridDispatch - Data_InOutGridDispatch
+	.short	InOutGridCheck_OnIndexswDown - Data_InOutGridDispatch
+	.short	MdPreset_ReturnZero2 - Data_InOutGridDispatch
+	.short	InOutGridCheck_OnLswData - Data_InOutGridDispatch
+	.short	MdPreset_ReturnZero2 - Data_InOutGridDispatch
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] InOutGridCheck_CaseTable_Strings
 ; InOutGridCheck_CaseTable_Strings -- 6 bytes of NUL-terminated strings
@@ -2314,7 +2431,16 @@ MainExcSend_ClampIndexToRange_Table:
 ; Typed in naka_widget_tables_2.c as uint16_t ExcDotFunc_CaseTable[10].
 ; -----------------------------------------------------------------------------
 ExcDotFunc_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x259EC, 0x14
+	.short	ExcDotFunc_OnGetLargeStep - ExcDotFunc_HandlerJumpTable
+	.short	ExcDotFunc_OnGetLargeStep - ExcDotFunc_HandlerJumpTable
+	.short	ExcDotFunc_InvalidIndex_Exit - ExcDotFunc_HandlerJumpTable
+	.short	ExcDotFunc_InvalidIndex_Exit - ExcDotFunc_HandlerJumpTable
+	.short	ExcDotFunc_InvalidIndex_Exit - ExcDotFunc_HandlerJumpTable
+	.short	ExcDotFunc_OnGetMax - ExcDotFunc_HandlerJumpTable
+	.short	ExcDotFunc_InvalidIndex_Exit - ExcDotFunc_HandlerJumpTable
+	.short	ExcDotFunc_HandlerJumpTable_Ext - ExcDotFunc_HandlerJumpTable
+	.short	ExcDotFunc_OnGetLargeStep - ExcDotFunc_HandlerJumpTable
+	.short	ExcDotFunc_HandlerJumpTable - ExcDotFunc_HandlerJumpTable
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] FileTransfer_Status_Table
 ; FileTransfer_Status_Table -- 4 u32 addresses, read by
@@ -2353,7 +2479,16 @@ FileTransfer_BlankStatus:		.incbin "includes/generated/naka_widget_tables_2.bin"
 ; Typed in naka_widget_tables_2.c as uint16_t ExcPmemFunc_CaseTable[10].
 ; -----------------------------------------------------------------------------
 ExcPmemFunc_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25A38, 0x14
+	.short	ExcPmemFunc_OnGetLargeStep - ExcPmemFunc_HandlerJumpTable
+	.short	ExcPmemFunc_OnGetLargeStep - ExcPmemFunc_HandlerJumpTable
+	.short	ExcPmemFunc_InvalidIndex_Exit - ExcPmemFunc_HandlerJumpTable
+	.short	ExcPmemFunc_InvalidIndex_Exit - ExcPmemFunc_HandlerJumpTable
+	.short	ExcPmemFunc_InvalidIndex_Exit - ExcPmemFunc_HandlerJumpTable
+	.short	ExcPmemFunc_OnGetMax - ExcPmemFunc_HandlerJumpTable
+	.short	ExcPmemFunc_InvalidIndex_Exit - ExcPmemFunc_HandlerJumpTable
+	.short	ExcPmemFunc_OnGetRamAddress - ExcPmemFunc_HandlerJumpTable
+	.short	ExcPmemFunc_OnGetLargeStep - ExcPmemFunc_HandlerJumpTable
+	.short	ExcPmemFunc_HandlerJumpTable - ExcPmemFunc_HandlerJumpTable
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ExcSmemFunc_CaseTable
 ; ExcSmemFunc_CaseTable -- jump table of a compiled `switch` in
@@ -2364,7 +2499,16 @@ ExcPmemFunc_CaseTable:
 ; Typed in naka_widget_tables_2.c as uint16_t ExcSmemFunc_CaseTable[10].
 ; -----------------------------------------------------------------------------
 ExcSmemFunc_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25A4C, 0x14
+	.short	ExcSmemFunc_OnGetLargeStep - ExcSmemFunc_HandlerJumpTable
+	.short	ExcSmemFunc_OnGetLargeStep - ExcSmemFunc_HandlerJumpTable
+	.short	ExcSmemFunc_InvalidIndex_Exit - ExcSmemFunc_HandlerJumpTable
+	.short	ExcSmemFunc_InvalidIndex_Exit - ExcSmemFunc_HandlerJumpTable
+	.short	ExcSmemFunc_InvalidIndex_Exit - ExcSmemFunc_HandlerJumpTable
+	.short	ExcSmemFunc_OnGetMax - ExcSmemFunc_HandlerJumpTable
+	.short	ExcSmemFunc_InvalidIndex_Exit - ExcSmemFunc_HandlerJumpTable
+	.short	ExcSmemFunc_OnGetRamAddress - ExcSmemFunc_HandlerJumpTable
+	.short	ExcSmemFunc_OnGetLargeStep - ExcSmemFunc_HandlerJumpTable
+	.short	ExcSmemFunc_HandlerJumpTable - ExcSmemFunc_HandlerJumpTable
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ExcCompFunc_CaseTable
 ; ExcCompFunc_CaseTable -- jump table of a compiled `switch` in
@@ -2375,7 +2519,16 @@ ExcSmemFunc_CaseTable:
 ; Typed in naka_widget_tables_2.c as uint16_t ExcCompFunc_CaseTable[10].
 ; -----------------------------------------------------------------------------
 ExcCompFunc_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25A60, 0x14
+	.short	ExcCompFunc_OnGetLargeStep - ExcCompFunc_HandlerJumpTable
+	.short	ExcCompFunc_OnGetLargeStep - ExcCompFunc_HandlerJumpTable
+	.short	ExcCompFunc_InvalidIndex_Exit - ExcCompFunc_HandlerJumpTable
+	.short	ExcCompFunc_InvalidIndex_Exit - ExcCompFunc_HandlerJumpTable
+	.short	ExcCompFunc_InvalidIndex_Exit - ExcCompFunc_HandlerJumpTable
+	.short	ExcCompFunc_OnGetMax - ExcCompFunc_HandlerJumpTable
+	.short	ExcCompFunc_InvalidIndex_Exit - ExcCompFunc_HandlerJumpTable
+	.short	ExcCompFunc_OnGetRamAddress - ExcCompFunc_HandlerJumpTable
+	.short	ExcCompFunc_OnGetLargeStep - ExcCompFunc_HandlerJumpTable
+	.short	ExcCompFunc_HandlerJumpTable - ExcCompFunc_HandlerJumpTable
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ExcSeqFunc_CaseTable
 ; ExcSeqFunc_CaseTable -- jump table of a compiled `switch` in
@@ -2386,7 +2539,16 @@ ExcCompFunc_CaseTable:
 ; Typed in naka_widget_tables_2.c as uint16_t ExcSeqFunc_CaseTable[10].
 ; -----------------------------------------------------------------------------
 ExcSeqFunc_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25A74, 0x14
+	.short	ExcSeqFunc_OnGetLargeStep - ExcSeqFunc_HandlerJumpTable
+	.short	ExcSeqFunc_OnGetLargeStep - ExcSeqFunc_HandlerJumpTable
+	.short	ExcSeqFunc_InvalidIndex_Exit - ExcSeqFunc_HandlerJumpTable
+	.short	ExcSeqFunc_InvalidIndex_Exit - ExcSeqFunc_HandlerJumpTable
+	.short	ExcSeqFunc_InvalidIndex_Exit - ExcSeqFunc_HandlerJumpTable
+	.short	ExcSeqFunc_OnGetMax - ExcSeqFunc_HandlerJumpTable
+	.short	ExcSeqFunc_InvalidIndex_Exit - ExcSeqFunc_HandlerJumpTable
+	.short	ExcSeqFunc_OnGetRamAddress - ExcSeqFunc_HandlerJumpTable
+	.short	ExcSeqFunc_OnGetLargeStep - ExcSeqFunc_HandlerJumpTable
+	.short	ExcSeqFunc_HandlerJumpTable - ExcSeqFunc_HandlerJumpTable
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ExcMspFunc_CaseTable
 ; ExcMspFunc_CaseTable -- jump table of a compiled `switch` in
@@ -2397,7 +2559,16 @@ ExcSeqFunc_CaseTable:
 ; Typed in naka_widget_tables_2.c as uint16_t ExcMspFunc_CaseTable[10].
 ; -----------------------------------------------------------------------------
 ExcMspFunc_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25A88, 0x14
+	.short	ExcMspFunc_OnGetLargeStep - ExcMspFunc_HandlerJumpTable
+	.short	ExcMspFunc_OnGetLargeStep - ExcMspFunc_HandlerJumpTable
+	.short	ExcMspFunc_InvalidIndex_Exit - ExcMspFunc_HandlerJumpTable
+	.short	ExcMspFunc_InvalidIndex_Exit - ExcMspFunc_HandlerJumpTable
+	.short	ExcMspFunc_InvalidIndex_Exit - ExcMspFunc_HandlerJumpTable
+	.short	ExcMspFunc_OnGetMax - ExcMspFunc_HandlerJumpTable
+	.short	ExcMspFunc_InvalidIndex_Exit - ExcMspFunc_HandlerJumpTable
+	.short	ExcMspFunc_OnGetRamAddress - ExcMspFunc_HandlerJumpTable
+	.short	ExcMspFunc_OnGetLargeStep - ExcMspFunc_HandlerJumpTable
+	.short	ExcMspFunc_HandlerJumpTable - ExcMspFunc_HandlerJumpTable
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ParaLoadOpt_AudioFlagCheck_CaseTable
 ; ParaLoadOpt_AudioFlagCheck_CaseTable -- jump table of a compiled
@@ -2409,7 +2580,19 @@ ExcMspFunc_CaseTable:
 ; ParaLoadOpt_AudioFlagCheck_CaseTable[13].
 ; -----------------------------------------------------------------------------
 ParaLoadOpt_AudioFlagCheck_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25A9C, 0x1A
+	.short	ParaLoadOpt_DispatchTable_A - ParaLoadOpt_DispatchTable_A
+	.short	ParaLoadOpt_AudioFlagCheck_Case1 - ParaLoadOpt_DispatchTable_A
+	.short	ParaLoadOpt_AudioFlagCheck_Case2 - ParaLoadOpt_DispatchTable_A
+	.short	ParaLoadOpt_AudioFlagCheck_Case3 - ParaLoadOpt_DispatchTable_A
+	.short	ParaLoadOpt_AudioFlagCheck_Case4 - ParaLoadOpt_DispatchTable_A
+	.short	ParaLoadOpt_AudioFlagCheck_Case5 - ParaLoadOpt_DispatchTable_A
+	.short	ParaLoadOpt_AudioFlagCheck_Case6 - ParaLoadOpt_DispatchTable_A
+	.short	ParaLoadOpt_AudioFlagCheck_Case7 - ParaLoadOpt_DispatchTable_A
+	.short	ParaLoadOpt_AudioFlagCheck_Case8 - ParaLoadOpt_DispatchTable_A
+	.short	MidiFunc_SendEvtReturnAlt - ParaLoadOpt_DispatchTable_A
+	.short	MidiFunc_SendEvtReturnAlt - ParaLoadOpt_DispatchTable_A
+	.short	ParaLoadOpt_AudioFlagCheck_Case11 - ParaLoadOpt_DispatchTable_A
+	.short	ParaLoadOpt_AudioFlagCheck_Case12 - ParaLoadOpt_DispatchTable_A
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ParaLoadOpt_AudioFlagCheck_B_CaseTable
 ; ParaLoadOpt_AudioFlagCheck_B_CaseTable -- jump table of a compiled
@@ -2421,7 +2604,19 @@ ParaLoadOpt_AudioFlagCheck_CaseTable:
 ; ParaLoadOpt_AudioFlagCheck_B_CaseTable[13].
 ; -----------------------------------------------------------------------------
 ParaLoadOpt_AudioFlagCheck_B_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25AB6, 0x1A
+	.short	ParaLoadOpt_DispatchTable_B - ParaLoadOpt_DispatchTable_B
+	.short	ParaLoadOpt_AudioFlagCheck_B_Case1 - ParaLoadOpt_DispatchTable_B
+	.short	ParaLoadOpt_AudioFlagCheck_B_Case2 - ParaLoadOpt_DispatchTable_B
+	.short	ParaLoadOpt_AudioFlagCheck_B_Case3 - ParaLoadOpt_DispatchTable_B
+	.short	ParaLoadOpt_AudioFlagCheck_B_Case4 - ParaLoadOpt_DispatchTable_B
+	.short	ParaLoadOpt_AudioFlagCheck_B_Case5 - ParaLoadOpt_DispatchTable_B
+	.short	ParaLoadOpt_AudioFlagCheck_B_Case6 - ParaLoadOpt_DispatchTable_B
+	.short	ParaLoadOpt_AudioFlagCheck_B_Case7 - ParaLoadOpt_DispatchTable_B
+	.short	ParaLoadOpt_AudioFlagCheck_B_Case8 - ParaLoadOpt_DispatchTable_B
+	.short	MidiFunc_SendEventReturn - ParaLoadOpt_DispatchTable_B
+	.short	MidiFunc_SendEventReturn - ParaLoadOpt_DispatchTable_B
+	.short	ParaLoadOpt_AudioFlagCheck_B_Case11 - ParaLoadOpt_DispatchTable_B
+	.short	ParaLoadOpt_AudioFlagCheck_B_Case12 - ParaLoadOpt_DispatchTable_B
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ParaLoadOpt_GridReturn_Table
 ; ParaLoadOpt_GridReturn_Table -- read by ParaLoadOpt_GridReturn (v10/v9
@@ -2457,7 +2652,13 @@ ParaLoadOpt_GridDelegateProc_Table:
 ; AcParaLoadOptGridBoxProc_CaseTable[7].
 ; -----------------------------------------------------------------------------
 AcParaLoadOptGridBoxProc_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25AF4, 0xE
+	.short	AcParaLoadOptGridBoxProc_OnIndexswUp - ParaLoadOpt_GridHandler
+	.short	AcParaLoadOptGridBoxProc_OnIndexswDown - ParaLoadOpt_GridHandler
+	.short	AcParaLoadOptGridBoxProc_OnIndexswUp - ParaLoadOpt_GridHandler
+	.short	AcParaLoadOptGridBoxProc_OnIndexswDown - ParaLoadOpt_GridHandler
+	.short	ParaLoadOpt_GridCheck3 - ParaLoadOpt_GridHandler
+	.short	AcParaLoadOptGridBoxProc_OnLswData - ParaLoadOpt_GridHandler
+	.short	AcParaLoadOptGridBoxProc_OnLswData - ParaLoadOpt_GridHandler
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] UserMemory_ConfirmData
 ; UserMemory_ConfirmData -- initializer of a local array:
@@ -2537,7 +2738,13 @@ ParaLoadOptGridCheck_LocalInit:
 ; ParaLoadOptGridCheck_CaseTable[7].
 ; -----------------------------------------------------------------------------
 ParaLoadOptGridCheck_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25B74, 0xE
+	.short	ParaLoadOpt_GridDispatch - ParaLoadOpt_GridDispatch
+	.short	ParaLoadOptGridCheck_OnIndexswDown - ParaLoadOpt_GridDispatch
+	.short	ParaLoadOpt_GridDispatch - ParaLoadOpt_GridDispatch
+	.short	ParaLoadOptGridCheck_OnIndexswDown - ParaLoadOpt_GridDispatch
+	.short	ParaLoadOpt_ReturnZero - ParaLoadOpt_GridDispatch
+	.short	ParaLoadOpt_ReturnZero - ParaLoadOpt_GridDispatch
+	.short	ParaLoadOptGridCheck_OnRamData - ParaLoadOpt_GridDispatch
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AcPcgOutGridBoxProc_CaseTable
 ; AcPcgOutGridBoxProc_CaseTable -- jump table of a compiled `switch` in
@@ -2549,7 +2756,13 @@ ParaLoadOptGridCheck_CaseTable:
 ; AcPcgOutGridBoxProc_CaseTable[7].
 ; -----------------------------------------------------------------------------
 AcPcgOutGridBoxProc_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25B82, 0xE
+	.short	AcPcgOutGridBoxProc_OnIndexswUp - PcgOutGridBoxEventDispatch
+	.short	AcPcgOutGridBoxProc_OnIndexswDown - PcgOutGridBoxEventDispatch
+	.short	AcPcgOutGridBoxProc_OnIndexswUp - PcgOutGridBoxEventDispatch
+	.short	AcPcgOutGridBoxProc_OnIndexswDown - PcgOutGridBoxEventDispatch
+	.short	PcgOutGrid_DefaultHandler - PcgOutGridBoxEventDispatch
+	.short	AcPcgOutGridBoxProc_OnLswData - PcgOutGridBoxEventDispatch
+	.short	AcPcgOutGridBoxProc_OnLswData - PcgOutGridBoxEventDispatch
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] UserMemory_FormatStrings
 ; UserMemory_FormatStrings -- label kept because other files use it; 22
@@ -2615,7 +2828,13 @@ PcgOutCheck_SendPreset3Named_Str_Fmt5d:			.incbin "includes/generated/naka_widge
 ; PcgOutGridCheck_CaseTable[7].
 ; -----------------------------------------------------------------------------
 PcgOutGridCheck_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25C50, 0xE
+	.short	PcgOutGridCheckJumpTable - PcgOutGridCheckJumpTable
+	.short	PcgOutGridCheck_OnIndexswDown - PcgOutGridCheckJumpTable
+	.short	PcgOutGridCheckJumpTable - PcgOutGridCheckJumpTable
+	.short	PcgOutGridCheck_OnIndexswDown - PcgOutGridCheckJumpTable
+	.short	PcgOutGridCheckComplete - PcgOutGridCheckJumpTable
+	.short	PcgOutGridCheckComplete - PcgOutGridCheckJumpTable
+	.short	PcgOutGridCheck_OnRamData - PcgOutGridCheckJumpTable
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AcSendEditSw_EventD_Table
 ; AcSendEditSw_EventD_Table -- read by AcSendEditSw_EventD (v10/v9
@@ -2893,7 +3112,13 @@ ComSetGrid_ParamStrDefault_Str:
 ; ComSetGridCheck_CaseTable[7].
 ; -----------------------------------------------------------------------------
 ComSetGridCheck_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25D22, 0xE
+	.short	ComSetGridCheck_Evt1C00017 - ComSetGridCheck_Evt1C00017
+	.short	ComSetGridCheck_Evt1C00018 - ComSetGridCheck_Evt1C00017
+	.short	ComSetGridCheck_Evt1C00017 - ComSetGridCheck_Evt1C00017
+	.short	ComSetGridCheck_Evt1C00018 - ComSetGridCheck_Evt1C00017
+	.short	UI_ReturnZero - ComSetGridCheck_Evt1C00017
+	.short	ComSetGridCheck_Evt1C0001C - ComSetGridCheck_Evt1C00017
+	.short	ComSetGridCheck_Evt1C0001C - ComSetGridCheck_Evt1C00017
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ComSetGridCheck_CaseTable_Tail
 ; ComSetGridCheck_CaseTable_Tail -- 14 bytes after
@@ -2908,7 +3133,13 @@ ComSetGridCheck_CaseTable:
 ; -----------------------------------------------------------------------------
 ComSetGridCheck_CaseTable_Tail:
 AcPmemOutLGridBoxProc_Data:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25D30, 0xE
+	.short	AcPmemOutLGridBoxProc_Evt1C00017 - AcPmemOutL_Init
+	.short	AcPmemOutLGridBoxProc_Evt1C00017 - AcPmemOutL_Init
+	.short	AcPmemOutLGridBoxProc_Evt1C00017 - AcPmemOutL_Init
+	.short	AcPmemOutLGridBoxProc_Evt1C00017 - AcPmemOutL_Init
+	.short	AcPmemOutL_ForwardToBase - AcPmemOutL_Init
+	.short	AcPmemOutLGridBoxProc_Evt1C0001C - AcPmemOutL_Init
+	.short	AcPmemOutLGridBoxProc_Evt1C0001C - AcPmemOutL_Init
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AcPmemOutRGridBoxProc_CaseTable
 ; AcPmemOutRGridBoxProc_CaseTable -- jump table of a compiled `switch`
@@ -2919,16 +3150,13 @@ AcPmemOutLGridBoxProc_Data:
 ; AcPmemOutRGridBoxProc_CaseTable[6].
 ; -----------------------------------------------------------------------------
 AcPmemOutRGridBoxProc_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25D3E, 0xC
-; -----------------------------------------------------------------------------
-; [naka_s_headers] NakaInst_NEXT_E800E8
-; NakaInst_NEXT_E800E8 -- label kept because other files use it; 2 bytes
-; to the next object. Contents not established.
-;
-; Typed in naka_widget_tables_2.c as uint8_t NakaInst_NEXT_E800E8[2].
-; -----------------------------------------------------------------------------
-NakaInst_NEXT_E800E8:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25D4A, 0x2
+	.short	AcPmemOutRGridBoxProc_Evt1C00017 - AcPmemOutR_Init
+	.short	AcPmemOutRGridBoxProc_Evt1C00017 - AcPmemOutR_Init
+	.short	AcPmemOutRGridBoxProc_Evt1C00017 - AcPmemOutR_Init
+	.short	AcPmemOutRGridBoxProc_Evt1C00017 - AcPmemOutR_Init
+	.short	AcPmemOutR_ForwardToBase - AcPmemOutR_Init
+	.short	AcPmemOutRGridBoxProc_Evt1C0001C - AcPmemOutR_Init
+	.short	AcPmemOutRGridBoxProc_Evt1C0001C - AcPmemOutR_Init
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] PmemOutLGridCheck_PtrTable
 ; PmemOutLGridCheck_PtrTable -- 3 u32 addresses, read by
@@ -3061,7 +3289,13 @@ PmemOutL_LoadOffStr_Str:
 ; PmemOutLGridCheck_CaseTable[7].
 ; -----------------------------------------------------------------------------
 PmemOutLGridCheck_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E28, 0xE
+	.short	PmemOutLGridCheck_Evt1C00017 - PmemOutLGridCheck_Evt1C00017
+	.short	PmemOutLGridCheck_Evt1C00018 - PmemOutLGridCheck_Evt1C00017
+	.short	PmemOutLGridCheck_Evt1C00017 - PmemOutLGridCheck_Evt1C00017
+	.short	PmemOutLGridCheck_Evt1C00018 - PmemOutLGridCheck_Evt1C00017
+	.short	PmemOutGrid_ReturnZero - PmemOutLGridCheck_Evt1C00017
+	.short	PmemOutGrid_ReturnZero - PmemOutLGridCheck_Evt1C00017
+	.short	PmemOutLGridCheck_Evt1C0001D - PmemOutLGridCheck_Evt1C00017
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] PmemOutLGridCheck_CaseTable_Tail
 ; PmemOutLGridCheck_CaseTable_Tail -- 22 bytes after
@@ -3128,7 +3362,13 @@ CtlMsg_SendParamValue_Str_Fmt3d:		.incbin "includes/generated/naka_widget_tables
 ; PmemOutRGridCheck_CaseTable[7].
 ; -----------------------------------------------------------------------------
 PmemOutRGridCheck_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25ED4, 0xE
+	.short	TtMdCtlMsg_EventDispatch - TtMdCtlMsg_EventDispatch
+	.short	PmemOutRGridCheck_Evt1C00018 - TtMdCtlMsg_EventDispatch
+	.short	TtMdCtlMsg_EventDispatch - TtMdCtlMsg_EventDispatch
+	.short	PmemOutRGridCheck_Evt1C00018 - TtMdCtlMsg_EventDispatch
+	.short	TtMdCtlMsg_ReturnZero2 - TtMdCtlMsg_EventDispatch
+	.short	TtMdCtlMsg_ReturnZero2 - TtMdCtlMsg_EventDispatch
+	.short	PmemOutRGridCheck_Evt1C0001D - TtMdCtlMsg_EventDispatch
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AcCtlMsgGrid_ScrollUp_PageDec_Table
 ; AcCtlMsgGrid_ScrollUp_PageDec_Table -- read by
@@ -3186,7 +3426,13 @@ AcCtlMsgGrid_GetRowText_Page1_Str:
 ; AcCtlMsgGridBoxProc_CaseTable[7].
 ; -----------------------------------------------------------------------------
 AcCtlMsgGridBoxProc_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25FDA, 0xE
+	.short	AcCtlMsgGridBoxProc_Evt1C00017 - AcCtlMsgGrid_Init
+	.short	AcCtlMsgGridBoxProc_Evt1C00018 - AcCtlMsgGrid_Init
+	.short	AcCtlMsgGridBoxProc_Evt1C00017 - AcCtlMsgGrid_Init
+	.short	AcCtlMsgGridBoxProc_Evt1C00018 - AcCtlMsgGrid_Init
+	.short	AcCtlMsgGrid_ForwardToBase - AcCtlMsgGrid_Init
+	.short	AcCtlMsgGridBoxProc_Evt1C0001C - AcCtlMsgGrid_Init
+	.short	AcCtlMsgGridBoxProc_Evt1C0001C - AcCtlMsgGrid_Init
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] CtlMsgGridCheck_Table
 ; CtlMsgGridCheck_Table -- read by CtlMsgGridCheck (v10/v9 0xf79f88, v7
@@ -3264,7 +3510,13 @@ MidiSetup_TtlDispatch_Str_2:
 ; CtlMsgGridCheck_CaseTable[7].
 ; -----------------------------------------------------------------------------
 CtlMsgGridCheck_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x26052, 0xE
+	.short	CtlMsgGridCheck_Evt1C00017 - CtlMsgGridCheck_Evt1C00017
+	.short	CtlMsgGridCheck_Evt1C00018 - CtlMsgGridCheck_Evt1C00017
+	.short	CtlMsgGridCheck_Evt1C00017 - CtlMsgGridCheck_Evt1C00017
+	.short	CtlMsgGridCheck_Evt1C00018 - CtlMsgGridCheck_Evt1C00017
+	.short	CtlMsgGrid_ReturnZero - CtlMsgGridCheck_Evt1C00017
+	.short	CtlMsgGridCheck_Evt1C0001C - CtlMsgGridCheck_Evt1C00017
+	.short	CtlMsgGrid_ReturnZero - CtlMsgGridCheck_Evt1C00017
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] MidiPart_CallMainFunc_Str
 ; MidiPart_CallMainFunc_Str -- NUL-terminated string(s), 2 bytes, used
@@ -3385,7 +3637,13 @@ MidiSetup_GridStr2_Str:
 ; AcMidiPartGridBoxProc_CaseTable[7].
 ; -----------------------------------------------------------------------------
 AcMidiPartGridBoxProc_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x26174, 0xE
+	.short	AcMidiPartGridBoxProc_Evt1C00017 - MidiSetup_TtlCase3
+	.short	MidiPart_InitGridBox - MidiSetup_TtlCase3
+	.short	AcMidiPartGridBoxProc_Evt1C00017 - MidiSetup_TtlCase3
+	.short	MidiPart_InitGridBox - MidiSetup_TtlCase3
+	.short	MidiSetup_GridBoxCase4 - MidiSetup_TtlCase3
+	.short	AcMidiPartGridBoxProc_Evt1C0001C - MidiSetup_TtlCase3
+	.short	MidiPart_ReturnZeroJmp - MidiSetup_TtlCase3
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] MidiSetup_EventHandler_Table
 ; MidiSetup_EventHandler_Table -- read by MidiSetup_EventHandler (v10/v9
@@ -3499,7 +3757,13 @@ MidiPart_LookupFromTable_Str_2:
 ; MidiPartGridCheck_CaseTable[7].
 ; -----------------------------------------------------------------------------
 MidiPartGridCheck_CaseTable:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x2635E, 0xE
+	.short	MidiPartGridCheck_Evt1C00017 - MidiPartGridCheck_Evt1C00017
+	.short	MidiPartGridCheck_Evt1C00018 - MidiPartGridCheck_Evt1C00017
+	.short	MidiPartGridCheck_Evt1C00017 - MidiPartGridCheck_Evt1C00017
+	.short	MidiPartGridCheck_Evt1C00018 - MidiPartGridCheck_Evt1C00017
+	.short	MidiSetup_ReturnZero - MidiPartGridCheck_Evt1C00017
+	.short	MidiPartGridCheck_Evt1C0001C - MidiPartGridCheck_Evt1C00017
+	.short	MidiSetup_ReturnZero - MidiPartGridCheck_Evt1C00017
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Murai_ApFuncTable_121
 ; Murai_ApFuncTable_121 -- object table: InitializeMurai (v10/v9
