@@ -490,7 +490,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0eae;
     uint16_t field_0eb0;
     uint16_t field_0eb2;
-    uint32_t ptrs_9[4];  /* 4 pointers */
+    uint32_t DirmdTitleFunc_PtrTable[4];  /* 4 pointers */
     char DirmdTitleNew_str[18];
     char DirmdTitleOld_str[18];
     char DirmdTitleESw_str[24];
@@ -640,7 +640,7 @@ typedef struct __attribute__((packed)) {
     char str_225[2];
     char str_226[2];
     uint32_t ptrs_14[3];  /* 3 pointers */
-    char str_227[2];
+    char WndScroll_ItemCountCheck_Str_Chr25[2];
     char str_228[2];
     uint16_t field_1236;
     char str_229[2];
@@ -659,8 +659,8 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1256;
     uint16_t field_1258;
     uint16_t field_125a;
-    char X_str_2[12];
-    char X_str_3[12];
+    char ModeEdit_HandlePaint_Data[12];
+    char TitleEdit_HandlePaint_Str_N0x_Fmt2X_Fmts[12];
     uint16_t field_1274;
     uint16_t field_1276;
     uint16_t field_1278;
@@ -901,16 +901,16 @@ typedef struct __attribute__((packed)) {
     char BMP_str[4];
     uint16_t field_14b9;
     char str_241[3];
-    char str_242[4];
-    char str_243[4];
-    char str_244[4];
-    char str_245[4];
-    char str_246[4];
-    uint16_t field_14d2;
+    char EditSw_ByteData_Str_N80[4];
+    char EditSw_ByteData_Str_N81[4];
+    char DrawEditSw_Str_N7f[4];
+    char DrawEditSw_SelectVariantA_Str_N80[4];
+    char DrawEditSw_SelectVariantC_Str_N81[4];
+    uint16_t TextBox_DrawLineLoop_Data;
     char Aa_str[8];
     char Aa_str_2[8];
     char NoMyCarDay_str[92];
-    char str_250[6];
+    char PsGridBox_Scroll_Render_Str_Fmtd_Fmtd[6];
     char PartChannelOctaveLocal_str[32];
     char Right1Right2LeftPart4_str[54];
     uint16_t field_159c;
@@ -932,9 +932,9 @@ typedef struct __attribute__((packed)) {
     uint8_t pad_104[8];  /* zero padding */
     char str_256[2];
     uint8_t pad_105[4];  /* zero padding */
-    char str_257[2];
-    char str_258[4];
-    char d_str_3[2];
+    char PsNumEditBox_Confirm_Str_Chr25[2];
+    char PsNumEditBox_Confirm_Str_Fmtd[4];
+    char PsNumEditBox_Confirm_Str_d[2];
     uint32_t PASSIVE_str_ptr;
     uint32_t Active_str_ptr;
     char Active_str[8];
@@ -943,11 +943,11 @@ typedef struct __attribute__((packed)) {
     uint32_t On_str_ptr;
     char On_str[4];
     char OFF_str[4];
-    char str_264[2];
-    char str_265[4];
-    char d_str_4[2];
-    char str_267[4];
-    char str_268[4];
+    char AcNumEdit_GetText_Str_Chr25[2];
+    char AcNumEdit_GetText_Str_Fmtd[4];
+    char AcNumEdit_GetText_Str_d[2];
+    char LswEditCheck_Str_Fmt3d[4];
+    char RamEditCheck_JumpStart_Str_Fmt3d[4];
     uint16_t field_160e;
     uint16_t field_1610;
     char str_269[2];
@@ -963,18 +963,18 @@ typedef struct __attribute__((packed)) {
     char True_str[6];
     char FALSE_str[6];
     char ON_str[4];
-    char OFF_str_2[4];
-    char str_279[4];
-    char str_280[4];
-    char str_281[4];
-    char str_282[4];
+    char ButtonState_Paint_EventConfirm_Str_OFF[4];
+    char ButtonState_DispatchDSP_InlineData_Str_N9b[4];
+    char ButtonState_DispatchDSP_InlineData_Str_N98[4];
+    char ButtonState_DispatchDSP_InlineData_Str_N85[4];
+    char ButtonState_DispatchDSP_InlineData_Str_N81[4];
     char ON_str_2[4];
-    char OFF_str_3[4];
+    char ButtonState_DispatchDSP_InlineData_Str_OFF[4];
     char OK_str[4];
-    char str_286[2];
-    char str_287[2];
-    char str_288[4];
-    char str_289[4];
+    char ButtonState_DispatchDSP_InlineData_Str_Lt[2];
+    char ButtonState_DispatchDSP_InlineData_Str_Gt[2];
+    char ButtonState_DispatchDSP_InlineData_Str_N7f[4];
+    char ButtonState_DispatchDSP_InlineData_Str_N80[4];
     char YES_str[4];
     char NO_str[4];
     uint8_t pad_107[2];  /* zero padding */
@@ -1236,7 +1236,7 @@ typedef struct __attribute__((packed)) {
     uint8_t pad_177[2];  /* zero padding */
     char str_353[2];
     uint8_t pad_178[62];  /* zero padding */
-    char str_354[4];
+    char AcMixerVol_Confirm_Str_Fmt3d[4];
     char MUTE_str[6];
     char DebugTime_str[12];
     char XX_str[12];
@@ -1257,7 +1257,7 @@ typedef struct __attribute__((packed)) {
     char Debug3_str[10];
     char Memo_str[8];
     char MemoryDump_str[14];
-    char str_363[2];
+    char DbDebugMenu_Init_Str_N1[2];
     uint8_t pad_184[2];  /* zero padding */
     uint16_t field_1a9c;
     uint8_t pad_185[2];  /* zero padding */
@@ -1294,8 +1294,8 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1b70;
     uint32_t ptr_1b72;
     uint16_t field_1b76;
-    char str_389[4];
-    uint16_t field_1b7c;
+    char PsTrkSw_Confirm_DrawGeometry_Str_Fmtd[4];
+    uint16_t AcTrkSw_Select_Data;
     char PsTextBox_code[10];
     char AcLanguageText_name[16];
     uint32_t ptrs_19[6];  /* 6 pointers */
@@ -1308,7 +1308,7 @@ typedef struct __attribute__((packed)) {
     char YZ_str[4];
     char name_str[6];
     char romram_str[8];
-    char str_393[2];
+    char ObjectProc_Evt1E00018_Str_Empty[2];
     uint8_t pad_186[2];  /* zero padding */
     uint16_t field_1bfa;
     char str_394[2];
@@ -1462,50 +1462,50 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1d4a;
     uint16_t field_1d4c;
     char str_431[4];
-    char str_432[6];
+    char BoxStyle7_CalcWidth_Str_Fmts_Fmtd[6];
     uint16_t field_1d58;
     uint16_t field_1d5a;
     uint16_t field_1d5c;
     char str_433[6];
-    char str_434[6];
+    char BoxStyle8_CalcWidth_Str_Fmts_Fmtd[6];
     uint16_t field_1d6a;
     uint16_t field_1d6c;
     uint16_t field_1d6e;
     char str_435[6];
-    char str_436[6];
+    char BoxStyle9_CalcWidth_Str_Fmts_Fmtd[6];
     uint16_t field_1d7c;
     uint16_t field_1d7e;
     uint16_t field_1d80;
     char str_437[6];
-    char str_438[6];
+    char BoxStyle10_CalcWidth_Str_Fmts_Fmtd[6];
     uint16_t field_1d8e;
     uint16_t field_1d90;
     uint16_t field_1d92;
     char str_439[6];
-    char str_440[6];
+    char BoxStyle11_CalcWidth_Str_Fmts_Fmtd[6];
     uint16_t field_1da0;
     uint16_t field_1da2;
     uint16_t field_1da4;
     char str_441[6];
-    char str_442[6];
+    char BoxStyle12_CalcWidth_Str_Fmts_Fmtd[6];
     uint16_t field_1db2;
     uint16_t field_1db4;
     uint16_t field_1db6;
     char str_443[6];
-    char str_444[6];
+    char BoxStyle13_CalcWidth_Str_Fmts_Fmtd[6];
     char Left_str[6];
-    char str_446[2];
+    char EdgeDraw_TopRight_Inner_Str_LBrace[2];
     char Top_str[6];
     char Width_str[8];
     char Height_str[8];
-    char str_450[2];
-    char str_451[4];
-    char str_452[2];
-    char str_453[4];
-    char str_454[2];
+    char EdgeVariant_A_CalcWidth_Str_RBrace[2];
+    char EdgeVariant_C_CalcWidth_Str_x[4];
+    char EdgeVariant_C_CalcHeight_Str_LBrace[2];
+    char ShadowBox_A_Setup_Str_y[4];
+    char ShadowBox_A_CalcWidth_Str_RBrace[2];
     char idc_str[4];
-    char str_456[2];
-    char str_457[2];
+    char ScrollBar_CalcRange_Str_DQuote[2];
+    char ScrollBar_CalcRange_Str_DQuote_2[2];
     char id_str[4];
     char idICON__str[8];
     char id_str_2[4];
@@ -1537,21 +1537,21 @@ typedef struct __attribute__((packed)) {
     char Idi_str_16[8];
     char IdNONE_code[8];
     char Mode_name[8];
-    char str_487[4];
+    char ModeID_GetCurrent_Str_Fmtd[4];
     char Makemodeid_str[16];
     char Mode_code[8];
     char Mode_name_2[8];
     char Title_str[8];
-    char str_490[4];
+    char TitleID_GetCurrent_Str_Fmtd[4];
     char Maketitleid_str[16];
     char Title_code[8];
     char Title_name[8];
     char name_str_2[6];
     char str_493[2];
-    char str_494[2];
+    char NameProc_GetText_Str_Empty[2];
     char romram_str_2[8];
     char str_496[2];
-    char str_497[2];
+    char ConstFlagProc_SetValue_Check_Str_Empty[2];
     char str_498[2];
     uint16_t field_1f38;
     char str_499[2];
@@ -1950,40 +1950,40 @@ typedef struct __attribute__((packed)) {
     uint16_t field_2466;
     uint8_t pad_216[4];  /* zero padding */
     uint32_t ptrs_23[5];  /* 5 pointers */
-    char str_512[4];
-    char str_513[4];
-    char str_514[4];
+    char DrawFunc_Init_SkipShift_Str_Fmt1d[4];
+    char DrawFunc_Init_FontTable2_Str_Fmt2d[4];
+    char DrawFunc_Init_FontTable0_Str_Fmt3d[4];
     uint8_t pad_217[4];  /* zero padding */
     uint32_t Naka_PresentationRootState_ptr;
-    char str_515[4];
-    char str_516[4];
-    char str_517[4];
-    char str_518[4];
-    char str_519[4];
-    char str_520[4];
+    char DrawFunc_Init_Variant1_Str_Fmt1d[4];
+    char DrawFunc_Init_Variant1_Str_Fmt2d[4];
+    char DrawFunc_Init_Variant1_Str_Fmt3d[4];
+    char DrawFunc_Init_Entry_Str_Fmt2d[4];
+    char DrawFunc_Init_Entry_Str_Fmt3d[4];
+    char DrawFunc_Init_Entry_Str_Fmt4d[4];
     uint8_t pad_218[4];  /* zero padding */
     uint32_t Naka_PresentationRootState_ptr_2;
-    char str_521[4];
-    char str_522[4];
-    char str_523[4];
+    char DrawFunc_Init_Entry_Str_Fmt1d[4];
+    char DrawFunc_Init_Entry2_Str_Fmt2d[4];
+    char DrawFunc_Init_Entry3_Str_Fmt3d[4];
     uint8_t pad_219[4];  /* zero padding */
     uint32_t Naka_PresentationRootState_ptr_3;
-    char str_524[4];
-    char str_525[4];
-    char str_526[4];
+    char DrawFunc_Init_Entry3_Str_Fmt1d[4];
+    char DrawFunc_Init_Entry3_Str_Fmt2d[4];
+    char DrawFunc_Init_Entry3_Str_Fmt3d_2[4];
     uint8_t pad_220[4];  /* zero padding */
     uint32_t Naka_PresentationRootState_ptr_4;
-    char str_527[4];
+    char DrawFunc_Init_Entry3_Str_Fmt1d_2[4];
     char str_528[4];
-    char str_529[4];
-    char str_530[4];
-    char str_531[4];
-    char str_532[4];
+    char DrawFunc_Init_Entry4_Str_Fmt3d[4];
+    char DrawFunc_Init_Entry5_Str_Fmt2d[4];
+    char DrawFunc_Init_Entry5_Str_Fmt3d[4];
+    char DrawFunc_Init_Entry5_Str_Fmt4d[4];
     uint8_t pad_221[4];  /* zero padding */
     uint32_t Naka_PresentationRootState_ptr_5;
-    char str_533[4];
-    char str_534[4];
-    char str_535[4];
+    char DrawFunc_Init_Entry5_Str_Fmt1d[4];
+    char DrawFunc_Init_Entry5_Str_Fmt2d_2[4];
+    char DrawFunc_Init_Entry5_Str_Fmt3d_2[4];
     uint16_t field_2508;
     uint16_t field_250a;
     uint16_t field_250c;
@@ -2126,7 +2126,7 @@ typedef struct __attribute__((packed)) {
     char RamEditCheck_str[14];
     char LswEditCheck_str[14];
     char DefaultFunction_str[16];
-    char str_545[2];
+    char DrawHelper_A_Setup_Str_DQuote[2];
     uint32_t ptrs_25[256];  /* 256 pointers */
     char w13_code[2];
     char LiMIC_name[6];
@@ -3605,7 +3605,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .field_0eb2 = 0x00AD,
 
-    .ptrs_9 = {
+    .DirmdTitleFunc_PtrTable = {
         NAKA_ADDR(DirmdEmu_CaseF),
         0x00F9AE42,
         0x00F9AE4F,
@@ -4032,7 +4032,7 @@ const naka_disk_warning_t naka_disk_warning_data
         SELF(ptrs_13),
     },
 
-    .str_227 = "%",
+    .WndScroll_ItemCountCheck_Str_Chr25 = "%",
 
     .str_228 = "%",
 
@@ -4070,9 +4070,9 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .field_125a = 0x059E,
 
-    .X_str_2 = "0x%02X : %s",
+    .ModeEdit_HandlePaint_Data = "0x%02X : %s",
 
-    .X_str_3 = "0x%02X : %s",
+    .TitleEdit_HandlePaint_Str_N0x_Fmt2X_Fmts = "0x%02X : %s",
 
     .field_1274 = 0x0707,
 
@@ -4554,17 +4554,17 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_241 = ALIGNED_STRING("7f"),
 
-    .str_242 = "~80",
+    .EditSw_ByteData_Str_N80 = "~80",
 
-    .str_243 = "~81",
+    .EditSw_ByteData_Str_N81 = "~81",
 
-    .str_244 = "~7f",
+    .DrawEditSw_Str_N7f = "~7f",
 
-    .str_245 = "~80",
+    .DrawEditSw_SelectVariantA_Str_N80 = "~80",
 
-    .str_246 = "~81",
+    .DrawEditSw_SelectVariantC_Str_N81 = "~81",
 
-    .field_14d2 = 0x000D,
+    .TextBox_DrawLineLoop_Data = 0x000D,
 
     .Aa_str = "~aa=%3d",
 
@@ -4572,7 +4572,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .NoMyCarDay_str = ALIGNED_STRING("No My Car Day|Memory|AyaSam|Sweet Home Town|I am Rocker|Sunday Song|Two Day Drunk?|Samba 2"),
 
-    .str_250 = "%d-%d",
+    .PsGridBox_Scroll_Render_Str_Fmtd_Fmtd = "%d-%d",
 
     .PartChannelOctaveLocal_str = " PART  |CHANNEL|OCTAVE | LOCAL ",
 
@@ -4616,11 +4616,11 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .pad_105 = { 0 },
 
-    .str_257 = "%",
+    .PsNumEditBox_Confirm_Str_Chr25 = "%",
 
-    .str_258 = ALIGNED_STRING("%d"),
+    .PsNumEditBox_Confirm_Str_Fmtd = ALIGNED_STRING("%d"),
 
-    .d_str_3 = "d",
+    .PsNumEditBox_Confirm_Str_d = "d",
 
     .PASSIVE_str_ptr = SELF(PASSIVE_str),
 
@@ -4638,15 +4638,15 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .OFF_str = "OFF",
 
-    .str_264 = "%",
+    .AcNumEdit_GetText_Str_Chr25 = "%",
 
-    .str_265 = ALIGNED_STRING("%d"),
+    .AcNumEdit_GetText_Str_Fmtd = ALIGNED_STRING("%d"),
 
-    .d_str_4 = "d",
+    .AcNumEdit_GetText_Str_d = "d",
 
-    .str_267 = "%3d",
+    .LswEditCheck_Str_Fmt3d = "%3d",
 
-    .str_268 = "%3d",
+    .RamEditCheck_JumpStart_Str_Fmt3d = "%3d",
 
     .field_160e = 0x0019,
 
@@ -4678,29 +4678,29 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .ON_str = ALIGNED_STRING("ON"),
 
-    .OFF_str_2 = "OFF",
+    .ButtonState_Paint_EventConfirm_Str_OFF = "OFF",
 
-    .str_279 = "~9b",
+    .ButtonState_DispatchDSP_InlineData_Str_N9b = "~9b",
 
-    .str_280 = "~98",
+    .ButtonState_DispatchDSP_InlineData_Str_N98 = "~98",
 
-    .str_281 = "~85",
+    .ButtonState_DispatchDSP_InlineData_Str_N85 = "~85",
 
-    .str_282 = "~81",
+    .ButtonState_DispatchDSP_InlineData_Str_N81 = "~81",
 
     .ON_str_2 = ALIGNED_STRING("ON"),
 
-    .OFF_str_3 = "OFF",
+    .ButtonState_DispatchDSP_InlineData_Str_OFF = "OFF",
 
     .OK_str = ALIGNED_STRING("OK"),
 
-    .str_286 = "<",
+    .ButtonState_DispatchDSP_InlineData_Str_Lt = "<",
 
-    .str_287 = ">",
+    .ButtonState_DispatchDSP_InlineData_Str_Gt = ">",
 
-    .str_288 = "~7f",
+    .ButtonState_DispatchDSP_InlineData_Str_N7f = "~7f",
 
-    .str_289 = "~80",
+    .ButtonState_DispatchDSP_InlineData_Str_N80 = "~80",
 
     .YES_str = "YES",
 
@@ -5253,7 +5253,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .pad_178 = { 0 },
 
-    .str_354 = "%3d",
+    .AcMixerVol_Confirm_Str_Fmt3d = "%3d",
 
     .MUTE_str = ALIGNED_STRING("MUTE"),
 
@@ -5300,7 +5300,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .MemoryDump_str = "-MEMORY DUMP-",
 
-    .str_363 = "1",
+    .DbDebugMenu_Init_Str_N1 = "1",
 
     .pad_184 = { 0 },
 
@@ -5401,9 +5401,9 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .field_1b76 = 0x00FF,
 
-    .str_389 = ALIGNED_STRING("%d"),
+    .PsTrkSw_Confirm_DrawGeometry_Str_Fmtd = ALIGNED_STRING("%d"),
 
-    .field_1b7c = 0x000D,
+    .AcTrkSw_Select_Data = 0x000D,
 
     .PsTextBox_code = "PsTextBox",
 
@@ -5436,7 +5436,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .romram_str = ALIGNED_STRING("romram"),
 
-    .str_393 = ALIGNED_STRING(""),
+    .ObjectProc_Evt1E00018_Str_Empty = ALIGNED_STRING(""),
 
     .pad_186 = { 0 },
 
@@ -5748,7 +5748,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_431 = "s%d",
 
-    .str_432 = "&%s%d",
+    .BoxStyle7_CalcWidth_Str_Fmts_Fmtd = "&%s%d",
 
     .field_1d58 = 0x7773,
 
@@ -5758,7 +5758,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_433 = ALIGNED_STRING("%s%d"),
 
-    .str_434 = "&%s%d",
+    .BoxStyle8_CalcWidth_Str_Fmts_Fmtd = "&%s%d",
 
     .field_1d6a = 0x7775,
 
@@ -5768,7 +5768,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_435 = ALIGNED_STRING("%s%d"),
 
-    .str_436 = "&%s%d",
+    .BoxStyle9_CalcWidth_Str_Fmts_Fmtd = "&%s%d",
 
     .field_1d7c = 0x6373,
 
@@ -5778,7 +5778,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_437 = ALIGNED_STRING("%s%d"),
 
-    .str_438 = "&%s%d",
+    .BoxStyle10_CalcWidth_Str_Fmts_Fmtd = "&%s%d",
 
     .field_1d8e = 0x6375,
 
@@ -5788,7 +5788,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_439 = ALIGNED_STRING("%s%d"),
 
-    .str_440 = "&%s%d",
+    .BoxStyle11_CalcWidth_Str_Fmts_Fmtd = "&%s%d",
 
     .field_1da0 = 0x6C73,
 
@@ -5798,7 +5798,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_441 = ALIGNED_STRING("%s%d"),
 
-    .str_442 = "&%s%d",
+    .BoxStyle12_CalcWidth_Str_Fmts_Fmtd = "&%s%d",
 
     .field_1db2 = 0x6C75,
 
@@ -5808,11 +5808,11 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_443 = ALIGNED_STRING("%s%d"),
 
-    .str_444 = "&%s%d",
+    .BoxStyle13_CalcWidth_Str_Fmts_Fmtd = "&%s%d",
 
     .Left_str = ".left",
 
-    .str_446 = "{",
+    .EdgeDraw_TopRight_Inner_Str_LBrace = "{",
 
     .Top_str = ALIGNED_STRING(".top"),
 
@@ -5820,21 +5820,21 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .Height_str = ".height",
 
-    .str_450 = "}",
+    .EdgeVariant_A_CalcWidth_Str_RBrace = "}",
 
-    .str_451 = ALIGNED_STRING(".x"),
+    .EdgeVariant_C_CalcWidth_Str_x = ALIGNED_STRING(".x"),
 
-    .str_452 = "{",
+    .EdgeVariant_C_CalcHeight_Str_LBrace = "{",
 
-    .str_453 = ALIGNED_STRING(".y"),
+    .ShadowBox_A_Setup_Str_y = ALIGNED_STRING(".y"),
 
-    .str_454 = "}",
+    .ShadowBox_A_CalcWidth_Str_RBrace = "}",
 
     .idc_str = "idc",
 
-    .str_456 = "\"",
+    .ScrollBar_CalcRange_Str_DQuote = "\"",
 
-    .str_457 = "\"",
+    .ScrollBar_CalcRange_Str_DQuote_2 = "\"",
 
     .id_str = ALIGNED_STRING("id"),
 
@@ -5898,7 +5898,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .Mode_name = ALIGNED_STRING("Mode%d"),
 
-    .str_487 = ALIGNED_STRING("%d"),
+    .ModeID_GetCurrent_Str_Fmtd = ALIGNED_STRING("%d"),
 
     .Makemodeid_str = ALIGNED_STRING("MAKEMODEID(%s)"),
 
@@ -5908,7 +5908,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .Title_str = "Title%d",
 
-    .str_490 = ALIGNED_STRING("%d"),
+    .TitleID_GetCurrent_Str_Fmtd = ALIGNED_STRING("%d"),
 
     .Maketitleid_str = "MAKETITLEID(%s)",
 
@@ -5920,13 +5920,13 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_493 = ALIGNED_STRING(""),
 
-    .str_494 = ALIGNED_STRING(""),
+    .NameProc_GetText_Str_Empty = ALIGNED_STRING(""),
 
     .romram_str_2 = ALIGNED_STRING("romram"),
 
     .str_496 = ALIGNED_STRING(""),
 
-    .str_497 = ALIGNED_STRING(""),
+    .ConstFlagProc_SetValue_Check_Str_Empty = ALIGNED_STRING(""),
 
     .str_498 = ALIGNED_STRING(""),
 
@@ -6804,73 +6804,73 @@ const naka_disk_warning_t naka_disk_warning_data
         NAKA_ADDR(Naka_PresentationRootState),
     },
 
-    .str_512 = "%1d",
+    .DrawFunc_Init_SkipShift_Str_Fmt1d = "%1d",
 
-    .str_513 = "%2d",
+    .DrawFunc_Init_FontTable2_Str_Fmt2d = "%2d",
 
-    .str_514 = "%3d",
+    .DrawFunc_Init_FontTable0_Str_Fmt3d = "%3d",
 
     .pad_217 = { 0 },
 
     .Naka_PresentationRootState_ptr = NAKA_ADDR(Naka_PresentationRootState),
 
-    .str_515 = "%1d",
+    .DrawFunc_Init_Variant1_Str_Fmt1d = "%1d",
 
-    .str_516 = "%2d",
+    .DrawFunc_Init_Variant1_Str_Fmt2d = "%2d",
 
-    .str_517 = "%3d",
+    .DrawFunc_Init_Variant1_Str_Fmt3d = "%3d",
 
-    .str_518 = "%2d",
+    .DrawFunc_Init_Entry_Str_Fmt2d = "%2d",
 
-    .str_519 = "%3d",
+    .DrawFunc_Init_Entry_Str_Fmt3d = "%3d",
 
-    .str_520 = "%4d",
+    .DrawFunc_Init_Entry_Str_Fmt4d = "%4d",
 
     .pad_218 = { 0 },
 
     .Naka_PresentationRootState_ptr_2 = NAKA_ADDR(Naka_PresentationRootState),
 
-    .str_521 = "%1d",
+    .DrawFunc_Init_Entry_Str_Fmt1d = "%1d",
 
-    .str_522 = "%2d",
+    .DrawFunc_Init_Entry2_Str_Fmt2d = "%2d",
 
-    .str_523 = "%3d",
+    .DrawFunc_Init_Entry3_Str_Fmt3d = "%3d",
 
     .pad_219 = { 0 },
 
     .Naka_PresentationRootState_ptr_3 = NAKA_ADDR(Naka_PresentationRootState),
 
-    .str_524 = "%1d",
+    .DrawFunc_Init_Entry3_Str_Fmt1d = "%1d",
 
-    .str_525 = "%2d",
+    .DrawFunc_Init_Entry3_Str_Fmt2d = "%2d",
 
-    .str_526 = "%3d",
+    .DrawFunc_Init_Entry3_Str_Fmt3d_2 = "%3d",
 
     .pad_220 = { 0 },
 
     .Naka_PresentationRootState_ptr_4 = NAKA_ADDR(Naka_PresentationRootState),
 
-    .str_527 = "%1d",
+    .DrawFunc_Init_Entry3_Str_Fmt1d_2 = "%1d",
 
     .str_528 = "%2d",
 
-    .str_529 = "%3d",
+    .DrawFunc_Init_Entry4_Str_Fmt3d = "%3d",
 
-    .str_530 = "%2d",
+    .DrawFunc_Init_Entry5_Str_Fmt2d = "%2d",
 
-    .str_531 = "%3d",
+    .DrawFunc_Init_Entry5_Str_Fmt3d = "%3d",
 
-    .str_532 = "%4d",
+    .DrawFunc_Init_Entry5_Str_Fmt4d = "%4d",
 
     .pad_221 = { 0 },
 
     .Naka_PresentationRootState_ptr_5 = NAKA_ADDR(Naka_PresentationRootState),
 
-    .str_533 = "%1d",
+    .DrawFunc_Init_Entry5_Str_Fmt1d = "%1d",
 
-    .str_534 = "%2d",
+    .DrawFunc_Init_Entry5_Str_Fmt2d_2 = "%2d",
 
-    .str_535 = "%3d",
+    .DrawFunc_Init_Entry5_Str_Fmt3d_2 = "%3d",
 
     .field_2508 = 0x2000,
 
@@ -7183,7 +7183,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .DefaultFunction_str = "DefaultFunction",
 
-    .str_545 = "\"",
+    .DrawHelper_A_Setup_Str_DQuote = "\"",
 
     .ptrs_25 = {
         SELF(TrashIcon_str),

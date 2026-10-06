@@ -3473,7 +3473,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_18c10;
     uint16_t field_18c12;
     uint16_t field_18c14;
-    uint32_t ptrs_33[3];  /* 3 pointers */
+    uint32_t RVari_Select_CheckSameBank_PtrTable[3];  /* 3 pointers */
     char MemoryC_str[10];
     char MemoryB_str[10];
     char MemoryA_str[10];
@@ -13768,7 +13768,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_18c14 = 0x0888,
 
-    .ptrs_33 = {
+    .RVari_Select_CheckSameBank_PtrTable = {
         SELF(MemoryA_str),
         SELF(MemoryB_str),
         SELF(MemoryC_str),

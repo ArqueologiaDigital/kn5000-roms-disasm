@@ -1137,17 +1137,17 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t Value_Label;
     char Value_text[6];
     /* element 0 of Viewable slot 0x44: MsaModeScreen (class id 0x0162000A) */
-    naka_cls_MsaModeScreen_t v44_e0;
+    naka_cls_MsaModeScreen_t NakaWidget_ToshiView044_0_MsaModeScreen;
     /* element 1 of Viewable slot 0x44: Label (class id 0x0160002B) */
     naka_cls_Label_t MusicStyleArrangerMode_Label;
     char MusicStyleArrangerMode_text[26];
     /* element 2 of Viewable slot 0x44: Icon (class id 0x0160002D) */
-    naka_cls_Icon_t v44_e2;
+    naka_cls_Icon_t NakaWidget_ToshiView044_2_Icon;
     /* element 3 of Viewable slot 0x44: EditSw (class id 0x01600030) */
     naka_cls_EditSw_t v44_e3;
     uint8_t bytes_07c0[4];
     /* element 4 of Viewable slot 0x44: EditSw (class id 0x01600030) */
-    naka_cls_EditSw_t v44_e4;
+    naka_cls_EditSw_t NakaWidget_ToshiView044_4_EditSw;
     uint8_t bytes_07ec[4];
     /* element 5 of Viewable slot 0x44: EditSw (class id 0x01600030) */
     naka_cls_EditSw_t v44_e5;
@@ -1162,14 +1162,14 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t PanelMemory_Label;
     char PanelMemory_text[14];
     /* element 9 of Viewable slot 0x44: IvIntEasySet (class id 0x01600063) */
-    naka_cls_IvIntEasySet_t v44_e9;
+    naka_cls_IvIntEasySet_t NakaWidget_ToshiView044_9_IvIntEasySet;
     /* element 10 of Viewable slot 0x44: MsaModeScreen (class id 0x0162000A) */
-    naka_cls_MsaModeScreen_t v44_e10;
+    naka_cls_MsaModeScreen_t NakaWidget_ToshiView044_10_MsaModeScreen;
     /* element 11 of Viewable slot 0x44: Label (class id 0x0160002B) */
     naka_cls_Label_t MusicStyleArrengerMode_Label;
     char MusicStyleArrengerMode_text[26];
     /* element 12 of Viewable slot 0x44: Icon (class id 0x0160002D) */
-    naka_cls_Icon_t v44_e12;
+    naka_cls_Icon_t NakaWidget_ToshiView044_12_Icon;
     /* element 13 of Viewable slot 0x44: EditSw (class id 0x01600030) */
     naka_cls_EditSw_t v44_e13;
     uint8_t bytes_096a[4];
@@ -1207,7 +1207,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_EditSw_t PMEM1_EditSw;
     uint8_t bytes_0b70[4];
     /* element 8 of Viewable slot 0x45: EditSw (class id 0x01600030) */
-    naka_cls_EditSw_t v45_e8;
+    naka_cls_EditSw_t NakaWidget_ToshiView045_8_EditSw;
     uint8_t bytes_0b9c[4];
     /* element 9 of Viewable slot 0x45: Label (class id 0x0160002B) */
     naka_cls_Label_t Normal_Label;
@@ -1233,7 +1233,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_StringBox_t ExpandModeFilter_StringBox;
     char ExpandModeFilter_str[20];
     /* element 18 of Viewable slot 0x45: Window (class id 0x01600035) */
-    naka_cls_Window_t v45_e18;
+    naka_cls_Window_t NakaWidget_ToshiView045_18_Window;
     /* element 0 of Viewable slot 0x47 "ControlSys": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t ControlSys;
     char DisplayTimeOut_text[18];
@@ -1527,7 +1527,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_EditSw_t vD1_e11;
     uint8_t bytes_230a[4];
     /* element 12 of Viewable slot 0xD1: IvIntEasySet (class id 0x01600063) */
-    naka_cls_IvIntEasySet_t vD1_e12;
+    naka_cls_IvIntEasySet_t NakaWidget_PMVIEW_12_IvIntEasySet;
     /* element 0 of Viewable slot 0xD2 "PMNAME": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t PMNAME;
     char Naming_text_3[8];
@@ -1562,14 +1562,14 @@ typedef struct __attribute__((packed)) {
     uint8_t pad_191[2];  /* zero padding */
     char NAMING_str[8];
     /* element 1 of Viewable slot 0xD3: IvNaming (class id 0x0160004D) */
-    naka_cls_IvNaming_t vD3_e1;
+    naka_cls_IvNaming_t NakaWidget_PMBKNAME_1_IvNaming;
     /* element 2 of Viewable slot 0xD3: AcFuncEditSw (class id 0x01600020) */
-    naka_cls_AcFuncEditSw_t vD3_e2;
+    naka_cls_AcFuncEditSw_t NakaWidget_PMBKNAME_2_AcFuncEditSw;
     /* element 3 of Viewable slot 0xD3: Label (class id 0x0160002B) */
     naka_cls_Label_t PMemBank_Label;
     char PMemBank_text[12];
     /* element 4 of Viewable slot 0xD3: BkNoBox (class id 0x01620006) */
-    naka_cls_BkNoBox_t vD3_e4;
+    naka_cls_BkNoBox_t NakaWidget_PMBKNAME_4_BkNoBox;
     /* element 5 of Viewable slot 0xD3: EditSw (class id 0x01600030) */
     naka_cls_EditSw_t vD3_e5;
     uint8_t bytes_2522[4];
@@ -1604,7 +1604,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_257c;
     uint16_t field_257e;
     /* element 1 of Viewable slot 0xE8: IvIntVari (class id 0x01600062) */
-    naka_cls_IvIntVari_t vE8_e1;
+    naka_cls_IvIntVari_t NakaWidget_SVARI_1_IvIntVari;
     /* element 0 of Viewable slot 0xE9 "RVARI": RVariScreen (class id 0x01620002) */
     naka_cls_RVariScreen_t RVARI;
     /* element 1 of Viewable slot 0xE9: AcTempoBox (class id 0x01600014) */
@@ -2188,7 +2188,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
 
     .Value_text = "VALUE",
 
-    .v44_e0 = {
+    .NakaWidget_ToshiView044_0_MsaModeScreen = {
         .class_ = 0x0162000A,
         .super = NAKA_NONE,
         .sub = 1,
@@ -2222,7 +2222,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
 
     .MusicStyleArrangerMode_text = "MUSIC STYLE ARRANGER MODE",
 
-    .v44_e2 = {
+    .NakaWidget_ToshiView044_2_Icon = {
         .class_ = 0x0160002D,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2251,7 +2251,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
 
     .bytes_07c0 = { 0x7E, 0x37, 0x66, 0x00 },
 
-    .v44_e4 = {
+    .NakaWidget_ToshiView044_4_EditSw = {
         .class_ = 0x01600030,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2332,7 +2332,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
 
     .PanelMemory_text = ALIGNED_STRING("PANEL MEMORY"),
 
-    .v44_e9 = {
+    .NakaWidget_ToshiView044_9_IvIntEasySet = {
         .class_ = 0x01600063,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2343,7 +2343,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .time = 0x0001,
     },
 
-    .v44_e10 = {
+    .NakaWidget_ToshiView044_10_MsaModeScreen = {
         .class_ = 0x0162000A,
         .super = NAKA_NONE,
         .sub = 11,
@@ -2377,7 +2377,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
 
     .MusicStyleArrengerMode_text = "MUSIC STYLE ARRENGER MODE",
 
-    .v44_e12 = {
+    .NakaWidget_ToshiView044_12_Icon = {
         .class_ = 0x0160002D,
         .super = 10,
         .sub = NAKA_NONE,
@@ -2601,7 +2601,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
 
     .bytes_0b70 = { 0x7E, 0x37, 0x66, 0x00 },
 
-    .v45_e8 = {
+    .NakaWidget_ToshiView045_8_EditSw = {
         .class_ = 0x01600030,
         .super = 5,
         .sub = NAKA_NONE,
@@ -2787,7 +2787,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
 
     .ExpandModeFilter_str = ALIGNED_STRING("EXPAND MODE FILTER"),
 
-    .v45_e18 = {
+    .NakaWidget_ToshiView045_18_Window = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = NAKA_NONE,
@@ -4777,7 +4777,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
 
     .bytes_230a = { 0x7E, 0x38, 0x30, 0x00 },
 
-    .vD1_e12 = {
+    .NakaWidget_PMVIEW_12_IvIntEasySet = {
         .class_ = 0x01600063,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4929,7 +4929,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
 
     .NAMING_str = ALIGNED_STRING("NAMING"),
 
-    .vD3_e1 = {
+    .NakaWidget_PMBKNAME_1_IvNaming = {
         .class_ = 0x0160004D,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4940,7 +4940,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .func = 0x01220001,
     },
 
-    .vD3_e2 = {
+    .NakaWidget_PMBKNAME_2_AcFuncEditSw = {
         .class_ = 0x01600020,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4974,7 +4974,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
 
     .PMemBank_text = ALIGNED_STRING("P.MEM Bank"),
 
-    .vD3_e4 = {
+    .NakaWidget_PMBKNAME_4_BkNoBox = {
         .class_ = 0x01620006,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5076,7 +5076,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
 
     .field_257e = 0x0003,
 
-    .vE8_e1 = {
+    .NakaWidget_SVARI_1_IvIntVari = {
         .class_ = 0x01600062,
         .super = 0,
         .sub = NAKA_NONE,

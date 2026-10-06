@@ -1165,7 +1165,7 @@ typedef struct __attribute__((packed)) {
     char str_507[2];
     uint8_t pad_144[2];  /* zero padding */
     uint16_t field_2b52;
-    uint8_t pad_145[4];  /* zero padding */
+    uint8_t SndParamBank_OptionDefault_30[4];  /* zero padding */
     uint16_t field_2b58;
     uint16_t field_2b5a;
     uint16_t field_2b5c;
@@ -1326,10 +1326,10 @@ typedef struct __attribute__((packed)) {
     /* the first 4 words of SoundParam_EncoderMappingData (ui_widgets/extension_device_screens.s), as the generator had them */
     uint32_t SoundParam_EncoderMappingData_Head[4];
     uint16_t field_3562;
-    uint16_t field_3564;
-    uint16_t field_3566;
-    uint16_t field_3568;
-    uint16_t field_356a;
+    uint16_t FileIO_BytecodeData_Data;
+    uint16_t FileIO_BytecodeData_Data_2;
+    uint16_t FileIO_BytecodeData_Data_3;
+    uint16_t FileIO_BytecodeData_Data_4;
     uint16_t field_356c;
     uint16_t field_356e;
     uint16_t field_3570;
@@ -1340,23 +1340,23 @@ typedef struct __attribute__((packed)) {
     uint16_t field_357a;
     uint16_t field_357c;
     uint16_t field_357e;
-    uint16_t field_3580;
+    uint16_t FileIO_BytecodeData_Data_8;
     uint16_t field_3582;
     uint16_t field_3584;
     uint16_t field_3586;
     uint16_t field_3588;
-    uint16_t field_358a;
+    uint16_t FileIO_BytecodeData_Data_10;
     uint16_t field_358c;
     uint16_t field_358e;
     uint16_t field_3590;
     uint16_t field_3592;
     uint16_t field_3594;
     char str_558[2];
-    uint32_t ptrs_27[6];  /* 6 pointers */
+    uint32_t FileIO_BytecodeData_Code_Entry8_PtrTable[6];  /* 6 pointers */
     uint16_t field_35b0;
     uint16_t field_35b2;
     uint16_t field_35b4;
-    uint32_t ptrs_28[6];  /* 6 pointers */
+    uint32_t FileIO_BytecodeData_Code_Entry8_PtrTable_2[6];  /* 6 pointers */
     uint16_t field_35ce;
     uint16_t field_35d0;
     uint16_t field_35d2;
@@ -1575,7 +1575,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_37d2;
     uint16_t field_37d4;
     uint16_t field_37d6;
-    uint32_t ptrs_30[31];  /* 31 pointers */
+    uint32_t ExtDev_SndParam_DispatchComplex_PtrTable[31];  /* 31 pointers */
     uint16_t field_3854;
     uint8_t pad_234[2];  /* zero padding */
     uint16_t field_3858;
@@ -5712,7 +5712,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_2b52 = 0x0001,
 
-    .pad_145 = { 0 },
+    .SndParamBank_OptionDefault_30 = { 0 },
 
     .field_2b58 = 0x0001,
 
@@ -6339,13 +6339,13 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_3562 = 0x110E,
 
-    .field_3564 = 0x0F13,
+    .FileIO_BytecodeData_Data = 0x0F13,
 
-    .field_3566 = 0xFF14,
+    .FileIO_BytecodeData_Data_2 = 0xFF14,
 
-    .field_3568 = 0xFF07,
+    .FileIO_BytecodeData_Data_3 = 0xFF07,
 
-    .field_356a = 0x0809,
+    .FileIO_BytecodeData_Data_4 = 0x0809,
 
     .field_356c = 0x0402,
 
@@ -6367,7 +6367,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_357e = 0x0706,
 
-    .field_3580 = 0x1110,
+    .FileIO_BytecodeData_Data_8 = 0x1110,
 
     .field_3582 = 0x0100,
 
@@ -6377,7 +6377,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_3588 = 0xFF06,
 
-    .field_358a = 0xFF0F,
+    .FileIO_BytecodeData_Data_10 = 0xFF0F,
 
     .field_358c = 0x0807,
 
@@ -6391,7 +6391,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_558 = ALIGNED_STRING(""),
 
-    .ptrs_27 = {
+    .FileIO_BytecodeData_Code_Entry8_PtrTable = {
         NAKA_ADDR(ExtDev_SndParam_Block70_Var04),
         NAKA_ADDR(ExtDev_SndParam_DispatchAndWriteA8),
         NAKA_ADDR(ExtDev_SndParam_Write98_Block),
@@ -6406,7 +6406,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_35b4 = 0x90B4,
 
-    .ptrs_28 = {
+    .FileIO_BytecodeData_Code_Entry8_PtrTable_2 = {
         NAKA_ADDR(ExtDev_SndParam_Block48_Var40),
         NAKA_ADDR(ExtDev_SndParam_Block48_Var04),
         NAKA_ADDR(ExtDev_SndParam_Block48_Var02),
@@ -6874,7 +6874,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_37d6 = 0x0808,
 
-    .ptrs_30 = {
+    .ExtDev_SndParam_DispatchComplex_PtrTable = {
         SELF(field_3730),
         SELF(field_3738),
         SELF(field_3740),

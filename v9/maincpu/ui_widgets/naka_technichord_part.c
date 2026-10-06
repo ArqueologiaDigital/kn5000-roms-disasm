@@ -1615,13 +1615,13 @@ typedef struct __attribute__((packed)) {
     /* element 1 of Viewable slot 0xD "SdtecdPage": AcWindowPage (class id 0x01600025) */
     naka_cls_AcWindowPage_t SdtecdPage;
     /* element 2 of Viewable slot 0xD: IvPageControl (class id 0x01600028) */
-    naka_cls_IvPageControl_t vD_e2;
+    naka_cls_IvPageControl_t NakaWidget_Sdtecd_2_IvPageControl;
     /* element 3 of Viewable slot 0xD: IvPageControl (class id 0x01600028) */
-    naka_cls_IvPageControl_t vD_e3;
+    naka_cls_IvPageControl_t NakaWidget_Sdtecd_3_IvPageControl;
     /* element 4 of Viewable slot 0xD: IvSdtecd (class id 0x01610008) */
-    naka_cls_IvSdtecd_t vD_e4;
+    naka_cls_IvSdtecd_t NakaWidget_Sdtecd_4_IvSdtecd;
     /* element 5 of Viewable slot 0xD: IvIntEasySet (class id 0x01600063) */
-    naka_cls_IvIntEasySet_t vD_e5;
+    naka_cls_IvIntEasySet_t NakaWidget_Sdtecd_5_IvIntEasySet;
     /* element 6 of Viewable slot 0xD "Sdtecd1": Window (class id 0x01600035) */
     naka_cls_Window_t Sdtecd1;
     /* element 7 of Viewable slot 0xD: AcIndexWideES (class id 0x01600022) */
@@ -1779,7 +1779,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_2490;
     char TONE_str[6];
     /* element 9 of Viewable slot 0xEA: IvPageOverWrite (class id 0x01610010) */
-    naka_cls_IvPageOverWrite_t vEA_e9;
+    naka_cls_IvPageOverWrite_t NakaWidget_Drawbar_9_IvPageOverWrite;
     /* element 10 of Viewable slot 0xEA: IvPageOverWrite (class id 0x01610010) */
     naka_cls_IvPageOverWrite_t Drawbar_IvPageOverWrite;
     /* element 11 of Viewable slot 0xEA: IvDrawbar (class id 0x01610011) */
@@ -5080,7 +5080,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .pagemax = 0x0002,
     },
 
-    .vD_e2 = {
+    .NakaWidget_Sdtecd_2_IvPageControl = {
         .class_ = 0x01600028,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5092,7 +5092,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .window = 0x000D0006,
     },
 
-    .vD_e3 = {
+    .NakaWidget_Sdtecd_3_IvPageControl = {
         .class_ = 0x01600028,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5104,7 +5104,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .window = 0x000D0019,
     },
 
-    .vD_e4 = {
+    .NakaWidget_Sdtecd_4_IvSdtecd = {
         .class_ = 0x01610008,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5114,7 +5114,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .rect = { 64, 0, 95, 31 },
     },
 
-    .vD_e5 = {
+    .NakaWidget_Sdtecd_5_IvIntEasySet = {
         .class_ = 0x01600063,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6038,7 +6038,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .TONE_str = ALIGNED_STRING("TONE"),
 
-    .vEA_e9 = {
+    .NakaWidget_Drawbar_9_IvPageOverWrite = {
         .class_ = 0x01610010,
         .super = 0,
         .sub = NAKA_NONE,
@@ -8153,10 +8153,10 @@ const naka_technichord_part_t naka_technichord_part_data
         0x00000000,
         0x00E837A4,
         SELF(SdtecdPage),
-        SELF(vD_e2),
-        SELF(vD_e3),
-        SELF(vD_e4),
-        SELF(vD_e5),
+        SELF(NakaWidget_Sdtecd_2_IvPageControl),
+        SELF(NakaWidget_Sdtecd_3_IvPageControl),
+        SELF(NakaWidget_Sdtecd_4_IvSdtecd),
+        SELF(NakaWidget_Sdtecd_5_IvIntEasySet),
         SELF(Sdtecd1),
         SELF(Sdtecd1_AcIndexWideES),
         SELF(Sdtecd1_AcIndexEditSw),
@@ -8211,7 +8211,7 @@ const naka_technichord_part_t naka_technichord_part_data
         SELF(Percussive_Label),
         SELF(w66),
         0x00E84140,
-        SELF(vEA_e9),
+        SELF(NakaWidget_Drawbar_9_IvPageOverWrite),
         SELF(Drawbar_IvPageOverWrite),
         SELF(Drawbar_IvDrawbar),
         SELF(DrawSetting),

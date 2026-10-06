@@ -1387,7 +1387,7 @@ typedef struct __attribute__((packed)) {
     /* element 30 of Viewable slot 0xB5 "CmpMeas": PsCmpMeasBox (class id 0x01640003) */
     naka_cls_PsCmpMeasBox_t CmpMeas;
     /* element 0 of Viewable slot 0xB6: IvDirmdScreen (class id 0x0160005A) */
-    naka_cls_IvDirmdScreen_t vB6_e0;
+    naka_cls_IvDirmdScreen_t NakaWidget_SunaView0B6_0_IvDirmdScreen;
     /* element 0 of Viewable slot 0xB7 "CmpBalScreen": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t CmpBalScreen;
     char PartBalance_text[14];
@@ -4280,7 +4280,7 @@ const naka_composer_style_t naka_composer_style_data
         .align = 0x0000,
     },
 
-    .vB6_e0 = {
+    .NakaWidget_SunaView0B6_0_IvDirmdScreen = {
         .class_ = 0x0160005A,
         .super = NAKA_NONE,
         .sub = NAKA_NONE,

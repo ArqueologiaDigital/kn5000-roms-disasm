@@ -394,7 +394,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_AcTitleMenu_t CheckTitle_AcTitleMenu;
     char CheckTitle_text[12];
     /* element 4 of Viewable slot 0x0: IvExitMode (class id 0x01600048) */
-    naka_cls_IvExitMode_t v0_e4;
+    naka_cls_IvExitMode_t NakaWidget_PanelSimulator_4_IvExitMode;
     /* element 5 of Viewable slot 0x0: AcWindowMenu (class id 0x01600042) */
     naka_cls_AcWindowMenu_t DebugWindow_AcWindowMenu;
     char DebugWindow_str[14];
@@ -1257,7 +1257,7 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .CheckTitle_text = "CHECK TITLE",
 
-    .v0_e4 = {
+    .NakaWidget_PanelSimulator_4_IvExitMode = {
         .class_ = 0x01600048,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2096,7 +2096,7 @@ const naka_debug_naming_t naka_debug_naming_data
         NAKA_ADDR(Naka_FileManagerEntry),
         SELF(PanelSimulatorForHk_Label),
         SELF(CheckTitle_AcTitleMenu),
-        SELF(v0_e4),
+        SELF(NakaWidget_PanelSimulator_4_IvExitMode),
         SELF(DebugWindow_AcWindowMenu),
         SELF(ClipBoard),
         SELF(DebugWindow),

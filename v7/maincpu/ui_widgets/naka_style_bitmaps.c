@@ -633,7 +633,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_075e;
     uint16_t field_0760;
     uint32_t ptrs_3[4];  /* 4 pointers */
-    uint16_t field_0772;
+    uint16_t Softver_ShowHide_Data;
     uint32_t ptrs_4[4];  /* 4 pointers */
     uint16_t field_0784;
     uint16_t field_0786;
@@ -3473,7 +3473,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_18c10;
     uint16_t field_18c12;
     uint16_t field_18c14;
-    uint32_t ptrs_33[3];  /* 3 pointers */
+    uint32_t RVari_Select_CheckSameBank_PtrTable[3];  /* 3 pointers */
     char MemoryC_str[10];
     char MemoryB_str[10];
     char MemoryA_str[10];
@@ -4522,7 +4522,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
         0x00000000,
     },
 
-    .field_0772 = 0x0549,
+    .Softver_ShowHide_Data = 0x0549,
 
     .ptrs_4 = {
         NAKA_ADDR(VGA_Initialize),
@@ -13768,7 +13768,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_18c14 = 0x0888,
 
-    .ptrs_33 = {
+    .RVari_Select_CheckSameBank_PtrTable = {
         SELF(MemoryA_str),
         SELF(MemoryB_str),
         SELF(MemoryC_str),

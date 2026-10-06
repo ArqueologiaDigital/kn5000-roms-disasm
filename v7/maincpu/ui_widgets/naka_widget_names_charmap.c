@@ -579,7 +579,7 @@ typedef struct __attribute__((packed)) {
     char Function_name[10];
     char w99_code[2];
     char Object_name[8];
-    char m_str[2];
+    char Root_ClassCount_160[2];
     uint16_t field_0624;
     char str_13[2];
     char CHARA5W_str[8];
@@ -713,7 +713,7 @@ typedef struct __attribute__((packed)) {
     char Round1Bmp_name[12];
     char Round1Bmp_code_2[12];
     char Round1Bmp_name_2[12];
-    uint32_t ptrs_2[61];  /* 61 pointers */
+    uint32_t Root_ResEventTable_1C0[61];  /* 61 pointers */
     char EV_SWIN_MODE_str[14];
     char EV_OLD_TITLE_str[14];
     char EV_NEW_TITLE_str[14];
@@ -775,7 +775,7 @@ typedef struct __attribute__((packed)) {
     char EV_SHOW_str[8];
     char EV_NONE_str[8];
     char str_139[2];
-    uint32_t ptrs_3[189];  /* 189 pointers */
+    uint32_t Root_ResMethodTable_1E0[189];  /* 189 pointers */
     char MT_MainLoopCount_str[18];
     char MT_SetTitleFlag_str[16];
     char MT_GetInitData_str[16];
@@ -964,7 +964,7 @@ typedef struct __attribute__((packed)) {
     char MT_GetProcedureSp_str[18];
     char MT_GetParentClassSp_str[20];
     char MT_GetClassSp_str[14];
-    uint16_t field_25fc;
+    uint16_t Root_ResMethodCount_1E0;
     uint32_t ptrs_4[706];  /* 706 pointers */
     char w132_code[2];
     char DrawBitmapSP2_name[14];
@@ -2130,7 +2130,7 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .Object_name = ALIGNED_STRING("Object"),
 
-    .m_str = "m",
+    .Root_ClassCount_160 = "m",
 
     .field_0624 = 0x000A,
 
@@ -2912,7 +2912,7 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .Round1Bmp_name_2 = ALIGNED_STRING("Round1.bmp"),
 
-    .ptrs_2 = {
+    .Root_ResEventTable_1C0 = {
         SELF(EV_NONE_str),
         SELF(EV_SHOW_str),
         SELF(EV_HIDE_str),
@@ -3098,7 +3098,7 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .str_139 = "<",
 
-    .ptrs_3 = {
+    .Root_ResMethodTable_1E0 = {
         SELF(MT_GetClassSp_str),
         SELF(MT_GetParentClassSp_str),
         SELF(MT_GetProcedureSp_str),
@@ -3666,7 +3666,7 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .MT_GetClassSp_str = "MT_GetClassSp",
 
-    .field_25fc = 0x00BC,
+    .Root_ResMethodCount_1E0 = 0x00BC,
 
     .ptrs_4 = {
         NAKA_ADDR(InitializeRoot),

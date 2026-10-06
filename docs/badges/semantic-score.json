@@ -1,14 +1,14 @@
 {
  "date": "2026-10-06",
- "head": "34fa5973",
+ "head": "795c6d9e",
  "dirty": true,
  "rules": 2,
- "entry_snapshot": "docs/coverage/dispatch-census-2026-10-06-11.json",
- "entry_snapshot_head": "9e5ec270",
+ "entry_snapshot": "docs/coverage/dispatch-census-2026-10-06-12.json",
+ "entry_snapshot_head": "7ec50c90",
  "score": {
-  "kn5000": 84.22,
+  "kn5000": 84.43,
   "wsa1": 89.54,
-  "all": 84.27
+  "all": 84.48
  },
  "components": {
   "kn5000": {
@@ -18,19 +18,19 @@
     "pct": 89.91
    },
    "names": {
-    "num": 129818,
-    "den": 145746,
+    "num": 129827,
+    "den": 145755,
     "pct": 89.07
    },
    "entry": {
-    "num": 2111,
+    "num": 2114,
     "den": 2231,
-    "pct": 94.62
+    "pct": 94.76
    },
    "fields": {
-    "num": 57102,
+    "num": 57772,
     "den": 90262,
-    "pct": 63.26
+    "pct": 64.0
    }
   },
   "wsa1": {
@@ -62,26 +62,26 @@
     "pct": 90.72
    },
    "names": {
-    "num": 144129,
-    "den": 164737,
+    "num": 144138,
+    "den": 164746,
     "pct": 87.49
    },
    "entry": {
-    "num": 2862,
+    "num": 2865,
     "den": 2993,
-    "pct": 95.62
+    "pct": 95.72
    },
    "fields": {
-    "num": 57102,
+    "num": 57772,
     "den": 90262,
-    "pct": 63.26
+    "pct": 64.0
    }
   }
  },
  "images": {
   "v10": {
    "names": {
-    "semantic": 39287,
+    "semantic": 39290,
     "continuation": 8749,
     "generic": 4434,
     "positional": 751
@@ -91,13 +91,13 @@
     2097152
    ],
    "entry": [
-    678,
+    679,
     702
    ]
   },
   "v9": {
    "names": {
-    "semantic": 39287,
+    "semantic": 39290,
     "continuation": 8745,
     "generic": 4427,
     "positional": 752
@@ -107,13 +107,13 @@
     2097152
    ],
    "entry": [
-    678,
+    679,
     702
    ]
   },
   "v7": {
    "names": {
-    "semantic": 39140,
+    "semantic": 39143,
     "continuation": 8505,
     "generic": 4504,
     "positional": 835
@@ -123,7 +123,7 @@
     2097152
    ],
    "entry": [
-    629,
+    630,
     701
    ]
   },

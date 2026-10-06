@@ -196,7 +196,7 @@ typedef struct __attribute__((packed)) {
     char EV_READACTION_str[14];
     char EV_READPRESENTATION_str[20];
     char EV_ACCORDIONTAB_str[16];
-    uint16_t field_03c2;
+    uint16_t Murai_ResEventCount_1C1;
     uint32_t ptrs_1[16];  /* 16 pointers */
     char MT_GetToneMode_str[16];
     char MT_ExitPresentation_str[20];
@@ -213,7 +213,7 @@ typedef struct __attribute__((packed)) {
     char MT_CheckPart_str[14];
     char MT_GetLswDataNo_str[16];
     char MT_GetPart_str[12];
-    uint16_t field_0510;
+    uint16_t Murai_ResMethodCount_1E1;
     uint32_t ptrs_2[76];  /* 76 pointers */
     char w42_code[2];
     char IvMPverProc_name[12];
@@ -480,7 +480,7 @@ const naka_sound_menu_drawbar_t naka_sound_menu_drawbar_data
 
     .EV_ACCORDIONTAB_str = "EV_ACCORDIONTAB",
 
-    .field_03c2 = 0x000A,
+    .Murai_ResEventCount_1C1 = 0x000A,
 
     .ptrs_1 = {
         SELF(MT_GetPart_str),
@@ -531,7 +531,7 @@ const naka_sound_menu_drawbar_t naka_sound_menu_drawbar_data
 
     .MT_GetPart_str = ALIGNED_STRING("MT_GetPart"),
 
-    .field_0510 = 0x000F,
+    .Murai_ResMethodCount_1E1 = 0x000F,
 
     .ptrs_2 = {
         NAKA_ADDR(IvSdpartProc),

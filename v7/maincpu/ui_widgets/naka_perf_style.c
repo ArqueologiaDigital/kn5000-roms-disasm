@@ -1934,7 +1934,7 @@ typedef struct __attribute__((packed)) {
     char ftdemobmptop_str[14];
     char ftdemo01_str[10];
     char TT_FDMSP_str[10];
-    uint8_t pad_133[4];  /* zero padding */
+    uint8_t Naka_MainFunctionTable_14B[4];  /* zero padding */
     uint32_t ptr_5eb4;
     char str_868[2];
     uint32_t ptrs_1[6];  /* 6 pointers */
@@ -11019,7 +11019,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .TT_FDMSP_str = ALIGNED_STRING("TT_FDMSP"),
 
-    .pad_133 = { 0 },
+    .Naka_MainFunctionTable_14B = { 0 },
 
     .ptr_5eb4 = SELF(str_868),
 

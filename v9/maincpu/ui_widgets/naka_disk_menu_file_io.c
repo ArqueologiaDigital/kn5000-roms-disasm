@@ -1240,7 +1240,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1cbe;
     char str_315[2];
     /* element 94 of Viewable slot 0x61: AcIndexEditSw (class id 0x0160001F) */
-    naka_cls_AcIndexEditSw_t v61_e94;
+    naka_cls_AcIndexEditSw_t NakaWidget_DiskLoad_94_AcIndexEditSw;
     /* element 95 of Viewable slot 0x61 "SongNameSmfLdWin": Window (class id 0x01600035) */
     naka_cls_Window_t SongNameSmfLdWin;
     /* element 96 of Viewable slot 0x61: AcParaStrBox (class id 0x01650003) */
@@ -2728,8 +2728,8 @@ typedef struct __attribute__((packed)) {
     char txt_Die_Pattern_im_Composer_sind[80];
     char ThePatternsInThe_str_5[76];
     char CcEv_str[6];
-    char str_1474[4];
-    char str_1475[4];
+    char PasswordOk_Str_Query_Query[4];
+    char CheckPasswordOk_Str_Query_Query[4];
     uint32_t ptrs_18[6];  /* 6 pointers */
     char Perhatian_str[12];
     char Attention_str[12];
@@ -5687,7 +5687,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .str_315 = "(",
 
-    .v61_e94 = {
+    .NakaWidget_DiskLoad_94_AcIndexEditSw = {
         .class_ = 0x0160001F,
         .super = 75,
         .sub = NAKA_NONE,
@@ -11571,7 +11571,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         SELF(DiskLoadSMF_IvMainEditSw),
         SELF(w75),
         0x00EA3070,
-        SELF(v61_e94),
+        SELF(NakaWidget_DiskLoad_94_AcIndexEditSw),
         SELF(SongNameSmfLdWin),
         SELF(SongNameSmfLdWin_AcParaStrBox),
         SELF(SongNameSmfLdWin_AcIndexEditSw),
@@ -13894,9 +13894,9 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .CcEv_str = ALIGNED_STRING("CcEv"),
 
-    .str_1474 = ALIGNED_STRING("??"),
+    .PasswordOk_Str_Query_Query = ALIGNED_STRING("??"),
 
-    .str_1475 = ALIGNED_STRING("??"),
+    .CheckPasswordOk_Str_Query_Query = ALIGNED_STRING("??"),
 
     .ptrs_18 = {
         SELF(Attention_str_3),
