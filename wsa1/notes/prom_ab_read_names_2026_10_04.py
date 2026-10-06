@@ -2569,6 +2569,21 @@ ROWS = [
     ("FB5154", "SysExDump_StopTransportsAndSend",
      "sets bit 7 of (0x60F802), T_Transport_StopAllRunning with XDE/XHL/XIX/XIZ preserved, then SysExDump_RunSendJob;\n"
      "called from SysExCmd_DumpRequestGate.  Basis: body."),
+    # prom_a leaves: naming-screen characters, byte copy, conversion results, COMBINATION EDIT solo (2026-10-06)
+    ("FD7C83", "NameChar_AsciiToIndexClamped",
+     "*argument 2 = NameChar_AsciiToIndex[argument 1] for a code below 0x82, else 0; an index above 0x5F becomes 0 --\n"
+     "the inverse of NameChar_IndexToAsciiOrSpace; called from SoundEditNaming_LcdKeyRow2 and SoundEditNaming_SoftKeyCol1\n"
+     "/ 2 / ...  Basis: body."),
+    ("FD79DC", "Mem_CopyBytes",
+     "copies argument 3 (a byte count) bytes from argument 2 to argument 1, one at a time, preserving HL and XIX; called\n"
+     "from SoundEditNaming_LcdKeyRow2.  Basis: body."),
+    ("FD7B3E", "SoundConv_GetResults3",
+     "*argument 1 / 2 / 3 = SoundConv_Result0 / Result1 / the byte after it -- SoundConv_GetResults with a third result;\n"
+     "called from ScreenEnter_SoundEditCopy.  Basis: body (named RAM)."),
+    ("FBFC32", "CombiEdit_ToggleSolo",
+     "(0x276F) toggled between 0 and 1 and passed to T_NoteRouting_SetSoloAndRebuild, then UI_ScreenFlags bit 4; called\n"
+     "from LcdKeyRow1_CombiEditConfigure, LcdKeyRow1_CombiEditMixer and LcdKeyRow2_CombiEditMenu.  (0x276F) is cleared on\n"
+     "COMBINATION EDIT entry.  Basis: body + callers."),
 ]
 
 # labels placed where there was none -- python3 notes/prom_ab_read_names_2026_10_04.py --place
@@ -2638,7 +2653,7 @@ PLACED = [
      "repaint.  Basis: table (button code) + body."),
     ("FBCBF1", "LcdKeyRow2_CombiEditPartSelect",
      "slot 9 (LCD key row 2) of the same two tables: the same part step on the press; on the release in panel-mode group\n"
-     "0x16, sub_FBFC32.  Basis: table (button code) + body."),
+     "0x16, CombiEdit_ToggleSolo.  Basis: table (button code) + body."),
     ("FBFF19", "WriteProtectError_Dismiss",
      "slots 11 (LCD key row 4) and 15 (EXIT) of ScreenButtons_WriteProtectError: on the release, either UI_ScreenHoldPending\n"
      "= 1 (while UI_ScreenHoldState bit 0, with UI_RequestBits bit 7 cleared) or UI_Request = 1 with UI_Request_Hi bit 1.\n"

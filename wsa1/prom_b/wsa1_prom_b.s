@@ -1670,7 +1670,7 @@
 	.set	sub_FD77B3, 0xFD77B3
 	.set	sub_FD785C, 0xFD785C
 	.set	PanelEvent_ToFieldIndex, 0xFD7905
-	.set	sub_FD79DC, 0xFD79DC
+	.set	Mem_CopyBytes, 0xFD79DC
 	.set	SoundConv_SetArgs4, 0xFD7ADD
 	.set	SoundConv_GetResults, 0xFD7B00
 	.set	Var27E9_Get, 0xFD7B6B
@@ -1682,7 +1682,7 @@
 	.set	PanelDial_ActAsButton, 0xFD7C01
 	.set	ToneEdit_StepFromEvent, 0xFD7C2D
 	.set	NameChar_IndexToAsciiOrSpace, 0xFD7C5A
-	.set	sub_FD7C83, 0xFD7C83
+	.set	NameChar_AsciiToIndexClamped, 0xFD7C83
 	.set	SoundEditLfo_SoftKeyCol2, 0xFD7E1A
 	.set	SoundEditLfo_SoftKeyCol3, 0xFD7E66
 	.set	SoundEditLfo_SoftKeyCol4, 0xFD7ED9
@@ -23002,7 +23002,7 @@ sub_F0B91C_Resume:
 	ld	wa, (xiz-2)	; F0B957  ld WA,(XIZ+0xfe)
 	extz	wa	; F0B95A  extz WA
 	pushw	wa	; F0B95C  push WA
-	call	sub_FD7C83	; F0B95D  call 0xfd7c83
+	call	NameChar_AsciiToIndexClamped	; F0B95D  call 0xfd7c83
 	ld	bc, (xiz-4)	; F0B961  ld BC,(XIZ+0xfc)
 	extz	bc	; F0B964  extz BC
 	pushw	bc	; F0B966  push BC
@@ -23073,7 +23073,7 @@ SoundEditNaming_SoftKeyCol1:		; <- T_SoundEditNaming_SoftKeyCol1
 	ld	a, (xiz-4)	; F0B9EC  ld A,(XIZ+0xfc)
 	extz	wa	; F0B9EF  extz WA
 	pushw	wa	; F0B9F1  push WA
-	call	sub_FD7C83	; F0B9F2  call 0xfd7c83
+	call	NameChar_AsciiToIndexClamped	; F0B9F2  call 0xfd7c83
 	ld	bc, (xiz-6)	; F0B9F6  ld BC,(XIZ+0xfa)
 	extz	bc	; F0B9F9  extz BC
 	pushw	bc	; F0B9FB  push BC
@@ -23140,7 +23140,7 @@ SoundEditNaming_SoftKeyCol2:		; <- T_SoundEditNaming_SoftKeyCol2
 	ld	a, (xiz-6)	; F0BA73  ld A,(XIZ+0xfa)
 	extz	wa	; F0BA76  extz WA
 	pushw	wa	; F0BA78  push WA
-	call	sub_FD7C83	; F0BA79  call 0xfd7c83
+	call	NameChar_AsciiToIndexClamped	; F0BA79  call 0xfd7c83
 	ld	bc, (xiz-8)	; F0BA7D  ld BC,(XIZ+0xf8)
 	extz	bc	; F0BA80  extz BC
 	pushw	bc	; F0BA82  push BC
@@ -23267,7 +23267,7 @@ sub_F0BAA8_Skip:
 	ld	a, w	; F0BB7E  ld A,W
 	extz	wa	; F0BB80  extz WA
 	pushw	wa	; F0BB82  push WA
-	call	sub_FD7C83	; F0BB83  call 0xfd7c83
+	call	NameChar_AsciiToIndexClamped	; F0BB83  call 0xfd7c83
 	ld	bc, (xiz-6)	; F0BB87  ld BC,(XIZ+0xfa)
 	extz	bc	; F0BB8A  extz BC
 	pushw	bc	; F0BB8C  push BC
@@ -23380,7 +23380,7 @@ sub_F0BBB4_Skip:
 	ld	a, w	; F0BC62  ld A,W
 	extz	wa	; F0BC64  extz WA
 	pushw	wa	; F0BC66  push WA
-	call	sub_FD7C83	; F0BC67  call 0xfd7c83
+	call	NameChar_AsciiToIndexClamped	; F0BC67  call 0xfd7c83
 	ld	bc, (xiz-6)	; F0BC6B  ld BC,(XIZ+0xfa)
 	extz	bc	; F0BC6E  extz BC
 	pushw	bc	; F0BC70  push BC
@@ -23460,7 +23460,7 @@ sub_F0BC98_Join:
 	ld	a, (xix)	; F0BCFC  ld A,(XIX)
 	extz	wa	; F0BCFE  extz WA
 	pushw	wa	; F0BD00  push WA
-	call	sub_FD7C83	; F0BD01  call 0xfd7c83
+	call	NameChar_AsciiToIndexClamped	; F0BD01  call 0xfd7c83
 	ld	bc, (xiz-4)	; F0BD05  ld BC,(XIZ+0xfc)
 	extz	bc	; F0BD08  extz BC
 	pushw	bc	; F0BD0A  push BC
@@ -23834,7 +23834,7 @@ sub_F0BF04_Skip2:
 	push	xbc	; F0BFE8  push XBC
 	lda	xwa, (xiz-44)	; F0BFE9  lda XWA,XIZ+0xd4
 	push	xwa	; F0BFEC  push XWA
-	call	sub_FD79DC	; F0BFED  call 0xfd79dc
+	call	Mem_CopyBytes	; F0BFED  call 0xfd79dc
 	ld	(xiz-5), 0	; F0BFF1  ld (XIZ+0xfb),0x00
 	inc	8, xsp	; F0BFF5  inc 0,XSP
 	inc	2, xsp	; F0BFF7  inc 2,XSP
@@ -23865,7 +23865,7 @@ sub_F0BF04_Join5:
 	add	xbc, xiz	; F0C02D  add XBC,XIZ
 	add	xbc, 4294967252	; F0C02F  add XBC,0xffffffd4
 	push	xbc	; F0C035  push XBC
-	call	sub_FD79DC	; F0C036  call 0xfd79dc
+	call	Mem_CopyBytes	; F0C036  call 0xfd79dc
 	ld	c, h	; F0C03A  ld C,H
 	add	c, l	; F0C03C  add C,L
 	ld	(xiz-5), c	; F0C03E  ld (XIZ+0xfb),C
@@ -23902,7 +23902,7 @@ sub_F0BF04_Skip3:
 	ld	a, w	; F0C085  ld A,W
 	extz	wa	; F0C087  extz WA
 	pushw	wa	; F0C089  push WA
-	call	sub_FD7C83	; F0C08A  call 0xfd7c83
+	call	NameChar_AsciiToIndexClamped	; F0C08A  call 0xfd7c83
 	ld	bc, (xiz-8)	; F0C08E  ld BC,(XIZ+0xf8)
 	extz	bc	; F0C091  extz BC
 	pushw	bc	; F0C093  push BC

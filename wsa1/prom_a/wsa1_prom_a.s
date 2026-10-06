@@ -105984,7 +105984,7 @@ LcdKeyRow1_CombiEditPartSelect:
 	popw hl                                              ; FBCBEF  4b
 	ret                                                  ; FBCBF0  0e
 ; LcdKeyRow2_CombiEditPartSelect: slot 9 (LCD key row 2) of the same two tables: the same part step on the press; on the release in panel-mode group
-;   0x16, sub_FBFC32.  Basis: table (button code) + body.
+;   0x16, CombiEdit_ToggleSolo.  Basis: table (button code) + body.
 LcdKeyRow2_CombiEditPartSelect:
 	pushw hl                                             ; FBCBF1  2b
 	ld c, (PanelEvent_Flags:16)                                   ; FBCBF2  c1 b0 28 23
@@ -106013,7 +106013,7 @@ LcdKeyRow2_CombiEditPartSelect:
 .LFBCC31:
 	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBCC31  c1 76 20 3f 16
 	jr nz, .LFBCC3B                                      ; FBCC36  6e 03
-	calr sub_FBFC32                                          ; FBCC38  1e f7 2f
+	calr CombiEdit_ToggleSolo                                          ; FBCC38  1e f7 2f
 .LFBCC3B:
 	popw hl                                              ; FBCC3B  4b
 	ret                                                  ; FBCC3C  0e
@@ -108039,7 +108039,7 @@ LcdKeyRow1_CombiEditMixer:
 	jr nz, .LFBDE68                                      ; FBDE5C  6e 0a
 	m_cp_mi8 MB16, PanelModeGroup, 0x16                          ; FBDE5E  c1 76 20 3f 16
 	jr nz, .LFBDE68                                      ; FBDE63  6e 03
-	calr sub_FBFC32                                      ; FBDE65  1e ca 1d
+	calr CombiEdit_ToggleSolo                                      ; FBDE65  1e ca 1d
 .LFBDE68:
 	pop XIX                                              ; FBDE68  5c
 	popw hl                                              ; FBDE69  4b
@@ -110932,7 +110932,7 @@ LcdKeyRow1_CombiEditConfigure:
 	ld c, (PanelEvent_Flags:16)                                   ; FBF5FC  c1 b0 28 23
 	and C,0x01                                           ; FBF600  cb cc 01
 	jr nz, .LFBF608                                      ; FBF603  6e 03
-	calr sub_FBFC32                                      ; FBF605  1e 2a 06
+	calr CombiEdit_ToggleSolo                                      ; FBF605  1e 2a 06
 .LFBF608:
 	ret                                                  ; FBF608  0e
 ; LcdKeyRow2_CombiEditConfigure: ScreenButtons_CombiEditConfigure[9], the 23-slot button table ScreenButtonBody_CombiEditConfigure reads through T_PanelCode_ToSlotAndFlags -- the
@@ -111528,7 +111528,7 @@ LcdKeyRow2_CombiEditMenu:
 	m_set 4, MD16, UI_ScreenFlags                                ; FBFB90  f1 95 20 bc
 	jr .LFBFB99                                          ; FBFB94  68 03
 .LFBFB96:
-	calr sub_FBFC32                                      ; FBFB96  1e 99 00
+	calr CombiEdit_ToggleSolo                                      ; FBFB96  1e 99 00
 .LFBFB99:
 	ret                                                  ; FBFB99  0e
 ; LcdKeyRow3_CombiEditMenu: ScreenButtons_CombiEditMenu[10], the 23-slot button table ScreenButton_CombiEditMenu reads through T_PanelCode_ToSlotAndFlags -- the
@@ -111610,7 +111610,10 @@ ExitKey_CombiEditMenu:
 	ld (UI_Request:16), 0x01                                 ; FBFC2C  f1 70 20 00 01
 .LFBFC31:
 	ret                                                  ; FBFC31  0e
-sub_FBFC32:
+; CombiEdit_ToggleSolo: (0x276F) toggled between 0 and 1 and passed to T_NoteRouting_SetSoloAndRebuild, then UI_ScreenFlags bit 4; called
+;   from LcdKeyRow1_CombiEditConfigure, LcdKeyRow1_CombiEditMixer and LcdKeyRow2_CombiEditMenu.  (0x276F) is cleared on
+;   COMBINATION EDIT entry.  Basis: body + callers.
+CombiEdit_ToggleSolo:
 	push XIX                                             ; FBFC32  3c
 	lda xix, (0x276f:16)                                ; FBFC33  f1 6f 27 34
 	ld C,(XIX)                                           ; FBFC37  84 23
@@ -128008,7 +128011,7 @@ NameChar_IndexToAscii:
 
 ; NameChar_AsciiToIndex -- 130 bytes: ASCII code -> character-set index,
 ; the inverse of NameChar_IndexToAscii (0 for codes not in the set).
-; Read by: sub_FD7C83 at 0xFD7C9D: sub_FD7C83(code, &out): out = code < 0x82 ?
+; Read by: NameChar_AsciiToIndexClamped at 0xFD7C9D: NameChar_AsciiToIndexClamped(code, &out): out = code < 0x82 ?
 ;          this[code] : 0, then replaces a result above 0x5F with 0 (so
 ;          valid indices are 0..95).  COUNT 130 = the bound `cp (XIZ+8),0x82`.
 NameChar_AsciiToIndex:
@@ -144476,7 +144479,9 @@ PanelEvent_ToFieldIndex:
 	popw hl                                              ; FD79D8  4b
 	unlk XIZ                                             ; FD79D9  ee 0d
 	ret                                                  ; FD79DB  0e
-sub_FD79DC:
+; Mem_CopyBytes: copies argument 3 (a byte count) bytes from argument 2 to argument 1, one at a time, preserving HL and XIX; called
+;   from SoundEditNaming_LcdKeyRow2.  Basis: body.
+Mem_CopyBytes:
 	link XIZ,0x0000                                      ; FD79DC  ee 0c 00 00
 	pushw hl                                             ; FD79E0  2b
 	push XIX                                             ; FD79E1  3c
@@ -144644,7 +144649,9 @@ SoundConv_SetArgs:
 	pop XIX                                              ; FD7B3A  5c
 	unlk XIZ                                             ; FD7B3B  ee 0d
 	ret                                                  ; FD7B3D  0e
-sub_FD7B3E:
+; SoundConv_GetResults3: *argument 1 / 2 / 3 = SoundConv_Result0 / Result1 / the byte after it -- SoundConv_GetResults with a third result;
+;   called from ScreenEnter_SoundEditCopy.  Basis: body (named RAM).
+SoundConv_GetResults3:
 	link XIZ,0x0000                                      ; FD7B3E  ee 0c 00 00
 	pushw hl                                             ; FD7B42  2b
 	push XIX                                             ; FD7B43  3c
@@ -144847,7 +144854,10 @@ NameChar_IndexToAsciiOrSpace:
 .LFD7C80:
 	unlk XIZ                                             ; FD7C80  ee 0d
 	ret                                                  ; FD7C82  0e
-sub_FD7C83:
+; NameChar_AsciiToIndexClamped: *argument 2 = NameChar_AsciiToIndex[argument 1] for a code below 0x82, else 0; an index above 0x5F becomes 0 --
+;   the inverse of NameChar_IndexToAsciiOrSpace; called from SoundEditNaming_LcdKeyRow2 and SoundEditNaming_SoftKeyCol1
+;   / 2 / ...  Basis: body.
+NameChar_AsciiToIndexClamped:
 	link XIZ,0x0000                                      ; FD7C83  ee 0c 00 00
 	push XIX                                             ; FD7C87  3c
 	ld XIX,(XIZ+0x0a)                                    ; FD7C88  ae 0a 24
@@ -154776,7 +154786,7 @@ ScreenEnter_SoundEditCopy:
 	push XWA                                             ; FDD191  38
 	lda xiy, (xiz-14)                                    ; FDD192  be f2 35
 	push XIY                                             ; FDD195  3d
-	call sub_FD7B3E                                      ; FDD196  1d 3e 7b fd
+	call SoundConv_GetResults3                                      ; FDD196  1d 3e 7b fd
 	ld h, (xiz-14)                                       ; FDD19A  8e f2 26
 	ld C,H                                               ; FDD19D  ce 8b
 	sll c, 0x03                                          ; FDD19F  cb ee 03

@@ -4652,4 +4652,8 @@ RENAMES = [
     ("DisplayList_FF0BE1", "EditScreen_DrawEventVelocity_DL3"),
     ("DisplayList_FF0D2F", "NoteEdit_DrawIncNumber_DL"),
     ("DisplayList_FF0D56", "DrumEdit_DrawIncLabel_DL"),
+    ("sub_FD7C83", "NameChar_AsciiToIndexClamped"),
+    ("sub_FD79DC", "Mem_CopyBytes"),
+    ("sub_FD7B3E", "SoundConv_GetResults3"),
+    ("sub_FBFC32", "CombiEdit_ToggleSolo"),
 ]
