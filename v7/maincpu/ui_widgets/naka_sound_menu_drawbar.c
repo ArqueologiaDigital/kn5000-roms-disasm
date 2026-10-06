@@ -48,6 +48,12 @@ extern const char PsLabelBoxProc;
 extern const char PsMixerControlProc;
 extern const char PsVariBoxProc;
 extern const char VwUserBitmapSpProc;
+extern const char ClassProps_AcDrawSetting;
+extern const char ClassProps_AcDrawbarName;
+extern const char ClassProps_AcFdemoScreen;
+extern const char ClassProps_AcPleaseWait;
+extern const char ClassProps_AcSndEMenu;
+extern const char ClassProps_IvMPver;
 
 #define BASE  0x00E80FE2u
 
@@ -288,17 +294,17 @@ const naka_sound_menu_drawbar_t naka_sound_menu_drawbar_data
 
     .classdef_161_31_propdata = SELF(AcFdemoScreen_code),
 
-    .classdef_161_31_propname = 0x00E80CAA,
+    .classdef_161_31_propname = NAKA_ADDR(ClassProps_AcFdemoScreen),
 
-    .classdef_161_32 = { .proc = NAKA_ADDR(AcSndEMenuProc), .parent = 0x01600040, .allsize = 54, .selfsize = 0, .name = SELF(AcSndEMenu_name), .propdata = SELF(AcSndEMenu_code), .propname = 0x00E80CB0 },
+    .classdef_161_32 = { .proc = NAKA_ADDR(AcSndEMenuProc), .parent = 0x01600040, .allsize = 54, .selfsize = 0, .name = SELF(AcSndEMenu_name), .propdata = SELF(AcSndEMenu_code), .propname = NAKA_ADDR(ClassProps_AcSndEMenu) },
 
-    .classdef_161_33 = { .proc = NAKA_ADDR(AcPleaseWaitProc), .parent = 0x01600012, .allsize = 36, .selfsize = 0, .name = SELF(AcPleaseWait_name), .propdata = SELF(AcPleaseWait_code), .propname = 0x00E80CB6 },
+    .classdef_161_33 = { .proc = NAKA_ADDR(AcPleaseWaitProc), .parent = 0x01600012, .allsize = 36, .selfsize = 0, .name = SELF(AcPleaseWait_name), .propdata = SELF(AcPleaseWait_code), .propname = NAKA_ADDR(ClassProps_AcPleaseWait) },
 
-    .classdef_161_34 = { .proc = NAKA_ADDR(AcDrawSettingProc), .parent = 0x01600026, .allsize = 44, .selfsize = 4, .name = SELF(AcDrawSetting_name), .propdata = SELF(AcDrawSetting_code), .propname = 0x00E80CBC },
+    .classdef_161_34 = { .proc = NAKA_ADDR(AcDrawSettingProc), .parent = 0x01600026, .allsize = 44, .selfsize = 4, .name = SELF(AcDrawSetting_name), .propdata = SELF(AcDrawSetting_code), .propname = NAKA_ADDR(ClassProps_AcDrawSetting) },
 
-    .classdef_161_35 = { .proc = NAKA_ADDR(AcDrawbarNameProc), .parent = 0x01600012, .allsize = 40, .selfsize = 4, .name = SELF(AcDrawbarName_name), .propdata = SELF(AcDrawbarName_code), .propname = 0x00E80CD4 },
+    .classdef_161_35 = { .proc = NAKA_ADDR(AcDrawbarNameProc), .parent = 0x01600012, .allsize = 40, .selfsize = 4, .name = SELF(AcDrawbarName_name), .propdata = SELF(AcDrawbarName_code), .propname = NAKA_ADDR(ClassProps_AcDrawbarName) },
 
-    .classdef_161_36 = { .proc = NAKA_ADDR(IvMPverProc), .parent = 0x01600027, .allsize = 22, .selfsize = 0, .name = 0x00E81088, .propdata = 0x00E81086, .propname = 0x00E80CF0 },
+    .classdef_161_36 = { .proc = NAKA_ADDR(IvMPverProc), .parent = 0x01600027, .allsize = 22, .selfsize = 0, .name = 0x00E81088, .propdata = 0x00E81086, .propname = NAKA_ADDR(ClassProps_IvMPver) },
 
     .classrun_161_x008C = 0x00000000,
 

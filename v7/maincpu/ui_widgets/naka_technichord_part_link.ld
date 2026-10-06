@@ -57,3 +57,6 @@ SeqByteBlock_TechnichordCfgA = 0x00F500D6;
 SeqByteBlock_TechnichordCfgB = 0x00F500E9;
 WidgetCharMap_DataEntry1 = 0x00EB00D8;
 WidgetName_PtrBlock_H = 0x00EB00B8;
+NakaWidget_Demofeature = 0x00E83D88;
+NakaWidget_Drawbar_8_Label = 0x00E84140;
+NakaWidget_Sdtecd = 0x00E837A4;

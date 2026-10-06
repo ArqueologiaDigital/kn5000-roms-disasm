@@ -30,3 +30,4 @@ WidgetName_PtrBlock_G = 0x00EB00A4;
 WidgetName_PtrBlock_I1 = 0x00EB00C4;
 WidgetName_PtrBlock_I2 = 0x00EB00C6;
 WidgetName_PtrBlock_K = 0x00EB00DB;
+NakaWidget_Perf3RhythmSel_StrOff = 0x00E24066;

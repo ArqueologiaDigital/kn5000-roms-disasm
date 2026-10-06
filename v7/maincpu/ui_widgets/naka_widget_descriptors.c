@@ -121,6 +121,11 @@ extern const char TtVocalistWorkstation;
 extern const char VocalistGridCheck;
 extern const char VocalistPage1OKFunc;
 extern const char VocalistPage2OKFunc;
+extern const char AttAreYouSureCheck_Strings;
+extern const char CmpStepTitle_Method3Nop;
+extern const char CmpStepTitle_OnHide;
+extern const char CmpStepTitle_OnPaint;
+extern const char CmpStepTitle_OnSwitchIn;
 
 #define BASE  0x00E30E60u
 
@@ -5254,7 +5259,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
         SELF(AttAreYouSureCheck_Strings[80]),
         SELF(AttAreYouSureCheck_Strings[98]),
         SELF(AttAreYouSureCheck_Strings[114]),
-        0x00E33824,
+        NAKA_ADDR(AttAreYouSureCheck_Strings),
         SELF(AttAreYouSureCheck_Strings[130]),
     },
 
@@ -5263,7 +5268,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
         SELF(AttAreYouSureCheck_Strings[20]),
         SELF(AttAreYouSureCheck_Strings[30]),
         SELF(AttAreYouSureCheck_Strings[42]),
-        0x00E33824,
+        NAKA_ADDR(AttAreYouSureCheck_Strings),
         SELF(AttAreYouSureCheck_Strings[54]),
     },
 
@@ -5272,7 +5277,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
         SELF(StsSeqMenu1Check_Strings[32]),
         SELF(StsSeqMenu1Check_Strings),
         SELF(StsSeqMenu1Check_Strings),
-        0x00E33824,
+        NAKA_ADDR(AttAreYouSureCheck_Strings),
         SELF(StsSeqMenu1Check_Strings),
     },
 
@@ -5281,7 +5286,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
         SELF(StsSeqMenu2Check_Strings[30]),
         SELF(StsSeqMenu2Check_Strings),
         SELF(StsSeqMenu2Check_Strings),
-        0x00E33824,
+        NAKA_ADDR(AttAreYouSureCheck_Strings),
         SELF(StsSeqMenu2Check_Strings),
     },
 
@@ -5290,7 +5295,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
         SELF(StsEasyRec1Check_Strings[130]),
         SELF(StsEasyRec1Check_Strings),
         SELF(StsEasyRec1Check_Strings),
-        0x00E33824,
+        NAKA_ADDR(AttAreYouSureCheck_Strings),
         SELF(StsEasyRec1Check_Strings),
     },
 
@@ -5299,7 +5304,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
         SELF(StsEasyRec2Check_Strings[22]),
         SELF(StsEasyRec2Check_Strings),
         SELF(StsEasyRec2Check_Strings),
-        0x00E33824,
+        NAKA_ADDR(AttAreYouSureCheck_Strings),
         SELF(StsEasyRec2Check_Strings),
     },
 
@@ -5308,7 +5313,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
         SELF(StsPnlWrtCheck_Strings[194]),
         SELF(StsPnlWrtCheck_Strings),
         SELF(StsPnlWrtCheck_Strings),
-        0x00E33824,
+        NAKA_ADDR(AttAreYouSureCheck_Strings),
         SELF(StsPnlWrtCheck_Strings),
     },
 
@@ -5317,7 +5322,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
         SELF(StsTrkClr1Check_Strings[96]),
         SELF(StsTrkClr1Check_Strings),
         SELF(StsTrkClr1Check_Strings),
-        0x00E33824,
+        NAKA_ADDR(AttAreYouSureCheck_Strings),
         SELF(StsTrkClr1Check_Strings),
     },
 
@@ -5326,7 +5331,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
         SELF(StsTrkClr2Check_Strings[34]),
         SELF(StsTrkClr2Check_Strings),
         SELF(StsTrkClr2Check_Strings),
-        0x00E33824,
+        NAKA_ADDR(AttAreYouSureCheck_Strings),
         SELF(StsTrkClr2Check_Strings),
     },
 
@@ -5335,7 +5340,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
         SELF(StsNtDrEditCheck_Strings[92]),
         SELF(StsNtDrEditCheck_Strings),
         SELF(StsNtDrEditCheck_Strings),
-        0x00E33824,
+        NAKA_ADDR(AttAreYouSureCheck_Strings),
         SELF(StsNtDrEditCheck_Strings),
     },
 
@@ -5344,7 +5349,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
         SELF(AttTrkClrCheck_Strings[78]),
         SELF(AttTrkClrCheck_Strings[138]),
         SELF(AttTrkClrCheck_Strings[238]),
-        0x00E33824,
+        NAKA_ADDR(AttAreYouSureCheck_Strings),
         SELF(AttTrkClrCheck_Strings[310]),
     },
 
@@ -5353,7 +5358,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
         SELF(AttSongClrCheck_Strings[70]),
         SELF(AttSongClrCheck_Strings[130]),
         SELF(AttSongClrCheck_Strings[218]),
-        0x00E33824,
+        NAKA_ADDR(AttAreYouSureCheck_Strings),
         SELF(AttSongClrCheck_Strings[280]),
     },
 
@@ -5362,7 +5367,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
         SELF(StsAtPunchCheck_Strings[38]),
         SELF(StsAtPunchCheck_Strings),
         SELF(StsAtPunchCheck_Strings),
-        0x00E33824,
+        NAKA_ADDR(AttAreYouSureCheck_Strings),
         SELF(StsAtPunchCheck_Strings),
     },
 
@@ -13923,10 +13928,10 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
     },
 
     .CmpStepTitleFunc_ProcTable = {
-        0x00F6A2FF,
-        0x00F6A32C,
-        0x00F6A339,
-        0x00F6A346,
+        NAKA_ADDR(CmpStepTitle_OnPaint),
+        NAKA_ADDR(CmpStepTitle_OnHide),
+        NAKA_ADDR(CmpStepTitle_OnSwitchIn),
+        NAKA_ADDR(CmpStepTitle_Method3Nop),
     },
 
     .AccBankData_SlotOrder = {

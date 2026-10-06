@@ -87,6 +87,10 @@ extern const char TitleProc;
 extern const char UserBitmapCheck;
 extern const char ViewableProc;
 extern const char VwBoxProc;
+extern const char SeGfx_BoundOp08_ColorBlit;
+extern const char SeGfx_BoundOp09_FormatNumber;
+extern const char SeGfx_BoundOp0A_FormatNumber;
+extern const char SeGfx_BoundOp0B_FormatNumber;
 
 #define BASE  0x00EA8CACu
 
@@ -2890,7 +2894,7 @@ const naka_disk_warning_t naka_disk_warning_data
     .GraphicsRender_Start_PtrTable = {
         NAKA_ADDR(DrawFunc_Init), NAKA_ADDR(GraphicsRender_RetStub), NAKA_ADDR(DrawText_ExtendedLayout), NAKA_ADDR(ColorBlit_WithPaletteSave),
         NAKA_ADDR(ColorBlit_Variant_ByteData), NAKA_ADDR(DrawFunc_Init_Variant1), NAKA_ADDR(SeGfx_BoundOp06_Helper), NAKA_ADDR(DrawText_ExtLayout_Variant1),
-        0x00FB25A3, 0x00FB22A3, 0x00FB2438, 0x00FB2346,
+        NAKA_ADDR(SeGfx_BoundOp08_ColorBlit), NAKA_ADDR(SeGfx_BoundOp09_FormatNumber), NAKA_ADDR(SeGfx_BoundOp0A_FormatNumber), NAKA_ADDR(SeGfx_BoundOp0B_FormatNumber),
     },
 
     .SeGfx_TextClipBoxes = {

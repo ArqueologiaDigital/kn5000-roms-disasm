@@ -21,3 +21,4 @@ SeqByteBlock_EffectsSeqData = 0x00F5008B;
 SeqByteBlock_EffectsSeqDotExt = 0x00F500B5;
 WidgetCharMap_DataEntry1 = 0x00EB00D8;
 WidgetCharMap_DataEntry2 = 0x00EB013F;
+NakaWidget_MdPresetUserWriteList = 0x00E57D62;

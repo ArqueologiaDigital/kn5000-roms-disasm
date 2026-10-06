@@ -31,6 +31,7 @@ extern const char WidgetName_PtrBlock_G;
 extern const char WidgetName_PtrBlock_I1;
 extern const char WidgetName_PtrBlock_I2;
 extern const char WidgetName_PtrBlock_K;
+extern const char NakaWidget_Perf3RhythmSel_StrOff;
 
 #define BASE  0x00E2107Cu
 
@@ -6589,7 +6590,7 @@ const naka_direct_play_t naka_direct_play_data
 
     .pad_482 = { 0 },
 
-    .ptr_2fd2 = 0x00E24066,
+    .ptr_2fd2 = NAKA_ADDR(NakaWidget_Perf3RhythmSel_StrOff),
 
     .NakaWidget_Perf3RhythmSel_StrOn_ptr = NAKA_ADDR(NakaWidget_Perf3RhythmSel_StrOn),
 

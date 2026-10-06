@@ -84,6 +84,84 @@ extern const char VwMenuBoxProc;
 extern const char VwUserBitmapByNameProc;
 extern const char VwUserBitmapProc;
 extern const char WindowProc;
+extern const char NakaClass_AcBitEditBox_PropNames;
+extern const char NakaClass_AcFuncEditSw_PropNames;
+extern const char NakaClass_AcFuncToggle_PropNames;
+extern const char NakaClass_AcFuncWideES_PropNames;
+extern const char NakaClass_AcGridBox_PropNames;
+extern const char NakaClass_AcIndexEditSw_PropNames;
+extern const char NakaClass_AcIndexToggle_PropNames;
+extern const char NakaClass_AcIndexWideES_PropNames;
+extern const char NakaClass_AcLanguageText_PropNames;
+extern const char NakaClass_AcListBox_PropNames;
+extern const char NakaClass_AcMixerVol_PropNames;
+extern const char NakaClass_AcModeMenu_PropNames;
+extern const char NakaClass_AcNamingWindow_PropNames;
+extern const char NakaClass_AcPmemName_PropNames;
+extern const char NakaClass_AcRamBox_PropNames;
+extern const char NakaClass_AcRhythmName_PropNames;
+extern const char NakaClass_AcScreenMenu_PropNames;
+extern const char NakaClass_AcSoundName_PropNames;
+extern const char NakaClass_AcStrRadioBox_PropNames;
+extern const char NakaClass_AcTrackSwitch_PropNames;
+extern const char NakaClass_AcWindowMenu_PropNames;
+extern const char NakaClass_AcWindowPage_PropNames;
+extern const char NakaClass_Bitmap_PropNames;
+extern const char NakaClass_Box_PropNames;
+extern const char NakaClass_DbDebugMenu_PropNames;
+extern const char NakaClass_DbMemo_PropNames;
+extern const char NakaClass_DbMemoryDump_PropNames;
+extern const char NakaClass_EditSw_PropNames;
+extern const char NakaClass_Frame_PropNames;
+extern const char NakaClass_GroupBox_PropNames;
+extern const char NakaClass_Icon_PropNames;
+extern const char NakaClass_IvCatchEvent_PropNames;
+extern const char NakaClass_IvDirmdScreen_PropNames;
+extern const char NakaClass_IvExitMode_PropNames;
+extern const char NakaClass_IvExitScreen_PropNames;
+extern const char NakaClass_IvExitWindow_PropNames;
+extern const char NakaClass_IvExit_PropNames;
+extern const char NakaClass_IvFixWin_PropNames;
+extern const char NakaClass_IvIntComplete_PropNames;
+extern const char NakaClass_IvIntEasySet_PropNames;
+extern const char NakaClass_IvIntError_PropNames;
+extern const char NakaClass_IvIntReminder_PropNames;
+extern const char NakaClass_IvIntVari_PropNames;
+extern const char NakaClass_IvIntWelcome_PropNames;
+extern const char NakaClass_IvInterrupt_PropNames;
+extern const char NakaClass_IvMainEditSw_PropNames;
+extern const char NakaClass_IvNaming_PropNames;
+extern const char NakaClass_IvPageControl_PropNames;
+extern const char NakaClass_IvScreen_PropNames;
+extern const char NakaClass_IvShowHide_PropNames;
+extern const char NakaClass_IvTrackSwitch_PropNames;
+extern const char NakaClass_Label_PropNames;
+extern const char NakaClass_Line_PropNames;
+extern const char NakaClass_ModeEdit_PropNames;
+extern const char NakaClass_PsCursorBox_PropNames;
+extern const char NakaClass_PsGridBox_PropNames;
+extern const char NakaClass_PsInvisibleBox_PropNames;
+extern const char NakaClass_PsListBox_PropNames;
+extern const char NakaClass_PsPageBox_PropNames;
+extern const char NakaClass_PsRadioBox_PropNames;
+extern const char NakaClass_PsTextBox_PropNames;
+extern const char NakaClass_PsToggleBox_PropNames;
+extern const char NakaClass_PsTrackSwitch_PropNames;
+extern const char NakaClass_PsWideESBox_PropNames;
+extern const char NakaClass_PsWideToggle_PropNames;
+extern const char NakaClass_Screen_PropNames;
+extern const char NakaClass_StringBox_PropNames;
+extern const char NakaClass_TextBox_PropNames;
+extern const char NakaClass_TitleEdit_PropNames;
+extern const char NakaClass_TrChordBox_PropNames;
+extern const char NakaClass_TrTransposeBox_PropNames;
+extern const char NakaClass_TtlScreen_PropNames;
+extern const char NakaClass_VwEditSwBox_PropNames;
+extern const char NakaClass_VwMenuBox_PropNames;
+extern const char NakaClass_VwUserBitmapByName_PropNames;
+extern const char NakaClass_VwUserBitmap_PropNames;
+extern const char NakaClass_VwWideESBox_PropNames;
+extern const char NakaClass_Window_PropNames;
 
 #define BASE  0x00EACCDAu
 
@@ -297,161 +375,161 @@ const naka_block_012_t naka_block_012_data
 
     .classdef_160_31_propdata = 0x00EAD8C4,
 
-    .classdef_160_31_propname = 0x00EAC296,
+    .classdef_160_31_propname = NAKA_ADDR(NakaClass_AcIndexEditSw_PropNames),
 
-    .classdef_160_32 = { .proc = NAKA_ADDR(AcFuncEditSwProc), .parent = 0x0160001E, .allsize = 44, .selfsize = 6, .name = 0x00EAD8B6, .propdata = 0x00EAD8B2, .propname = 0x00EAC2A6 },
+    .classdef_160_32 = { .proc = NAKA_ADDR(AcFuncEditSwProc), .parent = 0x0160001E, .allsize = 44, .selfsize = 6, .name = 0x00EAD8B6, .propdata = 0x00EAD8B2, .propname = NAKA_ADDR(NakaClass_AcFuncEditSw_PropNames) },
 
-    .classdef_160_33 = { .proc = NAKA_ADDR(PsWideESBoxProc), .parent = 0x0160001E, .allsize = 40, .selfsize = 2, .name = 0x00EAD8A6, .propdata = 0x00EAD8A4, .propname = 0x00EAC2C0 },
+    .classdef_160_33 = { .proc = NAKA_ADDR(PsWideESBoxProc), .parent = 0x0160001E, .allsize = 40, .selfsize = 2, .name = 0x00EAD8A6, .propdata = 0x00EAD8A4, .propname = NAKA_ADDR(NakaClass_PsWideESBox_PropNames) },
 
-    .classdef_160_34 = { .proc = NAKA_ADDR(AcIndexEditSwProc), .parent = 0x01600021, .allsize = 42, .selfsize = 2, .name = 0x00EAD896, .propdata = 0x00EAD894, .propname = 0x00EAC2D2 },
+    .classdef_160_34 = { .proc = NAKA_ADDR(AcIndexEditSwProc), .parent = 0x01600021, .allsize = 42, .selfsize = 2, .name = 0x00EAD896, .propdata = 0x00EAD894, .propname = NAKA_ADDR(NakaClass_AcIndexWideES_PropNames) },
 
-    .classdef_160_35 = { .proc = NAKA_ADDR(AcFuncEditSwProc), .parent = 0x01600021, .allsize = 46, .selfsize = 6, .name = 0x00EAD886, .propdata = 0x00EAD882, .propname = 0x00EAC2E2 },
+    .classdef_160_35 = { .proc = NAKA_ADDR(AcFuncEditSwProc), .parent = 0x01600021, .allsize = 46, .selfsize = 6, .name = 0x00EAD886, .propdata = 0x00EAD882, .propname = NAKA_ADDR(NakaClass_AcFuncWideES_PropNames) },
 
-    .classdef_160_36 = { .proc = NAKA_ADDR(PsPageBoxProc), .parent = 0x01600011, .allsize = 32, .selfsize = 4, .name = 0x00EAD878, .propdata = 0x00EAD876, .propname = 0x00EAC2FC },
+    .classdef_160_36 = { .proc = NAKA_ADDR(PsPageBoxProc), .parent = 0x01600011, .allsize = 32, .selfsize = 4, .name = 0x00EAD878, .propdata = 0x00EAD876, .propname = NAKA_ADDR(NakaClass_PsPageBox_PropNames) },
 
-    .classdef_160_37 = { .proc = NAKA_ADDR(AcWindowPageProc), .parent = 0x01600024, .allsize = 36, .selfsize = 4, .name = 0x00EAD868, .propdata = 0x00EAD864, .propname = 0x00EAC30C },
+    .classdef_160_37 = { .proc = NAKA_ADDR(AcWindowPageProc), .parent = 0x01600024, .allsize = 36, .selfsize = 4, .name = 0x00EAD868, .propdata = 0x00EAD864, .propname = NAKA_ADDR(NakaClass_AcWindowPage_PropNames) },
 
-    .classdef_160_38 = { .proc = NAKA_ADDR(PsToggleBoxProc), .parent = 0x01600010, .allsize = 40, .selfsize = 18, .name = 0x00EAD858, .propdata = 0x00EAD852, .propname = 0x00EAC32A },
+    .classdef_160_38 = { .proc = NAKA_ADDR(PsToggleBoxProc), .parent = 0x01600010, .allsize = 40, .selfsize = 18, .name = 0x00EAD858, .propdata = 0x00EAD852, .propname = NAKA_ADDR(NakaClass_PsToggleBox_PropNames) },
 
-    .classdef_160_39 = { .proc = NAKA_ADDR(PsInvisibleBoxProc), .parent = 0x01600010, .allsize = 22, .selfsize = 0, .name = 0x00EAD842, .propdata = 0x00EAD840, .propname = 0x00EAC366 },
+    .classdef_160_39 = { .proc = NAKA_ADDR(PsInvisibleBoxProc), .parent = 0x01600010, .allsize = 22, .selfsize = 0, .name = 0x00EAD842, .propdata = 0x00EAD840, .propname = NAKA_ADDR(NakaClass_PsInvisibleBox_PropNames) },
 
-    .classdef_160_40 = { .proc = NAKA_ADDR(IvPageControlProc), .parent = 0x01600027, .allsize = 28, .selfsize = 6, .name = 0x00EAD832, .propdata = 0x00EAD82E, .propname = 0x00EAC36C },
+    .classdef_160_40 = { .proc = NAKA_ADDR(IvPageControlProc), .parent = 0x01600027, .allsize = 28, .selfsize = 6, .name = 0x00EAD832, .propdata = 0x00EAD82E, .propname = NAKA_ADDR(NakaClass_IvPageControl_PropNames) },
 
-    .classdef_160_41 = { .proc = NAKA_ADDR(IvMainEditSwProc), .parent = 0x01600027, .allsize = 26, .selfsize = 4, .name = 0x00EAD820, .propdata = 0x00EAD81E, .propname = 0x00EAC388 },
+    .classdef_160_41 = { .proc = NAKA_ADDR(IvMainEditSwProc), .parent = 0x01600027, .allsize = 26, .selfsize = 4, .name = 0x00EAD820, .propdata = 0x00EAD81E, .propname = NAKA_ADDR(NakaClass_IvMainEditSw_PropNames) },
 
-    .classdef_160_42 = { .proc = NAKA_ADDR(AcSoundNameProc), .parent = 0x01600012, .allsize = 38, .selfsize = 2, .name = 0x00EAD812, .propdata = 0x00EAD810, .propname = 0x00EAC398 },
+    .classdef_160_42 = { .proc = NAKA_ADDR(AcSoundNameProc), .parent = 0x01600012, .allsize = 38, .selfsize = 2, .name = 0x00EAD812, .propdata = 0x00EAD810, .propname = NAKA_ADDR(NakaClass_AcSoundName_PropNames) },
 
-    .classdef_160_43 = { .proc = NAKA_ADDR(LabelProc), .parent = 0x01600010, .allsize = 32, .selfsize = 10, .name = 0x00EAD80A, .propdata = 0x00EAD806, .propname = 0x00EAC3A8 },
+    .classdef_160_43 = { .proc = NAKA_ADDR(LabelProc), .parent = 0x01600010, .allsize = 32, .selfsize = 10, .name = 0x00EAD80A, .propdata = 0x00EAD806, .propname = NAKA_ADDR(NakaClass_Label_PropNames) },
 
-    .classdef_160_44 = { .proc = NAKA_ADDR(BitmapProc), .parent = 0x01600010, .allsize = 26, .selfsize = 4, .name = 0x00EAD7FE, .propdata = 0x00EAD7FC, .propname = 0x00EAC3CE },
+    .classdef_160_44 = { .proc = NAKA_ADDR(BitmapProc), .parent = 0x01600010, .allsize = 26, .selfsize = 4, .name = 0x00EAD7FE, .propdata = 0x00EAD7FC, .propname = NAKA_ADDR(NakaClass_Bitmap_PropNames) },
 
-    .classdef_160_45 = { .proc = NAKA_ADDR(IconProc), .parent = 0x01600010, .allsize = 26, .selfsize = 4, .name = 0x00EAD7F6, .propdata = 0x00EAD7F4, .propname = 0x00EAC3DC },
+    .classdef_160_45 = { .proc = NAKA_ADDR(IconProc), .parent = 0x01600010, .allsize = 26, .selfsize = 4, .name = 0x00EAD7F6, .propdata = 0x00EAD7F4, .propname = NAKA_ADDR(NakaClass_Icon_PropNames) },
 
-    .classdef_160_46 = { .proc = NAKA_ADDR(LineProc), .parent = 0x01600010, .allsize = 26, .selfsize = 4, .name = 0x00EAD7EE, .propdata = 0x00EAD7EA, .propname = 0x00EAC3EC },
+    .classdef_160_46 = { .proc = NAKA_ADDR(LineProc), .parent = 0x01600010, .allsize = 26, .selfsize = 4, .name = 0x00EAD7EE, .propdata = 0x00EAD7EA, .propname = NAKA_ADDR(NakaClass_Line_PropNames) },
 
-    .classdef_160_47 = { .proc = NAKA_ADDR(FrameProc), .parent = 0x01600010, .allsize = 28, .selfsize = 6, .name = 0x00EAD7E4, .propdata = 0x00EAD7E0, .propname = 0x00EAC40A },
+    .classdef_160_47 = { .proc = NAKA_ADDR(FrameProc), .parent = 0x01600010, .allsize = 28, .selfsize = 6, .name = 0x00EAD7E4, .propdata = 0x00EAD7E0, .propname = NAKA_ADDR(NakaClass_Frame_PropNames) },
 
-    .classdef_160_48 = { .proc = NAKA_ADDR(EditSwProc), .parent = 0x0160002B, .allsize = 40, .selfsize = 8, .name = 0x00EAD7D8, .propdata = 0x00EAD7D4, .propname = 0x00EAC42E },
+    .classdef_160_48 = { .proc = NAKA_ADDR(EditSwProc), .parent = 0x0160002B, .allsize = 40, .selfsize = 8, .name = 0x00EAD7D8, .propdata = 0x00EAD7D4, .propname = NAKA_ADDR(NakaClass_EditSw_PropNames) },
 
-    .classdef_160_49 = { .proc = NAKA_ADDR(BoxProc), .parent = 0x01600010, .allsize = 26, .selfsize = 4, .name = 0x00EAD7D0, .propdata = 0x00EAD7CC, .propname = 0x00EAC454 },
+    .classdef_160_49 = { .proc = NAKA_ADDR(BoxProc), .parent = 0x01600010, .allsize = 26, .selfsize = 4, .name = 0x00EAD7D0, .propdata = 0x00EAD7CC, .propname = NAKA_ADDR(NakaClass_Box_PropNames) },
 
-    .classdef_160_50 = { .proc = NAKA_ADDR(GroupBoxProc), .parent = 0x01600031, .allsize = 26, .selfsize = 0, .name = 0x00EAD7C2, .propdata = 0x00EAD7C0, .propname = 0x00EAC470 },
+    .classdef_160_50 = { .proc = NAKA_ADDR(GroupBoxProc), .parent = 0x01600031, .allsize = 26, .selfsize = 0, .name = 0x00EAD7C2, .propdata = 0x00EAD7C0, .propname = NAKA_ADDR(NakaClass_GroupBox_PropNames) },
 
-    .classdef_160_51 = { .proc = NAKA_ADDR(ScreenProc), .parent = 0x01600032, .allsize = 34, .selfsize = 8, .name = 0x00EAD7B8, .propdata = 0x00EAD7B4, .propname = 0x00EAC476 },
+    .classdef_160_51 = { .proc = NAKA_ADDR(ScreenProc), .parent = 0x01600032, .allsize = 34, .selfsize = 8, .name = 0x00EAD7B8, .propdata = 0x00EAD7B4, .propname = NAKA_ADDR(NakaClass_Screen_PropNames) },
 
-    .classdef_160_52 = { .proc = NAKA_ADDR(TtlScreenProc), .parent = 0x01600033, .allsize = 42, .selfsize = 8, .name = 0x00EAD7AA, .propdata = 0x00EAD7A6, .propname = 0x00EAC492 },
+    .classdef_160_52 = { .proc = NAKA_ADDR(TtlScreenProc), .parent = 0x01600033, .allsize = 42, .selfsize = 8, .name = 0x00EAD7AA, .propdata = 0x00EAD7A6, .propname = NAKA_ADDR(NakaClass_TtlScreen_PropNames) },
 
-    .classdef_160_53 = { .proc = NAKA_ADDR(WindowProc), .parent = 0x01600032, .allsize = 36, .selfsize = 10, .name = 0x00EAD79E, .propdata = 0x00EAD79A, .propname = 0x00EAC4AC },
+    .classdef_160_53 = { .proc = NAKA_ADDR(WindowProc), .parent = 0x01600032, .allsize = 36, .selfsize = 10, .name = 0x00EAD79E, .propdata = 0x00EAD79A, .propname = NAKA_ADDR(NakaClass_Window_PropNames) },
 
-    .classdef_160_54 = { .proc = NAKA_ADDR(TextBoxProc), .parent = 0x01600031, .allsize = 40, .selfsize = 14, .name = 0x00EAD792, .propdata = 0x00EAD78C, .propname = 0x00EAC4D2 },
+    .classdef_160_54 = { .proc = NAKA_ADDR(TextBoxProc), .parent = 0x01600031, .allsize = 40, .selfsize = 14, .name = 0x00EAD792, .propdata = 0x00EAD78C, .propname = NAKA_ADDR(NakaClass_TextBox_PropNames) },
 
-    .classdef_160_55 = { .proc = NAKA_ADDR(StringBoxProc), .parent = 0x01600031, .allsize = 38, .selfsize = 12, .name = 0x00EAD782, .propdata = 0x00EAD77C, .propname = 0x00EAC512 },
+    .classdef_160_55 = { .proc = NAKA_ADDR(StringBoxProc), .parent = 0x01600031, .allsize = 38, .selfsize = 12, .name = 0x00EAD782, .propdata = 0x00EAD77C, .propname = NAKA_ADDR(NakaClass_StringBox_PropNames) },
 
-    .classdef_160_56 = { .proc = NAKA_ADDR(ModeEditProc), .parent = 0x01600031, .allsize = 44, .selfsize = 18, .name = 0x00EAD772, .propdata = 0x00EAD76C, .propname = 0x00EAC546 },
+    .classdef_160_56 = { .proc = NAKA_ADDR(ModeEditProc), .parent = 0x01600031, .allsize = 44, .selfsize = 18, .name = 0x00EAD772, .propdata = 0x00EAD76C, .propname = NAKA_ADDR(NakaClass_ModeEdit_PropNames) },
 
-    .classdef_160_57 = { .proc = NAKA_ADDR(TitleEditProc), .parent = 0x01600031, .allsize = 44, .selfsize = 18, .name = 0x00EAD762, .propdata = 0x00EAD75C, .propname = 0x00EAC57E },
+    .classdef_160_57 = { .proc = NAKA_ADDR(TitleEditProc), .parent = 0x01600031, .allsize = 44, .selfsize = 18, .name = 0x00EAD762, .propdata = 0x00EAD75C, .propname = NAKA_ADDR(NakaClass_TitleEdit_PropNames) },
 
-    .classdef_160_58 = { .proc = NAKA_ADDR(AcRhythmNameProc), .parent = 0x01600012, .allsize = 36, .selfsize = 0, .name = 0x00EAD74E, .propdata = 0x00EAD74C, .propname = 0x00EAC5B4 },
+    .classdef_160_58 = { .proc = NAKA_ADDR(AcRhythmNameProc), .parent = 0x01600012, .allsize = 36, .selfsize = 0, .name = 0x00EAD74E, .propdata = 0x00EAD74C, .propname = NAKA_ADDR(NakaClass_AcRhythmName_PropNames) },
 
-    .classdef_160_59 = { .proc = NAKA_ADDR(AcPmemNameProc), .parent = 0x01600012, .allsize = 36, .selfsize = 0, .name = 0x00EAD740, .propdata = 0x00EAD73E, .propname = 0x00EAC5BA },
+    .classdef_160_59 = { .proc = NAKA_ADDR(AcPmemNameProc), .parent = 0x01600012, .allsize = 36, .selfsize = 0, .name = 0x00EAD740, .propdata = 0x00EAD73E, .propname = NAKA_ADDR(NakaClass_AcPmemName_PropNames) },
 
-    .classdef_160_60 = { .proc = NAKA_ADDR(AcMixerVolProc), .parent = 0x01600011, .allsize = 32, .selfsize = 4, .name = 0x00EAD732, .propdata = 0x00EAD72E, .propname = 0x00EAC5C0 },
+    .classdef_160_60 = { .proc = NAKA_ADDR(AcMixerVolProc), .parent = 0x01600011, .allsize = 32, .selfsize = 4, .name = 0x00EAD732, .propdata = 0x00EAD72E, .propname = NAKA_ADDR(NakaClass_AcMixerVol_PropNames) },
 
-    .classdef_160_61 = { .proc = NAKA_ADDR(VwMenuBoxProc), .parent = 0x0160001C, .allsize = 50, .selfsize = 8, .name = 0x00EAD724, .propdata = 0x00EAD720, .propname = 0x00EAC5DC },
+    .classdef_160_61 = { .proc = NAKA_ADDR(VwMenuBoxProc), .parent = 0x0160001C, .allsize = 50, .selfsize = 8, .name = 0x00EAD724, .propdata = 0x00EAD720, .propname = NAKA_ADDR(NakaClass_VwMenuBox_PropNames) },
 
-    .classdef_160_62 = { .proc = NAKA_ADDR(VwEditSwBoxProc), .parent = 0x0160001E, .allsize = 44, .selfsize = 6, .name = 0x00EAD714, .propdata = 0x00EAD710, .propname = 0x00EAC5F4 },
+    .classdef_160_62 = { .proc = NAKA_ADDR(VwEditSwBoxProc), .parent = 0x0160001E, .allsize = 44, .selfsize = 6, .name = 0x00EAD714, .propdata = 0x00EAD710, .propname = NAKA_ADDR(NakaClass_VwEditSwBox_PropNames) },
 
-    .classdef_160_63 = { .proc = NAKA_ADDR(VwEditSwBoxProc), .parent = 0x01600021, .allsize = 46, .selfsize = 6, .name = 0x00EAD704, .propdata = 0x00EAD700, .propname = 0x00EAC60C },
+    .classdef_160_63 = { .proc = NAKA_ADDR(VwEditSwBoxProc), .parent = 0x01600021, .allsize = 46, .selfsize = 6, .name = 0x00EAD704, .propdata = 0x00EAD700, .propname = NAKA_ADDR(NakaClass_VwWideESBox_PropNames) },
 
-    .classdef_160_64 = { .proc = NAKA_ADDR(AcTitleMenuProc), .parent = 0x0160001C, .allsize = 54, .selfsize = 12, .name = 0x00EAD6F4, .propdata = 0x00EAD6F0, .propname = 0x00EAC624 },
+    .classdef_160_64 = { .proc = NAKA_ADDR(AcTitleMenuProc), .parent = 0x0160001C, .allsize = 54, .selfsize = 12, .name = 0x00EAD6F4, .propdata = 0x00EAD6F0, .propname = NAKA_ADDR(NakaClass_AcModeMenu_PropNames) },
 
-    .classdef_160_65 = { .proc = NAKA_ADDR(AcTitleMenuProc), .parent = 0x0160001C, .allsize = 54, .selfsize = 12, .name = 0x00EAD6E2, .propdata = 0x00EAD6DE, .propname = 0x00EAC646 },
+    .classdef_160_65 = { .proc = NAKA_ADDR(AcTitleMenuProc), .parent = 0x0160001C, .allsize = 54, .selfsize = 12, .name = 0x00EAD6E2, .propdata = 0x00EAD6DE, .propname = NAKA_ADDR(NakaClass_AcScreenMenu_PropNames) },
 
-    .classdef_160_66 = { .proc = NAKA_ADDR(AcTitleMenuProc), .parent = 0x0160001C, .allsize = 54, .selfsize = 12, .name = 0x00EAD6D0, .propdata = 0x00EAD6CC, .propname = 0x00EAC66A },
+    .classdef_160_66 = { .proc = NAKA_ADDR(AcTitleMenuProc), .parent = 0x0160001C, .allsize = 54, .selfsize = 12, .name = 0x00EAD6D0, .propdata = 0x00EAD6CC, .propname = NAKA_ADDR(NakaClass_AcWindowMenu_PropNames) },
 
-    .classdef_160_67 = { .proc = NAKA_ADDR(AcBitEditBoxProc), .parent = 0x01600015, .allsize = 58, .selfsize = 8, .name = 0x00EAD6BE, .propdata = 0x00EAD6BA, .propname = 0x00EAC68E },
+    .classdef_160_67 = { .proc = NAKA_ADDR(AcBitEditBoxProc), .parent = 0x01600015, .allsize = 58, .selfsize = 8, .name = 0x00EAD6BE, .propdata = 0x00EAD6BA, .propname = NAKA_ADDR(NakaClass_AcBitEditBox_PropNames) },
 
-    .classdef_160_68 = { .proc = NAKA_ADDR(AcFuncToggleProc), .parent = 0x01600026, .allsize = 44, .selfsize = 4, .name = 0x00EAD6AC, .propdata = 0x00EAD6AA, .propname = 0x00EAC6A8 },
+    .classdef_160_68 = { .proc = NAKA_ADDR(AcFuncToggleProc), .parent = 0x01600026, .allsize = 44, .selfsize = 4, .name = 0x00EAD6AC, .propdata = 0x00EAD6AA, .propname = NAKA_ADDR(NakaClass_AcFuncToggle_PropNames) },
 
-    .classdef_160_69 = { .proc = NAKA_ADDR(PsWideToggleProc), .parent = 0x01600026, .allsize = 42, .selfsize = 2, .name = 0x00EAD69C, .propdata = 0x00EAD69A, .propname = 0x00EAC6B8 },
+    .classdef_160_69 = { .proc = NAKA_ADDR(PsWideToggleProc), .parent = 0x01600026, .allsize = 42, .selfsize = 2, .name = 0x00EAD69C, .propdata = 0x00EAD69A, .propname = NAKA_ADDR(NakaClass_PsWideToggle_PropNames) },
 
-    .classdef_160_70 = { .proc = NAKA_ADDR(DbMemoProc), .parent = 0x01600010, .allsize = 22, .selfsize = 0, .name = 0x00EAD692, .propdata = 0x00EAD690, .propname = 0x00EAC6CA },
+    .classdef_160_70 = { .proc = NAKA_ADDR(DbMemoProc), .parent = 0x01600010, .allsize = 22, .selfsize = 0, .name = 0x00EAD692, .propdata = 0x00EAD690, .propname = NAKA_ADDR(NakaClass_DbMemo_PropNames) },
 
-    .classdef_160_71 = { .proc = NAKA_ADDR(IvExitProc), .parent = 0x01600027, .allsize = 22, .selfsize = 0, .name = 0x00EAD688, .propdata = 0x00EAD686, .propname = 0x00EAC6D0 },
+    .classdef_160_71 = { .proc = NAKA_ADDR(IvExitProc), .parent = 0x01600027, .allsize = 22, .selfsize = 0, .name = 0x00EAD688, .propdata = 0x00EAD686, .propname = NAKA_ADDR(NakaClass_IvExit_PropNames) },
 
-    .classdef_160_72 = { .proc = NAKA_ADDR(IvExitModeProc), .parent = 0x01600047, .allsize = 26, .selfsize = 4, .name = 0x00EAD67A, .propdata = 0x00EAD678, .propname = 0x00EAC6D6 },
+    .classdef_160_72 = { .proc = NAKA_ADDR(IvExitModeProc), .parent = 0x01600047, .allsize = 26, .selfsize = 4, .name = 0x00EAD67A, .propdata = 0x00EAD678, .propname = NAKA_ADDR(NakaClass_IvExitMode_PropNames) },
 
-    .classdef_160_73 = { .proc = NAKA_ADDR(IvExitScreenProc), .parent = 0x01600047, .allsize = 26, .selfsize = 4, .name = 0x00EAD66A, .propdata = 0x00EAD668, .propname = 0x00EAC6E6 },
+    .classdef_160_73 = { .proc = NAKA_ADDR(IvExitScreenProc), .parent = 0x01600047, .allsize = 26, .selfsize = 4, .name = 0x00EAD66A, .propdata = 0x00EAD668, .propname = NAKA_ADDR(NakaClass_IvExitScreen_PropNames) },
 
-    .classdef_160_74 = { .proc = NAKA_ADDR(IvFixWinProc), .parent = 0x01600027, .allsize = 26, .selfsize = 4, .name = 0x00EAD65E, .propdata = 0x00EAD65C, .propname = 0x00EAC6F8 },
+    .classdef_160_74 = { .proc = NAKA_ADDR(IvFixWinProc), .parent = 0x01600027, .allsize = 26, .selfsize = 4, .name = 0x00EAD65E, .propdata = 0x00EAD65C, .propname = NAKA_ADDR(NakaClass_IvFixWin_PropNames) },
 
-    .classdef_160_75 = { .proc = NAKA_ADDR(AcNamingWindowProc), .parent = 0x01600035, .allsize = 36, .selfsize = 0, .name = 0x00EAD64C, .propdata = 0x00EAD64A, .propname = 0x00EAC70A },
+    .classdef_160_75 = { .proc = NAKA_ADDR(AcNamingWindowProc), .parent = 0x01600035, .allsize = 36, .selfsize = 0, .name = 0x00EAD64C, .propdata = 0x00EAD64A, .propname = NAKA_ADDR(NakaClass_AcNamingWindow_PropNames) },
 
-    .classdef_160_76 = { .proc = NAKA_ADDR(PsCursorBoxProc), .parent = 0x01600012, .allsize = 40, .selfsize = 4, .name = 0x00EAD63E, .propdata = 0x00EAD63C, .propname = 0x00EAC710 },
+    .classdef_160_76 = { .proc = NAKA_ADDR(PsCursorBoxProc), .parent = 0x01600012, .allsize = 40, .selfsize = 4, .name = 0x00EAD63E, .propdata = 0x00EAD63C, .propname = NAKA_ADDR(NakaClass_PsCursorBox_PropNames) },
 
-    .classdef_160_77 = { .proc = NAKA_ADDR(IvNamingProc), .parent = 0x01600027, .allsize = 26, .selfsize = 4, .name = 0x00EAD632, .propdata = 0x00EAD630, .propname = 0x00EAC722 },
+    .classdef_160_77 = { .proc = NAKA_ADDR(IvNamingProc), .parent = 0x01600027, .allsize = 26, .selfsize = 4, .name = 0x00EAD632, .propdata = 0x00EAD630, .propname = NAKA_ADDR(NakaClass_IvNaming_PropNames) },
 
-    .classdef_160_78 = { .proc = NAKA_ADDR(AcIndexToggleProc), .parent = 0x01600026, .allsize = 44, .selfsize = 4, .name = 0x00EAD622, .propdata = 0x00EAD61E, .propname = 0x00EAC732 },
+    .classdef_160_78 = { .proc = NAKA_ADDR(AcIndexToggleProc), .parent = 0x01600026, .allsize = 44, .selfsize = 4, .name = 0x00EAD622, .propdata = 0x00EAD61E, .propname = NAKA_ADDR(NakaClass_AcIndexToggle_PropNames) },
 
-    .classdef_160_79 = { .proc = NAKA_ADDR(AcRamBoxProc), .parent = 0x01600012, .allsize = 44, .selfsize = 8, .name = 0x00EAD614, .propdata = 0x00EAD610, .propname = 0x00EAC74A },
+    .classdef_160_79 = { .proc = NAKA_ADDR(AcRamBoxProc), .parent = 0x01600012, .allsize = 44, .selfsize = 8, .name = 0x00EAD614, .propdata = 0x00EAD610, .propname = NAKA_ADDR(NakaClass_AcRamBox_PropNames) },
 
-    .classdef_160_80 = { .proc = NAKA_ADDR(PsRadioBoxProc), .parent = 0x01600011, .allsize = 44, .selfsize = 16, .name = 0x00EAD604, .propdata = 0x00EAD5FC, .propname = 0x00EAC764 },
+    .classdef_160_80 = { .proc = NAKA_ADDR(PsRadioBoxProc), .parent = 0x01600011, .allsize = 44, .selfsize = 16, .name = 0x00EAD604, .propdata = 0x00EAD5FC, .propname = NAKA_ADDR(NakaClass_PsRadioBox_PropNames) },
 
-    .classdef_160_81 = { .proc = NAKA_ADDR(AcStrRadioBoxProc), .parent = 0x01600050, .allsize = 48, .selfsize = 4, .name = 0x00EAD5EE, .propdata = 0x00EAD5EC, .propname = 0x00EAC7AE },
+    .classdef_160_81 = { .proc = NAKA_ADDR(AcStrRadioBoxProc), .parent = 0x01600050, .allsize = 48, .selfsize = 4, .name = 0x00EAD5EE, .propdata = 0x00EAD5EC, .propname = NAKA_ADDR(NakaClass_AcStrRadioBox_PropNames) },
 
-    .classdef_160_82 = { .proc = NAKA_ADDR(IvCatchEventProc), .parent = 0x01600027, .allsize = 26, .selfsize = 4, .name = 0x00EAD5DE, .propdata = 0x00EAD5DC, .propname = 0x00EAC7BC },
+    .classdef_160_82 = { .proc = NAKA_ADDR(IvCatchEventProc), .parent = 0x01600027, .allsize = 26, .selfsize = 4, .name = 0x00EAD5DE, .propdata = 0x00EAD5DC, .propname = NAKA_ADDR(NakaClass_IvCatchEvent_PropNames) },
 
-    .classdef_160_83 = { .proc = NAKA_ADDR(PsListBoxProc), .parent = 0x01600011, .allsize = 42, .selfsize = 14, .name = 0x00EAD5D2, .propdata = 0x00EAD5CC, .propname = 0x00EAC7CC },
+    .classdef_160_83 = { .proc = NAKA_ADDR(PsListBoxProc), .parent = 0x01600011, .allsize = 42, .selfsize = 14, .name = 0x00EAD5D2, .propdata = 0x00EAD5CC, .propname = NAKA_ADDR(NakaClass_PsListBox_PropNames) },
 
-    .classdef_160_84 = { .proc = NAKA_ADDR(PsGridBoxProc), .parent = 0x01600011, .allsize = 62, .selfsize = 34, .name = 0x00EAD5C2, .propdata = 0x00EAD5B6, .propname = 0x00EAC80A },
+    .classdef_160_84 = { .proc = NAKA_ADDR(PsGridBoxProc), .parent = 0x01600011, .allsize = 62, .selfsize = 34, .name = 0x00EAD5C2, .propdata = 0x00EAD5B6, .propname = NAKA_ADDR(NakaClass_PsGridBox_PropNames) },
 
-    .classdef_160_85 = { .proc = NAKA_ADDR(AcListBoxProc), .parent = 0x01600053, .allsize = 48, .selfsize = 6, .name = 0x00EAD5AC, .propdata = 0x00EAD5A8, .propname = 0x00EAC886 },
+    .classdef_160_85 = { .proc = NAKA_ADDR(AcListBoxProc), .parent = 0x01600053, .allsize = 48, .selfsize = 6, .name = 0x00EAD5AC, .propdata = 0x00EAD5A8, .propname = NAKA_ADDR(NakaClass_AcListBox_PropNames) },
 
-    .classdef_160_86 = { .proc = NAKA_ADDR(AcGridBoxProc), .parent = 0x01600054, .allsize = 74, .selfsize = 12, .name = 0x00EAD59E, .propdata = 0x00EAD59A, .propname = 0x00EAC8A0 },
+    .classdef_160_86 = { .proc = NAKA_ADDR(AcGridBoxProc), .parent = 0x01600054, .allsize = 74, .selfsize = 12, .name = 0x00EAD59E, .propdata = 0x00EAD59A, .propname = NAKA_ADDR(NakaClass_AcGridBox_PropNames) },
 
-    .classdef_160_87 = { .proc = NAKA_ADDR(DbDebugMenuProc), .parent = 0x0160001C, .allsize = 46, .selfsize = 4, .name = 0x00EAD58E, .propdata = 0x00EAD58C, .propname = 0x00EAC8CC },
+    .classdef_160_87 = { .proc = NAKA_ADDR(DbDebugMenuProc), .parent = 0x0160001C, .allsize = 46, .selfsize = 4, .name = 0x00EAD58E, .propdata = 0x00EAD58C, .propname = NAKA_ADDR(NakaClass_DbDebugMenu_PropNames) },
 
-    .classdef_160_88 = { .proc = NAKA_ADDR(PsTrackSwitchProc), .parent = 0x01600010, .allsize = 36, .selfsize = 14, .name = 0x00EAD57E, .propdata = 0x00EAD578, .propname = 0x00EAC8DC },
+    .classdef_160_88 = { .proc = NAKA_ADDR(PsTrackSwitchProc), .parent = 0x01600010, .allsize = 36, .selfsize = 14, .name = 0x00EAD57E, .propdata = 0x00EAD578, .propname = NAKA_ADDR(NakaClass_PsTrackSwitch_PropNames) },
 
-    .classdef_160_89 = { .proc = NAKA_ADDR(AcTrackSwitchProc), .parent = 0x01600058, .allsize = 36, .selfsize = 0, .name = 0x00EAD56A, .propdata = 0x00EAD568, .propname = 0x00EAC90C },
+    .classdef_160_89 = { .proc = NAKA_ADDR(AcTrackSwitchProc), .parent = 0x01600058, .allsize = 36, .selfsize = 0, .name = 0x00EAD56A, .propdata = 0x00EAD568, .propname = NAKA_ADDR(NakaClass_AcTrackSwitch_PropNames) },
 
-    .classdef_160_90 = { .proc = NAKA_ADDR(IvDirmdScreenProc), .parent = 0x01600033, .allsize = 34, .selfsize = 0, .name = 0x00EAD55A, .propdata = 0x00EAD558, .propname = 0x00EAC912 },
+    .classdef_160_90 = { .proc = NAKA_ADDR(IvDirmdScreenProc), .parent = 0x01600033, .allsize = 34, .selfsize = 0, .name = 0x00EAD55A, .propdata = 0x00EAD558, .propname = NAKA_ADDR(NakaClass_IvDirmdScreen_PropNames) },
 
-    .classdef_160_91 = { .proc = NAKA_ADDR(IvTrackSwitchProc), .parent = 0x01600027, .allsize = 22, .selfsize = 0, .name = 0x00EAD54A, .propdata = 0x00EAD548, .propname = 0x00EAC918 },
+    .classdef_160_91 = { .proc = NAKA_ADDR(IvTrackSwitchProc), .parent = 0x01600027, .allsize = 22, .selfsize = 0, .name = 0x00EAD54A, .propdata = 0x00EAD548, .propname = NAKA_ADDR(NakaClass_IvTrackSwitch_PropNames) },
 
-    .classdef_160_92 = { .proc = NAKA_ADDR(IvExitWindowProc), .parent = 0x01600047, .allsize = 22, .selfsize = 0, .name = 0x00EAD53A, .propdata = 0x00EAD538, .propname = 0x00EAC91E },
+    .classdef_160_92 = { .proc = NAKA_ADDR(IvExitWindowProc), .parent = 0x01600047, .allsize = 22, .selfsize = 0, .name = 0x00EAD53A, .propdata = 0x00EAD538, .propname = NAKA_ADDR(NakaClass_IvExitWindow_PropNames) },
 
-    .classdef_160_93 = { .proc = NAKA_ADDR(DbMemoryDumpProc), .parent = 0x01600010, .allsize = 26, .selfsize = 4, .name = 0x00EAD52A, .propdata = 0x00EAD528, .propname = 0x00EAC924 },
+    .classdef_160_93 = { .proc = NAKA_ADDR(DbMemoryDumpProc), .parent = 0x01600010, .allsize = 26, .selfsize = 4, .name = 0x00EAD52A, .propdata = 0x00EAD528, .propname = NAKA_ADDR(NakaClass_DbMemoryDump_PropNames) },
 
-    .classdef_160_94 = { .proc = NAKA_ADDR(IvInterruptProc), .parent = 0x01600027, .allsize = 24, .selfsize = 2, .name = 0x00EAD51C, .propdata = 0x00EAD51A, .propname = 0x00EAC932 },
+    .classdef_160_94 = { .proc = NAKA_ADDR(IvInterruptProc), .parent = 0x01600027, .allsize = 24, .selfsize = 2, .name = 0x00EAD51C, .propdata = 0x00EAD51A, .propname = NAKA_ADDR(NakaClass_IvInterrupt_PropNames) },
 
-    .classdef_160_95 = { .proc = NAKA_ADDR(IvIntReminderProc), .parent = 0x0160005E, .allsize = 24, .selfsize = 0, .name = 0x00EAD50C, .propdata = 0x00EAD50A, .propname = 0x00EAC942 },
+    .classdef_160_95 = { .proc = NAKA_ADDR(IvIntReminderProc), .parent = 0x0160005E, .allsize = 24, .selfsize = 0, .name = 0x00EAD50C, .propdata = 0x00EAD50A, .propname = NAKA_ADDR(NakaClass_IvIntReminder_PropNames) },
 
-    .classdef_160_96 = { .proc = NAKA_ADDR(IvIntErrorProc), .parent = 0x0160005E, .allsize = 24, .selfsize = 0, .name = 0x00EAD4FE, .propdata = 0x00EAD4FC, .propname = 0x00EAC948 },
+    .classdef_160_96 = { .proc = NAKA_ADDR(IvIntErrorProc), .parent = 0x0160005E, .allsize = 24, .selfsize = 0, .name = 0x00EAD4FE, .propdata = 0x00EAD4FC, .propname = NAKA_ADDR(NakaClass_IvIntError_PropNames) },
 
-    .classdef_160_97 = { .proc = NAKA_ADDR(IvIntCompleteProc), .parent = 0x0160005E, .allsize = 24, .selfsize = 0, .name = 0x00EAD4EE, .propdata = 0x00EAD4EC, .propname = 0x00EAC94E },
+    .classdef_160_97 = { .proc = NAKA_ADDR(IvIntCompleteProc), .parent = 0x0160005E, .allsize = 24, .selfsize = 0, .name = 0x00EAD4EE, .propdata = 0x00EAD4EC, .propname = NAKA_ADDR(NakaClass_IvIntComplete_PropNames) },
 
-    .classdef_160_98 = { .proc = NAKA_ADDR(IvIntVariProc), .parent = 0x0160005E, .allsize = 24, .selfsize = 0, .name = 0x00EAD4E2, .propdata = 0x00EAD4E0, .propname = 0x00EAC954 },
+    .classdef_160_98 = { .proc = NAKA_ADDR(IvIntVariProc), .parent = 0x0160005E, .allsize = 24, .selfsize = 0, .name = 0x00EAD4E2, .propdata = 0x00EAD4E0, .propname = NAKA_ADDR(NakaClass_IvIntVari_PropNames) },
 
-    .classdef_160_99 = { .proc = NAKA_ADDR(IvIntEasySetProc), .parent = 0x0160005E, .allsize = 24, .selfsize = 0, .name = 0x00EAD4D2, .propdata = 0x00EAD4D0, .propname = 0x00EAC95A },
+    .classdef_160_99 = { .proc = NAKA_ADDR(IvIntEasySetProc), .parent = 0x0160005E, .allsize = 24, .selfsize = 0, .name = 0x00EAD4D2, .propdata = 0x00EAD4D0, .propname = NAKA_ADDR(NakaClass_IvIntEasySet_PropNames) },
 
-    .classdef_160_100 = { .proc = NAKA_ADDR(IvShowHideProc), .parent = 0x01600027, .allsize = 26, .selfsize = 4, .name = 0x00EAD4C4, .propdata = 0x00EAD4C2, .propname = 0x00EAC960 },
+    .classdef_160_100 = { .proc = NAKA_ADDR(IvShowHideProc), .parent = 0x01600027, .allsize = 26, .selfsize = 4, .name = 0x00EAD4C4, .propdata = 0x00EAD4C2, .propname = NAKA_ADDR(NakaClass_IvShowHide_PropNames) },
 
-    .classdef_160_101 = { .proc = NAKA_ADDR(PsTextBoxProc), .parent = 0x01600011, .allsize = 38, .selfsize = 10, .name = 0x00EAD4B8, .propdata = 0x00EAD4B2, .propname = 0x00EAC970 },
+    .classdef_160_101 = { .proc = NAKA_ADDR(PsTextBoxProc), .parent = 0x01600011, .allsize = 38, .selfsize = 10, .name = 0x00EAD4B8, .propdata = 0x00EAD4B2, .propname = NAKA_ADDR(NakaClass_PsTextBox_PropNames) },
 
-    .classdef_160_102 = { .proc = NAKA_ADDR(AcLanguageTextProc), .parent = 0x01600065, .allsize = 42, .selfsize = 4, .name = 0x00EAD4A2, .propdata = 0x00EAD4A0, .propname = 0x00EAC9A6 },
+    .classdef_160_102 = { .proc = NAKA_ADDR(AcLanguageTextProc), .parent = 0x01600065, .allsize = 42, .selfsize = 4, .name = 0x00EAD4A2, .propdata = 0x00EAD4A0, .propname = NAKA_ADDR(NakaClass_AcLanguageText_PropNames) },
 
-    .classdef_160_103 = { .proc = NAKA_ADDR(TrTransposeBoxProc), .parent = 0x01600012, .allsize = 36, .selfsize = 0, .name = 0x00EAD490, .propdata = 0x00EAD48E, .propname = 0x00EAC9B6 },
+    .classdef_160_103 = { .proc = NAKA_ADDR(TrTransposeBoxProc), .parent = 0x01600012, .allsize = 36, .selfsize = 0, .name = 0x00EAD490, .propdata = 0x00EAD48E, .propname = NAKA_ADDR(NakaClass_TrTransposeBox_PropNames) },
 
-    .classdef_160_104 = { .proc = NAKA_ADDR(TrChordBoxProc), .parent = 0x01600012, .allsize = 36, .selfsize = 0, .name = 0x00EAD482, .propdata = 0x00EAD480, .propname = 0x00EAC9BC },
+    .classdef_160_104 = { .proc = NAKA_ADDR(TrChordBoxProc), .parent = 0x01600012, .allsize = 36, .selfsize = 0, .name = 0x00EAD482, .propdata = 0x00EAD480, .propname = NAKA_ADDR(NakaClass_TrChordBox_PropNames) },
 
-    .classdef_160_105 = { .proc = NAKA_ADDR(VwUserBitmapProc), .parent = 0x01600010, .allsize = 26, .selfsize = 4, .name = 0x00EAD472, .propdata = NAKA_ADDR(NakaData_WidgetNames), .propname = 0x00EAC9C2 },
+    .classdef_160_105 = { .proc = NAKA_ADDR(VwUserBitmapProc), .parent = 0x01600010, .allsize = 26, .selfsize = 4, .name = 0x00EAD472, .propdata = NAKA_ADDR(NakaData_WidgetNames), .propname = NAKA_ADDR(NakaClass_VwUserBitmap_PropNames) },
 
-    .classdef_160_106 = { .proc = NAKA_ADDR(IvScreenProc), .parent = 0x01600033, .allsize = 34, .selfsize = 0, .name = SELF(IvScreen_name), .propdata = SELF(IvScreen_code), .propname = 0x00EAC9D2 },
+    .classdef_160_106 = { .proc = NAKA_ADDR(IvScreenProc), .parent = 0x01600033, .allsize = 34, .selfsize = 0, .name = SELF(IvScreen_name), .propdata = SELF(IvScreen_code), .propname = NAKA_ADDR(NakaClass_IvScreen_PropNames) },
 
-    .classdef_160_107 = { .proc = NAKA_ADDR(IvIntWelcomeProc), .parent = 0x0160005E, .allsize = 24, .selfsize = 0, .name = SELF(IvIntWelcome_name), .propdata = SELF(IvIntWelcome_code), .propname = 0x00EAC9D8 },
+    .classdef_160_107 = { .proc = NAKA_ADDR(IvIntWelcomeProc), .parent = 0x0160005E, .allsize = 24, .selfsize = 0, .name = SELF(IvIntWelcome_name), .propdata = SELF(IvIntWelcome_code), .propname = NAKA_ADDR(NakaClass_IvIntWelcome_PropNames) },
 
-    .classdef_160_108 = { .proc = NAKA_ADDR(VwUserBitmapByNameProc), .parent = 0x01600010, .allsize = 26, .selfsize = 4, .name = SELF(VwUserBitmapByName_name), .propdata = SELF(VwUserBitmapByName_code), .propname = 0x00EAC9DE },
+    .classdef_160_108 = { .proc = NAKA_ADDR(VwUserBitmapByNameProc), .parent = 0x01600010, .allsize = 26, .selfsize = 4, .name = SELF(VwUserBitmapByName_name), .propdata = SELF(VwUserBitmapByName_code), .propname = NAKA_ADDR(NakaClass_VwUserBitmapByName_PropNames) },
 
     .classrun_160_x074C = 0x00000000,
 

@@ -261,3 +261,5 @@ NakaWidget_NamingCursorBox = 0x00EB2E4A;
 NakaWidget_TrAsFileList = 0x00E22C0E;
 SeqStep_TimerDispatch_ProcTables_Tail = 0x00E45014;
 NakaWidget_DiskMenu_1_AcTitleMenu = 0x00EA14E8;
+SeMenu_CompareAndApply_Data6 = 0x00F0FBFF;
+SendPartDataBlock_Data5 = 0x00FF00FF;

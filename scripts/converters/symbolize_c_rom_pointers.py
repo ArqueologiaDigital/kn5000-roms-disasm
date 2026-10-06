@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""symbolize_c_rom_pointers.py -- numeric ROM pointers in the compiled-C blobs -> NAKA_ADDR(Label) (v10, v9).
+"""symbolize_c_rom_pointers.py -- numeric ROM pointers in the compiled-C blobs -> NAKA_ADDR(Label) (v10, v9, v7).
 
 QUESTION IT ANSWERS
   The C sources of the main-CPU blobs (v10/maincpu/**/naka_*.c and friends) still hold many 32-bit initializer
@@ -16,11 +16,16 @@ QUESTION IT ANSWERS
   - A value with no label stays a number and is counted.
   - The DrawString colour pairs (0x00FF00F5, ...) are never converted, even when one equals a label address.
   The value does not change, so the compiled bytes do not change.  The byte gate is the proof.
-  v7 is NOT handled here: its C files carry v10's values, which scripts/build/regenerate_v7_c_divergence.py
-  relocates to v7's.
+  v7 (`--trees v7`) follows the v7 C flow.  v7's C files carry v10's values, which v7_c_divergence.json relocates,
+  so a v7 literal is looked up in v10's symbol file and its link script gets the v10 address.  The compiled bytes
+  stay the same.  Then scripts/generators/generate_v7_naka_link_scripts.py --apply moves each new symbol to its v7
+  address where v7's own bytes agree, and scripts/build/regenerate_v7_c_divergence.py --apply re-derives the
+  patches (it certifies every patched bin), BEFORE make.
 
 RUN (repository root; symbol files regenerated from a built tree)
   python3 scripts/converters/symbolize_c_rom_pointers.py [--apply] [--trees v10,v9]
+  python3 scripts/converters/symbolize_c_rom_pointers.py --trees v7 --apply; generate_v7_naka_link_scripts.py --apply;
+      regenerate_v7_c_divergence.py --apply; make all; make gate-all
 """
 import glob
 import os
@@ -56,7 +61,7 @@ def main():
     if "--trees" in sys.argv:
         trees = sys.argv[sys.argv.index("--trees") + 1].split(",")
     for tree in trees:
-        syms = load_syms(tree)
+        syms = load_syms("v10" if tree == "v7" else tree)   # v7's C holds v10's values (see the docstring)
         tot = left = 0
         for pc in sorted(glob.glob(os.path.join(ROOT, tree, "maincpu", "**", "*.c"), recursive=True)):
             pl = pc[:-2] + "_link.ld"

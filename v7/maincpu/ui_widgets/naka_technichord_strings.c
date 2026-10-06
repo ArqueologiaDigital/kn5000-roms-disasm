@@ -94,6 +94,18 @@ extern const char TypePriorityText;
 extern const char VwScreenTitleProc;
 extern const char WaitingFunc;
 extern const char WakeUpPassword;
+extern const char CmpDst_HandleShow_PtrTable_Target0;
+extern const char PsMixer_CtlTypeProc0;
+extern const char PsMixer_CtlTypeProc1;
+extern const char PsMixer_CtlTypeProc10;
+extern const char PsMixer_CtlTypeProc2;
+extern const char PsMixer_CtlTypeProc3;
+extern const char PsMixer_CtlTypeProc4;
+extern const char PsMixer_CtlTypeProc5;
+extern const char PsMixer_CtlTypeProc6;
+extern const char PsMixer_CtlTypeProc7;
+extern const char PsMixer_CtlTypeProc8;
+extern const char PsMixer_CtlTypeProc9;
 
 #define BASE  0x00E85F4Eu
 
@@ -9102,17 +9114,17 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .WelcomeScript_OpJumpOffsets = { 0, 896, 15, 162, 179, 208, 237, 293, 321, 386, 860, 265, 386 },
 
     .PsMixer_ControlProcTable = {
-        0x00F80B7D,
-        0x00F81ED2,
-        0x00F81B56,
-        0x00F80EE9,
-        0x00F815E5,
-        0x00F80B80,
-        0x00F80D21,
-        0x00F812AF,
-        0x00F8231B,
-        0x00F81890,
-        0x00F82222,
+        NAKA_ADDR(PsMixer_CtlTypeProc0),
+        NAKA_ADDR(PsMixer_CtlTypeProc1),
+        NAKA_ADDR(PsMixer_CtlTypeProc2),
+        NAKA_ADDR(PsMixer_CtlTypeProc3),
+        NAKA_ADDR(PsMixer_CtlTypeProc4),
+        NAKA_ADDR(PsMixer_CtlTypeProc5),
+        NAKA_ADDR(PsMixer_CtlTypeProc6),
+        NAKA_ADDR(PsMixer_CtlTypeProc7),
+        NAKA_ADDR(PsMixer_CtlTypeProc8),
+        NAKA_ADDR(PsMixer_CtlTypeProc9),
+        NAKA_ADDR(PsMixer_CtlTypeProc10),
     },
 
     .PsMixer_BootDefaultRows = {
@@ -10692,7 +10704,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
         0x00F9047F,
         0x00F906AD,
         0x00F90A91,
-        0x00F90D63,
+        NAKA_ADDR(CmpDst_HandleShow_PtrTable_Target0),
     },
 
     .CmpSrc_HandleShow_PtrTable = {
@@ -10708,7 +10720,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
         0x00F9047F,
         0x00F906AD,
         0x00F90A91,
-        0x00F90D63,
+        NAKA_ADDR(CmpDst_HandleShow_PtrTable_Target0),
     },
 
     .str_1596 = ALIGNED_STRING(""),

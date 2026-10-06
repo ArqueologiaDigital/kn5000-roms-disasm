@@ -260,6 +260,8 @@ extern const char SeqStep_TimerDispatch_ProcTables_Tail;
 extern const char NakaWidget_MidiPcgOutput_3_AcIndexWideES;
 extern const char NakaWidget_NamingCursorBox;
 extern const char NakaWidget_DiskMenu_1_AcTitleMenu;
+extern const char SeMenu_CompareAndApply_Data6;
+extern const char SendPartDataBlock_Data5;
 
 #define BASE  0x00EEE078u
 
@@ -4608,7 +4610,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .pad_305 = { 0 },
 
-    .ptr_1a6d = 0x00FF00FF,
+    .ptr_1a6d = NAKA_ADDR(SendPartDataBlock_Data5),
 
     .field_1a71 = 0x00FF,
 
@@ -5496,7 +5498,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .ptr_1e4c = 0x00FF9C9C,
 
-    .ptr_1e50 = 0x00F0FBFF,
+    .ptr_1e50 = NAKA_ADDR(SeMenu_CompareAndApply_Data6),
 
     .field_1e54 = 0xA0A0,
 
@@ -5516,7 +5518,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .pad_315 = { 0 },
 
-    .ptr_1e6a = 0x00FF00FF,
+    .ptr_1e6a = NAKA_ADDR(SendPartDataBlock_Data5),
 
     .field_1e6e = 0x00FF,
 
