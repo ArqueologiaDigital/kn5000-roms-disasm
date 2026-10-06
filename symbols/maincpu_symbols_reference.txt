@@ -9574,7 +9574,7 @@ ConstFlagProc_GetValue_Set_Data 00EAABDE
 ConstFlagProc_SetValue_Check_Str_Empty 00EAABE0
 CommonIDProc_OnDumpPointerEx_Data 00EAABE2
 CommonIDProc_Data 00EAABE4
-DrawIcons_Impl_ColLoop_Data 00EAABF2
+DrawIcons_PixelPairTable 00EAABF2
 DrawBitmapFile_Impl_Data 00EAADF2
 DrawPartGroup_DispatchByType_Data 00EAADF6
 Draw_DispatchByPartType_Data 00EAAE16

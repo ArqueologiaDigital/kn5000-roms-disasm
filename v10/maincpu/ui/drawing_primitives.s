@@ -2681,7 +2681,7 @@ DrawIcons_Impl_ColLoop:
 	ld a, c
 	extz wa
 	add wa, wa
-	lda xbc, (DrawIcons_Impl_ColLoop_Data:24)
+	lda xbc, (DrawIcons_PixelPairTable:24)
 	ld	wa, (xbc+wa)
 	ld (xix), wa
 	inc 1, iy

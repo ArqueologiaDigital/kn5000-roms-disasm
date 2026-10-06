@@ -1133,11 +1133,11 @@ CommonIDProc_Data:
 	.short	CommonIDProc_OnSetPropertyEx - CommonIDProc_OnGetPropDataSp
 	.short	CommonIDProc_OnGetPropDataSp - CommonIDProc_OnGetPropDataSp
 	.short	CommonIDProc_OnGetPropDataCountSp - CommonIDProc_OnGetPropDataSp
-; [nakarest] naka_disk_warning+0x1f46  +0x1f46..+0x214a (0xeaabf2, 516 B)
-; [nakarest] purpose not established: layout of 516 B at 0xeaabf2 not derived; readers below
-; [nakarest] Readers: source references DrawIcons_Impl_ColLoop (ui/drawing_primitives.s: `lda
-; [nakarest] xbc, (DrawIcons_Impl_ColLoop_Data:24)`).
-DrawIcons_Impl_ColLoop_Data:
+; DrawIcons_PixelPairTable -- 256 x {u8 left, u8 right}: the two colour indices of the two 4-bpp pixels in one
+; icon byte (high nibble = left pixel), nibble n -> n for n < 8, else 0xF0 + n.  DrawIcons_Impl writes
+; entry [byte] as one word per icon byte, 12 bytes x 24 rows: a 24 x 24 icon.  Typed in
+; ui_widgets/naka_disk_warning.c (scripts/converters/icon_pixel_pair_table_retype.py).
+DrawIcons_PixelPairTable:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x1F46, 0x200
 DrawBitmapFile_Impl_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x2146, 0x4
 ; [nakarest] naka_disk_warning+0x214a  +0x214a..+0x216a (0xeaadf6, 32 B)
