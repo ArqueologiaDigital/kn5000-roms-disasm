@@ -138776,7 +138776,7 @@ sub_F6079E_Join:
 ; Called from: T_SongClear_ClearBank (x3); in-module: 0xF60B19
 ; Touches: (0x0CA2) (0x0E02) (0x360A)  |  0x00001C 0x000100 0x000D50
 ;          0x000D70 0x603500 0x610000
-; Calls:   T_BStore_LoadGeometry sub_F610E3 sub_F60F4F T_F42880 sub_F609B6 T_F40A1C
+; Calls:   T_BStore_LoadGeometry sub_F610E3 sub_F60F4F T_F42880 SongEdit_ResetJobFields_Copy T_F40A1C
 ; Evidence: thunk slot T_SongClear_ClearBank holds `jp 0x00F608D0`, and 0xF608D0 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -138859,13 +138859,13 @@ sub_F608D0_Join2:
 	ldw	(BStore_Password:24), 0	; F609A1  ld (0x60341c),0x0000
 	call	T_F42880	; F609A8  call 0xf42880
 sub_F608D0_Join3:
-	call	sub_F609B6	; F609AC  call 0xf609b6
+	call	SongEdit_ResetJobFields_Copy	; F609AC  call 0xf609b6
 	call	T_F40A1C	; F609B0  call 0xf40a1c
 	ret	; F609B4  ret
 	ret	; F609B5  ret
 
 ; --------------------------------------------------------------------------
-; sub_F609B6
+; SongEdit_ResetJobFields_Copy
 ; Called from: in-module: 0xF609AC
 ; Touches: (0x0C35) (0x0DBE) (0x0DE6) (0x0DE8) (0x0DEA) (0x0DEC) (0x0DEE)
 ;          (0x0DF0) (0x0DF2) (0x0DF4) +12 more
@@ -138875,7 +138875,9 @@ sub_F608D0_Join3:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F609B6:
+; SongEdit_ResetJobFields_Copy: an exact copy of SongEdit_ResetJobFields (prom_b 0xF63A59) -- all 68 instructions equal, operands included,
+;   but the targets of its jr / jrl / djnz (notes/wsa1_exact_copy_names.py).
+SongEdit_ResetJobFields_Copy:
 	ld	(6304856:24), 0	; F609B6  ld (0x603458),0x00
 	ldw	(3518:16), 0	; F609BC  ld (0x0dbe),0x0000
 	ld	(6304857:24), 1	; F609C2  ld (0x603459),0x01
@@ -143363,7 +143365,7 @@ BStore_AllocChain_Return:
 ; SongEdit_ResetJobFields: Resets the song-edit job settings: workspace bytes/words 0x603458..0x60347C and
 ;   0x6034B1..0x6034BD, (0x0DBE)/(0x0E16)/(0x0E17)/(0x0C35) = 0, (0x0E04)/(0x0E05) = 100, NOTE CHANGE from/to measure
 ;   = 1, from/to note = 0, span (0x129E) = 1, and the from/to measure pairs at 0x0DE6.. / 0x0DF7.. = 1. Basis: callers
-;   + body -- run in BStore_BootPhase3; byte-identical twin of sub_F609B6, which SongClear_ClearBank runs.
+;   + body -- run in BStore_BootPhase3; byte-identical twin of SongEdit_ResetJobFields_Copy, which SongClear_ClearBank runs.
 ;   (notes/naming-pilot-2026-10-06/proposals_wave2_d.json)
 SongEdit_ResetJobFields:		; <- T_SongEdit_ResetJobFields
 	ld	(6304856:24), 0	; F63A59  ld (0x603458),0x00
@@ -185209,7 +185211,7 @@ sub_F77BDF_Return:
 ; SmfSizeCopy_ClearDueList
 ; Called from: in-module: 0xF77A4A
 ; Touches: (0x126E) (0x345C) (0x345E)
-; Calls:   0xF75095 sub_F77D00 sub_F77D39 sub_F77D43
+; Calls:   0xF75095 InputStream_OpenAndReadFirstBlock_Copy sub_F77D39 sub_F77D43
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF77C92 is an instruction boundary of this
@@ -185261,7 +185263,7 @@ sub_F77C92_Skip:
 sub_F77C92_Join:
 	ld	(BStore_CursorOffset:16), wa	; F77CEF  ld (0x345e),WA
 	ret	; F77CF3  ret
-	calr	sub_F77D00	; F77CF4  calr 0xf77d00
+	calr	InputStream_OpenAndReadFirstBlock_Copy	; F77CF4  calr 0xf77d00
 	ret	; F77CF7  ret
 	calr	sub_F77D39	; F77CF8  calr 0xf77d39
 	ret	; F77CFB  ret
@@ -185269,7 +185271,7 @@ sub_F77C92_Join:
 	ret	; F77CFF  ret
 
 ; --------------------------------------------------------------------------
-; sub_F77D00
+; InputStream_OpenAndReadFirstBlock_Copy
 ; Called from: in-module: 0xF77CF4
 ; Touches: (0x21D0) (0x21D1) (0x21D2) (0x21D3) (0x21D7) (0x21E7)  |
 ;          0x60A700 0x60AB00
@@ -185282,7 +185284,9 @@ sub_F77C92_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F77D00:
+; InputStream_OpenAndReadFirstBlock_Copy: an exact copy of InputStream_OpenAndReadFirstBlock (prom_b 0xF7659B) -- all 14 instructions equal, operands included,
+;   but the targets of its jr / jrl / djnz (notes/wsa1_exact_copy_names.py).
+InputStream_OpenAndReadFirstBlock_Copy:
 	m_or_mi8 MB16, Disk_Flags, 0x80	; F77D00  or (0x21e7),0x80
 	cp	l, 1:i3	; F77D05  cp L,1
 	jr	z, sub_F77D00_Skip	; F77D07  jr Z,0xf77d18
@@ -185414,7 +185418,7 @@ sub_F77DB3_Skip:
 ; Called from: in-module: 0xF77DAA
 ; Touches: (0x1193) (0x1194) (0x1195) (0x11AA) (0x11AB) (0x11AC) (0x126E)
 ;          (0x21D3) (0x21D7) (0x345C) +1 more  |  0x60A700 0x60AB00
-; Calls:   0xF752DF sub_F77EE7 sub_F77F20 sub_F77F2A
+; Calls:   0xF752DF InputStream_OpenAndReadFirstBlock_Copy2 sub_F77F20 sub_F77F2A
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
 ;                  targets it.  The scan is at every byte offset, so a hit
 ;                  is an upper bound on the CALL COUNT -- but a hit that
@@ -185508,7 +185512,7 @@ sub_F77DEF_Skip:
 sub_F77DEF_Join:
 	ld	(BStore_CursorOffset:16), wa	; F77ED6  ld (0x345e),WA
 	ret	; F77EDA  ret
-	calr	sub_F77EE7	; F77EDB  calr 0xf77ee7
+	calr	InputStream_OpenAndReadFirstBlock_Copy2	; F77EDB  calr 0xf77ee7
 	ret	; F77EDE  ret
 	calr	sub_F77F20	; F77EDF  calr 0xf77f20
 	ret	; F77EE2  ret
@@ -185516,7 +185520,7 @@ sub_F77DEF_Join:
 	ret	; F77EE6  ret
 
 ; --------------------------------------------------------------------------
-; sub_F77EE7
+; InputStream_OpenAndReadFirstBlock_Copy2
 ; Called from: in-module: 0xF77EDB
 ; Touches: (0x21D0) (0x21D1) (0x21D2) (0x21D3) (0x21D7) (0x21E7)  |
 ;          0x60A700 0x60AB00
@@ -185529,7 +185533,9 @@ sub_F77DEF_Join:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F77EE7:
+; InputStream_OpenAndReadFirstBlock_Copy2: an exact copy of InputStream_OpenAndReadFirstBlock (prom_b 0xF7659B) -- all 14 instructions equal, operands included,
+;   but the targets of its jr / jrl / djnz (notes/wsa1_exact_copy_names.py).
+InputStream_OpenAndReadFirstBlock_Copy2:
 	m_or_mi8 MB16, Disk_Flags, 0x80	; F77EE7  or (0x21e7),0x80
 	cp	l, 1:i3	; F77EEC  cp L,1
 	jr	z, sub_F77EE7_Skip	; F77EEE  jr Z,0xf77eff

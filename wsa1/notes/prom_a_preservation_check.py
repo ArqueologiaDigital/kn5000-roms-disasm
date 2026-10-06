@@ -5345,6 +5345,9 @@ RENAMES = {
     "DL_F3B651": "TrackAssign_PaintTrackGroup_DL",
     "DisplayList_FA2FAF": "Initial_RedrawSelectionHighlight_DL",
     "DisplayList_FEF831": "EditScreen_EraseVelocityCell_DL",
+    "sub_F609B6": "SongEdit_ResetJobFields_Copy",
+    "sub_F77D00": "InputStream_OpenAndReadFirstBlock_Copy",
+    "sub_F77EE7": "InputStream_OpenAndReadFirstBlock_Copy2",
 }
 
 
