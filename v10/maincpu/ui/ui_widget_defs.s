@@ -15365,28 +15365,28 @@ ApFuncIDProc:
 	ld xiz, xbc
 	ld	(xsp+4376), xwa
 	cp xiz, EVT_SET_PROPERTY_EX
-	jr z, DrawHelper_B_CalcRange
+	jr z, ApFuncIDProc_BuildIdList
 	cp xiz, EVT_GET_PROP_DATA_COUNT_SP
-	jr z, DrawHelper_B_CalcRange
+	jr z, ApFuncIDProc_BuildIdList
 	cp xiz, EVT_GET_PROP_DATA_SP
-	jr nz, DrawHelper_B_ReturnAlt
+	jr nz, ApFuncIDProc_Dispatch
 
-DrawHelper_B_CalcRange:
+ApFuncIDProc_BuildIdList:
 	ld xwa, 0:i3
 	ld (xsp + 16), xwa
 	ld xwa, 0x120
 	ld (xsp + 12), xwa
 
-DrawHelper_B_CalcThumb:
+ApFuncIDProc_BuildIdList_SlotLoop:
 	ld xbc, (xsp + 12)
 	ld wa, bc
 	call CountObject
 	extz xhl
 	ld xde, 0:i3
 	cp xhl, 0x0
-	jr ule, DrawHelper_B_ReturnZero
+	jr ule, ApFuncIDProc_BuildIdList_NextSlot
 
-DrawHelper_B_DrawTrack:
+ApFuncIDProc_BuildIdList_ObjLoop:
 	ld xwa, (xsp + 16)
 	sll xwa, 2
 	lda xbc, (xsp+276)
@@ -15399,28 +15399,28 @@ DrawHelper_B_DrawTrack:
 	add (xsp + 16), xwa
 	inc 1, xde
 	cp xde, xhl
-	jr c, DrawHelper_B_DrawTrack
+	jr c, ApFuncIDProc_BuildIdList_ObjLoop
 
-DrawHelper_B_ReturnZero:
+ApFuncIDProc_BuildIdList_NextSlot:
 	ld xwa, 1:i3
 	add (xsp + 12), xwa
 	ld xwa, (xsp + 12)
 	cp xwa, 0x13f
-	jr ule, DrawHelper_B_CalcThumb
+	jr ule, ApFuncIDProc_BuildIdList_SlotLoop
 
-DrawHelper_B_ReturnAlt:
+ApFuncIDProc_Dispatch:
 	cp xiz, EVT_SET_PROPERTY_EX
-	jrl z, DrawHelper_C_DrawTrack
+	jrl z, ApFuncIDProc_OnSetPropertyEx
 	cp xiz, EVT_GET_PROPERTY_EX
-	jr z, DrawHelper_C_Setup
+	jr z, ApFuncIDProc_OnGetOrDumpPropertyEx
 	cp xiz, EVT_DUMP_PROPERTY_EX
-	jr z, DrawHelper_C_Setup
+	jr z, ApFuncIDProc_OnGetOrDumpPropertyEx
 	cp xiz, EVT_MAKE_DUMP
-	jr z, DrawHelper_B_FinishAlt
+	jr z, ApFuncIDProc_OnMakeDump
 	cp xiz, EVT_GET_PROP_DATA_COUNT_SP
-	jr z, DrawHelper_B_Finish
+	jr z, ApFuncIDProc_OnGetPropDataCountSp
 	cp xiz, EVT_GET_PROP_DATA_SP
-	jrl nz, DrawHelper_C_Return
+	jrl nz, ApFuncIDProc_ForwardToCommon
 	ld XWA, (xsp + 0x1114)
 	ld (xsp + 4), xwa
 	ld xwa, (xwa + 8)
@@ -15430,15 +15430,15 @@ DrawHelper_B_ReturnAlt:
 	ld xwa, (xbc)
 	ld xbc, EVT_GET_NAME
 	ld xde, 0:i3
-	jr DrawHelper_C_CalcRange
+	jr ApFuncIDProc_GetNameAndCopy
 
-DrawHelper_B_Finish:
+ApFuncIDProc_OnGetPropDataCountSp:
 	ld xhl, (xsp + 16)
-	jrl MainFuncIDProc_Return
+	jrl ApFuncIDProc_Epilogue
 
-DrawHelper_B_FinishAlt:
-	pushw DrawHelper_B_FinishAlt_Str_idf@hi16
-	pushw DrawHelper_B_FinishAlt_Str_idf@lo16
+ApFuncIDProc_OnMakeDump:
+	pushw ApFuncIDProc_DumpPrefix@hi16
+	pushw ApFuncIDProc_DumpPrefix@lo16
 	lda xwa, (xsp + 24)
 	push xwa
 	call Strcpy
@@ -15452,9 +15452,9 @@ DrawHelper_B_FinishAlt:
 	push xwa
 	ld XWA, (xsp + 0x1118)
 	push xwa
-	jr DrawHelper_C_CalcThumb
+	jr ApFuncIDProc_StrcpyReturnZero
 
-DrawHelper_C_Setup:
+ApFuncIDProc_OnGetOrDumpPropertyEx:
 	ld XWA, (xsp + 0x1114)
 	ld (xsp + 4), xwa
 	ld XWA, (xsp + 0x1114)
@@ -15466,20 +15466,20 @@ DrawHelper_C_Setup:
 	ld xbc, EVT_GET_NAME
 	ld xde, 0:i3
 
-DrawHelper_C_CalcRange:
+ApFuncIDProc_GetNameAndCopy:
 	call ApFunctionProc
 	push xhl
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 4)
 	push xwa
 
-DrawHelper_C_CalcThumb:
+ApFuncIDProc_StrcpyReturnZero:
 	call Strcpy
 	inc 8, xsp
 	ld xhl, 0:i3
-	jrl MainFuncIDProc_Return
+	jrl ApFuncIDProc_Epilogue
 
-DrawHelper_C_DrawTrack:
+ApFuncIDProc_OnSetPropertyEx:
 	ld xwa, 0xffffffff
 	ld (xsp + 8), xwa
 	ld XWA, (xsp + 0x1114)
@@ -15488,9 +15488,9 @@ DrawHelper_C_DrawTrack:
 	ld (xsp + 12), xwa
 	ld xwa, (xsp + 16)
 	cp xwa, 0x0
-	jr ule, DrawHelper_C_ReturnAlt2
+	jr ule, ApFuncIDProc_SetProp_CheckFound
 
-DrawHelper_C_ReturnZero:
+ApFuncIDProc_SetProp_CompareName:
 	ld xwa, (xsp + 12)
 	sll xwa, 2
 	lda xbc, (xsp+276)
@@ -15506,7 +15506,7 @@ DrawHelper_C_ReturnZero:
 	call Strcmp
 	inc 8, xsp
 	cp hl, 0:i3
-	jr nz, DrawHelper_C_ReturnAlt
+	jr nz, ApFuncIDProc_SetProp_NextIndex
 	ld xwa, (xsp + 12)
 	sll xwa, 2
 	lda xbc, (xsp+276)
@@ -15516,21 +15516,21 @@ DrawHelper_C_ReturnZero:
 	ld (xwa + 4), xbc
 	ld xwa, 0:i3
 	ld (xsp + 8), xwa
-	jr DrawHelper_C_ReturnAlt3
+	jr ApFuncIDProc_SetProp_StoreId
 
-DrawHelper_C_ReturnAlt:
+ApFuncIDProc_SetProp_NextIndex:
 	ld xwa, 1:i3
 	add (xsp + 12), xwa
 	ld xwa, (xsp + 12)
 	cp xwa, (xsp + 16)
-	jr c, DrawHelper_C_ReturnZero
+	jr c, ApFuncIDProc_SetProp_CompareName
 
-DrawHelper_C_ReturnAlt2:
+ApFuncIDProc_SetProp_CheckFound:
 	ld xwa, (xsp + 8)
 	or xwa, xwa
-	jr nz, DrawHelper_C_ReturnAlt4
+	jr nz, ApFuncIDProc_SetProp_ReturnResult
 
-DrawHelper_C_ReturnAlt3:
+ApFuncIDProc_SetProp_StoreId:
 	ld XWA, (xsp + 0x1114)
 	ld (xsp + 4), xwa
 	ld XWA, (xsp + 0x1114)
@@ -15539,17 +15539,17 @@ DrawHelper_C_ReturnAlt3:
 	ld xwa, (xwa + 4)
 	ld (xhl), xwa
 
-DrawHelper_C_ReturnAlt4:
+ApFuncIDProc_SetProp_ReturnResult:
 	ld xhl, (xsp + 8)
-	jr MainFuncIDProc_Return
+	jr ApFuncIDProc_Epilogue
 
-DrawHelper_C_Return:
+ApFuncIDProc_ForwardToCommon:
 	ld XWA, (xsp + 0x1118)
 	ld xbc, xiz
 	ld XDE, (xsp + 0x1114)
 	calr CommonIDProc
 
-MainFuncIDProc_Return:
+ApFuncIDProc_Epilogue:
 	pop xiz
 	lda xsp, (xsp+4376)
 	ret
@@ -15561,28 +15561,28 @@ MainFuncIDProc:
 	ld xiz, xbc
 	ld	(xsp+4376), xwa
 	cp xiz, EVT_SET_PROPERTY_EX
-	jr z, DrawHelper_D_Setup
+	jr z, MainFuncIDProc_BuildIdList
 	cp xiz, EVT_GET_PROP_DATA_COUNT_SP
-	jr z, DrawHelper_D_Setup
+	jr z, MainFuncIDProc_BuildIdList
 	cp xiz, EVT_GET_PROP_DATA_SP
-	jr nz, DrawHelper_D_ReturnAlt
+	jr nz, MainFuncIDProc_Dispatch
 
-DrawHelper_D_Setup:
+MainFuncIDProc_BuildIdList:
 	ld xwa, 0:i3
 	ld (xsp + 16), xwa
 	ld xwa, 0x140
 	ld (xsp + 12), xwa
 
-DrawHelper_D_CalcRange:
+MainFuncIDProc_BuildIdList_SlotLoop:
 	ld xbc, (xsp + 12)
 	ld wa, bc
 	call CountObject
 	extz xhl
 	ld xde, 0:i3
 	cp xhl, 0x0
-	jr ule, DrawHelper_D_ReturnZero
+	jr ule, MainFuncIDProc_BuildIdList_NextSlot
 
-DrawHelper_D_DrawTrack:
+MainFuncIDProc_BuildIdList_ObjLoop:
 	ld xwa, (xsp + 16)
 	sll xwa, 2
 	lda xbc, (xsp+276)
@@ -15595,28 +15595,28 @@ DrawHelper_D_DrawTrack:
 	add (xsp + 16), xwa
 	inc 1, xde
 	cp xde, xhl
-	jr c, DrawHelper_D_DrawTrack
+	jr c, MainFuncIDProc_BuildIdList_ObjLoop
 
-DrawHelper_D_ReturnZero:
+MainFuncIDProc_BuildIdList_NextSlot:
 	ld xwa, 1:i3
 	add (xsp + 12), xwa
 	ld xwa, (xsp + 12)
 	cp xwa, 0x15f
-	jr ule, DrawHelper_D_CalcRange
+	jr ule, MainFuncIDProc_BuildIdList_SlotLoop
 
-DrawHelper_D_ReturnAlt:
+MainFuncIDProc_Dispatch:
 	cp xiz, EVT_SET_PROPERTY_EX
-	jrl z, DrawHelper_E_DrawTrack
+	jrl z, MainFuncIDProc_OnSetPropertyEx
 	cp xiz, EVT_GET_PROPERTY_EX
-	jr z, DrawHelper_E_Setup
+	jr z, MainFuncIDProc_OnGetOrDumpPropertyEx
 	cp xiz, EVT_DUMP_PROPERTY_EX
-	jr z, DrawHelper_E_Setup
+	jr z, MainFuncIDProc_OnGetOrDumpPropertyEx
 	cp xiz, EVT_MAKE_DUMP
-	jr z, DrawHelper_D_FinishAlt
+	jr z, MainFuncIDProc_OnMakeDump
 	cp xiz, EVT_GET_PROP_DATA_COUNT_SP
-	jr z, DrawHelper_D_Finish
+	jr z, MainFuncIDProc_OnGetPropDataCountSp
 	cp xiz, EVT_GET_PROP_DATA_SP
-	jrl nz, DrawHelper_E_Return
+	jrl nz, MainFuncIDProc_ForwardToCommon
 	ld XWA, (xsp + 0x1114)
 	ld (xsp + 4), xwa
 	ld xwa, (xwa + 8)
@@ -15626,15 +15626,15 @@ DrawHelper_D_ReturnAlt:
 	ld xwa, (xbc)
 	ld xbc, EVT_GET_NAME
 	ld xde, 0:i3
-	jr DrawHelper_E_CalcRange
+	jr MainFuncIDProc_GetNameAndCopy
 
-DrawHelper_D_Finish:
+MainFuncIDProc_OnGetPropDataCountSp:
 	ld xhl, (xsp + 16)
-	jrl ViewIDProc_Return
+	jrl MainFuncIDProc_Epilogue
 
-DrawHelper_D_FinishAlt:
-	pushw DrawHelper_D_FinishAlt_Str_idf@hi16
-	pushw DrawHelper_D_FinishAlt_Str_idf@lo16
+MainFuncIDProc_OnMakeDump:
+	pushw MainFuncIDProc_DumpPrefix@hi16
+	pushw MainFuncIDProc_DumpPrefix@lo16
 	lda xwa, (xsp + 24)
 	push xwa
 	call Strcpy
@@ -15648,9 +15648,9 @@ DrawHelper_D_FinishAlt:
 	push xwa
 	ld XWA, (xsp + 0x1118)
 	push xwa
-	jr DrawHelper_E_CalcThumb
+	jr MainFuncIDProc_StrcpyReturnZero
 
-DrawHelper_E_Setup:
+MainFuncIDProc_OnGetOrDumpPropertyEx:
 	ld XWA, (xsp + 0x1114)
 	ld (xsp + 4), xwa
 	ld XWA, (xsp + 0x1114)
@@ -15662,20 +15662,20 @@ DrawHelper_E_Setup:
 	ld xbc, EVT_GET_NAME
 	ld xde, 0:i3
 
-DrawHelper_E_CalcRange:
+MainFuncIDProc_GetNameAndCopy:
 	call MainFunctionProc
 	push xhl
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 4)
 	push xwa
 
-DrawHelper_E_CalcThumb:
+MainFuncIDProc_StrcpyReturnZero:
 	call Strcpy
 	inc 8, xsp
 	ld xhl, 0:i3
-	jrl ViewIDProc_Return
+	jrl MainFuncIDProc_Epilogue
 
-DrawHelper_E_DrawTrack:
+MainFuncIDProc_OnSetPropertyEx:
 	ld xwa, 0xffffffff
 	ld (xsp + 8), xwa
 	ld XWA, (xsp + 0x1114)
@@ -15684,9 +15684,9 @@ DrawHelper_E_DrawTrack:
 	ld (xsp + 12), xwa
 	ld xwa, (xsp + 16)
 	cp xwa, 0x0
-	jr ule, DrawHelper_E_ReturnAlt2
+	jr ule, MainFuncIDProc_SetProp_CheckFound
 
-DrawHelper_E_ReturnZero:
+MainFuncIDProc_SetProp_CompareName:
 	ld xwa, (xsp + 12)
 	sll xwa, 2
 	lda xbc, (xsp+276)
@@ -15702,7 +15702,7 @@ DrawHelper_E_ReturnZero:
 	call Strcmp
 	inc 8, xsp
 	cp hl, 0:i3
-	jr nz, DrawHelper_E_ReturnAlt
+	jr nz, MainFuncIDProc_SetProp_NextIndex
 	ld xwa, (xsp + 12)
 	sll xwa, 2
 	lda xbc, (xsp+276)
@@ -15712,21 +15712,21 @@ DrawHelper_E_ReturnZero:
 	ld (xwa + 4), xbc
 	ld xwa, 0:i3
 	ld (xsp + 8), xwa
-	jr DrawHelper_E_ReturnAlt3
+	jr MainFuncIDProc_SetProp_StoreId
 
-DrawHelper_E_ReturnAlt:
+MainFuncIDProc_SetProp_NextIndex:
 	ld xwa, 1:i3
 	add (xsp + 12), xwa
 	ld xwa, (xsp + 12)
 	cp xwa, (xsp + 16)
-	jr c, DrawHelper_E_ReturnZero
+	jr c, MainFuncIDProc_SetProp_CompareName
 
-DrawHelper_E_ReturnAlt2:
+MainFuncIDProc_SetProp_CheckFound:
 	ld xwa, (xsp + 8)
 	or xwa, xwa
-	jr nz, DrawHelper_E_ReturnAlt4
+	jr nz, MainFuncIDProc_SetProp_ReturnResult
 
-DrawHelper_E_ReturnAlt3:
+MainFuncIDProc_SetProp_StoreId:
 	ld XWA, (xsp + 0x1114)
 	ld (xsp + 4), xwa
 	ld XWA, (xsp + 0x1114)
@@ -15735,17 +15735,17 @@ DrawHelper_E_ReturnAlt3:
 	ld xwa, (xwa + 4)
 	ld (xhl), xwa
 
-DrawHelper_E_ReturnAlt4:
+MainFuncIDProc_SetProp_ReturnResult:
 	ld xhl, (xsp + 8)
-	jr ViewIDProc_Return
+	jr MainFuncIDProc_Epilogue
 
-DrawHelper_E_Return:
+MainFuncIDProc_ForwardToCommon:
 	ld XWA, (xsp + 0x1118)
 	ld xbc, xiz
 	ld XDE, (xsp + 0x1114)
 	calr CommonIDProc
 
-ViewIDProc_Return:
+MainFuncIDProc_Epilogue:
 	pop xiz
 	lda xsp, (xsp+4376)
 	ret
