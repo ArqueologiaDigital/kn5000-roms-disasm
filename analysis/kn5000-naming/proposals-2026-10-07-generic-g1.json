@@ -1,0 +1,1162 @@
+[
+ {
+  "old": "ExtData_VoiceParam_DispatchBytecode_Code",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ExtData_VoiceParam_DispatchBytecode_ModeMsp",
+  "header": "MD_MSP (CURRENT_MODE 15; also the switch base): sets bit 7 of LED row 2 (0x8F1A). Basis: switch value (CURRENT_MODE - 2) + body.",
+  "basis": "switch value meaning (CURRENT_MODE, NAKA mode ids) + body",
+  "evidence": [
+   "audio/audio_control_engine.s:3150 `ldb_d8 a, (CURRENT_MODE)` / 3152 `dec 2, wa` -- switch value = CURRENT_MODE - 2, 0..16",
+   "extensions/extension_data.s:2778 `.short ExtData_VoiceParam_DispatchBytecode_Code - ExtData_VoiceParam_DispatchBytecode_Code` -- entry 13 (table starts 2765) = mode 15",
+   "shared/event_codes.s:1858 `.equ NAKA_MODE_MD_MSP, 0x180000f` -- mode 15 is MD_MSP",
+   "audio/audio_control_engine.s:3135 `lda xbc, (xiz+0x2)` / 3163 `setm 7, (xbc)` -- bit 7 of ENCODER_STATE_BASE+2 (LED row 2); siblings ModeCmp/ModeSndArg name rows the same way"
+  ]
+ },
+ {
+  "old": "ExtData_ToneParam_DispatchHandler_Code",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ExtData_ToneParam_DispatchHandler_OnVoiceSelect",
+  "header": "Payload offset 0 of a per-part record (tags 0x00-0x19), the voice selector: re-applies the program (SndParam_ApplyProgramChange) and posts the record's +0/+1. Basis: switch value (changed payload offset) + body.",
+  "basis": "switch value meaning (payload offset 0x912F; +0 = voice selector per docs) + body",
+  "evidence": [
+   "audio/audio_control_engine.s:4976 `ld a, (0x912f:16)` / 4988 `jp t, (xix+wa)` -- switch on the changed payload offset",
+   "extensions/extension_data.s:3317 `.short ExtData_ToneParam_DispatchHandler_Code - ExtData_ToneParam_DispatchHandler_Code` -- entry 0 = offset 0",
+   "audio/audio_control_engine.s:4990 `jr ExtData_ToneParam_DispatchHandler_Join` / 5019 `call SndParam_ApplyProgramChange` -- offset 0 re-resolves the program",
+   "../../docs/kn-disk-file-formats.md:757 `| +0 | ... | the voice/tone selector` -- +0 of the 24-byte part record"
+  ]
+ },
+ {
+  "old": "ExtData_ToneParam_AltDispatch_Code",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ExtData_ToneParam_AltDispatch_WholeByteFields",
+  "header": "Payload +0 and +8 of a drawbar record (0x44/0x45/0x46; also the switch base): merges the whole byte (ExtData_SetTlvField 0xFF) and posts it. Basis: switch value + body.",
+  "basis": "switch value meaning (payload offset of drawbar records) + body",
+  "evidence": [
+   "extensions/extension_data.s:3331 `.short ExtData_ToneParam_AltDispatch_Code - ExtData_ToneParam_AltDispatch_Code` -- entries 0 and 8 (3331, 3339)",
+   "audio/audio_control_engine.s:5222 `jr ExtData_ToneParam_AltDispatch_Join` / 5237 `ldw wa, 255` / 5238 `calr ExtData_SetTlvField` -- whole-byte merge",
+   "../../analysis/disk-format-probes/lsw_drawbar_records.py:38 `+8 0x0F 8221 ... a switch` / 39 `+0 -- (no id) a shadow of tag 0x61 +0` -- the two fields; siblings are DrawbarNibbleFields/DrawbarFootages"
+  ]
+ },
+ {
+  "old": "ExtData_ToneParam_AltBody_Code",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ExtData_ToneParam_AltBody_OnStyleProgram",
+  "header": "Offset 0 of style/tempo record 0x48 (the style selection; also the switch base): resolves (0x9130, 0x9131) with AccStyle_LookupTempoAndVelocity, writes the result to +0/+1 and posts both. Basis: switch value + body.",
+  "basis": "switch value meaning (payload offset of record 0x48) + body",
+  "evidence": [
+   "extensions/extension_data.s:3342 `.short ExtData_ToneParam_AltBody_Code - ExtData_ToneParam_AltBody_Code` -- entry 0; record 0x48 is SoundProgram_DispatchTable entry 0x48 (ExtData_ToneParam_AltBody)",
+   "audio/audio_control_engine.s:5274 `jr ExtData_ToneParam_AltBody_Join` / 5294 `call Rhythm_LookupTempoVelocity_Wrap` -- wraps AccStyle_LookupTempoAndVelocity on (0x90EA/0x90EB)",
+   "../../analysis/disk-format-probes/README-lsw-nonpart-records.md:150 `+0/+1 11-bit style number` -- record 0x48 offset 0"
+  ]
+ },
+ {
+  "old": "RegBitManip_Handler_4_Code",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiStream_ResolveVoiceIndexMode1",
+  "header": "MIDI-mode-1 twin of PartCtrl_WriteProgramChange: stores HL (program L, bank H) at 0x916F, resolves it for part (0x90F7) (MidiStream_ExtendedDispatch_Helper3_Helper) and returns HL/W from 0x9173-0x9175; registers preserved. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/audio_control_engine.s:11940 `ld xix, RegBitManip_Handler_4_Code` / 11945 `ld xix, PartCtrl_WriteProgramChange` / 11947 `call (xix)` -- MidiStream_CheckPartProgramAllowed picks it when (0xFD50) & 3 == 1",
+   "audio/audio_control_engine.s:8451 `ld (0x916f:16), hl` / 8460 `call MidiStream_ExtendedDispatch_Helper3_Helper` / 8468 `ldw_d16 hl, (0x9173)`",
+   "audio/audio_control_engine.s:7359 `call SndBuf_WriteParamEntries_Helper` -- parts <= 31 resolve (program, bank) through the +0x10 table of (0xE14E); result to 0x90EE"
+  ]
+ },
+ {
+  "old": "PartReinit_SendB0Command_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqTrackAssign_PartTagTable",
+  "header": "20 bytes: TRACK ASSIGN value (0xF1A0[track]) -> panel part-record tag: RIGHT1 0, LEFT 2, RIGHT2 1, PART4..PART15 3..14, DRUMS 15, CHORD/APC 0x15, CONTROL/RHYTHM 0. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/audio_control_engine.s:9394 `ld xiy, 0xf1a0` / 9395 `ld l, (xiy+hl)` / 9397 `ld a, (xiy+hl)` -- indexed by the track's TRACK ASSIGN value; the byte becomes the event tag (PartReinit_SendB0Command)",
+   "audio/audio_control_engine.s:10651 `.byte 0x00, 0x02, 0x01, 0x07` (+10652-10653) -- 0,2,1,7,8,9,10,11,4,5,6,3,15,0x15,0x15,0,0,12,13,14",
+   "ui_widgets/naka_widget_tables_1.s:990 `TrAsSureLangCheck_PtrTable_2` -- names of values 0..19: RIGHT1, LEFT, RIGHT2, PART8..PART12, PART5..PART7, PART4, DRUMS, CHORD, APC, CONTROL, RHYTHM, PART13..15",
+   "audio/audio_control_engine.s:10274 `ld xix, PartReinit_SendB0Command_Data` -- VoiceNote_WriteBankAndCC skips it for value 15 (CONTROL, 10271 `cp a, 0xf`)"
+  ]
+ },
+ {
+  "old": "TempoRing_InitPartStream_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqTrackAssign_RecordMapTable",
+  "header": "20 pointers by TRACK ASSIGN value: the panel events a track of that type records -- 4-byte entries (tag, payload offset, value mask, emitter index into MidiStream_ProcessorDispatchC_Data), 0xFF-terminated. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/audio_control_engine.s:9202 `ld xix, 0xf1a0` / 9205 `ld xix, TempoRing_InitPartStream_Data` / 9206 `ld xiy, (xix+hl)` -- indexed by 0xF1A0[track 0x91C7], list copied to 0x91D2",
+   "audio/audio_control_engine.s:8926-8946 -- MidiStream_ProcessTempoRingBuf matches each queued panel event (tag, offset) against the list, tests the mask and calls the emitter (w & 0xF)",
+   "audio/audio_control_engine.s:8979 `MidiStream_ProcessorDispatchC_Data:` -- emitters MIDI_EmitRecord_B0/80/D2/D1/D3/D0",
+   "audio/audio_control_engine.s:8839-8853 -- the track mask comes from 0x28A8 in MD_SEQ_REAL while SEQ_TRANSPORT_STATE bit 2 is set, or (3407) in MD_SEQ_STEP (recording)"
+  ]
+ },
+ {
+  "old": "VoiceMode3_BuildChannelTable_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqTrackAssign_PlaybackMapTable",
+  "header": "20 pointers by TRACK ASSIGN value: the playback-side lists (tag, payload offset, mask, handler index into VoiceMode_ParamHandler_3_Data), 0xFF-terminated, matched against a played track event. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/audio_control_engine.s:10047 `ld xix, 0xf1a0` / 10050 `ld xix, VoiceMode3_BuildChannelTable_Data` -- indexed by 0xF1A0[part 0x91C8], copied to 0x91D2",
+   "audio/audio_control_engine.s:10017-10038 -- VoiceMode3_InitChannelMatch scans the list for the event's (tag, offset), masks and stores the handler index at 0x91D1",
+   "audio/audio_control_engine.s:9696 `ld l, (0x91d1:16)` / 9699 `ld xix, VoiceMode_ParamHandler_3_Data` -- the index selects VoiceMode3_EvTypeN"
+  ]
+ },
+ {
+  "old": "MidiStream_InitFromLookup_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiStream_PartEventMapTable",
+  "header": "16 pointers by (0x379B) & 15 (0xFFFFFFFF = none; set for 1, 2, 4, 8): panel-event maps of part records 0x10-0x13 (ACP1-3, BASS) in the same 4-byte format, used by MidiStream_ProcessEventBuffer. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/audio_control_engine.s:8575 `ld l, (0x379b:16)` / 8576 `and l, 0xf` / 8578 `ld xiy, MidiStream_InitFromLookup_Data` -- copied to 0x91D2",
+   "audio/audio_control_engine.s:11017 `.byte 0xff, 0xff, 0xff, 0xff, 0xd7, 0xc4, 0xfc, 0x00` -- entry 1 = 0xFCC4D7 = this table + 64; entries 2, 4, 8 likewise (11018-11021)",
+   "audio/audio_control_engine.s:11025 `.byte 0xb1, 0x10, 0x7f, 0x01, ...` -- the lists name tags 0x10..0x13; ../../analysis/disk-format-probes/README-lsw-param-namespace-map.md:192 tags 16-19 = ACP1-ACP3, BASS"
+  ],
+  "spelling": "its 16 entries are 32-bit code-space pointers spelled as .byte (e.g. 0xd7,0xc4,0xfc,0x00 = MidiStream_InitFromLookup_Data + 0x40); should be .long <label> / 0xffffffff"
+ },
+ {
+  "old": "MidiStream_DispatchLoop_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiStream_PanelEventHandlerTable",
+  "header": "192 x .long by panel-event id (0x00-0xBF): the handler MidiStream_DispatchLoop calls for each 4-byte event in the PanelEvent_Post queue at (0xC039); 0xFFFFFFFF = none. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/audio_control_engine.s:11391 `ld xix, 0xc039` / 11400 `ld xiy, MidiStream_DispatchLoop_Data` / 11401 `ld xiy, (xiy+wa)`",
+   "audio/audio_control_engine.s:45 `; xwa -> a 4-byte panel event ... Append it to the event queue at (0xC039)` -- PanelEvent_Post fills that queue (16 deep)",
+   "ui_widgets/extension_device_screens.s:1004 `Phase 0 (Encoder_MarkInvalid) stores 0xFF at RAM 0xC039, the first id of the PanelEvent_Post queue`"
+  ],
+  "spelling": "the header comment calls 0xC039 a 'MIDI RX buffer'; it is the PanelEvent_Post queue. Entries 61-191 live in boot/interrupt_vector_trampolines.s"
+ },
+ {
+  "old": "AudioInit_MixFallbackDefault_Code",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AudioVoiceHandler_NoneSentinel",
+  "header": "Never-called copy of AudioInit_MixFallbackDefault (extz wa / jrl AudioInit_ConfigStereoVoice) whose address is the 'no handler' marker: the four AudioVoiceHandler_Table readers skip the call when the mode's entry equals it. Basis: callers + body.",
+  "basis": "callers (address comparisons) + body",
+  "evidence": [
+   "audio/dsp_config_sysex.s:5383 `lda xwa, (AudioInit_MixFallbackDefault_Code:24)` / 5384 `cp xwa, xbc` / 5385 `ret z` -- AudioModeChange_Handler; same at 5425, 5496, 5541",
+   "ui_widgets/widget_dispatch.s:7115 `; 0xFDECEF (AudioInit_MixFallbackDefault+5) -- no entry of this table does, so every entry is called`",
+   "audio/audioinit_routines.s:346 `AudioInit_MixFallbackDefault_Code:` / 347-348 -- the same two instructions as AudioInit_MixFallbackDefault above it"
+  ]
+ },
+ {
+  "old": "SysEx_ChannelHandler_4B_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SysEx_DispatchByChannel_ChorusMacroChorus1",
+  "header": "GS chorus macro 0 (Chorus 1; also the switch base): value C of SysEx4B_ChannelWords0, written by the callers to DSP param 0x4910+C (DSP EFFECT slot). Basis: switch value (GS CHORUS MACRO) + body.",
+  "basis": "switch value meaning (GS CHORUS MACRO 0..7 from SysEx address 40 01 38) + body",
+  "evidence": [
+   "audio/dsp_config_sysex.s:373 `cp e, 0x38` / 400 `jrl SysEx_ApplyVoiceParam_49` -- Roland GS DT1 to 40 01 38 = CHORUS MACRO",
+   "audio/dsp_config_sysex.s:608 `calr SysEx_DispatchByChannel` -- SysEx_ApplyVoiceParam_49 passes A = the macro value, then 614 `add xwa, 0x4910`",
+   "audio/dsp_config_sysex.s:213 `lda xix, (SysEx4B_ChannelSwitch:24)` / 215 `lda xix, (SysEx_ChannelHandler_4B_Data:24)` -- macro 0..7, entry 0 = this",
+   "audio/dsp_config_sysex.s:221 `ld xwa, SysEx4B_ChannelWords0`; GS order 0 Chorus 1 .. 7 Short Delay (FB), as the reverb twin's cases are named (SysEx_DispatchByChannel_49_ReverbMacroRoom2)"
+  ]
+ },
+ {
+  "old": "SysEx_ChannelHandler_49_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SysEx_DispatchByChannel_49_ReverbMacroRoom1",
+  "header": "GS reverb macro 0 (Room 1; also the switch base): value C of SysEx49_ChannelWords0, written by the callers to DSP param 0x4B10+C. Basis: switch value (GS REVERB MACRO) + body.",
+  "basis": "switch value meaning (GS REVERB MACRO, as for the named sibling cases) + body",
+  "evidence": [
+   "audio/dsp_config_sysex.s:274 `lda xix, (SysEx_ChannelHandler_49_Data:24)` -- entry 0 of SysEx49_ChannelSwitch",
+   "audio/dsp_config_sysex.s:280 `ld xwa, SysEx49_ChannelWords0`",
+   "audio/dsp_config_sysex.s:284 `SysEx_DispatchByChannel_49_ReverbMacroRoom2:` -- case 1 already named; 0 Room 1 in GS order (c3 evidence)"
+  ]
+ },
+ {
+  "old": "SeqBuf3_EnableTx_Stub",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CompIface_SerialEnableTx",
+  "header": "Empty (ret) computer-interface counterpart of MIDI_SC0_ENABLE_TX: MIDI_SC0_TX_DISPATCH calls it when COM_SELECT is not MIDI, SeqOut_WriteTimedBytes after queuing bytes in SeqBuf3 for interface types 0/1. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_serial_routines.s:975 `cp (COM_SELECT:16), 0` / 977 `calr MIDI_SC0_ENABLE_TX` / 981 `call SeqBuf3_EnableTx_Stub`",
+   "audio/dsp_config_sysex.s:1444 `call SeqBuf3_WriteBytes` / 1447 `calr SeqBuf3_EnableTx_Stub` -- where the MIDI path calls MIDI_SC0_ENABLE_TX (1422)",
+   "audio/dsp_config_sysex.s:1618 `ret`"
+  ]
+ },
+ {
+  "old": "DSPCfg_Data_ParamDispatch_Code",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSPCfg_RecordFieldToParamId_DspEffectRecord",
+  "header": "Tag 0x61 (also the switch base): id base 0x4900 in DSP slot 0, the DSP EFFECT slot. Basis: switch value (tag - 0x61) + body.",
+  "basis": "switch value meaning + body",
+  "evidence": [
+   "audio/dsp_config_sysex.s:4060 `sub wa, 97` -- switch value = tag - 0x61",
+   "ui_widgets/widget_dispatch.s:4386 `.short DSPCfg_Data_ParamDispatch_Code - DSPCfg_Data_ParamDispatch_Code` -- entry 0 = tag 0x61",
+   "audio/dsp_config_sysex.s:4071 `ld xiz, 0x4900` / 4072 `ld wa, 0:i3` -- slot 0",
+   "../../analysis/disk-format-probes/README-lsw-leftover-records.md:24 `| 0 | 0x61 | 0x4900 | ... | DSP EFFECT`"
+  ]
+ },
+ {
+  "old": "UIStateEvt_ParamEdit_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PanelTag48_UpdateAudioConfig",
+  "header": "SwbtWr listener of panel record 0x48 (style/tempo): for payload offsets 0-6 mirrors the changed bits into the audio-configuration state (0xC596, 0xC59A, 0xC5A0) and sets 0xC594 bit 2. Basis: callers (listener list) + body.",
+  "basis": "callers (SwbtB2_Code48_Listeners) + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:6396 `.long UIStateEvt_ParamEdit_Data` -- SwbtB2_Code48_Listeners",
+   "audio/dsp_config_sysex.s:5804 `ldb_d8 a, (SWBTWR_PAYLOAD_1)` / 5808 `cp wa, 6:i3` -- switch on the changed payload offset 0..6",
+   "audio/dsp_config_sysex.s:5822 `ldb_d8 a, (0xfc5e)` / 5828 `ldb_d8 a, (0xfc5d)` -- record 0x48 payload +4/+3",
+   "audio/dsp_config_sysex.s:5353-5357 `ld wa, (0xc594:16)` / `bit 2, wa` / `andw (0xc594:16), 0xfffb` -- AudioInit_ProcessModeChange consumes the 0xC594 bit 2 flag and reruns AudioModeChange_Handler"
+  ]
+ },
+ {
+  "old": "UIStateEvt_TransposeUpdate_Apply_Code",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PanelTag48_UpdateAudioConfig_StyleNumber",
+  "header": "Offset 0 of record 0x48 (the style number; also the switch base): when bits 0-2 changed, recomputes 0xC596 bits 0-4 from +3/+4 (ParamEdit_WordTable), may refresh the tone bank, sets 0xC594 bit 2. Basis: switch value + body.",
+  "basis": "switch value meaning (payload offset 0 of record 0x48) + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:7212 ParamEdit_SwitchOffsets entry 0 = UIStateEvt_TransposeUpdate_Apply_Code (switch read at audio/dsp_config_sysex.s:5811-5814)",
+   "audio/dsp_config_sysex.s:5816 `ldb_d8 a, (SWBTWR_PAYLOAD_3)` / 5817 `and a, 7` -- changed-bit mask of +0",
+   "audio/dsp_config_sysex.s:5867 `call AudioInit_RefreshToneBank` / 5869-5871 `or (0xc596:16), iz` / `orw (0xc594:16), 4`",
+   "../../analysis/disk-format-probes/README-lsw-nonpart-records.md:150 -- record 0x48 +0/+1 = 11-bit style number"
+  ]
+ },
+ {
+  "old": "UIStateEvt_VolumeMixer_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PanelTag90_UpdateAudioConfig",
+  "header": "SwbtWr listener of panel record 0x90: for payload offsets 0-5 mirrors bits into the audio-configuration state (0xC1FE bits 0-2, 0xC596 bits 3/5/7, per-part bytes at (0xC1FF)+228) and sets 0xC594 bit 2. Basis: callers (listener list) + body.",
+  "basis": "callers (SwbtB2_Code90_Listeners) + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:6503 `.long UIStateEvt_VolumeMixer_Data` -- SwbtB2_Code90_Listeners",
+   "audio/dsp_config_sysex.s:6009 `ldb_d8 a, (SWBTWR_PAYLOAD_1)` / 6013 `cp wa, 5:i3` -- switch on the changed offset",
+   "audio/dsp_config_sysex.s:6024-6027 `and (0xc1fe:16), 252` / `or (0xc1fe:16), a` / `orw (0xc594:16), 4` -- the same mirroring AudioMode_ConfigExternal does from (0xFC66) (5560-5590)"
+  ]
+ },
+ {
+  "old": "UIStateEvt_TransposeUpdate_Apply_Code_2",
+  "verdict": "refuse",
+  "why_refused": "Case 0 (also the switch base) of the record-0x90 listener: copies payload +0 bits 0-1 into 0xC1FE bits 0-1 (and clears 0xC1FE when 0xC594 bit 4 is set). Record 0x90's fields are not identified (README-lsw-nonpart-records: 'small bit-field record'), so a name would only say 'byte 0'; the c9 pass refused the other cases for the same reason.",
+  "new": null,
+  "header": null,
+  "basis": "switch value = byte offset in an unidentified record",
+  "evidence": [
+   "audio/dsp_config_sysex.s:6021-6027 `ldb_d8 a, (SWBTWR_PAYLOAD_3)` / `and a, 31` / `and (0xc1fe:16), 252` / `or (0xc1fe:16), a`",
+   "ui_widgets/widget_dispatch.s:VolumeMixer_SwitchOffsets entry 0 -- offset 0 of record 0x90"
+  ]
+ },
+ {
+  "old": "UIStateEvt_EffectSelect_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PanelTag70_UpdateAudioConfig",
+  "header": "SwbtWr listener of panel record 0x70: offset 0/1 set the note 0xC5A2 (55/60/67 or +1), offset 2 a step (EffectSelect_StepTable -5..+6) into the high nibbles of (0xC1FF)+0x124 for 26 parts, offsets 3/4 RAM 0xE9C0/0xE9BE; sets 0xC594 bit 2. Basis: callers + body.",
+  "basis": "callers (SwbtB2_Code70_Listeners) + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:6473 `.long UIStateEvt_EffectSelect_Data` -- SwbtB2_Code70_Listeners",
+   "audio/dsp_config_sysex.s:6137 `ldb_d8 a, (SWBTWR_PAYLOAD_1)` -- dispatch on the changed offset 0..4",
+   "audio/dsp_config_sysex.s:6163-6175 `stb_d8 (0xc5a2), a` / `ld (0xc5a2:16), 55` / `60` / `67` -- payload +0 bits 0-1",
+   "audio/dsp_config_sysex.s:6206 `lda xbc, (EffectSelect_StepTable:24)` / 6218 `or (xwa), c` -- per-part high nibble; every path ends `orw (0xc594:16), 4`"
+  ]
+ },
+ {
+  "old": "UIStateEvt_PlayModeGuard_Data",
+  "verdict": "refuse",
+  "why_refused": "Listener of record 0x98: only payload +2 bit 6 matters -- set: 0xC596 bit 13; clear: clears it and re-runs Voice_UpdatePlayModeState / VoiceEvent_AllocAllLayers / NoteMap_FindBestMatch / VoiceEvent_DispatchTable. Neither record 0x98's +2 bit 6 nor 0xC596 bit 13 is identified, and unlike its siblings it does not set the 0xC594 change flag, so the name would be a guess.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body; meaning of the bit not established",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:6531 `.long UIStateEvt_PlayModeGuard_Data` -- SwbtB2_Code98_Listeners",
+   "audio/dsp_config_sysex.s:6248 `cp (SWBTWR_PAYLOAD_1:16), 2` / 6250 `bit 6, (SWBTWR_PAYLOAD_2:16)` / 6252 `orw (0xc596:16), 0x2000`",
+   "audio/dsp_config_sysex.s:6256 `call Voice_UpdatePlayModeState` ... 6261 `call VoiceEvent_DispatchTable`"
+  ]
+ },
+ {
+  "old": "UIStateEvt_ChannelConfig_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PanelTag80_UpdateAudioConfig",
+  "header": "SwbtWr listener of panel record 0x80 (sequencer/MIDI-clock control): mirrors +0 and +3 bits into the audio-configuration state (0xC59C bit 3, 0xC322, 0xC342-0xC34C bit 6, the per-part step nibble from record 0x70 +2), reloads 0xC362/0xC363 for offsets 10-12, sets 0xC594 bit 2. Basis: callers + body.",
+  "basis": "callers (SwbtB2_Code80_Listeners) + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:6492 `.long UIStateEvt_ChannelConfig_Data` -- SwbtB2_Code80_Listeners",
+   "audio/dsp_config_sysex.s:6265 `ldb_d8 a, (SWBTWR_PAYLOAD_1)` -- dispatch on offsets 0, 2, 3, 10-12",
+   "audio/dsp_config_sysex.s:6299 `ldb_d8 a, (0xfd04)` / 6302 `lda xbc, (EffectSelect_StepTable:24)` -- +0 bit 5 applies record 0x70's +2 step to all 26 parts",
+   "audio/dsp_config_sysex.s:6336 `res 4, (0xc322:16)` / 6346 `set 6, (0xc342:16)`; paths end `orw (0xc594:16), 4`"
+  ]
+ },
+ {
+  "old": "UIStateEvt_MuteToggle_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SwbtB2_CodeA8_UpdateAudioConfig",
+  "header": "SwbtWr listener of event code 0xA8 (no panel record of that tag): copies payload +16 bit 0 into 0xC594 bit 0 and sets 0xC594 bit 2, the audio-configuration change flag. Basis: callers + body.",
+  "basis": "callers (SwbtB2_CodeA8_Listeners) + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:6555 `.long UIStateEvt_MuteToggle_Data` -- SwbtB2_CodeA8_Listeners",
+   "audio/dsp_config_sysex.s:6409 `ldb_d8 a, (SWBTWR_PAYLOAD_1)` / 6410 `cp a, 16` / 6415 `orw (0xc594:16), 1` / 6419 `orw (0xc594:16), 4`",
+   "audio/audioinit_routines.s:633 `ld wa, (0xc594:16)` / 634 `and wa, 0x3` -- the audio init reads bits 0-1"
+  ]
+ },
+ {
+  "old": "LinkVoiceSlots_Block",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "NoteMap_FindLinkedSlotByKey",
+  "header": "Walks the slot list of the record at XWA (head NoteMap_LinkByte_Table[(XWA+3)], nodes {prev, next} at (0xE7E8)) for the slot whose stored key (0xC5CB)[3*slot] equals byte 0 of entry BC; returns it in L, or the list head when none. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/note_voice_mapping.s:2873 `call LinkVoiceSlots_Block` -- NoteMap_AssignAllVoiceLinks, for an entry whose second byte is 0, then unlinks the slot found (NoteMap_SwapVoiceLinks) unless it is the head",
+   "audio/note_voice_mapping.s:6612 `lda xhl, (NoteMap_LinkByte_Table:24)` / 6613 `ld e, (xhl+de)` -- list head 0x21/0x22",
+   "audio/note_voice_mapping.s:6630-6633 `muls wa, 0x3` / `add xwa, xix` / `cp (xwa + 1), c` -- compare the slot's key (0xC5CA+3n+1 = 0xC5CB+3n)",
+   "audio/note_voice_mapping.s:2850-2851 `ld a, (xbc)` / `ld (xhl+de), a` -- the assigning path stores entry byte 0 at (0xC5CB)[3*slot]"
+  ]
+ },
+ {
+  "old": "SeqPerformance_Event_Block",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqEvtBuf_NoteDispatch_Ignore",
+  "header": "Case of SeqEvtBuf_NoteDispatch for value 6 and out-of-range values: ignores the event and returns to SeqEvtBuf_NonNoteDispatchLoop. Basis: switch value + body.",
+  "basis": "switch value + body",
+  "evidence": [
+   "audio/note_voice_mapping.s:13865 `jrl lt, SeqPerformance_Event_Block` / 13867 `jrl gt, SeqPerformance_Event_Block` -- out-of-range values",
+   "ui_widgets/widget_dispatch.s:7397 `.short SeqPerformance_Event_Block - SeqPerformance_EventDispatch` -- entry 5 = value 6",
+   "audio/note_voice_mapping.s:13959 `jrl SeqEvtBuf_NonNoteDispatchLoop`"
+  ]
+ },
+ {
+  "old": "VoiceSlot_CheckAndApply_Data2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ChordTables_PitchClassBits",
+  "header": "16 x .short 1 << i, read as words at byte offset pitch-class + 1 (1..12): the bit set used to skip duplicate pitch classes while collecting held notes. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/note_voice_mapping.s:15473 `ld xiz, ChordTables_NoteToPitchClass` / 15476 `ld xiz, VoiceSlot_CheckAndApply_Data2` -- reader VoiceSlot_StoreParams_LoadReg",
+   "audio/note_voice_mapping.s:15477 `and_sriw_rm WA, 0x03, 0xf8, 0xe4` / 15479 `or_sriw_rm ...` -- test and add the bit; a set bit skips the note",
+   "audio/note_voice_mapping.s:16876 `.short 0x0001, 0x0002, 0x0004, ...`"
+  ]
+ },
+ {
+  "old": "UIState_ProcessKeyEvent_Code",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "UIState_ProcessKeyEvent_OnVoiceSelect",
+  "header": "Payload offset 0 of a part record (the voice selector; also the switch base): applies the whole byte (mask 0xFF) through SndParam_ApplyEventField unless MIDI_WriteChannelData_Block rejects the part. Basis: switch value + body.",
+  "basis": "switch value meaning (payload offset 0 = voice selector) + body",
+  "evidence": [
+   "audio/note_voice_mapping.s:17168 `ld a, (xsp+0x1)` / 17175 `lda xix, (KeyEvent_SwitchOffsets:24)` -- switch on SWBTWR_PAYLOAD_1",
+   "ui_widgets/widget_dispatch.s:8410 `.short UIState_ProcessKeyEvent_Code - UIState_ProcessKeyEvent_Code` -- entry 0",
+   "audio/note_voice_mapping.s:17180-17195 `and a, 255` / `calr MIDI_WriteChannelData_Block` / `calr SndParam_ApplyEventField`",
+   "../../docs/kn-disk-file-formats.md:757 -- +0 = the voice/tone selector (schema min 0, max 167)"
+  ]
+ },
+ {
+  "old": "HdaeRom_Entry",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PanelTag60_ApplyEffectOnOff",
+  "header": "SwbtWr listener of panel record 0x60: for payload +1 applies bits 7, 6 and 5 (DIGITAL REVERB, ACOUSTIC ILLUSION and EQUALIZER on/off) one at a time through SndParam_ApplyEventField. Basis: callers + body.",
+  "basis": "callers (SwbtB2_Code60_Listeners) + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:6410 `.long HdaeRom_Entry` -- SwbtB2_Code60_Listeners",
+   "audio/note_voice_mapping.s:17385 `cp a, 1:i3` / 17387 `bitm 7, (xsp+0x3)` / 17398 `bitm 6` / 17409 `bitm 5` -- each with SndParam_ApplyEventField",
+   "../../docs/kn-disk-file-formats.md:469 `0x4002/0x4004/0x4006 are tag 0x60 payload+1 bits 7/6/5 for slots 1/2/4` -- slots 1 DIGITAL REVERB, 2 ACOUSTIC ILLUSION, 4 EQUALIZER (lines 455-458)"
+  ]
+ },
+ {
+  "old": "HdaeRom_TableEntry2_Code",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PanelTag72_ApplyPartMix_Volume",
+  "header": "Payload +3 of record 0x72 (also the switch base): sent to parts 0x17 and 0x18 as CC 7 (volume), 0 when the value's bit 7 is set. Basis: switch value + body.",
+  "basis": "switch value meaning (changed payload offset of record 0x72) + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:8429 `.short HdaeRom_TableEntry2_Code - HdaeRom_TableEntry2_Code` -- entry 3",
+   "audio/note_voice_mapping.s:17587-17592 `bitm 7, (xsp+0x2)` / `res 7, a` / `ld (xbc), a` -- 0 when bit 7 set",
+   "audio/note_voice_mapping.s:17596-17598 `ldw wa, 23` / `ld bc, 7:i3` / `calr MIDI_SendControlChange`; 17602 part 24"
+  ]
+ },
+ {
+  "old": "MIDI_SendEpilogue_Code",
+  "verdict": "refuse",
+  "why_refused": "Case for parameter id 0x4000 (tag 0xB0 payload +0, also the switch base) of SndParam_ApplySystemParam: sends the value as COMM packet type 1 when it changed (SendPartDataBlock_Block, 0xE351). The sub-CPU hands type 1 to DSP_Set_MixParam_45B2, one of three inputs of the DSP2 output gain (with 0x4001 and the fade level 0x4005), but which control 0x4000 is is not established; c9 refused ids 0x4001/0x4005 for the same reason.",
+  "new": null,
+  "header": null,
+  "basis": "switch value known (id 0x4000); field meaning not established",
+  "evidence": [
+   "audio/note_voice_mapping.s:18461-18464 `ldto_berp a, 248` / `call SendPartDataBlock_Block`",
+   "audio/note_voice_mapping.s:26218-26226 SendPartDataBlock_Block: `cp (0xe351:16), a` / `ld bc, 1:i3` / `call SendCOMM_VariableLengthPacket`",
+   "audio/sndparam_records/run_edc2a4.c:100 `.key = 0x00004000, .bank_index = 0xB0, .bank_offset = 0x00`",
+   "../../v142/subcpu/kn5000_subprogram_v142.s:44354 `CmdHandler2C_Global_MixParamA:` -> DSP_Set_MixParam_45B2"
+  ]
+ },
+ {
+  "old": "MIDI_SendEpilogue_Code_2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SndParam_ApplySystemParam_ScaleTuneOnOff",
+  "header": "Id 0x4280 (record 0x92 +1 bit 7, scale tune on/off; also the switch base): sends F0 50 B1 with 127 (on) or 0 (off). Basis: switch value + body + receiver.",
+  "basis": "switch value meaning (id 0x4280 = record 0x92 +1 mask 0x80) + body + receiver",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:8437 `.short MIDI_SendEpilogue_Code_2 - MIDI_SendEpilogue_Code_2` -- entry 0 = id 0x4280 (switch `sub wa, 128` at audio/note_voice_mapping.s:18544)",
+   "audio/note_voice_mapping.s:18555-18566 `ldw wa, 127` / `cp iz, 0:i3` / `ldw wa, 80` / `ldw bc, 177` / `calr SeqVoice_CheckAndRet_Prologue` -- {F0, 0x50, 0xB1, 0 or 127}",
+   "../../analysis/disk-format-probes/README-lsw-param-namespace-map.md:131 `0x4280 -> +0x01 mask 80`",
+   "../../v142/subcpu/kn5000_subprogram_v142.s:22636 `Voice_SystemMsg_SubB1:` / 22639 `jrl ScaleTune_Set_Global_Enabled` -- the receiver of sub-command 0xB1"
+  ]
+ },
+ {
+  "old": "MIDI_PitchBendData_Block",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MIDI_SendAllVoicesPitchUpdate",
+  "header": "Sends the sub-CPU system message {F0 50 92 00} and flushes; the sub-CPU runs Voice_AllVoices_PortamentoUpdate (pitch refresh of parts 0-0x19) for it. Sent at the end of a sound-RAM transfer and on its abort path. Basis: callers + body + receiver.",
+  "basis": "callers + body + receiver",
+  "evidence": [
+   "audio/note_voice_mapping.s:19636-19640 `ldw wa, 80` / `ldw bc, 146` / `ld de, 0:i3` / `calr SeqVoice_CheckAndRet_Prologue` / `jp MIDI_PostSendStub`",
+   "midi/midi_dispatch_handlers.s:12251 `call MIDI_PitchBendData_Block` -- MidiSysEx_SendSoundRamEndCmd; 12417 the abort path",
+   "../../v142/subcpu/kn5000_subprogram_v142.s:22544 `; Sub-command 0x92 -> Voice_AllVoices_PortamentoUpdate (no argument).`"
+  ]
+ },
+ {
+  "old": "SendAllSoundOff_Flush_Code",
+  "verdict": "refuse",
+  "why_refused": "Case (also the switch base) of MIDI_WriteChannelData_Block for part tags 0x10-0x14, 0x17 and 0x18: returns L = 1, so UIState_ProcessKeyEvent does not apply those parts' record changes. The mixer name table gives 0x10-0x14 = ACP1-3, BASS, DRUM (and 0x15/0x16 = CHRD/RTBS, which return 0), but 0x17/0x18 are not identified and the owner MIDI_WriteChannelData_Block is itself misnamed, so the case is refused until the owner is named.",
+  "new": null,
+  "header": null,
+  "basis": "switch value = part tag; owner unnamed, tags 0x17/0x18 unidentified",
+  "evidence": [
+   "audio/note_voice_mapping.s:19665 `sub wa, 16` / 19673 `lda xix, (SendAllSoundOff_Flush_Code:24)` / 19676 `ld l, 1:opc`",
+   "ui_widgets/widget_dispatch.s:8564-8572 ChannelData_SwitchOffsets: entries 5, 6 -> _Case21, the rest -> this",
+   "../../analysis/disk-format-probes/README-lsw-param-namespace-map.md:190 `| mixer name | RT1 | RT2 | LEFT | PT4-PT16 | ACP1-ACP3 | BASS | DRUM | CHRD | RTBS |`"
+  ]
+ },
+ {
+  "old": "PlayModeStateMachine_Block5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Transport_EnableMidiStartContinue",
+  "header": "Clears 0x28A7 bit 2, the flag that makes the transport ignore incoming MIDI Start (0xFA) / Continue (0xFB). Basis: callers + body (and the readers of the bit).",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/note_voice_mapping.s:19841 `calr PlayModeStateMachine_Block5` -- first step of Acc_LoadAndStartPlayback",
+   "audio/note_voice_mapping.s:20300 `res 2, (0x28a7:16)`",
+   "midi/midi_serial_routines.s:453 `bit 2, (0x28a7:16)` / 454 `jr nz, Transport_NoClockReturn` / 455 `cp d, 0xfa` -- with the bit set 0xFA/0xFB are ignored; same at 604",
+   "ui/ui_playback_modes.s:165 `or (0x28a7:16), 4` -- PlayMode_SetupAndDispatch sets it, 171 the teardown clears it"
+  ]
+ },
+ {
+  "old": "StoreAndReturn_Block",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SongPlayer_ResetState",
+  "header": "Resets the song-file player: clears its state, mode, flags and counters in the block at 0xE9C4 (+0, +0x20, +0x21, +0x23, +0x27, +0x2B, +0x2D, +0x31, +0x239, +0x23D) and re-initialises the track slots and the SysEx and MIDI ring buffers. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/note_voice_mapping.s:19842 `calr StoreAndReturn_Block` -- Acc_LoadAndStartPlayback, before loading",
+   "audio/note_voice_mapping.s:19970 `jrl StoreAndReturn_Block` -- last step of Song_AbortPlayback",
+   "audio/note_voice_mapping.s:23604-23620 `ld (0xe9e4:16), 0` ... `ld (0xe9c4:16), 0` / `calr FileIO_InitTrackSlots` / `calr SysexRingBuf_Init` / `jrl MidiRingBuf_Init`",
+   "ui/char_encoding_naka_state.s:91-118 -- the field map of WorkRam2_SongPlayerState (0xE9C4) names these offsets"
+  ]
+ },
+ {
+  "old": "SndParam_TypeDispatch_Entry1",
+  "verdict": "refuse",
+  "why_refused": "Case for selector 2 of SndParam_LookupByChannel: picks column +4 of the (0xEC11) value-map row (row * 24 + 4). The meaning of the value-map columns (and of the selector) is not established -- earlier passes describe them only as 'column 4 / column 5' -- so a name would restate the index.",
+  "new": null,
+  "header": null,
+  "basis": "switch value = column selector of unidentified meaning",
+  "evidence": [
+   "audio/note_voice_mapping.s:24948-24957 `dec 1, wa` / `cp wa, 5:i3` / `lda xix, (SndParamChan_SwitchOffsets:24)`",
+   "ui_widgets/widget_dispatch.s:9198 `.short SndParam_TypeDispatch_Entry1 - SndParam_TypeDispatch` -- entry 1",
+   "audio/note_voice_mapping.s:24966-24969 `muls hl, 0x18` / `inc 4, hl` / `jr SndParam_LoadTableConverge`"
+  ]
+ },
+ {
+  "old": "Param_SignExtendRetu_Block2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SoundData_InitPhase0",
+  "header": "Init-phase-0 handler of subsystem table 11 (phases 1-3 are bare returns): jumps to the code that sets the sound-table base 0xE14E to (SoundData_CategoryDescPtr). Basis: callers (Subsys_HandlerTable11 entry 0) + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:9223 `.long Param_SignExtendRetu_Block2` -- entry 0 of Subsys_HandlerTable11; entries 1-3 Param_SignExtendRetu_Return",
+   "boot/screen_group_dispatch.s:21-24 -- ScreenGroup_Dispatch calls entry [phase] of every subsystem table; phase 0 right after the Sub-CPU payload transfer",
+   "audio/note_voice_mapping.s:25096 `jr Param_SignExtendRetu_Block` / 25091-25092 `ld xwa, (SoundData_CategoryDescPtr:24)` / `ld (0xe14e:16), xwa`"
+  ]
+ },
+ {
+  "old": "Param_SignExtendReturn_Code2",
+  "verdict": "refuse",
+  "why_refused": "Switch base / first case of Param_SignExtendReturn_Helper3, whose switch value is a range class of a received SysEx parameter address (425.. modulo 11). The address space is unidentified and the shared exit discards the pushed limits, exactly as the c9 pass found when it refused this switch's other cases.",
+  "new": null,
+  "header": null,
+  "basis": "switch value = range class of an unidentified SysEx parameter address",
+  "evidence": [
+   "audio/note_voice_mapping.s:25141-25153 (address classes, `call DivMod32`, `ParamSx_SwitchC`)",
+   "audio/note_voice_mapping.s:25082-25085 Param_SignExtendReturn_Helper2 `ld hl, wa / cpl bc / and hl, bc / retd 4` -- the pushed limits are not used"
+  ]
+ },
+ {
+  "old": "Param_SignExtendReturn_Code",
+  "verdict": "refuse",
+  "why_refused": "Switch base / first case of Param_SignExtendReturn_Helper3, whose switch value is a range class of a received SysEx parameter address (102.. modulo 81 via ParamSx_CaseMapB). The address space is unidentified and the shared exit discards the pushed limits, exactly as the c9 pass found when it refused this switch's other cases.",
+  "new": null,
+  "header": null,
+  "basis": "switch value = range class of an unidentified SysEx parameter address",
+  "evidence": [
+   "audio/note_voice_mapping.s:25141-25153 (address classes, `call DivMod32`, `ParamSx_SwitchB`)",
+   "audio/note_voice_mapping.s:25082-25085 Param_SignExtendReturn_Helper2 `ld hl, wa / cpl bc / and hl, bc / retd 4` -- the pushed limits are not used"
+  ]
+ },
+ {
+  "old": "Param_SignExtendReturn_Code3",
+  "verdict": "refuse",
+  "why_refused": "Switch base / case of the unlabelled routine after Param_SignExtendReturn_Join (entry `dec 6, xsp`), switched on (address - 295) mod 80 then mod 11 of a SysEx parameter address; the address space is unidentified (c9 refused the sibling cases) and the owner has no label.",
+  "new": null,
+  "header": null,
+  "basis": "switch value = range class of an unidentified SysEx parameter address; owner unlabelled",
+  "evidence": [
+   "audio/note_voice_mapping.s:25325 `lda xix, (Param_SignExtendReturn_Code3:24)` / ParamSx_SwitchF",
+   "audio/note_voice_mapping.s:25302 `cp xiz, 295` -- unlabelled owner starts at 25291 `dec 6, xsp`"
+  ],
+  "spelling": "in the owner, `.byte 0xf3, 0xe1` / `ld l, 1:opc` / `ldw wa, 0x3ab8` / `ldw wa, 0xf6e8` (0xFEEE47-0xFEEE50) is misframed: the bytes are `lda xwa, (xwa+0x127)` (f3 e1 27 01 30), `lda xwa, (xwa+0x3a)` (b8 3a 30), `cp xiz, xwa` (e8 f6), per unidasm"
+ },
+ {
+  "old": "Param_SignExtendRetu_Block3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SubCPU_RequestSoundName",
+  "header": "Sends sub-CPU request 0x20 {2B 30 7F 20 00 00 02 seq A C} (bank A, program C) on COMM channel 3 and returns its sequence number in L; the caller waits for the 17-byte reply, the sound's name. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/note_voice_mapping.s:24386 `call Param_SignExtendRetu_Block3` -- SndParam_ApplyProgramChangeAsync, then 24392 `ldw bc, 0x11` (reply length) and, on failure, copies Msg_SoundNameError 'Sound Name Error' (24399-24402)",
+   "display/graphics_text_vga.s:4979 `call SndParam_ApplyProgramChangeAsync` -- from MainGetSndName (the firmware's own NAKA function name)",
+   "audio/note_voice_mapping.s:25712-25727 `ld (xde + 3), 0x20` / `inc 1, (0xe197:16)` / `ld wa, 3:i3` / `ldw bc, 0xa` / `call sendCOMM` / `ld l, (0xe2bf:16)`"
+  ]
+ },
+ {
+  "old": "Param_SignExtendRetu_Block4",
+  "verdict": "refuse",
+  "why_refused": "Sends sub-CPU request 0x22 {2B 30 7F 22 00 00 02 seq A C} and returns the sequence number; ApplyProgramChangeAs_Prologue waits for a 1-byte reply and returns 0x7F/0 from its bit 7, which SndParam_UpdateVoiceEntry turns into bit 6 of the part's +4 field. What that per-sound flag is, is not established (the sub-CPU handler is named only DSP_ReadVoiceParam5D).",
+  "new": null,
+  "header": null,
+  "basis": "callers + body; meaning of the reply bit not established",
+  "evidence": [
+   "audio/note_voice_mapping.s:24429 `call Param_SignExtendRetu_Block4` / 24435 `ld bc, 1:i3` / 24446-24449 `bitm 7, (xsp + 2)` / `ld a, 0x7f:opc`",
+   "audio/audio_control_engine.s:7413 `call ApplyProgramChangeAs_Prologue` / 7416 `ldi_erpb 0xfb, 0x40`",
+   "../../v142/subcpu/kn5000_subprogram_v142.s:44050 `cp a, 0x22` -> DSP_Cmd2B_ReadParam5D"
+  ]
+ },
+ {
+  "old": "Param_SignExtendRetu_Block5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SubCPU_RequestShortSoundName",
+  "header": "Sends sub-CPU request 0x24 {2B 30 7F 24 00 00 02 seq A C} on COMM channel 3 and returns its sequence number; the caller waits for a 10-byte reply, substituting 'SName Error!!' on failure. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/note_voice_mapping.s:24472 `call Param_SignExtendRetu_Block5` -- ApplyProgramChangeAs_Prologue2, 24478 `ldw bc, 0xa` (reply length)",
+   "audio/note_voice_mapping.s:24483 `lda xwa, (Msg_SNameError:24)` -- error text 'SName Error!!'",
+   "sequencer/sequencer_engine.s:40 `call ApplyProgramChangeAs_Prologue2` -- NoteEditSy_ScanAndSortEntries collects the names of the 128 entries of bank 15",
+   "audio/note_voice_mapping.s:25754 `ld (xde + 3), 0x24` / 25769 `call sendCOMM`"
+  ]
+ },
+ {
+  "old": "BuildAndSendPacket_Block",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SubCPU_SendSoundMemUpdated",
+  "header": "Sends sub-CPU message {2C 30 7F 06 00 00 02 seq A C}: sound-memory entry (A, C) -- 0xFF/0xFF = all -- has been transferred; the sub-CPU runs DSP_VoiceState_Dispatch(A, C). Sent after the image at 0x1E0000 is bulk-copied to sub-CPU 0x7800. Basis: callers + body + receiver.",
+  "basis": "callers + body + receiver",
+  "evidence": [
+   "audio/note_voice_mapping.s:27658 `call InterCPU_E1_Bulk_Transfer` / 27661 `call BuildAndSendPacket_Block` -- PostTmLoad with WA = BC = 0xFF; also 27711 (PostTmSave_Success), 27773, 27835 (single entry / bank loads)",
+   "audio/note_voice_mapping.s:25938 `ld (xde + 3), 0x6` / 25950 `jp sendCOMM`",
+   "../../v142/subcpu/kn5000_subprogram_v142.s:44497 `; Sub-command 0x06: DSP_VoiceState_Dispatch(WA = payload[0], BC = payload[1]).`",
+   "audio/note_voice_mapping.s:27666 `call COMM_BuildAndSendPacket` -- the failure path sends sub-command 0x04 instead"
+  ]
+ },
+ {
+  "old": "CommParam_SetComplete_Block",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "COMM_ResetSentValues",
+  "header": "Init-phase-0 handler of subsystem table 1: sets 0xE356 = 1 and 0xFF into the last-sent caches 0xE351-0xE35C of the set-if-changed COMM senders, so each next value is sent. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:9333 `.long CommParam_SetComplete_Block` -- entry 0 of Subsys_HandlerTable01 (init phase 0)",
+   "audio/note_voice_mapping.s:26112-26122 `ld (0xe356:16), 1` / `ld (0xe357:16), 255` ... `ld (0xe35c:16), 255`",
+   "audio/note_voice_mapping.s:26219-26221 `cp (0xe351:16), a` / `ret z` / `ld (0xe351:16), a` -- the senders compare with these caches"
+  ]
+ },
+ {
+  "old": "CommParam_SetComplete_Block2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "COMM_ResetSentValues_Phase1",
+  "header": "Init-phase-1 entry of subsystem table 1: jumps to COMM_ResetSentValues. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:9334 `.long CommParam_SetComplete_Block2` -- entry 1 of Subsys_HandlerTable01",
+   "audio/note_voice_mapping.s:26126 `jr CommParam_SetComplete_Block`"
+  ]
+ },
+ {
+  "old": "SendPartDataBlock_Block4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "COMM_SendMicVolume",
+  "header": "Set-if-changed sender of the MIC volume: stores A in 0xE354 and sends it as COMM packet type 7 (sub-CPU DSP_Set_MicLevel). Basis: callers + body + receiver.",
+  "basis": "callers + body + receiver",
+  "evidence": [
+   "audio/note_voice_mapping.s:18519-18525 / 18527-18540 -- SndParam_ApplySystemParam ids 0x4141 / 0x4142 (de 65/66) call it with the level, or 0 while 0x4142 = 1",
+   "ui_widgets/naka_disk_warning.c:2459 `{ 0x00004141, 0x00004142, 3 },  /* 27 MIC */` -- the mixer's MIC channel (volume, mute ids)",
+   "audio/note_voice_mapping.s:26247-26254 `cp (0xe354:16), a` / `ld bc, 7:i3` / `call SendCOMM_VariableLengthPacket`",
+   "../../v142/subcpu/kn5000_subprogram_v142.s:44978 `; DSP_Set_MicLevel: Global 0x2C sub-command 0x07: stores the microphone level (main-CPU parameter 0x4141 ...`"
+  ]
+ },
+ {
+  "old": "SendPartDataBlock_Block9",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "COMM_SendEqualizerOnOff",
+  "header": "Set-if-changed sender of the EQUALIZER on/off: A != 0 -> 1, stored in 0xE35A and sent as COMM packet 0x25 (sub-CPU DSP_Set_EqualizerOnOff). Basis: callers + body + receiver.",
+  "basis": "callers + body + receiver",
+  "evidence": [
+   "audio/note_voice_mapping.s:18496 `call SendPartDataBlock_Block9` -- SndParam_ApplySystemParam_SendEqualizerOnOff (id 0x4006, tag 0x60 +1 bit 5)",
+   "audio/note_voice_mapping.s:26322-26334 `ld c, 1:opc` / `cp (0xe35a:16), c` / `ldw bc, 37` / `call SendCOMM_VariableLengthPacket`",
+   "../../v142/subcpu/kn5000_subprogram_v142.s:44424 `; \u2605 NEW NAME. Table entry 14 (raw 0x25): calls DSP_Set_EqualizerOnOff`"
+  ]
+ },
+ {
+  "old": "SendPartDataBlock_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SoundRam_ConvertKn1500Record",
+  "header": "Converts one KN1500 sound-RAM record (the 289-byte copy at XBC) into a 470-byte KN5000 record at XWA: fills it with defaults (SoundRam_DefaultRecord) and moves the fields to their KN5000 offsets. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/note_voice_mapping.s:27458 `calr SendPartDataBlock_Data` -- only caller: HdaeRom_DataDispatch, the case for image id 5 (KN1500), over 40 records",
+   "audio/note_voice_mapping.s:27445 `ld xbc, 289` / 27450 `ldw bc, 144` / `ldirw` -- source stride 289; 27453 `ld xbc, 470` -- destination 470-byte records",
+   "audio/note_voice_mapping.s:26809 `ld xiy, SoundRam_DefaultRecord` -- SendPartDataBlock_Return5_Helper, called first",
+   "../../analysis/kn5000-naming/proposals-2026-10-06-cases-c9.json -- HdaeRom_DataHandler image ids: 1 KN2000, 2 MKA, 3 MKB, 4 KN3000, 5 KN1500, 6 KN5000"
+  ]
+ },
+ {
+  "old": "TmFlashWrite_Block1",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PreTmLoadEntry",
+  "header": "Empty hook called before a single SOUND MEMORY entry is read from a .TM file, the per-entry counterpart of PreTmLoad (also a bare ret). Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "demo/file_demo_proc.s:3563 `call TmFlashWrite_Block1` -- SingleLoad_LoadSoundMemEntry, right before FileIO_ReadBlock",
+   "audio/note_voice_mapping.s:27722 `ret`",
+   "factory_test/test_data.s:89 `.long PreTmLoad` / 90 `.long PostTmLoad` -- the firmware's own whole-file hooks (HamaStr_PreTmLoad)"
+  ]
+ },
+ {
+  "old": "TmFlashWrite_Block1_Entry",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PostTmLoadEntry",
+  "header": "After a single SOUND MEMORY entry was read: on success converts it (HdaeRom_DataHandler or _AltHandler), bulk-copies the 470-byte (A < 64) or 80-byte record to the sub-CPU at 0x7800 + offset and sends SubCPU_SendSoundMemUpdated(A, C); on failure the 0x04 message; then refreshes the display. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "demo/file_demo_proc.s:3576 `call TmFlashWrite_Block1_Entry` -- SingleLoad_LoadSoundMemEntry, after the read, DE = result",
+   "audio/note_voice_mapping.s:27728 `cp de, 0:i3` / 27730 `cp (xsp+2), 0x40` / 27742 `ld xbc, 470` / 27768 `call InterCPU_E1_Bulk_Transfer` / 27773 `call BuildAndSendPacket_Block`",
+   "audio/note_voice_mapping.s:27645-27661 PostTmLoad -- the whole-file version does the same for 0xFF/0xFF"
+  ]
+ },
+ {
+  "old": "VoiceParam_DispatchTable1_Code",
+  "verdict": "refuse",
+  "why_refused": "Case (also the switch base) for image ids 4 (KN3000) and 6 (KN5000) of a switch on the sound-RAM image id: record offset 16 + 470 * n, size 470. Its owner, the routine at 0xFF0870 (`dec 8, xsp` after TmFlash_BulkTransferToSubCPU's `ret`), has no label -- the case should be named together with it (owner e.g. SoundRam_GetRecordOffsetAndSize; this case ..._Size470).",
+  "new": null,
+  "header": null,
+  "basis": "switch value known; owner unlabelled",
+  "evidence": [
+   "audio/note_voice_mapping.s:28040 `calr SendPartDataBlock_InitVal4` / 28044 `dec 1, hl` -- switch on image id - 1",
+   "ui_widgets/widget_dispatch.s:9443 / 9445 `.short VoiceParam_DispatchTable1_Code - VoiceParam_DispatchTable1_Code` -- entries 3 and 5 (ids 4, 6)",
+   "audio/note_voice_mapping.s:28056 `ld xbc, 0x1d6` / 28063 `ldw wa, 0x1d6` -- offset and size 470",
+   "audio/note_voice_mapping.s:28034 `dec 8, xsp` -- unlabelled owner"
+  ]
+ },
+ {
+  "old": "NumFormat_DivideAndC_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Strchr",
+  "header": "C strchr(s, c): returns in XHL the first byte of string (xsp+4) equal to (xsp+8), or 0 at the terminating NUL. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "ui/ui_playback_modes.s:2419-2422 `pushw 59` / `pushw 0` / `pushw 7370` / `call NumFormat_DivideAndC_Data` -- NameGetFuncCall_OnGetComposerName looks for ';' in the copied name",
+   "audio/note_voice_mapping.s:28913-28921 `ld xhl, (xsp+4)` / `cp a, (xhl)` / `ret z` / `cp (xhl+), 0` / `ld xhl, 0:i3`",
+   "audio/note_voice_mapping.s:28923 `Malloc:` -- next to the other C library routines (Strcpy, Mem_Copy)"
+  ]
+ },
+ {
+  "old": "DirmdEmulator_Entry",
+  "verdict": "refuse",
+  "why_refused": "Duplicate label: it sits on the same address as DirmdEmulator (an empty line between them) and names nothing else. Per the canonical-label policy it should be deleted and its 36 callers should name DirmdEmulator; no new name is needed.",
+  "new": null,
+  "header": null,
+  "basis": "alias of an existing label",
+  "evidence": [
+   "audio/presentation_sound_nav.s:1352 `DirmdEmulator_Entry:` / 1354 `DirmdEmulator:`",
+   "audio/presentation_sound_nav.s:1297 `calr DirmdEmulator_Entry` -- DirmdTitleFunc; audio/sound_editor_routines.s:66 SeMenuTitleFunc, and the other title funcs"
+  ]
+ },
+ {
+  "old": "SeMenu_RegisterParamDisplay_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeMenu_SendPartToneIndex",
+  "header": "Sends tone index BC of part A to the tone generator: 6-byte sound-editor command {0x88, part, 9 (21 when SeMenu_LoadObjEntries returns non-zero), BC >> 8, BC & 0xFF, A - 1}; the single-tone twin of SeMenu_SendToneIndex (ids 10/22). Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/sound_editor_ui.s:4039 `call SeMenu_GetToneIndex` ... 4060 `call SeMenu_RegisterParamDisplay_Data` -- SeTonTon1_OnColumn3 sends the stepped tone index",
+   "audio/semenu_routines.s:394 `ld (xwa), 136` / 400 `ld (xbc), 9` / 403 `ld (xbc), 21` / 412 `calr SeMenu_FlushDisplayObj`",
+   "audio/semenu_routines.s:416 `; SeMenu_SendToneIndex: Sends a 16-bit TONE index ... id 10, or 22`"
+  ]
+ },
+ {
+  "old": "SeMenu_InitDisplayColumn_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeEasy_SendParamValue",
+  "header": "Sends the EASY EDIT value at (XBC) of row A: 6-byte sound-editor command {0x88, part, 11, A - 1, value, 0xFF} via SeMenu_FlushDisplayObj. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/sound_editor_ui.s:5698 `call SeMenu_InitDisplayColumn_Data` -- only caller SeEasy_OnColumn4, after stepping row A's value (-10..+10; row 2 0..21 - 11)",
+   "audio/semenu_routines.s:681-692 `ld (xwa), 136` / `ld (xwa+2), 11` / `dec 1, c` / `ld (xwa+5), 255` / `calr SeMenu_FlushDisplayObj`"
+  ]
+ },
+ {
+  "old": "SeMenu_SetDisplayValue_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeWrtMem_SelectMemorySlotSound",
+  "header": "Selects SOUND MEMORY slot A (0-39: bank code 16 = A for 0-19, 17 = B for 20-39, number A mod 20) on the current part: resolves it (SndParam_ApplyProgramChange), writes the result to +0/+1 of part record 0x00/0x01/0x02 and shows it. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/sound_editor_ui.s:6535 `call SeMenu_SetDisplayValue_Data` -- SeWrtMem_OnSideRow1, right after the write command (62) for the slot from SeMenu_GetWriteMemSlot",
+   "audio/semenu_routines.s:730-741 `div a, 20` / `ld e, 17:opc` / `ld e, 16:opc` / 748 `call SndParam_ApplyProgramChange`",
+   "audio/semenu_routines.s:753 `lda xwa, (0xf9d0:16)` / 760 `(0xf9ea:16)` / 764 `(0xf9b6:16)` -- tag 1 / 2 / 0 payloads; 775 `call SeMenu_DisplayPartValue`"
+  ]
+ },
+ {
+  "old": "SeMenu_SetupMenuDisplay_Finalize_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeMenu_SetCurrentPart",
+  "header": "Stores A (1..4, else 1) as the sound editor's current part, RAM 0x65D, which SeMenu_ValidatePartNumber reads back. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/semenu_routines.s:1039 `ld (1629:16), a` / 1042 `ld (1629:16), 1`",
+   "audio/semenu_routines.s:1049 `ld c, (1629:16)` -- SeMenu_ValidatePartNumber",
+   "audio/semenu_routines.s:2529 / 2541 `calr SeMenu_SetupMenuDisplay_Finalize_Data` -- SeMenu_GoToPageOnEnabledPart selects the first enabled part"
+  ]
+ },
+ {
+  "old": "SeMenu_BitShift_Stub",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeMenu_SwitchNop",
+  "header": "Bare `ret`: the 'no action' entry of the sound-editor pages' switch-handler tables (185 slots). Basis: callers (table entries) + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "kn5000_v10_program.s:430 `.long SeMenu_BitShift_Stub` -- SeAmpAmp1TitleFunc_SwitchHandlers, unused switch slots between SeAmpAmp1_OnColumnN / _OnSideRowN",
+   "display/scoop_editor_data.s:67 `lda xde, (SeAmpAmp1TitleFunc_SwitchHandlers:24)` -- called per decoded switch",
+   "audio/semenu_routines.s:1197 `ret`"
+  ]
+ },
+ {
+  "old": "SeMenu_SetupPartDisplay_End_Sub",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeMenu_PostEditUpDownSet",
+  "header": "Posts EVT_EDIT_UP_SET (A = 0) or EVT_EDIT_DOWN_SET (A != 0) with the value (C - 1) | E. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/semenu_routines.s:2431 / 2436 `calr SeMenu_SetupPartDisplay_End_Sub` -- SeMenu_BindDialToColumn: A = 0, E = 0 then A = 1, E = 0x80",
+   "audio/semenu_routines.s:2409-2418 `dec 1, c` / `or c, e` / `jp UI_PostDialValueEvent` / `jp UI_PostDialRangeEvent`",
+   "ui/ui_control_panel.s:2999 `ld xbc, EVT_EDIT_DOWN_SET` / 3007 `ld xbc, EVT_EDIT_UP_SET`"
+  ]
+ },
+ {
+  "old": "SeMenu_ApplyPartEdit_Data2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeLfo1_StepSelectorAndReload",
+  "header": "LFO1 pages, column 2: steps the page's 1..4 selector (RAM 0x68D AMP / 0x68E PITCH / 0x68F FILTER; up for a first-bank switch, down otherwise, wrapping) and re-enters the title TT_SEAMPLFO1 / TT_SEPITLFO1 / TT_SEFILLFO1. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_editor_data.s:1683 `jp SeMenu_ApplyPartEdit_Data2` -- SeAmpLfo1_OnColumn2 (C = 0); audio/semenu_routines.s:7155 SePitLfo1_OnColumn2 (C = 1); display/scoop_editor_data.s:3792 SeFilLfo1_OnColumn2 (C = 2)",
+   "audio/semenu_routines.s:2659 `calr SeMenu_ApplyPartEdit_Helper14` -- 1596/1605/1610 `lda xwa, (1677/1678/1679:16)`, wrap 1..4 (1615-1621)",
+   "audio/semenu_routines.s:2662 `ld a, 42:opc` / 2671 `47` / 2676 `57` / 2666 `calr SeMenu_SendEvent`; shared/event_codes.s:1895/1900/1910 TITLE_SEPITLFO1 0x2A, TITLE_SEAMPLFO1 0x2F, TITLE_SEFILLFO1 0x39"
+  ]
+ },
+ {
+  "old": "SeMenu_PatchBank_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeMenu_SetPartRecordBits",
+  "header": "Sets (E = 1) or clears (E = 0) the bits C of byte A of the current part's panel record (part 0/1/2 -> tag 0 at 0xF9B6, tag 1 at 0xF9D0, tag 2 at 0xF9EA). Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/sound_editor_ui.s:6422-6425 `ld wa, 4:i3` / `ldw bc, 64` / `ld de, 0:i3` / `call SeMenu_PatchBank_Data` -- SeDigEff_OnSideRow2 clears +4 bit 6, then posts it (AddswbWr); 6437 sets it; also SeEasy_OnColumn4 (5765, 5815)",
+   "audio/semenu_routines.s:6156-6158 `lda xix, (0xf9b6:16)` / `lda xhl, (0xf9d0:16)` / `lda xde, (0xf9ea:16)`",
+   "audio/semenu_routines.s:6173 `or (xde), a` / 6190 `and (xde), a` -- set / clear"
+  ]
+ },
+ {
+  "old": "SeMenu_DisplayState_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeMenu_GetDisplayState",
+  "header": "Copies RAM 0x6C5 to (XWA): the getter twin of SeMenu_SetDisplayState. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/semenu_routines.s:6348 `ld (1733:16), a` -- SeMenu_SetDisplayState; 6352 `ld (xwa), (0x6c5)`",
+   "audio/sound_editor_ui.s:3125 `call SeMenu_DisplayState_Data` -- SeMenuTitleFunc_DispatchSwitch ignores switches when it and the patch status are 0; also SeDigEffTitleFunc_DispatchSwitch (5615)"
+  ]
+ },
+ {
+  "old": "Scoop_SetPartIndexAndDisplay_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Scoop_TrackTypeNameField",
+  "header": "Text-field descriptor (15 bytes: variable 0x118D, 7-character cells, names at +15) and the 20 names it shows for the current track's TRACK ASSIGN value: MELODY x12, DRUM, CHORD, CHORD, CONTROL, RHYTHM, MELODY x3. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "display/scoop_display.s:17015-17019 `ld xiy, 0xf1a0` / `ld a, (xiy+a)` / `ld (4493:16), a` / `ld xiy, Scoop_SetPartIndexAndDisplay_Data` -- stores 0xF1A0[track] at 0x118D and draws the field",
+   "display/scoop_display.s:17134 -- Scoop_InitDisplayFull does the same",
+   "includes/generated/sound_data_drum_kits.bin +0x3A `02 0f 8d 11 ff 00 07 61 b4 e0 00 ...` then 'MELODY ' ... 'DRUM   CHORD  CHORD  CONTROLRHYTHM ...' (label at 0xE0B452; 0xE0B461 = +15)"
+  ],
+  "spelling": "an .incbin slice; it holds a 24-bit pointer to its own +15 (0xE0B461)"
+ },
+ {
+  "old": "UpdSeSel_ExtendedOps_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeEasy_DrawPage",
+  "header": "EASY EDIT page draw (TT_SEEASY): reads the page object data, stores the page parameters, draws the static screen (SeMenu_ShowPopupDialog 0x21) and registers the elements. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/sound_editor_routines.s:95 `jp UpdSeSel_ExtendedOps_Data` -- SeEasyTitleFunc_OnDraw",
+   "kn5000_v10_program.s:1153 `.long UpdSeSel_ExtendedOps_Data` -- entry 1 of the page-draw table ToneGen_ParamTable_0x326",
+   "audio/sound_editor_ui.s:672-673 `pushw 33` / `call SeMenu_ShowPopupDialog` -- static screen 0x21 = TITLE_SEEASY"
+  ]
+ },
+ {
+  "old": "SeMenu_AltUpdate_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeTonTon2_DrawPage",
+  "header": "TONE SELECT page 2 draw (TT_SETONTON2): reads the page object data and registers its display elements (SeMenu_RegisterElement_Type1 for the four parts). Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/sound_editor_routines.s:143 `jp SeMenu_AltUpdate_Data` -- SeTonTon2TitleFunc_OnDraw",
+   "kn5000_v10_program.s:1155 `.long SeMenu_AltUpdate_Data` -- entry 3 of ToneGen_ParamTable_0x326",
+   "audio/sound_editor_ui.s:2027 `call SeMenu_ReadObjData` / 2034 `call SeMenu_RegisterElement_Type1`"
+  ]
+ },
+ {
+  "old": "SeMenu_CopyWriteUpdate_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeWrtMem_DrawPage",
+  "header": "WRITE TO MEMORY page draw (TT_SEWRTMEM): handles the pending write notification, then registers the page elements and fills the name buffer with the selected entry's name. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/sound_editor_routines.s:791 `jp SeMenu_CopyWriteUpdate_Data` -- SeWrtMemTitleFunc_OnDraw",
+   "kn5000_v10_program.s:1182 `.long SeMenu_CopyWriteUpdate_Data` -- ToneGen_ParamTable_0x326",
+   "audio/sound_editor_ui.s:2488 `call SeMenu_HandleMenuChange_Data` / 2501 `pushw 62` / 2505 `call SeMenu_RegisterElement_Type1`"
+  ]
+ },
+ {
+  "old": "SeMenu_CopyWriteUpdate_Step3_Code",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeDigEff_OnColumn3_CelesteChorusDetune",
+  "header": "Types 0-3 CELESTE 1/2, CHORUS 1/2 (also the switch base): column 3 is DETUNE, limits +50 and -50. Basis: switch value (DIGITAL EFFECT type) + body + screen captions.",
+  "basis": "switch value meaning (effect type (0x660) & 15) + body",
+  "evidence": [
+   "kn5000_v10_program.s:1113-1116 `.short SeMenu_CopyWriteUpdate_Step3_Code - SeMenu_CopyWriteUpdate_Step3_Code` -- types 0..3 (ToneGen_ParamTable_0x2EE)",
+   "audio/sound_editor_ui.s:6103-6105 `ld (xwa+8), 50` / `ld (xwa+9), 206` -- limits 50 / -50",
+   "audio/sound_editor_ui.s:15140-15144 `sd_ptext ... \"DEPTH\"` / `\"SPEED\"` / `\"DETUNE\"` / `\"DELAY\"` / `\"BALANCE\"` -- the celeste/chorus screen's columns",
+   "storage/flash_floppy_handlers.s:234 `.ascii \"CELESTE 1    \"` -- types 0..11 (c9 evidence)"
+  ]
+ },
+ {
+  "old": "SeMenu_CopyWriteUpdate_Step3_Code_2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeDigEff_OnColumn4_DelaySpeed2",
+  "header": "Types 0-5 and 7 (also the switch base): column 4 -- DELAY for CELESTE/CHORUS, SPEED2 for ENSEMBLE and ORGAN TREMOLO -- limits 50 and 0. Basis: switch value + body + screen captions.",
+  "basis": "switch value meaning + body",
+  "evidence": [
+   "kn5000_v10_program.s:1127-1136 ToneGen_ParamTable_0x306 -- entries 0-5 and 7 = SeMenu_CopyWriteUpdate_Step3_Code_2",
+   "audio/sound_editor_ui.s:6177-6179 `ld (xwa+8), 50` / `ld (xwa+9), 0`",
+   "audio/sound_editor_ui.s:15143 `\"DELAY\"` (celeste/chorus column 4); 15163 / 15195 `\"SPEED2\"` (ensemble / organ tremolo column 4)"
+  ]
+ },
+ {
+  "old": "SeMenu_CopyWriteUpdate_Step3_Code_3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeDigEff_OnColumn5_CelesteChorusBalance",
+  "header": "Types 0-3 CELESTE 1/2, CHORUS 1/2 (also the switch base): column 5 is BALANCE, limits 100 and 0. Basis: switch value + body + screen captions.",
+  "basis": "switch value meaning + body",
+  "evidence": [
+   "kn5000_v10_program.s:1141-1144 ToneGen_ParamTable_0x31A -- entries 0-3; 4-5 SeDigEff_OnColumn5_EnsembleDetune",
+   "audio/sound_editor_ui.s:6235-6237 `ld (xwa+8), 100` / `ld (xwa+9), 0`",
+   "audio/sound_editor_ui.s:15144 `sd_ptext 0x17, 13, 160, 209, \"BALANCE\"` -- the celeste/chorus screen's fifth column"
+  ]
+ },
+ {
+  "old": "SeMenu_ShowConfirmDialog_Sub",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeMenu_DrawSelectedPartEnvCurve",
+  "header": "Draws the current part's (0x65D) envelope-curve picture: its frame, then by bits 7-5 of the part's curve-type byte (0x662+part, 0x668+part in 4-part mode) a SeEnvCurve_BitmapTable bitmap or (type 3) a framed box, at that part's cell. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/sound_editor_ui.s:9298 `call SeMenu_ShowConfirmDialog_Sub` -- page draw after SeMenu_DrawSoloButton / SeMenu_DrawPartLabels; also SeMenu_DataBlock_01 (9963, 9969)",
+   "audio/sound_editor_ui.s:8607 `ld a, (1629:16)` / 8624 `ld xiz, 1634` / 8627 `ld xiz, 1640` / 8632 `call SeMenu_ShowConfirmDialog_Helper2`",
+   "audio/sound_editor_ui.s:8647-8649 `and a, 224` / `srl a, 5` / `cp a, 3:i3`; 8671 `ld xiz, SeEnvCurve_BitmapTable`"
+  ]
+ },
+ {
+  "old": "SeMenu_WaveformSelect_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeMenuTitle_DrawStaticScreen",
+  "header": "Static-screen routine of sound-editor title 0x20 TT_SEMENU (entry 0 of SeMenu_ShowPopupDialog_Draw, indexed by title id - 0x20): draws the page's fixed captions and frames. Basis: callers (table) + body.",
+  "basis": "callers (screen table indexed by title id) + body",
+  "evidence": [
+   "audio/sound_editor_ui.s:8154 `.long SeMenu_WaveformSelect_Data` -- entry 0 of SeMenu_ShowPopupDialog_Draw",
+   "audio/sound_editor_ui.s:8125-8129 `ld hl, (xiz + 8)` / `sub hl, 0x20` / `sla hl, 2` / `ld xiy, (xiy+hl)` -- index = title id - 0x20 (callers push the title, e.g. 672 `pushw 33` = TITLE_SEEASY)",
+   "shared/event_codes.s -- 0x20 TT_SEMENU",
+   "audio/sound_editor_ui.s:8754-8756 `ld xiy, SeMenu_WaveformSelect_Apply_Data` / `ld xix, SeScreenData_0x0685` / `call SeGfx_DrawStaticList` -- the SOUND EDIT menu records"
+  ]
+ },
+ {
+  "old": "SeMenu_PresetManager_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeTonHyb1_DrawStaticScreen",
+  "header": "Static-screen routine of sound-editor title 0x26 TT_SETONHYB1 (entry 6 of SeMenu_ShowPopupDialog_Draw, indexed by title id - 0x20): draws the page's fixed captions and frames. Basis: callers (table) + body.",
+  "basis": "callers (screen table indexed by title id) + body",
+  "evidence": [
+   "audio/sound_editor_ui.s:8160 `.long SeMenu_PresetManager_Data` -- entry 6 of SeMenu_ShowPopupDialog_Draw",
+   "audio/sound_editor_ui.s:8125-8129 `ld hl, (xiz + 8)` / `sub hl, 0x20` / `sla hl, 2` / `ld xiy, (xiy+hl)` -- index = title id - 0x20 (callers push the title, e.g. 672 `pushw 33` = TITLE_SEEASY)",
+   "shared/event_codes.s -- 0x26 TT_SETONHYB1",
+   "audio/sound_editor_ui.s:8917 `call SeMenu_DrawToneSelectTitle` / 8921 `call SeGfx_DrawStaticList`"
+  ]
+ },
+ {
+  "old": "SeMenu_PresetBrowser_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SePitLfo1_DrawStaticScreen",
+  "header": "Static-screen routine of sound-editor title 0x2A TT_SEPITLFO1 (entry 10 of SeMenu_ShowPopupDialog_Draw, indexed by title id - 0x20): draws the page's fixed captions and frames. Basis: callers (table) + body.",
+  "basis": "callers (screen table indexed by title id) + body",
+  "evidence": [
+   "audio/sound_editor_ui.s:8164 `.long SeMenu_PresetBrowser_Data` -- entry 10 of SeMenu_ShowPopupDialog_Draw",
+   "audio/sound_editor_ui.s:8125-8129 `ld hl, (xiz + 8)` / `sub hl, 0x20` / `sla hl, 2` / `ld xiy, (xiy+hl)` -- index = title id - 0x20 (callers push the title, e.g. 672 `pushw 33` = TITLE_SEEASY)",
+   "shared/event_codes.s -- 0x2A TT_SEPITLFO1",
+   "audio/sound_editor_ui.s:9131-9132 `call SeMenu_PresetBrowser_Navigate` / `call SeMenu_PresetBrowser_Select` -- the PITCH section frame, then falls into the shared LFO1 screen (9133)"
+  ]
+ },
+ {
+  "old": "SeMenu_PresetBrowser_Select_Sub",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeLfo1_DrawStaticScreen",
+  "header": "Static screen shared by the three LFO1 titles: frame, SOLO button, LFO part switches and the selected-part line, and the bound fields. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/sound_editor_ui.s:9133 -- entered from SePitLfo1's screen (0x2A, fall-through) and called by the AMP LFO1 and FILTER LFO1 screens (SeMenu_FilterEdit_DataBlock2 = entry 15 = 0x2F, SeMenu_FilterEdit_DataBlock1 = entry 25 = 0x39)",
+   "audio/sound_editor_ui.s:9137-9140 `call SeMenu_DrawSoloButton` / `call SeMenu_DrawLfoPartSwitches` / `call SeMenu_DrawLfoSelectedPartLine`",
+   "audio/sound_editor_ui.s:8939 `; ... the LFO page body SeMenu_PresetBrowser_Select_Sub` -- SeMenu_DrawLfoSelectedPartLine header"
+  ]
+ },
+ {
+  "old": "SeMenu_CompareAndApply_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeAmp_DrawSectionFrame",
+  "header": "Draws the AMPLITUDE section frame common to its five titles: 'AMPLITUDE', 'SOUND EDIT', the ENV / AMP / LFO tabs and boxes (all 17 records, or fewer in 2-part mode, (0x6AE) = 1). Basis: callers + body (records).",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/sound_editor_ui.s:9315-9325 `ld xiy, SeScreenData_0x1089` / `ld xix, SeScreenData_0x113B` / `call SeGfx_DrawStaticList`",
+   "audio/sound_editor_ui.s:12870-12873 `sd_ptext 0x1c, 15, 122, 5, \"AMPLITUDE\"` / `\"SOUND EDIT\"` / `\"ENV \\021\"` / `\"AMP \\021\"`",
+   "audio/sound_editor_ui.s:9339 / 9367 -- called by the AMP2 and AMP ENV1 screens (also CompareAndApply_Init, Utility_FillBlock, FilterEdit_DataBlock2)"
+  ]
+ },
+ {
+  "old": "SeMenu_CompareAndApply_Data4",
+  "verdict": "refuse",
+  "why_refused": "Draws the single static record at SeScreenData_0x113B: screen opcode 0x23 with data {0x63, 0x84, 0x00} (se_setup_labels.c: SD_UNKNOWN_TYPE). The AMPLITUDE pages call it last; the PITCH and FILTER pages draw the same kind of record. What opcode 0x23 draws is not established, so the name would be a guess.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body; the drawn record's opcode is not identified",
+  "evidence": [
+   "audio/sound_editor_ui.s:9330-9332 `ld xiy, SeScreenData_0x113B` / `ld xix, SeMenu_ShowConfirmDialog_Sub_Data` / `call SeGfx_DrawStaticList`",
+   "audio/sound_editor_screens/se_setup_labels.c:29 `.unknown_23_0 = { .opcode = 0x23, .length = 0x05, .data = { 0x63, 0x84, 0x00 } }`"
+  ]
+ },
+ {
+  "old": "SeMenu_CompareAndApply_Data5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeAmpAmp2_DrawStaticScreen",
+  "header": "Static-screen routine of sound-editor title 0x2C TT_SEAMPAMP2 (entry 12 of SeMenu_ShowPopupDialog_Draw, indexed by title id - 0x20): draws the page's fixed captions and frames. Basis: callers (table) + body.",
+  "basis": "callers (screen table indexed by title id) + body",
+  "evidence": [
+   "audio/sound_editor_ui.s:8166 `.long SeMenu_CompareAndApply_Data5` -- entry 12 of SeMenu_ShowPopupDialog_Draw",
+   "audio/sound_editor_ui.s:8125-8129 `ld hl, (xiz + 8)` / `sub hl, 0x20` / `sla hl, 2` / `ld xiy, (xiy+hl)` -- index = title id - 0x20 (callers push the title, e.g. 672 `pushw 33` = TITLE_SEEASY)",
+   "shared/event_codes.s -- 0x2C TT_SEAMPAMP2",
+   "audio/sound_editor_ui.s:9339 `call SeMenu_CompareAndApply_Data` -- the AMPLITUDE section frame; falls into the keyboard/breakpoint area (9351)"
+  ]
+ },
+ {
+  "old": "SeMenu_CompareAndApply_Apply_Sub",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeMenu_DrawBreakpointKeyboard",
+  "header": "Draws the mini keyboard at (56,139) (SeMenu_DrawKeyboardGraphic) and the fields below it: params 0-2 (0x660-0x662) as note names, param 3 (0x663) as a number. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/sound_editor_ui.s:9351-9358 `ldw (1734:16), 56` / `ldw (1736:16), 139` / `call SeMenu_DrawKeyboardGraphic` / `ld xiy, SeScreenData_0x2480`",
+   "audio/sound_editor_ui.s:10433 `call SeMenu_CompareAndApply_Apply_Sub` -- the FILTER FIL2 screen (SeMenu_FxEdit_DataBlock4, entry 22 = 0x36); the AMP2 screen falls into it",
+   "audio/sound_editor_ui.s: SeScreenData_0x248B / _0x249A / _0x24A9 `sdb_str 0x0661/0x0660/0x0662, ..., SeScreenData_0x2F6C, 3` -- note-name cells 'C-2' ...; SeMenu_StepNoteParamInRange steps the three ordered breakpoints of AmpAmp2/FilFil2"
+  ]
+ },
+ {
+  "old": "SeMenu_Utility_FormatSigned_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeFilHpq1_DrawStaticScreen",
+  "header": "Static-screen routine of sound-editor title 0x31 TT_SEFILHPQ1 (entry 17 of SeMenu_ShowPopupDialog_Draw, indexed by title id - 0x20): draws the page's fixed captions and frames. Basis: callers (table) + body.",
+  "basis": "callers (screen table indexed by title id) + body",
+  "evidence": [
+   "audio/sound_editor_ui.s:8171 `.long SeMenu_Utility_FormatSigned_Data` -- entry 17 of SeMenu_ShowPopupDialog_Draw",
+   "audio/sound_editor_ui.s:8125-8129 `ld hl, (xiz + 8)` / `sub hl, 0x20` / `sla hl, 2` / `ld xiy, (xiy+hl)` -- index = title id - 0x20 (callers push the title, e.g. 672 `pushw 33` = TITLE_SEEASY)",
+   "shared/event_codes.s -- 0x31 TT_SEFILHPQ1",
+   "audio/sound_editor_ui.s:9518-9520 `ld xiy, SeMenu_Utility_CompareBlock_Data_2` / `ld xix, SeScreenData_0x18D8` -- up to the caption 'HIGH PASS -12dB' (SeScreenData_0x18D8)"
+  ]
+ },
+ {
+  "old": "SeMenu_Utility_FormatPercent_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeFilH241_DrawStaticScreen",
+  "header": "Static-screen routine of sound-editor title 0x33 TT_SEFILH241 (entry 19 of SeMenu_ShowPopupDialog_Draw, indexed by title id - 0x20): draws the page's fixed captions and frames. Basis: callers (table) + body.",
+  "basis": "callers (screen table indexed by title id) + body",
+  "evidence": [
+   "audio/sound_editor_ui.s:8173 `.long SeMenu_Utility_FormatPercent_Data` -- entry 19 of SeMenu_ShowPopupDialog_Draw",
+   "audio/sound_editor_ui.s:8125-8129 `ld hl, (xiz + 8)` / `sub hl, 0x20` / `sla hl, 2` / `ld xiy, (xiy+hl)` -- index = title id - 0x20 (callers push the title, e.g. 672 `pushw 33` = TITLE_SEEASY)",
+   "shared/event_codes.s -- 0x33 TT_SEFILH241",
+   "audio/sound_editor_ui.s:9560-9562 `ld xiy, SeMenu_Utility_CompareBlock_Data_3` / `ld xix, SeScreenData_0x1997` / `call SeGfx_DrawStaticList`"
+  ]
+ },
+ {
+  "old": "SeMenu_Utility_FormatHex_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeFilBcf1_DrawStaticScreen",
+  "header": "Static-screen routine of sound-editor title 0x35 TT_SEFILBCF1 (entry 21 of SeMenu_ShowPopupDialog_Draw, indexed by title id - 0x20): draws the page's fixed captions and frames. Basis: callers (table) + body.",
+  "basis": "callers (screen table indexed by title id) + body",
+  "evidence": [
+   "audio/sound_editor_ui.s:8175 `.long SeMenu_Utility_FormatHex_Data` -- entry 21 of SeMenu_ShowPopupDialog_Draw",
+   "audio/sound_editor_ui.s:8125-8129 `ld hl, (xiz + 8)` / `sub hl, 0x20` / `sla hl, 2` / `ld xiy, (xiy+hl)` -- index = title id - 0x20 (callers push the title, e.g. 672 `pushw 33` = TITLE_SEEASY)",
+   "shared/event_codes.s -- 0x35 TT_SEFILBCF1",
+   "audio/sound_editor_ui.s:9599-9601 `ld xiy, SeScreenData_0x1ACA` / `ld xix, SeScreenData_0x1AE1` / `call SeGfx_DrawStaticList`"
+  ]
+ },
+ {
+  "old": "SeMenu_Utility_FormatHex_Sub",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeEnv1_DrawEnvelopeLayout",
+  "header": "Shared ENVELOPE page-1 layout of the PITCH ENV1 and FILTER ENV1 screens: 'PAGE1/2', 'ENVELOPE', 'KEYOFF', the ATK / PEAK / DECAY1 ... captions, SOLO button, part selector and the bound values. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/sound_editor_ui.s:10411 `call SeMenu_Utility_FormatHex_Sub` -- the PITCH ENV1 screen (SeMenu_FxEdit_DataBlock2, entry 8 = 0x28)",
+   "audio/sound_editor_ui.s:9611-9616 -- the FILTER ENV1 screen (SeMenu_Utility_End, entry 23 = 0x37) falls into it",
+   "audio/sound_editor_ui.s: SeScreenData_0x1B0B `sd_ctext ... \"PAGE1/2\"` / `\"ENVELOPE\"` / `\"KEYOFF\"` / `\"ATK\"` / `\"PEAK\"` / `\"DECAY1\"`"
+  ]
+ },
+ {
+  "old": "SeMenu_WaveformSelect_Apply_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeMenuTitle_StaticRecords",
+  "header": "Static screen records of the SOUND EDIT menu (TT_SEMENU): the 'SOUND EDIT' caption and the items WRITE, EASY EDIT, TONE SELECT, AMPLITUDE, TONE LAYER, DIGITAL EFFECT, PITCH, FILTER, CONTROLLER (se_setup_waveform +0xA); also the end of the one-record list SeMenu_PresetManager_Save draws. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/sound_editor_ui.s:8754 `ld xiy, SeMenu_WaveformSelect_Apply_Data` -- the TT_SEMENU screen draws from here",
+   "audio/sound_editor_ui.s:8896 `ld xix, SeMenu_WaveformSelect_Apply_Data` -- end bound after the separator record (+0)",
+   "audio/sound_editor_screens/se_setup_waveform.c:14-31 -- field_label 'SOUND EDIT', labeled refs ' WRITE', 'EASY EDIT', 'TONE SELECT', 'AMPLITUDE', 'TONE LAYER', 'DIGITAL', 'PITCH', 'EFFECT', 'FILTER', 'CONTROLLER'"
+  ]
+ },
+ {
+  "old": "SeMenu_PresetBrowser_Navigate_Data",
+  "verdict": "refuse",
+  "why_refused": "Split point inside se_setup_params_full (+0xB0): a screen opcode-0x23 record {0x07, 0x86, 0x00} followed by three selection rectangles inside the ENV/PITCH/LFO tab boxes. SeMenu_PresetBrowser_Navigate ends its PITCH-frame list here and SeMenu_PresetBrowser_Select draws only the 5-byte opcode-0x23 record from it; that opcode is not identified (same as SeMenu_CompareAndApply_Data4), so refused.",
+  "new": null,
+  "header": null,
+  "basis": "readers + bytes; opcode 0x23 not identified",
+  "evidence": [
+   "audio/sound_editor_ui.s:9118 `ld xix, SeMenu_PresetBrowser_Navigate_Data` / 9124-9125 `ld xiy, SeMenu_PresetBrowser_Navigate_Data` / `ld xix, SeMenu_PresetBrowser_Navigate_Data + 5`",
+   "audio/sound_editor_screens/se_setup_params_full.c:99-102 `.unknown_23_0 = { .opcode = 0x23, ... { 0x07, 0x86, 0x00 } }` / `.select_rect_0..2`"
+  ]
+ },
+ {
+  "old": "SeMenu_PresetBrowser_Init_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SePitPit1_StaticRecords",
+  "header": "Static captions of the PITCH page 1 screen (TT_SEPITPIT1): KEY, DE-TUNE, TONE, KEY SCALING, SHIFT, TUNE, SCALE, OCT-SHIFT, RIGHT SPLIT, CURSOR, LEFT SPLIT, KEY / DETUNE / SCALE / VALUE and markers (se_setup_params_full +0xD3, 260 B). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/sound_editor_ui.s:9103-9105 `ld xiy, SeMenu_PresetBrowser_Init_Data` / `ld xix, SeScreenData_0x1043` / `call SeGfx_DrawStaticList` -- SeMenu_PresetBrowser_Init = entry 7 of SeMenu_ShowPopupDialog_Draw = title 0x27 TT_SEPITPIT1",
+   "audio/sound_editor_screens/se_setup_params_full.c:103-125 -- param labels KEY, DE-, TONE, KEY SCALING, SHIFT, TUNE, SCALE, OCT-SHIFT, RIGHT SPLIT, CURSOR, LEFT SPLIT, KEY, DETUNE, SCALE, VALUE"
+  ]
+ },
+ {
+  "old": "SeMenu_Utility_FormatNumber_Data_2",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "SeMenu_Utility_CompareBlock_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "SeMenu_Utility_CompareBlock_Data_2",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "SeMenu_Utility_CompareBlock_Data_3",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ }
+]

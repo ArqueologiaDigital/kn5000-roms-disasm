@@ -5195,13 +5195,13 @@ MainSysCtrl_Entry4_CopyBitmaps:
 MainSysCtrl_Entry5_VoiceInit:
 	call Voice_InitBankDataSafe
 	jr t, MainSysControl_PostDispatchFinalize
-MainSysCtrl_Entry6:
+MainSysCtrl_OnInitCurrentPanel:
 	call MainSysCtrl_Entry5_VoiceInit_Helper
 	jr t, MainSysControl_PostDispatchFinalize
-MainSysCtrl_Entry7:
+MainSysCtrl_OnInitPartSetting:
 	call MainSysCtrl_Entry5_VoiceInit_Helper2
 	jr t, MainSysControl_PostDispatchFinalize
-MainSysCtrl_Entry8:
+MainSysCtrl_OnInitMidiSetting:
 	call MainSysCtrl_Entry5_VoiceInit_Helper3
 
 
@@ -5350,7 +5350,7 @@ AcFreeSplit_LookupNoteLabel:
 	exts xhl
 	divs hl, 0xc
 	sla hl, 2
-	lda xbc, (AcFreeSplit_LookupNoteLabel_Data:24)
+	lda xbc, (AcFreeSplit_OctaveDigitTable:24)
 	ld	xwa, (xbc+hl)
 	push xwa
 	ld xwa, 0x4181
@@ -5396,7 +5396,7 @@ AcFreeSplit_LookupSecondNote:
 	exts xhl
 	divs hl, 0xc
 	sla hl, 2
-	lda xbc, (AcFreeSplit_LookupNoteLabel_Data:24)
+	lda xbc, (AcFreeSplit_OctaveDigitTable:24)
 	ld	xwa, (xbc+hl)
 	push xwa
 	ld xwa, 0x4181
@@ -5504,7 +5504,7 @@ AcTranspose_ValueChanged:
 
 AcTranspose_FormatLabel:
 	sla wa, 2
-	lda xde, (AcTranspose_FormatLabel_Data:24)
+	lda xde, (AcTranspose_KeyNameTable:24)
 	ld	xwa, (xde+wa)
 	push xwa
 	pushw AcTranspose_FormatLabel_Str_Fmts@hi16

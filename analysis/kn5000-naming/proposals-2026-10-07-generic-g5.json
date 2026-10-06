@@ -1,0 +1,552 @@
+[
+ {
+  "old": "BoxStyle7_Setup_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "pBoolProc_DumpPointerFmt",
+  "header": "\"bool\\t%s%d\": the Sprintf format pBoolProc uses on EVT_DUMP_POINTER_EX -- a C declaration \"bool <prop name><index>\" of the pointed-to member (EVT_DUMP_PROPERTY_EX uses BoxStyle7_CalcWidth_Str_Fmts_Fmtd, \"&%s%d\").\nBasis: readers + bytes -- BoxStyle7_Setup is pBoolProc's EVT_DUMP_POINTER_EX case; it gets the name with EVT_GET_PROP_NAME and Sprintf_Locked(out, this, name, index).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/ui_widget_defs.s:12553 `pBoolProc:` -- the owning property proc (Matsushita name p<type>Proc)",
+   "ui/ui_widget_defs.s:12569-12570 `cp xiz, EVT_DUMP_POINTER_EX` / `jr z, BoxStyle7_Setup` -- the case that reads the label",
+   "ui/ui_widget_defs.s:12606 `ld xwa, BoxStyle7_Setup_Data` -- pushed as the format, then BoxStyle7_CheckInner calls Sprintf_Locked",
+   "ui_widgets/disk_warning_strings.s:977 `.incbin naka_disk_warning.bin, 0x1D48` -- bytes \"bool\\t%s%d\\0\" (+0xFF pad)"
+  ]
+ },
+ {
+  "old": "BoxStyle8_Setup_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "pSwordProc_DumpPointerFmt",
+  "header": "\"sword\\t%s%d\": the Sprintf format pSwordProc uses on EVT_DUMP_POINTER_EX -- a C declaration \"sword <prop name><index>\" of the pointed-to member (EVT_DUMP_PROPERTY_EX uses BoxStyle8_CalcWidth_Str_Fmts_Fmtd, \"&%s%d\").\nBasis: readers + bytes -- BoxStyle8_Setup is pSwordProc's EVT_DUMP_POINTER_EX case; it gets the name with EVT_GET_PROP_NAME and Sprintf_Locked(out, this, name, index).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/ui_widget_defs.s:12675 `pSwordProc:` -- the owning property proc (Matsushita name p<type>Proc)",
+   "ui/ui_widget_defs.s:12691-12692 `cp xiz, EVT_DUMP_POINTER_EX` / `jr z, BoxStyle8_Setup` -- the case that reads the label",
+   "ui/ui_widget_defs.s:12728 `ld xwa, BoxStyle8_Setup_Data` -- pushed as the format, then BoxStyle8_CheckInner calls Sprintf_Locked",
+   "ui_widgets/disk_warning_strings.s:987 `.incbin naka_disk_warning.bin, 0x1D58` -- bytes \"sword\\t%s%d\\0\" (+0xFF pad)"
+  ]
+ },
+ {
+  "old": "BoxStyle9_Setup_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "pUwordProc_DumpPointerFmt",
+  "header": "\"uword\\t%s%d\": the Sprintf format pUwordProc uses on EVT_DUMP_POINTER_EX -- a C declaration \"uword <prop name><index>\" of the pointed-to member (EVT_DUMP_PROPERTY_EX uses BoxStyle9_CalcWidth_Str_Fmts_Fmtd, \"&%s%d\").\nBasis: readers + bytes -- BoxStyle9_Setup is pUwordProc's EVT_DUMP_POINTER_EX case; it gets the name with EVT_GET_PROP_NAME and Sprintf_Locked(out, this, name, index).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/ui_widget_defs.s:12797 `pUwordProc:` -- the owning property proc (Matsushita name p<type>Proc)",
+   "ui/ui_widget_defs.s:12813-12814 `cp xiz, EVT_DUMP_POINTER_EX` / `jr z, BoxStyle9_Setup` -- the case that reads the label",
+   "ui/ui_widget_defs.s:12850 `ld xwa, BoxStyle9_Setup_Data` -- pushed as the format, then BoxStyle9_CheckInner calls Sprintf_Locked",
+   "ui_widgets/disk_warning_strings.s:997 `.incbin naka_disk_warning.bin, 0x1D6A` -- bytes \"uword\\t%s%d\\0\" (+0xFF pad)"
+  ]
+ },
+ {
+  "old": "BoxStyle10_Setup_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "pScharProc_DumpPointerFmt",
+  "header": "\"schar\\t%s%d\": the Sprintf format pScharProc uses on EVT_DUMP_POINTER_EX -- a C declaration \"schar <prop name><index>\" of the pointed-to member (EVT_DUMP_PROPERTY_EX uses BoxStyle10_CalcWidth_Str_Fmts_Fmtd, \"&%s%d\").\nBasis: readers + bytes -- BoxStyle10_Setup is pScharProc's EVT_DUMP_POINTER_EX case; it gets the name with EVT_GET_PROP_NAME and Sprintf_Locked(out, this, name, index).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/ui_widget_defs.s:12919 `pScharProc:` -- the owning property proc (Matsushita name p<type>Proc)",
+   "ui/ui_widget_defs.s:12935-12936 `cp xiz, EVT_DUMP_POINTER_EX` / `jr z, BoxStyle10_Setup` -- the case that reads the label",
+   "ui/ui_widget_defs.s:12972 `ld xwa, BoxStyle10_Setup_Data` -- pushed as the format, then BoxStyle10_CheckInner calls Sprintf_Locked",
+   "ui_widgets/disk_warning_strings.s:1007 `.incbin naka_disk_warning.bin, 0x1D7C` -- bytes \"schar\\t%s%d\\0\" (+0xFF pad)"
+  ]
+ },
+ {
+  "old": "BoxStyle11_Setup_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "pUcharProc_DumpPointerFmt",
+  "header": "\"uchar\\t%s%d\": the Sprintf format pUcharProc uses on EVT_DUMP_POINTER_EX -- a C declaration \"uchar <prop name><index>\" of the pointed-to member (EVT_DUMP_PROPERTY_EX uses BoxStyle11_CalcWidth_Str_Fmts_Fmtd, \"&%s%d\").\nBasis: readers + bytes -- BoxStyle11_Setup is pUcharProc's EVT_DUMP_POINTER_EX case; it gets the name with EVT_GET_PROP_NAME and Sprintf_Locked(out, this, name, index).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/ui_widget_defs.s:13042 `pUcharProc:` -- the owning property proc (Matsushita name p<type>Proc)",
+   "ui/ui_widget_defs.s:13058-13059 `cp xiz, EVT_DUMP_POINTER_EX` / `jr z, BoxStyle11_Setup` -- the case that reads the label",
+   "ui/ui_widget_defs.s:13095 `ld xwa, BoxStyle11_Setup_Data` -- pushed as the format, then BoxStyle11_CheckInner calls Sprintf_Locked",
+   "ui_widgets/disk_warning_strings.s:1017 `.incbin naka_disk_warning.bin, 0x1D8E` -- bytes \"uchar\\t%s%d\\0\" (+0xFF pad)"
+  ]
+ },
+ {
+  "old": "BoxStyle12_Setup_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "pSlongProc_DumpPointerFmt",
+  "header": "\"slong\\t%s%d\": the Sprintf format pSlongProc uses on EVT_DUMP_POINTER_EX -- a C declaration \"slong <prop name><index>\" of the pointed-to member (EVT_DUMP_PROPERTY_EX uses BoxStyle12_CalcWidth_Str_Fmts_Fmtd, \"&%s%d\").\nBasis: readers + bytes -- BoxStyle12_Setup is pSlongProc's EVT_DUMP_POINTER_EX case; it gets the name with EVT_GET_PROP_NAME and Sprintf_Locked(out, this, name, index).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/ui_widget_defs.s:13164 `pSlongProc:` -- the owning property proc (Matsushita name p<type>Proc)",
+   "ui/ui_widget_defs.s:13180-13181 `cp xiz, EVT_DUMP_POINTER_EX` / `jr z, BoxStyle12_Setup` -- the case that reads the label",
+   "ui/ui_widget_defs.s:13217 `ld xwa, BoxStyle12_Setup_Data` -- pushed as the format, then BoxStyle12_CheckInner calls Sprintf_Locked",
+   "ui_widgets/disk_warning_strings.s:1027 `.incbin naka_disk_warning.bin, 0x1DA0` -- bytes \"slong\\t%s%d\\0\" (+0xFF pad)"
+  ]
+ },
+ {
+  "old": "BoxStyle13_Setup_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "pUlongProc_DumpPointerFmt",
+  "header": "\"ulong\\t%s%d\": the Sprintf format pUlongProc uses on EVT_DUMP_POINTER_EX -- a C declaration \"ulong <prop name><index>\" of the pointed-to member (EVT_DUMP_PROPERTY_EX uses BoxStyle13_CalcWidth_Str_Fmts_Fmtd, \"&%s%d\").\nBasis: readers + bytes -- BoxStyle13_Setup is pUlongProc's EVT_DUMP_POINTER_EX case; it gets the name with EVT_GET_PROP_NAME and Sprintf_Locked(out, this, name, index).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/ui_widget_defs.s:13285 `pUlongProc:` -- the owning property proc (Matsushita name p<type>Proc)",
+   "ui/ui_widget_defs.s:13301-13302 `cp xiz, EVT_DUMP_POINTER_EX` / `jr z, BoxStyle13_Setup` -- the case that reads the label",
+   "ui/ui_widget_defs.s:13338 `ld xwa, BoxStyle13_Setup_Data` -- pushed as the format, then BoxStyle13_CheckInner calls Sprintf_Locked",
+   "ui_widgets/disk_warning_strings.s:1037 `.incbin naka_disk_warning.bin, 0x1DB2` -- bytes \"ulong\\t%s%d\\0\" (+0xFF pad)"
+  ]
+ },
+ {
+  "old": "CommonIDProc_OnDumpPointerEx_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CommonIDProc_DumpPointer_Str_Empty",
+  "header": "Empty string (\"\" + 0xFF pad) that CommonIDProc Strcpy's into the caller's dump buffer for EVT_DUMP_POINTER_EX (ID properties have no pointer form).\nBasis: readers + bytes -- CommonIDProc_OnDumpPointerEx (CommonIDProc_CaseTable entry 2) pushes it and joins the Strcpy; bytes 00 FF.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/ui_widget_defs.s:17487-17491 `CommonIDProc_OnDumpPointerEx:` ... `pushw CommonIDProc_OnDumpPointerEx_Data@hi16/@lo16`",
+   "ui/ui_widget_defs.s:17496 `call Strcpy` -- copied into (xwa+4) of the request",
+   "ui_widgets/disk_warning_strings.s:1136 `.short CommonIDProc_OnDumpPointerEx - CommonIDProc_OnGetPropDataSp` -- the case-table slot",
+   "ui_widgets/disk_warning_strings.s:1131 `.incbin ..., 0x1F36, 0x2` -- bytes 00 FF (sibling ConstFlagProc_DumpText / NameProc_MakeDump_Str_Empty)"
+  ]
+ },
+ {
+  "old": "DrawBitmapFile_Impl_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DrawBitmapFile_Str_BM",
+  "header": "\"BM\": the BMP file signature DrawBitmapFile_Impl checks (String_Compare, 2 chars) before drawing a bitmap file; mismatch returns.\nBasis: readers + bytes -- sibling of CaptureLcd_Str_BM; bytes 42 4D 00 FF.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/drawing_primitives.s:3485-3490 `pushw 0x2` / `pushw DrawBitmapFile_Impl_Data@hi16/@lo16` / `call String_Compare`",
+   "ui/drawing_primitives.s:3493 `jrl nz, DrawBitmapFile_Impl_Return` -- not a BMP: nothing drawn",
+   "ui_widgets/disk_warning_strings.s:1146 `.incbin ..., 0x2146, 0x4` -- bytes 42 4D 00 FF = \"BM\""
+  ]
+ },
+ {
+  "old": "Gfx_LoadSplashBMP_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Gfx_LoadSplashBMP_Str_BM",
+  "header": "\"BM\": the BMP signature Gfx_LoadSplashBMP compares with the first 2 bytes of the 14-byte file header it just read; mismatch fails validation.\nBasis: readers + bytes -- bytes 42 4D 00 FF; same use as DrawBitmapFile and CaptureLcd_Str_BM.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/ui_window_procs.s:6249-6252 `ld xbc, 0xe` / `call FileIO_ReadBlock` / `cp iz, 0xe` -- reads the 14-byte BITMAPFILEHEADER",
+   "ui/ui_window_procs.s:6254-6259 `pushw 0x2` / `pushw Gfx_LoadSplashBMP_Data@hi16/@lo16` / `call String_Compare`",
+   "ui/ui_window_procs.s:6262 `jr nz, FileIO_ControllerValidationFailed`",
+   "ui_widgets/disk_warning_strings.s:1192 `.incbin ..., 0x219C, 0x4` -- 42 4D 00 FF"
+  ]
+ },
+ {
+  "old": "NoteEdit_FormatTempoString_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "NoteEdit_MidiNoteNameTable",
+  "header": "128 x char[9]: MIDI note name per note number, C-2 .. G8, every character written as a \"~hh\" escape (~a0 = flat glyph, ~9e = sharp), e.g. \"~43~2d~32\" = \"C-2\"; Strncpy'd 9 bytes at note*9.\nBasis: readers + bytes -- NoteEditFunc_OnGetNoteString (title TT_SQNOTEEDT) and SqedtFunc_OnGetTnString/CnString index it by a note byte * 9.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "sequencer/sequencer_ui.s:6732-6747 `NoteEditFunc_OnGetNoteString:` `cp l, 0x95` (TITLE_SQNOTEEDT) / `pushw 0x9` / `muls wa, 0x9` / `lda xbc, (NoteEdit_FormatTempoString_Data:24)` / `call Strncpy`",
+   "sequencer/sequencer_ui.s:14279-14296 `SqedtFunc_OnGetTnString:` `ld a, (9750:16)` / `muls wa, 9` / table / Strncpy 9",
+   "sequencer/sequencer_ui.s:14303-14320 `SqedtFunc_OnGetCnString:` `ld a, (9816:16)` / `muls wa, 9` -- same table",
+   "includes/generated/naka_effects_seq.bin 0x89A2..0x8E22 = 1152 B = 128 x 9; decoded: C-2, D~a0-2(Db), D-2, ... C8, Db8, D8, Eb8, E8, F8, F#8, G8 (scratch agent_g5 python decode)",
+   "ui_widgets/style_bitmaps.s:3639 MainChordPre_RootNames header -- ~a0 is the flat glyph escape, ~9e the sharp one"
+  ],
+  "spelling": "The 1152-byte table is cut into three incbins: this label covers entries 0..53 and 7 bytes of 53; Str_20469e32473220 (+484) and Str_42a03242322043 (+523) are mid-entry splits whose old `.long` referrers no longer exist (only comments mention them) -- they should be merged into one table."
+ },
+ {
+  "old": "FileIO_BytecodeData_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "FileIO_BytecodeData_Data_2",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "FileIO_BytecodeData_Data_3",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "FileIO_BytecodeData_Data_4",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "FileIO_BytecodeData_Data_5",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "FileIO_BytecodeData_Data_6",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "FileIO_BytecodeData_Data_7",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "FileIO_BytecodeData_Data_8",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "FileIO_BytecodeData_Data_9",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "FileIO_BytecodeData_Data_10",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "FileIO_BytecodeData_Data_11",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "FileIO_BytecodeData_Data_13",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "FileIO_BytecodeData_Data_14",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "FileIO_BytecodeData_Data_15",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "CmpSetP1_DialGrid_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "CmpSetP1_SendAndApplyFunc_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "S2cMemNoBox_HandleScroll_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "S2c_GridCheck_Dispatch_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "PsCmpCpFPtnBox_HandleEvtBC_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "AcMemNoBox_HandleEvtBC_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "AcCmpRecBox_HandleEvtBC_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "MspNameBnkFunc_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "RgpSetBnkBox_HandleEvtBC_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "MspPlayModeFunc_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "AcSndArgGridBoxProc_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "AttLangCheck_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "SureLangCheck_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "SndMemLangCheck_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "SndMem1LangCheck_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "MemfulLangCheck_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "Memful2LangCheck_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "StylCnvLangCheck_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "AcCurSongName_HandleFocusGained_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "MidiPart_PageDisplay_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "NakaToggle_OnOff_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "PmemOutLGridCheck_LocalInit_Strings_Tail",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "TtMdCtlMsg_EventDispatch_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "MidiPartGridCheck_OnIndexswUp_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "MidiPartGridCheck_OnIndexswDown_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "ExitWindow_OK_Data_2",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "MasterSetup_EventDispatch_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "MasterSetup_DialTurn_Underflow_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "MstStyle1Grid_CellSelect_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "VariScreen_HandlePaint_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "Scoop_SelectModeTable_2Part_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "Scoop_InitPartDisplay_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "Scoop_SelectModeTable_2Part_Data_2",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "Scoop_TitleBar_GetPartConfig_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "Display_RedrawTitleBar_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "Scoop_TitleBar_Part1Check_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "Scoop_TitleBar_Part2Check_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "Scoop_InitPartDisplay_Data_2",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "Display_RedrawMainContent_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "Display_RedrawFooter_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "Display_RedrawFooter_Data_2",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "Scoop_FooterShowPartValue_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "Display_RedrawButtonLabels_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "Display_RedrawButtonLabels_Data_2",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "Display_RedrawButtonLabels_Data_3",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "Scoop_Selection_RedrawActive_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "Scoop_Selection_RedrawActive_Data_2",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "Scoop_Selection_DrawMode1_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "Scoop_Selection_RedrawActive_Data_3",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "Scoop_Selection_DrawMode1_Data_2",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "Scoop_SidePanel_StoreAndDraw_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "Scoop_SidePanel_StoreAndDraw_Data_2",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "Scoop_SidePanel_DrawOneSlot_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "Display_RedrawButtonLabels_Data_4",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "Display_RedrawButtonLabels_Data_5",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "Scoop_SelectModeTable_2Part_XIX_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "Scoop_CurveUpdate_Finalize_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "Scoop_EnvCalc_Handler1_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "Scoop_GlideCalc_Handler0_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "Scoop_EventLoop_12Entry_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "Scoop_EventLoop_12Entry_Alt_Data_Target5_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "Scoop_EventLoop_36Entry_Data_2",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "LswLeftHold_DefaultStr_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "IvSdpart_GetText_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "IvMesageProc_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ }
+]

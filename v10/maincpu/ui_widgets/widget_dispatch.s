@@ -92,7 +92,12 @@ SndParam_RegRamPtrs:
 SndParam_ValueTablePtrPair:
 	.set Naka_SubDispatch_B_Table, SndParam_ValueTablePtrPair
 	.long WidgetParam_MidiCC_Chorus
-SndParam_ReadRegWord_Data:
+; SndParam_WordValueListPtrs: Pointer table indexed by a sound-parameter descriptor's +11 byte whose entries point at
+;   16-bit value lists; the label holds entry 0 = WidgetParam_MidiCC_SysExcl, the list {1, 2, 3, 0x203, 0x201, 0x202}.
+;   Basis: readers -- SndParam_ReadRegWord returns the position (0..5) of the current word in list [+11];
+;   SndParam_RegisterBitfield_Data writes list[+11][value]. Index range beyond 0 is not traced (entry 1 would be
+;   SndParam_Registry).
+SndParam_WordValueListPtrs:
 	.long WidgetParam_MidiCC_SysExcl
 ; 972 x u32 pointers to sound-parameter descriptor records.  Count pinned by
 ; SndParam_RegisterAllWidgets / SndParam_RegisterLoop (0xFCEEC7): `ld xbc,xiz;
@@ -1164,7 +1169,11 @@ SndParam_DMA_Zone2Check_Data:
 	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0x3C
 	.long 0x00000000, 0x00000000, 0x00000000, 0x0000fc54	; 0x40
 	.long 0x0000fc26, 0x0000fc32, 0x0000fc3e, 0x0000fc4a	; 0x44
-SndParam_ClampReverbTime_Data:
+; SndParam_StyleRecordRamPtr: Entry 0x48 of SndParam_BlockRamPtrs = 0xFC5A, the RAM address of panel record 0x48
+;   (style + tempo). SndParam_ClampReverbTime and SndParam_ClampDelayTime load it directly and clamp the record's +8
+;   word (& 0x1FF) to 40..300: the tempo. Basis: readers + bytes -- `ld xwa, (<this>); ld hl, (xwa+8)`;
+;   SeqTimer_PostTempoUpdate writes the tempo to 0xFC62 = 0xFC5A + 8 via record 0x48 field 8.
+SndParam_StyleRecordRamPtr:
 	.long 0x0000fc5a, 0x0000ff92, 0x00000000, 0x00000000	; 0x48
 	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0x4C
 	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0x50
@@ -1222,21 +1231,59 @@ SndParam_OutOfMemoryMsg:
 ; Structure: 138-byte header + 25 x 234-byte channel config records + 148-byte trailer
 NakaInst_SoundConfig_LookupTable:
 	.long	MIDI_INIT_SEQUENCES, MidiInit_Stub1, MidiInit_Stub2, MidiInit_Stub3
-DataBuf_CopyBulkBitfields_Large_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x10, 0x18
-DSPCfg_ConfigureVoiceSlotA_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x28, 0x10
-DSPCfg_ConfigureVoiceSlotB_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x38, 0x10
-DSPCfg_VoiceSlotB_MapAndWrite_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x48, 0x10
-DSPCfg_VoiceSlotB_ExtractData_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x58, 0x32
+; FileData_NNPartSourceIndex: 24 x u8 for the 'NN' (.LSW class 3) live-panel import: KN5000 part record i (0..23, RAM
+;   0xF9B4 + 26i) -> index of the 4-byte source record in the file's block at +414 {0x17, 0x14, 0x13, 0x10, 0x11,
+;   0x12, 0..15, 0x15, 0x16}. Basis: readers + bytes -- FileData_ImportNNLivePanel's third loop copies record [map[i]]
+;   to part record i.
+FileData_NNPartSourceIndex:	.incbin "includes/generated/sound_config_lookup.bin", 0x10, 0x18
+; FileData_NNDspEffectAlgoMap: 16 x u8 for the 'NN' panel import: low nibble of the source record byte +341 -> DSP
+;   EFFECT algorithm number written as parameter 0x4900 (byte 0 of effect slot 0, tag 0x61 at destination +756) {0, 1,
+;   32, 33, 35, 9, 10, 4, 5, 0..}. Basis: readers + bytes -- DSPCfg_ConfigureVoiceSlotA (called by
+;   FileData_ImportNNLivePanel / ImportNNPanelMemories) indexes it and calls DSPCfg_WriteParamSimple(0x4900).
+FileData_NNDspEffectAlgoMap:	.incbin "includes/generated/sound_config_lookup.bin", 0x28, 0x10
+; FileData_NNDigitalReverbAlgoMap: 16 x u8 for the 'NN' panel import: high nibble of the source record byte +338 ->
+;   DIGITAL REVERB algorithm number written as parameter 0x4B00 (byte 0 of effect slot 1, tag 0x63 at destination
+;   +782) {17, 17, 20, 21, 21, 21, 10, 10, 10, 10, 0..}. Basis: readers + bytes -- the second half of
+;   DSPCfg_ConfigureVoiceSlotA indexes it and calls DSPCfg_WriteParamSimple(0x4B00); all values lie in slot 1's
+;   accepted set 9, 10, 16..27.
+FileData_NNDigitalReverbAlgoMap:	.incbin "includes/generated/sound_config_lookup.bin", 0x38, 0x10
+; FileData_NNDigitalReverbParamMap: 16 x u8 for the 'NN' panel import: (low nibble of source byte +338) / 2 -> the
+;   value written to each DIGITAL REVERB parameter 0x4B10+i whose DSPCfg_ResolveAndExtract kind is 1 or 2 {15, 30, 45,
+;   55, 70, 78, 85, 90, 92, 94, 70 x6}. Basis: readers + bytes -- the reverb parameter loop of
+;   DSPCfg_ConfigureVoiceSlotA; which reverb parameter kinds 1/2 are is not established.
+FileData_NNDigitalReverbParamMap:	.incbin "includes/generated/sound_config_lookup.bin", 0x48, 0x10
+; FileData_NNTag99ValueMap: 50 x u8 value translation for the 'NN' live-panel import: the source record bytes +389,
+;   +390, +394, +395 index it and the results go to destination +948, +949, +970, +969 (RAM 0xFD34/35/4A/49 = panel
+;   record 0x99 payload +4, +5, +0x1A, +0x19). Basis: readers + bytes -- DSPCfg_VoiceSlotB_ExtractData; what the codes
+;   (0, 0xC0..0xC7, 0x88, 0x92 ...) mean is not established.
+FileData_NNTag99ValueMap:	.incbin "includes/generated/sound_config_lookup.bin", 0x58, 0x32
 ; SndParam_PresetBanks -- 25 sound-parameter banks of 234 bytes, blocks 0..24 of SndParam_GetBlockPointer:
 ; 39 x {u32 live-panel RAM address, u8 b4, u8 b5}, address 0 = unused; entries 0..22 are applied by
 ; SndParam_ApplyBaseBlock, 23..38 by SndParam_ApplyMaskBlock.  Typed in sound_config_lookup.c
 ; (scripts/converters/sndparam_bank_retype.py).
 SndParam_PresetBanks:			.incbin "includes/generated/sound_config_lookup.bin", 0x8A, 0x16DA	; 25 x 234-byte sound-parameter banks (blocks 0..24 of SndParam_GetBlockPointer), typed in sound_config_lookup.c
-MidiSysEx_SendAllParams_Data:		.incbin "includes/generated/sound_config_lookup.bin", 0x1764, 0xE
-MidiSysEx_SendControlChange1_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x1772, 0x4
-MidiSysEx_SendProgramChange_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x1776, 0x2
-MidiSysEx_SendPartChanLoop_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x1778, 0xE
-MidiSysEx_CopyParamToBuffer_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x1786, 0x30
+; Vocalist_SysExTemplate: 14-byte SysEx template F0 00 00 10 00 35 60 0F 00 00 00 00 00 F7 for the Vocalist settings
+;   (panel record 0x47): the senders copy it, patch +4 (channel, param 0x2D00), +9 (parameter number 0x20 / 0x11 /
+;   0x12 / 0x1C ...) and +12 (value) and send it on MIDI out or the computer port. Basis: readers + bytes --
+;   MidiSysEx_SendAllParams and its continuations Mem_Copy 14 bytes from it; called after the vocalist page OK events.
+Vocalist_SysExTemplate:		.incbin "includes/generated/sound_config_lookup.bin", 0x1764, 0xE
+; Vocalist_ControlChangeTemplate: 3-byte Control Change template B0 10 00 (+ 0xFF pad): controller 16; the Vocalist
+;   senders OR the channel (param 0x2D00, when <= 15) into the status and put param 0x2D04 (or 0x2D06 + 60) in the
+;   value byte. Basis: readers + bytes -- MidiSysEx_SendControlChange1/2 Mem_Copy 3 bytes from it.
+Vocalist_ControlChangeTemplate:	.incbin "includes/generated/sound_config_lookup.bin", 0x1772, 0x4
+; Vocalist_ProgramChangeTemplate: 2-byte Program Change template C0 00: MidiSysEx_SendProgramChange ORs the Vocalist
+;   channel (param 0x2D00, when <= 15) into the status and puts param 0x2D02 in the program byte. Basis: readers +
+;   bytes -- Mem_Copy of 2 bytes from it.
+Vocalist_ProgramChangeTemplate:	.incbin "includes/generated/sound_config_lookup.bin", 0x1776, 0x2
+; Vocalist_PartSysExTemplate: Second copy of the 14-byte Vocalist SysEx template (F0 00 00 10 00 35 60 0F 00 00 00 00
+;   00 F7) used by MidiSysEx_SendAllPartChannels: 16 messages with +4 = part 0..15, +9 = 0x12, +12 = param 0x2D00.
+;   Basis: readers + bytes -- the loop's Mem_Copy source.
+Vocalist_PartSysExTemplate:	.incbin "includes/generated/sound_config_lookup.bin", 0x1778, 0xE
+; Vocalist_PresetRecords: 6 x 8-byte Vocalist presets: MidiSysEx_CopyParamToBuffer copies preset [n] whole into panel
+;   record 0x47 (RAM 0xFC4A, the Vocalist settings that keys 0x2D00.. address) when a vocalist page-1 preset is
+;   confirmed. Basis: readers + bytes -- `sla wa, 3; lda xbc, (<this>); ... Mem_Copy(0xFC4A, entry, 8)`; called from
+;   the 6 cases of MainVocalistPage1OKFunc (EVT_VST_PST_OK).
+Vocalist_PresetRecords:	.incbin "includes/generated/sound_config_lookup.bin", 0x1786, 0x30
 MIDI_ReadChannelParam_CaseTable:
 	.short	MidiChan_ParamDispatch - MidiChan_ParamDispatch
 	.short	MIDI_ReadChannelParam_Case1 - MidiChan_ParamDispatch
@@ -1271,7 +1318,10 @@ SeqData_ReadFieldByIndex_CaseTable:
 	.short	SeqData_ReadFieldByIndex_Case13 - SeqData_FieldDispatch
 	.short	SeqData_ReadFieldByIndex_Case14 - SeqData_FieldDispatch
 	.short	SeqData_ReadFieldByIndex_Case15 - SeqData_FieldDispatch
-ArpQueue_ComputeAndEnqueue_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x17F6, 0x2
+; SysEx_ChecksumEoxTemplate: 2-byte SysEx tail template {checksum, 0xF7}: ArpQueue_ComputeAndEnqueue copies it to the
+;   stack, replaces byte 0 with the Roland-style checksum (-(sum of the queued bytes) & 0x7F) and enqueues both bytes.
+;   Basis: readers + bytes -- `ld xiy, <this>; ldiw` then `neg e; res 7, e; ld (xwa), e`; bytes 00 F7.
+SysEx_ChecksumEoxTemplate:	.incbin "includes/generated/sound_config_lookup.bin", 0x17F6, 0x2
 ; 39 x u32 routine pointers; MidiTable_DispatchHelper (0xFD7AF5): `lda xbc,(<this>); ld xhl, (xbc+wa); call (xhl)`.
 ; Extent: to the next object's base (loaded by its own reader).
 SeqChan_CommandHandlers:
@@ -1279,28 +1329,28 @@ SeqChan_CommandHandlers:
 	.long SeqChan_UnhandledCmd
 	.long SeqChan_UnhandledCmd_0x01
 	.long SeqChan_UnhandledCmd_0x02
-	.long SeqChan_DispatchByType_Data
+	.long MidiPkt_XferOnGroupEnd
 	.long MidiSysEx_ProcessBlock
 	.long SeqChan_UnhandledCmd_0x12
 	.long SeqChan_UnhandledCmd_0x03
-	.long MidiPkt_InitSingleField_Data
+	.long MidiPkt_XferAnswerMsg21
 	.long MidiPkt_HandleCmdCode01
 	.long SeqChan_UnhandledCmd
-	.long MidiPkt_ArpExtHandler_N_Data
+	.long MidiPkt_XferOnDataPacket
 	.long MidiPkt_ArpExtHandler_A
-	.long MidiPkt_ArpExtHandler_B_Data
-	.long MidiPkt_ArpExtHandler_C_Data
-	.long MidiPkt_ArpExtHandler_D_Data
-	.long MidiPkt_ArpExtHandler_E_Data
-	.long MidiPkt_ArpExtHandler_F_Data
+	.long MidiPkt_XferOnPanelMemBlock
+	.long MidiPkt_XferOnSoundRamStart
+	.long MidiPkt_XferOnSoundRamDataBlock
+	.long MidiPkt_XferOnStyleImageStart
+	.long MidiPkt_XferOnStyleImageBlock2
 	.long MidiPkt_ArpExtHandler_G
 	.long MidiPkt_ArpExtHandler_K
 	.long MidiPkt_ArpExtHandler_L
-	.long MidiPkt_ArpExtHandler_M_Data
+	.long MidiPkt_XferOnSeqEventBlock
 	.long MidiPkt_RetStub_A
 	.long MidiPkt_RetStub_B
-	.long MidiPkt_ArpExtHandler_H_Data
-	.long MidiPkt_ArpExtHandler_I_Data
+	.long MidiPkt_XferOnAccompBlocksStart
+	.long MidiPkt_XferOnAccompBlocksBlock2
 	.long MidiPkt_ArpExtHandler_J
 	.long SeqChan_UnhandledCmd
 	.long SeqChan_UnhandledCmd
@@ -1315,7 +1365,7 @@ SeqChan_CommandHandlers:
 	.long SeqChan_UnhandledCmd
 	.long SeqChan_UnhandledCmd
 	.long SeqChan_UnhandledCmd
-; 22 x u32 routine pointers; MidiPkt_ArpExtHandler_N_Data (0xFD7E10): `lda xbc,(<this>); ld xhl, (xbc+hl); call (xhl)`.
+; 22 x u32 routine pointers; MidiPkt_XferOnDataPacket (0xFD7E10): `lda xbc,(<this>); ld xhl, (xbc+hl); call (xhl)`.
 ; Extent: to the next object's base (loaded by its own reader).
 SeqChan_StepCmdHandlers:
 	.long SeqChan_ProcessStepCmd
@@ -1325,22 +1375,22 @@ SeqChan_StepCmdHandlers:
 	.long SeqChan_StepCmd_Field4to5
 	.long SeqChan_StepCmd_Field5to6
 	.long SeqChan_ProcessStepCmd
-	.long SeqChan_StepCmd_Field6_Data
+	.long SeqChan_XferStep_StyleImageBlock1
 	.long SeqChan_StepCmd_Field8to9
 	.long SeqChan_StepCmd_Field9to10
 	.long SeqChan_ProcessStepCmd
-	.long SeqChan_StepCmd_Field11_Data
-	.long SeqChan_StepCmd_Field12_Data
+	.long SeqChan_XferStep_CurrentSong
+	.long SeqChan_XferStep_SongSlots
 	.long SeqChan_StepCmd_Field13Write
 	.long SeqChan_ProcessStepCmd
 	.long SeqChan_RetStub_A
 	.long SeqChan_RetStub_B
 	.long SeqChan_ProcessStepCmd
-	.long SeqChan_StepCmd_Field10_Data
-	.long SeqChan_StepCmd_Field13_Data
+	.long SeqChan_XferStep_AccompBlock1
+	.long SeqChan_XferStep_AccompBlock2
 	.long SeqChan_StepCmd_Field20to21
 	.long SeqChan_ProcessStepCmd
-; 22 x u32 routine pointers; SeqChan_DispatchByType_Data (0xFD80B2): `lda xbc,(<this>); ld xhl, (xbc+wa); call (xhl)`.
+; 22 x u32 routine pointers; MidiPkt_XferOnGroupEnd (0xFD80B2): `lda xbc,(<this>); ld xhl, (xbc+wa); call (xhl)`.
 ; Extent: to the next object's base (loaded by its own reader).
 SeqChan_WriteFieldHandlers:
 	.long SeqChan_DefaultHandler
@@ -1426,7 +1476,7 @@ VoiceData_SyncCodeList:
 ; lda xix,(0xFD8CF1); jp_rr 8,xix,..` -- targets 0xFD8CF1 (SysEx_SendDispatch) + offset (no labels yet).
 SysExSend_SwitchOffsets:
 	.short	SysEx_SendDispatch - SysEx_SendDispatch
-	.short	SysEx_DispatchCalls_Data - SysEx_SendDispatch
+	.short	SysEx_InitiateSend_SendStyleImage - SysEx_SendDispatch
 	.short	SysEx_InitiateSend_SendSequencer - SysEx_SendDispatch
 	.short	SysEx_InitiateSend_SendSoundMemory - SysEx_SendDispatch
 	.short	SysEx_InitiateSend_SendPanelMemory - SysEx_SendDispatch
@@ -1463,42 +1513,42 @@ SeqData_Handlers:
 	.long MidiPkt_ArpChordHandler
 	.long MidiPkt_ArpChordHandler
 	.long SeqData_FormatOutput_CaseC
-	.long SeqData_FormatOutput_Data
+	.long SysEx_OnTechnicsParamChange
 	.long SeqData_FormatOutput_Default
-	.long VoiceParam_AssSwb_MultiBlock_Data
+	.long SysEx_OnTechnicsParamRequest
 	.long MidiPkt_DispatchData_Chan4
 	.long MidiPkt_DispatchData_Chan3
 	.long MidiPkt_DispatchData_Chan1
 	.long MidiPkt_DispatchData_Chan2
 	.long MidiPkt_DispatchData_Chan5
 	.long MidiPkt_DispatchData_Chan6
-	.long MidiPkt_SysExValidator_Data
-	.long MidiPkt_SysExProcessor_Data
-	.long MidiPkt_SysExBulkTransfer_Data
+	.long SysEx_OnGmSystemOn
+	.long SysEx_OnGmSystemOff
+	.long SysEx_OnRolandGsParam
 ; 4-byte template: SeqData_DispatchLoop_Done (0xFD8DFD) copies it into its frame (`ld xiy,<this>; ld xix,xsp; ldi85; ldiw` -- 3 bytes).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 SeqData_OutTemplate:
 	.byte 0x08, 0x07, 0xf7, 0xff
-; 7 x s16 switch offsets.  SeqData_FormatOutput_Data (0xFD8F2A): `ld_rrw ..,xix,..;
+; 7 x s16 switch offsets.  SysEx_OnTechnicsParamChange (0xFD8F2A): `ld_rrw ..,xix,..;
 ; lda xix,(0xFD8F7E); jp_rr 8,xix,..` -- targets 0xFD8F7E + offset (no labels yet).
 SeqDataFmt_SwitchOffsets:
-	.short	SeqData_FormatOutput_Default_Code - SeqData_FormatOutput_Default_Code
-	.short	SeqData_FormatOutput_Data_Helper_Case2 - SeqData_FormatOutput_Default_Code
-	.short	SeqData_FormatOutput_Data_Helper_Case3 - SeqData_FormatOutput_Default_Code
-	.short	SeqData_FormatOutput_Data_Helper_Case4 - SeqData_FormatOutput_Default_Code
-	.short	SeqData_FormatOutput_Data_Helper_Case5 - SeqData_FormatOutput_Default_Code
-	.short	SeqData_FormatOutput_Data_Helper_Case6 - SeqData_FormatOutput_Default_Code
-	.short	SeqData_FormatOutput_Data_Helper_Case7 - SeqData_FormatOutput_Default_Code
-; 7 x s16 switch offsets.  VoiceParam_AssSwb_MultiBlock_Data (0xFD9A0C): `ld_rrw ..,xix,..;
+	.short	SysEx_OnTechnicsParamChange_Addr00 - SysEx_OnTechnicsParamChange_Addr00
+	.short	SeqData_FormatOutput_Data_Helper_Case2 - SysEx_OnTechnicsParamChange_Addr00
+	.short	SeqData_FormatOutput_Data_Helper_Case3 - SysEx_OnTechnicsParamChange_Addr00
+	.short	SeqData_FormatOutput_Data_Helper_Case4 - SysEx_OnTechnicsParamChange_Addr00
+	.short	SeqData_FormatOutput_Data_Helper_Case5 - SysEx_OnTechnicsParamChange_Addr00
+	.short	SeqData_FormatOutput_Data_Helper_Case6 - SysEx_OnTechnicsParamChange_Addr00
+	.short	SeqData_FormatOutput_Data_Helper_Case7 - SysEx_OnTechnicsParamChange_Addr00
+; 7 x s16 switch offsets.  SysEx_OnTechnicsParamRequest (0xFD9A0C): `ld_rrw ..,xix,..;
 ; lda xix,(0xFD9A3E); jp_rr 8,xix,..` -- targets 0xFD9A3E + offset (no labels yet).
 AssSwbMulti_SwitchOffsets:
-	.short	VoiceParam_MultiMode_StubRet_Code - VoiceParam_MultiMode_StubRet_Code
-	.short	VoiceParam_AssSwb_MultiBlock_Data_Case2 - VoiceParam_MultiMode_StubRet_Code
-	.short	VoiceParam_AssSwb_MultiBlock_Data_Case3 - VoiceParam_MultiMode_StubRet_Code
-	.short	VoiceParam_AssSwb_MultiBlock_Data_Case4 - VoiceParam_MultiMode_StubRet_Code
-	.short	VoiceParam_AssSwb_MultiBlock_Data_Case5 - VoiceParam_MultiMode_StubRet_Code
-	.short	VoiceParam_AssSwb_MultiBlock_Data_Case6 - VoiceParam_MultiMode_StubRet_Code
-	.short	VoiceParam_AssSwb_MultiBlock_Data_Case7 - VoiceParam_MultiMode_StubRet_Code
+	.short	SysEx_OnTechnicsParamRequest_Addr00 - SysEx_OnTechnicsParamRequest_Addr00
+	.short	VoiceParam_AssSwb_MultiBlock_Data_Case2 - SysEx_OnTechnicsParamRequest_Addr00
+	.short	VoiceParam_AssSwb_MultiBlock_Data_Case3 - SysEx_OnTechnicsParamRequest_Addr00
+	.short	VoiceParam_AssSwb_MultiBlock_Data_Case4 - SysEx_OnTechnicsParamRequest_Addr00
+	.short	VoiceParam_AssSwb_MultiBlock_Data_Case5 - SysEx_OnTechnicsParamRequest_Addr00
+	.short	VoiceParam_AssSwb_MultiBlock_Data_Case6 - SysEx_OnTechnicsParamRequest_Addr00
+	.short	VoiceParam_AssSwb_MultiBlock_Data_Case7 - SysEx_OnTechnicsParamRequest_Addr00
 ; 4-byte template: MidiPkt_BuildControl (0xFD9DA0) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+6); ldi85; ldiw` -- 3 bytes).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 MidiPkt_ControlTemplate:
@@ -1738,40 +1788,40 @@ MidiPkt_MsgTemplate_3368:
 ; Trailing 0xFF (if any) is padding the copy does not take.
 MidiPkt_MsgTemplate_336C:
 	.byte 0x00, 0x00, 0x00, 0xff
-; 6 x s16 switch offsets.  MidiPkt_SysExBulkTransfer_Data (0xFDA921): `ld_rrw ..,xix,..;
+; 6 x s16 switch offsets.  SysEx_OnRolandGsParam (0xFDA921): `ld_rrw ..,xix,..;
 ; lda xix,(0xFDA94D); jp_rr 8,xix,..` -- targets 0xFDA94D + offset (no labels yet).
 SysExBulk_SwitchOffsets:
-	.short	MidiPkt_SendBankSelect_Send_Code - MidiPkt_SendBankSelect_Send_Code
-	.short	MidiPkt_SysExBulkTransfer_Data_Case2 - MidiPkt_SendBankSelect_Send_Code
-	.short	MidiPkt_SysExBulkTransfer_Data_Case3 - MidiPkt_SendBankSelect_Send_Code
-	.short	MidiPkt_SysExBulkTransfer_Data_Case4 - MidiPkt_SendBankSelect_Send_Code
-	.short	MidiPkt_SysExBulkTransfer_Data_Case5 - MidiPkt_SendBankSelect_Send_Code
-	.short	MidiPkt_SysExBulkTransfer_Data_Case6 - MidiPkt_SendBankSelect_Send_Code
-; 16 x u8 (15, 0..8, 10..14, 9).  MidiPkt_SysExBulkTransfer_Data_Join (0xFDA9B1):
+	.short	SysEx_OnRolandGs_UseForRhythmPart - SysEx_OnRolandGs_UseForRhythmPart
+	.short	MidiPkt_SysExBulkTransfer_Data_Case2 - SysEx_OnRolandGs_UseForRhythmPart
+	.short	MidiPkt_SysExBulkTransfer_Data_Case3 - SysEx_OnRolandGs_UseForRhythmPart
+	.short	MidiPkt_SysExBulkTransfer_Data_Case4 - SysEx_OnRolandGs_UseForRhythmPart
+	.short	MidiPkt_SysExBulkTransfer_Data_Case5 - SysEx_OnRolandGs_UseForRhythmPart
+	.short	MidiPkt_SysExBulkTransfer_Data_Case6 - SysEx_OnRolandGs_UseForRhythmPart
+; 16 x u8 (15, 0..8, 10..14, 9).  MidiPkt_SysExBulkTransfer_Data_Helper2_Join (0xFDA9B1):
 ; `lda xbc,(<this>); ld a, (xbc+wa)`.
 SysExBulk_SlotMap:
 	.byte 0x0f, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x09
-; 4-byte template: MidiPkt_SysExBulkTransfer_Data_Join (0xFDA9B1) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+..); ldiw; ldiw` -- 4 bytes, one of six).
+; 4-byte template: MidiPkt_SysExBulkTransfer_Data_Helper2_Join (0xFDA9B1) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+..); ldiw; ldiw` -- 4 bytes, one of six).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 SysExBulk_FrameTemplate0:
 	.byte 0x00, 0x00, 0xff, 0x00
-; 4-byte template: MidiPkt_SysExBulkTransfer_Data_Join (0xFDA9B1) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+..); ldiw; ldiw` -- 4 bytes, one of six).
+; 4-byte template: MidiPkt_SysExBulkTransfer_Data_Helper2_Join (0xFDA9B1) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+..); ldiw; ldiw` -- 4 bytes, one of six).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 SysExBulk_FrameTemplate1:
 	.byte 0x00, 0x00, 0x00, 0xff
-; 4-byte template: MidiPkt_SysExBulkTransfer_Data_Join (0xFDA9B1) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+..); ldiw; ldiw` -- 4 bytes, one of six).
+; 4-byte template: MidiPkt_SysExBulkTransfer_Data_Helper2_Join (0xFDA9B1) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+..); ldiw; ldiw` -- 4 bytes, one of six).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 SysExBulk_FrameTemplate2:
 	.byte 0x00, 0x00, 0x00, 0xff
-; 4-byte template: MidiPkt_SysExBulkTransfer_Data_Join (0xFDA9B1) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+..); ldiw; ldiw` -- 4 bytes, one of six).
+; 4-byte template: MidiPkt_SysExBulkTransfer_Data_Helper2_Join (0xFDA9B1) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+..); ldiw; ldiw` -- 4 bytes, one of six).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 SysExBulk_FrameTemplate3:
 	.byte 0x00, 0x00, 0xff, 0x00
-; 4-byte template: MidiPkt_SysExBulkTransfer_Data_Join (0xFDA9B1) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+..); ldiw; ldiw` -- 4 bytes, one of six).
+; 4-byte template: MidiPkt_SysExBulkTransfer_Data_Helper2_Join (0xFDA9B1) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+..); ldiw; ldiw` -- 4 bytes, one of six).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 SysExBulk_FrameTemplate4:
 	.byte 0x00, 0x00, 0x00, 0xff
-; 4-byte template: MidiPkt_SysExBulkTransfer_Data_Join (0xFDA9B1) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+..); ldiw; ldiw` -- 4 bytes, one of six).
+; 4-byte template: MidiPkt_SysExBulkTransfer_Data_Helper2_Join (0xFDA9B1) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+..); ldiw; ldiw` -- 4 bytes, one of six).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 SysExBulk_FrameTemplate5:
 	.byte 0x00, 0x00, 0x00, 0xff
@@ -1806,107 +1856,107 @@ SysEx49_LevelCurve128:
 	.byte 90, 90, 90, 90, 90, 90, 90, 90, 91, 91, 91, 91, 91, 91, 91, 91
 	.byte 92, 92, 92, 92, 92, 92, 93, 93, 93, 93, 93, 93, 93, 94, 94, 94
 ; 5 x u16 (count pinned by the `cp c,5; ret nc` guard): case 0 of
-; SysEx_ChannelHandler_4B_Data (0xFDAD13) loads it (`ld xwa,<this>`) and
+; SysEx_DispatchByChannel_ChorusMacroChorus1 (0xFDAD13) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld hl, (xwa+de)`).
 SysEx4B_ChannelWords0:
 	.short 30, 4, 0, 80, 0
 ; 7 x u16 (count pinned by the `cp c,7; ret nc` guard): case 1 of
-; SysEx_ChannelHandler_4B_Data (0xFDAD13) loads it (`ld xwa,<this>`) and
+; SysEx_DispatchByChannel_ChorusMacroChorus1 (0xFDAD13) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld hl, (xwa+de)`).
 SysEx4B_ChannelWords1:
 	.short 84, 10, 53, 80, 0, 80, 0
 ; 5 x u16 (count pinned by the `cp c,5; ret nc` guard): case 2 of
-; SysEx_ChannelHandler_4B_Data (0xFDAD13) loads it (`ld xwa,<this>`) and
+; SysEx_DispatchByChannel_ChorusMacroChorus1 (0xFDAD13) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld hl, (xwa+de)`).
 SysEx4B_ChannelWords2:
 	.short 90, 6, 0, 80, 0
 ; 7 x u16 (count pinned by the `cp c,7; ret nc` guard): case 3 of
-; SysEx_ChannelHandler_4B_Data (0xFDAD13) loads it (`ld xwa,<this>`) and
+; SysEx_DispatchByChannel_ChorusMacroChorus1 (0xFDAD13) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld hl, (xwa+de)`).
 SysEx4B_ChannelWords3:
 	.short 86, 10, 53, 35, 0, 80, 0
 ; 8 x u16 (count pinned by the `cp c,8; ret nc` guard): case 4 of
-; SysEx_ChannelHandler_4B_Data (0xFDAD13) loads it (`ld xwa,<this>`) and
+; SysEx_DispatchByChannel_ChorusMacroChorus1 (0xFDAD13) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld hl, (xwa+de)`).
 SysEx4B_ChannelWords4:
 	.short 95, 8, 40, 0, 75, 0, 80, 0
 ; 8 x u16 (count pinned by the `cp c,8; ret nc` guard): case 5 of
-; SysEx_ChannelHandler_4B_Data (0xFDAD13) loads it (`ld xwa,<this>`) and
+; SysEx_DispatchByChannel_ChorusMacroChorus1 (0xFDAD13) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld hl, (xwa+de)`).
 SysEx4B_ChannelWords5:
 	.short 80, 2, 88, 0, 90, 0, 80, 0
 ; 7 x u16 (count pinned by the `cp c,7; ret nc` guard): case 6 of
-; SysEx_ChannelHandler_4B_Data (0xFDAD13) loads it (`ld xwa,<this>`) and
+; SysEx_DispatchByChannel_ChorusMacroChorus1 (0xFDAD13) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld hl, (xwa+de)`).
 SysEx4B_ChannelWords6:
 	.short 70, 70, 0, 0, 24, 80, 0
 ; 7 x u16 (count pinned by the `cp c,7; ret nc` guard): case 7 of
-; SysEx_ChannelHandler_4B_Data (0xFDAD13) loads it (`ld xwa,<this>`) and
+; SysEx_DispatchByChannel_ChorusMacroChorus1 (0xFDAD13) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld hl, (xwa+de)`).
 SysEx4B_ChannelWords7:
 	.short 70, 70, 50, 50, 24, 80, 0
 ; 8 x s16 switch offsets.  SysEx_DispatchByChannel (0xFDACEA): `ld_rrw ..,xix,..;
-; lda xix,(0xFDAD13); jp_rr 8,xix,..` -- targets 0xFDAD13 (SysEx_ChannelHandler_4B_Data) + offset (no labels yet).
+; lda xix,(0xFDAD13); jp_rr 8,xix,..` -- targets 0xFDAD13 (SysEx_DispatchByChannel_ChorusMacroChorus1) + offset (no labels yet).
 SysEx4B_ChannelSwitch:
-	.short	SysEx_ChannelHandler_4B_Data - SysEx_ChannelHandler_4B_Data
-	.short	SysEx_DispatchByChannel_Case1 - SysEx_ChannelHandler_4B_Data
-	.short	SysEx_DispatchByChannel_Case2 - SysEx_ChannelHandler_4B_Data
-	.short	SysEx_DispatchByChannel_Case3 - SysEx_ChannelHandler_4B_Data
-	.short	SysEx_DispatchByChannel_Case4 - SysEx_ChannelHandler_4B_Data
-	.short	SysEx_DispatchByChannel_Case5 - SysEx_ChannelHandler_4B_Data
-	.short	SysEx_DispatchByChannel_Case6 - SysEx_ChannelHandler_4B_Data
-	.short	SysEx_DispatchByChannel_Case7 - SysEx_ChannelHandler_4B_Data
+	.short	SysEx_DispatchByChannel_ChorusMacroChorus1 - SysEx_DispatchByChannel_ChorusMacroChorus1
+	.short	SysEx_DispatchByChannel_Case1 - SysEx_DispatchByChannel_ChorusMacroChorus1
+	.short	SysEx_DispatchByChannel_Case2 - SysEx_DispatchByChannel_ChorusMacroChorus1
+	.short	SysEx_DispatchByChannel_Case3 - SysEx_DispatchByChannel_ChorusMacroChorus1
+	.short	SysEx_DispatchByChannel_Case4 - SysEx_DispatchByChannel_ChorusMacroChorus1
+	.short	SysEx_DispatchByChannel_Case5 - SysEx_DispatchByChannel_ChorusMacroChorus1
+	.short	SysEx_DispatchByChannel_Case6 - SysEx_DispatchByChannel_ChorusMacroChorus1
+	.short	SysEx_DispatchByChannel_Case7 - SysEx_DispatchByChannel_ChorusMacroChorus1
 ; 5 x s16 (count pinned by the `cp c,5; ret nc` guard): case 0 of
-; SysEx_ChannelHandler_49_Data (0xFDAD9A) loads it (`ld xwa,<this>`) and
+; SysEx_DispatchByChannel_49_ReverbMacroRoom1 (0xFDAD9A) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld hl, (xwa+de)`).
 SysEx49_ChannelWords0:
 	.short 31, 11, 0, 50, 80
 ; 5 x s16 (count pinned by the `cp c,5; ret nc` guard): case 1 of
-; SysEx_ChannelHandler_49_Data (0xFDAD9A) loads it (`ld xwa,<this>`) and
+; SysEx_DispatchByChannel_49_ReverbMacroRoom1 (0xFDAD9A) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld hl, (xwa+de)`).
 SysEx49_ChannelWords1:
 	.short 34, 11, 12, 50, 80
 ; 5 x s16 (count pinned by the `cp c,5; ret nc` guard): case 2 of
-; SysEx_ChannelHandler_49_Data (0xFDAD9A) loads it (`ld xwa,<this>`) and
+; SysEx_DispatchByChannel_49_ReverbMacroRoom1 (0xFDAD9A) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld hl, (xwa+de)`).
 SysEx49_ChannelWords2:
 	.short 34, 11, 16, 50, 80
 ; 5 x s16 (count pinned by the `cp c,5; ret nc` guard): case 3 of
-; SysEx_ChannelHandler_49_Data (0xFDAD9A) loads it (`ld xwa,<this>`) and
+; SysEx_DispatchByChannel_49_ReverbMacroRoom1 (0xFDAD9A) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld hl, (xwa+de)`).
 SysEx49_ChannelWords3:
 	.short 40, 50, 12, 70, 80
 ; 5 x s16 (count pinned by the `cp c,5; ret nc` guard): case 4 of
-; SysEx_ChannelHandler_49_Data (0xFDAD9A) loads it (`ld xwa,<this>`) and
+; SysEx_DispatchByChannel_49_ReverbMacroRoom1 (0xFDAD9A) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld hl, (xwa+de)`).
 SysEx49_ChannelWords4:
 	.short 37, 20, 16, 50, 80
 ; 5 x s16 (count pinned by the `cp c,5; ret nc` guard): case 5 of
-; SysEx_ChannelHandler_49_Data (0xFDAD9A) loads it (`ld xwa,<this>`) and
+; SysEx_DispatchByChannel_49_ReverbMacroRoom1 (0xFDAD9A) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld hl, (xwa+de)`).
 SysEx49_ChannelWords5:
 	.short 37, 20, 0, 50, 80
 ; 6 x s16 (count pinned by the `cp c,6; ret nc` guard): case 6 of
-; SysEx_ChannelHandler_49_Data (0xFDAD9A) loads it (`ld xwa,<this>`) and
+; SysEx_DispatchByChannel_49_ReverbMacroRoom1 (0xFDAD9A) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld hl, (xwa+de)`).
 SysEx49_ChannelWords6:
 	.short 100, 100, 36, 36, 24, 80
 ; 6 x s16 (count pinned by the `cp c,6; ret nc` guard): case 7 of
-; SysEx_ChannelHandler_49_Data (0xFDAD9A) loads it (`ld xwa,<this>`) and
+; SysEx_DispatchByChannel_49_ReverbMacroRoom1 (0xFDAD9A) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld hl, (xwa+de)`).
 SysEx49_ChannelWords7:
 	.short 170, 250, 40, -30, 24, 80
 ; 8 x s16 switch offsets.  SysEx_DispatchByChannel_49 (0xFDAD71): `ld_rrw ..,xix,..;
-; lda xix,(0xFDAD9A); jp_rr 8,xix,..` -- targets 0xFDAD9A (SysEx_ChannelHandler_49_Data) + offset (no labels yet).
+; lda xix,(0xFDAD9A); jp_rr 8,xix,..` -- targets 0xFDAD9A (SysEx_DispatchByChannel_49_ReverbMacroRoom1) + offset (no labels yet).
 SysEx49_ChannelSwitch:
-	.short	SysEx_ChannelHandler_49_Data - SysEx_ChannelHandler_49_Data
-	.short	SysEx_DispatchByChannel_49_ReverbMacroRoom2 - SysEx_ChannelHandler_49_Data
-	.short	SysEx_DispatchByChannel_49_ReverbMacroRoom3 - SysEx_ChannelHandler_49_Data
-	.short	SysEx_DispatchByChannel_49_ReverbMacroHall1 - SysEx_ChannelHandler_49_Data
-	.short	SysEx_DispatchByChannel_49_ReverbMacroHall2 - SysEx_ChannelHandler_49_Data
-	.short	SysEx_DispatchByChannel_49_ReverbMacroPlate - SysEx_ChannelHandler_49_Data
-	.short	SysEx_DispatchByChannel_49_ReverbMacroDelay - SysEx_ChannelHandler_49_Data
-	.short	SysEx_DispatchByChannel_49_ReverbMacroPanningDelay - SysEx_ChannelHandler_49_Data
+	.short	SysEx_DispatchByChannel_49_ReverbMacroRoom1 - SysEx_DispatchByChannel_49_ReverbMacroRoom1
+	.short	SysEx_DispatchByChannel_49_ReverbMacroRoom2 - SysEx_DispatchByChannel_49_ReverbMacroRoom1
+	.short	SysEx_DispatchByChannel_49_ReverbMacroRoom3 - SysEx_DispatchByChannel_49_ReverbMacroRoom1
+	.short	SysEx_DispatchByChannel_49_ReverbMacroHall1 - SysEx_DispatchByChannel_49_ReverbMacroRoom1
+	.short	SysEx_DispatchByChannel_49_ReverbMacroHall2 - SysEx_DispatchByChannel_49_ReverbMacroRoom1
+	.short	SysEx_DispatchByChannel_49_ReverbMacroPlate - SysEx_DispatchByChannel_49_ReverbMacroRoom1
+	.short	SysEx_DispatchByChannel_49_ReverbMacroDelay - SysEx_DispatchByChannel_49_ReverbMacroRoom1
+	.short	SysEx_DispatchByChannel_49_ReverbMacroPanningDelay - SysEx_DispatchByChannel_49_ReverbMacroRoom1
 ; MIDI system-exclusive bytes (0xF0 ...) sent by MidiTable_FlushArpNotes (0xFD7B2F): `ld xwa,<this>;
 ; ld bc,5; call SeqBuf_FlushNoteOffs` queues the first 5 bytes; the rest is 0xFF padding.
 SysEx_Msg_3594:
@@ -3543,7 +3593,11 @@ MidiCtl_GateRecords:
 	.byte 0x08, 0x08
 	.long 0x0000fd56	; gate 2
 	.byte 0x04, 0x04
-MidiPkt_CheckGateCondition_Second_Data:
+; MidiCtl_SecondGateRecords: Gate-record array of the second condition byte (+13) of a MIDI control record: 3 x {u32
+;   RAM address, u8 mask, u8 value} (records 3-5 of the 6 at MidiCtl_GateRecords; index 0 unused, 0 = no condition),
+;   testing (RAM 0xFD56 & 0x08), (0xFD59 & 0x20), (0xFD59 & 0x40). Basis: readers + bytes --
+;   MidiPkt_CheckGateCondition_Second indexes it by +13 x 6; MidiCtl_GateRecords is the +12 array.
+MidiCtl_SecondGateRecords:
 	.long 0x0000fd56	; gate 3
 	.byte 0x08, 0x08
 	.long 0x0000fd59	; gate 4
@@ -3575,7 +3629,7 @@ MidiCtl_SubTableC:
 MidiCtl_SubTableCPtr:
 	.long MidiCtl_SubTableC
 ; 11 record pointers indexed by the caller (`sla wa,2` / `lda xwa,(<this>);
-; ld_rrl xwa,xwa,bc`) in the code after SeqData_FormatOutput_Data; the selected record's +17
+; ld_rrl xwa,xwa,bc`) in the code after SysEx_OnTechnicsParamChange; the selected record's +17
 ; (or +18) then picks the handler.  Extent: to the next table's base.
 MidiCtl_SelectTable0:
 	.long MidiCtl_NullRecord
@@ -3590,7 +3644,7 @@ MidiCtl_SelectTable0:
 	.long MidiCtl_Rec_09
 	.long MidiCtl_Rec_10
 ; 11 record pointers indexed by the caller (`sla wa,2` / `lda xwa,(<this>);
-; ld_rrl xwa,xwa,bc`) in the code after VoiceParam_AssSwb_MultiBlock_Data; the selected record's +17
+; ld_rrl xwa,xwa,bc`) in the code after SysEx_OnTechnicsParamRequest; the selected record's +17
 ; (or +18) then picks the handler.  Extent: to the next table's base.
 MidiCtl_SelectTable1:
 	.long MidiCtl_NullRecord
@@ -3709,7 +3763,7 @@ MidiCtl_Handlers:
 	.long MidiPkt_EnqueueControl_335C
 	.long MidiPkt_EnqueueControl_3358
 	.long MidiPkt_EnqueueControl_3368
-; 12 x u32 routines selected by a record's +17 (values 0-11): SeqData_FormatOutput_Data
+; 12 x u32 routines selected by a record's +17 (values 0-11): SysEx_OnTechnicsParamChange
 ; (0xFD8F2A) and its _Code_Epilogue* siblings: `ld c,(xbc+17); sla bc,2;
 ; lda xde,(<this>); ... call (xhl)`.
 MidiCtl_FormatHandlers:
@@ -3726,7 +3780,7 @@ MidiCtl_FormatHandlers:
 	.long SeqAlt_DualNibblePack
 	.long SeqAlt_ApplyDescriptor_TypeB
 ; 6 x u32 routines selected by a record's +18 (values 0-5):
-; VoiceParam_AssSwb_MultiBlock_Data (0xFD9A0C) and siblings: `ld c,(xbc+18);
+; SysEx_OnTechnicsParamRequest (0xFD9A0C) and siblings: `ld c,(xbc+18);
 ; sla bc,2; lda xde,(<this>); ... call (xhl)`.
 MidiCtl_AssSwbHandlers:
 	.long VoiceParam_MultiBlock_Ret
@@ -4120,7 +4174,11 @@ ToneKit_ParamBlock_115:	.incbin "includes/generated/tonekit_param_blocks.bin", 0
 ; are the DSP parameter-count bytes (DSPCfg_GetSlotCount, 0xEE5FE0) and
 ; +0x7C..+0x7F is entry 0 of the range table (0xEE6044).
 ToneKit_ParamBlock_116:			.incbin "includes/generated/tonekit_param_blocks.bin", 0x1002, 0x18
-DSPCfg_GetSlotCount_Data:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x101A, 0x64
+; DspFxParamCountTable: 100 x u8 parameter count of each DSP effect, indexed by effect number 0..99 (e.g. 5, 5, 7, 7,
+;   8 ...; 2 for 57..60 ACOUSTIC ILLUSION). DSPCfg_ApplyParamStruct loops that many parameters of the effect's record
+;   list. Basis: readers + bytes -- DSPCfg_GetSlotCount returns table[effect]; the range-table comment calls these
+;   bytes the parameter count.
+DspFxParamCountTable:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x101A, 0x64
 DSPCfg_LookupAndExtract_PtrTable:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x107E, 0x4	; 200 x 32-bit pointer
 ; =============================================================================
 ; DSP EFFECT TABLES, indexed by DSP effect number 0..99 (names from
@@ -4383,12 +4441,12 @@ DspCfg_ResolveFallback_WordTable:	.short 0, 2, 4, 5, 3
 ; (`jp t, (xix+wa)`).  The targets have no labels yet, so the offsets stay
 ; numeric: 0xFDCCD3, 0xFDCCDC, 0xFDCCE3, 0xFDCCEC, 0xFDCCF5, 0xFDCCFE (v10).
 DspCfg_OpLetter_JumpOffsets:
-	.short	DSPCfg_Data_ParamDispatch_Code - DSPCfg_Data_ParamDispatch_Code
-	.short	DSPCfg_RecordFieldToParamId_Tag62ReverbSlot - DSPCfg_Data_ParamDispatch_Code
-	.short	DSPCfg_RecordFieldToParamId_DigitalReverbRecord - DSPCfg_Data_ParamDispatch_Code
-	.short	DSPCfg_RecordFieldToParamId_EqualizerRecord - DSPCfg_Data_ParamDispatch_Code
-	.short	DSPCfg_RecordFieldToParamId_AcousticIllusionRecord - DSPCfg_Data_ParamDispatch_Code
-	.short	DSPCfg_RecordFieldToParamId_Slot3RoomKaraokeRecord - DSPCfg_Data_ParamDispatch_Code
+	.short	DSPCfg_RecordFieldToParamId_DspEffectRecord - DSPCfg_RecordFieldToParamId_DspEffectRecord
+	.short	DSPCfg_RecordFieldToParamId_Tag62ReverbSlot - DSPCfg_RecordFieldToParamId_DspEffectRecord
+	.short	DSPCfg_RecordFieldToParamId_DigitalReverbRecord - DSPCfg_RecordFieldToParamId_DspEffectRecord
+	.short	DSPCfg_RecordFieldToParamId_EqualizerRecord - DSPCfg_RecordFieldToParamId_DspEffectRecord
+	.short	DSPCfg_RecordFieldToParamId_AcousticIllusionRecord - DSPCfg_RecordFieldToParamId_DspEffectRecord
+	.short	DSPCfg_RecordFieldToParamId_Slot3RoomKaraokeRecord - DSPCfg_RecordFieldToParamId_DspEffectRecord
 ; switch table: u16 offset from AssSwb_SwapEntriesAndDispatch, 21 entries,
 ; used by DspConfig_EventDispatch (0xFDD29D: index = type-1 for 0..8, or
 ; type-1-0x12 for 9..20; `add bc,bc`, `ld r, (xrr+rr)`, `jp t, (xrr+rr)`).  Offset 0 is the
@@ -5748,7 +5806,7 @@ SwbtB1_Code46_Listeners:	.long 0xffffffff
 SwbtB1_Code47_Listeners:	.long 0xffffffff
 ; code 0x48: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB1_Code48_Listeners:
-	.long EffectMode_ByteData_Block3
+	.long PanelTag48_MsaReapply
 	.long 0xffffffff
 SwbtB1_Code49_Listeners:	.long 0xffffffff
 SwbtB1_Code50_Listeners:	.long 0xffffffff
@@ -5788,14 +5846,14 @@ SwbtB1_Code93_Listeners:	.long 0xffffffff
 ; code 0x98: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB1_Code98_Listeners:
 	.long BitMapOut_ByteData_PresetCopy
-	.long EffectMode_ByteData_Block4
+	.long PanelTag98_MsaReapply
 	.long FDemoText_ByteData_VoiceProbeB
 	.long 0xffffffff
 SwbtB1_Code99_Listeners:	.long 0xffffffff
 SwbtB1_Code9A_Listeners:	.long 0xffffffff
 ; code 0xA8: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB1_CodeA8_Listeners:
-	.long EffectMode_ByteData_Block2
+	.long PanelTagA8_ToggleOtpMode
 	.long 0xffffffff
 SwbtB1_CodeA9_Listeners:	.long 0xffffffff
 SwbtB1_CodeAA_Listeners:	.long 0xffffffff
@@ -6393,7 +6451,7 @@ SwbtB2_Code47_Listeners:
 SwbtB2_Code48_Listeners:
 	.long UIState_ProcessExtendedMode
 	.long AccWrap_ReplayStop
-	.long UIStateEvt_ParamEdit_Data
+	.long PanelTag48_UpdateAudioConfig
 	.long NotePool_DataBlock_8BA
 	.long UIState_KeyScan_Dispatch
 	.long BitMapOut_ByteData_RenderE
@@ -6407,7 +6465,7 @@ SwbtB2_Code53_Listeners:	.long 0xffffffff
 SwbtB2_Code54_Listeners:	.long 0xffffffff
 ; code 0x60: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code60_Listeners:
-	.long HdaeRom_Entry
+	.long PanelTag60_ApplyEffectOnOff
 	.long UIState_ProcessSimpleMode
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
@@ -6470,7 +6528,7 @@ SwbtB2_Code6E_Listeners:	.long 0xffffffff
 SwbtB2_Code70_Listeners:
 	.long UIState_NullReturn
 	.long HdaeRom_AltReadParam
-	.long UIStateEvt_EffectSelect_Data
+	.long PanelTag70_UpdateAudioConfig
 	.long UIState_KeyScan_Dispatch
 	.long DSPCfg_ProcessInput
 	.long 0xffffffff
@@ -6490,7 +6548,7 @@ SwbtB2_Code7A_Listeners:	.long 0xffffffff
 ; code 0x80: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code80_Listeners:
 	.long HdaeRom_AltEntry
-	.long UIStateEvt_ChannelConfig_Data
+	.long PanelTag80_UpdateAudioConfig
 	.long UIWidget_MidiStreamControl
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
@@ -6498,7 +6556,7 @@ SwbtB2_Code81_Listeners:	.long 0xffffffff
 ; code 0x90: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code90_Listeners:
 	.long UIState_SwitchOnDisplayMode
-	.long UIStateEvt_VolumeMixer_Data
+	.long PanelTag90_UpdateAudioConfig
 	.long AccStyle_JumpTable2
 	.long UIState_KeyScan_Dispatch
 	.long CtrlPanel_HandleKeyInput
@@ -6554,7 +6612,7 @@ SwbtB2_CodeA8_Listeners:
 	.long AccStyle_JumpTable
 	.long SwbtB2_CodeA8_Listener
 	.long Demo_SelectEntry_ByteTable
-	.long UIStateEvt_MuteToggle_Data
+	.long SwbtB2_CodeA8_UpdateAudioConfig
 	.long FileIO_ErrorCodeByteBlock
 	.long BitMapOut_ByteData_RenderState
 	.long UIState_KeyScan_Dispatch
@@ -7152,7 +7210,7 @@ AudioVoiceHandler_Table:
 ; 32 x u32 RAM addresses of 26-byte (0x1A) part records: 0xF9B6 + 0x1A*i for
 ; i = 0..22, then 0xFD62, 0xFD7C, then 0xF9B6 again.  UIState_ProcessMidiEvent
 ; (0xFDE084), UIStateEvt_DrumAssign_Set (0xFDE20A: `ld a,(xwa+13)`) and
-; UIStateEvt_VolumeMixer_Data_Loop (0xFDE616: `bitm 0,(xwa+22)`) load an entry
+; UIStateEvt_VolumeMixer_Data_Case4_Loop (0xFDE616: `bitm 0,(xwa+22)`) load an entry
 ; with `ld xwa, (xbc+wa)` and read record fields.
 PartRecord_RamPtrTable:
 	.long 0x0000f9b6
@@ -7199,27 +7257,27 @@ PartIndex_ByteMap:
 ; an entry with `ld a, (xbc+wa)`, then `and a,7 / sla a,1`.
 PartRouting_ByteTable:
 	.byte 0, 1, 2, 3, 0, -3, -2, -1
-; 12 x s8, -5..+6.  UIStateEvt_EffectSelect_Data_Skip2 (0xFDE723) reads an entry
+; 12 x s8, -5..+6.  PanelTag70_UpdateAudioConfig_Skip2 (0xFDE723) reads an entry
 ; with `ld e, (xbc+wa)` (two call sites).
 EffectSelect_StepTable:
 	.byte -5, -4, -3, -2, -1, 0, 1, 2
 	.byte 3, 4, 5, 6
-; 16 x u16 (0,1,2,4,0,0,0,0,0x10,0x11,0x12,0x14,0,0,0,0).  UIStateEvt_ParamEdit_Data
+; 16 x u16 (0,1,2,4,0,0,0,0,0x10,0x11,0x12,0x14,0,0,0,0).  PanelTag48_UpdateAudioConfig
 ; (0xFDE2A8) and its _Entry path read it with `ld iz, (xbc+wa)` (12 sites).
 ParamEdit_WordTable:
 	.short 0x0000, 0x0001, 0x0002, 0x0004, 0x0000, 0x0000, 0x0000, 0x0000
 	.short 0x0010, 0x0011, 0x0012, 0x0014, 0x0000, 0x0000, 0x0000, 0x0000
-; 7 x u16 switch offsets.  UIStateEvt_ParamEdit_Data (0xFDE2A8): `ld_rrw wa,xix,wa;
+; 7 x u16 switch offsets.  PanelTag48_UpdateAudioConfig (0xFDE2A8): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFDE2CF); jp_rr 8,xix,wa` -- targets 0xFDE2CF + offset (no labels yet).
 ParamEdit_SwitchOffsets:
-	.short	UIStateEvt_ParamEdit_Data_Epilogue - UIStateEvt_TransposeUpdate_Apply_Code
-	.short	UIStateEvt_ParamEdit_Data_Epilogue - UIStateEvt_TransposeUpdate_Apply_Code
-	.short	UIStateEvt_ParamEdit_Data_Epilogue - UIStateEvt_TransposeUpdate_Apply_Code
-	.short	UIStateEvt_TransposeUpdate_Apply_Code - UIStateEvt_TransposeUpdate_Apply_Code
-	.short	UIStateEvt_ParamEdit_Data_Case4 - UIStateEvt_TransposeUpdate_Apply_Code
-	.short	UIStateEvt_ParamEdit_Data_Case5 - UIStateEvt_TransposeUpdate_Apply_Code
-	.short	UIStateEvt_ParamEdit_Data_Case6 - UIStateEvt_TransposeUpdate_Apply_Code
-; 6 x u16 switch offsets.  UIStateEvt_VolumeMixer_Data (0xFDE514): `ld_rrw wa,xix,wa;
+	.short	UIStateEvt_ParamEdit_Data_Case6_Epilogue - PanelTag48_UpdateAudioConfig_StyleNumber
+	.short	UIStateEvt_ParamEdit_Data_Case6_Epilogue - PanelTag48_UpdateAudioConfig_StyleNumber
+	.short	UIStateEvt_ParamEdit_Data_Case6_Epilogue - PanelTag48_UpdateAudioConfig_StyleNumber
+	.short	PanelTag48_UpdateAudioConfig_StyleNumber - PanelTag48_UpdateAudioConfig_StyleNumber
+	.short	UIStateEvt_ParamEdit_Data_Case4 - PanelTag48_UpdateAudioConfig_StyleNumber
+	.short	UIStateEvt_ParamEdit_Data_Case5 - PanelTag48_UpdateAudioConfig_StyleNumber
+	.short	UIStateEvt_ParamEdit_Data_Case6 - PanelTag48_UpdateAudioConfig_StyleNumber
+; 6 x u16 switch offsets.  PanelTag90_UpdateAudioConfig (0xFDE514): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFDE538); jp_rr` -- targets 0xFDE538 + offset (no labels yet).
 VolumeMixer_SwitchOffsets:
 	.short	UIStateEvt_TransposeUpdate_Apply_Code_2 - UIStateEvt_TransposeUpdate_Apply_Code_2
@@ -7251,7 +7309,7 @@ AudioInit_SlotOrderMap:
 	.byte 0x00, 0x02, 0x01, 0x07, 0x08, 0x09, 0x0a, 0x0b
 	.byte 0x04, 0x05, 0x06, 0x03, 0x0f, 0x15, 0x15, 0xff
 	.byte 0x15, 0x0c, 0x0d, 0x0e
-; 2 x u8 (0x21, 0x22).  NoteMap_AssignAllVoiceLinks (0xFE1D3C), LinkVoiceSlots_Block,
+; 2 x u8 (0x21, 0x22).  NoteMap_AssignAllVoiceLinks (0xFE1D3C), NoteMap_FindLinkedSlotByKey,
 ; NoteMap_LookupAndMergeVoice and Voice_LookupTableEntries read it with
 ; `ld a, (xbc+wa)` / `lda xhl,(<this>)`.
 NoteMap_LinkByte_Table:
@@ -7325,8 +7383,16 @@ NoteMap_VoiceSlotRamPtrs:
 ; indexed with `ld r, (xrr+rr)`.  Flags: 0x80 x4, 0x20.
 NoteMap_ChannelMapRecords:
 	.long	0x0000c66a	; record 0
-LookupTableEntries_Prologue_Data_2:	.long	0x0000e82e
-LookupTableEntries_Prologue_Data_3:	.long	NoteMap_ByteMap_81
+; NoteMap_ChannelMapRecords_LinkCol: Base of the +4 column of the 5 x 13-byte NoteMap_ChannelMapRecords: per record a
+;   pointer to an array of 2-byte link entries whose byte +1 is the next entry index of a circular chain (0xE82E for
+;   records 0-3, 0xE970 for record 4). Basis: readers + bytes -- the four NoteMap lookups index it with record x 13
+;   and follow (link + 2i + 1) until they come back to the head.
+NoteMap_ChannelMapRecords_LinkCol:	.long	0x0000e82e
+; NoteMap_ChannelMapRecords_HeadMapCol: Base of the +8 column of the 5 x 13-byte NoteMap_ChannelMapRecords: per record
+;   a pointer to a byte map (NoteMap_ByteMap_81 / _21) from a key (<= 0x20) to the head index of that key's circular
+;   chain in the +4 link array. Basis: readers + bytes -- `ld xbc, (<this>+13*rec); ld e, (xbc+key)` then the chain
+;   walk starts at e.
+NoteMap_ChannelMapRecords_HeadMapCol:	.long	NoteMap_ByteMap_81
 	.byte 0x80
 	.long 0x0000c66a, 0x0000e82e, NoteMap_ByteMap_81	; record 1
 	.byte 0x80
@@ -7351,7 +7417,11 @@ NoteOn_ChannelByVoice:
 ; of the byte it indexes with (13 pairs to the next referenced object).
 NoteThreshold_PairTable:
 	.byte	0x00
-MarkEntriesAboveThre_LoadParam_Data_2:	.byte	0x20
+; NoteThreshold_PairTable_SecondMaskCol: Base of the second column of NoteThreshold_PairTable (13 x {u8, u8} for notes
+;   0x54..0x60): the one-bit mask each of those notes contributes to the second status byte (RAM 0xCD2F, changes sent
+;   with AddswbWr(0xA8, 0x0C)). Basis: readers + bytes -- NoteMap_MarkEntriesAboveThreshold reads [2*(note - 0x54)]
+;   here and at +0 for the first byte (RAM 0xCD2E, AddswbWr 0x0B).
+NoteThreshold_PairTable_SecondMaskCol:	.byte	0x20
 	.byte 0x00, 0x04
 	.byte 0x00, 0x00
 	.byte 0x00, 0x10
@@ -7394,7 +7464,7 @@ SeqEvtBuf_SwitchOffsets:
 	.short	SeqEvtBuf_NoteDispatch_DamperPedal - SeqPerformance_EventDispatch
 	.short	SeqEvtBuf_NoteDispatch_Pan - SeqPerformance_EventDispatch
 	.short	SeqEvtBuf_NoteDispatch_Expression - SeqPerformance_EventDispatch
-	.short	SeqPerformance_Event_Block - SeqPerformance_EventDispatch
+	.short	SeqEvtBuf_NoteDispatch_Ignore - SeqPerformance_EventDispatch
 	.short	SeqEvtBuf_NoteDispatch_DelaySend - SeqPerformance_EventDispatch
 ; 28 rows x 12 columns x 1 byte = 336 bytes.  SoundFX_Handler_2 (0xFE8E38): row = RAM byte
 ; 0xCEDF - 1 (`muls wa,0xc`), column = (0xCEAA - 0xCEE0 + VoiceBank_MapNoteToOffset
@@ -8070,11 +8140,31 @@ Harmony_Offsets4_B:
 ; SoundFX_Handler_10 (0xFE9360) +2/+3, SoundFX_Handler_11 (0xFE9383) +4/+5.
 Harmony_FixedIntervals:
 	.byte	-12
-SoundFX_Handler_9_Data_2:	.byte	12
-SoundFX_Handler_10_Data:	.byte	5
-SoundFX_Handler_10_Data_2:	.byte	12
-SoundFX_Handler_11_Data:	.byte	-10
-SoundFX_Handler_11_Data_2:	.byte	-5
+; Harmony_OctaveUpDown_Down: s8 12 of Harmony_FixedIntervals, subtracted from the reference note RAM 0xCEAA:
+;   SoundFX_Handler_9 (entry 10 of Harmony_HandlerTable, selected by RAM byte 0xE9BE) writes note - 12 (an octave
+;   below) as one of its two harmony notes; its pair is {+12, -12}: an octave above and below. Basis: readers + bytes
+;   -- the only reader is SoundFX_Handler_9's `ld e, (<this>); ld c, (0xceaa); sub c, e`.
+Harmony_OctaveUpDown_Down:	.byte	12
+; Harmony_FourthOctaveDown_Fourth: s8 5 of Harmony_FixedIntervals, subtracted from the reference note RAM 0xCEAA:
+;   SoundFX_Handler_10 (entry 11 of Harmony_HandlerTable, selected by RAM byte 0xE9BE) writes note - 5 (a fourth
+;   below) as one of its two harmony notes; its pair is {-5, -12}: a fourth and an octave below. Basis: readers +
+;   bytes -- the only reader is SoundFX_Handler_10's `ld e, (<this>); ld c, (0xceaa); sub c, e`.
+Harmony_FourthOctaveDown_Fourth:	.byte	5
+; Harmony_FourthOctaveDown_Octave: s8 12 of Harmony_FixedIntervals, subtracted from the reference note RAM 0xCEAA:
+;   SoundFX_Handler_10 (entry 11 of Harmony_HandlerTable, selected by RAM byte 0xE9BE) writes note - 12 (an octave
+;   below) as one of its two harmony notes; its pair is {-5, -12}: a fourth and an octave below. Basis: readers +
+;   bytes -- the only reader is SoundFX_Handler_10's `ld e, (<this>); ld c, (0xceaa); sub c, e`.
+Harmony_FourthOctaveDown_Octave:	.byte	12
+; Harmony_SeventhFourthUp_Seventh: s8 -10 of Harmony_FixedIntervals, subtracted from the reference note RAM 0xCEAA:
+;   SoundFX_Handler_11 (entry 12 of Harmony_HandlerTable, selected by RAM byte 0xE9BE) writes note + 10 (a minor
+;   seventh above) as one of its two harmony notes; its pair is {+10, +5}: a minor seventh and a fourth above. Basis:
+;   readers + bytes -- the only reader is SoundFX_Handler_11's `ld e, (<this>); ld c, (0xceaa); sub c, e`.
+Harmony_SeventhFourthUp_Seventh:	.byte	-10
+; Harmony_SeventhFourthUp_Fourth: s8 -5 of Harmony_FixedIntervals, subtracted from the reference note RAM 0xCEAA:
+;   SoundFX_Handler_11 (entry 12 of Harmony_HandlerTable, selected by RAM byte 0xE9BE) writes note + 5 (a fourth
+;   above) as one of its two harmony notes; its pair is {+10, +5}: a minor seventh and a fourth above. Basis: readers
+;   + bytes -- the only reader is SoundFX_Handler_11's `ld e, (<this>); ld c, (0xceaa); sub c, e`.
+Harmony_SeventhFourthUp_Fourth:	.byte	-5
 ; 16 x u32 routine pointers, indexed by RAM byte 0xE9BE: UIParam_CallbackDispatch
 ; (0xFE8C1B) does `ld c,(0xe9be); sla bc,2; lda xde,(<this>); add xbc,xde;
 ; ld xix,(xbc); call (xix)`.  Entry 0 is NoteMap_SearchVoiceEntry, entries 1-13
@@ -8407,48 +8497,48 @@ NoteMask9_ClassTable:
 ; 13 x s16 switch offsets.  UIState_ProcessKeyEvent (0xFEA812): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFEA84F); jp_rr 8,xix,wa` -- targets 0xFEA84F + offset (no labels yet).
 KeyEvent_SwitchOffsets:
-	.short	UIState_ProcessKeyEvent_Code - UIState_ProcessKeyEvent_Code
-	.short	UIState_ProcessKeyEvent_Case1 - UIState_ProcessKeyEvent_Code
-	.short	SndParam_ProcessEntry_Epilogue - UIState_ProcessKeyEvent_Code
-	.short	UIState_ProcessKeyEvent_Case3 - UIState_ProcessKeyEvent_Code
-	.short	UIState_ProcessKeyEvent_Case4 - UIState_ProcessKeyEvent_Code
-	.short	UIState_ProcessKeyEvent_Case5 - UIState_ProcessKeyEvent_Code
-	.short	SndParam_ProcessEntry_Epilogue - UIState_ProcessKeyEvent_Code
-	.short	UIState_ProcessKeyEvent_Case7 - UIState_ProcessKeyEvent_Code
-	.short	UIState_ProcessKeyEvent_Case8 - UIState_ProcessKeyEvent_Code
-	.short	UIState_ProcessKeyEvent_Case9 - UIState_ProcessKeyEvent_Code
-	.short	UIState_ProcessKeyEvent_Case10 - UIState_ProcessKeyEvent_Code
-	.short	UIState_ProcessKeyEvent_Case11 - UIState_ProcessKeyEvent_Code
-	.short	UIState_ProcessKeyEvent_Case12 - UIState_ProcessKeyEvent_Code
+	.short	UIState_ProcessKeyEvent_OnVoiceSelect - UIState_ProcessKeyEvent_OnVoiceSelect
+	.short	UIState_ProcessKeyEvent_Case1 - UIState_ProcessKeyEvent_OnVoiceSelect
+	.short	SndParam_ProcessEntry_Epilogue - UIState_ProcessKeyEvent_OnVoiceSelect
+	.short	UIState_ProcessKeyEvent_Case3 - UIState_ProcessKeyEvent_OnVoiceSelect
+	.short	UIState_ProcessKeyEvent_Case4 - UIState_ProcessKeyEvent_OnVoiceSelect
+	.short	UIState_ProcessKeyEvent_Case5 - UIState_ProcessKeyEvent_OnVoiceSelect
+	.short	SndParam_ProcessEntry_Epilogue - UIState_ProcessKeyEvent_OnVoiceSelect
+	.short	UIState_ProcessKeyEvent_Case7 - UIState_ProcessKeyEvent_OnVoiceSelect
+	.short	UIState_ProcessKeyEvent_Case8 - UIState_ProcessKeyEvent_OnVoiceSelect
+	.short	UIState_ProcessKeyEvent_Case9 - UIState_ProcessKeyEvent_OnVoiceSelect
+	.short	UIState_ProcessKeyEvent_Case10 - UIState_ProcessKeyEvent_OnVoiceSelect
+	.short	UIState_ProcessKeyEvent_Case11 - UIState_ProcessKeyEvent_OnVoiceSelect
+	.short	UIState_ProcessKeyEvent_Case12 - UIState_ProcessKeyEvent_OnVoiceSelect
 ; 8 x s16 switch offsets.  PanelTag72_ApplyPartMix (0xFEABD9): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFEAC14); jp_rr 8,xix,wa` -- targets 0xFEAC14 + offset (no labels yet).
 HdaeRomEntry2_SwitchOffsets:
-	.short	PanelTag72_ApplyPartMix_ReverbSend_Epilogue - HdaeRom_TableEntry2_Code
-	.short	PanelTag72_ApplyPartMix_ReverbSend_Epilogue - HdaeRom_TableEntry2_Code
-	.short	PanelTag72_ApplyPartMix_ReverbSend_Epilogue - HdaeRom_TableEntry2_Code
-	.short	HdaeRom_TableEntry2_Code - HdaeRom_TableEntry2_Code
-	.short	PanelTag72_ApplyPartMix_ReverbSend_Epilogue - HdaeRom_TableEntry2_Code
-	.short	PanelTag72_ApplyPartMix_ReverbSend_Epilogue - HdaeRom_TableEntry2_Code
-	.short	PanelTag72_ApplyPartMix_ReverbSend_Epilogue - HdaeRom_TableEntry2_Code
-	.short	PanelTag72_ApplyPartMix_ReverbSend - HdaeRom_TableEntry2_Code
+	.short	PanelTag72_ApplyPartMix_ReverbSend_Epilogue - PanelTag72_ApplyPartMix_Volume
+	.short	PanelTag72_ApplyPartMix_ReverbSend_Epilogue - PanelTag72_ApplyPartMix_Volume
+	.short	PanelTag72_ApplyPartMix_ReverbSend_Epilogue - PanelTag72_ApplyPartMix_Volume
+	.short	PanelTag72_ApplyPartMix_Volume - PanelTag72_ApplyPartMix_Volume
+	.short	PanelTag72_ApplyPartMix_ReverbSend_Epilogue - PanelTag72_ApplyPartMix_Volume
+	.short	PanelTag72_ApplyPartMix_ReverbSend_Epilogue - PanelTag72_ApplyPartMix_Volume
+	.short	PanelTag72_ApplyPartMix_ReverbSend_Epilogue - PanelTag72_ApplyPartMix_Volume
+	.short	PanelTag72_ApplyPartMix_ReverbSend - PanelTag72_ApplyPartMix_Volume
 ; 15 x s16 switch offsets.  SndParam_ApplySystemParam_SendEqualizerOnOff_Skip14 (0xFEB4C6): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFEB4EE); jp_rr 8,xix,wa` -- targets 0xFEB4EE + offset (no labels yet).
 SendEpilogueA_SwitchOffsets:
-	.short	MIDI_SendEpilogue_Code_2 - MIDI_SendEpilogue_Code_2
-	.short	SndParam_ApplySystemParam_ScaleTuneType - MIDI_SendEpilogue_Code_2
-	.short	SndParam_ApplySystemParam_ScaleTuneKey - MIDI_SendEpilogue_Code_2
-	.short	SndParam_ApplySystemParam_ScaleTuneUserNote0 - MIDI_SendEpilogue_Code_2
-	.short	SndParam_ApplySystemParam_ScaleTuneUserNote1 - MIDI_SendEpilogue_Code_2
-	.short	SndParam_ApplySystemParam_ScaleTuneUserNote2 - MIDI_SendEpilogue_Code_2
-	.short	SndParam_ApplySystemParam_ScaleTuneUserNote3 - MIDI_SendEpilogue_Code_2
-	.short	SndParam_ApplySystemParam_ScaleTuneUserNote4 - MIDI_SendEpilogue_Code_2
-	.short	SndParam_ApplySystemParam_ScaleTuneUserNote5 - MIDI_SendEpilogue_Code_2
-	.short	SndParam_ApplySystemParam_ScaleTuneUserNote6 - MIDI_SendEpilogue_Code_2
-	.short	SndParam_ApplySystemParam_ScaleTuneUserNote7 - MIDI_SendEpilogue_Code_2
-	.short	SndParam_ApplySystemParam_ScaleTuneUserNote8 - MIDI_SendEpilogue_Code_2
-	.short	SndParam_ApplySystemParam_ScaleTuneUserNote9 - MIDI_SendEpilogue_Code_2
-	.short	SndParam_ApplySystemParam_ScaleTuneUserNote10 - MIDI_SendEpilogue_Code_2
-	.short	SndParam_ApplySystemParam_ScaleTuneUserNote11 - MIDI_SendEpilogue_Code_2
+	.short	SndParam_ApplySystemParam_ScaleTuneOnOff - SndParam_ApplySystemParam_ScaleTuneOnOff
+	.short	SndParam_ApplySystemParam_ScaleTuneType - SndParam_ApplySystemParam_ScaleTuneOnOff
+	.short	SndParam_ApplySystemParam_ScaleTuneKey - SndParam_ApplySystemParam_ScaleTuneOnOff
+	.short	SndParam_ApplySystemParam_ScaleTuneUserNote0 - SndParam_ApplySystemParam_ScaleTuneOnOff
+	.short	SndParam_ApplySystemParam_ScaleTuneUserNote1 - SndParam_ApplySystemParam_ScaleTuneOnOff
+	.short	SndParam_ApplySystemParam_ScaleTuneUserNote2 - SndParam_ApplySystemParam_ScaleTuneOnOff
+	.short	SndParam_ApplySystemParam_ScaleTuneUserNote3 - SndParam_ApplySystemParam_ScaleTuneOnOff
+	.short	SndParam_ApplySystemParam_ScaleTuneUserNote4 - SndParam_ApplySystemParam_ScaleTuneOnOff
+	.short	SndParam_ApplySystemParam_ScaleTuneUserNote5 - SndParam_ApplySystemParam_ScaleTuneOnOff
+	.short	SndParam_ApplySystemParam_ScaleTuneUserNote6 - SndParam_ApplySystemParam_ScaleTuneOnOff
+	.short	SndParam_ApplySystemParam_ScaleTuneUserNote7 - SndParam_ApplySystemParam_ScaleTuneOnOff
+	.short	SndParam_ApplySystemParam_ScaleTuneUserNote8 - SndParam_ApplySystemParam_ScaleTuneOnOff
+	.short	SndParam_ApplySystemParam_ScaleTuneUserNote9 - SndParam_ApplySystemParam_ScaleTuneOnOff
+	.short	SndParam_ApplySystemParam_ScaleTuneUserNote10 - SndParam_ApplySystemParam_ScaleTuneOnOff
+	.short	SndParam_ApplySystemParam_ScaleTuneUserNote11 - SndParam_ApplySystemParam_ScaleTuneOnOff
 ; 7 x s16 switch offsets.  SndParam_ApplySystemParam_Skip7 (0xFEB3DC): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFEB40D); jp_rr 8,xix,wa` -- targets 0xFEB40D + offset (no labels yet).
 SendEpilogueB_SwitchOffsets:
@@ -9220,7 +9310,7 @@ SndParamOffs_SwitchOffsets:
 ; (kn5000_v10_program.s also names this address Subsys_HandlerTable11
 ; as an absolute .set; it is not a permutation table.)
 Subsys_HandlerTable11:
-	.long Param_SignExtendRetu_Block2
+	.long SoundData_InitPhase0
 	.long Param_SignExtendRetu_Return
 	.long Param_SignExtendRetu_Return
 	.long Param_SignExtendRetu_Return
@@ -9330,8 +9420,8 @@ TmFlash_ByteMap:
 ; Subsys_HandlerTable11; kn5000_v10_program.s's absolute .set
 ; Subsys_HandlerTable01 names the same address).
 Subsys_HandlerTable01:
-	.long CommParam_SetComplete_Block
-	.long CommParam_SetComplete_Block2
+	.long COMM_ResetSentValues
+	.long COMM_ResetSentValues_Phase1
 	.long CommParam_SetComplete_Return2
 	.long CommParam_SetComplete_Return3
 ; Sound-RAM data identifier "KN2000": SendPartDataBlock_InitVal7 (0xFF01AC)
@@ -9471,9 +9561,9 @@ CType_ClassTable:
 Sprintf_TypeSwitch:
 	.short	Sprintf_Format_Percent - Sprintf_Format_Percent
 	.short	Sprintf_CheckLengthLL_ConvSignedDecimal - Sprintf_Format_Percent
-	.short	Sprintf_FormatFloat_Entry - Sprintf_Format_Percent
-	.short	Sprintf_FormatFloat_Entry - Sprintf_Format_Percent
-	.short	Sprintf_FormatFloat_Entry - Sprintf_Format_Percent
+	.short	Sprintf_ConvFloat - Sprintf_Format_Percent
+	.short	Sprintf_ConvFloat - Sprintf_Format_Percent
+	.short	Sprintf_ConvFloat - Sprintf_Format_Percent
 	.short	Sprintf_MainLoop_ReadNext - Sprintf_Format_Percent
 	.short	Sprintf_CheckLengthLL_ConvSignedDecimal - Sprintf_Format_Percent
 	.short	Sprintf_MainLoop_ReadNext - Sprintf_Format_Percent

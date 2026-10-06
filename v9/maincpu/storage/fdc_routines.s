@@ -22,7 +22,7 @@ FDC_Read_Status:
 	ld l, (0x110008:24)
 	ret
 
-FDC_Read_Data:
+FDC_ReadDataRegister:
 	ld l, (0x11000a:24)
 	ret
 
@@ -38,7 +38,7 @@ FDC_WaitReady_Helper:
 	ld	(0x8b22:16), a
 	ret
 
-FDC_Write_Data:
+FDC_WriteDataRegister:
 	ld (0x11000a:24), a
 	ret
 
@@ -164,13 +164,13 @@ FDC_CONFIG_VERIFY_Loop4:
 	jr	nz, FDC_CONFIG_VERIFY_Loop4
 FDC_CONFIG_VERIFY_Skip7:
 	ldw	wa, 8
-	calr	FDC_Write_Data
+	calr	FDC_WriteDataRegister
 FDC_CONFIG_VERIFY_Skip8:
 	lda	xiz, (0x8a60:16)
 	inc	1, xiz
 FDC_CONFIG_VERIFY_Loop5:
 	calr	FDC_Wait_Ready_Timeout
-	calr	FDC_Read_Data
+	calr	FDC_ReadDataRegister
 	ld (xiz+), l
 FDC_CONFIG_VERIFY_Loop6:
 	calr FDC_Read_Status
@@ -207,9 +207,9 @@ FDC_CONFIG_VERIFY_Skip10:
 	add	wa, wa
 	lda	xix, (FDC_WaitReady_CaseTable:24)
 	ld	wa, (xix+wa)
-	lda xix, (FDC_CONFIG_VERIFY_Code:24)
+	lda xix, (FDC_CONFIG_VERIFY_On720KMedia:24)
 	jp	t, (xix+wa)
-FDC_CONFIG_VERIFY_Code:
+FDC_CONFIG_VERIFY_On720KMedia:
 	ld (35436:16), 0
 	ldw	(0x8a22:16), 0
 	ldib_erp 251, 0
@@ -742,7 +742,7 @@ FDC_ResultPhase_Read_Skip:
 	cp qiz, 0
 	jr nz, FDC_ResultPhase_Read_Join
 FDC_ResultPhase_Read_Loop2:
-	calr	FDC_Read_Data
+	calr	FDC_ReadDataRegister
 	lda	xwa, (0x8a60:16)
 	ld	bc, iz
 	extz	xbc
@@ -776,7 +776,7 @@ FDC_SendCommandByte:
 	calr	FDC_ResultPhase_Read
 	ld	a, (xsp)
 	extz	wa
-	calr	FDC_Write_Data
+	calr	FDC_WriteDataRegister
 	inc	2, xsp
 	ret
 FDC_SendParameterByte:
@@ -785,7 +785,7 @@ FDC_SendParameterByte:
 	calr	FDC_WaitParamByteReady
 	ld	a, (xsp)
 	extz	wa
-	calr	FDC_Write_Data
+	calr	FDC_WriteDataRegister
 	inc	2, xsp
 	ret
 FDC_WriteAuxCmdByte:
@@ -819,7 +819,7 @@ FDC_SendAuxCmdReadResult:
 	extz	wa
 	calr	FDC_WriteAuxCmdByte
 	calr	FDC_Wait_Ready_Timeout
-	calr	FDC_Read_Data
+	calr	FDC_ReadDataRegister
 	ld	(0x8a61:16), l
 FDC_SendAuxCmdReadResult_Epilogue2:
 	inc	2, xsp
@@ -1974,7 +1974,7 @@ FDC_INTERRUPT_HANDLER:
 	calr	FDC_Wait_Ready_Timeout
 	cp	(FDC_ERROR_CODE:16), 0
 	jr	nz, FDC_INTERRUPT_HANDLER_Code_Epilogue
-	calr	FDC_Read_Data
+	calr	FDC_ReadDataRegister
 	ldfr_berp l, 251
 	bit_erpb 251, 7
 	jr z, FDC_INTERRUPT_HANDLER_Code_Skip
@@ -2261,7 +2261,7 @@ INT4_WaitNonDMAMode:
 
 INT4_SendSpecifyCmd:
 	ldw wa, 0x8
-	calr FDC_Write_Data
+	calr FDC_WriteDataRegister
 
 INT4_StoreResultBase:
 	lda xiz, (0x8a60:16)
@@ -2269,7 +2269,7 @@ INT4_StoreResultBase:
 
 INT4_ReadResultLoop:
 	calr FDC_Wait_Status_Timeout
-	calr FDC_Read_Data
+	calr FDC_ReadDataRegister
 	ld (xiz+), l
 
 INT4_WaitResultReady:

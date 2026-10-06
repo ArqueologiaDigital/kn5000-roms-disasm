@@ -3727,10 +3727,10 @@ MainChordPre_ChordTypeNames:	.incbin "includes/generated/naka_style_bitmaps.bin"
 ; [nakarest] purpose not established: layout of 8 B at 0xed0000 not derived; readers below
 ; [nakarest] Readers: source references InitializeSuna (storage/flash_floppy_handlers.s:
 ; [nakarest] `RegTitle 0x4, 0xe1, 0xca64, 0xed, 0x1200000, 0xed0000`); 1 data word in
-; [nakarest] AcWelcomScreenProc_Data (at 0xe9e514), which is read by AcWelcomScreenProc
-; [nakarest] (ui/drawbar_panel_ui.s: `ld xwa, AcWelcomScreenProc_Data`); 1 data word in
-; [nakarest] AcWelcomScreenProc_Data_2 (at 0xe9edcc), which is read by AcWelcomScreenProc
-; [nakarest] (ui/drawbar_panel_ui.s: `ld xwa, AcWelcomScreenProc_Data_2`); 2 data words in
+; [nakarest] WelcomeScript_Steps_A (at 0xe9e514), which is read by AcWelcomScreenProc
+; [nakarest] (ui/drawbar_panel_ui.s: `ld xwa, WelcomeScript_Steps_A`); 1 data word in
+; [nakarest] WelcomeScript_Steps_B (at 0xe9edcc), which is read by AcWelcomScreenProc
+; [nakarest] (ui/drawbar_panel_ui.s: `ld xwa, WelcomeScript_Steps_B`); 2 data words in
 ; [nakarest] Naka_KeyScaling_NavTrail (at 0xe8303c, 0xe846c6), which is read by
 ; [nakarest] CharMap_ValueData_B (ui_widgets/widget_dispatch.s: `.long
 ; [nakarest] Naka_KeyScaling_NavTrail`).

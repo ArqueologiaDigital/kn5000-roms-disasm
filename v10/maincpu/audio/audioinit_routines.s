@@ -343,7 +343,10 @@ AudioInit_MixFallbackConfig:
 AudioInit_MixFallbackDefault:
 	extz wa
 	jrl AudioInit_ConfigStereoVoice
-AudioInit_MixFallbackDefault_Code:
+; AudioVoiceHandler_NoneSentinel: Never-called copy of AudioInit_MixFallbackDefault (extz wa / jrl
+;   AudioInit_ConfigStereoVoice) whose address is the 'no handler' marker: the four AudioVoiceHandler_Table readers
+;   skip the call when the mode's entry equals it. Basis: callers + body.
+AudioVoiceHandler_NoneSentinel:
 	extz wa
 	jrl AudioInit_ConfigStereoVoice
 

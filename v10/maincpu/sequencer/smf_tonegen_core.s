@@ -60,9 +60,12 @@ SeqPlay_ReadyStateTransition:
 ; Standard MIDI File chunk IDs "MThd" (+0) and "MTrk" (+4), compared
 ; against bytes read from the file: read by smf_playback.s via
 ; `ld xiy, SMF_HeaderMagic_MThdMTrk` (header chunk) and
-; `ld xiy, FloppyIO_ReadAndValidateHeader_Data` (track chunk).
+; `ld xiy, SMF_HeaderMagic_MTrk` (track chunk).
 SMF_HeaderMagic_MThdMTrk:	.ascii	"MThd"
-FloppyIO_ReadAndValidateHeader_Data:	.ascii	"MTrk"
+; SMF_HeaderMagic_MTrk: The Standard MIDI File track-chunk ID "MTrk", compared byte by byte with the next 4 bytes read
+;   from the floppy file before a track is loaded; the MThd ID sits right before it (SMF_HeaderMagic_MThdMTrk). Basis:
+;   readers + bytes.
+SMF_HeaderMagic_MTrk:	.ascii	"MTrk"
 
 SeqTrack_ResetAllChannelSlots:
 	ldw wa, 0xffff
@@ -1486,7 +1489,7 @@ MidiSysEx_CC_LookupPartMap:
 	ld xix, SeqTrack_ChannelMapIdentity
 	cp (4600:16), 1
 	jrl z, MidiSysEx_CC_PartMapSelected
-	ld xix, MidiSysEx_CC_LookupPartMap_Data
+	ld xix, SeqTrack_ChannelMapSwap10And16
 
 MidiSysEx_CC_PartMapSelected:
 	ld	a, (xix+hl)
@@ -1509,7 +1512,7 @@ MidiSysEx_Cmd_ProgramChange:
 	ld xix, SeqTrack_ChannelMapIdentity
 	cp (4600:16), 1
 	jrl z, MidiSysEx_PgmChg_PartMapSelected
-	ld xix, MidiSysEx_CC_LookupPartMap_Data
+	ld xix, SeqTrack_ChannelMapSwap10And16
 
 MidiSysEx_PgmChg_PartMapSelected:
 	ld	a, (xix+hl)
@@ -1576,12 +1579,17 @@ SeqTrack_ChannelMapIdentity:
 ; identity with entries 9 and 15 swapped.  Read by MidiSysEx_CC_LookupPartMap
 ; (0xF24273) and MidiSysEx_Cmd_ProgramChange
 ; (0xF242A9): XIX = this table when the byte at 0x11F8
-; is 1, else +0x10 (MidiSysEx_CC_LookupPartMap_Data), then ld A,(XIX+HL)
+; is 1, else +0x10 (SeqTrack_ChannelMapSwap10And16), then ld A,(XIX+HL)
 ; with HL = the channel byte at 0x1075, and A is written back there -- the
 ; channel is remapped in place.  TYPED 2026-09-25 (lane seqeng); was spelled
 ; nop / normal / push sr / pop sr / max / halt / ei 7 / ... / .byte 0x09.
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f
-MidiSysEx_CC_LookupPartMap_Data:
+; SeqTrack_ChannelMapSwap10And16: 16-byte MIDI-channel map: identity with entries 9 and 15 swapped (channels 10 and
+;   16), used instead of SeqTrack_ChannelMapIdentity when mode byte 0x11F8 is not 1; the readers remap the event's
+;   channel byte (0x1075) or a channel index through it. Same 10<->16 exchange as the TRACK ASSIGN default map
+;   VoiceChannels_LoadPartMapAndInitPan_Data, which puts code 12 (DRUMS) on channel 10 instead of 16. Basis: readers +
+;   bytes.
+SeqTrack_ChannelMapSwap10And16:
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x0f, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x09
 
 ToneGen_ComputeBlockPtr:
@@ -3044,7 +3052,7 @@ MidiPgmChg_Mode0_SetupA:
 	ld (6744:16), l
 	ld l, (4012:16)
 	ld (6745:16), l
-	ld xix, MidiSysEx_CC_LookupPartMap_Data
+	ld xix, SeqTrack_ChannelMapSwap10And16
 	ld	l, (xix+iy)
 	ld (6748:16), l
 	pop xix
@@ -3088,7 +3096,7 @@ MidiPgmChg_Mode0_SetupA:
 	cp (4323:16), 0
 	jrl nz, SoundGen_NullReturn
 	push xix
-	ld xix, MidiSysEx_CC_LookupPartMap_Data
+	ld xix, SeqTrack_ChannelMapSwap10And16
 	ld	a, (xix+iy)
 	pop xix
 	push xhl
@@ -3135,7 +3143,7 @@ MidiPgmChg_Mode2_SetupA:
 	ld (6744:16), l
 	ld l, (4012:16)
 	ld (6745:16), l
-	ld xix, MidiSysEx_CC_LookupPartMap_Data
+	ld xix, SeqTrack_ChannelMapSwap10And16
 	ld	l, (xix+iy)
 	ld (6748:16), l
 	pop xix
@@ -3192,7 +3200,7 @@ MidiPgmChg_Mode2_ApplyEnvelopeA:
 	cp (4323:16), 0
 	jrl nz, SoundGen_NullReturn
 	push xix
-	ld xix, MidiSysEx_CC_LookupPartMap_Data
+	ld xix, SeqTrack_ChannelMapSwap10And16
 	ld	a, (xix+iy)
 	pop xix
 	push xhl
@@ -4775,7 +4783,7 @@ VoiceParam_ByMode_Mode0:
 	ld (6744:16), l
 	ld l, (4012:16)
 	ld (6745:16), l
-	ld xix, MidiSysEx_CC_LookupPartMap_Data
+	ld xix, SeqTrack_ChannelMapSwap10And16
 	ld	l, (xix+de)
 	ld (6748:16), l
 	pop xde
@@ -4804,7 +4812,7 @@ VoiceParam_ByMode_Mode2:
 	ld (6744:16), l
 	ld l, (4012:16)
 	ld (6745:16), l
-	ld xix, MidiSysEx_CC_LookupPartMap_Data
+	ld xix, SeqTrack_ChannelMapSwap10And16
 	ld	l, (xix+de)
 	ld (6748:16), l
 	pop xde
@@ -5160,7 +5168,7 @@ VoiceSynth_Algo_MultiStage:
 	ld	a, (xix+hl)
 	cp	(4600:16), 1
 	jr	z, VoiceSynth_Algo_MultiStage_Skip
-	ld	xix, MidiSysEx_CC_LookupPartMap_Data
+	ld	xix, SeqTrack_ChannelMapSwap10And16
 	ld	a, (xix+hl)
 VoiceSynth_Algo_MultiStage_Skip:
 	pop xix

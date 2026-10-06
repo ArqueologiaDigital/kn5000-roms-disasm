@@ -8816,8 +8816,8 @@ IvMessage_SelectionChange:
 	jr IvMessage_Epilogue
 
 IvMessage_GetText:
-	pushw IvMessage_GetText_Data@hi16
-	pushw IvMessage_GetText_Data@lo16
+	pushw IvMessage_GetText_Str_Msg@hi16
+	pushw IvMessage_GetText_Str_Msg@lo16
 	push xde
 	call Strcpy
 	inc 8, xsp
@@ -9082,7 +9082,7 @@ CheckMsg_IncrementCheck:
 	ld bc, wa
 	muls wa, 0xe
 	add wa, 0xe
-	lda xde, (CheckMsg_IncrementCheck_Data:24)
+	lda xde, (IvMessage_Catalog_TextTableCol:24)
 	ld	xwa, (xde+wa)
 	or xwa, xwa
 	jr z, LanguageCheckReturn
@@ -9137,7 +9137,7 @@ MsgText_LookupMessage:
 	cp wa, 0x1a
 	jr z, MsgText_CheckLanguage
 	muls wa, 0xe
-	lda xbc, (CheckMsg_IncrementCheck_Data:24)
+	lda xbc, (IvMessage_Catalog_TextTableCol:24)
 	ld	xhl, (xbc+wa)
 	ret
 
@@ -9992,8 +9992,8 @@ Sdtecd1_SendEventReturn:
 	jr IvSdtecd1_ReturnDefault
 
 Sdtecd1_GetText:
-	pushw Sdtecd1_GetText_Data@hi16
-	pushw Sdtecd1_GetText_Data@lo16
+	pushw Sdtecd1_GetText_Str_TeC1@hi16
+	pushw Sdtecd1_GetText_Str_TeC1@lo16
 	push xiz
 	call Strcpy
 	inc 8, xsp
@@ -11036,10 +11036,10 @@ AcWelcomScreenProc:
 	ld wa, 1:i3
 	call ChangePalette
 	call Get_Region_Code
-	ld xwa, AcWelcomScreenProc_Data_2
+	ld xwa, WelcomeScript_Steps_B
 	cp l, 2:i3
 	jr nz, AcWelcomScreen_Init_StoreData
-	ld xwa, AcWelcomScreenProc_Data
+	ld xwa, WelcomeScript_Steps_A
 
 AcWelcomScreen_Init_StoreData:
 	ld (0x024786:24), xwa
@@ -11095,7 +11095,7 @@ AcWelcomScreen_Activate:
 	cp hl, 0:i3
 	jr z, AcWelcomScreen_Activate_Setup
 	call LcdOff
-	ld xwa, AcWelcomScreen_Activate_Data
+	ld xwa, WelcomeScreen_ClearRect
 	ld bc, 0:i3
 	call DrawBox
 	ld wa, 1:i3
@@ -11221,7 +11221,7 @@ AcWelcomScreen_Select_OpDrawGlyphC:
 	pushw	17
 	pushw	(xde)	; F7F709 (pushw (xde))
 	pushw	247
-	ld	xbc, AcWelcomScreen_RenderBytecode_Data
+	ld	xbc, WelcomeGlyph_C
 	ldw	de, 16
 	jrl	AcWelcomScreen_RenderBytecode_Join
 AcWelcomScreen_Select_OpDrawGlyphO:
@@ -11232,7 +11232,7 @@ AcWelcomScreen_Select_OpDrawGlyphO:
 	pushw	17
 	pushw	(xde)
 	pushw	247
-	ld	xbc, AcWelcomScreen_RenderBytecode_Data_3
+	ld	xbc, WelcomeGlyph_O
 	ldw	de, 16
 	jrl	AcWelcomScreen_RenderBytecode_Join
 AcWelcomScreen_Select_OpDrawGlyphL:
@@ -11285,7 +11285,7 @@ AcWelcomScreen_Select_OpDrawGlyphsIn:
 	pushw	17
 	pushw	255
 	pushw	247
-	ld	xbc, AcWelcomScreen_RenderBytecode_Data_2
+	ld	xbc, WelcomeGlyph_N
 	ldw	de, 16
 AcWelcomScreen_RenderBytecode_Join:
 	call	DrawBitmapSP2
@@ -11344,7 +11344,7 @@ AcWelcomScreen_Select_OpDrawColorWord_Skip2:
 	add	xde, (0x024786:24)
 	pushw	(xde+10)
 	pushw	247
-	ld	xbc, AcWelcomScreen_RenderBytecode_Data
+	ld	xbc, WelcomeGlyph_C
 	ldw	de, 16
 	call	DrawBitmapSP2
 	lda	xwa, (xsp+12)
@@ -11359,7 +11359,7 @@ AcWelcomScreen_Select_OpDrawColorWord_Skip2:
 	add	xde, (0x024786:24)
 	pushw	(xde+10)
 	pushw	247
-	ld	xbc, AcWelcomScreen_RenderBytecode_Data_3
+	ld	xbc, WelcomeGlyph_O
 	ldw	de, 16
 	call	DrawBitmapSP2
 	lda	xwa, (xsp+12)
@@ -11389,7 +11389,7 @@ AcWelcomScreen_Select_OpDrawColorWord_Skip2:
 	add	xde, (0x024786:24)
 	pushw	(xde+10)
 	pushw	247
-	ld	xbc, AcWelcomScreen_RenderBytecode_Data_3
+	ld	xbc, WelcomeGlyph_O
 	ldw	de, 16
 	call	DrawBitmapSP2
 	ld	wa, (0x024784:24)
@@ -11741,7 +11741,7 @@ PsMixer_ControlHelper:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	sla wa, 2
-; PsMixer control-type procedure table PsMixer_ControlHelper_Data (v10 0xE9F11C, 11 x 32-bit, read from
+; PsMixer control-type procedure table PsMixer_ControlProcTable (v10 0xE9F11C, 11 x 32-bit, read from
 ;   the ROM by scripts/renaming/uiproc_psmixer_ctltypes.py), indexed by word +2 of the control's record:
 ;    0 -> PsMixer_CtlTypeProc0
 ;    1 -> PsMixer_CtlTypeProc1
@@ -11754,14 +11754,14 @@ PsMixer_ControlHelper:
 ;    8 -> PsMixer_CtlTypeProc8
 ;    9 -> PsMixer_CtlTypeProc9
 ;   10 -> PsMixer_CtlTypeProc10
-	lda xbc, (PsMixer_ControlHelper_Data:24)
+	lda xbc, (PsMixer_ControlProcTable:24)
 	lda	xhl, (xbc+wa)
 	ld xwa, (xsp + 90)
 	ld xbc, EVT_DRAW
 	ld xhl, (xhl)
 	call (xhl)
 	ld de, (xsp + 8)
-	lda xbc, (PsMixer_ControlHelper_Data:24)
+	lda xbc, (PsMixer_ControlProcTable:24)
 	extz xde
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
@@ -11801,7 +11801,7 @@ PsMixer_GridLoop:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	sla wa, 2
-	lda xbc, (PsMixer_ControlHelper_Data:24)
+	lda xbc, (PsMixer_ControlProcTable:24)
 	lda	xhl, (xbc+wa)
 	ld xwa, (xsp + 90)
 	ld xbc, EVT_PARA_DRAW
@@ -11981,7 +11981,7 @@ AudioCtrl_DispatchHandler:
 	add xde, 0x10000
 	ld wa, (xwa + 2)
 	sla wa, 2
-	lda xbc, (PsMixer_ControlHelper_Data:24)
+	lda xbc, (PsMixer_ControlProcTable:24)
 	lda	xhl, (xbc+wa)
 	ld xwa, (xsp + 90)
 	ld xbc, EVT_SELE_DRAW
@@ -11995,7 +11995,7 @@ AudioCtrl_DispatchHandler:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	sla wa, 2
-	lda xbc, (PsMixer_ControlHelper_Data:24)
+	lda xbc, (PsMixer_ControlProcTable:24)
 	lda	xhl, (xbc+wa)
 	ld xwa, (xsp + 90)
 	ld xbc, EVT_SELE_DRAW
@@ -12255,7 +12255,7 @@ PsMixer_ControlCase8:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	sla wa, 2
-	lda xbc, (PsMixer_ControlHelper_Data:24)
+	lda xbc, (PsMixer_ControlProcTable:24)
 	lda	xhl, (xbc+wa)
 	ld xwa, (xsp + 90)
 	ld xbc, (xsp + 86)
@@ -12332,7 +12332,7 @@ PsMixer_ArrayReadHandler:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	sla wa, 2
-	lda xbc, (PsMixer_ControlHelper_Data:24)
+	lda xbc, (PsMixer_ControlProcTable:24)
 	lda	xhl, (xbc+wa)
 	ld xwa, (xsp + 90)
 	ld xbc, EVT_PARA_DRAW
@@ -12347,7 +12347,7 @@ AudioCtrl_MixerDispatch:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	sla wa, 2
-	lda xbc, (PsMixer_ControlHelper_Data:24)
+	lda xbc, (PsMixer_ControlProcTable:24)
 	lda	xhl, (xbc+wa)
 	ld xwa, (xsp + 90)
 	ld xbc, (xsp + 86)
@@ -12365,7 +12365,7 @@ AudioCtrl_MixerDispatch:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	sla wa, 2
-	lda xbc, (PsMixer_ControlHelper_Data:24)
+	lda xbc, (PsMixer_ControlProcTable:24)
 	lda	xhl, (xbc+wa)
 	ld xwa, (xsp + 90)
 	ld xbc, EVT_PARA_DRAW
@@ -12425,7 +12425,7 @@ AudioCtrl_ArrayReadHandler:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	sla wa, 2
-	lda xbc, (PsMixer_ControlHelper_Data:24)
+	lda xbc, (PsMixer_ControlProcTable:24)
 	lda	xhl, (xbc+wa)
 	ld xwa, (xsp + 90)
 	ld xbc, EVT_PARA_DRAW
@@ -12439,7 +12439,7 @@ AudioCtrl_DispatchCallback:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	sla wa, 2
-	lda xbc, (PsMixer_ControlHelper_Data:24)
+	lda xbc, (PsMixer_ControlProcTable:24)
 	lda	xhl, (xbc+wa)
 	ld xwa, (xsp + 90)
 	ld xbc, (xsp + 86)
@@ -12457,7 +12457,7 @@ AudioCtrl_DispatchCallback:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	sla wa, 2
-	lda xbc, (PsMixer_ControlHelper_Data:24)
+	lda xbc, (PsMixer_ControlProcTable:24)
 	lda	xhl, (xbc+wa)
 	ld xwa, (xsp + 90)
 	ld xbc, EVT_PARA_DRAW
@@ -12645,7 +12645,7 @@ PsMixer_EventForwardHelper:
 	jr nz, PsMixer_EventFwd_Next
 	ld wa, (xde + 2)
 	sla wa, 2
-	lda xbc, (PsMixer_ControlHelper_Data:24)
+	lda xbc, (PsMixer_ControlProcTable:24)
 	lda	xhl, (xbc+wa)
 	ld xwa, (xsp + 90)
 	ld xbc, (xsp + 86)
@@ -14910,8 +14910,8 @@ PsMixer_CtlTypeProc1_Loop:
 	lda	xwa, (0x3ea38:24)
 	ld	xwa, (xwa+hl)
 	push xwa
-	pushw	PsMixer_CtlTypeProc1_Data@hi16
-	pushw	PsMixer_CtlTypeProc1_Data@lo16
+	pushw	PsMixer_CtlTypeProc1_Str_Fmts@hi16
+	pushw	PsMixer_CtlTypeProc1_Str_Fmts@lo16
 	lda	xwa, (xsp+30)
 	push	xwa
 	call	Sprintf_Locked
@@ -15166,8 +15166,8 @@ PsMixer_CtlTypeProc10_Loop:
 	lda	xbc, (0x3eb28:24)
 	ld	xwa, (xbc+wa)
 	push xwa
-	pushw	PsMixer_CtlTypeProc10_Data@hi16
-	pushw	PsMixer_CtlTypeProc10_Data@lo16
+	pushw	PsMixer_CtlTypeProc10_Str_Fmts@hi16
+	pushw	PsMixer_CtlTypeProc10_Str_Fmts@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	Sprintf_Locked

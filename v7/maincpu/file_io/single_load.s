@@ -355,7 +355,7 @@ SLSrcBankList_FuncBody_Skip3:
 	ld	a, l
 	ld	c, e
 	add	a, e
-	cp a, (SLSrcBankList_FuncBody_Data_2:24)
+	cp a, (SingleLoadSrc_PanelMemEntryCount:24)
 	jr	nc, SingleLoadSrc_PanelMemListProc_Skip3
 	add	c, l
 	ld	(35168:16), c
@@ -405,7 +405,7 @@ SingleLoadSrc_PanelMemListProc_Skip5:
 	ld	c, e
 	ld	a, e
 	inc	1, a
-	cp a, (SLSrcBankList_FuncBody_Data_2:24)
+	cp a, (SingleLoadSrc_PanelMemEntryCount:24)
 	jr	nc, SingleLoadSrc_PanelMemListProc_Skip6
 	ld	e, (SingleLoadSrc_PanelMemBankSize:24)
 	ld	l, e
@@ -752,7 +752,7 @@ SLSrcBankList_FuncBody_Skip15:
 	ld	a, e
 	ld	c, l
 	add	a, l
-	cp a, (SLSrcBankList_FuncBody_Data_3:24)
+	cp a, (SingleLoadSrc_ComposerEntryCount:24)
 	jr	nc, SingleLoadSrc_ComposerListProc_Skip13
 	add	c, e
 	ld	(35170:16), c
@@ -801,7 +801,7 @@ SingleLoadSrc_ComposerListProc_Skip15:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	cp a, (SLSrcBankList_FuncBody_Data_3:24)
+	cp a, (SingleLoadSrc_ComposerEntryCount:24)
 	jr	nc, SingleLoadSrc_ComposerListProc_Skip16
 	ld	e, (SLSrcComposer_RowsPerColumn:24)
 	ld	l, e
@@ -1223,7 +1223,7 @@ SingleLoadSrc_SoundMemListProc_Skip30:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	cp a, (SLSrcBankList_FuncBody_Data_4:24)
+	cp a, (SingleLoadSrc_SoundMemEntryCount:24)
 	jr	nc, SingleLoadSrc_SoundMemListProc_Skip32
 	ld	e, (SingleLoadSrc_SoundMemPageSize:24)
 	ld	a, e

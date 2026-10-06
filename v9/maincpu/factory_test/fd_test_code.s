@@ -48,7 +48,7 @@
 FDLoadSaveTest:
 	dec 4, xsp
 	push xiz
-	lda xwa, (FDLoadSaveTest_Data:24)
+	lda xwa, (FDLoadSaveTest_Str_File_remove:24)
 	calr FDTest_PrintDiag
 	lda xwa, (FDLoadSaveTest_Str_A_IMMUNITY_TST:24)
 	push xwa
@@ -72,7 +72,7 @@ FDTest_AllocBuffer:
 	ld xwa, xhl
 	or xwa, xwa
 	jr nz, FDTest_FillBuffer
-	lda xwa, (FDTest_AllocBuffer_Data:24)
+	lda xwa, (FDTest_AllocBuffer_Str_Not_Enough_memory:24)
 	calr FDTest_PrintDiag
 	ld xwa, (xsp + 4)
 	push xwa
@@ -103,7 +103,7 @@ FDTest_OpenForWrite:
 	ld xiz, xhl
 	or xiz, xiz
 	jr nz, FDTest_WriteBuffer
-	lda xwa, (FDTest_OpenForWrite_Data:24)
+	lda xwa, (FDTest_OpenForWrite_Str_cannot_open_write_file:24)
 	calr FDTest_PrintDiag
 	ld xwa, (xsp + 4)
 	push xwa
@@ -113,7 +113,7 @@ FDTest_OpenForWrite:
 	jrl FDTest_Return
 
 FDTest_WriteBuffer:
-	lda xwa, (FDTest_WriteBuffer_Data:24)
+	lda xwa, (FDTest_WriteBuffer_Str_File_Write:24)
 	calr FDTest_PrintDiag
 	push xiz
 	pushw 0x800
@@ -144,7 +144,7 @@ FDTest_CloseAndReopen:
 	push xwa
 	call Memset
 	lda xsp, (xsp + 12)
-	lda xwa, (FDTest_CloseAndReopen_Data:24)
+	lda xwa, (FDTest_CloseAndReopen_Str_File_Read:24)
 	calr FDTest_PrintDiag
 	lda xwa, (FDTest_CloseAndReopen_Str_rb:24)
 	push xwa
@@ -155,7 +155,7 @@ FDTest_CloseAndReopen:
 	ld xiz, xhl
 	or xiz, xiz
 	jr nz, FDTest_ReadBack
-	lda xwa, (FDTest_CloseAndReopen_Data_2:24)
+	lda xwa, (FDTest_String_CannotOpenReadFile:24)
 	calr FDTest_PrintDiag
 	ld xwa, (xsp + 4)
 	push xwa
@@ -206,7 +206,7 @@ FDTest_CompareNext:
 	jr c, FDTest_CompareLoop
 
 FDTest_CompareResult:
-	lda xwa, (FDTest_CompareResult_Data:24)
+	lda xwa, (FDTest_String_DataCompare:24)
 	calr FDTest_PrintDiag
 	cp iz, 0:i3
 	jr z, FDTest_Pass

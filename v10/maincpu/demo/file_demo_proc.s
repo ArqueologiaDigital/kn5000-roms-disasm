@@ -506,7 +506,7 @@ FDemo_FileOpenAndProcess:
 	jr t, FDemo_FileOpen_Exit
 FDemo_FileOpen_DoOpen:
 	lda	xwa, (xsp+10)
-	ld xbc, FDemo_FileOpen_DoOpen_Data
+	ld xbc, FDemo_FileOpen_DoOpen_Str_rb
 	call FileIO_OpenWithMode
 	ld (xsp+4), hl
 	cpw (xsp+4), 0x0000
@@ -846,7 +846,7 @@ Demo_SelectEntry_LoadPattern:
 	ld a, (DEMO_CURRENT_SONG:16)
 	extz wa
 	add wa, wa
-	lda xbc, (Demo_SelectEntry_LoadPattern_Data:24)
+	lda xbc, (DemoSong_EntryCol:24)
 	ld	(DEMO_ACTIVE_ENTRY:16), (xbc+wa)
 	ret
 
@@ -1445,7 +1445,7 @@ FileIO_CheckSig_LoopTest:
 	ld a, (xsp + 4)
 	extz wa
 	sla wa, 3
-	lda xbc, (FileIO_CheckSig_LoopTest_Data:24)
+	lda xbc, (FileIO_FileSigRecs_LengthCol:24)
 	ld de, iz
 	cp	de, (xbc+wa)
 	jr c, FileIO_CheckSig_ReadLoop
@@ -3454,7 +3454,7 @@ SingleLoad_LoadComposerPattern_Epilogue4:
 ; SingleLoad_LoadSoundMemEntry: Single-loads SOUND MEMORY entry WA of the selected .TM file into entry BC: entries
 ;   below 40 are 470-byte sounds (file 16 + 470 * WA -> RAM 0x1E0000 + 16 + 470 * BC, flash block BC / 20, BC mod 20),
 ;   entries from 40 are the 80-byte records at 0x4AA7 + 80 * (index - 40) (flash block 64); the read is wrapped in
-;   TmFlashWrite_Block1 / TmFlashWrite_Block1_Entry; returns HL = result (0xFF98 no file, 0xFF9A wrong signature).
+;   PreTmLoadEntry / PostTmLoadEntry; returns HL = result (0xFF98 no file, 0xFF9A wrong signature).
 ;   Basis: callers + body -- SingleLoadDst_SoundMemListProc runs it for parameter 10 outside ALL mode with WA = source
 ;   cursor 0x8A00 and BC = destination cursor 0x8A08.
 SingleLoad_LoadSoundMemEntry:
@@ -3560,7 +3560,7 @@ SingleLoad_LoadSoundMemEntry_Join5:
 	extz	wa
 	ld	c, (xsp+14)
 	extz	bc
-	call	TmFlashWrite_Block1
+	call	PreTmLoadEntry
 	lda	xwa, (0x1e0000:24)
 	add	xwa, (xsp+0x6)
 	ld	bc, (xsp+10)
@@ -3573,7 +3573,7 @@ SingleLoad_LoadSoundMemEntry_Join5:
 	ld	c, (xsp+14)
 	extz	bc
 	ld	de, iz
-	call	TmFlashWrite_Block1_Entry
+	call	PostTmLoadEntry
 SingleLoad_LoadSoundMemEntry_Skip19:
 	call	FileIO_CloseHandle
 	ld	hl, iz
@@ -3583,7 +3583,7 @@ SingleLoad_LoadSoundMemEntry_Epilogue5:
 	ret
 ; SingleLoad_LoadSoundMemBank: Single-loads SOUND MEMORY bank WA of the selected .TM file into bank BC: banks 0-1 are
 ;   20 sounds = 9400 bytes (file 16 + 9400 * WA -> RAM 0x1E0000 + 16 + 9400 * BC), bank 2 and up is the 0x2927-byte
-;   block at 0x4980 (the area of entries 40+); the read is wrapped in TmFlashWrite_Block1_Return /
+;   block at 0x4980 (the area of entries 40+); the read is wrapped in PostTmLoadEntry_Return /
 ;   TmFlashWrite_ValidateParams; returns HL = result (0xFF98 no file, 0xFF9A wrong signature). Basis: callers + body
 ;   -- SingleLoadDst_SoundMemListProc runs it for parameter 10 in ALL mode with WA = 0x8A00 / 20 and BC = 0x8A08 / 20.
 SingleLoad_LoadSoundMemBank:
@@ -3660,7 +3660,7 @@ SingleLoad_LoadSoundMemBank_Join6:
 	jr	lt, SingleLoad_LoadSoundMemBank_Skip24
 	ld	a, (xsp+10)
 	extz	wa
-	call	TmFlashWrite_Block1_Return
+	call	PostTmLoadEntry_Return
 	lda	xwa, (0x1e0000:24)
 	add	xwa, (xsp+0x4)
 	ld	bc, (xsp+8)
@@ -8490,7 +8490,7 @@ FileIO_DiskRemoved:
 	ld (MEDLEY_PLAY_FLAG:16), 0
 	calr ResetProgressIndication
 	call FileIO_ValidateRecord_Return
-	call GetAprStatus_Entry
+	call Xapr_GetPresentFlag
 	cp l, 0:i3
 	ret nz
 	ld xwa, 0x600002

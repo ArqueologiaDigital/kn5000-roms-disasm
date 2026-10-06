@@ -1691,7 +1691,7 @@ SelfTest_SramAndRom_CheckROM:
 	push	xhl
 	push	xix
 	push	xiz
-	call	CPanel_PanelDetection_Wrapper
+	call	CPanel_ProbePanelMcus
 	ld	(36064:16), a
 	pop	xiz
 	pop	xix
@@ -2028,7 +2028,7 @@ EffectMode_ByteData_DiagEvents:
 	push XHL
 	push XIX
 	push XIZ
-	call CPanel_PanelDetection_Wrapper
+	call CPanel_ProbePanelMcus
 	ld (0x8ce0:16), a
 	pop XIZ
 	pop XIX
@@ -3545,8 +3545,8 @@ MstStyleAlp_CellSelect:
 	jr t, MstStyleAlp_PadLoopCond
 MstStyleAlp_AppendPadChar:
 	pushw	1
-	pushw	MstStyleAlp_AppendPadChar_Data@hi16
-	pushw	MstStyleAlp_AppendPadChar_Data@lo16
+	pushw	MstStyleAlp_AppendPadChar_Str_Blank1@hi16
+	pushw	MstStyleAlp_AppendPadChar_Str_Blank1@lo16
 	lda	xwa, (xsp+22)
 	push	xwa
 	call	Strncat
@@ -4048,8 +4048,8 @@ MstStyle1Grid_CellSelect:
 	jr	MstStyle1Grid_PadLeft_Check
 MstStyle1Grid_PadLeft_Loop:
 	pushw	1
-	pushw	MstStyle1Grid_CellSelect_Data_2@hi16
-	pushw	MstStyle1Grid_CellSelect_Data_2@lo16
+	pushw	MstStyle1Grid_PadLeft_Loop_Str_Blank1@hi16
+	pushw	MstStyle1Grid_PadLeft_Loop_Str_Blank1@lo16
 	lda	xwa, (xsp+18)
 	push	xwa
 	call	Strncat
@@ -6222,8 +6222,8 @@ MstGrid2_CellSelect:
 	jr	MstGrid2_PadLeft_CheckA
 MstGrid2_PadLeft_LoopA:
 	pushw	1
-	pushw	MstGrid2_PadLeft_LoopA_Data@hi16
-	pushw	MstGrid2_PadLeft_LoopA_Data@lo16
+	pushw	MstGrid2_PadLeft_LoopA_Str_Blank1@hi16
+	pushw	MstGrid2_PadLeft_LoopA_Str_Blank1@lo16
 	lda	xwa, (xsp+26)
 	push	xwa
 	call	Strncat
@@ -6919,8 +6919,8 @@ TchSensGridCheck_OnLswData:
 	lda	xbc, (xsp+4)
 	ld	(xwa+4), xbc
 	pushw	(xix)
-	pushw	TchSensGridCheck_OnLswData_Data@hi16
-	pushw	TchSensGridCheck_OnLswData_Data@lo16
+	pushw	TchSensGridCheck_OnLswData_Str_Fmt3d_3@hi16
+	pushw	TchSensGridCheck_OnLswData_Str_Fmt3d_3@lo16
 	push	xbc
 	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
@@ -8595,8 +8595,8 @@ PmExpFilter_DrawCellBank2:
 	add	bc, wa
 	inc	1, bc
 	ld	(xhl+2), bc
-	pushw PmExpFilter_DrawCellBank2_Data@hi16
-	pushw PmExpFilter_DrawCellBank2_Data@lo16
+	pushw PmExpFilter_DrawCellBank2_Str_PAGE_3_3@hi16
+	pushw PmExpFilter_DrawCellBank2_Str_PAGE_3_3@lo16
 	lda	xwa, (xsp+28)
 	push	xwa
 	call	Strcpy
@@ -10301,8 +10301,8 @@ IvPageOverWr_KeyPress:
 	jrl IvPageOverWr_SendAndReturn
 
 IvPageOverWr_GetName:
-	pushw	IvPageOverWr_GetName_Data@hi16
-	pushw	IvPageOverWr_GetName_Data@lo16
+	pushw	IvPageOverWr_GetName_Str_PAGE@hi16
+	pushw	IvPageOverWr_GetName_Str_PAGE@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
 	call	Strcpy
@@ -11876,8 +11876,8 @@ GmOnOffFunc:
 	cp	xbc, EVT_GET_LSW_STRING
 	jrl	nz, GmOnOff_DefaultReturn
 	pushw	(xde+4)
-	pushw	GmOnOffFunc_Data@hi16
-	pushw	GmOnOffFunc_Data@lo16
+	pushw	GmOnOffFunc_Str_Empty@hi16
+	pushw	GmOnOffFunc_Str_Empty@lo16
 	ld	xwa, (xde+8)
 	push	xwa
 	call	Sprintf_Locked

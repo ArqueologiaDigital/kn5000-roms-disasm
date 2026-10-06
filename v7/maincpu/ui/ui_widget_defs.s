@@ -8331,8 +8331,8 @@ AcTrkSw_Reset_DrawTrack:
 	cp	bc, 0:i3
 	jrl	ule, AcTrkSw_Select_CheckTrackNum
 AcTrkSw_Select:
-	pushw	AcTrkSw_Select_Data@hi16
-	pushw	AcTrkSw_Select_Data@lo16
+	pushw	PsTextBox_Str_LineBreak@hi16
+	pushw	PsTextBox_Str_LineBreak@lo16
 	ld	xwa, (xsp+14)
 	push	xwa
 	call	StrSearch_Init
@@ -12822,7 +12822,7 @@ BoxStyle7_Setup:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, BoxStyle7_Setup_Data
+	ld xwa, pBoolProc_DumpPointerFmt
 	jr BoxStyle7_CheckInner
 
 BoxStyle7_CalcWidth:
@@ -12942,7 +12942,7 @@ BoxStyle8_Setup:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, BoxStyle8_Setup_Data
+	ld xwa, pSwordProc_DumpPointerFmt
 	jr BoxStyle8_CheckInner
 
 BoxStyle8_CalcWidth:
@@ -13062,7 +13062,7 @@ BoxStyle9_Setup:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, BoxStyle9_Setup_Data
+	ld xwa, pUwordProc_DumpPointerFmt
 	jr BoxStyle9_CheckInner
 
 BoxStyle9_CalcWidth:
@@ -13182,7 +13182,7 @@ BoxStyle10_Setup:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, BoxStyle10_Setup_Data
+	ld xwa, pScharProc_DumpPointerFmt
 	jr BoxStyle10_CheckInner
 
 BoxStyle10_CalcWidth:
@@ -13303,7 +13303,7 @@ BoxStyle11_Setup:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, BoxStyle11_Setup_Data
+	ld xwa, pUcharProc_DumpPointerFmt
 	jr BoxStyle11_CheckInner
 
 BoxStyle11_CalcWidth:
@@ -13423,7 +13423,7 @@ BoxStyle12_Setup:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, BoxStyle12_Setup_Data
+	ld xwa, pSlongProc_DumpPointerFmt
 	jr BoxStyle12_CheckInner
 
 BoxStyle12_CalcWidth:
@@ -13542,7 +13542,7 @@ BoxStyle13_Setup:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, BoxStyle13_Setup_Data
+	ld xwa, pUlongProc_DumpPointerFmt
 	jr BoxStyle13_CheckInner
 
 BoxStyle13_CalcWidth:
@@ -17646,8 +17646,8 @@ CommonIDProc_CheckAvail:
 CommonIDProc_OnDumpPointerEx:
 	ld	xwa, (xsp+16)
 	ld	(xsp+4), xwa
-	pushw CommonIDProc_OnDumpPointerEx_Data@hi16
-	pushw CommonIDProc_OnDumpPointerEx_Data@lo16
+	pushw CommonIDProc_DumpPointer_Str_Empty@hi16
+	pushw CommonIDProc_DumpPointer_Str_Empty@lo16
 CommonIDProc_Join:
 	ld	xwa, (xsp+8)
 	ld	xwa, (xwa+4)
@@ -19307,7 +19307,7 @@ KillApTimer_CheckNextEntry_Epilogue:
 	pop xiz
 	inc 4, xsp
 	retd 0x8
-DrawTask_Entry:
+DrawTask_Main:
 	push xiz
 
 DrawTask_EventLoop:

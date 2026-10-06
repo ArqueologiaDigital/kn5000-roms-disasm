@@ -91,7 +91,7 @@ NoRef_SetWall_SlotMap20x2:
 	ccf
 	zcf
 	incf
-SetWall_UpdateSlotIndex_Sub:
+SqTrAs_PartInc_UpdateOkSw:
 	call	NoRef_SetWall_SlotMap20x2_Helper
 	ret
 NoRef_SetWall_SlotMap20x2_Helper:

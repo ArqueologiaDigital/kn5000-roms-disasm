@@ -376,7 +376,7 @@ SingleLoadSrc_PanelMemListProc_Skip2:
 	ld	a, l
 	ld	c, e
 	add	a, e
-	cp a, (SLSrcBankList_FuncBody_Data_2:24)
+	cp a, (SingleLoadSrc_PanelMemEntryCount:24)
 	jr	nc, SingleLoadSrc_PanelMemListProc_Skip3
 	add	c, l
 	ld	(0x89fc:16), c
@@ -426,7 +426,7 @@ SingleLoadSrc_PanelMemListProc_Skip5:
 	ld	c, e
 	ld	a, e
 	inc	1, a
-	cp a, (SLSrcBankList_FuncBody_Data_2:24)
+	cp a, (SingleLoadSrc_PanelMemEntryCount:24)
 	jr	nc, SingleLoadSrc_PanelMemListProc_Skip6
 	ld	e, (SingleLoadSrc_PanelMemBankSize:24)
 	ld	l, e
@@ -789,7 +789,7 @@ SingleLoadSrc_ComposerListProc_Skip12:
 	ld	a, e
 	ld	c, l
 	add	a, l
-	cp a, (SLSrcBankList_FuncBody_Data_3:24)
+	cp a, (SingleLoadSrc_ComposerEntryCount:24)
 	jr	nc, SingleLoadSrc_ComposerListProc_Skip13
 	add	c, e
 	ld	(0x89fe:16), c
@@ -838,7 +838,7 @@ SingleLoadSrc_ComposerListProc_Skip15:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	cp a, (SLSrcBankList_FuncBody_Data_3:24)
+	cp a, (SingleLoadSrc_ComposerEntryCount:24)
 	jr	nc, SingleLoadSrc_ComposerListProc_Skip16
 	ld	e, (SLSrcComposer_RowsPerColumn:24)
 	ld	l, e
@@ -1293,7 +1293,7 @@ SingleLoadSrc_SoundMemListProc_Skip30:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	cp a, (SLSrcBankList_FuncBody_Data_4:24)
+	cp a, (SingleLoadSrc_SoundMemEntryCount:24)
 	jr	nc, SingleLoadSrc_SoundMemListProc_Skip32
 	ld	e, (SingleLoadSrc_SoundMemPageSize:24)
 	ld	a, e
@@ -1802,7 +1802,7 @@ SingleLoadDst_PanelMemListProc_Skip:
 	ld	a, e
 	ld	c, l
 	add	a, l
-	cp a, (SLDstBankList_FuncBody_Data_5:24)
+	cp a, (SingleLoadDst_PanelMemEntryCount:24)
 	jr	nc, SingleLoadDst_PanelMemListProc_Skip3
 	add	c, e
 	ld	(0x8a02:16), c
@@ -1856,7 +1856,7 @@ SingleLoadDst_PanelMemListProc_Skip5:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	cp a, (SLDstBankList_FuncBody_Data_5:24)
+	cp a, (SingleLoadDst_PanelMemEntryCount:24)
 	jr	nc, SingleLoadDst_PanelMemListProc_Skip6
 	ld	e, (SingleLoadDst_PanelMemBankSize:24)
 	ld	l, e
@@ -2006,7 +2006,7 @@ SingleLoadDst_DrawSongRows:
 	ret
 ; SingleLoadDst_SequencerListProc: Single-load destination list for area 1 SEQUENCER: EVT_PAINT blanks rows 0/3 and
 ;   draws 'SONG: n' + slot label (SingleLoadDst_DrawSongRows, BuildSlotLabel); parameter 8 steps the song number
-;   RAM 0x8A04 up to SLDstBankList_FuncBody_Data_6; parameter 10 returns SingleLoad_LoadSong(song); entry
+;   RAM 0x8A04 up to SingleLoadDst_SequencerSongCount; parameter 10 returns SingleLoad_LoadSong(song); entry
 ;   [1] of SingleLoadDst_AreaListProcs and CmpSingleLoadDst_AreaListProcs, called with XWA = file-name box, XBC =
 ;   event, XDE = parameter
 SingleLoadDst_SequencerListProc:
@@ -2050,7 +2050,7 @@ SingleLoadDst_SequencerListProc_Skip10:
 	ld	c, w
 	ld	a, w
 	inc	1, a
-	cp a, (SLDstBankList_FuncBody_Data_6:24)
+	cp a, (SingleLoadDst_SequencerSongCount:24)
 	jr	nc, SingleLoadDst_SequencerListProc_Skip11
 	inc	1, c
 	ld	(0x8a04:16), c
@@ -2251,7 +2251,7 @@ SingleLoadDst_ComposerListProc_Skip15:
 	ld	a, e
 	ld	c, l
 	add	a, l
-	cp a, (SLDstBankList_FuncBody_Data_7:24)
+	cp a, (SingleLoadDst_ComposerEntryCount:24)
 	jr	nc, SingleLoadDst_ComposerListProc_Skip16
 	add	c, e
 	ld	(0x8a06:16), c
@@ -2305,7 +2305,7 @@ SingleLoadDst_ComposerListProc_Skip18:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	cp a, (SLDstBankList_FuncBody_Data_7:24)
+	cp a, (SingleLoadDst_ComposerEntryCount:24)
 	jr	nc, SingleLoadDst_ComposerListProc_Skip19
 	ld	e, (SingleLoadDst_ComposerBankSize:24)
 	ld	l, e
@@ -2535,7 +2535,7 @@ SingleLoadDst_DrawSoundMemItemRows_Skip2:
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (0x89cd:16)
-	ld	xbc, SLDstBankList_FuncBody_Data_3
+	ld	xbc, SingleLoadDst_DrawSoundMemItemRows_Str_Colon
 	call	FileIO_BuildFilePath
 	lda	xiz, (0x89cd:16)
 	ld	a, (0x8a08:16)
@@ -2688,7 +2688,7 @@ SingleLoadDst_SoundMemListProc_Skip29:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	cp	a, (SLDstBankList_FuncBody_Data_8:24)
+	cp	a, (SingleLoadDst_SoundMemEntryCount:24)
 	jr	nc, SingleLoadDst_SoundMemListProc_Skip31
 	ld	e, (SLDstSoundMem_RowsPerColumn:24)
 	ld	a, e

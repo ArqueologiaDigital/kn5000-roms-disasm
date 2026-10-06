@@ -1460,7 +1460,7 @@ CDlike_ExitModeUnlessKeepTitle:
 	jr	lt, CDlike_ExitModeUnlessKeepTitle_Skip
 	cp	wa, 13
 	jr	gt, CDlike_ExitModeUnlessKeepTitle_Skip
-	lda	xix, (SetWall_ReturnZero_Data:24)
+	lda	xix, (CDlike_KeepTitleCaseMap:24)
 	ld	wa, (xix+wa)
 	extz wa
 	sll	wa, 1
@@ -1642,7 +1642,7 @@ DkMdlyPly_ReturnZero:
 ; DkMdlyPly send audio command
 DkMdlyPly_SendAudioCmd:
 	ld hl, 0:i3
-	lda xde, (DkMdlyPly_SendAudioCmd_Data:24)
+	lda xde, (DkMdlyPly_BitMaskByIndex:24)
 
 DkMdlyPly_VoiceScanLoop:
 	ld bc, hl
@@ -1677,7 +1677,7 @@ Snd_ParamLookupSetupWerp:
 DkMdlyPly_HandleResult:
 	ldto_werp WA, 0xfa
 	add wa, wa
-	lda xbc, (DkMdlyPly_HandleResult_Data:24)
+	lda xbc, (DkMdlyPly_PartIndexTable:24)
 	ld	wa, (xbc+wa)
 	ldw bc, 0x401
 	call SndParam_LookupViaEncode
@@ -1688,7 +1688,7 @@ DkMdlyPly_HandleResult:
 	jr nz, DkMdlyPly_ExtendedCheck
 	ldto_werp WA, 0xfa
 	add wa, wa
-	lda xbc, (DkMdlyPly_HandleResult_Data:24)
+	lda xbc, (DkMdlyPly_PartIndexTable:24)
 	ld	wa, (xbc+wa)
 	ld (PART_SELECT:16), a
 	ld e, a
@@ -2419,7 +2419,7 @@ NameGetFuncCall_OnGetComposerName:
 	pushw	59
 	pushw	0
 	pushw	7370
-	call	NumFormat_DivideAndC_Data
+	call	Strchr
 	lda	xsp, (xsp+14)
 	lda	xwa, (0x021064:24)
 	or	xhl, xhl
@@ -3546,7 +3546,7 @@ SqTrSel_CaseA:
 SqStepTtlFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, SqStepTtlFunc_Data
+	ld xiy, SqStepTtlFunc_Methods
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw

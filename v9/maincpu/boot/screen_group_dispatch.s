@@ -13,7 +13,7 @@ ScreenGroup_ReInit:
 	call Reset_Floppy_Disk_Controller
 	call SndParam_Init
 	call MainTitle_InitGraphicsAndEvents
-	jp LoadAndRunXapr_Entry
+	jp Xapr_DetectAndCallBootInit
 
 ; ===========================================================================
 ; ScreenGroup_Dispatch - run init phase WA of every subsystem

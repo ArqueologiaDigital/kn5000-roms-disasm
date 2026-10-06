@@ -879,7 +879,7 @@ SeqOut_WriteTimedBytes_SerialWrite:
 	call	SeqBuf3_WriteBytes
 	inc	6, xsp
 	ldfr_werp	HL, 0xfa
-	calr	SeqBuf3_EnableTx_Stub
+	calr	CompIface_SerialEnableTx
 	jr	MIDI_SeqProcess_DisableIntReturn
 SeqOut_WriteTimedBytes_PC2Timing:
 	call	SeqBuf3_GetTimingValue
@@ -1029,7 +1029,7 @@ SeqBuf_DspSysEx_ReadAndForward_Loop:
 SeqBuf_DspSysEx_ReadAndForward_Done:
 	inc	2, xsp
 	ret
-SeqBuf3_EnableTx_Stub:
+CompIface_SerialEnableTx:
 	ret
 MidiSysEx_BuildAndSend:
 	lda	xsp, (xsp - 12)
@@ -2189,7 +2189,7 @@ DSPCfg_Data_001:
 	ret
 DSPCfg_GetSlotCount:
 	extz	xwa
-	ld	xbc, DSPCfg_GetSlotCount_Data
+	ld	xbc, DspFxParamCountTable
 	add	xbc, xwa
 	ld	l, (xbc)
 	extz	hl
@@ -3284,9 +3284,9 @@ DSPCfg_RecordFieldToParamId:
 	add	wa, wa
 	lda	xix, (DspCfg_OpLetter_JumpOffsets:24)
 	ld	wa, (xix+wa)
-	lda	xix, (DSPCfg_Data_ParamDispatch_Code:24)
+	lda	xix, (DSPCfg_RecordFieldToParamId_DspEffectRecord:24)
 	jp	t, (xix+wa)
-DSPCfg_Data_ParamDispatch_Code:
+DSPCfg_RecordFieldToParamId_DspEffectRecord:
 	ld	xiz, 0x4900
 	ld	wa, 0:i3
 	jr	DSPCfg_Data_ParamDispatch_Join3
@@ -3427,7 +3427,7 @@ DSPCfg_ApplyParamStruct:
 	ld	a, (xiz)
 	extz	wa
 	ld	(xsp + 4), wa
-	lda	xbc, (DSPCfg_GetSlotCount_Data:24)
+	lda	xbc, (DspFxParamCountTable:24)
 	ld	wa, (xsp + 4)
 	ld	a, (xbc+wa)
 	extz	wa
@@ -4525,7 +4525,7 @@ ScreenGroup_ReInit:
 	call	Reset_Floppy_Disk_Controller
 	call	SndParam_Init
 	call	MainTitle_InitGraphicsAndEvents
-	jp	LoadAndRunXapr_Entry
+	jp	Xapr_DetectAndCallBootInit
 ; ===========================================================================
 ; ScreenGroup_Dispatch - run init phase WA of every subsystem
 ; ===========================================================================

@@ -2557,7 +2557,7 @@ MIDI_ProcessChangedChannels:
 	cpl wa
 	and wa, (0x8f3a:16)
 	jr z, MidiChanged_ProcessGroup2
-	ld xbc, MIDI_ProcessChangedChannels_Data
+	ld xbc, PanelLed_PendingGroup1Handlers
 	calr DispatchBitmaskHandlers
 	ldw (0x8f3a:16), 0
 
@@ -2566,7 +2566,7 @@ MidiChanged_ProcessGroup2:
 	cpl wa
 	and wa, (0x8f3e:16)
 	jr z, MidiChanged_ProcessGroup3
-	ld xbc, MidiChanged_ProcessGroup2_Data
+	ld xbc, PanelLed_PendingGroup2Handlers
 	calr DispatchBitmaskHandlers
 	ldw (0x8f3e:16), 0
 
@@ -2575,7 +2575,7 @@ MidiChanged_ProcessGroup3:
 	cpl wa
 	and wa, (0x8f42:16)
 	jr z, MidiChanged_ProcessGroup4
-	ld xbc, MidiChanged_ProcessGroup3_Data
+	ld xbc, PanelLed_PendingGroup3Handlers
 	calr DispatchBitmaskHandlers
 	ldw (0x8f42:16), 0
 
@@ -2584,7 +2584,7 @@ MidiChanged_ProcessGroup4:
 	cpl wa
 	and wa, (0x8f46:16)
 	ret z
-	ld xbc, MidiChanged_ProcessGroup4_Data
+	ld xbc, PanelLed_PendingGroup4Handlers
 	calr DispatchBitmaskHandlers
 	ldw (0x8f46:16), 0
 	ret
@@ -2595,28 +2595,28 @@ MidiChannel_DispatchChanged:
 	ld wa, (0x8f3c:16)
 	cp wa, 0:i3
 	jr z, MidiDispatch_CheckGroup2
-	ld xbc, MidiChannel_DispatchChanged_Data
+	ld xbc, PanelLed_HeldGroup1Handlers
 	calr DispatchBitmaskHandlers
 
 MidiDispatch_CheckGroup2:
 	ld wa, (0x8f40:16)
 	cp wa, 0:i3
 	jr z, MidiDispatch_CheckGroup3
-	ld xbc, MidiDispatch_CheckGroup2_Data
+	ld xbc, PanelLed_HeldGroup2Handlers
 	calr DispatchBitmaskHandlers
 
 MidiDispatch_CheckGroup3:
 	ld wa, (0x8f44:16)
 	cp wa, 0:i3
 	jr z, MidiDispatch_CheckGroup4
-	ld xbc, MidiDispatch_CheckGroup3_Data
+	ld xbc, PanelLed_HeldGroup3Handlers
 	calr DispatchBitmaskHandlers
 
 MidiDispatch_CheckGroup4:
 	ld wa, (0x8f48:16)
 	cp wa, 0:i3
 	jr z, MidiDispatch_UpdateLEDs
-	ld xbc, MidiDispatch_CheckGroup4_Data
+	ld xbc, PanelLed_HeldGroup4Handlers
 	calr DispatchBitmaskHandlers
 
 MidiDispatch_UpdateLEDs:
@@ -3157,9 +3157,11 @@ ExtData_VoiceParam_DispatchBytecode:
 	add	wa, wa
 	lda	xix, (ExtData_VoiceParam_DispatchBytecode_CaseTable:24)
 	ld	wa, (xix+wa)
-	lda	xix, (ExtData_VoiceParam_DispatchBytecode_Code:24)
+	lda	xix, (ExtData_VoiceParam_DispatchBytecode_ModeMsp:24)
 	jp	t, (xix+wa)
-ExtData_VoiceParam_DispatchBytecode_Code:
+; ExtData_VoiceParam_DispatchBytecode_ModeMsp: MD_MSP (CURRENT_MODE 15; also the switch base): sets bit 7 of LED row 2
+;   (0x8F1A). Basis: switch value (CURRENT_MODE - 2) + body.
+ExtData_VoiceParam_DispatchBytecode_ModeMsp:
 	setm	7, (xbc)
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue2
 ; ExtData_VoiceParam_DispatchBytecode_ModeCmp: MD_CMP: sets bit 1 of LED row 0 (0x8F18)
@@ -3791,12 +3793,12 @@ MidiChOut_CheckHWState:
 
 MidiChOut_Mode6or3_Mask7:
 	and l, 0x7
-	ld xwa, MidiChOut_Mode6or3_Mask7_Data
+	ld xwa, BeatLed_ThreeBeatMasks
 	jr MidiChOut_TableLookup
 
 MidiChOut_OtherMode_Mask3:
 	and l, 0x3
-	ld xwa, MidiChOut_OtherMode_Mask3_Data
+	ld xwa, BeatLed_FourBeatMasks
 
 MidiChOut_TableLookup:
 	extz hl
@@ -4022,7 +4024,7 @@ UIState_ProcessSimpleMode:
 CtrlPanel_LookupIndicatorEntry:
 	extz wa
 	sla wa, 2
-	lda xbc, (CtrlPanel_LookupIndicatorEntry_Data:24)
+	lda xbc, (CtrlPanel_SingleBitMaskTable:24)
 	ld	xhl, (xbc+wa)
 	ret
 
@@ -4657,7 +4659,7 @@ BitmapTable_ProcessEntry:
 	add xbc, xbc
 	add xbc, xwa
 	add xbc, xbc
-	lda xwa, (BitmapTable_ProcessEntry_Data_2:24)
+	lda xwa, (PanelMem_FixupTagColumn:24)
 	add xwa, xbc
 	ld a, (xwa)
 	calr PanelTlv_PayloadOfTag
@@ -4669,7 +4671,7 @@ BitmapTable_ProcessEntry:
 	add xbc, xbc
 	add xbc, xwa
 	add xbc, xbc
-	ld xwa, BitmapTable_ProcessEntry_Data
+	ld xwa, PanelMem_FixupRecords
 	add xwa, xbc
 	lda xbc, (0x1ed400:24)
 	lda xde, (xwa + 3)
@@ -4984,9 +4986,12 @@ ExtData_ToneParam_DispatchHandler:
 	add	wa, wa
 	lda	xix, (ExtData_ToneParam_DispatchHandler_CaseTable:24)
 	ld	wa, (xix+wa)
-	lda xix, (ExtData_ToneParam_DispatchHandler_Code:24)
+	lda xix, (ExtData_ToneParam_DispatchHandler_OnVoiceSelect:24)
 	jp	t, (xix+wa)
-ExtData_ToneParam_DispatchHandler_Code:
+; ExtData_ToneParam_DispatchHandler_OnVoiceSelect: Payload offset 0 of a per-part record (tags 0x00-0x19), the voice
+;   selector: re-applies the program (SndParam_ApplyProgramChange) and posts the record's +0/+1. Basis: switch value
+;   (changed payload offset) + body.
+ExtData_ToneParam_DispatchHandler_OnVoiceSelect:
 	jr ExtData_ToneParam_DispatchHandler_Join
 ExtData_ToneParam_DispatchHandler_Case3:
 	jrl	ExtData_Voice_CheckMode3_Helper
@@ -5216,9 +5221,11 @@ ExtData_ToneParam_AltDispatch:
 	add	wa, wa
 	lda	xix, (ExtData_ToneParam_AltDispatch_CaseTable:24)
 	ld	wa, (xix+wa)
-	lda xix, (ExtData_ToneParam_AltDispatch_Code:24)
+	lda xix, (ExtData_ToneParam_AltDispatch_WholeByteFields:24)
 	jp	t, (xix+wa)
-ExtData_ToneParam_AltDispatch_Code:
+; ExtData_ToneParam_AltDispatch_WholeByteFields: Payload +0 and +8 of a drawbar record (0x44/0x45/0x46; also the
+;   switch base): merges the whole byte (ExtData_SetTlvField 0xFF) and posts it. Basis: switch value + body.
+ExtData_ToneParam_AltDispatch_WholeByteFields:
 	jr ExtData_ToneParam_AltDispatch_Join
 ; ExtData_ToneParam_AltDispatch_DrawbarNibbleFields: Payload +1/+2 of a drawbar record (cases 1, 2): merges the byte
 ;   as two 4-bit fields (ExtData_SetTlvField 0x0F, 0xF0).
@@ -5268,9 +5275,12 @@ ExtData_ToneParam_AltBody:
 	add	wa, wa
 	lda	xix, (ExtData_ToneParam_AltBody_CaseTable:24)
 	ld	wa, (xix+wa)
-	lda xix, (ExtData_ToneParam_AltBody_Code:24)
+	lda xix, (ExtData_ToneParam_AltBody_OnStyleProgram:24)
 	jp	t, (xix+wa)
-ExtData_ToneParam_AltBody_Code:
+; ExtData_ToneParam_AltBody_OnStyleProgram: Offset 0 of style/tempo record 0x48 (the style selection; also the switch
+;   base): resolves (0x9130, 0x9131) with AccStyle_LookupTempoAndVelocity, writes the result to +0/+1 and posts both.
+;   Basis: switch value + body.
+ExtData_ToneParam_AltBody_OnStyleProgram:
 	jr ExtData_ToneParam_AltBody_Join
 ExtData_ToneParam_AltBody_Case3:
 	jr ExtData_ToneParam_AltBody_Join2
@@ -5685,7 +5695,7 @@ ExtData_Voice_MixedHandler_Join:
 	ld	a, (0xfd02:16)
 	and	a, 3
 	extz	wa
-	lda	xbc, (ExtData_Voice_MixedHandler_Data:24)
+	lda	xbc, (SplitPoint_LedMaskByPreset:24)
 	ld	(0x8f58), (xbc+wa)
 	jr	ExtData_Voice_MixedHandler_Join4
 ExtData_Voice_MixedHandler_Skip5:
@@ -6286,7 +6296,7 @@ CtrlPanelRefresh_Done:
 CtrlPanel_BuildIndicatorBitmask:
 	push xiz
 	ld xiz, 0:i3
-	lda xde, (CtrlPanel_BuildIndicatorBitmask_Data:24)
+	lda xde, (CtrlPanel_BitIndexIdentityMap:24)
 	ld c, (xwa + 1)
 	cp c, 0xff
 	jr nz, IndBitmask_LookupByChannel
@@ -7607,7 +7617,7 @@ VoicePanInit_Loop:
 	add xbc, xwa
 	ld a, (xbc)
 	extz wa
-	lda xbc, (VoiceChannels_InitPanFromPreset_Data:24)
+	lda xbc, (SeqTrack_AssignToPanelTag:24)
 	ld	a, (xbc+wa)
 	calr PanelTlv_PayloadOfTag
 	cp xhl, 0xffffffff
@@ -8447,7 +8457,10 @@ MidiStream_ResolveVoiceIndex:
 	pop	xbc
 	pop	xwa
 	ret
-RegBitManip_Handler_4_Code:
+; MidiStream_ResolveVoiceIndexMode1: MIDI-mode-1 twin of PartCtrl_WriteProgramChange: stores HL (program L, bank H) at
+;   0x916F, resolves it for part (0x90F7) (MidiStream_ExtendedDispatch_Helper3_Helper) and returns HL/W from
+;   0x9173-0x9175; registers preserved. Basis: callers + body.
+MidiStream_ResolveVoiceIndexMode1:
 	ld	(0x916f:16), hl
 ;
 	push	xwa
@@ -8575,7 +8588,7 @@ MidiStream_InitFromLookup:
 	ld l, (0x379b:16)
 	and l, 0xf
 	sll hl, 2
-	ld xiy, MidiStream_InitFromLookup_Data
+	ld xiy, MidiStream_PartEventMapTable
 	ld	xiy, (xiy+hl)
 	cp xiy, 0xffffffff
 	jr z, MidiStreamInit_Done
@@ -9202,7 +9215,7 @@ TempoRing_InitPartStream:
 	ld xix, 0xf1a0
 	ld	l, (xix+hl)
 	sll hl, 2
-	ld xix, TempoRing_InitPartStream_Data
+	ld xix, SeqTrackAssign_RecordMapTable
 	ld	xiy, (xix+hl)
 	ld xix, 0x91d2
 
@@ -9393,7 +9406,7 @@ PartReinit_SendB0Command:
 	ld l, (0x91c8:16)
 	ld xiy, 0xf1a0
 	ld	l, (xiy+hl)
-	ld xiy, PartReinit_SendB0Command_Data
+	ld xiy, SeqTrackAssign_PartTagTable
 	ld	a, (xiy+hl)
 	ld w, 0x4:opc
 	ld (xix+), WA
@@ -9847,7 +9860,7 @@ MidiPartCC_WriteAndDispatch:
 	ld l, (0x91c8:16)
 	ld xix, 0xf1a0
 	ld	l, (xix+hl)
-	ld xix, PartReinit_SendB0Command_Data
+	ld xix, SeqTrackAssign_PartTagTable
 	ld	c, (xix+hl)
 	ld b, 0x3:opc
 	ld (0x915b:16), bc
@@ -10047,7 +10060,7 @@ VoiceMode3_BuildChannelTable:
 	ld xix, 0xf1a0
 	ld	l, (xix+hl)
 	sll hl, 2
-	ld xix, VoiceMode3_BuildChannelTable_Data
+	ld xix, SeqTrackAssign_PlaybackMapTable
 	ld	xiy, (xix+hl)
 	ld xix, 0x91d2
 
@@ -10123,7 +10136,7 @@ VoiceParam_SendPendingB4:
 	ld xix, 0xf1a0
 	ld l, (0x91c8:16)
 	ld	l, (xix+l)
-	ld xix, PartReinit_SendB0Command_Data
+	ld xix, SeqTrackAssign_PartTagTable
 	ld	b, (xix+l)
 	ld (0x915b:16), bc
 	ld d, 0x7f:opc
@@ -10168,7 +10181,7 @@ VoiceParam_SendPendingModulation:
 	ld xix, 0xf1a0
 	ld l, (0x91c8:16)
 	ld	l, (xix+l)
-	ld xix, PartReinit_SendB0Command_Data
+	ld xix, SeqTrackAssign_PartTagTable
 	ld	b, (xix+l)
 	ld (0x915b:16), bc
 	ld d, 0x7f:opc
@@ -10215,7 +10228,7 @@ VoiceParam_SendPendingPitchBend:
 	ld xix, 0xf1a0
 	ld l, (0x91c8:16)
 	ld	l, (xix+l)
-	ld xix, PartReinit_SendB0Command_Data
+	ld xix, SeqTrackAssign_PartTagTable
 	ld	b, (xix+l)
 	ld (0x915b:16), bc
 	and de, 0x7f7f
@@ -10271,7 +10284,7 @@ VoiceNote_WriteBankAndCC:
 	cp a, 0xf
 	jr z, VoiceNote_SetupCCParams
 	ld c, 0xb3:opc
-	ld xix, PartReinit_SendB0Command_Data
+	ld xix, SeqTrackAssign_PartTagTable
 	ld	b, (xix+a)
 
 VoiceNote_SetupCCParams:
@@ -10648,7 +10661,9 @@ VoiceMode_ParamConfigTables:
 	.byte 0x17, 0x00, 0xff, 0x00, 0x17, 0x04, 0x48, 0x01
 	.byte 0x17, 0x08, 0x7f, 0x01, 0xff, 0xff, 0xff, 0xff
 	.byte	0xff, 0xff, 0xff, 0xff
-PartReinit_SendB0Command_Data:	.byte	0x00, 0x02, 0x01, 0x07
+; SeqTrackAssign_PartTagTable: 20 bytes: TRACK ASSIGN value (0xF1A0[track]) -> panel part-record tag: RIGHT1 0, LEFT
+;   2, RIGHT2 1, PART4..PART15 3..14, DRUMS 15, CHORD/APC 0x15, CONTROL/RHYTHM 0. Basis: readers + bytes.
+SeqTrackAssign_PartTagTable:	.byte	0x00, 0x02, 0x01, 0x07
 	.byte 0x08, 0x09, 0x0a, 0x0b, 0x04, 0x05, 0x06, 0x03
 	.byte 0x0f, 0x15, 0x15, 0x00, 0x00, 0x0c, 0x0d, 0x0e
 MidiVoiceNote_LookupMode1_Data:
@@ -10660,7 +10675,10 @@ MidiVoiceNote_LookupMode0_Data:	.byte	0x00
 MidiVoiceNote_LookupMode3_Data:	.byte	0x00, 0x02
 	.byte 0x01, 0x08, 0x09, 0x0a, 0x0b, 0x03, 0x04, 0x05
 	.byte 0x06, 0x07, 0x11, 0x12, 0x13, 0x0c, 0x0f, 0xff
-TempoRing_InitPartStream_Data:
+; SeqTrackAssign_RecordMapTable: 20 pointers by TRACK ASSIGN value: the panel events a track of that type records --
+;   4-byte entries (tag, payload offset, value mask, emitter index into MidiStream_ProcessorDispatchC_Data), 0xFF-
+;   terminated. Basis: readers + bytes.
+SeqTrackAssign_RecordMapTable:
 	.long VoiceMode_ParamConfigTables + 0xb8
 	.long VoiceMode_ParamConfigTables + 0x168
 	.long VoiceMode_ParamConfigTables + 0x110
@@ -10843,7 +10861,10 @@ TempoRing_InitPartStream_Data:
 	.byte 0x72, 0x07, 0x7f, 0x06, 0xff, 0xff, 0xff, 0xff
 	.fill 8, 1, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff
-VoiceMode3_BuildChannelTable_Data:
+; SeqTrackAssign_PlaybackMapTable: 20 pointers by TRACK ASSIGN value: the playback-side lists (tag, payload offset,
+;   mask, handler index into VoiceMode_ParamHandler_3_Data), 0xFF-terminated, matched against a played track event.
+;   Basis: readers + bytes.
+SeqTrackAssign_PlaybackMapTable:
 	.long VoiceMode_ParamConfigTables + 0x614
 	.long VoiceMode_ParamConfigTables + 0x71c
 	.long VoiceMode_ParamConfigTables + 0x698
@@ -11013,7 +11034,10 @@ VoiceMode3_BuildChannelTable_Data:
 	.byte 0x72, 0x03, 0xff, 0x06, 0x72, 0x07, 0x7f, 0x06
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
-MidiStream_InitFromLookup_Data:
+; MidiStream_PartEventMapTable: 16 pointers by (0x379B) & 15 (0xFFFFFFFF = none; set for 1, 2, 4, 8): panel-event maps
+;   of part records 0x10-0x13 (ACP1-3, BASS) in the same 4-byte format, used by MidiStream_ProcessEventBuffer. Basis:
+;   readers + bytes.
+MidiStream_PartEventMapTable:
 	.byte 0xff, 0xff, 0xff, 0xff, 0xd7, 0xc4, 0xfc, 0x00
 	.byte 0xf3, 0xc4, 0xfc, 0x00, 0xff, 0xff, 0xff, 0xff
 	.byte 0x0f, 0xc5, 0xfc, 0x00, 0xff, 0xff, 0xff, 0xff
@@ -11397,7 +11421,7 @@ MidiStream_DispatchLoop:
 	jr ugt, MidiStream_AdvanceRxPtr
 	extz wa
 	sll wa, 2
-	ld xiy, MidiStream_DispatchLoop_Data
+	ld xiy, MidiStream_PanelEventHandlerTable
 	ld	xiy, (xiy+wa)
 	cp xiy, 0xffffffff
 	jr z, MidiStream_AdvanceRxPtr
@@ -11921,7 +11945,7 @@ MidiStream_SetPartProgram_Epilogue:
 	ret
 ; MidiStream_CheckPartProgramAllowed: Pre-check of MidiStream_SetPartProgram (part C, program E, bank B): clears bit 1
 ;   of 0x90FA. If bit 0 is set, it clears it and replaces E with the category of (E, B) (PartCtrl_WriteProgramChange,
-;   or RegBitManip_Handler_4_Code in MIDI mode 1). It then sets bit 1 (refuse) when part 15 or 20 gets a category
+;   or MidiStream_ResolveVoiceIndexMode1 in MIDI mode 1). It then sets bit 1 (refuse) when part 15 or 20 gets a category
 ;   other than 15 (drum kits), when parts 16-19, 21 or 22 get category 15, or when part 20 or 16-22 is used while
 ;   (0x379B) & 0x1F = 0. Registers are preserved. Basis: callers + body -- the only caller MidiStream_SetPartProgram
 ;   sets bit 0 of 0x90FA, calls it, and skips the program write when bit 1 comes back set.
@@ -11937,7 +11961,7 @@ MidiStream_CheckPartProgramAllowed:
 	stb_d8	(0x90f7), c
 	ld	l, e
 	ld	h, b
-	ld	xix, RegBitManip_Handler_4_Code
+	ld	xix, MidiStream_ResolveVoiceIndexMode1
 	ldb_d8	e, (0xfd50)
 	and	e, 3
 	cp	e, 1:i3
@@ -12166,9 +12190,11 @@ MidiStream_RunStatus_Mode1_Return2:
 ; ends exactly where SoundParam_NotifyChange (0xFCD201) begins.
 ; ⚠ Only the first 60 entries and 3 bytes of the 61st are in this file: the
 ; rest (0xFCCFF4-0xFCD200) is the start of boot/interrupt_vector_trampolines.s,
-; which spells it as instructions.  Also named MidiStream_DispatchLoop_Data
+; which spells it as instructions.  Also named MidiStream_PanelEventHandlerTable
 ; (a .set in shared/positional_labels.s).
-MidiStream_DispatchLoop_Data:
+; MidiStream_PanelEventHandlerTable: 192 x .long by panel-event id (0x00-0xBF): the handler MidiStream_DispatchLoop
+;   calls for each 4-byte event in the PanelEvent_Post queue at (0xC039); 0xFFFFFFFF = none. Basis: readers + bytes.
+MidiStream_PanelEventHandlerTable:
 	.long	MidiStream_StatusPrecheck
 	.long	MidiStream_StatusPrecheck
 	.long	MidiStream_StatusPrecheck

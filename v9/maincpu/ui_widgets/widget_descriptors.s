@@ -1727,7 +1727,7 @@ NoteEditFunc_CaseTable:
 ;   pointer); SngSelFunc_OnGetRamString (0xF2FF45, pushw far pointer)
 ; -----------------------------------------------------------------------------
 NoteEditFunc_CaseTable_Strings:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x38B4, 0x6
-SngSelFunc_HandleEvent47_Data:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x38BA, 0x4
+SngSelFunc_OnGetRamString_Str_Fmt2d:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x38BA, 0x4
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] EntGrid_PostMainEvent_Table
 ; EntGrid_PostMainEvent_Table -- read by EntGrid_PostMainEvent (v10/v9
@@ -1858,15 +1858,15 @@ EntGridCheck_SendAudioCommand_Str_Fmt3d:	.incbin "includes/generated/naka_widget
 ; SndParam_Dispatch_PtrTable[2].
 ; -----------------------------------------------------------------------------
 SndParam_Dispatch_PtrTable:
-	.short	SndParam_Dispatch_Code_2 - SndParam_Dispatch_Code_2
-	.short	SndParam_Dispatch_Code_2 - SndParam_Dispatch_Code_2
-	.short	SndParam_Dispatch_Code_2 - SndParam_Dispatch_Code_2
-	.short	SndParam_Dispatch_Code_2 - SndParam_Dispatch_Code_2
-	.short	EntertainerGridCheck_TypeRowDown - SndParam_Dispatch_Code_2
-	.short	EntertainerGridCheck_EffParamRowDown - SndParam_Dispatch_Code_2
-	.short	EntertainerGridCheck_EffParamRowDown - SndParam_Dispatch_Code_2
-	.short	EntertainerGridCheck_EffParamRowDown - SndParam_Dispatch_Code_2
-	.short	EntertainerGridCheck_EffParamRowDown - SndParam_Dispatch_Code_2
+	.short	EntertainerGridCheck_LswRowDown - EntertainerGridCheck_LswRowDown
+	.short	EntertainerGridCheck_LswRowDown - EntertainerGridCheck_LswRowDown
+	.short	EntertainerGridCheck_LswRowDown - EntertainerGridCheck_LswRowDown
+	.short	EntertainerGridCheck_LswRowDown - EntertainerGridCheck_LswRowDown
+	.short	EntertainerGridCheck_TypeRowDown - EntertainerGridCheck_LswRowDown
+	.short	EntertainerGridCheck_EffParamRowDown - EntertainerGridCheck_LswRowDown
+	.short	EntertainerGridCheck_EffParamRowDown - EntertainerGridCheck_LswRowDown
+	.short	EntertainerGridCheck_EffParamRowDown - EntertainerGridCheck_LswRowDown
+	.short	EntertainerGridCheck_EffParamRowDown - EntertainerGridCheck_LswRowDown
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SndParam_Dispatch_PtrTable_2
 ; SndParam_Dispatch_PtrTable_2 -- 2 u32 ROM addresses (or 0), read by
@@ -1877,15 +1877,15 @@ SndParam_Dispatch_PtrTable:
 ; SndParam_Dispatch_PtrTable_2[2].
 ; -----------------------------------------------------------------------------
 SndParam_Dispatch_PtrTable_2:
-	.short	SndParam_Dispatch_Code - SndParam_Dispatch_Code
-	.short	SndParam_Dispatch_Code - SndParam_Dispatch_Code
-	.short	SndParam_Dispatch_Code - SndParam_Dispatch_Code
-	.short	SndParam_Dispatch_Code - SndParam_Dispatch_Code
-	.short	EntertainerGridCheck_TypeRowUp - SndParam_Dispatch_Code
-	.short	EntertainerGridCheck_EffParamRowUp - SndParam_Dispatch_Code
-	.short	EntertainerGridCheck_EffParamRowUp - SndParam_Dispatch_Code
-	.short	EntertainerGridCheck_EffParamRowUp - SndParam_Dispatch_Code
-	.short	EntertainerGridCheck_EffParamRowUp - SndParam_Dispatch_Code
+	.short	EntertainerGridCheck_LswRowUp - EntertainerGridCheck_LswRowUp
+	.short	EntertainerGridCheck_LswRowUp - EntertainerGridCheck_LswRowUp
+	.short	EntertainerGridCheck_LswRowUp - EntertainerGridCheck_LswRowUp
+	.short	EntertainerGridCheck_LswRowUp - EntertainerGridCheck_LswRowUp
+	.short	EntertainerGridCheck_TypeRowUp - EntertainerGridCheck_LswRowUp
+	.short	EntertainerGridCheck_EffParamRowUp - EntertainerGridCheck_LswRowUp
+	.short	EntertainerGridCheck_EffParamRowUp - EntertainerGridCheck_LswRowUp
+	.short	EntertainerGridCheck_EffParamRowUp - EntertainerGridCheck_LswRowUp
+	.short	EntertainerGridCheck_EffParamRowUp - EntertainerGridCheck_LswRowUp
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] EntertainerGridCheck_CaseTable
 ; EntertainerGridCheck_CaseTable -- jump table of a compiled `switch` in
@@ -2988,28 +2988,28 @@ Sqedt_ParamDispatch_Str_34:	.incbin "includes/generated/naka_widget_descriptors.
 ; SeqFormat_DispatchA_CaseTable -- jump table of a compiled `switch` in
 ; SqedtFunc_OnChkCur_AtCursorPos0 (v10/v9 0xf3513d, v7 0xf35113) (`lda xix,
 ; (SeqFormat_DispatchA_CaseTable:24)`): 16 u16 case offsets from
-; SeqFormat_DispatchA_Code.
+; SqedtFunc_OnChkCur2_McpTrAFields.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; SeqFormat_DispatchA_CaseTable[16].
 ; -----------------------------------------------------------------------------
 SeqFormat_DispatchA_CaseTable:
-	.short	SeqFormat_DispatchA_Code - SeqFormat_DispatchA_Code
-	.short	SeqFormat_DispatchA_Code - SeqFormat_DispatchA_Code
-	.short	SeqFormat_DispatchA_Code - SeqFormat_DispatchA_Code
-	.short	SqedtFunc_OnChkCur2_McpTrBFields - SeqFormat_DispatchA_Code
-	.short	SqedtFunc_OnChkCur2_McpTrBFields - SeqFormat_DispatchA_Code
-	.short	SqedtFunc_OnChkCur2_McpTrBFields - SeqFormat_DispatchA_Code
-	.short	SqedtFunc_OnChkCur2_MinsTrAFields - SeqFormat_DispatchA_Code
-	.short	SqedtFunc_OnChkCur2_MinsTrAFields - SeqFormat_DispatchA_Code
-	.short	SqedtFunc_OnChkCur2_MinsTrAFields - SeqFormat_DispatchA_Code
-	.short	SqedtFunc_OnChkCur2_MinsTrBFields - SeqFormat_DispatchA_Code
-	.short	SqedtFunc_OnChkCur2_MinsTrBFields - SeqFormat_DispatchA_Code
-	.short	SqedtFunc_OnChkCur2_MinsTrBFields - SeqFormat_DispatchA_Code
-	.short	SqedtFunc_OnChkCur2_ScpFromFields - SeqFormat_DispatchA_Code
-	.short	SqedtFunc_OnChkCur2_ScpFromFields - SeqFormat_DispatchA_Code
-	.short	SqedtFunc_OnChkCur2_ScpToFields - SeqFormat_DispatchA_Code
-	.short	SqedtFunc_OnChkCur2_ScpToFields - SeqFormat_DispatchA_Code
+	.short	SqedtFunc_OnChkCur2_McpTrAFields - SqedtFunc_OnChkCur2_McpTrAFields
+	.short	SqedtFunc_OnChkCur2_McpTrAFields - SqedtFunc_OnChkCur2_McpTrAFields
+	.short	SqedtFunc_OnChkCur2_McpTrAFields - SqedtFunc_OnChkCur2_McpTrAFields
+	.short	SqedtFunc_OnChkCur2_McpTrBFields - SqedtFunc_OnChkCur2_McpTrAFields
+	.short	SqedtFunc_OnChkCur2_McpTrBFields - SqedtFunc_OnChkCur2_McpTrAFields
+	.short	SqedtFunc_OnChkCur2_McpTrBFields - SqedtFunc_OnChkCur2_McpTrAFields
+	.short	SqedtFunc_OnChkCur2_MinsTrAFields - SqedtFunc_OnChkCur2_McpTrAFields
+	.short	SqedtFunc_OnChkCur2_MinsTrAFields - SqedtFunc_OnChkCur2_McpTrAFields
+	.short	SqedtFunc_OnChkCur2_MinsTrAFields - SqedtFunc_OnChkCur2_McpTrAFields
+	.short	SqedtFunc_OnChkCur2_MinsTrBFields - SqedtFunc_OnChkCur2_McpTrAFields
+	.short	SqedtFunc_OnChkCur2_MinsTrBFields - SqedtFunc_OnChkCur2_McpTrAFields
+	.short	SqedtFunc_OnChkCur2_MinsTrBFields - SqedtFunc_OnChkCur2_McpTrAFields
+	.short	SqedtFunc_OnChkCur2_ScpFromFields - SqedtFunc_OnChkCur2_McpTrAFields
+	.short	SqedtFunc_OnChkCur2_ScpFromFields - SqedtFunc_OnChkCur2_McpTrAFields
+	.short	SqedtFunc_OnChkCur2_ScpToFields - SqedtFunc_OnChkCur2_McpTrAFields
+	.short	SqedtFunc_OnChkCur2_ScpToFields - SqedtFunc_OnChkCur2_McpTrAFields
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqedtFunc_SignExtend_CaseTable
 ; SqedtFunc_SignExtend_CaseTable -- jump table of a compiled `switch` in
@@ -3040,60 +3040,60 @@ SqedtFunc_SignExtend_CaseTable:
 ; Sqedt_ValueDispatch_CaseTable -- jump table of a compiled `switch` in
 ; SqedtFunc_OnCurToParam_CursorPos0 (v10/v9 0xf3502c, v7 0xf35002) (`lda xix,
 ; (Sqedt_ValueDispatch_CaseTable:24)`): 9 u16 case offsets from
-; Sqedt_ValueDispatch_Code3.
+; SqedtFunc_OnCurToParam_CursorPos2_LastMeasureField.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; Sqedt_ValueDispatch_CaseTable[9].
 ; -----------------------------------------------------------------------------
 Sqedt_ValueDispatch_CaseTable:
-	.short	SqedtFunc_OnCurToParam_CursorPos2_OnTitleSqtrkmrg - Sqedt_ValueDispatch_Code3
-	.short	Sqedt_ValueDispatch_Code3 - Sqedt_ValueDispatch_Code3
-	.short	Sqedt_ValueDispatch_Code3 - Sqedt_ValueDispatch_Code3
-	.short	Sqedt_ValueDispatch_Code3 - Sqedt_ValueDispatch_Code3
-	.short	Sqedt_ValueDispatch_Code3 - Sqedt_ValueDispatch_Code3
-	.short	Sqedt_ValueDispatch_Code3 - Sqedt_ValueDispatch_Code3
-	.short	Sqedt_ValueDispatch_Code3 - Sqedt_ValueDispatch_Code3
-	.short	SqedtFunc_ReturnNegOne - Sqedt_ValueDispatch_Code3
-	.short	Sqedt_ValueDispatch_Code3 - Sqedt_ValueDispatch_Code3
+	.short	SqedtFunc_OnCurToParam_CursorPos2_OnTitleSqtrkmrg - SqedtFunc_OnCurToParam_CursorPos2_LastMeasureField
+	.short	SqedtFunc_OnCurToParam_CursorPos2_LastMeasureField - SqedtFunc_OnCurToParam_CursorPos2_LastMeasureField
+	.short	SqedtFunc_OnCurToParam_CursorPos2_LastMeasureField - SqedtFunc_OnCurToParam_CursorPos2_LastMeasureField
+	.short	SqedtFunc_OnCurToParam_CursorPos2_LastMeasureField - SqedtFunc_OnCurToParam_CursorPos2_LastMeasureField
+	.short	SqedtFunc_OnCurToParam_CursorPos2_LastMeasureField - SqedtFunc_OnCurToParam_CursorPos2_LastMeasureField
+	.short	SqedtFunc_OnCurToParam_CursorPos2_LastMeasureField - SqedtFunc_OnCurToParam_CursorPos2_LastMeasureField
+	.short	SqedtFunc_OnCurToParam_CursorPos2_LastMeasureField - SqedtFunc_OnCurToParam_CursorPos2_LastMeasureField
+	.short	SqedtFunc_ReturnNegOne - SqedtFunc_OnCurToParam_CursorPos2_LastMeasureField
+	.short	SqedtFunc_OnCurToParam_CursorPos2_LastMeasureField - SqedtFunc_OnCurToParam_CursorPos2_LastMeasureField
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ValueDispatch_CaseTable_2
 ; Sqedt_ValueDispatch_CaseTable_2 -- jump table of a compiled `switch`
 ; in SqedtFunc_OnCurToParam_CursorPos0 (v10/v9 0xf3502c, v7 0xf35002) (`lda xix,
 ; (Sqedt_ValueDispatch_CaseTable_2:24)`): 8 u16 case offsets from
-; Sqedt_ValueDispatch_Code2.
+; SqedtFunc_OnCurToParam_CursorPos1_FromMeasureField.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; Sqedt_ValueDispatch_CaseTable_2[8].
 ; -----------------------------------------------------------------------------
 Sqedt_ValueDispatch_CaseTable_2:
-	.short	Sqedt_ValueDispatch_Code2 - Sqedt_ValueDispatch_Code2
-	.short	Sqedt_ValueDispatch_Code2 - Sqedt_ValueDispatch_Code2
-	.short	Sqedt_ValueDispatch_Code2 - Sqedt_ValueDispatch_Code2
-	.short	Sqedt_ValueDispatch_Code2 - Sqedt_ValueDispatch_Code2
-	.short	Sqedt_ValueDispatch_Code2 - Sqedt_ValueDispatch_Code2
-	.short	Sqedt_ValueDispatch_Code2 - Sqedt_ValueDispatch_Code2
-	.short	SqedtFunc_ReturnNegOne - Sqedt_ValueDispatch_Code2
-	.short	Sqedt_ValueDispatch_Code2 - Sqedt_ValueDispatch_Code2
+	.short	SqedtFunc_OnCurToParam_CursorPos1_FromMeasureField - SqedtFunc_OnCurToParam_CursorPos1_FromMeasureField
+	.short	SqedtFunc_OnCurToParam_CursorPos1_FromMeasureField - SqedtFunc_OnCurToParam_CursorPos1_FromMeasureField
+	.short	SqedtFunc_OnCurToParam_CursorPos1_FromMeasureField - SqedtFunc_OnCurToParam_CursorPos1_FromMeasureField
+	.short	SqedtFunc_OnCurToParam_CursorPos1_FromMeasureField - SqedtFunc_OnCurToParam_CursorPos1_FromMeasureField
+	.short	SqedtFunc_OnCurToParam_CursorPos1_FromMeasureField - SqedtFunc_OnCurToParam_CursorPos1_FromMeasureField
+	.short	SqedtFunc_OnCurToParam_CursorPos1_FromMeasureField - SqedtFunc_OnCurToParam_CursorPos1_FromMeasureField
+	.short	SqedtFunc_ReturnNegOne - SqedtFunc_OnCurToParam_CursorPos1_FromMeasureField
+	.short	SqedtFunc_OnCurToParam_CursorPos1_FromMeasureField - SqedtFunc_OnCurToParam_CursorPos1_FromMeasureField
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ValueDispatch_CaseTable_3
 ; Sqedt_ValueDispatch_CaseTable_3 -- jump table of a compiled `switch`
 ; in SqedtFunc_OnCurToParam_CursorPos0 (v10/v9 0xf3502c, v7 0xf35002) (`lda xix,
 ; (Sqedt_ValueDispatch_CaseTable_3:24)`): 9 u16 case offsets from
-; Sqedt_ValueDispatch_Code.
+; SqedtFunc_OnCurToParam_CursorPos0_TrackField.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; Sqedt_ValueDispatch_CaseTable_3[9].
 ; -----------------------------------------------------------------------------
 Sqedt_ValueDispatch_CaseTable_3:
-	.short	SqedtFunc_OnCurToParam_CursorPos0_OnTitleSqtrkmrg - Sqedt_ValueDispatch_Code
-	.short	Sqedt_ValueDispatch_Code - Sqedt_ValueDispatch_Code
-	.short	Sqedt_ValueDispatch_Code - Sqedt_ValueDispatch_Code
-	.short	Sqedt_ValueDispatch_Code - Sqedt_ValueDispatch_Code
-	.short	Sqedt_ValueDispatch_Code - Sqedt_ValueDispatch_Code
-	.short	Sqedt_ValueDispatch_Code - Sqedt_ValueDispatch_Code
-	.short	Sqedt_ValueDispatch_Code - Sqedt_ValueDispatch_Code
-	.short	SqedtFunc_ReturnNegOne - Sqedt_ValueDispatch_Code
-	.short	Sqedt_ValueDispatch_Code - Sqedt_ValueDispatch_Code
+	.short	SqedtFunc_OnCurToParam_CursorPos0_OnTitleSqtrkmrg - SqedtFunc_OnCurToParam_CursorPos0_TrackField
+	.short	SqedtFunc_OnCurToParam_CursorPos0_TrackField - SqedtFunc_OnCurToParam_CursorPos0_TrackField
+	.short	SqedtFunc_OnCurToParam_CursorPos0_TrackField - SqedtFunc_OnCurToParam_CursorPos0_TrackField
+	.short	SqedtFunc_OnCurToParam_CursorPos0_TrackField - SqedtFunc_OnCurToParam_CursorPos0_TrackField
+	.short	SqedtFunc_OnCurToParam_CursorPos0_TrackField - SqedtFunc_OnCurToParam_CursorPos0_TrackField
+	.short	SqedtFunc_OnCurToParam_CursorPos0_TrackField - SqedtFunc_OnCurToParam_CursorPos0_TrackField
+	.short	SqedtFunc_OnCurToParam_CursorPos0_TrackField - SqedtFunc_OnCurToParam_CursorPos0_TrackField
+	.short	SqedtFunc_ReturnNegOne - SqedtFunc_OnCurToParam_CursorPos0_TrackField
+	.short	SqedtFunc_OnCurToParam_CursorPos0_TrackField - SqedtFunc_OnCurToParam_CursorPos0_TrackField
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SeqFunc_ReturnZeroJmp_CaseTable
 ; SeqFunc_ReturnZeroJmp_CaseTable -- jump table of a compiled `switch`
@@ -3121,14 +3121,14 @@ SeqFunc_ReturnZeroJmp_CaseTable:
 ; Sqedt_ParamDispatch_CaseTable[8].
 ; -----------------------------------------------------------------------------
 Sqedt_ParamDispatch_CaseTable:
-	.short	SqedtFunc_LmString_OnTitleSqqtz - Sqedt_ParamDispatch_Code_3
-	.short	SqedtFunc_LmString_OnTitleSqtrns - Sqedt_ParamDispatch_Code_3
-	.short	SqedtFunc_LmString_OnTitleSqvelocng - Sqedt_ParamDispatch_Code_3
-	.short	Sqedt_ParamDispatch_Code_3 - Sqedt_ParamDispatch_Code_3
-	.short	Sqedt_ParamDispatch_Entry2 - Sqedt_ParamDispatch_Code_3
-	.short	SqedtFunc_LmString_OnTitleSqmers - Sqedt_ParamDispatch_Code_3
-	.short	Sqedt_ParamDispatch_Entry2 - Sqedt_ParamDispatch_Code_3
-	.short	SqedtFunc_LmString_OnTitleSqmdel - Sqedt_ParamDispatch_Code_3
+	.short	SqedtFunc_LmString_OnTitleSqqtz - SqedtFunc_LmString_OnTitleSqnotecng
+	.short	SqedtFunc_LmString_OnTitleSqtrns - SqedtFunc_LmString_OnTitleSqnotecng
+	.short	SqedtFunc_LmString_OnTitleSqvelocng - SqedtFunc_LmString_OnTitleSqnotecng
+	.short	SqedtFunc_LmString_OnTitleSqnotecng - SqedtFunc_LmString_OnTitleSqnotecng
+	.short	SqedtFunc_LmString_OnTitleSqadvdly - SqedtFunc_LmString_OnTitleSqnotecng
+	.short	SqedtFunc_LmString_OnTitleSqmers - SqedtFunc_LmString_OnTitleSqnotecng
+	.short	SqedtFunc_LmString_OnTitleSqadvdly - SqedtFunc_LmString_OnTitleSqnotecng
+	.short	SqedtFunc_LmString_OnTitleSqmdel - SqedtFunc_LmString_OnTitleSqnotecng
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_CaseTable_2
 ; Sqedt_ParamDispatch_CaseTable_2 -- jump table of a compiled `switch`
@@ -3139,14 +3139,14 @@ Sqedt_ParamDispatch_CaseTable:
 ; Sqedt_ParamDispatch_CaseTable_2[8].
 ; -----------------------------------------------------------------------------
 Sqedt_ParamDispatch_CaseTable_2:
-	.short	SqedtFunc_FmString_OnTitleSqqtz - Sqedt_ParamDispatch_Code_2
-	.short	SqedtFunc_FmString_OnTitleSqtrns - Sqedt_ParamDispatch_Code_2
-	.short	SqedtFunc_FmString_OnTitleSqvelocng - Sqedt_ParamDispatch_Code_2
-	.short	Sqedt_ParamDispatch_Code_2 - Sqedt_ParamDispatch_Code_2
-	.short	Sqedt_ParamDispatch_Entry - Sqedt_ParamDispatch_Code_2
-	.short	SqedtFunc_FmString_OnTitleSqmers - Sqedt_ParamDispatch_Code_2
-	.short	Sqedt_ParamDispatch_Entry - Sqedt_ParamDispatch_Code_2
-	.short	SqedtFunc_FmString_OnTitleSqmdel - Sqedt_ParamDispatch_Code_2
+	.short	SqedtFunc_FmString_OnTitleSqqtz - SqedtFunc_FmString_OnTitleSqnotecng
+	.short	SqedtFunc_FmString_OnTitleSqtrns - SqedtFunc_FmString_OnTitleSqnotecng
+	.short	SqedtFunc_FmString_OnTitleSqvelocng - SqedtFunc_FmString_OnTitleSqnotecng
+	.short	SqedtFunc_FmString_OnTitleSqnotecng - SqedtFunc_FmString_OnTitleSqnotecng
+	.short	SqedtFunc_FmString_OnTitleSqadvdly - SqedtFunc_FmString_OnTitleSqnotecng
+	.short	SqedtFunc_FmString_OnTitleSqmers - SqedtFunc_FmString_OnTitleSqnotecng
+	.short	SqedtFunc_FmString_OnTitleSqadvdly - SqedtFunc_FmString_OnTitleSqnotecng
+	.short	SqedtFunc_FmString_OnTitleSqmdel - SqedtFunc_FmString_OnTitleSqnotecng
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_CaseTable_3
 ; Sqedt_ParamDispatch_CaseTable_3 -- jump table of a compiled `switch`
@@ -3157,14 +3157,14 @@ Sqedt_ParamDispatch_CaseTable_2:
 ; Sqedt_ParamDispatch_CaseTable_3[8].
 ; -----------------------------------------------------------------------------
 Sqedt_ParamDispatch_CaseTable_3:
-	.short	SqedtFunc_TrkString_OnTitleSqqtz - Sqedt_ParamDispatch_Code
-	.short	SqedtFunc_TrkString_OnTitleSqtrns - Sqedt_ParamDispatch_Code
-	.short	SqedtFunc_TrkString_OnTitleSqvelocng - Sqedt_ParamDispatch_Code
-	.short	Sqedt_ParamDispatch_Code - Sqedt_ParamDispatch_Code
-	.short	SqedtFunc_TrkString_OnTitleSqvelocng_Skip - Sqedt_ParamDispatch_Code
-	.short	SqedtFunc_TrkString_OnTitleSqmers - Sqedt_ParamDispatch_Code
-	.short	SqedtFunc_TrkString_OnTitleSqvelocng_Skip - Sqedt_ParamDispatch_Code
-	.short	SqedtFunc_TrkString_OnTitleSqmdel - Sqedt_ParamDispatch_Code
+	.short	SqedtFunc_TrkString_OnTitleSqqtz - SqedtFunc_TrkString_OnTitleSqnotecng
+	.short	SqedtFunc_TrkString_OnTitleSqtrns - SqedtFunc_TrkString_OnTitleSqnotecng
+	.short	SqedtFunc_TrkString_OnTitleSqvelocng - SqedtFunc_TrkString_OnTitleSqnotecng
+	.short	SqedtFunc_TrkString_OnTitleSqnotecng - SqedtFunc_TrkString_OnTitleSqnotecng
+	.short	SqedtFunc_TrkString_OnTitleSqvelocng_Skip - SqedtFunc_TrkString_OnTitleSqnotecng
+	.short	SqedtFunc_TrkString_OnTitleSqmers - SqedtFunc_TrkString_OnTitleSqnotecng
+	.short	SqedtFunc_TrkString_OnTitleSqvelocng_Skip - SqedtFunc_TrkString_OnTitleSqnotecng
+	.short	SqedtFunc_TrkString_OnTitleSqmdel - SqedtFunc_TrkString_OnTitleSqnotecng
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqedtFunc_CaseTable
 ; SqedtFunc_CaseTable -- jump table of a compiled `switch` in SqedtFunc
@@ -3564,7 +3564,7 @@ Bitmap_Dredt0d:	.incbin "includes/generated/naka_widget_descriptors.bin", 0xE800
 ; WidgetData_DrawbarPositionTable[106].
 ; -----------------------------------------------------------------------------
 WidgetData_DrawbarPositionTable:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13618, 0x16
-BmDrEdit_TestPartTableEntry_Data:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1362E, 0x54
+Seq_TrackAssignPartRecordPtrs:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1362E, 0x54
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SeqPlay_SaveAndPrepareState_Table
 ; SeqPlay_SaveAndPrepareState_Table -- read by
@@ -3746,17 +3746,17 @@ Part_ApplyVoiceTableA_Table:	.incbin "includes/generated/naka_widget_descriptors
 ; -----------------------------------------------------------------------------
 Part_ApplyVoiceTableC_Table:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13776, 0xC
 ; -----------------------------------------------------------------------------
-; [naka_s_headers] SeqPlay_WriteErrorToVoiceTable_Data
-; SeqPlay_WriteErrorToVoiceTable_Data -- read by
+; [naka_s_headers] SeqData_ErrorCodeRemap
+; SeqData_ErrorCodeRemap -- read by
 ; SeqPlay_WriteErrorToVoiceTable (v10/v9 0xf43a46, v7 0xf43a38) (`lda
-; xbc, (SeqPlay_WriteErrorToVoiceTable_Data:24)`). 12 bytes to the
+; xbc, (SeqData_ErrorCodeRemap:24)`). 12 bytes to the
 ; next referenced object; the layout beyond that access is not
 ; established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
-; SeqPlay_WriteErrorToVoiceTable_Data[12].
+; SeqData_ErrorCodeRemap[12].
 ; -----------------------------------------------------------------------------
-SeqPlay_WriteErrorToVoiceTable_Data:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13782, 0xC
+SeqData_ErrorCodeRemap:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13782, 0xC
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Seq_SyncPositionAndOutputMIDITiming_LocalInit
 ; Seq_SyncPositionAndOutputMIDITiming_LocalInit -- initializer of a
@@ -4032,81 +4032,81 @@ SeqEvent_MainHandler_CaseTable:
 ; AppEvtHandler_Branch_024_CaseTable -- jump table of a compiled
 ; `switch` in AppEvtHandler_Branch_024 (v10/v9 0xf445b0, v7 0xf445a2)
 ; (`add xwa, AppEvtHandler_Branch_024_CaseTable`): case k jumps to
-; AppEvtHandler_Branch_024_Code + entry[k] (`lda
-; xix,(AppEvtHandler_Branch_024_Code); jp t, (xrr+rr)`). 6 u16 offsets; the
+; AppEvent_ChainDispatch1_IncMinsTrackA + entry[k] (`lda
+; xix,(AppEvent_ChainDispatch1_IncMinsTrackA); jp t, (xrr+rr)`). 6 u16 offsets; the
 ; reader's bound `cp ..., 5` pins 6 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; AppEvtHandler_Branch_024_CaseTable[6].
 ; -----------------------------------------------------------------------------
 AppEvtHandler_Branch_024_CaseTable:
-	.short	AppEvtHandler_Branch_024_Code - AppEvtHandler_Branch_024_Code
-	.short	AppEvtHandler_Branch_024_IncMinsFromMeasure - AppEvtHandler_Branch_024_Code
-	.short	AppEvtHandler_Branch_024_IncMinsLastMeasure - AppEvtHandler_Branch_024_Code
-	.short	AppEvtHandler_Branch_024_IncMinsTrackB - AppEvtHandler_Branch_024_Code
-	.short	AppEvtHandler_Branch_024_IncMinsStartMeasure - AppEvtHandler_Branch_024_Code
-	.short	AppEvtHandler_Branch_024_IncMinsRepeat - AppEvtHandler_Branch_024_Code
+	.short	AppEvent_ChainDispatch1_IncMinsTrackA - AppEvent_ChainDispatch1_IncMinsTrackA
+	.short	AppEvtHandler_Branch_024_IncMinsFromMeasure - AppEvent_ChainDispatch1_IncMinsTrackA
+	.short	AppEvtHandler_Branch_024_IncMinsLastMeasure - AppEvent_ChainDispatch1_IncMinsTrackA
+	.short	AppEvtHandler_Branch_024_IncMinsTrackB - AppEvent_ChainDispatch1_IncMinsTrackA
+	.short	AppEvtHandler_Branch_024_IncMinsStartMeasure - AppEvent_ChainDispatch1_IncMinsTrackA
+	.short	AppEvtHandler_Branch_024_IncMinsRepeat - AppEvent_ChainDispatch1_IncMinsTrackA
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AppEvtHandler_Branch_021_CaseTable
 ; AppEvtHandler_Branch_021_CaseTable -- jump table of a compiled
 ; `switch` in AppEvtHandler_Branch_021 (v10/v9 0xf444b9, v7 0xf444ab)
 ; (`add xwa, AppEvtHandler_Branch_021_CaseTable`): case k jumps to
-; AppEvtHandler_Branch_021_Code + entry[k] (`lda
-; xix,(AppEvtHandler_Branch_021_Code); jp t, (xrr+rr)`). 6 u16 offsets; the
+; AppEvent_ChainDispatch1_IncMcpTrackA + entry[k] (`lda
+; xix,(AppEvent_ChainDispatch1_IncMcpTrackA); jp t, (xrr+rr)`). 6 u16 offsets; the
 ; reader's bound `cp ..., 5` pins 6 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; AppEvtHandler_Branch_021_CaseTable[6].
 ; -----------------------------------------------------------------------------
 AppEvtHandler_Branch_021_CaseTable:
-	.short	AppEvtHandler_Branch_021_Code - AppEvtHandler_Branch_021_Code
-	.short	AppEvtHandler_Branch_021_IncMcpFromMeasure - AppEvtHandler_Branch_021_Code
-	.short	AppEvtHandler_Branch_021_IncMcpLastMeasure - AppEvtHandler_Branch_021_Code
-	.short	AppEvtHandler_Branch_021_IncMcpTrackB - AppEvtHandler_Branch_021_Code
-	.short	AppEvtHandler_Branch_021_IncMcpStartMeasure - AppEvtHandler_Branch_021_Code
-	.short	AppEvtHandler_Branch_021_IncMcpRepeat - AppEvtHandler_Branch_021_Code
+	.short	AppEvent_ChainDispatch1_IncMcpTrackA - AppEvent_ChainDispatch1_IncMcpTrackA
+	.short	AppEvtHandler_Branch_021_IncMcpFromMeasure - AppEvent_ChainDispatch1_IncMcpTrackA
+	.short	AppEvtHandler_Branch_021_IncMcpLastMeasure - AppEvent_ChainDispatch1_IncMcpTrackA
+	.short	AppEvtHandler_Branch_021_IncMcpTrackB - AppEvent_ChainDispatch1_IncMcpTrackA
+	.short	AppEvtHandler_Branch_021_IncMcpStartMeasure - AppEvent_ChainDispatch1_IncMcpTrackA
+	.short	AppEvtHandler_Branch_021_IncMcpRepeat - AppEvent_ChainDispatch1_IncMcpTrackA
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AppEvtHandler_Branch_006_CaseTable
 ; AppEvtHandler_Branch_006_CaseTable -- jump table of a compiled
 ; `switch` in AppEvtHandler_Branch_006 (v10/v9 0xf44243, v7 0xf44235)
 ; (`lda xix, (AppEvtHandler_Branch_006_CaseTable:24)`): case k jumps
-; to AppEvtHandler_Branch_006_Code + entry[k] (`lda
-; xix,(AppEvtHandler_Branch_006_Code); jp t, (xrr+rr)`). 8 u16 offsets; the
+; to AppEvent_ChainDispatch1_IncLastMeasure_OnTitleSqnotecng + entry[k] (`lda
+; xix,(AppEvent_ChainDispatch1_IncLastMeasure_OnTitleSqnotecng); jp t, (xrr+rr)`). 8 u16 offsets; the
 ; reader's bound `cp ..., 7` pins 8 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; AppEvtHandler_Branch_006_CaseTable[8].
 ; -----------------------------------------------------------------------------
 AppEvtHandler_Branch_006_CaseTable:
-	.short	AppEvtHandler_Branch_006_OnTitleSqqtz - AppEvtHandler_Branch_006_Code
-	.short	AppEvtHandler_Branch_006_OnTitleSqtrns - AppEvtHandler_Branch_006_Code
-	.short	AppEvtHandler_Branch_006_OnTitleSqvelocng - AppEvtHandler_Branch_006_Code
-	.short	AppEvtHandler_Branch_006_Code - AppEvtHandler_Branch_006_Code
-	.short	AppEvtHandler_Branch_007 - AppEvtHandler_Branch_006_Code
-	.short	AppEvtHandler_Branch_006_OnTitleSqmers - AppEvtHandler_Branch_006_Code
-	.short	AppEvtHandler_Branch_007 - AppEvtHandler_Branch_006_Code
-	.short	AppEvtHandler_Branch_006_OnTitleSqmdel - AppEvtHandler_Branch_006_Code
+	.short	AppEvtHandler_Branch_006_OnTitleSqqtz - AppEvent_ChainDispatch1_IncLastMeasure_OnTitleSqnotecng
+	.short	AppEvtHandler_Branch_006_OnTitleSqtrns - AppEvent_ChainDispatch1_IncLastMeasure_OnTitleSqnotecng
+	.short	AppEvtHandler_Branch_006_OnTitleSqvelocng - AppEvent_ChainDispatch1_IncLastMeasure_OnTitleSqnotecng
+	.short	AppEvent_ChainDispatch1_IncLastMeasure_OnTitleSqnotecng - AppEvent_ChainDispatch1_IncLastMeasure_OnTitleSqnotecng
+	.short	AppEvent_ChainDispatch1_IncLastMeasure_OnTitleSqadvdly - AppEvent_ChainDispatch1_IncLastMeasure_OnTitleSqnotecng
+	.short	AppEvtHandler_Branch_006_OnTitleSqmers - AppEvent_ChainDispatch1_IncLastMeasure_OnTitleSqnotecng
+	.short	AppEvent_ChainDispatch1_IncLastMeasure_OnTitleSqadvdly - AppEvent_ChainDispatch1_IncLastMeasure_OnTitleSqnotecng
+	.short	AppEvtHandler_Branch_006_OnTitleSqmdel - AppEvent_ChainDispatch1_IncLastMeasure_OnTitleSqnotecng
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AppEvtHandler_Branch_002_CaseTable
 ; AppEvtHandler_Branch_002_CaseTable -- jump table of a compiled
 ; `switch` in AppEvtHandler_Branch_002 (v10/v9 0xf4417e, v7 0xf44170)
 ; (`lda xix, (AppEvtHandler_Branch_002_CaseTable:24)`): case k jumps
-; to AppEvtHandler_Branch_002_Code + entry[k] (`lda
-; xix,(AppEvtHandler_Branch_002_Code); jp t, (xrr+rr)`). 8 u16 offsets; the
+; to AppEvent_ChainDispatch1_IncFromMeasure_OnTitleSqnotecng + entry[k] (`lda
+; xix,(AppEvent_ChainDispatch1_IncFromMeasure_OnTitleSqnotecng); jp t, (xrr+rr)`). 8 u16 offsets; the
 ; reader's bound `cp ..., 7` pins 8 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; AppEvtHandler_Branch_002_CaseTable[8].
 ; -----------------------------------------------------------------------------
 AppEvtHandler_Branch_002_CaseTable:
-	.short	AppEvtHandler_Branch_002_OnTitleSqqtz - AppEvtHandler_Branch_002_Code
-	.short	AppEvtHandler_Branch_002_OnTitleSqtrns - AppEvtHandler_Branch_002_Code
-	.short	AppEvtHandler_Branch_002_OnTitleSqvelocng - AppEvtHandler_Branch_002_Code
-	.short	AppEvtHandler_Branch_002_Code - AppEvtHandler_Branch_002_Code
-	.short	AppEvtHandler_Branch_003 - AppEvtHandler_Branch_002_Code
-	.short	AppEvtHandler_Branch_002_OnTitleSqmers - AppEvtHandler_Branch_002_Code
-	.short	AppEvtHandler_Branch_003 - AppEvtHandler_Branch_002_Code
-	.short	AppEvtHandler_Branch_002_OnTitleSqmdel - AppEvtHandler_Branch_002_Code
+	.short	AppEvtHandler_Branch_002_OnTitleSqqtz - AppEvent_ChainDispatch1_IncFromMeasure_OnTitleSqnotecng
+	.short	AppEvtHandler_Branch_002_OnTitleSqtrns - AppEvent_ChainDispatch1_IncFromMeasure_OnTitleSqnotecng
+	.short	AppEvtHandler_Branch_002_OnTitleSqvelocng - AppEvent_ChainDispatch1_IncFromMeasure_OnTitleSqnotecng
+	.short	AppEvent_ChainDispatch1_IncFromMeasure_OnTitleSqnotecng - AppEvent_ChainDispatch1_IncFromMeasure_OnTitleSqnotecng
+	.short	AppEvent_ChainDispatch1_IncFromMeasure_OnTitleSqadvdly - AppEvent_ChainDispatch1_IncFromMeasure_OnTitleSqnotecng
+	.short	AppEvtHandler_Branch_002_OnTitleSqmers - AppEvent_ChainDispatch1_IncFromMeasure_OnTitleSqnotecng
+	.short	AppEvent_ChainDispatch1_IncFromMeasure_OnTitleSqadvdly - AppEvent_ChainDispatch1_IncFromMeasure_OnTitleSqnotecng
+	.short	AppEvtHandler_Branch_002_OnTitleSqmdel - AppEvent_ChainDispatch1_IncFromMeasure_OnTitleSqnotecng
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AppEvtHandler_Branch_002_RamPtrs
 ; AppEvtHandler_Branch_002_RamPtrs -- Nine u32 RAM addresses (0xf1f1,
@@ -4169,39 +4169,39 @@ AppEvent_ChainDispatch1_CaseTable:
 ; AppEvent_SubDispatch_CaseTable -- jump table of a compiled `switch` in
 ; AppEvent_SubDispatch (v10/v9 0xf448a4, v7 0xf44896) (`add xwa,
 ; AppEvent_SubDispatch_CaseTable`): case k jumps to
-; AppEvent_SubDispatch_Code_2_Code2 + entry[k] (`lda
-; xix,(AppEvent_SubDispatch_Code_2_Code2); jp t, (xrr+rr)`). 6 u16 offsets; the
+; AppEvent_InlineHandler_DecMinsTrackA + entry[k] (`lda
+; xix,(AppEvent_InlineHandler_DecMinsTrackA); jp t, (xrr+rr)`). 6 u16 offsets; the
 ; reader's bound `cp ..., 5` pins 6 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; AppEvent_SubDispatch_CaseTable[6].
 ; -----------------------------------------------------------------------------
 AppEvent_SubDispatch_CaseTable:
-	.short	AppEvent_SubDispatch_Code_2_Code2 - AppEvent_SubDispatch_Code_2_Code2
-	.short	AppEvent_SubDispatch_DecMinsFromMeasure - AppEvent_SubDispatch_Code_2_Code2
-	.short	AppEvent_SubDispatch_DecMinsLastMeasure - AppEvent_SubDispatch_Code_2_Code2
-	.short	AppEvent_SubDispatch_DecMinsTrackB - AppEvent_SubDispatch_Code_2_Code2
-	.short	AppEvent_SubDispatch_DecMinsStartMeasure - AppEvent_SubDispatch_Code_2_Code2
-	.short	AppEvent_SubDispatch_DecMinsRepeat - AppEvent_SubDispatch_Code_2_Code2
+	.short	AppEvent_InlineHandler_DecMinsTrackA - AppEvent_InlineHandler_DecMinsTrackA
+	.short	AppEvent_SubDispatch_DecMinsFromMeasure - AppEvent_InlineHandler_DecMinsTrackA
+	.short	AppEvent_SubDispatch_DecMinsLastMeasure - AppEvent_InlineHandler_DecMinsTrackA
+	.short	AppEvent_SubDispatch_DecMinsTrackB - AppEvent_InlineHandler_DecMinsTrackA
+	.short	AppEvent_SubDispatch_DecMinsStartMeasure - AppEvent_InlineHandler_DecMinsTrackA
+	.short	AppEvent_SubDispatch_DecMinsRepeat - AppEvent_InlineHandler_DecMinsTrackA
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AppEvent_SubDispatch_CaseTable_2
 ; AppEvent_SubDispatch_CaseTable_2 -- jump table of a compiled `switch`
 ; in AppEvent_SubDispatch (v10/v9 0xf448a4, v7 0xf44896) (`add xwa,
 ; AppEvent_SubDispatch_CaseTable_2`): case k jumps to
-; AppEvent_SubDispatch_Code_2_Code + entry[k] (`lda
-; xix,(AppEvent_SubDispatch_Code_2_Code); jp t, (xrr+rr)`). 6 u16 offsets; the
+; AppEvent_InlineHandler_DecMcpTrackA + entry[k] (`lda
+; xix,(AppEvent_InlineHandler_DecMcpTrackA); jp t, (xrr+rr)`). 6 u16 offsets; the
 ; reader's bound `cp ..., 5` pins 6 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; AppEvent_SubDispatch_CaseTable_2[6].
 ; -----------------------------------------------------------------------------
 AppEvent_SubDispatch_CaseTable_2:
-	.short	AppEvent_SubDispatch_Code_2_Code - AppEvent_SubDispatch_Code_2_Code
-	.short	AppEvent_InlineHandler_DecMcpFromMeasure - AppEvent_SubDispatch_Code_2_Code
-	.short	AppEvent_InlineHandler_DecMcpLastMeasure - AppEvent_SubDispatch_Code_2_Code
-	.short	AppEvent_InlineHandler_DecMcpTrackB - AppEvent_SubDispatch_Code_2_Code
-	.short	AppEvent_InlineHandler_DecMcpStartMeasure - AppEvent_SubDispatch_Code_2_Code
-	.short	AppEvent_InlineHandler_DecMcpRepeat - AppEvent_SubDispatch_Code_2_Code
+	.short	AppEvent_InlineHandler_DecMcpTrackA - AppEvent_InlineHandler_DecMcpTrackA
+	.short	AppEvent_InlineHandler_DecMcpFromMeasure - AppEvent_InlineHandler_DecMcpTrackA
+	.short	AppEvent_InlineHandler_DecMcpLastMeasure - AppEvent_InlineHandler_DecMcpTrackA
+	.short	AppEvent_InlineHandler_DecMcpTrackB - AppEvent_InlineHandler_DecMcpTrackA
+	.short	AppEvent_InlineHandler_DecMcpStartMeasure - AppEvent_InlineHandler_DecMcpTrackA
+	.short	AppEvent_InlineHandler_DecMcpRepeat - AppEvent_InlineHandler_DecMcpTrackA
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AppEvent_SubDispatch_Table
 ; AppEvent_SubDispatch_Table -- read by AppEvent_SubDispatch (v10/v9
@@ -4213,14 +4213,14 @@ AppEvent_SubDispatch_CaseTable_2:
 ; AppEvent_SubDispatch_Table[16].
 ; -----------------------------------------------------------------------------
 AppEvent_SubDispatch_Table:
-	.short	AppEvent_InlineHandler_Switch3_OnTitleSqqtz - AppEvent_SubDispatch_Code_2
-	.short	AppEvent_InlineHandler_Switch3_OnTitleSqtrns - AppEvent_SubDispatch_Code_2
-	.short	AppEvent_InlineHandler_Switch3_OnTitleSqvelocng - AppEvent_SubDispatch_Code_2
-	.short	AppEvent_SubDispatch_Code_2 - AppEvent_SubDispatch_Code_2
-	.short	AppEvent_InlineHandler_Skip19 - AppEvent_SubDispatch_Code_2
-	.short	AppEvent_InlineHandler_Switch3_OnTitleSqmers - AppEvent_SubDispatch_Code_2
-	.short	AppEvent_InlineHandler_Skip19 - AppEvent_SubDispatch_Code_2
-	.short	AppEvent_InlineHandler_Switch3_OnTitleSqmdel - AppEvent_SubDispatch_Code_2
+	.short	AppEvent_InlineHandler_Switch3_OnTitleSqqtz - AppEvent_InlineHandler_DecLastMeasure_OnTitleSqnotecng
+	.short	AppEvent_InlineHandler_Switch3_OnTitleSqtrns - AppEvent_InlineHandler_DecLastMeasure_OnTitleSqnotecng
+	.short	AppEvent_InlineHandler_Switch3_OnTitleSqvelocng - AppEvent_InlineHandler_DecLastMeasure_OnTitleSqnotecng
+	.short	AppEvent_InlineHandler_DecLastMeasure_OnTitleSqnotecng - AppEvent_InlineHandler_DecLastMeasure_OnTitleSqnotecng
+	.short	AppEvent_InlineHandler_Skip19 - AppEvent_InlineHandler_DecLastMeasure_OnTitleSqnotecng
+	.short	AppEvent_InlineHandler_Switch3_OnTitleSqmers - AppEvent_InlineHandler_DecLastMeasure_OnTitleSqnotecng
+	.short	AppEvent_InlineHandler_Skip19 - AppEvent_InlineHandler_DecLastMeasure_OnTitleSqnotecng
+	.short	AppEvent_InlineHandler_Switch3_OnTitleSqmdel - AppEvent_InlineHandler_DecLastMeasure_OnTitleSqnotecng
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AppEvent_SubDispatch_Table_2
 ; AppEvent_SubDispatch_Table_2 -- read by AppEvent_SubDispatch (v10/v9
@@ -4232,14 +4232,14 @@ AppEvent_SubDispatch_Table:
 ; AppEvent_SubDispatch_Table_2[16].
 ; -----------------------------------------------------------------------------
 AppEvent_SubDispatch_Table_2:
-	.short	AppEvent_InlineHandler_Switch2_OnTitleSqqtz - AppEvent_SubDispatch_Code
-	.short	AppEvent_InlineHandler_Switch2_OnTitleSqtrns - AppEvent_SubDispatch_Code
-	.short	AppEvent_InlineHandler_Switch2_OnTitleSqvelocng - AppEvent_SubDispatch_Code
-	.short	AppEvent_SubDispatch_Code - AppEvent_SubDispatch_Code
-	.short	AppEvent_InlineHandler_Skip17 - AppEvent_SubDispatch_Code
-	.short	AppEvent_InlineHandler_Switch2_OnTitleSqmers - AppEvent_SubDispatch_Code
-	.short	AppEvent_InlineHandler_Skip17 - AppEvent_SubDispatch_Code
-	.short	AppEvent_InlineHandler_Switch2_OnTitleSqmdel - AppEvent_SubDispatch_Code
+	.short	AppEvent_InlineHandler_Switch2_OnTitleSqqtz - AppEvent_InlineHandler_DecFromMeasure_OnTitleSqnotecng
+	.short	AppEvent_InlineHandler_Switch2_OnTitleSqtrns - AppEvent_InlineHandler_DecFromMeasure_OnTitleSqnotecng
+	.short	AppEvent_InlineHandler_Switch2_OnTitleSqvelocng - AppEvent_InlineHandler_DecFromMeasure_OnTitleSqnotecng
+	.short	AppEvent_InlineHandler_DecFromMeasure_OnTitleSqnotecng - AppEvent_InlineHandler_DecFromMeasure_OnTitleSqnotecng
+	.short	AppEvent_InlineHandler_Skip17 - AppEvent_InlineHandler_DecFromMeasure_OnTitleSqnotecng
+	.short	AppEvent_InlineHandler_Switch2_OnTitleSqmers - AppEvent_InlineHandler_DecFromMeasure_OnTitleSqnotecng
+	.short	AppEvent_InlineHandler_Skip17 - AppEvent_InlineHandler_DecFromMeasure_OnTitleSqnotecng
+	.short	AppEvent_InlineHandler_Switch2_OnTitleSqmdel - AppEvent_InlineHandler_DecFromMeasure_OnTitleSqnotecng
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AppEvent_SubDispatch_RamPtrs
 ; AppEvent_SubDispatch_RamPtrs -- Byte-identical to
@@ -4775,9 +4775,9 @@ SeqPart_VelCurveData_Table_6:	.incbin "includes/generated/naka_widget_descriptor
 ; SeqPart_VelCurveData_Table_7[22].
 ; -----------------------------------------------------------------------------
 SeqPart_VelCurveData_Table_7:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1403E, 0x4
-SeqPart_VelCurveData_Data:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x14042, 0x8
-SeqPart_VelCurveData_Data_2:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1404A, 0x4
-SeqPart_VelCurveData_Data_3:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1404E, 0x6
+SeqPart_QtzGrid12_ZoneStarts:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x14042, 0x8
+SeqPart_QtzGrid32_ZoneStarts:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1404A, 0x4
+SeqPart_QtzGrid16_ZoneStarts:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1404E, 0x6
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SeqPart_VelZoneLookup_Table_2
 ; SeqPart_VelZoneLookup_Table_2 -- read by SeqPart_VelZoneLookup (v10/v9
@@ -5026,18 +5026,18 @@ FDC_Format2HD_BootSectorHead:	.incbin "includes/generated/naka_widget_descriptor
 ; -----------------------------------------------------------------------------
 FDC_Format2HD_FatHead:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1429A, 0x4
 ; -----------------------------------------------------------------------------
-; [naka_s_headers] FDC_Format2HD_FatHead_Tail
-; FDC_Format2HD_FatHead_Tail -- 6 bytes after FDC_Format2HD_FatHead that code reaches: the labels
+; [naka_s_headers] FileIO_ReadFreeSpaceViaFAT_Str_d
+; FileIO_ReadFreeSpaceViaFAT_Str_d -- 6 bytes after FDC_Format2HD_FatHead that code reaches: the labels
 ; below name each string after the routine that reaches it first
 ; (scripts/converters/split_blobs_at_far_pointers.py). Holds the strings "d" and "A:\". Contents
 ; not established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
-; FDC_Format2HD_FatHead_Tail[6].
+; FileIO_ReadFreeSpaceViaFAT_Str_d[6].
 ; Readers (claims_lint.py unread-claims, 2026-10-02): FileIO_ReadFreeSpaceViaFAT (0xF5279B, pushw
 ;   far pointer); FileIO_ReadFreeSpaceViaFAT (0xF527A1, pushw far pointer)
 ; -----------------------------------------------------------------------------
-FDC_Format2HD_FatHead_Tail:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1429E, 0x2
+FileIO_ReadFreeSpaceViaFAT_Str_d:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1429E, 0x2
 FileIO_ReadFreeSpaceViaFAT_Str_A:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x142A0, 0x4	; "A:\\"
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] GetDiskFreeSpace_CaseTable
@@ -5060,18 +5060,18 @@ GetDiskFreeSpace_CaseTable:
 	.short	GetDiskFreeSpace_JumpTable - GetDiskFreeSpace_JumpTable
 	.short	GetDiskFreeSpace_JumpTable - GetDiskFreeSpace_JumpTable
 ; -----------------------------------------------------------------------------
-; [naka_s_headers] GetDiskFreeSpace_CaseTable_Tail
-; GetDiskFreeSpace_CaseTable_Tail -- 6 bytes after
+; [naka_s_headers] FileIO_ReadVolumeLabelEntry_Str_d
+; FileIO_ReadVolumeLabelEntry_Str_d -- 6 bytes after
 ; GetDiskFreeSpace_CaseTable that code reaches: the labels below name each string after the routine
 ; that reaches it first (scripts/converters/split_blobs_at_far_pointers.py). Contents not
 ; established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
-; GetDiskFreeSpace_CaseTable_Tail[6].
+; FileIO_ReadVolumeLabelEntry_Str_d[6].
 ; Readers (claims_lint.py unread-claims, 2026-10-02): FileIO_ReadVolumeLabelEntry (0xF527FC, pushw
 ;   far pointer); FileIO_ReadVolumeLabelEntry (0xF52802, pushw far pointer)
 ; -----------------------------------------------------------------------------
-GetDiskFreeSpace_CaseTable_Tail:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x142B2, 0x2
+FileIO_ReadVolumeLabelEntry_Str_d:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x142B2, 0x2
 FileIO_ReadVolumeLabelEntry_Str_A:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x142B4, 0x4	; "A:\\"
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] GetVolumeLabel_CaseTable
@@ -5094,8 +5094,8 @@ GetVolumeLabel_CaseTable:
 	.short	GetVolumeLabel_JumpTable - GetVolumeLabel_JumpTable
 	.short	GetVolumeLabel_JumpTable - GetVolumeLabel_JumpTable
 ; -----------------------------------------------------------------------------
-; [naka_s_headers] GetVolumeLabel_CaseTable_Tail
-; GetVolumeLabel_CaseTable_Tail -- 28 bytes after
+; [naka_s_headers] PathInfo_BuildAndOpen_Str_A
+; PathInfo_BuildAndOpen_Str_A -- 28 bytes after
 ; GetVolumeLabel_CaseTable that code reaches: the labels below name each string after the routine
 ; that reaches it first (scripts/converters/split_blobs_at_far_pointers.py). Holds the strings
 ; "A:\",
@@ -5103,12 +5103,12 @@ GetVolumeLabel_CaseTable:
 ; established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
-; GetVolumeLabel_CaseTable_Tail[28].
+; PathInfo_BuildAndOpen_Str_A[28].
 ; Readers (claims_lint.py unread-claims, 2026-10-02): PathInfo_BuildAndOpen (0xF528B1, pushw far
 ;   pointer); PathInfo_BuildAndOpen (0xF528CA, pushw far pointer); FileIO_ParseLoop_CheckChar
 ;   (0xF52937, pushw far pointer); and 3 more
 ; -----------------------------------------------------------------------------
-GetVolumeLabel_CaseTable_Tail:				.incbin "includes/generated/naka_widget_descriptors.bin", 0x142C6, 0x4
+PathInfo_BuildAndOpen_Str_A:				.incbin "includes/generated/naka_widget_descriptors.bin", 0x142C6, 0x4
 PathInfo_BuildAndOpen_Str_wb:				.incbin "includes/generated/naka_widget_descriptors.bin", 0x142CA, 0x4	; "+wb"
 FileIO_ParseLoop_CheckChar_Str_Backslash:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x142CE, 0x2	; "\\"
 FindFirst_OpenDir_Str_d:				.incbin "includes/generated/naka_widget_descriptors.bin", 0x142D0, 0x2	; "d"
@@ -5133,29 +5133,29 @@ FDC_DetectSector_CheckPianoDisc_Str_N1_PianoDisc:	.incbin "includes/generated/na
 ; -----------------------------------------------------------------------------
 RhythmROM_BankProgramLocators:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x142E2, 0x1000
 ; -----------------------------------------------------------------------------
-; [naka_s_headers] AccPatch_Transpose_LookupTable_Data
-; AccPatch_Transpose_LookupTable_Data -- read by
+; [naka_s_headers] Note_PitchClassTable
+; Note_PitchClassTable -- read by
 ; AccPatch_Transpose_LookupTable (v10/v9 0xf60874, v7 0xf60470) (`add
-; xhl, AccPatch_Transpose_LookupTable_Data`), AccPlayback_TrackPosition
+; xhl, Note_PitchClassTable`), AccPlayback_TrackPosition
 ; (v10/v9 0xf61f6e, v7 0xf61b6a) (`ld xix,
-; AccPatch_Transpose_LookupTable_Data`), ToneGen_WriteMultiChanParam
+; Note_PitchClassTable`), ToneGen_WriteMultiChanParam
 ; (v10/v9 0xf62986, v7 0xf62582) (`ld xix,
-; AccPatch_Transpose_LookupTable_Data`), ToneGen_BuildConvertedNoteEvent (v10/v9 0xf62b29, v7
-; 0xf62725) (`ld xix, AccPatch_Transpose_LookupTable_Data`),
+; Note_PitchClassTable`), ToneGen_BuildConvertedNoteEvent (v10/v9 0xf62b29, v7
+; 0xf62725) (`ld xix, Note_PitchClassTable`),
 ; Rhythm_CrossVoice_Apply (v10/v9 0xf54ffe, v7 0xf54bfa) (`ld xiy,
-; AccPatch_Transpose_LookupTable_Data`), Rhythm_NoteRangeCheck (v10/v9
-; 0xf55030, v7 0xf54c2c) (`ld xiy, AccPatch_Transpose_LookupTable_Data`),
+; Note_PitchClassTable`), Rhythm_NoteRangeCheck (v10/v9
+; 0xf55030, v7 0xf54c2c) (`ld xiy, Note_PitchClassTable`),
 ; Rhythm_InstrBaseLookup (v10/v9 0xf550bb, v7 0xf54cb7) (`ld xiy,
-; AccPatch_Transpose_LookupTable_Data`), Rhythm_TranspMod_BaseApply (v10/v9
-; 0xf55b44, v7 0xf55740) (`ld xiy, AccPatch_Transpose_LookupTable_Data`),
+; Note_PitchClassTable`), Rhythm_TranspMod_BaseApply (v10/v9
+; 0xf55b44, v7 0xf55740) (`ld xiy, Note_PitchClassTable`),
 ; AccPlay_NoteAllocAndWrite (v10/v9 0xf722ab, v7 0xf71ea7) (`ld xix,
-; AccPatch_Transpose_LookupTable_Data`). 128 bytes to the next referenced
+; Note_PitchClassTable`). 128 bytes to the next referenced
 ; object; the layout beyond that access is not established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
-; AccPatch_Transpose_LookupTable_Data[128].
+; Note_PitchClassTable[128].
 ; -----------------------------------------------------------------------------
-AccPatch_Transpose_LookupTable_Data:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x152E2, 0x80
+Note_PitchClassTable:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x152E2, 0x80
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Rhythm_VelLookA_TableLookup_Table
 ; Rhythm_VelLookA_TableLookup_Table -- read by
@@ -5456,7 +5456,7 @@ AccTone_LookupByProgram_Table_2:	.incbin "includes/generated/naka_widget_descrip
 ; AccTuning_ReadAndApplyOffset_Table[116].
 ; -----------------------------------------------------------------------------
 AccTuning_ReadAndApplyOffset_Table:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x19168, 0x30
-AccTone_InlineBytecodeData_Data:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x19198, 0x22
+AccPart_BitToIndexTable:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x19198, 0x22
 AccTone_InlineBytecodeData_Data_2:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x191BA, 0x22
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AccTone_ExtendAndDispatch_Body_Table_3

@@ -3483,8 +3483,8 @@ DrawBitmapFile_Impl:
 	ld	(xsp+1076), xbc
 	ld	(xsp+1080), xwa
 	pushw 0x2
-	pushw DrawBitmapFile_Impl_Data@hi16
-	pushw DrawBitmapFile_Impl_Data@lo16
+	pushw DrawBitmapFile_Str_BM@hi16
+	pushw DrawBitmapFile_Str_BM@lo16
 	ld XWA, (xsp + 0x043a)
 	push xwa
 	call String_Compare

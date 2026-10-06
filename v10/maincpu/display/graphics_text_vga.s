@@ -2287,7 +2287,7 @@ FontGlyph_ByteData:
 	ret
 ; Text_GlyphToCharCode: Reverse of FontGlyph_ByteData: finds the character code whose Text_CharGlyphMap entry equals
 ;   the byte at (XWA) and stores it at (XBC); 0 and 0x20 are copied unchanged and a byte not in the map becomes 0x20.
-;   Basis: callers + body -- SeMenu_DrawWriteDestName and SeMenu_CopyWriteUpdate_Data run it in place over each of the
+;   Basis: callers + body -- SeMenu_DrawWriteDestName and SeWrtMem_DrawPage run it in place over each of the
 ;   16 bytes of a sound name before using the name as text; Text_CharGlyphMap's comment says 'the routine after it
 ;   searches it for the reverse'.
 Text_GlyphToCharCode:
@@ -5227,13 +5227,22 @@ MainSysCtrl_Entry4_CopyBitmaps:
 MainSysCtrl_Entry5_VoiceInit:
 	call Voice_InitBankDataSafe
 	jr t, MainSysControl_PostDispatchFinalize
-MainSysCtrl_Entry6:
+; MainSysCtrl_OnInitCurrentPanel: Case 1 of MainSysControl's EVT_SYS_INI switch = item 1 "CURRENT PANEL" of the
+;   INITIAL SETTING list (widget 0x410002): calls MainSysCtrl_Entry5_VoiceInit_Helper, which validates and re-resolves
+;   the live panel (PanelTlv_ValidateLivePanel, PanelTlv_ResolvePartCompanions, ...). Basis: callers + body.
+MainSysCtrl_OnInitCurrentPanel:
 	call MainSysCtrl_Entry5_VoiceInit_Helper
 	jr t, MainSysControl_PostDispatchFinalize
-MainSysCtrl_Entry7:
+; MainSysCtrl_OnInitPartSetting: Case 2 of MainSysControl's EVT_SYS_INI switch = item 2 "PART SETTING" of the INITIAL
+;   SETTING list (widget 0x410002): calls MainSysCtrl_Entry5_VoiceInit_Helper2, which copies part records of
+;   SndParamRam_DefaultImage into the live panel 0xF9A0. Basis: callers + body.
+MainSysCtrl_OnInitPartSetting:
 	call MainSysCtrl_Entry5_VoiceInit_Helper2
 	jr t, MainSysControl_PostDispatchFinalize
-MainSysCtrl_Entry8:
+; MainSysCtrl_OnInitMidiSetting: Case 3 of MainSysControl's EVT_SYS_INI switch = item 3 "MIDI SETTING" of the INITIAL
+;   SETTING list (widget 0x410002): calls MainSysCtrl_Entry5_VoiceInit_Helper3, which restores bits 0-2 of byte +14 of
+;   each part record from SndParamRam_DefaultImage. Basis: callers + body.
+MainSysCtrl_OnInitMidiSetting:
 	call MainSysCtrl_Entry5_VoiceInit_Helper3
 
 
@@ -5382,7 +5391,7 @@ AcFreeSplit_LookupNoteLabel:
 	exts xhl
 	divs hl, 0xc
 	sla hl, 2
-	lda xbc, (AcFreeSplit_LookupNoteLabel_Data:24)
+	lda xbc, (AcFreeSplit_OctaveDigitTable:24)
 	ld	xwa, (xbc+hl)
 	push xwa
 	ld xwa, 0x4181
@@ -5428,7 +5437,7 @@ AcFreeSplit_LookupSecondNote:
 	exts xhl
 	divs hl, 0xc
 	sla hl, 2
-	lda xbc, (AcFreeSplit_LookupNoteLabel_Data:24)
+	lda xbc, (AcFreeSplit_OctaveDigitTable:24)
 	ld	xwa, (xbc+hl)
 	push xwa
 	ld xwa, 0x4181
@@ -5536,7 +5545,7 @@ AcTranspose_ValueChanged:
 
 AcTranspose_FormatLabel:
 	sla wa, 2
-	lda xde, (AcTranspose_FormatLabel_Data:24)
+	lda xde, (AcTranspose_KeyNameTable:24)
 	ld	xwa, (xde+wa)
 	push xwa
 	pushw AcTranspose_FormatLabel_Str_Fmts@hi16

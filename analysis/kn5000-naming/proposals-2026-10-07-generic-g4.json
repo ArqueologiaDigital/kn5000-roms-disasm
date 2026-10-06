@@ -1,0 +1,1343 @@
+[
+ {
+  "old": "AccPatch_CountSlotsAlt_Body",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AccPatch_CountAvailableSlotsInAltImage",
+  "header": "Counts the free patch entries 0x96..0x153 (bit 7 of byte 0 clear) of the style image at RAM 0x69800 instead of the current one: temporarily points (0x39AE) at 0x69800, stores 190 minus the used entries in 0x34D4, restores (0x39AE).\nBasis: callers + body -- only caller is the thunk AccPatch_CountSlotsAlt, called after a style image is loaded into 0x69800 (DualVoice_LoadAndScan, Flash_InitBytecodeBlock, AccBankData); same loop as AccPatch_CountAvailableSlots, which uses RHYTHM_PATTERN_BUF_B.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:13847 `AccPatch_CountSlotsAlt:` / 13848 `calr AccPatch_CountSlotsAlt_Body` -- the only reference",
+   "storage/flash_floppy_handlers.s:5437 `call AccPatch_CountSlotsAlt` -- DualVoice_LoadAndScan, after NoteEventBuffer_CopyToSlot",
+   "sequencer/accompaniment_engine.s:36374 `call AccPatch_CountSlotsAlt` -- AccBankData path, right after DualVoice_LoadAndScan; 36383 `lda xwa, (0x069800:24)` / 36384 `ld (0x39ae:16), xwa` -- the image at 0x69800",
+   "sequencer/accompaniment_engine.s:15182 `ld xix, (0x39ae:16)` / 15184 `ld xix, 0x69800` / 15185 `ld (0x39ae:16), xix` -- swap in the 0x69800 base",
+   "sequencer/accompaniment_engine.s:15186 `ldw wa, 0xbe` / 15187 `ldw de, 0x153` / 15192 `calr AccPatch_ResolveSlotAddr` / 15193 `bitm 7, (xix)` / 15195 `dec 1, wa` / 15199 `cp de, 0x95` -- count down entries 0x153..0x96",
+   "sequencer/accompaniment_engine.s:15204 `ld (0x34d4:16), wa` / 15206 `ld (0x39ae:16), xix` -- result + restore",
+   "sequencer/accompaniment_engine.s:16083 `ld xix, (0x39ae:16)` / 16084 `add xix, 0x1400` -- AccPatch_ResolveSlotAddr: entry = (0x39AE) + 0x1400 + 256*index",
+   "sequencer/accompaniment_engine.s:15159 `AccPatch_CountAvailableSlots:` .. 15178 `ld (0x34d4:16), wa` -- the same count on RHYTHM_PATTERN_BUF_B (0x95C00 = 0x94800 + 0x1400)"
+  ]
+ },
+ {
+  "old": "AccPatch_SeqDispatch_Entry",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AccPatch_CmpRealTick",
+  "header": "Per-tick entry of the Composer REALTIME RECORDING engine: a jump vector (`jr AccPatch_SeqDispatch_Main`, 12 filler bytes, `jrl AccPatch_SeqAdvanceStep`) whose slot 0 runs the part-cursor step: rescans when the record part 0x379B changed, re-inits the tempo ring when stopped, runs and queues the part's notes, then saves 0x379B in 0x35FE.\nBasis: callers + body -- its only caller is AccPatch_DetectModeChange inside RhythmProc_CheckPlayMode, which runs only when CURRENT_TITLE = 181 (TT_CMREAL), from Seq_RhythmProcessor on every sequencer tick.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:14314 `call AccPatch_SeqDispatch_Entry` -- AccPatch_DetectModeChange, the only reference",
+   "sequencer/accompaniment_engine.s:14268 `RhythmProc_CheckPlayMode:` / 14269 `cp (CURRENT_TITLE:16), 181` -- the path exists only on TT_CMREAL (shared/event_codes.s:78 TITLE_CMREAL = 0xB5)",
+   "sequencer/accompaniment_engine.s:14240 `Seq_RhythmProcessor:` / 14242 `calr RhythmProc_CheckPlayMode` -- called from Seq_DispatcherTick_Process (smf_event_processor.s:10806)",
+   "sequencer/accompaniment_engine.s:16207 `jr AccPatch_SeqDispatch_Main` / 16208 `adc wa, (xwa)` (x6, to 16213) / 16214 `jrl AccPatch_SeqAdvanceStep` -- the vector; ROM 0xF5FE07: 68 5f, 12 x 0x90, 78 8d 0b",
+   "sequencer/accompaniment_engine.s:16262 `ld a, (0x379b:16)` / 16263 `cp a, (0x35fe:16)` / 16265 `calr AccPatch_ScanToSequenceStart` -- rescan on part change",
+   "sequencer/accompaniment_engine.s:16276 `bit 0, (0x3283:16)` / 16278 `call TempoRingBuf_ReInitAndRet`; 16328 `calr AccPatch_DispatchQueuedNotes`; 16331 `ld a, (0x379b:16)` / 16332 `ld (0x35fe:16), a`"
+  ],
+  "spelling": "the 12 bytes between the jr and the jrl are 0x90 filler spelled as six `adc wa, (xwa)`; never executed (jumped over)"
+ },
+ {
+  "old": "AccPatch_LoadTablePointers_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AccPatch_PartBlockVarTable",
+  "header": "17 x LE32 RAM pointers indexed by the one-hot record part 0x379B (1 AC1, 2 AC2, 4 AC3, 8 BAS, 16 DRM): the word variable holding that part's current patch-entry (256-byte block) number -- 0x329D, 0x329F, 0x32A1, 0x329B, 0x3297; other slots 0. AccPatch_LoadTablePointers returns it in XIY.\nBasis: readers + bytes -- the readers pass (XIY) as HL to AccPatch_GetEntryAddr and replace it with the entry's link word (+1 / +3) when the offset runs off the block.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:17025 `ld xiy, AccPatch_LoadTablePointers_Data` / 17026 `add xiy, xbc` / 17027 `ld xiy, (xiy)` -- XBC = 4*(0x379B), AccPatch_LoadTablePointers",
+   "sequencer/accompaniment_engine.s:17959 `.long 0x00000000, 0x0000329d, 0x0000329f, 0x00000000` .. 17963 `.long 0x00003297` -- non-zero only at indices 1, 2, 4, 8, 16",
+   "sequencer/accompaniment_engine.s:17034 `ld wa, (xiy)` / 17049 `ld hl, wa` / 17051 `calr AccPatch_GetEntryAddr` / 17053 `ld hl, (xix + 1)` / 17054 `ld (xiy), hl` -- AccPatch_AdjustTableEntryPos: block number, stepped back via the entry link",
+   "sequencer/accompaniment_engine.s:17895 `ld hl, (xiy)` / 17898 `calr AccPatch_GetEntryAddr` .. 17920 `ld wa, (xix + 3)` / 17925 `ld (xiy), wa` -- AccPatch_AdvancePlayPos: next block via link +3",
+   "ui_widgets/composer_style_convert_screens.s:411-415 CmpRealScreen VwEditSwBox texts DRM/AC3/AC2/AC1/BAS, selected by switches 0x80-0x84 = RhythmFillIn_PatternTable bytes 0x10/0x04/0x02/0x01/0x08 (ROM 0xF64F4D) -- the part order of 0x379B"
+  ]
+ },
+ {
+  "old": "AccPatch_LoadTablePointers_Data_2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AccPatch_PartOffsetVarTable",
+  "header": "17 x LE32 RAM pointers indexed by the one-hot record part 0x379B (1 AC1, 2 AC2, 4 AC3, 8 BAS, 16 DRM): the word variable holding that part's byte offset inside its current patch block (6..0xFE) -- 0x328D, 0x328F, 0x3291, 0x328B, 0x3287; other slots 0. AccPatch_LoadTablePointers returns it in XIX.\nBasis: readers + bytes -- twin of AccPatch_PartBlockVarTable; the readers add the step count (0x360A) to (XIX), wrap it past 0xFE to the next block (+5) or below 6 to the previous one.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:17021 `add xbc, AccPatch_LoadTablePointers_Data_2` / 17022 `ld xix, xbc` / 17023 `ld xix, (xix)` -- AccPatch_LoadTablePointers, XBC = 4*(0x379B)",
+   "sequencer/accompaniment_engine.s:17966 `.long 0x00000000, 0x0000328d, 0x0000328f, 0x00000000` .. 17970 `.long 0x00003287`",
+   "sequencer/accompaniment_engine.s:17913 `add de, (0x360a:16)` / 17914 `cp de, 0xfe` / 17917 `sub de, 0xfe` / 17926 `add de, 0x5` / 17927 `ld (xix), de` -- AccPatch_AdvancePlayPos: offset in the block",
+   "sequencer/accompaniment_engine.s:17035 `sub de, 0x6` / 17036 `cp de, (0x360a:16)` / 17040 `ld (xix), de` -- AccPatch_AdjustTableEntryPos steps the offset back",
+   "sequencer/accompaniment_engine.s:16202 `ld (0x3612:16), hl` / 16203 `ldw (0x3614:16), 6` -- the same (block, offset) pair for the cursor of the current part"
+  ]
+ },
+ {
+  "old": "ToneGen_ClassifyMono_MapChannel_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ToneGen_PartBitToNoteOnStatus",
+  "header": "17-byte table indexed by the one-hot record part 0x379B & 31: the MIDI note-on status byte written to the rhythm buffer for that part -- AC1 (1) 0x94, AC2 (2) 0x95, AC3 (4) 0x96, BAS (8) 0x97, DRM (16) 0x98; other slots 0.\nBasis: readers + bytes -- ToneGen_ClassifyMonoEvent defaults the part to 16 and ToneGen_ClassifyMono_MapChannel writes (status, note E, velocity D) with RhythmBuf_WriteByte, after closing the previous note as (status, note, 0).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:19869 `ld xiy, ToneGen_ClassifyMono_MapChannel_Data` / 19870 `ld a, (xiy+hl)` -- L = A = (0x379B) & 31",
+   "sequencer/accompaniment_engine.s:19305 `.byte 0x00, 0x94, 0x95, 0x00, 0x96, 0x00` / 19306 `0x97` / 19307 `0x98` -- indices 1, 2, 4, 8, 16",
+   "sequencer/accompaniment_engine.s:19859 `ld a, (0x379b:16)` / 19860 `and a, 0x1f` / 19863 `or a, 0x10` -- the index, default part 16",
+   "sequencer/accompaniment_engine.s:19893 `pushw wa` / 19894 `call RhythmBuf_WriteByte` / 19896 `ld a, e` / 19900 `ld a, d` -- status, note, velocity",
+   "sequencer/accompaniment_engine.s:19875 `ld a, (0x3516:16)` / 19879 `ld a, (0x3517:16)` / 19883 `ld a, 0x0:opc` -- previous note closed with velocity 0"
+  ]
+ },
+ {
+  "old": "ToneGen_LoadRhythmPatternParams_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ToneGen_PitchClassNoteFormTable",
+  "header": "12 x 3-byte records indexed by pitch class (note mod 12 via AccPatch_Transpose_LookupTable_Data): {flag, byte +6, byte +7}; flag 0 = plain 6-byte 0x90 note event, flag 1 = 8-byte 0x91 form with the two extra bytes. Non-zero: D#, E = (1, 0x00, 0x11), B = (1, 0x11, 0x11).\nBasis: readers + bytes -- ToneGen_LoadRhythmPatternParams copies the record to 0x3431..0x3433; AccVoice_ResolveNoteOnOffType and AccVoice_WriteNoteEventToBuffer pick 0x90 / 0x91 from it; the 4-byte twin AccPlay_NoteParamTable (seq_event_playback.s) is read the same way.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:20218 `ld c, a` / 20219 `sla a, 1` / 20220 `add c, a` / 20222 `ld xix, ToneGen_LoadRhythmPatternParams_Data` / 20225 `ld (0x3431:16), a` .. 20229 `ld (0x3433:16), a` -- 3*class, three bytes out",
+   "sequencer/accompaniment_engine.s:20174 `ld xix, AccPatch_Transpose_LookupTable_Data` / 20175 `ld a, (xix+wa)` -- AccPlayback_TrackPosition: the class",
+   "ui_widgets/widget_descriptors.s:5158 `AccPatch_Transpose_LookupTable_Data` -- ROM 0xE46142: 00 01 .. 0B repeated, i.e. note mod 12",
+   "sequencer/accompaniment_engine.s:21275 `ld xix, ToneGen_LoadRhythmPatternParams_Data` / 21277 `ld a, (xix)` / 21281 `ld e, 0x91:opc` -- AccVoice_ResolveNoteOnOffType: flag picks 0x91",
+   "sequencer/accompaniment_engine.s:21469 `ld xix, ToneGen_LoadRhythmPatternParams_Data` / 21472 `ld (xiy), 0x90` / 21475 `ld (xiy), 0x91` / 21477 `ld (xiy + 6), a` -- AccVoice_WriteNoteEventToBuffer",
+   "sequencer/accompaniment_engine.s:20259 `.byte 0x00, 0x00, 0x00` .. 20262-20263 `0x01, 0x00, 0x11` (classes 3, 4) .. 20270 `0x01, 0x11, 0x11` (class 11)"
+  ]
+ },
+ {
+  "old": "AccFill_AdvanceAndCheck_Code",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "RhythmBuf_BarQuartersByTimeSig",
+  "header": "20-byte table: bar length in quarter notes for each time-signature index 0..19 (1/2..4/2 = 2,4,6,8; 1/4..8/4 = 1..8; 2/8..16/8 = 1..8), indexed by byte +12 of the rhythm header at (0x3560).\nBasis: readers + bytes -- the values equal the length bytes of the 20 TimeSig_DisplayStrings records; RhythmBuf_FillEmptyPattern multiplies it by the measure count to fill an empty pattern with 0x81 beat codes, RhythmROM_ProcessPattern divides by it.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:23579 `ld xix, AccFill_AdvanceAndCheck_Code` / 23580 `ld w, (xix+hl)` / 23584 `mul wa, w` -- RhythmBuf_FillEmptyPattern, L = (xiy+12); 23591 `ld a, 0x81:opc` / 23594 `ld (xhl), a` -- beat codes",
+   "sequencer/accompaniment_engine.s:22815 `ld xhl, AccFill_AdvanceAndCheck_Code` / 22816 `ld l, (xhl+wa)` -- RhythmROM_InitPattern, A = (xhl+12) of (0x3560)",
+   "sequencer/accompaniment_engine.s:22850 `ld xhl, AccFill_AdvanceAndCheck_Code` / 22851 `ld a, (xhl+wa)` / 22854 `div wa, e` -- RhythmROM_ProcessPattern",
+   "ROM 0xF63EC8 (20 B): 02 04 06 08 01 02 03 04 05 06 07 08 01 02 03 04 05 06 07 08",
+   "sequencer/accompaniment_engine.s:26111 `.ascii \"(1/2)+0  \"` / 26112 `.byte 2` .. 26143 `(10/8)` / 26144 `.byte 5` / 26145 `(12/8)` / 26146 `.byte 6` -- TimeSig_DisplayStrings: the same 20 length bytes",
+   "sequencer/accompaniment_engine.s:24837 `ld xwa, RhythmPatInit_KitIndexTable` / 24838 `ld a, (xwa+l)` -- a second copy of the same 20 bytes (24877-24879), read with slot byte +12"
+  ],
+  "spelling": "data spelled as code: `push sr` / `.byte 0x04, 0x06` / `ld (1:8), 2:io` / `pop sr` / `max` / `halt` / `ei 7` ... (lines 23561-23573)"
+ },
+ {
+  "old": "DrumParam_Wrapper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AccPatch_QuantizeTick",
+  "header": "Thunk to DrumParam_Lookup: rounds the event tick A (0..95 within a beat) to the composer QUANTIZE grid W = (0x34DB) & 7 -- settings 1..7 = 8, 12, 16, 24, 32, 48, 96 ticks; the result 0x7F means 'rounds up into the next beat'.\nBasis: callers + body -- AccPatch_LookupStepByDrumParam calls it with W = (0x34DB) unless that is 0 (off) and on 0x7F moves to the next beat; 0x34DB is the value PsCmpQtzBoxProc prints and CmpRealTtl_CycleQuantize steps; the eight 96-byte arrays of DrumParam_Lookup_Data are nearest-grid-point maps.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:24294 `calr DrumParam_Lookup` / 24295 `ret` -- the whole body",
+   "sequencer/accompaniment_engine.s:17359 `ld a, (0x34db:16)` / 17361 `jr z, AccPatch_SetStepDone` / 17363 `ld w, (0x34db:16)` / 17365 `call DrumParam_Wrapper` / 17366 `cp a, 0x7f` -- caller AccPatch_LookupStepByDrumParam",
+   "sequencer/accompaniment_engine.s:24300 `and w, 0x7` / 24303 `add xhl, DrumParam_Lookup_Data` / 24308 `add xhl, xwa` / 24309 `ld a, (xhl)` -- array W, element A",
+   "sequencer/accompaniment_engine.s:24351 array 4: 12 x 0, 24 x 0x18, 24 x 0x30, 24 x 0x48, 12 x 0x7f -- nearest multiple of 24; 24344-24346 array 0/7: 48 x 0, 48 x 0x7f (grid 96)",
+   "audio/sound_editor_ui.s:16242 `ld a, (0x34db:16)` / 16245 `lda xbc, (PtrTbl_NotePositionStrs:24)` -- PsCmpQtzBoxProc, the QUANTIZE box of TT_CMREAL"
+  ]
+ },
+ {
+  "old": "DrumKitInit_Wrapper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpMode_Activate",
+  "header": "XIZ-preserving entry run when the Composer mode (MD_CMP, 14) is activated: through DrumKitInit_Entry it lights panel indicator 0x48 and, unless the previous mode was already 14, clears SOLO (0x34F1) and QUANTIZE (0x34DB), presets the step note fields 0x3714-0x3716, sets 0x379B = 64 (no part), saves the panel rhythm (0xFC5A/0xFC5B) in 0x34ED/0x34EE and 0x352B/0x352C, sends the composer program change and counts free patch slots.\nBasis: callers + body -- CmpModeFunc calls it on EVT_ACTIVATE_STATE phase 0 (mode activated).",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:30391 `cp xbc, EVT_ACTIVATE_STATE` / 30395 `or xde, xde` / 30401 `call DrumKitInit_Wrapper` -- CmpModeFunc, phase 0",
+   "shared/event_codes.s:27 EVT_ACTIVATE_STATE 'phase: 0 = mode activated, 1 = mode deactivated'; 1857 NAKA_MODE_MD_CMP = entry 14",
+   "sequencer/accompaniment_engine.s:24386 `push xiz` / 24387 `call DrumKitInit_Entry` / 24388 `pop xiz` -- body",
+   "sequencer/accompaniment_engine.s:24393 `call CtrlPanel_SetIndicatorBit` / 24394 `cp (PREVIOUS_MODE:16), 14` -- skip when re-entered from MD_CMP",
+   "sequencer/accompaniment_engine.s:24399 `ld (0x34f1:16), 0` / 24400 `ld (0x34db:16), 0` / 24406 `ld (0x379b:16), 64` / 24408 `ld (0x34ed:16), a` / 24410 `ld (0x34ee:16), a` / 24412 `ld (0x352b:16), a` -- 0xFC5A/0xFC5B saved",
+   "sequencer/accompaniment_engine.s:24438 `call AccPatch_CountSlots_Wrapper`"
+  ]
+ },
+ {
+  "old": "DrumKitExit_Wrapper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpMode_Deactivate",
+  "header": "XIZ-preserving entry run when the Composer mode (MD_CMP, 14) is deactivated: through DrumKitExit_Entry, unless the mode is still 14, it calls CtrlPanel_SetIndicatorBit(0x48), clears the composer flags, SOLO (0x34F1) and the record part 0x379B, restores the panel rhythm 0xFC5A/0xFC5B saved in 0x352B/0x352C (when 0x34CD bit 6 is set) and posts it, then restores the playback state.\nBasis: callers + body -- CmpModeFunc's phase-1 branch (label CmpMenuTtl_InitTitle) calls it on EVT_ACTIVATE_STATE phase 1 (mode deactivated); twin of CmpMode_Activate.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:30393 `cp xde, 0x1` / 30394 `jr z, CmpMenuTtl_InitTitle` / 30414 `call DrumKitExit_Wrapper` -- CmpModeFunc, phase 1",
+   "sequencer/accompaniment_engine.s:24471 `push xiz` / 24472 `call DrumKitExit_Entry` / 24473 `pop xiz` -- body",
+   "sequencer/accompaniment_engine.s:24479 `cp (CURRENT_MODE:16), 14` / 24480 `jr nz, DrumKitExit_CheckState1` -- only when leaving MD_CMP",
+   "sequencer/accompaniment_engine.s:24493 `ld (0x34f1:16), 0` / 24494 `ld (0x379b:16), 0`",
+   "sequencer/accompaniment_engine.s:24510 `bit 6, (0x34cd:16)` / 24513 `ld a, (0x352b:16)` / 24514 `ld (0xfc5a:16), a` .. 24519 `calr DrumKit_PostMidiEvents` -- restore the saved panel rhythm",
+   "sequencer/accompaniment_engine.s:24524 `call SeqAcc_RestorePlaybackState`"
+  ]
+ },
+ {
+  "old": "DrumKit_InlineCode1_Sub",
+  "verdict": "refuse",
+  "why_refused": "XIZ-preserving thunk of DrumKit_UpdateStatusFlags_Helper2, which -- only when bits 0-2 of 0xFC5D (field 3 of panel record 0x48) are 0 -- queues SwbtWr_TrailingBytecode(DE = 0x0348, WA = 0x0702), sets bit 3 of 0xFC5D and queues SwbtWr_QueuePostEvent(DE = 0x0348, WA = 0x0808). Its caller is the EASY COMPOSER title's phase-2 handler (CmEsyTtl_Dispatch), but what field 3 / its value 0 and bit 3 mean is not established (RegisterBit_Manipulate_Table dispatches on the same 3 bits), so no name can be pinned.",
+  "new": null,
+  "header": null,
+  "basis": "callers + body (insufficient)",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:31954 `call DrumKit_InlineCode1_Sub` -- CmEsyTtl_Dispatch (TT_CMEASY, EVT_ACTIVATE_STATE phase 2), followed by 31955 `call DrumKit_ValidateBank_Wrap`",
+   "sequencer/accompaniment_engine.s:24711 `push xiz` / 24712 `call DrumKit_UpdateStatusFlags_Helper2` / 24713 `pop xiz` -- body",
+   "sequencer/accompaniment_engine.s:24718 `ld a, (0xfc5d:16)` / 24719 `and a, 7` / 24726 `call SwbtWr_TrailingBytecode` / 24728 `or (0xfc5d:16), a` / 24732 `call SwbtWr_QueuePostEvent`",
+   "audio/audio_control_engine.s:8348 `ld l, (0xfc5d:16)` -- RegBitManip_Dispatch indexes RegisterBit_Manipulate_Table by the same 3 bits; their meaning is not documented"
+  ]
+ },
+ {
+  "old": "RhythmPatInit_Wrapper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpBkslSTtl_EnterTitle",
+  "header": "XIZ-preserving set-up run when the Composer RECORDING title (TT_CMBKSL_S, 0xB2) is entered or re-activated: through RhythmPatInit_Entry, unless it comes from TT_CMBKSL_S itself, it loads the current slot's pattern parameters (RhythmPatInit_LoadParams), sets the record part 0x379B = 32 (none of the five parts) and, coming from TT_CMREAL, restarts the play mode; always clears 0xE3E2 bits 0 and 5-6.\nBasis: callers + body -- CmpBkslSTtl_Dispatch (EVT_ACTIVATE_STATE phase 2, title new) and CmpBksl_STtlFunc_OnTitleActivate (phase 5) are its callers.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:31204 `call RhythmPatInit_Wrapper` -- CmpBkslSTtl_Dispatch, case of the EVT_ACTIVATE_STATE switch of CmpBksl_STtlFunc",
+   "sequencer/accompaniment_engine.s:31219 `call RhythmPatInit_Wrapper` -- CmpBksl_STtlFunc_OnTitleActivate",
+   "sequencer/accompaniment_engine.s:24812 `push xiz` / 24813 `call RhythmPatInit_Entry` / 24814 `pop xiz` -- body",
+   "sequencer/accompaniment_engine.s:24818 `cp (PREVIOUS_TITLE:16), 178` / 24820 `calr RhythmPatInit_LoadParams` / 24821 `ld (0x379b:16), 32` / 24822 `cp (PREVIOUS_TITLE:16), 181` / 24824 `call AccWrap_PlayModeDispatch` / 24828 `and (0xe3e2:16), 158`",
+   "shared/event_codes.s:1988 TITLE_CMBKSL_S = 0xB2 (178); 78 TITLE_CMREAL = 0xB5 (181)"
+  ]
+ },
+ {
+  "old": "RhythmFillIn_Wrapper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpBkslSTtl_SelectRecPart",
+  "header": "XIZ-preserving part select of the Composer RECORDING title (TT_CMBKSL_S): through RhythmFillIn_Select it sets the record part 0x379B = RhythmFillIn_PatternTable[HL - 4] (HL 4..8 -> DRM 0x10, AC3 0x04, AC2 0x02, AC1 0x01, BAS 0x08), updates the status flags and re-dispatches the audio state; the caller then switches to TT_CMREAL.\nBasis: callers + body -- the five switch handlers (labels CmpBkslSTtl_FillIn4..8, switches 0..4) pass HL = 4..8 and then post title 0xB5; the screen's five VwEditSwBox buttons read DRM, AC3, AC2, AC1, BAS.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:31258 `ld hl, 4:i3` / 31259 `call RhythmFillIn_Wrapper` / 31264 `ldw wa, 0xb5` -- CmpBkslSTtl_FillIn4 (switch 0), then title TT_CMREAL; FillIn5..8 pass 5..8",
+   "sequencer/accompaniment_engine.s:24899 `push xiz` / 24900 `call RhythmFillIn_Select` / 24901 `pop xiz` -- body",
+   "sequencer/accompaniment_engine.s:24906 `ld xwa, RhythmFillIn_PatternTable` / 24907 `cp hl, 4:i3` / 24909 `sub hl, 0x4` / 24913 `ld (0x379b:16), a` / 24914 `calr DrumKit_UpdateStatusFlags` / 24915 `call AudioInit_SelectAndDispatch`",
+   "ROM 0xF64F4D RhythmFillIn_PatternTable: 10 04 02 01 08 10 10 10",
+   "ui_widgets/composer_style_convert_screens.s:335-339 NakaWidget_CmpBkslSScreen_5..9_VwEditSwBox -- texts DRM, AC3, AC2, AC1, BAS (naka_composer_style.bin +0xE44, +0xE74, +0xEA4, +0xED4, +0xF04)",
+   "audio/sound_editor_ui.s:16159 `ld a, (0x379b:16)` (and ui_widgets/naka_screen_dispatch.s:2016 .long StrTrackRec) -- AcCmpRecBoxProc prints \"REC \" for the box whose part bit is in 0x379B"
+  ]
+ },
+ {
+  "old": "RhythmFillIn_PatternTable_Sub",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpRealTtl_EnterTitle",
+  "header": "XIZ-preserving set-up run when the Composer REALTIME RECORDING title (TT_CMREAL, 0xB5) is entered or re-activated: clears 0x28A7 bit 2 and 0xE3E2 bit 0; unless it comes from TT_CMREAL itself it sets 0x8D88 bit 0 and, when not playing, sets 0x34CD bit 7, runs Seq_DispatcherEntry and, coming from TT_CMBKSL_S, starts the accompaniment play (AccWrap_PlayModeStartAccPlay).\nBasis: callers + body -- CmpRealTtl_Dispatch (EVT_ACTIVATE_STATE phase 2) and CmpRealTtlFunc_OnTitleActivate (phase 5) call it.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:30712 `call RhythmFillIn_PatternTable_Sub` -- CmpRealTtl_Dispatch, then SoundCtrl_SendTempoScaled",
+   "sequencer/accompaniment_engine.s:30726 `call RhythmFillIn_PatternTable_Sub` -- CmpRealTtlFunc_OnTitleActivate (phase 5)",
+   "sequencer/accompaniment_engine.s:24927 `push xiz` / 24928 `call RhythmFillIn_PatternTable_Sub_Helper` / 24929 `pop xiz` -- body",
+   "sequencer/accompaniment_engine.s:24932 `and (0x28a7:16), 251` / 24934 `cp (PREVIOUS_TITLE:16), 181` / 24936 `or (0x8d88:16), 1` / 24937 `bit 0, (0x3283:16)` / 24940 `call Seq_DispatcherEntry` / 24941 `cp (PREVIOUS_TITLE:16), 178` / 24943 `call AccWrap_PlayModeStartAccPlay`",
+   "ROM: the label is at 0xF64F55, the first byte after the 8-byte RhythmFillIn_PatternTable (0xF64F4D), so it is a routine of its own"
+  ]
+ },
+ {
+  "old": "RhythmMute_Wrapper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpRealTtl_CycleQuantize",
+  "header": "XIZ-preserving action of the TT_CMREAL QUANTIZE switch: through RhythmMute_Toggle / RhythmMute_StateMachine it sets 0xE3E2 bit 3 and steps the composer quantize setting 0x34DB through 0 (off) -> 4 -> 5 -> 6 -> 7 -> 1 -> 2 -> 3 -> 0, i.e. 1/16, 8th triplet, 8th, quarter, 32nd triplet, 32nd, 16th triplet (grids 24, 32, 48, 96, 8, 12, 16 ticks).\nBasis: callers + body -- right-side switch row 4 of TT_CMREAL (menu text \"QUANTIZE\") calls it and repaints 0xB5001D (the PsCmpQtzBox, which prints PtrTbl_NotePositionStrs[(0x34DB)]); nothing in it mutes.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:30925 `call RhythmMute_Wrapper` / 30930 `ld xwa, 0xb5001d` -- CmpRealTtl_MajorDispatch_OnRightRow4Mute (switch 11, right row 4), repaints element 29",
+   "ui_widgets/composer_style_convert_screens.s:423 NakaWidget_CmpRealScreen_22_VwMenuBox -- row 4 text \"QUANTIZE\" (naka_composer_style.bin +0x199E); 425 NakaWidget_CmpQtz (PsCmpQtzBox)",
+   "sequencer/accompaniment_engine.s:24948 `push xiz` / 24949 `call RhythmMute_Toggle` / 24950 `pop xiz` -- body",
+   "sequencer/accompaniment_engine.s:24959 `inc 1, (0x34db:16)` / 24960 `cp (0x34db:16), 4` / 24962 `ld (0x34db:16), 0` / 24966 `cp (0x34db:16), 1` / 24968 `ld (0x34db:16), 4` / 24972 `cp (0x34db:16), 8` / 24974 `ld (0x34db:16), 1` -- the cycle",
+   "audio/sound_editor_ui.s:16242 `ld a, (0x34db:16)` / 16245 `lda xbc, (PtrTbl_NotePositionStrs:24)` -- PsCmpQtzBoxProc",
+   "sequencer/accompaniment_engine.s:24334 `.long DrumParam_PointerTableAndData + 0x32` .. 24341 -- the grid arrays AccPatch_QuantizeTick indexes with (0x34DB) & 7"
+  ]
+ },
+ {
+  "old": "RhythmSolo_Wrapper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpRealTtl_ToggleSolo",
+  "header": "XIZ-preserving action of the TT_CMREAL SOLO switch: through RhythmSolo_Toggle it toggles 0x34F1 between 0x80 and 0 (the mask AcCmpRecBoxProc tests to print \"MUTE\" in a part box), updates the status flags and, when not playing, sets 0x34CD bit 7.\nBasis: callers + body -- right-side switch row 5 of TT_CMREAL (menu text \"  SOLO\") calls it and repaints the five part boxes 0xB50018..0xB5001C.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:30941 `call RhythmSolo_Wrapper` -- CmpRealTtl_MajorDispatch_OnRightRow5Solo (switch 12, right row 5), then EVT_PAINT to 0xB50018..0xB5001C",
+   "ui_widgets/composer_style_convert_screens.s:424 NakaWidget_CmpRealScreen_23_VwMenuBox -- row 5 text \"  SOLO\" (naka_composer_style.bin +0x19DA)",
+   "sequencer/accompaniment_engine.s:25015 `push xiz` / 25016 `calr RhythmSolo_Toggle` / 25017 `pop xiz` -- body",
+   "sequencer/accompaniment_engine.s:25021 `bit 7, (0x34f1:16)` / 25023 `ld (0x34f1:16), 128` / 25027 `ld (0x34f1:16), 0` / 25030 `calr DrumKit_UpdateStatusFlags`",
+   "audio/sound_editor_ui.s:16177 `ld a, (0x34f1:16)` -- AcCmpRecBoxProc: (0x34F1) & mask = mask -> StrTrackMute \"MUTE\" (naka_screen_dispatch.s:2018)"
+  ]
+ },
+ {
+  "old": "RhythmVariation_Wrapper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpRealTtl_SelectRecPart",
+  "header": "XIZ-preserving part select of TT_CMREAL: through RhythmVariation_Select, when no section change is pending (0x34CF and 0x35FC bits 2-3 clear), it sets the record part 0x379B = RhythmFillIn_PatternTable[HL & 15] (HL 0..4 -> DRM 0x10, AC3 0x04, AC2 0x02, AC1 0x01, BAS 0x08), updates the status flags and re-dispatches the audio state.\nBasis: callers + body -- switches 0x80..0x84 of TT_CMREAL (labels CmpRealTtl_RhythmVar0..4) pass HL = 0..4 and repaint the five part boxes; the screen's VwEditSwBox buttons read DRM, AC3, AC2, AC1, BAS.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:30757 `ld hl, 0:i3` / 30758 `call RhythmVariation_Wrapper` -- CmpRealTtl_RhythmVar0 (switch 0x80); Var1..4 pass 1..4 (30791, 30824, 30857, 30890)",
+   "ui_widgets/composer_style_convert_screens.s:411-415 NakaWidget_CmpRealScreen_10..14_VwEditSwBox -- texts DRM, AC3, AC2, AC1, BAS (naka_composer_style.bin +0x1736 .. +0x17F6)",
+   "sequencer/accompaniment_engine.s:25039 `push xiz` / 25040 `calr RhythmVariation_Select` / 25041 `pop xiz` -- body",
+   "sequencer/accompaniment_engine.s:25045 `ld a, (0x34cf:16)` / 25046 `and a, 0xc` / 25053 `and hl, 0xf` / 25054 `ld xwa, RhythmFillIn_PatternTable` / 25056 `ld (0x379b:16), a` / 25063 `call AudioInit_SelectAndDispatch`",
+   "sequencer/accompaniment_engine.s:14220 `AccPatch_ChannelBitToIndex` header: bits 0,1,2,3,4 -> indices 2,3,4,1,0 -- with DRM 16, BAS 8, AC1 1, AC2 2, AC3 4 this is the DRUMS|BASS|ACCOMP1|ACCOMP2|ACCOMP3 order of the composer grids (msp_recording_screens.s:370)"
+  ]
+ },
+ {
+  "old": "RhythmVariation_InlineCode_Sub",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpStep_MoveRecPartTowardDrums",
+  "header": "XIZ-preserving part step of the Composer STEP title: through RhythmVariation_InlineCode_Sub_Helper it replaces the record part 0x379B by its successor in the order BAS (8) -> AC1 (1) -> AC2 (2) -> AC3 (4) -> DRM (16) (32-byte map RhythmVariation_InlineCode_Code2), re-dispatches the audio state and updates the status flags.\nBasis: callers + body -- AccDraw_SecondarySub_Handler09 (TT_CMSTEP switch 9) calls it unless W bit 7 is set or the part is already DRM (bit 4); Handler08's AccScreen_DataBlock_Helper3 is the opposite step (map RhythmVariation_InlineCode_Code, DRM -> AC3 -> AC2 -> AC1 -> BAS).",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:34496 `bit 7, w` / 34498 `bit 4, (0x379b:16)` / 34500 `call RhythmVariation_InlineCode_Sub` / 34501 `or (0xe3e0:16), 16` -- AccDraw_SecondarySub_Handler09",
+   "sequencer/accompaniment_engine.s:25150 `push xiz` / 25151 `calr RhythmVariation_InlineCode_Sub_Helper` / 25152 `pop xiz` -- body",
+   "sequencer/accompaniment_engine.s:25156 `ld l, (0x379b:16)` / 25157 `and l, 31` / 25158 `add xhl, RhythmVariation_InlineCode_Code2` / 25160 `ld (0x379b:16), a`",
+   "ROM 0xF65131 RhythmVariation_InlineCode_Code2: [1]=02 [2]=04 [4]=10 [8]=01 [16]=10, rest 0; ROM 0xF650EA RhythmVariation_InlineCode_Code: [1]=08 [2]=01 [4]=02 [8]=08 [16]=04",
+   "sequencer/accompaniment_engine.s:34488 `bit 3, (0x379b:16)` / 34490 `call AccScreen_DataBlock_Helper3` -- Handler08, the opposite direction, stops at BAS (bit 3)"
+  ]
+ },
+ {
+  "old": "DrumVoice_Handler7_Data_2_Sub",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpNcp_SendProgramChangeOnLeave",
+  "header": "XIZ-preserving step run when the Composer copy title TT_CMPNCP (0xB8) is left: through DrumVoice_Handler7_Data_3, unless CURRENT_TITLE is still TT_CMPNCP, it calls DrumKit_SendProgramChange, which sets the panel rhythm 0xFC5A to 0x80 + the composer pattern 0x34D6 and posts it.\nBasis: callers + body -- its only caller is CmpNcpTtlFunc_OnTitleOld (EVT_ACTIVATE_STATE phase 3, title left).",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:31426 `call DrumVoice_Handler7_Data_2_Sub` -- CmpNcpTtlFunc_OnTitleOld, after 31421 `call UI_PostDialEnable` with WA = 0",
+   "sequencer/accompaniment_engine.s:25684 `push xiz` / 25685 `call DrumVoice_Handler7_Data_3` / 25686 `pop xiz` -- body",
+   "sequencer/accompaniment_engine.s:25689 `cp (CURRENT_TITLE:16), 184` / 25691 `calr DrumKit_SendProgramChange`",
+   "sequencer/accompaniment_engine.s:24451 `ld l, (0x34d6:16)` / 24459 `add l, 0x80` / 24460 `ld xbc, 0xfc5a` / 24462 `ld (xbc+a), l` / 24467 `calr DrumKit_PostMidiEvents` -- DrumKit_SendProgramChange",
+   "shared/event_codes.s:79 TITLE_CMPNCP = 0xB8 (184)"
+  ]
+ },
+ {
+  "old": "DrumVoice_Handler7_Data_3_Sub",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpNcp_StepItemB_Wrap",
+  "header": "XIZ-preserving wrapper that steps the Composer copy page's TO-item selector 0x39A8 within 0..1 (W bit 7 set = up, clear = down; no wrap).\nBasis: callers + body -- CmpNcpTtl_TableDispatch_OnToItemPrev (W = 0) and _OnToItemNext (W = 0x80) call it; TO twin of CmpNcp_StepItemA_Wrap (selector 0x39A7, 0..2); 0x39A8 is the index CmpNcp_StepItemBValue maps through CmpNcp_ItemB_HandlerIndex.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:31710 `ld w, 0:opc` / 31711 `call DrumVoice_Handler7_Data_3_Sub` -- CmpNcpTtl_TableDispatch_OnToItemPrev (cases 120, 121)",
+   "sequencer/accompaniment_engine.s:31751 `ld w, 0x80:opc` / 31752 `call DrumVoice_Handler7_Data_3_Sub` -- CmpNcpTtl_TableDispatch_OnToItemNext (cases 132, 133)",
+   "sequencer/accompaniment_engine.s:25750 `push xiz` / 25751 `call DrumVoice_Handler7_Data_3_Helper3` / 25752 `pop xiz` -- body",
+   "sequencer/accompaniment_engine.s:25755 `ld a, (0x39a8:16)` / 25756 `bit 7, w` / 25758 `cp a, 1:i3` / 25760 `inc 1, a` / 25763 `cp a, 0:i3` / 25765 `dec 1, a` / 25767 `ld (0x39a8:16), a`",
+   "sequencer/accompaniment_engine.s:25698 `CmpNcp_StepItemA_Wrap:` -- the item-A twin (0x39A7, 0..2)"
+  ]
+ },
+ {
+  "old": "TimeSig_DisplayStrings_Code_Sub",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpNcp_LatchPanelRhythmAsSource",
+  "header": "Copies the panel rhythm selection -- record 0x48 fields 0/1, program 0xFC5A and bank 0xFC5B & 0x7F -- into 0x34ED / 0x34EE, the rhythm the Composer copies from (< 0x80 a preset rhythm of that bank, 0x80 + n composer memory n).\nBasis: callers + body -- every caller is on the Composer copy title TT_CMPNCP: its FROM item handlers 0 and 1, its title-activate set-up, and AccPatch_CallParamLookup after a panel rhythm press while CURRENT_TITLE = 184; AccPat_DispatchNoteChange copies from (0x34ED) into the current pattern 0x34D6.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:25835 `calr TimeSig_DisplayStrings_Code_Sub` -- CmpNcp_ItemHandler0, after CmpNcp_ItemStep0 / DrumKit_PostMidiEvents; 25844 the same in CmpNcp_ItemHandler1",
+   "sequencer/accompaniment_engine.s:25652 `calr TimeSig_DisplayStrings_Code_Sub` -- DrumVoice_Handler7_Data, body of CmpNcpTtl_Dispatch_Helper (TT_CMPNCP activate)",
+   "sequencer/accompaniment_engine.s:15879 `cp a, 184` / 15881 `call TimeSig_DisplayStrings_Code_Sub` -- AccPatch_CallParamLookup, only on CURRENT_TITLE 184 (TT_CMPNCP)",
+   "sequencer/accompaniment_engine.s:26290 `ld a, (0xfc5a:16)` / 26292 `ld w, (0xfc5b:16)` / 26293 `and w, 127` / 26294 `ld (0x34ed:16), a` / 26295 `ld (0x34ee:16), w` -- the whole body",
+   "sequencer/accompaniment_engine.s:22265 `ld a, (0x34ed:16)` / 22267 `cp a, (0x34d6:16)` / 22273 `ld a, (0x34ed:16)` / 22275 `ld (0x39ac:16), a` / 22277 `ld (0x39ad:16), a` -- AccPat_DispatchNoteChange: source slot (0x34ED) & 0x7F, destination 0x34D6",
+   "sequencer/accompaniment_engine.s:22254 `cp a, 0x80` / 22255 `jr c, AccPat_Dispatch_LowRange` -- below 0x80 a preset rhythm (RhythmROM_PatternDispatcher)"
+  ]
+ },
+ {
+  "old": "AccDraw_Secondary_Sub_Entry2_Data_9",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AccScreen_ArticulationCell",
+  "header": "Display-list item (15 bytes, opcode 2) at +0x62 of accomp_display_full.bin: a 4-character text cell bound to byte 0x39BB, drawn from the TENU/NORM/STAC/CUTT table at 0xF6AE4C (Accomp_Articulation_Names) at (154, 27); the rest of the slice is the note- and octave-name text other cells point at.\nBasis: readers + bytes -- the step-edit draw code copies the articulation index (0x3716) to 0x39BB and draws this one item with AccDraw_Secondary; AccScreen_BeatDataBlock uses its address as the end of AccScreen_BeatDataBlock_DisplayList.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:34470 `ldmm8 14779, 14102` / 34471 `ld xiy, AccDraw_Secondary_Sub_Entry2_Data_9` / 34472 `calr AccDraw_Secondary` -- AccScreen_DataBlock_Code6: 0x39BB <- (0x3716), queued by Handler05 after AccDraw_StepArticulation_Wrap",
+   "sequencer/accompaniment_engine.s:34753 `ldmm8 14779, 14102` / 34754 `ld xiy, AccDraw_Secondary_Sub_Entry2_Data_9` / 34755 `calr AccDraw_Secondary` -- AccDraw_Secondary_Helper12, step mode 4",
+   "sequencer/accompaniment_engine.s:34799 `ld xiy, AccScreen_BeatDataBlock_DisplayList` / 34800 `ld xix, AccDraw_Secondary_Sub_Entry2_Data_9` / 34801 `calr AccGraphics_RenderStart` -- end bound of the preceding list",
+   "ROM 0xF6AD8F: 02 0f bb 39 03 00 06 4c ae f6 00 04 00 9a 1b -- opcode 2, cell 0x39BB, text pointer 0xF6AE4C, width 4, x 154, y 27",
+   "sequencer/accompaniment_engine.s:35017 `.byte 0x54, 0x45, 0x4e, 0x55, 0x4e, 0x4f, 0x52, 0x4d, 0x53, 0x54, 0x41, 0x43, 0x43, 0x55, 0x54, 0x54` -- \"TENUNORMSTACCUTT\" at 0xF6AE4C",
+   "sequencer/accomp_screens/accomp_display_full.c:56 `.widget_4 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x39bb, .flags = 0x0003, .ref_tag = 0x06, .handler = HANDLER_ADDR(Accomp_Articulation_Names), .param = 4, .x = 154, .y = 27 },`"
+  ]
+ },
+ {
+  "old": "NoteEvent_Store_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "RhythmSlot_FlashSectionTable",
+  "header": "30-byte table indexed by rhythm slot 0..29: 0 for the RAM slots 0-9, 1 + (slot-10)/3 for the custom slots 10-29 (1..7, three per section); NoteEventBuffer_CopyToSlot loads flash section value-1. Basis: readers + bytes -- NoteEvent_Store returns L = table[A] for the copy-slot callers.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:1951-1955 `NoteEvent_Store: extz wa / lda xbc, (NoteEvent_Store_Data:24) / ld l, (xbc+wa) / ret` -- the only reader, a byte lookup by A",
+   "storage/flash_floppy_handlers.s:1329-1337 `ld a, (xsp+10)` / `calr NoteEvent_Store` / `ld (xsp+4), l` ... `calr NoteEventBuffer_CopyToSlot` -- Flash_InitBytecodeBlock passes a rhythm slot and feeds the result to the section loader",
+   "storage/flash_floppy_handlers.s:1957-1968 `dec 1, bc` / `cp bc, 0:i3` / `cp bc, 6:i3` / `lda xix, (MSP_Default_GroupOffsetB:24)` -- the consumer: value N loads Custom Data Flash section N-1 (FLASH_SECTION_PTR_0..6), 0 loads none",
+   "ROM 0xE160DE..0xE160FB = 0,0,0,0,0,0,0,0,0,0, 1,1,1, 2,2,2, 3,3,3, 4,4,4, 5,5,5, 6,6,6, 7,7 -- composer_msp_defaults.s:129 (2 B) + :130 MSP_Default_ChannelMapPad (8 B) + :133-139 MSP_Default_GroupIndex (20 B)",
+   "storage/flash_floppy_handlers.s:1608-1614 `cp a, 0x1e` / `cp a, 0xa` / `sub a, 0xa` / `div a, 0x3` -- PartGrid_ColumnDispatch makes the same slot -> section mapping arithmetically (slots < 10 are RAM, 10..29 three per section)",
+   "sequencer/accompaniment_engine.s:32573-32577 `ld c, 10:opc` / `ld a, (0x39b6:16)` / `cp a, 10` -- the CstmCp FROM slot keeps the 0..9 / 10..29 split"
+  ],
+  "spelling": "the table is framed as three labels: this one covers only its first 2 bytes, MSP_Default_ChannelMapPad its next 8 (slots 2-9) and MSP_Default_GroupIndex the last 20 (slots 10-29). The 'MSP_Default_*' names around it are not defaults: MSP_Default_GroupIndexPad (0xE160FC) is read the same way (flash_floppy_handlers.s:1341-1342) and is the slot -> position-in-section table (0 x10, then 0,1,2 repeating)."
+ },
+ {
+  "old": "ToneData_ZeroFillLoop_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Composer_DefaultHeaderFields",
+  "header": "16-byte factory default that ToneData_SetupCopyPointers copies to composer settings +0x10 (header bytes after the \"HK\" signature); its first words 0x20 / 0xC0 / 12 match the 12 x 16-byte record area at +0x20..+0xDF, the rest is undecoded. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:5608-5612 `lda xhl, (ToneData_ZeroFillLoop_Data:24)` / `ld xwa, (MSP_SETTINGS:16)` / `lda xde, (xwa + 16)` / `lda xhl, (xhl + 16)` -- 16 bytes to settings base+0x10 (ToneData_CopyBlock2_Loop)",
+   "storage/flash_floppy_handlers.s:5598-5601 `lda xwa, (Composer_SettingsBlock:24)` ... `lda xhl, (xwa + 6)` -- the 6 signature bytes \"H\\0K\\0\\0\\3\" go to base+0x00 just before",
+   "sequencer/composer_msp_defaults.s:221 `.byte 0x20, 0x00, 0xc0, 0x00, 0x0c, 0x00, 0x00, 0x01, 0x39, 0x00, 0x0c, 0x00, 0x00, 0x00, 0xc0, 0x03`",
+   "storage/flash_floppy_handlers.s:5652-5679 `lda xbc, (xwa + 32)` ... `add xde, 0x10` / `cp xde, 0xc0` -- the record area at +0x20 is 0xC0 bytes of 16-byte records (12), matching the words 0x0020 / 0x00C0 / 0x000C",
+   "audio/voice_bank_defaults.s:7-11 `Voice_BankHeaderDefaults` -- the sound-bank area's header has the same shape (0x0020, ..., 0x0100, 0x0039, 0x000C, 0x03C0)"
+  ]
+ },
+ {
+  "old": "ToneData_ScanRegionLoop_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Composer_DefaultEmptyRecord",
+  "header": "16-byte default record that ToneData_SetupCopyPointers writes into each of the 12 16-byte records at composer settings +0x20..+0xDF whose first byte is 0 (bytes 11/12 = 0x7F / 0x40, the rest 0). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:5656-5659 `cp (xbc), 0x0` / `jr nz, ToneData_AdvanceRegion` / `lda xiy, (ToneData_ScanRegionLoop_Data:24)` -- only for records whose first byte is 0",
+   "storage/flash_floppy_handlers.s:5660-5671 `lda xwa, (xwa + 32)` / `add xix, xwa` / `lda xiy, (xiy + 16)` / ToneData_CopyRegion_Inner -- 16 bytes into record xde of base+0x20",
+   "storage/flash_floppy_handlers.s:5674-5677 `add xde, 0x10` / `cp xde, 0xc0` -- 12 records",
+   "sequencer/composer_msp_defaults.s:224 `.byte 0x00 x11, 0x7f, 0x40, 0x00, 0x00, 0x00`"
+  ]
+ },
+ {
+  "old": "ToneData_ZeroFillLoop_Data_2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Composer_DefaultCompileBankNames",
+  "header": "Factory names of the composer's compile banks, 4 x 16 characters (\" Compile Bank 1 \", \" Compile Bank 2 \", two blank), copied to composer settings +0x240. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:5630-5634 `lda xhl, (ToneData_ZeroFillLoop_Data_2:24)` / `lda xde, (xwa+576)` / `lda xhl, (xhl + 64)` -- 64 bytes to base+0x240 (ToneData_CopyBlock4_Loop)",
+   "sequencer/composer_msp_defaults.s:227 `.ascii \" Compile Bank 1  Compile Bank 2                                 \"`",
+   "audio/voice_bank_defaults.s:26-27 `HEADER__COMPILE_BANKS: .ascii \" Compile Bank 1  Compile Bank 2 ...\"` -- the sound-bank area's counterpart"
+  ]
+ },
+ {
+  "old": "ToneData_ZeroFillLoop_Data_3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Composer_DefaultUserBankNames",
+  "header": "Factory names of the composer's user banks, 4 x 16 characters (\"   User Bank 1  \", \"   User Bank 2  \", two blank), copied to composer settings +0x280. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:5641-5645 `lda xhl, (ToneData_ZeroFillLoop_Data_3:24)` / `lda xde, (xwa+640)` / `lda xhl, (xhl + 64)` -- 64 bytes to base+0x280 (ToneData_CopyBlock5_Loop)",
+   "sequencer/composer_msp_defaults.s:230 `.ascii \"   User Bank 1     User Bank 2                                  \"`",
+   "audio/voice_bank_defaults.s:29-30 `HEADER__USER_BANKS` -- the sound-bank area's counterpart"
+  ]
+ },
+ {
+  "old": "Rhythm_VelLookA_SelectTable_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Rhythm_InstrMapTable_D4",
+  "header": "Second 49-byte variant of Rhythm_InstrMapTable_Default (RAM 0x32D8, clamped 0..0x2F -> row of Rhythm_VelLookA_TableLookup_Table), used while bit 2 of 0x32F4 is set, i.e. for the D4 (status 0x94) channel; Rhythm_TranspMod_BaseApply always uses it. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "sequencer/rhythm_routines.s:466-471 `ld xiy, Rhythm_InstrMapTable_Default` / `bit 2, (0x32f4:16)` / `ld xiy, Rhythm_VelLookA_SelectTable_Data` -- Rhythm_VelocityLookup_A's variant choice",
+   "sequencer/rhythm_routines.s:653-656 the same choice in Rhythm_VoiceMap_ApplyBase; :1611-1613 `ld xiy, Rhythm_VelLookA_SelectTable_Data` / `ld l, (xiy+hl)` -- Rhythm_TranspMod_BaseApply, unconditionally",
+   "sequencer/rhythm_routines.s:478-482 `ld l, (xiy+l)` / `sla hl, 4` / `ld xiy, Rhythm_VelLookA_TableLookup_Table` -- the byte is a 16-byte row number",
+   "sequencer/rhythm_routines.s:152-159 Rhythm_SetupChannel_D4 `and (0x32f4:16), 247` / `or (0x32f4:16), 4`; :799-806 Rhythm_DispatchCh_D4 the same, `ld w, 0x94:opc` -- bit 2 = the D4 channel (D7 sets bit 3, D5/D6 clear both)",
+   "sequencer/rhythm_routines.s:528-531 49 bytes, values 0..20; differs from the default at entries 15-18, 21-22, 24, 30-31, 33-34, 40-41"
+  ]
+ },
+ {
+  "old": "AccVoice_LoadRhythmParams_Part3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "RhythmPart3_ProcessAccentData",
+  "header": "Part 3 of the RhythmPart1/2_ProcessAccentData family: takes the part's 7-byte record at RAM 0x3254..0x325A, stores 5 of it at 0x321E or (bit 0 of 0x3283 set) appends it as a 0xC0 record to ring buffer 0x2D94 (the D4 channel buffer), clears bit 3 of 0x332C and calls AccVoiceReg_WritePart3. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:3190 `call AccVoice_LoadRhythmParams_Part3` -- caller AccCh2_ProcessNotes, where RhythmPart2_ProcessAccentData has the same place in AccCh1_ProcessNotes (accompaniment_engine.s:3015)",
+   "sequencer/seq_audio_mode.s:913-918 Rhythm_ProcessAllPartsAndLoad `calr RhythmPart1_ProcessAccentData` / `calr RhythmPart2_ProcessAccentData` / `calr AccVoice_LoadRhythmParams_Part3..5` -- the parts in order (line 916)",
+   "sequencer/accompaniment_engine.s:5757-5761 AccNote_FlushAll calls the same sequence, Part3 at line 5759",
+   "sequencer/seq_audio_mode.s:1111-1164 `call AccentData_ComparePart3` ... `calr AccVoiceReg_StoreParamRecord` / `ld (xhl+iy), 0xc0` ... `call AccVoiceReg_WritePart3` -- body identical to RhythmPart2_ProcessAccentData (1036-1089) with part 3's addresses"
+  ]
+ },
+ {
+  "old": "AccVoice_LoadRhythmParams_Part4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "RhythmPart4_ProcessAccentData",
+  "header": "Part 4 of the RhythmPart1/2_ProcessAccentData family: takes the part's 7-byte record at RAM 0x325B..0x3261, stores 5 of it at 0x3223 or (bit 0 of 0x3283 set) appends it as a 0xC0 record to ring buffer 0x2E94 (D5), clears bit 4 of 0x332C and calls AccVoiceReg_WritePart4. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:3365 `call AccVoice_LoadRhythmParams_Part4` -- caller AccCh3_ProcessNotes, where RhythmPart2_ProcessAccentData has the same place in AccCh1_ProcessNotes (accompaniment_engine.s:3015)",
+   "sequencer/seq_audio_mode.s:913-918 Rhythm_ProcessAllPartsAndLoad `calr RhythmPart1_ProcessAccentData` / `calr RhythmPart2_ProcessAccentData` / `calr AccVoice_LoadRhythmParams_Part3..5` -- the parts in order (line 917)",
+   "sequencer/accompaniment_engine.s:5757-5761 AccNote_FlushAll calls the same sequence, Part4 at line 5760",
+   "sequencer/seq_audio_mode.s:1166-1219 `call AccentData_ComparePart4` ... `calr AccVoiceReg_StoreParamRecord` / `ld (xhl+iy), 0xc0` ... `call AccVoiceReg_WritePart4` -- body identical to RhythmPart2_ProcessAccentData (1036-1089) with part 4's addresses"
+  ]
+ },
+ {
+  "old": "AccVoice_LoadRhythmParams_Part5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "RhythmPart5_ProcessAccentData",
+  "header": "Part 5 of the RhythmPart1/2_ProcessAccentData family: takes the part's 7-byte record at RAM 0x3262..0x3268, stores 5 of it at 0x3228 or (bit 0 of 0x3283 set) appends it as a 0xC0 record to ring buffer 0x2F94 (D6), clears bit 5 of 0x332C and calls AccVoiceReg_WritePart5. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:3540 `call AccVoice_LoadRhythmParams_Part5` -- caller AccCh4_ProcessNotes, where RhythmPart2_ProcessAccentData has the same place in AccCh1_ProcessNotes (accompaniment_engine.s:3015)",
+   "sequencer/seq_audio_mode.s:913-918 Rhythm_ProcessAllPartsAndLoad `calr RhythmPart1_ProcessAccentData` / `calr RhythmPart2_ProcessAccentData` / `calr AccVoice_LoadRhythmParams_Part3..5` -- the parts in order (line 918)",
+   "sequencer/accompaniment_engine.s:5757-5761 AccNote_FlushAll calls the same sequence, Part5 at line 5761",
+   "sequencer/seq_audio_mode.s:1221-1274 `call AccentData_ComparePart5` ... `calr AccVoiceReg_StoreParamRecord` / `ld (xhl+iy), 0xc0` ... `call AccVoiceReg_WritePart5` -- body identical to RhythmPart2_ProcessAccentData (1036-1089) with part 5's addresses"
+  ]
+ },
+ {
+  "old": "AccPlay_Entry",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AccPlay_TickVector",
+  "header": "Slot 0 of the AccPlay jump-vector block (jp AccPlay_MainDispatch; AccPlay_ToggleEntry / AccPlay_StopEntry follow); AccompSeq_PeriodicMain calls it once per periodic pass, after AccompSeq_FadeOutTick. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompseq_routines.s:24-25 `calr AccompSeq_FadeOutTick` / `call AccPlay_Entry` -- the only caller, AccompSeq_PeriodicMain",
+   "sequencer/seq_event_playback.s:1096-1106 `jp AccPlay_MainDispatch` / `jp AccPlay_ProcessVoiceBank` / `jp AccPlay_ToggleCodeFragment` / `jp AccPlay_CheckAndToggle` / `jp AccPlay_StopAndReset` -- a block of jp vectors",
+   "sequencer/seq_event_playback.s:1108-1154 AccPlay_MainDispatch compares 0x7F0B with its previous value 0x7F0C and starts / updates / stops accordingly -- the per-tick state machine"
+  ],
+  "spelling": "a 4-byte `jp` vector slot, not a routine body"
+ },
+ {
+  "old": "VocalistGrid_DispatchData_Code",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "VocalistGridCheck_LswDrawMidiChannel",
+  "header": "Case 0 (Lsw 0x2D00) of VocalistGridCheck_OnLswData's grid-cell switch, the Vocalist MIDI CHANNEL value: 16 -> \"OMNI\", 17 -> \"OFF\", else value+1 with \"%2d\"; then EVT_GRID_DRAW. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/seq_event_playback.s:3176-3187 `sub xwa, 0x2d00` / `cp xwa, 19` / `add xwa, MidiPart_ColWidthData` / `lda xix, (VocalistGrid_DispatchData_Code:24)` / `jp t, (xix+wa)` -- the switch in VocalistGridCheck_OnLswData on Lsw id - 0x2D00",
+   "ui_widgets/naka_widget_tables_2.s:1384 `.short VocalistGrid_DispatchData_Code - VocalistGrid_DispatchData_Code` -- entry 0 = Lsw 0x2D00; entry 2 is VocalistGridCheck_LswDrawProgram (0x2D02)",
+   "sequencer/seq_event_playback.s:3189-3197 `cp wa, 16` -> VocalistGrid_DispatchData_Str_2, `cp wa, 17` -> VocalistGrid_DispatchData_Str -- ROM 0xE7EEEC \"   OMNI   \", 0xE7EEE0 \"   OFF    \"",
+   "sequencer/seq_event_playback.s:3205-3212 `inc 1, wa` / `pushw VocalistGrid_DispatchData_Str_Fmt2d@hi16` / `call Sprintf_Locked` -- channel 1..16 as \"    %2d    \"",
+   "sequencer/seq_event_playback.s:3421-3428 VocalistGrid_CheckDispData does the same 16/17 test on SndParam_LookupReadOnly(0x2D00) -- the sibling switch's case 0"
+  ],
+  "spelling": "the case table is named MidiPart_ColWidthData (naka_widget_tables_2.s:1383) but it is this switch's case-offset table, not column widths"
+ },
+ {
+  "old": "AppEvtHandler_Branch_002_Code",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_ChainDispatch1_IncFromMeasure_OnTitleSqnotecng",
+  "header": "TT_SQNOTECNG (title 0x9F) case of EVT_INC_VAL on sequencer-edit parameter 1: the from-measure word 9744 (last measure 9746) goes up by one (max 999), pushing the last measure along. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:20412-20423 `sub wa, 0x9c` / `cp wa, 7:i3` / `lda xix, (AppEvtHandler_Branch_002_CaseTable:24)` / `jp t, (xix+wa)` -- AppEvent_ChainDispatch1_IncFromMeasure switches on CURRENT_TITLE - 0x9C",
+   "ui_widgets/widget_descriptors.s:4105 `.short AppEvtHandler_Branch_002_Code - AppEvtHandler_Branch_002_Code` -- entry 3 = title 0x9F (entries 0-2 / 5 / 7 are OnTitleSqqtz / Sqtrns / Sqvelocng / Sqmers / Sqmdel)",
+   "shared/event_codes.s:1978 `.equ TITLE_SQNOTECNG, 0x1a0009f` -- title 0x9F",
+   "sequencer/sequencer_engine.s:20425-20427 `lda xiz, (9744:16)` / `lda xwa, (9746:16)` / `jr AppEvtHandler_Branch_004`; :20451-20470 `cpw (xiz), 0x3e7` / `incw 1, (xiz)` / `cp bc, (xwa)` / `ld (xwa), bc`",
+   "sequencer/sequencer_engine.s:25275-25281 MainExeCall_OnTitleSqnotecng `ldmm8 0x2877, 9742` / `ld wa, (9744:16)` / `ld wa, (9746:16)` -- 9744 / 9746 are SQNOTECNG's from / last measure"
+  ]
+ },
+ {
+  "old": "AppEvtHandler_Branch_003",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_ChainDispatch1_IncFromMeasure_OnTitleSqadvdly",
+  "header": "TT_SQADVDLY (title 0xA0) case, also the default (titles outside 0x9C..0xA3 and 0xA2), of EVT_INC_VAL on parameter 1: selects from-measure 9734 / last measure 9736 for the shared increment. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:20416 / 20418 `jr lt, AppEvtHandler_Branch_003` / `jr gt, AppEvtHandler_Branch_003` -- the out-of-range titles",
+   "ui_widgets/widget_descriptors.s:4106 / 4108 `.short AppEvtHandler_Branch_003 - AppEvtHandler_Branch_002_Code` -- entries 4 (0xA0) and 6 (0xA2)",
+   "sequencer/sequencer_engine.s:20448-20450 `lda xiz, (9734:16)` / `lda xwa, (9736:16)` then falls into the increment",
+   "sequencer/sequencer_engine.s:25290-25296 MainExeCall_OnTitleSqadvdly `ldmm8 0x2877, 9732` / `ld wa, (9734:16)` / `ld wa, (9736:16)` -- 9734 / 9736 are SQADVDLY's from / last measure",
+   "sequencer/sequencer_engine.s:20408-20410 comment: SqedtFunc_OnGetFmString picks 0x2606 (9734) for every other title"
+  ]
+ },
+ {
+  "old": "AppEvtHandler_Branch_006_Code",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_ChainDispatch1_IncLastMeasure_OnTitleSqnotecng",
+  "header": "TT_SQNOTECNG (title 0x9F) case of EVT_INC_VAL on sequencer-edit parameter 2: the last-measure word 9746 goes up by one (max 999); the from measure 9744 is pulled down if it is now larger. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:20478-20490 `sub wa, 0x9c` / `lda xix, (AppEvtHandler_Branch_006_CaseTable:24)` / `lda xix, (AppEvtHandler_Branch_006_Code:24)` / `jp t, (xix+wa)` -- AppEvent_ChainDispatch1_IncLastMeasure switches on CURRENT_TITLE - 0x9C",
+   "ui_widgets/widget_descriptors.s:4084 `.short AppEvtHandler_Branch_006_Code - AppEvtHandler_Branch_006_Code` -- entry 3 = title 0x9F",
+   "sequencer/sequencer_engine.s:20492-20494 `lda xiz, (9744:16)` / `lda xwa, (9746:16)`; :20519-20523 `cpw (xwa), 0x3e7` / `incw 1, (xwa)`",
+   "sequencer/sequencer_engine.s:25275-25281 MainExeCall_OnTitleSqnotecng -- 9744 / 9746 are SQNOTECNG's from / last measure"
+  ]
+ },
+ {
+  "old": "AppEvtHandler_Branch_007",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_ChainDispatch1_IncLastMeasure_OnTitleSqadvdly",
+  "header": "TT_SQADVDLY (title 0xA0) case, also the default (titles outside 0x9C..0xA3 and 0xA2), of EVT_INC_VAL on parameter 2: selects from-measure 9734 / last measure 9736 for the shared increment. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:20483 / 20485 `jr lt, AppEvtHandler_Branch_007` / `jr gt, AppEvtHandler_Branch_007` -- the out-of-range titles",
+   "ui_widgets/widget_descriptors.s:4085 / 4087 `.short AppEvtHandler_Branch_007 - AppEvtHandler_Branch_006_Code` -- entries 4 (0xA0) and 6 (0xA2)",
+   "sequencer/sequencer_engine.s:20515-20517 `lda xiz, (9734:16)` / `lda xwa, (9736:16)` then falls into the increment",
+   "sequencer/sequencer_engine.s:25290-25296 MainExeCall_OnTitleSqadvdly -- 9734 / 9736 are SQADVDLY's from / last measure"
+  ]
+ },
+ {
+  "old": "AppEvtHandler_Branch_021_Code",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_ChainDispatch1_IncMcpTrackA",
+  "header": "Case 15 (TT_SQMCP track A, RAM 0xF1E9) of EVT_INC_VAL's measure-copy inner switch: up by one to at most 17 (all tracks); reaching 17 sets track B 0xF1EE to 17 too; then the six MCP fields are redrawn. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:20711-20721 AppEvent_ChainDispatch1_IncMcpParam `sub xwa, 0xf` / `add xwa, AppEvtHandler_Branch_021_CaseTable` / `lda xix, (AppEvtHandler_Branch_021_Code:24)` / `jp t, (xix+wa)` -- inner switch on parameter - 15",
+   "ui_widgets/widget_descriptors.s:4062-4067 entry 0 = this label, entries 1-5 = AppEvtHandler_Branch_021_IncMcp{FromMeasure,LastMeasure,TrackB,StartMeasure,Repeat}",
+   "sequencer/sequencer_engine.s:20708-20710 comment: parameter 15 = track A 0xf1e9",
+   "sequencer/sequencer_engine.s:20723-20731 `ld a, (0xf1e9:16)` / `cp a, 0x11` / `inc 1, a` / `ld (0xf1e9:16), a` / `ld (0xf1ee:16), 17` -- 17 = all, mirrored into track B",
+   "sequencer/sequencer_engine.s:20756-20765 AppEvtHandler_Branch_021_IncMcpTrackB does the mirror image on 0xf1ee / 0xf1e9"
+  ]
+ },
+ {
+  "old": "AppEvtHandler_Branch_024_Code",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_ChainDispatch1_IncMinsTrackA",
+  "header": "Case 21 (TT_SQMINS track A, RAM 0xF1E1) of EVT_INC_VAL's measure-insert inner switch: up by one to at most 17 (all tracks); reaching 17 sets track B 0xF1E6 to 17 too; then the six MINS fields are redrawn. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:20807-20817 AppEvent_ChainDispatch1_IncMinsParam `sub xwa, 0x15` / `add xwa, AppEvtHandler_Branch_024_CaseTable` / `lda xix, (AppEvtHandler_Branch_024_Code:24)` / `jp t, (xix+wa)` -- inner switch on parameter - 21",
+   "ui_widgets/widget_descriptors.s:4043-4048 entry 0 = this label, entries 1-5 = AppEvtHandler_Branch_024_IncMins{FromMeasure,LastMeasure,TrackB,StartMeasure,Repeat}",
+   "sequencer/sequencer_engine.s:20804-20806 comment: parameter 21 = track A 0xf1e1",
+   "sequencer/sequencer_engine.s:20819-20827 `ld a, (0xf1e1:16)` / `cp a, 0x11` / `inc 1, a` / `ld (0xf1e1:16), a` / `ld (0xf1e6:16), 17`"
+  ]
+ },
+ {
+  "old": "AppEvtHandler_Branch_033",
+  "verdict": "refuse",
+  "why_refused": "Internal continuation: the shared `call ApDeliveryEvent` + epilogue of AppEvent_ChainDispatch1 (EVT_INC_VAL dispatcher). All 16 referrers are that function's own switch cases (IncAdly, IncTranspose, IncQtzValue, ...) jumping here with XWA/XBC/XDE set for the last EVT_PARA_DRAW; it should become a local label of AppEvent_ChainDispatch1 (e.g. a _PostDrawAndReturn local).",
+  "new": null,
+  "header": null,
+  "basis": null,
+  "evidence": [
+   "sequencer/sequencer_engine.s:20995-21000 `AppEvtHandler_Branch_033: call ApDeliveryEvent` / `AppEvent_Epilogue: pop xiz / inc 4, xsp / ret`",
+   "sequencer/sequencer_engine.s:20567 / 20577 / 20607 / 20707 `jrl AppEvtHandler_Branch_033` -- from AppEvent_ChainDispatch1_IncAdly / IncTranspose / IncQtzValue / IncMrgTrackC, all cases of the same compiled switch (20373-20383)",
+   "sequencer/sequencer_engine.s:20374-20375 `dec 4, xsp` / `push xiz` -- the frame this tail unwinds belongs to AppEvent_ChainDispatch1"
+  ]
+ },
+ {
+  "old": "AppEvent_SubDispatch_Code",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_InlineHandler_DecFromMeasure_OnTitleSqnotecng",
+  "header": "TT_SQNOTECNG (title 0x9F) case of EVT_DEC_VAL on sequencer-edit parameter 1: the from-measure word 9744 (last measure 9746) goes down by one (min 1). Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:21039-21051 AppEvent_InlineHandler_DecFromMeasure `sub wa, 156` / `lda xix, (AppEvent_SubDispatch_Table_2:24)` / `lda xix, (AppEvent_SubDispatch_Code:24)` / `jp t, (xix+wa)` -- switch on CURRENT_TITLE - 0x9C",
+   "ui_widgets/widget_descriptors.s:4238 `.short AppEvent_SubDispatch_Code - AppEvent_SubDispatch_Code` -- entry 3 = title 0x9F (siblings AppEvent_InlineHandler_Switch2_OnTitleSq*)",
+   "sequencer/sequencer_engine.s:21053-21055 `lda_d16 xiz, (9744)` / `lda xwa, (9746:16)`; :21081-21083 `cpw (xiz), 1` / `decm 1, (xiz)`",
+   "sequencer/sequencer_engine.s:25275-25281 MainExeCall_OnTitleSqnotecng -- 9744 / 9746 are SQNOTECNG's from / last measure"
+  ]
+ },
+ {
+  "old": "AppEvent_SubDispatch_Code_2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_InlineHandler_DecLastMeasure_OnTitleSqnotecng",
+  "header": "TT_SQNOTECNG (title 0x9F) case of EVT_DEC_VAL on sequencer-edit parameter 2: the last-measure word 9746 goes down by one (min 1); the from measure 9744 follows if it is now larger. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:21106-21118 AppEvent_InlineHandler_DecLastMeasure `sub wa, 156` / `lda xix, (AppEvent_SubDispatch_Table:24)` / `lda xix, (AppEvent_SubDispatch_Code_2:24)` / `jp t, (xix+wa)`",
+   "ui_widgets/widget_descriptors.s:4219 `.short AppEvent_SubDispatch_Code_2 - AppEvent_SubDispatch_Code_2` -- entry 3 = title 0x9F (siblings AppEvent_InlineHandler_Switch3_OnTitleSq*)",
+   "sequencer/sequencer_engine.s:21120-21122 `lda_d16 xiz, (9744)` / `lda_d16 xwa, (9746)`; :21146-21148 `cpw (xwa), 1` -- the decrement works on the last-measure word",
+   "sequencer/sequencer_engine.s:25275-25281 MainExeCall_OnTitleSqnotecng -- 9744 / 9746 are SQNOTECNG's from / last measure"
+  ]
+ },
+ {
+  "old": "AppEvent_SubDispatch_Code_2_Code",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_InlineHandler_DecMcpTrackA",
+  "header": "Case 15 (TT_SQMCP track A, RAM 0xF1E9) of EVT_DEC_VAL's measure-copy inner switch: down by one to at least 1; stepping down from 17 (all) to 16 sets track B 0xF1EE to 16 too; then the six MCP fields are redrawn. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:21339-21349 AppEvent_InlineHandler_DecMcpParam `sub xwa, 15` / `add xwa, AppEvent_SubDispatch_CaseTable_2` / `lda xix, (AppEvent_SubDispatch_Code_2_Code:24)` / `jp t, (xix+wa)`",
+   "ui_widgets/widget_descriptors.s:4199-4204 entry 0 = this label, entries 1-5 = AppEvent_InlineHandler_DecMcp{FromMeasure,LastMeasure,TrackB,StartMeasure,Repeat}",
+   "sequencer/sequencer_engine.s:21336-21338 comment: parameter 15 = track A 0xf1e9",
+   "sequencer/sequencer_engine.s:21350-21358 `ld a, (61929:16)` / `cp a, 1:i3` / `dec 1, a` / `ld (0xf1e9:16), a` / `cp a, 16` / `ld (0xf1ee:16), 16`"
+  ],
+  "spelling": "`ld a, (61929:16)` spells RAM 0xF1E9 in decimal while the store beside it writes 0xf1e9"
+ },
+ {
+  "old": "AppEvent_SubDispatch_Code_2_Code2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AppEvent_InlineHandler_DecMinsTrackA",
+  "header": "Case 21 (TT_SQMINS track A, RAM 0xF1E1) of EVT_DEC_VAL's measure-insert inner switch: down by one to at least 1; stepping down from 17 (all) to 16 sets track B 0xF1E6 to 16 too; then the six MINS fields are redrawn. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:21435-21445 AppEvent_InlineHandler_DecMinsParam `sub xwa, 21` / `add xwa, AppEvent_SubDispatch_CaseTable` / `lda xix, (AppEvent_SubDispatch_Code_2_Code2:24)` / `jp t, (xix+wa)`",
+   "ui_widgets/widget_descriptors.s:4180-4185 entry 0 = this label, entries 1-5 = AppEvent_SubDispatch_DecMins{FromMeasure,LastMeasure,TrackB,StartMeasure,Repeat}",
+   "sequencer/sequencer_engine.s:21432-21434 comment: parameter 21 = track A 0xf1e1",
+   "sequencer/sequencer_engine.s:21446-21454 `ld a, (61921:16)` / `cp a, 1:i3` / `dec 1, a` / `ld (0xf1e1:16), a` / `cp a, 16` / `ld (0xf1e6:16), 16`"
+  ],
+  "spelling": "`ld a, (61921:16)` spells RAM 0xF1E1 in decimal"
+ },
+ {
+  "old": "SndParam_Dispatch_Code",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "EntertainerGridCheck_LswRowUp",
+  "header": "EntertainerGridCheck index-up case for grid rows 0-3: MainLswAdd(SndParam_Dispatch_Table[row], +1, or +4 on EVT_INDEXSW_UP_AIC) -- steps the row's local-switch value (row 0 MIC BALANCE = LSW 0x4141, row 3 ON/OFF = 0x4140; rows 1-2 hold -1). Basis: callers + body -- rows 0-3 of the row switch in EntertainerGridCheck's EVT_INDEXSW_UP case (SndParam_Dispatch_PtrTable_2).",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:7612 `sub xwa, EVT_INDEXSW_UP` -- EntertainerGridCheck's event switch; ui_widgets/widget_descriptors.s:1900/1902 entries 0 and 2 (EVT_INDEXSW_UP, EVT_INDEXSW_UP_AIC) go to SndParam_Dispatch (the index-up case; the down twin is EntertainerGridCheck_OnIndexswDown)",
+   "sequencer/sequencer_ui.s:7627 `ld xbc, EVT_GET_SELECTED_CEL` / 7638 `cpw (xbc), 1` / 7643 `cp wa, 8` -- only column 1; switch on the row 0..8",
+   "ui_widgets/widget_descriptors.s:1880-1888 `.short SndParam_Dispatch_Code - SndParam_Dispatch_Code` x4, then EntertainerGridCheck_TypeRowUp, EntertainerGridCheck_EffParamRowUp x4 -- this label serves rows 0-3",
+   "sequencer/sequencer_ui.s:7653 `cp xbc, EVT_INDEXSW_UP_AIC` / 7655-7657 `lda xbc, (SndParam_Dispatch_Table:24)` / `ld xwa, (xbc+de)` / `ld bc, 4:i3` / 7663 `ld bc, 1:i3` / 7666 `call MainLswAdd` -- step +4 when auto-repeating, else +1, on the row's LSW id",
+   "ui_widgets/widget_descriptors.s:1786 `SndParam_Dispatch_Table: .incbin ... 0x38F0, 0x24` -- 9 u32 LSW ids per row: 0x4141, -1, -1, 0x4140, 0x4E00, 0x4E10..0x4E13 (bytes 41 41 00 00 ff ff ff ff ff ff ff ff 40 41 00 00 00 4e ...)",
+   "ui_widgets/naka_effects_seq.c:12924 `.vD6_e1_fixedrow = \"MIC BALANCE :|-|| ON/OFF     :| TYPE       :| REVERB TIME:| ...\"` -- grid rows: 0 MIC BALANCE, 1 '-', 2 blank, 3 ON/OFF, 4 TYPE, 5-8 effect parameters",
+   "sequencer/sequencer_ui.s:7765/7767 `cp xhl, 0x4140` / `cp xhl, 0x4141` -- EntertainerGridCheck_OnLswData draws LSW 0x4140 as \"      ON \"/\"     OFF \" (SndParam_Dispatch_Str / _Str_2, 7781/7784) and 0x4141 as a number: rows 3 (ON/OFF) and 0 (MIC BALANCE)"
+  ]
+ },
+ {
+  "old": "SndParam_Dispatch_Code_2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "EntertainerGridCheck_LswRowDown",
+  "header": "EntertainerGridCheck index-down case for grid rows 0-3: MainLswAdd(SndParam_Dispatch_Table[row], -1, or -4 on EVT_INDEXSW_DOWN_AIC) -- the down twin of EntertainerGridCheck_LswRowUp (row 0 MIC BALANCE = LSW 0x4141, row 3 ON/OFF = 0x4140). Basis: callers + body -- rows 0-3 of the row switch in EntertainerGridCheck_OnIndexswDown (SndParam_Dispatch_PtrTable).",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:7682 `EntertainerGridCheck_OnIndexswDown:` -- EVT_INDEXSW_DOWN / _DOWN_AIC case (ui_widgets/widget_descriptors.s:1901/1903)",
+   "sequencer/sequencer_ui.s:7704-7707 `lda xix, (SndParam_Dispatch_PtrTable:24)` / `ld wa, (xix+wa)` / `lda xix, (SndParam_Dispatch_Code_2:24)` / `jp t, (xix+wa)` -- row switch",
+   "ui_widgets/widget_descriptors.s:1861-1864 `.short SndParam_Dispatch_Code_2 - SndParam_Dispatch_Code_2` x4, then EntertainerGridCheck_TypeRowDown, EntertainerGridCheck_EffParamRowDown x4 -- rows 0-3",
+   "sequencer/sequencer_ui.s:7711-7713 `lda xwa, (SndParam_Dispatch_Table:24)` / `ld xwa, (xwa+hl)` / `cp xde, EVT_INDEXSW_DOWN_AIC` / 7715 `ldw bc, 0xfffc` / 7719 `ldw bc, 0xffff` / 7722 `call MainLswAdd` -- step -4 auto-repeating, else -1",
+   "ui_widgets/widget_descriptors.s:1786 `SndParam_Dispatch_Table: .incbin ... 0x38F0, 0x24` -- 9 u32 LSW ids per row: 0x4141, -1, -1, 0x4140, 0x4E00, 0x4E10..0x4E13 (bytes 41 41 00 00 ff ff ff ff ff ff ff ff 40 41 00 00 00 4e ...)",
+   "ui_widgets/naka_effects_seq.c:12924 `.vD6_e1_fixedrow = \"MIC BALANCE :|-|| ON/OFF     :| TYPE       :| REVERB TIME:| ...\"` -- grid rows: 0 MIC BALANCE, 1 '-', 2 blank, 3 ON/OFF, 4 TYPE, 5-8 effect parameters"
+  ]
+ },
+ {
+  "old": "Sqedt_ParamDispatch_Code",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_TrkString_OnTitleSqnotecng",
+  "header": "SqedtFunc's EVT_GET_TRK_STRING case on title TT_SQNOTECNG (0x9F, note change): the track field from byte 9742, then the shared track-name formatting. Basis: callers + body -- entry 3 (title 0x9F) of the title switch in SqedtFunc_OnGetTrkString; MainExeCall_OnTitleSqnotecng runs the edit on the same track byte 9742.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14018 `sub hl, 156` / 14024 `lda xix, (Sqedt_ParamDispatch_CaseTable_3:24)` / 14026 `lda xix, (Sqedt_ParamDispatch_Code:24)` -- SqedtFunc_OnGetTrkString switches on the title id 0x9C..0xA3",
+   "ui_widgets/widget_descriptors.s:3163 `.short Sqedt_ParamDispatch_Code - Sqedt_ParamDispatch_Code` -- entry 3 = title 0x9F (siblings: entry 0 OnTitleSqqtz, 1 Sqtrns, 2 Sqvelocng, 5 Sqmers, 7 Sqmdel)",
+   "sequencer/sequencer_ui.s:14029 `ld a, (9742:16)` -- the title's track byte",
+   "sequencer/sequencer_engine.s:25275-25277 `MainExeCall_OnTitleSqnotecng:` / `ldmm8 0x2877, 9742` / `ld wa, (9744:16)` -- the EXECUTE of TT_SQNOTECNG takes its track from 9742",
+   "shared/event_codes.s:1978-1981 `.equ TITLE_SQNOTECNG, 0x1a0009f` / TITLE_SQADVDLY 0xA0 / TITLE_SQMCP 0xA2 -- the title ids of the inner switch (title - 156 = 0x9C..0xA3)"
+  ]
+ },
+ {
+  "old": "Sqedt_ParamDispatch_Code_2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_FmString_OnTitleSqnotecng",
+  "header": "SqedtFunc's EVT_GET_FM_STRING case on title TT_SQNOTECNG (0x9F): formats the from-measure word 9744 (0x2610) with Sqedt_ParamDispatch_Str. Basis: callers + body -- entry 3 of the title switch in SqedtFunc_OnGetFmString; MainExeCall_OnTitleSqnotecng reads the same word as the first measure.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14050 `SqedtFunc_OnGetFmString:` / 14054 `sub hl, 156` / 14060-14063 `lda xix, (Sqedt_ParamDispatch_CaseTable_2:24)` ... `jp t, (xix+hl)` -- switch on the title id",
+   "ui_widgets/widget_descriptors.s:3145 `.short Sqedt_ParamDispatch_Code_2 - Sqedt_ParamDispatch_Code_2` -- entry 3 = title 0x9F",
+   "sequencer/sequencer_ui.s:14065-14066 `pushm (0x2610:16)` / `ld xwa, Sqedt_ParamDispatch_Str` -- word 0x2610 = 9744",
+   "sequencer/sequencer_engine.s:25277 `ld wa, (9744:16)` -- MainExeCall_OnTitleSqnotecng: from-measure",
+   "shared/event_codes.s:1978-1981 `.equ TITLE_SQNOTECNG, 0x1a0009f` / TITLE_SQADVDLY 0xA0 / TITLE_SQMCP 0xA2 -- the title ids of the inner switch (title - 156 = 0x9C..0xA3)"
+  ]
+ },
+ {
+  "old": "Sqedt_ParamDispatch_Entry",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_FmString_OnTitleSqadvdly",
+  "header": "SqedtFunc's EVT_GET_FM_STRING case for TT_SQADVDLY (0xA0), also the switch default (title 0xA2 SQMCP and titles outside 0x9C..0xA3): formats the from-measure word 9734 (0x2606). Basis: callers + body -- entries 4 and 6 and the range checks of SqedtFunc_OnGetFmString's title switch; MainExeCall_OnTitleSqadvdly reads 9734 as its first measure.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14055-14058 `cp hl, 0:i3` / `jr lt, Sqedt_ParamDispatch_Entry` / `cp hl, 7:i3` / `jr gt, Sqedt_ParamDispatch_Entry` -- out-of-range titles",
+   "ui_widgets/widget_descriptors.s:3146/3148 `.short Sqedt_ParamDispatch_Entry - Sqedt_ParamDispatch_Code_2` -- entries 4 (0xA0 SQADVDLY) and 6 (0xA2 SQMCP)",
+   "sequencer/sequencer_ui.s:14089-14090 `pushm (0x2606:16)` / `ld xwa, Sqedt_ParamDispatch_Str_5` -- word 0x2606 = 9734",
+   "sequencer/sequencer_engine.s:25290-25292 `MainExeCall_OnTitleSqadvdly:` / `ldmm8 0x2877, 9732` / `ld wa, (9734:16)` -- the advance/delay edit's track 9732, from-measure 9734",
+   "shared/event_codes.s:1978-1981 `.equ TITLE_SQNOTECNG, 0x1a0009f` / TITLE_SQADVDLY 0xA0 / TITLE_SQMCP 0xA2 -- the title ids of the inner switch (title - 156 = 0x9C..0xA3)"
+  ]
+ },
+ {
+  "old": "Sqedt_ParamDispatch_Code_3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_LmString_OnTitleSqnotecng",
+  "header": "SqedtFunc's EVT_GET_LM_STRING case on title TT_SQNOTECNG (0x9F): formats the last-measure word 9746 (0x2612) with Sqedt_ParamDispatch_Str_6. Basis: callers + body -- entry 3 of the title switch in SqedtFunc_OnGetLmString; MainExeCall_OnTitleSqnotecng reads 9746 as the last measure.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14093 `SqedtFunc_OnGetLmString:` / 14097 `sub hl, 156` / 14103-14106 `lda xix, (Sqedt_ParamDispatch_CaseTable:24)` ... `jp t, (xix+hl)` -- switch on the title id",
+   "ui_widgets/widget_descriptors.s:3127 `.short Sqedt_ParamDispatch_Code_3 - Sqedt_ParamDispatch_Code_3` -- entry 3 = title 0x9F (siblings SqedtFunc_LmString_OnTitleSqqtz/Sqtrns/Sqvelocng/Sqmers/Sqmdel)",
+   "sequencer/sequencer_ui.s:14108-14109 `pushm (0x2612:16)` / `ld xwa, Sqedt_ParamDispatch_Str_6` -- word 0x2612 = 9746",
+   "sequencer/sequencer_engine.s:25279-25280 `ld wa, (9746:16)` / `sub wa, (9744:16)` -- MainExeCall_OnTitleSqnotecng: last - first measure",
+   "shared/event_codes.s:1978-1981 `.equ TITLE_SQNOTECNG, 0x1a0009f` / TITLE_SQADVDLY 0xA0 / TITLE_SQMCP 0xA2 -- the title ids of the inner switch (title - 156 = 0x9C..0xA3)"
+  ]
+ },
+ {
+  "old": "Sqedt_ParamDispatch_Entry2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_LmString_OnTitleSqadvdly",
+  "header": "SqedtFunc's EVT_GET_LM_STRING case for TT_SQADVDLY (0xA0), also the switch default (title 0xA2 SQMCP and titles outside 0x9C..0xA3): formats the last-measure word 9736 (0x2608). Basis: callers + body -- entries 4 and 6 and the range checks of SqedtFunc_OnGetLmString's title switch; MainExeCall_OnTitleSqadvdly reads 9736 as its last measure.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14098-14101 `cp hl, 0:i3` / `jr lt, Sqedt_ParamDispatch_Entry2` / `cp hl, 7:i3` / `jr gt, Sqedt_ParamDispatch_Entry2` -- out-of-range titles",
+   "ui_widgets/widget_descriptors.s:3128/3130 `.short Sqedt_ParamDispatch_Entry2 - Sqedt_ParamDispatch_Code_3` -- entries 4 (0xA0 SQADVDLY) and 6 (0xA2 SQMCP)",
+   "sequencer/sequencer_ui.s:14132-14133 `pushm (0x2608:16)` / `ld xwa, Sqedt_ParamDispatch_Str_11` -- word 0x2608 = 9736",
+   "sequencer/sequencer_engine.s:25294-25295 `ld wa, (9736:16)` / `sub wa, (9734:16)` -- MainExeCall_OnTitleSqadvdly: last - first measure",
+   "shared/event_codes.s:1978-1981 `.equ TITLE_SQNOTECNG, 0x1a0009f` / TITLE_SQADVDLY 0xA0 / TITLE_SQMCP 0xA2 -- the title ids of the inner switch (title - 156 = 0x9C..0xA3)"
+  ]
+ },
+ {
+  "old": "Sqedt_ValueDispatch_Code",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_OnCurToParam_CursorPos0_TrackField",
+  "header": "Cursor position 0 on titles 0x9C..0xA1 and 0xA3 (every one but SQTRKMRG and SQMCP): returns parameter 0, the track field. Basis: callers + body -- the shared case of the title switch in SqedtFunc_OnCurToParam_CursorPos0 (siblings: _OnTitleSqtrkmrg = parameter 12, SQMCP = -1).",
+  "basis": "callers + body",
+  "evidence": [
+   "ui_widgets/widget_descriptors.s:3107-3109 `.short SqedtFunc_OnCurToParam_CursorPos0/1/2 - SqedtFunc_OnCurToParam_CursorPos0` -- SqedtFunc_OnCurToParam (EVT_CUR_TO_PARAM) switches on the cursor position 0..6",
+   "sequencer/sequencer_ui.s:14640 `sub hl, 155` / 14646-14649 `lda xix, (Sqedt_ValueDispatch_CaseTable_3:24)` ... `jp t, (xix+hl)` -- switch on title - 0x9B, 0..8",
+   "ui_widgets/widget_descriptors.s:3088-3096 entry 0 SqedtFunc_OnCurToParam_CursorPos0_OnTitleSqtrkmrg, 1-6 and 8 Sqedt_ValueDispatch_Code, 7 (0xA2 SQMCP) SqedtFunc_ReturnNegOne",
+   "sequencer/sequencer_ui.s:14651 `ld l, 0:opc` / 14652 `jrl SqedtFunc_SignExtendAndReturn` -- returns 0",
+   "ui_widgets/widget_descriptors.s:1949-1951 `.short SqedtVal_ParamCases - SqedtVal_ParamCases` / `SqedtVal_ClearDrawBuffer_FromMeasureField` / `SqedtVal_ClearDrawBuffer_LastMeasureField` -- parameter 0 = the track field (SqedtVal_ParamCases sends EVT_GET_TRK_STRING, sequencer/sequencer_ui.s:8930), 1 = from measure, 2 = last measure"
+  ]
+ },
+ {
+  "old": "Sqedt_ValueDispatch_Code2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_OnCurToParam_CursorPos1_FromMeasureField",
+  "header": "Cursor position 1 on titles 0x9C..0xA1 and 0xA3 (all but SQMCP): returns parameter 1, the from-measure field. Basis: callers + body -- the shared case of the title switch in SqedtFunc_OnCurToParam_CursorPos1 (SQMCP = -1).",
+  "basis": "callers + body",
+  "evidence": [
+   "ui_widgets/widget_descriptors.s:3107-3109 `.short SqedtFunc_OnCurToParam_CursorPos0/1/2 - SqedtFunc_OnCurToParam_CursorPos0` -- SqedtFunc_OnCurToParam (EVT_CUR_TO_PARAM) switches on the cursor position 0..6",
+   "sequencer/sequencer_ui.s:14660 `sub hl, 156` / 14666-14669 `lda xix, (Sqedt_ValueDispatch_CaseTable_2:24)` ... `jp t, (xix+hl)` -- switch on title - 0x9C, 0..7",
+   "ui_widgets/widget_descriptors.s:3069-3076 entries 0-5 and 7 Sqedt_ValueDispatch_Code2, 6 (0xA2 SQMCP) SqedtFunc_ReturnNegOne",
+   "sequencer/sequencer_ui.s:14671 `ld l, 1:opc` / 14672 `jr SqedtFunc_SignExtendAndReturn` -- returns 1",
+   "ui_widgets/widget_descriptors.s:1949-1951 `.short SqedtVal_ParamCases - SqedtVal_ParamCases` / `SqedtVal_ClearDrawBuffer_FromMeasureField` / `SqedtVal_ClearDrawBuffer_LastMeasureField` -- parameter 0 = the track field (SqedtVal_ParamCases sends EVT_GET_TRK_STRING, sequencer/sequencer_ui.s:8930), 1 = from measure, 2 = last measure"
+  ]
+ },
+ {
+  "old": "Sqedt_ValueDispatch_Code3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_OnCurToParam_CursorPos2_LastMeasureField",
+  "header": "Cursor position 2 on titles 0x9C..0xA1 and 0xA3 (all but SQTRKMRG and SQMCP): returns parameter 2, the last-measure field. Basis: callers + body -- the shared case of the title switch in SqedtFunc_OnCurToParam_CursorPos2 (siblings: _OnTitleSqtrkmrg = parameter 13, SQMCP = -1).",
+  "basis": "callers + body",
+  "evidence": [
+   "ui_widgets/widget_descriptors.s:3107-3109 `.short SqedtFunc_OnCurToParam_CursorPos0/1/2 - SqedtFunc_OnCurToParam_CursorPos0` -- SqedtFunc_OnCurToParam (EVT_CUR_TO_PARAM) switches on the cursor position 0..6",
+   "sequencer/sequencer_ui.s:14677 `sub hl, 155` / 14683-14686 `lda xix, (Sqedt_ValueDispatch_CaseTable:24)` ... `jp t, (xix+hl)` -- switch on title - 0x9B, 0..8",
+   "ui_widgets/widget_descriptors.s:3049-3057 entry 0 SqedtFunc_OnCurToParam_CursorPos2_OnTitleSqtrkmrg, 1-6 and 8 Sqedt_ValueDispatch_Code3, 7 (SQMCP) SqedtFunc_ReturnNegOne",
+   "sequencer/sequencer_ui.s:14688 `ld l, 2:opc` / 14689 `jr SqedtFunc_SignExtendAndReturn` -- returns 2",
+   "ui_widgets/widget_descriptors.s:1949-1951 `.short SqedtVal_ParamCases - SqedtVal_ParamCases` / `SqedtVal_ClearDrawBuffer_FromMeasureField` / `SqedtVal_ClearDrawBuffer_LastMeasureField` -- parameter 0 = the track field (SqedtVal_ParamCases sends EVT_GET_TRK_STRING, sequencer/sequencer_ui.s:8930), 1 = from measure, 2 = last measure"
+  ]
+ },
+ {
+  "old": "SeqFormat_DispatchA_Code",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_OnChkCur2_McpTrAFields",
+  "header": "Fields 15-17 (measure-copy track A, from measure, last measure): EVT_CHK_CUR2 is true when side 0x3E2E0 = 0 and the from-cursor (0x3E2DC) = field - 15. Basis: callers + body -- cases 15-17 of SqedtFunc_OnChkCur2's field switch (siblings McpTrBFields 18-20, MinsTrAFields 21-23, MinsTrBFields 24-26, ScpFromFields, ScpToFields).",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14820-14831 `SqedtFunc_OnChkCur2:` / `sub wa, 15` / `cp wa, 15` / `lda xix, (SeqFormat_DispatchA_CaseTable:24)` / `lda xix, (SeqFormat_DispatchA_Code:24)` / `jp t, (xix+wa)` -- switch on the field number 15..30",
+   "ui_widgets/widget_descriptors.s:2997-2999 `.short SeqFormat_DispatchA_Code - SeqFormat_DispatchA_Code` x3, then SqedtFunc_OnChkCur2_McpTrBFields x3 (3000-3002) -- this label serves fields 15-17",
+   "sequencer/sequencer_ui.s:14833-14836 `cp (0x03e2e0:24), 0` / `ld xwa, 15` / `jr SqedtFunc_OnChkCur2_ScpFromFields_Join2` -- side 0, compare the from-cursor 0x3E2DC with field - 15 (14864-14871)",
+   "sequencer/sequencer_ui.s:10584 `sub xhl, 0xf` / 10590 `add xhl, SqplyVal_ExtraParams_CaseTable` / 10597 (AccIll_Dispatch, case 0) `ld xbc, EVT_GET_MCP_TR_A_STRING` / 10602 `ld xbc, EVT_CHK_CUR2` -- the field draw switch (SqplyVal_ExtraParams_CaseTable) maps field 15 to MCP TrA, 16 to EVT_GET_MCP_FM_STRING (10617), 17 to EVT_GET_MCP_LM_STRING (10621), and asks EVT_CHK_CUR2 with the same field number",
+   "shared/event_codes.s:649-651 `.equ EVT_GET_MCP_TR_A_STRING` / `_FM_STRING` / `_LM_STRING` -- measure-copy track A / from-measure / last-measure fields"
+  ]
+ },
+ {
+  "old": "SMF_ProcessTimedEvent_Entry",
+  "verdict": "refuse",
+  "why_refused": "Internal continuation of SMF_CC_Volume_Handler: it is reached only by that handler's own `jr z` (smf_event_processor.s:2884) and by falling through the `.include` of this file (2888) after the handler's `bit 0, (4236:16)` test. Body: L := the event's value byte (4215), then falls into SMF_ProcessTimedEvent_Continue, the shared 'write CC W = 7 (volume) with value L and its delta time' tail. Should become a local label of SMF_CC_Volume_Handler (e.g. SMF_CC_Volume_Handler_LoadValue).",
+  "new": null,
+  "header": null,
+  "basis": null,
+  "evidence": [
+   "sequencer/smf_event_processor.s:2882-2888 `SMF_CC_Volume_Handler:` / `cp (6709:16), 0` / `jr z, SMF_ProcessTimedEvent_Entry` / `bit 0, (4236:16)` / `jrl z, SMF_ProcessEventLoop` / `.include \"sequencer/smf_config_routines.s\"` -- the only branch to it, plus fall-through",
+   "sequencer/smf_config_routines.s:9-10 `SMF_ProcessTimedEvent_Entry:` / `ld l, (4215:16)` -- value byte, then SMF_ProcessTimedEvent_Continue (12) which the CC93 / CC64 / CC91 handlers also reach (smf_event_processor.s:2850, 2865, 2867, 2880)",
+   "sequencer/smf_event_processor.s:2395-2397 `ld w, 0x7:opc` / `cp l, 3:i3` / `jrl z, SMF_CC_Volume_Handler` -- SMF_ControlChange_ValidateRange sets W = 7 (CC#7 volume) before `jrl z, SMF_CC_Volume_Handler`"
+  ]
+ },
+ {
+  "old": "SMF_ProcessEventLoop_Entry",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SMF_ControlChange_SkipEvent",
+  "header": "Jump island of SMF_ControlChange_Handler (SMF export): a control event it does not write -- channel byte (4213) = 127 -- goes back to SMF_ProcessEventLoop for the next event. Basis: callers + body -- its only live referrer is SMF_ControlChange_Handler's `cp (4213:16), 127` test; the body is a single `jrl SMF_ProcessEventLoop`.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/smf_event_processor.s:2363-2367 `SMF_ControlChange_Handler:` / `cp hl, 6:i3` / `jrl nz, SMF_ProcessEventLoop` / `cp (4213:16), 127` / `jrl z, SMF_ProcessEventLoop_Entry` -- channel byte 127: skip",
+   "sequencer/smf_event_processor.s:2370 `jrl SMF_ControlChange_ValidateRange` -- unconditional; the other three references (2373, 2376, 2378) sit in the unreachable bytes after it",
+   "sequencer/smf_event_processor.s:2391-2394 `ld a, 0xb0:opc` / `ld w, (4213:16)` / `and w, 0xf` / `or a, w` -- (4213) is the channel the CC is written on",
+   "sequencer/smf_config_routines.s:55-56 `SMF_ProcessEventLoop_Entry:` / `jrl SMF_ProcessEventLoop` -- not reachable by fall-through (53 is an unconditional `jrl`)"
+  ]
+ },
+ {
+  "old": "SMF_ScanAndProcessChannel_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SMF_PartRecordOffsetByTrackAssign",
+  "header": "20 x u16, indexed by a track's TRACK ASSIGN code (RAM 0xF1A0[track], 0..19): offset of that part's 26-byte record from RAM 0xF460 (0x36 + 26 x part index); 0xFFFF for codes 13-16 (no part record: the SMF export skips the track). Basis: readers + bytes -- SMF_ScanAndProcessChannel and the SMF volume/pan, RPN fine-tune, coarse-tune and transpose writers.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "sequencer/smf_event_processor.s:1066-1077 `ld xix, 0xf1a0` / `ld l, (xix+hl)` / `sla l, 1` / `ld xix, SMF_ScanAndProcessChannel_Data` / `ld hl, (xix+hl)` / `cp hl, 0xffff` / `jrl z, SMF_AdvanceChannelScan` -- index = TRACK ASSIGN code, 0xFFFF skips",
+   "sequencer/smf_event_processor.s:1057 `ld xiy, 0xf460` / 1092 `lda xiy, (xiy+hl)` -- offset added to RAM 0xF460",
+   "sequencer/smf_event_processor.s:1387 / 1470 / 1572 / 1669 `ld xix, SMF_ScanAndProcessChannel_Data` -- SMF_WriteVol_PanAndPitch (CC10 from record +8), SMF_WriteRPN_FineTune (+10), SMF_WriteRPN_CoarseTune, SMF_WriteRPN_Transpose",
+   "sequencer/smf_config_routines.s:212-215 `.short 0x0036, 0x006a, 0x0050, 0x00ec, 0x0106 ... 0xffff x4 ... 0x016e, 0x0188, 0x01a2` -- 0x36 + 26k, k = the part index SMF_ProgramChange_ProcessPatch_Data gives for the same code",
+   "display/scoop_display.s:13131-13153 (SqStep_GetRhythmTrackForMeasures, earlier batch) -- 0xF1A0 is the TRACK ASSIGN table; codes 13-16 = CHORD / APC / CONTROL / RHYTHM per the earlier TRACK ASSIGN finding"
+  ]
+ },
+ {
+  "old": "SMF_Setup_WriteLoop_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SMF_GmSystemOnEvent",
+  "header": "8-byte SMF track event: delta 0, SysEx F0 05 7E 7F 09 01 F7 (General MIDI System On). SMF_Setup_WriteLoop writes it into the exported file when RAM byte 0x10E4 is non-zero. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "sequencer/smf_event_processor.s:1012-1016 `ld xiy, SMF_Setup_WriteLoop_Data` / `cp (4324:16), 0` / `jr nz, SMF_Setup_SelectTablePtr` / `ld xiy, SMF_Setup_WriteLoop_Data_2` -- chosen when (0x10E4) != 0",
+   "sequencer/smf_event_processor.s:1020-1028 `ldw bc, 0x8` / `ld A, (xiy+)` / `call SMF_WriteByte` -- 8 bytes written to the file",
+   "sequencer/smf_config_routines.s:221-222 `SMF_Setup_WriteLoop_Data:` / `.byte 0x00, 0xf0, 0x05, 0x7e, 0x7f, 0x09, 0x01, 0xf7` -- universal non-real-time GM System On"
+  ]
+ },
+ {
+  "old": "SMF_Setup_WriteLoop_Data_2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SMF_GmSystemOffEvent",
+  "header": "8-byte SMF track event: delta 0, SysEx F0 05 7E 7F 09 02 F7 (General MIDI System Off). SMF_Setup_WriteLoop writes it into the exported file when RAM byte 0x10E4 is zero. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "sequencer/smf_event_processor.s:1014-1016 `cp (4324:16), 0` / `jr nz, SMF_Setup_SelectTablePtr` / `ld xiy, SMF_Setup_WriteLoop_Data_2` -- chosen when (0x10E4) = 0",
+   "sequencer/smf_event_processor.s:1020-1028 `ldw bc, 0x8` / `ld A, (xiy+)` / `call SMF_WriteByte` -- 8 bytes written to the file",
+   "sequencer/smf_config_routines.s:223-224 `SMF_Setup_WriteLoop_Data_2:` / `.byte 0x00, 0xf0, 0x05, 0x7e, 0x7f, 0x09, 0x02, 0xf7` -- sub-ID 09 02 = GM System Off"
+  ]
+ },
+ {
+  "old": "SMF_ProgramChange_ProcessPatch_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SMF_PartIndexByTrackAssign",
+  "header": "20 x u8, indexed by a track's TRACK ASSIGN code (RAM 0xF1A0[channel]): the part index 0..15 of that code (0x7F for codes 13-16, which have no part), the same index that SMF_PartRecordOffsetByTrackAssign encodes as 0x36 + 26 x index. SMF_ProgramChange_ProcessPatch puts it in byte 0x1A5C of the record it converts with SndParam_InitBufferConverge before writing the bank/program events. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "sequencer/smf_event_processor.s:2207-2212 `ld l, (4213:16)` / `ld xix, 0xf1a0` / `ld l, (xix+hl)` / `ld xix, SMF_ProgramChange_ProcessPatch_Data` / `ld l, (xix+hl)` / `ld (6748:16), l` -- index = TRACK ASSIGN code of the event's channel, result to 0x1A5C",
+   "sequencer/smf_event_processor.s:2214-2215 `ld xwa, 0x1a57` / `call SndParam_InitBufferConverge` -- the 3-byte record at 0x1A5A is converted, then CC0 (bank) is written from 0x1A58",
+   "sequencer/smf_config_routines.s:232-233 `.byte 0x00, 0x02, 0x01, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x04, 0x05` / `.byte 0x06, 0x03, 0x0f, 0x7f, 0x7f, 0x7f, 0x7f, 0x0c, 0x0d, 0x0e` -- a permutation of 0..15 plus 0x7F",
+   "sequencer/smf_config_routines.s:212-215 -- the offset table's entry for every code is 0x36 + 26 x this byte (0x7F exactly where it holds 0xFFFF)"
+  ]
+ },
+ {
+  "old": "ScreenGroup2_Entry",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DiskStream_ReaderTask",
+  "header": "Task 2 entry (TaskSched_ScreenGroupTable group 2): the disk-stream reader. It posts the two 1028-byte buffers at DiskStream BufferPtr (0x3E3EE) to queue 2, then loops: takes a free buffer from queue 2, fills 1024 bytes from the stream (SndTable_ByteBlock_ReadOps: FileRead of handle 0x2357A, or raw sector commands), and sends it to queue 3 for TaskBuf_ReadNextByte, until ByteLength (0x3E3E8) is read; flag 0x2357E = 1 while it runs. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "boot/system_handlers.s:1999 `.long ScreenGroup2_Entry, 0x0001e436 ; group 2` -- task table entry (initial stack, SR 0x8800, priority 3)",
+   "sequencer/smf_event_processor.s:10399-10403 `ld xwa, (xwa + 71)` / `ld (0x03e3e8:24), xwa` / `ld wa, 2:i3` / `call Show_ScreenGroup` -- SndTable_LookupA opens the file \"rb\", stores its size and starts task 2; SndTable_LookupD does the same for sector mode (10514-10516)",
+   "sequencer/smf_event_processor.s:10172-10186 `ld (0x2357e:24), 1` / `ld xwa, (0x3e3e8:24)` / `ld xbc, (0x3e3ee:24)` / `call TaskMsg_Send` (wa = 2) / `lda xwa, (xwa+1028)` / `call TaskMsg_Send` -- two buffers to queue 2",
+   "sequencer/smf_event_processor.s:10193-10214 `call TaskMsg_Receive` (wa = 2) / `calr SndTable_ByteBlock_ReadOps` / `ld wa, 3:i3` / `call TaskMsg_Send` -- fill and pass to queue 3",
+   "sequencer/smf_event_processor.s:10136-10144 `SndTable_ByteBlock_ReadOps:` / `cp (254956:24), 0` / ... `pushw 1024` / `call FileRead` -- 1024 bytes per buffer (0x3E3EC = 1 -> FDC_SectorCmd_ByteBlock)",
+   "sequencer/smf_event_processor.s:10257-10264 `TaskBuf_ReadNextByte:` / `ld wa, 3:i3` / `call TaskMsg_Receive` -- the consumer of queue 3",
+   "ui_widgets/sequencer_channel_containers.s:104-107 `DiskStream_State` -- SourceMode, ByteLength, BufferPtr = RAM 0x22D72, 'the streaming reader SndTable_LookupA/D set up'"
+  ]
+ },
+ {
+  "old": "FloppyIO_ReadAndValidateHeader_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SMF_HeaderMagic_MTrk",
+  "header": "The Standard MIDI File track-chunk ID \"MTrk\", compared byte by byte with the next 4 bytes read from the floppy file before a track is loaded; the MThd ID sits right before it (SMF_HeaderMagic_MThdMTrk). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "sequencer/smf_playback.s:516-530 `FloppyIO_ReadAndValidateHeader:` / `ld bc, 4:i3` / `ld xiy, FloppyIO_ReadAndValidateHeader_Data` / `call FloppyIO_ReadNextByte` / `cp A, (xiy+)` / `ldw (6699:16), 49` -- 4-byte compare, mismatch = error state 49",
+   "sequencer/smf_tonegen_core.s:64-65 `SMF_HeaderMagic_MThdMTrk: .ascii \"MThd\"` / `FloppyIO_ReadAndValidateHeader_Data: .ascii \"MTrk\"`",
+   "sequencer/smf_playback.s:433 `ld xiy, SMF_HeaderMagic_MThdMTrk` -- the header-chunk check uses the sibling"
+  ]
+ },
+ {
+  "old": "MidiSysEx_CC_LookupPartMap_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqTrack_ChannelMapSwap10And16",
+  "header": "16-byte MIDI-channel map: identity with entries 9 and 15 swapped (channels 10 and 16), used instead of SeqTrack_ChannelMapIdentity when mode byte 0x11F8 is not 1; the readers remap the event's channel byte (0x1075) or a channel index through it. Same 10<->16 exchange as the TRACK ASSIGN default map VoiceChannels_LoadPartMapAndInitPan_Data, which puts code 12 (DRUMS) on channel 10 instead of 16. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "sequencer/smf_tonegen_core.s:1486-1494 `ld xix, SeqTrack_ChannelMapIdentity` / `cp (4600:16), 1` / `jrl z, MidiSysEx_CC_PartMapSelected` / `ld xix, MidiSysEx_CC_LookupPartMap_Data` / `ld a, (xix+hl)` / `ld (4213:16), a` -- MidiSysEx_CC_LookupPartMap remaps the channel in place",
+   "sequencer/smf_tonegen_core.s:1512 / 3047 / 3138 / 4778 / 5163, smf_event_processor.s:177 / 437 `ld xix, MidiSysEx_CC_LookupPartMap_Data` -- the other readers (program change, voice-parameter modes, SoundGen_SelectChannelTable)",
+   "sequencer/smf_tonegen_core.s:1585 `.byte 0x00, 0x01, ..., 0x08, 0x0f, 0x0a, ..., 0x0e, 0x09` -- identity except 9 <-> 15",
+   "sequencer/smf_tonegen_core.s:961-964 / 983-985 `ld xiy, VoiceChannels_PartMapTable` / `cp (4600:16), 1` / ... -- the TRACK ASSIGN default (copied to 0xF1A0): mode 1 has 0x0C (DRUMS) at entry 15, the other map at entry 9"
+  ]
+ },
+ {
+  "old": "FDC_Read_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FDC_ReadDataRegister",
+  "header": "Reads the uPD72068 data register (0x11000A) into L: result-phase bytes and status bytes. Basis: callers + body -- the result-phase readers (FDC_ResultPhase_Read, FDC_SendAuxCmdReadResult, FDC_INTERRUPT_HANDLER, INT4_ReadResultLoop, FDC_CONFIG_VERIFY) call it after waiting for RQM.",
+  "basis": "callers + body",
+  "evidence": [
+   "storage/fdc_routines.s:25-27 `FDC_Read_Data:` / `ld l, (0x11000a:24)` / `ret`",
+   "storage/fdc_routines.s:750 `calr FDC_Read_Data` -- FDC_ResultPhase_Read_Loop2; also 846 FDC_SendAuxCmdReadResult, 2027 FDC_INTERRUPT_HANDLER, 2322 INT4_ReadResultLoop, 178 FDC_CONFIG_VERIFY (`ld (xiz+), l`)",
+   "storage/fdc_routines.s:21-23 `FDC_Read_Status:` / `ld l, (0x110008:24)` -- the sibling reads the main status register",
+   "../technics-docs/fdc-subsystem.md:605-606 -- 0x110008 = main status (read) / auxiliary command (write); 0x11000A = data register"
+  ]
+ },
+ {
+  "old": "FDC_Write_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FDC_WriteDataRegister",
+  "header": "Writes A to the uPD72068 data register (0x11000A): command and parameter bytes. Basis: callers + body -- FDC_SendCommandByte, FDC_SendParameterByte, INT4_SendSpecifyCmd and FDC_CONFIG_VERIFY call it.",
+  "basis": "callers + body",
+  "evidence": [
+   "storage/fdc_routines.s:41-43 `FDC_Write_Data:` / `ld (0x11000a:24), a` / `ret`",
+   "storage/fdc_routines.s:787 / 800 `calr FDC_Write_Data` -- FDC_SendCommandByte / FDC_SendParameterByte; also 2314 INT4_SendSpecifyCmd, 172 FDC_CONFIG_VERIFY (`ldw wa, 8` = SENSE INTERRUPT STATUS)",
+   "../technics-docs/fdc-subsystem.md:606 -- 0x11000A = data register: uPD765-style commands, parameters, result bytes"
+  ]
+ },
+ {
+  "old": "FDC_CONFIG_VERIFY_Code",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FDC_CONFIG_VERIFY_On720KMedia",
+  "header": "Media-type 0 case of FDC_CONFIG_VERIFY's switch on the low nibble of 0x8A6E: stores drive mode 0 in 0x8A6C, rate/mode bits 0 and FDC_WaitReady_Helper(2) -- the 9 x 512 B, 80-track 720 KB (2DD) setting; codes 4 and 5 and the default run the same body with their own code. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "storage/fdc_routines.s:205-216 `ld a, (0x8a6e:16)` / `and a, 15` / `cp wa, 5:i3` / `lda xix, (FDC_WaitReady_CaseTable:24)` / `lda xix, (FDC_CONFIG_VERIFY_Code:24)` / `jp t, (xix+wa)` -- switch on the media-type nibble 0..5",
+   "ui_widgets/disk_warning_strings.s:130 `.short FDC_CONFIG_VERIFY_Code - FDC_CONFIG_VERIFY_Code` -- entry 0 (siblings: 2 On1024ByteSectorMedia, 3 On1440KMedia)",
+   "storage/fdc_routines.s:218-222 `ld (35436:16), 0` / `ldw (0x8a22:16), 0` / `ldib_erp 251, 0` / `ld wa, 2:i3` / `calr FDC_WaitReady_Helper` -- 0x8A6C (FDC_DRIVE_MODE) = 0, mode bits 0 (sent as aux command 0x0B | bits at FDC_WaitReady_Join)",
+   "../technics-docs/fdc-subsystem.md:703 `| 0, 4, 5 | 9 x 512 B, 80 tracks | 0x1B / 0x54 (720 KB 2DD) |` -- geometry of media type 0 in the boot twin (FDC_MediaStanza_Type0)"
+  ]
+ },
+ {
+  "old": "SeMenu_PresetManager_Load_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeDrumKit_TouchCurvePageRecords",
+  "header": "Sound-editor screen records (compiled se_setup_editor_full.c from offset 202): two \"TOUCH\" \"CURVE\" captions (y 62 and 209), two vertical-bar and two down-arrow marks, then box/line records up to SeScreenData_0x56CD -- drawn in drum-kit mode (0x6AE = 1) for SE screen code 0x2B; it also ends the DRUM DETAIL EDIT menu list that starts at SeMenu_PresetManager_Load_Records. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/sound_editor_ui.s:9284-9294 `cp (1710:16), 1` / `jr z, SeMenu_CompareAndApply_Check` / `ld xiy, SeMenu_PresetManager_Load_Data` / `ld xix, SeScreenData_0x56CD` / `call SeGfx_DrawStaticList` -- drawn from here in mode 1; SeMenu_CompareAndApply_Init is entry 11 (code 0x2B) of SeMenu_ShowPopupDialog_Draw (8165)",
+   "audio/sound_editor_ui.s:8885-8888 `cp (1710:16), 1` / `ld xiy, SeMenu_PresetManager_Load_Records` / `ld xix, SeMenu_PresetManager_Load_Data` -- end bound of the mode-1 list whose bytes say \"DRUM DETAIL EDIT\" (se_setup_editor_full.c field_label_0)",
+   "storage/flash_floppy_handlers.s:678 `SeMenu_PresetManager_Load_Data: .incbin \"includes/generated/se_setup_editor_full.bin\", 0xCA, 0x40`",
+   "audio/sound_editor_screens/se_setup_editor_full.c:77-84 `.param_label_1 = { .opcode = 0x17, ..., 0x54,0x4f,0x55,0x43,0x48 }` (\"TOUCH\" at 59,62), \"CURVE\" (107,62), \"TOUCH\" (84,209), \"CURVE\" (125,209), LCD_CHAR_VBAR x2, LCD_CHAR_DARROW x2 -- offset 202 = param_label_1"
+  ]
+ },
+ {
+  "old": "Flash_StoreBaseAndInitAccPatch_Sub",
+  "verdict": "refuse",
+  "why_refused": "Mechanics are clear, meaning is not. For record A + 30 it walks indices 0-9: reads field 0 through Util_FrameSetup10 and, where it equals the first word of the table at (0x7A0), rewrites it through PartGrid_OperationsBlock with the second word; then for each 4-byte pair k of the table at (0x7A4) (until 0xFFFF) it does the same for fields 1-3 with the pair at (0x7A0) + 4k + 4 / + 6 -- an old -> new number remap inside those records. Its callers are themselves generically or wrongly named (Flash_InitBytecodeBlock, _Helper8/_Helper9, Flash_WriteBackSlotTable) and what the records (MSP_Default_ChannelMap-indexed, via PartGrid_ColumnDispatch) and the remap tables at 0x7A0/0x7A4 hold is not established, so a name would be body-only.",
+  "new": null,
+  "header": null,
+  "basis": null,
+  "evidence": [
+   "storage/flash_floppy_handlers.s:2397-2430 `Flash_StoreBaseAndInitAccPatch_Sub:` / `cpw (0x7a0:16), 0xffff` / `add a, 30` / `calr Util_FrameSetup10` / `lda xwa, (1952:16)` / `cp hl, (xwa)` / `ld hl, (xwa+2)` / `calr PartGrid_OperationsBlock` / `cp_erpb 249, 10` -- first pass, field 0",
+   "storage/flash_floppy_handlers.s:2433-2470 `lda xwa, (1956:16)` / `cpw (xwa+bc), 0xffff` / `ld de, 1:i3` / `calr Util_FrameSetup10` -- second pass, fields 1-3",
+   "storage/flash_floppy_handlers.s:1427 `calr Flash_StoreBaseAndInitAccPatch_Sub` -- caller Flash_InitBytecodeBlock, between Flash_AssignSlotsToBlocks and Flash_StoreBaseAndInitAccPatch; also 3994/4030/4072 (Flash_InitBytecodeBlock_Helper8), 4120/4185 (Flash_WriteBackSlotTable), 4141 (Flash_InitBytecodeBlock_Helper9)",
+   "storage/flash_floppy_handlers.s:1655-1685 `Util_FrameSetup10:` / `calr PartGrid_ColumnDispatch` / `lda xbc, (MSP_Default_ChannelMap:24)` -- the getter; PartGrid_OperationsBlock (1748) is the matching setter"
+  ]
+ },
+ {
+  "old": "SetSepaOutMode_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SepaOut_Msg_CC9B_Value32",
+  "header": "4-byte sub-CPU control-change template B0 <part> 9B 20 (status, part placeholder, controller 0x9B, value 0x20 = 32); SetSepaOutMode patches the part to 0x14/0x13/0x16 and sends it with sendCOMM. Basis: readers + bytes -- used for part 0x14 in modes 1-3 and for all three parts in modes 2-3; mode 0 sends SepaOut_Config_0 (B0 xx 9B 01) instead.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/sepaout_config.s:21 `SetSepaOutMode_Data: .incbin ..., 0x4, 0x4` -- bytes b0 00 9b 20 (sepaout_config.bin +4)",
+   "kn5000_v10_program.s:1813 `ld xiy, SetSepaOutMode_Data` / 1814 `lda xix, (xsp + 12)` -- copied to the (xsp+12) slot",
+   "kn5000_v10_program.s:1876 `ld (xsp + 13), 0x14` / `lda xwa, (xsp + 12)` / `ld bc, 4:i3` / `call sendCOMM` -- byte +1 of a template is patched with the part (0x14, 0x13, 0x16) and the 4 bytes go to the sub-CPU",
+   "v142/subcpu/kn5000_subprogram_v142.s:21788 `XWA -> 4-byte message: +0 status, +1 part 0..0x19, +2 controller, +3 value` -- Voice_CtrlChange's message layout; 0x9B / 0x9D are among its explicit controller compares (21803, 21807)",
+   "kn5000_v10_program.s:1875-1880 `SetSepaOut_Mode1:` `ld (xsp + 13), 0x14` ... `call sendCOMM` -- mode 1: part 0x14 gets this template, parts 0x13/0x16 get SepaOut_Config_0 (xsp+16)",
+   "kn5000_v10_program.s:1914-1950 `SetSepaOut_Mode2:` -- (xsp+12) for parts 0x14, 0x13, 0x16"
+  ]
+ },
+ {
+  "old": "SetSepaOutMode_Data_2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SepaOut_Msg_CC9D_Value0",
+  "header": "4-byte sub-CPU control-change template B0 <part> 9D 00 (controller 0x9D, value 0); SetSepaOutMode sends it for parts 0x14, 0x13 and 0x16 in modes 0, 1 and 2. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/sepaout_config.s:22 `SetSepaOutMode_Data_2: .incbin ..., 0x8, 0x4` -- bytes b0 00 9d 00",
+   "kn5000_v10_program.s:1817 `ld xiy, SetSepaOutMode_Data_2` / 1818 `lda xix, (xsp + 8)` -- the (xsp+8) slot",
+   "kn5000_v10_program.s:1835 `ld (xsp + 9), 0x14` / `lda xwa, (xsp + 8)` / `call sendCOMM` -- mode 0, and the same (xsp+9) patches for 0x13 / 0x16 in modes 0-2",
+   "v142/subcpu/kn5000_subprogram_v142.s:21788 `XWA -> 4-byte message: +0 status, +1 part 0..0x19, +2 controller, +3 value` -- Voice_CtrlChange's message layout; 0x9B / 0x9D are among its explicit controller compares (21803, 21807)"
+  ]
+ },
+ {
+  "old": "SetSepaOutMode_Data_3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SepaOut_Msg_CC9D_Value1",
+  "header": "4-byte sub-CPU control-change template B0 <part> 9D 01 (controller 0x9D, value 1); SetSepaOutMode sends it only in mode 3, for parts 0x13 and 0x16. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/sepaout_config.s:23 `SetSepaOutMode_Data_3: .incbin ..., 0xC, 0x4` -- bytes b0 00 9d 01",
+   "kn5000_v10_program.s:1821 `ld xiy, SetSepaOutMode_Data_3` / 1822 `lda xix, (xsp + 4)` -- the (xsp+4) slot",
+   "kn5000_v10_program.s:1972 `ld (xsp + 5), 0x13` / `lda xwa, (xsp + 4)` / `call sendCOMM` -- SetSepaOut_Mode3 (1953), and again with 0x16",
+   "v142/subcpu/kn5000_subprogram_v142.s:21788 `XWA -> 4-byte message: +0 status, +1 part 0..0x19, +2 controller, +3 value` -- Voice_CtrlChange's message layout; 0x9B / 0x9D are among its explicit controller compares (21803, 21807)"
+  ]
+ },
+ {
+  "old": "SetSepaOutMode_Data_4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SepaOut_Msg_CC9D_Value2",
+  "header": "4-byte sub-CPU control-change template B0 <part> 9D 02 (controller 0x9D, value 2); SetSepaOutMode sends it only in mode 3, for part 0x14. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/sepaout_config.s:24 `SetSepaOutMode_Data_4: .incbin ..., 0x10, 0x4` -- bytes b0 00 9d 02",
+   "kn5000_v10_program.s:1825 `ld xiy, SetSepaOutMode_Data_4` / 1826 `ld xix, xsp` -- the (xsp+0) slot",
+   "kn5000_v10_program.s:1960 `ld (xsp + 1), 0x14` / `lda xwa, (xsp)` / `call sendCOMM` -- SetSepaOut_Mode3 only",
+   "v142/subcpu/kn5000_subprogram_v142.s:21788 `XWA -> 4-byte message: +0 status, +1 part 0..0x19, +2 controller, +3 value` -- Voice_CtrlChange's message layout; 0x9B / 0x9D are among its explicit controller compares (21803, 21807)"
+  ]
+ },
+ {
+  "old": "SetWall_ReturnZero_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CDlike_KeepTitleCaseMap",
+  "header": "14-byte case map of CDlike_ExitModeUnlessKeepTitle, indexed by CURRENT_TITLE - 108: 0 = keep the CD-like play mode (titles 108-111, 114, 115, 118, 119, 121), 1 = CDlike_ExitModeAndRestore (112, 113, 116, 117, 120). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/ui_playback_modes.s:1456-1462 `ld a, (CURRENT_TITLE:16)` / `sub wa, 108` / `cp wa, 13` -- index = title - 108, 0..13",
+   "ui/ui_playback_modes.s:1463-1465 `lda xix, (SetWall_ReturnZero_Data:24)` / `ld wa, (xix+wa)` / `extz wa` -- one byte per title",
+   "ui/ui_playback_modes.s:1467 `ld xix, SqTrAsPsTtl_CaseF_CaseTable` -- byte 0 -> CDlike_ExitModeUnlessKeepTitle_OnKeepTitle (ret), byte 1 -> _Skip (CDlike_ExitModeAndRestore) (ui/sepaout_config.s:55-56)",
+   "ui/sepaout_config.s:53 `.incbin \"includes/generated/sepaout_config.bin\", 0x44, 0xE` -- bytes 00 00 00 00 01 01 00 00 01 01 00 00 01 00",
+   "ui/ui_playback_modes.s:1452-1454 (header) -- kept titles DKDPSMF/DKDPDOC/DKDPPD, DPSMF, DPSMFLYR, DPMDLYSMF, DPMDLYSMFLYR, DKMDLY, SQMDLY = the nine 0 bytes"
+  ]
+ },
+ {
+  "old": "DkMdlyPly_SendAudioCmd_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DkMdlyPly_BitMaskByIndex",
+  "header": "16 x u16 single-bit masks, entry n = 1 << n; DkMdlyPly_SendAudioCmd ANDs each with WA and returns HL = the index of the lowest set bit of WA (16 when none). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/ui_playback_modes.s:1643-1655 `ld hl, 0:i3` / `lda xde, (DkMdlyPly_SendAudioCmd_Data:24)` / `ld bc, (xde+bc)` / `and bc, wa` / `ret nz` / `inc 1, hl` / `cp hl, 0x10` -- scan for the lowest set bit",
+   "ui/sepaout_config.s:71 `.incbin ..., 0x6E, 0x20` -- bytes 0001 0002 0004 ... 8000 (little-endian 1 << n, n = 0..15)",
+   "ui/ui_playback_modes.s:1686-1687 `ld wa, (xsp + 4)` / `calr DkMdlyPly_SendAudioCmd` / `cp hl, iz` -- DkMdlyPly_HandleResult compares the bit index with a part parameter"
+  ]
+ },
+ {
+  "old": "DkMdlyPly_HandleResult_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DkMdlyPly_PartIndexTable",
+  "header": "32 x u16 part numbers 0..31 (entry i = i) through which DkMdlyPly_CheckState walks the parts: the entry is passed to SndParam_LookupViaEncode with BC = 0x401 and, on a match with the lowest set bit of the mask (DkMdlyPly_SendAudioCmd), written to PART_SELECT. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/ui_playback_modes.s:1678-1683 `ldto_werp WA, 0xfa` / `add wa, wa` / `lda xbc, (DkMdlyPly_HandleResult_Data:24)` / `ld wa, (xbc+wa)` / `ldw bc, 0x401` / `call SndParam_LookupViaEncode` -- entry = part argument",
+   "ui/ui_playback_modes.s:1689-1693 `lda xbc, (DkMdlyPly_HandleResult_Data:24)` / `ld wa, (xbc+wa)` / `ld (PART_SELECT:16), a` -- entry stored as the selected part",
+   "ui/ui_playback_modes.s:1706-1708 `inc1w_erp 0xfa` / `cp_erpw 0xfa, 0x20, 0x00` -- loop index 0..31",
+   "ui/sepaout_config.s:72 `.incbin ..., 0x8E, 0x40` -- bytes 0000 0100 0200 ... 1f00 (0..31)"
+  ]
+ },
+ {
+  "old": "SqStepTtlFunc_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqStepTtlFunc_Methods",
+  "header": "The TT_SQSTEP title's 4-entry DirmdEmulator method vector: [0] Display_InitGraphicsAndScreen (draw), [1] Display_CallConditionalCompare (EVT_HIDE), [2] Display_CallPollAudioUpdate, [3] SqTrSel_CaseA. Basis: readers + bytes -- SqStepTtlFunc copies it to the stack and calls DirmdEmulator, like SeMenuTitleFunc_Methods / DirmdTitle_EmulatorMethods.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/ui_playback_modes.s:3549-3555 `ld xiy, SqStepTtlFunc_Data` / `ldw bc, 0x8` / `ldirw` / `lda xwa, (xsp)` / `call DirmdEmulator_Entry` -- 16-byte vector copied and handed to DirmdEmulator",
+   "ui/sepaout_config.s:197 `.incbin ..., 0x1CE, 0x10` -- 62 22 f2 00 / 88 22 f2 00 / 95 22 f2 00 / a2 22 f2 00 = 0xF22262 Display_InitGraphicsAndScreen, 0xF22288 Display_CallConditionalCompare, 0xF22295 Display_CallPollAudioUpdate, 0xF222A2 SqTrSel_CaseA (llvm-nm)",
+   "ui/sepaout_config.c:21-24 `extern const char Display_InitGraphicsAndScreen;` ... `SqTrSel_CaseA;` -- the C source's display_handlers[4]",
+   "audio/presentation_sound_nav.s:1367 `DirmdEmulator_Dispatch: ; EVT_HIDE: method 1` -- method numbering",
+   "audio/sound_editor_routines.s:60 `ld xiy, SeMenuTitleFunc_Methods` -- sibling naming"
+  ]
+ },
+ {
+  "old": "SeqInit_LookupDispatchEntry_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Demo_SongViewIdTable",
+  "header": "18 x u32 NAKA view ids of the demo song selectors DemoSong0..DemoSong17 (0xE10001-0xE10006, 0xE20001-0xE20006, 0xE30001-0xE30006), indexed by DEMO_ACTIVE_ENTRY; SeqInit_PostDispatchEvent sends EVT_SET_SELECTED 1 to the entry's view. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "demo/demo_seq_bridge.s:553-557 `extz wa` / `sla wa, 2` / `lda xbc, (SeqInit_LookupDispatchEntry_Data:24)` / `ld xhl, (xbc+wa)` -- 4-byte entries",
+   "demo/demo_seq_bridge.s:561-567 `ld a, (DEMO_ACTIVE_ENTRY:16)` / `calr SeqInit_LookupDispatchEntry` / `ld xwa, xhl` / `ld xbc, EVT_SET_SELECTED` / `jp ApDeliveryEvent` -- index and use",
+   "ui/sepaout_config.s:234 `.incbin ..., 0x222, 0x48` -- 0100 e100 ... 0600 e300 = 0x00E10001..0x00E30006",
+   "ui_widgets/naka_widget_tables_1.s:682 Yoko_ResNameTable_3E1 -- entries 1-6 name \"DemoSong0\"..\"DemoSong5\" (slot 0xE1); _3E2 / _3E3 entries 1-6 = DemoSong6..11 / DemoSong12..17 (decoded from the ROM)"
+  ]
+ },
+ {
+  "old": "SetWall_InlineCodeBlock_Sub",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqTrAs_PartInc_UpdateOkSw",
+  "header": "Track-assign page, EVT_TR_AS_PART_INC: calls the TrAsOkSw (view 0x8B0003) visibility update -- shown (EVT_SET_VISIBLE 1) when the edited assignment (0x2873) or the cursor track's stored one (0xF1A0[(0x0CDF)]) is 13-16, else hidden. Basis: callers + body -- only caller MiddleFuncCall_OnTrAsPartInc; MiddleFuncCall_DispatchData_Helper is the same wrapper for PART_DEC.",
+  "basis": "callers + body",
+  "evidence": [
+   "demo/demo_seq_bridge.s:98-103 `MiddleFuncCall_OnTrAsPartInc:` ... `call SetWall_InlineCodeBlock_Sub` -- only caller",
+   "ui/sepaout_config.s:226 `.short MiddleFuncCall_OnTrAsPartInc - MiddleFuncCall_DispatchData` -- case of EVT_TR_AS_PART_INC (sequencer/sequencer_ui.s:2820 posts it to NAKA_MAINFUNC_MiddleFuncCall)",
+   "ui/setwall_routines.s:89-91 `call NoRef_SetWall_SlotMap20x2_Helper` / `ret` -- body",
+   "ui/setwall_routines.s:93-102 `ld a, (0x2873:16)` / `cp a, 13` ... `cp a, 14` / `call CDlikeSwTtl_SendStartEvt` -- hide unless 13..16",
+   "ui/setwall_routines.s:103-118 `ld xhl, 0xf1a0` / `ld a, (3295:16)` / `ld a, (xhl+iy)` ... `call CDlikeSwTtl_SendStartEvtArg1` -- stored assignment 13..16 -> show",
+   "demo/demo_seq_bridge.s:487-491 / 481-485 -- CDlikeSwTtl_SendStartEvt / _SendStartEvtArg1 post EVT_SET_VISIBLE 0 / 1 to 0x8B0003; ui_widgets/naka_widget_tables_1.s:530 Yoko_ResNameTable_38B entry 3 = \"TrAsOkSw\" (decoded from the ROM)"
+  ]
+ },
+ {
+  "old": "EffectMode_ByteData_Block2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PanelTagA8_ToggleOtpMode",
+  "header": "SwbtWr listener of panel event 0xA8, offset 2 bit 0: when the bit turns on it switches MD_NORMAL -> MD_OTP (0x8D4E := 15), or back to MD_NORMAL if 0x8D4E is non-zero, and from TT_ONETCH / the Music Stylist titles 0xC1-0xC3, 0xC5 to MD_NORMAL; when it is off with 0x8D4E set it opens TT_MUSICSTYL. Each path posts EVT_SET_HOLD first. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:5797-5798 `SwbtB1_CodeA8_Listeners:` `.long EffectMode_ByteData_Block2` -- only reference, bank-1 listener of event 0xA8",
+   "ui/ui_mode_handlers.s:86-90 `cp (SWBTWR_PAYLOAD_1:16), 2` / `ret nz` / `ld a, (SWBTWR_PAYLOAD_2:16)` / `and a, (SWBTWR_PAYLOAD_3:16)` / `bit 0, a` -- offset 2, value & changed-mask bit 0",
+   "ui/ui_mode_handlers.s:132-139 `ldw wa, 18` / `call UI_PostPartChangeEvent` / `ld (0x8d4e:16), 0xf` -- EVT_CHANGE_MODE NAKA_MODE_MD_PS + 18 = MD_OTP (ui/ui_control_panel.s:2896-2903)",
+   "ui/ui_mode_handlers.s:93-102 `cp (CURRENT_MODE:16), 1` / `cp a, 192` / `cp a, 193` ... `cp a, 197` -- MD_NORMAL; titles 0xC0 TT_ONETCH, 0xC1 TT_MUSICSTYL, 0xC2 TT_MSCTSEL, 0xC3 TT_MSSCTSEL, 0xC5 TT_MSALPSEL (RegTitle in extensions/extension_init.s)",
+   "ui/ui_mode_handlers.s:141-151 `cp (0x8d4e:16), 0` / `ldw wa, 193` / `call UI_PostModeChangeEvent` -- EVT_CHANGE_TITLE TITLE_PS + 193 = TT_MUSICSTYL",
+   "display/graphics_text_vga.s:5297-5308 `MainMssSetUp`: EVT_OTP_CNT_SET -> (0x8d4e) := 7, EVT_OTP_CNT_RESET -> 0 -- 0x8D4E is the OTP count"
+  ]
+ },
+ {
+  "old": "EffectMode_ByteData_Block3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PanelTag48_MsaReapply",
+  "header": "SwbtWr listener of the style/tempo record 0x48: on a change of byte +0 (style number) -- in TT_ONETCH it posts UI_PostTimerResetEvent -- or of +7 (with 0x8D52 & 0x28), when LSW 0x401 (M.S.A. mode) is 2 or 3 and 0x400 is non-zero, it latches param 0x28002 into 0x8D54, sets 0xB7E2 bit 7 and re-runs EffectMode_CheckModeAndReinit. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:5750-5751 `SwbtB1_Code48_Listeners:` `.long EffectMode_ByteData_Block3` -- only reference, listener of panel record 0x48",
+   "ui/ui_mode_handlers.s:153-169 `ld a, (SWBTWR_PAYLOAD_1:16)` / `cp a, 0:i3` / `cp (SWBTWR_PAYLOAD_3:16), 0` / `cp (CURRENT_TITLE:16), 0xc0` / `call UI_PostTimerResetEvent` -- offset 0",
+   "ui/ui_mode_handlers.s:170-185 `ld xwa, 1025` / `cp hl, 3:i3` / `cp hl, 2:i3` / `ld xwa, 1024` / `ld xwa, 0x028002` / `ld (0x8d54:16), l` / `set 7, (0xb7e2:16)` / `calr EffectMode_CheckModeAndReinit`",
+   "ui/ui_mode_handlers.s:189-212 `cp a, 7:i3` / `and a, 0x28` ... `calr EffectMode_CheckModeAndReinit` -- offset 7",
+   "analysis/disk-format-probes/README-lsw-nonpart-records.md:123 -- tag 0x48 = style/rhythm selection + tempo, +0/+1 style number, +5..+7 accompaniment flag bytes",
+   "ui/ui_mode_handlers.s:913-942 `EffectMode_CheckModeAndReinit` -- `ld xwa, 0x401` / `call SndParam_LookupReadOnly` / value 3 -> notify param 0x300, value 2 -> re-run EffectMode_ProcessPresetChange with (0x8D56) offset by (0x8D54)",
+   "ui_widgets/style_bitmaps.s:3570-3573 -- MsaMode_EditSwByValue / MsaMode_OK: 0x401 is the M.S.A. mode setting of the MsaMode screen (values 0-3)"
+  ]
+ },
+ {
+  "old": "EffectMode_ByteData_Block4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PanelTag98_MsaReapply",
+  "header": "SwbtWr listener of panel record 0x98: on a change of byte +3 with a value whose bits 0-2 are non-zero, while 0x8D52 & 0x28, when LSW 0x401 (M.S.A. mode) is 2 or 3 and 0x400 is non-zero, it latches param 0x28002 into 0x8D54, sets 0xB7E2 bit 7 and re-runs EffectMode_CheckModeAndReinit; then clears 0x8D52 bits 3 and 5. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:5789-5791 `SwbtB1_Code98_Listeners:` ... `.long EffectMode_ByteData_Block4` -- listener of panel record 0x98",
+   "ui/ui_mode_handlers.s:214-222 `cp (SWBTWR_PAYLOAD_1:16), 3` / `ld a, (SWBTWR_PAYLOAD_2:16)` / `and a, 7` / `ld a, (0x8d52:16)` / `and a, 40` -- offset 3",
+   "ui/ui_mode_handlers.s:223-240 `ld xwa, 1025` ... `ld xwa, 0x28002` / `ld (0x8d54:16), l` / `set 7, (0xb7e2:16)` / `calr EffectMode_CheckModeAndReinit` / `and (0x8d52:16), 0xd7`",
+   "ui/ui_mode_handlers.s:913-942 `EffectMode_CheckModeAndReinit` -- `ld xwa, 0x401` / `call SndParam_LookupReadOnly` / value 3 -> notify param 0x300, value 2 -> re-run EffectMode_ProcessPresetChange with (0x8D56) offset by (0x8D54)",
+   "ui_widgets/style_bitmaps.s:3570-3573 -- MsaMode_EditSwByValue / MsaMode_OK: 0x401 is the M.S.A. mode setting of the MsaMode screen (values 0-3)"
+  ]
+ },
+ {
+  "old": "NameGetFunc_Entry",
+  "verdict": "refuse",
+  "why_refused": "Internal continuation of NameGetFuncCall: its `ld xhl, 0 / ret` exit, reached only by NameGetFuncCall's own range checks (ui/ui_playback_modes.s:2200, 2202), its own case table (slots 4, 9, 10, 11 of NameGetFuncCall_CaseTable) and the fall-through of the cases' NameGetFuncCall_Join2. It should become a local label (e.g. NameGetFuncCall_ReturnZero).",
+  "new": null,
+  "header": null,
+  "basis": null,
+  "evidence": [
+   "ui/ui_playback_modes.s:2443-2449 `NameGetFuncCall_Join2: call ApPostEvent` / `NameGetFunc_Entry: ld xhl, 0:i3` / `ret` -- shared exit",
+   "ui/ui_playback_modes.s:2200 `jrl lt, NameGetFunc_Entry` / 2202 `jrl gt, NameGetFunc_Entry` -- range check of the parent",
+   "ui/sepaout_config.s:119, 124-126 `.short NameGetFunc_Entry - NameGetFuncCall_Dispatch` -- default slots of the parent's case table"
+  ]
+ },
+ {
+  "old": "DrawTask_Entry",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DrawTask_Main",
+  "header": "Entry point of task (screen group) 5, the draw task: loops forever taking draw commands from the draw ring (DrawTask_Dispatch -> DrawRing_TryTake under event 3) and calling each command's function (+0) with XWA = the command, lowering its priority (TaskSched_ChangePriority 5, 3) while word 0x3EF4E is non-zero. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "boot/system_handlers.s:2008 `.long DrawTask_Entry, 0x0001d032 ; group 5` -- TaskSched_ScreenGroupTable record: entry point + stack top of task 5",
+   "ui/ui_widget_defs.s:19156-19160 `DrawTask_Entry: push xiz` / `DrawTask_EventLoop: calr DrawTask_Dispatch` -- never returns",
+   "ui/ui_widget_defs.s:19169-19176 `or xiz, xiz` / `ld xhl, (xiz)` / `ld xwa, xiz` / `call (xhl)` -- runs the command",
+   "ui/ui_widget_defs.s:19201-19208 `DrawTask_Dispatch:` `call TaskSched_WaitForEvent` / `calr DrawRing_TryTake` -- the draw ring (DrawRing_Post header 19215-19224)",
+   "ui/ui_widget_defs.s:19162-19166 `cpw (0x03ef4e:24), 0` / `ld wa, 5:i3` / `ld bc, 3:i3` / `call TaskSched_ChangePriority`"
+  ]
+ },
+ {
+  "old": "ColorBlit2_LargeCodeBlock_Entry2",
+  "verdict": "refuse",
+  "why_refused": "Internal loop head of DrawDottedLineWithMode_Impl (the second stepping loop, counter (xsp+20) against (xsp+8)), reached only by that routine's fall-through (ui/ui_window_procs.s:10043) and its own loop-back `jrl le` at kn5000_v10_program.s:2374 -- the routine continues in kn5000_v10_program.s after `.include \"ui/ui_window_procs.s\"`, which is why the referrer was attributed to Voice_FactoryPresetData. It should become a local label (e.g. DrawDottedLineWithMode_Impl_Loop2).",
+  "new": null,
+  "header": null,
+  "basis": null,
+  "evidence": [
+   "ui/ui_window_procs.s:10040-10046 `ld (xsp+20), xwa` / `ld xwa, (xsp+8)` / `jrl lt, DrawDottedLineWithMode_Impl_Join11` / `ColorBlit2_LargeCodeBlock_Entry2: cp (xsp+24), 3` -- loop set-up then head",
+   "kn5000_v10_program.s:2370-2374 `add (xsp+20), xwa` / `cp xwa, (xsp+8)` / `jrl le, ColorBlit2_LargeCodeBlock_Entry2` -- the only reference, the loop's own back-branch",
+   "kn5000_v10_program.s:2336-2350 `Voice_FactoryPresetData: .incbin ...` then the `.include` lines, then DrawDottedLineWithMode_Impl's code (`Voice_FactoryPresetData_Skip28` / `DrawDottedLineWithMode_Impl_Join7`) -- misattributed owner"
+  ]
+ },
+ {
+  "old": "GetSoundName_DefaultString_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetSoundName_Str_DashedName",
+  "header": "\"     ------     \": 16-character placeholder sound name (NUL, 0xFF pad) that GetSoundName copies into the caller's buffer instead of a real name when the program lookup is out of range, before posting EVT_SOUND_NAME. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/sound_navigation.s:59-64 `GetSoundName_DefaultString:` `pushw GetSoundName_DefaultString_Data@hi16` / `@lo16` / `call Strcpy` -- copied into the result buffer",
+   "audio/sound_navigation.s:40 `jr ugt, GetSoundName_DefaultString` -- taken instead of GetSoundName_BuildString",
+   "audio/sound_navigation.s:69-71 `ld xbc, EVT_SOUND_NAME` / `call ApPostEvent`",
+   "ui_widgets/disk_warning_strings.s:175 `.incbin \"includes/generated/naka_disk_warning.bin\", 0xD3A, 0x12` -- 20 20 20 20 20 2d 2d 2d 2d 2d 2d 20 20 20 20 20 00 ff"
+  ]
+ },
+ {
+  "old": "ModeEdit_HandlePaint_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ModeEditProc_Str_ModeIdAndName",
+  "header": "\"0x%02X : %s\": format of the mode edit box's caption -- the current mode's entry number (low word of GetModeNow) and the name the mode returns for EVT_GET_NAME. Basis: readers + bytes -- the TitleEdit box uses an identical string (TitleEdit_HandlePaint_Str_N0x_Fmt2X_Fmts).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/ui_window_procs.s:1120-1128 `call GetModeNow` / `ld xbc, EVT_GET_NAME` / `call SendEvent` / `push xhl` / `call GetModeNow` / `pushw hl` -- the two arguments",
+   "ui/ui_window_procs.s:1129-1133 `pushw ModeEdit_HandlePaint_Data@hi16` / `@lo16` / `call Sprintf_Locked` -- caller ModeEditProc_OnDraw",
+   "ui_widgets/disk_warning_strings.s:505 `.incbin ..., 0x125C, 0xC` -- \"0x%02X : %s\" NUL"
+  ]
+ },
+ {
+  "old": "VwUserBitmapByName_HandlePaint_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "VwUserBitmapByName_Str_BmpExt",
+  "header": "\".BMP\" (NUL, 0xFF pad): extension VwUserBitmapByName_HandlePaint appends (Strcat) to the view's name to form the bitmap file name it looks up (FDemo_LinkedListLookupField) and draws with DrawBitmapFile. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/ui_window_procs.s:1596-1605 `ld xwa, (xhl + 22)` / `call Strcpy` / `pushw VwUserBitmapByName_HandlePaint_Data@hi16` / `@lo16` / `call Strcat` -- name + extension",
+   "ui/ui_window_procs.s:1608-1613 `call FDemo_LinkedListLookupField` / `call DrawBitmapFile`",
+   "ui_widgets/disk_warning_strings.s:511 `.incbin ..., 0x14B4, 0x6` -- 2e 42 4d 50 00 ff"
+  ]
+ },
+ {
+  "old": "TextBox_DrawLineLoop_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "TextBox_Str_LineBreak",
+  "header": "\"\\r\": the line-break set TextBox_DrawLineLoop passes to StrSearch_Init (strcspn) to cut the text at the next CR before word-wrapping and drawing the line. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/ui_window_procs.s:2251-2259 `pushw TextBox_DrawLineLoop_Data@hi16` / `@lo16` / `push xiz` / `call StrSearch_Init` / `lda xwa, (xiz+hl)` / `ld (xwa), 0x0` -- terminates the line at the first CR",
+   "audio/note_voice_mapping.s:28148-28172 `StrSearch_Init` -- returns HL = index of the first character of (xsp+4) found in the set (xsp+8)",
+   "ui/ui_window_procs.s:2266 `call WordwrapStrings`",
+   "ui_widgets/disk_warning_strings.s:542 `.incbin ..., 0x14D2, 0x2` -- 0d 00"
+  ]
+ },
+ {
+  "old": "GridCheck_CellSelect_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GridCheck_Str_CellColRow",
+  "header": "\"%d-%d\": format GridCheck_CellSelect fills with the selected cell's column (high word of the event parameter) and row (low word) before sending EVT_GRID_DRAW to the focus object. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/ui_widget_defs.s:268-275 `ld xwa, xde` / `srl xwa, 16` / `ld (xbc), wa` / `ld (xwa), de` -- column = param >> 16, row = low word",
+   "ui/ui_widget_defs.s:278-283 `pushw (xwa)` / `pushw (xbc)` / `pushw GridCheck_CellSelect_Data@hi16` / `@lo16` / `call Sprintf_Locked`",
+   "ui/ui_widget_defs.s:285-289 `call GetFocusObject` / `ld xbc, EVT_GRID_DRAW` / `call SendEvent`",
+   "shared/event_codes.s:332 EVT_REQUEST_GRID_DRAW -- grid parameters are (col<<16)|row",
+   "ui_widgets/disk_warning_strings.s:578 `.incbin ..., 0x15BA, 0x6` -- 25 64 2d 25 64 00"
+  ]
+ },
+ {
+  "old": "AcTrkSw_Select_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PsTextBox_Str_LineBreak",
+  "header": "\"\\r\": the line-break set PsTextBoxProc's EVT_PARA_DRAW line loop (labelled AcTrkSw_Select) passes to StrSearch_Init to cut the text at the next CR before WordwrapStrings -- the same use as TextBox_DrawLineLoop_Data. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/ui_widget_defs.s:8151-8159 `PsTextBoxProc:` ... `cp xbc, EVT_PARA_DRAW` / `jr z, AcTrkSw_Reset` -- the AcTrkSw_* labels from 8165 to 8324 are locals of PsTextBoxProc",
+   "ui/ui_widget_defs.s:8242-8252 `AcTrkSw_Select:` `pushw AcTrkSw_Select_Data@hi16` / `@lo16` / `call StrSearch_Init` / `lda xwa, (xwa+hl)` / `ld (xwa), 0x0` -- cut at the first CR",
+   "ui/ui_widget_defs.s:8259 `call WordwrapStrings`; 8309 `jrl c, AcTrkSw_Select` -- the loop's only other reference",
+   "audio/note_voice_mapping.s:28148-28172 `StrSearch_Init` -- returns HL = index of the first character found in the set",
+   "ui_widgets/disk_warning_strings.s:846 `.incbin ..., 0x1B7C, 0x2` -- 0d 00"
+  ]
+ }
+]

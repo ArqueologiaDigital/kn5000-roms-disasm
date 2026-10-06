@@ -75,9 +75,9 @@ FDemoText_ByteData_VoiceProbeC:
 	add	wa, wa
 	lda	xix, (FDemoText_ByteData_VoiceProbeC_CaseTable:24)
 	ld	wa, (xix+wa)
-	lda	xix, (FDemoText_ByteData_VoiceProbeC_Code:24)
+	lda	xix, (FDemoText_ByteData_VoiceProbeC_RequestPartialResendAll:24)
 	jp	t, (xix+wa)
-FDemoText_ByteData_VoiceProbeC_Code:
+FDemoText_ByteData_VoiceProbeC_RequestPartialResendAll:
 	set	6, (0x247ec:24)
 	ret
 FDemoText_ByteData_VoiceProbeC_Case3:	; cases 3, 4, 5, 6
@@ -2913,7 +2913,7 @@ Seq_PostProcessDisplay:
 
 Seq_CopyResourcePtrs:
 	lda xde, (0x024fd8:24)
-	lda xhl, (Seq_CopyResourcePtrs_Data:24)
+	lda xhl, (Seq_CopyResourcePtrs_Str_Empty:24)
 	ld xbc, xde
 	lda xde, (xde+508)
 

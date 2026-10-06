@@ -343,7 +343,7 @@ AudioInit_MixFallbackConfig:
 AudioInit_MixFallbackDefault:
 	extz wa
 	jrl AudioInit_ConfigStereoVoice
-AudioInit_MixFallbackDefault_Code:
+AudioVoiceHandler_NoneSentinel:
 	extz wa
 	jrl AudioInit_ConfigStereoVoice
 

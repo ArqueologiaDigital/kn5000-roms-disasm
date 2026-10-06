@@ -22,7 +22,7 @@ FDC_Read_Status:
 	ld l, (0x110008:24)
 	ret
 
-FDC_Read_Data:
+FDC_ReadDataRegister:
 	ld l, (0x11000a:24)
 	ret
 
@@ -37,7 +37,7 @@ FDC_Write_Data_Entry_Helper:
 	ldmm8 0x8a84, 0x8a86
 	ld (0x8a86:16), a
 	ret
-FDC_Write_Data:
+FDC_WriteDataRegister:
 	ld (0x11000a:24), a
 	ret
 
@@ -173,13 +173,13 @@ FDC_CONFIG_VERIFY_Loop4:
 	jr	nz, FDC_CONFIG_VERIFY_Loop4
 FDC_WaitReady_Skip7:
 	ldw	wa, 8
-	calr	FDC_Write_Data
+	calr	FDC_WriteDataRegister
 FDC_WaitReady_Skip8:
 	lda	xiz, (0x89c4:16)
 	inc	1, xiz
 FDC_CONFIG_VERIFY_Loop5:
 	calr	FDC_Wait_Ready_Timeout
-	calr	FDC_Read_Data
+	calr	FDC_ReadDataRegister
 	ld	(xiz+), l
 FDC_CONFIG_VERIFY_Loop6:
 	calr	FDC_Read_Status
@@ -741,7 +741,7 @@ FDC_ResultPhase_Read_Skip:
 	cp	qiz, 0
 	jr	nz, FDC_ResultPhase_Read_Join
 FDC_ResultPhase_Read_Loop2:
-	calr	FDC_Read_Data
+	calr	FDC_ReadDataRegister
 	lda	xwa, (0x89c4:16)
 	ld	bc, iz
 	extz	xbc
@@ -775,7 +775,7 @@ FDC_SendCommandByte:
 	calr FDC_ResultPhase_Read
 	ld A,(XSP)
 	extz WA
-	calr FDC_Write_Data
+	calr FDC_WriteDataRegister
 	inc 2,XSP
 	ret
 FDC_SendParameterByte:
@@ -784,7 +784,7 @@ FDC_SendParameterByte:
 	calr	FDC_WaitParamByteReady
 	ld	a, (xsp)
 	extz	wa
-	calr	FDC_Write_Data
+	calr	FDC_WriteDataRegister
 	inc	2, xsp
 	ret
 FDC_WriteAuxCmdByte:
@@ -818,7 +818,7 @@ FDC_HardwareSetup_Helper4:
 	extz	wa
 	calr	FDC_WriteAuxCmdByte
 	calr	FDC_Wait_Ready_Timeout
-	calr	FDC_Read_Data
+	calr	FDC_ReadDataRegister
 	ld	(0x89c5:16), l
 FDC_ResultPhase_Read_Epilogue2:
 	inc	2, xsp
@@ -1974,7 +1974,7 @@ FDC_INTERRUPT_HANDLER_Code:
 	push	xsp
 	nop	
 	jr	nz, FDC_INTERRUPT_HANDLER_Code_Epilogue
-	calr	FDC_Read_Data
+	calr	FDC_ReadDataRegister
 	ldfr_berp	l, 251
 	bit_erpb	251, 7
 	jr	z, FDC_INTERRUPT_HANDLER_Code_Skip
@@ -2226,14 +2226,14 @@ INT4_WaitNonDMAMode:
 
 INT4_SendSpecifyCmd:
 	ldw wa, 0x8
-	calr FDC_Write_Data
+	calr FDC_WriteDataRegister
 
 INT4_StoreResultBase:
 	lda	xiz, (35268:16)
 	inc	1, xiz
 INT4_ReadResultLoop:
 	calr FDC_Wait_Status_Timeout
-	calr FDC_Read_Data
+	calr FDC_ReadDataRegister
 	ld (xiz+), l
 
 INT4_WaitResultReady:

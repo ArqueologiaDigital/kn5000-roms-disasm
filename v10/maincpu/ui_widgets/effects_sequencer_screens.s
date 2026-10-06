@@ -2576,15 +2576,19 @@ EntertainerGridCheck_GridDrawRecInit:	.incbin "includes/generated/naka_effects_s
 ; [nakarest] Text (484 B at 0xe30946), first string
 ; [nakarest] "~43~2d~32~44~a0~bc~44~2d~32~45~a0~bc~45~2d~32~46"; no registered NAKA table points
 ; [nakarest] into it; reached through source references NoteEdit_FormatTempoString
-; [nakarest] (sequencer/sequencer_ui.s: `lda xbc, (NoteEdit_FormatTempoString_Data:24)`),
+; [nakarest] (sequencer/sequencer_ui.s: `lda xbc, (NoteEdit_MidiNoteNameTable:24)`),
 ; [nakarest] SqedtFunc_OnGetQtzWinString_Join6 (sequencer/sequencer_ui.s: `lda xde,
-; [nakarest] (NoteEdit_FormatTempoString_Data:24)`).
-NoteEdit_FormatTempoString_Data:	.incbin "includes/generated/naka_effects_seq.bin", 0x89A2, 0x1E4
+; [nakarest] (NoteEdit_MidiNoteNameTable:24)`).
+; NoteEdit_MidiNoteNameTable: 128 x char[9]: MIDI note name per note number, C-2 .. G8, every character written as a
+;   "~hh" escape (~a0 = flat glyph, ~9e = sharp), e.g. "~43~2d~32" = "C-2"; Strncpy'd 9 bytes at note*9. Basis:
+;   readers + bytes -- NoteEditFunc_OnGetNoteString (title TT_SQNOTEEDT) and SqedtFunc_OnGetTnString/CnString index it
+;   by a note byte * 9.
+NoteEdit_MidiNoteNameTable:	.incbin "includes/generated/naka_effects_seq.bin", 0x89A2, 0x1E4
 ; [nakarest] naka_effects_seq+0x8b86  +0x8b86..+0x8e22 (0xe30b2a, 668 B)
 ; [nakarest] Text (668 B at 0xe30b2a), first string
 ; [nakarest] "20~46~9e~32~47~32~20~41~a0~32~41~32~20~42~a0~32~"; no registered NAKA table points
 ; [nakarest] into it; reached through source references InitializeKubo_Skip
-; [nakarest] (sequencer/sequencer_ui.s: `.long Str_42a03242322043`), Sqedt_ParamDispatch_Entry2
+; [nakarest] (sequencer/sequencer_ui.s: `.long Str_42a03242322043`), SqedtFunc_LmString_OnTitleSqadvdly
 ; [nakarest] (sequencer/sequencer_ui.s: `.long Str_20469e32473220`).
 Str_20469e32473220:	.incbin "includes/generated/naka_effects_seq.bin", 0x8B86, 0x27
 Str_42a03242322043:	.incbin "includes/generated/naka_effects_seq.bin", 0x8BAD, 0x275

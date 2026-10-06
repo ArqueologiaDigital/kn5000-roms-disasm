@@ -502,7 +502,7 @@ SeAmpAmp2_OnColumn4:
 	pushw	bc
 	ld	bc, 1:i3
 	ld	de, 0:i3
-	call	SeMenu_ApplyPartEdit_Helper14
+	call	SeMenu_StepNoteParamInRange
 	cp	l, 1:i3
 	jr	nz, SeAmpAmp2_OnColumn4_Skip7
 	lda	xwa, (xsp+4)
@@ -547,7 +547,7 @@ SeAmpAmp2_OnColumn5:
 	extz	bc
 	pushw	bc
 	ld	bc, 0:i3
-	call	SeMenu_ApplyPartEdit_Helper14
+	call	SeMenu_StepNoteParamInRange
 	cp	l, 1:i3
 	jr	nz, SeAmpAmp2_OnColumn5_Skip8
 	lda	xwa, (xsp+6)
@@ -586,7 +586,7 @@ SeAmpAmp2_OnColumn6:
 	extz	de
 	pushw	127
 	ld	bc, 2:i3
-	call	SeMenu_ApplyPartEdit_Helper14
+	call	SeMenu_StepNoteParamInRange
 	cp	l, 1:i3
 	jr	nz, SeAmpAmp2_OnColumn6_Skip9
 	lda	xwa, (xsp+4)
@@ -1444,7 +1444,7 @@ SeAmpEnv2_OnColumn4:
 	pushw	bc
 	ld	bc, 3:i3
 	ld	de, 0:i3
-	call	SeMenu_ApplyPartEdit_Helper14
+	call	SeMenu_StepNoteParamInRange
 	cp	l, 1:i3
 	jr	nz, SeAmpEnv2_OnColumn4_Skip21
 	lda	xwa, (xsp+4)
@@ -1489,7 +1489,7 @@ SeAmpEnv2_OnColumn5:
 	extz	bc
 	pushw	bc
 	ld	bc, 2:i3
-	call	SeMenu_ApplyPartEdit_Helper14
+	call	SeMenu_StepNoteParamInRange
 	cp	l, 1:i3
 	jr	nz, SeAmpEnv2_OnColumn5_Skip22
 	lda	xwa, (xsp+6)
@@ -1528,7 +1528,7 @@ SeAmpEnv2_OnColumn6:
 	extz	de
 	pushw	127
 	ld	bc, 4:i3
-	call	SeMenu_ApplyPartEdit_Helper14
+	call	SeMenu_StepNoteParamInRange
 	cp	l, 1:i3
 	jr	nz, SeAmpEnv2_OnColumn6_Skip23
 	lda	xwa, (xsp+4)
@@ -1690,7 +1690,7 @@ SeAmpEnv2_OnSwitch15:
 SeAmpLfo1_OnColumn2:
 	extz	wa
 	ld	bc, 0:i3
-	jp	SeMenu_ApplyPartEdit_Data2
+	jp	SeLfo1_StepSelectorAndReload
 SeAmpLfo1_OnColumn3:
 	extz	wa
 	ld	bc, 0:i3
@@ -3421,7 +3421,7 @@ SeFilFil2_OnColumn4:
 	pushw	bc
 	ld	bc, 1:i3
 	ld	de, 0:i3
-	call	SeMenu_ApplyPartEdit_Helper14
+	call	SeMenu_StepNoteParamInRange
 	cp	l, 1:i3
 	jr	nz, SeFilFil2_OnColumn4_Skip42
 	lda	xwa, (xsp+4)
@@ -3466,7 +3466,7 @@ SeFilFil2_OnColumn5:
 	extz	bc
 	pushw	bc
 	ld	bc, 0:i3
-	call	SeMenu_ApplyPartEdit_Helper14
+	call	SeMenu_StepNoteParamInRange
 	cp	l, 1:i3
 	jr	nz, SeFilFil2_OnColumn5_Skip43
 	lda	xwa, (xsp+6)
@@ -3505,7 +3505,7 @@ SeFilFil2_OnColumn6:
 	extz	de
 	pushw	127
 	ld	bc, 2:i3
-	call	SeMenu_ApplyPartEdit_Helper14
+	call	SeMenu_StepNoteParamInRange
 	cp	l, 1:i3
 	jr	nz, SeFilFil2_OnColumn6_Skip44
 	lda	xwa, (xsp+4)
@@ -3820,7 +3820,7 @@ SeFilEnv2_OnSwitch15:
 SeFilLfo1_OnColumn2:
 	extz	wa
 	ld	bc, 2:i3
-	jp	SeMenu_ApplyPartEdit_Data2
+	jp	SeLfo1_StepSelectorAndReload
 SeFilLfo1_OnColumn3:
 	extz	wa
 	ld	bc, 2:i3

@@ -1144,7 +1144,7 @@ MidiPkt_CheckGateCondition_Second:
 	jr z, MidiPkt_CheckGateCondition_Pass
 	extz wa
 	muls wa, 0x6
-	lda xbc, (MidiPkt_CheckGateCondition_Second_Data:24)
+	lda xbc, (MidiCtl_SecondGateRecords:24)
 	lda	xbc, (xbc+wa)
 	ld xde, (xbc)
 	ld a, (xbc + 4)
@@ -1254,21 +1254,21 @@ MidiPkt_SendBankSelect_Send:
 	call ArpQueue_SwapBuffers
 	ret
 
-MidiPkt_SysExValidator_Data:
+SysEx_OnGmSystemOn:
 	ld	a, (CURRENT_TITLE:16)
 	cp	a, 108
-	jr	c, MidiPkt_SysExValidator_Data_Skip
+	jr	c, SysEx_OnGmSystemOn_Skip
 	cp	a, 118
-	jr	ule, MidiPkt_SysExValidator_Data_Skip2
-MidiPkt_SysExValidator_Data_Skip:
+	jr	ule, SysEx_OnGmSystemOn_Skip2
+SysEx_OnGmSystemOn_Skip:
 	bit	4, (0xfd50:16)
 	ret	nz
-MidiPkt_SysExValidator_Data_Skip2:
+SysEx_OnGmSystemOn_Skip2:
 	cp	a, 153
-	jr	ugt, MidiPkt_SysExValidator_Data_Skip3
+	jr	ugt, SysEx_OnGmSystemOn_Skip3
 	cp	a, 148
 	ret	nc
-MidiPkt_SysExValidator_Data_Skip3:
+SysEx_OnGmSystemOn_Skip3:
 	set	7, (0x90f9:16)
 	lda	xbc, (0xfdad:16)
 	ld	e, (xbc)
@@ -1283,21 +1283,21 @@ MidiPkt_SysExValidator_Data_Skip3:
 	call	SwbtWr_ReinitBothBanks
 	pop	xiz
 	ret
-MidiPkt_SysExProcessor_Data:
+SysEx_OnGmSystemOff:
 	ld	a, (CURRENT_TITLE:16)
 	cp	a, 108
-	jr	c, MidiPkt_SysExProcessor_Data_Skip
+	jr	c, SysEx_OnGmSystemOff_Skip
 	cp	a, 118
-	jr	ule, MidiPkt_SysExProcessor_Data_Skip2
-MidiPkt_SysExProcessor_Data_Skip:
+	jr	ule, SysEx_OnGmSystemOff_Skip2
+SysEx_OnGmSystemOff_Skip:
 	bit	4, (0xfd50:16)
 	ret	nz
-MidiPkt_SysExProcessor_Data_Skip2:
+SysEx_OnGmSystemOff_Skip2:
 	cp	a, 153
-	jr	ugt, MidiPkt_SysExProcessor_Data_Skip3
+	jr	ugt, SysEx_OnGmSystemOff_Skip3
 	cp	a, 148
 	ret	nc
-MidiPkt_SysExProcessor_Data_Skip3:
+SysEx_OnGmSystemOff_Skip3:
 	lda	xbc, (0xfdad:16)
 	ld	a, (xbc)
 	bit	2, a
@@ -1315,7 +1315,7 @@ MidiPkt_SysExProcessor_Data_Skip3:
 	call	SwbtWr_ReinitBothBanks
 	pop	xiz
 	ret
-MidiPkt_SysExBulkTransfer_Data:
+SysEx_OnRolandGsParam:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 1:i3
 	call	SeqData_ReadFieldByIndex
@@ -1328,9 +1328,9 @@ MidiPkt_SysExBulkTransfer_Data:
 	add	hl, hl
 	lda	xix, (SysExBulk_SwitchOffsets:24)
 	ld	hl, (xix+hl)
-	lda xix, (MidiPkt_SendBankSelect_Send_Code:24)
+	lda xix, (SysEx_OnRolandGs_UseForRhythmPart:24)
 	jp	t, (xix+hl)
-MidiPkt_SendBankSelect_Send_Code:
+SysEx_OnRolandGs_UseForRhythmPart:
 	jr	MidiPkt_SysExBulkTransfer_Data_Join
 MidiPkt_SysExBulkTransfer_Data_Case2:
 	jrl	MidiPkt_SysExBulkTransfer_Data_Join3
@@ -1485,7 +1485,7 @@ MidiPkt_SysExBulkTransfer_Data_Helper2_Epilogue:
 	lda	xsp, (xsp+12)
 	ret
 MidiPkt_SysExBulkTransfer_Data_Join3:
-	jrl	MidiPkt_SysExValidator_Data
+	jrl	SysEx_OnGmSystemOn
 MidiPkt_SysExBulkTransfer_Data_Join4:
 	dec	2, xsp
 	push	xiz

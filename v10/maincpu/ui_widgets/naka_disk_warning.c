@@ -507,7 +507,7 @@ typedef struct __attribute__((packed)) {
     char AcNaming_FillCharSpace[2];
     /* WndEvt_DispatchByEventCode_CaseTable: 9 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
     uint16_t WndEvt_DispatchByEventCode_CaseTable[9];
-    char ModeEdit_HandlePaint_Data[12];
+    char ModeEditProc_Str_ModeIdAndName[12];
     char TitleEdit_HandlePaint_Str_N0x_Fmt2X_Fmts[12];
     /* UserBitmapCheck_Bitmap24x24: 24 x 24, one byte per pixel (asm header) */
     uint8_t UserBitmapCheck_Bitmap24x24[24][24];
@@ -521,7 +521,7 @@ typedef struct __attribute__((packed)) {
     char DrawEditSw_Str_N7f[4];
     char DrawEditSw_SelectVariantA_Str_N80[4];
     char DrawEditSw_SelectVariantC_Str_N81[4];
-    uint16_t TextBox_DrawLineLoop_Data;
+    uint16_t TextBox_Str_LineBreak;
     char Aa_str[8];
     char Aa_str_2[8];
     char NoMyCarDay_str[92];
@@ -533,7 +533,7 @@ typedef struct __attribute__((packed)) {
     /* AcGridBoxProc_CaseTable: 7 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
     uint16_t AcGridBoxProc_CaseTable[7];
     /* GridCheck_CellSelect_Data: text (the asm slice of the same name) */
-    char GridCheck_CellSelect_Data[6];
+    char GridCheck_Str_CellColRow[6];
     /* GridCheck_CaseTable: 7 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
     uint16_t GridCheck_CaseTable[7];
     char PsNumEditBox_Confirm_Str_Chr25[2];
@@ -694,7 +694,7 @@ typedef struct __attribute__((packed)) {
     /* DrawBox colour of a track switch for selection state 0-4 (parallel to the 5 strings of PsTrackSwitchProc_PtrTable_2) */
     uint16_t PsTrkSw_SelectStateColor[5];
     char PsTrkSw_Confirm_DrawGeometry_Str_Fmtd[4];
-    uint16_t AcTrkSw_Select_Data;
+    uint16_t PsTextBox_Str_LineBreak;
     char PsTextBox_code[10];
     char AcLanguageText_name[16];
     /* LanguageCheck_PtrTable: 6 pointers (cut from ptrs_19 by split_naka_pointer_arrays.py) */
@@ -760,25 +760,25 @@ typedef struct __attribute__((packed)) {
     /* ViewableProc_CaseTable: 7 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
     uint16_t ViewableProc_CaseTable[7];
     /* BoxStyle7_Setup_Data: text (the asm slice of the same name) */
-    char BoxStyle7_Setup_Data[10];
+    char pBoolProc_DumpPointerFmt[10];
     char BoxStyle7_CalcWidth_Str_Fmts_Fmtd[6];
     /* BoxStyle8_Setup_Data: text (the asm slice of the same name) */
-    char BoxStyle8_Setup_Data[12];
+    char pSwordProc_DumpPointerFmt[12];
     char BoxStyle8_CalcWidth_Str_Fmts_Fmtd[6];
     /* BoxStyle9_Setup_Data: text (the asm slice of the same name) */
-    char BoxStyle9_Setup_Data[12];
+    char pUwordProc_DumpPointerFmt[12];
     char BoxStyle9_CalcWidth_Str_Fmts_Fmtd[6];
     /* BoxStyle10_Setup_Data: text (the asm slice of the same name) */
-    char BoxStyle10_Setup_Data[12];
+    char pScharProc_DumpPointerFmt[12];
     char BoxStyle10_CalcWidth_Str_Fmts_Fmtd[6];
     /* BoxStyle11_Setup_Data: text (the asm slice of the same name) */
-    char BoxStyle11_Setup_Data[12];
+    char pUcharProc_DumpPointerFmt[12];
     char BoxStyle11_CalcWidth_Str_Fmts_Fmtd[6];
     /* BoxStyle12_Setup_Data: text (the asm slice of the same name) */
-    char BoxStyle12_Setup_Data[12];
+    char pSlongProc_DumpPointerFmt[12];
     char BoxStyle12_CalcWidth_Str_Fmts_Fmtd[6];
     /* BoxStyle13_Setup_Data: text (the asm slice of the same name) */
-    char BoxStyle13_Setup_Data[12];
+    char pUlongProc_DumpPointerFmt[12];
     char BoxStyle13_CalcWidth_Str_Fmts_Fmtd[6];
     char Left_str[6];
     char EdgeDraw_TopRight_Inner_Str_LBrace[2];
@@ -847,13 +847,13 @@ typedef struct __attribute__((packed)) {
     /* DrawIcons_PixelPairTable: [icon byte] -> {left, right} colour index of its two 4-bpp pixels, nibble n -> n (n < 8) or 0xF0 + n; read by DrawIcons_Impl (ui/drawing_primitives.s) */
     uint8_t DrawIcons_PixelPairTable[256][2];
     /* DrawBitmapFile_Impl_Data: text (the asm slice of the same name) */
-    char DrawBitmapFile_Impl_Data[4];
+    char DrawBitmapFile_Str_BM[4];
     /* DrawPartGroup_DispatchByType_CaseTable: 16 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
     uint16_t DrawPartGroup_DispatchByType_CaseTable[16];
     /* Draw_DispatchByPartType_CaseTable: 25 u16 case offsets of a compiled switch; the asm spells them `.short <Case> - <Base>` (scripts/converters/naka_case_tables_retype.py) */
     uint16_t Draw_DispatchByPartType_CaseTable[25];
     /* Gfx_LoadSplashBMP_Data: text (the asm slice of the same name) */
-    char Gfx_LoadSplashBMP_Data[4];
+    char Gfx_LoadSplashBMP_Str_BM[4];
     /* CaptureLcd_Str_BM: text (the asm slice of the same name) */
     char CaptureLcd_Str_BM[4];
     uint8_t field_21a4;
@@ -2126,7 +2126,7 @@ const naka_disk_warning_t naka_disk_warning_data
         0x059E,
     },
 
-    .ModeEdit_HandlePaint_Data = "0x%02X : %s",
+    .ModeEditProc_Str_ModeIdAndName = "0x%02X : %s",
 
     .TitleEdit_HandlePaint_Str_N0x_Fmt2X_Fmts = "0x%02X : %s",
 
@@ -2175,7 +2175,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .DrawEditSw_SelectVariantC_Str_N81 = "~81",
 
-    .TextBox_DrawLineLoop_Data = 0x000D,
+    .TextBox_Str_LineBreak = 0x000D,
 
     .Aa_str = "~aa=%3d",
 
@@ -2197,7 +2197,7 @@ const naka_disk_warning_t naka_disk_warning_data
         0x006B, 0x0116, 0x006B, 0x0116, 0x0200, 0x01E9, 0x01E9,
     },
 
-    .GridCheck_CellSelect_Data = "%d-%d",
+    .GridCheck_Str_CellColRow = "%d-%d",
 
     .GridCheck_CaseTable = {
         0x0000, 0x0000, 0x0000, 0x0000, 0x003F, 0x0000, 0x0000,
@@ -2548,7 +2548,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .PsTrkSw_Confirm_DrawGeometry_Str_Fmtd = ALIGNED_STRING("%d"),
 
-    .AcTrkSw_Select_Data = 0x000D,
+    .PsTextBox_Str_LineBreak = 0x000D,
 
     .PsTextBox_code = "PsTextBox",
 
@@ -2644,31 +2644,31 @@ const naka_disk_warning_t naka_disk_warning_data
         0x004B, 0x0091, 0x00C2, 0x00C2, 0x00C2, 0x0333, 0x00C2,
     },
 
-    .BoxStyle7_Setup_Data = "bool\011%s%d",
+    .pBoolProc_DumpPointerFmt = "bool\011%s%d",
 
     .BoxStyle7_CalcWidth_Str_Fmts_Fmtd = "&%s%d",
 
-    .BoxStyle8_Setup_Data = "sword\011%s%d\000\377",
+    .pSwordProc_DumpPointerFmt = "sword\011%s%d\000\377",
 
     .BoxStyle8_CalcWidth_Str_Fmts_Fmtd = "&%s%d",
 
-    .BoxStyle9_Setup_Data = "uword\011%s%d\000\377",
+    .pUwordProc_DumpPointerFmt = "uword\011%s%d\000\377",
 
     .BoxStyle9_CalcWidth_Str_Fmts_Fmtd = "&%s%d",
 
-    .BoxStyle10_Setup_Data = "schar\011%s%d\000\377",
+    .pScharProc_DumpPointerFmt = "schar\011%s%d\000\377",
 
     .BoxStyle10_CalcWidth_Str_Fmts_Fmtd = "&%s%d",
 
-    .BoxStyle11_Setup_Data = "uchar\011%s%d\000\377",
+    .pUcharProc_DumpPointerFmt = "uchar\011%s%d\000\377",
 
     .BoxStyle11_CalcWidth_Str_Fmts_Fmtd = "&%s%d",
 
-    .BoxStyle12_Setup_Data = "slong\011%s%d\000\377",
+    .pSlongProc_DumpPointerFmt = "slong\011%s%d\000\377",
 
     .BoxStyle12_CalcWidth_Str_Fmts_Fmtd = "&%s%d",
 
-    .BoxStyle13_Setup_Data = "ulong\011%s%d\000\377",
+    .pUlongProc_DumpPointerFmt = "ulong\011%s%d\000\377",
 
     .BoxStyle13_CalcWidth_Str_Fmts_Fmtd = "&%s%d",
 
@@ -2831,7 +2831,7 @@ const naka_disk_warning_t naka_disk_warning_data
         {0xFF, 0xF8}, {0xFF, 0xF9}, {0xFF, 0xFA}, {0xFF, 0xFB}, {0xFF, 0xFC}, {0xFF, 0xFD}, {0xFF, 0xFE}, {0xFF, 0xFF},  /* 0xF8.. */
     },
 
-    .DrawBitmapFile_Impl_Data = "BM\000\377",
+    .DrawBitmapFile_Str_BM = "BM\000\377",
 
     .DrawPartGroup_DispatchByType_CaseTable = {
         0x0063, 0x0091, 0x00BF, 0x00F3, 0x0126, 0x013C, 0x0152, 0x016B,
@@ -2845,7 +2845,7 @@ const naka_disk_warning_t naka_disk_warning_data
         0x0D9C,
     },
 
-    .Gfx_LoadSplashBMP_Data = "BM\000\377",
+    .Gfx_LoadSplashBMP_Str_BM = "BM\000\377",
 
     .CaptureLcd_Str_BM = "BM\000\377",
 

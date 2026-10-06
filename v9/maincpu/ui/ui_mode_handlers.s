@@ -82,34 +82,34 @@ EffectMode_CopyVoiceParams_Done:
 EffectMode_ByteData_Block1:
 	ldw	(0x8d58:16), 0xffff
 	jrl	EffectMode_CheckTransposeChanged
-EffectMode_ByteData_Block2:
+PanelTagA8_ToggleOtpMode:
 	cp	(SWBTWR_PAYLOAD_1:16), 2
 	ret	nz
 	ld	a, (SWBTWR_PAYLOAD_2:16)
 	and	a, (SWBTWR_PAYLOAD_3:16)
 	bit	0, a
-	jrl	z, EffectMode_ByteData_Block2_Skip4
+	jrl	z, PanelTagA8_ToggleOtpMode_Skip4
 	cp	(CURRENT_MODE:16), 1
-	jr	z, EffectMode_ByteData_Block2_Skip3
+	jr	z, PanelTagA8_ToggleOtpMode_Skip3
 	ld	a, (CURRENT_TITLE:16)
 	cp	a, 192
-	jr	z, EffectMode_ByteData_Block2_Skip2
+	jr	z, PanelTagA8_ToggleOtpMode_Skip2
 	cp	a, 193
-	jr	z, EffectMode_ByteData_Block2_Skip
+	jr	z, PanelTagA8_ToggleOtpMode_Skip
 	cp	a, 194
-	jr	z, EffectMode_ByteData_Block2_Skip
+	jr	z, PanelTagA8_ToggleOtpMode_Skip
 	cp	a, 195
-	jr	z, EffectMode_ByteData_Block2_Skip
+	jr	z, PanelTagA8_ToggleOtpMode_Skip
 	cp	a, 197
 	ret	nz
-EffectMode_ByteData_Block2_Skip:
+PanelTagA8_ToggleOtpMode_Skip:
 	ld	xwa, 0xffffffff
 	ld	xbc, EVT_SET_HOLD
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	wa, 1:i3
 	jr	EffectMode_ByteData_Block2_Code_Join
-EffectMode_ByteData_Block2_Skip2:
+PanelTagA8_ToggleOtpMode_Skip2:
 	cp	(0x8d4e:16), 0
 	ret	nz
 	ld	xwa, 0xffffffff
@@ -118,7 +118,7 @@ EffectMode_ByteData_Block2_Skip2:
 	call	ApPostEvent
 	ld	wa, 1:i3
 	jp	UI_PostPartChangeEvent
-EffectMode_ByteData_Block2_Skip3:
+PanelTagA8_ToggleOtpMode_Skip3:
 	cp	(0x8d4e:16), 0
 	jr	z, EffectMode_ByteData_Block2_Code_Skip
 	ld	xwa, 0xffffffff
@@ -138,7 +138,7 @@ EffectMode_ByteData_Block2_Code_Skip:
 	call	UI_PostPartChangeEvent
 	ld	(0x8d4e:16), 0xf
 	ret
-EffectMode_ByteData_Block2_Skip4:
+PanelTagA8_ToggleOtpMode_Skip4:
 	cp	(0x8d4e:16), 0
 	ret	z
 	ld	xwa, 0xffffffff
@@ -150,32 +150,32 @@ EffectMode_ByteData_Block2_Skip4:
 EffectMode_ByteData_Block2_Code_Join2:
 	ld	(0x8d4e:16), 0
 	ret
-EffectMode_ByteData_Block3:
+PanelTag48_MsaReapply:
 	ld	a, (SWBTWR_PAYLOAD_1:16)
 	cp	a, 0:i3
-	jr	nz, EffectMode_ByteData_Block3_Skip3
+	jr	nz, PanelTag48_MsaReapply_Skip3
 	cp	(SWBTWR_PAYLOAD_3:16), 0
-	jr	z, EffectMode_ByteData_Block3_Join
+	jr	z, PanelTag48_MsaReapply_Join
 	bit	7, (SWBTWR_PAYLOAD_2:16)
-	jr	nz, EffectMode_ByteData_Block3_Join
+	jr	nz, PanelTag48_MsaReapply_Join
 	bit	4, (0x8d52:16)
-	jr	nz, EffectMode_ByteData_Block3_Join
+	jr	nz, PanelTag48_MsaReapply_Join
 	cp	(CURRENT_TITLE:16), 0xc0
-	jr	nz, EffectMode_ByteData_Block3_Skip
+	jr	nz, PanelTag48_MsaReapply_Skip
 	call	UI_PostTimerResetEvent
-	jr	EffectMode_ByteData_Block3_Join
-EffectMode_ByteData_Block3_Skip:
+	jr	PanelTag48_MsaReapply_Join
+PanelTag48_MsaReapply_Skip:
 	ld	xwa, 1025
 	call	SndParam_LookupReadOnly
 	cp	hl, 3:i3
-	jr	z, EffectMode_ByteData_Block3_Skip2
+	jr	z, PanelTag48_MsaReapply_Skip2
 	cp	hl, 2:i3
-	jr	nz, EffectMode_ByteData_Block3_Join
-EffectMode_ByteData_Block3_Skip2:
+	jr	nz, PanelTag48_MsaReapply_Join
+PanelTag48_MsaReapply_Skip2:
 	ld	xwa, 1024
 	call	SndParam_LookupReadOnly
 	cp	hl, 0:i3
-	jr	z, EffectMode_ByteData_Block3_Join
+	jr	z, PanelTag48_MsaReapply_Join
 	ld	xwa, 0x028002
 	call	SndParam_LookupReadOnly
 	ld	(0x8d54:16), l
@@ -183,35 +183,35 @@ EffectMode_ByteData_Block3_Skip2:
 	set	3, (0x8d52:16)
 	calr	EffectMode_CheckModeAndReinit
 	res	3, (0x8d52:16)
-EffectMode_ByteData_Block3_Join:
+PanelTag48_MsaReapply_Join:
 	res	4, (0x8d52:16)
 	ret
-EffectMode_ByteData_Block3_Skip3:
+PanelTag48_MsaReapply_Skip3:
 	cp	a, 7:i3
-	jr	nz, EffectMode_ByteData_Block3_Skip5
+	jr	nz, PanelTag48_MsaReapply_Skip5
 	ld	a, (0x8d52:16)
 	and	a, 0x28
-	jr	z, EffectMode_ByteData_Block3_Skip5
+	jr	z, PanelTag48_MsaReapply_Skip5
 	ld	xwa, 1025
 	call	SndParam_LookupReadOnly
 	cp	hl, 3:i3
-	jr	z, EffectMode_ByteData_Block3_Skip4
+	jr	z, PanelTag48_MsaReapply_Skip4
 	cp	hl, 2:i3
-	jr	nz, EffectMode_ByteData_Block3_Skip5
-EffectMode_ByteData_Block3_Skip4:
+	jr	nz, PanelTag48_MsaReapply_Skip5
+PanelTag48_MsaReapply_Skip4:
 	ld	xwa, 1024
 	call	SndParam_LookupReadOnly
 	cp	hl, 0:i3
-	jr	z, EffectMode_ByteData_Block3_Skip5
+	jr	z, PanelTag48_MsaReapply_Skip5
 	ld	xwa, 0x028002
 	call	SndParam_LookupReadOnly
 	ld	(0x8d54:16), l
 	set	7, (0xb7e2:16)
 	calr	EffectMode_CheckModeAndReinit
-EffectMode_ByteData_Block3_Skip5:
+PanelTag48_MsaReapply_Skip5:
 	and	(0x8d52:16), 0xd7
 	ret
-EffectMode_ByteData_Block4:
+PanelTag98_MsaReapply:
 	cp	(SWBTWR_PAYLOAD_1:16), 3
 	jr	nz, EffectMode_ByteData_Block4_Code_Entry
 	ld	a, (SWBTWR_PAYLOAD_2:16)
@@ -1671,7 +1671,7 @@ SelfTest_SramAndRom_CheckROM:
 	push xhl
 	push xix
 	push xiz
-	call CPanel_PanelDetection_Wrapper
+	call CPanel_ProbePanelMcus
 	ld (0x8d7c:16), a
 	pop xiz
 	pop xix
@@ -1992,7 +1992,7 @@ EffectMode_ByteData_DiagEvents:
 	push	xhl
 	push	xix
 	push	xiz
-	call	CPanel_PanelDetection_Wrapper
+	call	CPanel_ProbePanelMcus
 	ld	(0x8d7c:16), a
 	pop	xiz
 	pop	xix
@@ -3531,8 +3531,8 @@ MstStyleAlp_CellSelect:
 
 MstStyleAlp_AppendPadChar:
 	pushw 0x1
-	pushw MstStyleAlp_AppendPadChar_Data@hi16
-	pushw MstStyleAlp_AppendPadChar_Data@lo16
+	pushw MstStyleAlp_AppendPadChar_Str_Blank1@hi16
+	pushw MstStyleAlp_AppendPadChar_Str_Blank1@lo16
 	lda xwa, (xsp + 22)
 	push xwa
 	call Strncat
@@ -4043,8 +4043,8 @@ MstStyle1Grid_CellSelect:
 
 MstStyle1Grid_PadLeft_Loop:
 	pushw 0x1
-	pushw MstStyle1Grid_CellSelect_Data_2@hi16
-	pushw MstStyle1Grid_CellSelect_Data_2@lo16
+	pushw MstStyle1Grid_PadLeft_Loop_Str_Blank1@hi16
+	pushw MstStyle1Grid_PadLeft_Loop_Str_Blank1@lo16
 	lda xwa, (xsp + 18)
 	push xwa
 	call Strncat
@@ -4748,8 +4748,8 @@ MstStyle1SubGrid_CellSelect:
 
 MstStyle1SubGrid_PadLeft_Loop:
 	pushw 0x1
-	pushw MstStyle1SubGrid_CellSelect_Data@hi16
-	pushw MstStyle1SubGrid_CellSelect_Data@lo16
+	pushw MstStyle1SubGrid_PadLeft_Loop_Str_Blank1@hi16
+	pushw MstStyle1SubGrid_PadLeft_Loop_Str_Blank1@lo16
 	lda xwa, (xsp + 14)
 	push xwa
 	call Strncat
@@ -6219,8 +6219,8 @@ MstGrid2_CellSelect:
 
 MstGrid2_PadLeft_LoopA:
 	pushw 0x1
-	pushw MstGrid2_PadLeft_LoopA_Data@hi16
-	pushw MstGrid2_PadLeft_LoopA_Data@lo16
+	pushw MstGrid2_PadLeft_LoopA_Str_Blank1@hi16
+	pushw MstGrid2_PadLeft_LoopA_Str_Blank1@lo16
 	lda xwa, (xsp + 26)
 	push xwa
 	call Strncat
@@ -6929,8 +6929,8 @@ TchSensGridCheck_OnLswData:
 	lda	xbc, (xsp+4)
 	ld	(xwa+4), xbc
 	pushw	(xix)	; FBABB9 (pushw (xix))
-	pushw	TchSensGridCheck_OnLswData_Data@hi16
-	pushw	TchSensGridCheck_OnLswData_Data@lo16
+	pushw	TchSensGridCheck_OnLswData_Str_Fmt3d_3@hi16
+	pushw	TchSensGridCheck_OnLswData_Str_Fmt3d_3@lo16
 	push	xbc
 	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
@@ -8618,8 +8618,8 @@ PmExpFilter_DrawCellBank2:
 	add bc, wa
 	inc 1, bc
 	ld (xhl + 2), bc
-	pushw PmExpFilter_DrawCellBank2_Data@hi16
-	pushw PmExpFilter_DrawCellBank2_Data@lo16
+	pushw PmExpFilter_DrawCellBank2_Str_PAGE_3_3@hi16
+	pushw PmExpFilter_DrawCellBank2_Str_PAGE_3_3@lo16
 	lda xwa, (xsp + 28)
 	push xwa
 	call Strcpy
@@ -10300,8 +10300,8 @@ IvPageOverWr_KeyPress:
 	jrl IvPageOverWr_SendAndReturn
 
 IvPageOverWr_GetName:
-	pushw IvPageOverWr_GetName_Data@hi16
-	pushw IvPageOverWr_GetName_Data@lo16
+	pushw IvPageOverWr_GetName_Str_PAGE@hi16
+	pushw IvPageOverWr_GetName_Str_PAGE@lo16
 	ld xwa, (xsp + 8)
 	push xwa
 	call Strcpy
@@ -11816,8 +11816,8 @@ GmOnOffFunc:
 	cp xbc, EVT_GET_LSW_STRING
 	jrl nz, GmOnOff_DefaultReturn
 	pushw	(xde+4)
-	pushw GmOnOffFunc_Data@hi16
-	pushw GmOnOffFunc_Data@lo16
+	pushw GmOnOffFunc_Str_Empty@hi16
+	pushw GmOnOffFunc_Str_Empty@lo16
 	ld xwa, (xde + 8)
 	push xwa
 	call Sprintf_Locked

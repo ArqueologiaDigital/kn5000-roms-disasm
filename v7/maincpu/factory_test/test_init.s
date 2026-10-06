@@ -282,27 +282,27 @@ TestTitleFunc:
 ; User action dispatch table (event 0x1c00013, xde=2..6)
 ; Each entry loads a string address and calls FDTest_PrintDiag, then exits
 TitleFunc_ActionDispatch:
-	lda xwa, (TitleFunc_ActionDispatch_Data:24)
+	lda xwa, (TitleFunc_ActionDispatch_Str_TitleNew:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
 TestTitleFunc_OnTitleOld:
-	lda xwa, (TitleFunc_ActionDispatch_Data_2:24)
+	lda xwa, (TestTitleFunc_OnTitleOld_Str_TitleOld:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
 TestTitleFunc_OnTitleActivate:
-	lda xwa, (TitleFunc_ActionDispatch_Data_3:24)
+	lda xwa, (TestTitleFunc_OnTitleActivate_Str_TitleActivate:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
 TestTitleFunc_OnTitleInactivate:
-	lda xwa, (TitleFunc_ActionDispatch_Data_4:24)
+	lda xwa, (TestTitleFunc_OnTitleInactivate_Str_TitleInactivate:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
 TestTitleFunc_OnTitleInterrupt:
-	lda xwa, (TitleFunc_ActionDispatch_Data_5:24)
+	lda xwa, (TestTitleFunc_OnTitleInterrupt_Str_TitleINTERUPT:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
 TestTitleFunc_OnTitleInterruptReturn:
-	lda xwa, (TitleFunc_ActionDispatch_Data_6:24)
+	lda xwa, (TestTitleFunc_OnTitleInterruptReturn_Str_TitleINTERUPT_RETURN:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
 
@@ -322,7 +322,7 @@ TitleFunc_LifecycleDispatch:
 ; 4=interrupt: print+call RegHamaTitle1_Entry, 5=interrupt return: print+call RegHamaTitle2_Entry
 ; 6=TBIOS test: call ListDir2_Entry
 TitleFunc_LifecycleTable:
-	lda xwa, (TitleFunc_LifecycleTable_Data:24)
+	lda xwa, (TitleFunc_LifecycleTable_Str_TBIOS_Test:24)
 	calr FDTest_PrintDiag
 	call TitleFunc_LifecycleTable_Helper
 	jr TitleFunc_Return
@@ -335,12 +335,12 @@ TitleFunc_LifecycleDispatch_OnStopFddTest:
 	ld xwa, 0:i3
 	ld xde, 0xffffffff
 	call KillApTimer
-	lda xwa, (TitleFunc_LifecycleTable_Data_2:24)
+	lda xwa, (TitleFunc_LifecycleDispatch_OnStopFddTest_Str_STOP_FDD_TEST:24)
 	calr FDTest_PrintDiag
 	ld wa, 0:i3
 	jr TitleFunc_Return
 TitleFunc_LifecycleDispatch_OnFddTestLoop:
-	lda xwa, (TitleFunc_LifecycleTable_Data_3:24)
+	lda xwa, (TitleFunc_LifecycleDispatch_OnFddTestLoop_Str_START_FDD_TEST_LOOP:24)
 	calr FDTest_PrintDiag
 	calr RunTestCounters_Entry
 	ld xwa, EVT_SW_IN
@@ -354,17 +354,17 @@ TitleFunc_LifecycleDispatch_OnFddTestLoop:
 	ld wa, 1:i3
 	jr TitleFunc_Return
 TitleFunc_LifecycleDispatch_OnListDirectory:
-	lda xwa, (TitleFunc_LifecycleTable_Data_4:24)
+	lda xwa, (TitleFunc_LifecycleDispatch_OnListDirectory_Str_DIR:24)
 	calr FDTest_PrintDiag
 	calr FDListDirectory
 	jr TitleFunc_Return
 TitleFunc_LifecycleDispatch_OnFormat2dd:
-	lda xwa, (TitleFunc_LifecycleTable_Data_5:24)
+	lda xwa, (TitleFunc_LifecycleDispatch_OnFormat2dd_Str_Debug_Test:24)
 	calr FDTest_PrintDiag
 	calr RegHamaTitle1_Entry
 	jr TitleFunc_Return
 TitleFunc_LifecycleDispatch_OnFormat2hd:
-	lda xwa, (TitleFunc_LifecycleTable_Data_6:24)
+	lda xwa, (TitleFunc_LifecycleDispatch_OnFormat2hd_Str_Debug_Test:24)
 	calr FDTest_PrintDiag
 	calr RegHamaTitle2_Entry
 	jr TitleFunc_Return
@@ -441,7 +441,7 @@ RunTestCounters_BadStatus:
 RunTestCounters_IncrNG:
 	incw 1, (0x03dd02:24)
 RunTestCounters_Display:
-	lda xwa, (RunTestCounters_Display_Data:24)
+	lda xwa, (RunTestCounters_Display_Str_TEST_Finishd:24)
 	calr FDTest_PrintDiag
 	ld de, (0x03dcfe:24)
 	exts xde
@@ -522,7 +522,7 @@ SendEvent_Entry:
 ; HamaEventDispatcher -- Dispatches events for HAMA subsystem
 ; Handles 0x1c00007 (title lifecycle) and 0x1e00085 (extension event)
 ; For 0x1c00007: dispatches on xde (0x8a=file ops, 0x8b=extension bootstrap)
-HamaEvtDisp_Entry:
+HamaDeb_HdaeDebugScreenFunc:
 	cp xbc, EVT_SW_IN
 	jr z, HamaEvtDisp_LifecycleCheck
 	cp xbc, EVT_ARE_YOU_CLASS_PROC
@@ -609,11 +609,11 @@ LoadExtROM_JumpEntry:
 	lda xwa, (0x027ed2:24)
 	jp (xhl)
 
-GetAprStatus_Entry:
+Xapr_GetPresentFlag:
 	ld l, (XAPR_PRESENT_FLAG:24)
 	ret
 
-LoadXaprInit_Entry:
+Xapr_DetectOnInit:
 	pushw	4
 	pushw	LoadExtROM_JumpEntry_Str_XAPR@hi16
 	pushw	LoadExtROM_JumpEntry_Str_XAPR@lo16
@@ -625,23 +625,23 @@ LoadXaprInit_Entry:
 	ret	nz
 	ld	(XAPR_PRESENT_FLAG:24), 1
 	ret
-HamaStub1_Entry:
+Xapr_InitPhase1_NullRet:
 	ret
 
-HamaStub2_Entry:
+Xapr_InitPhase2_NullRet:
 	ret
 
-HamaStub3_Entry:
+Xapr_InitPhase3_NullRet:
 	ret
 
-CallExtIfActive_Entry:
+Xapr_CallFrameHandler:
 	cp (XAPR_PRESENT_FLAG:24), 0x00
 	ret z
 	ld xhl, 0x280010
 	call (xhl)
 	ret
 
-LoadAndRunXapr_Entry:
+Xapr_DetectAndCallBootInit:
 	pushw	4
 	pushw	LoadExtROM_JumpEntry_Data@hi16
 	pushw	LoadExtROM_JumpEntry_Data@lo16

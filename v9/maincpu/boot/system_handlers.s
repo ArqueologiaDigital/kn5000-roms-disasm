@@ -1110,7 +1110,7 @@ Seq_InitFuncTable:
 ;
 ; PHASE 6: Sequencer Finalization
 ;   SeqPhase_OperationStateCheck, AccompSeq_PeriodicEntry
-;   CallExtIfActive_Entry (HDAE5000 extension)
+;   Xapr_CallFrameHandler (HDAE5000 extension)
 ; =============================================================================
 MainLoop:
 	ei 0
@@ -1244,7 +1244,7 @@ MainLoop_SequencerPhase:
 	calr Seq_EventProcessingTick
 	call Display_DirtyRegionDispatch
 	call AccompSeq_PeriodicEntry
-	call CallExtIfActive_Entry
+	call Xapr_CallFrameHandler
 	jrl MainLoop
 
 Seq_TickWrapper:
@@ -1996,7 +1996,7 @@ TaskSched_ScreenGroupTable:
 	.long	Boot_InitPeripherals, 0x0001dc34	; group 1
 	.short	0x8800
 	.byte	3, 0
-	.long	ScreenGroup2_Entry, 0x0001e436	; group 2
+	.long	DiskStream_ReaderTask, 0x0001e436	; group 2
 	.short	0x8800
 	.byte	3, 0
 	.long	ScreenGroup3_IdleSpin, 0x0001e4b8	; group 3
@@ -2005,7 +2005,7 @@ TaskSched_ScreenGroupTable:
 	.long	MainTitle_TeardownAndLoop, 0x0001c030	; group 4
 	.short	0x8800
 	.byte	3, 0
-	.long	DrawTask_Entry, 0x0001d032	; group 5
+	.long	DrawTask_Main, 0x0001d032	; group 5
 	.short	0x8800
 	.byte	3, 0
 ; one byte per queue, all 1: TaskSched_Init copies these 10 next to the 10 queue heads at RAM 0x4D1 (to 0x4F9),
@@ -3559,7 +3559,7 @@ TempoRingBuf_InlineBytecode2:
 	pushw	ix
 	push	xde
 	lda	xde, (0x1e753:24)
-	call	Seq_RingBuf_WriteByte_Data
+	call	Seq_RingBuf_ReadAheadToCheckpoint
 	pop	xde
 	popw	ix
 	ret
@@ -4648,7 +4648,7 @@ SeqBuf_NoteEvent_ReadByte:
 	popw ix
 	ret
 
-SeqBuf_NoteEvent_WriteByte_Data:
+SeqBuf_NoteEvent_WriteByte:
 	link	xiz, 0
 	pushw	ix
 	push	xde
@@ -4678,9 +4678,9 @@ SeqBuf_NoteEvent_WriteByte_Data:
 	ld	hl, (0x202c7:24)
 	cp hl, (131779:24)
 	ld	hl, 0:i3
-	jr	z, SeqBuf_NoteEvent_WriteByte_Data_Return
+	jr	z, SeqBuf_NoteEvent_WriteByte_Return
 	ldw	hl, 0xffff
-SeqBuf_NoteEvent_WriteByte_Data_Return:
+SeqBuf_NoteEvent_WriteByte_Return:
 	ret
 	ld	hl, (0x202c9:24)
 	ret
@@ -4733,7 +4733,7 @@ SeqBuf_NoteEvent_SaveWritePtr:
 	popw	ix
 	ret
 
-SeqBuf_NoteEvent_WriteByte_Block:
+SeqBuf_DmaChan0_WriteByte:
 	link	xiz, 0
 	pushw	ix
 	push	xde
@@ -4763,9 +4763,9 @@ SeqBuf_NoteEvent_WriteByte_Block:
 	ld	hl, (0x203d1:24)
 	cp hl, (132045:24)
 	ld	hl, 0:i3
-	jr	z, SeqBuf_NoteEvent_WriteByte_Block_Return
+	jr	z, SeqBuf_DmaChan0_WriteByte_Return
 	ldw	hl, 0xffff
-SeqBuf_NoteEvent_WriteByte_Block_Return:
+SeqBuf_DmaChan0_WriteByte_Return:
 	ret
 	ld	hl, (0x203d3:24)
 	ret
@@ -5209,13 +5209,13 @@ Seq_RingBuf_PeekByte_Read:
 	incw 1, (xde - 2)
 	ret
 
-Seq_RingBuf_WriteByte_Data:
+Seq_RingBuf_ReadAheadToCheckpoint:
 	ld	ix, (xde-10)
 	cp	ix, (xde-6)
-	jr	nz, Seq_RingBuf_WriteByte_Data_Skip
+	jr	nz, Seq_RingBuf_ReadAheadToCheckpoint_Skip
 	ldw	hl, 0xffff
 	ret
-Seq_RingBuf_WriteByte_Data_Skip:
+Seq_RingBuf_ReadAheadToCheckpoint_Skip:
 	xor	hl, hl
 	ld	l, (xde+ix)
 	.byte	0xdc, 0x38, 0xff, 0x07	; minc1 0x07ff,IX
@@ -5273,7 +5273,7 @@ SeqDMA_MultiWrite_NoteEvent_Loop:
 	ld (xsp + 2), xwa
 	extz bc
 	pushw bc
-	call SeqBuf_NoteEvent_WriteByte_Block
+	call SeqBuf_DmaChan0_WriteByte
 	inc 2, xsp
 	inc 1, iz
 	ld a, (xsp + 6)
@@ -5389,12 +5389,12 @@ SeqDMA_WriteMidi_NoteOn:
 	ld a, (xiz)
 	extz wa
 	pushw wa
-	call SeqBuf_NoteEvent_WriteByte_Data
+	call SeqBuf_NoteEvent_WriteByte
 	inc 1, xiz
 	ld a, (xiz)
 	extz wa
 	pushw wa
-	call SeqBuf_NoteEvent_WriteByte_Data
+	call SeqBuf_NoteEvent_WriteByte
 	inc 4, xsp
 
 SeqDMA_WriteMidi_NoteOn_Done:

@@ -212,10 +212,13 @@ SysEx_DispatchByChannel:
 	add wa, wa
 	lda xix, (SysEx4B_ChannelSwitch:24)
 	ld	wa, (xix+wa)
-	lda xix, (SysEx_ChannelHandler_4B_Data:24)
+	lda xix, (SysEx_DispatchByChannel_ChorusMacroChorus1:24)
 	jp	t, (xix+wa)
 
-SysEx_ChannelHandler_4B_Data:
+; SysEx_DispatchByChannel_ChorusMacroChorus1: GS chorus macro 0 (Chorus 1; also the switch base): value C of
+;   SysEx4B_ChannelWords0, written by the callers to DSP param 0x4910+C (DSP EFFECT slot). Basis: switch value (GS
+;   CHORUS MACRO) + body.
+SysEx_DispatchByChannel_ChorusMacroChorus1:
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, SysEx4B_ChannelWords0
@@ -271,10 +274,12 @@ SysEx_DispatchByChannel_49:
 	add wa, wa
 	lda xix, (SysEx49_ChannelSwitch:24)
 	ld	wa, (xix+wa)
-	lda xix, (SysEx_ChannelHandler_49_Data:24)
+	lda xix, (SysEx_DispatchByChannel_49_ReverbMacroRoom1:24)
 	jp	t, (xix+wa)
 
-SysEx_ChannelHandler_49_Data:
+; SysEx_DispatchByChannel_49_ReverbMacroRoom1: GS reverb macro 0 (Room 1; also the switch base): value C of
+;   SysEx49_ChannelWords0, written by the callers to DSP param 0x4B10+C. Basis: switch value (GS REVERB MACRO) + body.
+SysEx_DispatchByChannel_49_ReverbMacroRoom1:
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, SysEx49_ChannelWords0
@@ -1444,7 +1449,7 @@ SeqOut_WriteTimedBytes_SerialWrite:
 	call SeqBuf3_WriteBytes
 	inc 6, xsp
 	ldfr_werp HL, 0xfa
-	calr SeqBuf3_EnableTx_Stub
+	calr CompIface_SerialEnableTx
 	jr MIDI_SeqProcess_DisableIntReturn
 
 SeqOut_WriteTimedBytes_PC2Timing:
@@ -1614,7 +1619,10 @@ SeqBuf_DspSysEx_ReadAndForward_Done:
 	inc 2, xsp
 	ret
 
-SeqBuf3_EnableTx_Stub:
+; CompIface_SerialEnableTx: Empty (ret) computer-interface counterpart of MIDI_SC0_ENABLE_TX: MIDI_SC0_TX_DISPATCH
+;   calls it when COM_SELECT is not MIDI, SeqOut_WriteTimedBytes after queuing bytes in SeqBuf3 for interface types
+;   0/1. Basis: callers + body.
+CompIface_SerialEnableTx:
 	ret
 
 MidiSysEx_BuildAndSend:
@@ -2886,7 +2894,7 @@ DSPCfg_Data_001:
 
 DSPCfg_GetSlotCount:
 	extz xwa
-	ld xbc, DSPCfg_GetSlotCount_Data
+	ld xbc, DspFxParamCountTable
 	add xbc, xwa
 	ld l, (xbc)
 	extz hl
@@ -4065,9 +4073,11 @@ DSPCfg_RecordFieldToParamId:
 	add	wa, wa
 	lda	xix, (DspCfg_OpLetter_JumpOffsets:24)
 	ld	wa, (xix+wa)
-	lda	xix, (DSPCfg_Data_ParamDispatch_Code:24)
+	lda	xix, (DSPCfg_RecordFieldToParamId_DspEffectRecord:24)
 	jp	t, (xix+wa)
-DSPCfg_Data_ParamDispatch_Code:
+; DSPCfg_RecordFieldToParamId_DspEffectRecord: Tag 0x61 (also the switch base): id base 0x4900 in DSP slot 0, the DSP
+;   EFFECT slot. Basis: switch value (tag - 0x61) + body.
+DSPCfg_RecordFieldToParamId_DspEffectRecord:
 	ld	xiz, 0x4900
 	ld	wa, 0:i3
 	jr	DSPCfg_Data_ParamDispatch_Join3
@@ -4218,7 +4228,7 @@ DSPCfg_ApplyParamStruct:
 	ld a, (xiz)
 	extz wa
 	ld (xsp + 4), wa
-	lda xbc, (DSPCfg_GetSlotCount_Data:24)
+	lda xbc, (DspFxParamCountTable:24)
 	ld wa, (xsp + 4)
 	ld	a, (xbc+wa)
 	extz wa
@@ -5380,7 +5390,7 @@ AudioModeChange_Handler:
 	lda xbc, (AudioVoiceHandler_Table:24)
 	ld	xhl, (xbc+wa)
 	ld xbc, xhl
-	lda xwa, (AudioInit_MixFallbackDefault_Code:24)
+	lda xwa, (AudioVoiceHandler_NoneSentinel:24)
 	cp xwa, xbc
 	ret z
 	ld wa, 0:i3
@@ -5422,7 +5432,7 @@ AudioSubsystem_Callback:
 	lda xbc, (AudioVoiceHandler_Table:24)
 	ld	xhl, (xbc+wa)
 	ld xbc, xhl
-	lda xwa, (AudioInit_MixFallbackDefault_Code:24)
+	lda xwa, (AudioVoiceHandler_NoneSentinel:24)
 	cp xwa, xbc
 	ret z
 	ld wa, 0:i3
@@ -5493,7 +5503,7 @@ AudioVoice_Callback:
 	lda xbc, (AudioVoiceHandler_Table:24)
 	ld	xhl, (xbc+wa)
 	ld xbc, xhl
-	lda xwa, (AudioInit_MixFallbackDefault_Code:24)
+	lda xwa, (AudioVoiceHandler_NoneSentinel:24)
 	cp xwa, xbc
 	jr z, AudioVoice_SkipToDispatch
 	ld wa, 0:i3
@@ -5538,7 +5548,7 @@ AudioVoiceReset_Handler:
 	lda xbc, (AudioVoiceHandler_Table:24)
 	ld	xhl, (xbc+wa)
 	ld xbc, xhl
-	lda xwa, (AudioInit_MixFallbackDefault_Code:24)
+	lda xwa, (AudioVoiceHandler_NoneSentinel:24)
 	cp xwa, xbc
 	ret z
 	ld wa, 1:i3
@@ -5799,26 +5809,32 @@ UIStateEvt_TransposeUpdate_Clear:
 UIStateEvt_TransposeUpdate_Apply:
 	orw	(0xc594:16), 4
 	ret
-UIStateEvt_ParamEdit_Data:
+; PanelTag48_UpdateAudioConfig: SwbtWr listener of panel record 0x48 (style/tempo): for payload offsets 0-6 mirrors
+;   the changed bits into the audio-configuration state (0xC596, 0xC59A, 0xC5A0) and sets 0xC594 bit 2. Basis: callers
+;   (listener list) + body.
+PanelTag48_UpdateAudioConfig:
 	pushw	iz
 	ldb_d8	a, (SWBTWR_PAYLOAD_1)
 	extz	wa
 	cp	wa, 0:i3
-	jrl	mi, UIStateEvt_ParamEdit_Data_Epilogue
+	jrl	mi, UIStateEvt_ParamEdit_Data_Case6_Epilogue
 	cp	wa, 6:i3
-	jrl	gt, UIStateEvt_ParamEdit_Data_Epilogue
+	jrl	gt, UIStateEvt_ParamEdit_Data_Case6_Epilogue
 	add	wa, wa
 	lda	xix, (ParamEdit_SwitchOffsets:24)
 	ld	wa, (xix+wa)
-	lda	xix, (UIStateEvt_TransposeUpdate_Apply_Code:24)
+	lda	xix, (PanelTag48_UpdateAudioConfig_StyleNumber:24)
 	jp	t, (xix+wa)
-UIStateEvt_TransposeUpdate_Apply_Code:
+; PanelTag48_UpdateAudioConfig_StyleNumber: Offset 0 of record 0x48 (the style number; also the switch base): when
+;   bits 0-2 changed, recomputes 0xC596 bits 0-4 from +3/+4 (ParamEdit_WordTable), may refresh the tone bank, sets
+;   0xC594 bit 2. Basis: switch value + body.
+PanelTag48_UpdateAudioConfig_StyleNumber:
 	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 7
 	jrl	z, UIStateEvt_ParamEdit_Data_Entry
 	ldw_d16	wa, (0xc598)
 	bit	6, wa
-	jr	z, UIStateEvt_ParamEdit_Data_Skip
+	jr	z, PanelTag48_UpdateAudioConfig_StyleNumber_Skip
 	ldb_d8	a, (0xfc5e)
 	and	a, 7
 	extz	wa
@@ -5831,12 +5847,12 @@ UIStateEvt_TransposeUpdate_Apply_Code:
 	add	wa, wa
 	lda	xbc, (ParamEdit_WordTable:24)
 	or	iz, (xbc+wa)
-	jr	UIStateEvt_ParamEdit_Data_Join
-UIStateEvt_ParamEdit_Data_Skip:
+	jr	PanelTag48_UpdateAudioConfig_StyleNumber_Join
+PanelTag48_UpdateAudioConfig_StyleNumber_Skip:
 	ldw_d16	wa, (0xc598)
 	and	wa, 34
 	cp	wa, 32
-	jr	nz, UIStateEvt_ParamEdit_Data_Skip2
+	jr	nz, PanelTag48_UpdateAudioConfig_StyleNumber_Skip2
 	ld	iz, 2:i3
 	ldb_d8	a, (0xfc5d)
 	and	a, 8
@@ -5844,81 +5860,81 @@ UIStateEvt_ParamEdit_Data_Skip:
 	add	wa, wa
 	lda	xbc, (ParamEdit_WordTable:24)
 	or	iz, (xbc+wa)
-	jr	UIStateEvt_ParamEdit_Data_Join
-UIStateEvt_ParamEdit_Data_Skip2:
+	jr	PanelTag48_UpdateAudioConfig_StyleNumber_Join
+PanelTag48_UpdateAudioConfig_StyleNumber_Skip2:
 	ldb_d8	a, (0xfc5d)
 	and	a, 15
 	extz	wa
 	add	wa, wa
 	lda	xbc, (ParamEdit_WordTable:24)
 	ld	iz, (xbc+wa)
-UIStateEvt_ParamEdit_Data_Join:
+PanelTag48_UpdateAudioConfig_StyleNumber_Join:
 	ldw_d16	wa, (0xc596)
 	and	wa, 6
-	jr	z, UIStateEvt_ParamEdit_Data_Skip3
+	jr	z, PanelTag48_UpdateAudioConfig_StyleNumber_Skip3
 	ld	wa, iz
 	and	wa, 6
-	jr	z, UIStateEvt_ParamEdit_Data_Skip3
+	jr	z, PanelTag48_UpdateAudioConfig_StyleNumber_Skip3
 	ldw_d16	wa, (0xc596)
 	and	wa, 7
-	jr	nz, UIStateEvt_ParamEdit_Data_Skip4
-UIStateEvt_ParamEdit_Data_Skip3:
+	jr	nz, PanelTag48_UpdateAudioConfig_StyleNumber_Skip4
+PanelTag48_UpdateAudioConfig_StyleNumber_Skip3:
 	call	AudioInit_RefreshToneBank
-UIStateEvt_ParamEdit_Data_Skip4:
+PanelTag48_UpdateAudioConfig_StyleNumber_Skip4:
 	andw	(0xc596:16), 0xffe8
 	or	(0xc596:16), iz
 	orw	(0xc594:16), 4
 	ldw_d16	wa, (0xc596)
 	and	wa, 7
-	jr	z, UIStateEvt_ParamEdit_Data_Skip5
+	jr	z, PanelTag48_UpdateAudioConfig_StyleNumber_Skip5
 	ld	(0xc5a0:16), 31
 	jr	UIStateEvt_ParamEdit_Data_Entry
-UIStateEvt_ParamEdit_Data_Skip5:
+PanelTag48_UpdateAudioConfig_StyleNumber_Skip5:
 	ld	(0xc5a0:16), 16
 UIStateEvt_ParamEdit_Data_Entry:
 	bit	3, (SWBTWR_PAYLOAD_3:16)
-	jrl	z, UIStateEvt_ParamEdit_Data_Epilogue
+	jrl	z, UIStateEvt_ParamEdit_Data_Case6_Epilogue
 	bit	3, (SWBTWR_PAYLOAD_2:16)
-	jr	z, UIStateEvt_ParamEdit_Data_Skip6
+	jr	z, UIStateEvt_ParamEdit_Data_Entry_Skip6
 	orw	(0xc596:16), 16
-	jr	UIStateEvt_ParamEdit_Data_Join2
-UIStateEvt_ParamEdit_Data_Skip6:
+	jr	UIStateEvt_ParamEdit_Data_Entry_Join2
+UIStateEvt_ParamEdit_Data_Entry_Skip6:
 	andw	(0xc596:16), 0xffef
-UIStateEvt_ParamEdit_Data_Join2:
+UIStateEvt_ParamEdit_Data_Entry_Join2:
 	orw	(0xc59a:16), 0x2000
 	orw	(0xc594:16), 4
-	jrl	UIStateEvt_ParamEdit_Data_Epilogue
+	jrl	UIStateEvt_ParamEdit_Data_Case6_Epilogue
 UIStateEvt_ParamEdit_Data_Case4:
 	bit	6, (SWBTWR_PAYLOAD_3:16)
-	jr	z, UIStateEvt_ParamEdit_Data_Skip8
+	jr	z, UIStateEvt_ParamEdit_Data_Case4_Skip8
 	bit	6, (SWBTWR_PAYLOAD_2:16)
-	jr	z, UIStateEvt_ParamEdit_Data_Skip7
+	jr	z, UIStateEvt_ParamEdit_Data_Case4_Skip7
 	orw	(0xc596:16), 0x400
-	jr	UIStateEvt_ParamEdit_Data_Join3
-UIStateEvt_ParamEdit_Data_Skip7:
+	jr	UIStateEvt_ParamEdit_Data_Case4_Join3
+UIStateEvt_ParamEdit_Data_Case4_Skip7:
 	andw	(0xc596:16), 0xfbff
-UIStateEvt_ParamEdit_Data_Join3:
+UIStateEvt_ParamEdit_Data_Case4_Join3:
 	orw	(0xc59a:16), 0x4000
 	orw	(0xc594:16), 4
-UIStateEvt_ParamEdit_Data_Skip8:
+UIStateEvt_ParamEdit_Data_Case4_Skip8:
 	bit	4, (SWBTWR_PAYLOAD_3:16)
-	jr	z, UIStateEvt_ParamEdit_Data_Skip10
+	jr	z, UIStateEvt_ParamEdit_Data_Case4_Skip10
 	andw	(0xc596:16), 0xf7ff
 	bit	4, (SWBTWR_PAYLOAD_2:16)
-	jr	z, UIStateEvt_ParamEdit_Data_Skip9
+	jr	z, UIStateEvt_ParamEdit_Data_Case4_Skip9
 	orw	(0xc596:16), 0x800
-	jr	UIStateEvt_ParamEdit_Data_Join4
-UIStateEvt_ParamEdit_Data_Skip9:
+	jr	UIStateEvt_ParamEdit_Data_Case4_Join4
+UIStateEvt_ParamEdit_Data_Case4_Skip9:
 	andw	(0xc596:16), 0xf7ff
-UIStateEvt_ParamEdit_Data_Join4:
+UIStateEvt_ParamEdit_Data_Case4_Join4:
 	orw	(0xc594:16), 4
-UIStateEvt_ParamEdit_Data_Skip10:
+UIStateEvt_ParamEdit_Data_Case4_Skip10:
 	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 7
-	jrl	z, UIStateEvt_ParamEdit_Data_Epilogue
+	jrl	z, UIStateEvt_ParamEdit_Data_Case6_Epilogue
 	ldw_d16	wa, (0xc598)
 	bit	6, wa
-	jr	z, UIStateEvt_ParamEdit_Data_Skip11
+	jr	z, UIStateEvt_ParamEdit_Data_Case4_Skip11
 	ldb_d8	a, (0xfc5e)
 	and	a, 7
 	extz	wa
@@ -5931,11 +5947,11 @@ UIStateEvt_ParamEdit_Data_Skip10:
 	add	wa, wa
 	lda	xbc, (ParamEdit_WordTable:24)
 	or	iz, (xbc+wa)
-	jr	UIStateEvt_ParamEdit_Data_Join5
-UIStateEvt_ParamEdit_Data_Skip11:
+	jr	UIStateEvt_ParamEdit_Data_Case4_Join5
+UIStateEvt_ParamEdit_Data_Case4_Skip11:
 	ldw_d16	wa, (0xc598)
 	bit	5, wa
-	jr	z, UIStateEvt_ParamEdit_Data_Skip12
+	jr	z, UIStateEvt_ParamEdit_Data_Case4_Skip12
 	ld	iz, 2:i3
 	ldb_d8	a, (0xfc5d)
 	and	a, 8
@@ -5943,69 +5959,72 @@ UIStateEvt_ParamEdit_Data_Skip11:
 	add	wa, wa
 	lda	xbc, (ParamEdit_WordTable:24)
 	or	iz, (xbc+wa)
-	jr	UIStateEvt_ParamEdit_Data_Join5
-UIStateEvt_ParamEdit_Data_Skip12:
+	jr	UIStateEvt_ParamEdit_Data_Case4_Join5
+UIStateEvt_ParamEdit_Data_Case4_Skip12:
 	ldb_d8	a, (0xfc5d)
 	and	a, 15
 	extz	wa
 	add	wa, wa
 	lda	xbc, (ParamEdit_WordTable:24)
 	ld	iz, (xbc+wa)
-UIStateEvt_ParamEdit_Data_Join5:
+UIStateEvt_ParamEdit_Data_Case4_Join5:
 	andw	(0xc596:16), 0xffe8
 	or	(0xc596:16), iz
 	orw	(0xc594:16), 4
 	ldw_d16	wa, (0xc596)
 	and	wa, 7
-	jr	z, UIStateEvt_ParamEdit_Data_Skip13
+	jr	z, UIStateEvt_ParamEdit_Data_Case4_Skip13
 	ld	(0xc5a0:16), 31
-	jr	UIStateEvt_ParamEdit_Data_Epilogue
-UIStateEvt_ParamEdit_Data_Skip13:
+	jr	UIStateEvt_ParamEdit_Data_Case6_Epilogue
+UIStateEvt_ParamEdit_Data_Case4_Skip13:
 	ld	(0xc5a0:16), 16
-	jr	UIStateEvt_ParamEdit_Data_Epilogue
+	jr	UIStateEvt_ParamEdit_Data_Case6_Epilogue
 UIStateEvt_ParamEdit_Data_Case5:
 	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 252
-	jr	z, UIStateEvt_ParamEdit_Data_Skip15
+	jr	z, UIStateEvt_ParamEdit_Data_Case5_Skip15
 	bit	0, (0x3284:16)
-	jr	nz, UIStateEvt_ParamEdit_Data_Skip14
+	jr	nz, UIStateEvt_ParamEdit_Data_Case5_Skip14
 	ldw_d16	wa, (0xc596)
 	bit	9, wa
-	jr	z, UIStateEvt_ParamEdit_Data_Skip14
+	jr	z, UIStateEvt_ParamEdit_Data_Case5_Skip14
 	ldb_d8	a, (0xfc5f)
 	and	a, 252
-	jr	nz, UIStateEvt_ParamEdit_Data_Skip14
-UIStateEvt_ParamEdit_Data_Skip14:
+	jr	nz, UIStateEvt_ParamEdit_Data_Case5_Skip14
+UIStateEvt_ParamEdit_Data_Case5_Skip14:
 	orw	(0xc594:16), 4
-UIStateEvt_ParamEdit_Data_Skip15:
+UIStateEvt_ParamEdit_Data_Case5_Skip15:
 	bit	1, (SWBTWR_PAYLOAD_3:16)
-	jr	z, UIStateEvt_ParamEdit_Data_Epilogue
+	jr	z, UIStateEvt_ParamEdit_Data_Case6_Epilogue
 	bit	1, (0xfc5f:16)
-	jr	z, UIStateEvt_ParamEdit_Data_Skip16
+	jr	z, UIStateEvt_ParamEdit_Data_Case5_Skip16
 	ldw_d16	wa, (0xc596)
 	bit	9, wa
 	call	z, (AudioInit_RefreshToneBank:24)
-UIStateEvt_ParamEdit_Data_Skip16:
+UIStateEvt_ParamEdit_Data_Case5_Skip16:
 	orw	(0xc594:16), 4
-	jr	UIStateEvt_ParamEdit_Data_Epilogue
+	jr	UIStateEvt_ParamEdit_Data_Case6_Epilogue
 UIStateEvt_ParamEdit_Data_Case6:
 	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 252
-	jr	z, UIStateEvt_ParamEdit_Data_Epilogue
+	jr	z, UIStateEvt_ParamEdit_Data_Case6_Epilogue
 	bit	0, (0x3284:16)
-	jr	nz, UIStateEvt_ParamEdit_Data_Skip17
+	jr	nz, UIStateEvt_ParamEdit_Data_Case6_Skip17
 	ldw_d16	wa, (0xc596)
 	bit	9, wa
-	jr	z, UIStateEvt_ParamEdit_Data_Skip17
+	jr	z, UIStateEvt_ParamEdit_Data_Case6_Skip17
 	ldb_d8	a, (0xfc5f)
 	and	a, 252
-	jr	nz, UIStateEvt_ParamEdit_Data_Skip17
-UIStateEvt_ParamEdit_Data_Skip17:
+	jr	nz, UIStateEvt_ParamEdit_Data_Case6_Skip17
+UIStateEvt_ParamEdit_Data_Case6_Skip17:
 	orw	(0xc594:16), 4
-UIStateEvt_ParamEdit_Data_Epilogue:
+UIStateEvt_ParamEdit_Data_Case6_Epilogue:
 	popw	iz
 	ret
-UIStateEvt_VolumeMixer_Data:
+; PanelTag90_UpdateAudioConfig: SwbtWr listener of panel record 0x90: for payload offsets 0-5 mirrors bits into the
+;   audio-configuration state (0xC1FE bits 0-2, 0xC596 bits 3/5/7, per-part bytes at (0xC1FF)+228) and sets 0xC594 bit
+;   2. Basis: callers (listener list) + body.
+PanelTag90_UpdateAudioConfig:
 	ldb_d8	a, (SWBTWR_PAYLOAD_1)
 	extz	wa
 	cp	wa, 0:i3
@@ -6020,13 +6039,13 @@ UIStateEvt_VolumeMixer_Data:
 UIStateEvt_TransposeUpdate_Apply_Code_2:
 	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 31
-	jr	z, UIStateEvt_VolumeMixer_Data_Skip
+	jr	z, UIStateEvt_TransposeUpdate_Apply_Code_2_Skip
 	and	(0xc1fe:16), 252
 	ldb_d8	a, (SWBTWR_PAYLOAD_2)
 	and	a, 3
 	or	(0xc1fe:16), a
 	orw	(0xc594:16), 4
-UIStateEvt_VolumeMixer_Data_Skip:
+UIStateEvt_TransposeUpdate_Apply_Code_2_Skip:
 	ldw_d16	wa, (0xc594)
 	bit	4, wa
 	ret	z
@@ -6036,17 +6055,17 @@ UIStateEvt_VolumeMixer_Data_Skip:
 UIStateEvt_VolumeMixer_Data_Case1:
 	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 31
-	jr	z, UIStateEvt_VolumeMixer_Data_Skip3
+	jr	z, UIStateEvt_VolumeMixer_Data_Case1_Skip3
 	bit	1, (SWBTWR_PAYLOAD_2:16)
-	jr	z, UIStateEvt_VolumeMixer_Data_Skip2
+	jr	z, UIStateEvt_VolumeMixer_Data_Case1_Skip2
 	orw	(0xc596:16), 32
-	jr	UIStateEvt_VolumeMixer_Data_Join2
-UIStateEvt_VolumeMixer_Data_Skip2:
+	jr	UIStateEvt_VolumeMixer_Data_Case1_Join2
+UIStateEvt_VolumeMixer_Data_Case1_Skip2:
 	andw	(0xc596:16), 0xffdf
 	ldw_d16	wa, (0xc596)
 	and	wa, 7
 	call	z, (AudioInit_RefreshToneBank:24)
-UIStateEvt_VolumeMixer_Data_Join2:
+UIStateEvt_VolumeMixer_Data_Case1_Join2:
 	res	2, (0xc1fe:16)
 	ldb_d8	a, (SWBTWR_PAYLOAD_2)
 	and	a, 2
@@ -6054,7 +6073,7 @@ UIStateEvt_VolumeMixer_Data_Join2:
 	add	a, c
 	or	(0xc1fe:16), a
 	orw	(0xc594:16), 4
-UIStateEvt_VolumeMixer_Data_Skip3:
+UIStateEvt_VolumeMixer_Data_Case1_Skip3:
 	ldw_d16	wa, (0xc594)
 	bit	4, wa
 	ret	z
@@ -6067,21 +6086,21 @@ UIStateEvt_VolumeMixer_Data_Case3:
 	bit	0, (SWBTWR_PAYLOAD_2:16)
 	jr	z, UIStateEvt_VolumeMixer_Data_Entry
 	orw	(0xc596:16), 128
-	jr	UIStateEvt_VolumeMixer_Data_Join3
+	jr	UIStateEvt_VolumeMixer_Data_Entry_Join3
 UIStateEvt_VolumeMixer_Data_Entry:
 	andw	(0xc596:16), 0xff7f
-UIStateEvt_VolumeMixer_Data_Join3:
+UIStateEvt_VolumeMixer_Data_Entry_Join3:
 	orw	(0xc594:16), 4
 UIStateEvt_VolumeMixer_Data_Entry2:
 	bit	1, (SWBTWR_PAYLOAD_3:16)
 	ret	z
 	bit	1, (SWBTWR_PAYLOAD_2:16)
-	jr	z, UIStateEvt_VolumeMixer_Data_Skip4
+	jr	z, UIStateEvt_VolumeMixer_Data_Entry2_Skip4
 	orw	(0xc596:16), 8
-	jr	UIStateEvt_VolumeMixer_Data_Join4
-UIStateEvt_VolumeMixer_Data_Skip4:
+	jr	UIStateEvt_VolumeMixer_Data_Entry2_Join4
+UIStateEvt_VolumeMixer_Data_Entry2_Skip4:
 	andw	(0xc596:16), 0xfff7
-UIStateEvt_VolumeMixer_Data_Join4:
+UIStateEvt_VolumeMixer_Data_Entry2_Join4:
 	orw	(0xc594:16), 4
 	ret
 UIStateEvt_VolumeMixer_Data_Case4:
@@ -6090,14 +6109,14 @@ UIStateEvt_VolumeMixer_Data_Case4:
 	ret	z
 	ld	de, 0:i3
 	cp	de, 26
-	jr	ge, UIStateEvt_VolumeMixer_Data_Skip6
-UIStateEvt_VolumeMixer_Data_Loop:
+	jr	ge, UIStateEvt_VolumeMixer_Data_Case4_Skip6
+UIStateEvt_VolumeMixer_Data_Case4_Loop:
 	ld	wa, de
 	sla	wa, 2
 	lda	xbc, (PartRecord_RamPtrTable:24)
 	ld	xwa, (xbc+wa)
 	bitm	0, (xwa+0x16)
-	jr	z, UIStateEvt_VolumeMixer_Data_Skip5
+	jr	z, UIStateEvt_VolumeMixer_Data_Case4_Skip5
 	ld	wa, de
 	add	wa, wa
 	add	wa, 228
@@ -6109,8 +6128,8 @@ UIStateEvt_VolumeMixer_Data_Loop:
 	and	a, 255
 	sub	a, 64
 	ld	(xhl), a
-	jr	UIStateEvt_VolumeMixer_Data_Join
-UIStateEvt_VolumeMixer_Data_Skip5:
+	jr	UIStateEvt_VolumeMixer_Data_Case4_Join
+UIStateEvt_VolumeMixer_Data_Case4_Skip5:
 	ld	wa, de
 	add	wa, wa
 	add	wa, 228
@@ -6118,11 +6137,11 @@ UIStateEvt_VolumeMixer_Data_Skip5:
 	extz	xwa
 	add	xwa, xbc
 	ld	(xwa), 0
-UIStateEvt_VolumeMixer_Data_Join:
+UIStateEvt_VolumeMixer_Data_Case4_Join:
 	inc	1, de
 	cp	de, 26
-	jr	lt, UIStateEvt_VolumeMixer_Data_Loop
-UIStateEvt_VolumeMixer_Data_Skip6:
+	jr	lt, UIStateEvt_VolumeMixer_Data_Case4_Loop
+UIStateEvt_VolumeMixer_Data_Case4_Skip6:
 	orw	(0xc594:16), 4
 	ret
 UIStateEvt_VolumeMixer_Data_Case5:
@@ -6133,66 +6152,69 @@ UIStateEvt_VolumeMixer_Data_Case5:
 	ret
 UIStateEvt_VolumeMixer_Data_Case2:
 	ret
-UIStateEvt_EffectSelect_Data:
+; PanelTag70_UpdateAudioConfig: SwbtWr listener of panel record 0x70: offset 0/1 set the note 0xC5A2 (55/60/67 or +1),
+;   offset 2 a step (EffectSelect_StepTable -5..+6) into the high nibbles of (0xC1FF)+0x124 for 26 parts, offsets 3/4
+;   RAM 0xE9C0/0xE9BE; sets 0xC594 bit 2. Basis: callers + body.
+PanelTag70_UpdateAudioConfig:
 	ldb_d8	a, (SWBTWR_PAYLOAD_1)
 	cp	a, 4:i3
-	jrl	z, UIStateEvt_EffectSelect_Data_Skip4
+	jrl	z, PanelTag70_UpdateAudioConfig_Skip4
 	cp	a, 3:i3
-	jrl	z, UIStateEvt_EffectSelect_Data_Skip3
+	jrl	z, PanelTag70_UpdateAudioConfig_Skip3
 	cp	a, 2:i3
-	jrl	z, UIStateEvt_EffectSelect_Data_Skip2
+	jrl	z, PanelTag70_UpdateAudioConfig_Skip2
 	cp	a, 1:i3
-	jr	z, UIStateEvt_EffectSelect_Data_Skip
+	jr	z, PanelTag70_UpdateAudioConfig_Skip
 	cp	a, 0:i3
 	ret	nz
 	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 3
-	jr	z, UIStateEvt_EffectSelect_Data_Join
+	jr	z, PanelTag70_UpdateAudioConfig_Join
 	ldb_d8	a, (SWBTWR_PAYLOAD_2)
 	and	a, 3
 	cp	a, 3:i3
-	jr	z, UIStateEvt_EffectSelect_Data_Skip7
+	jr	z, PanelTag70_UpdateAudioConfig_Skip7
 	cp	a, 2:i3
-	jr	z, UIStateEvt_EffectSelect_Data_Skip6
+	jr	z, PanelTag70_UpdateAudioConfig_Skip6
 	cp	a, 1:i3
-	jr	z, UIStateEvt_EffectSelect_Data_Skip5
+	jr	z, PanelTag70_UpdateAudioConfig_Skip5
 	cp	a, 0:i3
-	jr	nz, UIStateEvt_EffectSelect_Data_Join
+	jr	nz, PanelTag70_UpdateAudioConfig_Join
 	ldb_d8	a, (0xfd03)
 	res	7, a
 	stb_d8	(0xc5a2), a
 	orw	(0xc59a:16), 0x400
-	jr	UIStateEvt_EffectSelect_Data_Join
-UIStateEvt_EffectSelect_Data_Skip5:
+	jr	PanelTag70_UpdateAudioConfig_Join
+PanelTag70_UpdateAudioConfig_Skip5:
 	ld	(0xc5a2:16), 55
 	orw	(0xc59a:16), 0x400
-	jr	UIStateEvt_EffectSelect_Data_Join
-UIStateEvt_EffectSelect_Data_Skip6:
+	jr	PanelTag70_UpdateAudioConfig_Join
+PanelTag70_UpdateAudioConfig_Skip6:
 	ld	(0xc5a2:16), 60
 	orw	(0xc59a:16), 0x400
-	jr	UIStateEvt_EffectSelect_Data_Join
-UIStateEvt_EffectSelect_Data_Skip7:
+	jr	PanelTag70_UpdateAudioConfig_Join
+PanelTag70_UpdateAudioConfig_Skip7:
 	ld	(0xc5a2:16), 67
 	orw	(0xc59a:16), 0x400
-UIStateEvt_EffectSelect_Data_Join:
+PanelTag70_UpdateAudioConfig_Join:
 	orw	(0xc594:16), 4
 	ret
-UIStateEvt_EffectSelect_Data_Skip:
+PanelTag70_UpdateAudioConfig_Skip:
 	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	res	7, a
 	cp	a, 0:i3
 	ret	z
 	ldb_d8	a, (0xfd02)
 	and	a, 3
-	jr	nz, UIStateEvt_EffectSelect_Data_Skip8
+	jr	nz, PanelTag70_UpdateAudioConfig_Skip8
 	ldb_d8	a, (SWBTWR_PAYLOAD_2)
 	res	7, a
 	stb_d8	(0xc5a2), a
-UIStateEvt_EffectSelect_Data_Skip8:
+PanelTag70_UpdateAudioConfig_Skip8:
 	orw	(0xc59a:16), 0x400
 	orw	(0xc594:16), 4
 	ret
-UIStateEvt_EffectSelect_Data_Skip2:
+PanelTag70_UpdateAudioConfig_Skip2:
 	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 255
 	ret	z
@@ -6205,8 +6227,8 @@ UIStateEvt_EffectSelect_Data_Skip2:
 	ld	e, (xbc+wa)
 	ld	hl, 0:i3
 	cp	hl, 26
-	jr	nc, UIStateEvt_EffectSelect_Data_Skip9
-UIStateEvt_EffectSelect_Data_Loop:
+	jr	nc, PanelTag70_UpdateAudioConfig_Skip9
+PanelTag70_UpdateAudioConfig_Loop:
 	ld	wa, hl
 	add	wa, wa
 	add	wa, 0x124
@@ -6220,11 +6242,11 @@ UIStateEvt_EffectSelect_Data_Loop:
 	or	(xwa), c
 	inc	1, hl
 	cp	hl, 26
-	jr	c, UIStateEvt_EffectSelect_Data_Loop
-UIStateEvt_EffectSelect_Data_Skip9:
+	jr	c, PanelTag70_UpdateAudioConfig_Loop
+PanelTag70_UpdateAudioConfig_Skip9:
 	orw	(0xc594:16), 4
 	ret
-UIStateEvt_EffectSelect_Data_Skip3:
+PanelTag70_UpdateAudioConfig_Skip3:
 	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 255
 	ret	z
@@ -6233,7 +6255,7 @@ UIStateEvt_EffectSelect_Data_Skip3:
 	stb_d8	(0xe9c0), a
 	orw	(0xc594:16), 4
 	ret
-UIStateEvt_EffectSelect_Data_Skip4:
+PanelTag70_UpdateAudioConfig_Skip4:
 	ldb_d8	a, (SWBTWR_PAYLOAD_3)
 	and	a, 15
 	ret	z
@@ -6261,14 +6283,17 @@ UIStateEvt_PlayModeGuard_ClearBit:
 	ret	z
 	call	VoiceEvent_DispatchTable
 	ret
-UIStateEvt_ChannelConfig_Data:
+; PanelTag80_UpdateAudioConfig: SwbtWr listener of panel record 0x80 (sequencer/MIDI-clock control): mirrors +0 and +3
+;   bits into the audio-configuration state (0xC59C bit 3, 0xC322, 0xC342-0xC34C bit 6, the per-part step nibble from
+;   record 0x70 +2), reloads 0xC362/0xC363 for offsets 10-12, sets 0xC594 bit 2. Basis: callers + body.
+PanelTag80_UpdateAudioConfig:
 	ldb_d8	a, (SWBTWR_PAYLOAD_1)
 	cp	a, 11
-	jrl	z, UIStateEvt_ChannelConfig_Data_Skip5
+	jrl	z, UIStateEvt_ChannelConfig_Data_Entry7_Skip5
 	cp	a, 12
-	jrl	z, UIStateEvt_ChannelConfig_Data_Skip5
+	jrl	z, UIStateEvt_ChannelConfig_Data_Entry7_Skip5
 	cp	a, 10
-	jrl	z, UIStateEvt_ChannelConfig_Data_Skip5
+	jrl	z, UIStateEvt_ChannelConfig_Data_Entry7_Skip5
 	cp	a, 3:i3
 	jrl	z, UIStateEvt_ChannelConfig_Data_Entry3
 	cp	a, 2:i3
@@ -6285,11 +6310,11 @@ UIStateEvt_ChannelConfig_Data_Entry:
 	bit	5, (SWBTWR_PAYLOAD_3:16)
 	ret	z
 	bit	5, (SWBTWR_PAYLOAD_2:16)
-	jr	z, UIStateEvt_ChannelConfig_Data_Skip
+	jr	z, UIStateEvt_ChannelConfig_Data_Entry_Skip
 	ld	de, 0:i3
 	cp	de, 26
-	jr	nc, UIStateEvt_ChannelConfig_Data_Join
-UIStateEvt_ChannelConfig_Data_Loop2:
+	jr	nc, UIStateEvt_ChannelConfig_Data_Entry_Join
+UIStateEvt_ChannelConfig_Data_Entry_Loop2:
 	ld	wa, de
 	add	wa, wa
 	add	wa, 0x124
@@ -6308,13 +6333,13 @@ UIStateEvt_ChannelConfig_Data_Loop2:
 	or	(xhl), a
 	inc	1, de
 	cp	de, 26
-	jr	c, UIStateEvt_ChannelConfig_Data_Loop2
-	jr	UIStateEvt_ChannelConfig_Data_Join
-UIStateEvt_ChannelConfig_Data_Skip:
+	jr	c, UIStateEvt_ChannelConfig_Data_Entry_Loop2
+	jr	UIStateEvt_ChannelConfig_Data_Entry_Join
+UIStateEvt_ChannelConfig_Data_Entry_Skip:
 	ld	de, 0:i3
 	cp	de, 26
-	jr	nc, UIStateEvt_ChannelConfig_Data_Join
-UIStateEvt_ChannelConfig_Data_Loop:
+	jr	nc, UIStateEvt_ChannelConfig_Data_Entry_Join
+UIStateEvt_ChannelConfig_Data_Entry_Loop:
 	ld	wa, de
 	add	wa, wa
 	add	wa, 0x124
@@ -6324,8 +6349,8 @@ UIStateEvt_ChannelConfig_Data_Loop:
 	andmi8	(xwa), 15
 	inc	1, de
 	cp	de, 26
-	jr	c, UIStateEvt_ChannelConfig_Data_Loop
-UIStateEvt_ChannelConfig_Data_Join:
+	jr	c, UIStateEvt_ChannelConfig_Data_Entry_Loop
+UIStateEvt_ChannelConfig_Data_Entry_Join:
 	orw	(0xc594:16), 4
 	ret
 UIStateEvt_ChannelConfig_Data_Entry2:
@@ -6335,14 +6360,14 @@ UIStateEvt_ChannelConfig_Data_Entry3:
 	bit	0, (SWBTWR_PAYLOAD_3:16)
 	jr	z, UIStateEvt_ChannelConfig_Data_Entry4
 	bit	0, (SWBTWR_PAYLOAD_2:16)
-	jr	z, UIStateEvt_ChannelConfig_Data_Skip4
+	jr	z, UIStateEvt_ChannelConfig_Data_Entry3_Skip4
 	res	4, (0xc322:16)
 	orw	(0xc59c:16), 8
-	jr	UIStateEvt_ChannelConfig_Data_Join2
-UIStateEvt_ChannelConfig_Data_Skip4:
+	jr	UIStateEvt_ChannelConfig_Data_Entry3_Join2
+UIStateEvt_ChannelConfig_Data_Entry3_Skip4:
 	set	4, (0xc322:16)
 	orw	(0xc59c:16), 8
-UIStateEvt_ChannelConfig_Data_Join2:
+UIStateEvt_ChannelConfig_Data_Entry3_Join2:
 	orw	(0xc594:16), 4
 UIStateEvt_ChannelConfig_Data_Entry4:
 	bit	2, (SWBTWR_PAYLOAD_3:16)
@@ -6355,7 +6380,7 @@ UIStateEvt_ChannelConfig_Data_Entry4:
 	set	6, (0xc348:16)
 	set	6, (0xc34a:16)
 	set	6, (0xc34c:16)
-	jr	UIStateEvt_ChannelConfig_Data_Join3
+	jr	UIStateEvt_ChannelConfig_Data_Entry5_Join3
 UIStateEvt_ChannelConfig_Data_Entry5:
 	res	6, (0xc342:16)
 	res	6, (0xc344:16)
@@ -6364,7 +6389,7 @@ UIStateEvt_ChannelConfig_Data_Entry5:
 	res	6, (0xc34a:16)
 	res	6, (0xc34c:16)
 	orw	(0xc59c:16), 8
-UIStateEvt_ChannelConfig_Data_Join3:
+UIStateEvt_ChannelConfig_Data_Entry5_Join3:
 	orw	(0xc594:16), 4
 UIStateEvt_ChannelConfig_Data_Entry6:
 	bit	6, (SWBTWR_PAYLOAD_3:16)
@@ -6377,25 +6402,25 @@ UIStateEvt_ChannelConfig_Data_Entry7:
 	orw	(0xc59c:16), 8
 	orw	(0xc594:16), 4
 	ret
-UIStateEvt_ChannelConfig_Data_Skip5:
+UIStateEvt_ChannelConfig_Data_Entry7_Skip5:
 	ld	xwa, 0x5000
 	call	SndParam_LookupReadOnly
 	cp	hl, 2:i3
-	jr	z, UIStateEvt_ChannelConfig_Data_Skip3
+	jr	z, UIStateEvt_ChannelConfig_Data_Entry7_Skip3
 	cp	hl, 1:i3
-	jr	z, UIStateEvt_ChannelConfig_Data_Skip2
+	jr	z, UIStateEvt_ChannelConfig_Data_Entry7_Skip2
 	cp	hl, 0:i3
 	ret	nz
 	ld	(0xc362:16), 0
 	ld	(0xc363:16), 255
 	ret
-UIStateEvt_ChannelConfig_Data_Skip2:
+UIStateEvt_ChannelConfig_Data_Entry7_Skip2:
 	ld	xwa, 0x5001
 	call	SndParam_LookupReadOnly
 	stb_d8	(0xc362), l
 	ld	(0xc363:16), 255
 	ret
-UIStateEvt_ChannelConfig_Data_Skip3:
+UIStateEvt_ChannelConfig_Data_Entry7_Skip3:
 	ld	(0xc362:16), 0
 	ld	xwa, 0x5002
 	call	SndParam_LookupReadOnly
@@ -6405,19 +6430,21 @@ UIStateEvt_StubReturn:
 	ret
 SwbtB2_Code93_NopListener:
 	ret
-UIStateEvt_MuteToggle_Data:
+; SwbtB2_CodeA8_UpdateAudioConfig: SwbtWr listener of event code 0xA8 (no panel record of that tag): copies payload
+;   +16 bit 0 into 0xC594 bit 0 and sets 0xC594 bit 2, the audio-configuration change flag. Basis: callers + body.
+SwbtB2_CodeA8_UpdateAudioConfig:
 	ldb_d8	a, (SWBTWR_PAYLOAD_1)
 	cp	a, 16
 	ret	nz
 	bit	0, (SWBTWR_PAYLOAD_3:16)
 	ret	z
 	bit	0, (SWBTWR_PAYLOAD_2:16)
-	jr	z, UIStateEvt_MuteToggle_Data_Skip
+	jr	z, SwbtB2_CodeA8_UpdateAudioConfig_Skip
 	orw	(0xc594:16), 1
-	jr	UIStateEvt_MuteToggle_Data_Join
-UIStateEvt_MuteToggle_Data_Skip:
+	jr	SwbtB2_CodeA8_UpdateAudioConfig_Join
+SwbtB2_CodeA8_UpdateAudioConfig_Skip:
 	andw	(0xc594:16), 0xfffe
-UIStateEvt_MuteToggle_Data_Join:
+SwbtB2_CodeA8_UpdateAudioConfig_Join:
 	orw	(0xc594:16), 4
 	ret
 SwbtB2_Code71_NopListener:

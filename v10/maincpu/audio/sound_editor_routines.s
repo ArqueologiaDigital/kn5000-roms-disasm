@@ -92,7 +92,7 @@ SeEasyTitleFunc:
 	ret
 
 SeEasyTitleFunc_OnDraw:
-	jp	UpdSeSel_ExtendedOps_Data
+	jp	SeEasy_DrawPage
 SeEasyTitleFunc_OnHide:
 	jp	SeMenu_CopyWriteUpdate_Step3_Join31
 SeEasyTitleFunc_OnSwitchIn:
@@ -140,7 +140,7 @@ SeTonTon2TitleFunc:
 	ret
 
 SeTonTon2TitleFunc_OnDraw:
-	jp	SeMenu_AltUpdate_Data
+	jp	SeTonTon2_DrawPage
 SeTonTon2TitleFunc_OnHide:
 	jp	SeMenu_CopyWriteUpdate_Step3_Join17
 SeTonTon2TitleFunc_OnSwitchIn:
@@ -788,7 +788,7 @@ SeWrtMemTitleFunc:
 	ret
 
 SeWrtMemTitleFunc_OnDraw:
-	jp	SeMenu_CopyWriteUpdate_Data
+	jp	SeWrtMem_DrawPage
 SeWrtMemTitleFunc_OnHide:
 	jp	SeMenu_CopyWriteUpdate_Step3_Return28
 SeWrtMemTitleFunc_OnSwitchIn:

@@ -1093,7 +1093,10 @@ Voice_DecodeStandard_Data:
 	.short 0x0100, 0x017d, 0x017d, 0x017d
 	.short 0x0100, 0x017d, 0x017d, 0x017d
 	.short 0x0100, 0x017d, 0x017d, 0x017d
-AccPlay_Entry:
+; AccPlay_TickVector: Slot 0 of the AccPlay jump-vector block (jp AccPlay_MainDispatch; AccPlay_ToggleEntry /
+;   AccPlay_StopEntry follow); AccompSeq_PeriodicMain calls it once per periodic pass, after AccompSeq_FadeOutTick.
+;   Basis: callers + body.
+AccPlay_TickVector:
 	jp AccPlay_MainDispatch
 AccPlay_JumpTable:
 	jp	AccPlay_ProcessVoiceBank
@@ -1649,7 +1652,7 @@ AccPlay_NoteAllocAndWrite:
 	push xix
 	ld l, (0x7f38:16)
 	xor h, h
-	ld xix, AccPatch_Transpose_LookupTable_Data
+	ld xix, Note_PitchClassTable
 	ld	a, (xix+hl)
 	xor w, w
 	sla wa, 2
@@ -1719,7 +1722,7 @@ AccPlay_NoteParamTable:
 ; 12 records x 4 bytes: +0 flag, +1 and +2 two extra event bytes, +3 unused
 ; (0 in every record).  Read by AccPlay_NoteAllocAndWrite
 ; (0xF722AB): L = byte at 0x7F38, A = byte
-; [AccPatch_Transpose_LookupTable_Data + L], HL = 4*A (12 records), then
+; [Note_PitchClassTable + L], HL = 4*A (12 records), then
 ; +0/+1/+2 go to 0x7E54/0x7E55/0x7E56.  A nonzero +0 makes the event
 ; status 0x91 instead of 0x90 and appends bytes +1 and +2 to the event.
 ; Non-zero records: 3 and 4 = (1, 0x00, 0x11), 7 = (1, 0x03, 0x00),
@@ -3183,9 +3186,12 @@ VocalistGridCheck_Join16:
 	add	xwa, xwa
 	add	xwa, MidiPart_ColWidthData
 	ld	wa, (xwa)
-	lda	xix, (VocalistGrid_DispatchData_Code:24)
+	lda	xix, (VocalistGridCheck_LswDrawMidiChannel:24)
 	jp	t, (xix+wa)
-VocalistGrid_DispatchData_Code:
+; VocalistGridCheck_LswDrawMidiChannel: Case 0 (Lsw 0x2D00) of VocalistGridCheck_OnLswData's grid-cell switch, the
+;   Vocalist MIDI CHANNEL value: 16 -> "OMNI", 17 -> "OFF", else value+1 with "%2d"; then EVT_GRID_DRAW. Basis:
+;   callers + body.
+VocalistGridCheck_LswDrawMidiChannel:
 	ld wa, (xbc)
 	cp wa, 16
 	jr	z, VocalistGridCheck_Skip2

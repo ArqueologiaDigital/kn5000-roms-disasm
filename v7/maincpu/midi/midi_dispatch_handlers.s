@@ -813,7 +813,7 @@ PanelEvt_Handler_0_NoteOnParam:
 	ld	l, (0x95b0:16)
 	cp	l, 31
 	jr	ugt, PanelEvt_Handler_0_NoteOnParam_Return
-	ld	xix, PanelEvt_Handler_0_NoteOnParam_Data
+	ld	xix, MidiTx_PartTargets_ProgramBank
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
@@ -844,7 +844,7 @@ PanelEvt_Handler_3_ValueCheck:
 	ld	l, (0x95b0:16)
 	cp	l, 31
 	jr	ugt, PanelEvt_Handler_3_ValueCheck_Return
-	ld	xix, PanelEvt_Handler_3_ValueCheck_Data
+	ld	xix, MidiTx_PartTargets_CC7_Volume
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
@@ -864,7 +864,7 @@ PanelEvt_Handler_5_ValueCheck:
 	ld	l, (0x95b0:16)
 	cp	l, 31
 	jr	ugt, PanelEvt_Handler_5_ValueCheck_Return
-	ld	xix, PanelEvt_Handler_5_ValueCheck_Data
+	ld	xix, MidiTx_PartTargets_CC93_Chorus
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
@@ -886,7 +886,7 @@ PanelEvt_Handler_7_ValueCheck:
 	ld	l, (0x95b0:16)
 	cp	l, 31
 	jr	ugt, PanelEvt_Handler_7_ValueCheck_Return
-	ld	xix, PanelEvt_Handler_7_ValueCheck_Data
+	ld	xix, MidiTx_PartTargets_CC91_Reverb
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
@@ -906,7 +906,7 @@ PanelEvt_Handler_8_ValueCheck:
 	ld	l, (0x95b0:16)
 	cp	l, 31
 	jr	ugt, PanelEvt_Handler_8_ValueCheck_Return
-	ld	xix, PanelEvt_Handler_8_ValueCheck_Data
+	ld	xix, MidiTx_PartTargets_CC10_Pan
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
@@ -926,7 +926,7 @@ PanelEvt_Handler_9_SingleByteParam:
 	ld	l, (0x95b0:16)
 	cp	l, 31
 	jr	ugt, PanelEvt_Handler_9_SingleByteParam_Return
-	ld	xix, PanelEvt_Handler_9_SingleByteParam_Data
+	ld	xix, MidiTx_PartTargets_RpnCoarseTune
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
@@ -947,7 +947,7 @@ PanelEvt_Handler_10_TwoByteParam:
 	ld	l, (0x95b0:16)
 	cp	l, 31
 	jr	ugt, PanelEvt_Handler_10_TwoByteParam_Return
-	ld	xix, PanelEvt_Handler_10_TwoByteParam_Data
+	ld	xix, MidiTx_PartTargets_RpnFineTune
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
@@ -970,7 +970,7 @@ PanelEvt_Handler_11_SingleByteParam:
 	ld	l, (0x95b0:16)
 	cp	l, 31
 	jr	ugt, PanelEvt_Handler_11_SingleByteParam_Return
-	ld	xix, PanelEvt_Handler_11_SingleByteParam_Data
+	ld	xix, MidiTx_PartTargets_RpnBendRange
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
@@ -988,7 +988,7 @@ PanelEvt_Handler_15_ConditionalSet:
 	ld	l, (0x95b0:16)
 	cp	l, 31
 	jr	ugt, PanelEvt_Handler_15_ConditionalSet_Return
-	ld	xix, PanelEvt_Handler_0_NoteOnParam_Data
+	ld	xix, MidiTx_PartTargets_ProgramBank
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
@@ -1126,7 +1126,7 @@ PanelEvt_D3ASlot1_SendCC91:
 	bit	7, (0x95b3:16)
 	jr	z, PanelEvt_D3ASlot1_SendCC91_Return
 	ld	l, 25:opc
-	ld	xix, PanelEvt_Handler_7_ValueCheck_Data
+	ld	xix, MidiTx_PartTargets_CC91_Reverb
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
@@ -1219,7 +1219,7 @@ PanelEvent_DispatchByIndex:
 PanelEvt_DispatchByIndex_Ret:
 	ret
 MidiCC_ChannelDispatch_TableA:
-	ld	xix, PanelEvt_Handler_0_NoteOnParam_Data
+	ld	xix, MidiTx_PartTargets_ProgramBank
 	ld	l, (0x95b1:16)
 	extz hl
 	sll l, 2
@@ -1234,7 +1234,7 @@ MidiCC_ChannelDispatch_Ctrl40:
 	ld	l, (0x95b1:16)
 	cp l, 0x1f
 	jr	ugt, BitMask_Ctrl40_ConfigExit
-	ld	xix, MidiCC_ChannelDispatch_Ctrl40_Data
+	ld	xix, MidiTx_PartTargets_CC121_ResetAll
 	extz hl
 	sll l, 2
 	ld	xix, (xix+hl)
@@ -1251,7 +1251,7 @@ MidiCC_ChannelDispatch_Ctrl41:
 	ld	l, (0x95b1:16)
 	cp l, 0x1f
 	jr	ugt, MidiCC_ChannelDispatch_Ctrl41_Ret
-	ld	xix, MidiCC_ChannelDispatch_Ctrl41_Data
+	ld	xix, MidiTx_PartTargets_CC120_AllSoundOff
 	extz hl
 	sll l, 2
 	ld	xix, (xix+hl)
@@ -1278,7 +1278,7 @@ MidiCC_ChannelDispatch_CtrlFlags:
 	ld	l, (0x95b1:16)
 	cp l, 0x1f
 	jr	ugt, PanelEvent_NullRet
-	ld	xix, MidiCC_ChannelDispatch_CtrlFlags_Data
+	ld	xix, MidiTx_PartTargets_PitchBend
 	extz hl
 	sll l, 2
 	ld	xix, (xix+hl)
@@ -1308,7 +1308,7 @@ MidiCC_ChannelDispatch_Ctrl1:
 	ld	l, (0x95b1:16)
 	cp l, 0x1f
 	jr	ugt, BitMask_Ctrl1_ConfigExit
-	ld	xix, MidiCC_ChannelDispatch_Ctrl1_Data
+	ld	xix, MidiTx_PartTargets_CC1_Modulation
 	extz hl
 	sll l, 2
 	ld	xix, (xix+hl)
@@ -1325,7 +1325,7 @@ MidiCC_ChannelDispatch_Ctrl3:
 	ld	l, (0x95b1:16)
 	cp l, 0x1f
 	jr	ugt, BitMask_Ctrl3_ConfigExit
-	ld	xix, MidiCC_ChannelDispatch_Ctrl3_Data
+	ld	xix, MidiTx_PartTargets_CC11_Expression
 	extz hl
 	sll l, 2
 	ld	xix, (xix+hl)
@@ -1342,7 +1342,7 @@ MidiCC_ChannelDispatch_CtrlFlags2:
 	ld	l, (0x95b1:16)
 	cp l, 0x1f
 	jr	ugt, PanelEvent_NullRet2
-	ld	xix, MidiCC_ChannelDispatch_CtrlFlags2_Data
+	ld	xix, MidiTx_PartTargets_ChannelPressure
 	extz hl
 	sll l, 2
 	ld	xix, (xix+hl)
@@ -1370,7 +1370,7 @@ MidiCC_ChannelDispatch_Ctrl0:
 	ld	l, (0x95b1:16)
 	cp l, 0x1f
 	jr	ugt, BitMask_Ctrl0_ConfigExit
-	ld	xix, MidiCC_ChannelDispatch_Ctrl0_Data
+	ld	xix, MidiTx_PartTargets_CC64_Sustain
 	extz hl
 	sll l, 2
 	ld	xix, (xix+hl)
@@ -1401,7 +1401,7 @@ MidiCC_ChannelDispatch_Func09:
 	ld	l, (0x95b1:16)
 	cp	l, 31
 	jr	ugt, MidiCC_ChannelDispatch_Ctrl0_Return
-	ld	xix, MidiCC_ChannelDispatch_Func09_Data
+	ld	xix, MidiTx_PartTargets_Func09
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
@@ -1418,7 +1418,7 @@ MidiCC_ChannelDispatch_Func08:
 	ld	l, (0x95b1:16)
 	cp	l, 31
 	jr	ugt, MidiCC_ChannelDispatch_Ctrl0_Return2
-	ld	xix, MidiCC_ChannelDispatch_Func08_Data
+	ld	xix, MidiTx_PartTargets_Func08
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
@@ -1435,7 +1435,7 @@ MidiCC_ChannelDispatch_Func12:
 	ld	l, (0x95b1:16)
 	cp	l, 31
 	jr	ugt, MidiCC_ChannelDispatch_Ctrl0_Return3
-	ld	xix, MidiCC_ChannelDispatch_Func12_Data
+	ld	xix, MidiTx_PartTargets_Func12
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
@@ -1452,7 +1452,7 @@ MidiCC_ChannelDispatch_Func13:
 	ld	l, (0x95b1:16)
 	cp	l, 31
 	jr	ugt, MidiCC_ChannelDispatch_Ctrl0_Return4
-	ld	xix, MidiCC_ChannelDispatch_Func13_Data
+	ld	xix, MidiTx_PartTargets_Func13
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
@@ -1469,7 +1469,7 @@ MidiCC_ChannelDispatch_Func14:
 	ld	l, (0x95b1:16)
 	cp	l, 31
 	jr	ugt, MidiCC_ChannelDispatch_Ctrl0_Return5
-	ld	xix, MidiCC_ChannelDispatch_Func14_Data
+	ld	xix, MidiTx_PartTargets_Func14
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
@@ -1486,7 +1486,7 @@ MidiCC_ChannelDispatch_Func15:
 	ld	l, (0x95b1:16)
 	cp	l, 31
 	jr	ugt, MidiCC_ChannelDispatch_Ctrl0_Return6
-	ld	xix, MidiCC_ChannelDispatch_Func15_Data
+	ld	xix, MidiTx_PartTargets_Func15
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
@@ -2331,7 +2331,7 @@ MidiCC_FunctionToCCNumber:
 	; Supersedes 44 v10_data_as_code_census.py notes inside this span, all carved
 	; one byte late for the same reason (e.g. 0xFD1A93-0xFD1AB2 (31 B) is the tail
 	; of the record that really starts at 0xFD1A8E).
-PanelEvt_Handler_0_NoteOnParam_Data:
+MidiTx_PartTargets_ProgramBank:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2340,7 +2340,7 @@ PanelEvt_Handler_0_NoteOnParam_Data:
 	.long 0x0000fbcb, 0x0000fbe5, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
-PanelEvt_Handler_3_ValueCheck_Data:
+MidiTx_PartTargets_CC7_Volume:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2349,7 +2349,7 @@ PanelEvt_Handler_3_ValueCheck_Data:
 	.long 0x0000fbcb, 0x0000fbe5, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
-PanelEvt_Handler_5_ValueCheck_Data:
+MidiTx_PartTargets_CC93_Chorus:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2367,7 +2367,7 @@ PanelEvt_Handler_4_DualValueCheck_Data:
 	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
-PanelEvt_Handler_7_ValueCheck_Data:
+MidiTx_PartTargets_CC91_Reverb:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2378,7 +2378,7 @@ PanelEvt_Handler_7_ValueCheck_Data:
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	; one-byte 0xFF pad; the record grid restarts at 0xFD1D0F
 	.byte 0xff
-PanelEvt_Handler_8_ValueCheck_Data:
+MidiTx_PartTargets_CC10_Pan:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2387,7 +2387,7 @@ PanelEvt_Handler_8_ValueCheck_Data:
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
-PanelEvt_Handler_9_SingleByteParam_Data:
+MidiTx_PartTargets_RpnCoarseTune:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2396,7 +2396,7 @@ PanelEvt_Handler_9_SingleByteParam_Data:
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
-PanelEvt_Handler_10_TwoByteParam_Data:
+MidiTx_PartTargets_RpnFineTune:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2405,7 +2405,7 @@ PanelEvt_Handler_10_TwoByteParam_Data:
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
-PanelEvt_Handler_11_SingleByteParam_Data:
+MidiTx_PartTargets_RpnBendRange:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2414,7 +2414,7 @@ PanelEvt_Handler_11_SingleByteParam_Data:
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
-MidiCC_ChannelDispatch_Ctrl40_Data:
+MidiTx_PartTargets_CC121_ResetAll:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2423,7 +2423,7 @@ MidiCC_ChannelDispatch_Ctrl40_Data:
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
-MidiCC_ChannelDispatch_Ctrl41_Data:
+MidiTx_PartTargets_CC120_AllSoundOff:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2432,7 +2432,7 @@ MidiCC_ChannelDispatch_Ctrl41_Data:
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
-MidiCC_ChannelDispatch_CtrlFlags_Data:
+MidiTx_PartTargets_PitchBend:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2441,7 +2441,7 @@ MidiCC_ChannelDispatch_CtrlFlags_Data:
 	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
-MidiCC_ChannelDispatch_Ctrl1_Data:
+MidiTx_PartTargets_CC1_Modulation:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2450,7 +2450,7 @@ MidiCC_ChannelDispatch_Ctrl1_Data:
 	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
-MidiCC_ChannelDispatch_Ctrl3_Data:
+MidiTx_PartTargets_CC11_Expression:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2459,7 +2459,7 @@ MidiCC_ChannelDispatch_Ctrl3_Data:
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0x0000fc19, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
-MidiCC_ChannelDispatch_CtrlFlags2_Data:
+MidiTx_PartTargets_ChannelPressure:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2468,16 +2468,7 @@ MidiCC_ChannelDispatch_CtrlFlags2_Data:
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
-MidiCC_ChannelDispatch_Ctrl0_Data:
-	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
-	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
-	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
-	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
-	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
-	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0xffffffff
-	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
-	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
-MidiCC_ChannelDispatch_Func09_Data:
+MidiTx_PartTargets_CC64_Sustain:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2486,7 +2477,7 @@ MidiCC_ChannelDispatch_Func09_Data:
 	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
-MidiCC_ChannelDispatch_Func08_Data:
+MidiTx_PartTargets_Func09:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2495,7 +2486,16 @@ MidiCC_ChannelDispatch_Func08_Data:
 	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
-MidiCC_ChannelDispatch_Func12_Data:
+MidiTx_PartTargets_Func08:
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+MidiTx_PartTargets_Func12:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2504,7 +2504,7 @@ MidiCC_ChannelDispatch_Func12_Data:
 	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0x0000fd6f
 	.long 0x0000fd89, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
-MidiCC_ChannelDispatch_Func13_Data:
+MidiTx_PartTargets_Func13:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2513,7 +2513,7 @@ MidiCC_ChannelDispatch_Func13_Data:
 	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0x0000fd6f
 	.long 0x0000fd89, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
-MidiCC_ChannelDispatch_Func14_Data:
+MidiTx_PartTargets_Func14:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2522,7 +2522,7 @@ MidiCC_ChannelDispatch_Func14_Data:
 	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0x0000fd6f
 	.long 0x0000fd89, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
-MidiCC_ChannelDispatch_Func15_Data:
+MidiTx_PartTargets_Func15:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -5171,7 +5171,7 @@ FileData_ImportNNLivePanel_Loop2:
 FileData_ImportNNLivePanel_Loop3:
 	ld	bc, (xsp+4)
 	extz	xbc
-	ld	xwa, DataBuf_CopyBulkBitfields_Large_Data
+	ld	xwa, FileData_NNPartSourceIndex
 	add	xwa, xbc
 	ld	a, (xwa)
 	extz	wa
@@ -5954,7 +5954,7 @@ DSPCfg_ConfigureVoiceSlotA:
 	ld	a, (xwa+341)
 	and a, 0xf
 	extz wa
-	lda	xbc, (DSPCfg_ConfigureVoiceSlotA_Data:24)
+	lda	xbc, (FileData_NNDspEffectAlgoMap:24)
 	ld	c, (xbc+wa)
 	extz bc
 	lda xde, (xde+756)
@@ -6009,7 +6009,7 @@ DSPCfg_ConfigureVoiceSlotB:
 	ld	a, (xwa+338)
 	srl a, 4
 	extz wa
-	lda	xbc, (DSPCfg_ConfigureVoiceSlotB_Data:24)
+	lda	xbc, (FileData_NNDigitalReverbAlgoMap:24)
 	ld	c, (xbc+wa)
 	extz bc
 	ld xwa, (xsp + 6)
@@ -6060,7 +6060,7 @@ DSPCfg_VoiceSlotB_MapAndWrite:
 	and c, 0xf
 	srl c, 1
 	extz bc
-	lda	xde, (DSPCfg_VoiceSlotB_MapAndWrite_Data:24)
+	lda	xde, (FileData_NNDigitalReverbParamMap:24)
 	ld	c, (xde+bc)
 	extz bc
 	ld xde, (xsp + 6)
@@ -6122,7 +6122,7 @@ DSPCfg_VoiceSlotB_ExtractData_Loop:
 	jr	c, DSPCfg_VoiceSlotB_ExtractData_Loop
 	ld	a, (xde+389)
 	extz	wa
-	lda	xhl, (DSPCfg_VoiceSlotB_ExtractData_Data:24)
+	lda	xhl, (FileData_NNTag99ValueMap:24)
 	ld	a, (xhl+wa)
 	ld	(xbc+948), a
 	ld	a, (xde+390)
@@ -7084,8 +7084,8 @@ MidiSysEx_SendAllParams:
 	cp hl, 0:i3
 	jr	z, MidiSysEx_SendReverbParam
 	pushw 0xe
-	pushw MidiSysEx_SendAllParams_Data@hi16
-	pushw MidiSysEx_SendAllParams_Data@lo16
+	pushw Vocalist_SysExTemplate@hi16
+	pushw Vocalist_SysExTemplate@lo16
 	push xiz
 	call	Mem_Copy
 	lda xsp, (xsp + 10)
@@ -7112,8 +7112,8 @@ MidiSysEx_SendReverbParam:
 	cp hl, 0:i3
 	jr	z, MidiSysEx_SendProgramChange
 	pushw 0xe
-	pushw MidiSysEx_SendAllParams_Data@hi16
-	pushw MidiSysEx_SendAllParams_Data@lo16
+	pushw Vocalist_SysExTemplate@hi16
+	pushw Vocalist_SysExTemplate@lo16
 	push xiz
 	call	Mem_Copy
 	lda xsp, (xsp + 10)
@@ -7156,8 +7156,8 @@ MidiSysEx_SendProgramChange:
 	cp hl, 0:i3
 	jr	z, MidiSysEx_SendControlChange1
 	pushw 0x2
-	pushw MidiSysEx_SendProgramChange_Data@hi16
-	pushw MidiSysEx_SendProgramChange_Data@lo16
+	pushw Vocalist_ProgramChangeTemplate@hi16
+	pushw Vocalist_ProgramChangeTemplate@lo16
 	push xiz
 	call	Mem_Copy
 	lda xsp, (xsp + 10)
@@ -7188,8 +7188,8 @@ MidiSysEx_SendControlChange1:
 	cp hl, 0:i3
 	jr	z, MidiSysEx_SendControlChange2
 	pushw 0x3
-	pushw MidiSysEx_SendControlChange1_Data@hi16
-	pushw MidiSysEx_SendControlChange1_Data@lo16
+	pushw Vocalist_ControlChangeTemplate@hi16
+	pushw Vocalist_ControlChangeTemplate@lo16
 	push xiz
 	call	Mem_Copy
 	lda xsp, (xsp + 10)
@@ -7220,8 +7220,8 @@ MidiSysEx_SendControlChange2:
 	cp hl, 0:i3
 	jr	z, MidiSysEx_CheckDelayAndSend
 	pushw 0x3
-	pushw MidiSysEx_SendControlChange1_Data@hi16
-	pushw MidiSysEx_SendControlChange1_Data@lo16
+	pushw Vocalist_ControlChangeTemplate@hi16
+	pushw Vocalist_ControlChangeTemplate@lo16
 	push xiz
 	call	Mem_Copy
 	lda xsp, (xsp + 10)
@@ -7259,8 +7259,8 @@ MidiSysEx_SendAfterDelay:
 	cp hl, 0:i3
 	jr	z, MidiSysEx_SendBankData1
 	pushw 0xe
-	pushw MidiSysEx_SendAllParams_Data@hi16
-	pushw MidiSysEx_SendAllParams_Data@lo16
+	pushw Vocalist_SysExTemplate@hi16
+	pushw Vocalist_SysExTemplate@lo16
 	push xiz
 	call	Mem_Copy
 	lda xsp, (xsp + 10)
@@ -7289,8 +7289,8 @@ MidiSysEx_SendBankData1:
 	cp hl, 0:i3
 	jr	z, MidiSysEx_SendBankData2
 	pushw 0xe
-	pushw MidiSysEx_SendAllParams_Data@hi16
-	pushw MidiSysEx_SendAllParams_Data@lo16
+	pushw Vocalist_SysExTemplate@hi16
+	pushw Vocalist_SysExTemplate@lo16
 	push xiz
 	call	Mem_Copy
 	lda xsp, (xsp + 10)
@@ -7334,8 +7334,8 @@ MidiSysEx_SendBankData2:
 	cp hl, 0:i3
 	jr	z, MidiSysEx_SendBankData3
 	pushw 0xe
-	pushw MidiSysEx_SendAllParams_Data@hi16
-	pushw MidiSysEx_SendAllParams_Data@lo16
+	pushw Vocalist_SysExTemplate@hi16
+	pushw Vocalist_SysExTemplate@lo16
 	push xiz
 	call	Mem_Copy
 	lda xsp, (xsp + 10)
@@ -7381,8 +7381,8 @@ MidiSysEx_SendBankData3:
 	cp hl, 0:i3
 	jr	z, MidiSysEx_FreeAndReturn
 	pushw 0xe
-	pushw MidiSysEx_SendAllParams_Data@hi16
-	pushw MidiSysEx_SendAllParams_Data@lo16
+	pushw Vocalist_SysExTemplate@hi16
+	pushw Vocalist_SysExTemplate@lo16
 	push xiz
 	call	Mem_Copy
 	lda xsp, (xsp + 10)
@@ -7443,8 +7443,8 @@ MidiSysEx_SendAllPartChannels:
 	ldw	(xsp+4), 0
 MidiSysEx_SendPartChanLoop:
 	pushw	14
-	pushw	MidiSysEx_SendPartChanLoop_Data@hi16
-	pushw	MidiSysEx_SendPartChanLoop_Data@lo16
+	pushw	Vocalist_PartSysExTemplate@hi16
+	pushw	Vocalist_PartSysExTemplate@lo16
 	push xiz
 	call	Mem_Copy
 	lda	xsp, (xsp+10)
@@ -7472,7 +7472,7 @@ MidiSysEx_SendPartChan_Done:
 MidiSysEx_CopyParamToBuffer:
 	extz wa
 	sla	wa, 3
-	lda	xbc, (MidiSysEx_CopyParamToBuffer_Data:24)
+	lda	xbc, (Vocalist_PresetRecords:24)
 	exts xwa
 	add xwa, xbc
 	pushw	8
@@ -9620,7 +9620,7 @@ MidiChan_ApplyTimeout:
 	ld de, 5:i3
 	calr	MIDI_ReadChannelParam
 	ret
-MidiChan_TimerDispatch_Data:
+MidiPkt_PreparePanelReceive:
 	push	xde
 	push	xhl
 	push	xix
@@ -10662,7 +10662,7 @@ MidiPkt_ArpExtHandler_A:
 	call	SeqData_ReadFieldByIndex
 	cp	l, 0:i3
 	jr	nz, MidiPkt_ArpExtHandler_A_Skip
-	call	MidiChan_TimerDispatch_Data
+	call	MidiPkt_PreparePanelReceive
 	ld	xwa, 0xbc40
 	call	MidiPkt_SetXferTotal_Panel
 	ld	xwa, 0xbc50
@@ -11243,7 +11243,7 @@ MidiSysEx_SendSoundRamEndCmd:
 	push	xhl
 	push	xix
 	push	xiz
-	call	MIDI_PitchBendData_Block
+	call	MIDI_SendAllVoicesPitchUpdate
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -11359,7 +11359,7 @@ SeqChan_UnhandledCmd_Join:
 	push	xhl
 	push	xix
 	push	xiz
-	ld	xhl, (MidiSysEx_ProcessBlock_Data:24)
+	ld	xhl, (SoundProgram_ResetAfterErrorVector:24)
 	call	(xhl)
 	call	MidiMsg_ParseChannelStream
 	call	SeqTimer_UpdateTempoReg
@@ -11375,7 +11375,7 @@ SeqChan_UnhandledCmd_Join2:
 	push	xix
 	push	xiz
 	call	SendPartDataBlock_DoGetError
-	call	MIDI_PitchBendData_Block
+	call	MIDI_SendAllVoicesPitchUpdate
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -11619,7 +11619,7 @@ SoundMode_RetStub_G:
 	ret
 SoundMode_RetStub_H:
 	ret
-SoundMode_SysExConfig_Data:
+SeqTimer_SetPanelTempo:
 	bit	4, (0xfd50:16)
 	ret	nz
 	and	wa, 511
@@ -12485,7 +12485,7 @@ SysEx_InitiateSend_Join:
 SysEx_ResetAndReturn:
 	ld	(0xbc7c:16), 0
 	jp	SoundMode_ResetAllParams
-SysEx_DispatchCalls_Data:
+SysEx_InitiateSend_SendStyleImage:
 	call	SysEx_ResetAndReturn_Helper
 	jr	SysEx_InitiateSend_Join
 SysEx_InitiateSend_SendSequencer:
@@ -12662,7 +12662,7 @@ SeqData_FormatOutput_CaseA:
 	cp de, 0x012c
 	ret	ugt
 	ld wa, de
-	call	SoundMode_SysExConfig_Data
+	call	SeqTimer_SetPanelTempo
 	calr	SeqData_FormatOutput_CaseB
 	ret
 SeqData_FormatOutput_CaseB:
@@ -12730,9 +12730,9 @@ SeqData_FormatOutput_Data_Helper:
 	add	hl, hl
 	lda	xix, (SeqDataFmt_SwitchOffsets:24)
 	ld	hl, (xix+hl)
-	lda	xix, (SeqData_FormatOutput_Default_Code:24)
+	lda	xix, (SysEx_OnTechnicsParamChange_Addr00:24)
 	jp	t, (xix+hl)
-SeqData_FormatOutput_Default_Code:
+SysEx_OnTechnicsParamChange_Addr00:
 	jr	SeqData_FormatOutput_Data_Helper_Join
 SeqData_FormatOutput_Data_Helper_Case2:
 	jr	SeqData_FormatOutput_Data_Helper_Join2
@@ -13820,9 +13820,9 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	add	hl, hl
 	lda	xix, (AssSwbMulti_SwitchOffsets:24)
 	ld	hl, (xix+hl)
-	lda	xix, (VoiceParam_MultiMode_StubRet_Code:24)
+	lda	xix, (SysEx_OnTechnicsParamRequest_Addr00:24)
 	jp	t, (xix+hl)
-VoiceParam_MultiMode_StubRet_Code:
+SysEx_OnTechnicsParamRequest_Addr00:
 	jr	VoiceParam_AssSwb_MultiBlock_Data_Join
 VoiceParam_AssSwb_MultiBlock_Data_Case2:
 	jr	VoiceParam_AssSwb_MultiBlock_Data_Join2

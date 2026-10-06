@@ -1942,7 +1942,7 @@ typedef struct __attribute__((packed)) {
      * next referenced object; the layout beyond that access is not
      * established.
      * --------------------------------------------------------------------- */
-    uint8_t SeqPlay_WriteErrorToVoiceTable_Data[12];
+    uint8_t SeqData_ErrorCodeRemap[12];
     /* ---------------------------------------------------------------------
      * Seq_SyncPositionAndOutputMIDITiming_LocalInit -- initializer of a
      * local array: Seq_SyncPositionAndOutputMIDITiming (v10/v9 0xF3E1C9, v7
@@ -2616,7 +2616,7 @@ typedef struct __attribute__((packed)) {
      * FDC_Format2HD_FatHead_Tail -- 6 bytes after FDC_Format2HD_FatHead that code DOES reach
      * (readers: the .s header) Holds the strings "d" and "A:\". Contents not established.
      * --------------------------------------------------------------------- */
-    uint8_t FDC_Format2HD_FatHead_Tail[6];
+    uint8_t FileIO_ReadFreeSpaceViaFAT_Str_d[6];
     /* ---------------------------------------------------------------------
      * GetDiskFreeSpace_CaseTable -- jump table of a compiled `switch` in
      * GetDiskFreeSpace (v10/v9 0xF52751, v7 0xF5234D) (`lda xix,
@@ -2631,7 +2631,7 @@ typedef struct __attribute__((packed)) {
      * GetDiskFreeSpace_CaseTable that code DOES reach (readers: the .s header, which also labels
      * each string) Contents not established.
      * --------------------------------------------------------------------- */
-    uint8_t GetDiskFreeSpace_CaseTable_Tail[6];
+    uint8_t FileIO_ReadVolumeLabelEntry_Str_d[6];
     /* ---------------------------------------------------------------------
      * GetVolumeLabel_CaseTable -- jump table of a compiled `switch` in
      * GetVolumeLabel (v10/v9 0xF527CE, v7 0xF523CA) (`lda xix,
@@ -2648,7 +2648,7 @@ typedef struct __attribute__((packed)) {
      * "+wb", "\", "d", "rb", then 0xFF and "1 PianoDisc". Contents not
      * established.
      * --------------------------------------------------------------------- */
-    uint8_t GetVolumeLabel_CaseTable_Tail[28];
+    uint8_t PathInfo_BuildAndOpen_Str_A[28];
     /* ---------------------------------------------------------------------
      * RhythmROM_BankProgramLocators -- 8 banks x 128 programs x {u16 hi, u16
      * lo}. AccVoice_ComputeChannelIndex (v10/v9 0xF53D77, v7 0xF53973) shows
@@ -2682,7 +2682,7 @@ typedef struct __attribute__((packed)) {
      * AccPatch_Transpose_LookupTable_Data`). 128 bytes to the next referenced
      * object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
-    uint8_t AccPatch_Transpose_LookupTable_Data[128];
+    uint8_t Note_PitchClassTable[128];
     /* ---------------------------------------------------------------------
      * Rhythm_VelLookA_TableLookup_Table -- read by
      * Rhythm_VelLookA_TableLookup (v10/v9 0xF5509A, v7 0xF54C96) (`ld xiy,
@@ -9336,7 +9336,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .Part_ApplyVoiceTableC_Table = { 0x23, 0xFF, 0xFF, 0xFF, 0xFF, 0x0F, 0xFF, 0x23, 0xFF, 0x1B, 0xFF, 0xFF },
 
-    .SeqPlay_WriteErrorToVoiceTable_Data = { 0x00, 0x00, 0x02, 0x03, 0x04, 0x05, 0x06, 0x00, 0x00, 0x09, 0x0A, 0x0B },
+    .SeqData_ErrorCodeRemap = { 0x00, 0x00, 0x02, 0x03, 0x04, 0x05, 0x06, 0x00, 0x00, 0x09, 0x0A, 0x0B },
 
     .Seq_SyncPositionAndOutputMIDITiming_LocalInit = { 0xF2, 0x00, 0x00 },
 
@@ -9770,15 +9770,15 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .FDC_Format2HD_FatHead = { 0xF0, 0xFF, 0xFF, 0xFF },
 
-    .FDC_Format2HD_FatHead_Tail = { 0x64, 0x00, 0x41, 0x3A, 0x5C, 0x00 },
+    .FileIO_ReadFreeSpaceViaFAT_Str_d = { 0x64, 0x00, 0x41, 0x3A, 0x5C, 0x00 },
 
     .GetDiskFreeSpace_CaseTable = { 0x0000, 0x0000, 0x0004, 0x000D, 0x0016, 0x0000, 0x0000 },
 
-    .GetDiskFreeSpace_CaseTable_Tail = { 0x64, 0x00, 0x41, 0x3A, 0x5C, 0x00 },
+    .FileIO_ReadVolumeLabelEntry_Str_d = { 0x64, 0x00, 0x41, 0x3A, 0x5C, 0x00 },
 
     .GetVolumeLabel_CaseTable = { 0x0000, 0x0000, 0x0005, 0x0005, 0x0005, 0x0000, 0x0000 },
 
-    .GetVolumeLabel_CaseTable_Tail = {
+    .PathInfo_BuildAndOpen_Str_A = {
         0x41, 0x3A, 0x5C, 0x00, 0x2B, 0x77, 0x62, 0x00, 0x5C, 0x00, 0x64, 0x00, 0x72, 0x62, 0x00, 0xFF,
         0x31, 0x20, 0x50, 0x69, 0x61, 0x6E, 0x6F, 0x44, 0x69, 0x73, 0x63, 0x00,
     },
@@ -10826,7 +10826,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
         },
     },
 
-    .AccPatch_Transpose_LookupTable_Data = {
+    .Note_PitchClassTable = {
         0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x00, 0x01, 0x02, 0x03,
         0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
         0x08, 0x09, 0x0A, 0x0B, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B,

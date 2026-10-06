@@ -19756,7 +19756,7 @@ SeqStatus_ResetAndSendCmd:
 SeqPlay_WriteErrorToVoiceTable:
 	ld a, (SEQ_ERROR_CODE:16)
 	extz wa
-	lda xbc, (SeqPlay_WriteErrorToVoiceTable_Data:24)
+	lda xbc, (SeqData_ErrorCodeRemap:24)
 	ld	(SEQ_ERROR_CODE:16), (xbc+wa)
 	ret
 
@@ -20413,15 +20413,18 @@ AppEvent_ChainDispatch1_IncFromMeasure:
 	extz wa
 	sub wa, 0x9c
 	cp wa, 0:i3
-	jr lt, AppEvtHandler_Branch_003
+	jr lt, AppEvent_ChainDispatch1_IncFromMeasure_OnTitleSqadvdly
 	cp wa, 7:i3
-	jr gt, AppEvtHandler_Branch_003
+	jr gt, AppEvent_ChainDispatch1_IncFromMeasure_OnTitleSqadvdly
 	add wa, wa
 	lda xix, (AppEvtHandler_Branch_002_CaseTable:24)
 	ld	wa, (xix+wa)
-	lda xix, (AppEvtHandler_Branch_002_Code:24)
+	lda xix, (AppEvent_ChainDispatch1_IncFromMeasure_OnTitleSqnotecng:24)
 	jp	t, (xix+wa)
-AppEvtHandler_Branch_002_Code:
+; AppEvent_ChainDispatch1_IncFromMeasure_OnTitleSqnotecng: TT_SQNOTECNG (title 0x9F) case of EVT_INC_VAL on sequencer-
+;   edit parameter 1: the from-measure word 9744 (last measure 9746) goes up by one (max 999), pushing the last
+;   measure along. Basis: callers + body.
+AppEvent_ChainDispatch1_IncFromMeasure_OnTitleSqnotecng:
 	lda xiz, (9744:16)
 	lda xwa, (9746:16)
 	jr AppEvtHandler_Branch_004
@@ -20445,7 +20448,10 @@ AppEvtHandler_Branch_002_OnTitleSqqtz:
 	lda xiz, (0xf1f2:16)
 	lda xwa, (9724:16)
 	jr AppEvtHandler_Branch_004
-AppEvtHandler_Branch_003:
+; AppEvent_ChainDispatch1_IncFromMeasure_OnTitleSqadvdly: TT_SQADVDLY (title 0xA0) case, also the default (titles
+;   outside 0x9C..0xA3 and 0xA2), of EVT_INC_VAL on parameter 1: selects from-measure 9734 / last measure 9736 for the
+;   shared increment. Basis: callers + body.
+AppEvent_ChainDispatch1_IncFromMeasure_OnTitleSqadvdly:
 	lda xiz, (9734:16)
 	lda xwa, (9736:16)
 AppEvtHandler_Branch_004:
@@ -20480,15 +20486,18 @@ AppEvent_ChainDispatch1_IncLastMeasure:
 	extz wa
 	sub wa, 0x9c
 	cp wa, 0:i3
-	jr lt, AppEvtHandler_Branch_007
+	jr lt, AppEvent_ChainDispatch1_IncLastMeasure_OnTitleSqadvdly
 	cp wa, 7:i3
-	jr gt, AppEvtHandler_Branch_007
+	jr gt, AppEvent_ChainDispatch1_IncLastMeasure_OnTitleSqadvdly
 	add wa, wa
 	lda xix, (AppEvtHandler_Branch_006_CaseTable:24)
 	ld	wa, (xix+wa)
-	lda xix, (AppEvtHandler_Branch_006_Code:24)
+	lda xix, (AppEvent_ChainDispatch1_IncLastMeasure_OnTitleSqnotecng:24)
 	jp	t, (xix+wa)
-AppEvtHandler_Branch_006_Code:
+; AppEvent_ChainDispatch1_IncLastMeasure_OnTitleSqnotecng: TT_SQNOTECNG (title 0x9F) case of EVT_INC_VAL on sequencer-
+;   edit parameter 2: the last-measure word 9746 goes up by one (max 999); the from measure 9744 is pulled down if it
+;   is now larger. Basis: callers + body.
+AppEvent_ChainDispatch1_IncLastMeasure_OnTitleSqnotecng:
 	lda xiz, (9744:16)
 	lda xwa, (9746:16)
 	jr AppEvtHandler_Branch_008
@@ -20512,7 +20521,10 @@ AppEvtHandler_Branch_006_OnTitleSqqtz:
 	lda xiz, (0xf1f2:16)
 	lda xwa, (9724:16)
 	jr AppEvtHandler_Branch_008
-AppEvtHandler_Branch_007:
+; AppEvent_ChainDispatch1_IncLastMeasure_OnTitleSqadvdly: TT_SQADVDLY (title 0xA0) case, also the default (titles
+;   outside 0x9C..0xA3 and 0xA2), of EVT_INC_VAL on parameter 2: selects from-measure 9734 / last measure 9736 for the
+;   shared increment. Basis: callers + body.
+AppEvent_ChainDispatch1_IncLastMeasure_OnTitleSqadvdly:
 	lda xiz, (9734:16)
 	lda xwa, (9736:16)
 AppEvtHandler_Branch_008:
@@ -20717,9 +20729,12 @@ AppEvent_ChainDispatch1_IncMcpParam:	; cases 15, 16, 17, 18, 19, 20
 	add xwa, xwa
 	add xwa, AppEvtHandler_Branch_021_CaseTable
 	ld wa, (xwa)
-	lda xix, (AppEvtHandler_Branch_021_Code:24)
+	lda xix, (AppEvent_ChainDispatch1_IncMcpTrackA:24)
 	jp	t, (xix+wa)
-AppEvtHandler_Branch_021_Code:
+; AppEvent_ChainDispatch1_IncMcpTrackA: Case 15 (TT_SQMCP track A, RAM 0xF1E9) of EVT_INC_VAL's measure-copy inner
+;   switch: up by one to at most 17 (all tracks); reaching 17 sets track B 0xF1EE to 17 too; then the six MCP fields
+;   are redrawn. Basis: callers + body.
+AppEvent_ChainDispatch1_IncMcpTrackA:
 	ld a, (0xf1e9:16)
 	cp a, 0x11
 	jrl nc, AppEvtHandler_Branch_024
@@ -20813,9 +20828,12 @@ AppEvent_ChainDispatch1_IncMinsParam:	; cases 21, 22, 23, 24, 25, 26
 	add xwa, xwa
 	add xwa, AppEvtHandler_Branch_024_CaseTable
 	ld wa, (xwa)
-	lda xix, (AppEvtHandler_Branch_024_Code:24)
+	lda xix, (AppEvent_ChainDispatch1_IncMinsTrackA:24)
 	jp	t, (xix+wa)
-AppEvtHandler_Branch_024_Code:
+; AppEvent_ChainDispatch1_IncMinsTrackA: Case 21 (TT_SQMINS track A, RAM 0xF1E1) of EVT_INC_VAL's measure-insert inner
+;   switch: up by one to at most 17 (all tracks); reaching 17 sets track B 0xF1E6 to 17 too; then the six MINS fields
+;   are redrawn. Basis: callers + body.
+AppEvent_ChainDispatch1_IncMinsTrackA:
 	ld a, (0xf1e1:16)
 	cp a, 0x11
 	jrl nc, AppEvtHandler_Branch_027
@@ -21047,9 +21065,11 @@ AppEvent_InlineHandler_DecFromMeasure:
 	add	wa, wa
 	lda	xix, (AppEvent_SubDispatch_Table_2:24)
 	ld	wa, (xix+wa)
-	lda	xix, (AppEvent_SubDispatch_Code:24)
+	lda	xix, (AppEvent_InlineHandler_DecFromMeasure_OnTitleSqnotecng:24)
 	jp	t, (xix+wa)
-AppEvent_SubDispatch_Code:
+; AppEvent_InlineHandler_DecFromMeasure_OnTitleSqnotecng: TT_SQNOTECNG (title 0x9F) case of EVT_DEC_VAL on sequencer-
+;   edit parameter 1: the from-measure word 9744 (last measure 9746) goes down by one (min 1). Basis: callers + body.
+AppEvent_InlineHandler_DecFromMeasure_OnTitleSqnotecng:
 	lda_d16	xiz, (9744)
 	lda	xwa, (9746:16)
 	jr	AppEvent_InlineHandler_Join9
@@ -21114,9 +21134,12 @@ AppEvent_InlineHandler_DecLastMeasure:
 	add	wa, wa
 	lda	xix, (AppEvent_SubDispatch_Table:24)
 	ld	wa, (xix+wa)
-	lda	xix, (AppEvent_SubDispatch_Code_2:24)
+	lda	xix, (AppEvent_InlineHandler_DecLastMeasure_OnTitleSqnotecng:24)
 	jp	t, (xix+wa)
-AppEvent_SubDispatch_Code_2:
+; AppEvent_InlineHandler_DecLastMeasure_OnTitleSqnotecng: TT_SQNOTECNG (title 0x9F) case of EVT_DEC_VAL on sequencer-
+;   edit parameter 2: the last-measure word 9746 goes down by one (min 1); the from measure 9744 follows if it is now
+;   larger. Basis: callers + body.
+AppEvent_InlineHandler_DecLastMeasure_OnTitleSqnotecng:
 	lda_d16	xiz, (9744)
 	lda_d16	xwa, (9746)
 	jr	AppEvent_InlineHandler_Join
@@ -21345,9 +21368,12 @@ AppEvent_InlineHandler_DecMcpParam:	; cases 15, 16, 17, 18, 19, 20
 	add	xwa, xwa
 	add	xwa, AppEvent_SubDispatch_CaseTable_2
 	ld	wa, (xwa)
-	lda	xix, (AppEvent_SubDispatch_Code_2_Code:24)
+	lda	xix, (AppEvent_InlineHandler_DecMcpTrackA:24)
 	jp	t, (xix+wa)
-AppEvent_SubDispatch_Code_2_Code:
+; AppEvent_InlineHandler_DecMcpTrackA: Case 15 (TT_SQMCP track A, RAM 0xF1E9) of EVT_DEC_VAL's measure-copy inner
+;   switch: down by one to at least 1; stepping down from 17 (all) to 16 sets track B 0xF1EE to 16 too; then the six
+;   MCP fields are redrawn. Basis: callers + body.
+AppEvent_InlineHandler_DecMcpTrackA:
 	ld a, (61929:16)
 	cp a, 1:i3
 	jrl ule, AppEvent_InlineHandler_Join5
@@ -21441,9 +21467,12 @@ AppEvent_InlineHandler_DecMinsParam:	; cases 21, 22, 23, 24, 25, 26
 	add	xwa, xwa
 	add	xwa, AppEvent_SubDispatch_CaseTable
 	ld	wa, (xwa)
-	lda	xix, (AppEvent_SubDispatch_Code_2_Code2:24)
+	lda	xix, (AppEvent_InlineHandler_DecMinsTrackA:24)
 	jp	t, (xix+wa)
-AppEvent_SubDispatch_Code_2_Code2:
+; AppEvent_InlineHandler_DecMinsTrackA: Case 21 (TT_SQMINS track A, RAM 0xF1E1) of EVT_DEC_VAL's measure-insert inner
+;   switch: down by one to at least 1; stepping down from 17 (all) to 16 sets track B 0xF1E6 to 16 too; then the six
+;   MINS fields are redrawn. Basis: callers + body.
+AppEvent_InlineHandler_DecMinsTrackA:
 	ld a, (61921:16)
 	cp a, 1:i3
 	jrl ule, AppEvent_InlineHandler_Entry3
@@ -33382,7 +33411,7 @@ SeqPart_VelocityCurveCalc_Join:
 	extz	de
 	lda	xbc, (SeqPart_VelCurveData_Table_3:24)
 	ld	(9792), (xbc+de)
-	ld	xbc, SeqPart_VelCurveData_Data
+	ld	xbc, SeqPart_QtzGrid12_ZoneStarts
 	ld	(9794), (xbc+de)
 	jrl	SeqPart_VelocityCurveCalc_Join5
 SeqPart_VelocityCurveCalc_QtzGrid32:
@@ -33405,7 +33434,7 @@ SeqPart_VelocityCurveCalc_Join4:
 	extz	de
 	lda	xbc, (SeqPart_VelCurveData_Table_4:24)
 	ld	(9792), (xbc+de)
-	ld	xbc, SeqPart_VelCurveData_Data_2
+	ld	xbc, SeqPart_QtzGrid32_ZoneStarts
 	ld	(9794), (xbc+de)
 	jrl	SeqPart_VelocityCurveCalc_Join5
 SeqPart_VelocityCurveCalc_QtzGrid16:
@@ -33443,7 +33472,7 @@ SeqPart_VelocityCurveCalc_Join2:
 	extz	de
 	lda	xbc, (SeqPart_VelCurveData_Table_5:24)
 	ld	(9792), (xbc+de)
-	ld	xbc, SeqPart_VelCurveData_Data_3
+	ld	xbc, SeqPart_QtzGrid16_ZoneStarts
 	ld	(9794), (xbc+de)
 	jrl	SeqPart_VelocityCurveCalc_Join5
 

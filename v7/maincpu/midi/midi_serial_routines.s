@@ -898,7 +898,7 @@ MIDI_SC0_TX_DISPATCH:
 	calr	MIDI_SC0_ENABLE_TX
 	jr	SC0TxDisp_RestoreAndReturn
 SC0TxDisp_NonMidiPath:
-	call	SeqBuf3_EnableTx_Stub
+	call	CompIface_SerialEnableTx
 SC0TxDisp_RestoreAndReturn:
 	pop	xiz
 	pop	xiy

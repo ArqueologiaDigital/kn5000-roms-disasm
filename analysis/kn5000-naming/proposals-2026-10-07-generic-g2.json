@@ -1,0 +1,1277 @@
+[
+ {
+  "old": "SeMenu_BankEdit_LoopHelper_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeTonHyb1_Row2Records",
+  "header": "Bound records of rows 2-4 of the TONE DYNAMICS page (screen 0x26), 50 bytes per row: group letter (RAM 0x669 & 0x0F -> \"A:\"..\"Z:\"), 13-character waveform name (RAM 0x20C03..), velocity low/high fields; row-pointer table entries 0-2 point at each row, and it ends row 1's list. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/sound_editor_ui.s:9815 `ld xiy, SeScreenData_0x1F80` -- SeMenu_BankEdit_LoopHelper draws row 1 = SeScreenData_0x1F80 up to this label",
+   "audio/sound_editor_ui.s:9816 `ld xix, SeMenu_BankEdit_LoopHelper_Data` -- end of row 1's bound list",
+   "audio/sound_editor_ui.s:9825 `ld xiy, SeMenu_BankEdit_LoopBody_Data + 20` -- row table [c] for rows 2-4 (c = 0..2, drawn when RAM 0x664+c != 0)",
+   "audio/sound_editor_screens/se_drumkit_display.c:94 `SD_PTR(widget_2),       /* variant 0: offset 40 */` -- variant 0 -> offset 40 = this label (incbin 0x28)",
+   "audio/sound_editor_screens/se_drumkit_display.c:69 `.widget_2 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x0669, .flags = 0x000f, .ref_tag = 0x20, .handler = HAND` -- row 2: id 0x669 mask 0x0F, table SE_DrumChannel_Labels = \"A:\"..; cell 21*256+32 = (64,135)",
+   "audio/sound_editor_ui.s:8160 `.long SeMenu_PresetManager_Data` -- full-draw table entry 6 = screen 0x26",
+   "audio/sound_editor_routines.s:214 `SeTonHyb1TitleFunc_OnDraw:` -- title SeTonHyb1 draws screen 0x26 (pushw 38 in its draw body)",
+   "audio/sound_editor_ui.s:14975 `sd_ptext\t0x1c, 19, 114, 5, \"TONE DYNAMICS\"` -- page title; body labels 'TONE WAVEFORM' / 'VELOCITY' (SeScreenData_0x4261)"
+  ]
+ },
+ {
+  "old": "SeMenu_BankEdit_LoopHelper_Data_2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeTonHyb1_Row1VelZeroText",
+  "header": "Static text \"  0-\" at the row-1 VELOCITY cell (192,119) of the TONE DYNAMICS page: row 1's velocity range always starts at 0 (its high value is RAM 0x661). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/sound_editor_ui.s:9812 `ld xiy, SeMenu_BankEdit_LoopHelper_Data_2` -- SeMenu_BankEdit_LoopHelper draws it unconditionally as a static list ...",
+   "audio/sound_editor_ui.s:9813 `ld xix, SeMenu_BankEdit_LoopHelper_Data_3` -- ... ending at the next label (one 8-byte record)",
+   "audio/sound_editor_screens/se_drumkit_display.c:81 `.labeled_ref_0 = { .opcode = SD_OP_LABELED_REF, .length = 8, .addr = 0x12b0, .label = { ' ', ' ', '0', '-' } }` -- cell 0x12B0 = 119*40+24 -> (192,119), text \"  0-\"",
+   "audio/sound_editor_screens/se_drumkit_display.c:68 `.nop_0 = { .opcode = 0x00, .length = 0x0a, .data = { 0x61, 0x06, 0x7f, 0x00, 0x20, 0xb4, 0x12, 0x03 } },` -- bound op 00 (number): RAM 0x661, mask 0x7F, cell 0x12B4 = (224,119), 3 digits",
+   "audio/sound_editor_ui.s:8160 `.long SeMenu_PresetManager_Data` -- full-draw table entry 6 = screen 0x26",
+   "audio/sound_editor_routines.s:214 `SeTonHyb1TitleFunc_OnDraw:` -- title SeTonHyb1 draws screen 0x26 (pushw 38 in its draw body)",
+   "audio/sound_editor_ui.s:14975 `sd_ptext\t0x1c, 19, 114, 5, \"TONE DYNAMICS\"` -- page title; body labels 'TONE WAVEFORM' / 'VELOCITY' (SeScreenData_0x4261)"
+  ]
+ },
+ {
+  "old": "SeMenu_BankEdit_LoopHelper_Data_3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeTonHyb1_Row2VelDash",
+  "header": "Static \"-\" between row 2's velocity low (RAM 0x664) and high (0x662) fields on the TONE DYNAMICS page, cell (216,135); the dashes of rows 3-4 and the rows' clear boxes follow. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/sound_editor_ui.s:9836 `ld xiy, SeMenu_BankEdit_LoopBody_Data + 44` -- row table [6+c] -> the row's dash, drawn when the row is in use",
+   "audio/sound_editor_screens/se_drumkit_display.c:100 `SD_PTR(labeled_ref_1),  /* variant 6: offset 198 */` -- variant 6 -> offset 198 = this label (incbin 0xC6)",
+   "audio/sound_editor_screens/se_drumkit_display.c:82 `.labeled_ref_1 = { .opcode = SD_OP_LABELED_REF, .length = 5, .addr = 0x1533, .label = { '-' } },` -- cell 0x1533 = 135*40+27, text \"-\"",
+   "audio/sound_editor_ui.s:9813 `ld xix, SeMenu_BankEdit_LoopHelper_Data_3` -- also the end of the \"  0-\" list",
+   "audio/sound_editor_ui.s:8160 `.long SeMenu_PresetManager_Data` -- full-draw table entry 6 = screen 0x26",
+   "audio/sound_editor_routines.s:214 `SeTonHyb1TitleFunc_OnDraw:` -- title SeTonHyb1 draws screen 0x26 (pushw 38 in its draw body)",
+   "audio/sound_editor_ui.s:14975 `sd_ptext\t0x1c, 19, 114, 5, \"TONE DYNAMICS\"` -- page title; body labels 'TONE WAVEFORM' / 'VELOCITY' (SeScreenData_0x4261)"
+  ]
+ },
+ {
+  "old": "SeMenu_BankEdit_LoopBody_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeTonHyb1_Row4ClearBoxes",
+  "header": "Two op-1B (fill with background) boxes that clear row 4 of the TONE DYNAMICS page (64,167)-(184,180) and (192,167)-(248,180); +20 is the 9-entry row table (rows 2-4: bound list, clear boxes, dash). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/sound_editor_ui.s:9844 `ld xiy, SeMenu_BankEdit_LoopBody_Data + 32` -- row table [3+c]: the clear boxes, drawn (+20 bytes) when RAM 0x664+c == 0",
+   "audio/sound_editor_ui.s:9825 `ld xiy, SeMenu_BankEdit_LoopBody_Data + 20` -- row table [c]: row c+2's bound list (+50 bytes)",
+   "audio/sound_editor_screens/se_drumkit_display.c:91 `.boundary_6 = { .type = 0x1b, .length = 0x0a, .p1 = { .x = 64, .y = 167 }, .p2 = { .x = 184, .y = 180 } },` -- type 0x1B box at offset 273 (= incbin 0x111)",
+   "audio/sound_editor_screens/se_drumkit_display.c:55 `uint32_t                       variant_table[9];  /* DrumKit_VariantSelect_Table */` -- the table at +20 (offset 293)",
+   "audio/sound_editor_ui.s:8393 `SeMenu_ClearRect:` -- op 1B = fill the rectangle with the background colour (its header)",
+   "audio/sound_editor_ui.s:8160 `.long SeMenu_PresetManager_Data` -- full-draw table entry 6 = screen 0x26",
+   "audio/sound_editor_routines.s:214 `SeTonHyb1TitleFunc_OnDraw:` -- title SeTonHyb1 draws screen 0x26 (pushw 38 in its draw body)",
+   "audio/sound_editor_ui.s:14975 `sd_ptext\t0x1c, 19, 114, 5, \"TONE DYNAMICS\"` -- page title; body labels 'TONE WAVEFORM' / 'VELOCITY' (SeScreenData_0x4261)"
+  ]
+ },
+ {
+  "old": "SeMenu_DataBlock_05_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeFilEq_RangeGainRecords",
+  "header": "The two bound records of edit parameter 5 (RAM 0x665) on the LPF/HPF -12dB + EQ pages (screens 0x30 SeFilLpq1, 0x31 SeFilHpq1): EQ RANGE \"LOW \"/\"HIGH\" from bit 7 at (192,221) and EQ GAIN \" --\",\" -6\"..\" +6\" from bits 0-6 at (272,221). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/sound_editor_ui.s:10028 `ld\txiy, SeMenu_DataBlock_05_Data` -- SeMenu_DataBlock_05: parameter A == 5 draws both records (to SeScreenData_0x21C0); other parameters use the record table",
+   "audio/sound_editor_ui.s:10038 `SeMenu_DataBlock_06:` -- same code for screen 0x31",
+   "audio/sound_editor_screens/se_general_edit.c:45 `.widget_3 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x0665, .flags = 0x0780, .ref_tag = 0x20, .handler = HAND` -- id 0x665 flags 0x0780 (mask 0x80, shift 7), table SE_MonoPoly_Names, 4 chars, cell 34*256+160 = 221*40+24",
+   "audio/sound_editor_screens/se_general_edit.c:46 `.widget_4 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x0665, .flags = 0x007f, .ref_tag = 0x20, .handler = HAND` -- id 0x665 mask 0x7F, SE_Detune_Values, 3 chars, cell 221*40+34",
+   "audio/sound_editor_ui.s:13328 `.ascii\t\"LOW \", \"HIGH\", \"MONO\", \"POLY\"` -- SeScreenData_0x1EE7 (= SE_MonoPoly_Names 0xF12AED): value 0/1 -> LOW/HIGH",
+   "audio/sound_editor_ui.s:13459 `.ascii\t\" --\", \" -6\", \" -5\", \" -4\"` -- SeScreenData_0x21F2 = SE_Detune_Values",
+   "audio/sound_editor_screens/se_setup_nav_full.c:86 `.param_label_8 = { .opcode = 0x17, .length = 0x0b, .data = { 0xca, 0x00, 0xd1, 0x00, 0x52, 0x41, 0x4e, 0x47, 0` -- \"RANGE\" at x 202, y 209; param_label_10 \"GAIN\" at x 280; 'dB' at 221*40+37",
+   "audio/sound_editor_routines.s:465 `SeFilHpq1TitleFunc:` -- screen codes: SeFilLpq1 0x30, SeFilHpq1 0x31 (pushw 48/49 in their draw bodies)"
+  ]
+ },
+ {
+  "old": "SeMenu_DrumKit_Dispatch_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SePitPit1_SplitValueRecords",
+  "header": "The PITCH page's (screen 0x27) RIGHT SPLIT and LEFT SPLIT value fields: bound op-05 signed numbers (value - 8) from RAM 0x670 high nibble at (208,149) and low nibble at (208,189), drawn together for edit parameter 16. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/sound_editor_ui.s:9871 `ld\txiy, SeMenu_DrumKit_Dispatch_Data` -- SeMenu_DrumKit_Dispatch (screen 0x27 update): A == 16 draws this list up to SeMenu_DrumKit_Dispatch_Data_2",
+   "audio/sound_editor_screens/se_name_editor.c:75 `.setup5_9 = { .type = 0x05, .length = 0x0b, .id = 0x0670, .flags = 0x04f0, .tag = 0x20, .handler = HANDLER_ADD` -- op 05, id 0x670, flags 0x04F0 (mask 0xF0, shift 4), cell 0x1762 = 149*40+26, 1 digit, zero 8 (offset 0xAE)",
+   "audio/sound_editor_screens/se_name_editor.c:76 `.setup5_10 = { .type = 0x05, .length = 0x0b, .id = 0x0670, .flags = 0x000f, .tag = 0x20, .handler = HANDLER_AD` -- op 05, id 0x670 mask 0x0F, cell 0x1DA2 = 189*40+26",
+   "audio/sound_editor_screens/se_setup_params_full.c:113 `.param_label_9 = { .opcode = 0x17, .length = 0x11, .data = { 0xb6, 0x00, 0x87, 0x00, 0x52, 0x49, 0x47, 0x48, 0` -- \"RIGHT SPLIT\" label at (182,135); \"LEFT SPLIT\" at (186,175) (decoded param_label_9 / _11)",
+   "audio/sound_editor_ui.s:13786 `.ascii\t\"PURE MAJ\"` -- tuning-system names of the same page's row 1",
+   "audio/sound_editor_routines.s:238 `SePitPit1TitleFunc_OnDraw:` -- SePitPit1 = screen 0x27 (pushw 39), whose full draw SeMenu_PresetBrowser_Init shows 'PITCH'"
+  ]
+ },
+ {
+  "old": "SeMenu_DrumKit_Dispatch_Data_2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SePitPit1_PartCursorBox",
+  "header": "PITCH page (screen 0x27): bound op-03 box record that highlights the selected part row: RAM 0x660 & 7 indexes SeScreenData_0x27D9 ({13,76..166,104} .. {13,172..166,200}, the four part rows). Entry 0 of the page's record table. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/sound_editor_ui.s:13853 `.long\tSeMenu_DrumKit_Dispatch_Data_2` -- SeMenu_DrumKit_Dispatch_Records3[0] = this; parameter 0 clears the part area then draws entry 0",
+   "audio/sound_editor_ui.s:9890 `ld\txiy, SeMenu_DrumKit_Dispatch_Records3` -- SeGfx_DrawIndexedBoundRecord on that table",
+   "audio/sound_editor_screens/se_name_editor.c:77 `.setup_0 = { .type = SD_BLOCK_SETUP, .length = 0x0b, .id = 0x0660, .flags = 0x0007, .tag = 0x05, .handler = HA` -- op 03, id 0x660 mask 7, table SE_NameEditor_CursorCoords_0 (offset 0xC4)",
+   "audio/sound_editor_ui.s:13826 `SeScreenData_0x27D9:` -- the box table it indexes (part rows y 76/108/140/172)",
+   "audio/sound_editor_ui.s:13843 `SeMenu_DrumKit_Dispatch_Records:` -- op-1B clear of (13,76)-(166,200) before the box is redrawn"
+  ]
+ },
+ {
+  "old": "SeMenu_FxEdit_Init_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeTonRan1_KeyLayerFrame",
+  "header": "Static records of the KEY LAYER page (screen 0x24, SeTonRan1): \"KEY LAYER\" caption, octave numbers 0-6 along y 42, four row separators and a selection box. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/sound_editor_ui.s:10371 `ld\txiy, SeMenu_FxEdit_Init_Data` -- SeMenu_FxEdit_Init (full-draw entry 4 = screen 0x24) draws it ...",
+   "audio/sound_editor_ui.s:10372 `ld\txix, SeMenu_FxEdit_Init_Data_2` -- ... up to the VELOCITY LAYER block",
+   "audio/sound_editor_screens/se_screen_f140ef.c:45 `.labeled_ref_0 = { .opcode = SD_OP_LABELED_REF, .length = 13, .addr = 0x04bd, .label = { 'K', 'E', 'Y', ' ', '` -- \"KEY LAYER\" (offset 10 = incbin 0xA)",
+   "audio/sound_editor_screens/se_screen_f140ef.c:46 `.param_label_0 = { .opcode = 0x17, .length = 0x07, .data = { 0x39, 0x00, 0x2a, 0x00, 0x30 } },` -- '0' at (57,42); _1.._6 '1'..'6' (octave numbers)",
+   "audio/sound_editor_routines.s:166 `SeTonRan1TitleFunc_OnDraw:` -- SeTonRan1 posts screen 0x24 (pushw 36)"
+  ]
+ },
+ {
+  "old": "SeMenu_FxEdit_Init_Data_2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeTonRan2_VelLayerFrame",
+  "header": "Static records of the VELOCITY LAYER page (screen 0x25, SeTonRan2): \"VELOCITY LAYER\" caption, velocity scale 0/32/64/96/127 along y 50, then the grid lines up to SeScreenData_0x3633. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/sound_editor_ui.s:10391 `ld\txiy, SeMenu_FxEdit_Init_Data_2` -- SeMenu_FxEdit_DataBlock1 (full-draw entry 5 = screen 0x25) draws it to SeScreenData_0x3633",
+   "audio/sound_editor_ui.s:10372 `ld\txix, SeMenu_FxEdit_Init_Data_2` -- also the end of the KEY LAYER block",
+   "audio/sound_editor_screens/se_screen_f140ef.c:58 `.labeled_ref_1 = { .opcode = SD_OP_LABELED_REF, .length = 18, .addr = 0x055b, .label = { 'V', 'E', 'L', 'O', '` -- \"VELOCITY LAYER\" (offset 0x7A)",
+   "audio/sound_editor_screens/se_screen_f140ef.c:63 `.param_label_11 = { .opcode = 0x17, .length = 0x09, .data = { 0xe4, 0x00, 0x33, 0x00, 0x31, 0x32, 0x37 } },` -- '127' at (228,51); _7.._10: 0, 32, 64, 96",
+   "audio/sound_editor_routines.s:190 `SeTonRan2TitleFunc_OnDraw:` -- SeTonRan2 posts screen 0x25 (pushw 37)"
+  ]
+ },
+ {
+  "old": "SeMenu_PresetBrowser_Select_Sub_Data_2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeLfo_Part4HatchRecord",
+  "header": "LFO pages (0x2A/0x2F/0x39): static op-03 blit of hatch pattern 4 (SeBitmap_Pattern24x10_4) at the part-4 label cell (48,158), shown when part 4 is disabled; +12 is the part-label table (parts 1-4 + end), +36 the four LFO-on marker records (box (79,y)-(88,y+9) + stub line). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/sound_editor_ui.s:9158 `ld\txiz, SeMenu_PresetBrowser_Select_Sub_Data_2 + 12` -- SeMenu_PresetBrowser_Select_Helper: for part c whose enable bit in (1630 = 0x65E) is clear, draws table[c]..table[c+1]",
+   "audio/sound_editor_ui.s:9169 `ld\txiz, SeMenu_PresetBrowser_Select_Sub_Data + 7` -- the enabled case draws \"1ST\"..\"4TH\" from the string-record table instead",
+   "audio/sound_editor_ui.s:9267 `ld\txiz, SeMenu_PresetBrowser_Select_Sub_Data_2 + 36` -- SeMenu_DrawLfoPartSwitches: marker record of a part whose LFO byte has bit 5",
+   "audio/sound_editor_screens/se_rhythm_transport_tables.c:71 `.setup_3 = { .opcode = 0x03, .length = 0x0c, .data = { 0x60, 0x0c, 0xf1, 0x00, 0xb6, 0x18, 0x03, 0x00, 0x0a, 0` -- op 03 len 12: bitmap 0xF10C60, cell 0x18B6 = 158*40+6, 3 bytes x 10 rows (offset 88 = incbin 0x58)",
+   "audio/sound_editor_screens/se_rhythm_transport_tables.c:77 `SD_PTR(setup_3),        /* [4] \u00e2\u0086\u0092 setup block 3 */` -- drum_table[4] = part 4; [5] = the table itself = its end"
+  ]
+ },
+ {
+  "old": "SeMenu_FilterEdit_Dispatch_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeTonTon2_DelayFields",
+  "header": "TONE SELECT page 3/3 (screen 0x23, SeTonTon2): the DELAY value fields of parts 1-4 (bound numbers, RAM 0x662-0x665 & 0x3F, x 136, rows y 85/118/149/181), followed by the REVERB DEPTH field (0x66A, (256,186)). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/sound_editor_ui.s:10484 `ld\txix, SeMenu_FilterEdit_Dispatch_Data` -- SeMenu_FilterEdit_Dispatch: parameter 1 redraws the trigger list up to here",
+   "audio/sound_editor_ui.s:14571 `.long\tSeMenu_FilterEdit_Dispatch_Data` -- record table SeScreenData_0x39BE[2] = parameter 2",
+   "audio/sound_editor_screens/se_parameter_grid.c:53 `.nop_0 = { .opcode = 0x00, .length = 0x0a, .data = { 0x62, 0x06, 0x3f, 0x00, 0x20, 0x59, 0x0d, 0x02 } },` -- op 00 (number): RAM 0x662 mask 0x3F, cell 0x0D59 = 85*40+17, 2 digits (offset 0x3C)",
+   "audio/sound_editor_screens/se_parameter_grid.c:57 `.nop_4 = { .opcode = 0x00, .length = 0x0a, .data = { 0x6a, 0x06, 0x7f, 0x00, 0x20, 0x30, 0x1d, 0x03 } },` -- RAM 0x66A mask 0x7F, cell 0x1D30 = 186*40+32, 3 digits",
+   "audio/sound_editor_screens/se_setup_rhythm.c:49 `.param_label_1 = { .opcode = 0x17, .length = 0x0b, .data = { 0x86, 0x00, 0x3e, 0x00, 0x44, 0x45, 0x4c, 0x41, 0` -- column label \"DELAY\" at x 134 (decoded param_label_1); \"REVERB\"/\"DEPTH\" at (247,158)/(250,168)",
+   "audio/sound_editor_ui.s:8157 `.long SeMenu_PresetInit_Main` -- full-draw entry 3 = screen 0x23",
+   "audio/sound_editor_routines.s:142 `SeTonTon2TitleFunc_OnDraw:` -- SeTonTon2 posts screen 0x23 (pushw 35)"
+  ]
+ },
+ {
+  "old": "SeMenu_FilterEdit_Dispatch_Data_2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeTonTon2_PanSideFields",
+  "header": "TONE SELECT page 3/3: the PANNING side fields of parts 1-4 (\"CTR\"/\"L  \"/\"R  \" from 2-bit fields of RAM 0x66B, x 192, rows y 85..181). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/sound_editor_ui.s:10476 `ld\txiy, SeMenu_FilterEdit_Dispatch_Data_2` -- parameter >= 11 redraws these four records (to Data_3)",
+   "audio/sound_editor_ui.s:14580 `.long\tSeMenu_FilterEdit_Dispatch_Data_2` -- record table entry 11",
+   "audio/sound_editor_screens/se_parameter_grid.c:58 `.widget_4 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x066b, .flags = 0x0003, .ref_tag = 0x06, .handler = HAND` -- id 0x66B mask 3, SE_ParamGrid_ControlNames, cell 13*256+96 = 85*40+24",
+   "audio/sound_editor_ui.s:14614 `.ascii\t\"CTR\", \"L  \", \"R  \"` -- SeScreenData_0x3A52, the 3-char table",
+   "audio/sound_editor_screens/se_setup_rhythm.c:50 `.param_label_2 = { .opcode = 0x17, .length = 0x0d, .data = { 0xb5, 0x00, 0x3e, 0x00, 0x50, 0x41, 0x4e, 0x4e, 0` -- \"PANNING\" column label at x 181",
+   "audio/sound_editor_ui.s:8157 `.long SeMenu_PresetInit_Main` -- full-draw entry 3 = screen 0x23",
+   "audio/sound_editor_routines.s:142 `SeTonTon2TitleFunc_OnDraw:` -- SeTonTon2 posts screen 0x23 (pushw 35)"
+  ]
+ },
+ {
+  "old": "SeMenu_FilterEdit_Dispatch_Data_3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeTonTon2_CursorBox",
+  "header": "TONE SELECT page 3/3: bound op-03 cursor box record, RAM 0x65D & 0x0F indexes SE_ParamGrid_CursorCoords; entry 0 of the page's record table. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/sound_editor_ui.s:14569 `.long\tSeMenu_FilterEdit_Dispatch_Data_3` -- SeScreenData_0x39BE[0]; parameter 0 clears then draws entry 0",
+   "audio/sound_editor_ui.s:10477 `ld\txix, SeMenu_FilterEdit_Dispatch_Data_3` -- end of the pan-side list",
+   "audio/sound_editor_screens/se_parameter_grid.c:62 `.setup_0 = { .type = SD_BLOCK_SETUP, .length = 0x0b, .id = 0x065d, .flags = 0x000f, .tag = 0x05, .handler = HA` -- op 03, id 0x65D mask 0x0F, SE_ParamGrid_CursorCoords (offset 0xAA)",
+   "audio/sound_editor_ui.s:8157 `.long SeMenu_PresetInit_Main` -- full-draw entry 3 = screen 0x23",
+   "audio/sound_editor_routines.s:142 `SeTonTon2TitleFunc_OnDraw:` -- SeTonTon2 posts screen 0x23 (pushw 35)"
+  ]
+ },
+ {
+  "old": "SeMenu_PresetInit_Main_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeTonTon2_PanAmountFields",
+  "header": "TONE SELECT page 3/3: the pan-amount number fields of parts 1-4 (RAM 0x66C-0x66F & 0x7F, 2 digits at x 200 after the side letter), drawn only for a non-zero value. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/sound_editor_ui.s:10308 `ld xix, SeMenu_PresetInit_Main_Data` -- SeMenu_PresetInit_Main draws the bound list up to here, then SeMenu_PresetInit_Loop2 (params 12-15)",
+   "audio/sound_editor_ui.s:10340 `SeMenu_PresetInit_Loop2:` -- params 0x0C..0x0F: draw table[A] when RAM 0x660+A != 0",
+   "audio/sound_editor_screens/se_parameter_grid.c:63 `.nop_5 = { .opcode = 0x00, .length = 0x0a, .data = { 0x6c, 0x06, 0x7f, 0x00, 0x20, 0x61, 0x0d, 0x02 } },` -- op 00: RAM 0x66C mask 0x7F, cell 0x0D61 = 85*40+25, 2 digits (offset 0xB5)",
+   "audio/sound_editor_ui.s:8157 `.long SeMenu_PresetInit_Main` -- full-draw entry 3 = screen 0x23",
+   "audio/sound_editor_routines.s:142 `SeTonTon2TitleFunc_OnDraw:` -- SeTonTon2 posts screen 0x23 (pushw 35)"
+  ]
+ },
+ {
+  "old": "SeMenu_EqEdit_SetupHelper1_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeCtr_TitleIcon",
+  "header": "Title-bar icon record of the CONTROLLER pages (screens 0x3B SeCtr2, 0x3C SeCtr3): op 23, style 0x5F, cell 3*40+11 (x 88, y 3), the twin of SeMenu_DrawTitleIcon's record; drawn last. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/sound_editor_ui.s:10583 `ld xiy, SeMenu_EqEdit_SetupHelper1_Data` -- SeMenu_EqEdit_SetupHelper2 draws just this record (to SeMenu_FilterEdit_DataBlock5_Data)",
+   "audio/sound_editor_ui.s:10571 `call SeMenu_EqEdit_SetupHelper2` -- called last by SeMenu_FilterEdit_DataBlock5 (0x3B) and SeMenu_EqEdit_Init (0x3C)",
+   "audio/sound_editor_screens/se_setup_ctrl_full.c:54 `.unknown_23_1 = { .opcode = 0x23, .length = 0x05, .data = { 0x5f, 0x83, 0x00 } },` -- op 23, {0x5F, 0x83, 0x00} (offset 47 = se_setup_ctrl_sub entry)",
+   "audio/sound_editor_ui.s:9083 `SeMenu_DrawTitleIcon:` -- same layout as the TONE SELECT title icon (op 23, style 0x61)",
+   "audio/sound_editor_routines.s:705 `SeCtr2TitleFunc:` -- SeCtr2 = screen 0x3B, SeCtr3 = 0x3C (draw bodies use 59/60)"
+  ]
+ },
+ {
+  "old": "SeMenu_FilterEdit_DataBlock5_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeCtr2_PageFrame",
+  "header": "Static frame of the CONTROLLER page 0x3B (SeCtr2) below its title: AFTER TOUCH / DEPTH / FUNCTION labels, the two function-row boxes, depth box and icons; +175 starts the 4-part \"1ST 2ND 3RD 4TH\" header (2-part mode draws \"1ST 2ND\" instead). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/sound_editor_ui.s:10536 `ld\txiy, SeMenu_FilterEdit_DataBlock5_Data` -- SeMenu_FilterEdit_DataBlock5 (full draw of 0x3B) draws it to SeMenu_FilterEdit_DataBlock5_Records",
+   "audio/sound_editor_ui.s:10544 `ld\txix, SeMenu_FilterEdit_DataBlock5_Data + 175` -- (0x6AE) == 1: stops at +175 and draws the 2-part header",
+   "audio/sound_editor_screens/se_setup_ctrl_full.c:61 `.param_label_1 = { .opcode = 0x17, .length = 0x0b, .data = { 0x0a, 0x00, 0x86, 0x00, 0x41, 0x46, 0x54, 0x45, 0` -- \"AFTER\" / param_label_2 \"TOUCH\", labeled_ref_0 \"DEPTH\", labeled_ref_1 \"FUNCTION\"",
+   "audio/sound_editor_ui.s:14767 `sd_ctext\t0x06, 19, 207*40+23, \"1ST 2ND 3RD 4TH\"` -- the record at +175",
+   "audio/sound_editor_routines.s:705 `SeCtr2TitleFunc:` -- SeCtr2 = screen 0x3B, SeCtr3 = 0x3C (draw bodies use 59/60)"
+  ]
+ },
+ {
+  "old": "SeMenu_FilterEdit_DataBlock5_Data_2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeCtr2_FunctionNameFields",
+  "header": "CONTROLLER page 0x3B: the four 13-character FUNCTION name fields (RAM 0x661, 0x662, 0x665, 0x666 & 0x3F -> \"PITCH BEND\", \"AMP ENV SUST\", ...; rows y 77 / 113, x 80 / 192), then the DEPTH value (0x66B, (128,221)). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/sound_editor_ui.s:14807 `.long\tSeMenu_FilterEdit_DataBlock5_Data_2` -- SeScreenData_0x3E60[1] = parameter 1",
+   "audio/sound_editor_ui.s:10549 `ld\txiy, SeMenu_FilterEdit_DataBlock5_Data_2` -- 2-part mode starts the page's bound list here (skipping the part 3/4 switches)",
+   "audio/sound_editor_screens/se_transport_display.c:48 `.widget_2 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x0661, .flags = 0x003f, .ref_tag = 0x20, .handler = HAND` -- id 0x661 mask 0x3F, SE_Transport_ParamNames, 13 chars, cell 12*256+18 = 77*40+10 (offset 0x1E)",
+   "audio/sound_editor_ui.s:14824 `.ascii\t\"PITCH BEND   \"` -- SeScreenData_0x3E8C, the 13-char function-name table",
+   "audio/sound_editor_routines.s:705 `SeCtr2TitleFunc:` -- SeCtr2 = screen 0x3B, SeCtr3 = 0x3C (draw bodies use 59/60)"
+  ]
+ },
+ {
+  "old": "SeMenu_EqEdit_DrawTable_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeCtr2_Part1And2Switches",
+  "header": "CONTROLLER page 0x3B: the part 1 and part 2 switch fields (\"OFF\"/\" ON\"/\"---\"/\"INV\" from RAM 0x66C bits 0-1 / 2-3, under \"1ST\" x 184 and \"2ND\" x 216, y 221); parts 3/4 (bits 4-7) are the two records before it. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/sound_editor_ui.s:10604 `ld xiy, SeMenu_EqEdit_DrawTable_Data` -- SeMenu_EqEdit_Dispatch: parameter 12 (0x66C) draws this pair; 4-part mode first draws 0x3DD3..Data_2",
+   "audio/sound_editor_screens/se_transport_display.c:53 `.widget_6 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x066c, .flags = 0x0003, .ref_tag = 0x20, .handler = HAND` -- id 0x66C mask 3, SE_Transport_SwitchNames, cell 34*256+159 = 221*40+23 (offset 100)",
+   "audio/sound_editor_screens/se_transport_display.c:54 `.widget_7 = { .opcode = 0x02, .subtype = 0x0f, .id = 0x066c, .flags = 0x020c, .ref_tag = 0x20, .handler = HAND` -- id 0x66C flags 0x020C, cell 221*40+27",
+   "audio/sound_editor_ui.s:14818 `.ascii\t\"OFF\", \" ON\", \"---\", \"INV\"` -- SeScreenData_0x3E80",
+   "audio/sound_editor_routines.s:705 `SeCtr2TitleFunc:` -- SeCtr2 = screen 0x3B, SeCtr3 = 0x3C (draw bodies use 59/60)"
+  ]
+ },
+ {
+  "old": "SeMenu_EqEdit_DrawTable_Data_2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeCtr2_CursorBox",
+  "header": "CONTROLLER page 0x3B: bound op-03 cursor box record, RAM 0x660 & 7 indexes SE_Transport_CursorCoords; entry 0 of the page's record table. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/sound_editor_ui.s:14806 `.long\tSeMenu_EqEdit_DrawTable_Data_2` -- SeScreenData_0x3E60[0]; SeMenu_EqEdit_Dispatch parameter 0 clears then draws entry 0",
+   "audio/sound_editor_ui.s:10605 `ld xix, SeMenu_EqEdit_DrawTable_Data_2` -- end of the part 1/2 switch pair",
+   "audio/sound_editor_screens/se_transport_display.c:55 `.setup_0 = { .type = SD_BLOCK_SETUP, .length = 0x0b, .id = 0x0660, .flags = 0x0007, .tag = 0x05, .handler = HA` -- op 03, id 0x660 mask 7 (offset 130)",
+   "audio/sound_editor_routines.s:705 `SeCtr2TitleFunc:` -- SeCtr2 = screen 0x3B, SeCtr3 = 0x3C (draw bodies use 59/60)"
+  ]
+ },
+ {
+  "old": "Sprintf_FormatFloat_Entry",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Sprintf_ConvFloat",
+  "header": "sprintf's floating-point conversion (%e %f %g %E %G): copies the argument (10 bytes with the L flag, flags bit 7, else 8), formats it with Sprintf_FormatFloat and adds the length to the output count. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/sprintf_core.s:194 `cp iz, 0x47` -- Sprintf_DispatchType: 'G' jumps here",
+   "audio/sprintf_core.s:196 `cp wa, 0x45` -- 'E' too",
+   "ui_widgets/widget_dispatch.s:9474 `.short\tSprintf_FormatFloat_Entry - Sprintf_Format_Percent` -- Sprintf_TypeSwitch entries 2-4 = 'e','f','g' (base 'c')",
+   "audio/sprintf_core.s:1058 `bit 7, wa` -- L flag (set by Sprintf_CheckLengthLL)",
+   "audio/sprintf_core.s:1066 `call Sprintf_CopyBytes10` -- long double argument",
+   "audio/sprintf_core.s:1089 `calr Sprintf_FormatFloat` -- the formatter"
+  ],
+  "spelling": "the argument sizes are spelled `lda xbc, (P2CR:8)` / `lda xbc, (P2:8)`: they load the constants 10 and 8 (SFR equates P2CR = 0x0A, P2 = 0x08 used as numbers)"
+ },
+ {
+  "old": "PanelTlv_ResolvePartCompanions_Entry",
+  "verdict": "refuse",
+  "why_refused": "A one-instruction tail call (`jr PanelTlv_ResolvePartCompanions`), i.e. a separate C function whose whole body calls the worker. Its 7 callers use it exactly as the 4 direct callers of the worker use the worker (all with `call`, so its comment 'for callers outside its calr reach' is wrong); nothing distinguishes a meaning for the wrapper, and any name would be an alias of PanelTlv_ResolvePartCompanions.",
+  "new": null,
+  "header": null,
+  "basis": null,
+  "evidence": [
+   "audio/tonegen_fileio_handlers.s:116 `jr PanelTlv_ResolvePartCompanions` -- the whole body",
+   "audio/audio_control_engine.s:4108 `call PanelTlv_ResolvePartCompanions_Entry` -- a caller (Audio_ReinitToneGen)",
+   "audio/audio_control_engine.s:4290 `call\tPanelTlv_ResolvePartCompanions` -- a direct caller of the worker in the same file"
+  ]
+ },
+ {
+  "old": "SeqBuf_NoteEvent_WriteByte_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqBuf_NoteEvent_WriteByte",
+  "header": "Writes the byte argument into the note-event ring buffer (descriptor 0x202CB, 256 bytes, Seq_RingBuf_WriteByte_Small); the same buffer SeqBuf_NoteEvent_ReadByte reads. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "boot/system_handlers.s:5392 `call SeqBuf_NoteEvent_WriteByte_Data` -- SeqDMA_WriteMidi_NoteOn (sub-CPU DMA channel 2): writes note and velocity of a 0x90 message",
+   "boot/system_handlers.s:4656 `lda\txde, (0x202cb:24)` -- descriptor",
+   "boot/system_handlers.s:4657 `calr\tSeq_RingBuf_WriteByte_Small` -- 256-byte write primitive",
+   "boot/system_handlers.s:4642 `SeqBuf_NoteEvent_ReadByte:` -- the reader of 0x202CB, called in pairs by MidiEvent_ParseNoteSequence"
+  ]
+ },
+ {
+  "old": "SeqBuf_NoteEvent_WriteByte_Block",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqBuf_DmaChan0_WriteByte",
+  "header": "Writes the byte argument into the ring buffer at descriptor 0x203D5 (256 bytes), the one inter-CPU DMA channel 0 fills (header bits 7:5 = 0). Not the note-event buffer 0x202CB; the 0x203D5 helpers are named SeqBuf_SoundEdit_* (Flush, SaveWritePtr, ...) although SeqDMA_MultiWrite_SoundEdit writes 0x204DF, so the channel number is the only settled name. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "boot/system_handlers.s:5276 `call SeqBuf_NoteEvent_WriteByte_Block` -- SeqDMA_MultiWrite_NoteEvent: one call per received byte",
+   "boot/boot_data_tables.s:45 `.long SeqDMA_MultiWrite_NoteEvent\t; 0: -> NoteEvent buffer (block writes)` -- SeqRingBuf_WriteDispatch_Table[0]; index = header bits 7:5",
+   "boot/system_handlers.s:4741 `lda\txde, (0x203d5:24)` -- descriptor",
+   "boot/system_handlers.s:4773 `SeqBuf_SoundEdit_Flush:` -- the 0x203D5 init helper's (conflicting) name",
+   "boot/system_handlers.s:6028 `srl c, 5` -- INTTC0 handler: channel = header >> 5, then calls the table entry with XBC = 0x5E8"
+  ]
+ },
+ {
+  "old": "Seq_RingBuf_WriteByte_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Seq_RingBuf_ReadAheadToCheckpoint",
+  "header": "2048-byte ring buffer primitive (XDE = descriptor): returns in L the byte at the read-ahead pointer (-10) and advances it (wrap 0x7FF), or HL = 0xFFFF when it has reached the checkpoint (-6); frees no space. It reads; it does not write. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "boot/system_handlers.s:3562 `call\tSeq_RingBuf_WriteByte_Data` -- TempoRingBuf_InlineBytecode2 (descriptor 0x1E753)",
+   "boot/system_handlers.s:5213 `ld\tix, (xde-10)` -- read-ahead pointer",
+   "boot/system_handlers.s:5214 `cp\tix, (xde-6)` -- stops at the checkpoint",
+   "boot/system_handlers.s:5147 `Seq_RingBuf_ReadData:` -- the 1024-byte twin (same -10/-6 pair)",
+   "boot/system_handlers.s:4633 `SeqBuf_VoiceMap_AdvanceCheckpoint:` -- -6 = copy of the write pointer -4 (checkpoint)"
+  ],
+  "spelling": "`.byte 0xdc, 0x38, 0xff, 0x07 ; minc1 0x07ff,IX` is the instruction `minc1_16 ix, 0x7ff` (llvm-mc encodes it as dc 38 ff 07), as in its siblings"
+ },
+ {
+  "old": "SqTrSel_CaseG_Thunk1",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqTrSel_CaseG_OnTitleDpMdlySmf",
+  "header": "Case CURRENT_TITLE = 0x73 (TT_DPMDLYSMF) of SqTrSel_CaseG: calls PlayMode_SendCommand6C with XDE/XHL/XIX/XIZ preserved. Basis: callers + body (switch value from the title registration).",
+  "basis": "callers + body",
+  "evidence": [
+   "ui/sepaout_config.s:240 `.short\tSqTrSel_CaseG_Thunk1 - SqTrSel_CaseG_JumpTable` -- case table entry 4",
+   "demo/demo_seq_bridge.s:649 `sub wa, 0x6f` -- SqTrSel_CaseG: index = CURRENT_TITLE - 0x6F, 0..7",
+   "sequencer/sequencer_ui.s:75 `RegTitle 0x7, InitializeYoko_Str_TT_DPMDLYSMF, 0x73, NAKA_MAINFUNC_DpMdlySmfTtlFunc, 0x730000` -- title 0x73",
+   "demo/demo_seq_bridge.s:667 `SqTrSel_CaseG_Thunk1:` -- body: push xde/xhl/xix/xiz, call PlayMode_SendCommand6C, pop, ret",
+   "demo/demo_seq_bridge.s:663 `SqTrSel_CaseG_OnTitleDpdoc:` -- sibling cases named by title (0x70, 0x71)"
+  ]
+ },
+ {
+  "old": "SqTrSel_CaseG_Thunk3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqTrSel_CaseG_OnTitleDpMdlyDoc",
+  "header": "Case CURRENT_TITLE = 0x74 (TT_DPMDLYDOC) of SqTrSel_CaseG: calls SongMode_StartPlayback with XDE/XHL/XIX/XIZ preserved. Basis: callers + body (switch value from the title registration).",
+  "basis": "callers + body",
+  "evidence": [
+   "ui/sepaout_config.s:241 `.short\tSqTrSel_CaseG_Thunk3 - SqTrSel_CaseG_JumpTable` -- case table entry 5",
+   "demo/demo_seq_bridge.s:649 `sub wa, 0x6f` -- SqTrSel_CaseG: index = CURRENT_TITLE - 0x6F, 0..7",
+   "sequencer/sequencer_ui.s:76 `RegTitle 0x7, InitializeYoko_Str_TT_DPMDLYDOC, 0x74, NAKA_MAINFUNC_DpMdlyDocTtlFunc, 0x740001` -- title 0x74",
+   "demo/demo_seq_bridge.s:689 `SqTrSel_CaseG_Thunk3:` -- body: push xde/xhl/xix/xiz, call SongMode_StartPlayback, pop, ret",
+   "demo/demo_seq_bridge.s:663 `SqTrSel_CaseG_OnTitleDpdoc:` -- sibling cases named by title (0x70, 0x71)"
+  ]
+ },
+ {
+  "old": "SqTrSel_CaseG_Thunk4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqTrSel_CaseG_OnTitleDpMdlyPd",
+  "header": "Case CURRENT_TITLE = 0x75 (TT_DPMDLYPD) of SqTrSel_CaseG: calls PartFormat_StartPlayback with XDE/XHL/XIX/XIZ preserved. Basis: callers + body (switch value from the title registration).",
+  "basis": "callers + body",
+  "evidence": [
+   "ui/sepaout_config.s:242 `.short\tSqTrSel_CaseG_Thunk4 - SqTrSel_CaseG_JumpTable` -- case table entry 6",
+   "demo/demo_seq_bridge.s:649 `sub wa, 0x6f` -- SqTrSel_CaseG: index = CURRENT_TITLE - 0x6F, 0..7",
+   "sequencer/sequencer_ui.s:77 `RegTitle 0x7, InitializeYoko_Str_TT_DPMDLYPD, 0x75, NAKA_MAINFUNC_DpMdlyPdTtlFunc, 0x750000` -- title 0x75",
+   "demo/demo_seq_bridge.s:700 `SqTrSel_CaseG_Thunk4:` -- body: push xde/xhl/xix/xiz, call PartFormat_StartPlayback, pop, ret",
+   "demo/demo_seq_bridge.s:663 `SqTrSel_CaseG_OnTitleDpdoc:` -- sibling cases named by title (0x70, 0x71)"
+  ]
+ },
+ {
+  "old": "SqTrSel_CaseG_Thunk2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqTrSel_CaseG_OnTitleDpMdlySmfLyr",
+  "header": "Case CURRENT_TITLE = 0x76 (TT_DPMDLYSMFLYR) of SqTrSel_CaseG: calls PlayMode_SendCommand6C with XDE/XHL/XIX/XIZ preserved. Basis: callers + body (switch value from the title registration).",
+  "basis": "callers + body",
+  "evidence": [
+   "ui/sepaout_config.s:243 `.short\tSqTrSel_CaseG_Thunk2 - SqTrSel_CaseG_JumpTable` -- case table entry 7",
+   "demo/demo_seq_bridge.s:649 `sub wa, 0x6f` -- SqTrSel_CaseG: index = CURRENT_TITLE - 0x6F, 0..7",
+   "sequencer/sequencer_ui.s:78 `RegTitle 0x7, InitializeYoko_Str_TT_DPMDLYSMFLYR, 0x76, NAKA_MAINFUNC_DpMdlySmfLyrTtlFunc, 0x760000` -- title 0x76",
+   "demo/demo_seq_bridge.s:678 `SqTrSel_CaseG_Thunk2:` -- body: push xde/xhl/xix/xiz, call PlayMode_SendCommand6C, pop, ret",
+   "demo/demo_seq_bridge.s:663 `SqTrSel_CaseG_OnTitleDpdoc:` -- sibling cases named by title (0x70, 0x71)"
+  ]
+ },
+ {
+  "old": "FDemoText_ByteData_VoiceProbeC_Code",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FDemoText_ByteData_VoiceProbeC_RequestPartialResendAll",
+  "header": "Cases 1 and 2 of FDemoText_ByteData_VoiceProbeC (SWBTWR codes 0x44-0x46, changed payload byte +1/+2): sets bit 6 of RAM 0x247EC, which makes FDemoText_ProcessOutputChannels request a partial resend of every active part. Also the switch's offset base. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "ui_widgets/technichord_string_data.s:4294 `.short\tFDemoText_ByteData_VoiceProbeC_Code - FDemoText_ByteData_VoiceProbeC_Code` -- case-table entries 0 and 1 (value - 1)",
+   "demo/fdemotext_routines.s:68 `dec\t1, wa` -- switch on SWBTWR_PAYLOAD_1 - 1",
+   "demo/fdemotext_routines.s:79 `set\t6, (0x247ec:24)` -- the body",
+   "demo/fdemotext_routines.s:222 `bit 6, c` -- FDemoText_ProcessOutputChannels: bit 6 -> OR each active part's FDemoText_PartialResendBit",
+   "demo/fdemotext_routines.s:83 `FDemoText_ByteData_VoiceProbeC_FootagesChanged:\t; cases 3, 4, 5, 6` -- sibling cases 3-6"
+  ]
+ },
+ {
+  "old": "MainSysCtrl_Entry6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MainSysCtrl_OnInitCurrentPanel",
+  "header": "Case 1 of MainSysControl's EVT_SYS_INI switch = item 1 \"CURRENT PANEL\" of the INITIAL SETTING list (widget 0x410002): calls MainSysCtrl_Entry5_VoiceInit_Helper, which validates and re-resolves the live panel (PanelTlv_ValidateLivePanel, PanelTlv_ResolvePartCompanions, ...). Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "extensions/extension_data.s:1138 `.short\tMainSysCtrl_Entry6 - MainSysCtrl_DispatchTable` -- MainSysControl_CaseTable entry 1",
+   "display/graphics_text_vga.s:5181 `cp xbc, EVT_SYS_INI` -- MainSysControl: switch on XDE (0..8)",
+   "ui/ui_mode_handlers.s:2467 `ld xwa, 0x410002` -- SystemInitOkFunc: XDE = the selected item of 0x410002, then MainFuncCall(MainSysControl, EVT_SYS_INI)",
+   "original_ROMs/kn5000_v10_program.rom 0xED3F72 (viewable 0x410002's list text) `PERFORMANCE | CURRENT PANEL | PART SETTING | MIDI SETTING | PANEL MEMORY | COMPOSER | SEQUENCER | MSP USER | SOUND MEMORY` -- item order",
+   "display/graphics_text_vga.s:5230 `MainSysCtrl_Entry6:` -- body: call MainSysCtrl_Entry5_VoiceInit_Helper",
+   "audio/audio_control_engine.s:4287 `MainSysCtrl_Entry5_VoiceInit_Helper:` -- the init routine"
+  ]
+ },
+ {
+  "old": "MainSysCtrl_Entry7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MainSysCtrl_OnInitPartSetting",
+  "header": "Case 2 of MainSysControl's EVT_SYS_INI switch = item 2 \"PART SETTING\" of the INITIAL SETTING list (widget 0x410002): calls MainSysCtrl_Entry5_VoiceInit_Helper2, which copies part records of SndParamRam_DefaultImage into the live panel 0xF9A0. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "extensions/extension_data.s:1139 `.short\tMainSysCtrl_Entry7 - MainSysCtrl_DispatchTable` -- MainSysControl_CaseTable entry 2",
+   "display/graphics_text_vga.s:5181 `cp xbc, EVT_SYS_INI` -- MainSysControl: switch on XDE (0..8)",
+   "ui/ui_mode_handlers.s:2467 `ld xwa, 0x410002` -- SystemInitOkFunc: XDE = the selected item of 0x410002, then MainFuncCall(MainSysControl, EVT_SYS_INI)",
+   "original_ROMs/kn5000_v10_program.rom 0xED3F72 (viewable 0x410002's list text) `PERFORMANCE | CURRENT PANEL | PART SETTING | MIDI SETTING | PANEL MEMORY | COMPOSER | SEQUENCER | MSP USER | SOUND MEMORY` -- item order",
+   "display/graphics_text_vga.s:5233 `MainSysCtrl_Entry7:` -- body: call MainSysCtrl_Entry5_VoiceInit_Helper2",
+   "audio/audio_control_engine.s:4295 `MainSysCtrl_Entry5_VoiceInit_Helper2:` -- the init routine"
+  ]
+ },
+ {
+  "old": "MainSysCtrl_Entry8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MainSysCtrl_OnInitMidiSetting",
+  "header": "Case 3 of MainSysControl's EVT_SYS_INI switch = item 3 \"MIDI SETTING\" of the INITIAL SETTING list (widget 0x410002): calls MainSysCtrl_Entry5_VoiceInit_Helper3, which restores bits 0-2 of byte +14 of each part record from SndParamRam_DefaultImage. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "extensions/extension_data.s:1140 `.short\tMainSysCtrl_Entry8 - MainSysCtrl_DispatchTable` -- MainSysControl_CaseTable entry 3",
+   "display/graphics_text_vga.s:5181 `cp xbc, EVT_SYS_INI` -- MainSysControl: switch on XDE (0..8)",
+   "ui/ui_mode_handlers.s:2467 `ld xwa, 0x410002` -- SystemInitOkFunc: XDE = the selected item of 0x410002, then MainFuncCall(MainSysControl, EVT_SYS_INI)",
+   "original_ROMs/kn5000_v10_program.rom 0xED3F72 (viewable 0x410002's list text) `PERFORMANCE | CURRENT PANEL | PART SETTING | MIDI SETTING | PANEL MEMORY | COMPOSER | SEQUENCER | MSP USER | SOUND MEMORY` -- item order",
+   "display/graphics_text_vga.s:5236 `MainSysCtrl_Entry8:` -- body: call MainSysCtrl_Entry5_VoiceInit_Helper3",
+   "audio/audio_control_engine.s:4336 `MainSysCtrl_Entry5_VoiceInit_Helper3:` -- the init routine"
+  ]
+ },
+ {
+  "old": "PerfMode_ParamHandler_3_Entry",
+  "verdict": "refuse",
+  "why_refused": "Handler of entries 4 and 21 of PerfMode_EventTable_3 (TT_SQSTEP event dispatch through DisplayMode_Dispatch, BC = event index 0..31): splits on W bit 7 into two generic helpers that act on a 0xD0-0xD3 record at the song cursor. The meaning of event index 4/21 and of the two helpers is not established, so the handler cannot be named from its callers.",
+  "new": null,
+  "header": null,
+  "basis": null,
+  "evidence": [
+   "display/scoop_display.s:1430 `.long\tPerfMode_ParamHandler_3_Entry` -- PerfMode_EventTable_3 entry 4 (and 21)",
+   "display/scoop_display.s:1412 `PerfMode_ParamHandler_3_Entry:` -- bit 7, w -> Helper / Helper2",
+   "display/scoop_display.s:935 `ld\t(9920:16), bc` -- DisplayMode_Dispatch stores the event index; its source is not traced"
+  ]
+ },
+ {
+  "old": "PerfMode_ParamHandler_Data",
+  "verdict": "refuse",
+  "why_refused": "Code, not data: handler of entries 3 and 20 of PerfMode_ParamHandler_7_DispatchTbl (and of PerfMode_DispatchTable_B), splitting on W bit 7 into PerfMode_ParamHandler_7_Helper / _Helper2. As for PerfMode_ParamHandler_3_Entry, the event index meaning is not established.",
+  "new": null,
+  "header": null,
+  "basis": null,
+  "evidence": [
+   "display/scoop_display.s:1587 `.long\tPerfMode_ParamHandler_Data` -- table entry 3",
+   "display/scoop_display.s:1569 `PerfMode_ParamHandler_Data:` -- bit 7, w -> PerfMode_ParamHandler_7_Helper / _Helper2"
+  ]
+ },
+ {
+  "old": "DisplayMode_Handler_3_Sub",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqStep_SeekForwardByDistance",
+  "header": "Second entry of SqStep_SeekForwardByStep that skips its step-length computation: steps the cursor forward (Timer_ParamLoadAndCompare) until the unit counter 0x0D5A has advanced by (0x0DCD), stopping on GLOBAL_ERROR_CODE 15, then until the clock 0x0D57 reaches (0x0DCE); stores the clock. Callers preset the distance. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:4375 `call\tDisplayMode_Handler_3_Sub` -- UIDisp_StepMeasureForward: distance = beats left in the measure, clock 0",
+   "display/scoop_display.s:6453 `call\tDisplayMode_Handler_3_Sub` -- SqStep_RecordSectionClearHalfBeatLater: distance = clock + 48 split into units/clock",
+   "display/scoop_display.s:4816 `call\tSqStep_ComputeStepTargetClock` -- SqStep_SeekForwardByStep falls into it after computing the distance",
+   "display/scoop_display.s:4820 `add hl, (3418:16)` -- target units = (0x0DCD) + (0x0D5A)",
+   "display/scoop_display.s:4831 `ld\tl, (3534:16)` -- target clock (0x0DCE)"
+  ]
+ },
+ {
+  "old": "SerialPort_ModeHandler_0_Sub",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqStep_SetupCursorTrack",
+  "header": "Second half of SqStep_InitOnEnter: (re)builds the step-record state for the cursor track: display mode from the selected track, per-track bit masks of track (0x0EEE), buffer resets, cursor and screen set-up. Re-run after a track change. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:7170 `jrl\tnz, SerialPort_ModeHandler_0_Sub` -- SqStep_InitOnEnter enters it on title entry",
+   "display/scoop_display.s:2810 `call\tSerialPort_ModeHandler_0_Sub` -- PerfMode_Handler_EvtB: after (0x2877) := cursor track (3822 = 0x0EEE)",
+   "display/scoop_display.s:2888 `call\tSerialPort_ModeHandler_0_Sub` -- DisplayMode_Dispatch_Mode0_Helper, same sequence",
+   "display/scoop_display.s:7182 `call\tSqStep_SetDisplayModeFromTrack` -- makes the selected track the cursor track",
+   "display/scoop_display.s:7208 `ld\tc, (3822:16)` -- cursor track - 1 = bit index into the track masks"
+  ]
+ },
+ {
+  "old": "SysEx_BytecodeDispatcher_Tbl2_Sub",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqStep_AdvanceBySelectedNoteLength",
+  "header": "TT_SQSTEP: after stepping over the cursor events for which VoiceCtrl_BytecodeHandler returns B = 22/23, advances the step clock 0x0D57 by the note length of the lowest set bit of 0x0DBF (SystemInit_StepHandler_0_Tbl: whole, dotted half, half, dotted quarter, quarter, eighth at 96 clocks per beat), writing a wrap marker at each 96-clock wrap. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:8105 `call\tSysEx_BytecodeDispatcher_Tbl2_Sub` -- SysEx_BytecodeDispatcher (panel action) after writing the note records (Helper4)",
+   "display/scoop_display.s:9483 `ld\txiy, 3519` -- 0x0DBF",
+   "display/scoop_display.s:9490 `ld\txde, SystemInit_StepHandler_0_Tbl` -- length table: {clocks, count} at +2 (0x60 x 4, x 3, x 2; 0x90 x 1; 0x60 x 1; 0x30 x 1)",
+   "display/scoop_display.s:9501 `cp\ta, 96` -- wrap at 96 clocks",
+   "display/scoop_display.s:9505 `call\tSqStep_WriteClockWrapMarker` -- marker on wrap"
+  ]
+ },
+ {
+  "old": "SysEx_BytecodeDispatcher_Tbl2_Sub3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqStep_WriteWrapMarker",
+  "header": "Writes one 0x81 clock-wrap marker record ({0x81} at 0x0E48, W = 1) at the song-data cursor through SystemInit_StepHandler_0_Helper2, all registers preserved; the uncounted core of SqStep_WriteClockWrapMarker, which falls into it after word 0x0D58 += 1. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:9546 `call\tSysEx_BytecodeDispatcher_Tbl2_Sub3` -- SqStep_WriteWrapMarkerAtCursor (cursor saved/restored around it)",
+   "display/scoop_display.s:3757 `call\tSysEx_BytecodeDispatcher_Tbl2_Sub3` -- ToneParam_HandlerTable loop: one per missing unit",
+   "display/scoop_display.s:9563 `SqStep_WriteClockWrapMarker:` -- counting variant falls into it",
+   "display/scoop_display.s:9575 `ld\t(xiy), 129` -- record {0x81}",
+   "display/scoop_display.s:9576 `call\tSystemInit_StepHandler_0_Helper2` -- the record writer"
+  ]
+ },
+ {
+  "old": "SysEx_BytecodeDispatcher_Tbl2_Sub4",
+  "verdict": "refuse",
+  "why_refused": "Reached from SqStep_RestoreOnLeave (display mode 0) and fallen into by an unlabelled loop over tracks of type 0x0D; it stores the cursor track's data offset (0xF250[3t+1]) into 0x0C9E[t], sets 0x0CBE[t] = 5 and rewrites 0xB0 / 0x30 / 0x60 records at the cursor. What that rewrite and track type 0x0D mean is not established (SqStep_RestoreTrackType's header leaves types 0x0D/0x0E open).",
+  "new": null,
+  "header": null,
+  "basis": null,
+  "evidence": [
+   "display/scoop_display.s:7967 `call\tSysEx_BytecodeDispatcher_Tbl2_Sub4` -- SqStep_RestoreOnLeave",
+   "display/scoop_display.s:9703 `SysEx_BytecodeDispatcher_Tbl2_Sub4:` -- body start",
+   "display/scoop_display.s:9700 `cp\t(xix+iz), 0x0d` -- the preceding unlabelled track loop selects type-0x0D tracks"
+  ]
+ },
+ {
+  "old": "DisplayStr_BytecodeBlock_B_Sub",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DisplayStr_WriteStoredControlLine",
+  "header": "TT_SQSTEP pop-up line for a control event stored at the song cursor: blanks the text line 0x0ECA, writes \"CONTROL \" at 0x0ECF, the control name/value (PerfMode_EventTable_0_Target1_Helper10, kind 0x3720) and marks regions 5 and 3. Second entry of DisplayStr_BytecodeBlock_B (which first marks the status bar). Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:10960 `call\tDisplayStr_BytecodeBlock_B_Sub` -- VoiceSlot_StatusRet: event at the cursor, pop-up (0x0DEF) already 1",
+   "display/scoop_display.s:11623 `ld\t(0x3720:16), 5` -- VoiceSlot_StatusRet: 0xD0 -> 5 (AFT.), 0xD1 -> 2, 0xD2 -> 1, 0xD3 -> 3, then this",
+   "display/scoop_display.s:14467 `ld\txiy, Str_Control` -- \"CONTROL\"",
+   "display/scoop_display.s:14474 `call\tPerfMode_EventTable_0_Target1_Helper10` -- control name/value"
+  ]
+ },
+ {
+  "old": "DisplayStr_BytecodeBlock_B_Sub2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DisplayStr_WriteIncomingControlLine",
+  "header": "TT_SQSTEP pop-up line for a control event being recorded: blanks the text line, writes \"CONTROL\" at 0x0ECF, the control name/value (kind 0x3720) and marks regions 5 and 3; second entry of DisplayStr_RedrawStatusAndControlLine, called directly when the pop-up is already 2. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:6818 `call\tDisplayStr_BytecodeBlock_B_Sub2` -- TempoRingBuf_OnModulationEvent (events from TempoRingBuf_DispatchEvents)",
+   "display/scoop_display.s:6863 `call\tDisplayStr_BytecodeBlock_B_Sub2` -- TempoRingBuf_OnPitchBendEvent",
+   "display/scoop_display.s:14483 `DisplayStr_RedrawStatusAndControlLine:` -- the full entry (status bar first)"
+  ]
+ },
+ {
+  "old": "DisplayStr_BytecodeBlock_C_Tbl2_Sub",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DisplayStr_ShowBlankLine",
+  "header": "Blanks the TT_SQSTEP pop-up text line 0x0ECA (30 bytes, then 25 spaces) and marks regions 5, 3 and 4; second entry of DisplayMode_RedrawWithBlankLine without the status-bar redraw. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:5315 `call\tDisplayStr_BytecodeBlock_C_Tbl2_Sub` -- DMA_ChannelHandler_2 (display mode 2) when the pop-up (0x0DEF) is already 8",
+   "display/scoop_display.s:14701 `DisplayMode_RedrawWithBlankLine:` -- full entry: Display_UpdateRegion0 first",
+   "display/scoop_display.s:14705 `ld\txiy, DisplayStr_BytecodeBlock_C_Text` -- 25 spaces"
+  ]
+ },
+ {
+  "old": "Display_BytecodeBlock_F_Sub",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DisplayStr_WriteNoteLine",
+  "header": "TT_SQSTEP pop-up line for a note event: blanks the text line, writes \" V\" at 0x0ED3, the note name and velocity (Disp_ShowNoteNameAndVelocity) and the note-value fields (Disp_ShowNoteValueFields), marks regions 5, 3, 4; second entry of Display_BytecodeBlock_F without the status bar. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:5305 `call\tDisplay_BytecodeBlock_F_Sub` -- DMA_ChannelHandler_1 (display mode 1), pop-up 0",
+   "display/scoop_display.s:10992 `call\tDisplay_BytecodeBlock_F_Sub` -- VoiceSlot_StatusRet, 0x90 event (velocity to 0x3717)",
+   "display/scoop_display.s:14861 `ldw (xix+9), 22048` -- 0x5620 = ' V'",
+   "display/scoop_display.s:4941 `call\tDisp_ShowNoteNameAndVelocity` -- note name / velocity"
+  ]
+ },
+ {
+  "old": "MstStyleAlp_AppendPadChar_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MstStyleAlp_AppendPadChar_Str_Blank1",
+  "header": "String \" \" read by its owner: Strncat(buf, this, 1): one pad space. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/ui_mode_handlers.s:3539 `pushw MstStyleAlp_AppendPadChar_Data@hi16` -- Strncat(buf, this, 1): one pad space",
+   "extensions/extension_data.s:521 `MstStyleAlp_AppendPadChar_Data:` -- bytes \" \""
+  ]
+ },
+ {
+  "old": "MstStyle1Grid_CellSelect_Data_2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MstStyle1Grid_PadLeft_Loop_Str_Blank1",
+  "header": "String \" \" read by its owner: MstStyle1Grid_PadLeft_Loop: Strncat(buf, this, 1). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/ui_mode_handlers.s:4051 `pushw MstStyle1Grid_CellSelect_Data_2@hi16` -- MstStyle1Grid_PadLeft_Loop: Strncat(buf, this, 1)",
+   "extensions/extension_data.s:541 `MstStyle1Grid_CellSelect_Data_2:` -- bytes \" \""
+  ]
+ },
+ {
+  "old": "MstStyle1SubGrid_CellSelect_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MstStyle1SubGrid_PadLeft_Loop_Str_Blank1",
+  "header": "String \" \" read by its owner: MstStyle1SubGrid_PadLeft_Loop: Strncat(buf, this, 1). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/ui_mode_handlers.s:4756 `pushw MstStyle1SubGrid_CellSelect_Data@hi16` -- MstStyle1SubGrid_PadLeft_Loop: Strncat(buf, this, 1)",
+   "extensions/extension_data.s:562 `MstStyle1SubGrid_CellSelect_Data:` -- bytes \" \""
+  ]
+ },
+ {
+  "old": "MstGrid2_PadLeft_LoopA_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MstGrid2_PadLeft_LoopA_Str_Blank1",
+  "header": "String \" \" read by its owner: MstGrid2_PadLeft_LoopA: Strncat(buf, this, 1). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/ui_mode_handlers.s:6227 `pushw MstGrid2_PadLeft_LoopA_Data@hi16` -- MstGrid2_PadLeft_LoopA: Strncat(buf, this, 1)",
+   "extensions/extension_data.s:593 `MstGrid2_PadLeft_LoopA_Data:` -- bytes \" \""
+  ]
+ },
+ {
+  "old": "TchSensGridCheck_OnLswData_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "TchSensGridCheck_OnLswData_Str_Fmt3d_3",
+  "header": "String \"%3d\" read by its owner: Sprintf_Locked format. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/ui_mode_handlers.s:6937 `pushw\tTchSensGridCheck_OnLswData_Data@hi16` -- Sprintf_Locked format",
+   "extensions/extension_data.s:624 `TchSensGridCheck_OnLswData_Data:` -- bytes \"%3d\""
+  ]
+ },
+ {
+  "old": "PmExpFilter_DrawCellBank2_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PmExpFilter_DrawCellBank2_Str_PAGE_3_3",
+  "header": "String \"PAGE 3/3\" read by its owner: Strcpy source; sibling PmExpFilter_DrawCellBank1_Str_PAGE_2_3. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/ui_mode_handlers.s:8626 `pushw PmExpFilter_DrawCellBank2_Data@hi16` -- Strcpy source; sibling PmExpFilter_DrawCellBank1_Str_PAGE_2_3",
+   "extensions/extension_data.s:803 `PmExpFilter_DrawCellBank2_Data:` -- bytes \"PAGE 3/3\""
+  ]
+ },
+ {
+  "old": "IvPageOverWr_GetName_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "IvPageOverWr_GetName_Str_PAGE",
+  "header": "String \"PAGE\" read by its owner: Strcpy source. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/ui_mode_handlers.s:10308 `pushw IvPageOverWr_GetName_Data@hi16` -- Strcpy source",
+   "extensions/extension_data.s:910 `IvPageOverWr_GetName_Data:` -- bytes \"PAGE\""
+  ]
+ },
+ {
+  "old": "GmOnOffFunc_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GmOnOffFunc_Str_Empty",
+  "header": "String \"\" read by its owner: Sprintf_Locked format on EVT_GET_LSW_STRING: an empty string. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/ui_mode_handlers.s:11824 `pushw GmOnOffFunc_Data@hi16` -- Sprintf_Locked format on EVT_GET_LSW_STRING: an empty string",
+   "extensions/extension_data.s:944 `GmOnOffFunc_Data:\t.byte\t0x00, 0xff` -- bytes \"\""
+  ],
+  "spelling": "spelled `.byte 0x00, 0xff`; `aligned_string \"\"` would say it"
+ },
+ {
+  "old": "AcFreeSplit_LookupNoteLabel_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AcFreeSplit_OctaveDigitTable",
+  "header": "11 pointers to one-digit octave strings indexed by note / 12: \"0\", \"0\", \"0\", \"1\"..\"8\" (octave = note / 12 - 2, floored at 0), for the SPLIT<%s%s> label. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "display/graphics_text_vga.s:5385 `lda xbc, (AcFreeSplit_LookupNoteLabel_Data:24)` -- AcFreeSplit_LookupNoteLabel: divs hl, 0xc / sla hl, 2 / table + 4 * (note/12)",
+   "display/graphics_text_vga.s:5431 `lda xbc, (AcFreeSplit_LookupNoteLabel_Data:24)` -- AcFreeSplit_LookupSecondNote, same",
+   "extensions/extension_data.s:1207 `.long OctaveDigitStr_0B` -- entry 0",
+   "extensions/extension_data.s:1219 `OctaveDigitStr_8:\t.asciz \"8\"` -- the digit cells",
+   "extensions/extension_data.s:1234 `AcFreeSplit_LookupNoteLabel_Str_SPLIT_Fmts_Fmts:\taligned_string \"SPLIT<%s%s>\"` -- the label format (note name + octave)"
+  ]
+ },
+ {
+  "old": "AcTranspose_FormatLabel_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AcTranspose_KeyNameTable",
+  "header": "12 pointers to key names for the TRANSPOSE label, indexed by the transpose value 0..11 = G, Ab, A, Bb, B, C, Db, D, Eb, E, F, F# (5 = C = no transposition, shown blank). ParamStr_Table_07 sits at its entry 1. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "display/graphics_text_vga.s:5539 `lda xde, (AcTranspose_FormatLabel_Data:24)` -- AcTranspose_FormatLabel: sla wa, 2 / table + 4 * value, printed as \"<%s>\"",
+   "display/graphics_text_vga.s:5526 `cp wa, 5:i3` -- AcTranspose_ValueChanged: value 5 (and 0x8D3C == 0) -> 4 blanks",
+   "extensions/extension_data.s:1238 `.long KeyScaleNoteStr_G` -- entry 0 = G",
+   "extensions/extension_data.s:1244 `.long KeyScaleNoteStr_C` -- entry 5 = C"
+  ]
+ },
+ {
+  "old": "MIDI_ProcessChangedChannels_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PanelLed_PendingGroup1Handlers",
+  "header": "Panel-LED update handlers of request group 1: {u16 bit, u32 handler} list (0xFFFF end) run once for the bits pending in 0x8F3A and not held in 0x8F3C, after which 0x8F3A is cleared; each handler sets or clears LED bits in the LED row image. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/audio_control_engine.s:2560 `ld xbc, MIDI_ProcessChangedChannels_Data` -- MIDI_ProcessChangedChannels: WA = (0x8F3A) & ~(0x8F3C), DispatchBitmaskHandlers, then ldw (0x8F3A), 0",
+   "extensions/extension_data.s:2620 `MIDI_ProcessChangedChannels_Data:` -- the list",
+   "audio/audio_control_engine.s:2663 `DispatchBitmaskHandlers:` -- reads {u16 mask, u32 handler} entries until mask 0xFFFF, calling handler for every mask bit set in WA",
+   "audio/audio_control_engine.s:2755 `lda\txiz, (ENCODER_STATE_BASE:16)` -- the handlers write the panel LED row image (ENCODER_STATE_BASE = 0x8F18)",
+   "audio/audio_control_engine.s:3732 `CtrlPanel_SetIndicatorLED:` -- request code A: group = A & 0xF0 (0x00/0x20/0x40) selects the word pair, bit = 1 << (A & 0x0F); sets the pending word, clears the held word"
+  ]
+ },
+ {
+  "old": "MidiChanged_ProcessGroup2_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PanelLed_PendingGroup2Handlers",
+  "header": "Panel-LED update handlers of request group 2: {u16 bit, u32 handler} list (0xFFFF end) run once for the bits pending in 0x8F3E and not held in 0x8F40, after which 0x8F3E is cleared; each handler sets or clears LED bits in the LED row image. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/audio_control_engine.s:2569 `ld xbc, MidiChanged_ProcessGroup2_Data` -- MIDI_ProcessChangedChannels: WA = (0x8F3E) & ~(0x8F40), DispatchBitmaskHandlers, then ldw (0x8F3E), 0",
+   "extensions/extension_data.s:2640 `MidiChanged_ProcessGroup2_Data:` -- the list",
+   "audio/audio_control_engine.s:2663 `DispatchBitmaskHandlers:` -- reads {u16 mask, u32 handler} entries until mask 0xFFFF, calling handler for every mask bit set in WA",
+   "audio/audio_control_engine.s:2755 `lda\txiz, (ENCODER_STATE_BASE:16)` -- the handlers write the panel LED row image (ENCODER_STATE_BASE = 0x8F18)",
+   "audio/audio_control_engine.s:3732 `CtrlPanel_SetIndicatorLED:` -- request code A: group = A & 0xF0 (0x00/0x20/0x40) selects the word pair, bit = 1 << (A & 0x0F); sets the pending word, clears the held word"
+  ]
+ },
+ {
+  "old": "MidiChanged_ProcessGroup3_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PanelLed_PendingGroup3Handlers",
+  "header": "Panel-LED update handlers of request group 3: {u16 bit, u32 handler} list (0xFFFF end) run once for the bits pending in 0x8F42 and not held in 0x8F44, after which 0x8F42 is cleared; each handler sets or clears LED bits in the LED row image. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/audio_control_engine.s:2578 `ld xbc, MidiChanged_ProcessGroup3_Data` -- MIDI_ProcessChangedChannels: WA = (0x8F42) & ~(0x8F44), DispatchBitmaskHandlers, then ldw (0x8F42), 0",
+   "extensions/extension_data.s:2664 `MidiChanged_ProcessGroup3_Data:` -- the list",
+   "audio/audio_control_engine.s:2663 `DispatchBitmaskHandlers:` -- reads {u16 mask, u32 handler} entries until mask 0xFFFF, calling handler for every mask bit set in WA",
+   "audio/audio_control_engine.s:2755 `lda\txiz, (ENCODER_STATE_BASE:16)` -- the handlers write the panel LED row image (ENCODER_STATE_BASE = 0x8F18)",
+   "audio/audio_control_engine.s:3732 `CtrlPanel_SetIndicatorLED:` -- request code A: group = A & 0xF0 (0x00/0x20/0x40) selects the word pair, bit = 1 << (A & 0x0F); sets the pending word, clears the held word"
+  ]
+ },
+ {
+  "old": "MidiChanged_ProcessGroup4_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PanelLed_PendingGroup4Handlers",
+  "header": "Panel-LED update handlers of request group 4: {u16 bit, u32 handler} list (0xFFFF end) run once for the bits pending in 0x8F46 and not held in 0x8F48, after which 0x8F46 is cleared; each handler sets or clears LED bits in the LED row image. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/audio_control_engine.s:2587 `ld xbc, MidiChanged_ProcessGroup4_Data` -- MIDI_ProcessChangedChannels: WA = (0x8F46) & ~(0x8F48), DispatchBitmaskHandlers, then ldw (0x8F46), 0",
+   "extensions/extension_data.s:2692 `MidiChanged_ProcessGroup4_Data:` -- the list",
+   "audio/audio_control_engine.s:2663 `DispatchBitmaskHandlers:` -- reads {u16 mask, u32 handler} entries until mask 0xFFFF, calling handler for every mask bit set in WA",
+   "audio/audio_control_engine.s:2755 `lda\txiz, (ENCODER_STATE_BASE:16)` -- the handlers write the panel LED row image (ENCODER_STATE_BASE = 0x8F18)",
+   "audio/audio_control_engine.s:3732 `CtrlPanel_SetIndicatorLED:` -- request code A: group = A & 0xF0 (0x00/0x20/0x40) selects the word pair, bit = 1 << (A & 0x0F); sets the pending word, clears the held word"
+  ]
+ },
+ {
+  "old": "MidiChannel_DispatchChanged_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PanelLed_HeldGroup1Handlers",
+  "header": "Panel-LED handlers of request group 1 run on every pass for the bits held in 0x8F3C (set by CtrlPanel_IndicatorDispatch, not cleared here); {u16 bit, u32 handler} list ending 0xFFFF (empty). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/audio_control_engine.s:2598 `ld xbc, MidiChannel_DispatchChanged_Data` -- MidiChannel_DispatchChanged: WA = (0x8F3C), DispatchBitmaskHandlers when non-zero",
+   "audio/audio_control_engine.s:3698 `CtrlPanel_IndicatorDispatch:` -- sets the held bit for request code A",
+   "extensions/extension_data.s:2700 `MidiChannel_DispatchChanged_Data:` -- the list",
+   "audio/audio_control_engine.s:2663 `DispatchBitmaskHandlers:` -- reads {u16 mask, u32 handler} entries until mask 0xFFFF, calling handler for every mask bit set in WA",
+   "audio/audio_control_engine.s:2755 `lda\txiz, (ENCODER_STATE_BASE:16)` -- the handlers write the panel LED row image (ENCODER_STATE_BASE = 0x8F18)"
+  ]
+ },
+ {
+  "old": "MidiDispatch_CheckGroup2_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PanelLed_HeldGroup2Handlers",
+  "header": "Panel-LED handlers of request group 2 run on every pass for the bits held in 0x8F40 (set by CtrlPanel_IndicatorDispatch, not cleared here); {u16 bit, u32 handler} list ending 0xFFFF. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/audio_control_engine.s:2605 `ld xbc, MidiDispatch_CheckGroup2_Data` -- MidiChannel_DispatchChanged: WA = (0x8F40), DispatchBitmaskHandlers when non-zero",
+   "audio/audio_control_engine.s:3698 `CtrlPanel_IndicatorDispatch:` -- sets the held bit for request code A",
+   "extensions/extension_data.s:2704 `MidiDispatch_CheckGroup2_Data:` -- the list",
+   "audio/audio_control_engine.s:2663 `DispatchBitmaskHandlers:` -- reads {u16 mask, u32 handler} entries until mask 0xFFFF, calling handler for every mask bit set in WA",
+   "audio/audio_control_engine.s:2755 `lda\txiz, (ENCODER_STATE_BASE:16)` -- the handlers write the panel LED row image (ENCODER_STATE_BASE = 0x8F18)"
+  ]
+ },
+ {
+  "old": "MidiDispatch_CheckGroup3_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PanelLed_HeldGroup3Handlers",
+  "header": "Panel-LED handlers of request group 3 run on every pass for the bits held in 0x8F44 (set by CtrlPanel_IndicatorDispatch, not cleared here); {u16 bit, u32 handler} list ending 0xFFFF. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/audio_control_engine.s:2612 `ld xbc, MidiDispatch_CheckGroup3_Data` -- MidiChannel_DispatchChanged: WA = (0x8F44), DispatchBitmaskHandlers when non-zero",
+   "audio/audio_control_engine.s:3698 `CtrlPanel_IndicatorDispatch:` -- sets the held bit for request code A",
+   "extensions/extension_data.s:2714 `MidiDispatch_CheckGroup3_Data:` -- the list",
+   "audio/audio_control_engine.s:2663 `DispatchBitmaskHandlers:` -- reads {u16 mask, u32 handler} entries until mask 0xFFFF, calling handler for every mask bit set in WA",
+   "audio/audio_control_engine.s:2755 `lda\txiz, (ENCODER_STATE_BASE:16)` -- the handlers write the panel LED row image (ENCODER_STATE_BASE = 0x8F18)"
+  ]
+ },
+ {
+  "old": "MidiDispatch_CheckGroup4_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PanelLed_HeldGroup4Handlers",
+  "header": "Panel-LED handlers of request group 4 run on every pass for the bits held in 0x8F48 (set by CtrlPanel_IndicatorDispatch, not cleared here); {u16 bit, u32 handler} list ending 0xFFFF (empty). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/audio_control_engine.s:2619 `ld xbc, MidiDispatch_CheckGroup4_Data` -- MidiChannel_DispatchChanged: WA = (0x8F48), DispatchBitmaskHandlers when non-zero",
+   "audio/audio_control_engine.s:3698 `CtrlPanel_IndicatorDispatch:` -- sets the held bit for request code A",
+   "extensions/extension_data.s:2724 `MidiDispatch_CheckGroup4_Data:` -- the list",
+   "audio/audio_control_engine.s:2663 `DispatchBitmaskHandlers:` -- reads {u16 mask, u32 handler} entries until mask 0xFFFF, calling handler for every mask bit set in WA",
+   "audio/audio_control_engine.s:2755 `lda\txiz, (ENCODER_STATE_BASE:16)` -- the handlers write the panel LED row image (ENCODER_STATE_BASE = 0x8F18)"
+  ]
+ },
+ {
+  "old": "MidiChOut_Mode6or3_Mask7_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "BeatLed_ThreeBeatMasks",
+  "header": "START/STOP BEAT LED masks for a three-beat cycle: beat counter (0x416) & 7 -> 1, 2, 4, 1, 2, 4 (BEAT 1-3), used when (0x433) is 3 or 6. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/audio_control_engine.s:3794 `ld xwa, MidiChOut_Mode6or3_Mask7_Data` -- after `and l, 0x7` with L = (1046)",
+   "audio/audio_control_engine.s:3767 `lda xiz, (ENCODER_STATE_BASE:16)` -- MidiChannel_ProcessOutputState: XDE = LED image + 14",
+   "extensions/extension_data.s:2750 `;  14: 0x0c = START/STOP BEAT 1-4` -- LED row 14 = START/STOP BEAT 1-4",
+   "audio/audio_control_engine.s:3805 `andmi8 (xde), 0xf0` -- the looked-up mask replaces the row's low nibble"
+  ]
+ },
+ {
+  "old": "MidiChOut_OtherMode_Mask3_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "BeatLed_FourBeatMasks",
+  "header": "START/STOP BEAT LED masks for a four-beat cycle: beat counter (0x416) & 3 -> 1, 2, 4, 8 (BEAT 1-4), used when (0x433) is neither 3 nor 6. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/audio_control_engine.s:3799 `ld xwa, MidiChOut_OtherMode_Mask3_Data` -- after `and l, 0x3`",
+   "audio/audio_control_engine.s:3767 `lda xiz, (ENCODER_STATE_BASE:16)` -- MidiChannel_ProcessOutputState: XDE = LED image + 14",
+   "extensions/extension_data.s:2750 `;  14: 0x0c = START/STOP BEAT 1-4` -- LED row 14 = START/STOP BEAT 1-4",
+   "audio/audio_control_engine.s:3805 `andmi8 (xde), 0xf0` -- the looked-up mask replaces the row's low nibble"
+  ]
+ },
+ {
+  "old": "CtrlPanel_LookupIndicatorEntry_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CtrlPanel_SingleBitMaskTable",
+  "header": "32 x u32 single-bit masks, entry k = 1 << k, returned in XHL by CtrlPanel_LookupIndicatorEntry. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/audio_control_engine.s:4025 `lda xbc, (CtrlPanel_LookupIndicatorEntry_Data:24)` -- CtrlPanel_LookupIndicatorEntry: sla wa, 2 / ld xhl, (xbc+wa)",
+   "extensions/extension_data.s:2796 `.long 0x00000001, 0x00000002, 0x00000004, 0x00000008` -- entries 0-3 (up to 0x80000000)"
+  ]
+ },
+ {
+  "old": "MidiSysEx_ProcessBlock_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SoundProgram_ResetAfterErrorVector",
+  "header": "Slot 2 of SoundProgram_ParamPtrTable, the pointer to Audio_ResetAfterPayloadError; called through it after a received block. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:12401 `ld\txhl, (MidiSysEx_ProcessBlock_Data:24)` -- MidiSysEx_BlockOp_ToVoiceBankInit path: load the slot and call (xhl)",
+   "extensions/extension_data.s:3290 `.long Audio_ResetAfterPayloadError` -- the slot's content",
+   "extensions/extension_data.s:3286 `SoundProgram_ParamPtrTable:` -- 4-entry table of audio (re)initialisation routines"
+  ]
+ },
+ {
+  "old": "BitmapTable_ProcessEntry_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PanelMem_FixupRecords",
+  "header": "One 6-byte panel-memory fixup record {u16 memory (0x50 = all 80), u8 TLV tag 0x43, u8 payload offset 1, u8 value 0x3C, u8 clear mask 0x7F}: Display_ProcessBitmapTable sets payload[1] of tag 0x43 to (b & 0x80) | 0x3C in each of the 80 panel memories (0x1ED400, 960 bytes each). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/audio_control_engine.s:4672 `ld xwa, BitmapTable_ProcessEntry_Data` -- index * 6",
+   "audio/audio_control_engine.s:4678 `cpw (xwa), 0x50` -- 0x50 = all memories",
+   "audio/audio_control_engine.s:4674 `lda xbc, (0x1ed400:24)` -- panel memory base",
+   "audio/audio_control_engine.s:4696 `add xix, 0x3c0` -- 960-byte stride, 0x50 iterations",
+   "audio/audio_control_engine.s:4694 `or (xbc), l` -- and ~(+5), or (+4)"
+  ]
+ },
+ {
+  "old": "BitmapTable_ProcessEntry_Data_2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PanelMem_FixupTagColumn",
+  "header": "The TLV-tag byte (+2) of the panel-memory fixup records, read as index * 6 + this and passed to PanelTlv_PayloadOfTag (tag 0x43). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/audio_control_engine.s:4660 `lda xwa, (BitmapTable_ProcessEntry_Data_2:24)` -- index * 6 + this",
+   "audio/audio_control_engine.s:4663 `calr PanelTlv_PayloadOfTag` -- A = tag",
+   "extensions/extension_data.s:3311 `BitmapTable_ProcessEntry_Data_2:` -- 0x43, 0x01, 0x3C, 0x7F"
+  ]
+ },
+ {
+  "old": "ExtData_Voice_MixedHandler_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SplitPoint_LedMaskByPreset",
+  "header": "SPLIT POINT LED masks by split preset (0xFD02) & 3: 0 -> none, 1 -> 1, 2 -> 2, 3 -> 4, stored to 0x8F58, whose bits 0-2 SndParam_MaskShiftMerge_8F58 puts into bits 4-6 of LED row 4 (0x8F1C). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/audio_control_engine.s:5688 `lda\txbc, (ExtData_Voice_MixedHandler_Data:24)` -- ExtData_Voice_MixedHandler: (0xFD02) & 3 -> (0x8F58), then request LED code 0x45",
+   "audio/audio_control_engine.s:3053 `SndParam_MaskShiftMerge_8F58:` -- (0x8F58) & 7 << 4 into (0x8F1C) = ENCODER_STATE_BASE + 4",
+   "extensions/extension_data.s:2738 `;   4: 0xc4 = FILL IN 1/2, INTRO&ENDING 1/2, SPLIT POINT (L/C/R), TEMPO/PROGRAM` -- LED row 4 holds SPLIT POINT (L/C/R)",
+   "audio/audioinit_routines.s:609 `cp a, 0x3c` -- AudioInit_UpdateIndicators sets 0x8F58 = 1/2/4 for split notes 0x37/0x3C/0x43 when (0xFD02) & 3 != 0"
+  ]
+ },
+ {
+  "old": "CtrlPanel_BuildIndicatorBitmask_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CtrlPanel_BitIndexIdentityMap",
+  "header": "Identity map 0..24 then 0xFF: CtrlPanel_BuildIndicatorBitmask turns a record's byte +1 (or byte +190) into a bit number through it before CtrlPanel_LookupIndicatorEntry. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/audio_control_engine.s:6289 `lda xde, (CtrlPanel_BuildIndicatorBitmask_Data:24)` -- the reader",
+   "audio/audio_control_engine.s:4396 `ld\ta, (xde+bc)` -- byte = table[index]",
+   "extensions/extension_data.s:3360 `.byte 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 0xff` -- bytes"
+  ]
+ },
+ {
+  "old": "VoiceChannels_InitPanFromPreset_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqTrack_AssignToPanelTag",
+  "header": "20-byte map from a sequencer track's assign value (0xF1A0[track]) to the panel TLV tag of that part's record, passed to PanelTlv_PayloadOfTag. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/audio_control_engine.s:7604 `lda xwa, (0xf1a0:16)` -- VoiceChannels_InitPanFromPreset: A = track type/assign of track n",
+   "audio/audio_control_engine.s:7610 `lda xbc, (VoiceChannels_InitPanFromPreset_Data:24)` -- A = table[assign]",
+   "audio/audio_control_engine.s:7612 `calr PanelTlv_PayloadOfTag` -- the result is a TLV tag",
+   "extensions/extension_data.s:3364 `.byte 0, 2, 1, 7, 8, 9, 10, 11, 4, 5, 6, 3, 15, 21, 21, 25, 20, 12, 13, 14` -- bytes"
+  ]
+ },
+ {
+  "old": "SndParam_ResetDefaultTable_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SndParam_ClearRecordTemplate",
+  "header": "12 zero bytes copied (6 words, ldirw) over a 12-byte sound-parameter work record at 0x96D4, 0x96E0, 0x96EC, ... 0x978C by 16 SndParam_* routines. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/sndparam_routines.s:1016 `ld xiy, SndParam_ResetDefaultTable_Data` -- SndParam_ResetDefaultTable -> 0x96D4",
+   "audio/sndparam_routines.s:1055 `ld\txix, 0x96e0` -- SndParam_RegisterEntry_Data -> 0x96E0",
+   "audio/sndparam_routines.s:2376 `ld\txix, 0x978c` -- -> 0x978C",
+   "extensions/extension_data.s:3509 `SndParam_ResetDefaultTable_Data:` -- 12 zero bytes"
+  ]
+ },
+ {
+  "old": "SndParam_InitHashFillLoop_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SndParam_EmptyHashSlot",
+  "header": "One empty 8-byte slot {u32 SNDPARAM_HASH_EMPTY_KEY, u32 0} stamped over every slot of the sound-parameter hash table by SndParam_InitHashTable. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/sndparam_routines.s:3093 `ld xiy, SndParam_InitHashFillLoop_Data` -- copied 4 words per slot, inc 8",
+   "extensions/extension_data.s:3514 `.long SNDPARAM_HASH_EMPTY_KEY, 0x00000000` -- bytes"
+  ]
+ },
+ {
+  "old": "WidgetParam_TestMode_Entry",
+  "verdict": "refuse",
+  "why_refused": "Sound-parameter descriptor of key 0x000000 (SndParam_Registry entry 0: bank 145, offset 0, mask 0xFF, 0..255, aux 0). The only lookup of key 0 found (SndParam_SyncDisplayBitmap stores it to 0x8E6C) does not say what the parameter is, so 'TestMode' can be neither confirmed nor replaced.",
+  "new": null,
+  "header": null,
+  "basis": null,
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:107 `.long WidgetParam_TestMode_Entry` -- SndParam_Registry entry 0",
+   "extensions/extension_data.s:3540 `sndparam_descriptor 0x000000, 145, 0, 0xff, 0, 255, 0, 0x00, 0x00, 1, 7, 5, 0, 0, 0xff` -- the record",
+   "audio/tonegen_fileio_handlers.s:696 `SndParam_SyncDisplayBitmap:` -- ld xwa, 0 / SndParam_LookupReadOnly / ld (0x8e6c), l"
+  ]
+ },
+ {
+  "old": "TitleFunc_ActionDispatch_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "TitleFunc_ActionDispatch_Str_TitleNew",
+  "header": "Factory-test diagnostic message \"\\nTitle new\" (leading LF), the text its owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "factory_test/test_init.s:152 `lda xwa, (TitleFunc_ActionDispatch_Data:24)` -- the only reader",
+   "factory_test/fd_test_data.s:339 `TitleFunc_ActionDispatch_Data:` -- bytes: 0x0A then \"Title new\""
+  ]
+ },
+ {
+  "old": "TitleFunc_ActionDispatch_Data_2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "TestTitleFunc_OnTitleOld_Str_TitleOld",
+  "header": "Factory-test diagnostic message \"\\nTitle old\" (leading LF), the text its owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "factory_test/test_init.s:158 `lda xwa, (TitleFunc_ActionDispatch_Data_2:24)` -- the only reader",
+   "factory_test/fd_test_data.s:342 `TitleFunc_ActionDispatch_Data_2:` -- bytes: 0x0A then \"Title old\""
+  ]
+ },
+ {
+  "old": "TitleFunc_ActionDispatch_Data_3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "TestTitleFunc_OnTitleActivate_Str_TitleActivate",
+  "header": "Factory-test diagnostic message \"\\nTitle Activate\" (leading LF), the text its owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "factory_test/test_init.s:162 `lda xwa, (TitleFunc_ActionDispatch_Data_3:24)` -- the only reader",
+   "factory_test/fd_test_data.s:346 `TitleFunc_ActionDispatch_Data_3:\t.byte\t0x0a` -- bytes: 0x0A then \"Title Activate\""
+  ]
+ },
+ {
+  "old": "TitleFunc_ActionDispatch_Data_4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "TestTitleFunc_OnTitleInactivate_Str_TitleInactivate",
+  "header": "Factory-test diagnostic message \"\\nTitle Inactivate\" (leading LF), the text its owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "factory_test/test_init.s:166 `lda xwa, (TitleFunc_ActionDispatch_Data_4:24)` -- the only reader",
+   "factory_test/fd_test_data.s:348 `TitleFunc_ActionDispatch_Data_4:` -- bytes: 0x0A then \"Title Inactivate\""
+  ]
+ },
+ {
+  "old": "TitleFunc_ActionDispatch_Data_5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "TestTitleFunc_OnTitleInterrupt_Str_TitleINTERUPT",
+  "header": "Factory-test diagnostic message \"\\nTitle INTERUPT\" (leading LF), the text its owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "factory_test/test_init.s:170 `lda xwa, (TitleFunc_ActionDispatch_Data_5:24)` -- the only reader",
+   "factory_test/fd_test_data.s:351 `TitleFunc_ActionDispatch_Data_5:` -- bytes: 0x0A then \"Title INTERUPT\""
+  ]
+ },
+ {
+  "old": "TitleFunc_ActionDispatch_Data_6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "TestTitleFunc_OnTitleInterruptReturn_Str_TitleINTERUPT_RETURN",
+  "header": "Factory-test diagnostic message \"\\nTitle INTERUPT RETURN\" (leading LF), the text its owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "factory_test/test_init.s:174 `lda xwa, (TitleFunc_ActionDispatch_Data_6:24)` -- the only reader",
+   "factory_test/fd_test_data.s:354 `TitleFunc_ActionDispatch_Data_6:` -- bytes: 0x0A then \"Title INTERUPT RETURN\""
+  ]
+ },
+ {
+  "old": "TitleFunc_LifecycleTable_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "TitleFunc_LifecycleTable_Str_TBIOS_Test",
+  "header": "Factory-test diagnostic message \"\\nTBIOS Test\" (leading LF), the text its owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "factory_test/test_init.s:194 `lda xwa, (TitleFunc_LifecycleTable_Data:24)` -- the only reader",
+   "factory_test/fd_test_data.s:357 `TitleFunc_LifecycleTable_Data:` -- bytes: 0x0A then \"TBIOS Test\""
+  ]
+ },
+ {
+  "old": "TitleFunc_LifecycleTable_Data_2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "TitleFunc_LifecycleDispatch_OnStopFddTest_Str_STOP_FDD_TEST",
+  "header": "Factory-test diagnostic message \"\\nSTOP FDD TEST\" (leading LF), the text its owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "factory_test/test_init.s:209 `lda xwa, (TitleFunc_LifecycleTable_Data_2:24)` -- the only reader",
+   "factory_test/fd_test_data.s:360 `TitleFunc_LifecycleTable_Data_2:` -- bytes: 0x0A then \"STOP FDD TEST\""
+  ]
+ },
+ {
+  "old": "TitleFunc_LifecycleTable_Data_3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "TitleFunc_LifecycleDispatch_OnFddTestLoop_Str_START_FDD_TEST_LOOP",
+  "header": "Factory-test diagnostic message \"\\nSTART FDD TEST LOOP\" (leading LF), the text its owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "factory_test/test_init.s:216 `lda xwa, (TitleFunc_LifecycleTable_Data_3:24)` -- the only reader",
+   "factory_test/fd_test_data.s:363 `TitleFunc_LifecycleTable_Data_3:` -- bytes: 0x0A then \"START FDD TEST LOOP\""
+  ]
+ },
+ {
+  "old": "TitleFunc_LifecycleTable_Data_4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "TitleFunc_LifecycleDispatch_OnListDirectory_Str_DIR",
+  "header": "Factory-test diagnostic message \"\\nDIR\" (leading LF), the text its owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "factory_test/test_init.s:230 `lda xwa, (TitleFunc_LifecycleTable_Data_4:24)` -- the only reader",
+   "factory_test/fd_test_data.s:366 `TitleFunc_LifecycleTable_Data_4:` -- bytes: 0x0A then \"DIR\""
+  ]
+ },
+ {
+  "old": "TitleFunc_LifecycleTable_Data_5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "TitleFunc_LifecycleDispatch_OnFormat2dd_Str_Debug_Test",
+  "header": "Factory-test diagnostic message \"\\nDebug Test\" (leading LF), the text its owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "factory_test/test_init.s:237 `lda xwa, (TitleFunc_LifecycleTable_Data_5:24)` -- the only reader",
+   "factory_test/fd_test_data.s:368 `TitleFunc_LifecycleTable_Data_5:\t.byte\t0x0a` -- bytes: 0x0A then \"Debug Test\""
+  ]
+ },
+ {
+  "old": "TitleFunc_LifecycleTable_Data_6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "TitleFunc_LifecycleDispatch_OnFormat2hd_Str_Debug_Test",
+  "header": "Factory-test diagnostic message \"\\nDebug Test\" (leading LF), the text its owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "factory_test/test_init.s:244 `lda xwa, (TitleFunc_LifecycleTable_Data_6:24)` -- the only reader",
+   "factory_test/fd_test_data.s:370 `TitleFunc_LifecycleTable_Data_6:` -- bytes: 0x0A then \"Debug Test\""
+  ]
+ },
+ {
+  "old": "RunTestCounters_Display_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "RunTestCounters_Display_Str_TEST_Finishd",
+  "header": "Factory-test diagnostic message \"\\nTEST Finishd!!\" (leading LF), the text its owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "factory_test/test_init.s:321 `lda xwa, (RunTestCounters_Display_Data:24)` -- the only reader",
+   "factory_test/fd_test_data.s:391 `RunTestCounters_Display_Data:` -- bytes: 0x0A then \"TEST Finishd!!\""
+  ]
+ },
+ {
+  "old": "FDLoadSaveTest_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FDLoadSaveTest_Str_File_remove",
+  "header": "Factory-test diagnostic message \"\\nFile remove =>\" (leading LF), the text its owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "factory_test/fd_test_code.s:51 `lda xwa, (FDLoadSaveTest_Data:24)` -- the only reader",
+   "factory_test/fd_test_data.s:402 `FDLoadSaveTest_Data:` -- bytes: 0x0A then \"File remove =>\""
+  ]
+ },
+ {
+  "old": "FDTest_AllocBuffer_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FDTest_AllocBuffer_Str_Not_Enough_memory",
+  "header": "Factory-test diagnostic message \"\\nNot Enough memory!\" (leading LF), the text its owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "factory_test/fd_test_code.s:75 `lda xwa, (FDTest_AllocBuffer_Data:24)` -- the only reader",
+   "factory_test/fd_test_data.s:411 `FDTest_AllocBuffer_Data:\t.byte\t0x0a` -- bytes: 0x0A then \"Not Enough memory!\""
+  ]
+ },
+ {
+  "old": "FDTest_OpenForWrite_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FDTest_OpenForWrite_Str_cannot_open_write_file",
+  "header": "Factory-test diagnostic message \"\\ncannot open write file\" (leading LF), the text its owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "factory_test/fd_test_code.s:106 `lda xwa, (FDTest_OpenForWrite_Data:24)` -- the only reader",
+   "factory_test/fd_test_data.s:416 `FDTest_OpenForWrite_Data:\t.byte\t0x0a` -- bytes: 0x0A then \"cannot open write file\""
+  ]
+ },
+ {
+  "old": "FDTest_WriteBuffer_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FDTest_WriteBuffer_Str_File_Write",
+  "header": "Factory-test diagnostic message \"\\nFile Write =>\" (leading LF), the text its owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "factory_test/fd_test_code.s:116 `lda xwa, (FDTest_WriteBuffer_Data:24)` -- the only reader",
+   "factory_test/fd_test_data.s:418 `FDTest_WriteBuffer_Data:` -- bytes: 0x0A then \"File Write =>\""
+  ]
+ },
+ {
+  "old": "FDTest_CloseAndReopen_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FDTest_CloseAndReopen_Str_File_Read",
+  "header": "Factory-test diagnostic message \"\\nFile Read =>\" (leading LF), the text its owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "factory_test/fd_test_code.s:147 `lda xwa, (FDTest_CloseAndReopen_Data:24)` -- the only reader",
+   "factory_test/fd_test_data.s:425 `FDTest_CloseAndReopen_Data:\t.byte\t0x0a` -- bytes: 0x0A then \"File Read =>\""
+  ]
+ }
+]

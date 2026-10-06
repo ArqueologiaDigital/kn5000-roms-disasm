@@ -97,7 +97,7 @@ WorkRam2_SendEpilogueByte:
 ; Offsets from here, with the routines that use them (audio/note_voice_mapping.s):
 ;  +0x00 u8 state; the block from +0 is also passed by address
 ;        (OutputFlush_Prologue, SeqFile_ParseHeader, LoadAndStartPlayback_LoadParam3
-;        `lda xwa,(0xE8FE)`, StoreAndReturn_Block clears it)
+;        `lda xwa,(0xE8FE)`, SongPlayer_ResetState clears it)
 ;  +0x20 u8 mode 0-4 (OutputFlush_InitVal `cp ...,4`, RecordReadOK_LoadReg sets 2)
 ;  +0x21 u16 flag bits 0x01/0x02/0x04/0x10 (SeqState_GetFlags, Acc_TransitionPlayMode,
 ;        Acc_StopPlayMode, Acc_StartFillIn, DecodeMidiEvent_LoadParam3)

@@ -276,10 +276,10 @@ SOUND_DATA_GM_SPECIAL:	.incbin "includes/generated/sound_data_gm_special.bin"
 ; (Scoop_CallDisplayHelper_SingleTableList, 8 bytes: Scoop_CallDisplayHelper_DisplayList_Code
 ; hands it to UIRender_SingleTable in XIY, with +0x1A as the end bound in XIX), +0x1A
 ; (Scoop_CallDisplayHelper_DisplayList_Data) and +0x3A
-; (Scoop_SetPartIndexAndDisplay_Data) -- labels since 2026-10-03, positional `.set`
+; (Scoop_TrackTypeNameField) -- labels since 2026-10-03, positional `.set`
 ; aliases before -- and are described, without a cited reader, in
 ; audio/sound_data_drum_kits.c; the +0x4C reader never indexes past byte 17.
 SOUND_DATA_DRUM_KITS:				.incbin "includes/generated/sound_data_drum_kits.bin", 0x0, 0x12
 Scoop_CallDisplayHelper_SingleTableList:	.incbin "includes/generated/sound_data_drum_kits.bin", 0x12, 0x8
 Scoop_CallDisplayHelper_DisplayList_Data:	.incbin "includes/generated/sound_data_drum_kits.bin", 0x1A, 0x20
-Scoop_SetPartIndexAndDisplay_Data:		.incbin "includes/generated/sound_data_drum_kits.bin", 0x3A, 0x9B
+Scoop_TrackTypeNameField:		.incbin "includes/generated/sound_data_drum_kits.bin", 0x3A, 0x9B

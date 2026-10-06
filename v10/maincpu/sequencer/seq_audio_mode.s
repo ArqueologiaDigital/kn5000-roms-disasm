@@ -914,9 +914,9 @@ Rhythm_ProcessAllPartsAndLoad:
 	calr RhythmPart_CopyData
 	calr RhythmPart1_ProcessAccentData
 	calr RhythmPart2_ProcessAccentData
-	calr AccVoice_LoadRhythmParams_Part3
-	calr AccVoice_LoadRhythmParams_Part4
-	calr AccVoice_LoadRhythmParams_Part5
+	calr RhythmPart3_ProcessAccentData
+	calr RhythmPart4_ProcessAccentData
+	calr RhythmPart5_ProcessAccentData
 	bit 0, (0x3283:16)
 	jr nz, Rhythm_ProcessAllDone
 	call AccVoice_LoadAllChannelParams
@@ -1108,7 +1108,11 @@ Rhythm_PackVelocityHighBit:
 Rhythm_VelocityPackDone:
 	ret
 
-AccVoice_LoadRhythmParams_Part3:
+; RhythmPart3_ProcessAccentData: Part 3 of the RhythmPart1/2_ProcessAccentData family: takes the part's 7-byte record
+;   at RAM 0x3254..0x325A, stores 5 of it at 0x321E or (bit 0 of 0x3283 set) appends it as a 0xC0 record to ring
+;   buffer 0x2D94 (the D4 channel buffer), clears bit 3 of 0x332C and calls AccVoiceReg_WritePart3. Basis: callers +
+;   body.
+RhythmPart3_ProcessAccentData:
 	bit 0, (0x3283:16)
 	jr z, RhythmPart3_LoadAndStore
 	call AccentData_ComparePart3
@@ -1163,7 +1167,10 @@ RhythmPart3_WriteDone:
 	call AccVoiceReg_WritePart3
 	ret
 
-AccVoice_LoadRhythmParams_Part4:
+; RhythmPart4_ProcessAccentData: Part 4 of the RhythmPart1/2_ProcessAccentData family: takes the part's 7-byte record
+;   at RAM 0x325B..0x3261, stores 5 of it at 0x3223 or (bit 0 of 0x3283 set) appends it as a 0xC0 record to ring
+;   buffer 0x2E94 (D5), clears bit 4 of 0x332C and calls AccVoiceReg_WritePart4. Basis: callers + body.
+RhythmPart4_ProcessAccentData:
 	bit 0, (0x3283:16)
 	jr z, RhythmPart4_LoadAndStore
 	call AccentData_ComparePart4
@@ -1218,7 +1225,10 @@ RhythmPart4_WriteDone:
 	call AccVoiceReg_WritePart4
 	ret
 
-AccVoice_LoadRhythmParams_Part5:
+; RhythmPart5_ProcessAccentData: Part 5 of the RhythmPart1/2_ProcessAccentData family: takes the part's 7-byte record
+;   at RAM 0x3262..0x3268, stores 5 of it at 0x3228 or (bit 0 of 0x3283 set) appends it as a 0xC0 record to ring
+;   buffer 0x2F94 (D6), clears bit 5 of 0x332C and calls AccVoiceReg_WritePart5. Basis: callers + body.
+RhythmPart5_ProcessAccentData:
 	bit 0, (0x3283:16)
 	jr z, RhythmPart5_LoadAndStore
 	call AccentData_ComparePart5

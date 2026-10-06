@@ -19,14 +19,24 @@ Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d:	.asciz "%3d"
 Scoop_EventLoop_36Entry_Branch3_Str_Fmt2d_2:	.asciz "%2d"
 Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d_2:	.asciz "%3d"
 Scoop_EventLoop_36Entry_Branch3_Str_Fmt4d:	.asciz "%4d"
-Scoop_EventLoop_36Entry_Branch3_Data:
+; Scoop_BoundOp0A_ClipBox: 4 x u16 {0, 0, 319, 239}: text clip box (the whole 320 x 240 screen) of Scoop bound display
+;   op 0x0A, copied with ldirw into its frame and passed to DrawString. Basis: readers + bytes (cf.
+;   SeGfx_StaticOp06_ClipBox).
+Scoop_BoundOp0A_ClipBox:
 	.short	0, 0, 319, 239	; copied as 4 words by Scoop_EventLoop_12Entry_Alt_Data_Target10: the 320x240 screen's corners
 Scoop_EventLoop_36Entry_Branch3_Str_Fmt1d_2:	.asciz "%1d"
 Scoop_EventLoop_36Entry_Branch3_Str_Fmt2d_3:	.asciz "%2d"
 Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d_3:	.asciz "%3d"
-Scoop_EventLoop_36Entry_Branch3_Data_2:
+; Scoop_BoundOp07_ClipBox: 4 x u16 {0, 0, 319, 239}: text clip box (whole 320 x 240 screen) of Scoop bound display op
+;   7, which draws a string picked from a table by a masked, shifted RAM byte. Basis: readers + bytes (cf.
+;   SeGfx_StaticOp06_ClipBox).
+Scoop_BoundOp07_ClipBox:
 	.short	0, 0, 319, 239	; copied as 4 words by Scoop_EventLoop_12Entry_Alt_Data_Target10: the 320x240 screen's corners
-Scoop_EventLoop_12Entry_Alt_Data:
+; Scoop_BoundOpHandlerTable: 12 x u32: handler of each op (record byte 0, 0..11) of a Scoop bound display list (values
+;   read from RAM); Scoop_EventLoop_12Entry_Alt copies it to its frame and calls [op] with XWA = record, byte 1 =
+;   record length. Same op shape as GraphicsRender_Start_PtrTable: op 3 = ColorBlit_WithPaletteSave, op 10 prints a
+;   RAM byte with %1d/%2d/%3d. Basis: readers + bytes.
+Scoop_BoundOpHandlerTable:
 	.long Scoop_EnvProcessor_Data
 	.long Scoop_Dispatch_Nop
 	.long Scoop_EnvelopeCalc_Data

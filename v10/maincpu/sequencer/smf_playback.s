@@ -517,7 +517,7 @@ FloppyIO_ReadAndValidateHeader:
 	call FloppyIO_SelectReadMode
 	call FloppyIO_ConfigureSwitchboard
 	ld bc, 4:i3
-	ld xiy, FloppyIO_ReadAndValidateHeader_Data
+	ld xiy, SMF_HeaderMagic_MTrk
 
 SMF_ReadMTrk_ByteLoop:
 	pushw bc

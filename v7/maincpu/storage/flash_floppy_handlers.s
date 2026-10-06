@@ -340,7 +340,7 @@ SeMenu_NameEdit_DataBlock2_Records:
 ; [v10] F15D1C flags=0x01 len=10
 	.byte	0x01, 0x0a, 0x7d, 0x00, 0xe3, 0x00, 0x9a, 0x00, 0xe3, 0x00
 ; static record list (83 records {u8 op, u8 len, payload}), read by GraphicsRender_ProcessEntries; ends 0xF15FC8
-; evidence: SeMenu_WaveformSelect_Data+0x38 (0xF0F544)
+; evidence: SeMenuTitle_DrawStaticScreen+0x38 (0xF0F544)
 SeScreenData_0x5120:
 ; [v10] F15D26 flags=0x1c len=14
 	.byte	0x1c, 0x0e, 0x70, 0x00, 0x09, 0x00
@@ -527,14 +527,14 @@ SeScreenData_0x5120:
 ; [v10] F15FE8 flags=0x02 len=10
 	.byte	0x02, 0x0a, 0x19, 0x01, 0x5e, 0x00, 0x19, 0x01, 0xaa, 0x00
 ; static record list (2 records {u8 op, u8 len, payload}), read by GraphicsRender_ProcessEntries; ends 0xF15FDC
-; evidence: SeMenu_WaveformSelect_Data+0x62 (0xF0F56E), SeMenu_PresetManager_Init+0x75 (0xF0F653)
+; evidence: SeMenuTitle_DrawStaticScreen+0x62 (0xF0F56E), SeMenu_PresetManager_Init+0x75 (0xF0F653)
 SeScreenData_0x53EC:
 ; [v10] F15FF2 flags=0x1b len=10
 	.byte	0x1b, 0x0a, 0x19, 0x01, 0x71, 0x00, 0x33, 0x01, 0xa8, 0x00
 ; [v10] F15FFC flags=0x05 len=10
 	.byte	0x05, 0x0a, 0x19, 0x01, 0x71, 0x00, 0x33, 0x01, 0xa8, 0x00
 ; bound record list (16 records {u8 op, u8 len, payload}), read by GraphicsRender_Start; ends 0xF160C7
-; evidence: SeMenu_WaveformSelect_Data+0x4A (0xF0F556), SeMenu_PresetManager_Init+0x85 (0xF0F663)
+; evidence: SeMenuTitle_DrawStaticScreen+0x4A (0xF0F556), SeMenu_PresetManager_Init+0x85 (0xF0F663)
 ; single bound record (op 0x07, 17 B), read by GraphicsRender_Start
 ; evidence: recptrs table 0xF16101
 SeScreenData_0x5400:
@@ -709,7 +709,7 @@ SeMenu_PresetManager_Load_Records:
 	.byte	0x09, 0x0a, 0xa5, 0x00, 0xbc, 0x00, 0x33, 0x01, 0xcd, 0x00
 ; static record list (17 records {u8 op, u8 len, payload}), read by GraphicsRender_ProcessEntries; ends 0xF162A9
 ; evidence: SeMenu_CompareAndApply_Check+0xA (0xF0FB4D)
-SeScreenData_0x5633:
+SeDrumKit_TouchCurvePageRecords:
 	.byte	0x17, 0x0b, 0x3b, 0x00, 0x3e, 0x00
 	.ascii	"TOUCH"
 	.byte	0x17, 0x0b, 0x6b, 0x00, 0x3e, 0x00
@@ -2035,7 +2035,7 @@ Pack12BitValueWithBank:
 ; NoteEventBuffer Store dispatch (7-entry, table 0xe16136)
 NoteEvent_Store:
 	extz wa
-	lda xbc, (NoteEvent_Store_Data:24)
+	lda xbc, (RhythmSlot_FlashSectionTable:24)
 	ld	l, (xbc+wa)
 	ret
 
@@ -5641,7 +5641,7 @@ ToneData_CopyBlock1_Loop:
 	ld (xde+), a
 	cp xbc, xhl
 	jr c, ToneData_CopyBlock1_Loop
-	lda xhl, (ToneData_ZeroFillLoop_Data:24)
+	lda xhl, (Composer_DefaultHeaderFields:24)
 	ld xbc, xhl
 	ld xwa, (MSP_SETTINGS:16)
 	lda xde, (xwa + 16)
@@ -5663,7 +5663,7 @@ ToneData_CopyBlock3_Loop:
 	ld (xde+), a
 	cp xbc, xhl
 	jr c, ToneData_CopyBlock3_Loop
-	lda xhl, (ToneData_ZeroFillLoop_Data_2:24)
+	lda xhl, (Composer_DefaultCompileBankNames:24)
 	ld xbc, xhl
 	ld xwa, (MSP_SETTINGS:16)
 	lda xde, (xwa+576)
@@ -5674,7 +5674,7 @@ ToneData_CopyBlock4_Loop:
 	ld (xde+), a
 	cp xbc, xhl
 	jr c, ToneData_CopyBlock4_Loop
-	lda xhl, (ToneData_ZeroFillLoop_Data_3:24)
+	lda xhl, (Composer_DefaultUserBankNames:24)
 	ld xbc, xhl
 	ld xwa, (MSP_SETTINGS:16)
 	lda xde, (xwa+640)
@@ -5692,7 +5692,7 @@ ToneData_CopyBlock5_Loop:
 ToneData_ScanRegionLoop:
 	cp (xbc), 0x0
 	jr nz, ToneData_AdvanceRegion
-	lda xiy, (ToneData_ScanRegionLoop_Data:24)
+	lda xiy, (Composer_DefaultEmptyRecord:24)
 	ld xhl, xiy
 	ld xwa, (MSP_SETTINGS:16)
 	lda xwa, (xwa + 32)

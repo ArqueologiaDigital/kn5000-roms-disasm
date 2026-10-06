@@ -57,8 +57,8 @@ GetSoundName_BuildString:
 	jr GetSoundName_DispatchResult
 
 GetSoundName_DefaultString:
-	pushw GetSoundName_DefaultString_Data@hi16
-	pushw GetSoundName_DefaultString_Data@lo16
+	pushw GetSoundName_Str_DashedName@hi16
+	pushw GetSoundName_Str_DashedName@lo16
 	ld xwa, (xsp + 14)
 	push xwa
 	call Strcpy

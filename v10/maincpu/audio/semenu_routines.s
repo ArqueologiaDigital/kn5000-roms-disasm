@@ -366,7 +366,10 @@ SeMenu_RegisterParamDisplay_ClearLoop:
 	lda xsp, (xsp + 14)
 	ret
 
-SeMenu_RegisterParamDisplay_Data:
+; SeMenu_SendPartToneIndex: Sends tone index BC of part A to the tone generator: 6-byte sound-editor command {0x88,
+;   part, 9 (21 when SeMenu_LoadObjEntries returns non-zero), BC >> 8, BC & 0xFF, A - 1}; the single-tone twin of
+;   SeMenu_SendToneIndex (ids 10/22). Basis: callers + body.
+SeMenu_SendPartToneIndex:
 	lda	xsp, (xsp-20)
 	pushw	iz
 	ld	iz, bc
@@ -376,10 +379,10 @@ SeMenu_RegisterParamDisplay_Data:
 	lda	xbc, (xsp+2)
 	ld	xwa, xbc
 	lda	xbc, (xbc+9)
-SeMenu_RegisterParamDisplay_Data_Loop:
+SeMenu_SendPartToneIndex_Loop:
 	ld (xwa+), 0
 	cp	xwa, xbc
-	jr	c, SeMenu_RegisterParamDisplay_Data_Loop
+	jr	c, SeMenu_SendPartToneIndex_Loop
 	lda	xwa, (xsp+14)
 	calr	SeMenu_LoadMasterPtr
 	lda	xhl, (xsp+16)
@@ -396,12 +399,12 @@ SeMenu_RegisterParamDisplay_Data_Loop:
 	ld	(xwa+1), c
 	lda	xbc, (xwa+2)
 	cp	(xsp+12), 0
-	jr	nz, SeMenu_RegisterParamDisplay_Data_Skip
+	jr	nz, SeMenu_SendPartToneIndex_Skip
 	ld	(xbc), 9
-	jr	SeMenu_RegisterParamDisplay_Data_Join
-SeMenu_RegisterParamDisplay_Data_Skip:
+	jr	SeMenu_SendPartToneIndex_Join
+SeMenu_SendPartToneIndex_Skip:
 	ld	(xbc), 21
-SeMenu_RegisterParamDisplay_Data_Join:
+SeMenu_SendPartToneIndex_Join:
 	ld	c, (xhl)
 	ld	(xwa+3), c
 	ld	c, (xde)
@@ -664,17 +667,19 @@ SeMenu_InitDisplayColumn_Loop:
 	lda xsp, (xsp + 10)
 	ret
 
-SeMenu_InitDisplayColumn_Data:
+; SeEasy_SendParamValue: Sends the EASY EDIT value at (XBC) of row A: 6-byte sound-editor command {0x88, part, 11, A -
+;   1, value, 0xFF} via SeMenu_FlushDisplayObj. Basis: callers + body.
+SeEasy_SendParamValue:
 	lda	xsp, (xsp-18)
 	ld	(xsp+12), xbc
 	ld	(xsp+16), a
 	lda	xbc, (xsp)
 	ld	xwa, xbc
 	lda	xbc, (xbc+9)
-SeMenu_InitDisplayColumn_Data_Loop:
+SeEasy_SendParamValue_Loop:
 	ld (xwa+), 0
 	cp	xwa, xbc
-	jr	c, SeMenu_InitDisplayColumn_Data_Loop
+	jr	c, SeEasy_SendParamValue_Loop
 	lda	xwa, (xsp+10)
 	calr	SeMenu_LoadMasterPtr
 	lda	xwa, (xsp)
@@ -719,7 +724,10 @@ SeMenu_SetDisplayValue_Loop:
 	lda xsp, (xsp + 14)
 	ret
 
-SeMenu_SetDisplayValue_Data:
+; SeWrtMem_SelectMemorySlotSound: Selects SOUND MEMORY slot A (0-39: bank code 16 = A for 0-19, 17 = B for 20-39,
+;   number A mod 20) on the current part: resolves it (SndParam_ApplyProgramChange), writes the result to +0/+1 of
+;   part record 0x00/0x01/0x02 and shows it. Basis: callers + body.
+SeWrtMem_SelectMemorySlotSound:
 	lda	xsp, (xsp-10)
 	ld	(xsp+8), a
 	lda	xwa, (xsp)
@@ -734,12 +742,12 @@ SeMenu_SetDisplayValue_Data:
 	div	a, 20
 	ld	c, w
 	cp	e, 0:i3
-	jr	z, SeMenu_SetDisplayValue_Data_Skip
+	jr	z, SeWrtMem_SelectMemorySlotSound_Skip
 	ld	e, 17:opc
-	jr	SeMenu_SetDisplayValue_Data_Join
-SeMenu_SetDisplayValue_Data_Skip:
+	jr	SeWrtMem_SelectMemorySlotSound_Join
+SeWrtMem_SelectMemorySlotSound_Skip:
 	ld	e, 16:opc
-SeMenu_SetDisplayValue_Data_Join:
+SeWrtMem_SelectMemorySlotSound_Join:
 	lda	xwa, (xsp+2)
 	ld	(xwa), e
 	ld	(xwa+1), c
@@ -750,20 +758,20 @@ SeMenu_SetDisplayValue_Data_Join:
 	ld	e, (xwa+3)
 	ld	c, (xwa+4)
 	cp	(xsp), 1
-	jr	nz, SeMenu_SetDisplayValue_Data_Skip2
+	jr	nz, SeWrtMem_SelectMemorySlotSound_Skip2
 	lda	xwa, (0xf9d0:16)
 	ld	(xwa), e
-	jr	SeMenu_SetDisplayValue_Data_Join2
-SeMenu_SetDisplayValue_Data_Skip2:
+	jr	SeWrtMem_SelectMemorySlotSound_Join2
+SeWrtMem_SelectMemorySlotSound_Skip2:
 	cp	(xsp), 2
-	jr	nz, SeMenu_SetDisplayValue_Data_Skip3
+	jr	nz, SeWrtMem_SelectMemorySlotSound_Skip3
 	lda	xwa, (0xf9ea:16)
 	ld	(xwa), e
-	jr	SeMenu_SetDisplayValue_Data_Join2
-SeMenu_SetDisplayValue_Data_Skip3:
+	jr	SeWrtMem_SelectMemorySlotSound_Join2
+SeWrtMem_SelectMemorySlotSound_Skip3:
 	lda	xwa, (0xf9b6:16)
 	ld	(xwa), e
-SeMenu_SetDisplayValue_Data_Join2:
+SeWrtMem_SelectMemorySlotSound_Join2:
 	ld	(xwa+1), c
 	extz	bc
 	pushw	bc
@@ -1031,14 +1039,16 @@ SeMenu_SetupMenuDisplay_Finalize:
 	ldmi16 (xwa), 0x65c
 	ret
 
-SeMenu_SetupMenuDisplay_Finalize_Data:
+; SeMenu_SetCurrentPart: Stores A (1..4, else 1) as the sound editor's current part, RAM 0x65D, which
+;   SeMenu_ValidatePartNumber reads back. Basis: callers + body.
+SeMenu_SetCurrentPart:
 	cp	a, 1:i3
-	jr	c, SeMenu_SetupMenuDisplay_Finalize_Data_Skip
+	jr	c, SeMenu_SetCurrentPart_Skip
 	cp	a, 4:i3
-	jr	ugt, SeMenu_SetupMenuDisplay_Finalize_Data_Skip
+	jr	ugt, SeMenu_SetCurrentPart_Skip
 	ld	(1629:16), a
 	ret
-SeMenu_SetupMenuDisplay_Finalize_Data_Skip:
+SeMenu_SetCurrentPart_Skip:
 	ld	(1629:16), 1
 	ret
 
@@ -1193,7 +1203,9 @@ SeMenu_LoadPartParam:
 	ld (xbc), a
 	ret
 
-SeMenu_BitShift_Stub:
+; SeMenu_SwitchNop: Bare `ret`: the 'no action' entry of the sound-editor pages' switch-handler tables (185 slots).
+;   Basis: callers (table entries) + body.
+SeMenu_SwitchNop:
 	ret
 
 SeMenu_BitShiftMask:
@@ -1814,7 +1826,7 @@ SeMenu_SelectPartIfEnabled_Skip21:
 SeMenu_SelectPartIfEnabled_Skip22:
 	ld	a, (xsp+2)
 	extz	wa
-	calr	SeMenu_SetupMenuDisplay_Finalize_Data
+	calr	SeMenu_SetCurrentPart
 	ld	l, 1:opc
 SeMenu_SelectPartIfEnabled_Epilogue3:
 	inc	4, xsp
@@ -2390,7 +2402,7 @@ SeMenu_SetNameBufferChar:
 ;   nothing. Basis: callers + body -- only the WRITE SOUND name-entry handlers call it: the side-row-1 handler reads
 ;   all 16 characters to send them, the cursor-left/right handlers read the character at the new cursor (page param 0)
 ;   into param 1. Its twin SeMenu_SetNameBufferChar writes the buffer, and
-;   SeMenu_CopyWriteUpdate_Data fills it with an entry's name (SeMenu_SetupPartDisplay mode 1).
+;   SeWrtMem_DrawPage fills it with an entry's name (SeMenu_SetupPartDisplay mode 1).
 SeMenu_GetNameBufferChar:
 	cp a, 15
 	ret	ugt
@@ -2405,15 +2417,17 @@ SeMenu_GetNameBufferChar:
 SeMenu_PostDialEnable:
 	extz	wa
 	jp	UI_PostDialEnable
-SeMenu_SetupPartDisplay_End_Sub:
+; SeMenu_PostEditUpDownSet: Posts EVT_EDIT_UP_SET (A = 0) or EVT_EDIT_DOWN_SET (A != 0) with the value (C - 1) | E.
+;   Basis: callers + body.
+SeMenu_PostEditUpDownSet:
 	dec	1, c
 	or	c, e
 	extz	bc
 	cp	a, 0:i3
-	jr	nz, SeMenu_SetupPartDisplay_End_Sub_Skip
+	jr	nz, SeMenu_PostEditUpDownSet_Skip
 	ld	wa, bc
 	jp	UI_PostDialValueEvent
-SeMenu_SetupPartDisplay_End_Sub_Skip:
+SeMenu_PostEditUpDownSet_Skip:
 	ld	wa, bc
 	jp	UI_PostDialRangeEvent
 ; SeMenu_BindDialToColumn: Points the dial at sound-editor column A (1..8): posts EVT_VALEN_SET(1),
@@ -2428,12 +2442,12 @@ SeMenu_BindDialToColumn:
 	extz	bc
 	ld	wa, 0:i3
 	ld	de, 0:i3
-	calr	SeMenu_SetupPartDisplay_End_Sub
+	calr	SeMenu_PostEditUpDownSet
 	ld	c, (xsp)
 	extz	bc
 	ld	wa, 1:i3
 	ldw	de, 128
-	calr	SeMenu_SetupPartDisplay_End_Sub
+	calr	SeMenu_PostEditUpDownSet
 	inc	2, xsp
 	ret
 ; SeMenu_SwitchToValueStep: Writes the signed value step for a column switch to (XBC) (edit-descriptor byte +10): +1
@@ -2526,7 +2540,7 @@ SeMenu_GoToPageOnEnabledPart_Loop5:
 	jr	z, SeMenu_GoToPageOnEnabledPart_Skip10
 	ldto_berp a, 251
 	extz	wa
-	calr	SeMenu_SetupMenuDisplay_Finalize_Data
+	calr	SeMenu_SetCurrentPart
 	ld	a, (xsp+6)
 	extz	wa
 	ld	bc, 0:i3
@@ -2538,7 +2552,7 @@ SeMenu_GoToPageOnEnabledPart_Skip10:
 	jr	ule, SeMenu_GoToPageOnEnabledPart_Loop5
 SeMenu_GoToPageOnEnabledPart_Skip11:
 	ld	wa, 1:i3
-	calr	SeMenu_SetupMenuDisplay_Finalize_Data
+	calr	SeMenu_SetCurrentPart
 	ld	a, (xsp+6)
 	extz	wa
 	ld	bc, 0:i3
@@ -2647,7 +2661,10 @@ SeMenu_ApplyPartEdit_End:
 	lda xsp, (xsp + 14)
 	ret
 
-SeMenu_ApplyPartEdit_Data2:
+; SeLfo1_StepSelectorAndReload: LFO1 pages, column 2: steps the page's 1..4 selector (RAM 0x68D AMP / 0x68E PITCH /
+;   0x68F FILTER; up for a first-bank switch, down otherwise, wrapping) and re-enters the title TT_SEAMPLFO1 /
+;   TT_SEPITLFO1 / TT_SEFILLFO1. Basis: callers + body.
+SeLfo1_StepSelectorAndReload:
 	dec	2, xsp
 	ld	(xsp), c
 	res	7, a
@@ -2658,24 +2675,24 @@ SeMenu_ApplyPartEdit_Data2:
 	extz	bc
 	calr	SeMenu_ApplyPartEdit_Helper14
 	cp	(xsp), 1
-	jr	nz, SeMenu_ApplyPartEdit_Skip29
+	jr	nz, SeLfo1_StepSelectorAndReload_Skip29
 	ld	a, 42:opc
-SeMenu_ApplyPartEdit_Join:
+SeLfo1_StepSelectorAndReload_Join:
 	extz	wa
 	ld	bc, 1:i3
 	calr	SeMenu_SendEvent
-	jr	SeMenu_ApplyPartEdit_Epilogue
-SeMenu_ApplyPartEdit_Skip29:
+	jr	SeLfo1_StepSelectorAndReload_Epilogue
+SeLfo1_StepSelectorAndReload_Skip29:
 	cp	(xsp), 0
-	jr	nz, SeMenu_ApplyPartEdit_Skip30
+	jr	nz, SeLfo1_StepSelectorAndReload_Skip30
 	ld	a, 47:opc
-	jr	SeMenu_ApplyPartEdit_Join
-SeMenu_ApplyPartEdit_Skip30:
+	jr	SeLfo1_StepSelectorAndReload_Join
+SeLfo1_StepSelectorAndReload_Skip30:
 	cp	(xsp), 2
-	jr	nz, SeMenu_ApplyPartEdit_Epilogue
+	jr	nz, SeLfo1_StepSelectorAndReload_Epilogue
 	ld	a, 57:opc
-	jr	SeMenu_ApplyPartEdit_Join
-SeMenu_ApplyPartEdit_Epilogue:
+	jr	SeLfo1_StepSelectorAndReload_Join
+SeLfo1_StepSelectorAndReload_Epilogue:
 	inc	2, xsp
 	ret
 SeMenu_ApplyPartEdit_AltStore_Join:
@@ -2715,14 +2732,14 @@ SeMenu_ApplyPartEdit_AltStore_Join:
 	ld	de, 0:i3
 	calr	SeMenu_StepParamFieldAndSend
 	cp	(xsp+16), 0
-	jr	nz, SeMenu_ApplyPartEdit_Skip31
+	jr	nz, SeLfo1_StepSelectorAndReload_Skip31
 	cp	(xsp+14), 1
-	jr	nz, SeMenu_ApplyPartEdit_Skip31
+	jr	nz, SeLfo1_StepSelectorAndReload_Skip31
 	ld	c, (xsp+3)
 	extz	bc
 	ld	wa, 2:i3
 	calr	SeMenu_StoreEffectParam
-SeMenu_ApplyPartEdit_Skip31:
+SeLfo1_StepSelectorAndReload_Skip31:
 	ld	wa, 3:i3
 	calr	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+20)
@@ -2764,14 +2781,14 @@ SeMenu_ApplyPartEdit_AltStore_Join2:
 	ld	de, 0:i3
 	calr	SeMenu_StepParamFieldAndSend
 	cp	(xsp+16), 0
-	jr	nz, SeMenu_ApplyPartEdit_Skip32
+	jr	nz, SeLfo1_StepSelectorAndReload_Skip32
 	cp	(xsp+14), 1
-	jr	nz, SeMenu_ApplyPartEdit_Skip32
+	jr	nz, SeLfo1_StepSelectorAndReload_Skip32
 	ld	c, (xsp+3)
 	extz	bc
 	ld	wa, 2:i3
 	calr	SeMenu_StoreEffectParam
-SeMenu_ApplyPartEdit_Skip32:
+SeLfo1_StepSelectorAndReload_Skip32:
 	ld	wa, 4:i3
 	calr	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+20)
@@ -2813,14 +2830,14 @@ SeMenu_ApplyPartEdit_AltStore_Join3:
 	ld	de, 0:i3
 	calr	SeMenu_StepParamFieldAndSend
 	cp	(xsp+16), 0
-	jr	nz, SeMenu_ApplyPartEdit_Skip33
+	jr	nz, SeLfo1_StepSelectorAndReload_Skip33
 	cp	(xsp+14), 1
-	jr	nz, SeMenu_ApplyPartEdit_Skip33
+	jr	nz, SeLfo1_StepSelectorAndReload_Skip33
 	ld	c, (xsp+3)
 	extz	bc
 	ld	wa, 1:i3
 	calr	SeMenu_StoreEffectParam
-SeMenu_ApplyPartEdit_Skip33:
+SeLfo1_StepSelectorAndReload_Skip33:
 	ld	wa, 5:i3
 	calr	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+20)
@@ -2861,14 +2878,14 @@ SeMenu_ApplyPartEdit_AltStore_Join4:
 	ld	de, 0:i3
 	calr	SeMenu_StepParamFieldAndSend
 	cp	(xsp+16), 0
-	jr	nz, SeMenu_ApplyPartEdit_Skip34
+	jr	nz, SeLfo1_StepSelectorAndReload_Skip34
 	cp	(xsp+14), 1
-	jr	nz, SeMenu_ApplyPartEdit_Skip34
+	jr	nz, SeLfo1_StepSelectorAndReload_Skip34
 	ld	c, (xsp+3)
 	extz	bc
 	ld	wa, 0:i3
 	calr	SeMenu_StoreEffectParam
-SeMenu_ApplyPartEdit_Skip34:
+SeLfo1_StepSelectorAndReload_Skip34:
 	ld	wa, 6:i3
 	calr	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+20)
@@ -2960,24 +2977,24 @@ SeMenu_ApplyPartEdit_AltStore_Join7:
 	ld	wa, 0:i3
 	calr	SeMenu_LoadPartParam
 	cp	(xsp+2), 0
-	jr	nz, SeMenu_ApplyPartEdit_Skip35
+	jr	nz, SeLfo1_StepSelectorAndReload_Skip35
 	cp	(xsp), 0
-	jr	z, SeMenu_ApplyPartEdit_Epilogue8
+	jr	z, SeLfo1_StepSelectorAndReload_Epilogue8
 	ld	wa, 0:i3
 	ld	bc, 0:i3
-	jr	SeMenu_ApplyPartEdit_Join19
-SeMenu_ApplyPartEdit_Skip35:
+	jr	SeLfo1_StepSelectorAndReload_Join19
+SeLfo1_StepSelectorAndReload_Skip35:
 	cp	(xsp), 1
-	jr	z, SeMenu_ApplyPartEdit_Epilogue8
+	jr	z, SeLfo1_StepSelectorAndReload_Epilogue8
 	ld	wa, 0:i3
 	ld	bc, 1:i3
-SeMenu_ApplyPartEdit_Join19:
+SeLfo1_StepSelectorAndReload_Join19:
 	calr	SeMenu_StorePartParam
 	pushw	0
 	pushw	40
 	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
-SeMenu_ApplyPartEdit_Epilogue8:
+SeLfo1_StepSelectorAndReload_Epilogue8:
 	inc	4, xsp
 	ret
 SeMenu_ApplyPartEdit_AltStore_Join8:
@@ -2988,7 +3005,7 @@ SeMenu_ApplyPartEdit_AltStore_Join8:
 	ld	wa, 0:i3
 	calr	SeMenu_LoadPartParam
 	cp	(xsp+14), 0
-	jr	z, SeMenu_ApplyPartEdit_Epilogue2
+	jr	z, SeLfo1_StepSelectorAndReload_Epilogue2
 	lda	xwa, (xsp+12)
 	calr	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
@@ -3016,7 +3033,7 @@ SeMenu_ApplyPartEdit_AltStore_Join8:
 	calr	SeMenu_ApplyPartEdit_Helper7
 	ld	wa, 1:i3
 	calr	SeMenu_BindDialToColumn
-SeMenu_ApplyPartEdit_Epilogue2:
+SeLfo1_StepSelectorAndReload_Epilogue2:
 	lda	xsp, (xsp+20)
 	ret
 SeMenu_ApplyPartEdit_AltStore_Join9:
@@ -3027,7 +3044,7 @@ SeMenu_ApplyPartEdit_AltStore_Join9:
 	ld	wa, 0:i3
 	calr	SeMenu_LoadPartParam
 	cp	(xsp+14), 0
-	jr	z, SeMenu_ApplyPartEdit_Epilogue3
+	jr	z, SeLfo1_StepSelectorAndReload_Epilogue3
 	lda	xwa, (xsp+12)
 	calr	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
@@ -3055,7 +3072,7 @@ SeMenu_ApplyPartEdit_AltStore_Join9:
 	calr	SeMenu_ApplyPartEdit_Helper7
 	ld	wa, 2:i3
 	calr	SeMenu_BindDialToColumn
-SeMenu_ApplyPartEdit_Epilogue3:
+SeLfo1_StepSelectorAndReload_Epilogue3:
 	lda	xsp, (xsp+20)
 	ret
 SeMenu_ApplyPartEdit_AltStore_Join10:
@@ -3071,7 +3088,7 @@ SeMenu_ApplyPartEdit_AltStore_Join10:
 	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp+2)
 	cp	(xsp+16), 0
-	jr	nz, SeMenu_ApplyPartEdit_Skip
+	jr	nz, SeLfo1_StepSelectorAndReload_Skip
 	ldib_erp 250, 2
 	ld wa, 2:i3
 	calr	SeMenu_LoadPartParam
@@ -3082,8 +3099,8 @@ SeMenu_ApplyPartEdit_AltStore_Join10:
 	ld	(xwa+9), 206
 	ld	a, (xsp+20)
 	ldfr_berp a, 251
-	jr SeMenu_ApplyPartEdit_Join2
-SeMenu_ApplyPartEdit_Skip:
+	jr SeLfo1_StepSelectorAndReload_Join2
+SeLfo1_StepSelectorAndReload_Skip:
 	ldib_erp 250, 5
 	ld wa, 5:i3
 	calr	SeMenu_LoadPartParam
@@ -3094,7 +3111,7 @@ SeMenu_ApplyPartEdit_Skip:
 	ld	(xwa+9), 0
 	ld	a, (xsp+18)
 	ldfr_berp a, 251
-SeMenu_ApplyPartEdit_Join2:
+SeLfo1_StepSelectorAndReload_Join2:
 	ld	a, (xsp+22)
 	extz	wa
 	lda	xbc, (xsp+12)
@@ -3124,7 +3141,7 @@ SeMenu_ApplyPartEdit_AltStore_Join11:
 	ld	wa, 0:i3
 	calr	SeMenu_LoadPartParam
 	cp	(xsp+14), 0
-	jr	z, SeMenu_ApplyPartEdit_Epilogue4
+	jr	z, SeLfo1_StepSelectorAndReload_Epilogue4
 	lda	xwa, (xsp+12)
 	calr	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
@@ -3152,7 +3169,7 @@ SeMenu_ApplyPartEdit_AltStore_Join11:
 	calr	SeMenu_ApplyPartEdit_Helper7
 	ld	wa, 4:i3
 	calr	SeMenu_BindDialToColumn
-SeMenu_ApplyPartEdit_Epilogue4:
+SeLfo1_StepSelectorAndReload_Epilogue4:
 	lda	xsp, (xsp+20)
 	ret
 SeMenu_ApplyPartEdit_AltStore_Join12:
@@ -3168,7 +3185,7 @@ SeMenu_ApplyPartEdit_AltStore_Join12:
 	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp+2)
 	cp	(xsp+16), 0
-	jr	nz, SeMenu_ApplyPartEdit_Skip2
+	jr	nz, SeLfo1_StepSelectorAndReload_Skip2
 	ldi_erpb 250, 10
 	ldw wa, 10
 	calr	SeMenu_LoadPartParam
@@ -3179,8 +3196,8 @@ SeMenu_ApplyPartEdit_AltStore_Join12:
 	ld	(xwa+9), 206
 	ld	a, (xsp+20)
 	ldfr_berp a, 251
-	jr SeMenu_ApplyPartEdit_Join3
-SeMenu_ApplyPartEdit_Skip2:
+	jr SeLfo1_StepSelectorAndReload_Join3
+SeLfo1_StepSelectorAndReload_Skip2:
 	ldib_erp 250, 7
 	ld wa, 7:i3
 	calr	SeMenu_LoadPartParam
@@ -3191,7 +3208,7 @@ SeMenu_ApplyPartEdit_Skip2:
 	ld	(xwa+9), 0
 	ld	a, (xsp+18)
 	ldfr_berp a, 251
-SeMenu_ApplyPartEdit_Join3:
+SeLfo1_StepSelectorAndReload_Join3:
 	ld	a, (xsp+22)
 	extz	wa
 	lda	xbc, (xsp+12)
@@ -3221,7 +3238,7 @@ SeMenu_ApplyPartEdit_AltStore_Join13:
 	ld	wa, 0:i3
 	calr	SeMenu_LoadPartParam
 	cp	(xsp+14), 0
-	jr	z, SeMenu_ApplyPartEdit_Epilogue5
+	jr	z, SeLfo1_StepSelectorAndReload_Epilogue5
 	lda	xwa, (xsp+12)
 	calr	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
@@ -3249,7 +3266,7 @@ SeMenu_ApplyPartEdit_AltStore_Join13:
 	calr	SeMenu_ApplyPartEdit_Helper7
 	ld	wa, 6:i3
 	calr	SeMenu_BindDialToColumn
-SeMenu_ApplyPartEdit_Epilogue5:
+SeLfo1_StepSelectorAndReload_Epilogue5:
 	lda	xsp, (xsp+20)
 	ret
 SeMenu_ApplyPartEdit_AltStore_Join14:
@@ -3265,7 +3282,7 @@ SeMenu_ApplyPartEdit_AltStore_Join14:
 	calr	SeMenu_LoadPartParam
 	lda	xbc, (xsp+2)
 	cp	(xsp+16), 0
-	jr	nz, SeMenu_ApplyPartEdit_Skip3
+	jr	nz, SeLfo1_StepSelectorAndReload_Skip3
 	ldib_erp 250, 1
 	ld wa, 1:i3
 	calr	SeMenu_LoadPartParam
@@ -3276,8 +3293,8 @@ SeMenu_ApplyPartEdit_AltStore_Join14:
 	ld	(xwa+9), 206
 	ld	a, (xsp+20)
 	ldfr_berp a, 251
-	jr SeMenu_ApplyPartEdit_Join4
-SeMenu_ApplyPartEdit_Skip3:
+	jr SeLfo1_StepSelectorAndReload_Join4
+SeLfo1_StepSelectorAndReload_Skip3:
 	ldi_erpb 250, 9
 	ldw wa, 9
 	calr	SeMenu_LoadPartParam
@@ -3288,7 +3305,7 @@ SeMenu_ApplyPartEdit_Skip3:
 	ld	(xwa+9), 0
 	ld	a, (xsp+18)
 	ldfr_berp a, 251
-SeMenu_ApplyPartEdit_Join4:
+SeLfo1_StepSelectorAndReload_Join4:
 	ld	a, (xsp+22)
 	extz	wa
 	lda	xbc, (xsp+12)
@@ -3352,7 +3369,7 @@ SeMenu_ApplyPartEdit_AltStore_Join15:
 	ldw	wa, 9
 	calr	SeMenu_LoadPartParam
 	cp	(xsp+12), 0
-	jr	z, SeMenu_ApplyPartEdit_Skip36
+	jr	z, SeLfo1_StepSelectorAndReload_Skip36
 	ldw	wa, 9
 	ld	bc, 0:i3
 	calr	SeMenu_StorePartParam
@@ -3360,7 +3377,7 @@ SeMenu_ApplyPartEdit_AltStore_Join15:
 	pushw	41
 	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
-SeMenu_ApplyPartEdit_Skip36:
+SeLfo1_StepSelectorAndReload_Skip36:
 	ld	wa, 2:i3
 	calr	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+20)
@@ -3407,7 +3424,7 @@ SeMenu_ApplyPartEdit_AltStore_Join16:
 	ldw	wa, 9
 	calr	SeMenu_LoadPartParam
 	cp	(xsp+12), 1
-	jr	z, SeMenu_ApplyPartEdit_Skip4
+	jr	z, SeLfo1_StepSelectorAndReload_Skip4
 	ldw	wa, 9
 	ld	bc, 1:i3
 	calr	SeMenu_StorePartParam
@@ -3415,7 +3432,7 @@ SeMenu_ApplyPartEdit_AltStore_Join16:
 	pushw	41
 	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
-SeMenu_ApplyPartEdit_Skip4:
+SeLfo1_StepSelectorAndReload_Skip4:
 	ld	wa, 3:i3
 	calr	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+20)
@@ -3462,7 +3479,7 @@ SeMenu_ApplyPartEdit_AltStore_Join17:
 	ldw	wa, 9
 	calr	SeMenu_LoadPartParam
 	cp	(xsp+12), 2
-	jr	z, SeMenu_ApplyPartEdit_Skip37
+	jr	z, SeLfo1_StepSelectorAndReload_Skip37
 	ldw	wa, 9
 	ld	bc, 2:i3
 	calr	SeMenu_StorePartParam
@@ -3470,7 +3487,7 @@ SeMenu_ApplyPartEdit_AltStore_Join17:
 	pushw	41
 	call	SeMenu_ShowConfirmDialog
 	inc	4, xsp
-SeMenu_ApplyPartEdit_Skip37:
+SeLfo1_StepSelectorAndReload_Skip37:
 	ld	wa, 4:i3
 	calr	SeMenu_BindDialToColumn
 	lda	xsp, (xsp+20)
@@ -3484,7 +3501,7 @@ SeMenu_ApplyPartEdit_AltStore_Join18:
 	ld	de, 0:i3
 	calr	SeMenu_StepNoteParamInRange
 	cp	l, 1:i3
-	jr	nz, SeMenu_ApplyPartEdit_Skip5
+	jr	nz, SeLfo1_StepSelectorAndReload_Skip5
 	lda	xwa, (xsp+2)
 	calr	SeMenu_ValidatePartNumber
 	lda	xbc, (xsp)
@@ -3504,7 +3521,7 @@ SeMenu_ApplyPartEdit_AltStore_Join18:
 	ld	wa, 2:i3
 	ld	bc, 1:i3
 	calr	SeMenu_DrawKeyScaleGraph
-SeMenu_ApplyPartEdit_Skip5:
+SeLfo1_StepSelectorAndReload_Skip5:
 	ld	wa, 5:i3
 	calr	SeMenu_BindDialToColumn
 	inc	6, xsp
@@ -3595,12 +3612,12 @@ SeMenu_ApplyPartEdit_AltStore_Join21:
 	ld	(xbc+7), 0
 	lda	xwa, (xbc+8)
 	cp	(xsp+14), 0
-	jr	nz, SeMenu_ApplyPartEdit_Skip6
+	jr	nz, SeLfo1_StepSelectorAndReload_Skip6
 	ld	(xwa), 27
-	jr	SeMenu_ApplyPartEdit_Join5
-SeMenu_ApplyPartEdit_Skip6:
+	jr	SeLfo1_StepSelectorAndReload_Join5
+SeLfo1_StepSelectorAndReload_Skip6:
 	ld	(xwa), 3
-SeMenu_ApplyPartEdit_Join5:
+SeLfo1_StepSelectorAndReload_Join5:
 	ld	(xbc+9), 0
 	ld	a, (xsp+24)
 	extz	wa
@@ -5103,7 +5120,7 @@ SeMenu_SelectPartAndRedraw:
 SeMenu_ApplyPartEdit_Entry5_Code_Skip:
 	ld	a, (xsp+4)
 	extz	wa
-	calr	SeMenu_SetupMenuDisplay_Finalize_Data
+	calr	SeMenu_SetCurrentPart
 	ld	c, (xsp+4)
 	extz	bc
 	ld	wa, 0:i3
@@ -6144,7 +6161,9 @@ SeMenu_SetPatchBank:
 	ld (1720:16), a
 	ret
 
-SeMenu_PatchBank_Data:
+; SeMenu_SetPartRecordBits: Sets (E = 1) or clears (E = 0) the bits C of byte A of the current part's panel record
+;   (part 0/1/2 -> tag 0 at 0xF9B6, tag 1 at 0xF9D0, tag 2 at 0xF9EA). Basis: callers + body.
+SeMenu_SetPartRecordBits:
 	dec	8, xsp
 	ld	(xsp+2), e
 	ld	(xsp+4), c
@@ -6166,37 +6185,37 @@ SeMenu_PatchBank_Data:
 	extz	xhl
 	add	xhl, xix
 	cp	(xsp+2), 1
-	jr	nz, SeMenu_PatchBank_Data_Skip5
+	jr	nz, SeMenu_SetPartRecordBits_Skip5
 	cp	(xsp), 1
-	jr	nz, SeMenu_PatchBank_Data_Skip3
+	jr	nz, SeMenu_SetPartRecordBits_Skip3
 	ld	a, (xsp+4)
 	or	(xde), a
-	jr	SeMenu_PatchBank_Data_Epilogue2
-SeMenu_PatchBank_Data_Skip3:
+	jr	SeMenu_SetPartRecordBits_Epilogue2
+SeMenu_SetPartRecordBits_Skip3:
 	cp	(xsp), 2
-	jr	nz, SeMenu_PatchBank_Data_Skip4
+	jr	nz, SeMenu_SetPartRecordBits_Skip4
 	ld	a, (xsp+4)
 	or	(xbc), a
-	jr	SeMenu_PatchBank_Data_Epilogue2
-SeMenu_PatchBank_Data_Skip4:
+	jr	SeMenu_SetPartRecordBits_Epilogue2
+SeMenu_SetPartRecordBits_Skip4:
 	ld	a, (xsp+4)
 	or	(xhl), a
-	jr	SeMenu_PatchBank_Data_Epilogue2
-SeMenu_PatchBank_Data_Skip5:
+	jr	SeMenu_SetPartRecordBits_Epilogue2
+SeMenu_SetPartRecordBits_Skip5:
 	ld	a, (xsp+4)
 	cpl	a
 	cp	(xsp), 1
-	jr	nz, SeMenu_PatchBank_Data_Skip6
+	jr	nz, SeMenu_SetPartRecordBits_Skip6
 	and	(xde), a
-	jr	SeMenu_PatchBank_Data_Epilogue2
-SeMenu_PatchBank_Data_Skip6:
+	jr	SeMenu_SetPartRecordBits_Epilogue2
+SeMenu_SetPartRecordBits_Skip6:
 	cp	(xsp), 2
-	jr	nz, SeMenu_PatchBank_Data_Skip7
+	jr	nz, SeMenu_SetPartRecordBits_Skip7
 	and	(xbc), a
-	jr	SeMenu_PatchBank_Data_Epilogue2
-SeMenu_PatchBank_Data_Skip7:
+	jr	SeMenu_SetPartRecordBits_Epilogue2
+SeMenu_SetPartRecordBits_Skip7:
 	and	(xhl), a
-SeMenu_PatchBank_Data_Epilogue2:
+SeMenu_SetPartRecordBits_Epilogue2:
 	inc	8, xsp
 	ret
 ; SeMenu_StepNoteParamInRange: Steps edit-buffer byte C (bit 7 kept) by the dial step in A, where 0 means off and
@@ -6233,10 +6252,10 @@ SeMenu_StepNoteParamInRange_Skip2:
 	cp	a, 0:i3
 	jr	nz, SeMenu_PatchBank_Data_Entry_Skip6
 	cp	(xsp+4), 127
-	jr	nc, SeMenu_PatchBank_Data_Skip2
+	jr	nc, SeMenu_PatchBank_Data_Entry_Skip2
 	ld	a, (xsp+4)
 	cp	a, (xsp+16)
-	jr	nc, SeMenu_PatchBank_Data_Skip2
+	jr	nc, SeMenu_PatchBank_Data_Entry_Skip2
 SeMenu_PatchBank_Data_Entry:
 	cp	(xsp+4), 0
 	jr	nz, SeMenu_PatchBank_Data_Entry_Skip3
@@ -6266,10 +6285,10 @@ SeMenu_PatchBank_Data_Entry_Join:
 SeMenu_PatchBank_Data_Entry_Skip5:
 	ld	a, (xsp+4)
 	cp	a, (xsp+16)
-	jr	ule, SeMenu_PatchBank_Data_Skip
+	jr	ule, SeMenu_PatchBank_Data_Entry_Skip
 	ld	a, (xsp+16)
 	ld	(xsp+4), a
-SeMenu_PatchBank_Data_Skip:
+SeMenu_PatchBank_Data_Entry_Skip:
 	ld	a, (xsp)
 	or	(xsp+4), a
 	ld	a, (xsp+8)
@@ -6278,16 +6297,16 @@ SeMenu_PatchBank_Data_Skip:
 	extz	bc
 	calr	SeMenu_StorePartParam
 	ld	l, 1:opc
-	jr	SeMenu_PatchBank_Data_Epilogue
+	jr	SeMenu_PatchBank_Data_Entry_Epilogue
 SeMenu_PatchBank_Data_Entry_Skip6:
 	cp	(xsp+4), 0
-	jr	z, SeMenu_PatchBank_Data_Skip2
+	jr	z, SeMenu_PatchBank_Data_Entry_Skip2
 	ld	a, (xsp+4)
 	cp	a, (xsp+6)
 	jr	ugt, SeMenu_PatchBank_Data_Entry
-SeMenu_PatchBank_Data_Skip2:
+SeMenu_PatchBank_Data_Entry_Skip2:
 	ld	l, 0:opc
-SeMenu_PatchBank_Data_Epilogue:
+SeMenu_PatchBank_Data_Entry_Epilogue:
 	lda	xsp, (xsp+12)
 	retd	2
 
@@ -6348,7 +6367,8 @@ SeMenu_SetDisplayState:
 	ld (1733:16), a
 	ret
 
-SeMenu_DisplayState_Data:
+; SeMenu_GetDisplayState: Copies RAM 0x6C5 to (XWA): the getter twin of SeMenu_SetDisplayState. Basis: callers + body.
+SeMenu_GetDisplayState:
 	ld	(xwa), (0x6c5)
 	ret
 ; SeMenu_SetLastSwitch: Stores A, the switch number just decoded, in RAM 0x065A. Basis: callers + body --
@@ -7152,7 +7172,7 @@ SePitEnv2_OnSwitch15:
 SePitLfo1_OnColumn2:
 	extz	wa
 	ld	bc, 1:i3
-	jp	SeMenu_ApplyPartEdit_Data2
+	jp	SeLfo1_StepSelectorAndReload
 SePitLfo1_OnColumn3:
 	extz	wa
 	ld	bc, 1:i3

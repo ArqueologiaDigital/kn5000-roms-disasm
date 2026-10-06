@@ -1324,9 +1324,9 @@ Data_InOutGridDispatch:
 	add	bc, bc
 	lda	xix, (Data_InOutGridDispatch_CaseTable_3:24)
 	ld	bc, (xix+bc)
-	lda	xix, (Data_InOutGridDispatch_Code:24)
+	lda	xix, (InOutGridCheck_IncRight1Input:24)
 	jp	t, (xix+bc)
-Data_InOutGridDispatch_Code:
+InOutGridCheck_IncRight1Input:
 	ld	xwa, 0x2100
 	ld	bc, 1:i3
 	ld	de, 1:i3
@@ -1405,9 +1405,9 @@ InOutGridCheck_OnIndexswDown:	; cases 29360152, 29360154
 	add	bc, bc
 	lda	xix, (Data_InOutGridDispatch_CaseTable_2:24)
 	ld	bc, (xix+bc)
-	lda	xix, (Data_InOutGridDispatch_Code_2:24)
+	lda	xix, (InOutGridCheck_DecRight1Input:24)
 	jp	t, (xix+bc)
-Data_InOutGridDispatch_Code_2:
+InOutGridCheck_DecRight1Input:
 	ld	xwa, 0x2100
 	ldw	bc, 0xffff
 	ld	de, 1:i3

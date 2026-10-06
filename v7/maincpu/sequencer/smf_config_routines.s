@@ -52,7 +52,7 @@ SMF_WriteLoop2_BufferEmpty:
 SMF_WriteLoop2_Continue:
 	jrl SMF_ProcessEventLoop
 
-SMF_ProcessEventLoop_Entry:
+SMF_ControlChange_SkipEvent:
 	jrl SMF_ProcessEventLoop
 
 SMF_IncrementPosition:
@@ -199,36 +199,36 @@ SMF_SetupActiveChannel_Str_MTrk:
 	; writes the track-length placeholder from RAM words 0x0FA2/0x0FA4
 	; instead (scripts/analysis/sequi_find_refs.py v7 0xF28226 -> none).
 	.byte 0x00, 0x00, 0x00, 0x00
-	; +0x1A (SMF_ScanAndProcessChannel_Data): 20 x 16-bit offsets indexed by the
+	; +0x1A (SMF_PartRecordOffsetByTrackAssign): 20 x 16-bit offsets indexed by the
 	; PART-TYPE CODE a MIDI channel carries in RAM 0xF1A0[channel] (x2).
 	; Readers SMF_ScanAndProcessChannel (0xF2727F), SMF_WriteVol_PanAndPitch (0xF274EB),
 	; SMF_WriteRPN_FineTune (0xF2759F), SMF_WriteRPN_CoarseTune (0xF27661) and
-	; SMF_WriteRPN_Transpose (0xF27719): `ld xix, SMF_ScanAndProcessChannel_Data`,
+	; SMF_WriteRPN_Transpose (0xF27719): `ld xix, SMF_PartRecordOffsetByTrackAssign`,
 	; `ld hl, (xrr+rr)` (hl := table[code]); 0xFFFF skips the channel;
 	; otherwise the offset is added to RAM 0xF460 (`lda xiy, (xrr+rr)`) to reach
 	; that part's record.  The offsets are 0x36 + 26*k (k = 0..15), so the
 	; records sit 26 bytes apart.  20 entries, pinned by the next piece at +0x42.
-SMF_ScanAndProcessChannel_Data:
+SMF_PartRecordOffsetByTrackAssign:
 	.short 0x0036, 0x006a, 0x0050, 0x00ec, 0x0106	; codes 0-4
 	.short 0x0120, 0x013a, 0x0154, 0x009e, 0x00b8	; codes 5-9
 	.short 0x00d2, 0x0084, 0x01bc, 0xffff, 0xffff	; codes 10-14
 	.short 0xffff, 0xffff, 0x016e, 0x0188, 0x01a2	; codes 15-19
-	; +0x42 (SMF_Setup_WriteLoop_Data): delta 0 + SysEx F0 05 7E 7F 09 01 F7,
-	; "General MIDI System On".  +0x4A (SMF_Setup_WriteLoop_Data_2): the same
+	; +0x42 (SMF_GmSystemOnEvent): delta 0 + SysEx F0 05 7E 7F 09 01 F7,
+	; "General MIDI System On".  +0x4A (SMF_GmSystemOffEvent): the same
 	; with 09 02, "GM System Off".  SMF_Setup_WriteLoop (0xF27224) writes 8 bytes
 	; of the first when RAM byte 0x10E4 is non-zero, of the second when it
 	; is zero.
-SMF_Setup_WriteLoop_Data:
+SMF_GmSystemOnEvent:
 	.byte 0x00, 0xf0, 0x05, 0x7e, 0x7f, 0x09, 0x01, 0xf7
-SMF_Setup_WriteLoop_Data_2:
+SMF_GmSystemOffEvent:
 	.byte 0x00, 0xf0, 0x05, 0x7e, 0x7f, 0x09, 0x02, 0xf7
-	; +0x52 (SMF_ProgramChange_ProcessPatch_Data): 20 bytes, indexed by the same
+	; +0x52 (SMF_PartIndexByTrackAssign): 20 bytes, indexed by the same
 	; part-type code.  SMF_ProgramChange_ProcessPatch (0xF27B68): L := 0xF1A0[ch],
-	; `ld xix, SMF_ProgramChange_ProcessPatch_Data`, `ld l, (xrr+rr)` (L := table[L]),
+	; `ld xix, SMF_PartIndexByTrackAssign`, `ld l, (xrr+rr)` (L := table[L]),
 	; stored at RAM 0x1A5C, the third byte of the 3-byte message built at
 	; 0x1A5A before SndParam_InitBufferConverge.  0x7F exactly where the
 	; offset table above holds 0xFFFF (codes 13-16).
-SMF_ProgramChange_ProcessPatch_Data:
+SMF_PartIndexByTrackAssign:
 	.byte 0x00, 0x02, 0x01, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x04, 0x05	; codes 0-9
 	.byte 0x06, 0x03, 0x0f, 0x7f, 0x7f, 0x7f, 0x7f, 0x0c, 0x0d, 0x0e	; codes 10-19
 

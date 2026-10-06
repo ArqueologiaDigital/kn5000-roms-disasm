@@ -914,9 +914,9 @@ Rhythm_ProcessAllPartsAndLoad:
 	calr RhythmPart_CopyData
 	calr RhythmPart1_ProcessAccentData
 	calr RhythmPart2_ProcessAccentData
-	calr AccVoice_LoadRhythmParams_Part3
-	calr AccVoice_LoadRhythmParams_Part4
-	calr AccVoice_LoadRhythmParams_Part5
+	calr RhythmPart3_ProcessAccentData
+	calr RhythmPart4_ProcessAccentData
+	calr RhythmPart5_ProcessAccentData
 	bit 0, (0x3283:16)
 	jr nz, Rhythm_ProcessAllDone
 	call AccVoice_LoadAllChannelParams
@@ -1108,7 +1108,7 @@ Rhythm_PackVelocityHighBit:
 Rhythm_VelocityPackDone:
 	ret
 
-AccVoice_LoadRhythmParams_Part3:
+RhythmPart3_ProcessAccentData:
 	bit 0, (0x3283:16)
 	jr z, RhythmPart3_LoadAndStore
 	call AccentData_ComparePart3
@@ -1163,7 +1163,7 @@ RhythmPart3_WriteDone:
 	call AccVoiceReg_WritePart3
 	ret
 
-AccVoice_LoadRhythmParams_Part4:
+RhythmPart4_ProcessAccentData:
 	bit 0, (0x3283:16)
 	jr z, RhythmPart4_LoadAndStore
 	call AccentData_ComparePart4
@@ -1218,7 +1218,7 @@ RhythmPart4_WriteDone:
 	call AccVoiceReg_WritePart4
 	ret
 
-AccVoice_LoadRhythmParams_Part5:
+RhythmPart5_ProcessAccentData:
 	bit 0, (0x3283:16)
 	jr z, RhythmPart5_LoadAndStore
 	call AccentData_ComparePart5

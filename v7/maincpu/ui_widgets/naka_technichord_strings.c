@@ -1999,9 +1999,9 @@ typedef struct __attribute__((packed)) {
     PsMixer_KnobPointerOffsets_t PsMixer_KnobPointerOffsets[16];
     char MUTE_str_3[6];
     /* PsMixer_CtlTypeProc1_Data: text (the asm slice of the same name) */
-    char PsMixer_CtlTypeProc1_Data[4];
+    char PsMixer_CtlTypeProc1_Str_Fmts[4];
     /* PsMixer_CtlTypeProc10_Data: text (the asm slice of the same name) */
-    char PsMixer_CtlTypeProc10_Data[4];
+    char PsMixer_CtlTypeProc10_Str_Fmts[4];
     /* Sound-parameter number of each on-screen drawbar 0..8: 0x280, 0x282, 0x281, 0x283..0x288 */
     uint16_t IvDrawbar1_DrawbarParamIds[9];
     /* item 0..14 -> LSW (panel-setting) id; items 0-10 are part-relative (+ part*1024), 11-14 are used as-is */
@@ -2516,12 +2516,12 @@ typedef struct __attribute__((packed)) {
     char SLSrcBankList_FuncBody_Entry_Str_Colon_3[4];
     char All_str_2[18];
     uint16_t SLSrcComposer_RowsPerColumn;
-    uint16_t SLSrcBankList_FuncBody_Data_3;
+    uint16_t SingleLoadSrc_ComposerEntryCount;
     char SLSrcBankList_FuncBody_Entry_Str_Colon_4[4];
     char SLSrcBankList_FuncBody_Entry_Str_Colon_5[4];
     char All_str_3[18];
     uint16_t SingleLoadSrc_SoundMemPageSize;
-    uint16_t SLSrcBankList_FuncBody_Data_4;
+    uint16_t SingleLoadSrc_SoundMemEntryCount;
     uint32_t SLSrc_HandleShow_PtrTable[5];  /* 5 pointers */
     char SLDstBankList_FuncBody_Str_Colon[4];
     char SLDstBankList_FuncBody_Str_Colon_2[4];
@@ -9546,9 +9546,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .MUTE_str_3 = ALIGNED_STRING("MUTE"),
 
-    .PsMixer_CtlTypeProc1_Data = "%s:",
+    .PsMixer_CtlTypeProc1_Str_Fmts = "%s:",
 
-    .PsMixer_CtlTypeProc10_Data = "%s:",
+    .PsMixer_CtlTypeProc10_Str_Fmts = "%s:",
 
     .IvDrawbar1_DrawbarParamIds = {
         0x0280, 0x0282, 0x0281, 0x0283, 0x0284, 0x0285, 0x0286, 0x0287,
@@ -10648,7 +10648,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .SLSrcComposer_RowsPerColumn = 0xFF0A,
 
-    .SLSrcBankList_FuncBody_Data_3 = 0xFF1E,
+    .SingleLoadSrc_ComposerEntryCount = 0xFF1E,
 
     .SLSrcBankList_FuncBody_Entry_Str_Colon_4 = ALIGNED_STRING(": "),
 
@@ -10658,7 +10658,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .SingleLoadSrc_SoundMemPageSize = 0xFF14,
 
-    .SLSrcBankList_FuncBody_Data_4 = 0xFFA8,
+    .SingleLoadSrc_SoundMemEntryCount = 0xFFA8,
 
     .SLSrc_HandleShow_PtrTable = {
         NAKA_ADDR(SingleLoadSrc_PanelMemListProc),

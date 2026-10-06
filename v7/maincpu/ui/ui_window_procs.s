@@ -1216,8 +1216,8 @@ ModeEditProc_OnDraw:
 	call	GetModeNow
 	ld	qhl, 0
 	pushw	hl
-	pushw	ModeEdit_HandlePaint_Data@hi16
-	pushw	ModeEdit_HandlePaint_Data@lo16
+	pushw	ModeEditProc_Str_ModeIdAndName@hi16
+	pushw	ModeEditProc_Str_ModeIdAndName@lo16
 	lda	xwa, (xsp+14)
 	push	xwa
 	call	Sprintf_Locked
@@ -1686,8 +1686,8 @@ VwUserBitmapByName_HandlePaint:
 	lda	xwa, (xsp+8)
 	push	xwa
 	call	Strcpy
-	pushw	VwUserBitmapByName_HandlePaint_Data@hi16
-	pushw	VwUserBitmapByName_HandlePaint_Data@lo16
+	pushw	VwUserBitmapByName_Str_BmpExt@hi16
+	pushw	VwUserBitmapByName_Str_BmpExt@lo16
 	lda	xwa, (xsp+16)
 	push	xwa
 	call	Strcat
@@ -2332,8 +2332,8 @@ TextBox_SetupWordwrap:
 	jrl ule, TextBox_FreeBuffer
 
 TextBox_DrawLineLoop:
-	pushw TextBox_DrawLineLoop_Data@hi16
-	pushw TextBox_DrawLineLoop_Data@lo16
+	pushw TextBox_Str_LineBreak@hi16
+	pushw TextBox_Str_LineBreak@lo16
 	push XIZ
 	call StrSearch_Init
 	inc	8, xsp
@@ -6264,8 +6264,8 @@ Gfx_LoadSplashBMP:
 	cp IZ,0x000e
 	jrl nz, SplashScreen_Return
 	pushw 0x0002
-	pushw Gfx_LoadSplashBMP_Data@hi16
-	pushw Gfx_LoadSplashBMP_Data@lo16
+	pushw Gfx_LoadSplashBMP_Str_BM@hi16
+	pushw Gfx_LoadSplashBMP_Str_BM@lo16
 	lda xwa, (xsp + 0x0450)
 	push XWA
 	call String_Compare

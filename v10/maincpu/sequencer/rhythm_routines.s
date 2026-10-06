@@ -407,7 +407,7 @@ Rhythm_CrossVoice_Apply:
 	sub w, 0xc
 	ld (0x332e:16), w
 	or (0x332d:16), 1
-	ld xiy, AccPatch_Transpose_LookupTable_Data
+	ld xiy, Note_PitchClassTable
 	ld	w, (xiy+a)
 	sub a, w
 	pop xiy
@@ -423,7 +423,7 @@ Rhythm_NoteRangeCheck:
 	jr z, Rhythm_NoteRangeReturn
 	push xiy
 	ld w, a
-	ld xiy, AccPatch_Transpose_LookupTable_Data
+	ld xiy, Note_PitchClassTable
 	ld	w, (xiy+a)
 	sub a, w
 	pop xiy
@@ -467,7 +467,7 @@ Rhythm_VelLookA_SelectTable:
 	ld xiy, Rhythm_InstrMapTable_Default
 	bit 2, (0x32f4:16)
 	jr z, Rhythm_VelLookA_CheckBit3
-	ld xiy, Rhythm_VelLookA_SelectTable_Data
+	ld xiy, Rhythm_InstrMapTable_D4
 
 Rhythm_VelLookA_CheckBit3:
 	bit 3, (0x32f4:16)
@@ -491,7 +491,7 @@ Rhythm_VelLookA_Done:
 
 Rhythm_InstrBaseLookup:
 	push xiy
-	ld xiy, AccPatch_Transpose_LookupTable_Data
+	ld xiy, Note_PitchClassTable
 	lda	xiy, (xiy+a)
 	ld a, (xiy)
 	pop xiy
@@ -508,9 +508,9 @@ Rhythm_InstrBaseLookup:
 ;     lda_dri XIY, ...  ; xiy += row*16  /  ldb_sri A, ... ; A := row[A]
 ;     add w, a                                           ; note += row[col]
 ; where the column A came from Rhythm_InstrBaseLookup (a byte of
-; AccPatch_Transpose_LookupTable_Data indexed by the note).
+; Note_PitchClassTable indexed by the note).
 ; Variant choice: bit 2 of RAM 0x32F4 selects +0x31 (the positional alias
-; Rhythm_VelLookA_SelectTable_Data), bit 3 selects +0x62 (..._0x62) and,
+; Rhythm_InstrMapTable_D4), bit 3 selects +0x62 (..._0x62) and,
 ; being tested second, wins over bit 2;
 ; Rhythm_TranspMod_BaseApply always uses +0x31.  Stride 0x31 = 49 is pinned by
 ; those two aliases; the tables end exactly at Rhythm_TransposeNote (147 B).
@@ -524,7 +524,10 @@ Rhythm_InstrMapTable_Default:
 	.byte 5, 0, 0, 1, 1, 6, 4, 5, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0	; entry 48: past the 0..0x2F index clamp, never read
 	; +0x31: bit 2 of 0x32F4 set; always used by Rhythm_TranspMod_BaseApply
-Rhythm_VelLookA_SelectTable_Data:
+; Rhythm_InstrMapTable_D4: Second 49-byte variant of Rhythm_InstrMapTable_Default (RAM 0x32D8, clamped 0..0x2F -> row
+;   of Rhythm_VelLookA_TableLookup_Table), used while bit 2 of 0x32F4 is set, i.e. for the D4 (status 0x94) channel;
+;   Rhythm_TranspMod_BaseApply always uses it. Basis: readers + bytes.
+Rhythm_InstrMapTable_D4:
 	.byte 0, 0, 0, 1, 5, 0, 3, 9, 10, 7, 4, 2, 5, 6, 6, 11
 	.byte 12, 14, 15, 8, 10, 16, 17, 4, 13, 18, 19, 20, 0, 5, 12, 13
 	.byte 5, 12, 13, 1, 1, 6, 4, 5, 11, 16, 0, 0, 0, 0, 0, 0
@@ -653,7 +656,7 @@ Rhythm_VoiceMap_Inst2Clamp:
 	ld xiy, Rhythm_InstrMapTable_Default
 	bit 2, (0x32f4:16)
 	jr z, Rhythm_VoiceMap_Inst2Bit2
-	ld xiy, Rhythm_VelLookA_SelectTable_Data
+	ld xiy, Rhythm_InstrMapTable_D4
 
 Rhythm_VoiceMap_Inst2Bit2:
 	bit 3, (0x32f4:16)
@@ -1600,7 +1603,7 @@ Rhythm_TranspMod_Done:
 
 Rhythm_TranspMod_BaseApply:
 	ld w, a
-	ld xiy, AccPatch_Transpose_LookupTable_Data
+	ld xiy, Note_PitchClassTable
 	ld	a, (xiy+a)
 	ld l, (0x32d8:16)
 	cp l, 0x30
@@ -1609,7 +1612,7 @@ Rhythm_TranspMod_BaseApply:
 
 Rhythm_TranspMod_BaseLookup:
 	extz hl
-	ld xiy, Rhythm_VelLookA_SelectTable_Data
+	ld xiy, Rhythm_InstrMapTable_D4
 	ld	l, (xiy+hl)
 	extz hl
 	sla hl, 4

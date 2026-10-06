@@ -174,9 +174,9 @@ Sprintf_CheckLengthLL:
 Sprintf_DispatchType:
 	ld	wa, iz
 	cp	iz, 0x47
-	jrl	z, Sprintf_FormatFloat_Entry
+	jrl	z, Sprintf_ConvFloat
 	cp	wa, 0x45
-	jrl	z, Sprintf_FormatFloat_Entry
+	jrl	z, Sprintf_ConvFloat
 	cp	wa, 0x58
 	jrl	z, Sprintf_Hex_GetArg
 	cp	wa, 0x25
@@ -925,7 +925,7 @@ Sprintf_StoreCount_Short:
 	ld	wa, (xsp + 4)
 	ld	(xbc), wa
 	jr	Sprintf_MainLoop_ReadNext
-Sprintf_FormatFloat_Entry:
+Sprintf_ConvFloat:
 	lda	xbc, (xsp + 68)
 	ld	wa, (xsp + 6)
 	bit	7, wa

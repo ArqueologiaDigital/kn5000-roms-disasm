@@ -1,0 +1,1187 @@
+[
+ {
+  "old": "FDTest_CloseAndReopen_Data_2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FDTest_String_CannotOpenReadFile",
+  "header": "FD self-test diagnostic line \"\\ncannot open read file\" (0x0A + text, NUL, 0xFF pad), printed when reopening A:IMMUNITY.TST for reading fails. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "factory_test/fd_test_code.s:158 `lda xwa, (FDTest_CloseAndReopen_Data_2:24)` + `calr FDTest_PrintDiag` -- only reader, on the FileOpen(\"rb\") failure path (jr nz, FDTest_ReadBack skips it)",
+   "factory_test/fd_test_code.s:149-153 `lda xwa, (FDTest_CloseAndReopen_Str_rb:24)` / `lda xwa, (FDLoadSaveTest_Str_A_IMMUNITY_TST:24)` / `call FileOpen` -- the open it reports",
+   "factory_test/fd_test_data.s:429-431 `.byte 0x0a` / `.ascii \"cannot open read file\"` / `.byte 0x00, 0xff` -- the bytes",
+   "factory_test/fd_test_data.s:16,93 `FDTest_String_Total:` / `FDTest_String_RunningTest:` -- the file's FDTest_String_* convention"
+  ]
+ },
+ {
+  "old": "FDTest_CompareResult_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FDTest_String_DataCompare",
+  "header": "FD self-test diagnostic line \"\\nData Compare =>\" (0x0A + text, NUL, 0xFF pad), printed before the read-back compare verdict. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "factory_test/fd_test_code.s:209 `lda xwa, (FDTest_CompareResult_Data:24)` + `calr FDTest_PrintDiag` -- only reader, after the 0x400-word compare loop",
+   "factory_test/fd_test_code.s:213 `lda xwa, (FDTest_CompareResult_Str_Error:24)` / 223 `FDTest_Pass_Str_OK` -- the \" Error!!!!!!!!\" / \" OK\" that follow it",
+   "factory_test/fd_test_data.s:436-438 `.byte 0x0a` / `.ascii \"Data Compare =>\"` / `.byte 0x00, 0xff` -- the bytes"
+  ]
+ },
+ {
+  "old": "HamaList_Entry",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "NakaPropTbl_HamaList",
+  "header": "Property-name list (+0x14 `props` field) of the HAMA class \"HamaList\": a single pointer to \"\", i.e. the class adds no properties. Basis: readers + bytes (naka_class_t layout).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "factory_test/test_data.s:39-44 `Hama_ClassTable_169:` .long HamaListProc / 8 bytes / .long HamaStr_HamaList / .long HamaList_HeaderStr_Empty / `.long HamaList_Entry` -- the record's +0x14 word",
+   "ui_widgets/naka_types.h:296-303 (v7 copy) `uint32_t props; /* +0x14 -> property-name pointers, \"\" last, then the names */` -- field meaning; ClassProc indexes these records",
+   "factory_test/test_data.s:33-36 `HamaList_Entry:` `.long HamaList_EntryStr_Empty` / `aligned_string \"\"` -- one pointer, to the \"\" terminator",
+   "ui_widgets/naka_direct_play_property_tables.s:129-131 `NakaPropTbl_DemoMedleyDisp:` `.long NakaPropStr_DemoMedleyDisp_0` / `aligned_string \"\"` -- same empty-list shape and the NakaPropTbl_<Class> naming"
+  ]
+ },
+ {
+  "old": "HamaEvtDisp_Entry",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "HamaDeb_HdaeDebugScreenFunc",
+  "header": "ApFunction \"hamadeb\" (NAKA_APFUNC_hamadeb 0x1290001) of the \"DEBUG SCREEN for HD-AE\" page: EVT_SW_IN 0x8A (LOAD) loads A:HKEXT.XAP into 0x200000, 0x8B (GO) checks its \"XAPR\" id and jumps to 0x200008;\nEVT_ARE_YOU_CLASS_PROC and everything else return 0. Basis: callers + body (entry 1 of Hama_ApFuncTable_129, named by Hama_ApFuncTable_429).",
+  "basis": "callers + body",
+  "evidence": [
+   "factory_test/test_data.s:17-19 `Hama_ApFuncTable_129:` .long FDTestDialogProc / `.long HamaEvtDisp_Entry` -- entry 1 of the Hama ApFunction table",
+   "factory_test/test_data.s:23-25,29-30 `Hama_ApFuncTable_429:` entry 1 `.long HamaStr_hamadeb` -> `aligned_string \"hamadeb\"` -- the firmware's own name; shared/event_codes.s:1645 NAKA_APFUNC_hamadeb = 0x1290001",
+   "factory_test/fd_test_data.s:107,115,127 \"DEBUG SCREEN for HD-AE\" container; LOAD button byte 0x8a, GO button byte 0x8b",
+   "factory_test/test_init.s:403-424 `cp xbc, EVT_SW_IN` / `cp xde, 0x8b` -> HamaEvtDisp_ExtBootstrap (calr LoadExtROM_Entry) / `cp xde, 0x8a` -> calr CheckFDStatusLoad_Entry",
+   "factory_test/test_init.s:443-462 CheckFDStatusLoad: FileOpen \"A:HKEXT.XAP\" / FileRead 0x8000 bytes to 0x200000; 472-487 LoadExtROM: String_Compare \"XAPR\" at 0x200000, `ld xhl, 0x200008` / `jp (xhl)`"
+  ]
+ },
+ {
+  "old": "GetAprStatus_Entry",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Xapr_GetPresentFlag",
+  "header": "Returns L = XAPR_PRESENT_FLAG (RAM 0x3DD04): 1 when an extension ROM with the \"XAPR\" id was found at 0x280000. Basis: callers + body -- the panel AA event-15 handlers and FileIO_DiskRemoved branch on L.",
+  "basis": "callers + body",
+  "evidence": [
+   "factory_test/test_init.s:489-491 `ld l, (XAPR_PRESENT_FLAG:24)` / `ret` -- the whole body",
+   "shared/ram_variables.s:115 `.equ XAPR_PRESENT_FLAG, 0x3dd04 ; 1 = extension ROM (XAPR) detected`",
+   "boot/main_title_ctrl_panel.s:510-512 `call GetAprStatus_Entry` / `cp l, 0:i3` / jr z, CtrlPanel_AA_15_AprInactive -- EVT_EASY_SET_ON with 0xB when present, 6 when not; 527 the same for the release",
+   "demo/file_demo_proc.s:8493-8495 `call GetAprStatus_Entry` / `cp l, 0:i3` / `ret nz` -- FileIO_DiskRemoved posts EVT_SET_VISIBLE to 0x600002 only without the extension"
+  ]
+ },
+ {
+  "old": "LoadXaprInit_Entry",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Xapr_DetectOnInit",
+  "header": "Init-phase-0 handler of the extension-ROM subsystem: compares the 4 bytes at 0x280000 with \"XAPR\" and sets XAPR_PRESENT_FLAG = 1 on a match (never clears it). Basis: callers + body -- entry 0 of WidgetDispatch_FDTestPtrTable, entry 2 of Subsys_HandlerTableList.",
+  "basis": "callers + body",
+  "evidence": [
+   "factory_test/fd_test_data.s:479-483 `WidgetDispatch_FDTestPtrTable:` `.long LoadXaprInit_Entry` + HamaStub1..3_Entry -- 4 init-phase handlers",
+   "ui_widgets/widget_dispatch.s:7077-7081 `Subsys_HandlerTableList:` third entry `.long WidgetDispatch_FDTestPtrTable`; boot/screen_group_dispatch.s:21-27 ScreenGroup_Dispatch calls table[phase] of every listed table",
+   "factory_test/test_init.s:494-499 `pushw LoadXaprInit_Entry_Str_XAPR@lo16` / `ld xwa, 0x280000` / `call String_Compare`",
+   "factory_test/test_init.s:501-504 `ret nz` / `ld (XAPR_PRESENT_FLAG:24), 0x01` / `ret`",
+   "hdae5000/hd-ae5000_v2_06i.s:380 (repo root) `.ascii \"XAPR4\" ; Magic identifier (\"XAPR\" checked by main CPU)` at 0x280000"
+  ]
+ },
+ {
+  "old": "HamaStub1_Entry",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Xapr_InitPhase1_NullRet",
+  "header": "Bare `ret`: the init-phase-1 handler of the extension-ROM subsystem (only phase 0, Xapr_DetectOnInit, does work). Basis: table + body -- entry 1 of WidgetDispatch_FDTestPtrTable (X_NullRet convention).",
+  "basis": "table + body",
+  "evidence": [
+   "factory_test/fd_test_data.s:481 `.long HamaStub1_Entry` -- entry 1 of WidgetDispatch_FDTestPtrTable (entry 2 of Subsys_HandlerTableList)",
+   "factory_test/test_init.s:506-507 `HamaStub1_Entry:` / `ret` -- the whole body",
+   "boot/screen_group_dispatch.s:21-27 -- ScreenGroup_Dispatch / VoiceInit_Dispatch call table[phase], phase 0-3, of every subsystem table",
+   "ui_widgets/extension_device_screens.s:1061-1063 PanelInput_InitFuncTable header: 'only phase 0 does work ..., phases 1-3 are a bare `ret`' -- the same pattern in a sibling table"
+  ]
+ },
+ {
+  "old": "HamaStub2_Entry",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Xapr_InitPhase2_NullRet",
+  "header": "Bare `ret`: the init-phase-2 handler of the extension-ROM subsystem (only phase 0, Xapr_DetectOnInit, does work). Basis: table + body -- entry 2 of WidgetDispatch_FDTestPtrTable (X_NullRet convention).",
+  "basis": "table + body",
+  "evidence": [
+   "factory_test/fd_test_data.s:482 `.long HamaStub2_Entry` -- entry 2 of WidgetDispatch_FDTestPtrTable (entry 2 of Subsys_HandlerTableList)",
+   "factory_test/test_init.s:509-510 `HamaStub2_Entry:` / `ret` -- the whole body",
+   "boot/screen_group_dispatch.s:21-27 -- ScreenGroup_Dispatch / VoiceInit_Dispatch call table[phase], phase 0-3, of every subsystem table",
+   "ui_widgets/extension_device_screens.s:1061-1063 PanelInput_InitFuncTable header: 'only phase 0 does work ..., phases 1-3 are a bare `ret`' -- the same pattern in a sibling table"
+  ]
+ },
+ {
+  "old": "HamaStub3_Entry",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Xapr_InitPhase3_NullRet",
+  "header": "Bare `ret`: the init-phase-3 handler of the extension-ROM subsystem (only phase 0, Xapr_DetectOnInit, does work). Basis: table + body -- entry 3 of WidgetDispatch_FDTestPtrTable (X_NullRet convention).",
+  "basis": "table + body",
+  "evidence": [
+   "factory_test/fd_test_data.s:483 `.long HamaStub3_Entry` -- entry 3 of WidgetDispatch_FDTestPtrTable (entry 2 of Subsys_HandlerTableList)",
+   "factory_test/test_init.s:512-513 `HamaStub3_Entry:` / `ret` -- the whole body",
+   "boot/screen_group_dispatch.s:21-27 -- ScreenGroup_Dispatch / VoiceInit_Dispatch call table[phase], phase 0-3, of every subsystem table",
+   "ui_widgets/extension_device_screens.s:1061-1063 PanelInput_InitFuncTable header: 'only phase 0 does work ..., phases 1-3 are a bare `ret`' -- the same pattern in a sibling table"
+  ]
+ },
+ {
+  "old": "CallExtIfActive_Entry",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Xapr_CallFrameHandler",
+  "header": "Main-loop hook: when XAPR_PRESENT_FLAG is set, calls the extension ROM's second entry vector 0x280010 (HD-AE5000: jp HDAE5000_Frame_Handler). Basis: callers + body -- MainLoop_SequencerPhase calls it on every pass.",
+  "basis": "callers + body",
+  "evidence": [
+   "boot/system_handlers.s:1247 `call CallExtIfActive_Entry` -- last call of MainLoop_SequencerPhase before `jrl MainLoop`",
+   "factory_test/test_init.s:516-520 `cp (XAPR_PRESENT_FLAG:24), 0x00` / `ret z` / `ld xhl, 0x280010` / `call (xhl)`",
+   "hdae5000/hd-ae5000_v2_06i.s:203 (repo root) `0x280010 - JP to HDAE5000_Frame_Handler`; 397-398 `HDAE5000_ENTRY_2:` `jp HDAE5000_Frame_Handler ; Called from main loop`",
+   "boot/system_handlers.s:1111-1113 MainLoop header: 'CallExtIfActive_Entry (HDAE5000 extension)'"
+  ]
+ },
+ {
+  "old": "LoadAndRunXapr_Entry",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Xapr_DetectAndCallBootInit",
+  "header": "Re-detects the extension ROM (\"XAPR\" at 0x280000 -> XAPR_PRESENT_FLAG 1, else 0) and, if present, calls its boot vector 0x280008 with XWA = 0x027ED2 (the object table). Basis: callers + body -- ScreenGroup_ReInit tail-jumps here at the end of init phase 0.",
+  "basis": "callers + body",
+  "evidence": [
+   "boot/screen_group_dispatch.s:16 `jp LoadAndRunXapr_Entry` -- tail of ScreenGroup_ReInit; 73 `call z, (ScreenGroup_ReInit:24)` -- only after phase 0",
+   "factory_test/test_init.s:523-536 `ld xwa, 0x280000` / `call String_Compare` / `ld (XAPR_PRESENT_FLAG:24), 0x01` / LoadAndRunXapr_ClearFlag `ld (XAPR_PRESENT_FLAG:24), 0x00`",
+   "factory_test/test_init.s:539-543 `cp (XAPR_PRESENT_FLAG:24), 0x00` / `ld xhl, 0x280008` / `lda xwa, (0x027ed2:24)` / `call (xhl)`",
+   "hdae5000/hd-ae5000_v2_06i.s:202 (repo root) `0x280008 - JP to HDAE5000_Boot_Init`; its HDAE5000_RAM_MainWorkspacePtr note: the workspace is the object table at 0x027ED2"
+  ]
+ },
+ {
+  "old": "Scoop_EventLoop_36Entry_Branch3_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Scoop_BoundOp0A_ClipBox",
+  "header": "4 x u16 {0, 0, 319, 239}: text clip box (the whole 320 x 240 screen) of Scoop bound display op 0x0A, copied with ldirw into its frame and passed to DrawString. Basis: readers + bytes (cf. SeGfx_StaticOp06_ClipBox).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "display/scoop_display.s:19843-19846 `ld xiy, Scoop_EventLoop_36Entry_Branch3_Data` / `lda xix, (xsp+264)` / `ld bc, 4:i3` / `ldirw` -- only reader, Scoop_EventLoop_12Entry_Alt_Data_Target10",
+   "includes/gui_format_strings.s:40 `.long Scoop_EventLoop_12Entry_Alt_Data_Target10` -- entry 10 (0x0A) of the op table",
+   "display/scoop_display.s:19887-19897 `lda xwa, (xsp+264)` / `ld xhl, xwa` ... `call DrawString` -- the copy is DrawString's box argument",
+   "includes/gui_format_strings.s:23 `.short 0, 0, 319, 239` -- the bytes",
+   "ui_widgets/disk_warning_strings.s:1279-1282 `SeGfx_StaticOp06_ClipBox` -- the same object and naming for the static ops"
+  ]
+ },
+ {
+  "old": "Scoop_EventLoop_36Entry_Branch3_Data_2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Scoop_BoundOp07_ClipBox",
+  "header": "4 x u16 {0, 0, 319, 239}: text clip box (whole 320 x 240 screen) of Scoop bound display op 7, which draws a string picked from a table by a masked, shifted RAM byte. Basis: readers + bytes (cf. SeGfx_StaticOp06_ClipBox).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "display/scoop_display.s:19909-19912 `ld xiy, Scoop_EventLoop_36Entry_Branch3_Data_2` / `lda xix, (xsp+266)` / `ld bc, 4:i3` / `ldirw` -- only reader, Scoop_EventLoop_12Entry_Alt_Data_Target7",
+   "includes/gui_format_strings.s:37 `.long Scoop_EventLoop_12Entry_Alt_Data_Target7` -- entry 7 of the op table",
+   "display/scoop_display.s:19913-19921 `ld iz, (xde+2)` / `ld a, (xiz)` / `and a, l` (mask +4) / shift by +5 -- the RAM byte that selects the text",
+   "display/scoop_display.s:19960-19970 `lda xwa, (xsp+266)` / `ld xhl, xwa` ... `call DrawString` -- the copy is DrawString's box argument",
+   "includes/gui_format_strings.s:28 `.short 0, 0, 319, 239` -- the bytes"
+  ]
+ },
+ {
+  "old": "Scoop_EventLoop_12Entry_Alt_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Scoop_BoundOpHandlerTable",
+  "header": "12 x u32: handler of each op (record byte 0, 0..11) of a Scoop bound display list (values read from RAM); Scoop_EventLoop_12Entry_Alt copies it to its frame and calls [op] with XWA = record, byte 1 = record length.\nSame op shape as GraphicsRender_Start_PtrTable: op 3 = ColorBlit_WithPaletteSave, op 10 prints a RAM byte with %1d/%2d/%3d. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "display/scoop_display.s:19985-19988 `ld xiy, Scoop_EventLoop_12Entry_Alt_Data` / `lda xix, (xsp + 6)` / `ldw bc, 0x18` / `ldirw` -- 24 words = 12 pointers copied to the frame",
+   "display/scoop_display.s:19993-20010 `ld c, (xiz)` / `cp c, 0xb` / `sla bc, 2` / `ld xhl, (xbc)` / `call (xhl)` then `ld a, (xsp + 4)` (byte 1) / `lda xiz, (xiz+wa)` -- op dispatch and record stride",
+   "includes/gui_format_strings.s:30-41 -- the 12 entries; entry 3 `.long ColorBlit_WithPaletteSave`",
+   "ui_widgets/disk_warning_strings.s:1271-1278 GraphicsRender_Start_PtrTable: 'handler of each bound display record op (a value read from RAM)', entry 3 ColorBlit_WithPaletteSave, ops 09-0B print a number",
+   "display/scoop_display.s:19849-19858 (op 10) `ld bc, (xiz+2)` / `pushm (xbc)` / Sprintf \"%1d\" -- the value is read from the RAM address in the record"
+  ]
+ },
+ {
+  "old": "AcChordBoxProc_Entry",
+  "verdict": "refuse",
+  "why_refused": "Not a separate object: an alias at the same address as AcChordBoxProc (only a blank line between the two labels). Per the Canonical Label Names policy it should be deleted and TrChordBoxProc's `jp` retargeted to AcChordBoxProc, not renamed.",
+  "new": null,
+  "header": "",
+  "basis": "",
+  "evidence": [
+   "kn5000_v10_program.s:3260-3262 `AcChordBoxProc_Entry:` / (blank) / `AcChordBoxProc:` -- same address",
+   "ui/ui_widget_defs.s:8380-8381 `TrChordBoxProc:` `jp AcChordBoxProc_Entry` -- the only reference"
+  ]
+ },
+ {
+  "old": "CPanel_PanelDetection_Wrapper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CPanel_ProbePanelMcus",
+  "header": "Far-callable entry (`calr CPanel_PanelDetection; ret`, like CPanel_Poll) used by the self-test: probes the left (0x20) and right (0xE0) panel MCUs and returns A = CPANEL_PANEL_DETECT_FLAGS (bit 0 left answered, bit 3 right answered).\nBasis: callers + body -- SelfTest_SramAndRom_CheckROM and EffectMode_ByteData_DiagEvents store A at 0x8D7C and test `and a, 9`.",
+  "basis": "callers + body",
+  "evidence": [
+   "ui/ui_mode_handlers.s:1674-1675 `call CPanel_PanelDetection_Wrapper` / `ld (0x8d7c:16), a` -- SelfTest_SramAndRom_CheckROM",
+   "ui/ui_mode_handlers.s:1995-1996 `call CPanel_PanelDetection_Wrapper` / `ld (0x8d7c:16), a` -- EffectMode_ByteData_DiagEvents",
+   "kn5000_v10_program.s:3525-3527 `calr CPanel_PanelDetection` / `ret` -- the whole body; 3508-3510 CPanel_Poll is the same veneer shape",
+   "ui/cpanel_routines.s:430-436,446-452 commands 0x20 / 0xE0, `or (CPANEL_PANEL_DETECT_FLAGS:16), 1` / `, 8`; 455-456 `ld a, (CPANEL_PANEL_DETECT_FLAGS:16)` / `ret`",
+   "ui/ui_mode_handlers.s:2000-2004 `ld a, (0x8d7c:16)` / `cpl a` / `and a, 9` / calr Report_test_result_by_blinking_LED -- the consumer of the two bits"
+  ]
+ },
+ {
+  "old": "SubCPU_Payload_DelayLoop_Short_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SubCPU_FlashPayloadEnableFlag",
+  "header": "ROM configuration byte at 0xFFFEED (0xFF in v7/v9/v10): when 0xFF, SubCPU_Send_Payload first tries the SLIDE4K update image at 0x3E0000 (custom-data flash) and only falls back to 0x800000; any other value uses 0x800000 directly.\nBasis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "kn5000_v10_program.s:1505-1514 `ld xiz, 0x800000` / `cp (SubCPU_Payload_DelayLoop_Short_Data:24), 0xff` / `jr nz, SubCPU_Payload_TransferPart2` / `ld xiz, 0x50000` / `ld xwa, 0x3e0000` / `call SLIDE_Parse_Header` / on 0xFFFF `ld xiz, 0x800000` -- only reader",
+   "kn5000_v10_program.s:3671 `SubCPU_Payload_DelayLoop_Short_Data: .byte 0xff`; linked ELF: 0x00FFFEED",
+   "original_ROMs/kn5000_v10/v9/v7_program.rom offset 0x1FFEED = 0xFF in all three (xxd)",
+   "CLAUDE.md 'LZSS Compressed Regions': 0x3E0000 = custom data flash, firmware-update staging; factory units fall back to the table data ROM"
+  ]
+ },
+ {
+  "old": "Boot_CallInitHandlers_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Boot_InitHandlersEnableFlag",
+  "header": "ROM configuration byte at 0xFFFEEE (0x00 in v7/v9/v10): only when it is 0xFF does Boot_CallInitHandlers (called at the top of every MainLoop pass) call the four handlers of System_TimestampPointers (all 0x00000409).\nBasis: readers + bytes -- so the hook is disabled in all three releases.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "shared/boot_call_init_handlers.s:47-50 `cp (Boot_CallInitHandlers_Data:24), 255` / `jr nz, Boot_CallInitHandlers__done` -- only reader",
+   "shared/boot_call_init_handlers.s:65-69 `lda xde, (System_TimestampPointers:24)` / `ld xbc, (xde+bc)` / `call INDIRECT_CALL_HELPER` -- 4 handlers",
+   "boot/system_handlers.s:12,1117 `.equ SeqData_EF086F, Boot_CallInitHandlers` / `call SeqData_EF086F` -- first call of MainLoop",
+   "kn5000_v10_program.s:3672 `.byte 0x00`; boot/rom_end_structure.s:13-17 System_TimestampPointers = 4 x `.long 0x409`; ROM offset 0x1FFEEE = 0x00 in v7, v9, v10"
+  ]
+ },
+ {
+  "old": "SubCPU_Send_Payload_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SubCPU_SendPayloadEnableFlag",
+  "header": "ROM configuration byte at 0xFFFEEF (0xFF in v7/v9/v10): SubCPU_Send_Payload performs the whole sub-CPU payload transfer only when it is 0xFF, otherwise returns at once. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "kn5000_v10_program.s:1476-1478 `push xiz` / `cp (SubCPU_Send_Payload_Data:24), 0xff` / `jrl nz, SubCPU_Payload_Done` -- first test of SubCPU_Send_Payload, its only reader",
+   "kn5000_v10_program.s:1462-1464 SubCPU_Send_Payload header: 'reads from 0xfffeef to check if transfer should proceed'",
+   "kn5000_v10_program.s:3673 `SubCPU_Send_Payload_Data: .byte 0xff`; linked ELF 0x00FFFEEF; ROM offset 0x1FFEEF = 0xFF in v7, v9, v10"
+  ]
+ },
+ {
+  "old": "Data_InOutGridDispatch_Code",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "InOutGridCheck_IncRight1Input",
+  "header": "Case 0 (row 0, \"RIGHT 1 INPUT\") of InOutGridCheck's increment switch: steps SndParam 0x2100 by +1 (values CONDUCTOR / DIRECT). Basis: callers + body -- entry 0 of Data_InOutGridDispatch_CaseTable_3; siblings InOutGridCheck_IncAutoPlayChordInput (0x2101) ...",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/ac_listener_handlers.s:1339-1342 `lda xix, (Data_InOutGridDispatch_CaseTable_3:24)` / `ld bc, (xix+bc)` / `lda xix, (Data_InOutGridDispatch_Code:24)` / `jp t, (xix+bc)` -- row = focused cell's row 0..8",
+   "ui_widgets/naka_widget_tables_2.s:2226-2227 `.short Data_InOutGridDispatch_Code - Data_InOutGridDispatch_Code` / `.short InOutGridCheck_IncAutoPlayChordInput - ...` -- entry 0, then row 1",
+   "midi/ac_listener_handlers.s:1344-1347 `ld xwa, 0x2100` / `ld bc, 1:i3` / `ld de, 1:i3` / `jrl InOutGridCheck_Join` -- +1 to 0x2100",
+   "ui_widgets/naka_widget_tables_2.c:12662 row text \" RIGHT 1 INPUT :| AUTO PLAY CHORD INPUT :| ...\" -- row 0 is RIGHT 1 INPUT",
+   "midi/ac_listener_handlers.s:1734-1737 row-0 draw: `ld xwa, 8448` (0x2100) through Data_InOutGridDispatch_PtrTable_2 = {\"CONDUCTOR\", \" DIRECT  \"} (naka_widget_tables_2.bin 0x2590A)"
+  ]
+ },
+ {
+  "old": "Data_InOutGridDispatch_Code_2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "InOutGridCheck_DecRight1Input",
+  "header": "Case 0 (row 0, \"RIGHT 1 INPUT\") of InOutGridCheck's decrement switch (InOutGridCheck_OnIndexswDown): steps SndParam 0x2100 by -1. Basis: callers + body -- entry 0 of Data_InOutGridDispatch_CaseTable_2; sibling InOutGridCheck_DecAutoPlayChordInput (0x2101).",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/ac_listener_handlers.s:1418-1421 `lda xix, (Data_InOutGridDispatch_CaseTable_2:24)` / `lda xix, (Data_InOutGridDispatch_Code_2:24)` / `jp t, (xix+bc)` -- in InOutGridCheck_OnIndexswDown",
+   "ui_widgets/naka_widget_tables_2.s:2206-2207 `.short Data_InOutGridDispatch_Code_2 - Data_InOutGridDispatch_Code_2` / `.short InOutGridCheck_DecAutoPlayChordInput - ...`",
+   "midi/ac_listener_handlers.s:1422-1425 `ld xwa, 0x2100` / `ldw bc, 0xffff` / `ld de, 1:i3` / `jr InOutGridCheck_Join` -- -1 to 0x2100",
+   "ui_widgets/naka_widget_tables_2.c:12662 row 0 text \" RIGHT 1 INPUT\""
+  ]
+ },
+ {
+  "old": "MidiSerial_HandleDefault_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiRx_SystemMsg_MarkIgnored",
+  "header": "Handler of every system message F0..FF except F2 / F3 in the MIDI-stream pump: only sets bit 0 of RAM 0x428, which MidiSerial_PumpLoop clears before each message (the same body as the note / key-pressure handler MidiCC_Handler_SimpleParamStore).\nBasis: table + body; no reader of that bit was found, so 'ignored' is what the handlers share, not a proven consumer.",
+  "basis": "table + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:105-121 `MidiSerial_CmdJumpTable:` 14 of 16 entries `.long MidiSerial_HandleDefault_Data`; F2 -> MidiSerial_HandleSongPosition, F3 -> MidiSerial_HandleSongSelect",
+   "midi/midi_dispatch_handlers.s:177-183 MidiRx_SystemMsgDispatch `and l, 15` / `ld xiz, MidiSerial_CmdJumpTable` / `call (xiz)` -- the reader",
+   "midi/midi_dispatch_handlers.s:139-141 `or (0x428:16), 1` / `ret` -- the whole body",
+   "midi/midi_dispatch_handlers.s:26 `and (1064:16), 254` -- MidiSerial_PumpLoop clears bit 0 of 0x428 before each message",
+   "midi/midi_dispatch_handlers.s:204-206 MidiCC_Handler_SimpleParamStore: same `or (0x428:16), 1` for 8x/9x/Ax; `command grep` finds no other access to 0x428 / 1064"
+  ]
+ },
+ {
+  "old": "PanelEvt_Handler_0_NoteOnParam_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiTx_PartTargets_ProgramBank",
+  "header": "MIDI transmit part-target table for program change (Cx) and bank select (CC0/CC32): 32 x u32 indexed by part. Entries are the address of byte +13 of a 26-byte part record (0xF9B6 + 26*k): its low nibble is ORed into the status byte as the channel and bit 6 suppresses the send unless bit 7 of 0x90E5 is set; 0xFFFFFFFF = part not sent. Basis: readers + bytes (gate bit 4 of 0xFD57).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:1247 `ld xix, PanelEvt_Handler_0_NoteOnParam_Data` -- PanelEvt_Handler_0_NoteOnParam (index (0x964C))",
+   "midi/midi_dispatch_handlers.s:1265-1268 `or a, 192` / `ld w, (0x964e:16)` / `calr FileData_ValidateAndDispatch` -- sends C0|ch, program",
+   "midi/midi_dispatch_handlers.s:1422,1435 PanelEvt_Handler_15_ConditionalSet and 1664,1672 MidiCC_ChannelDispatch_TableA: same table, then `call MidiCC_ChannelDispatch_DualSend`",
+   "midi/midi_dispatch_handlers.s:2048-2055 DualSend: `ld w, 0x0:opc` ... `ld w, 0x20:opc` -- CC0 / CC32 (bank select MSB / LSB)",
+   "midi/midi_dispatch_handlers.s:2776-2791 -- layout note: 32 x u32 per record, present entries 0x0000F9C3 + 26*k, absent 0xFFFFFFFF, index from (0x964C) / (0x964D) 0..31"
+  ]
+ },
+ {
+  "old": "PanelEvt_Handler_3_ValueCheck_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiTx_PartTargets_CC7_Volume",
+  "header": "MIDI transmit part-target table for CC7 (volume): 32 x u32 indexed by part. Entries are the address of byte +13 of a 26-byte part record (0xF9B6 + 26*k): its low nibble is ORed into the status byte as the channel and bit 6 suppresses the send unless bit 7 of 0x90E5 is set; 0xFFFFFFFF = part not sent. Basis: readers + bytes (gate bit 2 of 0xFD58).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:1278 `ld xix, PanelEvt_Handler_3_ValueCheck_Data` -- only reader, PanelEvt_Handler_3_ValueCheck",
+   "midi/midi_dispatch_handlers.s:1284-1288 `bit 2, (0xfd58:16)` / `ld e, (0x964e:16)` / `ld w, 2:opc` / `calr MidiChannel_ConfigureController` -- function 2 = CC7",
+   "midi/midi_dispatch_handlers.s:1972-1990 MidiChannel_ConfigureController: `ld a, (xix)` / `bit 6, a` / `or a, 0xb0` / `ld xiz, MidiCC_FunctionToCCNumber` / `ld w, (xiz+w)` -- sends B0|ch, CC(function W), E",
+   "midi/midi_dispatch_handlers.s:2766-2777 MidiCC_FunctionToCCNumber: f0 CC64, f1 CC1, f2 CC7, f3 CC11, f4 CC10, f5 CC93, f6 CC94, f7 CC91; f8-15 0xFF; f40 CC121, f41 CC120",
+   "midi/midi_dispatch_handlers.s:2776-2791 -- layout note: 32 x u32 per record, present entries 0x0000F9C3 + 26*k, absent 0xFFFFFFFF, index from (0x964C) / (0x964D) 0..31"
+  ]
+ },
+ {
+  "old": "PanelEvt_Handler_5_ValueCheck_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiTx_PartTargets_CC93_Chorus",
+  "header": "MIDI transmit part-target table for CC93 (chorus send): 32 x u32 indexed by part. Entries are the address of byte +13 of a 26-byte part record (0xF9B6 + 26*k): its low nibble is ORed into the status byte as the channel and bit 6 suppresses the send unless bit 7 of 0x90E5 is set; 0xFFFFFFFF = part not sent. Basis: readers + bytes (gate bit 5 of 0xFD58).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:1298 `ld xix, PanelEvt_Handler_5_ValueCheck_Data` -- only reader, PanelEvt_Handler_5_ValueCheck",
+   "midi/midi_dispatch_handlers.s:1304-1308 `bit 5, (0xfd58:16)` / `ld w, 5:opc` / `calr MidiChannel_ConfigureController` -- function 5 = CC93",
+   "midi/midi_dispatch_handlers.s:1972-1990 MidiChannel_ConfigureController: `ld a, (xix)` / `bit 6, a` / `or a, 0xb0` / `ld xiz, MidiCC_FunctionToCCNumber` / `ld w, (xiz+w)` -- sends B0|ch, CC(function W), E",
+   "midi/midi_dispatch_handlers.s:2766-2777 MidiCC_FunctionToCCNumber: f0 CC64, f1 CC1, f2 CC7, f3 CC11, f4 CC10, f5 CC93, f6 CC94, f7 CC91; f8-15 0xFF; f40 CC121, f41 CC120",
+   "midi/midi_dispatch_handlers.s:2776-2791 -- layout note: 32 x u32 per record, present entries 0x0000F9C3 + 26*k, absent 0xFFFFFFFF, index from (0x964C) / (0x964D) 0..31"
+  ]
+ },
+ {
+  "old": "PanelEvt_Handler_7_ValueCheck_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiTx_PartTargets_CC91_Reverb",
+  "header": "MIDI transmit part-target table for CC91 (reverb send): 32 x u32 indexed by part. Entries are the address of byte +13 of a 26-byte part record (0xF9B6 + 26*k): its low nibble is ORed into the status byte as the channel and bit 6 suppresses the send unless bit 7 of 0x90E5 is set; 0xFFFFFFFF = part not sent. Basis: readers + bytes (gate bit 5 of 0xFD58).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:1320 `ld xix, PanelEvt_Handler_7_ValueCheck_Data` -- PanelEvt_Handler_7_ValueCheck",
+   "midi/midi_dispatch_handlers.s:1326-1330 `bit 5, (0xfd58:16)` / `ld w, 7:opc` / `calr MidiChannel_ConfigureController` -- function 7 = CC91",
+   "midi/midi_dispatch_handlers.s:1563-1578 PanelEvt_D3ASlot1_SendCC91: `ld l, 25:opc` / `ld xix, PanelEvt_Handler_7_ValueCheck_Data` ... `ld w, 7:opc` -- entry 25 sends CC91 0x7F/0",
+   "midi/midi_dispatch_handlers.s:1972-1990 MidiChannel_ConfigureController: `ld a, (xix)` / `bit 6, a` / `or a, 0xb0` / `ld xiz, MidiCC_FunctionToCCNumber` / `ld w, (xiz+w)` -- sends B0|ch, CC(function W), E",
+   "midi/midi_dispatch_handlers.s:2766-2777 MidiCC_FunctionToCCNumber: f0 CC64, f1 CC1, f2 CC7, f3 CC11, f4 CC10, f5 CC93, f6 CC94, f7 CC91; f8-15 0xFF; f40 CC121, f41 CC120",
+   "midi/midi_dispatch_handlers.s:2776-2791 -- layout note: 32 x u32 per record, present entries 0x0000F9C3 + 26*k, absent 0xFFFFFFFF, index from (0x964C) / (0x964D) 0..31"
+  ]
+ },
+ {
+  "old": "PanelEvt_Handler_8_ValueCheck_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiTx_PartTargets_CC10_Pan",
+  "header": "MIDI transmit part-target table for CC10 (pan): 32 x u32 indexed by part. Entries are the address of byte +13 of a 26-byte part record (0xF9B6 + 26*k): its low nibble is ORed into the status byte as the channel and bit 6 suppresses the send unless bit 7 of 0x90E5 is set; 0xFFFFFFFF = part not sent. Basis: readers + bytes (gate bit 4 of 0xFD58).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:1340 `ld xix, PanelEvt_Handler_8_ValueCheck_Data` -- only reader, PanelEvt_Handler_8_ValueCheck",
+   "midi/midi_dispatch_handlers.s:1346-1350 `bit 4, (0xfd58:16)` / `ld w, 4:opc` / `calr MidiChannel_ConfigureController` -- function 4 = CC10",
+   "midi/midi_dispatch_handlers.s:1972-1990 MidiChannel_ConfigureController: `ld a, (xix)` / `bit 6, a` / `or a, 0xb0` / `ld xiz, MidiCC_FunctionToCCNumber` / `ld w, (xiz+w)` -- sends B0|ch, CC(function W), E",
+   "midi/midi_dispatch_handlers.s:2766-2777 MidiCC_FunctionToCCNumber: f0 CC64, f1 CC1, f2 CC7, f3 CC11, f4 CC10, f5 CC93, f6 CC94, f7 CC91; f8-15 0xFF; f40 CC121, f41 CC120",
+   "midi/midi_dispatch_handlers.s:2776-2791 -- layout note: 32 x u32 per record, present entries 0x0000F9C3 + 26*k, absent 0xFFFFFFFF, index from (0x964C) / (0x964D) 0..31"
+  ]
+ },
+ {
+  "old": "PanelEvt_Handler_9_SingleByteParam_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiTx_PartTargets_RpnCoarseTune",
+  "header": "MIDI transmit part-target table for RPN 0,2 (coarse tuning): 32 x u32 indexed by part. Entries are the address of byte +13 of a 26-byte part record (0xF9B6 + 26*k): its low nibble is ORed into the status byte as the channel and bit 6 suppresses the send unless bit 7 of 0x90E5 is set; 0xFFFFFFFF = part not sent. Basis: readers + bytes (gate bit 1 of 0xFD57).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:1360 `ld xix, PanelEvt_Handler_9_SingleByteParam_Data` -- only reader, PanelEvt_Handler_9_SingleByteParam",
+   "midi/midi_dispatch_handlers.s:1366-1371 `bit 1, (0xfd57:16)` / `ld bc, 2:i3` / `ld d, (0x964e:16)` / `xor e, e` / `calr FileData_ProcessWithLookup` -- RPN 0/2, data MSB = value",
+   "midi/midi_dispatch_handlers.s:2011-2025 FileData_ProcessWithLookup: B0|ch then `ld w, 100:opc` (CC100 = C), `ld a, 101:opc` (CC101 = B), `ld a, 6:opc` (CC6 = D), `ld a, 38:opc` (CC38 = E) -- an RPN write, number B:C",
+   "midi/midi_dispatch_handlers.s:2776-2791 -- layout note: 32 x u32 per record, present entries 0x0000F9C3 + 26*k, absent 0xFFFFFFFF, index from (0x964C) / (0x964D) 0..31"
+  ]
+ },
+ {
+  "old": "PanelEvt_Handler_10_TwoByteParam_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiTx_PartTargets_RpnFineTune",
+  "header": "MIDI transmit part-target table for RPN 0,1 (fine tuning): 32 x u32 indexed by part. Entries are the address of byte +13 of a 26-byte part record (0xF9B6 + 26*k): its low nibble is ORed into the status byte as the channel and bit 6 suppresses the send unless bit 7 of 0x90E5 is set; 0xFFFFFFFF = part not sent. Basis: readers + bytes (gate bit 1 of 0xFD57).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:1381 `ld xix, PanelEvt_Handler_10_TwoByteParam_Data` -- only reader, PanelEvt_Handler_10_TwoByteParam",
+   "midi/midi_dispatch_handlers.s:1387-1394 `bit 1, (0xfd57:16)` / `ld bc, 1:i3` / `ld d, (0x964e:16)` / `xor e, e` / `srl de, 1` / `srl e, 1` / `calr FileData_ProcessWithLookup` -- RPN 0/1, value split into a 14-bit MSB/LSB",
+   "midi/midi_dispatch_handlers.s:2011-2025 FileData_ProcessWithLookup: B0|ch then `ld w, 100:opc` (CC100 = C), `ld a, 101:opc` (CC101 = B), `ld a, 6:opc` (CC6 = D), `ld a, 38:opc` (CC38 = E) -- an RPN write, number B:C",
+   "midi/midi_dispatch_handlers.s:2776-2791 -- layout note: 32 x u32 per record, present entries 0x0000F9C3 + 26*k, absent 0xFFFFFFFF, index from (0x964C) / (0x964D) 0..31"
+  ]
+ },
+ {
+  "old": "PanelEvt_Handler_11_SingleByteParam_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiTx_PartTargets_RpnBendRange",
+  "header": "MIDI transmit part-target table for RPN 0,0 (pitch-bend sensitivity): 32 x u32 indexed by part. Entries are the address of byte +13 of a 26-byte part record (0xF9B6 + 26*k): its low nibble is ORed into the status byte as the channel and bit 6 suppresses the send unless bit 7 of 0x90E5 is set; 0xFFFFFFFF = part not sent. Basis: readers + bytes (gate bit 0 of 0xFD57).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:1404 `ld xix, PanelEvt_Handler_11_SingleByteParam_Data` -- only reader, PanelEvt_Handler_11_SingleByteParam",
+   "midi/midi_dispatch_handlers.s:1410-1415 `bit 0, (0xfd57:16)` / `ld bc, 0:i3` / `ld d, (0x964e:16)` / `calr FileData_ProcessWithLookup` -- RPN 0/0, data MSB = value",
+   "midi/midi_dispatch_handlers.s:2011-2025 FileData_ProcessWithLookup: B0|ch then `ld w, 100:opc` (CC100 = C), `ld a, 101:opc` (CC101 = B), `ld a, 6:opc` (CC6 = D), `ld a, 38:opc` (CC38 = E) -- an RPN write, number B:C",
+   "midi/midi_dispatch_handlers.s:2776-2791 -- layout note: 32 x u32 per record, present entries 0x0000F9C3 + 26*k, absent 0xFFFFFFFF, index from (0x964C) / (0x964D) 0..31"
+  ]
+ },
+ {
+  "old": "MidiCC_ChannelDispatch_Ctrl40_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiTx_PartTargets_CC121_ResetAll",
+  "header": "MIDI transmit part-target table for CC121 (reset all controllers): 32 x u32 indexed by part. Entries are the address of byte +13 of a 26-byte part record (0xF9B6 + 26*k): its low nibble is ORed into the status byte as the channel and bit 6 suppresses the send unless bit 7 of 0x90E5 is set; 0xFFFFFFFF = part not sent. Basis: readers + bytes (gate bit 0 of 0xFD59).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:1681 `ld xix, MidiCC_ChannelDispatch_Ctrl40_Data` -- only reader, MidiCC_ChannelDispatch_Ctrl40 (index (0x964D))",
+   "midi/midi_dispatch_handlers.s:1687-1691 `bit 0, (0xfd59:16)` / `xor e, e` / `ld w, 0x28:opc` / `calr MidiChannel_ConfigureController` -- function 40 = CC121, value 0",
+   "midi/midi_dispatch_handlers.s:1972-1990 MidiChannel_ConfigureController: `ld a, (xix)` / `bit 6, a` / `or a, 0xb0` / `ld xiz, MidiCC_FunctionToCCNumber` / `ld w, (xiz+w)` -- sends B0|ch, CC(function W), E",
+   "midi/midi_dispatch_handlers.s:2766-2777 MidiCC_FunctionToCCNumber: f0 CC64, f1 CC1, f2 CC7, f3 CC11, f4 CC10, f5 CC93, f6 CC94, f7 CC91; f8-15 0xFF; f40 CC121, f41 CC120",
+   "midi/midi_dispatch_handlers.s:2776-2791 -- layout note: 32 x u32 per record, present entries 0x0000F9C3 + 26*k, absent 0xFFFFFFFF, index from (0x964C) / (0x964D) 0..31"
+  ]
+ },
+ {
+  "old": "MidiCC_ChannelDispatch_Ctrl41_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiTx_PartTargets_CC120_AllSoundOff",
+  "header": "MIDI transmit part-target table for CC120 (all sound off): 32 x u32 indexed by part. Entries are the address of byte +13 of a 26-byte part record (0xF9B6 + 26*k): its low nibble is ORed into the status byte as the channel and bit 6 suppresses the send unless bit 7 of 0x90E5 is set; 0xFFFFFFFF = part not sent. Basis: readers + bytes (no gate bit).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:1700 `ld xix, MidiCC_ChannelDispatch_Ctrl41_Data` -- only reader, MidiCC_ChannelDispatch_Ctrl41",
+   "midi/midi_dispatch_handlers.s:1706-1708 `xor e, e` / `ld w, 0x29:opc` / `calr MidiChannel_ConfigureController` -- function 41 = CC120, value 0, no gate bit",
+   "midi/midi_dispatch_handlers.s:1972-1990 MidiChannel_ConfigureController: `ld a, (xix)` / `bit 6, a` / `or a, 0xb0` / `ld xiz, MidiCC_FunctionToCCNumber` / `ld w, (xiz+w)` -- sends B0|ch, CC(function W), E",
+   "midi/midi_dispatch_handlers.s:2766-2777 MidiCC_FunctionToCCNumber: f0 CC64, f1 CC1, f2 CC7, f3 CC11, f4 CC10, f5 CC93, f6 CC94, f7 CC91; f8-15 0xFF; f40 CC121, f41 CC120",
+   "midi/midi_dispatch_handlers.s:2776-2791 -- layout note: 32 x u32 per record, present entries 0x0000F9C3 + 26*k, absent 0xFFFFFFFF, index from (0x964C) / (0x964D) 0..31"
+  ]
+ },
+ {
+  "old": "MidiCC_ChannelDispatch_CtrlFlags_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiTx_PartTargets_PitchBend",
+  "header": "MIDI transmit part-target table for pitch bend (Ex): 32 x u32 indexed by part. Entries are the address of byte +13 of a 26-byte part record (0xF9B6 + 26*k): its low nibble is ORed into the status byte as the channel and bit 6 suppresses the send unless bit 7 of 0x90E5 is set; 0xFFFFFFFF = part not sent. Basis: readers + bytes (gate bit 6 of 0xFD57).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:1731 `ld xix, MidiCC_ChannelDispatch_CtrlFlags_Data` -- only reader, MidiCC_ChannelDispatch_CtrlFlags",
+   "midi/midi_dispatch_handlers.s:1737-1755 `bit 6, (0xfd57:16)` / `ld a, (xix)` / `bit 6, a` / `ldw de, 0x300` / `or a, 0xe0` / LSB (0x964E), MSB (0x964F) / `calr FileData_ValidateAndDispatch` -- 3-byte E0|ch message",
+   "midi/midi_dispatch_handlers.s:2776-2791 -- layout note: 32 x u32 per record, present entries 0x0000F9C3 + 26*k, absent 0xFFFFFFFF, index from (0x964C) / (0x964D) 0..31"
+  ]
+ },
+ {
+  "old": "MidiCC_ChannelDispatch_Ctrl1_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiTx_PartTargets_CC1_Modulation",
+  "header": "MIDI transmit part-target table for CC1 (modulation): 32 x u32 indexed by part. Entries are the address of byte +13 of a 26-byte part record (0xF9B6 + 26*k): its low nibble is ORed into the status byte as the channel and bit 6 suppresses the send unless bit 7 of 0x90E5 is set; 0xFFFFFFFF = part not sent. Basis: readers + bytes (gate bit 1 of 0xFD58).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:1764 `ld xix, MidiCC_ChannelDispatch_Ctrl1_Data` -- only reader, MidiCC_ChannelDispatch_Ctrl1",
+   "midi/midi_dispatch_handlers.s:1770-1774 `bit 1, (0xfd58:16)` / `ld w, 0x1:opc` / `calr MidiChannel_ConfigureController` -- function 1 = CC1",
+   "midi/midi_dispatch_handlers.s:1972-1990 MidiChannel_ConfigureController: `ld a, (xix)` / `bit 6, a` / `or a, 0xb0` / `ld xiz, MidiCC_FunctionToCCNumber` / `ld w, (xiz+w)` -- sends B0|ch, CC(function W), E",
+   "midi/midi_dispatch_handlers.s:2766-2777 MidiCC_FunctionToCCNumber: f0 CC64, f1 CC1, f2 CC7, f3 CC11, f4 CC10, f5 CC93, f6 CC94, f7 CC91; f8-15 0xFF; f40 CC121, f41 CC120",
+   "midi/midi_dispatch_handlers.s:2776-2791 -- layout note: 32 x u32 per record, present entries 0x0000F9C3 + 26*k, absent 0xFFFFFFFF, index from (0x964C) / (0x964D) 0..31"
+  ]
+ },
+ {
+  "old": "MidiCC_ChannelDispatch_Ctrl3_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiTx_PartTargets_CC11_Expression",
+  "header": "MIDI transmit part-target table for CC11 (expression): 32 x u32 indexed by part. Entries are the address of byte +13 of a 26-byte part record (0xF9B6 + 26*k): its low nibble is ORed into the status byte as the channel and bit 6 suppresses the send unless bit 7 of 0x90E5 is set; 0xFFFFFFFF = part not sent. Basis: readers + bytes (gate bit 3 of 0xFD58).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:1783 `ld xix, MidiCC_ChannelDispatch_Ctrl3_Data` -- only reader, MidiCC_ChannelDispatch_Ctrl3",
+   "midi/midi_dispatch_handlers.s:1789-1793 `bit 3, (0xfd58:16)` / `ld w, 0x3:opc` / `calr MidiChannel_ConfigureController` -- function 3 = CC11",
+   "midi/midi_dispatch_handlers.s:1972-1990 MidiChannel_ConfigureController: `ld a, (xix)` / `bit 6, a` / `or a, 0xb0` / `ld xiz, MidiCC_FunctionToCCNumber` / `ld w, (xiz+w)` -- sends B0|ch, CC(function W), E",
+   "midi/midi_dispatch_handlers.s:2766-2777 MidiCC_FunctionToCCNumber: f0 CC64, f1 CC1, f2 CC7, f3 CC11, f4 CC10, f5 CC93, f6 CC94, f7 CC91; f8-15 0xFF; f40 CC121, f41 CC120",
+   "midi/midi_dispatch_handlers.s:2776-2791 -- layout note: 32 x u32 per record, present entries 0x0000F9C3 + 26*k, absent 0xFFFFFFFF, index from (0x964C) / (0x964D) 0..31"
+  ]
+ },
+ {
+  "old": "MidiCC_ChannelDispatch_CtrlFlags2_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiTx_PartTargets_ChannelPressure",
+  "header": "MIDI transmit part-target table for channel pressure (Dx): 32 x u32 indexed by part. Entries are the address of byte +13 of a 26-byte part record (0xF9B6 + 26*k): its low nibble is ORed into the status byte as the channel and bit 6 suppresses the send unless bit 7 of 0x90E5 is set; 0xFFFFFFFF = part not sent. Basis: readers + bytes (gate bit 5 of 0xFD57).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:1802 `ld xix, MidiCC_ChannelDispatch_CtrlFlags2_Data` -- only reader, MidiCC_ChannelDispatch_CtrlFlags2",
+   "midi/midi_dispatch_handlers.s:1808-1824 `bit 5, (0xfd57:16)` / `ldw de, 0x200` / `or a, 0xd0` / `ld w, (0x964e:16)` / `calr FileData_ValidateAndDispatch` -- 2-byte D0|ch message",
+   "midi/midi_dispatch_handlers.s:2776-2791 -- layout note: 32 x u32 per record, present entries 0x0000F9C3 + 26*k, absent 0xFFFFFFFF, index from (0x964C) / (0x964D) 0..31"
+  ]
+ },
+ {
+  "old": "MidiCC_ChannelDispatch_Ctrl0_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiTx_PartTargets_CC64_Sustain",
+  "header": "MIDI transmit part-target table for CC64 (sustain / damper): 32 x u32 indexed by part. Entries are the address of byte +13 of a 26-byte part record (0xF9B6 + 26*k): its low nibble is ORed into the status byte as the channel and bit 6 suppresses the send unless bit 7 of 0x90E5 is set; 0xFFFFFFFF = part not sent. Basis: readers + bytes (gate bit 0 of 0xFD58).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:1833 `ld xix, MidiCC_ChannelDispatch_Ctrl0_Data` -- only reader, MidiCC_ChannelDispatch_Ctrl0",
+   "midi/midi_dispatch_handlers.s:1839-1843 `bit 0, (0xfd58:16)` / `ld w, 0x0:opc` / `calr MidiChannel_ConfigureController` -- function 0 = CC64",
+   "midi/midi_dispatch_handlers.s:1972-1990 MidiChannel_ConfigureController: `ld a, (xix)` / `bit 6, a` / `or a, 0xb0` / `ld xiz, MidiCC_FunctionToCCNumber` / `ld w, (xiz+w)` -- sends B0|ch, CC(function W), E",
+   "midi/midi_dispatch_handlers.s:2766-2777 MidiCC_FunctionToCCNumber: f0 CC64, f1 CC1, f2 CC7, f3 CC11, f4 CC10, f5 CC93, f6 CC94, f7 CC91; f8-15 0xFF; f40 CC121, f41 CC120",
+   "midi/midi_dispatch_handlers.s:2776-2791 -- layout note: 32 x u32 per record, present entries 0x0000F9C3 + 26*k, absent 0xFFFFFFFF, index from (0x964C) / (0x964D) 0..31"
+  ]
+ },
+ {
+  "old": "MidiCC_ChannelDispatch_Func09_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiTx_PartTargets_Func09",
+  "header": "MIDI transmit part-target table for CC function 9, which has no controller number (MidiCC_FunctionToCCNumber[9] = 0xFF, so nothing is ever sent): 32 x u32 indexed by part. Entries are the address of byte +13 of a 26-byte part record (0xF9B6 + 26*k): its low nibble is ORed into the status byte as the channel and bit 6 suppresses the send unless bit 7 of 0x90E5 is set; 0xFFFFFFFF = part not sent. Basis: readers + bytes (gate bit 1 of 0xFD59).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:1866 `ld xix, MidiCC_ChannelDispatch_Func09_Data` -- only reader, MidiCC_ChannelDispatch_Func09 (itself unreferenced, see its header at 1846-1857)",
+   "midi/midi_dispatch_handlers.s:1872-1876 `bit 1, (0xfd59:16)` / `ld w, 9:opc` / `calr MidiChannel_ConfigureController`",
+   "midi/midi_dispatch_handlers.s:1972-1990 MidiChannel_ConfigureController: `ld a, (xix)` / `bit 6, a` / `or a, 0xb0` / `ld xiz, MidiCC_FunctionToCCNumber` / `ld w, (xiz+w)` -- sends B0|ch, CC(function W), E",
+   "midi/midi_dispatch_handlers.s:2766-2777 MidiCC_FunctionToCCNumber: f0 CC64, f1 CC1, f2 CC7, f3 CC11, f4 CC10, f5 CC93, f6 CC94, f7 CC91; f8-15 0xFF; f40 CC121, f41 CC120",
+   "midi/midi_dispatch_handlers.s:2393-2426 receive-side siblings MidiCC_PartTargets_Func12..15 -- the FuncNN naming",
+   "midi/midi_dispatch_handlers.s:2776-2791 -- layout note: 32 x u32 per record, present entries 0x0000F9C3 + 26*k, absent 0xFFFFFFFF, index from (0x964C) / (0x964D) 0..31"
+  ]
+ },
+ {
+  "old": "MidiCC_ChannelDispatch_Func08_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiTx_PartTargets_Func08",
+  "header": "MIDI transmit part-target table for CC function 8, which has no controller number (MidiCC_FunctionToCCNumber[8] = 0xFF, so nothing is ever sent): 32 x u32 indexed by part. Entries are the address of byte +13 of a 26-byte part record (0xF9B6 + 26*k): its low nibble is ORed into the status byte as the channel and bit 6 suppresses the send unless bit 7 of 0x90E5 is set; 0xFFFFFFFF = part not sent. Basis: readers + bytes (gate bit 2 of 0xFD59).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:1883 `ld xix, MidiCC_ChannelDispatch_Func08_Data` -- only reader, MidiCC_ChannelDispatch_Func08 (itself unreferenced, see its header at 1846-1857)",
+   "midi/midi_dispatch_handlers.s:1889-1893 `bit 2, (0xfd59:16)` / `ld w, 8:opc` / `calr MidiChannel_ConfigureController`",
+   "midi/midi_dispatch_handlers.s:1972-1990 MidiChannel_ConfigureController: `ld a, (xix)` / `bit 6, a` / `or a, 0xb0` / `ld xiz, MidiCC_FunctionToCCNumber` / `ld w, (xiz+w)` -- sends B0|ch, CC(function W), E",
+   "midi/midi_dispatch_handlers.s:2766-2777 MidiCC_FunctionToCCNumber: f0 CC64, f1 CC1, f2 CC7, f3 CC11, f4 CC10, f5 CC93, f6 CC94, f7 CC91; f8-15 0xFF; f40 CC121, f41 CC120",
+   "midi/midi_dispatch_handlers.s:2393-2426 receive-side siblings MidiCC_PartTargets_Func12..15 -- the FuncNN naming",
+   "midi/midi_dispatch_handlers.s:2776-2791 -- layout note: 32 x u32 per record, present entries 0x0000F9C3 + 26*k, absent 0xFFFFFFFF, index from (0x964C) / (0x964D) 0..31"
+  ]
+ },
+ {
+  "old": "MidiCC_ChannelDispatch_Func12_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiTx_PartTargets_Func12",
+  "header": "MIDI transmit part-target table for CC function 12, which has no controller number (MidiCC_FunctionToCCNumber[12] = 0xFF, so nothing is ever sent): 32 x u32 indexed by part. Entries are the address of byte +13 of a 26-byte part record (0xF9B6 + 26*k): its low nibble is ORed into the status byte as the channel and bit 6 suppresses the send unless bit 7 of 0x90E5 is set; 0xFFFFFFFF = part not sent. Basis: readers + bytes (gate bit 3 of 0xFD59).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:1900 `ld xix, MidiCC_ChannelDispatch_Func12_Data` -- only reader, MidiCC_ChannelDispatch_Func12 (itself unreferenced, see its header at 1846-1857)",
+   "midi/midi_dispatch_handlers.s:1906-1910 `bit 3, (0xfd59:16)` / `ld w, 12:opc` / `calr MidiChannel_ConfigureController`",
+   "midi/midi_dispatch_handlers.s:1972-1990 MidiChannel_ConfigureController: `ld a, (xix)` / `bit 6, a` / `or a, 0xb0` / `ld xiz, MidiCC_FunctionToCCNumber` / `ld w, (xiz+w)` -- sends B0|ch, CC(function W), E",
+   "midi/midi_dispatch_handlers.s:2766-2777 MidiCC_FunctionToCCNumber: f0 CC64, f1 CC1, f2 CC7, f3 CC11, f4 CC10, f5 CC93, f6 CC94, f7 CC91; f8-15 0xFF; f40 CC121, f41 CC120",
+   "midi/midi_dispatch_handlers.s:2393-2426 receive-side siblings MidiCC_PartTargets_Func12..15 -- the FuncNN naming",
+   "midi/midi_dispatch_handlers.s:2776-2791 -- layout note: 32 x u32 per record, present entries 0x0000F9C3 + 26*k, absent 0xFFFFFFFF, index from (0x964C) / (0x964D) 0..31"
+  ]
+ },
+ {
+  "old": "MidiCC_ChannelDispatch_Func13_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiTx_PartTargets_Func13",
+  "header": "MIDI transmit part-target table for CC function 13, which has no controller number (MidiCC_FunctionToCCNumber[13] = 0xFF, so nothing is ever sent): 32 x u32 indexed by part. Entries are the address of byte +13 of a 26-byte part record (0xF9B6 + 26*k): its low nibble is ORed into the status byte as the channel and bit 6 suppresses the send unless bit 7 of 0x90E5 is set; 0xFFFFFFFF = part not sent. Basis: readers + bytes (gate bit 3 of 0xFD59).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:1917 `ld xix, MidiCC_ChannelDispatch_Func13_Data` -- only reader, MidiCC_ChannelDispatch_Func13 (itself unreferenced, see its header at 1846-1857)",
+   "midi/midi_dispatch_handlers.s:1923-1927 `bit 3, (0xfd59:16)` / `ld w, 13:opc` / `calr MidiChannel_ConfigureController`",
+   "midi/midi_dispatch_handlers.s:1972-1990 MidiChannel_ConfigureController: `ld a, (xix)` / `bit 6, a` / `or a, 0xb0` / `ld xiz, MidiCC_FunctionToCCNumber` / `ld w, (xiz+w)` -- sends B0|ch, CC(function W), E",
+   "midi/midi_dispatch_handlers.s:2766-2777 MidiCC_FunctionToCCNumber: f0 CC64, f1 CC1, f2 CC7, f3 CC11, f4 CC10, f5 CC93, f6 CC94, f7 CC91; f8-15 0xFF; f40 CC121, f41 CC120",
+   "midi/midi_dispatch_handlers.s:2393-2426 receive-side siblings MidiCC_PartTargets_Func12..15 -- the FuncNN naming",
+   "midi/midi_dispatch_handlers.s:2776-2791 -- layout note: 32 x u32 per record, present entries 0x0000F9C3 + 26*k, absent 0xFFFFFFFF, index from (0x964C) / (0x964D) 0..31"
+  ]
+ },
+ {
+  "old": "MidiCC_ChannelDispatch_Func14_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiTx_PartTargets_Func14",
+  "header": "MIDI transmit part-target table for CC function 14, which has no controller number (MidiCC_FunctionToCCNumber[14] = 0xFF, so nothing is ever sent): 32 x u32 indexed by part. Entries are the address of byte +13 of a 26-byte part record (0xF9B6 + 26*k): its low nibble is ORed into the status byte as the channel and bit 6 suppresses the send unless bit 7 of 0x90E5 is set; 0xFFFFFFFF = part not sent. Basis: readers + bytes (gate bit 4 of 0xFD59).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:1934 `ld xix, MidiCC_ChannelDispatch_Func14_Data` -- only reader, MidiCC_ChannelDispatch_Func14 (itself unreferenced, see its header at 1846-1857)",
+   "midi/midi_dispatch_handlers.s:1940-1944 `bit 4, (0xfd59:16)` / `ld w, 14:opc` / `calr MidiChannel_ConfigureController`",
+   "midi/midi_dispatch_handlers.s:1972-1990 MidiChannel_ConfigureController: `ld a, (xix)` / `bit 6, a` / `or a, 0xb0` / `ld xiz, MidiCC_FunctionToCCNumber` / `ld w, (xiz+w)` -- sends B0|ch, CC(function W), E",
+   "midi/midi_dispatch_handlers.s:2766-2777 MidiCC_FunctionToCCNumber: f0 CC64, f1 CC1, f2 CC7, f3 CC11, f4 CC10, f5 CC93, f6 CC94, f7 CC91; f8-15 0xFF; f40 CC121, f41 CC120",
+   "midi/midi_dispatch_handlers.s:2393-2426 receive-side siblings MidiCC_PartTargets_Func12..15 -- the FuncNN naming",
+   "midi/midi_dispatch_handlers.s:2776-2791 -- layout note: 32 x u32 per record, present entries 0x0000F9C3 + 26*k, absent 0xFFFFFFFF, index from (0x964C) / (0x964D) 0..31"
+  ]
+ },
+ {
+  "old": "MidiCC_ChannelDispatch_Func15_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiTx_PartTargets_Func15",
+  "header": "MIDI transmit part-target table for CC function 15, which has no controller number (MidiCC_FunctionToCCNumber[15] = 0xFF, so nothing is ever sent): 32 x u32 indexed by part. Entries are the address of byte +13 of a 26-byte part record (0xF9B6 + 26*k): its low nibble is ORed into the status byte as the channel and bit 6 suppresses the send unless bit 7 of 0x90E5 is set; 0xFFFFFFFF = part not sent. Basis: readers + bytes (gate bit 4 of 0xFD59).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:1951 `ld xix, MidiCC_ChannelDispatch_Func15_Data` -- only reader, MidiCC_ChannelDispatch_Func15 (itself unreferenced, see its header at 1846-1857)",
+   "midi/midi_dispatch_handlers.s:1957-1961 `bit 4, (0xfd59:16)` / `ld w, 15:opc` / `calr MidiChannel_ConfigureController`",
+   "midi/midi_dispatch_handlers.s:1972-1990 MidiChannel_ConfigureController: `ld a, (xix)` / `bit 6, a` / `or a, 0xb0` / `ld xiz, MidiCC_FunctionToCCNumber` / `ld w, (xiz+w)` -- sends B0|ch, CC(function W), E",
+   "midi/midi_dispatch_handlers.s:2766-2777 MidiCC_FunctionToCCNumber: f0 CC64, f1 CC1, f2 CC7, f3 CC11, f4 CC10, f5 CC93, f6 CC94, f7 CC91; f8-15 0xFF; f40 CC121, f41 CC120",
+   "midi/midi_dispatch_handlers.s:2393-2426 receive-side siblings MidiCC_PartTargets_Func12..15 -- the FuncNN naming",
+   "midi/midi_dispatch_handlers.s:2776-2791 -- layout note: 32 x u32 per record, present entries 0x0000F9C3 + 26*k, absent 0xFFFFFFFF, index from (0x964C) / (0x964D) 0..31"
+  ]
+ },
+ {
+  "old": "DataBuf_CopyBulkBitfields_Stub",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "MidiChan_TimerDispatch_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiPkt_PreparePanelReceive",
+  "header": "Before a panel group is received: rewrites every panel TLV record header (PanelTlv_WriteAllHeaders) and takes the change-detection snapshot (SndParam_SyncDisplayBitmap), preserving XDE/XHL/XIX/XIZ.\nBasis: callers + body -- only caller MidiPkt_ArpExtHandler_A (message id 11, panel group start, state 0).",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:11642 `call MidiChan_TimerDispatch_Data` -- MidiPkt_ArpExtHandler_A, state 0, before `call MidiPkt_SetXferTotal_Panel` / `MidiPkt_SetXferBlock_LivePanel`",
+   "midi/midi_dispatch_handlers.s:10517-10527 push 4 regs / `call PanelTlv_WriteAllHeaders` / `call SndParam_SyncDisplayBitmap` / pop -- the whole body",
+   "midi/midi_dispatch_handlers.s:10154-10157 MidiPkt_SetXferBlock_LivePanel header: 'command 11, state 0 writes all panel TLV headers, then points the total descriptor 0xBCDC ...'",
+   "audio/tonegen_fileio_handlers.s:696-720 SndParam_SyncDisplayBitmap: saves params 0/0x102/0x103/0x300/0x4006 and copies 0x620 bytes of 0xF9A0 to 0x3C8E4 -- the snapshot SoundParam_NotifyMultipleChanges later compares",
+   "midi/midi_dispatch_handlers.s:12920-12930 MidiCtrl_FullReconfigure -- the same push / WriteAllHeaders / SyncDisplayBitmap / pop sequence inline"
+  ]
+ },
+ {
+  "old": "MidiSeq_PartLookup_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiPkt_XferShowResult",
+  "header": "End of a MIDI bulk transfer (send or receive): posts the ParaLoadOpt event, maps the transfer status (field 4) to GLOBAL_ERROR_CODE (0 -> 0x23, else MidiRx_PartLookup_ByteMap[status]) and opens the TT_MESAGE box (title 0xEE); status 34 shows nothing.\nBasis: callers + body -- ArpChord_FinalizePass (receive) and SysEx_SendDispatch / SysEx_InitiateSend_Join (send) call it last.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:11550 `call MidiSeq_PartLookup_Data` -- ArpChord_FinalizePass, after MidiPkt_RecoverIfXferAborted",
+   "midi/midi_dispatch_handlers.s:13643-13644 `call SysEx_FinishBulkSend` / `call MidiSeq_PartLookup_Data` -- SysEx_InitiateSend_Join",
+   "midi/midi_dispatch_handlers.s:11002-11017 `call ParaLoadOpt_PostDualEvent` / field 4 / `cp l, 34` / `cp l, 0:i3`",
+   "midi/midi_dispatch_handlers.s:11024-11037 `ld (GLOBAL_ERROR_CODE:16), 35` / `lda xbc, (MidiRx_PartLookup_ByteMap:24)` / `ldw wa, 238` / `jp SoundCtrl_SendCommand`",
+   "ui/ui_control_panel.s:2931-2942 SoundCtrl_SendCommand posts EVT_INTERRUPT_TITLE with TITLE_PS + A; shared/event_codes.s:93 TITLE_MESAGE = 0x1A000EE, the message box"
+  ]
+ },
+ {
+  "old": "MidiSeq_PartConfigure_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiTable_PreDispatchNullRet",
+  "header": "Bare `ret` called before each received packet is dispatched; the two instructions after it (`ldw wa, 238` / `jp SoundCtrl_SendCommand`, a TT_MESAGE box) are unreachable.\nBasis: callers + body -- MidiTable_DispatchHelper and ArpQueue_ProcessAndSort_Data call it after the status check; cf. MidiTable_NullRet, called last.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:11562 `call MidiSeq_PartConfigure_Data` -- MidiTable_DispatchHelper, after `cp l, 0:i3` / `ret nz` on field 4, before the SeqChan_CommandDispatch_Table call",
+   "midi/midi_dispatch_handlers.s:9771 `call MidiSeq_PartConfigure_Data` -- ArpQueue_ProcessAndSort_Data_Loop, after `cp (xwa+4), 0` / `ret nz`",
+   "midi/midi_dispatch_handlers.s:11073-11075 `ret` / `ldw wa, 238` / `jp SoundCtrl_SendCommand` -- the body and its dead tail",
+   "midi/midi_dispatch_handlers.s:11574 `call MidiTable_NullRet` -- the post-dispatch sibling (accepted name, helpers-j)"
+  ]
+ },
+ {
+  "old": "MidiPkt_InitSingleField_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiPkt_XferAnswerMsg21",
+  "header": "Message id 7 (F0 50 21 01 28 12, the sender's opening message) of the MIDI bulk-transfer receive: once per session (0xBD20 0 -> 1) answers with SysEx_Msg_35C4 = F0 50 22 01 28 12 F7. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:1286 `.long MidiPkt_InitSingleField_Data` -- entry 7",
+   "ui_widgets/widget_dispatch.s:3256 `sysex_rx_entry 0x21, 0x00, SysExRx_Trie_005` -> 01 -> 28 -> 12 gives action 7",
+   "midi/midi_dispatch_handlers.s:11603-11608 `cp (0xbd20:16), 0` / `ret nz` / `ld (0xbd20:16), 1` / `ld xwa, SysEx_Msg_35C4` / `ld bc, 7:i3` / `call SeqBuf_FlushNoteOffs`",
+   "ui_widgets/widget_dispatch.s:1940-1945 SysEx_Msg_35BC = F0 50 21 01 28 12 F7 (sent by MidiPkt_ArpPassLoop) and SysEx_Msg_35C4 = F0 50 22 01 28 12 F7 -- the pair",
+   "midi/midi_dispatch_handlers.s:11612-11627 MidiPkt_HandleCmdCode01 (id 8 = F0 50 22 ...): needs 0xBD20 == 1, stores fields 6-8, sets bit 7 of 0xBD18, 0xBD20 = 2",
+   "ui_widgets/widget_dispatch.s:1277-1316 SeqChan_CommandHandlers, indexed by the packet's message id; MidiTable_DispatchHelper (midi/midi_dispatch_handlers.s:11566-11570) `ld a, (xwa)` / `lda xbc, (SeqChan_CommandDispatch_Table:24)` / `call (xhl)`",
+   "ui_widgets/widget_dispatch.s:3243-3258 SysExRx_TrieRoot (byte 2 of the message) + the trie walk in midi/midi_dispatch_handlers.s:8614-8660: a leaf's action byte becomes field 0 = the message id that indexes SeqChan_CommandHandlers / SeqData_Handlers (paths enumerated by scratch agent_g3/trie.py)"
+  ]
+ },
+ {
+  "old": "MidiPkt_ArpExtHandler_B_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiPkt_XferOnPanelMemBlock",
+  "header": "Message id 12 (F0 50 2D 01 28 12 24 00 00 04 59 30): block 2 of the panel group -- in state 2 points 0xBCEC at the 80 panel memories (0x1ED350, 0x12CB0 bytes) and continues at SeqChan_StepCmd_Field2to3; else error 25. field 3 of MIDISEQ_SPARE_BUF_PTR = the receive state; a block-start command checks it, points the block descriptor 0xBCEC (and for a group start the total 0xBCDC) and jumps into that block's step; a wrong state stores an error status in field 4. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:1291 `.long MidiPkt_ArpExtHandler_B_Data` -- entry 12",
+   "ui_widgets/widget_dispatch.s:1970-1971 SysEx_TechMsg_35EE = F0 50 2D 01 28 12 24 00 00 04 59 30 (what the sender's panel group sends second)",
+   "midi/midi_dispatch_handlers.s:11654-11661 `cp l, 2:i3` / `ld xwa, 0xbcec` / `call MidiPkt_ArpPopReturn_Helper2` / `jrl SeqChan_StepCmd_Field2to3`",
+   "midi/midi_dispatch_handlers.s:10170-10176 MidiPkt_ArpPopReturn_Helper2: `lda xbc, (0x1ed350:24)` ... `ld xbc, 0x12cb0` -- the descriptor",
+   "midi/midi_dispatch_handlers.s:10156-10159 MidiPkt_SetXferBlock_LivePanel header: block 2 of the panel transfer is the 80 panel memories at 0x1ED350",
+   "ui_widgets/widget_dispatch.s:1277-1316 SeqChan_CommandHandlers, indexed by the packet's message id; MidiTable_DispatchHelper (midi/midi_dispatch_handlers.s:11566-11570) `ld a, (xwa)` / `lda xbc, (SeqChan_CommandDispatch_Table:24)` / `call (xhl)`",
+   "ui_widgets/widget_dispatch.s:3243-3258 SysExRx_TrieRoot (byte 2 of the message) + the trie walk in midi/midi_dispatch_handlers.s:8614-8660: a leaf's action byte becomes field 0 = the message id that indexes SeqChan_CommandHandlers / SeqData_Handlers (paths enumerated by scratch agent_g3/trie.py)"
+  ]
+ },
+ {
+  "old": "MidiPkt_ArpExtHandler_C_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiPkt_XferOnSoundRamStart",
+  "header": "Message id 13 (F0 50 2D 01 28 12 38 00 00 00 00 10): start of the sound-RAM group -- in state 0 points the total 0xBCDC at 0x1E0000 (0x72AA bytes) and block 0xBCEC at its 16-byte id, then SeqChan_StepCmd_Field4to5; else error 26. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:1292 `.long MidiPkt_ArpExtHandler_C_Data` -- entry 13",
+   "ui_widgets/widget_dispatch.s:1975-1976 SysEx_TechMsg_35FA = F0 50 2D 01 28 12 38 00 00 00 00 10",
+   "midi/midi_dispatch_handlers.s:11668-11676 `cp l, 0:i3` / `ld xwa, 0xbcdc` / `call MidiSeq_ClearSyncFlag_Helper3` / `ld xwa, 0xbcec` / `call MidiPkt_ArpPopReturn_Helper3` / `jrl SeqChan_StepCmd_Field4to5`",
+   "midi/midi_dispatch_handlers.s:10178-10194 Helper3: `lda xbc, (0x1e0000:24)` / `ld xbc, 0x72aa`; ArpPopReturn_Helper3: 0x1E0000, `ld xbc, 16`",
+   "midi/midi_dispatch_handlers.s:11103-11107 SysEx_SendSoundMemoryData header: the 16-byte 'KN5000 SOUND RAM' id at 0x1E0000, then the data from 0x1E0010",
+   "ui_widgets/widget_dispatch.s:1277-1316 SeqChan_CommandHandlers, indexed by the packet's message id; MidiTable_DispatchHelper (midi/midi_dispatch_handlers.s:11566-11570) `ld a, (xwa)` / `lda xbc, (SeqChan_CommandDispatch_Table:24)` / `call (xhl)`",
+   "ui_widgets/widget_dispatch.s:3243-3258 SysExRx_TrieRoot (byte 2 of the message) + the trie walk in midi/midi_dispatch_handlers.s:8614-8660: a leaf's action byte becomes field 0 = the message id that indexes SeqChan_CommandHandlers / SeqData_Handlers (paths enumerated by scratch agent_g3/trie.py)"
+  ]
+ },
+ {
+  "old": "MidiPkt_ArpExtHandler_D_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiPkt_XferOnSoundRamDataBlock",
+  "header": "Message id 14 (F0 50 2D 01 28 12 38 00 10 00 5A 50): block 2 of the sound-RAM group -- in state 5 points 0xBCEC at 0x1E0010 (0x729A bytes) and continues at SeqChan_StepCmd_Field5to6; else error 25. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:1293 `.long MidiPkt_ArpExtHandler_D_Data` -- entry 14",
+   "ui_widgets/widget_dispatch.s:1980-1981 SysEx_TechMsg_3606 = F0 50 2D 01 28 12 38 00 10 00 5A 50",
+   "midi/midi_dispatch_handlers.s:11684-11691 `cp l, 5:i3` / `ld xwa, 0xbcec` / `call MidiPkt_ArpPopReturn_Helper4` / `jrl SeqChan_StepCmd_Field5to6`",
+   "midi/midi_dispatch_handlers.s:10196-10204 ArpPopReturn_Helper4: `lda xbc, (0x1e0000:24)` / `add xbc, 16` / `ld xbc, 0x729a`",
+   "ui_widgets/widget_dispatch.s:1277-1316 SeqChan_CommandHandlers, indexed by the packet's message id; MidiTable_DispatchHelper (midi/midi_dispatch_handlers.s:11566-11570) `ld a, (xwa)` / `lda xbc, (SeqChan_CommandDispatch_Table:24)` / `call (xhl)`",
+   "ui_widgets/widget_dispatch.s:3243-3258 SysExRx_TrieRoot (byte 2 of the message) + the trie walk in midi/midi_dispatch_handlers.s:8614-8660: a leaf's action byte becomes field 0 = the message id that indexes SeqChan_CommandHandlers / SeqData_Handlers (paths enumerated by scratch agent_g3/trie.py)"
+  ]
+ },
+ {
+  "old": "MidiPkt_ArpExtHandler_E_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiPkt_XferOnStyleImageStart",
+  "header": "Message id 15 (F0 50 2D 01 28 12 50 00 00 00 00 60): start of the style-image group -- in state 0 resets the demo/style state, points the total at RHYTHM_PATTERN_BUF_A (0x16800 or the used size) and block 1 at RHYTHM_PATTERN_BUF_A..0x94860, then step 7; else error 27. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:1294 `.long MidiPkt_ArpExtHandler_E_Data` -- entry 15",
+   "ui_widgets/widget_dispatch.s:1985-1986 SysEx_TechMsg_3612 = F0 50 2D 01 28 12 50 00 00 00 00 60",
+   "midi/midi_dispatch_handlers.s:11698-11708 `cp l, 0:i3` / `call MidiPkt_ArpExtHandler_A_Helper` / `call MidiSeq_ClearSyncFlag_Helper4` (0xBCDC) / `call MidiPkt_ArpPopReturn_Helper5` (0xBCEC) / `jrl SeqChan_StepCmd_Field6_Data`",
+   "midi/midi_dispatch_handlers.s:10206-10232 Helper4: `lda xwa, (RHYTHM_PATTERN_BUF_A:24)` / `ld xwa, 0x16800`; ArpPopReturn_Helper5: RHYTHM_PATTERN_BUF_A to `(0x94860:24)`",
+   "midi/midi_dispatch_handlers.s:10240-10245 MidiPkt_SetXferBlock_StyleImagePool header: blocks 1-2 of the style image are RHYTHM_PATTERN_BUF_A (0x60) and 0x94860 (0x1360)",
+   "ui_widgets/widget_dispatch.s:1277-1316 SeqChan_CommandHandlers, indexed by the packet's message id; MidiTable_DispatchHelper (midi/midi_dispatch_handlers.s:11566-11570) `ld a, (xwa)` / `lda xbc, (SeqChan_CommandDispatch_Table:24)` / `call (xhl)`",
+   "ui_widgets/widget_dispatch.s:3243-3258 SysExRx_TrieRoot (byte 2 of the message) + the trie walk in midi/midi_dispatch_handlers.s:8614-8660: a leaf's action byte becomes field 0 = the message id that indexes SeqChan_CommandHandlers / SeqData_Handlers (paths enumerated by scratch agent_g3/trie.py)"
+  ]
+ },
+ {
+  "old": "MidiPkt_ArpExtHandler_F_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiPkt_XferOnStyleImageBlock2",
+  "header": "Message id 16 (F0 50 2D 01 28 12 50 00 60 00 26 60): block 2 of the style-image group -- in state 8 points 0xBCEC at 0x94860..0x95BC0 and continues at SeqChan_StepCmd_Field8to9; else error 27. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:1295 `.long MidiPkt_ArpExtHandler_F_Data` -- entry 16",
+   "ui_widgets/widget_dispatch.s:1990-1991 SysEx_TechMsg_361E = F0 50 2D 01 28 12 50 00 60 00 26 60",
+   "midi/midi_dispatch_handlers.s:11715-11722 `cp l, 8` / `ld xwa, 0xbcec` / `call MidiPkt_ArpPopReturn_Helper6` / `jrl SeqChan_StepCmd_Field8to9`",
+   "midi/midi_dispatch_handlers.s:10234-10241 ArpPopReturn_Helper6: `lda xde, (0x94860:24)` / `lda xbc, (0x95bc0:24)` / `sub xbc, xde`",
+   "ui_widgets/widget_dispatch.s:1277-1316 SeqChan_CommandHandlers, indexed by the packet's message id; MidiTable_DispatchHelper (midi/midi_dispatch_handlers.s:11566-11570) `ld a, (xwa)` / `lda xbc, (SeqChan_CommandDispatch_Table:24)` / `call (xhl)`",
+   "ui_widgets/widget_dispatch.s:3243-3258 SysExRx_TrieRoot (byte 2 of the message) + the trie walk in midi/midi_dispatch_handlers.s:8614-8660: a leaf's action byte becomes field 0 = the message id that indexes SeqChan_CommandHandlers / SeqData_Handlers (paths enumerated by scratch agent_g3/trie.py)"
+  ]
+ },
+ {
+  "old": "MidiPkt_ArpExtHandler_H_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiPkt_XferOnAccompBlocksStart",
+  "header": "Message id 23 (F0 50 2D 01 28 12 48 00 00 00 00 20): start of the accompaniment-block-area group -- in state 0 points the total at 0x1E8800 (0x3C00 or the used size) and block 1 at 0x1E8800..0x1E8820, then step 18; else error 30. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:1302 `.long MidiPkt_ArpExtHandler_H_Data` -- entry 23",
+   "ui_widgets/widget_dispatch.s:2015-2016 SysEx_TechMsg_3656 = F0 50 2D 01 28 12 48 00 00 00 00 20",
+   "midi/midi_dispatch_handlers.s:11744-11754 `cp l, 0:i3` / `call MidiPkt_ArpExtHandler_G_Helper2` / `call MidiSeq_ClearSyncFlag_Helper6` (0xBCDC) / `call MidiPkt_ArpPopReturn_Helper11` (0xBCEC) / `jrl SeqChan_StepCmd_Field10_Data`",
+   "midi/midi_dispatch_handlers.s:10351-10378 Helper6: `lda xwa, (0x1e8800:24)` / `ld xwa, 0x3c00`; ArpPopReturn_Helper11: 0x1E8800 to `(0x1e8820:24)`",
+   "midi/midi_dispatch_handlers.s:10388-10394 MidiPkt_SetXferBlock_AccompBlockPool header: blocks 1-2 are 0x1E8800 (0x20) and 0x1E8820 (0x2E0)",
+   "ui_widgets/widget_dispatch.s:1277-1316 SeqChan_CommandHandlers, indexed by the packet's message id; MidiTable_DispatchHelper (midi/midi_dispatch_handlers.s:11566-11570) `ld a, (xwa)` / `lda xbc, (SeqChan_CommandDispatch_Table:24)` / `call (xhl)`",
+   "ui_widgets/widget_dispatch.s:3243-3258 SysExRx_TrieRoot (byte 2 of the message) + the trie walk in midi/midi_dispatch_handlers.s:8614-8660: a leaf's action byte becomes field 0 = the message id that indexes SeqChan_CommandHandlers / SeqData_Handlers (paths enumerated by scratch agent_g3/trie.py)"
+  ]
+ },
+ {
+  "old": "MidiPkt_ArpExtHandler_I_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiPkt_XferOnAccompBlocksBlock2",
+  "header": "Message id 24 (F0 50 2D 01 28 12 48 00 20 00 01 60): block 2 of the accompaniment-block-area group -- in state 19 points 0xBCEC at 0x1E8820..0x1E8B00 and continues at step 19; else error 30. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:1303 `.long MidiPkt_ArpExtHandler_I_Data` -- entry 24",
+   "ui_widgets/widget_dispatch.s:2020-2021 SysEx_TechMsg_3662 = F0 50 2D 01 28 12 48 00 20 00 01 60",
+   "midi/midi_dispatch_handlers.s:11761-11768 `cp l, 19` / `ld xwa, 0xbcec` / `call MidiPkt_ArpPopReturn_Helper12` / `jrl SeqChan_StepCmd_Field13_Data`",
+   "midi/midi_dispatch_handlers.s:10380-10387 ArpPopReturn_Helper12: `lda xde, (0x1e8820:24)` / `lda xbc, (0x1e8b00:24)` / `sub xbc, xde`",
+   "ui_widgets/widget_dispatch.s:1277-1316 SeqChan_CommandHandlers, indexed by the packet's message id; MidiTable_DispatchHelper (midi/midi_dispatch_handlers.s:11566-11570) `ld a, (xwa)` / `lda xbc, (SeqChan_CommandDispatch_Table:24)` / `call (xhl)`",
+   "ui_widgets/widget_dispatch.s:3243-3258 SysExRx_TrieRoot (byte 2 of the message) + the trie walk in midi/midi_dispatch_handlers.s:8614-8660: a leaf's action byte becomes field 0 = the message id that indexes SeqChan_CommandHandlers / SeqData_Handlers (paths enumerated by scratch agent_g3/trie.py)"
+  ]
+ },
+ {
+  "old": "MidiPkt_ArpExtHandler_M_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiPkt_XferOnSeqEventBlock",
+  "header": "Message id 20 (F0 50 2D 01 28 12 61 30 00 + length): block 3 of the sequencer group -- in state 13 points 0xBCEC at the event memory (0xB0000, 0x4D800 or the used size), takes the length from the message and continues at SeqChan_StepCmd_Field13Write; else error 28. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:1299 `.long MidiPkt_ArpExtHandler_M_Data` -- entry 20",
+   "ui_widgets/widget_dispatch.s:2010-2011 SysEx_TechMsg_364C = F0 50 2D 01 28 12 61 30 00 (9 bytes, the length follows)",
+   "midi/midi_dispatch_handlers.s:11820-11828 `cp l, 13` / `ld xwa, 0xbcec` / `call MidiPkt_ArpPopReturn_Helper10` / `call MidiPkt_SetXferLengthFromMsg` / `jrl SeqChan_StepCmd_Field13Write`",
+   "midi/midi_dispatch_handlers.s:10329-10337 ArpPopReturn_Helper10: `lda xwa, (0xb0000:24)` / `add xwa, 0x4d800`; 10276-10280 MidiPkt_SetXferTotal_SeqData header: block 3 = event memory from 0xB0000",
+   "ui_widgets/widget_dispatch.s:1277-1316 SeqChan_CommandHandlers, indexed by the packet's message id; MidiTable_DispatchHelper (midi/midi_dispatch_handlers.s:11566-11570) `ld a, (xwa)` / `lda xbc, (SeqChan_CommandDispatch_Table:24)` / `call (xhl)`",
+   "ui_widgets/widget_dispatch.s:3243-3258 SysExRx_TrieRoot (byte 2 of the message) + the trie walk in midi/midi_dispatch_handlers.s:8614-8660: a leaf's action byte becomes field 0 = the message id that indexes SeqChan_CommandHandlers / SeqData_Handlers (paths enumerated by scratch agent_g3/trie.py)"
+  ]
+ },
+ {
+  "old": "MidiPkt_ArpExtHandler_N_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiPkt_XferOnDataPacket",
+  "header": "Message id 10 (F0 50 7E <nibble data>, a bulk-transfer data packet): dispatches on the receive state (field 3, < 22) through SeqChan_StepCmdHandlers to the step of the block being received. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:1289 `.long MidiPkt_ArpExtHandler_N_Data` -- entry 10",
+   "ui_widgets/widget_dispatch.s:3246 `sysex_rx_entry 0x7e, 0x0a, SysExRx_Trie_000` -- byte 2 = 0x7E gives id 10; 1936-1937 SysEx_Msg_35B8 = F0 50 7E is the data header the sender queues",
+   "midi/midi_dispatch_handlers.s:11839-11848 `ld bc, 3:i3` / `call SeqData_ReadFieldByIndex` / `cp l, 22` / `ret nc` / `lda xbc, (SeqChan_StepCmdHandlers:24)` / `call (xhl)`",
+   "ui_widgets/widget_dispatch.s:1320-1342 SeqChan_StepCmdHandlers: state 1 SeqChan_StepCmd_Field1to2 ... 20 SeqChan_StepCmd_Field20to21, wrong states SeqChan_ProcessStepCmd (error 19)",
+   "ui_widgets/widget_dispatch.s:1277-1316 SeqChan_CommandHandlers, indexed by the packet's message id; MidiTable_DispatchHelper (midi/midi_dispatch_handlers.s:11566-11570) `ld a, (xwa)` / `lda xbc, (SeqChan_CommandDispatch_Table:24)` / `call (xhl)`",
+   "ui_widgets/widget_dispatch.s:3243-3258 SysExRx_TrieRoot (byte 2 of the message) + the trie walk in midi/midi_dispatch_handlers.s:8614-8660: a leaf's action byte becomes field 0 = the message id that indexes SeqChan_CommandHandlers / SeqData_Handlers (paths enumerated by scratch agent_g3/trie.py)"
+  ]
+ },
+ {
+  "old": "SeqChan_StepCmd_Field6_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqChan_XferStep_StyleImageBlock1",
+  "header": "Receive step for block 1 of the style image (RHYTHM_PATTERN_BUF_A, 0x60 bytes): sets state 7, unpacks the packet into the block, and when the block is complete sets state 8 (awaiting block 2, message id 16). Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:1328 `.long SeqChan_StepCmd_Field6_Data` -- state 7",
+   "midi/midi_dispatch_handlers.s:11708 `jrl SeqChan_StepCmd_Field6_Data` -- from MidiPkt_ArpExtHandler_E_Data (style-image start, block 1 descriptor)",
+   "midi/midi_dispatch_handlers.s:11921-11934 `ld de, 7:i3` / `call MIDI_ReadChannelParam` (field 3) / `call MidiPkt_UnpackNibblesToXfer` / field 15 == 0 -> `ldw de, 8`",
+   "midi/midi_dispatch_handlers.s:11715-11717 MidiPkt_ArpExtHandler_F_Data (block 2) requires state 8",
+   "ui_widgets/widget_dispatch.s:1320-1342 SeqChan_StepCmdHandlers indexed by the receive state; MidiPkt_ArpExtHandler_N_Data (data packets) calls [state]",
+   "midi/midi_dispatch_handlers.s:11872-11885 SeqChan_StepCmd_Field2to3 -- the sibling shape: state S, MidiPkt_UnpackNibblesToXfer, field 15 == 0 (block complete) -> state S+1"
+  ]
+ },
+ {
+  "old": "SeqChan_StepCmd_Field10_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqChan_XferStep_AccompBlock1",
+  "header": "Receive step for block 1 of the accompaniment-block area (0x1E8800, 0x20 bytes): sets state 18, unpacks the packet, and when complete sets state 19 (awaiting block 2, message id 24). Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:1339 `.long SeqChan_StepCmd_Field10_Data` -- state 18",
+   "midi/midi_dispatch_handlers.s:11754 `jrl SeqChan_StepCmd_Field10_Data` -- from MidiPkt_ArpExtHandler_H_Data (group start, block 1 descriptor)",
+   "midi/midi_dispatch_handlers.s:11969-11982 `ldw de, 18` / `call MIDI_ReadChannelParam` / `call MidiPkt_UnpackNibblesToXfer` / field 15 == 0 -> `ldw de, 19`",
+   "midi/midi_dispatch_handlers.s:11761-11764 MidiPkt_ArpExtHandler_I_Data (block 2) requires state 19",
+   "ui_widgets/widget_dispatch.s:1320-1342 SeqChan_StepCmdHandlers indexed by the receive state; MidiPkt_ArpExtHandler_N_Data (data packets) calls [state]",
+   "midi/midi_dispatch_handlers.s:11872-11885 SeqChan_StepCmd_Field2to3 -- the sibling shape: state S, MidiPkt_UnpackNibblesToXfer, field 15 == 0 (block complete) -> state S+1"
+  ]
+ },
+ {
+  "old": "SeqChan_StepCmd_Field13_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqChan_XferStep_AccompBlock2",
+  "header": "Receive step for block 2 of the accompaniment-block area (0x1E8820, 0x2E0 bytes): sets state 19, unpacks the packet, and when complete sets state 20 (awaiting the block pool, message id 25). Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:1340 `.long SeqChan_StepCmd_Field13_Data` -- state 19",
+   "midi/midi_dispatch_handlers.s:11768 `jrl SeqChan_StepCmd_Field13_Data` -- from MidiPkt_ArpExtHandler_I_Data (block 2 descriptor)",
+   "midi/midi_dispatch_handlers.s:11985-11998 `ldw de, 19` / `call MIDI_ReadChannelParam` / `call MidiPkt_UnpackNibblesToXfer` / field 15 == 0 -> `ldw de, 20`",
+   "midi/midi_dispatch_handlers.s:11775-11780 MidiPkt_ArpExtHandler_J (block pool, MidiPkt_SetXferBlock_AccompBlockPool) requires state 20",
+   "ui_widgets/widget_dispatch.s:1320-1342 SeqChan_StepCmdHandlers indexed by the receive state; MidiPkt_ArpExtHandler_N_Data (data packets) calls [state]",
+   "midi/midi_dispatch_handlers.s:11872-11885 SeqChan_StepCmd_Field2to3 -- the sibling shape: state S, MidiPkt_UnpackNibblesToXfer, field 15 == 0 (block complete) -> state S+1"
+  ]
+ },
+ {
+  "old": "SeqChan_StepCmd_Field11_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqChan_XferStep_CurrentSong",
+  "header": "Receive step for block 1 of the sequencer group, the current-song record (0xF180, 0x800 bytes): sets state 11, unpacks the packet (AccWrap_ReturnZero(4) gate), and when complete sets state 12 (awaiting the song slots, message id 19). Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:1332 `.long SeqChan_StepCmd_Field11_Data` -- state 11",
+   "midi/midi_dispatch_handlers.s:11799 `jrl SeqChan_StepCmd_Field11_Data` -- from MidiPkt_ArpExtHandler_K (MidiPkt_SetXferBlock_CurrentSong)",
+   "midi/midi_dispatch_handlers.s:12017-12033 `ldw de, 11` / `call AccWrap_ReturnZero` / `call nz, (MidiPkt_UnpackNibblesToXfer:24)` / field 15 == 0 -> `ldw de, 12`",
+   "midi/midi_dispatch_handlers.s:10284-10289 MidiPkt_SetXferBlock_CurrentSong header: block 1 of the sequencer transfer, step 11",
+   "ui_widgets/widget_dispatch.s:1320-1342 SeqChan_StepCmdHandlers indexed by the receive state; MidiPkt_ArpExtHandler_N_Data (data packets) calls [state]",
+   "midi/midi_dispatch_handlers.s:11872-11885 SeqChan_StepCmd_Field2to3 -- the sibling shape: state S, MidiPkt_UnpackNibblesToXfer, field 15 == 0 (block complete) -> state S+1"
+  ]
+ },
+ {
+  "old": "SeqChan_StepCmd_Field12_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqChan_XferStep_SongSlots",
+  "header": "Receive step for block 2 of the sequencer group, the ten song slots (0xAB000, 0x5000 bytes): sets state 12, unpacks the packet, and when complete sets state 13 (awaiting the event memory, message id 20). Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:1333 `.long SeqChan_StepCmd_Field12_Data` -- state 12",
+   "midi/midi_dispatch_handlers.s:11813 `jrl SeqChan_StepCmd_Field12_Data` -- from MidiPkt_ArpExtHandler_L (MidiPkt_SetXferBlock_SongSlots)",
+   "midi/midi_dispatch_handlers.s:12036-12052 `ldw de, 12` / `call AccWrap_ReturnZero` / `call nz, (MidiPkt_UnpackNibblesToXfer:24)` / field 15 == 0 -> `ldw de, 13`",
+   "midi/midi_dispatch_handlers.s:10291-10294 MidiPkt_SetXferBlock_SongSlots header: block 2 of the sequencer transfer, step 12",
+   "ui_widgets/widget_dispatch.s:1320-1342 SeqChan_StepCmdHandlers indexed by the receive state; MidiPkt_ArpExtHandler_N_Data (data packets) calls [state]",
+   "midi/midi_dispatch_handlers.s:11872-11885 SeqChan_StepCmd_Field2to3 -- the sibling shape: state S, MidiPkt_UnpackNibblesToXfer, field 15 == 0 (block complete) -> state S+1"
+  ]
+ },
+ {
+  "old": "SeqChan_DispatchByType_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiPkt_XferOnGroupEnd",
+  "header": "Message id 3 (F0 50 27 7E, end of a transfer group): dispatches on the receive state through SeqChan_WriteFieldHandlers -- states 3/6/10/14/21 (panel, sound RAM, style image, sequencer, accompaniment blocks complete) reset the state and set that group's bit 7/6/5/4/2 of 0xBD1A; other states store error 31. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:1282 `.long SeqChan_DispatchByType_Data` -- entry 3",
+   "ui_widgets/widget_dispatch.s:3250 `sysex_rx_entry 0x27, 0x00, SysExRx_Trie_022` -> 0x7E gives id 3; 1920-1921 SysEx_Msg_35A0 = F0 50 27 7E F7, sent by MidiPkt_ArpConfigChain_Data_Helper18 after a group",
+   "midi/midi_dispatch_handlers.s:12083-12093 `ld a, (xwa+3)` / `cp a, 22` / `lda xbc, (SeqChan_WriteFieldHandlers:24)` / `call (xhl)` / `res 7, (0xbd1c:16)`",
+   "ui_widgets/widget_dispatch.s:1345-1367 SeqChan_WriteFieldHandlers: [3] _Data_A, [6] _Data_B, [10] _Data_C, [14] _Data_D, [17] SeqChan_RetStub_C, [21] _Data_E, the rest SeqChan_DefaultHandler (error 31)",
+   "midi/midi_dispatch_handlers.s:12098-12135 _Data_A..E: field 3 = 0 and `set 7/6/5/4/2, (0xbd1a:16)`; 12155-12161 MidiSysEx_FinishPanelXfer: 'bit 7 is set only by SeqChan_WriteField_Data_A, the end step (state 3)'",
+   "ui_widgets/widget_dispatch.s:1277-1316 SeqChan_CommandHandlers, indexed by the packet's message id; MidiTable_DispatchHelper (midi/midi_dispatch_handlers.s:11566-11570) `ld a, (xwa)` / `lda xbc, (SeqChan_CommandDispatch_Table:24)` / `call (xhl)`",
+   "ui_widgets/widget_dispatch.s:3243-3258 SysExRx_TrieRoot (byte 2 of the message) + the trie walk in midi/midi_dispatch_handlers.s:8614-8660: a leaf's action byte becomes field 0 = the message id that indexes SeqChan_CommandHandlers / SeqData_Handlers (paths enumerated by scratch agent_g3/trie.py)"
+  ]
+ },
+ {
+  "old": "SoundMode_SysExConfig_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqTimer_SetPanelTempo",
+  "header": "Stores tempo WA (40..300, 9 bits) into the panel tempo word 0xFC62 (low byte, bit 0 of 0xFC63), queues it as SwbtWr param 0x48/8 and reloads the tempo timer (SeqTimer_UpdateTempoReg). Basis: callers + body -- the only caller is the F0 50 25 (message id 9, tempo) receive handler.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:13847 `call SoundMode_SysExConfig_Data` -- SeqData_FormatOutput_CaseA, after `cp de, 0x0028` / `ret c` / `cp de, 0x012c` / `ret ugt`",
+   "ui_widgets/widget_dispatch.s:1448 `.long SeqData_FormatOutput_Dispatch` -- entry 9 of SeqData_Handlers; 3244 `sysex_rx_entry 0x25, 0x09, ...` -- F0 50 25 is id 9",
+   "midi/midi_dispatch_handlers.s:13784-13800 SeqData_DispatchLoop_Done sends F0 50 25 + the tempo clamped to 40..300 (0x28 / 0x12C) -- the same message outbound",
+   "midi/midi_dispatch_handlers.s:12691-12705 `and wa, 511` / `lda xbc, (0xfc5a:16)` / `ld (xbc+8), l` / bit 8 -> (xbc+9) bit 0 / MIDI_MSG_STATUS 72, DATA1 8, DATA2 l / `call SwbtWr_WriteParamBlock`",
+   "midi/midi_dispatch_handlers.s:12720 `call SeqTimer_UpdateTempoReg`; audio/audio_control_engine.s:8281-8285 it reads `ld wa, (xde + 8)` / `and wa, 0x1ff` / `cp wa, 0x28` from 0xFC5A -- the tempo word"
+  ]
+ },
+ {
+  "old": "MidiCtrl_ModeSwitch_Data",
+  "verdict": "refuse",
+  "why_refused": "Listener 0 of SwbtB2 code 0x91: when payload byte 1 == 3 and bit 2 of payload byte 3 is set, calls COMM_WriteAndCheck with 1/0 from bit 2 of payload byte 2. What code 0x91 / record 3 / bit 2 stand for, and which setting COMM_WriteAndCheck (SndParam 0x7F/9 then per-part volumes) writes, are not established; a name would be body-only.",
+  "new": null,
+  "header": "",
+  "basis": "",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:6508-6509 `SwbtB2_Code91_Listeners:` `.long MidiCtrl_ModeSwitch_Data`",
+   "midi/midi_dispatch_handlers.s:13510-13530 `bit 0, (0xb7ee:16)` / `cp (SWBTWR_PAYLOAD_1:16), 3` / `bit 2, (SWBTWR_PAYLOAD_3:16)` / `calr MidiCtrl_Bit2ToChannel` -> `jp COMM_WriteAndCheck`",
+   "midi/midi_dispatch_handlers.s:12876-12885 MidiCtrl_ModeSwitchHandler tests the same payload pattern -- a sibling, also unexplained",
+   "audio/note_voice_mapping.s:19504-19526 COMM_WriteAndCheck: `ldw wa, 0x7f` / `ldw bc, 0x9` / `calr SeqVoice_CheckAndRet_Prologue` then MIDI_SendPartVolumes_Loop"
+  ]
+ },
+ {
+  "old": "SysEx_DispatchCalls_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SysEx_InitiateSend_SendStyleImage",
+  "header": "Case 1 (STYLE IMAGE) of SysEx_InitiateSend: sizes the style-image group (total 0xBCBC from RHYTHM_PATTERN_BUF_A) and sends it (SysEx_ResetAndReturn_Helper), then rejoins SysEx_InitiateSend_Join.\nBasis: callers + body -- entry 1 of SysExSend_SwitchOffsets; message id 32 (F0 50 2B 01 28 12 50 00 00, style request) selects code 1.",
+  "basis": "callers + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:1427-1430 `SysExSend_SwitchOffsets:` entry 1 `.short SysEx_DispatchCalls_Data - SysEx_SendDispatch`; entries 2-6 are SysEx_InitiateSend_SendSequencer / _SendSoundMemory / _SendPanelMemory / _SendNoData / _SendMspUser",
+   "midi/midi_dispatch_handlers.s:13649-13651 `call SysEx_ResetAndReturn_Helper` / `jr SysEx_InitiateSend_Join` -- the whole body, the siblings' shape",
+   "midi/midi_dispatch_handlers.s:11090-11093 SysEx_ResetAndReturn_Helper: `ld xwa, 0xbcbc` / `call MidiSeq_ClearSyncFlag_Helper4` / `jrl MidiPkt_ArpConfigChain_Data_Helper7`",
+   "midi/midi_dispatch_handlers.s:10206-10213 MidiSeq_ClearSyncFlag_Helper4: RHYTHM_PATTERN_BUF_A, 0x16800 -- the style-image total (also used by the receive side, message id 15)",
+   "midi/midipkt_routines.s:1201-1203 MidiPkt_DispatchData_Chan1 `ld (0xbcfc:16), 1` -- SeqData_Handlers entry 32 = F0 50 2B 01 28 12 50 00 00 (style group 0x50)"
+  ]
+ },
+ {
+  "old": "SeqData_FormatOutput_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SysEx_OnTechnicsParamChange",
+  "header": "Handler of message id 27, F0 50 2C 01 28 12 <address> (a Technics parameter-change message, the same header the KN5000 sends in SysEx_Msg_35DC): switches on field 1 (address group 1..7) to apply the parameter through MidiCtl_SelectTableN / MidiCtl_FormatHandlers, then re-sends the output banks.\nBasis: table + body.",
+  "basis": "table + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:1466 `.long SeqData_FormatOutput_Data` -- entry 27",
+   "ui_widgets/widget_dispatch.s:1437-1477 SeqData_Handlers (39 x u32) indexed by the received SysEx's message id; SeqData_DispatchHandler (midi/midi_dispatch_handlers.s:13738-13756) `lda xbc, (SeqData_SubDispatch_Table:24)` / `call (xhl)`",
+   "ui_widgets/widget_dispatch.s:3252 `sysex_rx_entry 0x2c, 0x00, SysExRx_Trie_673` -- the 2C subtree whose leaves carry action 27, field 1 = 1 / 3 / 7 for address groups 00 / 01 / 0A",
+   "midi/midi_dispatch_handlers.s:13886-13893 `bit 4, (0xfd50:16)` / `calr SeqData_FormatOutput_Data_Helper` / `cpw (0x90de:16), 0` / `call SwbtWr_ReinitBothBanks`",
+   "midi/midi_dispatch_handlers.s:13906-13917 field 1 - 1 in 0..6 -> SeqDataFmt_SwitchOffsets; 13934-13963 case 0 `lda xwa, (MidiCtl_SelectTable0:24)` ... `lda xde, (MidiCtl_FormatHandlers:24)` / `call (xhl)`",
+   "ui_widgets/widget_dispatch.s:3712-3727 MidiCtl_FormatHandlers: SeqAlt_ApplyDescriptor_*, DSPParam_StoreWithLoop, VoiceParam_StoreToBuffer ... -- store handlers",
+   "ui_widgets/widget_dispatch.s:1958-1961 SysEx_Msg_35DC = F0 50 2C 01 28 12 -- the header MidiPkt_EnqueueControl_* send for a parameter change"
+  ]
+ },
+ {
+  "old": "SeqData_FormatOutput_Default_Code",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SysEx_OnTechnicsParamChange_Addr00",
+  "header": "Case 0 of SysEx_OnTechnicsParamChange's switch (field 1 = 1: parameter-change messages whose address starts 00 00): jumps to the common body that looks up MidiCtl_SelectTable0[field 2] (11 records) and calls its MidiCtl_FormatHandlers entry.\nBasis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:13915-13917 `lda xix, (SeqDataFmt_SwitchOffsets:24)` / `lda xix, (SeqData_FormatOutput_Default_Code:24)` / `jp t, (xix+hl)` -- switch base",
+   "ui_widgets/widget_dispatch.s:1484 `.short SeqData_FormatOutput_Default_Code - SeqData_FormatOutput_Default_Code` -- entry 0 of SeqDataFmt_SwitchOffsets",
+   "midi/midi_dispatch_handlers.s:13919-13920 `jr SeqData_FormatOutput_Data_Helper_Join` -- the whole body",
+   "midi/midi_dispatch_handlers.s:13934-13963 Join: field 2 < 11 / `lda xwa, (MidiCtl_SelectTable0:24)` / `calr MidiPkt_CheckGateCondition` / `ld c, (xbc+17)` / MidiCtl_FormatHandlers",
+   "trie (scratch agent_g3/trie.py): every F0 50 2C 01 28 12 00 00 xx path yields field 1 = 0x01 (01 -> 03 for 01 xx, 07 for 0A xx)"
+  ]
+ },
+ {
+  "old": "VoiceParam_AssSwb_MultiBlock_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SysEx_OnTechnicsParamRequest",
+  "header": "Handler of message id 29, F0 50 2B 01 28 12 <address> (a Technics parameter request): switches on field 1 like SysEx_OnTechnicsParamChange but calls MidiCtl_AssSwbHandlers, which look up the value and queue a 2C reply (MidiPkt_BuildDirect -> MidiPkt_EnqueueControl_*).\nBasis: table + body; 2B 01 28 12 <group> 00 00 (ids 30-35) likewise start a bulk send.",
+  "basis": "table + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:1468 `.long VoiceParam_AssSwb_MultiBlock_Data` -- entry 29",
+   "ui_widgets/widget_dispatch.s:1437-1477 SeqData_Handlers (39 x u32) indexed by the received SysEx's message id; SeqData_DispatchHandler (midi/midi_dispatch_handlers.s:13738-13756) `lda xbc, (SeqData_SubDispatch_Table:24)` / `call (xhl)`",
+   "ui_widgets/widget_dispatch.s:3253 `sysex_rx_entry 0x2b, 0x00, SysExRx_Trie_750` -- the 2B subtree, leaves action 29 (and 28, 30-35)",
+   "midi/midi_dispatch_handlers.s:15046-15060 field 1 - 1 in 0..6 -> AssSwbMulti_SwitchOffsets; 15076-15103 `lda xwa, (MidiCtl_SelectTable1:24)` / `ld c, (xbc+18)` / `lda xde, (MidiCtl_AssSwbHandlers:24)` / `call (xhl)`",
+   "ui_widgets/widget_dispatch.s:3728-3737 MidiCtl_AssSwbHandlers: VoiceParam_LookupAndEnqueue, MidiPkt_BuildStatusDirect, MidiPkt_BuildDirect ...",
+   "midi/midipkt_routines.s:53-77 MidiPkt_BuildDirect reads the current value (Part_LookupTableEntry) and `calr MidiPkt_EnqueueControl_335C` -- a reply in the 2C format (SysEx_Msg_35DC)",
+   "midi/midipkt_routines.s:1195-1256 ids 30-35 (2B ... 20/38/50/60/48 00 00) -> MidiPkt_DispatchData_Chan* -> SysEx_InitiateSend: 2B is the request direction"
+  ]
+ },
+ {
+  "old": "VoiceParam_MultiMode_StubRet_Code",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SysEx_OnTechnicsParamRequest_Addr00",
+  "header": "Case 0 of SysEx_OnTechnicsParamRequest's switch (field 1 = 1: requests whose address starts 00 00): jumps to the common body that looks up MidiCtl_SelectTable1[field 2] and calls its MidiCtl_AssSwbHandlers entry. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:15058-15060 `lda xix, (AssSwbMulti_SwitchOffsets:24)` / `lda xix, (VoiceParam_MultiMode_StubRet_Code:24)` / `jp t, (xix+hl)` -- switch base",
+   "ui_widgets/widget_dispatch.s:1493 `.short VoiceParam_MultiMode_StubRet_Code - VoiceParam_MultiMode_StubRet_Code` -- entry 0 of AssSwbMulti_SwitchOffsets",
+   "midi/midi_dispatch_handlers.s:15064-15065 `jr VoiceParam_AssSwb_MultiBlock_Data_Join` -- the whole body (not a stub return, despite the old name)",
+   "midi/midi_dispatch_handlers.s:15076-15103 Join: field 2 < 11 / `lda xwa, (MidiCtl_SelectTable1:24)` / `ld c, (xbc+18)` / MidiCtl_AssSwbHandlers"
+  ]
+ },
+ {
+  "old": "MidiInit_Stub1",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "MidiInit_Stub2",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "MidiInit_Stub3",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "SC0Init_Entry",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "MidiPkt_EnqueueExtended_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "MidiPkt_SysExValidator_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SysEx_OnGmSystemOn",
+  "header": "Handler of message id 36, the Universal SysEx F0 7E 7F 09 01 (General MIDI System On): outside the guarded titles sets bit 2 of the byte at 0xFDAD, writes it with AssswbWr (0x91, 3) and re-sends both output banks.\nBasis: table + body.",
+  "basis": "table + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:1475 `.long MidiPkt_SysExValidator_Data` -- entry 36",
+   "ui_widgets/widget_dispatch.s:1437-1477 SeqData_Handlers (39 x u32) indexed by the received SysEx's message id; SeqData_DispatchHandler (midi/midi_dispatch_handlers.s:13738-13756) `lda xbc, (SeqData_SubDispatch_Table:24)` / `call (xhl)`",
+   "ui_widgets/widget_dispatch.s:3245 `sysex_rx_entry 0x7f, 0x00, SysExRx_Trie_016` -> 09 -> 01 gives action 36 (02 gives 37); the parser accepts manufacturer byte 0x7E (midi/midi_dispatch_handlers.s:13729)",
+   "ui_widgets/widget_dispatch.s:1950-1953 SysEx_GmSystemOn = F0 7E 7F 09 01 F7 -- the same message, sent by MidiPkt_DispatchSpecialType",
+   "midi/midipkt_routines.s:1280-1292 `set 7, (0x90f9:16)` / `lda xbc, (0xfdad:16)` / `set 2, e` / `ldw wa, 145` / `call AssswbWr` / `call SwbtWr_ReinitBothBanks`"
+  ]
+ },
+ {
+  "old": "MidiPkt_SysExProcessor_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SysEx_OnGmSystemOff",
+  "header": "Handler of message id 37, F0 7E 7F 09 02 (General MIDI System Off): if bit 2 of the byte at 0xFDAD is set, clears it, writes it with AssswbWr (0x91, 3) and re-sends both output banks -- the inverse of SysEx_OnGmSystemOn.\nBasis: table + body.",
+  "basis": "table + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:1476 `.long MidiPkt_SysExProcessor_Data` -- entry 37",
+   "ui_widgets/widget_dispatch.s:1437-1477 SeqData_Handlers (39 x u32) indexed by the received SysEx's message id; SeqData_DispatchHandler (midi/midi_dispatch_handlers.s:13738-13756) `lda xbc, (SeqData_SubDispatch_Table:24)` / `call (xhl)`",
+   "trie: 0x7F -> 09 -> 02 gives action 37 (ui_widgets/widget_dispatch.s:3245); 1954-1957 SysEx_GmSystemOff = F0 7E 7F 09 02 F7",
+   "midi/midipkt_routines.s:1309-1325 `bit 2, a` / `ret z` / `res 2, e` / `ldw wa, 145` / `call AssswbWr` / `call SwbtWr_ReinitBothBanks`"
+  ]
+ },
+ {
+  "old": "MidiPkt_SysExBulkTransfer_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SysEx_OnRolandGsParam",
+  "header": "Handler of message id 38, Roland GS data set F0 41 <dev> 42 12 40 ..: switches on field 1 -- 1 = 40 1x 15 (use for rhythm part), 2 = 40 00 7F 00 41 (GS reset), 3/4/5/6 = 40 01 30/33/38/3A (reverb macro/level, chorus macro/level).\nBasis: table + body.",
+  "basis": "table + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:1477 `.long MidiPkt_SysExBulkTransfer_Data` -- entry 38",
+   "ui_widgets/widget_dispatch.s:1437-1477 SeqData_Handlers (39 x u32) indexed by the received SysEx's message id; SeqData_DispatchHandler (midi/midi_dispatch_handlers.s:13738-13756) `lda xbc, (SeqData_SubDispatch_Table:24)` / `call (xhl)`",
+   "ui_widgets/widget_dispatch.s:3258 `sysex_rx_entry 0xfe, 0x00, SysExRx_Trie_799` -> 42 12 40 ...: action 38 with field-1 keys 01..06 (dump in scratch agent_g3/trie.py); midi/midi_dispatch_handlers.s:13727-13731 manufacturer 0x41 accepted",
+   "midi/midipkt_routines.s:1326-1339 field 1 - 1 in 0..5 / `lda xix, (SysExBulk_SwitchOffsets:24)` / `jp t, (xix+hl)`",
+   "midi/midipkt_routines.s:1347-1350 cases 4-6 -> SysEx_ApplyToSlot4B_Data / SysEx_ApplyToSlot49_Data / SysEx_ApplyToSlot49_Format_Data"
+  ]
+ },
+ {
+  "old": "MidiPkt_SendBankSelect_Send_Code",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SysEx_OnRolandGs_UseForRhythmPart",
+  "header": "Case 0 (field 1 = 1, GS address 40 1x 15 USE FOR RHYTHM PART) of SysEx_OnRolandGsParam: jumps to the body that maps block x through SysExBulk_SlotMap to a part and, for value 1-2, sets its bank to 120 (drums), for 0 back to 0.\nBasis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midipkt_routines.s:1338-1339 `lda xix, (MidiPkt_SendBankSelect_Send_Code:24)` / `jp t, (xix+hl)` -- switch base",
+   "ui_widgets/widget_dispatch.s:1743-1749 SysExBulk_SwitchOffsets entry 0 = `MidiPkt_SendBankSelect_Send_Code - MidiPkt_SendBankSelect_Send_Code`",
+   "midi/midipkt_routines.s:1341-1342 `jr MidiPkt_SysExBulkTransfer_Data_Join` -- the whole body",
+   "midi/midipkt_routines.s:1393-1407 Join: field 9 - 16 < 16 -> `lda xbc, (SysExBulk_SlotMap:24)`; field 11 <= 2",
+   "midi/midipkt_routines.s:1408-1418 value != 0: `ldw bc, 32` / `ldw de, 120` / `call SndParam_NotifyAndReturn`; 1438-1443 value 0: `ld de, 0:i3`",
+   "ui_widgets/widget_dispatch.s:1750-1752 SysExBulk_SlotMap = (15, 0..8, 10..14, 9): GS block order (block 0 = part 10)"
+  ]
+ },
+ {
+  "old": "AccPos_ClearOnStart_Padding_Sub",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "AccDir_Entry",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "AccProcess_Entry",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "AccStyle_Entry",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "AccVoiceDelta_Part1",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "AccVoiceDelta_Part2",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "AccVoiceDelta_Part3",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "AccVoiceDelta_Part4",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "AccVoiceDelta_Part5",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "AccTone_JumpTableData_Data",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ },
+ {
+  "old": "AccPatch_CountSlots_Wrapper",
+  "verdict": "refuse",
+  "why_refused": "not reviewed (stopped early at the owner's request)"
+ }
+]

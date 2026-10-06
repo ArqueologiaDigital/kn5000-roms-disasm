@@ -529,7 +529,7 @@ AcMstStyleAlpGridBoxProc_EventOffsets:	; read by AcMstStyleAlpGridBoxProc via Ma
 	.short	MasterSetup_InheritedProc_Fallback - AcMstStyleAlp_Boundary_Skip
 	.short	AcMstStyleAlpGridBoxProc_OnLswData - AcMstStyleAlp_Boundary_Skip
 	.short	AcMstStyleAlpGridBoxProc_OnLswData - AcMstStyleAlp_Boundary_Skip
-MstStyleAlp_AppendPadChar_Data:
+MstStyleAlp_AppendPadChar_Str_Blank1:
 	aligned_string " "
 MstStyleAlp_OverflowStr_Str_Blank32:	aligned_string "                                "
 MstStyleAlp_AppendPadChar2_Str_Blank1:	aligned_string " "
@@ -549,7 +549,7 @@ AcMstStyle1GridBoxProc_EventOffsets:	; read by AcMstStyle1GridBoxProc via MstSty
 	.short	MstStyle_InheritedProc_Fallback - MstStyle_EventDispatch
 	.short	MstStyle_ForwardToChild - MstStyle_EventDispatch
 	.short	MstStyle_ForwardToChild - MstStyle_EventDispatch
-MstStyle1Grid_CellSelect_Data_2:
+MstStyle1Grid_PadLeft_Loop_Str_Blank1:
 	aligned_string " "
 MstStyle1Grid_OutOfRange_Str_Blank16:	aligned_string "                "
 MstStyle1Grid_PadLeft_LoopB_Str_Blank1:	aligned_string " "
@@ -570,6 +570,7 @@ AcMstStyle1SubGridBoxProc_EventOffsets:	; read by AcMstStyle1SubGridBoxProc via 
 	.short	MstStyle1Sub_InheritedFallback - MstStyle1_EventDispatch
 	.short	MstStyle1Sub_ForwardToChild - MstStyle1_EventDispatch
 	.short	MstStyle1Sub_ForwardToChild - MstStyle1_EventDispatch
+MstStyle1SubGrid_PadLeft_Loop_Str_Blank1:
 	aligned_string " "
 MstStyle1SubGrid_OutOfRange_Str_Blank16:	aligned_string "                "
 MstStyle1SubGrid_PadLeft_LoopB_Str_Blank1:
@@ -601,7 +602,7 @@ AcMstStyle2GridBoxProc_EventOffsets:	; read by AcMstStyle2GridBoxProc via MstSty
 	.short	MstStyle2_InheritedFallback - MstStyle1Page_EventDispatch
 	.short	MstStyle2_ForwardToChild - MstStyle1Page_EventDispatch
 	.short	MstStyle2_ForwardToChild - MstStyle1Page_EventDispatch
-MstGrid2_PadLeft_LoopA_Data:
+MstGrid2_PadLeft_LoopA_Str_Blank1:
 	aligned_string " "
 MstGrid2_OutOfRange_LowCol_Str_Blank32:
 	aligned_string "                                "
@@ -632,7 +633,7 @@ AcTchSensGridBoxProc_EventOffsets:	; read by AcTchSensGridBoxProc via MstStyle2_
 	.short	TchSens_InheritedFallback - MstStyle2_EventDispatch
 	.short	AcTchSensGridBoxProc_OnLswData - MstStyle2_EventDispatch
 	.short	AcTchSensGridBoxProc_OnLswData - MstStyle2_EventDispatch
-TchSensGridCheck_OnLswData_Data:
+TchSensGridCheck_OnLswData_Str_Fmt3d_3:
 	aligned_string "%3d"
 TchSensGridCheck_OnLswData_Str_ON:
 	aligned_string "ON "
@@ -811,7 +812,7 @@ PmExpFilter_Repaint_Str_ON_OFF:
 PmExpFilter_DrawCellBank1_Str_Fmts:	.byte	0x25, 0x73, 0x00, 0xff
 PmExpFilter_DrawCellBank1_Str_PAGE_2_3:	aligned_string "PAGE 2/3"
 PmExpFilter_DrawCellBank2_Str_Fmts:	.byte 0x25, 0x73, 0x00, 0xff
-PmExpFilter_DrawCellBank2_Data:
+PmExpFilter_DrawCellBank2_Str_PAGE_3_3:
 	aligned_string "PAGE 3/3"
 AcPmExpFilterGridBoxProc_EventOffsets:	; read by AcPmExpFilterGridBoxProc via PmemPageCtl_EventDispatch (AcPmExpFilterGridBoxProc_EventOffsets)
 	.short	AcPmExpFilterGridBoxProc_OnIndexswUp - PmemPageCtl_EventDispatch
@@ -918,7 +919,7 @@ DispTimeSetGridCheck_EventOffsets:	; read by DispTimeSetGridCheck via DispTimeSe
 	.short	DispTimeSet_ReturnZero - DispTimeSet_EventDispatch
 	.short	DispTimeSetGridCheck_OnLswData - DispTimeSet_EventDispatch
 	.short	DispTimeSetGridCheck_OnLswData - DispTimeSet_EventDispatch
-IvPageOverWr_GetName_Data:
+IvPageOverWr_GetName_Str_PAGE:
 	aligned_string "PAGE"
 MssName_EventDispatch_Str_Memory_data:	aligned_string "Memory data "
 MssName_EventDispatch_Str_Blank2:
@@ -954,7 +955,7 @@ PmBkNameFunc_CaseTable:
 	.short	PmBkName_DataBytes - PmBkName_EventDispatch
 	.short	PmBkNameFunc_OnGetLargeStep - PmBkName_EventDispatch
 	.short	PmBkName_EventDispatch - PmBkName_EventDispatch
-GmOnOffFunc_Data:	.byte	0x00, 0xff
+GmOnOffFunc_Str_Empty:	.byte	0x00, 0xff
 VariScreen_HandlePaint_Str_SOUND:	.byte	0x53, 0x4f, 0x55, 0x4e, 0x44, 0x00
 VariScreen_DrawNameString_Str_Fmtd:		.byte	0x25, 0x64, 0x3a, 0x00
 VariScreen_DrawRightNameString_Str_Fmtd:	.byte	0x25, 0x64, 0x3a, 0x00
@@ -1148,9 +1149,9 @@ Str_UserInitialWallpaper_DE:	aligned_string "USER INITIAL ersetzt das aktuelle H
 Str_UserInitialWallpaper_EN:	aligned_string "USER INITIAL will replace the current user wallpaper with the \"Plain Black\" wallpaper!"
 MainSysControl_CaseTable:
 	.short	MainSysCtrl_DispatchTable - MainSysCtrl_DispatchTable
-	.short	MainSysCtrl_Entry6 - MainSysCtrl_DispatchTable
+	.short	MainSysCtrl_OnInitCurrentPanel - MainSysCtrl_DispatchTable
 	.short	MainSysCtrl_Entry7 - MainSysCtrl_DispatchTable
-	.short	MainSysCtrl_Entry8 - MainSysCtrl_DispatchTable
+	.short	MainSysCtrl_OnInitMidiSetting - MainSysCtrl_DispatchTable
 	.short	MainSysCtrl_Entry4_CopyBitmaps - MainSysCtrl_DispatchTable
 	.short	MainSysCtrl_Entry1_AccDemo - MainSysCtrl_DispatchTable
 	.short	MainSysCtrl_Entry2_PartInit - MainSysCtrl_DispatchTable
@@ -1207,7 +1208,7 @@ SplitNoteStr_DFlat:	aligned_string "D~a0"
 ;     it, and the last entry (0x00ED1BD6) is exactly the first byte past the
 ;     table's own end (0xED1BAA + 11*4);
 ;   * display/graphics_text_vga.s indexes THIS address -- `divs hl, 0xc` then
-;     `sla hl, 2` then `lda_24 xbc, (AcFreeSplit_LookupNoteLabel_Data)` at 0xFC2DE2 and
+;     `sla hl, 2` then `lda_24 xbc, (AcFreeSplit_OctaveDigitTable)` at 0xFC2DE2 and
 ;     0xFC2E67. Note number / 12, scaled by 4 = the pointer width.
 ; The five phantom `jp` operands (NakaData_PartConfig,
 ; Bitmap_SplitPoint_Gb_0x2B, Bitmap_Dredt0d_0xA8D, SepaOut_FormatData_Tail,
@@ -1215,8 +1216,8 @@ SplitNoteStr_DFlat:	aligned_string "D~a0"
 ; definitions here; nothing lost a name.
 ; -----------------------------------------------------------------------------
 SplitNoteStr_C:	aligned_string "C "
-	; 0xED1BAA = AcFreeSplit_LookupNoteLabel_Data: octave-digit pointers, index = note / 12
-AcFreeSplit_LookupNoteLabel_Data:
+	; 0xED1BAA = AcFreeSplit_OctaveDigitTable: octave-digit pointers, index = note / 12
+AcFreeSplit_OctaveDigitTable:
 	.long OctaveDigitStr_0B
 	.long OctaveDigitStr_0C
 	.long OctaveDigitStr_0A
@@ -1247,7 +1248,7 @@ AcFreeSplit_ValueChanged_Str_Blank10:			aligned_string "          "
 AcFreeSplit_LookupNoteLabel_Str_SPLIT_Fmts_Fmts:	aligned_string "SPLIT<%s%s>"
 AcFreeSplit_CheckSecondKey_Str_Blank10:			aligned_string "          "
 AcFreeSplit_LookupSecondNote_Str_SPLIT_Fmts_Fmts:	aligned_string "SPLIT<%s%s>"
-AcTranspose_FormatLabel_Data:
+AcTranspose_KeyNameTable:
 	.long KeyScaleNoteStr_G
 ParamStr_Table_07:
 	.long KeyScaleNoteStr_AFlat
@@ -2544,11 +2545,11 @@ Str_ErrorDialog_NeedsRepairing:	aligned_string "this unit needs repairing."
 ; the caller passes, `inc 6, xiz`, until a mask of 0xFFFF.
 ; MIDI_ProcessChangedChannels (0xFC683F) passes four "changed" words and
 ; MidiChannel_DispatchChanged (0xFC68B2) four others; the callers reach the
-; lists through positional names MIDI_ProcessChangedChannels_Data .. _0x4D4
+; lists through positional names PanelLed_PendingGroup1Handlers .. _0x4D4
 ; (shared/positional_labels.s).  Six handlers (0xFC75E3, 0xFC7704, 0xFC7686,
 ; 0xFC75A6, 0xFC75B7, 0xFC7741) have no label there and stay numeric.
 ; ---------------------------------------------------------------------------
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA545-0xEDA558 (19 B), unreached CODE-territory, was disassembled as 11 plausible-but-dead instruction lines; per=100% dist=10 near MidiChanged_ProcessGroup2_Data+13
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA545-0xEDA558 (19 B), unreached CODE-territory, was disassembled as 11 plausible-but-dead instruction lines; per=100% dist=10 near PanelLed_PendingGroup2Handlers+13
 	; ENCODER_LUT_MODWHEEL, entries 36-127 (0-35 are in the blob above): 92 bytes
 	.byte 0x21, 0x22, 0x23, 0x24, 0x25, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2a, 0x2b, 0x2c, 0x2c, 0x2d, 0x2e
 	.byte 0x2f, 0x30, 0x31, 0x32, 0x33, 0x34, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3a, 0x3b, 0x3b, 0x3c
@@ -2630,7 +2631,7 @@ ENCODER_LUT_EXPRESSION:
 	.byte 0x60, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6a, 0x6b, 0x6c, 0x6d, 0x6e, 0x6f
 	.byte 0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7a, 0x7b, 0x7c, 0x7d, 0x7e, 0x7f
 	; MIDI_ProcessChangedChannels, group 1: flags 0x8F3A & ~0x8F3C
-MIDI_ProcessChangedChannels_Data:
+PanelLed_PendingGroup1Handlers:
 	.short 0x0001
 	.long MIDI_ProcessChangedChannels_Data_Target0
 	.short 0x0002
@@ -2650,7 +2651,7 @@ MIDI_ProcessChangedChannels_Data:
 	.short 0xffff	; end of list
 	.long 0xffffffff
 	; MIDI_ProcessChangedChannels, group 2: 0x8F3E & ~0x8F40
-MidiChanged_ProcessGroup2_Data:
+PanelLed_PendingGroup2Handlers:
 	.short 0x0001
 	.long MidiChanged_ProcessGroup2_Data_Target0
 	.short 0x0002
@@ -2674,7 +2675,7 @@ MidiChanged_ProcessGroup2_Data:
 	.short 0xffff	; end of list
 	.long 0xffffffff
 	; MIDI_ProcessChangedChannels, group 3: 0x8F42 & ~0x8F44
-MidiChanged_ProcessGroup3_Data:
+PanelLed_PendingGroup3Handlers:
 	.short 0x0001
 	.long SndParam_DecrLookup_Via0300
 	.short 0x0004
@@ -2702,7 +2703,7 @@ MidiChanged_ProcessGroup3_Data:
 	.short 0xffff	; end of list
 	.long 0xffffffff
 	; MIDI_ProcessChangedChannels, group 4: 0x8F46 & ~0x8F48
-MidiChanged_ProcessGroup4_Data:
+PanelLed_PendingGroup4Handlers:
 	.short 0x0001
 	.long CtrlPanel_SyncBit0_From8F5C
 	.short 0x0002
@@ -2710,11 +2711,11 @@ MidiChanged_ProcessGroup4_Data:
 	.short 0xffff	; end of list
 	.long 0xffffffff
 	; MidiChannel_DispatchChanged, group 1: 0x8F3C
-MidiChannel_DispatchChanged_Data:
+PanelLed_HeldGroup1Handlers:
 	.short 0xffff	; end of list
 	.long 0xffffffff
 	; MidiChannel_DispatchChanged, group 2: 0x8F40
-MidiDispatch_CheckGroup2_Data:
+PanelLed_HeldGroup2Handlers:
 	.short 0x0040
 	.long CtrlPanel_SetResBit0_ViaLookup4
 	.short 0x0008
@@ -2724,7 +2725,7 @@ MidiDispatch_CheckGroup2_Data:
 	.short 0xffff	; end of list
 	.long 0xffffffff
 	; MidiChannel_DispatchChanged, group 3: 0x8F44
-MidiDispatch_CheckGroup3_Data:
+PanelLed_HeldGroup3Handlers:
 	.short 0x0004
 	.long CtrlPanel_SetResBit7_ViaLookup4C
 	.short 0x2000
@@ -2734,7 +2735,7 @@ MidiDispatch_CheckGroup3_Data:
 	.short 0xffff	; end of list
 	.long 0xffffffff
 	; MidiChannel_DispatchChanged, group 4: 0x8F48
-MidiDispatch_CheckGroup4_Data:
+PanelLed_HeldGroup4Handlers:
 	.short 0xffff	; end of list
 	.long 0xffffffff
 
@@ -2775,26 +2776,26 @@ Protocol_values_for_LED_rows:
 AudioCtl_SmallTables:
 	.byte 4, 2, 6, 7, 5, 3
 ExtData_VoiceParam_DispatchBytecode_CaseTable:
-	.short	ExtData_VoiceParam_DispatchBytecode_ModeSound - ExtData_VoiceParam_DispatchBytecode_Code
-	.short	ExtData_VoiceParam_DispatchBytecode_ModeSound - ExtData_VoiceParam_DispatchBytecode_Code
-	.short	ExtData_VoiceParam_DispatchBytecode_ModeControl - ExtData_VoiceParam_DispatchBytecode_Code
-	.short	ExtData_VoiceParam_DispatchBytecode_ModeMidi - ExtData_VoiceParam_DispatchBytecode_Code
-	.short	ExtData_VoiceParam_DispatchBytecode_ModeDisk - ExtData_VoiceParam_DispatchBytecode_Code
-	.short	ExtData_VoiceParam_DispatchBytecode_ModeEntertainer - ExtData_VoiceParam_DispatchBytecode_Code
-	.short	ExtData_VoiceParam_DispatchBytecode_ModeSeq - ExtData_VoiceParam_DispatchBytecode_Code
-	.short	ExtData_VoiceParam_DispatchBytecode_ModeSeqErec - ExtData_VoiceParam_DispatchBytecode_Code
-	.short	SndParamF9A541_ResBit7_Code_Epilogue - ExtData_VoiceParam_DispatchBytecode_Code
-	.short	ExtData_VoiceParam_DispatchBytecode_ModeSeqReal - ExtData_VoiceParam_DispatchBytecode_Code
-	.short	ExtData_VoiceParam_DispatchBytecode_ModeSeq - ExtData_VoiceParam_DispatchBytecode_Code
-	.short	ExtData_VoiceParam_DispatchBytecode_ModeSeq - ExtData_VoiceParam_DispatchBytecode_Code
-	.short	ExtData_VoiceParam_DispatchBytecode_ModeCmp - ExtData_VoiceParam_DispatchBytecode_Code
-	.short	ExtData_VoiceParam_DispatchBytecode_Code - ExtData_VoiceParam_DispatchBytecode_Code
-	.short	SndParamF9A541_ResBit7_Code_Epilogue - ExtData_VoiceParam_DispatchBytecode_Code
-	.short	ExtData_VoiceParam_DispatchBytecode_ModeSndArg - ExtData_VoiceParam_DispatchBytecode_Code
-	.short	ExtData_VoiceParam_DispatchBytecode_Case18 - ExtData_VoiceParam_DispatchBytecode_Code
-MidiChOut_Mode6or3_Mask7_Data:
+	.short	ExtData_VoiceParam_DispatchBytecode_ModeSound - ExtData_VoiceParam_DispatchBytecode_ModeMsp
+	.short	ExtData_VoiceParam_DispatchBytecode_ModeSound - ExtData_VoiceParam_DispatchBytecode_ModeMsp
+	.short	ExtData_VoiceParam_DispatchBytecode_ModeControl - ExtData_VoiceParam_DispatchBytecode_ModeMsp
+	.short	ExtData_VoiceParam_DispatchBytecode_ModeMidi - ExtData_VoiceParam_DispatchBytecode_ModeMsp
+	.short	ExtData_VoiceParam_DispatchBytecode_ModeDisk - ExtData_VoiceParam_DispatchBytecode_ModeMsp
+	.short	ExtData_VoiceParam_DispatchBytecode_ModeEntertainer - ExtData_VoiceParam_DispatchBytecode_ModeMsp
+	.short	ExtData_VoiceParam_DispatchBytecode_ModeSeq - ExtData_VoiceParam_DispatchBytecode_ModeMsp
+	.short	ExtData_VoiceParam_DispatchBytecode_ModeSeqErec - ExtData_VoiceParam_DispatchBytecode_ModeMsp
+	.short	SndParamF9A541_ResBit7_Code_Epilogue - ExtData_VoiceParam_DispatchBytecode_ModeMsp
+	.short	ExtData_VoiceParam_DispatchBytecode_ModeSeqReal - ExtData_VoiceParam_DispatchBytecode_ModeMsp
+	.short	ExtData_VoiceParam_DispatchBytecode_ModeSeq - ExtData_VoiceParam_DispatchBytecode_ModeMsp
+	.short	ExtData_VoiceParam_DispatchBytecode_ModeSeq - ExtData_VoiceParam_DispatchBytecode_ModeMsp
+	.short	ExtData_VoiceParam_DispatchBytecode_ModeCmp - ExtData_VoiceParam_DispatchBytecode_ModeMsp
+	.short	ExtData_VoiceParam_DispatchBytecode_ModeMsp - ExtData_VoiceParam_DispatchBytecode_ModeMsp
+	.short	SndParamF9A541_ResBit7_Code_Epilogue - ExtData_VoiceParam_DispatchBytecode_ModeMsp
+	.short	ExtData_VoiceParam_DispatchBytecode_ModeSndArg - ExtData_VoiceParam_DispatchBytecode_ModeMsp
+	.short	ExtData_VoiceParam_DispatchBytecode_Case18 - ExtData_VoiceParam_DispatchBytecode_ModeMsp
+BeatLed_ThreeBeatMasks:
 	.byte 1, 2, 4, 1, 2, 4
-MidiChOut_OtherMode_Mask3_Data:
+BeatLed_FourBeatMasks:
 	.byte 1, 2, 4, 8, 1, 2, 4, 8
 UIState_ProcessExtendedMode_CaseTable:
 	.short	UIState_ProcessExtendedMode_Cases - UIState_ProcessExtendedMode_Cases
@@ -2805,7 +2806,7 @@ UIState_ProcessExtendedMode_CaseTable:
 	.short	UIState_ProcessExtendedMode_Case5 - UIState_ProcessExtendedMode_Cases
 	.short	UIState_ProcessExtendedMode_Case5 - UIState_ProcessExtendedMode_Cases
 	.short	UIState_ProcessExtendedMode_Case7 - UIState_ProcessExtendedMode_Cases
-CtrlPanel_LookupIndicatorEntry_Data:
+CtrlPanel_SingleBitMaskTable:
 	.long 0x00000001, 0x00000002, 0x00000004, 0x00000008
 	.long 0x00000010, 0x00000020, 0x00000040, 0x00000080
 	.long 0x00000100, 0x00000200, 0x00000400, 0x00000800
@@ -2832,25 +2833,25 @@ CtrlPanel_LookupIndicatorEntry_Data:
 ; audio_control_engine.s name them); kn5000_v10_program.s still holds the
 ; old absolute names ReverbPreset_1..27 for records 1-27 as `.set`s.
 ; ---------------------------------------------------------------------------
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA65B-0xEDA66C (17 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=60% dist=7 near MidiChOut_OtherMode_Mask3_Data+7
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA675-0xEDA68D (24 B), unreached CODE-territory, was disassembled as 17 plausible-but-dead instruction lines; per=100% dist=6 near CtrlPanel_LookupIndicatorEntry_Data+9
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA696-0xEDA6AE (24 B), unreached CODE-territory, was disassembled as 17 plausible-but-dead instruction lines; per=100% dist=6 near CtrlPanel_LookupIndicatorEntry_Data+42
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA6B7-0xEDA6CF (24 B), unreached CODE-territory, was disassembled as 17 plausible-but-dead instruction lines; per=100% dist=6 near CtrlPanel_LookupIndicatorEntry_Data+75
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA6D8-0xEDA6F8 (32 B), unreached CODE-territory, was disassembled as 21 plausible-but-dead instruction lines; per=100% dist=11 near CtrlPanel_LookupIndicatorEntry_Data+108
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA700-0xEDA710 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=6 near CtrlPanel_LookupIndicatorEntry_Data+148
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA718-0xEDA728 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=8 near CtrlPanel_LookupIndicatorEntry_Data+172
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA730-0xEDA740 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=7 near CtrlPanel_LookupIndicatorEntry_Data+196
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA760-0xEDA770 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=8 near CtrlPanel_LookupIndicatorEntry_Data+244
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA778-0xEDA788 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=7 near CtrlPanel_LookupIndicatorEntry_Data+268
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA820-0xEDA830 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=10 near CtrlPanel_LookupIndicatorEntry_Data+436
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA8B0-0xEDA8C0 (16 B), unreached CODE-territory, was disassembled as 11 plausible-but-dead instruction lines; per=100% dist=7 near CtrlPanel_LookupIndicatorEntry_Data+580
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA8E0-0xEDA8F0 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=7 near CtrlPanel_LookupIndicatorEntry_Data+628
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA940-0xEDA950 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=8 near CtrlPanel_LookupIndicatorEntry_Data+724
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA970-0xEDA980 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=8 near CtrlPanel_LookupIndicatorEntry_Data+772
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA9A0-0xEDA9B0 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=8 near CtrlPanel_LookupIndicatorEntry_Data+820
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA9D0-0xEDA9E0 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=8 near CtrlPanel_LookupIndicatorEntry_Data+868
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDAA00-0xEDAA10 (16 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=100% dist=8 near CtrlPanel_LookupIndicatorEntry_Data+916
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDAA30-0xEDAA40 (16 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=100% dist=8 near CtrlPanel_LookupIndicatorEntry_Data+964
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA65B-0xEDA66C (17 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=60% dist=7 near BeatLed_FourBeatMasks+7
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA675-0xEDA68D (24 B), unreached CODE-territory, was disassembled as 17 plausible-but-dead instruction lines; per=100% dist=6 near CtrlPanel_SingleBitMaskTable+9
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA696-0xEDA6AE (24 B), unreached CODE-territory, was disassembled as 17 plausible-but-dead instruction lines; per=100% dist=6 near CtrlPanel_SingleBitMaskTable+42
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA6B7-0xEDA6CF (24 B), unreached CODE-territory, was disassembled as 17 plausible-but-dead instruction lines; per=100% dist=6 near CtrlPanel_SingleBitMaskTable+75
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA6D8-0xEDA6F8 (32 B), unreached CODE-territory, was disassembled as 21 plausible-but-dead instruction lines; per=100% dist=11 near CtrlPanel_SingleBitMaskTable+108
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA700-0xEDA710 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=6 near CtrlPanel_SingleBitMaskTable+148
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA718-0xEDA728 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=8 near CtrlPanel_SingleBitMaskTable+172
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA730-0xEDA740 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=7 near CtrlPanel_SingleBitMaskTable+196
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA760-0xEDA770 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=8 near CtrlPanel_SingleBitMaskTable+244
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA778-0xEDA788 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=7 near CtrlPanel_SingleBitMaskTable+268
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA820-0xEDA830 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=10 near CtrlPanel_SingleBitMaskTable+436
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA8B0-0xEDA8C0 (16 B), unreached CODE-territory, was disassembled as 11 plausible-but-dead instruction lines; per=100% dist=7 near CtrlPanel_SingleBitMaskTable+580
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA8E0-0xEDA8F0 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=7 near CtrlPanel_SingleBitMaskTable+628
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA940-0xEDA950 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=8 near CtrlPanel_SingleBitMaskTable+724
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA970-0xEDA980 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=8 near CtrlPanel_SingleBitMaskTable+772
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA9A0-0xEDA9B0 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=8 near CtrlPanel_SingleBitMaskTable+820
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA9D0-0xEDA9E0 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=8 near CtrlPanel_SingleBitMaskTable+868
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDAA00-0xEDAA10 (16 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=100% dist=8 near CtrlPanel_SingleBitMaskTable+916
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDAA30-0xEDAA40 (16 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=100% dist=8 near CtrlPanel_SingleBitMaskTable+964
 ReverbPreset_0:
 	.byte 0x11, 0x32, 0x00, 0x0c, 0x14, 0x32, 0x5d, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
@@ -3291,7 +3292,7 @@ PanelTlv_CompanionByPart:
 	.long 0x0000ff7e, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x18]
 ; SoundProgram_DispatchTable + 0x880: four audio (re)initialisation routines.
 ; midi/midi_dispatch_handlers.s calls the third through it (`ld xhl,
-; (MidiSysEx_ProcessBlock_Data:24)` / `call (xhl)`), and entry 6 of
+; (SoundProgram_ResetAfterErrorVector:24)` / `call (xhl)`), and entry 6 of
 ; SystemConfig_PointerTable (ui_widgets/widget_dispatch.s) points at the
 ; table's head under the `.set` name SoundProgram_ParamPtrTable
 ; (kn5000_v10_program.s).  Searched for other readers: the positional names
@@ -3299,7 +3300,7 @@ PanelTlv_CompanionByPart:
 SoundProgram_ParamPtrTable:
 	.long Audio_InitAllDefaults
 	.long Audio_ReinitToneGenAndOutput
-MidiSysEx_ProcessBlock_Data:
+SoundProgram_ResetAfterErrorVector:
 	.long Audio_ResetAfterPayloadError
 	.long Audio_FullReinitWithPreset
 ; SoundProgram_DispatchTable + 0x890..+0x907: seven small tables, each read
@@ -3319,61 +3320,61 @@ MidiSysEx_ProcessBlock_Data:
 	; +0x890: one 6-byte record.  BitmapTable_ProcessEntry (0xFC7A6A) takes
 	; index*6 and reads +0 with `cpw (xwa), 0x50`, +2 (at +0x892) as a
 	; command byte for PanelTlv_PayloadOfTag, and +3, +4, +5.
-BitmapTable_ProcessEntry_Data:
+PanelMem_FixupRecords:
 	.short 0x0050
-BitmapTable_ProcessEntry_Data_2:
+PanelMem_FixupTagColumn:
 	.byte 0x43, 0x01, 0x3c, 0x7f
 	; +0x896: 12 jump offsets.  ExtData_ToneParam_DispatchHandler (0xFC7D77):
 	; `cp wa, 11` / `add wa, wa` / `ld wa, (xix+wa)` / `jp_rr` from 0xFC8570
 	; (no label there in audio_control_engine.s, so the offsets are numeric).
 ExtData_ToneParam_DispatchHandler_CaseTable:
-	.short	ExtData_ToneParam_DispatchHandler_Code - ExtData_ToneParam_DispatchHandler_Code
-	.short	ExtData_ToneParam_DispatchHandler_Case1 - ExtData_ToneParam_DispatchHandler_Code
-	.short	ExtData_ToneParam_DispatchHandler_Case1 - ExtData_ToneParam_DispatchHandler_Code
-	.short	ExtData_ToneParam_DispatchHandler_Case3 - ExtData_ToneParam_DispatchHandler_Code
-	.short	ExtData_ToneParam_DispatchHandler_Case4 - ExtData_ToneParam_DispatchHandler_Code
-	.short	ExtData_ToneParam_DispatchHandler_Case5 - ExtData_ToneParam_DispatchHandler_Code
-	.short	ExtData_ToneParam_DispatchHandler_Case6 - ExtData_ToneParam_DispatchHandler_Code
-	.short	ExtData_ToneParam_DispatchHandler_Case7 - ExtData_ToneParam_DispatchHandler_Code
-	.short	ExtData_ToneParam_DispatchHandler_Case8 - ExtData_ToneParam_DispatchHandler_Code
-	.short	ExtData_ToneParam_DispatchHandler_Case9 - ExtData_ToneParam_DispatchHandler_Code
-	.short	ExtData_ToneParam_DispatchHandler_Case10 - ExtData_ToneParam_DispatchHandler_Code
-	.short	ExtData_ToneParam_DispatchHandler_Case11 - ExtData_ToneParam_DispatchHandler_Code
+	.short	ExtData_ToneParam_DispatchHandler_OnVoiceSelect - ExtData_ToneParam_DispatchHandler_OnVoiceSelect
+	.short	ExtData_ToneParam_DispatchHandler_Case1 - ExtData_ToneParam_DispatchHandler_OnVoiceSelect
+	.short	ExtData_ToneParam_DispatchHandler_Case1 - ExtData_ToneParam_DispatchHandler_OnVoiceSelect
+	.short	ExtData_ToneParam_DispatchHandler_Case3 - ExtData_ToneParam_DispatchHandler_OnVoiceSelect
+	.short	ExtData_ToneParam_DispatchHandler_Case4 - ExtData_ToneParam_DispatchHandler_OnVoiceSelect
+	.short	ExtData_ToneParam_DispatchHandler_Case5 - ExtData_ToneParam_DispatchHandler_OnVoiceSelect
+	.short	ExtData_ToneParam_DispatchHandler_Case6 - ExtData_ToneParam_DispatchHandler_OnVoiceSelect
+	.short	ExtData_ToneParam_DispatchHandler_Case7 - ExtData_ToneParam_DispatchHandler_OnVoiceSelect
+	.short	ExtData_ToneParam_DispatchHandler_Case8 - ExtData_ToneParam_DispatchHandler_OnVoiceSelect
+	.short	ExtData_ToneParam_DispatchHandler_Case9 - ExtData_ToneParam_DispatchHandler_OnVoiceSelect
+	.short	ExtData_ToneParam_DispatchHandler_Case10 - ExtData_ToneParam_DispatchHandler_OnVoiceSelect
+	.short	ExtData_ToneParam_DispatchHandler_Case11 - ExtData_ToneParam_DispatchHandler_OnVoiceSelect
 	; +0x8AE: 9 jump offsets, ExtData_ToneParam_AltDispatch (0xFC7F9F), from 0xFC8793.
 ExtData_ToneParam_AltDispatch_CaseTable:
-	.short	ExtData_ToneParam_AltDispatch_Code - ExtData_ToneParam_AltDispatch_Code
-	.short	ExtData_ToneParam_AltDispatch_DrawbarNibbleFields - ExtData_ToneParam_AltDispatch_Code
-	.short	ExtData_ToneParam_AltDispatch_DrawbarNibbleFields - ExtData_ToneParam_AltDispatch_Code
-	.short	ExtData_ToneParam_AltDispatch_DrawbarFootages - ExtData_ToneParam_AltDispatch_Code
-	.short	ExtData_ToneParam_AltDispatch_DrawbarFootages - ExtData_ToneParam_AltDispatch_Code
-	.short	ExtData_ToneParam_AltDispatch_DrawbarFootages - ExtData_ToneParam_AltDispatch_Code
-	.short	ExtData_ToneParam_AltDispatch_DrawbarFootages - ExtData_ToneParam_AltDispatch_Code
-	.short	ExtData_ToneParam_AltDispatch_Drawbar1FootAndSwitches - ExtData_ToneParam_AltDispatch_Code
-	.short	ExtData_ToneParam_AltDispatch_Code - ExtData_ToneParam_AltDispatch_Code
+	.short	ExtData_ToneParam_AltDispatch_WholeByteFields - ExtData_ToneParam_AltDispatch_WholeByteFields
+	.short	ExtData_ToneParam_AltDispatch_DrawbarNibbleFields - ExtData_ToneParam_AltDispatch_WholeByteFields
+	.short	ExtData_ToneParam_AltDispatch_DrawbarNibbleFields - ExtData_ToneParam_AltDispatch_WholeByteFields
+	.short	ExtData_ToneParam_AltDispatch_DrawbarFootages - ExtData_ToneParam_AltDispatch_WholeByteFields
+	.short	ExtData_ToneParam_AltDispatch_DrawbarFootages - ExtData_ToneParam_AltDispatch_WholeByteFields
+	.short	ExtData_ToneParam_AltDispatch_DrawbarFootages - ExtData_ToneParam_AltDispatch_WholeByteFields
+	.short	ExtData_ToneParam_AltDispatch_DrawbarFootages - ExtData_ToneParam_AltDispatch_WholeByteFields
+	.short	ExtData_ToneParam_AltDispatch_Drawbar1FootAndSwitches - ExtData_ToneParam_AltDispatch_WholeByteFields
+	.short	ExtData_ToneParam_AltDispatch_WholeByteFields - ExtData_ToneParam_AltDispatch_WholeByteFields
 	; +0x8C0: 9 jump offsets, ExtData_ToneParam_AltBody (0xFC8009), from 0xFC87FD.
 ExtData_ToneParam_AltBody_CaseTable:
-	.short	ExtData_ToneParam_AltBody_Code - ExtData_ToneParam_AltBody_Code
-	.short	ExtData_ToneParam_AltBody_Case1 - ExtData_ToneParam_AltBody_Code
-	.short	ExtData_ToneParam_AltBody_Case1 - ExtData_ToneParam_AltBody_Code
-	.short	ExtData_ToneParam_AltBody_Case3 - ExtData_ToneParam_AltBody_Code
-	.short	ExtData_ToneParam_AltBody_Case4 - ExtData_ToneParam_AltBody_Code
-	.short	ExtData_ToneParam_AltBody_Case5 - ExtData_ToneParam_AltBody_Code
-	.short	ExtData_ToneParam_AltBody_Case5 - ExtData_ToneParam_AltBody_Code
-	.short	ExtData_ToneParam_AltBody_Case7 - ExtData_ToneParam_AltBody_Code
-	.short	ExtData_ToneParam_AltBody_Case8 - ExtData_ToneParam_AltBody_Code
+	.short	ExtData_ToneParam_AltBody_OnStyleProgram - ExtData_ToneParam_AltBody_OnStyleProgram
+	.short	ExtData_ToneParam_AltBody_Case1 - ExtData_ToneParam_AltBody_OnStyleProgram
+	.short	ExtData_ToneParam_AltBody_Case1 - ExtData_ToneParam_AltBody_OnStyleProgram
+	.short	ExtData_ToneParam_AltBody_Case3 - ExtData_ToneParam_AltBody_OnStyleProgram
+	.short	ExtData_ToneParam_AltBody_Case4 - ExtData_ToneParam_AltBody_OnStyleProgram
+	.short	ExtData_ToneParam_AltBody_Case5 - ExtData_ToneParam_AltBody_OnStyleProgram
+	.short	ExtData_ToneParam_AltBody_Case5 - ExtData_ToneParam_AltBody_OnStyleProgram
+	.short	ExtData_ToneParam_AltBody_Case7 - ExtData_ToneParam_AltBody_OnStyleProgram
+	.short	ExtData_ToneParam_AltBody_Case8 - ExtData_ToneParam_AltBody_OnStyleProgram
 	; +0x8D2: 4 bytes, indexed by a value & 3 in ExtData_ToneParam_MultiChannel.
 ExtData_ToneParam_MultiChannel_Data:
 	.byte 1, 1, 2, 3
 	; +0x8D6: 4 bytes, indexed by (RAM 0xFD02) & 3 in ExtData_Voice_MixedHandler.
-ExtData_Voice_MixedHandler_Data:
+SplitPoint_LedMaskByPreset:
 	.byte 0, 1, 2, 4
 	; +0x8DA: 26 bytes, 0..24 then 0xFF, read by CtrlPanel_BuildIndicatorBitmask (0xFC8A7E).
-CtrlPanel_BuildIndicatorBitmask_Data:
+CtrlPanel_BitIndexIdentityMap:
 	.byte 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
 	.byte 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 0xff
 	; +0x8F4: 20 bytes, a channel remap read with `ld a, (xrr+rr)` by
 	; VoiceChannels_InitPanFromPreset; its result goes to PanelTlv_PayloadOfTag.
-VoiceChannels_InitPanFromPreset_Data:
+SeqTrack_AssignToPanelTag:
 	.byte 0, 2, 1, 7, 8, 9, 10, 11, 4, 5, 6, 3, 15, 21, 21, 25, 20, 12, 13, 14
 ReverbPreset_Table:
 	.long ReverbPreset_0
@@ -3519,11 +3520,11 @@ Display_CopyAndRenderBitmaps_Str_HK:	.byte	0x48, 0x4b
 ;   +0x6CC {u32 0x00FFFFFF, u32 0}: one EMPTY 8-byte hash slot, stamped over
 ;          the whole {key, record pointer} table at RAM 0x34100 by
 ;          SndParam_InitHashFillLoop.
-SndParam_ResetDefaultTable_Data:
+SndParam_ClearRecordTemplate:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 SndParam_RW_Fail_Data:
 	.byte 0x00, 0x00, 0x00, 0x00
-SndParam_InitHashFillLoop_Data:
+SndParam_EmptyHashSlot:
 	.long SNDPARAM_HASH_EMPTY_KEY, 0x00000000
 ; ---------------------------------------------------------------------------
 ; sndparam_descriptor -- ONE 18-byte sound-parameter descriptor

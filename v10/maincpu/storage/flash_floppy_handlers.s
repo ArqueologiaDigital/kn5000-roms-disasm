@@ -336,7 +336,7 @@ SeMenu_NameEdit_DataBlock2_Records:
 ; F15D1C flags=0x01 len=10
 	.byte	0x01, 0x0a, 0x7d, 0x00, 0xe3, 0x00, 0x9a, 0x00, 0xe3, 0x00
 ; static record list (83 records {u8 op, u8 len, payload}), read by GraphicsRender_ProcessEntries; ends 0xF15FF2
-; evidence: SeMenu_WaveformSelect_Data_Skip+0x2B (0xF0F56E)
+; evidence: SeMenuTitle_DrawStaticScreen_Skip+0x2B (0xF0F56E)
 SeScreenData_0x5120:
 ; F15D26 flags=0x1c len=14
 	.byte	0x1c, 0x0e, 0x70, 0x00, 0x09, 0x00
@@ -523,14 +523,14 @@ SeScreenData_0x5120:
 ; F15FE8 flags=0x02 len=10
 	.byte	0x02, 0x0a, 0x19, 0x01, 0x5e, 0x00, 0x19, 0x01, 0xaa, 0x00
 ; static record list (2 records {u8 op, u8 len, payload}), read by GraphicsRender_ProcessEntries; ends 0xF16006
-; evidence: SeMenu_WaveformSelect_Data_Skip+0x55 (0xF0F598), SeMenu_PresetManager_Init+0x75 (0xF0F67D)
+; evidence: SeMenuTitle_DrawStaticScreen_Skip+0x55 (0xF0F598), SeMenu_PresetManager_Init+0x75 (0xF0F67D)
 SeScreenData_0x53EC:
 ; F15FF2 flags=0x1b len=10
 	.byte	0x1b, 0x0a, 0x19, 0x01, 0x71, 0x00, 0x33, 0x01, 0xa8, 0x00
 ; F15FFC flags=0x05 len=10
 	.byte	0x05, 0x0a, 0x19, 0x01, 0x71, 0x00, 0x33, 0x01, 0xa8, 0x00
 ; bound record list (16 records {u8 op, u8 len, payload}), read by GraphicsRender_Start; ends 0xF160F1
-; evidence: SeMenu_WaveformSelect_Data_Skip+0x3D (0xF0F580), SeMenu_PresetManager_Init+0x85 (0xF0F68D)
+; evidence: SeMenuTitle_DrawStaticScreen_Skip+0x3D (0xF0F580), SeMenu_PresetManager_Init+0x85 (0xF0F68D)
 ; single bound record (op 0x07, 17 B), read by GraphicsRender_Start
 ; evidence: recptrs table 0xF1612B
 SeScreenData_0x5400:
@@ -675,7 +675,11 @@ DrumDetailEdit_Menu_Table:
 SeMenu_PresetManager_Load_Records:
 ; se_setup_editor_full: 266 B at 0xF1616F, compiled from audio/sound_editor_screens/se_setup_editor_full.c
 	.incbin "includes/generated/se_setup_editor_full.bin", 0x0, 0xCA
-SeMenu_PresetManager_Load_Data:	.incbin "includes/generated/se_setup_editor_full.bin", 0xCA, 0x40
+; SeDrumKit_TouchCurvePageRecords: Sound-editor screen records (compiled se_setup_editor_full.c from offset 202): two
+;   "TOUCH" "CURVE" captions (y 62 and 209), two vertical-bar and two down-arrow marks, then box/line records up to
+;   SeScreenData_0x56CD -- drawn in drum-kit mode (0x6AE = 1) for SE screen code 0x2B; it also ends the DRUM DETAIL
+;   EDIT menu list that starts at SeMenu_PresetManager_Load_Records. Basis: readers + bytes.
+SeDrumKit_TouchCurvePageRecords:	.incbin "includes/generated/se_setup_editor_full.bin", 0xCA, 0x40
 ; static record list (17 records {u8 op, u8 len, payload}), read by GraphicsRender_ProcessEntries; ends 0xF162D3
 ; evidence: SeMenu_CompareAndApply_Check+0xA (0xF0FB77)
 ; F16279 -- remainder of the source line the descriptor ends inside
@@ -1950,7 +1954,7 @@ Pack12BitValueWithBank:
 ; NoteEventBuffer Store dispatch (7-entry, table 0xe16136)
 NoteEvent_Store:
 	extz wa
-	lda xbc, (NoteEvent_Store_Data:24)
+	lda xbc, (RhythmSlot_FlashSectionTable:24)
 	ld	l, (xbc+wa)
 	ret
 
@@ -5605,7 +5609,7 @@ ToneData_CopyBlock1_Loop:
 	ld (xde+), a
 	cp xbc, xhl
 	jr c, ToneData_CopyBlock1_Loop
-	lda xhl, (ToneData_ZeroFillLoop_Data:24)
+	lda xhl, (Composer_DefaultHeaderFields:24)
 	ld xbc, xhl
 	ld xwa, (MSP_SETTINGS:16)
 	lda xde, (xwa + 16)
@@ -5627,7 +5631,7 @@ ToneData_CopyBlock3_Loop:
 	ld (xde+), a
 	cp xbc, xhl
 	jr c, ToneData_CopyBlock3_Loop
-	lda xhl, (ToneData_ZeroFillLoop_Data_2:24)
+	lda xhl, (Composer_DefaultCompileBankNames:24)
 	ld xbc, xhl
 	ld xwa, (MSP_SETTINGS:16)
 	lda xde, (xwa+576)
@@ -5638,7 +5642,7 @@ ToneData_CopyBlock4_Loop:
 	ld (xde+), a
 	cp xbc, xhl
 	jr c, ToneData_CopyBlock4_Loop
-	lda xhl, (ToneData_ZeroFillLoop_Data_3:24)
+	lda xhl, (Composer_DefaultUserBankNames:24)
 	ld xbc, xhl
 	ld xwa, (MSP_SETTINGS:16)
 	lda xde, (xwa+640)
@@ -5656,7 +5660,7 @@ ToneData_CopyBlock5_Loop:
 ToneData_ScanRegionLoop:
 	cp (xbc), 0x0
 	jr nz, ToneData_AdvanceRegion
-	lda xiy, (ToneData_ScanRegionLoop_Data:24)
+	lda xiy, (Composer_DefaultEmptyRecord:24)
 	ld xhl, xiy
 	ld xwa, (MSP_SETTINGS:16)
 	lda xwa, (xwa + 32)

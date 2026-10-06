@@ -7,7 +7,7 @@
 ; bytes as `.fill 8, 1, 0xff` rows plus `swi 7` / `decf` / `adc` / `ld xiy`
 ; lines.  Proven wrong: the CPU's vector table is the 4-byte-per-vector table
 ; at 0xFFFF00 (boot/rom_end_structure.s), and these 525 bytes are the tail of
-; the 192-entry handler table MidiStream_DispatchLoop_Data
+; the 192-entry handler table MidiStream_PanelEventHandlerTable
 ; (0xFCCF01-0xFCD200; the name is a .set in shared/positional_labels.s).
 ; Entries 0-59 and three bytes of entry 60 end audio/audio_control_engine.s;
 ; this file holds the last byte of entry 60 and entries 61-191.
@@ -16,7 +16,7 @@
 ; entered from MidiStream_ProcessRxBuffer (0xFCC856):
 ;     ld xix, 0xc039 / ld hl, (0x9133) / ld a, (xix+hl)    record type byte
 ;     cp a, 0xff -> done;  cp a, 0xbf / jr ugt -> skip       types 0x00-0xBF
-;     extz wa / sll wa, 2 / ld xiy, MidiStream_DispatchLoop_Data
+;     extz wa / sll wa, 2 / ld xiy, MidiStream_PanelEventHandlerTable
 ;     ld xiy, (xiy + wa) / cp xiy, 0xffffffff / jr z -> skip
 ;     BC = record word 0 -> (0x915B), DE = record word 1 -> (0x915D)
 ;     call (xiy);  then (0x9133) += 4 and loop
@@ -33,8 +33,8 @@
 ; incoming MIDI traffic produces record types 0x48, 0x60 and 0x98.
 ;
 ; Earlier notes on two of these rows (kept; both regions are table entries):
-; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFCD01C-0xFCD02C (16 B), unreached CODE-territory, was disassembled as 14 plausible-but-dead instruction lines; per=100% dist=5 near MidiStream_DispatchLoop_Data+283
-; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFCD15C-0xFCD16C (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=5 near MidiStream_DispatchLoop_Data+603
+; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFCD01C-0xFCD02C (16 B), unreached CODE-territory, was disassembled as 14 plausible-but-dead instruction lines; per=100% dist=5 near MidiStream_PanelEventHandlerTable+283
+; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFCD15C-0xFCD16C (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=5 near MidiStream_PanelEventHandlerTable+603
 
 	.byte	0xff					; last byte of entry 60 (type 0x3C): 0xFFFFFFFF
 	.long	0xffffffff, 0xffffffff, 0xffffffff	; types 0x3D-0x3F

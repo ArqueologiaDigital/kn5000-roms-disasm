@@ -16,7 +16,7 @@ Hama_ModeInit_Table:
 ; evidence: InitializeHama `RegObjTablHama 0x1600002, ApFunctionProc, 0x2, <this>, 0x129` -> RegisterObjectTable (descriptor +10 = this; registry 0x27ED2 + 14*index)
 Hama_ApFuncTable_129:
 	.long	FDTestDialogProc
-	.long	HamaEvtDisp_Entry
+	.long	HamaDeb_HdaeDebugScreenFunc
 	.long	0
 ; table of 3 pointers to the NAME strings of the functions in object 0x129's table
 ; evidence: InitializeHama `RegObjTablHama 0x1600002, ApFunctionProc, 0x2, <this>, 0x429` -> RegisterObjectTable (descriptor +10 = this; registry 0x27ED2 + 14*index)
@@ -30,7 +30,9 @@ HamaStr_hamadeb:
 	aligned_string "hamadeb"
 HamaStr_HamaPage1Func:
 	aligned_string "HamaPage1Func"
-HamaList_Entry:
+; NakaPropTbl_HamaList: Property-name list (+0x14 `props` field) of the HAMA class "HamaList": a single pointer to "",
+;   i.e. the class adds no properties. Basis: readers + bytes (naka_class_t layout).
+NakaPropTbl_HamaList:
 	.long	HamaList_EntryStr_Empty
 HamaList_EntryStr_Empty:
 	aligned_string ""
@@ -41,7 +43,7 @@ Hama_ClassTable_169:
 	.byte	0x55, 0x00, 0x60, 0x01, 0x30, 0x00, 0x00, 0x00
 	.long	HamaStr_HamaList
 	.long	HamaList_HeaderStr_Empty
-	.long	HamaList_Entry
+	.long	NakaPropTbl_HamaList
 	.zero 24
 HamaList_HeaderStr_Empty:
 	aligned_string ""

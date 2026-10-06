@@ -3693,10 +3693,10 @@ MainChordPre_ChordTypeNames:	.incbin "includes/generated/naka_style_bitmaps.bin"
 ; [nakarest] naka_style_bitmaps+0x18e42  +0x18e42..+0x18e4a (0xed0000, 8 B)
 ; [nakarest] purpose not established: layout of 8 B at 0xed0000 not derived; readers below
 ; [nakarest] Readers: source references InitializeSuna (storage/flash_floppy_handlers.s: `ld
-; [nakarest] XDE,0x00ed0000`); 1 data word in AcWelcomScreenProc_Data (at 0xe9e514), which is read by
-; [nakarest] AcWelcomScreenProc (ui/drawbar_panel_ui.s: `ld xwa, AcWelcomScreenProc_Data`); 1 data
-; [nakarest] word in AcWelcomScreenProc_Data_2 (at 0xe9edcc), which is read by AcWelcomScreenProc
-; [nakarest] (ui/drawbar_panel_ui.s: `ld xwa, AcWelcomScreenProc_Data_2`); 2 data words in
+; [nakarest] XDE,0x00ed0000`); 1 data word in WelcomeScript_Steps_A (at 0xe9e514), which is read by
+; [nakarest] AcWelcomScreenProc (ui/drawbar_panel_ui.s: `ld xwa, WelcomeScript_Steps_A`); 1 data
+; [nakarest] word in WelcomeScript_Steps_B (at 0xe9edcc), which is read by AcWelcomScreenProc
+; [nakarest] (ui/drawbar_panel_ui.s: `ld xwa, WelcomeScript_Steps_B`); 2 data words in
 ; [nakarest] Naka_KeyScaling_NavTrail (at 0xe8303c, 0xe846c6).
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18E42, 0x8
 ; External label offsets within the binary blob above.

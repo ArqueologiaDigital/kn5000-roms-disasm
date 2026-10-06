@@ -2555,11 +2555,11 @@ SeMenu_CopyWriteUpdate_Loop:
 	ld	wa, 0:i3
 	ldw	bc, 11
 	ld	de, 0:i3
-	call	SeMenu_SetupPartDisplay_End_Helper2
+	call	SeMenu_PostEditUpDownSet
 	ld	wa, 1:i3
 	ldw	bc, 12
 	ld	de, 0:i3
-	call	SeMenu_SetupPartDisplay_End_Helper2
+	call	SeMenu_PostEditUpDownSet
 	ld	wa, 0:i3
 	call	SeMenu_SetCurrentStep
 	ldw	wa, 30
@@ -3122,7 +3122,7 @@ SeMenuTitleFunc_DispatchSwitch:
 	cp (XSP+0x06),0x00
 	jr nz, .Lc_f0bf3f
 	lda xwa, (xsp + 0x02)
-	call SeMenu_DisplayState_Data
+	call SeMenu_GetDisplayState
 	cp (XSP+0x02),0x00
 	jr nz, .Lc_f0bf8f
 .Lc_f0bf3f:
@@ -3245,7 +3245,7 @@ SeMenu_CopyWriteUpdate_Join6:
 	ld	a, (xsp)
 	extz	wa
 	ld	bc, (xsp+8)
-	call	SeMenu_RegisterParamDisplay_Data
+	call	SeMenu_SendPartToneIndex
 	ld	a, (xsp)
 	extz	wa
 	ldw	bc, 16
@@ -3292,7 +3292,7 @@ SeMenu_CopyWriteUpdate_Join7:
 	ld	a, (xsp+4)
 	extz	wa
 	ld	bc, (xsp+2)
-	call	SeMenu_RegisterParamDisplay_Data
+	call	SeMenu_SendPartToneIndex
 	ld	a, (xsp+4)
 	extz	wa
 	ldw	bc, 16
@@ -3720,7 +3720,7 @@ SeMenu_CopyWriteUpdate_Entry7:
 	ld	bc, 1:i3
 	call	SeMenu_StorePartParam
 	ld	wa, 1:i3
-	call	SeMenu_SetupMenuDisplay_Finalize_Data
+	call	SeMenu_SetCurrentPart
 	pushw 0
 	pushw 32
 	call	SeMenu_ShowConfirmDialog
@@ -3761,7 +3761,7 @@ SeMenu_CopyWriteUpdate_Skip16:
 	ld	bc, 2:i3
 	call	SeMenu_StorePartParam
 	ld	wa, 2:i3
-	call	SeMenu_SetupMenuDisplay_Finalize_Data
+	call	SeMenu_SetCurrentPart
 	pushw 0
 	pushw 32
 	call	SeMenu_ShowConfirmDialog
@@ -4022,7 +4022,7 @@ SeMenu_CopyWriteUpdate_Join14:
 	ld	a, (xsp+2)
 	extz	wa
 	ld	bc, (xsp)
-	call	SeMenu_RegisterParamDisplay_Data
+	call	SeMenu_SendPartToneIndex
 	ld	a, (xsp+2)
 	extz	wa
 	ldw	bc, 16
@@ -4062,7 +4062,7 @@ SeTonTon1_OnColumn3_Join8:
 	ld	a, (xsp+4)
 	extz	wa
 	ld	bc, (xsp+2)
-	call	SeMenu_RegisterParamDisplay_Data
+	call	SeMenu_SendPartToneIndex
 	ld	a, (xsp+4)
 	extz	wa
 	ldw	bc, 16
@@ -4540,7 +4540,7 @@ SeTonRan1_OnColumn3:
 	pushw	bc
 	ld	bc, 2:i3
 	ld	de, 0:i3
-	call	SeMenu_ApplyPartEdit_Helper14
+	call	SeMenu_StepNoteParamInRange
 	cp	l, 1:i3
 	jr	nz, SeTonRan1_OnColumn3_Skip18
 	lda	xwa, (xsp+2)
@@ -4587,7 +4587,7 @@ SeTonRan1_OnColumn4:
 	extz	bc
 	pushw	bc
 	ld	bc, 1:i3
-	call	SeMenu_ApplyPartEdit_Helper14
+	call	SeMenu_StepNoteParamInRange
 	cp	l, 1:i3
 	jr	nz, SeTonRan1_OnColumn4_Skip19
 	lda	xwa, (xsp+2)
@@ -4633,7 +4633,7 @@ SeTonRan1_OnColumn5:
 	extz	bc
 	pushw	bc
 	ld	bc, 3:i3
-	call	SeMenu_ApplyPartEdit_Helper14
+	call	SeMenu_StepNoteParamInRange
 	cp	l, 1:i3
 	jr	nz, SeTonRan1_OnColumn5_Skip20
 	lda	xwa, (xsp+2)
@@ -4674,7 +4674,7 @@ SeTonRan1_OnColumn6:
 	extz	de
 	pushw 127
 	ld	bc, 4:i3
-	call	SeMenu_ApplyPartEdit_Helper14
+	call	SeMenu_StepNoteParamInRange
 	cp	l, 1:i3
 	jr	nz, SeTonRan1_OnColumn6_Skip21
 	lda	xwa, (xsp+2)
@@ -5612,7 +5612,7 @@ SeDigEffTitleFunc_DispatchSwitch:
 	ld (XSP+0x08),BC
 	ld IZ,WA
 	lda xwa, (xsp + 0x02)
-	call SeMenu_DisplayState_Data
+	call SeMenu_GetDisplayState
 	cp (XSP+0x02),0x00
 	jr nz, .Lc_f0d7e3
 	lda xde, (xsp + 0x06)
@@ -5696,7 +5696,7 @@ SeEasy_OnColumn4_Skip32:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xsp+5)
-	call	SeMenu_InitDisplayColumn_Data
+	call	SeEasy_SendParamValue
 	cp	(xsp+18), 2
 	jr	c, SeEasy_OnColumn4_Skip71
 	cp	(xsp+18), 4
@@ -5763,7 +5763,7 @@ SeEasy_OnColumn4_Skip73:
 	ld	wa, 4:i3
 	ldw	bc, 64
 	ld	de, 1:i3
-	call	SeMenu_PatchBank_Data
+	call	SeMenu_SetPartRecordBits
 	ld	a, (xsp+14)
 	extz	wa
 	pushw	64
@@ -5813,7 +5813,7 @@ SeEasy_OnColumn4_Skip76:
 	ld	wa, 4:i3
 	ldw	bc, 64
 	ld	de, 0:i3
-	call	SeMenu_PatchBank_Data
+	call	SeMenu_SetPartRecordBits
 	ld	a, (xsp+14)
 	extz	wa
 	pushw	64
@@ -6098,9 +6098,9 @@ SeDigEff_OnColumn3:
 	add	wa, wa
 	lda	xix, (ToneGen_ParamTable_0x2EE:24)
 	ld	wa, (xix+wa)
-	lda	xix, (SeMenu_CopyWriteUpdate_Step3_Code:24)
+	lda	xix, (SeDigEff_OnColumn3_CelesteChorusDetune:24)
 	jp	t, (xix+wa)
-SeMenu_CopyWriteUpdate_Step3_Code:
+SeDigEff_OnColumn3_CelesteChorusDetune:
 	lda	xwa, (xsp)
 	ld	(xwa+8), 50
 	ld	(xwa+9), 206
@@ -6166,9 +6166,9 @@ SeDigEff_OnColumn4:
 	add	wa, wa
 	lda	xix, (ToneGen_ParamTable_0x306:24)
 	ld	wa, (xix+wa)
-	lda	xix, (SeMenu_CopyWriteUpdate_Step3_Code_2:24)
+	lda	xix, (SeDigEff_OnColumn4_DelaySpeed2:24)
 	jp	t, (xix+wa)
-SeMenu_CopyWriteUpdate_Step3_Code_2:
+SeDigEff_OnColumn4_DelaySpeed2:
 	lda	xwa, (xsp)
 	ld	(xwa+8), 50
 Scoop_SoundEditorData_Helper_Join13:
@@ -6223,9 +6223,9 @@ SeDigEff_OnColumn5:
 	add	wa, wa
 	lda	xix, (ToneGen_ParamTable_0x31A:24)
 	ld	wa, (xix+wa)
-	lda	xix, (SeMenu_CopyWriteUpdate_Step3_Code_3:24)
+	lda	xix, (SeDigEff_OnColumn5_CelesteChorusBalance:24)
 	jp	t, (xix+wa)
-SeMenu_CopyWriteUpdate_Step3_Code_3:
+SeDigEff_OnColumn5_CelesteChorusBalance:
 	lda	xwa, (xsp)
 	ld	(xwa+8), 100
 	ld	(xwa+9), 0
@@ -6415,7 +6415,7 @@ SeDigEff_OnSideRow2_Skip41:
 	ld	wa, 4:i3
 	ldw	bc, 64
 	ld	de, 0:i3
-	call	SeMenu_PatchBank_Data
+	call	SeMenu_SetPartRecordBits
 	ld	a, (xsp)
 	extz	wa
 	pushw	64
@@ -6427,7 +6427,7 @@ Scoop_SoundEditorData_Helper_Skip22:
 	ld	wa, 4:i3
 	ldw	bc, 64
 	ld	de, 1:i3
-	call	SeMenu_PatchBank_Data
+	call	SeMenu_SetPartRecordBits
 	ld	a, (xsp)
 	extz	wa
 	pushw	64
@@ -6525,7 +6525,7 @@ SeWrtMem_OnSideRow1:
 	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper
 	ld	a, (xsp)
 	extz	wa
-	call	SeMenu_SetDisplayValue_Data
+	call	SeWrtMem_SelectMemorySlotSound
 	ldw	wa, 35
 	call	SeMenu_TriggerNotification
 	ld	wa, 1:i3
@@ -6800,11 +6800,11 @@ Scoop_SoundEditorData_Helper_Skip28:
 	ld	wa, 0:i3
 	ldw	bc, 8
 	ld	de, 0:i3
-	call	SeMenu_SetupPartDisplay_End_Helper2
+	call	SeMenu_PostEditUpDownSet
 	ld	wa, 1:i3
 	ld	bc, 6:i3
 	ld	de, 0:i3
-	call	SeMenu_SetupPartDisplay_End_Helper2
+	call	SeMenu_PostEditUpDownSet
 	inc	4, xsp
 	ret
 Scoop_SoundEditorData_Helper_Join18:
@@ -8127,19 +8127,19 @@ SeMenu_ShowPopupDialog:
 ; shared/positional_labels.s builds aliases on it.)
 ; -----------------------------------------------------------------------------
 SeMenu_ShowPopupDialog_Draw:
-	.long SeMenu_WaveformSelect_Data
+	.long SeMenuTitle_DrawStaticScreen
 	.long SeMenu_NameEdit_DataBlock2
 	.long SeMenu_PresetManager_SaveApply
 	.long SeMenu_PresetInit_Main
 	.long SeMenu_FxEdit_Init
 	.long SeMenu_FxEdit_DataBlock1
-	.long SeMenu_PresetManager_Data
+	.long SeTonHyb1_DrawStaticScreen
 	.long SeMenu_PresetBrowser_Init
 	.long SeMenu_FxEdit_DataBlock2
 	.long SeMenu_FxEdit_DataBlock3
-	.long SeMenu_PresetBrowser_Data
+	.long SePitLfo1_DrawStaticScreen
 	.long SeMenu_CompareAndApply_Init
-	.long SeMenu_CompareAndApply_Data5
+	.long SeAmpAmp2_DrawStaticScreen
 	.long SeMenu_Utility_CopyBlock
 	.long SeMenu_Utility_FillBlock
 	.long SeMenu_FilterEdit_DataBlock2
@@ -8548,20 +8548,20 @@ SeMenu_ShowConfirmDialog_Code:
 	ldf	0
 	pop_f
 	nop
-SeMenu_ShowConfirmDialog_Sub:
+SeMenu_DrawSelectedPartEnvCurve:
 	cp	(0x6ae:16), 1
-	jr	nz, SeMenu_ShowConfirmDialog_Sub_Skip
+	jr	nz, SeMenu_DrawSelectedPartEnvCurve_Skip
 	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeMenu_ShowConfirmDialog_Sub_Data_2
 	ld	xix, SeMenu_ShowConfirmDialog_Sub_Data_3
 	call	SeGfx_DrawStaticList
-	jr	SeMenu_ShowConfirmDialog_Sub_Join
-SeMenu_ShowConfirmDialog_Sub_Skip:
+	jr	SeMenu_DrawSelectedPartEnvCurve_Join
+SeMenu_DrawSelectedPartEnvCurve_Skip:
 	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x1140
 	ld	xix, SeMenu_ShowConfirmDialog_Sub_Data_2
 	call	SeGfx_DrawStaticList
-SeMenu_ShowConfirmDialog_Sub_Join:
+SeMenu_DrawSelectedPartEnvCurve_Join:
 	xor	xwa, xwa
 	ldb_d8	a, (0x65d)
 	sla	wa, 2
@@ -8695,20 +8695,20 @@ SeMenu_WaveformSelect_Apply:
 	ld	xix, SeMenu_WaveformSelect_Apply_Records
 	call	SeGfx_DrawStaticList
 	ret
-SeMenu_WaveformSelect_Data:
+SeMenuTitle_DrawStaticScreen:
 	cp	(0x6b8:16), 1
-	jr	nz, SeMenu_WaveformSelect_Data_Skip
+	jr	nz, SeMenuTitle_DrawStaticScreen_Skip
 	call	SeMenu_WaveformSelect_Apply
-	jr	SeMenu_WaveformSelect_Data_Return
-SeMenu_WaveformSelect_Data_Skip:
+	jr	SeMenuTitle_DrawStaticScreen_Return
+SeMenuTitle_DrawStaticScreen_Skip:
 	ld	(COLORBLIT_MODE:24), 0
 	cp	(0x6ae:16), 1
 	jr	z, SeMenu_WaveformSelect_Data_Skip2
-	ld	xiy, SeScreenData_0x0562
+	ld	xiy, SeMenuTitle_StaticRecords
 	ld	xix, SeScreenData_0x0685
 	call	SeGfx_DrawStaticList
 	call	SeMenu_DrawOriginalEditedBadge
-	jr	SeMenu_WaveformSelect_Data_Return
+	jr	SeMenuTitle_DrawStaticScreen_Return
 SeMenu_WaveformSelect_Data_Skip2:
 	ld	xiy, SeScreenData_0x5120
 	ld	xix, SeScreenData_0x53EC
@@ -8723,7 +8723,7 @@ SeMenu_WaveformSelect_Data_Skip2:
 	ld	xix, DrumDetailEdit_Entry_01
 	call	SeGfx_DrawStaticList
 	ld	(COLORBLIT_MODE:24), 0
-SeMenu_WaveformSelect_Data_Return:
+SeMenuTitle_DrawStaticScreen_Return:
 	ret
 SeMenu_DrawOriginalEditedBadge:
 	ld (COLORBLIT_MODE:24), 0x00
@@ -8833,14 +8833,14 @@ SeMenu_PresetManager_Load:
 	cp	(0x6ae:16), 1
 	jr	nz, SeMenu_PresetManager_End
 	ld	xiy, SeMenu_PresetManager_Load_Records
-	ld	xix, SeScreenData_0x5633
+	ld	xix, SeDrumKit_TouchCurvePageRecords
 	call	SeGfx_DrawStaticList
 SeMenu_PresetManager_End:
 	ret
 SeMenu_PresetManager_Save:
 	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeMenu_PresetManager_Save_Records
-	ld	xix, SeScreenData_0x0562
+	ld	xix, SeMenuTitle_StaticRecords
 	call	SeGfx_DrawStaticList
 	call	Display_DeferOrUpdateScreen_Direct_0xF
 	ret
@@ -8858,7 +8858,7 @@ SeMenu_PresetManager_SaveApply:
 	call	SeGfx_DrawBoundList
 	call	SeMenu_DrawTitleIcon
 	ret
-SeMenu_PresetManager_Data:
+SeTonHyb1_DrawStaticScreen:
 	call	SeMenu_DrawToneSelectTitle
 	cp	(1710:16), 1
 	jr	z, SeMenu_PresetManager_Data_Skip
@@ -8866,7 +8866,7 @@ SeMenu_PresetManager_Data:
 	ld	xix, SeScreenData_0x441A
 	call	SeGfx_DrawStaticList
 	call	SeMenu_PresetManager_Save
-	jr	SeMenu_PresetManager_Data_Join
+	jr	SeTonHyb1_DrawStaticScreen_Join
 SeMenu_PresetManager_Data_Skip:
 	ld	xiy, SeScreenData_0x441A
 	ld	xix, SeScreenData_0x4447
@@ -8874,7 +8874,7 @@ SeMenu_PresetManager_Data_Skip:
 	ld	xiy, SeScreenData_0x4261
 	ld	xix, SeScreenData_0x441A
 	call	SeGfx_DrawStaticList
-SeMenu_PresetManager_Data_Join:
+SeTonHyb1_DrawStaticScreen_Join:
 	call	SeMenu_DrawSoloButton
 	call	SeMenu_DrawPartSelector
 	ld	(COLORBLIT_MODE:24), 0
@@ -9024,7 +9024,7 @@ SeMenu_DrawToneLayerFrame:
 	ret
 SeMenu_PresetBrowser_Init:
 	call	SeMenu_PresetBrowser_Navigate
-	ld	xiy, SeScreenData_0x0E31
+	ld	xiy, SePitPit1_StaticRecords
 	ld	xix, SeScreenData_0x1043
 	call	SeGfx_DrawStaticList
 	call	SeMenu_DrawSoloButton
@@ -9047,7 +9047,7 @@ SeMenu_PresetBrowser_Select:
 	ld	xix, SeScreenData_0x0E13
 	call	SeGfx_DrawStaticList
 	ret
-SeMenu_PresetBrowser_Data:
+SePitLfo1_DrawStaticScreen:
 	.byte 0x1d, 0x42, 0xf9, 0xf0, 0x1d, 0x57, 0xf9, 0xf0
 SeMenu_FilterEdit_DataBlock1_Helper:
 	ld XIY,SeScreenData_0x3660
@@ -9112,7 +9112,7 @@ SeMenu_DrawLfoPartSwitches:
 	call	SeGfx_DrawStaticList
 	ld	c, 4:opc
 	ld	xiy, 1637
-SeMenu_PresetBrowser_Data_Code_Loop:
+SeMenu_DrawLfoPartSwitches_Loop:
 	ld	w, (xiy)
 	and	w, 32
 	jrl	z, SeMenu_PresetBrowser_Data_Code_Join2
@@ -9187,10 +9187,10 @@ SeMenu_PresetBrowser_Data_Code_Loop:
 SeMenu_PresetBrowser_Data_Code_Join2:
 	add	xiy, 1
 	dec	1, c
-	jrl	nz, SeMenu_PresetBrowser_Data_Code_Loop
+	jrl	nz, SeMenu_DrawLfoPartSwitches_Loop
 	ret
 SeMenu_CompareAndApply_Init:
-	call	SeMenu_CompareAndApply_Data
+	call	SeAmp_DrawSectionFrame
 	cp	(1710:16), 1
 	jr	z, SeMenu_CompareAndApply_Check
 	call	SeMenu_PresetManager_Save
@@ -9199,13 +9199,13 @@ SeMenu_CompareAndApply_Init:
 	call	SeGfx_DrawStaticList
 	jr	SeMenu_CompareAndApply_Match
 SeMenu_CompareAndApply_Check:
-	ld	xiy, SeScreenData_0x5633
+	ld	xiy, SeDrumKit_TouchCurvePageRecords
 	ld	xix, SeScreenData_0x56CD
 	call	SeGfx_DrawStaticList
 SeMenu_CompareAndApply_Match:
 	call	SeMenu_DrawSoloButton
 	call	SeMenu_DrawPartLabels
-	call	SeMenu_ShowConfirmDialog_Sub
+	call	SeMenu_DrawSelectedPartEnvCurve
 	cp	(1710:16), 1
 	jr	z, SeMenu_CompareAndApply_Apply
 	ld	(COLORBLIT_MODE:24), 0
@@ -9221,7 +9221,7 @@ SeMenu_CompareAndApply_Apply:
 SeMenu_CompareAndApply_End:
 	call SeMenu_CompareAndApply_Data4
 	ret
-SeMenu_CompareAndApply_Data:
+SeAmp_DrawSectionFrame:
 	ld (COLORBLIT_MODE:24), 0x00
 	ld XIY,SeScreenData_0x1089
 	cp (0x06ae:16), 0x01
@@ -9239,7 +9239,7 @@ SeMenu_CompareAndApply_Data4:
 	ld	xix, SeScreenData_0x1140
 	call	SeGfx_DrawStaticList
 	ret
-SeMenu_CompareAndApply_Data5:
+SeAmpAmp2_DrawStaticScreen:
 	.byte 0x1d, 0x20, 0xf0, 0xf0, 0x1d, 0x6a, 0xf0, 0xf0
 	.byte 0x1d, 0x93
 SeMenu_CompareAndApply_Data6:
@@ -9255,7 +9255,7 @@ SeMenu_CompareAndApply_Data6:
 	ld	xix, SeScreenData_0x1452
 	call	SeGfx_DrawStaticList
 	call	SeMenu_CompareAndApply_Data4
-SeMenu_CompareAndApply_Apply_Sub:
+SeMenu_DrawBreakpointKeyboard:
 	ldw	(1734:16), 56
 	ldw	(1736:16), 139
 	call	SeMenu_DrawKeyboardGraphic
@@ -9265,7 +9265,7 @@ SeMenu_CompareAndApply_Apply_Sub:
 	call	SeGfx_DrawBoundList
 	ret
 SeMenu_Utility_CopyBlock:
-	call	SeMenu_CompareAndApply_Data
+	call	SeAmp_DrawSectionFrame
 	cp	(1710:16), 1
 	jr	z, SeMenu_Utility_CopyBlock_Skip
 	ld	xiy, SeScreenData_0x1466
@@ -9326,7 +9326,7 @@ SeMenu_Utility_CopyBlock_Skip3:
 SeMenu_Utility_CopyBlock_Return:
 	ret
 SeMenu_Utility_FillBlock:
-	call	SeMenu_CompareAndApply_Data
+	call	SeAmp_DrawSectionFrame
 	ld	xiy, SeScreenData_0x1523
 	ld	xix, SeMenu_Utility_FillBlock_Records
 	call	SeGfx_DrawStaticList
@@ -9693,11 +9693,11 @@ SeMenu_BankEdit_Return:
 	ret
 SeMenu_BankEdit_LoopHelper:
 	ld	(COLORBLIT_MODE:24), 0
-	ld	xiy, SeMenu_BankEdit_LoopHelper_Data_2
-	ld	xix, SeMenu_BankEdit_LoopHelper_Data_3
+	ld	xiy, SeTonHyb1_Row1VelZeroText
+	ld	xix, SeTonHyb1_Row2VelDash
 	call	SeGfx_DrawStaticList
 	ld	xiy, SeScreenData_0x1F80
-	ld	xix, SeScreenData_0x1FA8
+	ld	xix, SeTonHyb1_Row2Records
 	call	SeGfx_DrawBoundList
 	ld	c, 0:opc
 	ld	xiz, 1636
@@ -9752,8 +9752,8 @@ SeMenu_DrumKit_Dispatch:
 	cp	a, 16
 	jr	nz, SeMenu_DrumKit_Dispatch_Join
 	ld	(COLORBLIT_MODE:24), 0
-	ld	xiy, SeMenu_DrumKit_Dispatch_Data
-	ld	xix, SeMenu_DrumKit_Dispatch_Data_2
+	ld	xiy, SePitPit1_SplitValueRecords
+	ld	xix, SePitPit1_PartCursorBox
 	call	SeGfx_DrawBoundList
 	jr	SeMenu_DrumKit_Dispatch_Return
 SeMenu_DrumKit_Dispatch_Skip:
@@ -9838,13 +9838,13 @@ Data_UnknownBlock_Skip5:
 	jr	c, Data_UnknownBlock_Skip6
 Data_UnknownBlock_Join2:
 	push_a
-	call	SeMenu_ShowConfirmDialog_Sub
+	call	SeMenu_DrawSelectedPartEnvCurve
 	pop_a
 	jr	Data_UnknownBlock_Join4
 Data_UnknownBlock_Skip6:
 	cp	a, 0:i3
 	jr	nz, Data_UnknownBlock_Join4
-	call	SeMenu_ShowConfirmDialog_Sub
+	call	SeMenu_DrawSelectedPartEnvCurve
 	cp	(0x6ae:16), 1
 	jr	z, Data_UnknownBlock_Skip7
 	ld	(COLORBLIT_MODE:24), 1
@@ -9903,7 +9903,7 @@ SeMenu_DataBlock_05:
 	cp	a, 5:i3
 	jr	nz, Data_UnknownBlock_Skip11
 	ld	(COLORBLIT_MODE:24), 0
-	ld	xiy, SeScreenData_0x21A2
+	ld	xiy, SeFilEq_RangeGainRecords
 	ld	xix, SeScreenData_0x21C0
 	call	SeGfx_DrawBoundList
 	jr	Data_UnknownBlock_Return3
@@ -9917,7 +9917,7 @@ SeMenu_DataBlock_06:
 	cp	a, 5:i3
 	jr	nz, Data_UnknownBlock_Skip12
 	ld	(COLORBLIT_MODE:24), 0
-	ld	xiy, SeScreenData_0x21A2
+	ld	xiy, SeFilEq_RangeGainRecords
 	ld	xix, SeScreenData_0x21C0
 	call	SeGfx_DrawBoundList
 	jr	Data_UnknownBlock_Return4
@@ -10172,7 +10172,7 @@ SeMenu_PresetInit_Main:
 	call	SeMenu_DrawPartLabels
 	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x38E1
-	ld	xix, SeScreenData_0x3996
+	ld	xix, SeTonTon2_PanAmountFields
 	call	SeGfx_DrawBoundList
 	call	SeMenu_PresetInit_Loop1
 	call	SeMenu_PresetInit_Loop2
@@ -10233,12 +10233,12 @@ SeMenu_PresetInit_Lookup2Return:
 SeMenu_FxEdit_Init:
 	call	SeMenu_DrawToneLayerFrame
 	ld	(COLORBLIT_MODE:24), 0
-	ld	xiy, SeScreenData_0x34F3
-	ld	xix, SeMenu_FxEdit_Init_Data_2
+	ld	xiy, SeTonRan1_KeyLayerFrame
+	ld	xix, SeTonRan2_VelLayerFrame
 	call	SeGfx_DrawStaticList
 	ld	(COLORBLIT_MODE:24), 2
 	ld	xiy, SeScreenData_0x34E9
-	ld	xix, SeScreenData_0x34F3
+	ld	xix, SeTonRan1_KeyLayerFrame
 	call	SeGfx_DrawStaticList
 	ldw	(1734:16), 47
 	ldw	(1736:16), 51
@@ -10253,12 +10253,12 @@ SeMenu_FxEdit_Init:
 SeMenu_FxEdit_DataBlock1:
 	call	SeMenu_DrawToneLayerFrame
 	ld	(COLORBLIT_MODE:24), 0
-	ld	xiy, SeMenu_FxEdit_Init_Data_2
+	ld	xiy, SeTonRan2_VelLayerFrame
 	ld	xix, SeScreenData_0x3633
 	call	SeGfx_DrawStaticList
 	ld	(COLORBLIT_MODE:24), 2
 	ld	xiy, SeScreenData_0x34E9
-	ld	xix, SeScreenData_0x34F3
+	ld	xix, SeTonRan1_KeyLayerFrame
 	call	SeGfx_DrawStaticList
 	call	SeMenu_DrawSoloButton
 	call	SeMenu_DrawPartSelector
@@ -10295,7 +10295,7 @@ SeMenu_FxEdit_DataBlock4:
 	ld	xix, SeScreenData_0x3660
 	call	SeGfx_DrawStaticList
 	call	SeMenu_PresetManager_Save
-	call	SeMenu_CompareAndApply_Apply_Sub
+	call	SeMenu_DrawBreakpointKeyboard
 	call	SeMenu_Utility_FormatNumber_Loop
 	ret
 SeMenu_FilterEdit_Init:
@@ -10326,7 +10326,7 @@ SeMenu_FilterEdit_DataBlock1:
 	call	SeMenu_Utility_FormatNumber_Loop
 	ret
 SeMenu_FilterEdit_DataBlock2:
-	call	SeMenu_CompareAndApply_Data
+	call	SeAmp_DrawSectionFrame
 	call	SeMenu_FilterEdit_DataBlock1_Helper
 	call	SeMenu_CompareAndApply_Data4
 	ret
@@ -10338,15 +10338,15 @@ SeMenu_FilterEdit_Dispatch:
 	cp	a, 11
 	jr	c, SeMenu_FilterEdit_Dispatch_Skip3
 	ld	(COLORBLIT_MODE:24), 0
-	ld	xiy, SeMenu_FilterEdit_Dispatch_Data_2
-	ld	xix, SeMenu_FilterEdit_Dispatch_Data_3
+	ld	xiy, SeTonTon2_PanSideFields
+	ld	xix, SeTonTon2_CursorBox
 	call	SeGfx_DrawBoundList
 	call	SeMenu_PresetInit_Loop2
 	jr	SeMenu_FilterEdit_Dispatch_Return
 SeMenu_FilterEdit_Dispatch_Skip:
 	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x38E1
-	ld	xix, SeScreenData_0x391D
+	ld	xix, SeTonTon2_DelayFields
 	call	SeGfx_DrawBoundList
 	call	SeMenu_PresetInit_Loop1
 	jr	SeMenu_FilterEdit_Dispatch_Return
@@ -10400,13 +10400,13 @@ SeMenu_FilterEdit_DataBlock5:
 	.byte	0xb8, 0xfd, 0xf0, 0x68, 0x29
 SeMenu_FilterEdit_DataBlock5_Skip:
 	ld	(COLORBLIT_MODE:24), 0
-	ld	xiy, SeScreenData_0x3C37
-	ld	xix, SeScreenData_0x3C37 + 175
+	ld	xiy, SeCtr2_PageFrame
+	ld	xix, SeCtr2_PageFrame + 175
 	call	SeGfx_DrawStaticList
 	ld	xiy, SeMenu_FilterEdit_DataBlock5_Records
 	ld	xix, SeScreenData_0x3D36
 	call	SeGfx_DrawStaticList
-	ld	xiy, SeMenu_FilterEdit_DataBlock5_Data_2
+	ld	xiy, SeCtr2_FunctionNameFields
 	jr	SeMenu_FilterEdit_DataBlock5_Join
 SeMenu_FilterEdit_DataBlock5_Join2:
 	ld	xiy, SeScreenData_0x3DD3
@@ -10432,13 +10432,13 @@ SeMenu_EqEdit_Init:
 SeMenu_EqEdit_SetupHelper1:
 	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeMenu_EqEdit_SetupHelper1_Records
-	ld	xix, SeScreenData_0x3C32
+	ld	xix, SeCtr_TitleIcon
 	call	SeGfx_DrawStaticList
 	ret
 SeMenu_EqEdit_SetupHelper2:
 	ld	(COLORBLIT_MODE:24), 0
-	ld	xiy, SeScreenData_0x3C32
-	ld	xix, SeScreenData_0x3C37
+	ld	xiy, SeCtr_TitleIcon
+	ld	xix, SeCtr2_PageFrame
 	call	SeGfx_DrawStaticList
 	ret
 SeMenu_EqEdit_Dispatch:
@@ -10452,10 +10452,10 @@ SeMenu_EqEdit_Dispatch:
 	cp	(0x6ae:16), 1
 	jr	z, SeMenu_EqEdit_DrawTable
 	ld	xiy, SeScreenData_0x3DD3
-	ld	xix, SeMenu_FilterEdit_DataBlock5_Data_2
+	ld	xix, SeCtr2_FunctionNameFields
 	call	SeGfx_DrawBoundList
 SeMenu_EqEdit_DrawTable:
-	ld	xiy, SeScreenData_0x3E37
+	ld	xiy, SeCtr2_Part1And2Switches
 	ld	xix, SeScreenData_0x3E55
 	call	SeGfx_DrawBoundList
 	jr	SeMenu_EqEdit_Return
@@ -10722,7 +10722,7 @@ SeBitmap_Pattern24x10_3:
 	.byte	0b00010101
 ; 1-bpp bitmap 24x10 px, stored column by column (3 byte-columns of 10 rows;
 ; bit 7 is tested first), drawn by static op 03 via ColorBlit2_LargeCodeBlock
-; evidence: static op03 record at SeScreenData_0x080F, static op03 record at SeScreenData_0x0BEA, static op03 record at SeScreenData_0x0CC6, static op03 record at SeMenu_PresetBrowser_Select_Sub_Data_2
+; evidence: static op03 record at SeScreenData_0x080F, static op03 record at SeScreenData_0x0BEA, static op03 record at SeScreenData_0x0CC6, static op03 record at SeLfo_Part4HatchRecord
 SeBitmap_Pattern24x10_4:
 	; column 0 (x 0-7)
 	.byte	0b00000100
@@ -12071,13 +12071,13 @@ SeBitmap_EnvCurve6:
 	.byte	0b00000011
 	.byte	0b11111111
 	.byte	0b11111111
-; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0562
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeMenuTitle_StaticRecords
 ; evidence: SeMenu_PresetManager_Save
 SeMenu_PresetManager_Save_Records:
 	sd_quad	0x1b, 3, 2, 312, 3
 ; static record list (35 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0685
-; evidence: SeMenu_WaveformSelect_Data
-SeScreenData_0x0562:
+; evidence: SeMenuTitle_DrawStaticScreen
+SeMenuTitle_StaticRecords:
 	sd_ptext	0x1c, 16, 110, 5, "SOUND EDIT"
 	sd_ctext	0x06, 11, 36*40+0, "\020 WRITE"
 	sd_ctext	0x06, 5, 75*40+39, "\021"
@@ -12114,14 +12114,14 @@ SeScreenData_0x0562:
 	sd_op23	0x0a, 150*40+34
 	sd_op23	0x5f, 190*40+34
 ; static record list (4 records), read by GraphicsRender_ProcessEntries; end SeMenu_DrawOriginalEditedBadge_Records
-; evidence: SeMenu_WaveformSelect_Data
+; evidence: SeMenuTitle_DrawStaticScreen
 SeScreenData_0x0685:
 	sd_quad	0x1b, 236, 31, 308, 50
 	sd_ctext	0x06, 14, 36*40+30, "ORIGINAL \021"
 	sd_quad	0x09, 236, 31, 308, 50
 	sd_quad	0x09, 238, 33, 306, 48
 ; static record list (4 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x06DB
-; evidence: SeMenu_WaveformSelect_Data
+; evidence: SeMenuTitle_DrawStaticScreen
 SeMenu_DrawOriginalEditedBadge_Records:
 	sd_quad	0x1b, 236, 31, 308, 50
 	sd_ctext	0x06, 12, 36*40+32, "EDITED \021"
@@ -12447,7 +12447,7 @@ SeScreenData_0x08CB:
 SeScreenData_0x08D1:
 	.ascii	"OFF", "ON "
 ; static record list (25 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x09AA
-; evidence: SeMenu_PresetManager_Data
+; evidence: SeTonHyb1_DrawStaticScreen
 SeMenu_DrawToneLayerFrame_Records:
 	sd_ptext	0x1c, 16, 115, 5, "T0NE LAYER"
 	sd_ptext	0x17, 16, 6, 7, "SOUND EDIT"
@@ -12475,13 +12475,13 @@ SeMenu_DrawToneLayerFrame_Records:
 	sd_quad	0x05, 70, 220, 250, 232
 	sd_op23	0x64, 3*40+11
 ; static record list (3 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x09D5
-; evidence: SeMenu_PresetManager_Data
+; evidence: SeTonHyb1_DrawStaticScreen
 SeScreenData_0x09AA:
 	sd_ptext	0x1c, 17, 114, 5, "T0NE SELECT"
 	sd_ptext	0x17, 16, 6, 7, "SOUND EDIT"
 	sd_quad	0x09, 4, 4, 68, 16
 ; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x09DA
-; evidence: SeMenu_PresetManager_Data
+; evidence: SeTonHyb1_DrawStaticScreen
 SeScreenData_0x09D5:
 	sd_op23	0x61, 3*40+11
 ; static record list (51 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0B7E
@@ -12539,7 +12539,7 @@ SeScreenData_0x09DA:
 	sd_quad	0x02, 60, 54, 60, 199
 	sd_quad	0x02, 188, 54, 188, 199
 ; static record list (4 records), read by GraphicsRender_ProcessEntries; ends SeScreenData_0x0B88, SeMenu_DrawPartLabels_Records
-; evidence: SeMenu_PresetManager_Data
+; evidence: SeTonHyb1_DrawStaticScreen
 SeScreenData_0x0B7E:
 	sd_ctext	0x06, 5, 78*40+0, "\020"
 	sd_ctext	0x06, 5, 115*40+0, "\020"
@@ -12562,7 +12562,7 @@ SeScreenData_0x0BA0:
 SeScreenData_0x0BA7:
 	sd_ctext	0x20, 7, 175*40+2, "4TH"
 ; list-boundary table: entry i and i+1 bound list i (6 entries, LE32)
-; evidence: SeMenu_PresetManager_Data
+; evidence: SeTonHyb1_DrawStaticScreen
 SeMenu_DrawPartLabels_Records2:
 	.long	SeMenu_DrawPartLabels_Records
 	.long	SeMenu_DrawPartLabels_Records
@@ -12587,7 +12587,7 @@ SeScreenData_0x0BDE:
 SeScreenData_0x0BEA:
 	sd_blit	SeBitmap_Pattern24x10_4, 175*40+2, 3, 10
 ; list-boundary table: entry i and i+1 bound list i (6 entries, LE32)
-; evidence: SeMenu_PresetManager_Data
+; evidence: SeTonHyb1_DrawStaticScreen
 SeMenu_DrawPartLabels_Records3:
 	.long	SeScreenData_0x0BC6
 	.long	SeScreenData_0x0BC6
@@ -12616,7 +12616,7 @@ SeScreenData_0x0C47:
 	sd_blit	SeBitmap_RadioOn, 178*40+2, 2, 12
 	sd_ctext	0x20, 7, 178*40+4, "4TH"
 ; list-boundary table: entry i and i+1 bound list i (6 entries, LE32)
-; evidence: SeMenu_PresetManager_Data
+; evidence: SeTonHyb1_DrawStaticScreen
 SeMenu_DrawPartRadioButtons_Records:
 	.long	SeScreenData_0x0C0E
 	.long	SeScreenData_0x0C0E
@@ -12645,7 +12645,7 @@ SeScreenData_0x0CBA:
 	sd_blit	SeBitmap_RadioOff, 178*40+2, 2, 12
 	sd_blit	SeBitmap_Pattern24x10_4, 178*40+4, 3, 10
 ; list-boundary table: entry i and i+1 bound list i (6 entries, LE32)
-; evidence: SeMenu_PresetManager_Data
+; evidence: SeTonHyb1_DrawStaticScreen
 SeMenu_DrawPartRadioButtons_Records2:
 	.long	SeScreenData_0x0C72
 	.long	SeScreenData_0x0C72
@@ -12664,7 +12664,7 @@ SeScreenData_0x0CFF:
 	sd_blit	SeBitmap_RadioOn, 149*40+2, 2, 12
 	sd_ptext	0x17, 9, 33, 152, "2ND"
 ; list-boundary table: entry i and i+1 bound list i (4 entries, LE32)
-; evidence: SeMenu_PresetManager_Data
+; evidence: SeTonHyb1_DrawStaticScreen
 SeMenu_DrawTwoPartRadioButtons_Records:
 	.long	SeScreenData_0x0CEA
 	.long	SeScreenData_0x0CEA
@@ -12681,7 +12681,7 @@ SeScreenData_0x0D39:
 	sd_blit	SeBitmap_RadioOff, 149*40+2, 2, 12
 	sd_ptext	0x17, 9, 33, 152, "2ND"
 ; list-boundary table: entry i and i+1 bound list i (4 entries, LE32)
-; evidence: SeMenu_PresetManager_Data
+; evidence: SeTonHyb1_DrawStaticScreen
 SeMenu_DrawTwoPartRadioButtons_Records2:
 	.long	SeScreenData_0x0D24
 	.long	SeScreenData_0x0D24
@@ -12722,7 +12722,7 @@ SeScreenData_0x0E13:
 	sd_quad	0x05, 278, 107, 306, 120
 ; static record list (58 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x1043
 ; evidence: SeMenu_PresetBrowser_Init
-SeScreenData_0x0E31:
+SePitPit1_StaticRecords:
 	sd_ptext	0x17, 9, 49, 55, "KEY"
 	sd_ptext	0x17, 9, 91, 55, "DE-"
 	sd_ptext	0x17, 10, 132, 55, "TONE"
@@ -13375,7 +13375,7 @@ SeMenu_PresetManager_SaveApply_Records:
 	.ascii	"Z"
 ; string table, 4-char cells, indexed by a bound record's value (field +7 of
 ; a bound op 02/07 record; value at most 2 by the record's mask; the table holds 4 cells)
-; evidence: bound op02 record at SeScreenData_0x21A2
+; evidence: bound op02 record at SeFilEq_RangeGainRecords
 SeScreenData_0x1EE7:
 	.ascii	"LOW ", "HIGH", "MONO", "POLY"
 ; list-boundary table: entry i and i+1 bound list i (19 entries, LE32)
@@ -13414,10 +13414,10 @@ SeMenu_PatchEdit_SetupPath_Records2:
 	.short	13, 137, 307, 165
 	.short	13, 169, 307, 197
 ; bound record list (1 record), read by GraphicsRender_Start; end SeScreenData_0x1F80
-; evidence: SeMenu_PresetManager_Data
+; evidence: SeTonHyb1_DrawStaticScreen
 SeScreenData_0x1F75:
 	sdb_box	0x03, 0x0660, 0x0f, 0, 0x05, SeMenu_BankEdit_SetupPath_Records2
-; bound record list (3 records), read by GraphicsRender_Start; end SeScreenData_0x1FA8
+; bound record list (3 records), read by GraphicsRender_Start; end SeTonHyb1_Row2Records
 ; evidence: SeMenu_BankEdit_LoopHelper
 SeScreenData_0x1F80:
 	sdb_str	0x0668, 0x0f, 0, 0x20, SeScreenData_0x20C9, 2, 119*40+8
@@ -13425,7 +13425,7 @@ SeScreenData_0x1F80:
 	sdb_num	0x0661, 0x7f, 0, 0x20, 119*40+28, 3
 ; bound record list (4 records), read by GraphicsRender_Start; end SeScreenData_0x1FDA
 ; evidence: startptrs at SeScreenData_0x20A5
-SeScreenData_0x1FA8:
+SeTonHyb1_Row2Records:
 	sdb_str	0x0669, 0x0f, 0, 0x20, SeScreenData_0x20C9, 2, 135*40+8
 	sdb_str	0x0000, 0x00, 0, 0x20, 0x00020c03, 13, 135*40+10
 	sdb_num	0x0664, 0x7f, 0, 0x20, 135*40+24, 3
@@ -13437,20 +13437,20 @@ SeScreenData_0x1FDA:
 	sdb_str	0x0000, 0x00, 0, 0x20, 0x00020c13, 13, 151*40+10
 	sdb_num	0x0665, 0x7f, 0, 0x20, 151*40+24, 3
 	sdb_num	0x0663, 0x7f, 0, 0x20, 151*40+28, 3
-; bound record list (4 records), read by GraphicsRender_Start; end SeMenu_BankEdit_LoopHelper_Data_2
+; bound record list (4 records), read by GraphicsRender_Start; end SeTonHyb1_Row1VelZeroText
 ; evidence: startptrs at SeScreenData_0x20A5
 SeScreenData_0x200C:
 	sdb_str	0x066b, 0x0f, 0, 0x20, SeScreenData_0x20C9, 2, 167*40+8
 	sdb_str	0x0000, 0x00, 0, 0x20, 0x00020c23, 13, 167*40+10
 	sdb_num	0x0666, 0x7f, 0, 0x20, 167*40+24, 3
 	sdb_num	0x0667, 0x7f, 0, 0x20, 167*40+28, 3
-; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeMenu_BankEdit_LoopHelper_Data_3
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeTonHyb1_Row2VelDash
 ; evidence: SeMenu_BankEdit_LoopHelper
-SeMenu_BankEdit_LoopHelper_Data_2:
+SeTonHyb1_Row1VelZeroText:
 	sd_ctext	0x06, 8, 119*40+24, "  0-"
 ; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x204B
 ; evidence: startptrs at SeScreenData_0x20BD
-SeMenu_BankEdit_LoopHelper_Data_3:
+SeTonHyb1_Row2VelDash:
 	sd_ctext	0x06, 5, 135*40+27, "-"
 ; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2050
 ; evidence: startptrs at SeScreenData_0x20BD
@@ -13472,20 +13472,20 @@ SeScreenData_0x2055:
 SeScreenData_0x2069:
 	sd_quad	0x1b, 64, 135, 184, 148
 	sd_quad	0x1b, 192, 135, 248, 148
-; static record list (2 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2091
+; static record list (2 records), read by GraphicsRender_ProcessEntries; end SeTonHyb1_Row4ClearBoxes
 ; evidence: startptrs at SeScreenData_0x20B1
 SeScreenData_0x207D:
 	sd_quad	0x1b, 64, 151, 184, 164
 	sd_quad	0x1b, 192, 151, 248, 164
 ; static record list (2 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x20A5
 ; evidence: startptrs at SeScreenData_0x20B1
-SeScreenData_0x2091:
+SeTonHyb1_Row4ClearBoxes:
 	sd_quad	0x1b, 64, 167, 184, 180
 	sd_quad	0x1b, 192, 167, 248, 180
 ; list-start table: entry i -> a list of 50 bytes (3 entries, LE32)
 ; evidence: SeMenu_BankEdit_LoopBody
 SeScreenData_0x20A5:
-	.long	SeScreenData_0x1FA8
+	.long	SeTonHyb1_Row2Records
 	.long	SeScreenData_0x1FDA
 	.long	SeScreenData_0x200C
 ; list-start table: entry i -> a list of 20 bytes (3 entries, LE32)
@@ -13493,16 +13493,16 @@ SeScreenData_0x20A5:
 SeScreenData_0x20B1:
 	.long	SeScreenData_0x2069
 	.long	SeScreenData_0x207D
-	.long	SeScreenData_0x2091
+	.long	SeTonHyb1_Row4ClearBoxes
 ; list-start table: entry i -> a list of 5 bytes (3 entries, LE32)
 ; evidence: SeMenu_BankEdit_LoopBody
 SeScreenData_0x20BD:
-	.long	SeMenu_BankEdit_LoopHelper_Data_3
+	.long	SeTonHyb1_Row2VelDash
 	.long	SeScreenData_0x204B
 	.long	SeScreenData_0x2050
 ; string table, 2-char cells, indexed by a bound record's value (field +7 of
 ; a bound op 02/07 record; value at most 32 by the record's mask; the table holds 25 cells; values >= 25 would read past it)
-; evidence: bound op07 record DrumDetailEdit_Entry_02, bound op07 record DrumDetailEdit_Entry_06, bound op02 record at SeScreenData_0x1F80, bound op02 record at SeScreenData_0x1FA8 (+2 more)
+; evidence: bound op07 record DrumDetailEdit_Entry_02, bound op07 record DrumDetailEdit_Entry_06, bound op02 record at SeScreenData_0x1F80, bound op02 record at SeTonHyb1_Row2Records (+2 more)
 SeScreenData_0x20C9:
 	.ascii	"A:", "B:", "C:", "D:", "E:", "F:", "G:", "H:"
 	.ascii	"I:", "J:", "K:", "L:", "M:", "N:", "O:", "P:"
@@ -13557,7 +13557,7 @@ SeScreenData_0x2193:
 	sdb_str	0x0664, 0x7f, 0, 0x20, SeScreenData_0x30EC, 5, 221*40+29
 ; bound record list (2 records), read by GraphicsRender_Start; end SeScreenData_0x21C0
 ; evidence: SeMenu_DataBlock_05, SeMenu_DataBlock_06
-SeScreenData_0x21A2:
+SeFilEq_RangeGainRecords:
 	sdb_str	0x0665, 0x80, 7, 0x20, SeScreenData_0x1EE7, 4, 221*40+24
 	sdb_str	0x0665, 0x7f, 0, 0x20, SeScreenData_0x21F2, 3, 221*40+34
 ; record-pointer table: entry i -> one bound record, drawn with SeGfx_DrawBoundRecord (5 entries, LE32)
@@ -13937,8 +13937,8 @@ TuningSys_Param_01:
 	.set	SeScreenData_0x2682, . + 163
 	.set	SeScreenData_0x26AE, . + 207
 	.incbin "includes/generated/se_name_editor.bin", 0x0, 0xAE
-SeMenu_DrumKit_Dispatch_Data:	.incbin "includes/generated/se_name_editor.bin", 0xAE, 0x16
-SeMenu_DrumKit_Dispatch_Data_2:	.incbin "includes/generated/se_name_editor.bin", 0xC4, 0x16
+SePitPit1_SplitValueRecords:	.incbin "includes/generated/se_name_editor.bin", 0xAE, 0x16
+SePitPit1_PartCursorBox:	.incbin "includes/generated/se_name_editor.bin", 0xC4, 0x16
 ; string table, 8-char cells, indexed by a bound record's value (field +7 of
 ; a bound op 02/07 record; value at most 32 by the record's mask; the table holds 32 cells)
 ; evidence: bound op02 record at SeScreenData_0x2673
@@ -13983,7 +13983,7 @@ SeScreenData_0x27B9:
 	.ascii	"1/16", "1/32", "1/64", " FIX"
 ; box table: {x1, y1, x2, y2} u16 per entry, indexed by a bound op 03/04/08
 ; record's value (pointer field +7; value at most 8 by the record's mask; the table holds 5 cells; values >= 5 would read past it)
-; evidence: bound op03 record at SeMenu_DrumKit_Dispatch_Data_2
+; evidence: bound op03 record at SePitPit1_PartCursorBox
 SeScreenData_0x27D9:
 	.short	13, 76, 166, 104
 	.short	13, 76, 166, 104
@@ -14011,7 +14011,7 @@ SeScreenData_0x2833:
 ; evidence: SeMenu_DrumKit_Dispatch
 	.set	TuningSystem_Handler_Table, . + 4
 SeMenu_DrumKit_Dispatch_Records3:
-	.long	SeMenu_DrumKit_Dispatch_Data_2
+	.long	SePitPit1_PartCursorBox
 	.long	TuningSys_Param_01
 	.long	SeScreenData_0x25EA
 	.long	SeScreenData_0x25F5
@@ -14028,7 +14028,7 @@ SeMenu_DrumKit_Dispatch_Records3:
 	.long	SeScreenData_0x2673
 	.long	SeScreenData_0x2682
 ; bound record list (7 records), read by GraphicsRender_Start; ends Data_UnknownBlock_Records, SeScreenData_0x28CE
-; evidence: SeMenu_PresetBrowser_Data, Data_UnknownBlock
+; evidence: SePitLfo1_DrawStaticScreen, Data_UnknownBlock
 SeScreenData_0x287D:
 	sdb_str	0x0664, 0xc0, 6, 0x20, SeScreenData_0x2930, 3, 221*40+12
 	sdb_num	0x0664, 0x1f, 0, 0x20, 221*40+16, 3
@@ -14079,7 +14079,7 @@ Data_UnknownBlock_Records4:
 	.long	Data_UnknownBlock_Records2
 	.long	SeScreenData_0x287D
 ; record-pointer table: entry i -> one bound record, drawn with SeGfx_DrawBoundRecord (4 entries, LE32)
-; evidence: SeMenu_PresetBrowser_Data
+; evidence: SePitLfo1_DrawStaticScreen
 SeMenu_DrawLfoPartSwitches_Records:
 	.long	SeScreenData_0x28CE
 	.long	SeScreenData_0x28DD
@@ -14104,7 +14104,7 @@ SeScreenData_0x293C:
 Data_UnknownBlock_Records5:
 	sd_quad	0x1b, 182, 62, 218, 169
 ; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeMenu_DrawLfoPartSwitches_Records2
-; evidence: SeMenu_PresetBrowser_Data
+; evidence: SePitLfo1_DrawStaticScreen
 SeScreenData_0x296E:
 	sd_quad	0x1b, 46, 62, 74, 169
 ; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2982
@@ -14124,7 +14124,7 @@ SeScreenData_0x298C:
 SeScreenData_0x2996:
 	sd_quad	0x05, 46, 156, 74, 169
 ; list-boundary table: entry i and i+1 bound list i (5 entries, LE32)
-; evidence: SeMenu_PresetBrowser_Data
+; evidence: SePitLfo1_DrawStaticScreen
 SeMenu_DrawLfoPartSwitches_Records3:
 	.long	SeMenu_DrawLfoPartSwitches_Records2
 	.long	SeScreenData_0x2982
@@ -14136,11 +14136,11 @@ SeMenu_DrawLfoPartSwitches_Records3:
 SeMenu_DrawLfoSelectedPartLine_Records:
 	sd_quad	0x1b, 221, 68, 237, 203
 ; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeMenu_DrawLfoPartSwitches_Records4
-; evidence: SeMenu_PresetBrowser_Data
+; evidence: SePitLfo1_DrawStaticScreen
 SeScreenData_0x29BE:
 	sd_quad	0x1b, 89, 67, 179, 166
 ; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeMenu_DrawLfoPartSwitches_Records5
-; evidence: SeMenu_PresetBrowser_Data
+; evidence: SePitLfo1_DrawStaticScreen
 SeMenu_DrawLfoPartSwitches_Records4:
 	sd_quad	0x1b, 77, 65, 88, 167
 ; static record list (2 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x29E6
@@ -14236,7 +14236,7 @@ SeScreenData_0x2AC2:
 SeScreenData_0x2ACC:
 	sd_quad	0x01, 93, 163, 180, 163
 ; record-group table: entry i -> 10-byte records, one picked by value (4 entries, LE32)
-; evidence: SeMenu_PresetBrowser_Data
+; evidence: SePitLfo1_DrawStaticScreen
 SeMenu_DrawLfoPartSwitches_Records6:
 	.long	SeScreenData_0x2A36
 	.long	SeScreenData_0x2A5E
@@ -14259,7 +14259,7 @@ SeScreenData_0x2AF4:
 SeScreenData_0x2AFB:
 	sd_ptext	0x17, 7, 88, 160, "\020"
 ; list-start table: entry i -> a list of 7 bytes (4 entries, LE32)
-; evidence: SeMenu_PresetBrowser_Data
+; evidence: SePitLfo1_DrawStaticScreen
 SeMenu_DrawLfoPartSwitches_Records7:
 	.long	SeScreenData_0x2AE6
 	.long	SeScreenData_0x2AED
@@ -14635,13 +14635,13 @@ SeMenu_PresetInit_Main_Records:
 	sd_quad	0x02, 124, 56, 124, 202
 	sd_quad	0x02, 174, 56, 174, 202
 	sd_quad	0x05, 244, 180, 287, 200
-; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x34F3
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeTonRan1_KeyLayerFrame
 ; evidence: SeMenu_FxEdit_Init, SeMenu_FxEdit_DataBlock1
 SeScreenData_0x34E9:
 	sd_quad	0x09, 69, 204, 251, 233
-; static record list (13 records), read by GraphicsRender_ProcessEntries; end SeMenu_FxEdit_Init_Data_2
+; static record list (13 records), read by GraphicsRender_ProcessEntries; end SeTonRan2_VelLayerFrame
 ; evidence: SeMenu_FxEdit_Init
-SeScreenData_0x34F3:
+SeTonRan1_KeyLayerFrame:
 	sd_ctext	0x06, 13, 30*40+13, "KEY LAYER"
 	sd_ptext	0x17, 7, 57, 42, "0"
 	sd_ptext	0x17, 7, 84, 42, "1"
@@ -14657,7 +14657,7 @@ SeScreenData_0x34F3:
 	sd_quad	0x05, 262, 68, 306, 94
 ; static record list (21 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x3633
 ; evidence: SeMenu_FxEdit_DataBlock1
-SeMenu_FxEdit_Init_Data_2:
+SeTonRan2_VelLayerFrame:
 	sd_ctext	0x06, 18, 34*40+11, "VELOCITY LAYER"
 	sd_ptext	0x17, 7, 45, 50, "0"
 	sd_ptext	0x17, 8, 91, 50, "32"
@@ -14686,7 +14686,7 @@ SeScreenData_0x3633:
 	sd_ptext	0x17, 23, 106, 195, "FILTER KEY FOLLOW"
 	sd_quad	0x05, 270, 67, 306, 92
 ; static record list (48 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x3805
-; evidence: SeMenu_PresetBrowser_Data
+; evidence: SePitLfo1_DrawStaticScreen
 SeScreenData_0x3660:
 	sd_ctext	0x06, 8, 64*40+23, "LF01"
 	sd_ctext	0x06, 5, 75*40+0, "\020"
@@ -14753,7 +14753,7 @@ SeScreenData_0x3813:
 SeScreenData_0x381A:
 	sd_ctext	0x20, 7, 158*40+6, "4TH"
 ; list-boundary table: entry i and i+1 bound list i (6 entries, LE32)
-; evidence: SeMenu_PresetBrowser_Data
+; evidence: SePitLfo1_DrawStaticScreen
 SeScreenData_0x3821:
 	.long	SeScreenData_0x3805
 	.long	SeScreenData_0x3805
@@ -14769,25 +14769,25 @@ SeScreenData_0x3839:
 ; evidence: bounds at SeScreenData_0x3869
 SeScreenData_0x3845:
 	sd_blit	SeBitmap_Pattern24x10_2, 95*40+6, 3, 10
-; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeMenu_PresetBrowser_Select_Sub_Data_2
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeLfo_Part4HatchRecord
 ; evidence: bounds at SeScreenData_0x3869
 SeScreenData_0x3851:
 	sd_blit	SeBitmap_Pattern24x10_3, 126*40+6, 3, 10
 ; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x3869
 ; evidence: bounds at SeScreenData_0x3869
-SeMenu_PresetBrowser_Select_Sub_Data_2:
+SeLfo_Part4HatchRecord:
 	sd_blit	SeBitmap_Pattern24x10_4, 158*40+6, 3, 10
 ; list-boundary table: entry i and i+1 bound list i (6 entries, LE32)
-; evidence: SeMenu_PresetBrowser_Data
+; evidence: SePitLfo1_DrawStaticScreen
 SeScreenData_0x3869:
 	.long	SeScreenData_0x3839
 	.long	SeScreenData_0x3839
 	.long	SeScreenData_0x3845
 	.long	SeScreenData_0x3851
-	.long	SeMenu_PresetBrowser_Select_Sub_Data_2
+	.long	SeLfo_Part4HatchRecord
 	.long	SeScreenData_0x3869
 ; list-start table: entry i -> a list of 20 bytes (4 entries, LE32)
-; evidence: SeMenu_PresetBrowser_Data
+; evidence: SePitLfo1_DrawStaticScreen
 SeScreenData_0x3881:
 	.long	SeScreenData_0x3891
 	.long	SeScreenData_0x38A5
@@ -14813,7 +14813,7 @@ SeScreenData_0x38B9:
 SeScreenData_0x38CD:
 	sd_quad	0x09, 79, 158, 88, 167
 	sd_quad	0x01, 77, 162, 79, 162
-; bound record list (14 records), read by GraphicsRender_Start; ends SeScreenData_0x391D, SeScreenData_0x3996
+; bound record list (14 records), read by GraphicsRender_Start; ends SeTonTon2_DelayFields, SeTonTon2_PanAmountFields
 ; evidence: SeMenu_PresetInit_Main, SeMenu_FilterEdit_Dispatch
 SeScreenData_0x38E1:
 	sdb_str	0x0661, 0x03, 0, 0x20, SeScreenData_0x3A5B, 7, 85*40+7
@@ -14822,7 +14822,7 @@ SeScreenData_0x38E1:
 	sdb_str	0x0661, 0xc0, 6, 0x20, SeScreenData_0x3A5B, 7, 181*40+7
 ; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
 ; evidence: recptrs at SeScreenData_0x39BE
-SeScreenData_0x391D:
+SeTonTon2_DelayFields:
 	sdb_num	0x0662, 0x3f, 0, 0x20, 85*40+17, 2
 ; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
 ; evidence: recptrs at SeScreenData_0x39BE
@@ -14840,20 +14840,20 @@ SeScreenData_0x393B:
 ; evidence: recptrs at SeScreenData_0x39BE
 SeScreenData_0x3945:
 	sdb_num	0x066a, 0x7f, 0, 0x20, 186*40+32, 3
-; bound record list (4 records), read by GraphicsRender_Start; end SeMenu_FilterEdit_Dispatch_Data_3
+; bound record list (4 records), read by GraphicsRender_Start; end SeTonTon2_CursorBox
 ; evidence: SeMenu_FilterEdit_Dispatch
-SeMenu_FilterEdit_Dispatch_Data_2:
+SeTonTon2_PanSideFields:
 	sdb_str	0x066b, 0x03, 0, 0x06, SeScreenData_0x3A52, 3, 85*40+24
 	sdb_str	0x066b, 0x0c, 2, 0x06, SeScreenData_0x3A52, 3, 118*40+24
 	sdb_str	0x066b, 0x30, 4, 0x06, SeScreenData_0x3A52, 3, 149*40+24
 	sdb_str	0x066b, 0xc0, 6, 0x06, SeScreenData_0x3A52, 3, 181*40+24
 ; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
 ; evidence: recptrs at SeScreenData_0x39BE
-SeMenu_FilterEdit_Dispatch_Data_3:
+SeTonTon2_CursorBox:
 	sdb_box	0x03, 0x065d, 0x0f, 0, 0x05, SeMenu_FilterEdit_Dispatch_Records2
 ; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
 ; evidence: recptrs at SeScreenData_0x39BE
-SeScreenData_0x3996:
+SeTonTon2_PanAmountFields:
 	sdb_num	0x066c, 0x7f, 0, 0x20, 85*40+25, 2
 ; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
 ; evidence: recptrs at SeScreenData_0x39BE
@@ -14870,19 +14870,19 @@ SeScreenData_0x39B4:
 ; record-pointer table: entry i -> one bound record, drawn with SeGfx_DrawBoundRecord (16 entries, LE32)
 ; evidence: SeMenu_PresetInit_TableLookup2, SeMenu_FilterEdit_Dispatch
 SeScreenData_0x39BE:
-	.long	SeMenu_FilterEdit_Dispatch_Data_3
+	.long	SeTonTon2_CursorBox
 	.long	SeScreenData_0x38E1
-	.long	SeScreenData_0x391D
+	.long	SeTonTon2_DelayFields
 	.long	SeScreenData_0x3927
 	.long	SeScreenData_0x3931
 	.long	SeScreenData_0x393B
-	.long	SeScreenData_0x3996
+	.long	SeTonTon2_PanAmountFields
 	.long	SeScreenData_0x39A0
 	.long	SeScreenData_0x39AA
 	.long	SeScreenData_0x39B4
 	.long	SeScreenData_0x3945
-	.long	SeMenu_FilterEdit_Dispatch_Data_2
-	.long	SeScreenData_0x3996
+	.long	SeTonTon2_PanSideFields
+	.long	SeTonTon2_PanAmountFields
 	.long	SeScreenData_0x39A0
 	.long	SeScreenData_0x39AA
 	.long	SeScreenData_0x39B4
@@ -14913,7 +14913,7 @@ SeMenu_PresetInit_TableLookup1_Records:
 	.long	SeScreenData_0x3A2B
 ; string table, 3-char cells, indexed by a bound record's value (field +7 of
 ; a bound op 02/07 record; value at most 4 by the record's mask; the table holds 3 cells; values >= 3 would read past it)
-; evidence: bound op07 record DrumDetailEdit_Entry_09, bound op02 record at SeMenu_FilterEdit_Dispatch_Data_2, bound op02 record at SeScreenData_0x395E, bound op02 record at SeScreenData_0x396D (+1 more)
+; evidence: bound op07 record DrumDetailEdit_Entry_09, bound op02 record at SeTonTon2_PanSideFields, bound op02 record at SeScreenData_0x395E, bound op02 record at SeScreenData_0x396D (+1 more)
 SeScreenData_0x3A52:
 	.ascii	"CTR", "L  ", "R  "
 ; string table, 7-char cells, indexed by a bound record's value (field +7 of
@@ -14935,7 +14935,7 @@ SeMenu_FilterEdit_Dispatch_Records:
 	sd_quad	0x1b, 13, 76, 228, 200
 ; box table: {x1, y1, x2, y2} u16 per entry, indexed by a bound op 03/04/08
 ; record's value (pointer field +7; value at most 16 by the record's mask; the table holds 5 cells; values >= 5 would read past it)
-; evidence: bound op03 record at SeMenu_FilterEdit_Dispatch_Data_3
+; evidence: bound op03 record at SeTonTon2_CursorBox
 SeMenu_FilterEdit_Dispatch_Records2:
 	.short	13, 76, 228, 104
 	.short	13, 76, 228, 104
@@ -15052,20 +15052,20 @@ SeScreenData_0x3BDB:
 	.long	SeScreenData_0x3BCA
 	.long	SeScreenData_0x3BCA
 	.long	SeScreenData_0x3BCA
-; static record list (4 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x3C32
+; static record list (4 records), read by GraphicsRender_ProcessEntries; end SeCtr_TitleIcon
 ; evidence: SeMenu_EqEdit_SetupHelper1
 SeMenu_EqEdit_SetupHelper1_Records:
 	sd_ptext	0x1c, 16, 114, 5, "C0NTR0LLER"
 	sd_ptext	0x17, 16, 6, 7, "SOUND EDIT"
 	sd_quad	0x09, 4, 4, 68, 16
 	sd_op23	0x5f, 3*40+11
-; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x3C37
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeCtr2_PageFrame
 ; evidence: SeMenu_EqEdit_SetupHelper2
-SeScreenData_0x3C32:
+SeCtr_TitleIcon:
 	sd_op23	0x5f, 3*40+11
 ; static record list (28 records), read by GraphicsRender_ProcessEntries; ends SeScreenData_0x3CE6, SeMenu_FilterEdit_DataBlock5_Records
 ; evidence: SeMenu_FilterEdit_DataBlock5
-SeScreenData_0x3C37:
+SeCtr2_PageFrame:
 	sd_ctext	0x07, 6, 71*40+7, "__"
 	sd_ctext	0x07, 5, 73*40+0, "\020"
 	sd_ctext	0x07, 5, 73*40+39, "\021"
@@ -15119,14 +15119,14 @@ SeScreenData_0x3D36:
 	sd_quad	0x22, 209, 218, 230, 238
 	sd_quad	0x01, 89, 228, 110, 228
 	sd_quad	0x01, 209, 228, 230, 228
-; bound record list (10 records), read by GraphicsRender_Start; ends SeMenu_FilterEdit_DataBlock5_Data_2, SeScreenData_0x3E60
+; bound record list (10 records), read by GraphicsRender_Start; ends SeCtr2_FunctionNameFields, SeScreenData_0x3E60
 ; evidence: SeMenu_FilterEdit_DataBlock5, SeMenu_EqEdit_Dispatch
 SeScreenData_0x3DD3:
 	sdb_str	0x066c, 0x30, 4, 0x20, SeScreenData_0x3E80, 3, 221*40+31
 	sdb_str	0x066c, 0xc0, 6, 0x20, SeScreenData_0x3E80, 3, 221*40+35
 ; bound record list (8 records), read by GraphicsRender_Start; end SeScreenData_0x3E60
 ; evidence: SeMenu_FilterEdit_DataBlock5
-SeMenu_FilterEdit_DataBlock5_Data_2:
+SeCtr2_FunctionNameFields:
 	sdb_str	0x0661, 0x3f, 0, 0x20, SeScreenData_0x3E8C, 13, 77*40+10
 ; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
 ; evidence: recptrs at SeScreenData_0x3E60
@@ -15146,7 +15146,7 @@ SeScreenData_0x3E2D:
 	sdb_num	0x066b, 0x7f, 0, 0x20, 221*40+16, 3
 ; bound record list (2 records), read by GraphicsRender_Start; end SeScreenData_0x3E55
 ; evidence: SeMenu_EqEdit_DrawTable
-SeScreenData_0x3E37:
+SeCtr2_Part1And2Switches:
 	sdb_str	0x066c, 0x03, 0, 0x20, SeScreenData_0x3E80, 3, 221*40+23
 	sdb_str	0x066c, 0x0c, 2, 0x20, SeScreenData_0x3E80, 3, 221*40+27
 ; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
@@ -15157,7 +15157,7 @@ SeScreenData_0x3E55:
 ; evidence: SeMenu_EqEdit_DefaultPath
 SeScreenData_0x3E60:
 	.long	SeScreenData_0x3E55
-	.long	SeMenu_FilterEdit_DataBlock5_Data_2
+	.long	SeCtr2_FunctionNameFields
 	.long	SeScreenData_0x3E00
 	.long	SeScreenData_0x3E0F
 	.long	SeScreenData_0x3E1E
@@ -15166,12 +15166,12 @@ SeScreenData_0x3E60:
 	.long	SeScreenData_0x3E2D
 ; string table, 3-char cells, indexed by a bound record's value (field +7 of
 ; a bound op 02/07 record; value at most 4 by the record's mask; the table holds 4 cells)
-; evidence: bound op02 record at SeScreenData_0x3E37, bound op02 record at SeScreenData_0x3E46, bound op02 record at SeScreenData_0x3DD3, bound op02 record at SeScreenData_0x3DE2
+; evidence: bound op02 record at SeCtr2_Part1And2Switches, bound op02 record at SeScreenData_0x3E46, bound op02 record at SeScreenData_0x3DD3, bound op02 record at SeScreenData_0x3DE2
 SeScreenData_0x3E80:
 	.ascii	"OFF", " ON", "---", "INV"
 ; string table, 13-char cells, indexed by a bound record's value (field +7 of
 ; a bound op 02/07 record; value at most 64 by the record's mask; the table holds 64 cells)
-; evidence: bound op02 record at SeMenu_FilterEdit_DataBlock5_Data_2, bound op02 record at SeScreenData_0x3E00, bound op02 record at SeScreenData_0x3E0F, bound op02 record at SeScreenData_0x3E1E
+; evidence: bound op02 record at SeCtr2_FunctionNameFields, bound op02 record at SeScreenData_0x3E00, bound op02 record at SeScreenData_0x3E0F, bound op02 record at SeScreenData_0x3E1E
 SeScreenData_0x3E8C:
 	.ascii	"-------------"
 	.ascii	"PITCH BEND   "
@@ -15271,11 +15271,11 @@ SeScreenData_0x4248:
 	.ascii	"DISABLE"
 	.ascii	"ENABLE "
 ; static record list (46 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x441A
-; evidence: SeMenu_PresetManager_Data
+; evidence: SeTonHyb1_DrawStaticScreen
 SeScreenData_0x4256:
 	sd_ctext	0x06, 11, 6*40+32, "PAGE2/3"
 ; static record list (45 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x441A
-; evidence: SeMenu_PresetManager_Data
+; evidence: SeTonHyb1_DrawStaticScreen
 SeScreenData_0x4261:
 	sd_quad	0x09, 101, 58, 197, 72
 	sd_quad	0x1b, 99, 54, 195, 68
@@ -15323,7 +15323,7 @@ SeScreenData_0x4261:
 	sd_quad	0x02, 243, 55, 243, 60
 	sd_quad	0x02, 244, 56, 244, 59
 ; static record list (3 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x4447
-; evidence: SeMenu_PresetManager_Data
+; evidence: SeTonHyb1_DrawStaticScreen
 SeScreenData_0x441A:
 	sd_ptext	0x1c, 19, 114, 5, "TONE DYNAMICS"
 	sd_ptext	0x17, 16, 6, 7, "SOUND EDIT"

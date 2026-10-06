@@ -174,7 +174,7 @@ VoiceChannel_ApplyPitchFlags:
 	ld xix, SeqTrack_ChannelMapIdentity
 	cp (4600:16), 1
 	jr z, VoiceChannel_SelectChannelBank
-	ld xix, MidiSysEx_CC_LookupPartMap_Data
+	ld xix, SeqTrack_ChannelMapSwap10And16
 
 VoiceChannel_SelectChannelBank:
 	ld	a, (xix+iy)
@@ -434,7 +434,7 @@ SoundGen_UpdateAndWriteChannel:
 	jr SoundGen_ApplyChannelParam
 
 SoundGen_SelectChannelTable:
-	ld xix, MidiSysEx_CC_LookupPartMap_Data
+	ld xix, SeqTrack_ChannelMapSwap10And16
 	cp (4600:16), 1
 	jr nz, SoundGen_SelectAltChannelTable
 	ld xix, SeqTrack_ChannelMapIdentity
@@ -1010,10 +1010,10 @@ SMF_Setup_FileUnderflow:
 	jp SMF_FlushAndFinalize
 
 SMF_Setup_WriteLoop:
-	ld xiy, SMF_Setup_WriteLoop_Data
+	ld xiy, SMF_GmSystemOnEvent
 	cp (4324:16), 0
 	jr nz, SMF_Setup_SelectTablePtr
-	ld xiy, SMF_Setup_WriteLoop_Data_2
+	ld xiy, SMF_GmSystemOffEvent
 
 SMF_Setup_SelectTablePtr:
 	ld xix, (4376:16)
@@ -1070,7 +1070,7 @@ SMF_ScanAndProcessChannel:
 	ld b, l
 	sla l, 1
 	push xix
-	ld xix, SMF_ScanAndProcessChannel_Data
+	ld xix, SMF_PartRecordOffsetByTrackAssign
 	ld	hl, (xix+hl)
 	pop xix
 	cp hl, 0xffff
@@ -1384,7 +1384,7 @@ SMF_WriteVol_PanAndPitch:
 	xor h, h
 	sla l, 1
 	push xix
-	ld xix, SMF_ScanAndProcessChannel_Data
+	ld xix, SMF_PartRecordOffsetByTrackAssign
 	ld	hl, (xix+hl)
 	pop xix
 	cp hl, 0xffff
@@ -1467,7 +1467,7 @@ SMF_WriteRPN_FineTune:
 	ld xix, 0xf1a0
 	ld	l, (xix+hl)
 	sla hl, 1
-	ld xix, SMF_ScanAndProcessChannel_Data
+	ld xix, SMF_PartRecordOffsetByTrackAssign
 	ld	hl, (xix+hl)
 	pop xix
 	ld xiy, 0xf460
@@ -1569,7 +1569,7 @@ SMF_WriteRPN_CoarseTune:
 	ld xix, 0xf1a0
 	ld	l, (xix+hl)
 	sla l, 1
-	ld xix, SMF_ScanAndProcessChannel_Data
+	ld xix, SMF_PartRecordOffsetByTrackAssign
 	ld	hl, (xix+hl)
 	pop xix
 	ld xiy, 0xf460
@@ -1666,7 +1666,7 @@ SMF_WriteRPN_Transpose:
 	ld xix, 0xf1a0
 	ld	l, (xix+hl)
 	sla l, 1
-	ld xix, SMF_ScanAndProcessChannel_Data
+	ld xix, SMF_PartRecordOffsetByTrackAssign
 	ld	hl, (xix+hl)
 	pop xix
 	ld xiy, 0xf460
@@ -2207,7 +2207,7 @@ SMF_ProgramChange_ProcessPatch:
 	ld l, (4213:16)
 	ld xix, 0xf1a0
 	ld	l, (xix+hl)
-	ld xix, SMF_ProgramChange_ProcessPatch_Data
+	ld xix, SMF_PartIndexByTrackAssign
 	ld	l, (xix+hl)
 	ld (6748:16), l
 	pop xix
@@ -2364,18 +2364,18 @@ SMF_ControlChange_Handler:
 	cp hl, 6:i3
 	jrl nz, SMF_ProcessEventLoop
 	cp (4213:16), 127
-	jrl z, SMF_ProcessEventLoop_Entry
+	jrl z, SMF_ControlChange_SkipEvent
 	ld l, (4214:16)
 	ld a, (4213:16)
 	jrl SMF_ControlChange_ValidateRange
 	ld l, (4214:16)
 	cp l, 0x7f
-	jrl z, SMF_ProcessEventLoop_Entry
+	jrl z, SMF_ControlChange_SkipEvent
 	and l, 0x1f
 	cp l, 0:i3
-	jrl c, SMF_ProcessEventLoop_Entry
+	jrl c, SMF_ControlChange_SkipEvent
 	cp l, 0xf
-	jrl ugt, SMF_ProcessEventLoop_Entry
+	jrl ugt, SMF_ControlChange_SkipEvent
 	jrl SMF_ProcessEventLoop
 	jrl SMF_ProcessEventLoop
 	jrl SMF_ProcessEventLoop
@@ -9350,8 +9350,8 @@ GetDiskFreeSpace_Case4:
 	ld	(xiz), xwa
 
 FileIO_ReadFreeSpaceViaFAT:
-	pushw FDC_Format2HD_FatHead_Tail@hi16
-	pushw FDC_Format2HD_FatHead_Tail@lo16
+	pushw FileIO_ReadFreeSpaceViaFAT_Str_d@hi16
+	pushw FileIO_ReadFreeSpaceViaFAT_Str_d@lo16
 	pushw FileIO_ReadFreeSpaceViaFAT_Str_A@hi16
 	pushw FileIO_ReadFreeSpaceViaFAT_Str_A@lo16
 	call FileOpen
@@ -9398,8 +9398,8 @@ GetVolumeLabel_JumpTable:
 	jrl	GetVolumeLabel_Return
 
 FileIO_ReadVolumeLabelEntry:
-	pushw GetDiskFreeSpace_CaseTable_Tail@hi16
-	pushw GetDiskFreeSpace_CaseTable_Tail@lo16
+	pushw FileIO_ReadVolumeLabelEntry_Str_d@hi16
+	pushw FileIO_ReadVolumeLabelEntry_Str_d@lo16
 	pushw FileIO_ReadVolumeLabelEntry_Str_A@hi16
 	pushw FileIO_ReadVolumeLabelEntry_Str_A@lo16
 	call FileOpen
@@ -9483,8 +9483,8 @@ FileIO_CheckPathAndVolumeLabel:
 
 PathInfo_BuildAndOpen:
 	ld (xsp + 6), 0x0
-	pushw GetVolumeLabel_CaseTable_Tail@hi16
-	pushw GetVolumeLabel_CaseTable_Tail@lo16
+	pushw PathInfo_BuildAndOpen_Str_A@hi16
+	pushw PathInfo_BuildAndOpen_Str_A@lo16
 	lda xwa, (xsp + 10)
 	push xwa
 	call Strcat
@@ -10081,7 +10081,7 @@ SndTable_ByteBlock_ReadOps_Code_Entry:
 SndTable_ByteBlock_ReadOps_Skip2:
 	ldw	hl, 0xffff
 	ret
-ScreenGroup2_Entry:
+DiskStream_ReaderTask:
 	dec	2, xsp
 	push	xiz
 	ld	(0x2357e:24), 1
@@ -10104,23 +10104,23 @@ ScreenGroup2_Entry:
 	extz	xwa
 	cp xwa, (141102:24)
 	jrl	ugt, SndTable_ByteBlock_ReadOps_Code_Join
-SndTable_ByteBlock_ReadOps_Loop:
+DiskStream_ReaderTask_Loop:
 	ld	wa, 2:i3
 	call	TaskMsg_Receive
 	ld	xiz, xhl
 	cpw	(xiz+2), 0
-	jr	z, SndTable_ByteBlock_ReadOps_Skip3
+	jr	z, DiskStream_ReaderTask_Skip3
 	ldw (xiz+2), 65534
 	ld	xwa, xiz
 	ld	xbc, xwa
 	ld	wa, 3:i3
 	call	TaskMsg_Send
 	jr	SndTable_ByteBlock_ReadOps_Code_Join
-SndTable_ByteBlock_ReadOps_Skip3:
+DiskStream_ReaderTask_Skip3:
 	lda	xwa, (xiz+4)
 	calr	SndTable_ByteBlock_ReadOps
 	cp	hl, 0:i3
-	jr	z, SndTable_ByteBlock_ReadOps_Skip4
+	jr	z, DiskStream_ReaderTask_Skip4
 	ldw (xiz), 0
 	ldw (xiz+2), 65534
 	ld	xwa, xiz
@@ -10128,7 +10128,7 @@ SndTable_ByteBlock_ReadOps_Skip3:
 	ld	wa, 3:i3
 	call	TaskMsg_Send
 	jr	SndTable_ByteBlock_ReadOps_Code_Join
-SndTable_ByteBlock_ReadOps_Skip4:
+DiskStream_ReaderTask_Skip4:
 	ldw	(xiz), 1024
 	ld	wa, (xsp+4)
 	extz	xwa
@@ -10151,7 +10151,7 @@ SndTable_ByteBlock_ReadOps_Code_Skip2:
 	ld	wa, (xsp+4)
 	extz	xwa
 	cp xwa, (141102:24)
-	jrl	ule, SndTable_ByteBlock_ReadOps_Loop
+	jrl	ule, DiskStream_ReaderTask_Loop
 SndTable_ByteBlock_ReadOps_Code_Join:
 	ld	(0x2357e:24), 0
 	call	SndTable_ByteBlock_ReadOps_Helper

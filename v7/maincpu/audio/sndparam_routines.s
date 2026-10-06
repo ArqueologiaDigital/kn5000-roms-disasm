@@ -26,7 +26,7 @@
 ; from v10 may cite v10 addresses.
 
 ; A free slot of SNDPARAM_HASH_TABLE has this key (extension_data.s
-; SndParam_InitHashFillLoop_Data is the {key, pointer} pair stamped over the table).  It is the
+; SndParam_EmptyHashSlot is the {key, pointer} pair stamped over the table).  It is the
 ; same number as NakaData_RomEnd, which is why the probes used to spell it that way.
 	.equ SNDPARAM_HASH_EMPTY_KEY, 0x00FFFFFF
 
@@ -488,7 +488,7 @@ SndParam_ReadRegWord_Part_2:
 	ld	de, (xde+bc)
 	ld	a, (xwa + 11)
 	sla	a, 2
-	lda	xbc, (SndParam_ReadRegWord_Data:24)
+	lda	xbc, (SndParam_WordValueListPtrs:24)
 	ld	xwa, (xbc+a)
 	ld	hl, 0:i3
 SndParam_ReadRegScanLoop:
@@ -553,7 +553,7 @@ SndParam_ReadRegAddress:
 	ld	hl, wa
 	ret
 SndParam_ResetDefaultTable:
-	ld	xiy, SndParam_ResetDefaultTable_Data
+	ld	xiy, SndParam_ClearRecordTemplate
 	ld	xix, 0x9638
 	ld	bc, 6:i3
 	ldirw
@@ -590,7 +590,7 @@ SndParam_RegisterEntry_Data_Skip:
 	jr	ge, SndParam_RegisterEntry_Data_Skip4
 	ldfr_berp	a, 230
 SndParam_RegisterEntry_Data_Skip4:
-	ld	xiy, SndParam_ResetDefaultTable_Data
+	ld	xiy, SndParam_ClearRecordTemplate
 	ld	xix, 0x9644
 	ld	bc, 6:i3
 	ldirw
@@ -690,7 +690,7 @@ SndParam_RegisterEntryAlt_Data_Skip:
 	jr	ge, SndParam_RegisterEntryAlt_Data_Skip3
 	ldfr_berp	a, 230
 SndParam_RegisterEntryAlt_Data_Skip3:
-	ld	xiy, SndParam_ResetDefaultTable_Data
+	ld	xiy, SndParam_ClearRecordTemplate
 	ld	xix, 0x9650
 	ld	bc, 6:i3
 	ldirw
@@ -750,7 +750,7 @@ SndParam_RegisterEntryAlt_Data_Join:
 	ret
 SndParam_UpdateEntry_Data:
 	ld	de, bc
-	ld	xiy, SndParam_ResetDefaultTable_Data
+	ld	xiy, SndParam_ClearRecordTemplate
 	ld	xix, 0x965c
 	ld	bc, 6:i3
 	ldirw
@@ -798,7 +798,7 @@ SndParam_RegisterMultiField_Data:
 	ld	(xsp+4), xwa
 	or	xwa, xwa
 	jrl	z, SndParam_RegisterMultiField_Data_Skip2
-	ld	xiy, SndParam_ResetDefaultTable_Data
+	ld	xiy, SndParam_ClearRecordTemplate
 	ld	xix, 0x9668
 	ld	bc, 6:i3
 	ldirw
@@ -894,7 +894,7 @@ SndParam_RegisterBitfield_Data_Part:
 	ld	xiz, (xix+bc)
 	or	xiz, xiz
 	jrl	z, SndParam_RegisterBitfield_Data_Skip3
-	ld	xiy, SndParam_ResetDefaultTable_Data
+	ld	xiy, SndParam_ClearRecordTemplate
 SndParam_RegisterBitfield_Data_Part_2:
 	ld	xix, 0x9674
 	ld	bc, 6:i3
@@ -916,7 +916,7 @@ SndParam_RegisterBitfield_Data_Skip:
 SndParam_RegisterBitfield_Data_Skip2:
 	ld	c, (xwa+11)
 	sla	c, 2
-	lda	xiy, (SndParam_ReadRegWord_Data:24)
+	lda	xiy, (SndParam_WordValueListPtrs:24)
 	ld	xiy, (xiy+c)
 	exts	xde
 	add	xde, xde
@@ -993,7 +993,7 @@ SndParam_RegisterLinked_Data_Skip:
 	jr	ge, SndParam_RegisterLinked_Data_Skip2
 	ldfr_berp	a, 230
 SndParam_RegisterLinked_Data_Skip2:
-	ld	xiy, SndParam_ResetDefaultTable_Data
+	ld	xiy, SndParam_ClearRecordTemplate
 	ld	xix, 0x9680
 SndParam_RegisterLinked_Data_Skip2_Part:
 	ld	bc, 6:i3
@@ -1162,7 +1162,7 @@ SndParam_RegisterLinked2_Data_Skip4:
 	ld	xwa, (xhl)
 	ld	l, (xwa+bc)
 SndParam_RegisterLinked2_Data_Join2:
-	ld	xiy, SndParam_ResetDefaultTable_Data
+	ld	xiy, SndParam_ClearRecordTemplate
 	ld	xix, 0x968c
 	ld	bc, 6:i3
 	ldirw
@@ -1246,7 +1246,7 @@ SndParam_RegisterSimple_Data:
 	ld	xiz, (xbc+wa)
 	or	xiz, xiz
 	jr	z, SndParam_RegisterSimple_Data_Skip3
-	ld	xiy, SndParam_ResetDefaultTable_Data
+	ld	xiy, SndParam_ClearRecordTemplate
 	ld	xix, 0x9698
 	ld	bc, 6:i3
 	ldirw
@@ -1299,7 +1299,7 @@ SndParam_RegisterSimple_Data_Join2:
 	inc	6, xsp
 	ret
 SndParam_DeregisterEntry_Data:
-	ld	xiy, SndParam_ResetDefaultTable_Data
+	ld	xiy, SndParam_ClearRecordTemplate
 	ld	xix, 0x96a4
 	ld	bc, 6:i3
 	ldirw
@@ -1321,7 +1321,7 @@ SndParam_RegisterChained_Data:
 	ld	xiz, (xbc+wa)
 	or	xiz, xiz
 	jrl	z, SndParam_RegisterChained_Data_Skip
-	ld	xiy, SndParam_ResetDefaultTable_Data
+	ld	xiy, SndParam_ClearRecordTemplate
 	ld	xix, 0x96b0
 SndParam_RegisterChained_Data_Part:
 	ld	bc, 6:i3
@@ -1439,7 +1439,7 @@ SndParam_RegisterChained2_Data:
 	ld	xiz, (xbc+wa)
 	or	xiz, xiz
 	jrl	z, SndParam_RegisterChained2_Data_Skip
-	ld	xiy, SndParam_ResetDefaultTable_Data
+	ld	xiy, SndParam_ClearRecordTemplate
 	ld	xix, 0x96bc
 	ld	bc, 6:i3
 	ldirw
@@ -1550,7 +1550,7 @@ SndParam_RegisterComplex_Data:
 	ld	(xsp), xwa
 	or	xwa, xwa
 	jrl	z, SndParam_RegisterComplex_Data_Skip2
-	ld	xiy, SndParam_ResetDefaultTable_Data
+	ld	xiy, SndParam_ClearRecordTemplate
 	ld	xix, 0x96c8
 	ld	bc, 6:i3
 	ldirw
@@ -1714,7 +1714,7 @@ SndParam_RegisterDual_Data:
 	ld	(xsp), xwa
 	or	xwa, xwa
 	jrl	z, SndParam_RegisterDual_Data_Skip2
-	ld	xiy, SndParam_ResetDefaultTable_Data
+	ld	xiy, SndParam_ClearRecordTemplate
 	ld	xix, 0x96d8
 	ld	bc, 6:i3
 	ldirw
@@ -1849,7 +1849,7 @@ SndParam_RegisterOffset_Data:
 	ld	xwa, (xbc+wa)
 	or	xwa, xwa
 	jrl	z, SndParam_RegisterOffset_Data_Skip3
-	ld	xiy, SndParam_ResetDefaultTable_Data
+	ld	xiy, SndParam_ClearRecordTemplate
 	ld	xix, 0x96e4
 	ld	bc, 6:i3
 	ldirw
@@ -1926,7 +1926,7 @@ SndParam_RegisterWide_Data:
 	ld	(xsp+4), xwa
 	or	xwa, xwa
 	jrl	z, SndParam_RegisterWide_Data_Skip4
-	ld	xiy, SndParam_ResetDefaultTable_Data
+	ld	xiy, SndParam_ClearRecordTemplate
 	ld	xix, 0x96f0
 	ld	bc, 6:i3
 	ldirw
@@ -2085,7 +2085,7 @@ SndParam_EncodeFieldSub_Data_Skip2:
 	extz	hl
 	ret
 SndParam_ClampReverbTime:
-	ld	xwa, (SndParam_ClampReverbTime_Data:24)
+	ld	xwa, (SndParam_StyleRecordRamPtr:24)
 	ld	hl, (xwa+8)
 	and	hl, 511
 	cp	hl, 40
@@ -2156,7 +2156,7 @@ SndParam_DecodeFieldAlt_Data_Join:
 	extz	hl
 	ret
 SndParam_ClampDelayTime:
-	ld	xwa, (SndParam_ClampReverbTime_Data:24)
+	ld	xwa, (SndParam_StyleRecordRamPtr:24)
 	ld	hl, (xwa+8)
 	and	hl, 511
 	cp	hl, 40
@@ -2628,7 +2628,7 @@ SndParam_InitHashTable:
 	ld	xwa, xbc
 	lda	xde, (xbc+16376)
 SndParam_InitHashFillLoop:
-	ld	xiy, SndParam_InitHashFillLoop_Data
+	ld	xiy, SndParam_EmptyHashSlot
 	ld	xix, xwa
 	ld	bc, 4:i3
 	ldirw

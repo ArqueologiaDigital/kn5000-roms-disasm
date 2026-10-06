@@ -2311,9 +2311,9 @@ NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea:	.incbin "includes/ge
 ; [nakarest] (InitializeMurai), all class Window.
 IvMesageProc_Data:		.incbin "includes/generated/naka_technichord_strings.bin", 0x173F2, 0x6
 MsgHeader_BuildLoop_PtrTable:	.incbin "includes/generated/naka_technichord_strings.bin", 0x173F8, 0x4	; 2 x 32-bit pointer
-CheckMsg_IncrementCheck_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0x173FC, 0x464
+IvMessage_Catalog_TextTableCol:	.incbin "includes/generated/naka_technichord_strings.bin", 0x173FC, 0x464
 IvMesageProc_PtrTable:		.incbin "includes/generated/naka_technichord_strings.bin", 0x17860, 0x18	; 6 x 32-bit pointer
-IvMessage_GetText_Data:		.incbin "includes/generated/naka_technichord_strings.bin", 0x17878, 0x4
+IvMessage_GetText_Str_Msg:		.incbin "includes/generated/naka_technichord_strings.bin", 0x17878, 0x4
 ; PleaseWait_LangTexts -- 6 x uint32_t: the "please wait" text per help language ("PLEASE WAIT!", "BITTE WARTEN!",
 ; "VEUILLEZ PATIENTER!", "\xa1POR FAVOR, ESPERE!", "PLEASE WAIT!", "SILAHKAN TUNGGU!").
 ; PleaseWait_GetText (ui/drawbar_panel_ui.s) indexes it by the help language byte 0x340e4, fills a buffer of
@@ -2529,7 +2529,7 @@ Sdtecd1_TypeButtonView:	.incbin "includes/generated/naka_technichord_strings.bin
 ; Sdtecd1_ScrollDown_Lookup / _ScrollUp_Lookup find the current value's position with SdpartLookupPartId,
 ; move it by +7 / -7 (two columns of 7; refused past 13 or below 0) and MainLswPut the value found there.
 Sdtecd1_ValueScreenOrder:	.incbin "includes/generated/naka_technichord_strings.bin", 0x17AB6, 0x1E
-Sdtecd1_GetText_Data:		.incbin "includes/generated/naka_technichord_strings.bin", 0x17AD4, 0x6
+Sdtecd1_GetText_Str_TeC1:		.incbin "includes/generated/naka_technichord_strings.bin", 0x17AD4, 0x6
 ; LswOrchestrator_PartNames -- 17 x uint32_t: display text of orchestrator part value 0-16
 ; {" RIGHT 1 ", " RIGHT 2 ", "  LEFT   ", " PART 4  " .. " PART 16 ", "CONDUCTOR"}.
 ; LswOrchestrator (ui/drawbar_panel_ui.s), EVT_GET_LSW_STRING: Strcpy's entry [value at record +4];
@@ -2895,7 +2895,7 @@ MPver_GetText_Str_MPv:		.incbin "includes/generated/naka_technichord_strings.bin
 ;
 ; What it is: the letter C, read from the bit pictures in the C
 ; (upside-down there, because the rows are stored bottom-up). No label
-; of its own in the .s: other files reach it as AcWelcomScreen_RenderBytecode_Data
+; of its own in the .s: other files reach it as WelcomeGlyph_C
 ; (.set in shared/positional_labels.s); it shares the old NakaInst_TOTAL
 ; slice with the strings above it. Drawn by the welcome-script op
 ; handlers: 'C' by op 4 alone and ops 9/12 as the first letter of
@@ -2925,7 +2925,7 @@ MPver_GetText_Str_MPv:		.incbin "includes/generated/naka_technichord_strings.bin
 ;
 ; Typed in naka_technichord_strings.c as uint8_t WelcomeGlyph_C[17][2].
 ; -----------------------------------------------------------------------------
-AcWelcomScreen_RenderBytecode_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0x17F12, 0x22
+WelcomeGlyph_C:	.incbin "includes/generated/naka_technichord_strings.bin", 0x17F12, 0x22
 ; -----------------------------------------------------------------------------
 ; [nakarest_retype] Bitmap_Digit1
 ; Bitmap_Digit1  --  'I', 1 glyph of 16 x 17 pixels, 1 bpp, 34 bytes
@@ -2951,7 +2951,7 @@ Bitmap_Digit1:	.incbin "includes/generated/naka_technichord_strings.bin", 0x17F3
 ;
 ; What it is: the letters L/N/O, read from the bit pictures in the C
 ; (upside-down there, because the rows are stored bottom-up). Glyphs 1
-; and 2 are reached as AcWelcomScreen_RenderBytecode_Data_2 and AcWelcomScreen_RenderBytecode_Data_3 (.set
+; and 2 are reached as WelcomeGlyph_N and WelcomeGlyph_O (.set
 ; in shared/positional_labels.s). Drawn by the welcome-script op
 ; handlers: 'L' by op 6 alone and ops 9/12 in COLO(U)R; 'N' by op 8,
 ; after the I; 'O' by op 5 alone and ops 9/12 twice in COLO(U)R.
@@ -2966,8 +2966,8 @@ Bitmap_Digit1:	.incbin "includes/generated/naka_technichord_strings.bin", 0x17F3
 ; Bitmap_DigitL[3][17][2].
 ; -----------------------------------------------------------------------------
 Bitmap_DigitL:				.incbin "includes/generated/naka_technichord_strings.bin", 0x17F56, 0x22
-AcWelcomScreen_RenderBytecode_Data_2:	.incbin "includes/generated/naka_technichord_strings.bin", 0x17F78, 0x22
-AcWelcomScreen_RenderBytecode_Data_3:	.incbin "includes/generated/naka_technichord_strings.bin", 0x17F9A, 0x22
+WelcomeGlyph_N:	.incbin "includes/generated/naka_technichord_strings.bin", 0x17F78, 0x22
+WelcomeGlyph_O:	.incbin "includes/generated/naka_technichord_strings.bin", 0x17F9A, 0x22
 ; -----------------------------------------------------------------------------
 ; [nakarest_retype] Bitmap_DigitR
 ; Bitmap_DigitR  --  'R', 1 glyph of 16 x 17 pixels, 1 bpp, 34 bytes
@@ -3011,7 +3011,7 @@ Bitmap_DigitD:	.incbin "includes/generated/naka_technichord_strings.bin", 0x17FD
 ; WelcomeScript_Steps_A  --  186 welcome_step_t records x 12 bytes = 2232 bytes
 ;
 ; The welcome-screen animation script used when Get_Region_Code returns
-; 2. Reached by other files as AcWelcomScreenProc_Data (.set in
+; 2. Reached by other files as WelcomeScript_Steps_A (.set in
 ; shared/positional_labels.s).
 ;
 ; Reader: AcWelcomScreenProc (v10/v9 0xf7f4a6, v7 0xf7f0a2), on its init
@@ -3041,13 +3041,13 @@ Bitmap_DigitD:	.incbin "includes/generated/naka_technichord_strings.bin", 0x17FD
 ; Typed in naka_technichord_strings.c as welcome_step_t
 ; WelcomeScript_Steps_A[186].
 ; -----------------------------------------------------------------------------
-AcWelcomScreenProc_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0x18000, 0x8B8
+WelcomeScript_Steps_A:	.incbin "includes/generated/naka_technichord_strings.bin", 0x18000, 0x8B8
 ; -----------------------------------------------------------------------------
 ; [nakarest_retype] WelcomeScript_Steps_B
 ; WelcomeScript_Steps_B  --  191 welcome_step_t records x 12 bytes = 2292 bytes
 ;
 ; The welcome-screen animation script used for every other region code.
-; Reached by other files as AcWelcomScreenProc_Data_2 (.set in
+; Reached by other files as WelcomeScript_Steps_B (.set in
 ; shared/positional_labels.s).
 ;
 ; Reader: AcWelcomScreenProc (v10/v9 0xf7f4a6, v7 0xf7f0a2), on its init
@@ -3077,7 +3077,7 @@ AcWelcomScreenProc_Data:	.incbin "includes/generated/naka_technichord_strings.bi
 ; Typed in naka_technichord_strings.c as welcome_step_t
 ; WelcomeScript_Steps_B[191].
 ; -----------------------------------------------------------------------------
-AcWelcomScreenProc_Data_2:	.incbin "includes/generated/naka_technichord_strings.bin", 0x188B8, 0x8F4
+WelcomeScript_Steps_B:	.incbin "includes/generated/naka_technichord_strings.bin", 0x188B8, 0x8F4
 ; -----------------------------------------------------------------------------
 ; [nakarest_retype] WelcomeScreen_ClearRect
 ; WelcomeScreen_ClearRect  --  4 x s16 {x1, y1, x2, y2} = {0, 0, 319, 239}
@@ -3085,14 +3085,14 @@ AcWelcomScreenProc_Data_2:	.incbin "includes/generated/naka_technichord_strings.
 ; The whole 320 x 240 screen. AcWelcomScreen_Activate (v10/v9 0xf7f595,
 ; v7 0xf7f191) (when CheckNotDrawFlag is clear) turns the LCD off,
 ; passes this rectangle to DrawBox with colour 0, updates the screen and
-; turns the LCD back on (`ld xwa, AcWelcomScreen_Activate_Data; ld bc, 0; call
+; turns the LCD back on (`ld xwa, WelcomeScreen_ClearRect; ld bc, 0; call
 ; DrawBox`; the name is .set in shared/positional_labels.s). The
 ; generator had read its last four bytes 3F 01 EF 00 as a pointer to
 ; Naka_PresentationRootState (0x00ef013f); they are x2 = 319, y2 = 239.
 ;
 ; Typed as int16_t WelcomeScreen_ClearRect[4].
 ; -----------------------------------------------------------------------------
-AcWelcomScreen_Activate_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0x191AC, 0x8
+WelcomeScreen_ClearRect:	.incbin "includes/generated/naka_technichord_strings.bin", 0x191AC, 0x8
 ; -----------------------------------------------------------------------------
 ; [nakarest_retype] WelcomeScript_OpJumpOffsets
 ; WelcomeScript_OpJumpOffsets  --  13 x s16 code offsets, one per op 0..12
@@ -3137,9 +3137,9 @@ AcWelcomScreen_Select_CaseTable:
 ; PsMixer_ControlHelper (v10/v9 0xf7fcb0, v7 0xf7f8ac)
 ; (ui/drawbar_panel_ui.s) loads the word at +2 of a control record,
 ; multiplies it by 4 and indexes this table (lda xbc,
-; PsMixer_ControlHelper_Data -- .set in shared/positional_labels.s -- then an
+; PsMixer_ControlProcTable -- .set in shared/positional_labels.s -- then an
 ; indexed load into xhl), and calls the entry with xbc = 0x1c0000d, the
-; paint message; the same `lda xbc, PsMixer_ControlHelper_Data` occurs at 14
+; paint message; the same `lda xbc, PsMixer_ControlProcTable` occurs at 14
 ; sites in that file. The eleven values (v10/v9) are 0xf80b7d, 0xf81ed2,
 ; 0xf81b56, 0xf80ee9, 0xf815e5, 0xf80b80, 0xf80d21, 0xf812af, 0xf8231b,
 ; 0xf81890, 0xf82222: all inside the AudioCtrl_DataBlock_* stretch of
@@ -3152,7 +3152,7 @@ AcWelcomScreen_Select_CaseTable:
 ;
 ; Typed as uint32_t PsMixer_ControlProcTable[11].
 ; -----------------------------------------------------------------------------
-PsMixer_ControlHelper_Data:
+PsMixer_ControlProcTable:
 	.long	PsMixer_CtlTypeProc0
 	.long	PsMixer_CtlTypeProc1
 	.long	PsMixer_CtlTypeProc2
@@ -3994,8 +3994,8 @@ PsMixer_KnobPointerOffsets:	.incbin "includes/generated/naka_technichord_strings
 ; [nakarest] it; reached through source references PsMixer_CtlTypeProc2_Entry
 ; [nakarest] (ui/drawbar_panel_ui.s: `ld xde, PsMixer_CtlTypeProc2_Entry_Data`).
 PsMixer_CtlTypeProc2_Entry_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1991E, 0x6
-PsMixer_CtlTypeProc1_Data:		.incbin "includes/generated/naka_technichord_strings.bin", 0x19924, 0x4
-PsMixer_CtlTypeProc10_Data:		.incbin "includes/generated/naka_technichord_strings.bin", 0x19928, 0x4
+PsMixer_CtlTypeProc1_Str_Fmts:		.incbin "includes/generated/naka_technichord_strings.bin", 0x19924, 0x4
+PsMixer_CtlTypeProc10_Str_Fmts:		.incbin "includes/generated/naka_technichord_strings.bin", 0x19928, 0x4
 ; IvDrawbar1_DrawbarParamIds -- 9 x u16: sound-parameter number (0..0x3FF) of each of the 9 drawbars, in screen order
 ; IvDrawbar1_LoadVals reads each with SndParam_LookupViaEncode(part, id); IvDrawbar1_OK writes the new
 ; level with MainLswPartPut(part, id, level).  Screen slots 1 and 2 use 0x282 and 0x281 (not in numeric order).
@@ -4178,15 +4178,15 @@ FDemoText_FullSendBitByPart:	.incbin "includes/generated/naka_technichord_string
 ; FDemoText_ProcessOutputChannels (n = 0..2) calls FDemoText_UpdatePartialVoice when this bit is set and the even bit
 ; (FDemoText_FullSendBitByPart: 0x01, 0x04, 0x10) is not.  Both in demo/fdemotext_routines.s.
 FDemoText_PartialResendBit:	.incbin "includes/generated/naka_technichord_strings.bin", 0x19D82, 0x4
-; FDemoText_ByteData_VoiceProbeC_CaseTable -- 7 x int16: the case offsets of FDemoText_ByteData_VoiceProbeC's compiled switch, relative to FDemoText_ByteData_VoiceProbeC_Code
+; FDemoText_ByteData_VoiceProbeC_CaseTable -- 7 x int16: the case offsets of FDemoText_ByteData_VoiceProbeC's compiled switch, relative to FDemoText_ByteData_VoiceProbeC_RequestPartialResendAll
 FDemoText_ByteData_VoiceProbeC_CaseTable:
-	.short	FDemoText_ByteData_VoiceProbeC_Code - FDemoText_ByteData_VoiceProbeC_Code
-	.short	FDemoText_ByteData_VoiceProbeC_Code - FDemoText_ByteData_VoiceProbeC_Code
-	.short	FDemoText_ByteData_VoiceProbeC_Case3 - FDemoText_ByteData_VoiceProbeC_Code
-	.short	FDemoText_ByteData_VoiceProbeC_Case3 - FDemoText_ByteData_VoiceProbeC_Code
-	.short	FDemoText_ByteData_VoiceProbeC_Case3 - FDemoText_ByteData_VoiceProbeC_Code
-	.short	FDemoText_ByteData_VoiceProbeC_Case3 - FDemoText_ByteData_VoiceProbeC_Code
-	.short	FDemoText_ByteData_VoiceProbeC_Case7 - FDemoText_ByteData_VoiceProbeC_Code
+	.short	FDemoText_ByteData_VoiceProbeC_RequestPartialResendAll - FDemoText_ByteData_VoiceProbeC_RequestPartialResendAll
+	.short	FDemoText_ByteData_VoiceProbeC_RequestPartialResendAll - FDemoText_ByteData_VoiceProbeC_RequestPartialResendAll
+	.short	FDemoText_ByteData_VoiceProbeC_Case3 - FDemoText_ByteData_VoiceProbeC_RequestPartialResendAll
+	.short	FDemoText_ByteData_VoiceProbeC_Case3 - FDemoText_ByteData_VoiceProbeC_RequestPartialResendAll
+	.short	FDemoText_ByteData_VoiceProbeC_Case3 - FDemoText_ByteData_VoiceProbeC_RequestPartialResendAll
+	.short	FDemoText_ByteData_VoiceProbeC_Case3 - FDemoText_ByteData_VoiceProbeC_RequestPartialResendAll
+	.short	FDemoText_ByteData_VoiceProbeC_Case7 - FDemoText_ByteData_VoiceProbeC_RequestPartialResendAll
 FDemoText_InitFuncTable:	.incbin "includes/generated/naka_technichord_strings.bin", 0x19d94, 0x10
 ; FDemoText_MarkupTagTable -- word 0 (tag-name pointer, "BR") of a 15 x {u32 tag name, u32 handler} table: 14 feature-demo
 ; markup tags (BR, CENTER, /CENTER, FONT, /FONT, IMG, SHOW, EXEC, ACT, /ACT, PRESENTATION, /PRESENTATION, ACTION, /ACTION;
@@ -4343,10 +4343,10 @@ FDemoText_ScreenClipRect:	.incbin "includes/generated/naka_technichord_strings.b
 ; [nakarest] strings each padded with 0xFF, then "<PRESENTATION>" -- the ROM bytes.  Readers: source
 ; [nakarest] references StrInstantStart (ui_widgets/naka_screen_dispatch.s: `.long
 ; [nakarest] Presentation_RootEntry`); 2
-; [nakarest] data words in AcWelcomScreenProc_Data (at 0xe9e268, 0xe9e328), which is read by
-; [nakarest] AcWelcomScreenProc (ui/drawbar_panel_ui.s: `ld xwa, AcWelcomScreenProc_Data`); 2 data
-; [nakarest] words in AcWelcomScreenProc_Data_2 (at 0xe9eb20, 0xe9ebe0), which is read by
-; [nakarest] AcWelcomScreenProc (ui/drawbar_panel_ui.s: `ld xwa, AcWelcomScreenProc_Data_2`).
+; [nakarest] data words in WelcomeScript_Steps_A (at 0xe9e268, 0xe9e328), which is read by
+; [nakarest] AcWelcomScreenProc (ui/drawbar_panel_ui.s: `ld xwa, WelcomeScript_Steps_A`); 2 data
+; [nakarest] words in WelcomeScript_Steps_B (at 0xe9eb20, 0xe9ebe0), which is read by
+; [nakarest] AcWelcomScreenProc (ui/drawbar_panel_ui.s: `ld xwa, WelcomeScript_Steps_B`).
 ; [nakarest] 2026-10-03: 0x00EA00nn is also the NAKA id of view nn of slot 0xEA (Drawbar, DrawPerc4,
 ; [nakarest] DrawPerc223, DrawSetting ...), and the code once listed here as reading this span --
 ; [nakarest] RegTitle's view argument, and `ld xwa, ...` before SendEvent / ApPostEvent -- loaded
@@ -4355,7 +4355,7 @@ FDemoText_ScreenClipRect:	.incbin "includes/generated/naka_technichord_strings.b
 ; [nakarest] words above are view ids too is not settled.
 Presentation_RootEntry:				.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0B2, 0x4	; 0x013F, 0x00EF = 319, 239
 Seq_InitVoiceStructures_Str_Empty:		.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0B6, 0x2	; "", 0xFF pad: Seq_InitVoiceStructures' Strcpy source
-Seq_CopyResourcePtrs_Data:			.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0B8, 0x2	; "", 0xFF pad: the pointer Seq_CopyResourcePtrs fills its table with
+Seq_CopyResourcePtrs_Str_Empty:			.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0B8, 0x2	; "", 0xFF pad: the pointer Seq_CopyResourcePtrs fills its table with
 Presentation_TagStrTable:			.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0BA, 0x10	; "<PRESENTATION>", NUL, 0xFF pad
 Seq_LoadResource_Proceed_Str_PRESENTATION:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0CA, 0x10	; "</PRESENTATION>", NUL
 ; Seq_LoadDisplayResource_NameBufInit -- 1 x char: byte 0 of a char[32] = "" (32 zero bytes); the 31 bytes after
@@ -4402,15 +4402,15 @@ FDemo_LoadRegsAndPostEvent_Str_FEATURE:	.incbin "includes/generated/naka_technic
 ; [nakarest] Text (4 B at 0xea00a8), first string "rb"; no registered NAKA table points into it;
 ; [nakarest] reached through source references FDemo_FileOpen_DoOpen (demo/file_demo_proc.s: `ld
 ; [nakarest] xbc, 0x00ea00a8`).
-FDemo_FileOpen_DoOpen_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A15A, 0x4
+FDemo_FileOpen_DoOpen_Str_rb:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A15A, 0x4
 ; [nakarest] naka_technichord_strings+0x1a15e  +0x1a15e..+0x1a18c (0xea00ac, 46 B)
 ; [nakarest] purpose not established: layout of 46 B at 0xea00ac not derived; readers below
 ; [nakarest] Readers: source references Demo_SelectEntry_LoadPattern (demo/file_demo_proc.s:
-; [nakarest] `lda xbc, (Demo_SelectEntry_LoadPattern_Data:24)`).
-Demo_SelectEntry_LoadPattern_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A15E, 0x1
+; [nakarest] `lda xbc, (DemoSong_EntryCol:24)`).
+DemoSong_EntryCol:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A15E, 0x1
 ; DemoSong_TitleCol -- 1 x uint8_t: 0xE1 (TITLE_DEMOSTYLE), the title byte of demo song 0 and the base of the
 ; title column of the 23 x {u8 entry, u8 title} demo song order that starts 1 byte earlier at
-; Demo_SelectEntry_LoadPattern_Data. Demo_SelectEntry_DrawSecondary reads [2*DEMO_CURRENT_SONG] here
+; DemoSong_EntryCol. Demo_SelectEntry_DrawSecondary reads [2*DEMO_CURRENT_SONG] here
 ; and passes it to UI_PostModeChangeEvent (EVT_CHANGE_TITLE to TITLE_PS + byte).
 DemoSong_TitleCol:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A15F, 0x1
 ; DemoSong_OrderFromSong1 -- 22 x {u8 entry, u8 title}: demo songs 1-22 of the auto-demo order
@@ -4429,7 +4429,7 @@ Demo_PartBitMask:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1
 FileIO_TypeProbeOrder:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A1AC, 0xA
 ; FileIO_RegionSignatures -- word 0 (signature pointer, "HK") of an 8 x {u32 signature, u16 file offset, u16 length} table,
 ; one record per file region 0-7. FileIO_CheckRegionSignature (demo/file_demo_proc.s) indexes it with region x 8: it seeks to
-; the offset (FileIO_FileSigRecs_OffsetCol = this + 4), then compares `length` bytes (FileIO_CheckSig_LoopTest_Data =
+; the offset (FileIO_FileSigRecs_OffsetCol = this + 4), then compares `length` bytes (FileIO_FileSigRecs_LengthCol =
 ; this + 6) read from the file with the signature, e.g. record 4 = the 16 bytes "KN5000 SOUND RAM" at offset 0.
 FileIO_RegionSignatures:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A1B6, 0x4
 ; FileIO_FileSigRecs_OffsetCol -- 1 x uint16_t = 4: file offset of signature 0 ("HK" at byte 4); the base of the
@@ -4440,14 +4440,14 @@ FileIO_FileSigRecs_OffsetCol:	.incbin "includes/generated/naka_technichord_strin
 ; [nakarest] naka_technichord_strings+0x1a1bc  +0x1a1bc..+0x1a1f1 (0xea010a, 53 B)
 ; [nakarest] purpose not established: layout of 53 B at 0xea010a not derived; readers below
 ; [nakarest] Readers: source references FileIO_CheckSig_LoopTest (demo/file_demo_proc.s: `lda
-; [nakarest] xbc, (FileIO_CheckSig_LoopTest_Data:24)`).
-FileIO_CheckSig_LoopTest_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A1BC, 0x35
+; [nakarest] xbc, (FileIO_FileSigRecs_LengthCol:24)`).
+FileIO_FileSigRecs_LengthCol:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A1BC, 0x35
 ; [nakarest] Presentation_TagTableEnd  +0x1a1f1..+0x1a224 (0xea013f, 51 B)
 ; [nakarest] Text (51 B at 0xea013f), first string ""; no registered NAKA table points into it;
 ; [nakarest] reached through 1 data word in Kubo_FunctionNameTable_408_EndName (at 0xe2a9a2); 7 data
-; [nakarest] words in FileIO_CheckSig_LoopTest_Data (at 0xea013c, 0xea0134, 0xea012c), which is
+; [nakarest] words in FileIO_FileSigRecs_LengthCol (at 0xea013c, 0xea0134, 0xea012c), which is
 ; [nakarest] read by FileIO_CheckSig_LoopTest (demo/file_demo_proc.s: `lda xbc,
-; [nakarest] (FileIO_CheckSig_LoopTest_Data:24)`); 1 data word in FileIO_RegionSignatures
+; [nakarest] (FileIO_FileSigRecs_LengthCol:24)`); 1 data word in FileIO_RegionSignatures
 ; [nakarest] (at 0xea0104), which is read by FileIO_CheckSig_ReadLoop (demo/file_demo_proc.s:
 ; [nakarest] `lda xbc, (FileIO_RegionSignatures:24)`).
 Presentation_TagTableEnd:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A1F1, 0x33
@@ -5302,17 +5302,17 @@ SLSrcBankList_FuncBody_Str_ALL:			.incbin "includes/generated/naka_technichord_s
 ; switch, the divisor that gives the bank of a position, and the C argument of its draw helpers; the
 ; position limit is 80 (the byte after it).
 SingleLoadSrc_PanelMemBankSize:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA04, 0x2
-SLSrcBankList_FuncBody_Data_2:			.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA06, 0x4
+SingleLoadSrc_PanelMemEntryCount:			.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA06, 0x4
 SLSrcBankList_FuncBody_Entry_Str_Colon:		.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA0A, 0x2	; ":"
 SLSrcBankList_FuncBody_Entry_Str_Colon_2:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA0C, 0x4	; ": "
 SLSrcBankList_FuncBody_Entry_Str_Colon_3:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA10, 0x4	; ": "
 SLSrcBankList_FuncBody_Entry_Str_ALL:		.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA14, 0x12	; "      ALL       "
 ; SLSrcComposer_RowsPerColumn -- 1 x uint8_t = 10 (+ 0xFF pad): rows per column of the single-load COMPOSER source list
 ; The mode-2 routine of SLSrc_HandleShow_PtrTable (the one after SLSrcBankList_FuncBody_Helper6_Epilogue) lays out its 30 items
-; (SLSrcBankList_FuncBody_Data_3, the next byte pair) as columns of 10: event parameter 5 moves the cursor (RAM 0x89FE) by +-10,
+; (SingleLoadSrc_ComposerEntryCount, the next byte pair) as columns of 10: event parameter 5 moves the cursor (RAM 0x89FE) by +-10,
 ; parameter 6 by +-1 inside a column (index mod 10); the value is also passed in C to the list helpers.
 SLSrcComposer_RowsPerColumn:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA26, 0x2
-SLSrcBankList_FuncBody_Data_3:			.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA28, 0x2
+SingleLoadSrc_ComposerEntryCount:			.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA28, 0x2
 SLSrcBankList_FuncBody_Entry_Str_Colon_4:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA2A, 0x4	; ": "
 SLSrcBankList_FuncBody_Entry_Str_Colon_5:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA2E, 0x4	; ": "
 ; [nakarest] Str_AllOption_EA0980  +0x1aa32..+0x1aa64 (0xea0980, 50 B)
@@ -5323,7 +5323,7 @@ Str_AllOption_EA0980:			.incbin "includes/generated/naka_technichord_strings.bin
 ; switch, the divisor that gives the bank of a position, and the C argument of its draw helpers; the
 ; position limit is 168 (the byte after it).
 SingleLoadSrc_SoundMemPageSize:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA44, 0x2
-SLSrcBankList_FuncBody_Data_4:		.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA46, 0x2
+SingleLoadSrc_SoundMemEntryCount:		.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA46, 0x2
 SLSrc_HandleShow_PtrTable:		.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA48, 0x14	; 5 x 32-bit pointer
 SLDstBankList_FuncBody_Str_Colon:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA5C, 0x4	; ": "
 SLDstBankList_FuncBody_Str_Colon_2:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA60, 0x4	; ": "

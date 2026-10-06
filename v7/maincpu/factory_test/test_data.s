@@ -18,7 +18,7 @@ Hama_ApFuncTable_429:	.byte	0x6c, 0xf0
 HamaStr_Empty:	aligned_string ""
 HamaStr_hamadeb:	aligned_string "hamadeb"
 HamaStr_HamaPage1Func:	aligned_string "HamaPage1Func"
-HamaList_Entry:
+NakaPropTbl_HamaList:
 	.long HamaList_EntryStr_Empty
 HamaList_EntryStr_Empty:	aligned_string ""
 InitializeHama_Data_2:
@@ -28,7 +28,7 @@ InitializeHama_Data_2:
 	.byte 0x55, 0x00, 0x60, 0x01
 	.byte 0x30, 0x00, 0x00, 0x00, 0xb2, 0xf0, 0xe1, 0x00
 	.long HamaList_HeaderStr_Empty
-	.long HamaList_Entry
+	.long NakaPropTbl_HamaList
 	.zero 24
 HamaList_HeaderStr_Empty:
 	aligned_string	""

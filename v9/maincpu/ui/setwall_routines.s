@@ -74,19 +74,19 @@ SqTrAs_CursorPrevTrack_Skip2:
 NoRef_SetWall_SlotMap20x2:
 	.byte 0x00, 0x02, 0x00, 0x0a, 0x03, 0x04, 0x05, 0x06, 0x0b, 0x08, 0x09, 0x01, 0x13, 0x0c, 0x0d, 0x0e, 0x0f, 0x07, 0x11, 0x12
 	.byte 0x02, 0x0b, 0x01, 0x04, 0x05, 0x06, 0x07, 0x11, 0x09, 0x0a, 0x03, 0x08, 0x0d, 0x0e, 0x0f, 0x10, 0x10, 0x12, 0x13, 0x0c
-SetWall_InlineCodeBlock_Sub:
+SqTrAs_PartInc_UpdateOkSw:
 	call	NoRef_SetWall_SlotMap20x2_Helper
 	ret
 NoRef_SetWall_SlotMap20x2_Helper:
 	ld	a, (0x2873:16)
 	cp	a, 13
-	jr	z, SetWall_InlineCodeBlock_Sub_Skip
+	jr	z, NoRef_SetWall_SlotMap20x2_Helper_Skip
 	cp	a, 16
-	jr	z, SetWall_InlineCodeBlock_Sub_Skip
+	jr	z, NoRef_SetWall_SlotMap20x2_Helper_Skip
 	cp	a, 15
-	jr	z, SetWall_InlineCodeBlock_Sub_Skip
+	jr	z, NoRef_SetWall_SlotMap20x2_Helper_Skip
 	cp	a, 14
-	jr	z, SetWall_InlineCodeBlock_Sub_Skip
+	jr	z, NoRef_SetWall_SlotMap20x2_Helper_Skip
 	call	CDlikeSwTtl_SendStartEvt
 	ld	xhl, 0xf1a0
 	xor	w, w
@@ -94,17 +94,17 @@ NoRef_SetWall_SlotMap20x2_Helper:
 	ld	iy, wa
 	ld	a, (xhl+iy)
 	cp a, 13
-	jr	z, SetWall_InlineCodeBlock_Sub_Skip
+	jr	z, NoRef_SetWall_SlotMap20x2_Helper_Skip
 	cp	a, 16
-	jr	z, SetWall_InlineCodeBlock_Sub_Skip
+	jr	z, NoRef_SetWall_SlotMap20x2_Helper_Skip
 	cp	a, 15
-	jr	z, SetWall_InlineCodeBlock_Sub_Skip
+	jr	z, NoRef_SetWall_SlotMap20x2_Helper_Skip
 	cp	a, 14
-	jr	z, SetWall_InlineCodeBlock_Sub_Skip
-	jr	SetWall_InlineCodeBlock_Sub_Return
-SetWall_InlineCodeBlock_Sub_Skip:
+	jr	z, NoRef_SetWall_SlotMap20x2_Helper_Skip
+	jr	NoRef_SetWall_SlotMap20x2_Helper_Return
+NoRef_SetWall_SlotMap20x2_Helper_Skip:
 	call	CDlikeSwTtl_SendStartEvtArg1
-SetWall_InlineCodeBlock_Sub_Return:
+NoRef_SetWall_SlotMap20x2_Helper_Return:
 	ret
 MiddleFuncCall_DispatchData_Helper:
 	call	NoRef_SetWall_SlotMap20x2_Helper

@@ -2203,15 +2203,15 @@ Data_InOutGridDispatch_CaseTable:
 ; Data_InOutGridDispatch_CaseTable_2[9].
 ; -----------------------------------------------------------------------------
 Data_InOutGridDispatch_CaseTable_2:
-	.short	Data_InOutGridDispatch_Code_2 - Data_InOutGridDispatch_Code_2
-	.short	InOutGridCheck_DecAutoPlayChordInput - Data_InOutGridDispatch_Code_2
-	.short	InOutGridCheck_DecVelocityInputMode - Data_InOutGridDispatch_Code_2
-	.short	InOutGridCheck_DecVelocityOffsetOrFixed - Data_InOutGridDispatch_Code_2
-	.short	MdPreset_ReturnZero2 - Data_InOutGridDispatch_Code_2
-	.short	InOutGridCheck_DecTechniChordOutput - Data_InOutGridDispatch_Code_2
-	.short	InOutGridCheck_DecTransposeOutput - Data_InOutGridDispatch_Code_2
-	.short	InOutGridCheck_DecDrumPatternOutput - Data_InOutGridDispatch_Code_2
-	.short	InOutGridCheck_Switch3_Case8 - Data_InOutGridDispatch_Code_2
+	.short	InOutGridCheck_DecRight1Input - InOutGridCheck_DecRight1Input
+	.short	InOutGridCheck_DecAutoPlayChordInput - InOutGridCheck_DecRight1Input
+	.short	InOutGridCheck_DecVelocityInputMode - InOutGridCheck_DecRight1Input
+	.short	InOutGridCheck_DecVelocityOffsetOrFixed - InOutGridCheck_DecRight1Input
+	.short	MdPreset_ReturnZero2 - InOutGridCheck_DecRight1Input
+	.short	InOutGridCheck_DecTechniChordOutput - InOutGridCheck_DecRight1Input
+	.short	InOutGridCheck_DecTransposeOutput - InOutGridCheck_DecRight1Input
+	.short	InOutGridCheck_DecDrumPatternOutput - InOutGridCheck_DecRight1Input
+	.short	InOutGridCheck_Switch3_Case8 - InOutGridCheck_DecRight1Input
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Data_InOutGridDispatch_CaseTable_3
 ; Data_InOutGridDispatch_CaseTable_3 -- jump table of a compiled
@@ -2223,15 +2223,15 @@ Data_InOutGridDispatch_CaseTable_2:
 ; Data_InOutGridDispatch_CaseTable_3[9].
 ; -----------------------------------------------------------------------------
 Data_InOutGridDispatch_CaseTable_3:
-	.short	Data_InOutGridDispatch_Code - Data_InOutGridDispatch_Code
-	.short	InOutGridCheck_IncAutoPlayChordInput - Data_InOutGridDispatch_Code
-	.short	InOutGridCheck_IncVelocityInputMode - Data_InOutGridDispatch_Code
-	.short	InOutGridCheck_IncVelocityOffsetOrFixed - Data_InOutGridDispatch_Code
-	.short	MdPreset_ReturnZero2 - Data_InOutGridDispatch_Code
-	.short	InOutGridCheck_IncTechniChordOutput - Data_InOutGridDispatch_Code
-	.short	InOutGridCheck_IncTransposeOutput - Data_InOutGridDispatch_Code
-	.short	InOutGridCheck_IncDrumPatternOutput - Data_InOutGridDispatch_Code
-	.short	InOutGridCheck_IncAutoPlayChordOutput - Data_InOutGridDispatch_Code
+	.short	InOutGridCheck_IncRight1Input - InOutGridCheck_IncRight1Input
+	.short	InOutGridCheck_IncAutoPlayChordInput - InOutGridCheck_IncRight1Input
+	.short	InOutGridCheck_IncVelocityInputMode - InOutGridCheck_IncRight1Input
+	.short	InOutGridCheck_IncVelocityOffsetOrFixed - InOutGridCheck_IncRight1Input
+	.short	MdPreset_ReturnZero2 - InOutGridCheck_IncRight1Input
+	.short	InOutGridCheck_IncTechniChordOutput - InOutGridCheck_IncRight1Input
+	.short	InOutGridCheck_IncTransposeOutput - InOutGridCheck_IncRight1Input
+	.short	InOutGridCheck_IncDrumPatternOutput - InOutGridCheck_IncRight1Input
+	.short	InOutGridCheck_IncAutoPlayChordOutput - InOutGridCheck_IncRight1Input
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] InOutGridCheck_CaseTable
 ; InOutGridCheck_CaseTable -- jump table of a compiled `switch` in

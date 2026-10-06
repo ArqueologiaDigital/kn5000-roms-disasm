@@ -85,3 +85,24 @@ on-off, rotary speed, fade level, mic level, MICSNS); the 2^21 / 2^22 / 2^23 FP 
 that select it) holds the styles in category order. `Detect_Region_Code` / `Get_Region_Code` keep their names
 (the region code is the real thing, and the main-CPU trees share the routine). The website pages and the
 living scripts that quoted the old names were updated; dated notes keep them.
+
+**Generic-label batches g1-g6** (`proposals-2026-10-07-generic-g{1..6}.json`): every v10 `_Data` / `_Code` /
+`_Entry` / `_Part` / `_Sub` / `_Block` / `_Wrapper` / `_Stub` / `_Tail` / `_Thunk` label that has a named
+referrer and is not internal flow (477 labels referenced only within 400 lines of their own file were left
+out), 543 in all. 384 renamed. The batches were stopped early at the owner's request, and each agent wrote out what
+it had finished: 100 records are "not reviewed (stopped early)", mostly g5 (79) and g3 (17). The 26
+`PartName6_PartN` / `PartName4_PartN` proposals were not applied: those names already say what they are and
+match the `_Part` suffix rule only by accident. g6's evidence has 14 line citations off by one or two lines
+(its own final check; the quoted instructions are right). Leads, not acted on:
+- alias merges: seven `SndParam_*_Data` labels sit on the address of a semantic label (`SndParam_Registry`,
+  `SndParam_ReadHandlers`, ...; g6 `merge_into`), as do `AcChordBoxProc_Entry` and `DirmdEmulator_Entry`;
+- wrong names: `SndParam_ClampReverbTime` / `ClampDelayTime` clamp the tempo to 40..300;
+  `DkMdlyPly_SendAudioCmd` returns the index of the lowest set bit; `MidiStream_DispatchLoop_Data`'s buffer is
+  the PanelEvent_Post queue; `MainSysControl`'s siblings follow the INITIAL SETTING list (Entry4 = PANEL MEMORY);
+- spelling: `.byte 0xdc,0x38,0xff,0x07` = `minc1_16 ix, 0x7ff`; `Sprintf` loads 10 and 8 as `(P2CR:8)` /
+  `(P2:8)`; `MidiStream_InitFromLookup_Data`'s 16 pointers are `.byte`; `AccPatch_SeqDispatch_Entry` holds 12
+  bytes of 0x90 fill as six `adc wa,(xwa)`; misframed code near `Param_SignExtendReturn_Code3` (0xFEEE47);
+  `AccFill_AdvanceAndCheck_Code` is a bar-length table; HD-AE5000 veneers still use 0x280008 / 0x280010;
+- reopen: c9's `SendEpilogue_Data_Case5` (parameter 0x4005 is the fade level) and c4's GS chorus cases 1-7;
+- 0xFFFEED-0xFFFEEF are configuration bytes (payload transfer on, try the 0x3E0000 update image first,
+  main-loop hooks off), identical in v7 / v9 / v10.

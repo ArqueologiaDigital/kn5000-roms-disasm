@@ -499,7 +499,7 @@ FDemo_FileOpenAndProcess:
 	jr	FDemo_FileOpen_Exit
 FDemo_FileOpen_DoOpen:
 	lda	xwa, (xsp+10)
-	ld xbc, FDemo_FileOpen_DoOpen_Data
+	ld xbc, FDemo_FileOpen_DoOpen_Str_rb
 	call FileIO_OpenWithMode
 	ld (xsp+4), hl
 	cpw (xsp+4), 0x0000
@@ -833,7 +833,7 @@ Demo_SelectEntry_LoadPattern:
 	ld a, (DEMO_CURRENT_SONG:16)
 	extz wa
 	add wa, wa
-	lda xbc, (Demo_SelectEntry_LoadPattern_Data:24)
+	lda xbc, (DemoSong_EntryCol:24)
 	ld	(DEMO_ACTIVE_ENTRY:16), (xbc+wa)
 	ret
 
@@ -1439,7 +1439,7 @@ FileIO_CheckSig_LoopTest:
 	ld a, (xsp + 4)
 	extz wa
 	sla wa, 3
-	lda xbc, (FileIO_CheckSig_LoopTest_Data:24)
+	lda xbc, (FileIO_FileSigRecs_LengthCol:24)
 	ld de, iz
 	cp	de, (xbc+wa)
 	jr c, FileIO_CheckSig_ReadLoop
@@ -3523,7 +3523,7 @@ SingleLoad_LoadSoundMemEntry_Join5:
 	extz	wa
 	ld	c, (xsp+14)
 	extz	bc
-	call	TmFlashWrite_Block1
+	call	PreTmLoadEntry
 	lda	xwa, (1966080:24)
 	add	xwa, (xsp+0x6)
 	ld	bc, (xsp+10)
@@ -3536,7 +3536,7 @@ SingleLoad_LoadSoundMemEntry_Join5:
 	ld	c, (xsp+14)
 	extz	bc
 	ld	de, iz
-	call	TmFlashWrite_Block1_Entry
+	call	PostTmLoadEntry
 SingleLoad_LoadSoundMemEntry_Skip19:
 	call	FileIO_CloseHandle
 	ld	hl, iz
@@ -3618,7 +3618,7 @@ SingleLoad_LoadSoundMemBank_Join6:
 	jr	lt, SingleLoad_LoadSoundMemBank_Skip24
 	ld	a, (xsp+10)
 	extz	wa
-	call	TmFlashWrite_Block1_Return
+	call	PostTmLoadEntry_Return
 	lda	xwa, (1966080:24)
 	add	xwa, (xsp+0x4)
 	ld	bc, (xsp+8)
@@ -8389,7 +8389,7 @@ FileIO_DiskRemoved:
 	ld	(MEDLEY_PLAY_FLAG:16), 0
 	calr	ResetProgressIndication
 	call	FileIO_ValidateRecord_Return
-	call	GetAprStatus_Entry
+	call	Xapr_GetPresentFlag
 	cp	l, 0:i3
 	ret	nz
 	ld	xwa, 6291458

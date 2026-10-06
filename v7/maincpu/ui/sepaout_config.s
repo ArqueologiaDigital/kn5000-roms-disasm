@@ -19,10 +19,10 @@ RESOURCE_INFO_HANDLER_OFFSETS:
 
 ; SepaOut configuration data (826 bytes, compiled from sepaout_config.c)
 SepaOut_Config_0:	.incbin "includes/generated/sepaout_config.bin", 0x0, 0x4
-SetSepaOutMode_Data:	.incbin "includes/generated/sepaout_config.bin", 0x4, 0x4
-SetSepaOutMode_Data_2:	.incbin "includes/generated/sepaout_config.bin", 0x8, 0x4
-SetSepaOutMode_Data_3:	.incbin "includes/generated/sepaout_config.bin", 0xC, 0x4
-SetSepaOutMode_Data_4:	.incbin "includes/generated/sepaout_config.bin", 0x10, 0x4
+SepaOut_Msg_CC9B_Value32:	.incbin "includes/generated/sepaout_config.bin", 0x4, 0x4
+SepaOut_Msg_CC9D_Value0:	.incbin "includes/generated/sepaout_config.bin", 0x8, 0x4
+SepaOut_Msg_CC9D_Value1:	.incbin "includes/generated/sepaout_config.bin", 0xC, 0x4
+SepaOut_Msg_CC9D_Value2:	.incbin "includes/generated/sepaout_config.bin", 0x10, 0x4
 SqSngSelTtlFunc_CaseTable:
 	.short	SqTrAs_CondCheck - SqTrAs_CondCheck
 	.short	SqSngSelTtlFunc_OnTitleOld - SqTrAs_CondCheck
@@ -51,7 +51,7 @@ SqTrAsPsTtlFunc_CaseTable:
 	.short	SqTrAsPsTtl_ReturnZero - SqTrAsPsTtl_Dispatch
 	.short	SqTrAsPsTtl_ReturnZero - SqTrAsPsTtl_Dispatch
 	.short	SqTrAsPsTtl_ReturnZero - SqTrAsPsTtl_Dispatch
-SetWall_ReturnZero_Data:			.incbin "includes/generated/sepaout_config.bin", 0x44, 0xE
+CDlike_KeepTitleCaseMap:			.incbin "includes/generated/sepaout_config.bin", 0x44, 0xE
 SqTrAsPsTtl_CaseF_CaseTable:
 	.short	CDlike_ExitModeUnlessKeepTitle_OnKeepTitle - SqTrAsPsTtl_CaseF_Skip
 	.short	SqTrAsPsTtl_CaseF_Skip - SqTrAsPsTtl_CaseF_Skip
@@ -69,8 +69,8 @@ DkMdlyPlyTtlFunc_CaseTable:
 	.short	DkMdlyPly_ReturnZero - DkMdlyPlyTtl_Dispatch
 	.short	DkMdlyPly_ReturnZero - DkMdlyPlyTtl_Dispatch
 	.short	DkMdlyPly_ReturnZero - DkMdlyPlyTtl_Dispatch
-DkMdlyPly_SendAudioCmd_Data:			.incbin "includes/generated/sepaout_config.bin", 0x6E, 0x20
-DkMdlyPly_HandleResult_Data:			.incbin "includes/generated/sepaout_config.bin", 0x8E, 0x40
+DkMdlyPly_BitMaskByIndex:			.incbin "includes/generated/sepaout_config.bin", 0x6E, 0x20
+DkMdlyPly_PartIndexTable:			.incbin "includes/generated/sepaout_config.bin", 0x8E, 0x40
 DisplayMode_DispatchEvents_CaseTable:
 	.short	DisplayMode_BatchEventSend - DisplayMode_BatchEventSend
 	.short	DisplayMode_DispatchEvents_OnTitleDpdoc - DisplayMode_BatchEventSend
@@ -195,7 +195,7 @@ SqTrSelTtlFunc_CaseTable:
 	.short	SqTrSelTtl_ReturnZero - SqTrSelTtl_Dispatch
 	.short	SqTrSelTtl_ReturnZero - SqTrSelTtl_Dispatch
 	.short	SqTrSelTtl_ReturnZero - SqTrSelTtl_Dispatch
-SqStepTtlFunc_Data:				.incbin "includes/generated/sepaout_config.bin", 0x1CE, 0x10
+SqStepTtlFunc_Methods:				.incbin "includes/generated/sepaout_config.bin", 0x1CE, 0x10
 DemoStyleTtlFunc_CaseTable:
 	.short	DemoStyle_DispatchTable - DemoStyle_DispatchTable
 	.short	DemoStyleTtlFunc_Exit - DemoStyle_DispatchTable
@@ -232,16 +232,16 @@ MiddleFuncCall_CaseTable:
 	.short	MiddleFuncCall_OnDirectPlayMute - MiddleFuncCall_DispatchData
 	.short	MiddleFuncCall_OnTrackMidiCall - MiddleFuncCall_DispatchData
 SongBankLookup_BuildAudioCmd_Str_Fmt3d_FmtPct:	.incbin "includes/generated/sepaout_config.bin", 0x21C, 0x6
-SeqInit_LookupDispatchEntry_Data:		.incbin "includes/generated/sepaout_config.bin", 0x222, 0x48
+Demo_SongViewIdTable:		.incbin "includes/generated/sepaout_config.bin", 0x222, 0x48
 SqTrSel_CaseG_CaseTable:
 	.short	SqTrSel_CaseG_JumpTable - SqTrSel_CaseG_JumpTable
 	.short	SqTrSel_CaseG_OnTitleDpdoc - SqTrSel_CaseG_JumpTable
 	.short	SqTrSel_CaseG_OnTitleDppd - SqTrSel_CaseG_JumpTable
 	.short	SqTrSel_CaseG_JumpTable - SqTrSel_CaseG_JumpTable
-	.short	SqTrSel_CaseG_Thunk1 - SqTrSel_CaseG_JumpTable
-	.short	SqTrSel_CaseG_Thunk3 - SqTrSel_CaseG_JumpTable
-	.short	SqTrSel_CaseG_Thunk4 - SqTrSel_CaseG_JumpTable
-	.short	SqTrSel_CaseG_Thunk2 - SqTrSel_CaseG_JumpTable
+	.short	SqTrSel_CaseG_OnTitleDpMdlySmf - SqTrSel_CaseG_JumpTable
+	.short	SqTrSel_CaseG_OnTitleDpMdlyDoc - SqTrSel_CaseG_JumpTable
+	.short	SqTrSel_CaseG_OnTitleDpMdlyPd - SqTrSel_CaseG_JumpTable
+	.short	SqTrSel_CaseG_OnTitleDpMdlySmfLyr - SqTrSel_CaseG_JumpTable
 Yoko_ApFunctionTable_127:			.incbin "includes/generated/sepaout_config.bin", 0x27A, 0xBC
 Yoko_ApFunctionTable_427:			.incbin "includes/generated/sepaout_config.bin", 0x336, 0x4
 

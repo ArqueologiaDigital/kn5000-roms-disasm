@@ -677,7 +677,7 @@ MidiPkt_CheckGateCondition_Second:
 	jr	z, MidiPkt_CheckGateCondition_Pass
 	extz wa
 	muls wa, 0x6
-	lda	xbc, (MidiPkt_CheckGateCondition_Second_Data:24)
+	lda	xbc, (MidiCtl_SecondGateRecords:24)
 	lda	xbc, (xbc+wa)
 	ld xde, (xbc)
 	ld a, (xbc + 4)
@@ -854,9 +854,9 @@ MidiPkt_SysExBulkTransfer_Data:
 	add	hl, hl
 	lda	xix, (SysExBulk_SwitchOffsets:24)
 	ld	hl, (xix+hl)
-	lda	xix, (MidiPkt_SendBankSelect_Send_Code:24)
+	lda	xix, (SysEx_OnRolandGs_UseForRhythmPart:24)
 	jp	t, (xix+hl)
-MidiPkt_SendBankSelect_Send_Code:
+SysEx_OnRolandGs_UseForRhythmPart:
 	jr	MidiPkt_SysExBulkTransfer_Data_Join
 MidiPkt_SysExBulkTransfer_Data_Case2:
 	jrl	MidiPkt_SysExBulkTransfer_Data_Join3
@@ -1267,9 +1267,9 @@ SysEx_DispatchByChannel:
 	add	wa, wa
 	lda	xix, (SysEx4B_ChannelSwitch:24)
 	ld	wa, (xix+wa)
-	lda	xix, (SysEx_ChannelHandler_4B_Data:24)
+	lda	xix, (SysEx_DispatchByChannel_ChorusMacroChorus1:24)
 	jp	t, (xix+wa)
-SysEx_ChannelHandler_4B_Data:
+SysEx_DispatchByChannel_ChorusMacroChorus1:
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, SysEx4B_ChannelWords0
@@ -1324,9 +1324,9 @@ SysEx_DispatchByChannel_49:
 	add	wa, wa
 	lda	xix, (SysEx49_ChannelSwitch:24)
 	ld	wa, (xix+wa)
-	lda	xix, (SysEx_ChannelHandler_49_Data:24)
+	lda	xix, (SysEx_DispatchByChannel_49_ReverbMacroRoom1:24)
 	jp	t, (xix+wa)
-SysEx_ChannelHandler_49_Data:
+SysEx_DispatchByChannel_49_ReverbMacroRoom1:
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, SysEx49_ChannelWords0

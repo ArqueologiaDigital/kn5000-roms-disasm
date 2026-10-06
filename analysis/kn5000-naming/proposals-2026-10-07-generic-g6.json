@@ -1,0 +1,1269 @@
+[
+ {
+  "old": "CheckMsg_IncrementCheck_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "IvMessage_Catalog_TextTableCol",
+  "header": "Text-table column of the IvMesage message catalog: the u32 at +10 of catalog record 0 (80 records x 14 bytes {u16 kind, u32 code, u32 header table, u32 text table} + a zero terminator); readers add index*14. Basis: readers + bytes -- MessageText returns entry [msg] for EVT_GET_LANGUAGE_PTR, CheckMsg_IncrementCheck stops at the record whose entry is 0.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:9135-9141 `MsgText_LookupMessage: ld wa, (0x02478c:24)` / `muls wa, 0xe` / `lda xbc, (CheckMsg_IncrementCheck_Data:24)` / `ld xhl, (xbc+wa)` -- MessageText (EVT_GET_LANGUAGE_PTR, line 9130) returns the text-table pointer of message [index]",
+   "ui/drawbar_panel_ui.s:9081-9087 `CheckMsg_IncrementCheck: muls wa, 0xe` / `add wa, 0xe` / `lda xde, (CheckMsg_IncrementCheck_Data:24)` / `or xwa, xwa` / `jr z, LanguageCheckReturn` -- next record's pointer 0 = end of catalog",
+   "ui_widgets/technichord_string_data.s:2298-2300 `[nakarest] the IvMesage message catalog ... 80 records x 14 bytes {u16 kind, u32 code ..., u32 header table, u32 text table}` -- record layout",
+   "ui_widgets/technichord_string_data.s:2312-2314 `IvMesageProc_Data` 0x173F2 (+0), `MsgHeader_BuildLoop_PtrTable` 0x173F8 (+6), `CheckMsg_IncrementCheck_Data` 0x173FC (+10) -- the three column bases of record 0"
+  ]
+ },
+ {
+  "old": "IvMessage_GetText_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "IvMessage_GetText_Str_Msg",
+  "header": "\"Msg\" (NUL-terminated): the class-name string IvMesageProc copies into the caller's buffer on EVT_GET_STRING. Basis: readers + bytes -- the only reader is IvMessage_GetText's Strcpy; bytes 4D 73 67 00.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:8739-8740 `cp xbc, EVT_GET_STRING` / `jrl z, IvMessage_GetText` -- IvMesageProc dispatch",
+   "ui/drawbar_panel_ui.s:8818-8822 `pushw IvMessage_GetText_Data@hi16` / `pushw IvMessage_GetText_Data@lo16` / `push xde` / `call Strcpy` -- Strcpy source",
+   "includes/generated/naka_technichord_strings.bin +0x17878 `4d 73 67 00` -- \"Msg\"",
+   "ui_widgets/technichord_string_data.s:2533 `IvAccordion_GetText_Str_Acdn` -- sibling naming pattern for GetText class-name strings"
+  ],
+  "spelling": "string held as an .incbin slice"
+ },
+ {
+  "old": "Sdtecd1_GetText_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Sdtecd1_GetText_Str_TeC1",
+  "header": "\"TeC1\" (NUL + 0xFF pad): the class-name string IvSdtecd1Proc returns on EVT_GET_STRING. Basis: readers + bytes -- Sdtecd1_GetText's Strcpy source; bytes 54 65 43 31 00 FF; sibling Sdtecd_GetText_Str_TeCd.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:9834-9835 `cp xbc, EVT_GET_STRING` / `jrl z, Sdtecd1_GetText`",
+   "ui/drawbar_panel_ui.s:9994-9998 `pushw Sdtecd1_GetText_Data@hi16` / `pushw Sdtecd1_GetText_Data@lo16` / `push xiz` / `call Strcpy`",
+   "includes/generated/naka_technichord_strings.bin +0x17AD4 `54 65 43 31 00 ff` -- \"TeC1\"",
+   "ui_widgets/technichord_string_data.s:2535 `Sdtecd_GetText_Str_TeCd` -- sibling \"TeCd\""
+  ],
+  "spelling": "string held as an .incbin slice"
+ },
+ {
+  "old": "AcWelcomScreen_RenderBytecode_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "WelcomeGlyph_C",
+  "header": "Welcome-screen glyph 'C': 16 x 17 px, 1 bpp, one big-endian word per row, rows stored bottom-up (34 bytes), drawn by DrawBitmapSP2 from the welcome-script op handlers. Basis: readers + bytes -- the handlers pass it with width 16 / height 17, and the bitmap rendered bottom-up is the letter C.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:11218-11226 `AcWelcomScreen_Select_OpDrawGlyphC:` ... `ld xbc, AcWelcomScreen_RenderBytecode_Data` / `ldw de, 16` -- op 4 draws it 16 wide, 17 high (`pushw 17`)",
+   "ui/drawbar_panel_ui.s:11352 `ld xbc, AcWelcomScreen_RenderBytecode_Data` -- AcWelcomScreen_Select_OpDrawColorWord: first letter of COLO(U)R",
+   "includes/generated/naka_technichord_strings.bin +0x17F12..+0x22 -- rendered (rows reversed) as the letter C",
+   "ui_widgets/technichord_string_data.s:2956-2989 header of the first glyph: `Typed in naka_technichord_strings.c as uint8_t WelcomeGlyph_C[17][2]`, glyph format and op->glyph list"
+  ]
+ },
+ {
+  "old": "AcWelcomScreen_RenderBytecode_Data_2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "WelcomeGlyph_N",
+  "header": "Welcome-screen glyph 'N': 16 x 17 px, 1 bpp, one big-endian word per row, rows stored bottom-up (34 bytes), drawn by DrawBitmapSP2 from the welcome-script op handlers. Basis: readers + bytes -- the handlers pass it with width 16 / height 17, and the bitmap rendered bottom-up is the letter N.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:11274-11291 `AcWelcomScreen_Select_OpDrawGlyphsIn:` ... `ld xbc, Bitmap_Digit1` ... `addw (xwa), 0x10` ... `ld xbc, AcWelcomScreen_RenderBytecode_Data_2` -- op 8 draws I then this glyph 16 px to the right",
+   "includes/generated/naka_technichord_strings.bin +0x17F78..+0x22 -- rendered (rows reversed) as the letter N",
+   "ui_widgets/technichord_string_data.s:2956-2989 header of the first glyph: `Typed in naka_technichord_strings.c as uint8_t WelcomeGlyph_C[17][2]`, glyph format and op->glyph list"
+  ]
+ },
+ {
+  "old": "AcWelcomScreen_RenderBytecode_Data_3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "WelcomeGlyph_O",
+  "header": "Welcome-screen glyph 'O': 16 x 17 px, 1 bpp, one big-endian word per row, rows stored bottom-up (34 bytes), drawn by DrawBitmapSP2 from the welcome-script op handlers. Basis: readers + bytes -- the handlers pass it with width 16 / height 17, and the bitmap rendered bottom-up is the letter O.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:11229-11237 `AcWelcomScreen_Select_OpDrawGlyphO:` ... `ld xbc, AcWelcomScreen_RenderBytecode_Data_3` -- op 5",
+   "ui/drawbar_panel_ui.s:11367 / 11397 `ld xbc, AcWelcomScreen_RenderBytecode_Data_3` -- the two O's of COLO(U)R (ops 9/12)",
+   "includes/generated/naka_technichord_strings.bin +0x17F9A..+0x22 -- rendered (rows reversed) as the letter O",
+   "ui_widgets/technichord_string_data.s:2956-2989 header of the first glyph: `Typed in naka_technichord_strings.c as uint8_t WelcomeGlyph_C[17][2]`, glyph format and op->glyph list"
+  ]
+ },
+ {
+  "old": "AcWelcomScreenProc_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "WelcomeScript_Steps_A",
+  "header": "Welcome-screen animation script used when Get_Region_Code returns 2: 186 welcome_step_t records x 12 bytes {u32 delay, s16 x, s16 y, s16 op, u16 arg}; spells COLOR (ops 4-7, 9). Basis: readers + bytes -- AcWelcomScreenProc stores it at RAM 0x024786 as the step table; the C type names it.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:11038-11045 `call Get_Region_Code` / `ld xwa, AcWelcomScreenProc_Data_2` / `cp l, 2:i3` / `jr nz, ...` / `ld xwa, AcWelcomScreenProc_Data` / `ld (0x024786:24), xwa` -- region 2 selects this table",
+   "ui/drawbar_panel_ui.s:11118 / 11189 `ld xbc, (0x024786:24)` / `add xbc, (0x024786:24)` -- the step walker indexes table + 12*step",
+   "ui_widgets/technichord_string_data.s:3073-3105 header `WelcomeScript_Steps_A -- 186 welcome_step_t records x 12 bytes` / `Typed in naka_technichord_strings.c as welcome_step_t WelcomeScript_Steps_A[186]`"
+  ]
+ },
+ {
+  "old": "AcWelcomScreenProc_Data_2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "WelcomeScript_Steps_B",
+  "header": "Welcome-screen animation script for every region code other than 2: 191 welcome_step_t records x 12 bytes; spells COLOUR (ops 4-7, 11, 12). Basis: readers + bytes -- AcWelcomScreenProc's default choice for RAM 0x024786; the C type names it.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:11039-11041 `ld xwa, AcWelcomScreenProc_Data_2` / `cp l, 2:i3` / `jr nz, AcWelcomScreen_Init_StoreData` -- kept unless the region code is 2",
+   "ui/drawbar_panel_ui.s:11045 `ld (0x024786:24), xwa` -- the step-table pointer",
+   "ui_widgets/technichord_string_data.s:3109-3141 header `WelcomeScript_Steps_B -- 191 welcome_step_t records` / `welcome_step_t WelcomeScript_Steps_B[191]`"
+  ]
+ },
+ {
+  "old": "AcWelcomScreen_Activate_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "WelcomeScreen_ClearRect",
+  "header": "4 x s16 {x1, y1, x2, y2} = {0, 0, 319, 239}: the whole 320 x 240 screen, which AcWelcomScreen_Activate clears to colour 0 with DrawBox while the LCD is off. Basis: readers + bytes -- DrawBox's rectangle argument; bytes 00 00 00 00 3F 01 EF 00.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:11093-11100 `AcWelcomScreen_Activate:` ... `call LcdOff` / `ld xwa, AcWelcomScreen_Activate_Data` / `ld bc, 0:i3` / `call DrawBox`",
+   "includes/generated/naka_technichord_strings.bin +0x191AC `00 00 00 00 3f 01 ef 00` -- (0,0)-(319,239)",
+   "ui_widgets/technichord_string_data.s:3145-3156 header `WelcomeScreen_ClearRect -- 4 x s16 {x1, y1, x2, y2} = {0, 0, 319, 239}`"
+  ]
+ },
+ {
+  "old": "PsMixer_ControlHelper_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PsMixer_ControlProcTable",
+  "header": "11 x code pointers PsMixer_CtlTypeProc0..10, indexed by the control-type word (+2) of a mixer row record; every PsMixer/AudioCtrl handler calls entry [type] with the event. Basis: readers + bytes -- 14 sites do `ld wa, (xwa+2); sla wa, 2; lda xbc, (<this>); ... call (xhl)`; the C type names it.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:11747-11767 `ld wa, (xwa + 2)` / `sla wa, 2` / `lda xbc, (PsMixer_ControlHelper_Data:24)` / `lda xhl, (xbc+wa)` / `ld xbc, EVT_DRAW` / `call (xhl)` -- PsMixer_ControlHelper",
+   "ui/drawbar_panel_ui.s:12651-12653 `ld wa, (xde + 2)` / `sla wa, 2` / `lda xbc, (PsMixer_ControlHelper_Data:24)` -- PsMixer_EventForwardHelper (same index)",
+   "ui_widgets/technichord_string_data.s:3218-3229 `.long PsMixer_CtlTypeProc0` ... `.long PsMixer_CtlTypeProc10` -- the 11 entries",
+   "ui_widgets/technichord_string_data.s:3197-3216 header `PsMixer_ControlProcTable -- 11 x u32 code addresses` / `Typed as uint32_t PsMixer_ControlProcTable[11]`"
+  ]
+ },
+ {
+  "old": "PartName6_Part16",
+  "verdict": "refuse",
+  "why_refused": "kept: the old name already says what it is (proposed PartName6_Pt16 only avoided the _Part suffix rule)",
+  "new": "PartName6_Pt16",
+  "header": "6-character mixer caption \"PART16\" of sound part 16 (part row 15): entry 15 of the 30 six-character part names that MidiPart_ConfigNameTable puts at RAM 0x3EA38 (work-RAM image at 0x3EA30). The old name was already right; only its _Part16 tail matches the generic-suffix rule, so the part is spelled Pt16 as in the firmware's own 4-character caption \"PT16\" and the sibling TrackName6_Tr16. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui_widgets/sequencer_channel_containers.s:208 `.long PartName6_Part16` -- MidiPart_ConfigNameTable entry 17 = 6-char name of part row 15 (entry 2 = PartName6_Right1)",
+   "ui/drawbar_panel_ui.s:14912-14916 `calr PsMixer_ReadWordArrayEntry` / `sla hl, 2` / `lda xwa, (0x3ea38:24)` / `ld xwa, (xwa+hl)` -- PsMixer_CtlTypeProc1 prints the part row's 6-char name (\"%s:\")",
+   "ui/drawbar_panel_ui.s:12616-12619 `ldto_werp WA, 0xfa` / `sla wa, 2` / `lda xbc, (0x03ea38:24)` / `ld xwa, (xbc+wa)` -- PsMixerControlProc_OnSoundName, same table",
+   "ui_widgets/technichord_string_data.s:3232 `MidiPart_ConfigNameTable's first word points here and Boot_InitWorkRAM copies that word to RAM 0x3EA30` -- table lands at 0x3EA30, names from 0x3EA38",
+   "ui_widgets/technichord_string_data.s:3376 `PartName6_Part16: .incbin ...` -- bytes \"PART16\" NUL 0xFF"
+  ]
+ },
+ {
+  "old": "PartName6_Part15",
+  "verdict": "refuse",
+  "why_refused": "kept: the old name already says what it is (proposed PartName6_Pt15 only avoided the _Part suffix rule)",
+  "new": "PartName6_Pt15",
+  "header": "6-character mixer caption \"PART15\" of sound part 15 (part row 14): entry 14 of the 30 six-character part names that MidiPart_ConfigNameTable puts at RAM 0x3EA38 (work-RAM image at 0x3EA30). The old name was already right; only its _Part15 tail matches the generic-suffix rule, so the part is spelled Pt15 as in the firmware's own 4-character caption \"PT15\" and the sibling TrackName6_Tr15. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui_widgets/sequencer_channel_containers.s:207 `.long PartName6_Part15` -- MidiPart_ConfigNameTable entry 16 = 6-char name of part row 14 (entry 2 = PartName6_Right1)",
+   "ui/drawbar_panel_ui.s:14912-14916 `calr PsMixer_ReadWordArrayEntry` / `sla hl, 2` / `lda xwa, (0x3ea38:24)` / `ld xwa, (xwa+hl)` -- PsMixer_CtlTypeProc1 prints the part row's 6-char name (\"%s:\")",
+   "ui/drawbar_panel_ui.s:12616-12619 `ldto_werp WA, 0xfa` / `sla wa, 2` / `lda xbc, (0x03ea38:24)` / `ld xwa, (xbc+wa)` -- PsMixerControlProc_OnSoundName, same table",
+   "ui_widgets/technichord_string_data.s:3232 `MidiPart_ConfigNameTable's first word points here and Boot_InitWorkRAM copies that word to RAM 0x3EA30` -- table lands at 0x3EA30, names from 0x3EA38",
+   "ui_widgets/technichord_string_data.s:3382 `PartName6_Part15: .incbin ...` -- bytes \"PART15\" NUL 0xFF"
+  ]
+ },
+ {
+  "old": "PartName6_Part14",
+  "verdict": "refuse",
+  "why_refused": "kept: the old name already says what it is (proposed PartName6_Pt14 only avoided the _Part suffix rule)",
+  "new": "PartName6_Pt14",
+  "header": "6-character mixer caption \"PART14\" of sound part 14 (part row 13): entry 13 of the 30 six-character part names that MidiPart_ConfigNameTable puts at RAM 0x3EA38 (work-RAM image at 0x3EA30). The old name was already right; only its _Part14 tail matches the generic-suffix rule, so the part is spelled Pt14 as in the firmware's own 4-character caption \"PT14\" and the sibling TrackName6_Tr14. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui_widgets/sequencer_channel_containers.s:206 `.long PartName6_Part14` -- MidiPart_ConfigNameTable entry 15 = 6-char name of part row 13 (entry 2 = PartName6_Right1)",
+   "ui/drawbar_panel_ui.s:14912-14916 `calr PsMixer_ReadWordArrayEntry` / `sla hl, 2` / `lda xwa, (0x3ea38:24)` / `ld xwa, (xwa+hl)` -- PsMixer_CtlTypeProc1 prints the part row's 6-char name (\"%s:\")",
+   "ui/drawbar_panel_ui.s:12616-12619 `ldto_werp WA, 0xfa` / `sla wa, 2` / `lda xbc, (0x03ea38:24)` / `ld xwa, (xbc+wa)` -- PsMixerControlProc_OnSoundName, same table",
+   "ui_widgets/technichord_string_data.s:3232 `MidiPart_ConfigNameTable's first word points here and Boot_InitWorkRAM copies that word to RAM 0x3EA30` -- table lands at 0x3EA30, names from 0x3EA38",
+   "ui_widgets/technichord_string_data.s:3388 `PartName6_Part14: .incbin ...` -- bytes \"PART14\" NUL 0xFF"
+  ]
+ },
+ {
+  "old": "PartName6_Part13",
+  "verdict": "refuse",
+  "why_refused": "kept: the old name already says what it is (proposed PartName6_Pt13 only avoided the _Part suffix rule)",
+  "new": "PartName6_Pt13",
+  "header": "6-character mixer caption \"PART13\" of sound part 13 (part row 12): entry 12 of the 30 six-character part names that MidiPart_ConfigNameTable puts at RAM 0x3EA38 (work-RAM image at 0x3EA30). The old name was already right; only its _Part13 tail matches the generic-suffix rule, so the part is spelled Pt13 as in the firmware's own 4-character caption \"PT13\" and the sibling TrackName6_Tr13. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui_widgets/sequencer_channel_containers.s:205 `.long PartName6_Part13` -- MidiPart_ConfigNameTable entry 14 = 6-char name of part row 12 (entry 2 = PartName6_Right1)",
+   "ui/drawbar_panel_ui.s:14912-14916 `calr PsMixer_ReadWordArrayEntry` / `sla hl, 2` / `lda xwa, (0x3ea38:24)` / `ld xwa, (xwa+hl)` -- PsMixer_CtlTypeProc1 prints the part row's 6-char name (\"%s:\")",
+   "ui/drawbar_panel_ui.s:12616-12619 `ldto_werp WA, 0xfa` / `sla wa, 2` / `lda xbc, (0x03ea38:24)` / `ld xwa, (xbc+wa)` -- PsMixerControlProc_OnSoundName, same table",
+   "ui_widgets/technichord_string_data.s:3232 `MidiPart_ConfigNameTable's first word points here and Boot_InitWorkRAM copies that word to RAM 0x3EA30` -- table lands at 0x3EA30, names from 0x3EA38",
+   "ui_widgets/technichord_string_data.s:3394 `PartName6_Part13: .incbin ...` -- bytes \"PART13\" NUL 0xFF"
+  ]
+ },
+ {
+  "old": "PartName6_Part12",
+  "verdict": "refuse",
+  "why_refused": "kept: the old name already says what it is (proposed PartName6_Pt12 only avoided the _Part suffix rule)",
+  "new": "PartName6_Pt12",
+  "header": "6-character mixer caption \"PART12\" of sound part 12 (part row 11): entry 11 of the 30 six-character part names that MidiPart_ConfigNameTable puts at RAM 0x3EA38 (work-RAM image at 0x3EA30). The old name was already right; only its _Part12 tail matches the generic-suffix rule, so the part is spelled Pt12 as in the firmware's own 4-character caption \"PT12\" and the sibling TrackName6_Tr12. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui_widgets/sequencer_channel_containers.s:204 `.long PartName6_Part12` -- MidiPart_ConfigNameTable entry 13 = 6-char name of part row 11 (entry 2 = PartName6_Right1)",
+   "ui/drawbar_panel_ui.s:14912-14916 `calr PsMixer_ReadWordArrayEntry` / `sla hl, 2` / `lda xwa, (0x3ea38:24)` / `ld xwa, (xwa+hl)` -- PsMixer_CtlTypeProc1 prints the part row's 6-char name (\"%s:\")",
+   "ui/drawbar_panel_ui.s:12616-12619 `ldto_werp WA, 0xfa` / `sla wa, 2` / `lda xbc, (0x03ea38:24)` / `ld xwa, (xbc+wa)` -- PsMixerControlProc_OnSoundName, same table",
+   "ui_widgets/technichord_string_data.s:3232 `MidiPart_ConfigNameTable's first word points here and Boot_InitWorkRAM copies that word to RAM 0x3EA30` -- table lands at 0x3EA30, names from 0x3EA38",
+   "ui_widgets/technichord_string_data.s:3400 `PartName6_Part12: .incbin ...` -- bytes \"PART12\" NUL 0xFF"
+  ]
+ },
+ {
+  "old": "PartName6_Part11",
+  "verdict": "refuse",
+  "why_refused": "kept: the old name already says what it is (proposed PartName6_Pt11 only avoided the _Part suffix rule)",
+  "new": "PartName6_Pt11",
+  "header": "6-character mixer caption \"PART11\" of sound part 11 (part row 10): entry 10 of the 30 six-character part names that MidiPart_ConfigNameTable puts at RAM 0x3EA38 (work-RAM image at 0x3EA30). The old name was already right; only its _Part11 tail matches the generic-suffix rule, so the part is spelled Pt11 as in the firmware's own 4-character caption \"PT11\" and the sibling TrackName6_Tr11. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui_widgets/sequencer_channel_containers.s:203 `.long PartName6_Part11` -- MidiPart_ConfigNameTable entry 12 = 6-char name of part row 10 (entry 2 = PartName6_Right1)",
+   "ui/drawbar_panel_ui.s:14912-14916 `calr PsMixer_ReadWordArrayEntry` / `sla hl, 2` / `lda xwa, (0x3ea38:24)` / `ld xwa, (xwa+hl)` -- PsMixer_CtlTypeProc1 prints the part row's 6-char name (\"%s:\")",
+   "ui/drawbar_panel_ui.s:12616-12619 `ldto_werp WA, 0xfa` / `sla wa, 2` / `lda xbc, (0x03ea38:24)` / `ld xwa, (xbc+wa)` -- PsMixerControlProc_OnSoundName, same table",
+   "ui_widgets/technichord_string_data.s:3232 `MidiPart_ConfigNameTable's first word points here and Boot_InitWorkRAM copies that word to RAM 0x3EA30` -- table lands at 0x3EA30, names from 0x3EA38",
+   "ui_widgets/technichord_string_data.s:3406 `PartName6_Part11: .incbin ...` -- bytes \"PART11\" NUL 0xFF"
+  ]
+ },
+ {
+  "old": "PartName6_Part10",
+  "verdict": "refuse",
+  "why_refused": "kept: the old name already says what it is (proposed PartName6_Pt10 only avoided the _Part suffix rule)",
+  "new": "PartName6_Pt10",
+  "header": "6-character mixer caption \"PART10\" of sound part 10 (part row 9): entry 9 of the 30 six-character part names that MidiPart_ConfigNameTable puts at RAM 0x3EA38 (work-RAM image at 0x3EA30). The old name was already right; only its _Part10 tail matches the generic-suffix rule, so the part is spelled Pt10 as in the firmware's own 4-character caption \"PT10\" and the sibling TrackName6_Tr10. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui_widgets/sequencer_channel_containers.s:202 `.long PartName6_Part10` -- MidiPart_ConfigNameTable entry 11 = 6-char name of part row 9 (entry 2 = PartName6_Right1)",
+   "ui/drawbar_panel_ui.s:14912-14916 `calr PsMixer_ReadWordArrayEntry` / `sla hl, 2` / `lda xwa, (0x3ea38:24)` / `ld xwa, (xwa+hl)` -- PsMixer_CtlTypeProc1 prints the part row's 6-char name (\"%s:\")",
+   "ui/drawbar_panel_ui.s:12616-12619 `ldto_werp WA, 0xfa` / `sla wa, 2` / `lda xbc, (0x03ea38:24)` / `ld xwa, (xbc+wa)` -- PsMixerControlProc_OnSoundName, same table",
+   "ui_widgets/technichord_string_data.s:3232 `MidiPart_ConfigNameTable's first word points here and Boot_InitWorkRAM copies that word to RAM 0x3EA30` -- table lands at 0x3EA30, names from 0x3EA38",
+   "ui_widgets/technichord_string_data.s:3412 `PartName6_Part10: .incbin ...` -- bytes \"PART10\" NUL 0xFF"
+  ]
+ },
+ {
+  "old": "PartName6_Part9",
+  "verdict": "refuse",
+  "why_refused": "kept: the old name already says what it is (proposed PartName6_Pt9 only avoided the _Part suffix rule)",
+  "new": "PartName6_Pt9",
+  "header": "6-character mixer caption \"PART 9\" of sound part 9 (part row 8): entry 8 of the 30 six-character part names that MidiPart_ConfigNameTable puts at RAM 0x3EA38 (work-RAM image at 0x3EA30). The old name was already right; only its _Part9 tail matches the generic-suffix rule, so the part is spelled Pt9 as in the firmware's own 4-character caption \"PT 9\" and the sibling TrackName6_Tr9. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui_widgets/sequencer_channel_containers.s:201 `.long PartName6_Part9` -- MidiPart_ConfigNameTable entry 10 = 6-char name of part row 8 (entry 2 = PartName6_Right1)",
+   "ui/drawbar_panel_ui.s:14912-14916 `calr PsMixer_ReadWordArrayEntry` / `sla hl, 2` / `lda xwa, (0x3ea38:24)` / `ld xwa, (xwa+hl)` -- PsMixer_CtlTypeProc1 prints the part row's 6-char name (\"%s:\")",
+   "ui/drawbar_panel_ui.s:12616-12619 `ldto_werp WA, 0xfa` / `sla wa, 2` / `lda xbc, (0x03ea38:24)` / `ld xwa, (xbc+wa)` -- PsMixerControlProc_OnSoundName, same table",
+   "ui_widgets/technichord_string_data.s:3232 `MidiPart_ConfigNameTable's first word points here and Boot_InitWorkRAM copies that word to RAM 0x3EA30` -- table lands at 0x3EA30, names from 0x3EA38",
+   "ui_widgets/technichord_string_data.s:3418 `PartName6_Part9: .incbin ...` -- bytes \"PART 9\" NUL 0xFF"
+  ]
+ },
+ {
+  "old": "PartName6_Part8",
+  "verdict": "refuse",
+  "why_refused": "kept: the old name already says what it is (proposed PartName6_Pt8 only avoided the _Part suffix rule)",
+  "new": "PartName6_Pt8",
+  "header": "6-character mixer caption \"PART 8\" of sound part 8 (part row 7): entry 7 of the 30 six-character part names that MidiPart_ConfigNameTable puts at RAM 0x3EA38 (work-RAM image at 0x3EA30). The old name was already right; only its _Part8 tail matches the generic-suffix rule, so the part is spelled Pt8 as in the firmware's own 4-character caption \"PT 8\" and the sibling TrackName6_Tr8. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui_widgets/sequencer_channel_containers.s:200 `.long PartName6_Part8` -- MidiPart_ConfigNameTable entry 9 = 6-char name of part row 7 (entry 2 = PartName6_Right1)",
+   "ui/drawbar_panel_ui.s:14912-14916 `calr PsMixer_ReadWordArrayEntry` / `sla hl, 2` / `lda xwa, (0x3ea38:24)` / `ld xwa, (xwa+hl)` -- PsMixer_CtlTypeProc1 prints the part row's 6-char name (\"%s:\")",
+   "ui/drawbar_panel_ui.s:12616-12619 `ldto_werp WA, 0xfa` / `sla wa, 2` / `lda xbc, (0x03ea38:24)` / `ld xwa, (xbc+wa)` -- PsMixerControlProc_OnSoundName, same table",
+   "ui_widgets/technichord_string_data.s:3232 `MidiPart_ConfigNameTable's first word points here and Boot_InitWorkRAM copies that word to RAM 0x3EA30` -- table lands at 0x3EA30, names from 0x3EA38",
+   "ui_widgets/technichord_string_data.s:3424 `PartName6_Part8: .incbin ...` -- bytes \"PART 8\" NUL 0xFF"
+  ]
+ },
+ {
+  "old": "PartName6_Part7",
+  "verdict": "refuse",
+  "why_refused": "kept: the old name already says what it is (proposed PartName6_Pt7 only avoided the _Part suffix rule)",
+  "new": "PartName6_Pt7",
+  "header": "6-character mixer caption \"PART 7\" of sound part 7 (part row 6): entry 6 of the 30 six-character part names that MidiPart_ConfigNameTable puts at RAM 0x3EA38 (work-RAM image at 0x3EA30). The old name was already right; only its _Part7 tail matches the generic-suffix rule, so the part is spelled Pt7 as in the firmware's own 4-character caption \"PT 7\" and the sibling TrackName6_Tr7. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui_widgets/sequencer_channel_containers.s:199 `.long PartName6_Part7` -- MidiPart_ConfigNameTable entry 8 = 6-char name of part row 6 (entry 2 = PartName6_Right1)",
+   "ui/drawbar_panel_ui.s:14912-14916 `calr PsMixer_ReadWordArrayEntry` / `sla hl, 2` / `lda xwa, (0x3ea38:24)` / `ld xwa, (xwa+hl)` -- PsMixer_CtlTypeProc1 prints the part row's 6-char name (\"%s:\")",
+   "ui/drawbar_panel_ui.s:12616-12619 `ldto_werp WA, 0xfa` / `sla wa, 2` / `lda xbc, (0x03ea38:24)` / `ld xwa, (xbc+wa)` -- PsMixerControlProc_OnSoundName, same table",
+   "ui_widgets/technichord_string_data.s:3232 `MidiPart_ConfigNameTable's first word points here and Boot_InitWorkRAM copies that word to RAM 0x3EA30` -- table lands at 0x3EA30, names from 0x3EA38",
+   "ui_widgets/technichord_string_data.s:3430 `PartName6_Part7: .incbin ...` -- bytes \"PART 7\" NUL 0xFF"
+  ]
+ },
+ {
+  "old": "PartName6_Part6",
+  "verdict": "refuse",
+  "why_refused": "kept: the old name already says what it is (proposed PartName6_Pt6 only avoided the _Part suffix rule)",
+  "new": "PartName6_Pt6",
+  "header": "6-character mixer caption \"PART 6\" of sound part 6 (part row 5): entry 5 of the 30 six-character part names that MidiPart_ConfigNameTable puts at RAM 0x3EA38 (work-RAM image at 0x3EA30). The old name was already right; only its _Part6 tail matches the generic-suffix rule, so the part is spelled Pt6 as in the firmware's own 4-character caption \"PT 6\" and the sibling TrackName6_Tr6. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui_widgets/sequencer_channel_containers.s:198 `.long PartName6_Part6` -- MidiPart_ConfigNameTable entry 7 = 6-char name of part row 5 (entry 2 = PartName6_Right1)",
+   "ui/drawbar_panel_ui.s:14912-14916 `calr PsMixer_ReadWordArrayEntry` / `sla hl, 2` / `lda xwa, (0x3ea38:24)` / `ld xwa, (xwa+hl)` -- PsMixer_CtlTypeProc1 prints the part row's 6-char name (\"%s:\")",
+   "ui/drawbar_panel_ui.s:12616-12619 `ldto_werp WA, 0xfa` / `sla wa, 2` / `lda xbc, (0x03ea38:24)` / `ld xwa, (xbc+wa)` -- PsMixerControlProc_OnSoundName, same table",
+   "ui_widgets/technichord_string_data.s:3232 `MidiPart_ConfigNameTable's first word points here and Boot_InitWorkRAM copies that word to RAM 0x3EA30` -- table lands at 0x3EA30, names from 0x3EA38",
+   "ui_widgets/technichord_string_data.s:3436 `PartName6_Part6: .incbin ...` -- bytes \"PART 6\" NUL 0xFF"
+  ]
+ },
+ {
+  "old": "PartName6_Part5",
+  "verdict": "refuse",
+  "why_refused": "kept: the old name already says what it is (proposed PartName6_Pt5 only avoided the _Part suffix rule)",
+  "new": "PartName6_Pt5",
+  "header": "6-character mixer caption \"PART 5\" of sound part 5 (part row 4): entry 4 of the 30 six-character part names that MidiPart_ConfigNameTable puts at RAM 0x3EA38 (work-RAM image at 0x3EA30). The old name was already right; only its _Part5 tail matches the generic-suffix rule, so the part is spelled Pt5 as in the firmware's own 4-character caption \"PT 5\" and the sibling TrackName6_Tr5. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui_widgets/sequencer_channel_containers.s:197 `.long PartName6_Part5` -- MidiPart_ConfigNameTable entry 6 = 6-char name of part row 4 (entry 2 = PartName6_Right1)",
+   "ui/drawbar_panel_ui.s:14912-14916 `calr PsMixer_ReadWordArrayEntry` / `sla hl, 2` / `lda xwa, (0x3ea38:24)` / `ld xwa, (xwa+hl)` -- PsMixer_CtlTypeProc1 prints the part row's 6-char name (\"%s:\")",
+   "ui/drawbar_panel_ui.s:12616-12619 `ldto_werp WA, 0xfa` / `sla wa, 2` / `lda xbc, (0x03ea38:24)` / `ld xwa, (xbc+wa)` -- PsMixerControlProc_OnSoundName, same table",
+   "ui_widgets/technichord_string_data.s:3232 `MidiPart_ConfigNameTable's first word points here and Boot_InitWorkRAM copies that word to RAM 0x3EA30` -- table lands at 0x3EA30, names from 0x3EA38",
+   "ui_widgets/technichord_string_data.s:3442 `PartName6_Part5: .incbin ...` -- bytes \"PART 5\" NUL 0xFF"
+  ]
+ },
+ {
+  "old": "PartName6_Part4",
+  "verdict": "refuse",
+  "why_refused": "kept: the old name already says what it is (proposed PartName6_Pt4 only avoided the _Part suffix rule)",
+  "new": "PartName6_Pt4",
+  "header": "6-character mixer caption \"PART 4\" of sound part 4 (part row 3): entry 3 of the 30 six-character part names that MidiPart_ConfigNameTable puts at RAM 0x3EA38 (work-RAM image at 0x3EA30). The old name was already right; only its _Part4 tail matches the generic-suffix rule, so the part is spelled Pt4 as in the firmware's own 4-character caption \"PT 4\" and the sibling TrackName6_Tr4. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui_widgets/sequencer_channel_containers.s:196 `.long PartName6_Part4` -- MidiPart_ConfigNameTable entry 5 = 6-char name of part row 3 (entry 2 = PartName6_Right1)",
+   "ui/drawbar_panel_ui.s:14912-14916 `calr PsMixer_ReadWordArrayEntry` / `sla hl, 2` / `lda xwa, (0x3ea38:24)` / `ld xwa, (xwa+hl)` -- PsMixer_CtlTypeProc1 prints the part row's 6-char name (\"%s:\")",
+   "ui/drawbar_panel_ui.s:12616-12619 `ldto_werp WA, 0xfa` / `sla wa, 2` / `lda xbc, (0x03ea38:24)` / `ld xwa, (xbc+wa)` -- PsMixerControlProc_OnSoundName, same table",
+   "ui_widgets/technichord_string_data.s:3232 `MidiPart_ConfigNameTable's first word points here and Boot_InitWorkRAM copies that word to RAM 0x3EA30` -- table lands at 0x3EA30, names from 0x3EA38",
+   "ui_widgets/technichord_string_data.s:3448 `PartName6_Part4: .incbin ...` -- bytes \"PART 4\" NUL 0xFF"
+  ]
+ },
+ {
+  "old": "PartName4_Part16",
+  "verdict": "refuse",
+  "why_refused": "kept: the old name already says what it is (proposed PartName4_Pt16 only avoided the _Part suffix rule)",
+  "new": "PartName4_Pt16",
+  "header": "4-character mixer caption \"PT16\" of sound part 16 (part row 15): entry 15 of the 30 four-character part names that MidiPart_ConfigNameTable puts at RAM 0x3EAB0. The old name was already right; only its _Part16 tail matches the generic-suffix rule, so the part is spelled Pt16 as in the caption text itself and the sibling TrackName4_Tr16. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui_widgets/sequencer_channel_containers.s:238 `.long PartName4_Part16` -- MidiPart_ConfigNameTable entry 47 (= 0x3EA30 + 4*47 = 0x3EAB0 + 4*15; entry 32 = PartName4_Right1)",
+   "ui/drawbar_panel_ui.s:13216-13232 `PsMixer_CtlTypeProc5_OnParaDraw:` ... `lda xwa, (0x3eab0:24)` / `ld de, (xsp+4)` / `sla de, 2` / `ld xde, (xwa+de)` -- the part row's 4-char caption",
+   "ui_widgets/technichord_string_data.s:3556 `PartName4_Part16: .incbin ...` -- bytes \"PT16\" NUL 0xFF"
+  ]
+ },
+ {
+  "old": "PartName4_Part15",
+  "verdict": "refuse",
+  "why_refused": "kept: the old name already says what it is (proposed PartName4_Pt15 only avoided the _Part suffix rule)",
+  "new": "PartName4_Pt15",
+  "header": "4-character mixer caption \"PT15\" of sound part 15 (part row 14): entry 14 of the 30 four-character part names that MidiPart_ConfigNameTable puts at RAM 0x3EAB0. The old name was already right; only its _Part15 tail matches the generic-suffix rule, so the part is spelled Pt15 as in the caption text itself and the sibling TrackName4_Tr15. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui_widgets/sequencer_channel_containers.s:237 `.long PartName4_Part15` -- MidiPart_ConfigNameTable entry 46 (= 0x3EA30 + 4*46 = 0x3EAB0 + 4*14; entry 32 = PartName4_Right1)",
+   "ui/drawbar_panel_ui.s:13216-13232 `PsMixer_CtlTypeProc5_OnParaDraw:` ... `lda xwa, (0x3eab0:24)` / `ld de, (xsp+4)` / `sla de, 2` / `ld xde, (xwa+de)` -- the part row's 4-char caption",
+   "ui_widgets/technichord_string_data.s:3562 `PartName4_Part15: .incbin ...` -- bytes \"PT15\" NUL 0xFF"
+  ]
+ },
+ {
+  "old": "PartName4_Part14",
+  "verdict": "refuse",
+  "why_refused": "kept: the old name already says what it is (proposed PartName4_Pt14 only avoided the _Part suffix rule)",
+  "new": "PartName4_Pt14",
+  "header": "4-character mixer caption \"PT14\" of sound part 14 (part row 13): entry 13 of the 30 four-character part names that MidiPart_ConfigNameTable puts at RAM 0x3EAB0. The old name was already right; only its _Part14 tail matches the generic-suffix rule, so the part is spelled Pt14 as in the caption text itself and the sibling TrackName4_Tr14. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui_widgets/sequencer_channel_containers.s:236 `.long PartName4_Part14` -- MidiPart_ConfigNameTable entry 45 (= 0x3EA30 + 4*45 = 0x3EAB0 + 4*13; entry 32 = PartName4_Right1)",
+   "ui/drawbar_panel_ui.s:13216-13232 `PsMixer_CtlTypeProc5_OnParaDraw:` ... `lda xwa, (0x3eab0:24)` / `ld de, (xsp+4)` / `sla de, 2` / `ld xde, (xwa+de)` -- the part row's 4-char caption",
+   "ui_widgets/technichord_string_data.s:3568 `PartName4_Part14: .incbin ...` -- bytes \"PT14\" NUL 0xFF"
+  ]
+ },
+ {
+  "old": "PartName4_Part13",
+  "verdict": "refuse",
+  "why_refused": "kept: the old name already says what it is (proposed PartName4_Pt13 only avoided the _Part suffix rule)",
+  "new": "PartName4_Pt13",
+  "header": "4-character mixer caption \"PT13\" of sound part 13 (part row 12): entry 12 of the 30 four-character part names that MidiPart_ConfigNameTable puts at RAM 0x3EAB0. The old name was already right; only its _Part13 tail matches the generic-suffix rule, so the part is spelled Pt13 as in the caption text itself and the sibling TrackName4_Tr13. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui_widgets/sequencer_channel_containers.s:235 `.long PartName4_Part13` -- MidiPart_ConfigNameTable entry 44 (= 0x3EA30 + 4*44 = 0x3EAB0 + 4*12; entry 32 = PartName4_Right1)",
+   "ui/drawbar_panel_ui.s:13216-13232 `PsMixer_CtlTypeProc5_OnParaDraw:` ... `lda xwa, (0x3eab0:24)` / `ld de, (xsp+4)` / `sla de, 2` / `ld xde, (xwa+de)` -- the part row's 4-char caption",
+   "ui_widgets/technichord_string_data.s:3574 `PartName4_Part13: .incbin ...` -- bytes \"PT13\" NUL 0xFF"
+  ]
+ },
+ {
+  "old": "PartName4_Part12",
+  "verdict": "refuse",
+  "why_refused": "kept: the old name already says what it is (proposed PartName4_Pt12 only avoided the _Part suffix rule)",
+  "new": "PartName4_Pt12",
+  "header": "4-character mixer caption \"PT12\" of sound part 12 (part row 11): entry 11 of the 30 four-character part names that MidiPart_ConfigNameTable puts at RAM 0x3EAB0. The old name was already right; only its _Part12 tail matches the generic-suffix rule, so the part is spelled Pt12 as in the caption text itself and the sibling TrackName4_Tr12. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui_widgets/sequencer_channel_containers.s:234 `.long PartName4_Part12` -- MidiPart_ConfigNameTable entry 43 (= 0x3EA30 + 4*43 = 0x3EAB0 + 4*11; entry 32 = PartName4_Right1)",
+   "ui/drawbar_panel_ui.s:13216-13232 `PsMixer_CtlTypeProc5_OnParaDraw:` ... `lda xwa, (0x3eab0:24)` / `ld de, (xsp+4)` / `sla de, 2` / `ld xde, (xwa+de)` -- the part row's 4-char caption",
+   "ui_widgets/technichord_string_data.s:3580 `PartName4_Part12: .incbin ...` -- bytes \"PT12\" NUL 0xFF"
+  ]
+ },
+ {
+  "old": "PartName4_Part11",
+  "verdict": "refuse",
+  "why_refused": "kept: the old name already says what it is (proposed PartName4_Pt11 only avoided the _Part suffix rule)",
+  "new": "PartName4_Pt11",
+  "header": "4-character mixer caption \"PT11\" of sound part 11 (part row 10): entry 10 of the 30 four-character part names that MidiPart_ConfigNameTable puts at RAM 0x3EAB0. The old name was already right; only its _Part11 tail matches the generic-suffix rule, so the part is spelled Pt11 as in the caption text itself and the sibling TrackName4_Tr11. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui_widgets/sequencer_channel_containers.s:233 `.long PartName4_Part11` -- MidiPart_ConfigNameTable entry 42 (= 0x3EA30 + 4*42 = 0x3EAB0 + 4*10; entry 32 = PartName4_Right1)",
+   "ui/drawbar_panel_ui.s:13216-13232 `PsMixer_CtlTypeProc5_OnParaDraw:` ... `lda xwa, (0x3eab0:24)` / `ld de, (xsp+4)` / `sla de, 2` / `ld xde, (xwa+de)` -- the part row's 4-char caption",
+   "ui_widgets/technichord_string_data.s:3586 `PartName4_Part11: .incbin ...` -- bytes \"PT11\" NUL 0xFF"
+  ]
+ },
+ {
+  "old": "PartName4_Part10",
+  "verdict": "refuse",
+  "why_refused": "kept: the old name already says what it is (proposed PartName4_Pt10 only avoided the _Part suffix rule)",
+  "new": "PartName4_Pt10",
+  "header": "4-character mixer caption \"PT10\" of sound part 10 (part row 9): entry 9 of the 30 four-character part names that MidiPart_ConfigNameTable puts at RAM 0x3EAB0. The old name was already right; only its _Part10 tail matches the generic-suffix rule, so the part is spelled Pt10 as in the caption text itself and the sibling TrackName4_Tr10. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui_widgets/sequencer_channel_containers.s:232 `.long PartName4_Part10` -- MidiPart_ConfigNameTable entry 41 (= 0x3EA30 + 4*41 = 0x3EAB0 + 4*9; entry 32 = PartName4_Right1)",
+   "ui/drawbar_panel_ui.s:13216-13232 `PsMixer_CtlTypeProc5_OnParaDraw:` ... `lda xwa, (0x3eab0:24)` / `ld de, (xsp+4)` / `sla de, 2` / `ld xde, (xwa+de)` -- the part row's 4-char caption",
+   "ui_widgets/technichord_string_data.s:3592 `PartName4_Part10: .incbin ...` -- bytes \"PT10\" NUL 0xFF"
+  ]
+ },
+ {
+  "old": "PartName4_Part9",
+  "verdict": "refuse",
+  "why_refused": "kept: the old name already says what it is (proposed PartName4_Pt9 only avoided the _Part suffix rule)",
+  "new": "PartName4_Pt9",
+  "header": "4-character mixer caption \"PT 9\" of sound part 9 (part row 8): entry 8 of the 30 four-character part names that MidiPart_ConfigNameTable puts at RAM 0x3EAB0. The old name was already right; only its _Part9 tail matches the generic-suffix rule, so the part is spelled Pt9 as in the caption text itself and the sibling TrackName4_Tr9. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui_widgets/sequencer_channel_containers.s:231 `.long PartName4_Part9` -- MidiPart_ConfigNameTable entry 40 (= 0x3EA30 + 4*40 = 0x3EAB0 + 4*8; entry 32 = PartName4_Right1)",
+   "ui/drawbar_panel_ui.s:13216-13232 `PsMixer_CtlTypeProc5_OnParaDraw:` ... `lda xwa, (0x3eab0:24)` / `ld de, (xsp+4)` / `sla de, 2` / `ld xde, (xwa+de)` -- the part row's 4-char caption",
+   "ui_widgets/technichord_string_data.s:3598 `PartName4_Part9: .incbin ...` -- bytes \"PT 9\" NUL 0xFF"
+  ]
+ },
+ {
+  "old": "PartName4_Part8",
+  "verdict": "refuse",
+  "why_refused": "kept: the old name already says what it is (proposed PartName4_Pt8 only avoided the _Part suffix rule)",
+  "new": "PartName4_Pt8",
+  "header": "4-character mixer caption \"PT 8\" of sound part 8 (part row 7): entry 7 of the 30 four-character part names that MidiPart_ConfigNameTable puts at RAM 0x3EAB0. The old name was already right; only its _Part8 tail matches the generic-suffix rule, so the part is spelled Pt8 as in the caption text itself and the sibling TrackName4_Tr8. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui_widgets/sequencer_channel_containers.s:230 `.long PartName4_Part8` -- MidiPart_ConfigNameTable entry 39 (= 0x3EA30 + 4*39 = 0x3EAB0 + 4*7; entry 32 = PartName4_Right1)",
+   "ui/drawbar_panel_ui.s:13216-13232 `PsMixer_CtlTypeProc5_OnParaDraw:` ... `lda xwa, (0x3eab0:24)` / `ld de, (xsp+4)` / `sla de, 2` / `ld xde, (xwa+de)` -- the part row's 4-char caption",
+   "ui_widgets/technichord_string_data.s:3604 `PartName4_Part8: .incbin ...` -- bytes \"PT 8\" NUL 0xFF"
+  ]
+ },
+ {
+  "old": "PartName4_Part7",
+  "verdict": "refuse",
+  "why_refused": "kept: the old name already says what it is (proposed PartName4_Pt7 only avoided the _Part suffix rule)",
+  "new": "PartName4_Pt7",
+  "header": "4-character mixer caption \"PT 7\" of sound part 7 (part row 6): entry 6 of the 30 four-character part names that MidiPart_ConfigNameTable puts at RAM 0x3EAB0. The old name was already right; only its _Part7 tail matches the generic-suffix rule, so the part is spelled Pt7 as in the caption text itself and the sibling TrackName4_Tr7. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui_widgets/sequencer_channel_containers.s:229 `.long PartName4_Part7` -- MidiPart_ConfigNameTable entry 38 (= 0x3EA30 + 4*38 = 0x3EAB0 + 4*6; entry 32 = PartName4_Right1)",
+   "ui/drawbar_panel_ui.s:13216-13232 `PsMixer_CtlTypeProc5_OnParaDraw:` ... `lda xwa, (0x3eab0:24)` / `ld de, (xsp+4)` / `sla de, 2` / `ld xde, (xwa+de)` -- the part row's 4-char caption",
+   "ui_widgets/technichord_string_data.s:3610 `PartName4_Part7: .incbin ...` -- bytes \"PT 7\" NUL 0xFF"
+  ]
+ },
+ {
+  "old": "PartName4_Part6",
+  "verdict": "refuse",
+  "why_refused": "kept: the old name already says what it is (proposed PartName4_Pt6 only avoided the _Part suffix rule)",
+  "new": "PartName4_Pt6",
+  "header": "4-character mixer caption \"PT 6\" of sound part 6 (part row 5): entry 5 of the 30 four-character part names that MidiPart_ConfigNameTable puts at RAM 0x3EAB0. The old name was already right; only its _Part6 tail matches the generic-suffix rule, so the part is spelled Pt6 as in the caption text itself and the sibling TrackName4_Tr6. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui_widgets/sequencer_channel_containers.s:228 `.long PartName4_Part6` -- MidiPart_ConfigNameTable entry 37 (= 0x3EA30 + 4*37 = 0x3EAB0 + 4*5; entry 32 = PartName4_Right1)",
+   "ui/drawbar_panel_ui.s:13216-13232 `PsMixer_CtlTypeProc5_OnParaDraw:` ... `lda xwa, (0x3eab0:24)` / `ld de, (xsp+4)` / `sla de, 2` / `ld xde, (xwa+de)` -- the part row's 4-char caption",
+   "ui_widgets/technichord_string_data.s:3616 `PartName4_Part6: .incbin ...` -- bytes \"PT 6\" NUL 0xFF"
+  ]
+ },
+ {
+  "old": "PartName4_Part5",
+  "verdict": "refuse",
+  "why_refused": "kept: the old name already says what it is (proposed PartName4_Pt5 only avoided the _Part suffix rule)",
+  "new": "PartName4_Pt5",
+  "header": "4-character mixer caption \"PT 5\" of sound part 5 (part row 4): entry 4 of the 30 four-character part names that MidiPart_ConfigNameTable puts at RAM 0x3EAB0. The old name was already right; only its _Part5 tail matches the generic-suffix rule, so the part is spelled Pt5 as in the caption text itself and the sibling TrackName4_Tr5. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui_widgets/sequencer_channel_containers.s:227 `.long PartName4_Part5` -- MidiPart_ConfigNameTable entry 36 (= 0x3EA30 + 4*36 = 0x3EAB0 + 4*4; entry 32 = PartName4_Right1)",
+   "ui/drawbar_panel_ui.s:13216-13232 `PsMixer_CtlTypeProc5_OnParaDraw:` ... `lda xwa, (0x3eab0:24)` / `ld de, (xsp+4)` / `sla de, 2` / `ld xde, (xwa+de)` -- the part row's 4-char caption",
+   "ui_widgets/technichord_string_data.s:3622 `PartName4_Part5: .incbin ...` -- bytes \"PT 5\" NUL 0xFF"
+  ]
+ },
+ {
+  "old": "PartName4_Part4",
+  "verdict": "refuse",
+  "why_refused": "kept: the old name already says what it is (proposed PartName4_Pt4 only avoided the _Part suffix rule)",
+  "new": "PartName4_Pt4",
+  "header": "4-character mixer caption \"PT 4\" of sound part 4 (part row 3): entry 3 of the 30 four-character part names that MidiPart_ConfigNameTable puts at RAM 0x3EAB0. The old name was already right; only its _Part4 tail matches the generic-suffix rule, so the part is spelled Pt4 as in the caption text itself and the sibling TrackName4_Tr4. Basis: readers + bytes.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui_widgets/sequencer_channel_containers.s:226 `.long PartName4_Part4` -- MidiPart_ConfigNameTable entry 35 (= 0x3EA30 + 4*35 = 0x3EAB0 + 4*3; entry 32 = PartName4_Right1)",
+   "ui/drawbar_panel_ui.s:13216-13232 `PsMixer_CtlTypeProc5_OnParaDraw:` ... `lda xwa, (0x3eab0:24)` / `ld de, (xsp+4)` / `sla de, 2` / `ld xde, (xwa+de)` -- the part row's 4-char caption",
+   "ui_widgets/technichord_string_data.s:3628 `PartName4_Part4: .incbin ...` -- bytes \"PT 4\" NUL 0xFF"
+  ]
+ },
+ {
+  "old": "PsMixer_CtlTypeProc1_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PsMixer_CtlTypeProc1_Str_Fmts",
+  "header": "\"%s:\" format: PsMixer_CtlTypeProc1 Sprintf's each of the 8 grid columns' 6-character part name (RAM 0x3EA38 table) with it as the column caption. Basis: readers + bytes -- Sprintf_Locked format argument; bytes 25 73 3A 00.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:14915-14922 `lda xwa, (0x3ea38:24)` / `ld xwa, (xwa+hl)` / `push xwa` / `pushw PsMixer_CtlTypeProc1_Data@hi16` / `pushw PsMixer_CtlTypeProc1_Data@lo16` / ... `call Sprintf_Locked`",
+   "includes/generated/naka_technichord_strings.bin +0x19924 `25 73 3a 00` -- \"%s:\"",
+   "extensions/extension_data.s:574 `MstStyle2_GetNameB_DrawString_Str_Fmts: aligned_string \"%s:\"` -- precedent spelling"
+  ],
+  "spelling": "string held as an .incbin slice"
+ },
+ {
+  "old": "PsMixer_CtlTypeProc10_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PsMixer_CtlTypeProc10_Str_Fmts",
+  "header": "\"%s:\" format: PsMixer_CtlTypeProc10 Sprintf's the 6-character track names (RAM 0x3EB28 table, TrackName6_*) of the 8 visible grid columns with it. Basis: readers + bytes -- Sprintf_Locked format argument; bytes 25 73 3A 00.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:15171-15178 `lda xbc, (0x3eb28:24)` / `ld xwa, (xbc+wa)` / `push xwa` / `pushw PsMixer_CtlTypeProc10_Data@hi16` / `pushw PsMixer_CtlTypeProc10_Data@lo16` / ... `call Sprintf_Locked`",
+   "includes/generated/naka_technichord_strings.bin +0x19928 `25 73 3a 00` -- \"%s:\"",
+   "ui_widgets/sequencer_channel_containers.s:253 `.long TrackName6_Tr1` -- MidiPart_ConfigNameTable entry 62 = RAM 0x3EA30 + 0xF8 = 0x3EB28"
+  ],
+  "spelling": "string held as an .incbin slice"
+ },
+ {
+  "old": "Seq_CopyResourcePtrs_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Seq_CopyResourcePtrs_Str_Empty",
+  "header": "Empty string (\"\" + 0xFF pad): Seq_CopyResourcePtrs fills all 128 pointers of the resource-pointer table at (0x024FD8) with its address before loading. Basis: readers + bytes -- `lda xhl, (<this>)` then `ld (xbc+), xhl` over 508 bytes; bytes 00 FF; sibling Seq_InitVoiceStructures_Str_Empty.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "demo/fdemotext_routines.s:2879-2888 `lda xde, (0x024fd8:24)` / `lda xhl, (Seq_CopyResourcePtrs_Data:24)` / `lda xde, (xde+508)` / `ld (xbc+), XHL` / `cp xbc, xde` -- table filled with this pointer",
+   "includes/generated/naka_technichord_strings.bin +0x1A0B8 `00 ff` -- \"\"",
+   "ui_widgets/technichord_string_data.s:4514 `Seq_InitVoiceStructures_Str_Empty:` -- sibling empty string"
+  ],
+  "spelling": "string held as an .incbin slice"
+ },
+ {
+  "old": "FDemo_FileOpen_DoOpen_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FDemo_FileOpen_DoOpen_Str_rb",
+  "header": "File mode \"rb\" (NUL + 0xFF pad) that FDemo_FileOpen_DoOpen passes to FileIO_OpenWithMode. Basis: readers + bytes -- XBC mode argument; bytes 72 62 00 FF.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "demo/file_demo_proc.s:507-510 `FDemo_FileOpen_DoOpen: lda xwa, (xsp+10)` / `ld xbc, FDemo_FileOpen_DoOpen_Data` / `call FileIO_OpenWithMode`",
+   "includes/generated/naka_technichord_strings.bin +0x1A15A `72 62 00 ff` -- \"rb\"",
+   "ui_widgets/widget_descriptors.s:5115 `SndTable_LookupA_Str_rb` -- precedent name for an \"rb\" mode string"
+  ],
+  "spelling": "string held as an .incbin slice"
+ },
+ {
+  "old": "Demo_SelectEntry_LoadPattern_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DemoSong_EntryCol",
+  "header": "Base of the entry column of the 23 x {u8 entry, u8 title} auto-demo song order (byte 0 = 0, entry of demo song 0); Demo_SelectEntry_LoadPattern loads DEMO_ACTIVE_ENTRY from [2*DEMO_CURRENT_SONG]. Basis: readers + bytes -- the title column one byte later is DemoSong_TitleCol, read with the same 2*song index.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "demo/file_demo_proc.s:845-850 `ld a, (DEMO_CURRENT_SONG:16)` / `add wa, wa` / `lda xbc, (Demo_SelectEntry_LoadPattern_Data:24)` / `ld (DEMO_ACTIVE_ENTRY:16), (xbc+wa)`",
+   "demo/file_demo_proc.s:858-863 `add wa, wa` / `lda xbc, (DemoSong_TitleCol:24)` / `ld a, (xbc+wa)` / `call UI_PostModeChangeEvent` -- the title column, same index",
+   "ui_widgets/technichord_string_data.s:4585-4589 `DemoSong_TitleCol -- ... base of the title column of the 23 x {u8 entry, u8 title} demo song order that starts 1 byte earlier`",
+   "includes/generated/naka_technichord_strings.bin +0x1A15E `00 e1 01 e1 0e e3 08 e2 ...` -- {entry, title} pairs"
+  ]
+ },
+ {
+  "old": "FileIO_CheckSig_LoopTest_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FileIO_FileSigRecs_LengthCol",
+  "header": "Base of the length column (+6) of the 8 x 8-byte file-signature records {u8 *sig, u16 offset, u16 length} that start at FileIO_RegionSignatures; record 0's length = 2 (\"HK\"). FileIO_CheckRegionSignature compares [kind*8] bytes. Basis: readers + bytes -- sibling FileIO_FileSigRecs_OffsetCol (+4).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "demo/file_demo_proc.s:1444-1451 `FileIO_CheckSig_LoopTest: ld a, (xsp + 4)` / `sla wa, 3` / `lda xbc, (FileIO_CheckSig_LoopTest_Data:24)` / `ld de, iz` / `cp de, (xbc+wa)` / `jr c, FileIO_CheckSig_ReadLoop` -- loop while bytes compared < length",
+   "demo/file_demo_proc.s:1414-1419 `sla wa, 3` / `lda xbc, (FileIO_FileSigRecs_OffsetCol:24)` / `ld wa, (xbc+wa)` / ... `call FileIO_SeekAndReadBlock` -- offset column, same kind*8 index",
+   "ui_widgets/technichord_string_data.s:4604-4613 headers of FileIO_RegionSignatures (+0) and FileIO_FileSigRecs_OffsetCol (+4)",
+   "includes/generated/naka_technichord_strings.bin +0x1A1B6 `6e01ea00 0400 0200 | 6a01ea00 0000 0200 ...` -- record 0 = {sig, offset 4, length 2}"
+  ]
+ },
+ {
+  "old": "SLSrcBankList_FuncBody_Data_2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SingleLoadSrc_PanelMemEntryCount",
+  "header": "Number of entries (80) of the PANEL MEMORY single-load source list: SingleLoadSrc_PanelMemListProc refuses a bank step (+8) or an item step (+1) whose new position would reach it. Basis: readers + bytes -- the readers compare the stepped cursor with it.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "file_io/single_load.s:375-379 `ld l, (SingleLoadSrc_PanelMemBankSize:24)` / `add a, e` / `cp a, (SLSrcBankList_FuncBody_Data_2:24)` / `jr nc, ...` -- bank paging (parameter 5)",
+   "file_io/single_load.s:427-429 `inc 1, a` / `cp a, (SLSrcBankList_FuncBody_Data_2:24)` -- item step (parameter 6)",
+   "ui_widgets/technichord_string_data.s:5646-5650 `SingleLoadSrc_PanelMemBankSize -- ... = 8 ... the position limit is 80 (the byte after it)`",
+   "includes/generated/naka_technichord_strings.bin +0x1AA06 `50 ff` -- value 80 + 0xFF pad"
+  ]
+ },
+ {
+  "old": "SLSrcBankList_FuncBody_Data_3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SingleLoadSrc_ComposerEntryCount",
+  "header": "Number of items (30) of the COMPOSER single-load source list (3 columns of 10): SingleLoadSrc_ComposerListProc refuses a column step (+10) or an item step (+1) that would reach it. Basis: readers + bytes -- the readers compare the stepped cursor with it.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "file_io/single_load.s:788-792 `ld e, (SLSrcComposer_RowsPerColumn:24)` / `add a, l` / `cp a, (SLSrcBankList_FuncBody_Data_3:24)` -- column step (parameter 5)",
+   "file_io/single_load.s:839-841 `inc 1, a` / `cp a, (SLSrcBankList_FuncBody_Data_3:24)` -- item step (parameter 6)",
+   "ui_widgets/technichord_string_data.s:5672-5676 `SLSrcComposer_RowsPerColumn ... lays out its 30 items (SLSrcBankList_FuncBody_Data_3, the next byte pair) as columns of 10`",
+   "includes/generated/naka_technichord_strings.bin +0x1AA28 `1e ff` -- value 30 + 0xFF pad"
+  ]
+ },
+ {
+  "old": "SLSrcBankList_FuncBody_Data_4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SingleLoadSrc_SoundMemEntryCount",
+  "header": "Number of positions (168) of the SOUND MEMORY single-load source list: SingleLoadSrc_SoundMemListProc refuses an item step (+1) that would reach it. Basis: readers + bytes -- the readers compare the stepped cursor with it.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "file_io/single_load.s:1292-1297 `inc 1, a` / `cp a, (SLSrcBankList_FuncBody_Data_4:24)` / `jr nc, ...` -- item step (parameter 6)",
+   "ui_widgets/technichord_string_data.s:5693-5697 `SingleLoadSrc_SoundMemPageSize -- ... = 20 ... the position limit is 168 (the byte after it)`",
+   "includes/generated/naka_technichord_strings.bin +0x1AA46 `a8 ff` -- value 168 + 0xFF pad"
+  ]
+ },
+ {
+  "old": "SLDstBankList_FuncBody_Data_5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SingleLoadDst_PanelMemEntryCount",
+  "header": "Number of entries (80) of the PANEL MEMORY single-load destination list: SingleLoadDst_PanelMemListProc refuses a bank step (+8) or an item step (+1) that would reach it. Basis: readers + bytes -- the readers compare the stepped cursor with it.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "file_io/single_load.s:1801-1805 `ld e, (SingleLoadDst_PanelMemBankSize:24)` / `add a, l` / `cp a, (SLDstBankList_FuncBody_Data_5:24)` -- bank step (parameter 7)",
+   "file_io/single_load.s:1859 `cp a, (SLDstBankList_FuncBody_Data_5:24)` -- item step",
+   "ui_widgets/technichord_string_data.s:5724-5728 `SingleLoadDst_PanelMemBankSize -- ... = 8 ... the position limit is 80 (the byte after it)`",
+   "includes/generated/naka_technichord_strings.bin +0x1AA7C `50 ff` -- value 80 + 0xFF pad"
+  ]
+ },
+ {
+  "old": "SLDstBankList_FuncBody_Data_6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SingleLoadDst_SequencerSongCount",
+  "header": "Number of songs (10) of the SEQUENCER single-load destination list: SingleLoadDst_SequencerListProc steps the song number RAM 0x8A04 up only while the result stays below it. Basis: readers + bytes -- the readers compare the stepped cursor with it.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "file_io/single_load.s:2043-2055 `ld w, (0x8a04:16)` ... `inc 1, a` / `cp a, (SLDstBankList_FuncBody_Data_6:24)` / `jr nc, ...` / `inc 1, c` / `ld (0x8a04:16), c` -- song step (parameter 8)",
+   "file_io/single_load.s:2007-2009 header `SingleLoadDst_SequencerListProc: ... parameter 8 steps the song number RAM 0x8A04 up to SLDstBankList_FuncBody_Data_6`",
+   "includes/generated/naka_technichord_strings.bin +0x1AA82 `0a ff` -- value 10 + 0xFF pad"
+  ]
+ },
+ {
+  "old": "SLDstBankList_FuncBody_Data_7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SingleLoadDst_ComposerEntryCount",
+  "header": "Number of items (30) of the COMPOSER single-load destination list: SingleLoadDst_ComposerListProc refuses a bank step (+10) or an item step (+1) that would reach it. Basis: readers + bytes -- the readers compare the stepped cursor with it.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "file_io/single_load.s:2250-2254 `ld e, (SingleLoadDst_ComposerBankSize:24)` / `add a, l` / `cp a, (SLDstBankList_FuncBody_Data_7:24)` -- bank step",
+   "file_io/single_load.s:2308 `cp a, (SLDstBankList_FuncBody_Data_7:24)` -- item step",
+   "ui_widgets/technichord_string_data.s:5750-5754 `SingleLoadDst_ComposerBankSize -- ... = 10 ... the position limit is 30 (the byte after it)`",
+   "includes/generated/naka_technichord_strings.bin +0x1AAA0 `1e ff` -- value 30 + 0xFF pad"
+  ]
+ },
+ {
+  "old": "SLDstBankList_FuncBody_Data_8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SingleLoadDst_SoundMemEntryCount",
+  "header": "Number of positions (168) of the SOUND MEMORY single-load destination list: SingleLoadDst_SoundMemListProc refuses an item step (+1, parameter 8) that would reach it. Basis: readers + bytes -- the readers compare the stepped cursor with it.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "file_io/single_load.s:2687-2692 `inc 1, a` / `cp a, (SLDstBankList_FuncBody_Data_8:24)` / `jr nc, ...` -- item step (parameter 8)",
+   "ui_widgets/technichord_string_data.s:5784 `SLDstSoundMem_RowsPerColumn` (20) -- the byte pair before it, same layout as the source list's 20 / 168",
+   "includes/generated/naka_technichord_strings.bin +0x1AAC6 `a8 ff` -- value 168 + 0xFF pad"
+  ]
+ },
+ {
+  "old": "SLDstBankList_FuncBody_Data_3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SingleLoadDst_DrawSoundMemItemRows_Str_Colon",
+  "header": "\": \" separator (NUL + 0xFF pad) that SingleLoadDst_DrawSoundMemItemRows appends to the unit caption before the sound number in row 2 (RAM 0x89CD) for a sound position. Basis: readers + bytes -- FileIO_BuildFilePath (strcat) source; bytes 3A 20 00 FF.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "file_io/single_load.s:2531-2539 `ld c, (0x89f8:16)` / ... `call FileIO_CopyString` / `lda xwa, (0x89cd:16)` / `ld xbc, SLDstBankList_FuncBody_Data_3` / `call FileIO_BuildFilePath`",
+   "file_io/single_load.s:2541-2551 `ld a, (0x8a08:16)` / `div wa, (xsp+0x4)` / `inc 1, a` / `calr NumToAscii_FormatNumber` / `call FileIO_BuildFilePath` -- the number appended after it",
+   "includes/generated/naka_technichord_strings.bin +0x1AAC0 `3a 20 00 ff` -- \": \"",
+   "ui_widgets/technichord_string_data.s:5733 `SLDstMemLabel_ColonSep` -- the same separator for the song rows"
+  ],
+  "spelling": "string held as an .incbin slice"
+ },
+ {
+  "old": "SngSelFunc_HandleEvent47_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SngSelFunc_OnGetRamString_Str_Fmt2d",
+  "header": "\"%2d\" format: SngSelFunc_OnGetRamString prints the song number (RAM 0xFFE3 + 1) with it after \"SONG\" for EVT_GET_RAM_STRING. Basis: readers + bytes -- Sprintf_Locked format argument; bytes 25 32 64 00.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "sequencer/sequencer_ui.s:7182-7198 `SngSelFunc_OnGetRamString:` ... `ld a, (0x00ffe3:24)` / `inc 1, a` / `pushw wa` / `pushw SngSelFunc_HandleEvent47_Data@hi16` / `pushw SngSelFunc_HandleEvent47_Data@lo16` / ... `call Sprintf_Locked`",
+   "sequencer/sequencer_ui.s:7177-7178 `cp xbc, EVT_GET_RAM_STRING` / `jr z, SngSelFunc_OnGetRamString`",
+   "includes/generated/naka_widget_descriptors.bin +0x38BA `25 32 64 00` -- \"%2d\""
+  ],
+  "spelling": "string held as an .incbin slice"
+ },
+ {
+  "old": "BmDrEdit_TestPartTableEntry_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Seq_TrackAssignPartRecordPtrs",
+  "header": "21 x u32 RAM addresses, indexed by a TRACK ASSIGN part code (RAM 0xF1A0[track], 0..20): the 26-byte panel part record of that part (0xF9B6 + 26k = PanelTlv_PayloadByTag[k]); codes 13-16 and 20 (no part record, 16 = RHYTHM) point at 0xF9B6. Basis: readers + bytes -- BmDrEdit_TestPartTableEntry (no caller found) loads entry [0xF1A0[RAM 0x2965]] and tests the record's byte 0; the code -> k mapping is the one SMF_ScanAndProcessChannel_Data gives as 0x36 + 26k offsets.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "sequencer/bmdredit_routines.s:1793-1804 `ld a, (0x2965:16)` / `lda_d16 xbc, (0xf1a0)` / `add xwa, xbc` / `ld a, (xwa)` / `sla wa, 2` / `lda xbc, (BmDrEdit_TestPartTableEntry_Data:24)` / `ld xwa, (xbc+wa)` / `cp (xwa), 240`",
+   "includes/generated/naka_widget_descriptors.bin +0x1362E `f9b6 f9ea f9d0 fa6c fa86 faa0 faba fad4 fa1e fa38 fa52 fa04 fb3c f9b6 f9b6 f9b6 f9b6 faee fb08 fb22 f9b6` (u32 each) -- 21 RAM addresses",
+   "sequencer/smf_config_routines.s:211-215 `SMF_ScanAndProcessChannel_Data: .short 0x0036, 0x006a, 0x0050, 0x00ec ...` -- the same codes -> 26-byte record k (0xFFFF for 13-16)",
+   "extensions/extension_data.s:3234-3236 `PanelTlv_PayloadByTag: .long 0x0000f9b6, 0x0000f9d0, 0x0000f9ea ...` -- 0xF9B6 + 26k = record of tag k",
+   "ui/ui_playback_modes.s:79 `Seq_FindRhythmTrack: ... TRACK ASSIGN value (0xF1A0[t]) is 16` -- what 0xF1A0 holds"
+  ]
+ },
+ {
+  "old": "SeqPlay_WriteErrorToVoiceTable_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqData_ErrorCodeRemap",
+  "header": "12 x u8 SEQ_ERROR_CODE -> SEQ_ERROR_CODE map {0, 0, 2, 3, 4, 5, 6, 0, 0, 9, 10, 11}: drops the end-of-data codes 1, 7 and 8 (end mark / 0x82 reached / 0xFFFF position) and keeps the real errors. Basis: readers + bytes -- SeqPlay_WriteErrorToVoiceTable does SEQ_ERROR_CODE := table[SEQ_ERROR_CODE] at the end of each sequence scan.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "sequencer/sequencer_engine.s:19756-19760 `ld a, (SEQ_ERROR_CODE:16)` / `extz wa` / `lda xbc, (SeqPlay_WriteErrorToVoiceTable_Data:24)` / `ld (SEQ_ERROR_CODE:16), (xbc+wa)`",
+   "sequencer/sequencer_engine.s:14342 / 14443 / 15007 / 15210 `calr SeqPlay_WriteErrorToVoiceTable` -- called as the exit of the scan routines",
+   "includes/generated/naka_widget_descriptors.bin +0x13782 `00 00 02 03 04 05 06 00 00 09 0a 0b`",
+   "sequencer/sequencer_engine.s:13167-13169 `cp l, 0x82` / `jr nz, ...` / `ld (SEQ_ERROR_CODE:16), 7` and 13213-13215 `cp iz, 0xffff` / `ld (SEQ_ERROR_CODE:16), 8` -- 7/8 mark end of data",
+   "shared/ram_variables.s:33 `.equ SEQ_ERROR_CODE, 0x287a ; ... 1..11 / 255 set by the end-mark, overflow and bad-parameter paths`"
+  ]
+ },
+ {
+  "old": "SeqPart_VelCurveData_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqPart_QtzGrid12_ZoneStarts",
+  "header": "8 x u8 lower edges {90, 6, 18, 30, 42, 54, 66, 78} of the quantize zones of the 12-tick grid: zone e = positions [start[e], end[e]) (zone 0 wraps), stored in RAM 9794 next to the upper edge from SeqPart_VelCurveData_Table_3 in RAM 9792. Basis: readers + bytes -- SeqPart_VelocityCurveCalc_QtzGrid12 picks zone e with the bounds 6/18/30/42/54/66/78/90 on position RAM 9784 and copies entry [e] of both tables.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "sequencer/sequencer_engine.s:33382-33386 `extz de` / `lda xbc, (SeqPart_VelCurveData_Table_3:24)` / `ld (9792), (xbc+de)` / `ld xbc, SeqPart_VelCurveData_Data` / `ld (9794), (xbc+de)` -- end and start of zone e",
+   "sequencer/sequencer_engine.s (SeqPart_VelocityCurveCalc_QtzGrid12) `cp c, ...` / `ld e, k:opc` chain with bounds 6/18/30/42/54/66/78/90 -- zone e = [bound(e-1), bound(e))",
+   "includes/generated/naka_widget_descriptors.bin SeqPart_VelCurveData_Data bytes = {90, 6, 18, 30, 42, 54, 66, 78} -- each entry is the previous zone's upper edge",
+   "(repo) analysis/kn5000-naming/proposals-2026-10-06-cases-c8.json SeqPart_VelocityCurveCalc_QtzGrid48 header -- 'stores the zone's edge pair in 9792/9794'"
+  ]
+ },
+ {
+  "old": "SeqPart_VelCurveData_Data_2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqPart_QtzGrid32_ZoneStarts",
+  "header": "3 x u8 lower edges {80, 16, 48 (+ 0xFF)} of the quantize zones of the 32-tick grid: zone e = positions [start[e], end[e]) (zone 0 wraps), stored in RAM 9794 next to the upper edge from SeqPart_VelCurveData_Table_4 in RAM 9792. Basis: readers + bytes -- SeqPart_VelocityCurveCalc_QtzGrid32 picks zone e with the bounds 16/48/80 on position RAM 9784 and copies entry [e] of both tables.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "sequencer/sequencer_engine.s:33405-33409 `extz de` / `lda xbc, (SeqPart_VelCurveData_Table_4:24)` / `ld (9792), (xbc+de)` / `ld xbc, SeqPart_VelCurveData_Data_2` / `ld (9794), (xbc+de)` -- end and start of zone e",
+   "sequencer/sequencer_engine.s (SeqPart_VelocityCurveCalc_QtzGrid32) `cp c, ...` / `ld e, k:opc` chain with bounds 16/48/80 -- zone e = [bound(e-1), bound(e))",
+   "includes/generated/naka_widget_descriptors.bin SeqPart_VelCurveData_Data_2 bytes = {80, 16, 48 (+ 0xFF)} -- each entry is the previous zone's upper edge",
+   "(repo) analysis/kn5000-naming/proposals-2026-10-06-cases-c8.json SeqPart_VelocityCurveCalc_QtzGrid48 header -- 'stores the zone's edge pair in 9792/9794'"
+  ]
+ },
+ {
+  "old": "SeqPart_VelCurveData_Data_3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqPart_QtzGrid16_ZoneStarts",
+  "header": "6 x u8 lower edges {88, 8, 24, 40, 56, 72} of the quantize zones of the 16-tick grid: zone e = positions [start[e], end[e]) (zone 0 wraps), stored in RAM 9794 next to the upper edge from SeqPart_VelCurveData_Table_5 in RAM 9792. Basis: readers + bytes -- SeqPart_VelocityCurveCalc_QtzGrid16 picks zone e with the bounds 8/24/40/56/72/88 on position RAM 9784 and copies entry [e] of both tables.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "sequencer/sequencer_engine.s:33443-33447 `extz de` / `lda xbc, (SeqPart_VelCurveData_Table_5:24)` / `ld (9792), (xbc+de)` / `ld xbc, SeqPart_VelCurveData_Data_3` / `ld (9794), (xbc+de)` -- end and start of zone e",
+   "sequencer/sequencer_engine.s (SeqPart_VelocityCurveCalc_QtzGrid16) `cp c, ...` / `ld e, k:opc` chain with bounds 8/24/40/56/72/88 -- zone e = [bound(e-1), bound(e))",
+   "includes/generated/naka_widget_descriptors.bin SeqPart_VelCurveData_Data_3 bytes = {88, 8, 24, 40, 56, 72} -- each entry is the previous zone's upper edge",
+   "(repo) analysis/kn5000-naming/proposals-2026-10-06-cases-c8.json SeqPart_VelocityCurveCalc_QtzGrid48 header -- 'stores the zone's edge pair in 9792/9794'"
+  ]
+ },
+ {
+  "old": "FDC_Format2HD_FatHead_Tail",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FileIO_ReadFreeSpaceViaFAT_Str_d",
+  "header": "Open-mode string \"d\" (NUL) that FileIO_ReadFreeSpaceViaFAT passes to FileOpen with path \"A:\\\" to read the disk's FAT for the free-space count. Basis: readers + bytes -- FileOpen's second argument; bytes 64 00; sibling FindFirst_OpenDir_Str_d.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "sequencer/smf_event_processor.s:9437-9442 `FileIO_ReadFreeSpaceViaFAT: pushw FDC_Format2HD_FatHead_Tail@hi16` / `pushw ...@lo16` / `pushw FileIO_ReadFreeSpaceViaFAT_Str_A@hi16` / `pushw ...@lo16` / `call FileOpen` -- (path \"A:\\\", mode this)",
+   "includes/generated/naka_widget_descriptors.bin +0x1429E `64 00` -- \"d\"",
+   "ui_widgets/widget_descriptors.s:5114 `FindFirst_OpenDir_Str_d:` -- precedent for the same \"d\" mode"
+  ],
+  "spelling": "string held as an .incbin slice"
+ },
+ {
+  "old": "GetDiskFreeSpace_CaseTable_Tail",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FileIO_ReadVolumeLabelEntry_Str_d",
+  "header": "Open-mode string \"d\" (NUL) that FileIO_ReadVolumeLabelEntry passes to FileOpen with path \"A:\\\" before reading the volume-label directory entry. Basis: readers + bytes -- FileOpen's second argument; bytes 64 00.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "sequencer/smf_event_processor.s:9485-9490 `FileIO_ReadVolumeLabelEntry: pushw GetDiskFreeSpace_CaseTable_Tail@hi16` / `pushw ...@lo16` / `pushw FileIO_ReadVolumeLabelEntry_Str_A@hi16` / ... `call FileOpen`",
+   "includes/generated/naka_widget_descriptors.bin +0x142B2 `64 00` -- \"d\"",
+   "ui_widgets/widget_descriptors.s:5114 `FindFirst_OpenDir_Str_d:` -- precedent"
+  ],
+  "spelling": "string held as an .incbin slice"
+ },
+ {
+  "old": "GetVolumeLabel_CaseTable_Tail",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PathInfo_BuildAndOpen_Str_A",
+  "header": "Drive prefix \"A:\\\" (NUL) that PathInfo_BuildAndOpen Strcat's into its empty path buffer before the file name, then opens the result with \"+wb\". Basis: readers + bytes -- Strcat source; bytes 41 3A 5C 00; siblings FileIO_ReadFreeSpaceViaFAT_Str_A / FileIO_ReadVolumeLabelEntry_Str_A.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "sequencer/smf_event_processor.s:9569-9575 `PathInfo_BuildAndOpen: ld (xsp + 6), 0x0` / `pushw GetVolumeLabel_CaseTable_Tail@hi16` / `pushw ...@lo16` / `lda xwa, (xsp + 10)` / `push xwa` / `call Strcat`",
+   "sequencer/smf_event_processor.s:9576-9585 `push xwa` / `call Strcat` (the name, 9580) / `pushw PathInfo_BuildAndOpen_Str_wb@hi16` ... `call FileOpen`",
+   "includes/generated/naka_widget_descriptors.bin +0x142C6 `41 3a 5c 00` -- \"A:\\\"",
+   "ui_widgets/widget_descriptors.s:5041 `FileIO_ReadFreeSpaceViaFAT_Str_A: ... ; \"A:\\\\\"` -- precedent name"
+  ],
+  "spelling": "string held as an .incbin slice"
+ },
+ {
+  "old": "AccPatch_Transpose_LookupTable_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Note_PitchClassTable",
+  "header": "128 x u8 MIDI note -> pitch class (note mod 12: 0,1,..,11 repeating). The accompaniment transpose, rhythm instrument lookups and note allocation index it by a note number. Basis: readers + bytes -- every reader adds a note (0..127) to its base; the bytes are i mod 12.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:17471-17474 `AccPatch_Transpose_LookupTable: ld xhl, 0:i3` / `ld l, (0x36ec:16)` / `add xhl, AccPatch_Transpose_LookupTable_Data` / `ld a, (xhl)` -- after the transpose wraps (0x36EC) by 12 (lines 17467-17469 `ld w, 0xc:opc` / `sub w, a` / `add (0x36ec:16), w`)",
+   "sequencer/rhythm_routines.s:494 / 511 `ld xiy, AccPatch_Transpose_LookupTable_Data` / `; ... indexed by the note` -- Rhythm_InstrBaseLookup",
+   "sequencer/seq_event_playback.s:1652 `ld xix, AccPatch_Transpose_LookupTable_Data` -- AccPlay_NoteAllocAndWrite",
+   "includes/generated/naka_widget_descriptors.bin +0x152E2 `00 01 02 .. 0b 00 01 ..` -- entry i = i mod 12 for i = 0..127"
+  ]
+ },
+ {
+  "old": "AccTone_InlineBytecodeData_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AccPart_BitToIndexTable",
+  "header": "34 x u8: the one-hot accompaniment-part bit (RAM 0x33D4: 1, 2, 4, 8, 16, 32) -> part index 0..5 (other entries 0, the last 0xFF). Basis: readers + bytes -- both readers index it with the byte at RAM 0x33D4 and use the result to index a per-part word table; AccStyle_SetupPartAddresses sets 0x33D4 to 1, 2, 4, 8, 16, 32 for the six parts.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:12684-12690 `extz wa` / `lda xbc, (AccTone_InlineBytecodeData_Data:24)` / `ld a, (xbc+wa)` / `ld xbc, (0x3426:16)` / `add wa, wa` / `ldw (13270), (xbc+wa)` -- A = part bit; result indexes the part's word",
+   "sequencer/accompaniment_engine.s:13232-13244 (A = (13268:16), loaded at 13209) `lda xbc, (AccTone_InlineBytecodeData_Data:24)` / `ld l, (xbc+wa)` ... `add hl, hl` / `ldw (13270), (xde+hl)` -- same, A = RAM 0x33D4 (13268)",
+   "sequencer/accompaniment_engine.s:13615-13616 `ld a, (0x33d4:16)` / `call AccPedal_DirectionA_Wrap_Helper` -- the first reader's A is the part bit",
+   "sequencer/accompaniment_engine.s:409-435 `ld (0x33d4:16), 1` ... `ld (0x33d4:16), 32` -- AccStyle_SetupPartAddresses walks the six parts",
+   "includes/generated/naka_widget_descriptors.bin +0x19198 `00 00 01 00 02 00 00 00 03 ... 04 ... 05 ff` -- entry[1<<n] = n"
+  ]
+ },
+ {
+  "old": "SndParam_ReadRegWord_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SndParam_WordValueListPtrs",
+  "header": "Pointer table indexed by a sound-parameter descriptor's +11 byte whose entries point at 16-bit value lists; the label holds entry 0 = WidgetParam_MidiCC_SysExcl, the list {1, 2, 3, 0x203, 0x201, 0x202}. Basis: readers -- SndParam_ReadRegWord returns the position (0..5) of the current word in list [+11]; SndParam_RegisterBitfield_Data writes list[+11][value]. Index range beyond 0 is not traced (entry 1 would be SndParam_Registry).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/sndparam_routines.s:941-952 `ld a, (xwa + 11)` / `sla a, 2` / `lda xbc, (SndParam_ReadRegWord_Data:24)` / `ld xwa, (xbc+a)` / `SndParam_ReadRegScanLoop: cp DE, (xwa+)` / `inc 1, hl` / `cp hl, 5:i3` -- scan a 6-word list",
+   "audio/sndparam_routines.s:1371-1378 `ld c, (xwa+11)` / `sla c, 2` / `lda xiy, (SndParam_ReadRegWord_Data:24)` / `ld xiy, (xiy+c)` / `add xde, xde` / `add xde, xiy` / `ld de, (xde)` -- list[value]",
+   "ui_widgets/widget_dispatch.s:95-96 `SndParam_ReadRegWord_Data:` / `.long WidgetParam_MidiCC_SysExcl` -- entry 0",
+   "extensions/extension_data.s:3758-3759 `WidgetParam_MidiCC_SysExcl: .byte 0x01, 0x00, 0x02, 0x00, 0x03, 0x00, 0x03, 0x02, 0x01, 0x02, 0x02, 0x02` -- 6 words",
+   "ui_widgets/widget_dispatch.s:85-91 comment on SndParam_ValueTablePtrPair -- the +0/+4 bases, 'index ranges not traced'"
+  ]
+ },
+ {
+  "old": "SndParam_RegisterLoop_Data",
+  "verdict": "refuse",
+  "why_refused": "ALIAS, not a name problem: this label sits on the same address as SndParam_Registry (line 105, the line directly above, nothing between them), which is already the semantic name and has no code referrers of its own. A rename to SndParam_Registry would create a duplicate label definition. Fix by merging: respell the 2 referrer(s) to SndParam_Registry and delete the `SndParam_RegisterLoop_Data:` line (CLAUDE.md 'Canonical Label Names'). Apply the same in v9/v7.",
+  "new": null,
+  "header": null,
+  "basis": null,
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:105-106 `SndParam_Registry:` / `SndParam_RegisterLoop_Data:` -- two labels, one address",
+   "audio/sndparam_routines.s:3109 `ld xwa, SndParam_RegisterLoop_Data` -- SndParam_RegisterLoop walks 972 (0x3CC) entries (line 3115)",
+   "audio/sndparam_routines.s:3224 `ld xwa, SndParam_RegisterLoop_Data` -- SndParam_ReregisterLoop"
+  ],
+  "merge_into": "SndParam_Registry"
+ },
+ {
+  "old": "SndParam_RO_Dispatch_Data",
+  "verdict": "refuse",
+  "why_refused": "ALIAS, not a name problem: this label sits on the same address as SndParam_ReadHandlers (line 1082, the line directly above, nothing between them), which is already the semantic name and has no code referrers of its own. A rename to SndParam_ReadHandlers would create a duplicate label definition. Fix by merging: respell the 1 referrer(s) to SndParam_ReadHandlers and delete the `SndParam_RO_Dispatch_Data:` line (CLAUDE.md 'Canonical Label Names'). Apply the same in v9/v7.",
+  "new": null,
+  "header": null,
+  "basis": null,
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:1082-1083 `SndParam_ReadHandlers:` / `SndParam_RO_Dispatch_Data:` -- two labels, one address",
+   "audio/sndparam_routines.s:303 `lda xbc, (SndParam_RO_Dispatch_Data:24)` -- SndParam_RO_Dispatch"
+  ],
+  "merge_into": "SndParam_ReadHandlers"
+ },
+ {
+  "old": "SndParam_DispatchCallback_Data",
+  "verdict": "refuse",
+  "why_refused": "ALIAS, not a name problem: this label sits on the same address as SndParam_RegisterHandlers (line 1094, the line directly above, nothing between them), which is already the semantic name and has no code referrers of its own. A rename to SndParam_RegisterHandlers would create a duplicate label definition. Fix by merging: respell the 1 referrer(s) to SndParam_RegisterHandlers and delete the `SndParam_DispatchCallback_Data:` line (CLAUDE.md 'Canonical Label Names'). Apply the same in v9/v7.",
+  "new": null,
+  "header": null,
+  "basis": null,
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:1094-1095 `SndParam_RegisterHandlers:` / `SndParam_DispatchCallback_Data:` -- two labels, one address",
+   "audio/sndparam_routines.s:58 `lda xde, (SndParam_DispatchCallback_Data:24)` -- SndParam_DispatchCallback"
+  ],
+  "merge_into": "SndParam_RegisterHandlers"
+ },
+ {
+  "old": "SndParam_Lkp2_Dispatch_Data",
+  "verdict": "refuse",
+  "why_refused": "ALIAS, not a name problem: this label sits on the same address as SndParam_Register2Handlers (line 1108, the line directly above, nothing between them), which is already the semantic name and has no code referrers of its own. A rename to SndParam_Register2Handlers would create a duplicate label definition. Fix by merging: respell the 1 referrer(s) to SndParam_Register2Handlers and delete the `SndParam_Lkp2_Dispatch_Data:` line (CLAUDE.md 'Canonical Label Names'). Apply the same in v9/v7.",
+  "new": null,
+  "header": null,
+  "basis": null,
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:1108-1109 `SndParam_Register2Handlers:` / `SndParam_Lkp2_Dispatch_Data:` -- two labels, one address",
+   "audio/sndparam_routines.s:188 `lda xbc, (SndParam_Lkp2_Dispatch_Data:24)` -- SndParam_Lkp2_Dispatch"
+  ],
+  "merge_into": "SndParam_Register2Handlers"
+ },
+ {
+  "old": "SndParam_RW_ProcessResult_Data",
+  "verdict": "refuse",
+  "why_refused": "ALIAS, not a name problem: this label sits on the same address as SndParam_EncodeHandlers (line 1121, the line directly above, nothing between them), which is already the semantic name and has no code referrers of its own. A rename to SndParam_EncodeHandlers would create a duplicate label definition. Fix by merging: respell the 2 referrer(s) to SndParam_EncodeHandlers and delete the `SndParam_RW_ProcessResult_Data:` line (CLAUDE.md 'Canonical Label Names'). Apply the same in v9/v7.",
+  "new": null,
+  "header": null,
+  "basis": null,
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:1121-1122 `SndParam_EncodeHandlers:` / `SndParam_RW_ProcessResult_Data:` -- two labels, one address",
+   "audio/sndparam_routines.s:472 `lda xbc, (SndParam_RW_ProcessResult_Data:24)` -- SndParam_RW_ProcessResult",
+   "audio/sndparam_routines.s:597 `lda xhl, (SndParam_RW_ProcessResult_Data:24)`"
+  ],
+  "merge_into": "SndParam_EncodeHandlers"
+ },
+ {
+  "old": "SndParam_DispatchTypeDE5_Data",
+  "verdict": "refuse",
+  "why_refused": "ALIAS, not a name problem: this label sits on the same address as SndParam_WriteHandlers (line 1132, the line directly above, nothing between them), which is already the semantic name and has no code referrers of its own. A rename to SndParam_WriteHandlers would create a duplicate label definition. Fix by merging: respell the 1 referrer(s) to SndParam_WriteHandlers and delete the `SndParam_DispatchTypeDE5_Data:` line (CLAUDE.md 'Canonical Label Names'). Apply the same in v9/v7.",
+  "new": null,
+  "header": null,
+  "basis": null,
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:1132-1133 `SndParam_WriteHandlers:` / `SndParam_DispatchTypeDE5_Data:` -- two labels, one address",
+   "audio/sndparam_routines.s:96 `lda xde, (SndParam_DispatchTypeDE5_Data:24)` -- SndParam_DispatchTypeDE5"
+  ],
+  "merge_into": "SndParam_WriteHandlers"
+ },
+ {
+  "old": "SndParam_DMA_Zone2Check_Data",
+  "verdict": "refuse",
+  "why_refused": "ALIAS, not a name problem: this label sits on the same address as SndParam_BlockRamPtrs (line 1147, the line directly above, nothing between them), which is already the semantic name and has no code referrers of its own. A rename to SndParam_BlockRamPtrs would create a duplicate label definition. Fix by merging: respell the 20 referrer(s) to SndParam_BlockRamPtrs and delete the `SndParam_DMA_Zone2Check_Data:` line (CLAUDE.md 'Canonical Label Names'). Apply the same in v9/v7.",
+  "new": null,
+  "header": null,
+  "basis": null,
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:1147-1148 `SndParam_BlockRamPtrs:` / `SndParam_DMA_Zone2Check_Data:` -- two labels, one address",
+   "audio/sndparam_routines.s:829 `lda xde, (SndParam_DMA_Zone2Check_Data:24)` -- SndParam_ReadRegField (one of 20 sites, all `ld c,(xwa+4); sla bc,2` indexing)",
+   "audio/sndparam_routines.s:933 `lda xde, (SndParam_DMA_Zone2Check_Data:24)` -- SndParam_ReadRegWord"
+  ],
+  "merge_into": "SndParam_BlockRamPtrs"
+ },
+ {
+  "old": "SndParam_ClampReverbTime_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SndParam_StyleRecordRamPtr",
+  "header": "Entry 0x48 of SndParam_BlockRamPtrs = 0xFC5A, the RAM address of panel record 0x48 (style + tempo). SndParam_ClampReverbTime and SndParam_ClampDelayTime load it directly and clamp the record's +8 word (& 0x1FF) to 40..300: the tempo. Basis: readers + bytes -- `ld xwa, (<this>); ld hl, (xwa+8)`; SeqTimer_PostTempoUpdate writes the tempo to 0xFC62 = 0xFC5A + 8 via record 0x48 field 8.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/sndparam_routines.s:2532-2543 `SndParam_ClampReverbTime: ld xwa, (SndParam_ClampReverbTime_Data:24)` / `ld hl, (xwa+8)` / `and hl, 511` / `cp hl, 40` ... `cp hl, 300` / `ldw hl, 300`",
+   "audio/sndparam_routines.s:2602-2613 `SndParam_ClampDelayTime: ld xwa, (SndParam_ClampReverbTime_Data:24)` -- identical clamp",
+   "ui_widgets/widget_dispatch.s:1166-1167 `.long ..., 0x0000fc54 ; 0x44` / `SndParam_ClampReverbTime_Data: .long 0x0000fc5a, ... ; 0x48` -- entry 0x48 of SndParam_BlockRamPtrs",
+   "ui/ui_playback_modes.s:142-153 `SeqTimer_PostTempoUpdate:` ... `ld e, 0x48:opc` / `ld d, 0x8:opc` / `call SwbtWr_QueuePostEvent` / `ld (0xfc62:16), wa` -- record 0x48 +8 = tempo",
+   "(repo) docs/kn-disk-file-formats.md:618 `0x48 style+tempo`"
+  ]
+ },
+ {
+  "old": "DataBuf_CopyBulkBitfields_Large_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FileData_NNPartSourceIndex",
+  "header": "24 x u8 for the 'NN' (.LSW class 3) live-panel import: KN5000 part record i (0..23, RAM 0xF9B4 + 26i) -> index of the 4-byte source record in the file's block at +414 {0x17, 0x14, 0x13, 0x10, 0x11, 0x12, 0..15, 0x15, 0x16}. Basis: readers + bytes -- FileData_ImportNNLivePanel's third loop copies record [map[i]] to part record i.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:5720-5742 `ld xwa, DataBuf_CopyBulkBitfields_Large_Data` / `add xwa, xbc` / `ld a, (xwa)` / `sla wa, 2` / `add de, 414` / `lda xiz, (xwa+de)` ... `ld xbc, 26` / `call Math_MultiplyAccumulate` / `add xhl, 52` / `calr VoiceParam_CopyBitfields_LargeBlock` / `cpw (xsp+4), 24`",
+   "midi/midi_dispatch_handlers.s:5662-5666 header `FileData_ImportNNLivePanel: Foreign .LSW import, stage 1 for header class 3 ('N','N') ... into the live panel area at 0xF980`",
+   "includes/generated/sound_config_lookup.bin +0x10 `17 14 13 10 11 12 00 01 .. 0f 15 16` -- the 24 indexes"
+  ]
+ },
+ {
+  "old": "DSPCfg_ConfigureVoiceSlotA_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FileData_NNDspEffectAlgoMap",
+  "header": "16 x u8 for the 'NN' panel import: low nibble of the source record byte +341 -> DSP EFFECT algorithm number written as parameter 0x4900 (byte 0 of effect slot 0, tag 0x61 at destination +756) {0, 1, 32, 33, 35, 9, 10, 4, 5, 0..}. Basis: readers + bytes -- DSPCfg_ConfigureVoiceSlotA (called by FileData_ImportNNLivePanel / ImportNNPanelMemories) indexes it and calls DSPCfg_WriteParamSimple(0x4900).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:6525-6533 `ld a, (xwa+341)` / `and a, 0xf` / `lda xbc, (DSPCfg_ConfigureVoiceSlotA_Data:24)` / `ld c, (xbc+wa)` / `lda xde, (xde+756)` / `ld xwa, 0x4900` / `call DSPCfg_WriteParamSimple`",
+   "midi/midi_dispatch_handlers.s:5768-5770 `ld xwa, (xsp+10)` / `ld xbc, (xsp+6)` / `calr DSPCfg_ConfigureVoiceSlotA` -- file record -> live panel 0xF980",
+   "audio/sndparam_records/run_edc634.c:120 `{ .key = 0x00004900, .bank_index = 0x61, .bank_offset = 0x00` -- param 0x4900 = tag 0x61 byte 0",
+   "(repo) docs/kn-disk-file-formats.md:454 `| 0 | 0x61 | ... | DSP EFFECT` -- byte 0 is the algorithm number",
+   "includes/generated/sound_config_lookup.bin +0x28 `00 01 20 21 23 09 0a 04 05 00 ..`"
+  ]
+ },
+ {
+  "old": "DSPCfg_ConfigureVoiceSlotB_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FileData_NNDigitalReverbAlgoMap",
+  "header": "16 x u8 for the 'NN' panel import: high nibble of the source record byte +338 -> DIGITAL REVERB algorithm number written as parameter 0x4B00 (byte 0 of effect slot 1, tag 0x63 at destination +782) {17, 17, 20, 21, 21, 21, 10, 10, 10, 10, 0..}. Basis: readers + bytes -- the second half of DSPCfg_ConfigureVoiceSlotA indexes it and calls DSPCfg_WriteParamSimple(0x4B00); all values lie in slot 1's accepted set 9, 10, 16..27.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:6581-6591 `ld a, (xwa+338)` / `srl a, 4` / `lda xbc, (DSPCfg_ConfigureVoiceSlotB_Data:24)` / `ld c, (xbc+wa)` / `lda xde, (xwa+782)` / `ld xwa, 0x4b00` / `call DSPCfg_WriteParamSimple`",
+   "audio/sndparam_records/run_edc634.c:140 `{ .key = 0x00004B00, .bank_index = 0x63, .bank_offset = 0x00` -- tag 0x63 byte 0",
+   "(repo) docs/kn-disk-file-formats.md:455 `| 1 | 0x63 | 9, 10, 16..27 (14) | DIGITAL REVERB`",
+   "includes/generated/sound_config_lookup.bin +0x38 `11 11 14 15 15 15 0a 0a 0a 0a 00 ..`"
+  ]
+ },
+ {
+  "old": "DSPCfg_VoiceSlotB_MapAndWrite_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FileData_NNDigitalReverbParamMap",
+  "header": "16 x u8 for the 'NN' panel import: (low nibble of source byte +338) / 2 -> the value written to each DIGITAL REVERB parameter 0x4B10+i whose DSPCfg_ResolveAndExtract kind is 1 or 2 {15, 30, 45, 55, 70, 78, 85, 90, 92, 94, 70 x6}. Basis: readers + bytes -- the reverb parameter loop of DSPCfg_ConfigureVoiceSlotA; which reverb parameter kinds 1/2 are is not established.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:6622-6644 `add xwa, 0x4b10` / `call DSPCfg_ResolveAndExtract` / `cp hl, 1:i3` / `jr z, DSPCfg_VoiceSlotB_MapAndWrite` / `cp hl, 2:i3` ... `ld c, (xbc+338)` / `and c, 0xf` / `srl c, 1` / `lda xde, (DSPCfg_VoiceSlotB_MapAndWrite_Data:24)` / `ld c, (xde+bc)`",
+   "midi/midi_dispatch_handlers.s:6656-6659 `DSPCfg_VoiceSlotB_WriteAndLoop: call DSPCfg_WriteParamSimple` / `inc 1, iz` -- written to param 0x4B10+iz of slot 0x63",
+   "includes/generated/sound_config_lookup.bin +0x48 `0f 1e 2d 37 46 4e 55 5a 5c 5e 46 46 46 46 46 46`"
+  ]
+ },
+ {
+  "old": "DSPCfg_VoiceSlotB_ExtractData_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FileData_NNTag99ValueMap",
+  "header": "50 x u8 value translation for the 'NN' live-panel import: the source record bytes +389, +390, +394, +395 index it and the results go to destination +948, +949, +970, +969 (RAM 0xFD34/35/4A/49 = panel record 0x99 payload +4, +5, +0x1A, +0x19). Basis: readers + bytes -- DSPCfg_VoiceSlotB_ExtractData; what the codes (0, 0xC0..0xC7, 0x88, 0x92 ...) mean is not established.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:6704-6721 `ld a, (xde+389)` / `lda xhl, (DSPCfg_VoiceSlotB_ExtractData_Data:24)` / `ld a, (xhl+wa)` / `ld (xbc+948), a` ... `(xde+390)` -> `(xbc+949)`, `(xde+394)` -> `(xbc+970)`, `(xde+395)` -> `(xbc+969)`",
+   "midi/midi_dispatch_handlers.s:5771-5773 `ld xwa, (xsp+10)` / `ld xbc, (xsp+6)` / `calr DSPCfg_VoiceSlotB_ExtractData` -- file record -> live panel 0xF980 (FileData_ImportNNLivePanel)",
+   "ui_widgets/widget_dispatch.s:1188 `.long 0x0000fd96, 0x0000fd30, 0x0000ffa4, ... ; 0x98` -- SndParam_BlockRamPtrs[0x99] = 0xFD30, so 0xF980+948 = 0xFD34 = record 0x99 +4",
+   "audio/sndparam_records/run_edbc9e.c:210 / 230 `.key = 0x00002886, .bank_index = 0x99, .bank_offset = 0x04` / `0x00002888 ... .bank_offset = 0x05` -- the fields are parameters 0x2886 / 0x2888",
+   "includes/generated/sound_config_lookup.bin +0x58 `00 c0 c1 .. c7 c0 .. c7 b3 88 92 93 94 40 96 99 a1 ...`"
+  ]
+ },
+ {
+  "old": "MidiSysEx_SendAllParams_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Vocalist_SysExTemplate",
+  "header": "14-byte SysEx template F0 00 00 10 00 35 60 0F 00 00 00 00 00 F7 for the Vocalist settings (panel record 0x47): the senders copy it, patch +4 (channel, param 0x2D00), +9 (parameter number 0x20 / 0x11 / 0x12 / 0x1C ...) and +12 (value) and send it on MIDI out or the computer port. Basis: readers + bytes -- MidiSysEx_SendAllParams and its continuations Mem_Copy 14 bytes from it; called after the vocalist page OK events.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:7743-7760 `pushw 0xe` / `pushw MidiSysEx_SendAllParams_Data@hi16` / ... `call Mem_Copy` / `ld xwa, 0x2d00` / `call SndParam_LookupReadOnly` / `ld (xiz + 4), l` / `ld (xiz + 9), 0x20` / `ld (xiz + 12), 0x3` / ... `call SeqOut_WriteTimedBytes` or `call sendCOMM`",
+   "midi/midi_dispatch_handlers.s:7774-7780 second copy in MidiSysEx_SendReverbParam: `ldmi16 (xiz + 4), 0xb7f2` / `ld (xiz + 9), 0x11`",
+   "includes/generated/sound_config_lookup.bin +0x1764 `f0 00 00 10 00 35 60 0f 00 00 00 00 00 f7`",
+   "audio/sndparam_records/run_edbc9e.c:690 `.key = 0x00002D00, .bank_index = 0x47` -- the 0x2Dxx keys live in record 0x47",
+   "sequencer/seq_event_playback.s:3935-3953 / 3979 MainVocalistPage1OKFunc (EVT_VST_PST_OK) -> VocalistPage1OK_Dispatch ... `call MidiSysEx_SendAllParams`"
+  ]
+ },
+ {
+  "old": "MidiSysEx_SendControlChange1_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Vocalist_ControlChangeTemplate",
+  "header": "3-byte Control Change template B0 10 00 (+ 0xFF pad): controller 16; the Vocalist senders OR the channel (param 0x2D00, when <= 15) into the status and put param 0x2D04 (or 0x2D06 + 60) in the value byte. Basis: readers + bytes -- MidiSysEx_SendControlChange1/2 Mem_Copy 3 bytes from it.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:7857-7872 `pushw 0x3` / `pushw MidiSysEx_SendControlChange1_Data@hi16` ... `call Mem_Copy` / `ld xwa, 0x2d00` ... `or (xiz), l` / `ld xwa, 0x2d04` ... `ld (xiz + 2), l`",
+   "midi/midi_dispatch_handlers.s:7892-7908 MidiSysEx_SendControlChange2: same template, `ld xwa, 0x2d06` / `add hl, 0x3c` / `ld (xiz + 2), l`",
+   "includes/generated/sound_config_lookup.bin +0x1772 `b0 10 00 ff`"
+  ]
+ },
+ {
+  "old": "MidiSysEx_SendProgramChange_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Vocalist_ProgramChangeTemplate",
+  "header": "2-byte Program Change template C0 00: MidiSysEx_SendProgramChange ORs the Vocalist channel (param 0x2D00, when <= 15) into the status and puts param 0x2D02 in the program byte. Basis: readers + bytes -- Mem_Copy of 2 bytes from it.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:7822-7837 `pushw 0x2` / `pushw MidiSysEx_SendProgramChange_Data@hi16` ... `call Mem_Copy` / `ld xwa, 0x2d00` ... `or (xiz), l` / `ld xwa, 0x2d02` ... `ld (xiz + 1), l`",
+   "includes/generated/sound_config_lookup.bin +0x1776 `c0 00`"
+  ]
+ },
+ {
+  "old": "MidiSysEx_SendPartChanLoop_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Vocalist_PartSysExTemplate",
+  "header": "Second copy of the 14-byte Vocalist SysEx template (F0 00 00 10 00 35 60 0F 00 00 00 00 00 F7) used by MidiSysEx_SendAllPartChannels: 16 messages with +4 = part 0..15, +9 = 0x12, +12 = param 0x2D00. Basis: readers + bytes -- the loop's Mem_Copy source.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:8134-8151 `MidiSysEx_SendPartChanLoop: pushw 14` / `pushw MidiSysEx_SendPartChanLoop_Data@hi16` ... `call Mem_Copy` / `ld (xiz+4), a` / `ld (xiz+9), 0x12` / `ld xwa, 0x00002d00` ... `ld (xiz+0x0c), l` / ... `cpw (xsp+4), 0x0010`",
+   "includes/generated/sound_config_lookup.bin +0x1778 `f0 00 00 10 00 35 60 0f 00 00 00 00 00 f7` -- same bytes as Vocalist_SysExTemplate",
+   "sequencer/seq_event_playback.s:3952-3953 `call MidiSysEx_CopyParamToBuffer` / `call MidiSysEx_SendAllPartChannels` -- vocalist preset OK"
+  ]
+ },
+ {
+  "old": "MidiSysEx_CopyParamToBuffer_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Vocalist_PresetRecords",
+  "header": "6 x 8-byte Vocalist presets: MidiSysEx_CopyParamToBuffer copies preset [n] whole into panel record 0x47 (RAM 0xFC4A, the Vocalist settings that keys 0x2D00.. address) when a vocalist page-1 preset is confirmed. Basis: readers + bytes -- `sla wa, 3; lda xbc, (<this>); ... Mem_Copy(0xFC4A, entry, 8)`; called from the 6 cases of MainVocalistPage1OKFunc (EVT_VST_PST_OK).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:8161-8172 `extz wa` / `sla wa, 3` / `lda xbc, (MidiSysEx_CopyParamToBuffer_Data:24)` / `add xwa, xbc` / `pushw 8` / `push xwa` / `pushw 0` / `pushw 0xfc4a` / `call Mem_Copy`",
+   "sequencer/seq_event_playback.s:3935-3953 `MainVocalistPage1OKFunc: cp xbc, EVT_VST_PST_OK` ... `cp de, 5:i3` ... `jp t, (xix+de)` / `VocalistPage1OK_Dispatch: call MidiSysEx_CopyParamToBuffer`",
+   "ui_widgets/widget_dispatch.s:1166 `.long 0x0000fc26, 0x0000fc32, 0x0000fc3e, 0x0000fc4a ; 0x44` -- SndParam_BlockRamPtrs[0x47] = 0xFC4A",
+   "audio/sndparam_records/run_edbc9e.c:690-750 keys 0x2D00..0x2D06 all `.bank_index = 0x47`",
+   "includes/generated/sound_config_lookup.bin +0x1786 `b3 00 26 00 c0 07 ff ff | b3 00 26 00 00 79 bc bc | 77 00 0f 00 c0 07 ff ff | ...` -- 6 records"
+  ]
+ },
+ {
+  "old": "ArpQueue_ComputeAndEnqueue_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SysEx_ChecksumEoxTemplate",
+  "header": "2-byte SysEx tail template {checksum, 0xF7}: ArpQueue_ComputeAndEnqueue copies it to the stack, replaces byte 0 with the Roland-style checksum (-(sum of the queued bytes) & 0x7F) and enqueues both bytes. Basis: readers + bytes -- `ld xiy, <this>; ldiw` then `neg e; res 7, e; ld (xwa), e`; bytes 00 F7.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:9858-9883 `ld xiy, ArpQueue_ComputeAndEnqueue_Data` / `ld xix, xsp` / `ldiw` ... `ArpQueue_CountLoop: add E, (xhl+)` ... `neg e` / `res 7, e` / `ld (xwa), e` / `ld bc, 2:i3` / `calr ArpQueue_Enqueue`",
+   "midi/midipkt_routines.s:1126 `call ArpQueue_ComputeAndEnqueue` -- MidiPkt_SendCtlValueSysEx ends its SysEx with it (also 207, 660, 713, 766, 852, 914, 974, 1050)",
+   "includes/generated/sound_config_lookup.bin +0x17F6 `00 f7`"
+  ]
+ },
+ {
+  "old": "MidiPkt_CheckGateCondition_Second_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MidiCtl_SecondGateRecords",
+  "header": "Gate-record array of the second condition byte (+13) of a MIDI control record: 3 x {u32 RAM address, u8 mask, u8 value} (records 3-5 of the 6 at MidiCtl_GateRecords; index 0 unused, 0 = no condition), testing (RAM 0xFD56 & 0x08), (0xFD59 & 0x20), (0xFD59 & 0x40). Basis: readers + bytes -- MidiPkt_CheckGateCondition_Second indexes it by +13 x 6; MidiCtl_GateRecords is the +12 array.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "midi/midipkt_routines.s:1149-1160 `MidiPkt_CheckGateCondition_Second: ld a, (xwa + 13)` / `jr z, ..._Pass` / `muls wa, 0x6` / `lda xbc, (MidiPkt_CheckGateCondition_Second_Data:24)` / `ld xde, (xbc)` / `ld a, (xbc + 4)` / `and a, (xde)` / `cp (xbc + 5), a`",
+   "midi/midipkt_routines.s:1136-1146 `ld c, (xwa + 12)` ... `lda xde, (MidiCtl_GateRecords:24)` -- the first condition's array",
+   "ui_widgets/widget_dispatch.s:3536-3552 `MidiCtl_GateRecords:` 6 records; `MidiPkt_CheckGateCondition_Second_Data:` = record 3 (+0x12)"
+  ]
+ },
+ {
+  "old": "DSPCfg_GetSlotCount_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DspFxParamCountTable",
+  "header": "100 x u8 parameter count of each DSP effect, indexed by effect number 0..99 (e.g. 5, 5, 7, 7, 8 ...; 2 for 57..60 ACOUSTIC ILLUSION). DSPCfg_ApplyParamStruct loops that many parameters of the effect's record list. Basis: readers + bytes -- DSPCfg_GetSlotCount returns table[effect]; the range-table comment calls these bytes the parameter count.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/dsp_config_sysex.s:2887-2893 `DSPCfg_GetSlotCount: extz xwa` / `ld xbc, DSPCfg_GetSlotCount_Data` / `add xbc, xwa` / `ld l, (xbc)`",
+   "audio/dsp_config_sysex.s:4218-4224 `ld a, (xiz)` / `lda xbc, (DSPCfg_GetSlotCount_Data:24)` / `ld a, (xbc+wa)` / `ld (xsp + 6), wa` -- count for effect = record byte 0",
+   "audio/dsp_config_sysex.s:4293-4296 `incw 1, (xsp + 12)` / `ld wa, (xsp + 6)` / `cp (xsp + 12), wa` / `jr c, DSPCfg_ApplyParamStruct_ReadLoop` -- one pass per parameter",
+   "ui_widgets/widget_dispatch.s:4129-4134 `Entry n -> the effect's {min,max,param_id} ... one per parameter ... The parameter count is the byte table at 0xEE5FE0 (DSPCfg_GetSlotCount)`",
+   "includes/generated/tonekit_param_blocks.bin +0x101A (100 bytes) `05 05 07 07 08 08 05 05 06 07 0c ...`"
+  ]
+ },
+ {
+  "old": "LookupTableEntries_Prologue_Data_2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "NoteMap_ChannelMapRecords_LinkCol",
+  "header": "Base of the +4 column of the 5 x 13-byte NoteMap_ChannelMapRecords: per record a pointer to an array of 2-byte link entries whose byte +1 is the next entry index of a circular chain (0xE82E for records 0-3, 0xE970 for record 4). Basis: readers + bytes -- the four NoteMap lookups index it with record x 13 and follow (link + 2i + 1) until they come back to the head.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/note_voice_mapping.s:6802-6817 `muls hl, 0xd` / `lda xiy, (LookupTableEntries_Prologue_Data_2:24)` / `ld xiy, (xiy+hl)` ... `add bc, bc` / `add xbc, xiy` / `ld l, (xbc + 1)` / `cp l, e` -- next index, stop at the head",
+   "audio/note_voice_mapping.s:6894 / 7180 / 7428 `lda ..., (LookupTableEntries_Prologue_Data_2:24)` -- NoteMap_ClaimVoiceSlot, LookupVoice_StartLookup, CollectMatchingEntri_LoadReg",
+   "ui_widgets/widget_dispatch.s:7321-7328 `5 records x 13 bytes {+0 u32 RAM ptr, +4 u32 RAM ptr, +8 u32 byte-map ptr, +12 u8 flags}` / `LookupTableEntries_Prologue_Data_2: .long 0x0000e82e`"
+  ]
+ },
+ {
+  "old": "LookupTableEntries_Prologue_Data_3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "NoteMap_ChannelMapRecords_HeadMapCol",
+  "header": "Base of the +8 column of the 5 x 13-byte NoteMap_ChannelMapRecords: per record a pointer to a byte map (NoteMap_ByteMap_81 / _21) from a key (<= 0x20) to the head index of that key's circular chain in the +4 link array. Basis: readers + bytes -- `ld xbc, (<this>+13*rec); ld e, (xbc+key)` then the chain walk starts at e.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/note_voice_mapping.s:6805-6810 `muls bc, 0xd` / `lda xhl, (LookupTableEntries_Prologue_Data_3:24)` / `ld xbc, (xhl+bc)` / `ld e, (xbc+de)` -- head index for key DE",
+   "audio/note_voice_mapping.s:6868-6886 `cp (xsp + 12), 0x20` ... `lda xiy, (LookupTableEntries_Prologue_Data_3:24)` / `ld xbc, (xiy+ix)` / `ld b, (xbc+iz)` -- NoteMap_ClaimVoiceSlot, key <= 0x20",
+   "ui_widgets/widget_dispatch.s:7329-7337 `LookupTableEntries_Prologue_Data_3: .long NoteMap_ByteMap_81` ... `.long 0x0000ca7a, 0x0000e970, NoteMap_ByteMap_21 ; record 4`"
+  ]
+ },
+ {
+  "old": "MarkEntriesAboveThre_LoadParam_Data_2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "NoteThreshold_PairTable_SecondMaskCol",
+  "header": "Base of the second column of NoteThreshold_PairTable (13 x {u8, u8} for notes 0x54..0x60): the one-bit mask each of those notes contributes to the second status byte (RAM 0xCD2F, changes sent with AddswbWr(0xA8, 0x0C)). Basis: readers + bytes -- NoteMap_MarkEntriesAboveThreshold reads [2*(note - 0x54)] here and at +0 for the first byte (RAM 0xCD2E, AddswbWr 0x0B).",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/note_voice_mapping.s:9117-9123 `ld a, (xbc)` / `sub a, 0x54` / `add wa, wa` / `lda xbc, (MarkEntriesAboveThre_LoadParam_Data_2:24)` / `ld a, (xbc+wa)` / `ldfr_berp A, 0xf9`",
+   "audio/note_voice_mapping.s:9103-9109 same index into `NoteThreshold_PairTable` -> `ldfr_berp A, 0xfa`",
+   "audio/note_voice_mapping.s:9135-9168 `xor a, (0xcd2f:16)` ... `ldw wa, 0xa8` / `ldw bc, 0xc` / `call AddswbWr` / `ld (0xcd2f:16), a` -- second mask -> 0xCD2F",
+   "ui_widgets/widget_dispatch.s:7352-7366 `NoteThreshold_PairTable: .byte 0x00` / `MarkEntriesAboveThre_LoadParam_Data_2: .byte 0x20` / pairs (0,4) (0,0) (0,0x10) (0x20,0) ..."
+  ]
+ },
+ {
+  "old": "SoundFX_Handler_9_Data_2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Harmony_OctaveUpDown_Down",
+  "header": "s8 12 of Harmony_FixedIntervals, subtracted from the reference note RAM 0xCEAA: SoundFX_Handler_9 (entry 10 of Harmony_HandlerTable, selected by RAM byte 0xE9BE) writes note - 12 (an octave below) as one of its two harmony notes; its pair is {+12, -12}: an octave above and below. Basis: readers + bytes -- the only reader is SoundFX_Handler_9's `ld e, (<this>); ld c, (0xceaa); sub c, e`.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/note_voice_mapping.s:14960-14963 `ld e, (SoundFX_Handler_9_Data_2:24)` / `ld c, (0xceaa:16)` / `sub c, e` / `ld (xwa + 7), c` -- one harmony note",
+   "audio/note_voice_mapping.s:14955-14965 `SoundFX_Handler_9:` ... `ldw (xwa), 0x2` / `ld hl, 2:i3` -- two harmony notes",
+   "ui_widgets/widget_dispatch.s:8068-8077 `Harmony_FixedIntervals: .byte -12` / `SoundFX_Handler_9_Data_2: .byte 12` / ... / `SoundFX_Handler_11_Data_2: .byte -5` -- the 6 intervals (`SoundFX_Handler_9_Data_2` at line 8073)",
+   "ui_widgets/widget_dispatch.s:8085-8100 `Harmony_HandlerTable:` ... `.long SoundFX_Handler_9` -- entry 10, indexed by RAM byte 0xE9BE"
+  ]
+ },
+ {
+  "old": "SoundFX_Handler_10_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Harmony_FourthOctaveDown_Fourth",
+  "header": "s8 5 of Harmony_FixedIntervals, subtracted from the reference note RAM 0xCEAA: SoundFX_Handler_10 (entry 11 of Harmony_HandlerTable, selected by RAM byte 0xE9BE) writes note - 5 (a fourth below) as one of its two harmony notes; its pair is {-5, -12}: a fourth and an octave below. Basis: readers + bytes -- the only reader is SoundFX_Handler_10's `ld e, (<this>); ld c, (0xceaa); sub c, e`.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/note_voice_mapping.s:14969-14972 `ld e, (SoundFX_Handler_10_Data:24)` / `ld c, (0xceaa:16)` / `sub c, e` / `ld (xwa + 5), c` -- one harmony note",
+   "audio/note_voice_mapping.s:14968-14978 `SoundFX_Handler_10:` ... `ldw (xwa), 0x2` / `ld hl, 2:i3` -- two harmony notes",
+   "ui_widgets/widget_dispatch.s:8068-8077 `Harmony_FixedIntervals: .byte -12` / `SoundFX_Handler_9_Data_2: .byte 12` / ... / `SoundFX_Handler_11_Data_2: .byte -5` -- the 6 intervals (`SoundFX_Handler_10_Data` at line 8074)",
+   "ui_widgets/widget_dispatch.s:8085-8100 `Harmony_HandlerTable:` ... `.long SoundFX_Handler_10` -- entry 11, indexed by RAM byte 0xE9BE"
+  ]
+ },
+ {
+  "old": "SoundFX_Handler_10_Data_2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Harmony_FourthOctaveDown_Octave",
+  "header": "s8 12 of Harmony_FixedIntervals, subtracted from the reference note RAM 0xCEAA: SoundFX_Handler_10 (entry 11 of Harmony_HandlerTable, selected by RAM byte 0xE9BE) writes note - 12 (an octave below) as one of its two harmony notes; its pair is {-5, -12}: a fourth and an octave below. Basis: readers + bytes -- the only reader is SoundFX_Handler_10's `ld e, (<this>); ld c, (0xceaa); sub c, e`.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/note_voice_mapping.s:14973-14976 `ld e, (SoundFX_Handler_10_Data_2:24)` / `ld c, (0xceaa:16)` / `sub c, e` / `ld (xwa + 7), c` -- one harmony note",
+   "audio/note_voice_mapping.s:14968-14978 `SoundFX_Handler_10:` ... `ldw (xwa), 0x2` / `ld hl, 2:i3` -- two harmony notes",
+   "ui_widgets/widget_dispatch.s:8068-8077 `Harmony_FixedIntervals: .byte -12` / `SoundFX_Handler_9_Data_2: .byte 12` / ... / `SoundFX_Handler_11_Data_2: .byte -5` -- the 6 intervals (`SoundFX_Handler_10_Data_2` at line 8075)",
+   "ui_widgets/widget_dispatch.s:8085-8100 `Harmony_HandlerTable:` ... `.long SoundFX_Handler_10` -- entry 11, indexed by RAM byte 0xE9BE"
+  ]
+ },
+ {
+  "old": "SoundFX_Handler_11_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Harmony_SeventhFourthUp_Seventh",
+  "header": "s8 -10 of Harmony_FixedIntervals, subtracted from the reference note RAM 0xCEAA: SoundFX_Handler_11 (entry 12 of Harmony_HandlerTable, selected by RAM byte 0xE9BE) writes note + 10 (a minor seventh above) as one of its two harmony notes; its pair is {+10, +5}: a minor seventh and a fourth above. Basis: readers + bytes -- the only reader is SoundFX_Handler_11's `ld e, (<this>); ld c, (0xceaa); sub c, e`.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/note_voice_mapping.s:14982-14985 `ld e, (SoundFX_Handler_11_Data:24)` / `ld c, (0xceaa:16)` / `sub c, e` / `ld (xwa + 5), c` -- one harmony note",
+   "audio/note_voice_mapping.s:14981-14991 `SoundFX_Handler_11:` ... `ldw (xwa), 0x2` / `ld hl, 2:i3` -- two harmony notes",
+   "ui_widgets/widget_dispatch.s:8068-8077 `Harmony_FixedIntervals: .byte -12` / `SoundFX_Handler_9_Data_2: .byte 12` / ... / `SoundFX_Handler_11_Data_2: .byte -5` -- the 6 intervals (`SoundFX_Handler_11_Data` at line 8076)",
+   "ui_widgets/widget_dispatch.s:8085-8100 `Harmony_HandlerTable:` ... `.long SoundFX_Handler_11` -- entry 12, indexed by RAM byte 0xE9BE"
+  ]
+ },
+ {
+  "old": "SoundFX_Handler_11_Data_2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Harmony_SeventhFourthUp_Fourth",
+  "header": "s8 -5 of Harmony_FixedIntervals, subtracted from the reference note RAM 0xCEAA: SoundFX_Handler_11 (entry 12 of Harmony_HandlerTable, selected by RAM byte 0xE9BE) writes note + 5 (a fourth above) as one of its two harmony notes; its pair is {+10, +5}: a minor seventh and a fourth above. Basis: readers + bytes -- the only reader is SoundFX_Handler_11's `ld e, (<this>); ld c, (0xceaa); sub c, e`.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "audio/note_voice_mapping.s:14986-14989 `ld e, (SoundFX_Handler_11_Data_2:24)` / `ld c, (0xceaa:16)` / `sub c, e` / `ld (xwa + 7), c` -- one harmony note",
+   "audio/note_voice_mapping.s:14981-14991 `SoundFX_Handler_11:` ... `ldw (xwa), 0x2` / `ld hl, 2:i3` -- two harmony notes",
+   "ui_widgets/widget_dispatch.s:8068-8077 `Harmony_FixedIntervals: .byte -12` / `SoundFX_Handler_9_Data_2: .byte 12` / ... / `SoundFX_Handler_11_Data_2: .byte -5` -- the 6 intervals (`SoundFX_Handler_11_Data_2` at line 8077)",
+   "ui_widgets/widget_dispatch.s:8085-8100 `Harmony_HandlerTable:` ... `.long SoundFX_Handler_11` -- entry 12, indexed by RAM byte 0xE9BE"
+  ]
+ }
+]

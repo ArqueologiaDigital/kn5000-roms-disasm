@@ -126,7 +126,10 @@ MSP_Default_ChannelMap:		.byte  0,  4,  8,  1,  5,  9,  2,  6
 				.byte 10,  3,  7, 11, 12, 18, 24, 13
 				.byte 19, 25, 14, 20, 26, 15, 21, 27
 				.byte	16, 22, 28, 17, 23, 29
-NoteEvent_Store_Data:	.byte	0, 0
+; RhythmSlot_FlashSectionTable: 30-byte table indexed by rhythm slot 0..29: 0 for the RAM slots 0-9, 1 + (slot-10)/3
+;   for the custom slots 10-29 (1..7, three per section); NoteEventBuffer_CopyToSlot loads flash section value-1.
+;   Basis: readers + bytes -- NoteEvent_Store returns L = table[A] for the copy-slot callers.
+RhythmSlot_FlashSectionTable:	.byte	0, 0
 MSP_Default_ChannelMapPad:	.zero 8
 
 ; Group index table: maps each of 20 parts to its group (1-7)
@@ -201,7 +204,7 @@ MSP_Default_TrailingPad:	.zero 36
 ; (FileHdr_InitBasePointer sets it to 0x1E8800, in battery-backed SRAM).
 ; Reader: ToneData_SetupCopyPointers (storage/flash_floppy_handlers.s; v10/v9
 ; 0xF19555, v7 0xF1952B), which copies, through the positional aliases
-; ToneData_ZeroFillLoop_Data/_0x70/_0x80/_0xC0 (shared/positional_labels.s):
+; Composer_DefaultHeaderFields/_0x70/_0x80/_0xC0 (shared/positional_labels.s):
 ;   +0x00 ( 6 B) -> base+0x000    "H\0K\0" signature + 00 03
 ;   +0x60 (16 B) -> base+0x010
 ;   +0x70 (16 B) -> base+0x020+16k for each k = 0..11 whose first byte is 0
@@ -217,16 +220,26 @@ Composer_SettingsBlock:
 	.zero 90
 
 	; +0x60: 16-byte record copied to base+0x10
-ToneData_ZeroFillLoop_Data:
+; Composer_DefaultHeaderFields: 16-byte factory default that ToneData_SetupCopyPointers copies to composer settings
+;   +0x10 (header bytes after the "HK" signature); its first words 0x20 / 0xC0 / 12 match the 12 x 16-byte record area
+;   at +0x20..+0xDF, the rest is undecoded. Basis: readers + bytes.
+Composer_DefaultHeaderFields:
 	.byte 0x20, 0x00, 0xc0, 0x00, 0x0c, 0x00, 0x00, 0x01, 0x39, 0x00, 0x0c, 0x00, 0x00, 0x00, 0xc0, 0x03
 	; +0x70: 16-byte default for the empty slots at base+0x20..0xDF
-ToneData_ScanRegionLoop_Data:
+; Composer_DefaultEmptyRecord: 16-byte default record that ToneData_SetupCopyPointers writes into each of the 12
+;   16-byte records at composer settings +0x20..+0xDF whose first byte is 0 (bytes 11/12 = 0x7F / 0x40, the rest 0).
+;   Basis: readers + bytes.
+Composer_DefaultEmptyRecord:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7f, 0x40, 0x00, 0x00, 0x00
 	; +0x80: bank names, 4 x 16 characters -> base+0x240
-ToneData_ZeroFillLoop_Data_2:
+; Composer_DefaultCompileBankNames: Factory names of the composer's compile banks, 4 x 16 characters (" Compile Bank 1
+;   ", " Compile Bank 2 ", two blank), copied to composer settings +0x240. Basis: readers + bytes.
+Composer_DefaultCompileBankNames:
 	.ascii " Compile Bank 1  Compile Bank 2                                 "
 	; +0xC0: bank names, 4 x 16 characters -> base+0x280
-ToneData_ZeroFillLoop_Data_3:
+; Composer_DefaultUserBankNames: Factory names of the composer's user banks, 4 x 16 characters (" User Bank 1 ", "
+;   User Bank 2 ", two blank), copied to composer settings +0x280. Basis: readers + bytes.
+Composer_DefaultUserBankNames:
 	.ascii "   User Bank 1     User Bank 2                                  "
 
 ; -----------------------------------------------------------------------------

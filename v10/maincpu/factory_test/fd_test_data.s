@@ -336,38 +336,62 @@ FDTest_CfgName_FDDTest:	aligned_string "FDD_TEST"
 	.long FDTest_TestTitle_Terminator
 FDTest_TestTitle_Terminator:	aligned_string ""
 FDTest_String_TestTitleFunc:	aligned_string "TestTitleFunc"
-TitleFunc_ActionDispatch_Data:
+; TitleFunc_ActionDispatch_Str_TitleNew: Factory-test diagnostic message "\nTitle new" (leading LF), the text its
+;   owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.
+TitleFunc_ActionDispatch_Str_TitleNew:
 	.byte 0x0a
 	aligned_string "Title new"
-TitleFunc_ActionDispatch_Data_2:
+; TestTitleFunc_OnTitleOld_Str_TitleOld: Factory-test diagnostic message "\nTitle old" (leading LF), the text its
+;   owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.
+TestTitleFunc_OnTitleOld_Str_TitleOld:
 	.byte 0x0a
 	.asciz "Title old"
 	.byte	0xff
-TitleFunc_ActionDispatch_Data_3:	.byte	0x0a
+; TestTitleFunc_OnTitleActivate_Str_TitleActivate: Factory-test diagnostic message "\nTitle Activate" (leading LF),
+;   the text its owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.
+TestTitleFunc_OnTitleActivate_Str_TitleActivate:	.byte	0x0a
 	aligned_string "Title Activate"
-TitleFunc_ActionDispatch_Data_4:
+; TestTitleFunc_OnTitleInactivate_Str_TitleInactivate: Factory-test diagnostic message "\nTitle Inactivate" (leading
+;   LF), the text its owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.
+TestTitleFunc_OnTitleInactivate_Str_TitleInactivate:
 	.byte 0x0a
 	aligned_string "Title Inactivate"
-TitleFunc_ActionDispatch_Data_5:
+; TestTitleFunc_OnTitleInterrupt_Str_TitleINTERUPT: Factory-test diagnostic message "\nTitle INTERUPT" (leading LF),
+;   the text its owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.
+TestTitleFunc_OnTitleInterrupt_Str_TitleINTERUPT:
 	.byte 0x0a
 	aligned_string "Title INTERUPT"
-TitleFunc_ActionDispatch_Data_6:
+; TestTitleFunc_OnTitleInterruptReturn_Str_TitleINTERUPT_RETURN: Factory-test diagnostic message "\nTitle INTERUPT
+;   RETURN" (leading LF), the text its owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.
+TestTitleFunc_OnTitleInterruptReturn_Str_TitleINTERUPT_RETURN:
 	.byte 0x0a
 	aligned_string "Title INTERUPT RETURN"
-TitleFunc_LifecycleTable_Data:
+; TitleFunc_LifecycleTable_Str_TBIOS_Test: Factory-test diagnostic message "\nTBIOS Test" (leading LF), the text its
+;   owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.
+TitleFunc_LifecycleTable_Str_TBIOS_Test:
 	.byte 0x0a
 	aligned_string "TBIOS Test"
-TitleFunc_LifecycleTable_Data_2:
+; TitleFunc_LifecycleDispatch_OnStopFddTest_Str_STOP_FDD_TEST: Factory-test diagnostic message "\nSTOP FDD TEST"
+;   (leading LF), the text its owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.
+TitleFunc_LifecycleDispatch_OnStopFddTest_Str_STOP_FDD_TEST:
 	.byte 0x0a
 	aligned_string "STOP FDD TEST"
-TitleFunc_LifecycleTable_Data_3:
+; TitleFunc_LifecycleDispatch_OnFddTestLoop_Str_START_FDD_TEST_LOOP: Factory-test diagnostic message "\nSTART FDD TEST
+;   LOOP" (leading LF), the text its owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.
+TitleFunc_LifecycleDispatch_OnFddTestLoop_Str_START_FDD_TEST_LOOP:
 	.byte 0x0a
 	aligned_string "START FDD TEST LOOP"
-TitleFunc_LifecycleTable_Data_4:
+; TitleFunc_LifecycleDispatch_OnListDirectory_Str_DIR: Factory-test diagnostic message "\nDIR" (leading LF), the text
+;   its owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.
+TitleFunc_LifecycleDispatch_OnListDirectory_Str_DIR:
 	.byte	0x0a, 0x44, 0x49, 0x52, 0x00, 0xff
-TitleFunc_LifecycleTable_Data_5:	.byte	0x0a
+; TitleFunc_LifecycleDispatch_OnFormat2dd_Str_Debug_Test: Factory-test diagnostic message "\nDebug Test" (leading LF),
+;   the text its owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.
+TitleFunc_LifecycleDispatch_OnFormat2dd_Str_Debug_Test:	.byte	0x0a
 	aligned_string "Debug Test"
-TitleFunc_LifecycleTable_Data_6:
+; TitleFunc_LifecycleDispatch_OnFormat2hd_Str_Debug_Test: Factory-test diagnostic message "\nDebug Test" (leading LF),
+;   the text its owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.
+TitleFunc_LifecycleDispatch_OnFormat2hd_Str_Debug_Test:
 	.byte 0x0a
 	.asciz "Debug Test"
 TitleFunc_LifecycleDispatch_CaseTable:
@@ -388,7 +412,9 @@ TestTitleFunc_CaseTable:
 	.short	TestTitleFunc_OnTitleInterruptReturn - TitleFunc_ActionDispatch
 ListDir2_Entry_Str_A_HAMA_LSW:
 	aligned_string "A:\\HAMA\\*.LSW"
-RunTestCounters_Display_Data:
+; RunTestCounters_Display_Str_TEST_Finishd: Factory-test diagnostic message "\nTEST Finishd!!" (leading LF), the text
+;   its owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.
+RunTestCounters_Display_Str_TEST_Finishd:
 	.byte 0x0a
 	.asciz "TEST Finishd!!"
 CreateRunFDOp_Entry_Str_init:
@@ -399,7 +425,9 @@ CreateRunFDOp_Entry_Str_OK:
 CreateRunFDOp_Fail_Str_NG:	.byte	0x4e, 0x47, 0x00, 0xff
 FDLoadSaveTest_Str_A_IMMUNITY_TST:
 	aligned_string "A:IMMUNITY.TST"
-FDLoadSaveTest_Data:
+; FDLoadSaveTest_Str_File_remove: Factory-test diagnostic message "\nFile remove =>" (leading LF), the text its owner
+;   prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.
+FDLoadSaveTest_Str_File_remove:
 	.byte	0x0a
 	.ascii	"File remove =>"
 	.byte	0x00
@@ -408,32 +436,44 @@ FDLoadSaveTest_Str_error:	.byte	0x20, 0x65
 FDTest_OpenFailed_Str_OK:
 	.byte 0x20, 0x4f
 	.byte	0x4b, 0x00
-FDTest_AllocBuffer_Data:	.byte	0x0a
+; FDTest_AllocBuffer_Str_Not_Enough_memory: Factory-test diagnostic message "\nNot Enough memory!" (leading LF), the
+;   text its owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.
+FDTest_AllocBuffer_Str_Not_Enough_memory:	.byte	0x0a
 	.asciz "Not Enough memory!"
 FDTest_OpenForWrite_Str_wb:
 	.byte 0x77, 0x62
 	.byte	0x00, 0xff
-FDTest_OpenForWrite_Data:	.byte	0x0a
+; FDTest_OpenForWrite_Str_cannot_open_write_file: Factory-test diagnostic message "\ncannot open write file" (leading
+;   LF), the text its owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.
+FDTest_OpenForWrite_Str_cannot_open_write_file:	.byte	0x0a
 	.asciz "cannot open write file"
-FDTest_WriteBuffer_Data:
+; FDTest_WriteBuffer_Str_File_Write: Factory-test diagnostic message "\nFile Write =>" (leading LF), the text its
+;   owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.
+FDTest_WriteBuffer_Str_File_Write:
 	.byte 0x0a
 	aligned_string "File Write =>"
 FDTest_WriteBuffer_Str_Error:
 	aligned_string " Error"
 FDTest_CloseAndReopen_Str_OK:
 	.byte	0x20, 0x4f, 0x4b, 0x00
-FDTest_CloseAndReopen_Data:	.byte	0x0a
+; FDTest_CloseAndReopen_Str_File_Read: Factory-test diagnostic message "\nFile Read =>" (leading LF), the text its
+;   owner prints (FDTest_PrintDiag or the console printer). Basis: readers + bytes.
+FDTest_CloseAndReopen_Str_File_Read:	.byte	0x0a
 	aligned_string "File Read =>"
 FDTest_CloseAndReopen_Str_rb:
 	.byte	0x72, 0x62, 0x00, 0xff
-FDTest_CloseAndReopen_Data_2:	.byte	0x0a
+; FDTest_String_CannotOpenReadFile: FD self-test diagnostic line "\ncannot open read file" (0x0A + text, NUL, 0xFF
+;   pad), printed when reopening A:IMMUNITY.TST for reading fails. Basis: readers + bytes.
+FDTest_String_CannotOpenReadFile:	.byte	0x0a
 	.ascii	"cannot open read file"
 	.byte	0x00, 0xff
 FDTest_ReadBack_Str_error:
 	aligned_string " error"
 FDTest_VerifyData_Str_OK:
 	.byte	0x20, 0x4f, 0x4b, 0x00
-FDTest_CompareResult_Data:	.byte	0x0a
+; FDTest_String_DataCompare: FD self-test diagnostic line "\nData Compare =>" (0x0A + text, NUL, 0xFF pad), printed
+;   before the read-back compare verdict. Basis: readers + bytes.
+FDTest_String_DataCompare:	.byte	0x0a
 	.ascii	"Data Compare =>"
 	.byte	0x00, 0xff
 FDTest_CompareResult_Str_Error:
@@ -477,10 +517,10 @@ LoadExtROM_Entry_Str_Different_ID:
 	aligned_string "Different ID"
 LoadXaprInit_Entry_Str_XAPR:	aligned_string "XAPR"
 WidgetDispatch_FDTestPtrTable:
-	.long	LoadXaprInit_Entry
-	.long	HamaStub1_Entry
-	.long	HamaStub2_Entry
-	.long	HamaStub3_Entry
+	.long	Xapr_DetectOnInit
+	.long	Xapr_InitPhase1_NullRet
+	.long	Xapr_InitPhase2_NullRet
+	.long	Xapr_InitPhase3_NullRet
 LoadExtROM_JumpEntry_Data:	.byte	0x58, 0x41
 	.byte 0x50, 0x52, 0x00, 0xff
 ResInfo_GetResourceListPtr_Str_TEST:

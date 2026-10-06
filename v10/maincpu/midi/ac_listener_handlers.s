@@ -1338,9 +1338,12 @@ Data_InOutGridDispatch:
 	add	bc, bc
 	lda	xix, (Data_InOutGridDispatch_CaseTable_3:24)
 	ld	bc, (xix+bc)
-	lda	xix, (Data_InOutGridDispatch_Code:24)
+	lda	xix, (InOutGridCheck_IncRight1Input:24)
 	jp	t, (xix+bc)
-Data_InOutGridDispatch_Code:
+; InOutGridCheck_IncRight1Input: Case 0 (row 0, "RIGHT 1 INPUT") of InOutGridCheck's increment switch: steps SndParam
+;   0x2100 by +1 (values CONDUCTOR / DIRECT). Basis: callers + body -- entry 0 of Data_InOutGridDispatch_CaseTable_3;
+;   siblings InOutGridCheck_IncAutoPlayChordInput (0x2101) ...
+InOutGridCheck_IncRight1Input:
 	ld	xwa, 0x2100
 	ld	bc, 1:i3
 	ld	de, 1:i3
@@ -1416,9 +1419,12 @@ InOutGridCheck_OnIndexswDown:	; cases 29360152, 29360154
 	add	bc, bc
 	lda	xix, (Data_InOutGridDispatch_CaseTable_2:24)
 	ld	bc, (xix+bc)
-	lda	xix, (Data_InOutGridDispatch_Code_2:24)
+	lda	xix, (InOutGridCheck_DecRight1Input:24)
 	jp	t, (xix+bc)
-Data_InOutGridDispatch_Code_2:
+; InOutGridCheck_DecRight1Input: Case 0 (row 0, "RIGHT 1 INPUT") of InOutGridCheck's decrement switch
+;   (InOutGridCheck_OnIndexswDown): steps SndParam 0x2100 by -1. Basis: callers + body -- entry 0 of
+;   Data_InOutGridDispatch_CaseTable_2; sibling InOutGridCheck_DecAutoPlayChordInput (0x2101).
+InOutGridCheck_DecRight1Input:
 	ld	xwa, 0x2100
 	ldw	bc, 0xffff
 	ld	de, 1:i3

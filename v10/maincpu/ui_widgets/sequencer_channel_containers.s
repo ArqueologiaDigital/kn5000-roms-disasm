@@ -104,7 +104,7 @@ SectorCache_AgeOverflowFlag:	.incbin "includes/generated/naka_sequencer_channels
 FDC_DiskTypeState:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x70E, 0x6
 ; DiskStream_State -- 1 x struct: the streaming reader SndTable_LookupA/D set up: SourceMode 0 = FileRead
 ; from a file opened "rb", 1 = raw sector commands; ByteLength = file size (handle +71) or sectors << 9;
-; BufferPtr = RAM 0x22D72, the message block ScreenGroup2_Entry hands to TaskMsg_Send.
+; BufferPtr = RAM 0x22D72, the message block DiskStream_ReaderTask hands to TaskMsg_Send.
 DiskStream_State:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x714, 0xA
 ; East_ReverbMidiMenuWorkCells -- 1 x struct (54 cells): power-on values of the InitializeEast view work cells
 ; Reverb/EQ presets, MIDI menu. Boot_InitWorkRAM copies them to RAM 0x3e3f2..0x3e46e; each cell is the RAM
@@ -509,7 +509,7 @@ Dirmd_PostRequests:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x
 Vga_InitPalette:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1A78, 0x400
 ; NoteMap_LinkArray32 -- 35 x struct {prev, next}: a circular doubly linked list of 32 slots with head node 32
 ; (+65 = head.next, the first slot) plus two empty list heads 33, 34; NoteMap_SwapVoiceLinks /
-; NoteMap_LinkVoiceSlots / LinkVoiceSlots_Block address node n at base + 2n.
+; NoteMap_LinkVoiceSlots / NoteMap_FindLinkedSlotByKey address node n at base + 2n.
 NoteMap_LinkArray32:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1E78, 0x46
 ; NoteMap_LinkArray128 -- 33 x struct {prev, next}: nodes 0..32 of a 129-node circular list (128 slots,
 ; head node 128 whose next byte NoteMap_AllocNewVoiceEntry reads at RAM 0xE92F); the remaining nodes lie

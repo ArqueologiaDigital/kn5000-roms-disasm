@@ -125,14 +125,14 @@ IvTimer_HandleEvent3A_Str_N1shot:	.incbin "includes/generated/naka_disk_warning.
 IvIndexSwCtrlProc_Str_ISC:		.incbin "includes/generated/naka_disk_warning.bin", 0xBEE, 0x4	; "ISC"
 IvIndexSwDelayProc_Str_ISD:		.incbin "includes/generated/naka_disk_warning.bin", 0xBF2, 0x4	; "ISD"
 IvWaitWinCtlProc_Str_WWC:		.incbin "includes/generated/naka_disk_warning.bin", 0xBF6, 0x4	; "WWC"
-; FDC_WaitReady_CaseTable -- 6 x int16: the case offsets of FDC_CONFIG_VERIFY_Skip10's compiled switch, relative to FDC_CONFIG_VERIFY_Code
+; FDC_WaitReady_CaseTable -- 6 x int16: the case offsets of FDC_CONFIG_VERIFY_Skip10's compiled switch, relative to FDC_CONFIG_VERIFY_On720KMedia
 FDC_WaitReady_CaseTable:
-	.short	FDC_CONFIG_VERIFY_Code - FDC_CONFIG_VERIFY_Code
-	.short	FDC_CONFIG_VERIFY_Case1 - FDC_CONFIG_VERIFY_Code
-	.short	FDC_CONFIG_VERIFY_On1024ByteSectorMedia - FDC_CONFIG_VERIFY_Code
-	.short	FDC_CONFIG_VERIFY_On1440KMedia - FDC_CONFIG_VERIFY_Code
-	.short	FDC_CONFIG_VERIFY_Case4 - FDC_CONFIG_VERIFY_Code
-	.short	FDC_CONFIG_VERIFY_Case5 - FDC_CONFIG_VERIFY_Code
+	.short	FDC_CONFIG_VERIFY_On720KMedia - FDC_CONFIG_VERIFY_On720KMedia
+	.short	FDC_CONFIG_VERIFY_Case1 - FDC_CONFIG_VERIFY_On720KMedia
+	.short	FDC_CONFIG_VERIFY_On1024ByteSectorMedia - FDC_CONFIG_VERIFY_On720KMedia
+	.short	FDC_CONFIG_VERIFY_On1440KMedia - FDC_CONFIG_VERIFY_On720KMedia
+	.short	FDC_CONFIG_VERIFY_Case4 - FDC_CONFIG_VERIFY_On720KMedia
+	.short	FDC_CONFIG_VERIFY_Case5 - FDC_CONFIG_VERIFY_On720KMedia
 ; FDC_COMMAND_DISPATCHER_CaseTable -- 12 x int16: the case offsets of FDC_COMMAND_DISPATCHER's compiled switch, relative to FDC_CMD_HANDLER_BASE
 FDC_COMMAND_DISPATCHER_CaseTable:
 	.short	FDC_CMD_HANDLER_BASE - FDC_CMD_HANDLER_BASE
@@ -172,7 +172,7 @@ CtrlPanel_DialStepByDelta:	.incbin "includes/generated/naka_disk_warning.bin", 0
 ; TRANSITION_TIMER (bit 0) on press and ANDs it out on release; the AND of both masks picks combos
 ; (0x1100, 0xA1, 0x91, 0x89 in CtrlPanel_DispatchCombinedState). Rows 0..16 are reachable (cp e, 0x10)
 CtrlPanel_SwitchRowBit:	.incbin "includes/generated/naka_disk_warning.bin", 0xCBA, 0x80
-GetSoundName_DefaultString_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0xD3A, 0x12
+GetSoundName_Str_DashedName:	.incbin "includes/generated/naka_disk_warning.bin", 0xD3A, 0x12
 ; MainPmanControl_CaseTable -- 6 x int16: the case offsets of MainPmanControl's compiled switch, relative to MainPmanCtrl_DispatchTable
 MainPmanControl_CaseTable:
 	.short	MainPmanCtrl_Case0 - MainPmanCtrl_DispatchTable
@@ -502,13 +502,13 @@ WndEvt_DispatchByEventCode_CaseTable:
 	.short	WndEvt_DispatchByEventCode_DeleteChar - WndEvt_EventCodeDispatch
 	.short	WndEvt_DispatchByEventCode_CenterName - WndEvt_EventCodeDispatch
 	.short	WndEvt_DispatchByEventCode_ClearName - WndEvt_EventCodeDispatch
-ModeEdit_HandlePaint_Data:			.incbin "includes/generated/naka_disk_warning.bin", 0x125C, 0xC
+ModeEditProc_Str_ModeIdAndName:			.incbin "includes/generated/naka_disk_warning.bin", 0x125C, 0xC
 TitleEdit_HandlePaint_Str_N0x_Fmt2X_Fmts:	.incbin "includes/generated/naka_disk_warning.bin", 0x1268, 0xC	; "0x%02X : %s"
 ; UserBitmapCheck_Bitmap24x24 -- a 24 x 24 bitmap, one byte per pixel.  UserBitmapCheck answers
 ; EVT_GET_BITMAP_WIDTH / _HEIGHT with 0x18 and EVT_GET_BITMAP_DATA with this address; VwUserBitmap_HandlePaint
 ; draws it with DrawBitmapSPFast.  Typed in ui_widgets/naka_disk_warning.c (scripts/converters/bitmap_id_tables_retype.py).
 UserBitmapCheck_Bitmap24x24:	.incbin "includes/generated/naka_disk_warning.bin", 0x1274, 0x240
-VwUserBitmapByName_HandlePaint_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x14B4, 0x6
+VwUserBitmapByName_Str_BmpExt:	.incbin "includes/generated/naka_disk_warning.bin", 0x14B4, 0x6
 ; [nakarest] naka_disk_warning+0x14ba  +0x14ba..+0x14be (0xeaa166, 4 B)
 ; [nakarest] Text (4 B at 0xeaa166), first string "~7f"; no registered NAKA table points into
 ; [nakarest] it; reached through source references EditSw_ByteData (ui/ui_window_procs.s: `ld
@@ -539,7 +539,7 @@ DrawEditSw_SelectVariantA_Str_N80:	.incbin "includes/generated/naka_disk_warning
 ; [nakarest] it; reached through source references DrawEditSw_SelectVariantC
 ; [nakarest] (ui/ui_window_procs.s: `ld xwa, DrawEditSw_SelectVariantC_Str_N81`).
 DrawEditSw_SelectVariantC_Str_N81:			.incbin "includes/generated/naka_disk_warning.bin", 0x14CE, 0x4	; "~81"
-TextBox_DrawLineLoop_Data:				.incbin "includes/generated/naka_disk_warning.bin", 0x14D2, 0x2
+TextBox_Str_LineBreak:				.incbin "includes/generated/naka_disk_warning.bin", 0x14D2, 0x2
 AcTempoBox_MatchTempoID_Str_aa_Fmt3d:			.incbin "includes/generated/naka_disk_warning.bin", 0x14D4, 0x8	; "~aa=%3d"
 AcTempoBox_CopyTempoString_Str_aa:			.incbin "includes/generated/naka_disk_warning.bin", 0x14DC, 0x8	; "~aa=---"
 PsListBox_GetText_Str_No_My_Car_Day_Memory_AyaSam:	.incbin "includes/generated/naka_disk_warning.bin", 0x14E4, 0x5C	; "No My Car Day|Memory|AyaSam|Sweet Home Town|I am Rocker|Sunday Song|Two Day Drunk?|Samba 2"
@@ -575,7 +575,7 @@ AcGridBoxProc_CaseTable:
 	.short	AcGridBox_Default - AcGridBox_Init
 	.short	AcGridBox_CellSelect - AcGridBox_Init
 	.short	AcGridBox_CellSelect - AcGridBox_Init
-GridCheck_CellSelect_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x15BA, 0x6
+GridCheck_Str_CellColRow:	.incbin "includes/generated/naka_disk_warning.bin", 0x15BA, 0x6
 ; GridCheck_CaseTable -- 7 x int16: the case offsets of GridCheck's compiled switch, relative to GridCheck_JumpEnd
 GridCheck_CaseTable:
 	.short	GridCheck_JumpEnd - GridCheck_JumpEnd
@@ -843,7 +843,7 @@ PsTrkSw_SelectStateLabelText:	.incbin "includes/generated/naka_disk_warning.bin"
 ; the same state indexes the 5 strings copied from PsTrkSw_SelectStateLabels
 PsTrkSw_SelectStateColor:	.incbin "includes/generated/naka_disk_warning.bin", 0x1B6E, 0xA
 PsTrkSw_Confirm_DrawGeometry_Str_Fmtd:	.incbin "includes/generated/naka_disk_warning.bin", 0x1B78, 0x4	; "%d"
-AcTrkSw_Select_Data:			.incbin "includes/generated/naka_disk_warning.bin", 0x1B7C, 0x2
+PsTextBox_Str_LineBreak:			.incbin "includes/generated/naka_disk_warning.bin", 0x1B7C, 0x2
 ; [nakarest] naka_disk_warning+0x1b7e  +0x1b7e..+0x1b88 (0xeaa82a, 10 B)
 ; [nakarest] Text (10 B at 0xeaa82a), first string "PsTextBox"; no registered NAKA table points
 ; [nakarest] into it; reached through source references AcTrkSw_Select_HighTrack
@@ -973,8 +973,8 @@ ViewableProc_CaseTable:
 ; [nakarest] naka_disk_warning+0x1d48  +0x1d48..+0x1d52 (0xeaa9f4, 10 B)
 ; [nakarest] Text (10 B at 0xeaa9f4), first string "bool %s%d"; no registered NAKA table points
 ; [nakarest] into it; reached through source references BoxStyle7_Setup (ui/ui_widget_defs.s:
-; [nakarest] `ld xwa, BoxStyle7_Setup_Data`).
-BoxStyle7_Setup_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x1D48, 0xA
+; [nakarest] `ld xwa, pBoolProc_DumpPointerFmt`).
+pBoolProc_DumpPointerFmt:	.incbin "includes/generated/naka_disk_warning.bin", 0x1D48, 0xA
 ; [nakarest] naka_disk_warning+0x1d52  +0x1d52..+0x1d58 (0xeaa9fe, 6 B)
 ; [nakarest] Text (6 B at 0xeaa9fe), first string "&%s%d"; no registered NAKA table points into
 ; [nakarest] it; reached through source references BoxStyle7_CalcWidth (ui/ui_widget_defs.s: `ld
@@ -983,8 +983,8 @@ BoxStyle7_CalcWidth_Str_Fmts_Fmtd:	.incbin "includes/generated/naka_disk_warning
 ; [nakarest] naka_disk_warning+0x1d58  +0x1d58..+0x1d64 (0xeaaa04, 12 B)
 ; [nakarest] Text (12 B at 0xeaaa04), first string "sword %s%d"; no registered NAKA table points
 ; [nakarest] into it; reached through source references BoxStyle8_Setup (ui/ui_widget_defs.s:
-; [nakarest] `ld xwa, BoxStyle8_Setup_Data`).
-BoxStyle8_Setup_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x1D58, 0xC
+; [nakarest] `ld xwa, pSwordProc_DumpPointerFmt`).
+pSwordProc_DumpPointerFmt:	.incbin "includes/generated/naka_disk_warning.bin", 0x1D58, 0xC
 ; [nakarest] naka_disk_warning+0x1d64  +0x1d64..+0x1d6a (0xeaaa10, 6 B)
 ; [nakarest] Text (6 B at 0xeaaa10), first string "&%s%d"; no registered NAKA table points into
 ; [nakarest] it; reached through source references BoxStyle8_CalcWidth (ui/ui_widget_defs.s: `ld
@@ -993,8 +993,8 @@ BoxStyle8_CalcWidth_Str_Fmts_Fmtd:	.incbin "includes/generated/naka_disk_warning
 ; [nakarest] naka_disk_warning+0x1d6a  +0x1d6a..+0x1d76 (0xeaaa16, 12 B)
 ; [nakarest] Text (12 B at 0xeaaa16), first string "uword %s%d"; no registered NAKA table points
 ; [nakarest] into it; reached through source references BoxStyle9_Setup (ui/ui_widget_defs.s:
-; [nakarest] `ld xwa, BoxStyle9_Setup_Data`).
-BoxStyle9_Setup_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x1D6A, 0xC
+; [nakarest] `ld xwa, pUwordProc_DumpPointerFmt`).
+pUwordProc_DumpPointerFmt:	.incbin "includes/generated/naka_disk_warning.bin", 0x1D6A, 0xC
 ; [nakarest] naka_disk_warning+0x1d76  +0x1d76..+0x1d7c (0xeaaa22, 6 B)
 ; [nakarest] Text (6 B at 0xeaaa22), first string "&%s%d"; no registered NAKA table points into
 ; [nakarest] it; reached through source references BoxStyle9_CalcWidth (ui/ui_widget_defs.s: `ld
@@ -1003,8 +1003,8 @@ BoxStyle9_CalcWidth_Str_Fmts_Fmtd:	.incbin "includes/generated/naka_disk_warning
 ; [nakarest] naka_disk_warning+0x1d7c  +0x1d7c..+0x1d88 (0xeaaa28, 12 B)
 ; [nakarest] Text (12 B at 0xeaaa28), first string "schar %s%d"; no registered NAKA table points
 ; [nakarest] into it; reached through source references BoxStyle10_Setup (ui/ui_widget_defs.s:
-; [nakarest] `ld xwa, BoxStyle10_Setup_Data`).
-BoxStyle10_Setup_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x1D7C, 0xC
+; [nakarest] `ld xwa, pScharProc_DumpPointerFmt`).
+pScharProc_DumpPointerFmt:	.incbin "includes/generated/naka_disk_warning.bin", 0x1D7C, 0xC
 ; [nakarest] naka_disk_warning+0x1d88  +0x1d88..+0x1d8e (0xeaaa34, 6 B)
 ; [nakarest] Text (6 B at 0xeaaa34), first string "&%s%d"; no registered NAKA table points into
 ; [nakarest] it; reached through source references BoxStyle10_CalcWidth (ui/ui_widget_defs.s:
@@ -1013,8 +1013,8 @@ BoxStyle10_CalcWidth_Str_Fmts_Fmtd:	.incbin "includes/generated/naka_disk_warnin
 ; [nakarest] naka_disk_warning+0x1d8e  +0x1d8e..+0x1d9a (0xeaaa3a, 12 B)
 ; [nakarest] Text (12 B at 0xeaaa3a), first string "uchar %s%d"; no registered NAKA table points
 ; [nakarest] into it; reached through source references BoxStyle11_Setup (ui/ui_widget_defs.s:
-; [nakarest] `ld xwa, BoxStyle11_Setup_Data`).
-BoxStyle11_Setup_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x1D8E, 0xC
+; [nakarest] `ld xwa, pUcharProc_DumpPointerFmt`).
+pUcharProc_DumpPointerFmt:	.incbin "includes/generated/naka_disk_warning.bin", 0x1D8E, 0xC
 ; [nakarest] naka_disk_warning+0x1d9a  +0x1d9a..+0x1da0 (0xeaaa46, 6 B)
 ; [nakarest] Text (6 B at 0xeaaa46), first string "&%s%d"; no registered NAKA table points into
 ; [nakarest] it; reached through source references BoxStyle11_CalcWidth (ui/ui_widget_defs.s:
@@ -1023,8 +1023,8 @@ BoxStyle11_CalcWidth_Str_Fmts_Fmtd:	.incbin "includes/generated/naka_disk_warnin
 ; [nakarest] naka_disk_warning+0x1da0  +0x1da0..+0x1dac (0xeaaa4c, 12 B)
 ; [nakarest] Text (12 B at 0xeaaa4c), first string "slong %s%d"; no registered NAKA table points
 ; [nakarest] into it; reached through source references BoxStyle12_Setup (ui/ui_widget_defs.s:
-; [nakarest] `ld xwa, BoxStyle12_Setup_Data`).
-BoxStyle12_Setup_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x1DA0, 0xC
+; [nakarest] `ld xwa, pSlongProc_DumpPointerFmt`).
+pSlongProc_DumpPointerFmt:	.incbin "includes/generated/naka_disk_warning.bin", 0x1DA0, 0xC
 ; [nakarest] naka_disk_warning+0x1dac  +0x1dac..+0x1db2 (0xeaaa58, 6 B)
 ; [nakarest] Text (6 B at 0xeaaa58), first string "&%s%d"; no registered NAKA table points into
 ; [nakarest] it; reached through source references BoxStyle12_CalcWidth (ui/ui_widget_defs.s:
@@ -1033,8 +1033,8 @@ BoxStyle12_CalcWidth_Str_Fmts_Fmtd:	.incbin "includes/generated/naka_disk_warnin
 ; [nakarest] naka_disk_warning+0x1db2  +0x1db2..+0x1dbe (0xeaaa5e, 12 B)
 ; [nakarest] Text (12 B at 0xeaaa5e), first string "ulong %s%d"; no registered NAKA table points
 ; [nakarest] into it; reached through source references BoxStyle13_Setup (ui/ui_widget_defs.s:
-; [nakarest] `ld xwa, BoxStyle13_Setup_Data`).
-BoxStyle13_Setup_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x1DB2, 0xC
+; [nakarest] `ld xwa, pUlongProc_DumpPointerFmt`).
+pUlongProc_DumpPointerFmt:	.incbin "includes/generated/naka_disk_warning.bin", 0x1DB2, 0xC
 ; [nakarest] naka_disk_warning+0x1dbe  +0x1dbe..+0x1ed0 (0xeaaa6a, 274 B)
 ; [nakarest] Text (274 B at 0xeaaa6a), first string "&%s%d"; no registered NAKA table points
 ; [nakarest] into it; reached through source references BoxStyle13_CalcWidth
@@ -1128,7 +1128,7 @@ ConstFlagProc_GetValue_Str_romram:	.incbin "includes/generated/naka_disk_warning
 ; (EVT_GET_PROP_MEMBER copies "romram" instead, ConstFlagProc_GetValue_Str_romram).
 ConstFlagProc_DumpText:	.incbin "includes/generated/naka_disk_warning.bin", 0x1F32, 0x2
 ConstFlagProc_SetValue_Check_Str_Empty:	.incbin "includes/generated/naka_disk_warning.bin", 0x1F34, 0x2	; ""
-CommonIDProc_OnDumpPointerEx_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x1F36, 0x2
+CommonIDProc_DumpPointer_Str_Empty:	.incbin "includes/generated/naka_disk_warning.bin", 0x1F36, 0x2
 ; CommonIDProc_CaseTable -- 7 x int16: the case offsets of CommonIDProc's compiled switch, relative to CommonIDProc_OnGetPropDataSp
 CommonIDProc_CaseTable:
 	.short	CommonIDProc_ReturnZero - CommonIDProc_OnGetPropDataSp
@@ -1143,7 +1143,7 @@ CommonIDProc_CaseTable:
 ; entry [byte] as one word per icon byte, 12 bytes x 24 rows: a 24 x 24 icon.  Typed in
 ; ui_widgets/naka_disk_warning.c (scripts/converters/icon_pixel_pair_table_retype.py).
 DrawIcons_PixelPairTable:	.incbin "includes/generated/naka_disk_warning.bin", 0x1F46, 0x200
-DrawBitmapFile_Impl_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x2146, 0x4
+DrawBitmapFile_Str_BM:	.incbin "includes/generated/naka_disk_warning.bin", 0x2146, 0x4
 ; DrawPartGroup_DispatchByType_CaseTable -- 16 x int16: the case offsets of DrawPartGroup_DispatchByType's compiled switch, relative to DrawPartGroup_TableJump_DefaultCase
 DrawPartGroup_DispatchByType_CaseTable:
 	.short	DrawDesignBox_PartGroupStyle_LeftChevron16 - DrawPartGroup_TableJump_DefaultCase
@@ -1189,7 +1189,7 @@ Draw_DispatchByPartType_CaseTable:
 	.short	DrawDesignBox_Impl_BevelCorners - Draw_StyledBoxWithFrame
 	.short	DrawDesignBox_Impl_BevelTopCorners - Draw_StyledBoxWithFrame
 	.short	DrawDesignBox_Impl_BevelBottomCorners - Draw_StyledBoxWithFrame
-Gfx_LoadSplashBMP_Data:		.incbin "includes/generated/naka_disk_warning.bin", 0x219C, 0x4
+Gfx_LoadSplashBMP_Str_BM:		.incbin "includes/generated/naka_disk_warning.bin", 0x219C, 0x4
 CaptureLcd_Str_BM:		.incbin "includes/generated/naka_disk_warning.bin", 0x21A0, 0x4	; "BM"
 CaptureLcd_Str_HKLCD_Fmt3d_BMP:	.incbin "includes/generated/naka_disk_warning.bin", 0x21A4, 0xE	; "HKLCD%03d.BMP"
 ; [nakarest] naka_disk_warning+0x21b2  +0x21b2..+0x21b6 (0xeaae5e, 4 B)

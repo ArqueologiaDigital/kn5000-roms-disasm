@@ -507,7 +507,7 @@ CtrlPanel_AA_04_Bit5Release:
 CtrlPanel_AA_PanelEvent_15:
 	bit 5, a
 	jr z, CtrlPanel_AA_15_Release
-	call GetAprStatus_Entry
+	call Xapr_GetPresentFlag
 	cp l, 0:i3
 	jr z, CtrlPanel_AA_15_AprInactive
 	ld xwa, 0xffffffff
@@ -524,7 +524,7 @@ CtrlPanel_AA_15_AprInactive:
 CtrlPanel_AA_15_Release:
 	bit 5, c
 	jrl z, UIEvent_Epilogue
-	call GetAprStatus_Entry
+	call Xapr_GetPresentFlag
 	cp l, 0:i3
 	jr z, CtrlPanel_AA_15_ReleaseAprInactive
 	ld xwa, 0xffffffff

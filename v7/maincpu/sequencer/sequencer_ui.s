@@ -6992,7 +6992,7 @@ NoteEditFunc_OnGetNoteString:
 	jr	nz, NoteEdit_FormatNoteOther
 	pushw 9
 	muls	wa, 9
-	lda	xbc, (NoteEdit_FormatTempoString_Data:24)
+	lda	xbc, (NoteEdit_MidiNoteNameTable:24)
 	exts	xwa
 	add	xwa, xbc
 	push	xwa
@@ -7439,8 +7439,8 @@ SngSelFunc_OnGetRamString:
 	inc	1, a
 	extz	wa
 	pushw	wa
-	pushw	SngSelFunc_HandleEvent47_Data@hi16
-	pushw	SngSelFunc_HandleEvent47_Data@lo16
+	pushw	SngSelFunc_OnGetRamString_Str_Fmt2d@hi16
+	pushw	SngSelFunc_OnGetRamString_Str_Fmt2d@lo16
 	ld	xwa, (xiz+18)
 	inc	4, xwa
 	push	xwa
@@ -7887,24 +7887,24 @@ SndParam_Dispatch:
 	add	wa, wa
 	lda	xix, (SndParam_Dispatch_PtrTable_2:24)
 	ld	wa, (xix+wa)
-	lda	xix, (SndParam_Dispatch_Code:24)
+	lda	xix, (EntertainerGridCheck_LswRowUp:24)
 	jp	t, (xix+wa)
-SndParam_Dispatch_Code:
+EntertainerGridCheck_LswRowUp:
 	ld	xbc, (xsp+62)
 	sla	de, 2
 	cp	xbc, EVT_INDEXSW_UP_AIC
-	jr	nz, SndParam_Dispatch_Skip
+	jr	nz, EntertainerGridCheck_LswRowUp_Skip
 	lda	xbc, (SndParam_Dispatch_Table:24)
 	ld	xwa, (xbc+de)
 	ld	bc, 4:i3
 	ld	de, 4:i3
-	jr	SndParam_Dispatch_Join
-SndParam_Dispatch_Skip:
+	jr	EntertainerGridCheck_LswRowUp_Join
+EntertainerGridCheck_LswRowUp_Skip:
 	lda	xbc, (SndParam_Dispatch_Table:24)
 	ld	xwa, (xbc+de)
 	ld	bc, 1:i3
 	ld	de, 4:i3
-SndParam_Dispatch_Join:
+EntertainerGridCheck_LswRowUp_Join:
 	call	MainLswAdd
 	jrl	SndParam_ReturnZero
 EntertainerGridCheck_TypeRowUp:
@@ -7943,22 +7943,22 @@ EntertainerGridCheck_OnIndexswDown:	; cases 29360152, 29360154
 	add	wa, wa
 	lda	xix, (SndParam_Dispatch_PtrTable:24)
 	ld	wa, (xix+wa)
-	lda	xix, (SndParam_Dispatch_Code_2:24)
+	lda	xix, (EntertainerGridCheck_LswRowDown:24)
 	jp	t, (xix+wa)
-SndParam_Dispatch_Code_2:
+EntertainerGridCheck_LswRowDown:
 	ld	xde, (xsp+62)
 	sla	hl, 2
 	lda	xwa, (SndParam_Dispatch_Table:24)
 	ld	xwa, (xwa+hl)
 	cp	xde, EVT_INDEXSW_DOWN_AIC
-	jr	nz, SndParam_Dispatch_Skip2
+	jr	nz, EntertainerGridCheck_LswRowDown_Skip2
 	ldw	bc, 65532
 	ld	de, 4:i3
-	jr	SndParam_Dispatch_Join2
-SndParam_Dispatch_Skip2:
+	jr	EntertainerGridCheck_LswRowDown_Join2
+EntertainerGridCheck_LswRowDown_Skip2:
 	ldw	bc, 65535
 	ld	de, 4:i3
-SndParam_Dispatch_Join2:
+EntertainerGridCheck_LswRowDown_Join2:
 	call	MainLswAdd
 	jrl	SndParam_ReturnZero
 EntertainerGridCheck_TypeRowDown:
@@ -14272,9 +14272,9 @@ SqedtFunc_OnGetTrkString:
 	add	hl, hl
 	lda	xix, (Sqedt_ParamDispatch_CaseTable_3:24)
 	ld	hl, (xix+hl)
-	lda	xix, (Sqedt_ParamDispatch_Code:24)
+	lda	xix, (SqedtFunc_TrkString_OnTitleSqnotecng:24)
 	jp	t, (xix+hl)
-Sqedt_ParamDispatch_Code:
+SqedtFunc_TrkString_OnTitleSqnotecng:
 	ld	a, (9742:16)
 	jr	SqedtFunc_TrkString_OnTitleSqvelocng_Join
 SqedtFunc_TrkString_OnTitleSqtrns:
@@ -14302,42 +14302,42 @@ SqedtFunc_OnGetFmString:
 	extz	hl
 	sub	hl, 156
 	cp	hl, 0:i3
-	jr	lt, Sqedt_ParamDispatch_Entry
+	jr	lt, SqedtFunc_FmString_OnTitleSqadvdly
 	cp	hl, 7:i3
-	jr	gt, Sqedt_ParamDispatch_Entry
+	jr	gt, SqedtFunc_FmString_OnTitleSqadvdly
 	add	hl, hl
 	lda	xix, (Sqedt_ParamDispatch_CaseTable_2:24)
 	ld	hl, (xix+hl)
-	lda	xix, (Sqedt_ParamDispatch_Code_2:24)
+	lda	xix, (SqedtFunc_FmString_OnTitleSqnotecng:24)
 	jp	t, (xix+hl)
-Sqedt_ParamDispatch_Code_2:
+SqedtFunc_FmString_OnTitleSqnotecng:
 	pushm (0x2610:16)
 	ld	xwa, Sqedt_ParamDispatch_Str
-	jr	Sqedt_ParamDispatch_Join2
+	jr	SqedtFunc_FmString_OnTitleSqadvdly_Join2
 SqedtFunc_FmString_OnTitleSqtrns:
 	pushm (0x261e:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_2
-	jr	Sqedt_ParamDispatch_Join2
+	jr	SqedtFunc_FmString_OnTitleSqadvdly_Join2
 SqedtFunc_FmString_OnTitleSqmdel:
 	pushm (0xf1d7:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_3
-	jr	Sqedt_ParamDispatch_Join2
+	jr	SqedtFunc_FmString_OnTitleSqadvdly_Join2
 SqedtFunc_FmString_OnTitleSqmers:
 	pushm (0xf1dc:16)
 	ld xwa, FmtStr_pct3d_4B5E
-	jr	Sqedt_ParamDispatch_Join2
+	jr	SqedtFunc_FmString_OnTitleSqadvdly_Join2
 SqedtFunc_FmString_OnTitleSqqtz:
 	pushm (0xf1f2:16)
 	ld xwa, Sqedt_ParamDispatch_Str_Fmt3d
-	jr	Sqedt_ParamDispatch_Join2
+	jr	SqedtFunc_FmString_OnTitleSqadvdly_Join2
 SqedtFunc_FmString_OnTitleSqvelocng:
 	pushm (0xf229:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_4
-	jr	Sqedt_ParamDispatch_Join2
-Sqedt_ParamDispatch_Entry:
+	jr	SqedtFunc_FmString_OnTitleSqadvdly_Join2
+SqedtFunc_FmString_OnTitleSqadvdly:
 	pushm (0x2606:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_5
-Sqedt_ParamDispatch_Join2:
+SqedtFunc_FmString_OnTitleSqadvdly_Join2:
 	jrl	SqedtFunc_CheckMode_CopyParam_Join10
 SqedtFunc_OnGetLmString:
 	ld	xwa, (xsp+8)
@@ -14345,42 +14345,42 @@ SqedtFunc_OnGetLmString:
 	extz	hl
 	sub	hl, 156
 	cp	hl, 0:i3
-	jr	lt, Sqedt_ParamDispatch_Entry2
+	jr	lt, SqedtFunc_LmString_OnTitleSqadvdly
 	cp	hl, 7:i3
-	jr	gt, Sqedt_ParamDispatch_Entry2
+	jr	gt, SqedtFunc_LmString_OnTitleSqadvdly
 	add	hl, hl
 	lda	xix, (Sqedt_ParamDispatch_CaseTable:24)
 	ld	hl, (xix+hl)
-	lda	xix, (Sqedt_ParamDispatch_Code_3:24)
+	lda	xix, (SqedtFunc_LmString_OnTitleSqnotecng:24)
 	jp	t, (xix+hl)
-Sqedt_ParamDispatch_Code_3:
+SqedtFunc_LmString_OnTitleSqnotecng:
 	pushm (0x2612:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_6
-	jr	Sqedt_ParamDispatch_Entry2_Join
+	jr	SqedtFunc_LmString_OnTitleSqadvdly_Join
 SqedtFunc_LmString_OnTitleSqtrns:
 	pushm (0x2620:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_7
-	jr	Sqedt_ParamDispatch_Entry2_Join
+	jr	SqedtFunc_LmString_OnTitleSqadvdly_Join
 SqedtFunc_LmString_OnTitleSqmdel:
 	pushm (0x262c:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_8
-	jr	Sqedt_ParamDispatch_Entry2_Join
+	jr	SqedtFunc_LmString_OnTitleSqadvdly_Join
 SqedtFunc_LmString_OnTitleSqmers:
 	pushm (0x2626:16)
 	ld xwa, NakaInst_3d
-	jr	Sqedt_ParamDispatch_Entry2_Join
+	jr	SqedtFunc_LmString_OnTitleSqadvdly_Join
 SqedtFunc_LmString_OnTitleSqqtz:
 	pushm (0x25fc:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_9
-	jr	Sqedt_ParamDispatch_Entry2_Join
+	jr	SqedtFunc_LmString_OnTitleSqadvdly_Join
 SqedtFunc_LmString_OnTitleSqvelocng:
 	pushm (0x25fa:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_10
-	jr	Sqedt_ParamDispatch_Entry2_Join
-Sqedt_ParamDispatch_Entry2:
+	jr	SqedtFunc_LmString_OnTitleSqadvdly_Join
+SqedtFunc_LmString_OnTitleSqadvdly:
 	pushm (0x2608:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_11
-Sqedt_ParamDispatch_Entry2_Join:
+SqedtFunc_LmString_OnTitleSqadvdly_Join:
 	jrl	SqedtFunc_CheckMode_CopyParam_Join10
 SqedtFunc_OnGetAdlyString:
 	ld	xwa, (xsp+8)
@@ -14535,7 +14535,7 @@ SqedtFunc_OnGetTnString:
 	ld	a, (9750:16)
 	extz	wa
 	muls	wa, 9
-	lda	xde, (NoteEdit_FormatTempoString_Data:24)
+	lda	xde, (NoteEdit_MidiNoteNameTable:24)
 	exts	xwa
 	add	xwa, xde
 	push	xwa
@@ -14559,7 +14559,7 @@ SqedtFunc_OnGetCnString:
 	ld	a, (9816:16)
 	extz	wa
 	muls	wa, 9
-	lda	xde, (NoteEdit_FormatTempoString_Data:24)
+	lda	xde, (NoteEdit_MidiNoteNameTable:24)
 	exts	xwa
 	add	xwa, xde
 	push	xwa
@@ -14717,7 +14717,7 @@ SqedtFunc_OnGetScpFtrString:
 	ld	(xsp+4), xwa
 	pushw	3
 	ld a, (0x270c:16)
-	jr Sqedt_ParamDispatch_Entry2_Join2
+	jr SqedtFunc_OnGetScpTtrString_Join2
 SqedtFunc_OnGetScpTsngString:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
@@ -14731,7 +14731,7 @@ SqedtFunc_OnGetScpTtrString:
 	ld	(xsp+4), xwa
 	pushw	3
 	ld	a, (9998:16)
-Sqedt_ParamDispatch_Entry2_Join2:
+SqedtFunc_OnGetScpTtrString_Join2:
 	extz	wa
 	muls	wa, 3
 	ld	xbc, Sqedt_ParamDispatch_Table
@@ -14881,9 +14881,9 @@ SqedtFunc_OnCurToParam_CursorPos0:
 	add	hl, hl
 	lda	xix, (Sqedt_ValueDispatch_CaseTable_3:24)
 	ld	hl, (xix+hl)
-	lda	xix, (Sqedt_ValueDispatch_Code:24)
+	lda	xix, (SqedtFunc_OnCurToParam_CursorPos0_TrackField:24)
 	jp	t, (xix+hl)
-Sqedt_ValueDispatch_Code:
+SqedtFunc_OnCurToParam_CursorPos0_TrackField:
 	ld	l, 0:opc
 	jrl	SqedtFunc_SignExtendAndReturn
 SqedtFunc_OnCurToParam_CursorPos0_OnTitleSqtrkmrg:
@@ -14899,9 +14899,9 @@ SqedtFunc_OnCurToParam_CursorPos1:
 	add	hl, hl
 	lda	xix, (Sqedt_ValueDispatch_CaseTable_2:24)
 	ld	hl, (xix+hl)
-	lda	xix, (Sqedt_ValueDispatch_Code2:24)
+	lda	xix, (SqedtFunc_OnCurToParam_CursorPos1_FromMeasureField:24)
 	jp	t, (xix+hl)
-Sqedt_ValueDispatch_Code2:
+SqedtFunc_OnCurToParam_CursorPos1_FromMeasureField:
 	ld	l, 1:opc
 	jr	SqedtFunc_SignExtendAndReturn
 SqedtFunc_OnCurToParam_CursorPos2:
@@ -14914,9 +14914,9 @@ SqedtFunc_OnCurToParam_CursorPos2:
 	add	hl, hl
 	lda	xix, (Sqedt_ValueDispatch_CaseTable:24)
 	ld	hl, (xix+hl)
-	lda	xix, (Sqedt_ValueDispatch_Code3:24)
+	lda	xix, (SqedtFunc_OnCurToParam_CursorPos2_LastMeasureField:24)
 	jp	t, (xix+hl)
-Sqedt_ValueDispatch_Code3:
+SqedtFunc_OnCurToParam_CursorPos2_LastMeasureField:
 	ld	l, 2:opc
 	jr	SqedtFunc_SignExtendAndReturn
 SqedtFunc_OnCurToParam_CursorPos2_OnTitleSqtrkmrg:
@@ -15044,9 +15044,9 @@ SqedtFunc_OnChkCur2:
 	add	wa, wa
 	lda	xix, (SeqFormat_DispatchA_CaseTable:24)
 	ld	wa, (xix+wa)
-	lda	xix, (SeqFormat_DispatchA_Code:24)
+	lda	xix, (SqedtFunc_OnChkCur2_McpTrAFields:24)
 	jp	t, (xix+wa)
-SeqFormat_DispatchA_Code:
+SqedtFunc_OnChkCur2_McpTrAFields:
 	cp	(0x03e2e0:24), 0
 	jrl	nz, SeqFunc_ReturnZeroJmp
 	ld	xwa, 15

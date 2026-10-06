@@ -1680,7 +1680,7 @@ SeAmpEnv2_OnSwitch15:
 SeAmpLfo1_OnColumn2:
 	extz	wa
 	ld	bc, 0:i3
-	jp	SeMenu_ApplyPartEdit_Data2
+	jp	SeLfo1_StepSelectorAndReload
 SeAmpLfo1_OnColumn3:
 	extz	wa
 	ld	bc, 0:i3
@@ -3789,7 +3789,7 @@ SeFilEnv2_OnSwitch15:
 SeFilLfo1_OnColumn2:
 	extz	wa
 	ld	bc, 2:i3
-	jp	SeMenu_ApplyPartEdit_Data2
+	jp	SeLfo1_StepSelectorAndReload
 SeFilLfo1_OnColumn3:
 	extz	wa
 	ld	bc, 2:i3

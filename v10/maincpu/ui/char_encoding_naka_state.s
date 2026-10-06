@@ -74,12 +74,12 @@ WorkRam2_VoiceLinks_Count:
 ; NoteMap_FindBestMatch when it reaches 0 (`ld a,(0xE9BC); ... dec 1,a`).
 WorkRam2_VoiceMatchCountdown:
 	.byte 0x0a, 0xff	; RAM 0xE9BC
-; {u8 index, 0xFF}; 20 at power-on.  UIStateEvt_EffectSelect_Data_Skip4 stores
+; {u8 index, 0xFF}; 20 at power-on.  PanelTag70_UpdateAudioConfig_Skip4 stores
 ; (RAM 0xC07E) & 15 here; UIParam_CallbackDispatch reads it as the index of a
 ; u32 entry (`ld c,(0xE9BE); sla bc,2`) and calls through that entry.
 WorkRam2_CallbackIndex:
 	.byte 0x14, 0xff	; RAM 0xE9BE
-; {u8 value, 0xFF}; 0 at power-on.  UIStateEvt_EffectSelect_Data_Skip3 stores
+; {u8 value, 0xFF}; 0 at power-on.  PanelTag70_UpdateAudioConfig_Skip3 stores
 ; RAM 0xC07E here; AudioInit_Pan_CheckReverbChannel compares it with 14 and
 ; AudioInit_Pan_Reverb_CopyFromMain copies it to RAM 0xC2BC.
 WorkRam2_EffectSelectByte:
@@ -93,7 +93,7 @@ WorkRam2_SendEpilogueByte:
 ; Offsets from here, with the routines that use them (audio/note_voice_mapping.s):
 ;  +0x00 u8 state; the block from +0 is also passed by address
 ;        (OutputFlush_Prologue, SeqFile_ParseHeader, LoadAndStartPlayback_LoadParam3
-;        `lda xwa,(0xE9C4)`, StoreAndReturn_Block clears it)
+;        `lda xwa,(0xE9C4)`, SongPlayer_ResetState clears it)
 ;  +0x20 u8 mode 0-4 (OutputFlush_InitVal `cp ...,4`, RecordReadOK_LoadReg sets 2)
 ;  +0x21 u16 flag bits 0x01/0x02/0x04/0x10 (SeqState_GetFlags, Acc_TransitionPlayMode,
 ;        Acc_StopPlayMode, Acc_StartFillIn, DecodeMidiEvent_LoadParam3)

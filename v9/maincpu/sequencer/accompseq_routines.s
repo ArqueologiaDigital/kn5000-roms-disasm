@@ -22,7 +22,7 @@ AccompSeq_PeriodicMain:
 	bit 5, (0x7e53:16)
 	jr nz, AccompSeq_PeriodicReturn
 	calr AccompSeq_FadeOutTick
-	call AccPlay_Entry
+	call AccPlay_TickVector
 	calr AccompSeq_SaveTimerSnapshot
 
 AccompSeq_PeriodicReturn:

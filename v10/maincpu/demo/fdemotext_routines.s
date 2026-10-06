@@ -73,9 +73,13 @@ FDemoText_ByteData_VoiceProbeC:
 	add	wa, wa
 	lda	xix, (FDemoText_ByteData_VoiceProbeC_CaseTable:24)
 	ld	wa, (xix+wa)
-	lda	xix, (FDemoText_ByteData_VoiceProbeC_Code:24)
+	lda	xix, (FDemoText_ByteData_VoiceProbeC_RequestPartialResendAll:24)
 	jp	t, (xix+wa)
-FDemoText_ByteData_VoiceProbeC_Code:
+; FDemoText_ByteData_VoiceProbeC_RequestPartialResendAll: Cases 1 and 2 of FDemoText_ByteData_VoiceProbeC (SWBTWR
+;   codes 0x44-0x46, changed payload byte +1/+2): sets bit 6 of RAM 0x247EC, which makes
+;   FDemoText_ProcessOutputChannels request a partial resend of every active part. Also the switch's offset base.
+;   Basis: callers + body.
+FDemoText_ByteData_VoiceProbeC_RequestPartialResendAll:
 	set	6, (0x247ec:24)
 	ret
 ; FDemoText_ByteData_VoiceProbeC_FootagesChanged: Payload +3..+6 (drawbar footages): sets the part's full-send bit in
@@ -2878,7 +2882,7 @@ Seq_PostProcessDisplay:
 
 Seq_CopyResourcePtrs:
 	lda xde, (0x024fd8:24)
-	lda xhl, (Seq_CopyResourcePtrs_Data:24)
+	lda xhl, (Seq_CopyResourcePtrs_Str_Empty:24)
 	ld xbc, xde
 	lda xde, (xde+508)
 
