@@ -141,6 +141,32 @@ a table is `0x47`, at `0xE7EE70` — the same shape as the tag-`0x43` screen at 
 
 ---
 
+## 5. The field constant `k` is the parameter's MIDI controller number (2026-10-06)
+
+Section 1 left `k` as "which of its fields". The descriptors themselves (`audio/sndparam_records/run_*.c`,
+`sndparam_types.h`: record = `bank_index`, byte = `bank_offset`, bits = `mask`) say which field each `k` edits, and
+for the part fields that match a documented byte the match is the MIDI controller of that name (part 0x00 shown;
+all 25 parts carry the same `(byte, mask)` per `k`, asserted by `scripts/renaming/gen_sndparam_desc_names.py`):
+
+| `k` | MIDI controller | record byte, mask | independent basis |
+|---|---|---|---|
+| `0x00` | CC 0 Bank Select MSB | `+0`, `FF` | `+0` is the flat panel sound number (kn-disk-file-formats.md, "The voice selector's 168 options") |
+| `0x20` | CC 32 Bank Select LSB | `+1`, `7F` | `+1` is its variation bank (same) |
+| `0x07` | CC 7 Volume | `+3`, `7F` | |
+| `0x0A` | CC 10 Pan | `+8`, `7F` | |
+| `0x5B` | CC 91 Reverb send | `+7`, `7F` | |
+| `0x5D` | CC 93 Chorus send | `+5`, `7F` | |
+| `0x40` | CC 64 Sustain | `+4`, `08` | the panel SUSTAIN button's action addresses tag 0 (the current part) byte 4 bit 3 (`PanelActions_RightSeg3`, technics-docs control-panel-protocol.md) |
+| `0x5E` | CC 94 (Celeste) | `+4`, `40` | DIGITAL EFFECT's action addresses byte 4 bit 6 (same list) |
+| `0x01` | CC 1 Modulation | record `0xB2`, byte = part | a per-part live-controller array, not the part record |
+| `0x0B` | CC 11 Expression | record `0xB3`, byte = part | same |
+
+**[INFERENCE, with the evidence above]** The controller reading is not stated by the firmware; it is the one
+reading under which the constants are not arbitrary: eight of them land on the very byte or bit the controller of
+that number governs, and two of those are confirmed by the panel buttons that set them. `k = 0x08` (`+3`, `80`),
+`0x78`, `0x80`-`0x82` and `0x1B0`/`0x1B2` are not named. The drawbar keys `0x280`-`0x288` of parts 0-2 are the nine
+footages of section 2. `gen_sndparam_desc_names.py` names those descriptors `SndParam_Part<TT>_<Field>`.
+
 ## PROVEN vs INFERRED
 
 **PROVEN:** the part namespace law and its ten field constants; that only the three drawbar

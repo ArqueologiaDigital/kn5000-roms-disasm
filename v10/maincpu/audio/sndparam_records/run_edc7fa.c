@@ -16,7 +16,7 @@ const sndparam_descriptor_t run_edc7fa[9]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [  1] 0xEDC80C  MidiChParam_Entry_086 */
+    /* [  1] 0xEDC80C  SndParam_Part00_Sound */
     { .key = 0x00008000, .bank_index = 0x00, .bank_offset = 0x00,
       .mask = 0xFF, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -26,8 +26,8 @@ const sndparam_descriptor_t run_edc7fa[9]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDC820-0xEDC830 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=67% dist=6 near MidiChParam_Entry_087+2 */
-    /* [  2] 0xEDC81E  MidiChParam_Entry_087 */
+    /* data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDC820-0xEDC830 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=67% dist=6 near SndParam_Part00_Modulation+2 */
+    /* [  2] 0xEDC81E  SndParam_Part00_Modulation */
     { .key = 0x00008001, .bank_index = 0xB2, .bank_offset = 0x00,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0x03,
@@ -37,7 +37,7 @@ const sndparam_descriptor_t run_edc7fa[9]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [  3] 0xEDC830  MidiChParam_Entry_088 */
+    /* [  3] 0xEDC830  SndParam_Part00_Volume */
     { .key = 0x00008007, .bank_index = 0x00, .bank_offset = 0x03,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -57,7 +57,7 @@ const sndparam_descriptor_t run_edc7fa[9]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [  5] 0xEDC854  MidiChParam_Entry_090 */
+    /* [  5] 0xEDC854  SndParam_Part00_Pan */
     { .key = 0x0000800A, .bank_index = 0x00, .bank_offset = 0x08,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -67,7 +67,7 @@ const sndparam_descriptor_t run_edc7fa[9]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [  6] 0xEDC866  MidiChParam_Entry_091 */
+    /* [  6] 0xEDC866  SndParam_Part00_Expression */
     { .key = 0x0000800B, .bank_index = 0xB3, .bank_offset = 0x00,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -77,7 +77,7 @@ const sndparam_descriptor_t run_edc7fa[9]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [  7] 0xEDC878  MidiChParam_Entry_092 */
+    /* [  7] 0xEDC878  SndParam_Part00_Bank */
     { .key = 0x00008020, .bank_index = 0x00, .bank_offset = 0x01,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -87,7 +87,7 @@ const sndparam_descriptor_t run_edc7fa[9]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [  8] 0xEDC88A  MidiChParam_Entry_093 */
+    /* [  8] 0xEDC88A  SndParam_Part00_Sustain */
     { .key = 0x00008040, .bank_index = 0x00, .bank_offset = 0x04,
       .mask = 0x08, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x03, .xor_value = 0x00,
       .aux_index = 0x00,

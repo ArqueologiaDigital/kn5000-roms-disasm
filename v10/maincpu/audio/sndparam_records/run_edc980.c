@@ -37,7 +37,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [  3] 0xEDC9B6  MidiChParam_Entry_108 */
+    /* [  3] 0xEDC9B6  SndParam_Part00_Drawbar16 */
     { .key = 0x00008280, .bank_index = 0x44, .bank_offset = 0x03,
       .mask = 0x0F, .clamp_min = 0x00, .clamp_max = 0x08, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -47,7 +47,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [  4] 0xEDC9C8  MidiChParam_Entry_109 */
+    /* [  4] 0xEDC9C8  SndParam_Part00_Drawbar8 */
     { .key = 0x00008281, .bank_index = 0x44, .bank_offset = 0x03,
       .mask = 0xF0, .clamp_min = 0x00, .clamp_max = 0x08, .shift = 0x04, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -57,7 +57,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [  5] 0xEDC9DA  MidiChParam_Entry_110 */
+    /* [  5] 0xEDC9DA  SndParam_Part00_Drawbar5_1_3 */
     { .key = 0x00008282, .bank_index = 0x44, .bank_offset = 0x04,
       .mask = 0x0F, .clamp_min = 0x00, .clamp_max = 0x08, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -67,7 +67,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [  6] 0xEDC9EC  MidiChParam_Entry_111 */
+    /* [  6] 0xEDC9EC  SndParam_Part00_Drawbar4 */
     { .key = 0x00008283, .bank_index = 0x44, .bank_offset = 0x04,
       .mask = 0xF0, .clamp_min = 0x00, .clamp_max = 0x08, .shift = 0x04, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -77,7 +77,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [  7] 0xEDC9FE  MidiChParam_Entry_112 */
+    /* [  7] 0xEDC9FE  SndParam_Part00_Drawbar2_2_3 */
     { .key = 0x00008284, .bank_index = 0x44, .bank_offset = 0x05,
       .mask = 0x0F, .clamp_min = 0x00, .clamp_max = 0x08, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -87,7 +87,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [  8] 0xEDCA10  VoiceParamEx_Entry_001 */
+    /* [  8] 0xEDCA10  SndParam_Part00_Drawbar2 */
     { .key = 0x00008285, .bank_index = 0x44, .bank_offset = 0x05,
       .mask = 0xF0, .clamp_min = 0x00, .clamp_max = 0x08, .shift = 0x04, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -97,7 +97,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [  9] 0xEDCA22  VoiceParamEx_Entry_002 */
+    /* [  9] 0xEDCA22  SndParam_Part00_Drawbar1_3_5 */
     { .key = 0x00008286, .bank_index = 0x44, .bank_offset = 0x06,
       .mask = 0x0F, .clamp_min = 0x00, .clamp_max = 0x08, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -107,7 +107,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 10] 0xEDCA34  VoiceParamEx_Entry_003 */
+    /* [ 10] 0xEDCA34  SndParam_Part00_Drawbar1_1_3 */
     { .key = 0x00008287, .bank_index = 0x44, .bank_offset = 0x06,
       .mask = 0xF0, .clamp_min = 0x00, .clamp_max = 0x08, .shift = 0x04, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -117,7 +117,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 11] 0xEDCA46  VoiceParamEx_Entry_004 */
+    /* [ 11] 0xEDCA46  SndParam_Part00_Drawbar1 */
     { .key = 0x00008288, .bank_index = 0x44, .bank_offset = 0x07,
       .mask = 0x0F, .clamp_min = 0x00, .clamp_max = 0x08, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -147,7 +147,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 14] 0xEDCA7C  VoiceParamEx_Entry_007 */
+    /* [ 14] 0xEDCA7C  SndParam_Part01_Sound */
     { .key = 0x00008400, .bank_index = 0x01, .bank_offset = 0x00,
       .mask = 0xFF, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -157,7 +157,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 15] 0xEDCA8E  VoiceParamEx_Entry_008 */
+    /* [ 15] 0xEDCA8E  SndParam_Part01_Modulation */
     { .key = 0x00008401, .bank_index = 0xB2, .bank_offset = 0x01,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0x03,
@@ -167,7 +167,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 16] 0xEDCAA0  VoiceParamEx_Entry_009 */
+    /* [ 16] 0xEDCAA0  SndParam_Part01_Volume */
     { .key = 0x00008407, .bank_index = 0x01, .bank_offset = 0x03,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -187,7 +187,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 18] 0xEDCAC4  VoiceParamEx_Entry_011 */
+    /* [ 18] 0xEDCAC4  SndParam_Part01_Pan */
     { .key = 0x0000840A, .bank_index = 0x01, .bank_offset = 0x08,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -197,7 +197,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 19] 0xEDCAD6  VoiceParamEx_Entry_012 */
+    /* [ 19] 0xEDCAD6  SndParam_Part01_Expression */
     { .key = 0x0000840B, .bank_index = 0xB3, .bank_offset = 0x01,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -207,7 +207,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 20] 0xEDCAE8  VoiceParamEx_Entry_013 */
+    /* [ 20] 0xEDCAE8  SndParam_Part01_Bank */
     { .key = 0x00008420, .bank_index = 0x01, .bank_offset = 0x01,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -217,7 +217,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 21] 0xEDCAFA  VoiceParamEx_Entry_014 */
+    /* [ 21] 0xEDCAFA  SndParam_Part01_Sustain */
     { .key = 0x00008440, .bank_index = 0x01, .bank_offset = 0x04,
       .mask = 0x08, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x03, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -227,7 +227,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 1, /* SndParam_EncodeFieldSub_Data / SndParam_DecodeFieldAlt_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 22] 0xEDCB0C  VoiceParamEx_Entry_015 */
+    /* [ 22] 0xEDCB0C  SndParam_Part01_ReverbSend */
     { .key = 0x0000845B, .bank_index = 0x01, .bank_offset = 0x07,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -237,7 +237,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 23] 0xEDCB1E  VoiceParamEx_Entry_016 */
+    /* [ 23] 0xEDCB1E  SndParam_Part01_ChorusSend */
     { .key = 0x0000845D, .bank_index = 0x01, .bank_offset = 0x05,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -247,7 +247,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 24] 0xEDCB30  VoiceParamEx_Entry_017 */
+    /* [ 24] 0xEDCB30  SndParam_Part01_DigitalEffect */
     { .key = 0x0000845E, .bank_index = 0x01, .bank_offset = 0x04,
       .mask = 0x40, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x06, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -368,7 +368,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 36] 0xEDCC08  VoiceParamEx_Entry_029 */
+    /* [ 36] 0xEDCC08  SndParam_Part01_Drawbar16 */
     { .key = 0x00008680, .bank_index = 0x45, .bank_offset = 0x03,
       .mask = 0x0F, .clamp_min = 0x00, .clamp_max = 0x08, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -378,7 +378,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 37] 0xEDCC1A  VoiceParamEx_Entry_030 */
+    /* [ 37] 0xEDCC1A  SndParam_Part01_Drawbar8 */
     { .key = 0x00008681, .bank_index = 0x45, .bank_offset = 0x03,
       .mask = 0xF0, .clamp_min = 0x00, .clamp_max = 0x08, .shift = 0x04, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -388,7 +388,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 38] 0xEDCC2C  VoiceParamEx_Entry_031 */
+    /* [ 38] 0xEDCC2C  SndParam_Part01_Drawbar5_1_3 */
     { .key = 0x00008682, .bank_index = 0x45, .bank_offset = 0x04,
       .mask = 0x0F, .clamp_min = 0x00, .clamp_max = 0x08, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -398,7 +398,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 39] 0xEDCC3E  VoiceParamEx_Entry_032 */
+    /* [ 39] 0xEDCC3E  SndParam_Part01_Drawbar4 */
     { .key = 0x00008683, .bank_index = 0x45, .bank_offset = 0x04,
       .mask = 0xF0, .clamp_min = 0x00, .clamp_max = 0x08, .shift = 0x04, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -408,7 +408,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 40] 0xEDCC50  VoiceParamEx_Entry_033 */
+    /* [ 40] 0xEDCC50  SndParam_Part01_Drawbar2_2_3 */
     { .key = 0x00008684, .bank_index = 0x45, .bank_offset = 0x05,
       .mask = 0x0F, .clamp_min = 0x00, .clamp_max = 0x08, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -418,7 +418,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 41] 0xEDCC62  VoiceParamEx_Entry_034 */
+    /* [ 41] 0xEDCC62  SndParam_Part01_Drawbar2 */
     { .key = 0x00008685, .bank_index = 0x45, .bank_offset = 0x05,
       .mask = 0xF0, .clamp_min = 0x00, .clamp_max = 0x08, .shift = 0x04, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -428,7 +428,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 42] 0xEDCC74  VoiceParamEx_Entry_035 */
+    /* [ 42] 0xEDCC74  SndParam_Part01_Drawbar1_3_5 */
     { .key = 0x00008686, .bank_index = 0x45, .bank_offset = 0x06,
       .mask = 0x0F, .clamp_min = 0x00, .clamp_max = 0x08, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -438,7 +438,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 43] 0xEDCC86  VoiceParamEx_Entry_036 */
+    /* [ 43] 0xEDCC86  SndParam_Part01_Drawbar1_1_3 */
     { .key = 0x00008687, .bank_index = 0x45, .bank_offset = 0x06,
       .mask = 0xF0, .clamp_min = 0x00, .clamp_max = 0x08, .shift = 0x04, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -448,7 +448,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 44] 0xEDCC98  VoiceParamEx_Entry_037 */
+    /* [ 44] 0xEDCC98  SndParam_Part01_Drawbar1 */
     { .key = 0x00008688, .bank_index = 0x45, .bank_offset = 0x07,
       .mask = 0x0F, .clamp_min = 0x00, .clamp_max = 0x08, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -478,7 +478,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 47] 0xEDCCCE  VoiceParamEx_Entry_040 */
+    /* [ 47] 0xEDCCCE  SndParam_Part02_Sound */
     { .key = 0x00008800, .bank_index = 0x02, .bank_offset = 0x00,
       .mask = 0xFF, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -488,7 +488,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 48] 0xEDCCE0  VoiceParamEx_Entry_041 */
+    /* [ 48] 0xEDCCE0  SndParam_Part02_Modulation */
     { .key = 0x00008801, .bank_index = 0xB2, .bank_offset = 0x02,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0x03,
@@ -498,7 +498,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 49] 0xEDCCF2  VoiceParamEx_Entry_042 */
+    /* [ 49] 0xEDCCF2  SndParam_Part02_Volume */
     { .key = 0x00008807, .bank_index = 0x02, .bank_offset = 0x03,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -518,7 +518,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 51] 0xEDCD16  VoiceParamEx_Entry_044 */
+    /* [ 51] 0xEDCD16  SndParam_Part02_Pan */
     { .key = 0x0000880A, .bank_index = 0x02, .bank_offset = 0x08,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -528,7 +528,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 52] 0xEDCD28  VoiceParamEx_Entry_045 */
+    /* [ 52] 0xEDCD28  SndParam_Part02_Expression */
     { .key = 0x0000880B, .bank_index = 0xB3, .bank_offset = 0x02,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -538,7 +538,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 53] 0xEDCD3A  VoiceParamEx_Entry_046 */
+    /* [ 53] 0xEDCD3A  SndParam_Part02_Bank */
     { .key = 0x00008820, .bank_index = 0x02, .bank_offset = 0x01,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -548,7 +548,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 54] 0xEDCD4C  VoiceParamEx_Entry_047 */
+    /* [ 54] 0xEDCD4C  SndParam_Part02_Sustain */
     { .key = 0x00008840, .bank_index = 0x02, .bank_offset = 0x04,
       .mask = 0x08, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x03, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -558,7 +558,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 1, /* SndParam_EncodeFieldSub_Data / SndParam_DecodeFieldAlt_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 55] 0xEDCD5E  VoiceParamEx_Entry_048 */
+    /* [ 55] 0xEDCD5E  SndParam_Part02_ReverbSend */
     { .key = 0x0000885B, .bank_index = 0x02, .bank_offset = 0x07,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -568,7 +568,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 56] 0xEDCD70  VoiceParamEx_Entry_049 */
+    /* [ 56] 0xEDCD70  SndParam_Part02_ChorusSend */
     { .key = 0x0000885D, .bank_index = 0x02, .bank_offset = 0x05,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -578,7 +578,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 57] 0xEDCD82  VoiceParamEx_Entry_050 */
+    /* [ 57] 0xEDCD82  SndParam_Part02_DigitalEffect */
     { .key = 0x0000885E, .bank_index = 0x02, .bank_offset = 0x04,
       .mask = 0x40, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x06, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -698,7 +698,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 69] 0xEDCE5A  VoiceParamEx_Entry_062 */
+    /* [ 69] 0xEDCE5A  SndParam_Part02_Drawbar16 */
     { .key = 0x00008A80, .bank_index = 0x46, .bank_offset = 0x03,
       .mask = 0x0F, .clamp_min = 0x00, .clamp_max = 0x08, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -708,7 +708,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 70] 0xEDCE6C  VoiceParamEx_Entry_063 */
+    /* [ 70] 0xEDCE6C  SndParam_Part02_Drawbar8 */
     { .key = 0x00008A81, .bank_index = 0x46, .bank_offset = 0x03,
       .mask = 0xF0, .clamp_min = 0x00, .clamp_max = 0x08, .shift = 0x04, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -718,7 +718,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 71] 0xEDCE7E  VoiceParamEx_Entry_064 */
+    /* [ 71] 0xEDCE7E  SndParam_Part02_Drawbar5_1_3 */
     { .key = 0x00008A82, .bank_index = 0x46, .bank_offset = 0x04,
       .mask = 0x0F, .clamp_min = 0x00, .clamp_max = 0x08, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -728,7 +728,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 72] 0xEDCE90  VoiceParamEx_Entry_065 */
+    /* [ 72] 0xEDCE90  SndParam_Part02_Drawbar4 */
     { .key = 0x00008A83, .bank_index = 0x46, .bank_offset = 0x04,
       .mask = 0xF0, .clamp_min = 0x00, .clamp_max = 0x08, .shift = 0x04, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -738,7 +738,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 73] 0xEDCEA2  VoiceParamEx_Entry_066 */
+    /* [ 73] 0xEDCEA2  SndParam_Part02_Drawbar2_2_3 */
     { .key = 0x00008A84, .bank_index = 0x46, .bank_offset = 0x05,
       .mask = 0x0F, .clamp_min = 0x00, .clamp_max = 0x08, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -748,7 +748,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 74] 0xEDCEB4  VoiceParamEx_Entry_067 */
+    /* [ 74] 0xEDCEB4  SndParam_Part02_Drawbar2 */
     { .key = 0x00008A85, .bank_index = 0x46, .bank_offset = 0x05,
       .mask = 0xF0, .clamp_min = 0x00, .clamp_max = 0x08, .shift = 0x04, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -758,7 +758,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 75] 0xEDCEC6  VoiceParamEx_Entry_068 */
+    /* [ 75] 0xEDCEC6  SndParam_Part02_Drawbar1_3_5 */
     { .key = 0x00008A86, .bank_index = 0x46, .bank_offset = 0x06,
       .mask = 0x0F, .clamp_min = 0x00, .clamp_max = 0x08, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -768,7 +768,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 76] 0xEDCED8  VoiceParamEx_Entry_069 */
+    /* [ 76] 0xEDCED8  SndParam_Part02_Drawbar1_1_3 */
     { .key = 0x00008A87, .bank_index = 0x46, .bank_offset = 0x06,
       .mask = 0xF0, .clamp_min = 0x00, .clamp_max = 0x08, .shift = 0x04, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -778,7 +778,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 77] 0xEDCEEA  VoiceParamEx_Entry_070 */
+    /* [ 77] 0xEDCEEA  SndParam_Part02_Drawbar1 */
     { .key = 0x00008A88, .bank_index = 0x46, .bank_offset = 0x07,
       .mask = 0x0F, .clamp_min = 0x00, .clamp_max = 0x08, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -808,7 +808,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 80] 0xEDCF20  VoiceParamEx_Entry_073 */
+    /* [ 80] 0xEDCF20  SndParam_Part03_Sound */
     { .key = 0x00008C00, .bank_index = 0x03, .bank_offset = 0x00,
       .mask = 0xFF, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -818,7 +818,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 81] 0xEDCF32  VoiceParamEx_Entry_074 */
+    /* [ 81] 0xEDCF32  SndParam_Part03_Modulation */
     { .key = 0x00008C01, .bank_index = 0xB2, .bank_offset = 0x03,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0x03,
@@ -828,7 +828,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 82] 0xEDCF44  VoiceParamEx_Entry_075 */
+    /* [ 82] 0xEDCF44  SndParam_Part03_Volume */
     { .key = 0x00008C07, .bank_index = 0x03, .bank_offset = 0x03,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -848,7 +848,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 84] 0xEDCF68  VoiceParamEx_Entry_077 */
+    /* [ 84] 0xEDCF68  SndParam_Part03_Pan */
     { .key = 0x00008C0A, .bank_index = 0x03, .bank_offset = 0x08,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -858,7 +858,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 85] 0xEDCF7A  VoiceParamEx_Entry_078 */
+    /* [ 85] 0xEDCF7A  SndParam_Part03_Expression */
     { .key = 0x00008C0B, .bank_index = 0xB3, .bank_offset = 0x03,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -868,7 +868,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 86] 0xEDCF8C  VoiceParamEx_Entry_079 */
+    /* [ 86] 0xEDCF8C  SndParam_Part03_Bank */
     { .key = 0x00008C20, .bank_index = 0x03, .bank_offset = 0x01,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -878,7 +878,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 87] 0xEDCF9E  VoiceParamEx_Entry_080 */
+    /* [ 87] 0xEDCF9E  SndParam_Part03_Sustain */
     { .key = 0x00008C40, .bank_index = 0x03, .bank_offset = 0x04,
       .mask = 0x08, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x03, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -888,7 +888,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 1, /* SndParam_EncodeFieldSub_Data / SndParam_DecodeFieldAlt_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 88] 0xEDCFB0  VoiceParamEx_Entry_081 */
+    /* [ 88] 0xEDCFB0  SndParam_Part03_ReverbSend */
     { .key = 0x00008C5B, .bank_index = 0x03, .bank_offset = 0x07,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -898,7 +898,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 89] 0xEDCFC2  VoiceParamEx_Entry_082 */
+    /* [ 89] 0xEDCFC2  SndParam_Part03_ChorusSend */
     { .key = 0x00008C5D, .bank_index = 0x03, .bank_offset = 0x05,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -908,7 +908,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 90] 0xEDCFD4  VoiceParamEx_Entry_083 */
+    /* [ 90] 0xEDCFD4  SndParam_Part03_DigitalEffect */
     { .key = 0x00008C5E, .bank_index = 0x03, .bank_offset = 0x04,
       .mask = 0x40, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x06, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -978,7 +978,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 97] 0xEDD052  PartParam_Entry_005 */
+    /* [ 97] 0xEDD052  SndParam_Part04_Sound */
     { .key = 0x00009000, .bank_index = 0x04, .bank_offset = 0x00,
       .mask = 0xFF, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -988,7 +988,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 98] 0xEDD064  PartParam_Entry_006 */
+    /* [ 98] 0xEDD064  SndParam_Part04_Modulation */
     { .key = 0x00009001, .bank_index = 0xB2, .bank_offset = 0x04,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0x03,
@@ -998,7 +998,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [ 99] 0xEDD076  PartParam_Entry_007 */
+    /* [ 99] 0xEDD076  SndParam_Part04_Volume */
     { .key = 0x00009007, .bank_index = 0x04, .bank_offset = 0x03,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1018,7 +1018,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [101] 0xEDD09A  PartParam_Entry_009 */
+    /* [101] 0xEDD09A  SndParam_Part04_Pan */
     { .key = 0x0000900A, .bank_index = 0x04, .bank_offset = 0x08,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1028,7 +1028,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [102] 0xEDD0AC  PartParam_Entry_010 */
+    /* [102] 0xEDD0AC  SndParam_Part04_Expression */
     { .key = 0x0000900B, .bank_index = 0xB3, .bank_offset = 0x04,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1038,7 +1038,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [103] 0xEDD0BE  PartParam_Entry_011 */
+    /* [103] 0xEDD0BE  SndParam_Part04_Bank */
     { .key = 0x00009020, .bank_index = 0x04, .bank_offset = 0x01,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1048,7 +1048,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [104] 0xEDD0D0  PartParam_Entry_012 */
+    /* [104] 0xEDD0D0  SndParam_Part04_Sustain */
     { .key = 0x00009040, .bank_index = 0x04, .bank_offset = 0x04,
       .mask = 0x08, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x03, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -1058,7 +1058,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 1, /* SndParam_EncodeFieldSub_Data / SndParam_DecodeFieldAlt_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [105] 0xEDD0E2  PartParam_Entry_013 */
+    /* [105] 0xEDD0E2  SndParam_Part04_ReverbSend */
     { .key = 0x0000905B, .bank_index = 0x04, .bank_offset = 0x07,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1068,7 +1068,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [106] 0xEDD0F4  PartParam_Entry_014 */
+    /* [106] 0xEDD0F4  SndParam_Part04_ChorusSend */
     { .key = 0x0000905D, .bank_index = 0x04, .bank_offset = 0x05,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1078,7 +1078,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [107] 0xEDD106  PartParam_Entry_015 */
+    /* [107] 0xEDD106  SndParam_Part04_DigitalEffect */
     { .key = 0x0000905E, .bank_index = 0x04, .bank_offset = 0x04,
       .mask = 0x40, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x06, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -1148,7 +1148,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [114] 0xEDD184  PartParam_Entry_022 */
+    /* [114] 0xEDD184  SndParam_Part05_Sound */
     { .key = 0x00009400, .bank_index = 0x05, .bank_offset = 0x00,
       .mask = 0xFF, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1158,7 +1158,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [115] 0xEDD196  PartParam_Entry_023 */
+    /* [115] 0xEDD196  SndParam_Part05_Modulation */
     { .key = 0x00009401, .bank_index = 0xB2, .bank_offset = 0x05,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0x03,
@@ -1168,7 +1168,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [116] 0xEDD1A8  PartParam_Entry_024 */
+    /* [116] 0xEDD1A8  SndParam_Part05_Volume */
     { .key = 0x00009407, .bank_index = 0x05, .bank_offset = 0x03,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1188,7 +1188,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [118] 0xEDD1CC  PartParam_Entry_026 */
+    /* [118] 0xEDD1CC  SndParam_Part05_Pan */
     { .key = 0x0000940A, .bank_index = 0x05, .bank_offset = 0x08,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1198,7 +1198,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [119] 0xEDD1DE  PartParam_Entry_027 */
+    /* [119] 0xEDD1DE  SndParam_Part05_Expression */
     { .key = 0x0000940B, .bank_index = 0xB3, .bank_offset = 0x05,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1208,7 +1208,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [120] 0xEDD1F0  PartParam_Entry_028 */
+    /* [120] 0xEDD1F0  SndParam_Part05_Bank */
     { .key = 0x00009420, .bank_index = 0x05, .bank_offset = 0x01,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1218,7 +1218,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [121] 0xEDD202  PartParam_Entry_029 */
+    /* [121] 0xEDD202  SndParam_Part05_Sustain */
     { .key = 0x00009440, .bank_index = 0x05, .bank_offset = 0x04,
       .mask = 0x08, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x03, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -1228,7 +1228,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 1, /* SndParam_EncodeFieldSub_Data / SndParam_DecodeFieldAlt_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [122] 0xEDD214  PartParam_Entry_030 */
+    /* [122] 0xEDD214  SndParam_Part05_ReverbSend */
     { .key = 0x0000945B, .bank_index = 0x05, .bank_offset = 0x07,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1238,7 +1238,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [123] 0xEDD226  PartParam_Entry_031 */
+    /* [123] 0xEDD226  SndParam_Part05_ChorusSend */
     { .key = 0x0000945D, .bank_index = 0x05, .bank_offset = 0x05,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1248,7 +1248,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [124] 0xEDD238  PartParam_Entry_032 */
+    /* [124] 0xEDD238  SndParam_Part05_DigitalEffect */
     { .key = 0x0000945E, .bank_index = 0x05, .bank_offset = 0x04,
       .mask = 0x40, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x06, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -1318,7 +1318,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [131] 0xEDD2B6  PartParam_Entry_039 */
+    /* [131] 0xEDD2B6  SndParam_Part06_Sound */
     { .key = 0x00009800, .bank_index = 0x06, .bank_offset = 0x00,
       .mask = 0xFF, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1328,7 +1328,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [132] 0xEDD2C8  PartParam_Entry_040 */
+    /* [132] 0xEDD2C8  SndParam_Part06_Modulation */
     { .key = 0x00009801, .bank_index = 0xB2, .bank_offset = 0x06,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0x03,
@@ -1338,7 +1338,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [133] 0xEDD2DA  PartParam_Entry_041 */
+    /* [133] 0xEDD2DA  SndParam_Part06_Volume */
     { .key = 0x00009807, .bank_index = 0x06, .bank_offset = 0x03,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1358,7 +1358,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [135] 0xEDD2FE  PartParam_Entry_043 */
+    /* [135] 0xEDD2FE  SndParam_Part06_Pan */
     { .key = 0x0000980A, .bank_index = 0x06, .bank_offset = 0x08,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1368,7 +1368,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [136] 0xEDD310  PartParam_Entry_044 */
+    /* [136] 0xEDD310  SndParam_Part06_Expression */
     { .key = 0x0000980B, .bank_index = 0xB3, .bank_offset = 0x06,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1378,7 +1378,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [137] 0xEDD322  PartParam_Entry_045 */
+    /* [137] 0xEDD322  SndParam_Part06_Bank */
     { .key = 0x00009820, .bank_index = 0x06, .bank_offset = 0x01,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1388,7 +1388,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [138] 0xEDD334  PartParam_Entry_046 */
+    /* [138] 0xEDD334  SndParam_Part06_Sustain */
     { .key = 0x00009840, .bank_index = 0x06, .bank_offset = 0x04,
       .mask = 0x08, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x03, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -1398,7 +1398,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 1, /* SndParam_EncodeFieldSub_Data / SndParam_DecodeFieldAlt_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [139] 0xEDD346  PartParam_Entry_047 */
+    /* [139] 0xEDD346  SndParam_Part06_ReverbSend */
     { .key = 0x0000985B, .bank_index = 0x06, .bank_offset = 0x07,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1408,7 +1408,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [140] 0xEDD358  PartParam_Entry_048 */
+    /* [140] 0xEDD358  SndParam_Part06_ChorusSend */
     { .key = 0x0000985D, .bank_index = 0x06, .bank_offset = 0x05,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1418,7 +1418,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [141] 0xEDD36A  PartParam_Entry_049 */
+    /* [141] 0xEDD36A  SndParam_Part06_DigitalEffect */
     { .key = 0x0000985E, .bank_index = 0x06, .bank_offset = 0x04,
       .mask = 0x40, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x06, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -1488,7 +1488,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [148] 0xEDD3E8  PartParam_Entry_056 */
+    /* [148] 0xEDD3E8  SndParam_Part07_Sound */
     { .key = 0x00009C00, .bank_index = 0x07, .bank_offset = 0x00,
       .mask = 0xFF, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1498,7 +1498,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [149] 0xEDD3FA  PartParam_Entry_057 */
+    /* [149] 0xEDD3FA  SndParam_Part07_Modulation */
     { .key = 0x00009C01, .bank_index = 0xB2, .bank_offset = 0x07,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0x03,
@@ -1508,7 +1508,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [150] 0xEDD40C  PartParam_Entry_058 */
+    /* [150] 0xEDD40C  SndParam_Part07_Volume */
     { .key = 0x00009C07, .bank_index = 0x07, .bank_offset = 0x03,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1528,7 +1528,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [152] 0xEDD430  PartParam_Entry_060 */
+    /* [152] 0xEDD430  SndParam_Part07_Pan */
     { .key = 0x00009C0A, .bank_index = 0x07, .bank_offset = 0x08,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1538,7 +1538,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [153] 0xEDD442  PartParam_Entry_061 */
+    /* [153] 0xEDD442  SndParam_Part07_Expression */
     { .key = 0x00009C0B, .bank_index = 0xB3, .bank_offset = 0x07,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1548,7 +1548,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [154] 0xEDD454  PartParam_Entry_062 */
+    /* [154] 0xEDD454  SndParam_Part07_Bank */
     { .key = 0x00009C20, .bank_index = 0x07, .bank_offset = 0x01,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1558,7 +1558,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [155] 0xEDD466  PartParam_Entry_063 */
+    /* [155] 0xEDD466  SndParam_Part07_Sustain */
     { .key = 0x00009C40, .bank_index = 0x07, .bank_offset = 0x04,
       .mask = 0x08, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x03, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -1568,7 +1568,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 1, /* SndParam_EncodeFieldSub_Data / SndParam_DecodeFieldAlt_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [156] 0xEDD478  PartParam_Entry_064 */
+    /* [156] 0xEDD478  SndParam_Part07_ReverbSend */
     { .key = 0x00009C5B, .bank_index = 0x07, .bank_offset = 0x07,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1578,7 +1578,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [157] 0xEDD48A  PartParam_Entry_065 */
+    /* [157] 0xEDD48A  SndParam_Part07_ChorusSend */
     { .key = 0x00009C5D, .bank_index = 0x07, .bank_offset = 0x05,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1588,7 +1588,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [158] 0xEDD49C  PartParam_Entry_066 */
+    /* [158] 0xEDD49C  SndParam_Part07_DigitalEffect */
     { .key = 0x00009C5E, .bank_index = 0x07, .bank_offset = 0x04,
       .mask = 0x40, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x06, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -1658,7 +1658,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [165] 0xEDD51A  PartParam_Entry_073 */
+    /* [165] 0xEDD51A  SndParam_Part08_Sound */
     { .key = 0x0000A000, .bank_index = 0x08, .bank_offset = 0x00,
       .mask = 0xFF, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1668,7 +1668,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [166] 0xEDD52C  PartParam_Entry_074 */
+    /* [166] 0xEDD52C  SndParam_Part08_Modulation */
     { .key = 0x0000A001, .bank_index = 0xB2, .bank_offset = 0x08,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0x03,
@@ -1678,7 +1678,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [167] 0xEDD53E  PartParam_Entry_075 */
+    /* [167] 0xEDD53E  SndParam_Part08_Volume */
     { .key = 0x0000A007, .bank_index = 0x08, .bank_offset = 0x03,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1698,7 +1698,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [169] 0xEDD562  PartParam_Entry_077 */
+    /* [169] 0xEDD562  SndParam_Part08_Pan */
     { .key = 0x0000A00A, .bank_index = 0x08, .bank_offset = 0x08,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1708,7 +1708,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [170] 0xEDD574  PartParam_Entry_078 */
+    /* [170] 0xEDD574  SndParam_Part08_Expression */
     { .key = 0x0000A00B, .bank_index = 0xB3, .bank_offset = 0x08,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1718,7 +1718,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [171] 0xEDD586  PartParam_Entry_079 */
+    /* [171] 0xEDD586  SndParam_Part08_Bank */
     { .key = 0x0000A020, .bank_index = 0x08, .bank_offset = 0x01,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1728,7 +1728,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [172] 0xEDD598  PartParam_Entry_080 */
+    /* [172] 0xEDD598  SndParam_Part08_Sustain */
     { .key = 0x0000A040, .bank_index = 0x08, .bank_offset = 0x04,
       .mask = 0x08, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x03, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -1738,7 +1738,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 1, /* SndParam_EncodeFieldSub_Data / SndParam_DecodeFieldAlt_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [173] 0xEDD5AA  PartParam_Entry_081 */
+    /* [173] 0xEDD5AA  SndParam_Part08_ReverbSend */
     { .key = 0x0000A05B, .bank_index = 0x08, .bank_offset = 0x07,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1748,7 +1748,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [174] 0xEDD5BC  PartParam_Entry_082 */
+    /* [174] 0xEDD5BC  SndParam_Part08_ChorusSend */
     { .key = 0x0000A05D, .bank_index = 0x08, .bank_offset = 0x05,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1758,7 +1758,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [175] 0xEDD5CE  PartParam_Entry_083 */
+    /* [175] 0xEDD5CE  SndParam_Part08_DigitalEffect */
     { .key = 0x0000A05E, .bank_index = 0x08, .bank_offset = 0x04,
       .mask = 0x40, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x06, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -1828,7 +1828,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [182] 0xEDD64C  PartParam_Entry_090 */
+    /* [182] 0xEDD64C  SndParam_Part09_Sound */
     { .key = 0x0000A400, .bank_index = 0x09, .bank_offset = 0x00,
       .mask = 0xFF, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1838,7 +1838,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [183] 0xEDD65E  PartParam_Entry_091 */
+    /* [183] 0xEDD65E  SndParam_Part09_Modulation */
     { .key = 0x0000A401, .bank_index = 0xB2, .bank_offset = 0x09,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0x03,
@@ -1848,7 +1848,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [184] 0xEDD670  PartParam_Entry_092 */
+    /* [184] 0xEDD670  SndParam_Part09_Volume */
     { .key = 0x0000A407, .bank_index = 0x09, .bank_offset = 0x03,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1868,7 +1868,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [186] 0xEDD694  PartParam_Entry_094 */
+    /* [186] 0xEDD694  SndParam_Part09_Pan */
     { .key = 0x0000A40A, .bank_index = 0x09, .bank_offset = 0x08,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1878,7 +1878,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [187] 0xEDD6A6  PartParam_Entry_095 */
+    /* [187] 0xEDD6A6  SndParam_Part09_Expression */
     { .key = 0x0000A40B, .bank_index = 0xB3, .bank_offset = 0x09,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1888,7 +1888,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [188] 0xEDD6B8  PartParam_Entry_096 */
+    /* [188] 0xEDD6B8  SndParam_Part09_Bank */
     { .key = 0x0000A420, .bank_index = 0x09, .bank_offset = 0x01,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1898,7 +1898,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [189] 0xEDD6CA  PartParam_Entry_097 */
+    /* [189] 0xEDD6CA  SndParam_Part09_Sustain */
     { .key = 0x0000A440, .bank_index = 0x09, .bank_offset = 0x04,
       .mask = 0x08, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x03, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -1908,7 +1908,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 1, /* SndParam_EncodeFieldSub_Data / SndParam_DecodeFieldAlt_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [190] 0xEDD6DC  PartParam_Entry_098 */
+    /* [190] 0xEDD6DC  SndParam_Part09_ReverbSend */
     { .key = 0x0000A45B, .bank_index = 0x09, .bank_offset = 0x07,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1918,7 +1918,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [191] 0xEDD6EE  PartParam_Entry_099 */
+    /* [191] 0xEDD6EE  SndParam_Part09_ChorusSend */
     { .key = 0x0000A45D, .bank_index = 0x09, .bank_offset = 0x05,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -1928,7 +1928,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [192] 0xEDD700  PartParam_Entry_100 */
+    /* [192] 0xEDD700  SndParam_Part09_DigitalEffect */
     { .key = 0x0000A45E, .bank_index = 0x09, .bank_offset = 0x04,
       .mask = 0x40, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x06, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -1998,7 +1998,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [199] 0xEDD77E  PartParam_Entry_107 */
+    /* [199] 0xEDD77E  SndParam_Part0A_Sound */
     { .key = 0x0000A800, .bank_index = 0x0A, .bank_offset = 0x00,
       .mask = 0xFF, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2008,7 +2008,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [200] 0xEDD790  PartParam_Entry_108 */
+    /* [200] 0xEDD790  SndParam_Part0A_Modulation */
     { .key = 0x0000A801, .bank_index = 0xB2, .bank_offset = 0x0A,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0x03,
@@ -2018,7 +2018,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [201] 0xEDD7A2  PartParam_Entry_109 */
+    /* [201] 0xEDD7A2  SndParam_Part0A_Volume */
     { .key = 0x0000A807, .bank_index = 0x0A, .bank_offset = 0x03,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2038,7 +2038,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [203] 0xEDD7C6  PartParam_Entry_111 */
+    /* [203] 0xEDD7C6  SndParam_Part0A_Pan */
     { .key = 0x0000A80A, .bank_index = 0x0A, .bank_offset = 0x08,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2048,7 +2048,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [204] 0xEDD7D8  PartParam_Entry_112 */
+    /* [204] 0xEDD7D8  SndParam_Part0A_Expression */
     { .key = 0x0000A80B, .bank_index = 0xB3, .bank_offset = 0x0A,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2058,7 +2058,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [205] 0xEDD7EA  PartParam_Entry_113 */
+    /* [205] 0xEDD7EA  SndParam_Part0A_Bank */
     { .key = 0x0000A820, .bank_index = 0x0A, .bank_offset = 0x01,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2068,7 +2068,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [206] 0xEDD7FC  PartParam_Entry_114 */
+    /* [206] 0xEDD7FC  SndParam_Part0A_Sustain */
     { .key = 0x0000A840, .bank_index = 0x0A, .bank_offset = 0x04,
       .mask = 0x08, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x03, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -2078,7 +2078,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 1, /* SndParam_EncodeFieldSub_Data / SndParam_DecodeFieldAlt_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [207] 0xEDD80E  PartParam_Entry_115 */
+    /* [207] 0xEDD80E  SndParam_Part0A_ReverbSend */
     { .key = 0x0000A85B, .bank_index = 0x0A, .bank_offset = 0x07,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2088,7 +2088,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [208] 0xEDD820  PartParam_Entry_116 */
+    /* [208] 0xEDD820  SndParam_Part0A_ChorusSend */
     { .key = 0x0000A85D, .bank_index = 0x0A, .bank_offset = 0x05,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2098,7 +2098,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [209] 0xEDD832  PartParam_Entry_117 */
+    /* [209] 0xEDD832  SndParam_Part0A_DigitalEffect */
     { .key = 0x0000A85E, .bank_index = 0x0A, .bank_offset = 0x04,
       .mask = 0x40, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x06, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -2168,7 +2168,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [216] 0xEDD8B0  PartParam_Entry_124 */
+    /* [216] 0xEDD8B0  SndParam_Part0B_Sound */
     { .key = 0x0000AC00, .bank_index = 0x0B, .bank_offset = 0x00,
       .mask = 0xFF, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2178,7 +2178,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [217] 0xEDD8C2  PartParam_Entry_125 */
+    /* [217] 0xEDD8C2  SndParam_Part0B_Modulation */
     { .key = 0x0000AC01, .bank_index = 0xB2, .bank_offset = 0x0B,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0x03,
@@ -2188,7 +2188,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [218] 0xEDD8D4  PartParam_Entry_126 */
+    /* [218] 0xEDD8D4  SndParam_Part0B_Volume */
     { .key = 0x0000AC07, .bank_index = 0x0B, .bank_offset = 0x03,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2208,7 +2208,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [220] 0xEDD8F8  PartParam_Entry_128 */
+    /* [220] 0xEDD8F8  SndParam_Part0B_Pan */
     { .key = 0x0000AC0A, .bank_index = 0x0B, .bank_offset = 0x08,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2218,7 +2218,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [221] 0xEDD90A  PartParam_Entry_129 */
+    /* [221] 0xEDD90A  SndParam_Part0B_Expression */
     { .key = 0x0000AC0B, .bank_index = 0xB3, .bank_offset = 0x0B,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2228,7 +2228,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [222] 0xEDD91C  PartParam_Entry_130 */
+    /* [222] 0xEDD91C  SndParam_Part0B_Bank */
     { .key = 0x0000AC20, .bank_index = 0x0B, .bank_offset = 0x01,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2238,7 +2238,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [223] 0xEDD92E  PartParam_Entry_131 */
+    /* [223] 0xEDD92E  SndParam_Part0B_Sustain */
     { .key = 0x0000AC40, .bank_index = 0x0B, .bank_offset = 0x04,
       .mask = 0x08, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x03, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -2248,7 +2248,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 1, /* SndParam_EncodeFieldSub_Data / SndParam_DecodeFieldAlt_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [224] 0xEDD940  PartParam_Entry_132 */
+    /* [224] 0xEDD940  SndParam_Part0B_ReverbSend */
     { .key = 0x0000AC5B, .bank_index = 0x0B, .bank_offset = 0x07,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2258,7 +2258,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [225] 0xEDD952  PartParam_Entry_133 */
+    /* [225] 0xEDD952  SndParam_Part0B_ChorusSend */
     { .key = 0x0000AC5D, .bank_index = 0x0B, .bank_offset = 0x05,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2268,7 +2268,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [226] 0xEDD964  PartParam_Entry_134 */
+    /* [226] 0xEDD964  SndParam_Part0B_DigitalEffect */
     { .key = 0x0000AC5E, .bank_index = 0x0B, .bank_offset = 0x04,
       .mask = 0x40, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x06, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -2338,7 +2338,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [233] 0xEDD9E2  PartParam_Entry_141 */
+    /* [233] 0xEDD9E2  SndParam_Part0C_Sound */
     { .key = 0x0000B000, .bank_index = 0x0C, .bank_offset = 0x00,
       .mask = 0xFF, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2348,7 +2348,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [234] 0xEDD9F4  PartParam_Entry_142 */
+    /* [234] 0xEDD9F4  SndParam_Part0C_Modulation */
     { .key = 0x0000B001, .bank_index = 0xB2, .bank_offset = 0x0C,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0x03,
@@ -2358,7 +2358,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [235] 0xEDDA06  PartParam_Entry_143 */
+    /* [235] 0xEDDA06  SndParam_Part0C_Volume */
     { .key = 0x0000B007, .bank_index = 0x0C, .bank_offset = 0x03,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2378,7 +2378,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [237] 0xEDDA2A  PartParam_Entry_145 */
+    /* [237] 0xEDDA2A  SndParam_Part0C_Pan */
     { .key = 0x0000B00A, .bank_index = 0x0C, .bank_offset = 0x08,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2388,7 +2388,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [238] 0xEDDA3C  PartParam_Entry_146 */
+    /* [238] 0xEDDA3C  SndParam_Part0C_Expression */
     { .key = 0x0000B00B, .bank_index = 0xB3, .bank_offset = 0x0C,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2398,7 +2398,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [239] 0xEDDA4E  PartParam_Entry_147 */
+    /* [239] 0xEDDA4E  SndParam_Part0C_Bank */
     { .key = 0x0000B020, .bank_index = 0x0C, .bank_offset = 0x01,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2408,7 +2408,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [240] 0xEDDA60  PartParam_Entry_148 */
+    /* [240] 0xEDDA60  SndParam_Part0C_Sustain */
     { .key = 0x0000B040, .bank_index = 0x0C, .bank_offset = 0x04,
       .mask = 0x08, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x03, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -2418,7 +2418,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 1, /* SndParam_EncodeFieldSub_Data / SndParam_DecodeFieldAlt_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [241] 0xEDDA72  PartParam_Entry_149 */
+    /* [241] 0xEDDA72  SndParam_Part0C_ReverbSend */
     { .key = 0x0000B05B, .bank_index = 0x0C, .bank_offset = 0x07,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2428,7 +2428,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [242] 0xEDDA84  PartParam_Entry_150 */
+    /* [242] 0xEDDA84  SndParam_Part0C_ChorusSend */
     { .key = 0x0000B05D, .bank_index = 0x0C, .bank_offset = 0x05,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2438,7 +2438,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [243] 0xEDDA96  PartParam_Entry_151 */
+    /* [243] 0xEDDA96  SndParam_Part0C_DigitalEffect */
     { .key = 0x0000B05E, .bank_index = 0x0C, .bank_offset = 0x04,
       .mask = 0x40, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x06, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -2508,7 +2508,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [250] 0xEDDB14  PartParam_Entry_158 */
+    /* [250] 0xEDDB14  SndParam_Part0D_Sound */
     { .key = 0x0000B400, .bank_index = 0x0D, .bank_offset = 0x00,
       .mask = 0xFF, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2518,7 +2518,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [251] 0xEDDB26  PartParam_Entry_159 */
+    /* [251] 0xEDDB26  SndParam_Part0D_Modulation */
     { .key = 0x0000B401, .bank_index = 0xB2, .bank_offset = 0x0D,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0x03,
@@ -2528,7 +2528,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [252] 0xEDDB38  PartParam_Entry_160 */
+    /* [252] 0xEDDB38  SndParam_Part0D_Volume */
     { .key = 0x0000B407, .bank_index = 0x0D, .bank_offset = 0x03,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2548,7 +2548,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [254] 0xEDDB5C  PartParam_Entry_162 */
+    /* [254] 0xEDDB5C  SndParam_Part0D_Pan */
     { .key = 0x0000B40A, .bank_index = 0x0D, .bank_offset = 0x08,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2558,7 +2558,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [255] 0xEDDB6E  PartParam_Entry_163 */
+    /* [255] 0xEDDB6E  SndParam_Part0D_Expression */
     { .key = 0x0000B40B, .bank_index = 0xB3, .bank_offset = 0x0D,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2568,7 +2568,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [256] 0xEDDB80  PartParam_Entry_164 */
+    /* [256] 0xEDDB80  SndParam_Part0D_Bank */
     { .key = 0x0000B420, .bank_index = 0x0D, .bank_offset = 0x01,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2578,7 +2578,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [257] 0xEDDB92  PartParam_Entry_165 */
+    /* [257] 0xEDDB92  SndParam_Part0D_Sustain */
     { .key = 0x0000B440, .bank_index = 0x0D, .bank_offset = 0x04,
       .mask = 0x08, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x03, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -2588,7 +2588,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 1, /* SndParam_EncodeFieldSub_Data / SndParam_DecodeFieldAlt_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [258] 0xEDDBA4  PartParam_Entry_166 */
+    /* [258] 0xEDDBA4  SndParam_Part0D_ReverbSend */
     { .key = 0x0000B45B, .bank_index = 0x0D, .bank_offset = 0x07,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2598,7 +2598,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [259] 0xEDDBB6  PartParam_Entry_167 */
+    /* [259] 0xEDDBB6  SndParam_Part0D_ChorusSend */
     { .key = 0x0000B45D, .bank_index = 0x0D, .bank_offset = 0x05,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2608,7 +2608,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [260] 0xEDDBC8  PartParam_Entry_168 */
+    /* [260] 0xEDDBC8  SndParam_Part0D_DigitalEffect */
     { .key = 0x0000B45E, .bank_index = 0x0D, .bank_offset = 0x04,
       .mask = 0x40, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x06, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -2678,7 +2678,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [267] 0xEDDC46  PartParam_Entry_175 */
+    /* [267] 0xEDDC46  SndParam_Part0E_Sound */
     { .key = 0x0000B800, .bank_index = 0x0E, .bank_offset = 0x00,
       .mask = 0xFF, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2688,7 +2688,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [268] 0xEDDC58  PartParam_Entry_176 */
+    /* [268] 0xEDDC58  SndParam_Part0E_Modulation */
     { .key = 0x0000B801, .bank_index = 0xB2, .bank_offset = 0x0E,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0x03,
@@ -2698,7 +2698,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [269] 0xEDDC6A  PartParam_Entry_177 */
+    /* [269] 0xEDDC6A  SndParam_Part0E_Volume */
     { .key = 0x0000B807, .bank_index = 0x0E, .bank_offset = 0x03,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2718,7 +2718,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [271] 0xEDDC8E  PartParam_Entry_179 */
+    /* [271] 0xEDDC8E  SndParam_Part0E_Pan */
     { .key = 0x0000B80A, .bank_index = 0x0E, .bank_offset = 0x08,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2728,7 +2728,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [272] 0xEDDCA0  PartParam_Entry_180 */
+    /* [272] 0xEDDCA0  SndParam_Part0E_Expression */
     { .key = 0x0000B80B, .bank_index = 0xB3, .bank_offset = 0x0E,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2738,7 +2738,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [273] 0xEDDCB2  PartParam_Entry_181 */
+    /* [273] 0xEDDCB2  SndParam_Part0E_Bank */
     { .key = 0x0000B820, .bank_index = 0x0E, .bank_offset = 0x01,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2748,7 +2748,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [274] 0xEDDCC4  PartParam_Entry_182 */
+    /* [274] 0xEDDCC4  SndParam_Part0E_Sustain */
     { .key = 0x0000B840, .bank_index = 0x0E, .bank_offset = 0x04,
       .mask = 0x08, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x03, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -2758,7 +2758,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 1, /* SndParam_EncodeFieldSub_Data / SndParam_DecodeFieldAlt_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [275] 0xEDDCD6  PartParam_Entry_183 */
+    /* [275] 0xEDDCD6  SndParam_Part0E_ReverbSend */
     { .key = 0x0000B85B, .bank_index = 0x0E, .bank_offset = 0x07,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2768,7 +2768,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [276] 0xEDDCE8  PartParam_Entry_184 */
+    /* [276] 0xEDDCE8  SndParam_Part0E_ChorusSend */
     { .key = 0x0000B85D, .bank_index = 0x0E, .bank_offset = 0x05,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2778,7 +2778,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [277] 0xEDDCFA  PartParam_Entry_185 */
+    /* [277] 0xEDDCFA  SndParam_Part0E_DigitalEffect */
     { .key = 0x0000B85E, .bank_index = 0x0E, .bank_offset = 0x04,
       .mask = 0x40, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x06, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -2848,7 +2848,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [284] 0xEDDD78  PartParam_Entry_192 */
+    /* [284] 0xEDDD78  SndParam_Part0F_Sound */
     { .key = 0x0000BC00, .bank_index = 0x0F, .bank_offset = 0x00,
       .mask = 0xFF, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2858,7 +2858,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [285] 0xEDDD8A  PartParam_Entry_193 */
+    /* [285] 0xEDDD8A  SndParam_Part0F_Modulation */
     { .key = 0x0000BC01, .bank_index = 0xB2, .bank_offset = 0x0F,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0x03,
@@ -2868,7 +2868,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [286] 0xEDDD9C  PartParam_Entry_194 */
+    /* [286] 0xEDDD9C  SndParam_Part0F_Volume */
     { .key = 0x0000BC07, .bank_index = 0x0F, .bank_offset = 0x03,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2888,7 +2888,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [288] 0xEDDDC0  PartParam_Entry_196 */
+    /* [288] 0xEDDDC0  SndParam_Part0F_Pan */
     { .key = 0x0000BC0A, .bank_index = 0x0F, .bank_offset = 0x08,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2898,7 +2898,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [289] 0xEDDDD2  PartParam_Entry_197 */
+    /* [289] 0xEDDDD2  SndParam_Part0F_Expression */
     { .key = 0x0000BC0B, .bank_index = 0xB3, .bank_offset = 0x0F,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2908,7 +2908,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [290] 0xEDDDE4  PartParam_Entry_198 */
+    /* [290] 0xEDDDE4  SndParam_Part0F_Bank */
     { .key = 0x0000BC20, .bank_index = 0x0F, .bank_offset = 0x01,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2918,7 +2918,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [291] 0xEDDDF6  PartParam_Entry_199 */
+    /* [291] 0xEDDDF6  SndParam_Part0F_Sustain */
     { .key = 0x0000BC40, .bank_index = 0x0F, .bank_offset = 0x04,
       .mask = 0x08, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x03, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -2928,7 +2928,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 1, /* SndParam_EncodeFieldSub_Data / SndParam_DecodeFieldAlt_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [292] 0xEDDE08  PartParam_Entry_200 */
+    /* [292] 0xEDDE08  SndParam_Part0F_ReverbSend */
     { .key = 0x0000BC5B, .bank_index = 0x0F, .bank_offset = 0x07,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2938,7 +2938,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [293] 0xEDDE1A  PartParam_Entry_201 */
+    /* [293] 0xEDDE1A  SndParam_Part0F_ChorusSend */
     { .key = 0x0000BC5D, .bank_index = 0x0F, .bank_offset = 0x05,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -2948,7 +2948,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [294] 0xEDDE2C  PartParam_Entry_202 */
+    /* [294] 0xEDDE2C  SndParam_Part0F_DigitalEffect */
     { .key = 0x0000BC5E, .bank_index = 0x0F, .bank_offset = 0x04,
       .mask = 0x40, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x06, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -3018,7 +3018,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [301] 0xEDDEAA  PartParam_Entry_209 */
+    /* [301] 0xEDDEAA  SndParam_Part10_Sound */
     { .key = 0x0000C000, .bank_index = 0x10, .bank_offset = 0x00,
       .mask = 0xFF, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3028,7 +3028,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 5, /* SndParam_BatchUpdate_Data */
       .unknown_0x11 = 0xFF },
-    /* [302] 0xEDDEBC  PartParam_Entry_210 */
+    /* [302] 0xEDDEBC  SndParam_Part10_Modulation */
     { .key = 0x0000C001, .bank_index = 0xB2, .bank_offset = 0x10,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0x03,
@@ -3038,7 +3038,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 1, /* SndParam_WriteFieldDirect_Data */
       .unknown_0x11 = 0xFF },
-    /* [303] 0xEDDECE  PartParam_Entry_211 */
+    /* [303] 0xEDDECE  SndParam_Part10_Volume */
     { .key = 0x0000C007, .bank_index = 0x10, .bank_offset = 0x03,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3058,7 +3058,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [305] 0xEDDEF2  PartParam_Entry_213 */
+    /* [305] 0xEDDEF2  SndParam_Part10_Pan */
     { .key = 0x0000C00A, .bank_index = 0x10, .bank_offset = 0x08,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3068,7 +3068,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 1, /* SndParam_WriteFieldDirect_Data */
       .unknown_0x11 = 0xFF },
-    /* [306] 0xEDDF04  PartParam_Entry_214 */
+    /* [306] 0xEDDF04  SndParam_Part10_Expression */
     { .key = 0x0000C00B, .bank_index = 0xB3, .bank_offset = 0x10,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3078,7 +3078,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 1, /* SndParam_WriteFieldDirect_Data */
       .unknown_0x11 = 0xFF },
-    /* [307] 0xEDDF16  PartParam_Entry_215 */
+    /* [307] 0xEDDF16  SndParam_Part10_Bank */
     { .key = 0x0000C020, .bank_index = 0x10, .bank_offset = 0x01,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3088,7 +3088,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 4, /* SndParam_WriteViaHash_Data */
       .unknown_0x11 = 0xFF },
-    /* [308] 0xEDDF28  PartParam_Entry_216 */
+    /* [308] 0xEDDF28  SndParam_Part10_Sustain */
     { .key = 0x0000C040, .bank_index = 0x10, .bank_offset = 0x04,
       .mask = 0x08, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x03, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -3098,7 +3098,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 1, /* SndParam_EncodeFieldSub_Data / SndParam_DecodeFieldAlt_Data */
       .write_accessor    = 2, /* SndParam_WriteFieldSub_Data */
       .unknown_0x11 = 0xFF },
-    /* [309] 0xEDDF3A  PartParam_Entry_217 */
+    /* [309] 0xEDDF3A  SndParam_Part10_ReverbSend */
     { .key = 0x0000C05B, .bank_index = 0x10, .bank_offset = 0x07,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3108,7 +3108,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [310] 0xEDDF4C  PartParam_Entry_218 */
+    /* [310] 0xEDDF4C  SndParam_Part10_ChorusSend */
     { .key = 0x0000C05D, .bank_index = 0x10, .bank_offset = 0x05,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3118,7 +3118,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [311] 0xEDDF5E  PartParam_Entry_219 */
+    /* [311] 0xEDDF5E  SndParam_Part10_DigitalEffect */
     { .key = 0x0000C05E, .bank_index = 0x10, .bank_offset = 0x04,
       .mask = 0x40, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x06, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -3188,7 +3188,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [318] 0xEDDFDC  PartParam_Entry_226 */
+    /* [318] 0xEDDFDC  SndParam_Part11_Sound */
     { .key = 0x0000C400, .bank_index = 0x11, .bank_offset = 0x00,
       .mask = 0xFF, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3198,7 +3198,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 5, /* SndParam_BatchUpdate_Data */
       .unknown_0x11 = 0xFF },
-    /* [319] 0xEDDFEE  PartParam_Entry_227 */
+    /* [319] 0xEDDFEE  SndParam_Part11_Modulation */
     { .key = 0x0000C401, .bank_index = 0xB2, .bank_offset = 0x11,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0x03,
@@ -3208,7 +3208,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 1, /* SndParam_WriteFieldDirect_Data */
       .unknown_0x11 = 0xFF },
-    /* [320] 0xEDE000  ExtPartParam_Entry_228 */
+    /* [320] 0xEDE000  SndParam_Part11_Volume */
     { .key = 0x0000C407, .bank_index = 0x11, .bank_offset = 0x03,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3228,7 +3228,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [322] 0xEDE024  ExtPartParam_Entry_230 */
+    /* [322] 0xEDE024  SndParam_Part11_Pan */
     { .key = 0x0000C40A, .bank_index = 0x11, .bank_offset = 0x08,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3238,7 +3238,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 1, /* SndParam_WriteFieldDirect_Data */
       .unknown_0x11 = 0xFF },
-    /* [323] 0xEDE036  ExtPartParam_Entry_231 */
+    /* [323] 0xEDE036  SndParam_Part11_Expression */
     { .key = 0x0000C40B, .bank_index = 0xB3, .bank_offset = 0x11,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3248,7 +3248,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 1, /* SndParam_WriteFieldDirect_Data */
       .unknown_0x11 = 0xFF },
-    /* [324] 0xEDE048  ExtPartParam_Entry_232 */
+    /* [324] 0xEDE048  SndParam_Part11_Bank */
     { .key = 0x0000C420, .bank_index = 0x11, .bank_offset = 0x01,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3258,7 +3258,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 4, /* SndParam_WriteViaHash_Data */
       .unknown_0x11 = 0xFF },
-    /* [325] 0xEDE05A  ExtPartParam_Entry_233 */
+    /* [325] 0xEDE05A  SndParam_Part11_Sustain */
     { .key = 0x0000C440, .bank_index = 0x11, .bank_offset = 0x04,
       .mask = 0x08, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x03, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -3268,7 +3268,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 1, /* SndParam_EncodeFieldSub_Data / SndParam_DecodeFieldAlt_Data */
       .write_accessor    = 2, /* SndParam_WriteFieldSub_Data */
       .unknown_0x11 = 0xFF },
-    /* [326] 0xEDE06C  ExtPartParam_Entry_234 */
+    /* [326] 0xEDE06C  SndParam_Part11_ReverbSend */
     { .key = 0x0000C45B, .bank_index = 0x11, .bank_offset = 0x07,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3278,7 +3278,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [327] 0xEDE07E  ExtPartParam_Entry_235 */
+    /* [327] 0xEDE07E  SndParam_Part11_ChorusSend */
     { .key = 0x0000C45D, .bank_index = 0x11, .bank_offset = 0x05,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3288,7 +3288,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [328] 0xEDE090  ExtPartParam_Entry_236 */
+    /* [328] 0xEDE090  SndParam_Part11_DigitalEffect */
     { .key = 0x0000C45E, .bank_index = 0x11, .bank_offset = 0x04,
       .mask = 0x40, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x06, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -3358,7 +3358,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [335] 0xEDE10E  ExtPartParam_Entry_243 */
+    /* [335] 0xEDE10E  SndParam_Part12_Sound */
     { .key = 0x0000C800, .bank_index = 0x12, .bank_offset = 0x00,
       .mask = 0xFF, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3368,7 +3368,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 5, /* SndParam_BatchUpdate_Data */
       .unknown_0x11 = 0xFF },
-    /* [336] 0xEDE120  ExtPartParam_Entry_244 */
+    /* [336] 0xEDE120  SndParam_Part12_Modulation */
     { .key = 0x0000C801, .bank_index = 0xB2, .bank_offset = 0x12,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0x03,
@@ -3378,7 +3378,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 1, /* SndParam_WriteFieldDirect_Data */
       .unknown_0x11 = 0xFF },
-    /* [337] 0xEDE132  ExtPartParam_Entry_245 */
+    /* [337] 0xEDE132  SndParam_Part12_Volume */
     { .key = 0x0000C807, .bank_index = 0x12, .bank_offset = 0x03,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3398,7 +3398,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [339] 0xEDE156  ExtPartParam_Entry_247 */
+    /* [339] 0xEDE156  SndParam_Part12_Pan */
     { .key = 0x0000C80A, .bank_index = 0x12, .bank_offset = 0x08,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3408,7 +3408,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 1, /* SndParam_WriteFieldDirect_Data */
       .unknown_0x11 = 0xFF },
-    /* [340] 0xEDE168  ExtPartParam_Entry_248 */
+    /* [340] 0xEDE168  SndParam_Part12_Expression */
     { .key = 0x0000C80B, .bank_index = 0xB3, .bank_offset = 0x12,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3418,7 +3418,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 1, /* SndParam_WriteFieldDirect_Data */
       .unknown_0x11 = 0xFF },
-    /* [341] 0xEDE17A  ExtPartParam_Entry_249 */
+    /* [341] 0xEDE17A  SndParam_Part12_Bank */
     { .key = 0x0000C820, .bank_index = 0x12, .bank_offset = 0x01,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3428,7 +3428,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 4, /* SndParam_WriteViaHash_Data */
       .unknown_0x11 = 0xFF },
-    /* [342] 0xEDE18C  ExtPartParam_Entry_250 */
+    /* [342] 0xEDE18C  SndParam_Part12_Sustain */
     { .key = 0x0000C840, .bank_index = 0x12, .bank_offset = 0x04,
       .mask = 0x08, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x03, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -3438,7 +3438,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 1, /* SndParam_EncodeFieldSub_Data / SndParam_DecodeFieldAlt_Data */
       .write_accessor    = 2, /* SndParam_WriteFieldSub_Data */
       .unknown_0x11 = 0xFF },
-    /* [343] 0xEDE19E  ExtPartParam_Entry_251 */
+    /* [343] 0xEDE19E  SndParam_Part12_ReverbSend */
     { .key = 0x0000C85B, .bank_index = 0x12, .bank_offset = 0x07,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3448,7 +3448,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [344] 0xEDE1B0  ExtPartParam_Entry_252 */
+    /* [344] 0xEDE1B0  SndParam_Part12_ChorusSend */
     { .key = 0x0000C85D, .bank_index = 0x12, .bank_offset = 0x05,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3458,7 +3458,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [345] 0xEDE1C2  ExtPartParam_Entry_253 */
+    /* [345] 0xEDE1C2  SndParam_Part12_DigitalEffect */
     { .key = 0x0000C85E, .bank_index = 0x12, .bank_offset = 0x04,
       .mask = 0x40, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x06, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -3528,7 +3528,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [352] 0xEDE240  ExtPartParam_Entry_260 */
+    /* [352] 0xEDE240  SndParam_Part13_Sound */
     { .key = 0x0000CC00, .bank_index = 0x13, .bank_offset = 0x00,
       .mask = 0xFF, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3538,7 +3538,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 5, /* SndParam_BatchUpdate_Data */
       .unknown_0x11 = 0xFF },
-    /* [353] 0xEDE252  ExtPartParam_Entry_261 */
+    /* [353] 0xEDE252  SndParam_Part13_Modulation */
     { .key = 0x0000CC01, .bank_index = 0xB2, .bank_offset = 0x13,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0x03,
@@ -3548,7 +3548,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 1, /* SndParam_WriteFieldDirect_Data */
       .unknown_0x11 = 0xFF },
-    /* [354] 0xEDE264  ExtPartParam_Entry_262 */
+    /* [354] 0xEDE264  SndParam_Part13_Volume */
     { .key = 0x0000CC07, .bank_index = 0x13, .bank_offset = 0x03,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3568,7 +3568,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [356] 0xEDE288  ExtPartParam_Entry_264 */
+    /* [356] 0xEDE288  SndParam_Part13_Pan */
     { .key = 0x0000CC0A, .bank_index = 0x13, .bank_offset = 0x08,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3578,7 +3578,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 1, /* SndParam_WriteFieldDirect_Data */
       .unknown_0x11 = 0xFF },
-    /* [357] 0xEDE29A  ExtPartParam_Entry_265 */
+    /* [357] 0xEDE29A  SndParam_Part13_Expression */
     { .key = 0x0000CC0B, .bank_index = 0xB3, .bank_offset = 0x13,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3588,7 +3588,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 1, /* SndParam_WriteFieldDirect_Data */
       .unknown_0x11 = 0xFF },
-    /* [358] 0xEDE2AC  ExtPartParam_Entry_266 */
+    /* [358] 0xEDE2AC  SndParam_Part13_Bank */
     { .key = 0x0000CC20, .bank_index = 0x13, .bank_offset = 0x01,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3598,7 +3598,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 4, /* SndParam_WriteViaHash_Data */
       .unknown_0x11 = 0xFF },
-    /* [359] 0xEDE2BE  ExtPartParam_Entry_267 */
+    /* [359] 0xEDE2BE  SndParam_Part13_Sustain */
     { .key = 0x0000CC40, .bank_index = 0x13, .bank_offset = 0x04,
       .mask = 0x08, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x03, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -3608,7 +3608,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 1, /* SndParam_EncodeFieldSub_Data / SndParam_DecodeFieldAlt_Data */
       .write_accessor    = 2, /* SndParam_WriteFieldSub_Data */
       .unknown_0x11 = 0xFF },
-    /* [360] 0xEDE2D0  ExtPartParam_Entry_268 */
+    /* [360] 0xEDE2D0  SndParam_Part13_ReverbSend */
     { .key = 0x0000CC5B, .bank_index = 0x13, .bank_offset = 0x07,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3618,7 +3618,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [361] 0xEDE2E2  ExtPartParam_Entry_269 */
+    /* [361] 0xEDE2E2  SndParam_Part13_ChorusSend */
     { .key = 0x0000CC5D, .bank_index = 0x13, .bank_offset = 0x05,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3628,7 +3628,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [362] 0xEDE2F4  ExtPartParam_Entry_270 */
+    /* [362] 0xEDE2F4  SndParam_Part13_DigitalEffect */
     { .key = 0x0000CC5E, .bank_index = 0x13, .bank_offset = 0x04,
       .mask = 0x40, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x06, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -3698,7 +3698,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [369] 0xEDE372  ExtPartParam_Entry_277 */
+    /* [369] 0xEDE372  SndParam_Part14_Sound */
     { .key = 0x0000D000, .bank_index = 0x14, .bank_offset = 0x00,
       .mask = 0xFF, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3708,7 +3708,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [370] 0xEDE384  ExtPartParam_Entry_278 */
+    /* [370] 0xEDE384  SndParam_Part14_Modulation */
     { .key = 0x0000D001, .bank_index = 0xB2, .bank_offset = 0x14,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0x03,
@@ -3718,7 +3718,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 1, /* SndParam_WriteFieldDirect_Data */
       .unknown_0x11 = 0xFF },
-    /* [371] 0xEDE396  ExtPartParam_Entry_279 */
+    /* [371] 0xEDE396  SndParam_Part14_Volume */
     { .key = 0x0000D007, .bank_index = 0x14, .bank_offset = 0x03,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3738,7 +3738,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [373] 0xEDE3BA  ExtPartParam_Entry_281 */
+    /* [373] 0xEDE3BA  SndParam_Part14_Pan */
     { .key = 0x0000D00A, .bank_index = 0x14, .bank_offset = 0x08,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3748,7 +3748,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 1, /* SndParam_WriteFieldDirect_Data */
       .unknown_0x11 = 0xFF },
-    /* [374] 0xEDE3CC  ExtPartParam_Entry_282 */
+    /* [374] 0xEDE3CC  SndParam_Part14_Expression */
     { .key = 0x0000D00B, .bank_index = 0xB3, .bank_offset = 0x14,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3758,7 +3758,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 1, /* SndParam_WriteFieldDirect_Data */
       .unknown_0x11 = 0xFF },
-    /* [375] 0xEDE3DE  ExtPartParam_Entry_283 */
+    /* [375] 0xEDE3DE  SndParam_Part14_Bank */
     { .key = 0x0000D020, .bank_index = 0x14, .bank_offset = 0x01,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3768,7 +3768,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [376] 0xEDE3F0  ExtPartParam_Entry_284 */
+    /* [376] 0xEDE3F0  SndParam_Part14_Sustain */
     { .key = 0x0000D040, .bank_index = 0x14, .bank_offset = 0x04,
       .mask = 0x08, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x03, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -3778,7 +3778,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 1, /* SndParam_EncodeFieldSub_Data / SndParam_DecodeFieldAlt_Data */
       .write_accessor    = 2, /* SndParam_WriteFieldSub_Data */
       .unknown_0x11 = 0xFF },
-    /* [377] 0xEDE402  ExtPartParam_Entry_285 */
+    /* [377] 0xEDE402  SndParam_Part14_ReverbSend */
     { .key = 0x0000D05B, .bank_index = 0x14, .bank_offset = 0x07,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3788,7 +3788,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [378] 0xEDE414  ExtPartParam_Entry_286 */
+    /* [378] 0xEDE414  SndParam_Part14_ChorusSend */
     { .key = 0x0000D05D, .bank_index = 0x14, .bank_offset = 0x05,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3798,7 +3798,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [379] 0xEDE426  ExtPartParam_Entry_287 */
+    /* [379] 0xEDE426  SndParam_Part14_DigitalEffect */
     { .key = 0x0000D05E, .bank_index = 0x14, .bank_offset = 0x04,
       .mask = 0x40, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x06, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -3868,7 +3868,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [386] 0xEDE4A4  ExtPartParam_Entry_294 */
+    /* [386] 0xEDE4A4  SndParam_Part15_Sound */
     { .key = 0x0000D400, .bank_index = 0x15, .bank_offset = 0x00,
       .mask = 0xFF, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3878,7 +3878,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [387] 0xEDE4B6  ExtPartParam_Entry_295 */
+    /* [387] 0xEDE4B6  SndParam_Part15_Modulation */
     { .key = 0x0000D401, .bank_index = 0xB2, .bank_offset = 0x15,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0x03,
@@ -3888,7 +3888,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [388] 0xEDE4C8  ExtPartParam_Entry_296 */
+    /* [388] 0xEDE4C8  SndParam_Part15_Volume */
     { .key = 0x0000D407, .bank_index = 0x15, .bank_offset = 0x03,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3908,7 +3908,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [390] 0xEDE4EC  ExtPartParam_Entry_298 */
+    /* [390] 0xEDE4EC  SndParam_Part15_Pan */
     { .key = 0x0000D40A, .bank_index = 0x15, .bank_offset = 0x08,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3918,7 +3918,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 1, /* SndParam_WriteFieldDirect_Data */
       .unknown_0x11 = 0xFF },
-    /* [391] 0xEDE4FE  ExtPartParam_Entry_299 */
+    /* [391] 0xEDE4FE  SndParam_Part15_Expression */
     { .key = 0x0000D40B, .bank_index = 0xB3, .bank_offset = 0x15,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3928,7 +3928,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [392] 0xEDE510  ExtPartParam_Entry_300 */
+    /* [392] 0xEDE510  SndParam_Part15_Bank */
     { .key = 0x0000D420, .bank_index = 0x15, .bank_offset = 0x01,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3938,7 +3938,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [393] 0xEDE522  ExtPartParam_Entry_301 */
+    /* [393] 0xEDE522  SndParam_Part15_Sustain */
     { .key = 0x0000D440, .bank_index = 0x15, .bank_offset = 0x04,
       .mask = 0x08, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x03, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -3948,7 +3948,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 1, /* SndParam_EncodeFieldSub_Data / SndParam_DecodeFieldAlt_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [394] 0xEDE534  ExtPartParam_Entry_302 */
+    /* [394] 0xEDE534  SndParam_Part15_ReverbSend */
     { .key = 0x0000D45B, .bank_index = 0x15, .bank_offset = 0x07,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3958,7 +3958,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [395] 0xEDE546  ExtPartParam_Entry_303 */
+    /* [395] 0xEDE546  SndParam_Part15_ChorusSend */
     { .key = 0x0000D45D, .bank_index = 0x15, .bank_offset = 0x05,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -3968,7 +3968,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [396] 0xEDE558  ExtPartParam_Entry_304 */
+    /* [396] 0xEDE558  SndParam_Part15_DigitalEffect */
     { .key = 0x0000D45E, .bank_index = 0x15, .bank_offset = 0x04,
       .mask = 0x40, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x06, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -4038,7 +4038,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [403] 0xEDE5D6  ExtPartParam_Entry_311 */
+    /* [403] 0xEDE5D6  SndParam_Part16_Sound */
     { .key = 0x0000D800, .bank_index = 0x16, .bank_offset = 0x00,
       .mask = 0xFF, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -4048,7 +4048,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [404] 0xEDE5E8  ExtPartParam_Entry_312 */
+    /* [404] 0xEDE5E8  SndParam_Part16_Modulation */
     { .key = 0x0000D801, .bank_index = 0xB2, .bank_offset = 0x16,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0x03,
@@ -4058,7 +4058,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [405] 0xEDE5FA  ExtPartParam_Entry_313 */
+    /* [405] 0xEDE5FA  SndParam_Part16_Volume */
     { .key = 0x0000D807, .bank_index = 0x16, .bank_offset = 0x03,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -4078,7 +4078,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [407] 0xEDE61E  ExtPartParam_Entry_315 */
+    /* [407] 0xEDE61E  SndParam_Part16_Pan */
     { .key = 0x0000D80A, .bank_index = 0x16, .bank_offset = 0x08,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -4088,7 +4088,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 1, /* SndParam_WriteFieldDirect_Data */
       .unknown_0x11 = 0xFF },
-    /* [408] 0xEDE630  ExtPartParam_Entry_316 */
+    /* [408] 0xEDE630  SndParam_Part16_Expression */
     { .key = 0x0000D80B, .bank_index = 0xB3, .bank_offset = 0x16,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -4098,7 +4098,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [409] 0xEDE642  ExtPartParam_Entry_317 */
+    /* [409] 0xEDE642  SndParam_Part16_Bank */
     { .key = 0x0000D820, .bank_index = 0x16, .bank_offset = 0x01,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -4108,7 +4108,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [410] 0xEDE654  ExtPartParam_Entry_318 */
+    /* [410] 0xEDE654  SndParam_Part16_Sustain */
     { .key = 0x0000D840, .bank_index = 0x16, .bank_offset = 0x04,
       .mask = 0x08, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x03, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -4118,7 +4118,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 1, /* SndParam_EncodeFieldSub_Data / SndParam_DecodeFieldAlt_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [411] 0xEDE666  ExtPartParam_Entry_319 */
+    /* [411] 0xEDE666  SndParam_Part16_ReverbSend */
     { .key = 0x0000D85B, .bank_index = 0x16, .bank_offset = 0x07,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -4128,7 +4128,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [412] 0xEDE678  ExtPartParam_Entry_320 */
+    /* [412] 0xEDE678  SndParam_Part16_ChorusSend */
     { .key = 0x0000D85D, .bank_index = 0x16, .bank_offset = 0x05,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -4138,7 +4138,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [413] 0xEDE68A  ExtPartParam_Entry_321 */
+    /* [413] 0xEDE68A  SndParam_Part16_DigitalEffect */
     { .key = 0x0000D85E, .bank_index = 0x16, .bank_offset = 0x04,
       .mask = 0x40, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x06, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -4208,7 +4208,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [420] 0xEDE708  ExtPartParam_Entry_328 */
+    /* [420] 0xEDE708  SndParam_Part17_Sound */
     { .key = 0x0000DC00, .bank_index = 0x17, .bank_offset = 0x00,
       .mask = 0xFF, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -4218,7 +4218,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 5, /* SndParam_BatchUpdate_Data */
       .unknown_0x11 = 0xFF },
-    /* [421] 0xEDE71A  ExtPartParam_Entry_329 */
+    /* [421] 0xEDE71A  SndParam_Part17_Modulation */
     { .key = 0x0000DC01, .bank_index = 0xB2, .bank_offset = 0x17,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0x03,
@@ -4228,7 +4228,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 1, /* SndParam_WriteFieldDirect_Data */
       .unknown_0x11 = 0xFF },
-    /* [422] 0xEDE72C  ExtPartParam_Entry_330 */
+    /* [422] 0xEDE72C  SndParam_Part17_Volume */
     { .key = 0x0000DC07, .bank_index = 0x17, .bank_offset = 0x03,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -4248,7 +4248,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [424] 0xEDE750  ExtPartParam_Entry_332 */
+    /* [424] 0xEDE750  SndParam_Part17_Pan */
     { .key = 0x0000DC0A, .bank_index = 0x17, .bank_offset = 0x08,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -4258,7 +4258,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 1, /* SndParam_WriteFieldDirect_Data */
       .unknown_0x11 = 0xFF },
-    /* [425] 0xEDE762  ExtPartParam_Entry_333 */
+    /* [425] 0xEDE762  SndParam_Part17_Expression */
     { .key = 0x0000DC0B, .bank_index = 0xB3, .bank_offset = 0x17,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -4268,7 +4268,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 1, /* SndParam_WriteFieldDirect_Data */
       .unknown_0x11 = 0xFF },
-    /* [426] 0xEDE774  ExtPartParam_Entry_334 */
+    /* [426] 0xEDE774  SndParam_Part17_Bank */
     { .key = 0x0000DC20, .bank_index = 0x17, .bank_offset = 0x01,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -4278,7 +4278,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 4, /* SndParam_WriteViaHash_Data */
       .unknown_0x11 = 0xFF },
-    /* [427] 0xEDE786  ExtPartParam_Entry_335 */
+    /* [427] 0xEDE786  SndParam_Part17_Sustain */
     { .key = 0x0000DC40, .bank_index = 0x17, .bank_offset = 0x04,
       .mask = 0x08, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x03, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -4288,7 +4288,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 1, /* SndParam_EncodeFieldSub_Data / SndParam_DecodeFieldAlt_Data */
       .write_accessor    = 2, /* SndParam_WriteFieldSub_Data */
       .unknown_0x11 = 0xFF },
-    /* [428] 0xEDE798  ExtPartParam_Entry_336 */
+    /* [428] 0xEDE798  SndParam_Part17_ReverbSend */
     { .key = 0x0000DC5B, .bank_index = 0x17, .bank_offset = 0x07,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -4298,7 +4298,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [429] 0xEDE7AA  ExtPartParam_Entry_337 */
+    /* [429] 0xEDE7AA  SndParam_Part17_ChorusSend */
     { .key = 0x0000DC5D, .bank_index = 0x17, .bank_offset = 0x05,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -4308,7 +4308,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [430] 0xEDE7BC  ExtPartParam_Entry_338 */
+    /* [430] 0xEDE7BC  SndParam_Part17_DigitalEffect */
     { .key = 0x0000DC5E, .bank_index = 0x17, .bank_offset = 0x04,
       .mask = 0x40, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x06, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -4378,7 +4378,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [437] 0xEDE83A  ExtPartParam_Entry_345 */
+    /* [437] 0xEDE83A  SndParam_Part18_Sound */
     { .key = 0x0000E000, .bank_index = 0x18, .bank_offset = 0x00,
       .mask = 0xFF, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -4388,7 +4388,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 5, /* SndParam_BatchUpdate_Data */
       .unknown_0x11 = 0xFF },
-    /* [438] 0xEDE84C  ExtPartParam_Entry_346 */
+    /* [438] 0xEDE84C  SndParam_Part18_Modulation */
     { .key = 0x0000E001, .bank_index = 0xB2, .bank_offset = 0x18,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0x03,
@@ -4398,7 +4398,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 1, /* SndParam_WriteFieldDirect_Data */
       .unknown_0x11 = 0xFF },
-    /* [439] 0xEDE85E  ExtPartParam_Entry_347 */
+    /* [439] 0xEDE85E  SndParam_Part18_Volume */
     { .key = 0x0000E007, .bank_index = 0x18, .bank_offset = 0x03,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -4418,7 +4418,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [441] 0xEDE882  ExtPartParam_Entry_349 */
+    /* [441] 0xEDE882  SndParam_Part18_Pan */
     { .key = 0x0000E00A, .bank_index = 0x18, .bank_offset = 0x08,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -4428,7 +4428,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 1, /* SndParam_WriteFieldDirect_Data */
       .unknown_0x11 = 0xFF },
-    /* [442] 0xEDE894  ExtPartParam_Entry_350 */
+    /* [442] 0xEDE894  SndParam_Part18_Expression */
     { .key = 0x0000E00B, .bank_index = 0xB3, .bank_offset = 0x18,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -4438,7 +4438,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 1, /* SndParam_WriteFieldDirect_Data */
       .unknown_0x11 = 0xFF },
-    /* [443] 0xEDE8A6  ExtPartParam_Entry_351 */
+    /* [443] 0xEDE8A6  SndParam_Part18_Bank */
     { .key = 0x0000E020, .bank_index = 0x18, .bank_offset = 0x01,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0xFF, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -4448,7 +4448,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 4, /* SndParam_WriteViaHash_Data */
       .unknown_0x11 = 0xFF },
-    /* [444] 0xEDE8B8  ExtPartParam_Entry_352 */
+    /* [444] 0xEDE8B8  SndParam_Part18_Sustain */
     { .key = 0x0000E040, .bank_index = 0x18, .bank_offset = 0x04,
       .mask = 0x08, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x03, .xor_value = 0x00,
       .aux_index = 0x00,
@@ -4458,7 +4458,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 1, /* SndParam_EncodeFieldSub_Data / SndParam_DecodeFieldAlt_Data */
       .write_accessor    = 2, /* SndParam_WriteFieldSub_Data */
       .unknown_0x11 = 0xFF },
-    /* [445] 0xEDE8CA  ExtPartParam_Entry_353 */
+    /* [445] 0xEDE8CA  SndParam_Part18_ReverbSend */
     { .key = 0x0000E05B, .bank_index = 0x18, .bank_offset = 0x07,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -4468,7 +4468,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [446] 0xEDE8DC  ExtPartParam_Entry_354 */
+    /* [446] 0xEDE8DC  SndParam_Part18_ChorusSend */
     { .key = 0x0000E05D, .bank_index = 0x18, .bank_offset = 0x05,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -4478,7 +4478,7 @@ const sndparam_descriptor_t run_edc980[460]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [447] 0xEDE8EE  ExtPartParam_Entry_355 */
+    /* [447] 0xEDE8EE  SndParam_Part18_DigitalEffect */
     { .key = 0x0000E05E, .bank_index = 0x18, .bank_offset = 0x04,
       .mask = 0x40, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x06, .xor_value = 0x00,
       .aux_index = 0x00,

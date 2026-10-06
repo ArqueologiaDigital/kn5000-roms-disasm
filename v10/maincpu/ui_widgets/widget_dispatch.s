@@ -264,17 +264,17 @@ SndParam_RegisterLoop_Data:
 	.long MidiChParam_Entry_037
 	.long MidiChParam_Entry_038
 	.long MidiChParam_Entry_039
-	.long MidiChParam_Entry_086
-	.long MidiChParam_Entry_087
-	.long MidiChParam_Entry_088
+	.long SndParam_Part00_Sound
+	.long SndParam_Part00_Modulation
+	.long SndParam_Part00_Volume
 	.long MidiChParam_Entry_089
-	.long MidiChParam_Entry_090
-	.long MidiChParam_Entry_091
-	.long MidiChParam_Entry_092
-	.long MidiChParam_Entry_093
-	.long MidiChParam_Entry_094
-	.long MidiChParam_Entry_095
-	.long MidiChParam_Entry_096
+	.long SndParam_Part00_Pan
+	.long SndParam_Part00_Expression
+	.long SndParam_Part00_Bank
+	.long SndParam_Part00_Sustain
+	.long SndParam_Part00_ReverbSend
+	.long SndParam_Part00_ChorusSend
+	.long SndParam_Part00_DigitalEffect
 	.long MidiChParam_Entry_098
 	.long MidiChParam_Entry_099
 	.long MidiChParam_Entry_100
@@ -286,28 +286,28 @@ SndParam_RegisterLoop_Data:
 	.long MidiChParam_Entry_105
 	.long MidiChParam_Entry_106
 	.long MidiChParam_Entry_107
-	.long MidiChParam_Entry_108
-	.long MidiChParam_Entry_109
-	.long MidiChParam_Entry_110
-	.long MidiChParam_Entry_111
-	.long MidiChParam_Entry_112
-	.long VoiceParamEx_Entry_001
-	.long VoiceParamEx_Entry_002
-	.long VoiceParamEx_Entry_003
-	.long VoiceParamEx_Entry_004
+	.long SndParam_Part00_Drawbar16
+	.long SndParam_Part00_Drawbar8
+	.long SndParam_Part00_Drawbar5_1_3
+	.long SndParam_Part00_Drawbar4
+	.long SndParam_Part00_Drawbar2_2_3
+	.long SndParam_Part00_Drawbar2
+	.long SndParam_Part00_Drawbar1_3_5
+	.long SndParam_Part00_Drawbar1_1_3
+	.long SndParam_Part00_Drawbar1
 	.long VoiceParamEx_Entry_005
 	.long VoiceParamEx_Entry_006
-	.long VoiceParamEx_Entry_007
-	.long VoiceParamEx_Entry_008
-	.long VoiceParamEx_Entry_009
+	.long SndParam_Part01_Sound
+	.long SndParam_Part01_Modulation
+	.long SndParam_Part01_Volume
 	.long VoiceParamEx_Entry_010
-	.long VoiceParamEx_Entry_011
-	.long VoiceParamEx_Entry_012
-	.long VoiceParamEx_Entry_013
-	.long VoiceParamEx_Entry_014
-	.long VoiceParamEx_Entry_015
-	.long VoiceParamEx_Entry_016
-	.long VoiceParamEx_Entry_017
+	.long SndParam_Part01_Pan
+	.long SndParam_Part01_Expression
+	.long SndParam_Part01_Bank
+	.long SndParam_Part01_Sustain
+	.long SndParam_Part01_ReverbSend
+	.long SndParam_Part01_ChorusSend
+	.long SndParam_Part01_DigitalEffect
 	.long VoiceParamEx_Entry_019
 	.long VoiceParamEx_Entry_020
 	.long VoiceParamEx_Entry_021
@@ -319,28 +319,28 @@ SndParam_RegisterLoop_Data:
 	.long VoiceParamEx_Entry_026
 	.long VoiceParamEx_Entry_027
 	.long VoiceParamEx_Entry_028
-	.long VoiceParamEx_Entry_029
-	.long VoiceParamEx_Entry_030
-	.long VoiceParamEx_Entry_031
-	.long VoiceParamEx_Entry_032
-	.long VoiceParamEx_Entry_033
-	.long VoiceParamEx_Entry_034
-	.long VoiceParamEx_Entry_035
-	.long VoiceParamEx_Entry_036
-	.long VoiceParamEx_Entry_037
+	.long SndParam_Part01_Drawbar16
+	.long SndParam_Part01_Drawbar8
+	.long SndParam_Part01_Drawbar5_1_3
+	.long SndParam_Part01_Drawbar4
+	.long SndParam_Part01_Drawbar2_2_3
+	.long SndParam_Part01_Drawbar2
+	.long SndParam_Part01_Drawbar1_3_5
+	.long SndParam_Part01_Drawbar1_1_3
+	.long SndParam_Part01_Drawbar1
 	.long VoiceParamEx_Entry_038
 	.long VoiceParamEx_Entry_039
-	.long VoiceParamEx_Entry_040
-	.long VoiceParamEx_Entry_041
-	.long VoiceParamEx_Entry_042
+	.long SndParam_Part02_Sound
+	.long SndParam_Part02_Modulation
+	.long SndParam_Part02_Volume
 	.long VoiceParamEx_Entry_043
-	.long VoiceParamEx_Entry_044
-	.long VoiceParamEx_Entry_045
-	.long VoiceParamEx_Entry_046
-	.long VoiceParamEx_Entry_047
-	.long VoiceParamEx_Entry_048
-	.long VoiceParamEx_Entry_049
-	.long VoiceParamEx_Entry_050
+	.long SndParam_Part02_Pan
+	.long SndParam_Part02_Expression
+	.long SndParam_Part02_Bank
+	.long SndParam_Part02_Sustain
+	.long SndParam_Part02_ReverbSend
+	.long SndParam_Part02_ChorusSend
+	.long SndParam_Part02_DigitalEffect
 	.long VoiceParamEx_Entry_052
 	.long VoiceParamEx_Entry_053
 	.long VoiceParamEx_Entry_054
@@ -352,385 +352,385 @@ SndParam_RegisterLoop_Data:
 	.long VoiceParamEx_Entry_059
 	.long VoiceParamEx_Entry_060
 	.long VoiceParamEx_Entry_061
-	.long VoiceParamEx_Entry_062
-	.long VoiceParamEx_Entry_063
-	.long VoiceParamEx_Entry_064
-	.long VoiceParamEx_Entry_065
-	.long VoiceParamEx_Entry_066
-	.long VoiceParamEx_Entry_067
-	.long VoiceParamEx_Entry_068
-	.long VoiceParamEx_Entry_069
-	.long VoiceParamEx_Entry_070
+	.long SndParam_Part02_Drawbar16
+	.long SndParam_Part02_Drawbar8
+	.long SndParam_Part02_Drawbar5_1_3
+	.long SndParam_Part02_Drawbar4
+	.long SndParam_Part02_Drawbar2_2_3
+	.long SndParam_Part02_Drawbar2
+	.long SndParam_Part02_Drawbar1_3_5
+	.long SndParam_Part02_Drawbar1_1_3
+	.long SndParam_Part02_Drawbar1
 	.long VoiceParamEx_Entry_071
 	.long VoiceParamEx_Entry_072
-	.long VoiceParamEx_Entry_073
-	.long VoiceParamEx_Entry_074
-	.long VoiceParamEx_Entry_075
+	.long SndParam_Part03_Sound
+	.long SndParam_Part03_Modulation
+	.long SndParam_Part03_Volume
 	.long VoiceParamEx_Entry_076
-	.long VoiceParamEx_Entry_077
-	.long VoiceParamEx_Entry_078
-	.long VoiceParamEx_Entry_079
-	.long VoiceParamEx_Entry_080
-	.long VoiceParamEx_Entry_081
-	.long VoiceParamEx_Entry_082
-	.long VoiceParamEx_Entry_083
+	.long SndParam_Part03_Pan
+	.long SndParam_Part03_Expression
+	.long SndParam_Part03_Bank
+	.long SndParam_Part03_Sustain
+	.long SndParam_Part03_ReverbSend
+	.long SndParam_Part03_ChorusSend
+	.long SndParam_Part03_DigitalEffect
 	.long VoiceParamEx_Entry_085
 	.long PartParam_Entry_001
 	.long PartParam_Entry_002
 	.long PartParam_Entry_003
 	.long PartParam_Entry_004
 	.long VoiceParamEx_Entry_084
-	.long PartParam_Entry_005
-	.long PartParam_Entry_006
-	.long PartParam_Entry_007
+	.long SndParam_Part04_Sound
+	.long SndParam_Part04_Modulation
+	.long SndParam_Part04_Volume
 	.long PartParam_Entry_008
-	.long PartParam_Entry_009
-	.long PartParam_Entry_010
-	.long PartParam_Entry_011
-	.long PartParam_Entry_012
-	.long PartParam_Entry_013
-	.long PartParam_Entry_014
-	.long PartParam_Entry_015
+	.long SndParam_Part04_Pan
+	.long SndParam_Part04_Expression
+	.long SndParam_Part04_Bank
+	.long SndParam_Part04_Sustain
+	.long SndParam_Part04_ReverbSend
+	.long SndParam_Part04_ChorusSend
+	.long SndParam_Part04_DigitalEffect
 	.long PartParam_Entry_017
 	.long PartParam_Entry_018
 	.long PartParam_Entry_019
 	.long PartParam_Entry_020
 	.long PartParam_Entry_021
 	.long PartParam_Entry_016
-	.long PartParam_Entry_022
-	.long PartParam_Entry_023
-	.long PartParam_Entry_024
+	.long SndParam_Part05_Sound
+	.long SndParam_Part05_Modulation
+	.long SndParam_Part05_Volume
 	.long PartParam_Entry_025
-	.long PartParam_Entry_026
-	.long PartParam_Entry_027
-	.long PartParam_Entry_028
-	.long PartParam_Entry_029
-	.long PartParam_Entry_030
-	.long PartParam_Entry_031
-	.long PartParam_Entry_032
+	.long SndParam_Part05_Pan
+	.long SndParam_Part05_Expression
+	.long SndParam_Part05_Bank
+	.long SndParam_Part05_Sustain
+	.long SndParam_Part05_ReverbSend
+	.long SndParam_Part05_ChorusSend
+	.long SndParam_Part05_DigitalEffect
 	.long PartParam_Entry_034
 	.long PartParam_Entry_035
 	.long PartParam_Entry_036
 	.long PartParam_Entry_037
 	.long PartParam_Entry_038
 	.long PartParam_Entry_033
-	.long PartParam_Entry_039
-	.long PartParam_Entry_040
-	.long PartParam_Entry_041
+	.long SndParam_Part06_Sound
+	.long SndParam_Part06_Modulation
+	.long SndParam_Part06_Volume
 	.long PartParam_Entry_042
-	.long PartParam_Entry_043
-	.long PartParam_Entry_044
-	.long PartParam_Entry_045
-	.long PartParam_Entry_046
-	.long PartParam_Entry_047
-	.long PartParam_Entry_048
-	.long PartParam_Entry_049
+	.long SndParam_Part06_Pan
+	.long SndParam_Part06_Expression
+	.long SndParam_Part06_Bank
+	.long SndParam_Part06_Sustain
+	.long SndParam_Part06_ReverbSend
+	.long SndParam_Part06_ChorusSend
+	.long SndParam_Part06_DigitalEffect
 	.long PartParam_Entry_051
 	.long PartParam_Entry_052
 	.long PartParam_Entry_053
 	.long PartParam_Entry_054
 	.long PartParam_Entry_055
 	.long PartParam_Entry_050
-	.long PartParam_Entry_056
-	.long PartParam_Entry_057
-	.long PartParam_Entry_058
+	.long SndParam_Part07_Sound
+	.long SndParam_Part07_Modulation
+	.long SndParam_Part07_Volume
 	.long PartParam_Entry_059
-	.long PartParam_Entry_060
-	.long PartParam_Entry_061
-	.long PartParam_Entry_062
-	.long PartParam_Entry_063
-	.long PartParam_Entry_064
-	.long PartParam_Entry_065
-	.long PartParam_Entry_066
+	.long SndParam_Part07_Pan
+	.long SndParam_Part07_Expression
+	.long SndParam_Part07_Bank
+	.long SndParam_Part07_Sustain
+	.long SndParam_Part07_ReverbSend
+	.long SndParam_Part07_ChorusSend
+	.long SndParam_Part07_DigitalEffect
 	.long PartParam_Entry_068
 	.long PartParam_Entry_069
 	.long PartParam_Entry_070
 	.long PartParam_Entry_071
 	.long PartParam_Entry_072
 	.long PartParam_Entry_067
-	.long PartParam_Entry_073
-	.long PartParam_Entry_074
-	.long PartParam_Entry_075
+	.long SndParam_Part08_Sound
+	.long SndParam_Part08_Modulation
+	.long SndParam_Part08_Volume
 	.long PartParam_Entry_076
-	.long PartParam_Entry_077
-	.long PartParam_Entry_078
-	.long PartParam_Entry_079
-	.long PartParam_Entry_080
-	.long PartParam_Entry_081
-	.long PartParam_Entry_082
-	.long PartParam_Entry_083
+	.long SndParam_Part08_Pan
+	.long SndParam_Part08_Expression
+	.long SndParam_Part08_Bank
+	.long SndParam_Part08_Sustain
+	.long SndParam_Part08_ReverbSend
+	.long SndParam_Part08_ChorusSend
+	.long SndParam_Part08_DigitalEffect
 	.long PartParam_Entry_085
 	.long PartParam_Entry_086
 	.long PartParam_Entry_087
 	.long PartParam_Entry_088
 	.long PartParam_Entry_089
 	.long PartParam_Entry_084
-	.long PartParam_Entry_090
-	.long PartParam_Entry_091
-	.long PartParam_Entry_092
+	.long SndParam_Part09_Sound
+	.long SndParam_Part09_Modulation
+	.long SndParam_Part09_Volume
 	.long PartParam_Entry_093
-	.long PartParam_Entry_094
-	.long PartParam_Entry_095
-	.long PartParam_Entry_096
-	.long PartParam_Entry_097
-	.long PartParam_Entry_098
-	.long PartParam_Entry_099
-	.long PartParam_Entry_100
+	.long SndParam_Part09_Pan
+	.long SndParam_Part09_Expression
+	.long SndParam_Part09_Bank
+	.long SndParam_Part09_Sustain
+	.long SndParam_Part09_ReverbSend
+	.long SndParam_Part09_ChorusSend
+	.long SndParam_Part09_DigitalEffect
 	.long PartParam_Entry_102
 	.long PartParam_Entry_103
 	.long PartParam_Entry_104
 	.long PartParam_Entry_105
 	.long PartParam_Entry_106
 	.long PartParam_Entry_101
-	.long PartParam_Entry_107
-	.long PartParam_Entry_108
-	.long PartParam_Entry_109
+	.long SndParam_Part0A_Sound
+	.long SndParam_Part0A_Modulation
+	.long SndParam_Part0A_Volume
 	.long PartParam_Entry_110
-	.long PartParam_Entry_111
-	.long PartParam_Entry_112
-	.long PartParam_Entry_113
-	.long PartParam_Entry_114
-	.long PartParam_Entry_115
-	.long PartParam_Entry_116
-	.long PartParam_Entry_117
+	.long SndParam_Part0A_Pan
+	.long SndParam_Part0A_Expression
+	.long SndParam_Part0A_Bank
+	.long SndParam_Part0A_Sustain
+	.long SndParam_Part0A_ReverbSend
+	.long SndParam_Part0A_ChorusSend
+	.long SndParam_Part0A_DigitalEffect
 	.long PartParam_Entry_119
 	.long PartParam_Entry_120
 	.long PartParam_Entry_121
 	.long PartParam_Entry_122
 	.long PartParam_Entry_123
 	.long PartParam_Entry_118
-	.long PartParam_Entry_124
-	.long PartParam_Entry_125
-	.long PartParam_Entry_126
+	.long SndParam_Part0B_Sound
+	.long SndParam_Part0B_Modulation
+	.long SndParam_Part0B_Volume
 	.long PartParam_Entry_127
-	.long PartParam_Entry_128
-	.long PartParam_Entry_129
-	.long PartParam_Entry_130
-	.long PartParam_Entry_131
-	.long PartParam_Entry_132
-	.long PartParam_Entry_133
-	.long PartParam_Entry_134
+	.long SndParam_Part0B_Pan
+	.long SndParam_Part0B_Expression
+	.long SndParam_Part0B_Bank
+	.long SndParam_Part0B_Sustain
+	.long SndParam_Part0B_ReverbSend
+	.long SndParam_Part0B_ChorusSend
+	.long SndParam_Part0B_DigitalEffect
 	.long PartParam_Entry_136
 	.long PartParam_Entry_137
 	.long PartParam_Entry_138
 	.long PartParam_Entry_139
 	.long PartParam_Entry_140
 	.long PartParam_Entry_135
-	.long PartParam_Entry_141
-	.long PartParam_Entry_142
-	.long PartParam_Entry_143
+	.long SndParam_Part0C_Sound
+	.long SndParam_Part0C_Modulation
+	.long SndParam_Part0C_Volume
 	.long PartParam_Entry_144
-	.long PartParam_Entry_145
-	.long PartParam_Entry_146
-	.long PartParam_Entry_147
-	.long PartParam_Entry_148
-	.long PartParam_Entry_149
-	.long PartParam_Entry_150
-	.long PartParam_Entry_151
+	.long SndParam_Part0C_Pan
+	.long SndParam_Part0C_Expression
+	.long SndParam_Part0C_Bank
+	.long SndParam_Part0C_Sustain
+	.long SndParam_Part0C_ReverbSend
+	.long SndParam_Part0C_ChorusSend
+	.long SndParam_Part0C_DigitalEffect
 	.long PartParam_Entry_153
 	.long PartParam_Entry_154
 	.long PartParam_Entry_155
 	.long PartParam_Entry_156
 	.long PartParam_Entry_157
 	.long PartParam_Entry_152
-	.long PartParam_Entry_158
-	.long PartParam_Entry_159
-	.long PartParam_Entry_160
+	.long SndParam_Part0D_Sound
+	.long SndParam_Part0D_Modulation
+	.long SndParam_Part0D_Volume
 	.long PartParam_Entry_161
-	.long PartParam_Entry_162
-	.long PartParam_Entry_163
-	.long PartParam_Entry_164
-	.long PartParam_Entry_165
-	.long PartParam_Entry_166
-	.long PartParam_Entry_167
-	.long PartParam_Entry_168
+	.long SndParam_Part0D_Pan
+	.long SndParam_Part0D_Expression
+	.long SndParam_Part0D_Bank
+	.long SndParam_Part0D_Sustain
+	.long SndParam_Part0D_ReverbSend
+	.long SndParam_Part0D_ChorusSend
+	.long SndParam_Part0D_DigitalEffect
 	.long PartParam_Entry_170
 	.long PartParam_Entry_171
 	.long PartParam_Entry_172
 	.long PartParam_Entry_173
 	.long PartParam_Entry_174
 	.long PartParam_Entry_169
-	.long PartParam_Entry_175
-	.long PartParam_Entry_176
-	.long PartParam_Entry_177
+	.long SndParam_Part0E_Sound
+	.long SndParam_Part0E_Modulation
+	.long SndParam_Part0E_Volume
 	.long PartParam_Entry_178
-	.long PartParam_Entry_179
-	.long PartParam_Entry_180
-	.long PartParam_Entry_181
-	.long PartParam_Entry_182
-	.long PartParam_Entry_183
-	.long PartParam_Entry_184
-	.long PartParam_Entry_185
+	.long SndParam_Part0E_Pan
+	.long SndParam_Part0E_Expression
+	.long SndParam_Part0E_Bank
+	.long SndParam_Part0E_Sustain
+	.long SndParam_Part0E_ReverbSend
+	.long SndParam_Part0E_ChorusSend
+	.long SndParam_Part0E_DigitalEffect
 	.long PartParam_Entry_187
 	.long PartParam_Entry_188
 	.long PartParam_Entry_189
 	.long PartParam_Entry_190
 	.long PartParam_Entry_191
 	.long PartParam_Entry_186
-	.long PartParam_Entry_192
-	.long PartParam_Entry_193
-	.long PartParam_Entry_194
+	.long SndParam_Part0F_Sound
+	.long SndParam_Part0F_Modulation
+	.long SndParam_Part0F_Volume
 	.long PartParam_Entry_195
-	.long PartParam_Entry_196
-	.long PartParam_Entry_197
-	.long PartParam_Entry_198
-	.long PartParam_Entry_199
-	.long PartParam_Entry_200
-	.long PartParam_Entry_201
-	.long PartParam_Entry_202
+	.long SndParam_Part0F_Pan
+	.long SndParam_Part0F_Expression
+	.long SndParam_Part0F_Bank
+	.long SndParam_Part0F_Sustain
+	.long SndParam_Part0F_ReverbSend
+	.long SndParam_Part0F_ChorusSend
+	.long SndParam_Part0F_DigitalEffect
 	.long PartParam_Entry_204
 	.long PartParam_Entry_205
 	.long PartParam_Entry_206
 	.long PartParam_Entry_207
 	.long PartParam_Entry_208
 	.long PartParam_Entry_203
-	.long PartParam_Entry_209
-	.long PartParam_Entry_210
-	.long PartParam_Entry_211
+	.long SndParam_Part10_Sound
+	.long SndParam_Part10_Modulation
+	.long SndParam_Part10_Volume
 	.long PartParam_Entry_212
-	.long PartParam_Entry_213
-	.long PartParam_Entry_214
-	.long PartParam_Entry_215
-	.long PartParam_Entry_216
-	.long PartParam_Entry_217
-	.long PartParam_Entry_218
-	.long PartParam_Entry_219
+	.long SndParam_Part10_Pan
+	.long SndParam_Part10_Expression
+	.long SndParam_Part10_Bank
+	.long SndParam_Part10_Sustain
+	.long SndParam_Part10_ReverbSend
+	.long SndParam_Part10_ChorusSend
+	.long SndParam_Part10_DigitalEffect
 	.long PartParam_Entry_221
 	.long PartParam_Entry_222
 	.long PartParam_Entry_223
 	.long PartParam_Entry_224
 	.long PartParam_Entry_225
 	.long PartParam_Entry_220
-	.long PartParam_Entry_226
-	.long PartParam_Entry_227
-	.long ExtPartParam_Entry_228
+	.long SndParam_Part11_Sound
+	.long SndParam_Part11_Modulation
+	.long SndParam_Part11_Volume
 	.long ExtPartParam_Entry_229
-	.long ExtPartParam_Entry_230
-	.long ExtPartParam_Entry_231
-	.long ExtPartParam_Entry_232
-	.long ExtPartParam_Entry_233
-	.long ExtPartParam_Entry_234
-	.long ExtPartParam_Entry_235
-	.long ExtPartParam_Entry_236
+	.long SndParam_Part11_Pan
+	.long SndParam_Part11_Expression
+	.long SndParam_Part11_Bank
+	.long SndParam_Part11_Sustain
+	.long SndParam_Part11_ReverbSend
+	.long SndParam_Part11_ChorusSend
+	.long SndParam_Part11_DigitalEffect
 	.long ExtPartParam_Entry_238
 	.long ExtPartParam_Entry_239
 	.long ExtPartParam_Entry_240
 	.long ExtPartParam_Entry_241
 	.long ExtPartParam_Entry_242
 	.long ExtPartParam_Entry_237
-	.long ExtPartParam_Entry_243
-	.long ExtPartParam_Entry_244
-	.long ExtPartParam_Entry_245
+	.long SndParam_Part12_Sound
+	.long SndParam_Part12_Modulation
+	.long SndParam_Part12_Volume
 	.long ExtPartParam_Entry_246
-	.long ExtPartParam_Entry_247
-	.long ExtPartParam_Entry_248
-	.long ExtPartParam_Entry_249
-	.long ExtPartParam_Entry_250
-	.long ExtPartParam_Entry_251
-	.long ExtPartParam_Entry_252
-	.long ExtPartParam_Entry_253
+	.long SndParam_Part12_Pan
+	.long SndParam_Part12_Expression
+	.long SndParam_Part12_Bank
+	.long SndParam_Part12_Sustain
+	.long SndParam_Part12_ReverbSend
+	.long SndParam_Part12_ChorusSend
+	.long SndParam_Part12_DigitalEffect
 	.long ExtPartParam_Entry_255
 	.long ExtPartParam_Entry_256
 	.long ExtPartParam_Entry_257
 	.long ExtPartParam_Entry_258
 	.long ExtPartParam_Entry_259
 	.long ExtPartParam_Entry_254
-	.long ExtPartParam_Entry_260
-	.long ExtPartParam_Entry_261
-	.long ExtPartParam_Entry_262
+	.long SndParam_Part13_Sound
+	.long SndParam_Part13_Modulation
+	.long SndParam_Part13_Volume
 	.long ExtPartParam_Entry_263
-	.long ExtPartParam_Entry_264
-	.long ExtPartParam_Entry_265
-	.long ExtPartParam_Entry_266
-	.long ExtPartParam_Entry_267
-	.long ExtPartParam_Entry_268
-	.long ExtPartParam_Entry_269
-	.long ExtPartParam_Entry_270
+	.long SndParam_Part13_Pan
+	.long SndParam_Part13_Expression
+	.long SndParam_Part13_Bank
+	.long SndParam_Part13_Sustain
+	.long SndParam_Part13_ReverbSend
+	.long SndParam_Part13_ChorusSend
+	.long SndParam_Part13_DigitalEffect
 	.long ExtPartParam_Entry_272
 	.long ExtPartParam_Entry_273
 	.long ExtPartParam_Entry_274
 	.long ExtPartParam_Entry_275
 	.long ExtPartParam_Entry_276
 	.long ExtPartParam_Entry_271
-	.long ExtPartParam_Entry_277
-	.long ExtPartParam_Entry_278
-	.long ExtPartParam_Entry_279
+	.long SndParam_Part14_Sound
+	.long SndParam_Part14_Modulation
+	.long SndParam_Part14_Volume
 	.long ExtPartParam_Entry_280
-	.long ExtPartParam_Entry_281
-	.long ExtPartParam_Entry_282
-	.long ExtPartParam_Entry_283
-	.long ExtPartParam_Entry_284
-	.long ExtPartParam_Entry_285
-	.long ExtPartParam_Entry_286
-	.long ExtPartParam_Entry_287
+	.long SndParam_Part14_Pan
+	.long SndParam_Part14_Expression
+	.long SndParam_Part14_Bank
+	.long SndParam_Part14_Sustain
+	.long SndParam_Part14_ReverbSend
+	.long SndParam_Part14_ChorusSend
+	.long SndParam_Part14_DigitalEffect
 	.long ExtPartParam_Entry_289
 	.long ExtPartParam_Entry_290
 	.long ExtPartParam_Entry_291
 	.long ExtPartParam_Entry_292
 	.long ExtPartParam_Entry_293
 	.long ExtPartParam_Entry_288
-	.long ExtPartParam_Entry_294
-	.long ExtPartParam_Entry_295
-	.long ExtPartParam_Entry_296
+	.long SndParam_Part15_Sound
+	.long SndParam_Part15_Modulation
+	.long SndParam_Part15_Volume
 	.long ExtPartParam_Entry_297
-	.long ExtPartParam_Entry_298
-	.long ExtPartParam_Entry_299
-	.long ExtPartParam_Entry_300
-	.long ExtPartParam_Entry_301
-	.long ExtPartParam_Entry_302
-	.long ExtPartParam_Entry_303
-	.long ExtPartParam_Entry_304
+	.long SndParam_Part15_Pan
+	.long SndParam_Part15_Expression
+	.long SndParam_Part15_Bank
+	.long SndParam_Part15_Sustain
+	.long SndParam_Part15_ReverbSend
+	.long SndParam_Part15_ChorusSend
+	.long SndParam_Part15_DigitalEffect
 	.long ExtPartParam_Entry_306
 	.long ExtPartParam_Entry_307
 	.long ExtPartParam_Entry_308
 	.long ExtPartParam_Entry_309
 	.long ExtPartParam_Entry_310
 	.long ExtPartParam_Entry_305
-	.long ExtPartParam_Entry_311
-	.long ExtPartParam_Entry_312
-	.long ExtPartParam_Entry_313
+	.long SndParam_Part16_Sound
+	.long SndParam_Part16_Modulation
+	.long SndParam_Part16_Volume
 	.long ExtPartParam_Entry_314
-	.long ExtPartParam_Entry_315
-	.long ExtPartParam_Entry_316
-	.long ExtPartParam_Entry_317
-	.long ExtPartParam_Entry_318
-	.long ExtPartParam_Entry_319
-	.long ExtPartParam_Entry_320
-	.long ExtPartParam_Entry_321
+	.long SndParam_Part16_Pan
+	.long SndParam_Part16_Expression
+	.long SndParam_Part16_Bank
+	.long SndParam_Part16_Sustain
+	.long SndParam_Part16_ReverbSend
+	.long SndParam_Part16_ChorusSend
+	.long SndParam_Part16_DigitalEffect
 	.long ExtPartParam_Entry_323
 	.long ExtPartParam_Entry_324
 	.long ExtPartParam_Entry_325
 	.long ExtPartParam_Entry_326
 	.long ExtPartParam_Entry_327
 	.long ExtPartParam_Entry_322
-	.long ExtPartParam_Entry_328
-	.long ExtPartParam_Entry_329
-	.long ExtPartParam_Entry_330
+	.long SndParam_Part17_Sound
+	.long SndParam_Part17_Modulation
+	.long SndParam_Part17_Volume
 	.long ExtPartParam_Entry_331
-	.long ExtPartParam_Entry_332
-	.long ExtPartParam_Entry_333
-	.long ExtPartParam_Entry_334
-	.long ExtPartParam_Entry_335
-	.long ExtPartParam_Entry_336
-	.long ExtPartParam_Entry_337
-	.long ExtPartParam_Entry_338
+	.long SndParam_Part17_Pan
+	.long SndParam_Part17_Expression
+	.long SndParam_Part17_Bank
+	.long SndParam_Part17_Sustain
+	.long SndParam_Part17_ReverbSend
+	.long SndParam_Part17_ChorusSend
+	.long SndParam_Part17_DigitalEffect
 	.long ExtPartParam_Entry_340
 	.long ExtPartParam_Entry_341
 	.long ExtPartParam_Entry_342
 	.long ExtPartParam_Entry_343
 	.long ExtPartParam_Entry_344
 	.long ExtPartParam_Entry_339
-	.long ExtPartParam_Entry_345
-	.long ExtPartParam_Entry_346
-	.long ExtPartParam_Entry_347
+	.long SndParam_Part18_Sound
+	.long SndParam_Part18_Modulation
+	.long SndParam_Part18_Volume
 	.long ExtPartParam_Entry_348
-	.long ExtPartParam_Entry_349
-	.long ExtPartParam_Entry_350
-	.long ExtPartParam_Entry_351
-	.long ExtPartParam_Entry_352
-	.long ExtPartParam_Entry_353
-	.long ExtPartParam_Entry_354
-	.long ExtPartParam_Entry_355
+	.long SndParam_Part18_Pan
+	.long SndParam_Part18_Expression
+	.long SndParam_Part18_Bank
+	.long SndParam_Part18_Sustain
+	.long SndParam_Part18_ReverbSend
+	.long SndParam_Part18_ChorusSend
+	.long SndParam_Part18_DigitalEffect
 	.long ExtPartParam_Entry_357
 	.long ExtPartParam_Entry_358
 	.long ExtPartParam_Entry_359

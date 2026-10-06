@@ -6,7 +6,7 @@
 
 const sndparam_descriptor_t run_edc8a4[10]
     __attribute__((section(".text"), used)) = {
-    /* [  0] 0xEDC8A4  MidiChParam_Entry_094 */
+    /* [  0] 0xEDC8A4  SndParam_Part00_ReverbSend */
     { .key = 0x0000805B, .bank_index = 0x00, .bank_offset = 0x07,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -16,7 +16,7 @@ const sndparam_descriptor_t run_edc8a4[10]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [  1] 0xEDC8B6  MidiChParam_Entry_095 */
+    /* [  1] 0xEDC8B6  SndParam_Part00_ChorusSend */
     { .key = 0x0000805D, .bank_index = 0x00, .bank_offset = 0x05,
       .mask = 0x7F, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x00, .xor_value = 0x00,
       .aux_index = 0xFF,
@@ -26,7 +26,7 @@ const sndparam_descriptor_t run_edc8a4[10]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [  2] 0xEDC8C8  MidiChParam_Entry_096 */
+    /* [  2] 0xEDC8C8  SndParam_Part00_DigitalEffect */
     { .key = 0x0000805E, .bank_index = 0x00, .bank_offset = 0x04,
       .mask = 0x40, .clamp_min = 0x00, .clamp_max = 0x7F, .shift = 0x06, .xor_value = 0x00,
       .aux_index = 0x00,
