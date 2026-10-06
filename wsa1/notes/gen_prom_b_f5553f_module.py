@@ -1295,7 +1295,7 @@ def checks(verbose=True, layout=True):
       (len(th), sorted("T_%06X" % s for v in th.values() for s in v)[:3],
        sorted("T_%06X" % s for v in th.values() for s in v)[-3:]),
       (len(th), ["T_ModeEnter_SeqPlay_Fwd", "T_ModeLeave_SeqPlay_Fwd", "T_ModeEnter_RealtimeRecord_Fwd"],
-       ["T_PartIndex_PostChangeEvent", "T_F42CA0", "T_F42CA8"]), verbose)
+       ["T_PartIndex_PostChangeEvent", "T_PartSound_CopyNameToDrawScratch", "T_F42CA8"]), verbose)
     c("ENTRY every thunk target is an instruction boundary of this transcription",
       [hex(t) for t in th if t not in boundaries()], [], verbose)
     lab = labels()

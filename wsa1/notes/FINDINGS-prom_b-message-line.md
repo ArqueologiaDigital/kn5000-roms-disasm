@@ -200,20 +200,20 @@ one byte after its `ret`.
   was missed by `prom_b_msgline.py`'s writer table only because it moves those
   four bytes with two `ld (XIX),WA` stores rather than an `ldir`; the script's
   `touches_buf` flag still listed it, which is why it got a second look.
-  `sub_F6DBF9` is still refused: it writes three table-selected fields into the
+  `MsgLine_FormatLengthAndPhrasing` is still refused: it writes three table-selected fields into the
   line and only the last, `TENU`/`NORM`/`STAC`/`CUTT`, is identifiable.
 * **`sub_F6D482`, `sub_F6D5BA`, `MsgLine_SetTextDashes`, `MsgLine_MeasureNumber`,
-  `sub_F6D710`, `sub_F6D86B`, `sub_F6D890`, `sub_F6D963`, `sub_F6D9AE`,
-  `sub_F6DA12`, `sub_F6DA9A`, `sub_F6DAED`, `sub_F6DBF9`** all touch the line
+  `sub_F6D710`, `sub_F6D86B`, `MsgLine_ControlTypeAndValue`, `sub_F6D963`, `MsgLine_PutTempoDigits`,
+  `sub_F6DA12`, `sub_F6DA9A`, `sub_F6DAED`, `MsgLine_FormatLengthAndPhrasing`** all touch the line
   but copy no caption of their own. Three of them are close to nameable and were
   still refused, and it is worth saying why:
   * (2026-10-03, later) `MsgLine_SetTextDashes` (was `sub_F6D5E2`) was named from its body alone:
     it stores `---` at `MsgLine_Text` -- a filler, not a caption, so this list's point stands.
-  * `sub_F6D9AE` renders the 16-bit word at `(0x100C)` into the line at +16,
+  * `MsgLine_PutTempoDigits` renders the 16-bit word at `(0x100C)` into the line at +16,
     right after the `<0x15>=` of the `TEMPO` caption, and its callers are the
     `TEMPO` composers. "Tempo value" is a good guess and it is a guess about a
     RAM variable this round did not identify. Left `sub_XXXXXX`.
-  * `sub_F6D890` copies entry `(0x12B8) & 7` of an eight-entry, eight-character
+  * `MsgLine_ControlTypeAndValue` copies entry `(0x12B8) & 7` of an eight-entry, eight-character
     table at `0xF6D915` (`        `, `P.BEND= `, `MOD.1 = `, `EXP.  = `,
     `P.MEM = `, `AFT.  = `) into the line at +14. The table is nameable; what
     `(0x12B8)` is, is not, and the routine's behaviour splits on it.

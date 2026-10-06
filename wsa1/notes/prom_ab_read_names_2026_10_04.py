@@ -47,7 +47,7 @@ ROWS = [
      "T_Blink_SetEnable(1) then T_Blink_Stop."),
     ("F66201", "SequencerMedley_StopPlayback",
      "when Medley_Playing is 1: clears it and (0x22D0); for an INT source, or FD with a NORM file: T_Medley_Stop and, unless\n"
-     "(0x0E48) bit 2, T_F42E98; otherwise (0x0E36) = 1 and T_F4257C.  Called by LcdKeyRow3_SequencerMedley and SequencerMedley_OnLeave."),
+     "(0x0E48) bit 2, T_F42E98; otherwise (0x0E36) = 1 and T_Medley_NormFileCommand.  Called by LcdKeyRow3_SequencerMedley and SequencerMedley_OnLeave."),
     ("F6625C", "SequencerMedley_StepFieldUp",
      "clears bit 7 of W, then SequencerMedley_StepFirstSong (Medley_Field 1) or _StepLastSong (2): the step goes UP."),
     ("F66278", "SequencerMedley_StepFieldDown",
@@ -391,7 +391,7 @@ ROWS = [
     ("F00244", "Transport_StartAllContinue",
      "the same start without resetting C's or B's counters (only TransportA_ResetCounters)."),
     ("F0017D", "Transport_StartStopFromZero",
-     "if C does not run, Transport_StartAllFromZero; if B runs and (0x3000) is non-zero, T_F40E18 with (0x60501B) bit 0\n"
+     "if C does not run, Transport_StartAllFromZero; if B runs and (0x3000) is non-zero, T_Transport_StopWhileRecording with (0x60501B) bit 0\n"
      "set around it; otherwise Transport_StopAllRunning."),
     ("F0020B", "Transport_StartStopContinue",
      "the same with Transport_StartAllContinue for the start."),
@@ -418,7 +418,7 @@ ROWS = [
      "StatusMsg_ShowByIndex(9) (PLEASE WAIT), Disk_MountFloppyWithRetry; on 0: Disk_SaveFileName, Disk_ScanDirectory,\n"
      "Disk_RestoreFileName; otherwise Disk_ShowMountError and Disk_PortA3_Release."),
     ("FE055B", "Disk_MountAndScanDirectory_LeaveOnError",
-     "the same, but a failed mount also runs sub_FE1907, clears (0x2229) and sets UI_Request_Hi = 0x10."),
+     "the same, but a failed mount also runs DiskError_SoundAlertAndWait, clears (0x2229) and sets UI_Request_Hi = 0x10."),
     ("FE179D", "Disk_InitFileNameCharset",
      "writes the 37 characters '_', 'A'..'Z', '0'..'9' to 0x1753.. -- the character set of the name editor."),
     ("FE2F39", "Disk_InitDriveAndNameEntry",
@@ -1015,7 +1015,7 @@ ROWS = [
     ("F7B737", "MeasureInsert_StepStartMeasure",
      "field 5 of the page; steps with SeqJob_StepMeasure."),
     ("F7B74C", "MeasureInsert_StepRepeat",
-     "field 6 of the page; steps with sub_F7CCDB, 0..127."),
+     "field 6 of the page; steps with SeqJob_StepValueInRange, 0..127."),
     ("F7B8DC", "MeasureC0py_InitFields",
      "Paint_MeasureC0py's stage-0 init (thunk T_MeasureC0py_InitFields): MeasureC0py_LoadSavedFields, MeasureC0py_Field = 1.  MEASURE C0PY: the same six fields"),
     ("F7BC73", "MeasureC0py_LoadSavedFields",
@@ -1035,7 +1035,7 @@ ROWS = [
     ("F7BB58", "MeasureC0py_StepStartMeasure",
      "field 5 of the page; steps with SeqJob_StepMeasure."),
     ("F7BB6D", "MeasureC0py_StepRepeat",
-     "field 6 of the page; steps with sub_F7CCDB, 0..127."),
+     "field 6 of the page; steps with SeqJob_StepValueInRange, 0..127."),
     ("F7BFEA", "Quantize_InitFields",
      "Paint_Quantize's stage-0 init (thunk T_Quantize_InitFields): copies the saved fields from battery RAM 0x603477.. into the working cells."),
     ("F7C0F1", "Quantize_StepFieldUp",
@@ -1281,7 +1281,7 @@ ROWS = [
      "(0x60341C) = (0x2210) << 8 | (0x220F), the two characters page 3 took from the entry buffer 0x22F0."),
     ("FE070C", "DiskSave_ShowResult",
      "(result): 3 -> status 3, Delay_500Ticks, (0x220F) = (0x220C) = 0 (the entered password is spent); else\n"
-     "status 7 for 7 and 6 for anything else, sub_FE1907 and, outside an SMF write, a delay.  Returns the result."),
+     "status 7 for 7 and 6 for anything else, DiskError_SoundAlertAndWait and, outside an SMF write, a delay.  Returns the result."),
     ("FE0811", "DiskSave_IsBankPasswordSet",
      "unless (0x21FA) is 3: on screen 0x4E or for content type SEQUENCER, the password of bank Disk_SeqBank\n"
      "(BStore_GetDiskBankPassword via BStore_GetDiskBankPassword_SaveRegs); for ALL, the first set one of any bank\n"
@@ -1598,7 +1598,7 @@ ROWS = [
      "measure's start -- the callers subtract them to get the tick within the measure."),
     # NOTE / DRUM EDIT: opening the cursor's measure
     ("FE8EF3", "EditScreen_SeekCursorMeasure",
-     "(0x0C90) = EditCursor_Measure, sub_FE8F0C (T_F40A70), then T_F40C5C on chain EditScreen_Part + 1: prom_b's\n"
+     "(0x0C90) = EditCursor_Measure, sub_FE8F0C (T_F40A70), then T_BStore_SeekChainToMeasure on chain EditScreen_Part + 1: prom_b's\n"
      "seek to that measure, which returns IX = its first beat and IY = the offset."),
     ("FE8EA9", "EditScreen_OpenCursorMeasure",
      "EditScreen_SeekCursorMeasure; when it found the measure: EditMeasure_StartBeat = IX, EditMeasure_StartTick = 0,\n"
@@ -1606,7 +1606,7 @@ ROWS = [
     ("FE8ED3", "EditScreen_SeekCursorMeasureStart",
      "EditScreen_SeekCursorMeasure; when found: EditPos_Beat = IX, EditPos_Tick = 0, BStore_CursorOffset = IY."),
     ("FE8AE9", "EditScreen_BuildBeatTable",
-     "for the (0x601F76) measures from EditCursor_Measure, seeks each one (T_F40C5C) and fills the byte table at\n"
+     "for the (0x601F76) measures from EditCursor_Measure, seeks each one (T_BStore_SeekChainToMeasure) and fills the byte table at\n"
      "0x601F5F that EditCursor_BeatsInMeasure reads; the cursor is saved and restored around it."),
     ("FE95C8", "EditCursor_WrapPastMeasureEnd",
      "with EditCursor_TickInMeasure past the measure: the next measure at beat 0 when the beat table's last entry\n"
@@ -1881,7 +1881,7 @@ ROWS = [
     # GM mode (prom_a 0xFB5000)
     ("FB5972", "GmMode_ApplyChange",
      "GmMode_HandleChange's body: the parameter image snapshot; entering GM (UiEvent_Byte2 bit 2): sub_FB567E,\n"
-     "GmMode_ResetToDefaults and, unless (0x124C) bit 0, T_F42574; leaving: sub_FB5903, sub_FB568D; then the image\n"
+     "GmMode_ResetToDefaults and, unless (0x124C) bit 0, T_BStore_Workspace_StoreParamImage; leaving: sub_FB5903, sub_FB568D; then the image\n"
      "re-sanitised and published, the tempo re-applied, and every part's pitch bend, channel pressure,\n"
      "modulation, expression and hold reset (GmReset_AllParts*), with GmReset_AllPartsParamB7 / _ParamB6."),
     ("FB5E5E", "GmReset_AllPartsParamB7",
@@ -1907,7 +1907,7 @@ ROWS = [
      "T_Medley_AdvanceInternalSong, called by the sequencer at a song's end: when an INT medley plays ((0x34D0) bit 2), the next song as\n"
      "in Medley_SkipToNextInternalSong, without stopping first."),
     ("FE7950", "Medley_Tick",
-     "T_Medley_Tick: counts (0x22D0) down; at 5 for INT: playback flags cleared and T_F409CC; at 0: INT -> T_Transport_ResetAndStartBC (the\n"
+     "T_Medley_Tick: counts (0x22D0) down; at 5 for INT: playback flags cleared and T_Seq_RewindAfterSongLoad; at 0: INT -> T_Transport_ResetAndStartBC (the\n"
      "transports from zero), FD + MIDI FILE -> the next song (wrapping) and Medley_StartMidiFile."),
     ("FE79B7", "Medley_StartMidiFile",
      "(0x34D0) |= 4, T_Disk_MountAndScanMidiFilesResetRings (mount and list the MIDI files); from Medley_PlayingSong, the first listing entry\n"
@@ -2409,7 +2409,7 @@ ROWS = [
      "copied back into Combination_Current (the flag is left as it is).  Basis: body."),
     ("FBF79C", "CombiEditConfigure_RepaintMarkedSounds",
      "posted by CombiEdit_RunPendingRepaint, and called by the CONFIGURE page repaint: takes and clears\n"
-     "CombiEdit_DirtySound, then for the 8 parts shown from (0x276B) whose bit is set, T_F42CA0 and the part's\n"
+     "CombiEdit_DirtySound, then for the 8 parts shown from (0x276B) whose bit is set, T_PartSound_CopyNameToDrawScratch and the part's\n"
      "record of RecordArray_F1A037 (one record per part, stride from the array).  Basis: body."),
     ("FBF92F", "CombiEditConfigure_DrawMidiSettings",
      "CONFIGURE page 0 (CombiEdit_Page): byte 13 of the 8 parts from (0x276B) -- BASIC CHANNEL, LOCAL CONTROL, MIDI\n"
@@ -2515,7 +2515,7 @@ ROWS = [
      "called from sub_F45D80.  Basis: body (named RAM)."),
     ("F442C4", "BStore_SongName_LoadDefault",
      "ldirw of 3 words from WorkspaceDefaults + 0x71 to BStore_SongName, the 6-character song name, preserving\n"
-     "XIX/XIY/BC; called from sub_F44260.  Basis: body (named RAM)."),
+     "XIX/XIY/BC; called from BStore_ResetWorkspaceToDefault.  Basis: body (named RAM)."),
     ("F77DD4", "SmfOut_WriteLastWindowAndClose",
      "when SmfOut_WindowsFlushed is non-zero: Disk_Flags bit 1 set, T_DiskApi_WriteFileFromWindow_Entry; then Disk_Flags\n"
      "bit 1 cleared and T_DiskApi_CloseFile_Call; called from sub_F7669D.  Basis: body."),

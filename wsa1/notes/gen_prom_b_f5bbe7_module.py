@@ -14,7 +14,7 @@ WHY THIS BLOCK
     inside ONE `.incbin` span, with the highest summed reference upper bound of
     any run in the image (62) -- and it owns 0xF5EBD0, which
     notes/prom_b_call_graph.py ranks the SECOND most-referenced unconverted
-    target in prom_b (x25, through T_F4270C).
+    target in prom_b (x25, through T_BStore_ReadCursorAdvance_Call).
 
     The span it sits in is 0xF5BBE7-0xF62BFF, and those 17 slots are the ONLY
     thunk slots that point anywhere into it, so the run and the span are the same
@@ -734,7 +734,7 @@ BANNER = """
 ; all inside ONE `.incbin` span, with the highest summed reference upper bound of
 ; any run in the image (62); it owns 0xF5EBD0, which notes/prom_b_call_graph.py
 ; ranks the SECOND most-referenced unconverted target in prom_b (x25, through
-; T_F4270C).  Those 17 slots are the ONLY thunk slots pointing anywhere into the
+; T_BStore_ReadCursorAdvance_Call).  Those 17 slots are the ONLY thunk slots pointing anywhere into the
 ; span, so the run and the span are the same boundary seen twice, and converting
 ; the span closes it entirely.
 ;

@@ -52,7 +52,7 @@ the SysEx descriptors, which is how they are named (`notes/prom_a_combi_mixer_ce
 
 | cell painter | record byte | parameter | dirty mask |
 |---|---|---|---|
-| `CombiEditMixer_DrawSound` | second record +0x1B..+0x1D (or `T_F42CA0`'s text) | the sound | 0x2770 |
+| `CombiEditMixer_DrawSound` | second record +0x1B..+0x1D (or `T_PartSound_CopyNameToDrawScratch`'s text) | the sound | 0x2770 |
 | `CombiEditMixer_DrawLocalControl` | first 13 & 0x20 | LOCAL CONTROL | 0x2771 |
 | `CombiEditMixer_DrawPanpot` | first 8 | PANPOT | 0x2772 |
 | `CombiEditMixer_DrawVolume` | first 3 | VOLUME | 0x2773 |

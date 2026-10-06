@@ -18,7 +18,7 @@ Reproduce everything below:
 target extent. **T_F426E0-T_F42720** — 17 slots, 16,244 bytes, one span, summed
 reference upper bound 62, the highest of any run — owns `0xF5EBD0`, which
 `notes/prom_b_call_graph.py` ranks the second most-referenced unconverted target
-in prom_b (x25, through `T_F4270C`). Those 17 slots are the **only** thunk slots
+in prom_b (x25, through `T_BStore_ReadCursorAdvance_Call`). Those 17 slots are the **only** thunk slots
 pointing anywhere into `0xF5BBE7-0xF62BFF`, so the run and the span are one
 boundary seen twice.
 

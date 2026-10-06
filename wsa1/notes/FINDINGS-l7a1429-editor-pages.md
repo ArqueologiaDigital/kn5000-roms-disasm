@@ -86,7 +86,7 @@ screen entirely:
   then, for all four layers, ORs bits into p11: value 1 or 3 sets `0x40` on layers
   1 and 2 (`0xFD42D9`, `0xFD42DD`), 2 or 3 sets `0x40` on layers 3 and 4
   (`0xFD42ED`, `0xFD42F1`), 4 sets `0x80` on all four (`0xFD4305`);
-* prom_b's partial repaint for that field, `sub_F5CBD9` (`0xF5CBD9`), reads
+* prom_b's partial repaint for that field, `ToneEditPage_A0_PaintGroupBrackets` (`0xF5CBD9`), reads
   `(0x27AC)` -- which is `0x27A6[6]` -- and switches between four different bracket
   graphics (`0xF5CBEC`-`0xF5CC2E`);
 * the MODELING top's own bottom legend is `ON/OFF  GROUP  DRIVER  RESONATOR

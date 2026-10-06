@@ -16,7 +16,7 @@ QUESTION IT ANSWERS
   and CombiEditMixer_OnPartParamEvent's page routines OR a part's bit into DIRTY and post the callback
   (T_CallbackQueue_Post).  So the callback and its DIRTY byte are named after the same parameter.
   One painter reads no parameter byte: 0xFBE5EE draws the part's sound (second record +0x1B / +0x1C / +0x1D in
-  panel-mode group 0x16, else T_F42CA0's text); it is named CombiEditMixer_DrawSound by that reading.
+  panel-mode group 0x16, else T_PartSound_CopyNameToDrawScratch's text); it is named CombiEditMixer_DrawSound by that reading.
 
 RUN
   python3 notes/prom_a_combi_mixer_cells.py          # the plan
@@ -100,7 +100,7 @@ def plan():
             if r is None:
                 if a == 0xFBE5EE:
                     cells[lab] = (a, "Sound", "the part's sound: in panel-mode group 0x16 the second record's +0x1D bank, +0x1B group, "
-                                  "+0x1C member (number = group x 8 + member + 1), otherwise T_F42CA0's text")
+                                  "+0x1C member (number = group x 8 + member + 1), otherwise T_PartSound_CopyNameToDrawScratch's text")
                 continue
             rec, off, mask = r
             hits = [p for p in P if p[0] == rec and p[1] == off and (mask is None or p[2] == mask)]

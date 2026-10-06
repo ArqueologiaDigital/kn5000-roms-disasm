@@ -15,3 +15,8 @@ re-read a sample of bodies against those claims. Each new label carries its head
 - `notes/prom_b_thunks_round6.py --pending-args` named the routine-directory slots after their targets, with
   `--mark` and `--fix-ranges`;
 - `make gate-all` and both preservation checks were re-run.
+
+**Wave 2** (`proposals_wave2_{c,d,e,f}.json`) used the same process on the next 120 routines that at least two
+named routines call (`OldCopy_*` callers excluded): 102 named, 18 refused. Refusals are kept with their reasons, e.g.
+routines acting on song-data marker bytes whose meaning is not established, or veneers whose only callers are
+unnamed.
