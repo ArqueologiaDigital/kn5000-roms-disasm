@@ -1315,7 +1315,7 @@ FDemoText_ByteData_DisplayRefresh_Epilogue2:
 	pop	xiz
 	lda xsp, (xsp+136)
 	ret
-Seq_LoadDisplayResource_Helper:
+FDemoText_ReadTaggedBlock:
 	lda	xsp, (xsp-22)
 	pushw	iz
 	ld	(xsp+12), xde
@@ -2978,7 +2978,7 @@ Seq_LoadResource_Proceed:
 	ld xwa, 0x000248c8			; data source
 	ld xbc, 0x00000100			; size 256
 	ld xde, Presentation_TagStrTable			; destination descriptor
-	calr	Seq_LoadDisplayResource_Helper
+	calr	FDemoText_ReadTaggedBlock
 	call FileIO_CloseHandle			; finalize
 Seq_Epilogue32:
 	pop xiz
@@ -3030,7 +3030,7 @@ Seq_FillBufferLoop:
 	pushw Seq_FillBufferLoop_Str_ACTION@lo16
 	ld xbc, xiz				; info ptr
 	ld xde, Seq_FillBufferLoop_Str_ACTION_2			; destination descriptor
-	calr	Seq_LoadDisplayResource_Helper
+	calr	FDemoText_ReadTaggedBlock
 	call FileIO_CloseHandle			; finalize
 	cp hl, 0:i3
 	jr nz, Seq_NamedResource_Epilogue			; finalize failed

@@ -2978,7 +2978,7 @@ SeMenu_CopyWriteUpdate_Entry:
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue4
 	ld	wa, 1:i3
 SeMenu_CopyWriteUpdate_Join2:
-	call	SeMenu_TransferPartValues_EndData_0x9E
+	call	SeCtr2_SetSelection
 	ldw	wa, 59
 	ld	bc, 1:i3
 	call	SeMenu_SendEvent
@@ -3002,7 +3002,7 @@ SeMenu_CopyWriteUpdate_Entry2:
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue5
 	ld	wa, 5:i3
 SeMenu_CopyWriteUpdate_Join3:
-	call	SeMenu_TransferPartValues_EndData_0x9E
+	call	SeCtr2_SetSelection
 	ldw	wa, 59
 	ld	bc, 1:i3
 	call	SeMenu_SendEvent
@@ -3191,7 +3191,7 @@ SeMenu_CopyWriteUpdate_Skip5:
 	jr	nz, SeMenu_CopyWriteUpdate_Epilogue8
 	ld	bc, 1:i3
 SeMenu_CopyWriteUpdate_Join5:
-	call	SeMenu_PartMask_Data_Code_Sub
+	call	SeMenu_SetPartEnabled
 	pushw 2
 	pushw 32
 	call	SeMenu_ShowConfirmDialog
@@ -3968,7 +3968,7 @@ SeMenu_CopyWriteUpdate_Skip20:
 	jr	nz, SeMenu_CopyWriteUpdate_Epilogue21
 	ld	bc, 1:i3
 SeMenu_CopyWriteUpdate_Join13:
-	call	SeMenu_PartMask_Data_Code_Sub
+	call	SeMenu_SetPartEnabled
 	pushw	1
 	pushw	34
 	call	SeMenu_ShowConfirmDialog
@@ -6519,7 +6519,7 @@ SeWrtMem_OnSideRow3:
 	incm8	1, (xsp+4)
 	ld	a, (xsp+4)
 	extz	wa
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper4
+	call	SeMenu_SetWriteMemSlot
 	lda	xde, (xsp)
 	ld	a, (xsp+4)
 	extz	wa
@@ -6564,7 +6564,7 @@ SeWrtMem_OnSideRow4:
 	decm8	1, (xsp+4)
 	ld	a, (xsp+4)
 	extz	wa
-	call	SeMenu_CopyWriteUpdate_Step3_Code_3_Helper4
+	call	SeMenu_SetWriteMemSlot
 	lda	xde, (xsp)
 	ld	a, (xsp+4)
 	extz	wa
@@ -7996,7 +7996,7 @@ SeMenu_DisplayPartValue_Data_Code_Join2:
 	pop	xwa
 	pop	xiz
 	ret
-SeMenu_ApplyPartEdit_AltStore_Helper:
+SeGfx_DrawLine:
 	push xiz
 	ld	xiz, xsp
 	push	xwa
@@ -8023,7 +8023,7 @@ SeMenu_ApplyPartEdit_AltStore_Helper:
 	pop	xwa
 	pop	xiz
 	ret
-SeMenu_ApplyPartEdit_Helper16:
+SeMenu_DrawDottedLine:
 	push	xiz
 	ld	xiz, xsp
 	push	xwa
@@ -8319,7 +8319,7 @@ SeMenu_PresetManager_Data_Helper2_Join:
 	pop	xbc
 	pop	xwa
 	ret
-SeMenu_ApplyPartEdit_AltStore_Helper3:
+SeMenu_ClearRect:
 	push	xiz
 	ld	xiz, xsp
 	push	xwa
@@ -8346,7 +8346,7 @@ SeMenu_ApplyPartEdit_AltStore_Helper3:
 	pop	xwa
 	pop	xiz
 	ret
-SeMenu_CompareAndApply_Apply_Helper:
+SeMenu_DrawKeyboardGraphic:
 	ld (COLORBLIT_MODE:24), 0x00
 	ld C, 0x07:opc
 	ld ix, (0x06c6:16)
@@ -8807,21 +8807,21 @@ SeMenu_PresetManager_Save:
 	call	Display_DeferOrUpdateScreen_Direct_0xF
 	ret
 SeMenu_PresetManager_SaveApply:
-	call	SeMenu_PresetManager_SaveApply_Helper3
+	call	SeMenu_DrawToneSelectTitle
 	call	SeMenu_PresetManager_Save
 	ld	xiy, SeScreenData_0x09DA
 	ld	xix, SeScreenData_0x0B7E
 	call	SeGfx_DrawStaticList
 	call	SeMenu_DrawSoloButton
-	call	SeMenu_PresetManager_SaveApply_Helper2
+	call	SeMenu_DrawPartRadioButtons
 	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x1DCB
 	ld	xix, SeScreenData_0x1ECE
 	call	SeGfx_DrawBoundList
-	call	SeMenu_PresetManager_SaveApply_Helper4
+	call	SeMenu_DrawTitleIcon
 	ret
 SeMenu_PresetManager_Data:
-	call	SeMenu_PresetManager_SaveApply_Helper3
+	call	SeMenu_DrawToneSelectTitle
 	cp	(1710:16), 1
 	jr	z, SeMenu_PresetManager_Data_Skip
 	ld	xiy, SeScreenData_0x4256
@@ -8844,7 +8844,7 @@ SeMenu_PresetManager_Data_Join:
 	ld	xix, SeScreenData_0x1F80
 	call	SeGfx_DrawBoundList
 	call	SeMenu_BankEdit_LoopHelper
-	call	SeMenu_PresetManager_SaveApply_Helper4
+	call	SeMenu_DrawTitleIcon
 	ret
 SeMenu_DrawPartLabels:
 	cp (0x06ae:16), 0x01
@@ -8891,7 +8891,7 @@ SeMenu_PresetManager_Data_Entry:
 SeMenu_PresetManager_Data_Join2:
 	djnz8	c, -84
 	ret
-SeMenu_PresetManager_SaveApply_Helper2:
+SeMenu_DrawPartRadioButtons:
 	ld (COLORBLIT_MODE:24), 0x00
 	cp (0x06ae:16), 0x01
 	jr nz, .Lc_f0f816
@@ -8963,19 +8963,19 @@ SeMenu_PresetManager_Data_Entry3:
 SeMenu_PresetManager_Data_Join4:
 	djnz8	c, -84
 	ret
-SeMenu_PresetManager_SaveApply_Helper3:
+SeMenu_DrawToneSelectTitle:
 	ld (COLORBLIT_MODE:24), 0x00
 	ld XIY,SeScreenData_0x09AA
 	ld XIX,SeScreenData_0x09D5
 	call SeGfx_DrawStaticList
 	ret
-SeMenu_PresetManager_SaveApply_Helper4:
+SeMenu_DrawTitleIcon:
 	ld (COLORBLIT_MODE:24), 0x00
 	ld XIY,SeScreenData_0x09D5
 	ld XIX,SeScreenData_0x09DA
 	call SeGfx_DrawStaticList
 	ret
-SeMenu_FxEdit_Init_Helper:
+SeMenu_DrawToneLayerFrame:
 	ld (COLORBLIT_MODE:24), 0x00
 	ld XIY,SeScreenData_0x08D7
 	ld XIX,SeScreenData_0x09AA
@@ -9218,7 +9218,7 @@ SeMenu_CompareAndApply_Data6:
 SeMenu_CompareAndApply_Apply_Sub:
 	ldw	(1734:16), 56
 	ldw	(1736:16), 139
-	call	SeMenu_CompareAndApply_Apply_Helper
+	call	SeMenu_DrawKeyboardGraphic
 	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x2480
 	ld	xix, SeScreenData_0x24B8
@@ -9258,11 +9258,11 @@ SeMenu_Utility_CopyBlock_Skip2:
 	ld	xiy, SeScreenData_0x5811
 	ld	xix, SeScreenData_0x5853
 	call	SeGfx_DrawBoundList
-	call	SeMenu_Utility_CopyBlock_Helper
+	call	SeMenu_DrawEnvKeyOffFields
 SeMenu_Utility_CopyBlock_Join2:
 	call	SeMenu_CompareAndApply_Data4
 	ret
-SeMenu_Utility_CopyBlock_Helper:
+SeMenu_DrawEnvKeyOffFields:
 	ld	(COLORBLIT_MODE:24), 0
 	ld	a, (1632:16)
 	and	a, 32
@@ -9297,7 +9297,7 @@ SeMenu_Utility_FillBlock:
 	call	SeMenu_PresetManager_Save
 	ldw	(1734:16), 56
 	ldw	(1736:16), 139
-	call	SeMenu_CompareAndApply_Apply_Helper
+	call	SeMenu_DrawKeyboardGraphic
 	call	SeMenu_DrawSoloButton
 	call	SeMenu_DrawPartSelector
 	ld	(COLORBLIT_MODE:24), 0
@@ -9626,7 +9626,7 @@ SeMenu_PatchEdit_SetupPath:
 	ld	a, 0:opc
 	jr	SeMenu_PatchEdit_DefaultPath
 SeMenu_PatchEdit_CallHelper:
-	call SeMenu_PresetManager_SaveApply_Helper2
+	call SeMenu_DrawPartRadioButtons
 	jr t, SeMenu_PatchEdit_Return
 SeMenu_PatchEdit_DefaultPath:
 	ld	xiy, SeScreenData_0x1EF7
@@ -9845,7 +9845,7 @@ Data_UnknownBlock_Skip9:
 	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x5853
 	call	SeGfx_DrawIndexedBoundRecord
-	call	SeMenu_Utility_CopyBlock_Helper
+	call	SeMenu_DrawEnvKeyOffFields
 	jr	Data_UnknownBlock_Return2
 Data_UnknownBlock_Skip10:
 	ld	xiy, SeScreenData_0x5853
@@ -10123,7 +10123,7 @@ SeMenu_DataBlock_12_Helper:
 	call	SeGfx_StaticOp05_FromBuf
 	.byte 0x0e
 SeMenu_PresetInit_Main:
-	call	SeMenu_PresetManager_SaveApply_Helper3
+	call	SeMenu_DrawToneSelectTitle
 	call	SeMenu_PresetManager_Save
 	ld	xiy, SeScreenData_0x336C
 	ld	xix, SeScreenData_0x34E9
@@ -10136,7 +10136,7 @@ SeMenu_PresetInit_Main:
 	call	SeGfx_DrawBoundList
 	call	SeMenu_PresetInit_Loop1
 	call	SeMenu_PresetInit_Loop2
-	call	SeMenu_PresetManager_SaveApply_Helper4
+	call	SeMenu_DrawTitleIcon
 	ret
 SeMenu_PresetInit_Loop1:
 	; --- Loop 1: iterate A from 2 to 5, call table lookup (15 bytes) ---
@@ -10191,7 +10191,7 @@ SeMenu_PresetInit_Lookup2Return:
 
 
 SeMenu_FxEdit_Init:
-	call	SeMenu_FxEdit_Init_Helper
+	call	SeMenu_DrawToneLayerFrame
 	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeScreenData_0x34F3
 	ld	xix, SeMenu_FxEdit_Init_Data_2
@@ -10202,7 +10202,7 @@ SeMenu_FxEdit_Init:
 	call	SeGfx_DrawStaticList
 	ldw	(1734:16), 47
 	ldw	(1736:16), 51
-	call	SeMenu_CompareAndApply_Apply_Helper
+	call	SeMenu_DrawKeyboardGraphic
 	call	SeMenu_DrawSoloButton
 	call	SeMenu_DrawPartSelector
 	ld	(COLORBLIT_MODE:24), 0
@@ -10211,7 +10211,7 @@ SeMenu_FxEdit_Init:
 	call	SeGfx_DrawBoundList
 	ret
 SeMenu_FxEdit_DataBlock1:
-	call	SeMenu_FxEdit_Init_Helper
+	call	SeMenu_DrawToneLayerFrame
 	ld	(COLORBLIT_MODE:24), 0
 	ld	xiy, SeMenu_FxEdit_Init_Data_2
 	ld	xix, SeScreenData_0x3633
@@ -10271,7 +10271,7 @@ SeMenu_FilterEdit_Init_Sub:
 	call	SeMenu_PresetManager_Save
 	ldw	(1734:16), 56
 	ldw	(1736:16), 139
-	call	SeMenu_CompareAndApply_Apply_Helper
+	call	SeMenu_DrawKeyboardGraphic
 	call	SeMenu_DrawSoloButton
 	call	SeMenu_DrawPartSelector
 	ld	(COLORBLIT_MODE:24), 0

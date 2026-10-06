@@ -62,7 +62,7 @@ extern const char ResIconProc;
 extern const char ResMethodProc;
 extern const char ResNameProc;
 extern const char ResStringProc;
-extern const char SeGfx_BoundOp06_Helper;
+extern const char SeGfx_BoundOp06_PrintWord;
 extern const char SeGfx_StaticOp00_Line;
 extern const char SeGfx_StaticOp01_Line;
 extern const char SeGfx_StaticOp02_Line;
@@ -2890,7 +2890,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .GraphicsRender_Start_PtrTable = {
         NAKA_ADDR(DrawFunc_Init), NAKA_ADDR(GraphicsRender_RetStub), NAKA_ADDR(DrawText_ExtendedLayout), NAKA_ADDR(ColorBlit_WithPaletteSave),
-        NAKA_ADDR(ColorBlit_Variant_ByteData), NAKA_ADDR(DrawFunc_Init_Variant1), NAKA_ADDR(SeGfx_BoundOp06_Helper), NAKA_ADDR(DrawText_ExtLayout_Variant1),
+        NAKA_ADDR(ColorBlit_Variant_ByteData), NAKA_ADDR(DrawFunc_Init_Variant1), NAKA_ADDR(SeGfx_BoundOp06_PrintWord), NAKA_ADDR(DrawText_ExtLayout_Variant1),
         0x00FB25A3, 0x00FB22A3, 0x00FB2438, 0x00FB2346,
     },
 

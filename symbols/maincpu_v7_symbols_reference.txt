@@ -6,8 +6,8 @@
 # Do not hand-edit: rename in the sources and regenerate.
 #
 #   symbols .................. 53,365
-#   semantic names ........... 52,533 (98.4%)
-#   positional names ......... 832
+#   semantic names ........... 52,534 (98.4%)
+#   positional names ......... 831
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -16841,7 +16841,7 @@ PerfMode_EventTable_7 00EF697B
 PerfMode_VolumeParam_Process 00EF69FB
 PerfMode_VolumeParam_Process_Skip 00EF6A62
 PerfMode_VolumeParam_Process_Return 00EF6A6A
-PerfMode_VolumeParam_Process_Helper 00EF6A6B
+PerfMode_ShowVolumeLine 00EF6A6B
 Str_VolumeEq2 00EF6AA4
 PerfMode_ParamHandler_9 00EF6AAD
 PerfMode_ParamHandler_9_Return 00EF6AC7
@@ -18070,7 +18070,7 @@ SubCPU_ToneParamDisplay_Epilogue 00EFD9DD
 SubCPU_ToneParamDisplay_Helper 00EFD9E0
 SubCPU_ToneParamDisplay_Skip 00EFD9F9
 SubCPU_ToneParamDisplay_Skip2 00EFDA0D
-SubCPU_ToneParamDisplay_Helper2 00EFDA31
+PartParam_LoadSelectedValue 00EFDA31
 SubCPU_ToneParamDisplay_Epilogue2 00EFDA73
 DisplayStr_ShowPartParamLine 00EFDA75
 SubCPU_ToneParamDisplay_Skip3 00EFDAC6
@@ -19431,7 +19431,7 @@ SeMenu_ValidatePartNumber_Store 00F06A62
 SeMenu_ValidatePartNumber_End 00F06A6B
 SeMenu_StorePartMask 00F06A71
 SeMenu_PartMask_Data 00F06A76
-SeMenu_PartMask_Data_Code_Sub 00F06A7B
+SeMenu_SetPartEnabled 00F06A7B
 SeMenu_StorePartMask_Skip 00F06A8F
 SeMenu_StorePartMask_Skip2 00F06A91
 SeMenu_PartMask_Data_Code_Skip 00F06AB7
@@ -19508,7 +19508,7 @@ SeMenu_TransferPartValues_EndData_Skip27 00F06E28
 UpdSeSel_DetailedUpdate_Helper 00F06E31
 SeMenu_TransferPartValues_EndData_Skip28 00F06E3D
 SeMenu_TransferPartValues_EndData_Skip29 00F06E3F
-SeMenu_TransferPartValues_EndData_0x9E 00F06E42
+SeCtr2_SetSelection 00F06E42
 SeMenu_TransferPartValues_EndData_0xA3 00F06E47
 SeMenu_TransferPartValues_EndData_Skip13 00F06E57
 SeMenu_TransferPartValues_EndData_Skip14 00F06E5B
@@ -19592,7 +19592,7 @@ SeMenu_SetupPartDisplay_End_Skip5 00F07405
 SeMenu_SetupPartDisplay_End_Skip6 00F07411
 SeMenu_SetupPartDisplay_End_Epilogue 00F0741C
 SeMenu_GetWriteMemSlot 00F07423
-SeMenu_CopyWriteUpdate_Step3_Code_3_Helper4 00F07428
+SeMenu_SetWriteMemSlot 00F07428
 SeMenu_CopyWriteUpdate_Step3_Code_3_Helper5 00F0742D
 SeMenu_CopyWriteUpdate_Step3_Code_3_Helper6 00F0743F
 SeMenu_SetupPartDisplay_End_Helper 00F07453
@@ -20596,8 +20596,8 @@ SeMenu_DisplayPartValue_Data_Code_Join 00F0ED8D
 SeMenu_DisplayPartValue_Data_Code_Skip3 00F0EDA2
 SeMenu_DisplayPartValue_Data_Code_Skip4 00F0EDB4
 SeMenu_DisplayPartValue_Data_Code_Join2 00F0EDC0
-SeMenu_ApplyPartEdit_AltStore_Helper 00F0EDD2
-SeMenu_ApplyPartEdit_Helper16 00F0EE09
+SeGfx_DrawLine 00F0EDD2
+SeMenu_DrawDottedLine 00F0EE09
 SeMenu_ShowPopupDialog 00F0EE40
 SeMenu_ShowPopupDialog_Draw 00F0EE71
 SeMenu_ShowConfirmDialog 00F0EF31
@@ -20609,8 +20609,8 @@ SeMenu_DrawPartSelector 00F0F06A
 SeMenu_ShowConfirmDialog_Data_Code_Skip 00F0F090
 SeMenu_PresetManager_Data_Helper2_Skip 00F0F0D7
 SeMenu_PresetManager_Data_Helper2_Join 00F0F0F7
-SeMenu_ApplyPartEdit_AltStore_Helper3 00F0F11F
-SeMenu_CompareAndApply_Apply_Helper 00F0F156
+SeMenu_ClearRect 00F0F11F
+SeMenu_DrawKeyboardGraphic 00F0F156
 SeMenu_ShowConfirmDialog_Data_Code_Loop 00F0F166
 SeMenu_ShowConfirmDialog_Helper 00F0F291
 SeMenu_ShowConfirmDialog_Data_Code_Loop2 00F0F2E0
@@ -20661,7 +20661,7 @@ SeMenu_PresetManager_Data_Join 00F0F756
 SeMenu_DrawPartLabels 00F0F77B
 SeMenu_PresetManager_Data_Entry 00F0F7E1
 SeMenu_PresetManager_Data_Join2 00F0F801
-SeMenu_PresetManager_SaveApply_Helper2 00F0F805
+SeMenu_DrawPartRadioButtons 00F0F805
 SeMenu_PresetManager_SaveApply_Helper2_Skip 00F0F816
 SeMenu_PresetManager_SaveApply_Helper2_Join 00F0F818
 SeMenu_PresetManager_SaveApply_Helper2_Skip2 00F0F849
@@ -20669,9 +20669,9 @@ SeMenu_PresetManager_SaveApply_Helper2_Join2 00F0F869
 SeMenu_WaveformSelect_Apply_Helper4 00F0F86D
 SeMenu_PresetManager_Data_Entry3 00F0F8A6
 SeMenu_PresetManager_Data_Join4 00F0F8C6
-SeMenu_PresetManager_SaveApply_Helper3 00F0F8CA
-SeMenu_PresetManager_SaveApply_Helper4 00F0F8DF
-SeMenu_FxEdit_Init_Helper 00F0F8F4
+SeMenu_DrawToneSelectTitle 00F0F8CA
+SeMenu_DrawTitleIcon 00F0F8DF
+SeMenu_DrawToneLayerFrame 00F0F8F4
 SeMenu_PresetBrowser_Init 00F0F90F
 SeMenu_PresetBrowser_Navigate 00F0F942
 SeMenu_PresetBrowser_Select 00F0F957
@@ -20700,7 +20700,7 @@ SeMenu_Utility_CopyBlock_Skip 00F0FC5F
 SeMenu_Utility_CopyBlock_Join 00F0FC7B
 SeMenu_Utility_CopyBlock_Skip2 00F0FCA0
 SeMenu_Utility_CopyBlock_Join2 00F0FCB2
-SeMenu_Utility_CopyBlock_Helper 00F0FCB7
+SeMenu_DrawEnvKeyOffFields 00F0FCB7
 SeMenu_Utility_CopyBlock_Skip3 00F0FCEA
 SeMenu_Utility_CopyBlock_Return 00F0FD0C
 SeMenu_Utility_FillBlock 00F0FD0D
@@ -30372,7 +30372,7 @@ Fat_CountContiguousClusters_Next 00F4FAB1
 Fat_CountContiguousClusters_ReadFat 00F4FABE
 Fat_CountContiguousClusters_Done 00F4FACE
 Fat_CountContiguousClusters_Return 00F4FAD1
-SeqByteBlock_StyleBitmapRef_Code_Helper_Helper 00F4FAD5
+Fat_AllocateClusters 00F4FAD5
 SeqByteBlock_StyleBitmapRef_Code_Helper_Loop2 00F4FB0F
 SeqByteBlock_StyleBitmapRef_Code_Helper_Skip3 00F4FB1F
 SeqByteBlock_StyleBitmapRef_Code_Helper_Loop3 00F4FB26
@@ -30476,7 +30476,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper_Epilogue5 00F50359
 SeqByteBlock_StyleBitmapRef_Code_Helper2 00F5035E
 SeqByteBlock_StyleBitmapRef_Code_Helper2_Skip 00F50390
 SeqByteBlock_StyleBitmapRef_Code_Helper2_Epilogue 00F503B9
-SeqByteBlock_StyleBitmapRef_Code_Helper3_Helper3 00F503BD
+Fat_FreeFileClusters 00F503BD
 SeqByteBlock_StyleBitmapRef_Code_Helper2_Loop 00F503CD
 SeqByteBlock_StyleBitmapRef_Code_Helper2_Join 00F503E9
 SeqByteBlock_StyleBitmapRef_Code_Helper2_Skip2 00F503FC
@@ -30523,7 +30523,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper4_Skip6 00F50AC7
 SeqByteBlock_StyleBitmapRef_Code_Skip5 00F50ADE
 SeqByteBlock_StyleBitmapRef_Code_Helper4_Join 00F50AE7
 SeqByteBlock_StyleBitmapRef_Code_Epilogue2 00F50B34
-SeqByteBlock_StyleBitmapRef_Code_Helper5 00F50B38
+Fat_GetSectorAtFilePos 00F50B38
 SeqByteBlock_StyleBitmapRef_Code_Skip6 00F50B7A
 SeqByteBlock_StyleBitmapRef_Code_Epilogue3 00F50B80
 SeqByteBlock_StyleBitmapRef_Code_Helper6_Helper 00F50B84
@@ -30538,7 +30538,7 @@ SeqByteBlock_StyleBitmapRef_Code_Join3 00F50CBE
 SeqByteBlock_StyleBitmapRef_Code_Helper5_Skip3 00F50CDA
 SeqByteBlock_StyleBitmapRef_Code_Helper5_Join 00F50CE5
 SeqByteBlock_StyleBitmapRef_Code_Epilogue4 00F50D0B
-SeqByteBlock_StyleBitmapRef_Code_Helper6 00F50D10
+Fat_ReadFile 00F50D10
 SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip 00F50D39
 SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip2 00F50D57
 SeqByteBlock_StyleBitmapRef_Code_Helper6_Join 00F50D63
@@ -30563,7 +30563,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip13 00F50F31
 SeqByteBlock_StyleBitmapRef_Code_Epilogue5 00F50F34
 SeqChan_SetupAndCallHelper 00F50F38
 SeqChan_InitChannelState 00F50F4E
-SeqByteBlock_StyleBitmapRef_Code_Helper7 00F50F64
+Fat_WriteFile 00F50F64
 SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip 00F50F84
 SeqByteBlock_StyleBitmapRef_Code_Helper7_Loop 00F50F8C
 SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip2 00F50FD7
@@ -30637,7 +30637,7 @@ SeqChan_ByteBlockC_Skip2 00F51662
 SeqChan_ByteBlockC_Skip3 00F51677
 SeqChan_ByteBlockC_Epilogue 00F51696
 SeqChan_ByteBlockD 00F51698
-SeqChan_ByteBlockD_Helper 00F516BB
+Fat_HandleDiskIoError 00F516BB
 SeqChan_ByteBlockD_Helper_Skip 00F516D4
 SeqChan_ByteBlockD_Skip 00F51706
 SeqChan_ByteBlockD_Entry 00F51727
@@ -32793,7 +32793,7 @@ AccTone_ExtendAndDispatch_Skip 00F5D519
 AccTone_ExtendAndDispatch_Skip2 00F5D534
 AccTone_ExtendAndDispatch_Helper 00F5D541
 AccTone_ExtendAndDispatch_Helper2 00F5D5C6
-AccVoice_BarCounterBytecodeData_Helper 00F5D5F6
+AccVoice_GetMeasureStartBlock 00F5D5F6
 AccVoice_BarCounterBytecodeData_Helper2 00F5D61E
 AccVoice_BarCounterBytecodeData_Helper3 00F5D996
 AccVoice_BarCounterBytecodeData_Helper4 00F5D9AD
@@ -32879,7 +32879,7 @@ AccBuf_ResetAll4_Wrap 00F5E3B0
 AccSeq_DualPartScan_Wrap 00F5E3B7
 AccSeq_FourChannelScan_Wrap 00F5E3BE
 AccPedal_DirectionA_Wrap 00F5E3C5
-AccTuning_ComplexBytecodeData_Helper3 00F5E3D2
+AccPart_GetParamAddr_Wrap 00F5E3D2
 AccTone_CallWithSaveAll 00F5E41D
 AccVoice_IncrementBarWithSave 00F5E430
 AccTuning_DispatchDataBlock_A 00F5E443
@@ -33076,7 +33076,7 @@ AccPatch_CallParamLookup_Helper 00F5F6D1
 AccPatch_CallParamLookup_Skip 00F5F70C
 AccPatch_CallParamLookup_Return2 00F5F730
 AccDemo_InitDone_Helper 00F5F731
-AccDemo_InitWithFlag_Helper 00F5F735
+AccPatch_EnsureStyleImageHeader 00F5F735
 AccPatch_CallParamLookup_Skip2 00F5F75F
 AccPatch_CallParamLookup_Return3 00F5F763
 AccPatch_CallParamLookup_Helper2 00F5F764
@@ -33872,7 +33872,7 @@ ToneBank_CopyChunk_Return 00F63091
 ToneBank_ComputeEntryAddress_Join 00F63094
 ToneBank_ComputeAddr_CheckRange 00F630AB
 ToneBank_ComputeAddr_Return 00F630B0
-AccFill_ProcessDone_Helper 00F630B1
+RhythmBuf_FindFreeBlock 00F630B1
 ToneBank_CopyChunkWithSwap 00F630B4
 ToneBank_SwapCopy_Return 00F630C7
 ToneBank_SwapCopy_Pad 00F630CC
@@ -34233,7 +34233,7 @@ DrumVoice_Handler7_Code_Return6 00F6536C
 DrumVoice_Handler6_Helper 00F65377
 DrumVoice_Handler7_Code_Skip2 00F653A3
 DrumVoice_Handler7_Code_Join3 00F653AC
-RhythmVariation_Select_Helper 00F653CF
+Rhythm_LoadCurrentTimeSig 00F653CF
 DrumVoice_Handler7_Code_Join4 00F6540E
 DrumVoice_Handler7_Helper2 00F65418
 DrumVoice_Handler7_Code_Skip3 00F65453
@@ -37690,9 +37690,9 @@ AcWelcomScreen_Select_Case7 00F7F36A
 AcWelcomScreen_Select_Case8 00F7F386
 AcWelcomScreen_RenderBytecode_Join 00F7F3C0
 AcWelcomScreen_Select_Case9 00F7F3C7
-Softver_ShowHide_Code_Skip 00F7F419
-Softver_ShowHide_Code_Skip2 00F7F420
-Softver_ShowHide_Code_Skip3 00F7F550
+AcWelcomScreen_RenderBytecode_Skip 00F7F419
+AcWelcomScreen_RenderBytecode_Skip2 00F7F420
+AcWelcomScreen_RenderBytecode_Skip3 00F7F550
 AcWelcomScreen_Select_Case10 00F7F5A1
 AcWelcomScreen_Select_NextStep 00F7F5C5
 AcWelcomScreen_Select_StartTimer 00F7F5F7
@@ -44120,7 +44120,7 @@ DrawDesignBox_ByteData 00FACE13
 ClampColorToRange_Skip 00FACE3B
 ClampColorToRange_Epilogue 00FACE68
 DrawDesignBox_ByteData_Code 00FACE6C
-ClampColorToRange_Helper 00FACE84
+DrawDottedLine_Impl 00FACE84
 ClampColorToRange_Skip2 00FACEA8
 ClampColorToRange_Skip3 00FACED0
 ClampColorToRange_Skip4 00FACEEA
@@ -47809,7 +47809,7 @@ MidiStream_CallFilterAndAudio 00FCBDDF
 MidiStream_ApplyDone 00FCBDE7
 MidiStream_DispatchData 00FCBDE8
 MidiCC_Handler_BitManipulation_Code_Helper 00FCBDEC
-PerfMode_Evt04_VolumeHandler_Helper2 00FCBDFE
+MidiCC_SetPendingPartVolume 00FCBDFE
 MidiStream_ApplyPendingParams_Skip 00FCBE18
 MidiStream_ApplyPendingParams_Return 00FCBE25
 MidiCC_RxCC11_Expression_Helper 00FCBE2A

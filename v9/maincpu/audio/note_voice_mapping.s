@@ -25604,7 +25604,7 @@ SeqData_FormatOutput_Default_Helper:
 	jr	z, Param_SignExtendReturn_Join6
 	add	xhl, xbc
 	cp	e, 128
-	jr	z, Param_SignExtendReturn_Skip20
+	jr	z, Param_SignExtendReturn_Skip21
 	cp	e, 64
 	jr	z, Param_SignExtendReturn_Join6
 	cp	e, 0:i3
@@ -25616,7 +25616,7 @@ SeqData_FormatOutput_Default_Helper:
 	ld	bc, (xsp+0x6)
 	ld	xde, xiz
 	jr	Param_SignExtendReturn_Join5
-Param_SignExtendReturn_Skip20:
+Param_SignExtendReturn_Skip21:
 	cp	xhl, 0x2927
 	jr	ugt, Param_SignExtendReturn_Skip22
 	ld	(0xe193:16), xiz

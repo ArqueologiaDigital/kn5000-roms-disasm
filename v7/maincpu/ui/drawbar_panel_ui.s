@@ -11638,7 +11638,7 @@ AcWelcomScreen_RenderBytecode_Join:
 AcWelcomScreen_Select_Case9:	; cases 9, 12
 	lda	xhl, (0x03ea24:24)
 	cpw	(xhl+10), 65535
-	jr	z, Softver_ShowHide_Code_Skip2
+	jr	z, AcWelcomScreen_RenderBytecode_Skip2
 	lda	xwa, (xsp+4)
 	lda	xde, (xwa+2)
 	ld	bc, (xhl+6)
@@ -11661,12 +11661,12 @@ AcWelcomScreen_Select_Case9:	; cases 9, 12
 	ld	xbc, (0x24786:24)
 	add	xde, xbc
 	cpw	(xde+8), 12
-	jr	nz, Softver_ShowHide_Code_Skip
+	jr	nz, AcWelcomScreen_RenderBytecode_Skip
 	addw	(xhl), 0x10
-Softver_ShowHide_Code_Skip:
+AcWelcomScreen_RenderBytecode_Skip:
 	ldw	bc, 245
 	call	DrawBox
-Softver_ShowHide_Code_Skip2:
+AcWelcomScreen_RenderBytecode_Skip2:
 	ld	wa, (0x024784:24)
 	exts	xwa
 	ld	xbc, xwa
@@ -11746,7 +11746,7 @@ Softver_ShowHide_Code_Skip2:
 	ld	xwa, (0x024786:24)
 	add	xbc, xwa
 	cpw	(xbc+8), 12
-	jr	nz, Softver_ShowHide_Code_Skip3
+	jr	nz, AcWelcomScreen_RenderBytecode_Skip3
 	lda	xwa, (xsp+12)
 	addw	(xwa), 0x10
 	pushw	17
@@ -11763,7 +11763,7 @@ Softver_ShowHide_Code_Skip2:
 	ld	xbc, Bitmap_DigitD
 	ldw	de, 16
 	call	DrawBitmapSP2
-Softver_ShowHide_Code_Skip3:
+AcWelcomScreen_RenderBytecode_Skip3:
 	lda	xwa, (xsp+12)
 	addw	(xwa), 0x10
 	pushw	17

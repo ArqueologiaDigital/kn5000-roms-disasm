@@ -847,7 +847,7 @@ SeScreenData_0x5853:
 	.long	SeScreenData_0x587D
 	.long	SeScreenData_0x5848
 ; bound record list (2 records {u8 op, u8 len, payload}), read by GraphicsRender_Start; ends 0xF16463
-; evidence: SeMenu_Utility_CopyBlock_Helper+0x19 (0xF0FCD0)
+; evidence: SeMenu_DrawEnvKeyOffFields+0x19 (0xF0FCD0)
 ; single bound record (op 0x00, 10 B), read by GraphicsRender_Start
 ; evidence: recptrs table 0xF1642F
 SeScreenData_0x5873:

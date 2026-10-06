@@ -9855,7 +9855,7 @@ VoiceMode3_EvType3:
 	ld	(0x9644:16), wa
 	ldw	wa, 0x7f00
 	ld	(0x9646:16), wa
-	call	VoiceMode3_EvType3_Helper
+	call	MidiCC_ResetAllControllers
 	ld	a, (0x91b6:16)
 	ld	(0x90f8:16), a
 MidiVoice_DataBlockHandler_Skip2:
@@ -10989,7 +10989,12 @@ MidiCC_Helper_ConditionalESetup_Store_Helper:
 	ret
 	calr	MidiStream_ExtendedDispatch
 	ret
-PerfMode_Evt04_VolumeHandler_Helper2:
+; MidiCC_SetPendingPartVolume: Queues a part volume: for target BC with part C <= 31 it stores E | 0x80 in the
+;   pending-volume byte 0x94B2[C]; target BC = 0x00B0 instead marks 0x90F8, stores E in MIDI_CC_EXPRESSION_PENDING and
+;   calls Audio_WriteBankSelectParams at once. Basis: callers + body -- MidiCC_RxCC7_Volume passes its CC7 target
+;   (function 3, the part) and PerfMode_Evt04_VolumeHandler passes C = PART_SELECT, B = 3; the scanners send each
+;   flagged byte as function 3.
+MidiCC_SetPendingPartVolume:
 	cp	bc, 176
 	jr	z, MidiStream_ApplyPendingParams_Skip
 	cp	c, 31
@@ -11081,7 +11086,12 @@ MidiCC_QueuePartParam:
 	ret
 	calr	MidiStream_ExtendedDispatch
 	ret
-VoiceMode3_EvType3_Helper:
+; MidiCC_ResetAllControllers: MIDI Reset All Controllers for part (0x9645): posts the control event (0x9644)/(0x9646),
+;   then pitch bend 0x4000 (event 0xB1), channel pressure 0 (0xB4), modulation 0 (0xB2), expression 127 (0xB3), voice
+;   param 4 = 0x800, re-posts the original event and sets the part's RPN word (0x9674 + 2*part) to the null 0x7F7F.
+;   Basis: callers + body -- MidiCC_Handler_ParamDispatch reaches it through MidiCC_PartTargets_CC121_ResetAll
+;   (CC121); the event codes are those of the pitch-bend, channel-pressure, CC1 and CC11 part-target tables.
+MidiCC_ResetAllControllers:
 	ld	bc, (0x9644:16)
 	ld	de, (0x9646:16)
 	ld	(0x90f8:16), 255

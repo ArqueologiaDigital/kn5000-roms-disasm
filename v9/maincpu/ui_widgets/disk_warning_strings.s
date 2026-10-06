@@ -1278,7 +1278,7 @@ GraphicsRender_Start_PtrTable:
 	.long	ColorBlit_WithPaletteSave
 	.long	ColorBlit_Variant_ByteData
 	.long	DrawFunc_Init_Variant1
-	.long	SeGfx_BoundOp06_Helper
+	.long	SeGfx_BoundOp06_PrintWord
 	.long	DrawText_ExtLayout_Variant1
 	.long	SeGfx_BoundOp08_ColorBlit
 	.long	SeGfx_BoundOp09_FormatNumber
@@ -1378,7 +1378,7 @@ DrawFunc_Init_Entry_Str_Fmt3d:	.incbin "includes/generated/naka_disk_warning.bin
 ; [nakarest] (display/graphics_text_vga.s: `ld xwa, DrawFunc_Init_Entry_Str_Fmt4d`).
 DrawFunc_Init_Entry_Str_Fmt4d:	.incbin "includes/generated/naka_disk_warning.bin", 0x24A8, 0x4	; "%4d"
 ; SeGfx_BoundOp06_ClipRect -- 4 x int16_t: clip rectangle {x1 0, y1 0, x2 319, y2 239}, the whole 320 x 240 screen
-; SeGfx_BoundOp06_Helper (display/graphics_text_vga.s) copies it to its frame (`ldirw`, 4 words) and passes the copy to
+; SeGfx_BoundOp06_PrintWord (display/graphics_text_vga.s) copies it to its frame (`ldirw`, 4 words) and passes the copy to
 ; DrawText_QueueOrDirect as the clip rectangle.  The old C read its last 4 bytes (3F 01 EF 00) as a pointer.
 SeGfx_BoundOp06_ClipRect:	.incbin "includes/generated/naka_disk_warning.bin", 0x24AC, 0x8
 ; [nakarest] naka_disk_warning+0x24b4  +0x24b4..+0x24b8 (0xeab160, 4 B)

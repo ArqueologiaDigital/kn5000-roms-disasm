@@ -800,7 +800,7 @@ SeScreenData_0x5853:
 	.long	SeScreenData_0x587D
 	.long	SeScreenData_0x5848
 ; bound record list (2 records {u8 op, u8 len, payload}), read by GraphicsRender_Start; ends 0xF1648D
-; evidence: SeMenu_Utility_CopyBlock_Helper+0x19 (0xF0FCFA)
+; evidence: SeMenu_DrawEnvKeyOffFields+0x19 (0xF0FCFA)
 ; single bound record (op 0x00, 10 B), read by GraphicsRender_Start
 ; evidence: recptrs table 0xF16459
 SeScreenData_0x5873:
@@ -810,7 +810,7 @@ SeScreenData_0x5873:
 SeScreenData_0x587D:
 	.byte	0x00, 0x0a, 0x66, 0x06, 0x7f, 0x00, 0x20, 0x7a, 0x22, 0x03
 ; static record list (2 records {u8 op, u8 len, payload}), read by GraphicsRender_ProcessEntries; ends 0xF1649B
-; evidence: SeMenu_Utility_CopyBlock_Helper+0x3D (0xF0FD1E)
+; evidence: SeMenu_DrawEnvKeyOffFields+0x3D (0xF0FD1E)
 SeScreenData_0x5887:
 	.byte	0x20, 0x07, 0x74, 0x22, 0x20, 0x2d, 0x2d
 	.byte	0x20, 0x07, 0x7a, 0x22, 0x20, 0x2d, 0x2d

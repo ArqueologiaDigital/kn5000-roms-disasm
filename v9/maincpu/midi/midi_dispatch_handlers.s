@@ -562,7 +562,7 @@ MidiCC_RxCC7_Volume:
 	ld	(0x9648:16), a
 	ld	(0x9644:16), bc
 	ld	(0x9646:16), de
-	call	PerfMode_Evt04_VolumeHandler_Helper2
+	call	MidiCC_SetPendingPartVolume
 MidiCC_RxCC7_Volume_Return:
 	ret
 MidiCC_RxCC11_Expression:
@@ -910,7 +910,7 @@ MidiCC_Handler_ParamDispatch:
 	ld	(0x9648:16), a
 	ld	(0x9644:16), bc
 	ld	(0x9646:16), de
-	call	VoiceMode3_EvType3_Helper
+	call	MidiCC_ResetAllControllers
 MidiCC_Handler_ParamDispatch_Return:
 	ret
 MidiCC_Handler_TableDispatch:
@@ -2284,7 +2284,7 @@ MidiCC_PartTargets_CC1_Modulation:
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 ; MidiCC_PartTargets_CC7_Volume (+0x260): function 2 <- CC7, reader
-; MidiCC_RxCC7_Volume (0xFCFF0E) -> PerfMode_Evt04_VolumeHandler_Helper2.
+; MidiCC_RxCC7_Volume (0xFCFF0E) -> MidiCC_SetPendingPartVolume.
 MidiCC_PartTargets_CC7_Volume:
 	.byte 0x00, 0x03, 0x7f, 0x01, 0x03, 0x7f, 0x02, 0x03, 0x7f, 0x03, 0x03, 0x7f
 	.byte 0x04, 0x03, 0x7f, 0x05, 0x03, 0x7f, 0x06, 0x03, 0x7f, 0x07, 0x03, 0x7f
@@ -2432,7 +2432,7 @@ MidiCC_PartTargets_Func15:
 ;
 ; MidiCC_PartTargets_CC121_ResetAll (+0x6E0): function 40 <- CC121 (reset all
 ; controllers), reader MidiCC_Handler_ParamDispatch (0xFD02FF), D = 0x7F,
-; -> VoiceMode3_EvType3_Helper.
+; -> MidiCC_ResetAllControllers.
 MidiCC_PartTargets_CC121_ResetAll:
 	.short 0x00ad, 0x01ad, 0x02ad, 0x03ad, 0x04ad, 0x05ad, 0x06ad, 0x07ad
 	.short 0x08ad, 0x09ad, 0x0aad, 0x0bad, 0x0cad, 0x0dad, 0x0ead, 0x0fad
@@ -10011,7 +10011,7 @@ SeqVoice_DispatchProcess_Data_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+12)
 	ret
-MidiPkt_ArpExtHandler_G_Helper:
+MidiPkt_SetXferLengthFromMsg:
 	push	xiz
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 12
@@ -11581,7 +11581,7 @@ MidiPkt_ArpExtHandler_G:
 	jr	nz, MidiPkt_ArpExtHandler_G_Skip
 	ld	xwa, 0xbcec
 	call	MidiPkt_ArpPopReturn_Helper7
-	call	MidiPkt_ArpExtHandler_G_Helper
+	call	MidiPkt_SetXferLengthFromMsg
 	jrl	SeqChan_StepCmd_Field9to10
 MidiPkt_ArpExtHandler_G_Skip:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
@@ -11627,7 +11627,7 @@ MidiPkt_ArpExtHandler_J:
 	jr	nz, MidiPkt_ArpExtHandler_J_Skip
 	ld	xwa, 0xbcec
 	call	MidiPkt_ArpPopReturn_Helper13
-	call	MidiPkt_ArpExtHandler_G_Helper
+	call	MidiPkt_SetXferLengthFromMsg
 	jrl	SeqChan_StepCmd_Field20to21
 MidiPkt_ArpExtHandler_J_Skip:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
@@ -11672,7 +11672,7 @@ MidiPkt_ArpExtHandler_M_Data:
 	jr	nz, MidiPkt_ArpExtHandler_M_Data_Skip
 	ld	xwa, 0xbcec
 	call	MidiPkt_ArpPopReturn_Helper10
-	call	MidiPkt_ArpExtHandler_G_Helper
+	call	MidiPkt_SetXferLengthFromMsg
 	jrl	SeqChan_StepCmd_Field13Write
 MidiPkt_ArpExtHandler_M_Data_Skip:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)

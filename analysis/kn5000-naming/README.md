@@ -11,3 +11,7 @@ at least one caller site. Refused records keep the reason and a mechanical descr
 
 **Apply** with `scripts/renaming/apply_kn5000_naming_proposals.py TAG proposals-*.json --apply`. It works on v10,
 v9 and v7, which share the names. Then run `make gate-all` and `l2_symbol_reference.py --regen` / `--check`.
+
+`probes/rhythm_probe.py` answers what byte +976 (0x3D0) of each rhythm header in the Rhythm Data ROM holds: the
+time-signature index that `Rhythm_LoadCurrentTimeSig` copies to RAM 0x34F0. Run it from the repository root on a
+built tree. On 2026-10-06 it printed 201 rhythms: 7 for 186 of them, 6 for 13, and 9 and 11 once each.

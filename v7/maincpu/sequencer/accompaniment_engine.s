@@ -11930,7 +11930,7 @@ AccTone_ExtendAndDispatch_Helper2:
 	ret	nz
 	call	AccSeq_FourChannelScan_Wrap
 	ret
-AccVoice_BarCounterBytecodeData_Helper:
+AccVoice_GetMeasureStartBlock:
 	extz DE
 	sla de, 2
 	extz BC
@@ -12098,7 +12098,7 @@ AccVoice_BarCounterBytecodeData:
 	ld	e, (0x334f:16)
 	extz	de
 	ld	bc, 0:i3
-	calr	AccVoice_BarCounterBytecodeData_Helper
+	calr	AccVoice_GetMeasureStartBlock
 	ld	(0x31fb:16), hl
 	cp	hl, 65534
 	jr	nz, AccVoice_BarCounterBytecodeData_Skip
@@ -12116,7 +12116,7 @@ AccVoice_BarCounterBytecodeData_Skip:
 	ld	e, (0x3351:16)
 	extz	de
 	ld	bc, 1:i3
-	calr	AccVoice_BarCounterBytecodeData_Helper
+	calr	AccVoice_GetMeasureStartBlock
 	ld	(0x31ff:16), hl
 	cp	hl, 65534
 	jr	nz, AccVoice_BarCounterBytecodeData_Skip2
@@ -12134,7 +12134,7 @@ AccVoice_BarCounterBytecodeData_Skip2:
 	ld	e, (0x3352:16)
 	extz	de
 	ld	bc, 2:i3
-	calr	AccVoice_BarCounterBytecodeData_Helper
+	calr	AccVoice_GetMeasureStartBlock
 	ld	(0x3201:16), hl
 	cp	hl, 65534
 	jr	nz, AccVoice_BarCounterBytecodeData_Skip3
@@ -12152,7 +12152,7 @@ AccVoice_BarCounterBytecodeData_Skip3:
 	ld	e, (0x3353:16)
 	extz	de
 	ld	bc, 3:i3
-	calr	AccVoice_BarCounterBytecodeData_Helper
+	calr	AccVoice_GetMeasureStartBlock
 	ld	(0x3203:16), hl
 	cp	hl, 65534
 	jr	nz, AccVoice_BarCounterBytecodeData_Skip4
@@ -12170,7 +12170,7 @@ AccVoice_BarCounterBytecodeData_Skip4:
 	ld	e, (0x3354:16)
 	extz	de
 	ld	bc, 4:i3
-	calr	AccVoice_BarCounterBytecodeData_Helper
+	calr	AccVoice_GetMeasureStartBlock
 	ld	(0x3205:16), hl
 	cp	hl, 65534
 	jr	nz, AccVoice_BarCounterBytecodeData_Skip5
@@ -12624,7 +12624,7 @@ AccTuning_ComplexBytecodeData_Code_Skip:
 	call	AccPedal_DirectionA_Wrap
 	ld	xwa, xiz
 	ld	bc, hl
-	call	AccTuning_ComplexBytecodeData_Helper3
+	call	AccPart_GetParamAddr_Wrap
 	ld	(0x333c:16), hl
 AccTuning_ComplexBytecodeData_Epilogue:
 	pop	xiz
@@ -12933,7 +12933,7 @@ AccPedal_DirectionA_Wrap:
 	and	xhl, 65535
 	pop	xiz
 	ret
-AccTuning_ComplexBytecodeData_Helper3:
+AccPart_GetParamAddr_Wrap:
 	push	xiz
 	ld	xiy, xwa
 	ld	xhl, xbc
@@ -13217,7 +13217,7 @@ AccDemo_InitWithFlag:
 
 AccPatch_MultiCallWrapper:
 	push	xiz
-	calr	AccDemo_InitWithFlag_Helper
+	calr	AccPatch_EnsureStyleImageHeader
 	calr	AccPatch_ClearModeFlag
 	pop	xiz
 	ret
@@ -15057,7 +15057,7 @@ AccPatch_CallParamLookup_Helper:
 	ld	a, (xiy+16)
 	bit	0, a
 	jr	nz, AccPatch_CallParamLookup_Skip
-	call	RhythmVariation_Select_Helper
+	call	Rhythm_LoadCurrentTimeSig
 	ld	(13476:16), 7
 AccPatch_CallParamLookup_Skip:
 	ld	a, (SWBTWR_PAYLOAD_1:16)
@@ -15070,13 +15070,13 @@ AccPatch_CallParamLookup_Skip:
 	jr	nz, AccPatch_CallParamLookup_Return2
 	call	TimeSig_DisplayStrings_Code_Sub
 	call	AccPatch_CallParamLookup_Helper7
-	call	RhythmVariation_Select_Helper
+	call	Rhythm_LoadCurrentTimeSig
 AccPatch_CallParamLookup_Return2:
 	ret
 AccDemo_InitDone_Helper:
 	calr	AccPatch_CallParamLookup_Helper2
 	ret
-AccDemo_InitWithFlag_Helper:
+AccPatch_EnsureStyleImageHeader:
 	ld XIY,RHYTHM_PATTERN_BUF_A
 	add XIY,0x00000000
 	add XIY,0x00000000
@@ -21630,7 +21630,7 @@ ToneBank_ComputeAddr_CheckRange:
 ToneBank_ComputeAddr_Return:
 	ret
 
-AccFill_ProcessDone_Helper:
+RhythmBuf_FindFreeBlock:
 	ldw de, 0x96
 
 ToneBank_CopyChunkWithSwap:
@@ -22537,7 +22537,7 @@ AccFill_ProcessDone_Join:
 	inc	1, xiz
 	cp	xiz, 254
 	jr	ule, AccFill_AdvanceAndCheck
-	calr	AccFill_ProcessDone_Helper
+	calr	RhythmBuf_FindFreeBlock
 	bit	0, (0x3514:16)
 	jr	nz, AccFill_AdvCheck_Return
 	push	xiy
@@ -24162,7 +24162,7 @@ RhythmVariation_Select_Code_Helper6:
 	calr	TimeSig_DisplayStrings_Code_Sub2
 	calr	DrumKit_PostMidiEvents
 RhythmVariation_Select_Code_Skip4:
-	calr	RhythmVariation_Select_Helper
+	calr	Rhythm_LoadCurrentTimeSig
 	ret
 RhythmConfig_ReturnStub:
 	ret
@@ -24440,7 +24440,7 @@ DrumVoice_Handler6_Code:
 	jr	nz, DrumVoice_Handler6_Return
 	calr	DrumVoice_Handler6_Helper
 	calr	DrumKit_PostMidiEvents
-	calr	RhythmVariation_Select_Helper
+	calr	Rhythm_LoadCurrentTimeSig
 DrumVoice_Handler6_Return:
 	ret	
 DrumVoice_Handler7:
@@ -24455,7 +24455,7 @@ DrumVoice_Handler7:
 	jr	nz, DrumVoice_Handler7_Return
 	calr	DrumVoice_Handler7_Helper2
 	calr	DrumKit_PostMidiEvents
-	calr	RhythmVariation_Select_Helper
+	calr	Rhythm_LoadCurrentTimeSig
 DrumVoice_Handler7_Return:
 	ret
 	push	xiz
@@ -24782,7 +24782,7 @@ DrumVoice_Handler7_Code_Join3:
 	and	h, 127
 	ld	(0xfc5b:16), h
 	ret
-RhythmVariation_Select_Helper:
+Rhythm_LoadCurrentTimeSig:
 	ld	l, (0xfc5a:16)
 	and	l, 255
 	ld	h, (0xfc5b:16)

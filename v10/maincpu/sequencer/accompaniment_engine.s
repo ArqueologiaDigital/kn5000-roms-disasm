@@ -10448,7 +10448,7 @@ AccProcess_Entry_Skip2:
 	ld	xwa, 0x7530
 	div	xwa, bc
 	pushw	wa
-	calr	AccProcess_Entry_Helper
+	calr	AccProcess_PostAveragedTapTempo
 	popw	wa
 	ld	hl, (0x3494:16)
 	ld	(0x3496:16), hl
@@ -10459,7 +10459,12 @@ AccProcess_Entry_Skip2:
 	ld	(RHYTHM_PATTERN_SEL_B:16), wa
 AccProcess_Entry_Return:
 	ret
-AccProcess_Entry_Helper:
+; AccProcess_PostAveragedTapTempo: Averages the new tap tempo WA with the previous one or two (words 0x3492, 0x3494; 0
+;   = none) and posts the result as the tempo event (E = 0x48, D = 8) through SwbtWr_TrailingBytecode. Basis: callers
+;   + body -- AccProcess_InlinedCode times successive presses (SWBTWR_PAYLOAD_1 = 18, pressed) with SYSTEM_TIMESTAMP,
+;   clamps the interval to 100..750 and passes WA = 30000 / interval; SeqTimer_PostTempoUpdate posts tempo with the
+;   same E/D.
+AccProcess_PostAveragedTapTempo:
 	ld	de, (0x3492:16)
 	ld	bc, (0x3494:16)
 	cp	de, 0:i3
@@ -12283,7 +12288,12 @@ AccTone_InlineBytecodeData_Code_Helper2:
 	ret	nz
 	call	AccSeq_FourChannelScan_Wrap
 	ret
-AccVoice_BarCounterBytecodeData_Helper:
+; AccVoice_GetMeasureStartBlock: HL = block-number word (+0) of the measure-start table entry for slot A, channel
+;   index BC, measure DE: word at 0x95440 (RHYTHM_PATTERN_BUF_A + 0xC40) + 160*A + 32*BC + 4*DE; _Helper2 beside it
+;   returns the offset word (+2). Basis: callers + body -- AccVoice_BarCounterBytecodeData reads it for the five
+;   channels (BC = 0..4) with each channel's current measure and flags 0xFFFE (empty) in 0x33E0; the table is written
+;   by AccPatch_StoreMeasureCursor with the cursor block (0x3612) at +0.
+AccVoice_GetMeasureStartBlock:
 	extz	de
 	sla	de, 2
 	extz	bc
@@ -12737,7 +12747,7 @@ AccVoice_BarCounterBytecodeData:
 	ld	e, (13291:16)
 	extz	de
 	ld	bc, 0:i3
-	calr	AccVoice_BarCounterBytecodeData_Helper
+	calr	AccVoice_GetMeasureStartBlock
 	ld	(12951:16), hl
 	cp	hl, 65534
 	jr	nz, AccVoice_BarCounterBytecodeData_Skip
@@ -12755,7 +12765,7 @@ AccVoice_BarCounterBytecodeData_Skip:
 	ld	e, (13293:16)
 	extz	de
 	ld	bc, 1:i3
-	calr	AccVoice_BarCounterBytecodeData_Helper
+	calr	AccVoice_GetMeasureStartBlock
 	ld	(12955:16), hl
 	cp	hl, 65534
 	jr	nz, AccVoice_BarCounterBytecodeData_Skip2
@@ -12773,7 +12783,7 @@ AccVoice_BarCounterBytecodeData_Skip2:
 	ld	e, (13294:16)
 	extz	de
 	ld	bc, 2:i3
-	calr	AccVoice_BarCounterBytecodeData_Helper
+	calr	AccVoice_GetMeasureStartBlock
 	ld	(12957:16), hl
 	cp	hl, 65534
 	jr	nz, AccVoice_BarCounterBytecodeData_Skip3
@@ -12791,7 +12801,7 @@ AccVoice_BarCounterBytecodeData_Skip3:
 	ld	e, (13295:16)
 	extz	de
 	ld	bc, 3:i3
-	calr	AccVoice_BarCounterBytecodeData_Helper
+	calr	AccVoice_GetMeasureStartBlock
 	ld	(12959:16), hl
 	cp	hl, 65534
 	jr	nz, AccVoice_BarCounterBytecodeData_Skip4
@@ -12809,7 +12819,7 @@ AccVoice_BarCounterBytecodeData_Skip4:
 	ld	e, (13296:16)
 	extz	de
 	ld	bc, 4:i3
-	calr	AccVoice_BarCounterBytecodeData_Helper
+	calr	AccVoice_GetMeasureStartBlock
 	ld	(12961:16), hl
 	cp	hl, 65534
 	jr	nz, AccVoice_BarCounterBytecodeData_Skip5
@@ -13265,7 +13275,7 @@ AccTuning_ComplexBytecodeData_Code_Skip:
 	call	AccPedal_DirectionA_Wrap
 	ld	xwa, xiz
 	ld	bc, hl
-	call	AccTuning_ComplexBytecodeData_Code_Helper3
+	call	AccPart_GetParamAddr_Wrap
 	ld	(13272:16), hl
 AccTuning_ComplexBytecodeData_Code_Epilogue:
 	pop	xiz
@@ -13427,9 +13437,12 @@ AccTuning_ComplexBytecodeData_Code_Skip6:
 	ldw	(12937:16), 6
 	set	1, (0x33e0:16)
 	ret
-	calr	AccTuning_ComplexBytecodeData_Code_Helper
+	calr	AccTuning_NullRet
 	ret
-AccTuning_ComplexBytecodeData_Code_Helper:
+; AccTuning_NullRet: Empty routine (`ret` only). Its one caller is the `calr`/`ret` pair that follows
+;   AccTuning_ComplexBytecodeData's final `ret` with no label in front, so no branch reaches it. Basis: callers + body
+;   -- literal; named like AccChord_NullRet.
+AccTuning_NullRet:
 	ret
 
 AccTone_WriteProgramChange:
@@ -13576,7 +13589,11 @@ AccPedal_DirectionA_Wrap:
 	and	xhl, 0xffff
 	pop	xiz
 	ret
-AccTuning_ComplexBytecodeData_Code_Helper3:
+; AccPart_GetParamAddr_Wrap: Register-convention wrapper of AccPart_GetParamAddr: XIY = XWA (the record), HL = BC
+;   zero-extended (the offset); returns its result in HL (XWA high half cleared), preserving XIZ. Basis: callers +
+;   body -- AccTuning_ComplexBytecodeData passes XWA = the record from AccTone_LookupByProgram_Dispatch and BC = the
+;   offset from AccPedal_DirectionA_Wrap, then stores HL at 13272.
+AccPart_GetParamAddr_Wrap:
 	push	xiz
 	ld	xiy, xwa
 	ld	xhl, xbc
@@ -13863,7 +13880,7 @@ AccDemo_InitWithFlag:
 
 AccPatch_MultiCallWrapper:
 	push	xiz
-	calr	AccPatch_MultiCallWrapper_Helper
+	calr	AccPatch_EnsureStyleImageHeader
 	calr	AccPatch_ClearModeFlag
 	pop	xiz
 	ret
@@ -14085,7 +14102,7 @@ AccPatch_CheckAndInitDemo_Join:
 	calr	AccPatch_CheckAndInitDemo_Helper3
 	pop	c
 	push	c
-	calr	AccPatch_CheckAndInitDemo_Helper4
+	calr	AccPatch_StoreMeasureCursor
 	pop	c
 	pop_a
 	pop	e
@@ -14109,7 +14126,7 @@ AccPatch_SlotScanByteData_Join:
 	cp	c, 8
 	jr	z, AccPatch_SlotScanByteData_Return
 	push	c
-	calr	AccPatch_CheckAndInitDemo_Helper4
+	calr	AccPatch_StoreMeasureCursor
 	pop	c
 	inc	1, c
 	jr	AccPatch_SlotScanByteData_Join
@@ -14157,7 +14174,13 @@ AccPatch_SlotScanByteData_Join2:
 	jr	AccPatch_SlotScanByteData_Join2
 AccPatch_SlotScanByteData_Return3:
 	ret
-AccPatch_CheckAndInitDemo_Helper4:
+; AccPatch_StoreMeasureCursor: Stores the pattern-data cursor (block word 0x3612, offset word 0x3614) as entry C
+;   (0..7) of the measure-start table: RHYTHM_PATTERN_BUF_A + 0xC40 + 160*slot(0x34D6) + 32*channelIndex + 4*C,
+;   channelIndex from the one-hot channel (0x379B) through the byte table AccPatch_SlotScanByteData_Code. Basis:
+;   callers + body -- AccPatch_SlotScanByteData fills entries 0..7 with the channel start; the
+;   AccPatch_CheckAndInitDemo_Helper loop stores the cursor after skipping each measure (one beats-per-measure run of
+;   0x81 beat codes); AccVoice_GetMeasureStartBlock/_Helper2 read +0/+2 back.
+AccPatch_StoreMeasureCursor:
 	push	c
 	ld	xwa, 0:i3
 	ld	a, 160:opc
@@ -15840,7 +15863,7 @@ AccPatch_CallParamLookup_Helper:
 	ld	a, (xiy+16)
 	bit	0, a
 	jr	nz, AccPatch_CallParamLookup_Skip
-	call	RhythmVariation_Select_Helper
+	call	Rhythm_LoadCurrentTimeSig
 	ld	(0x3540:16), 7
 AccPatch_CallParamLookup_Skip:
 	ld	a, (SWBTWR_PAYLOAD_1:16)
@@ -15853,13 +15876,17 @@ AccPatch_CallParamLookup_Skip:
 	jr	nz, AccPatch_CallParamLookup_Return2
 	call	TimeSig_DisplayStrings_Code_Sub
 	call	AccPatch_ComplexDataBlock_Helper2
-	call	RhythmVariation_Select_Helper
+	call	Rhythm_LoadCurrentTimeSig
 AccPatch_CallParamLookup_Return2:
 	ret
 AccDemo_InitDone_Helper:
 	calr	AccPatch_CallParamLookup_Helper2
 	ret
-AccPatch_MultiCallWrapper_Helper:
+; AccPatch_EnsureStyleImageHeader: Checks that the style image at RHYTHM_PATTERN_BUF_A (0x94800) starts with the
+;   header bytes 'H', 0, 'K'; if not, rebuilds the built-in default style image with AccDemo_Init_Wrap. Basis: callers
+;   + body -- AccPatch_MultiCallWrapper runs it (then AccPatch_ClearModeFlag) when MidiSysEx_ProcessBlock_Helper8
+;   finishes a received block; the default image AccDemo_LoadRhythm copies begins 0x48 0x00 0x4B.
+AccPatch_EnsureStyleImageHeader:
 	ld	xiy, RHYTHM_PATTERN_BUF_A
 	add	xiy, 0
 	add	xiy, 0
@@ -20318,7 +20345,7 @@ AccPlayback_Ongoing_D2Type:
 	ld c, a
 	cp de, bc
 	jr ule, AccPlayback_Ongoing_StoreDone
-	calr AccPlayback_Ongoing_D2Type_Helper
+	calr AccPlayback_SaveReadPosition
 	ld hl, (0x346b:16)
 	calr ToneGen_CalcBufferAddr
 	ld	a, (xhl+iy)
@@ -20401,7 +20428,11 @@ AccPlayback_Ongoing_AdvDone:
 	nop
 	nop
 
-AccPlayback_Ongoing_D2Type_Helper:
+; AccPlayback_SaveReadPosition: Saves the pattern read position -- block 0x346B, byte 0x3435, offset 0x3449 and the
+;   position counter BC -- into 0x351A, 0x351C, 0x351E and 0x3520, the slot ToneGen_ProcessRestore_UseSaved later
+;   copies back into 0x346B/0x3449. Basis: callers + body -- AccPlayback_Ongoing_D2Type calls it for each event whose
+;   position BC is still before the target DE while scanning the pattern.
+AccPlayback_SaveReadPosition:
 	ld wa, (0x346b:16)
 	ld (0x351a:16), wa
 	ld a, (0x3435:16)
@@ -22500,7 +22531,11 @@ ToneBank_ComputeAddr_CheckRange:
 ToneBank_ComputeAddr_Return:
 	ret
 
-AccFill_ProcessDone_Helper:
+; RhythmBuf_FindFreeBlock: Returns DE = the first 256-byte block of RHYTHM_PATTERN_BUF_B with index 150..339 whose
+;   header byte bit 7 (in use) is clear; when none is free it sets bit 0 of 0x35B0 (DE = 340). Basis: callers + body
+;   -- RhythmBuf_LoadPattern calls it when the current block fills (offset > 0xFE), then links the new block (+3 /
+;   +1), marks it used (bit 7) and decrements the free-block count 0x34D4.
+RhythmBuf_FindFreeBlock:
 	ldw de, 0x96
 
 ToneBank_CopyChunkWithSwap:
@@ -23453,7 +23488,7 @@ AccFill_ProcessDone_Join:
 	inc 1, xiz
 	cp xiz, 0xfe
 	jr ule, AccFill_AdvanceAndCheck
-	calr AccFill_ProcessDone_Helper
+	calr RhythmBuf_FindFreeBlock
 	bit 0, (0x35b0:16)
 	jr nz, AccFill_AdvCheck_Return
 	push xiy
@@ -24478,7 +24513,10 @@ DrumKitExit_Return:
 
 DrumKitExit_DataPad:
 	ret
-CmEsyTtl_Dispatch_Helper:
+; DrumKit_ValidateBank_Wrap: XIZ-preserving wrapper: `push xiz / call DrumKit_ValidateBank / pop xiz / ret`. Basis:
+;   callers + body -- CmEsyTtl_Dispatch calls it after DrumKit_InlineCode1_Sub; v7 already names the identical routine
+;   DrumKit_ValidateBank_Wrap.
+DrumKit_ValidateBank_Wrap:
 	push	xiz
 	call	DrumKit_ValidateBank
 	pop	xiz
@@ -25123,7 +25161,11 @@ RhythmVariation_InlineCode_Code2:
 	nop
 	.zero 8
 	ret
-AccDraw_SecondarySub_Handler03_Helper:
+; AccDraw_StepNoteValue_Wrap: XIZ-preserving wrapper of RhythmVariation_InlineCode_Sub_Helper_Helper, which in mode
+;   (0x3712) = 4 steps the note value (0x3714) up (W bit 7 clear) or down within 1..13. Basis: callers + body --
+;   AccDraw_SecondarySub_Handler03 calls it and redraws the beat block; 0x3714 is the note value that
+;   Disp_ShowNoteValueFields names and PerfMode_Evt03_FlagHandler_A also clamps to 1..13.
+AccDraw_StepNoteValue_Wrap:
 	push	xiz
 	calr	RhythmVariation_InlineCode_Sub_Helper_Helper
 	pop	xiz
@@ -25149,7 +25191,11 @@ RhythmVariation_Select_Join:
 	jr	RhythmVariation_Select_Return
 RhythmVariation_Select_Return:
 	ret
-AccDraw_SecondarySub_Handler04_Helper:
+; AccDraw_AdjustPlusNoteValue: XIZ-preserving call of RhythmVariation_Select_Helper2: when the step mode byte 0x3712 =
+;   4 it moves the "+" note-value index 0x3715 by -1 (W bit 7 set) or +1 (clear), clamped to 0..13. Basis: callers +
+;   body -- AccDraw_SecondarySub_Handler04 is switch 4 of the CmpStep title's switch table (Handler03 steps the note
+;   value 0x3714 1..13, Handler05 the articulation 0x3716 0..3), and redraws after calling it.
+AccDraw_AdjustPlusNoteValue:
 	push	xiz
 	calr	RhythmVariation_Select_Helper2
 	pop	xiz
@@ -25173,7 +25219,12 @@ RhythmVariation_Select_Join2:
 	jr	RhythmVariation_Select_Return2
 RhythmVariation_Select_Return2:
 	ret
-AccDraw_SecondarySub_Handler05_Helper:
+; AccDraw_StepArticulation_Wrap: XIZ-preserving wrapper of RhythmVariation_Select_Helper3, which in mode (0x3712) = 4
+;   steps the articulation (0x3716: TENU/NORM/STAC/CUTT) up (W bit 7 clear) or down within 0..3; in other modes it
+;   latches the direction in (0x372D) bit 4 (up) / bit 5 (down). Basis: callers + body --
+;   AccDraw_SecondarySub_Handler05 calls it; 0x3716 is the articulation index Disp_ShowNoteValueFields names and
+;   PerfMode_Evt03_ClampAndUpdate clamps to 0..3.
+AccDraw_StepArticulation_Wrap:
 	push	xiz
 	calr	RhythmVariation_Select_Helper3
 	pop	xiz
@@ -25223,7 +25274,7 @@ RhythmVariation_Select_Entry_Data:
 	calr	TimeSig_DisplayStrings_Code_Sub2
 	calr	DrumKit_PostMidiEvents
 RhythmVariation_Select_Entry_Data_Skip:
-	calr	RhythmVariation_Select_Helper
+	calr	Rhythm_LoadCurrentTimeSig
 	ret
 
 RhythmConfig_ReturnStub:
@@ -25493,7 +25544,7 @@ DrumVoice_Handler6:
 	jr	nz, DrumVoice_Handler6_Return
 	calr	DrumVoice_Handler6_Helper
 	calr	DrumKit_PostMidiEvents
-	calr	RhythmVariation_Select_Helper
+	calr	Rhythm_LoadCurrentTimeSig
 DrumVoice_Handler6_Return:
 	ret
 DrumVoice_Handler7:
@@ -25507,7 +25558,7 @@ DrumVoice_Handler7:
 	jr	nz, DrumVoice_Handler7_Return
 	calr	DrumVoice_Handler7_Helper2
 	calr	DrumKit_PostMidiEvents
-	calr	RhythmVariation_Select_Helper
+	calr	Rhythm_LoadCurrentTimeSig
 DrumVoice_Handler7_Return:
 	ret
 	push	xiz
@@ -25600,7 +25651,11 @@ DrumVoice_Handler7_Data_3:
 	calr	DrumKit_SendProgramChange
 DrumVoice_Handler7_Code_Return3:
 	ret
-CmpNcpTtl_Dispatch2_Helper:
+; CmpNcp_StepItemA_Wrap: XIZ-preserving wrapper of DrumVoice_Handler7_Data_3_Helper, which steps the Composer NCP
+;   item-A selector (0x39A7) up (W bit 7 set) or down within 0..2. Basis: callers + body -- CmpNcpTtl_Dispatch2 calls
+;   it with W = 0 and cases 128/129 with W = 128; 0x39A7 is the index CmpNcp_ItemA_HandlerIndex maps to
+;   CmpNcp_ItemHandlerTable.
+CmpNcp_StepItemA_Wrap:
 	push	xiz
 	call	DrumVoice_Handler7_Data_3_Helper
 	pop	xiz
@@ -25636,7 +25691,7 @@ DrumVoice_Handler7_Data_3_Helper2:
 CmpNcp_ItemA_HandlerIndex:
 	; (0x39A7), stepped between 0 and 2 by DrumVoice_Handler7_Data_3_Helper -> the
 	; CmpNcp_ItemHandlerTable index that DrumVoice_Handler7_Data_3_Helper2 dispatches.
-	; Reached through CmpNcpTtl_Dispatch2_Helper / _Helper2.
+	; Reached through CmpNcp_StepItemA_Wrap / _Helper2.
 	.short	0, 1, 2
 DrumVoice_Handler7_Data_3_Sub:
 	push	xiz
@@ -25836,7 +25891,12 @@ DrumVoice_Handler7_Code_Join3:
 	and	h, 127
 	ld	(0xfc5b:16), h
 	ret
-RhythmVariation_Select_Helper:
+; Rhythm_LoadCurrentTimeSig: Locates the current rhythm's header in the Rhythm Data ROM
+;   (RhythmROM_BankProgramLocators[bank 0xFC5B & 0x7F][program 0xFC5A], 0x400000 + (hi & 0xFF) << 16 + lo) and copies
+;   its byte +976 (0x3D0), the time-signature index into TimeSig_DisplayStrings, to RAM 0x34F0. Basis: callers + body
+;   + ROM data -- every rhythm-selection path (DrumVoice_Handler6/7, RhythmVariation_Select_Entry_Data,
+;   AccPatch_CallParamLookup_Helper) calls it after the selection.
+Rhythm_LoadCurrentTimeSig:
 	ld	l, (0xfc5a:16)
 	and	l, 255
 	ld	h, (0xfc5b:16)
@@ -29329,7 +29389,7 @@ DrumParam_ReadMaxCount_Helper5_Return:
 	ret
 
 AccVoice_SetupStyleSlots:
-	calr AccVoice_SetupStyleSlots_Helper2
+	calr AccPatch_GetCurrentSlotAddrXix
 	calr DrumChannel_MapToIndexB
 	sll xbc, 1
 	add xix, xbc
@@ -29343,7 +29403,7 @@ AccVoice_SetupStyleSlots:
 	pop xwa
 	pushw hl
 	calr Voice_ClearSlotBuffer
-	calr AccVoice_SetupStyleSlots_Helper
+	calr AccVoice_WriteEmptyPattern
 	popw hl
 
 AccVoice_SetupSlots_Loop:
@@ -29389,7 +29449,11 @@ AccVoice_SetupSlots_StoreEntry:
 AccVoice_SetupSlots_Return:
 	ret
 
-AccVoice_SetupStyleSlots_Helper:
+; AccVoice_WriteEmptyPattern: Writes an empty pattern body after the 6-byte block header at XWA: one 0x81 beat marker
+;   per beat ((0x34D7) + 1 times (0x34D9)) followed by the end code 0x83. Basis: callers + body --
+;   AccVoice_SetupStyleSlots resolves the channel's first block, clears its link word and buffer, and calls it before
+;   re-filling the slots.
+AccVoice_WriteEmptyPattern:
 	add xwa, 0x6
 	ld xbc, 0:i3
 	ld c, (0x34d7:16)
@@ -29410,7 +29474,11 @@ AccVoice_SetupSlots_Done:
 	ld (xwa), c
 	ret
 
-AccVoice_SetupStyleSlots_Helper2:
+; AccPatch_GetCurrentSlotAddrXix: XIX = RHYTHM_PATTERN_BUF_A + 0x60 * (s + 1), the 96-byte record of the current patch
+;   slot s = (0x34D6) (s >= 30 gives slot 0; signed compare): the XIX twin of AccPatch_GetCurrentSlotAddr, which
+;   returns the same address in XIY. Basis: callers + body -- AccPatch_SetCursorToChannelStart reads a channel's first
+;   block word from XIX, AccPatch_InitEasySlotHeader writes the record's +12.. fields through it.
+AccPatch_GetCurrentSlotAddrXix:
 	ld xhl, 0:i3
 	ld l, (0x34d6:16)
 	cp l, 0x1e
@@ -29457,7 +29525,7 @@ AccPatch_ResolveEntryAddr_Helper:
 	sll	xbc, 3
 	add	xbc, 0x37d1
 	ld	xiy, xbc
-	calr	AccVoice_SetupStyleSlots_Helper2
+	calr	AccPatch_GetCurrentSlotAddrXix
 	push	xix
 	calr	DrumChannel_MapToIndexA
 	pop	xix
@@ -29473,7 +29541,7 @@ AccPatch_ResolveEntryAddr_Helper:
 ;   data byte after the block header. Basis: callers + body -- AccVoice_SetupSlots_* call it before the routines that
 ;   write 0x81/0x83 at that cursor.
 AccPatch_SetCursorToChannelStart:
-	calr	AccVoice_SetupStyleSlots_Helper2
+	calr	AccPatch_GetCurrentSlotAddrXix
 	calr	DrumChannel_MapToIndexB
 	sll	bc, 1
 	ld	hl, (xix+bc)
@@ -29496,7 +29564,7 @@ AccPatch_ResolveEntryAddr_Join:
 	ld	(0x38d1:16), a
 	jr	AccPatch_ResolveEntryAddr_Join
 AccPatch_ResolveEntryAddr_Skip:
-	calr	AccPatch_ResolveEntryAddr_Helper10
+	calr	AccPatch_AppendPatternEndCode
 	ret
 AccPatch_ResolveEntryAddr_Helper4:
 	calr	AccPatch_ResolveEntryAddr_Helper5
@@ -29709,7 +29777,12 @@ AccPatch_ResolveEntryAddr_Skip9:
 	ld	(GLOBAL_ERROR_CODE:16), 15
 AccPatch_ResolveEntryAddr_Return5:
 	ret
-AccPatch_ResolveEntryAddr_Helper10:
+; AccPatch_AppendPatternEndCode: Appends the end code 0x83 to the selected channel's pattern data: points the
+;   channel's source stream (0x3898 + 4 * Rhythm_MapChannelToDrumIndex) at Rhythm_EndPattern (a lone 0x83) and copies
+;   that one event at the write cursor (0x3612 block / 0x3614 offset) with AccPatch_ResolveEntryAddr_Helper8. Basis:
+;   callers + body -- AccPatch_ResolveEntryAddr_Helper3 and AccVoice_SetupSlots_ForEachSlot copy every slot's events
+;   in a loop and call it once when the loop ends.
+AccPatch_AppendPatternEndCode:
 	calr	Rhythm_MapChannelToDrumIndex
 	sll	bc, 2
 	add	xbc, 0x3898
@@ -29720,7 +29793,7 @@ AccPatch_ResolveEntryAddr_Helper10:
 	ret
 Rhythm_EndPattern:
 	; A pattern stream that is only its end code 0x83 (RhythmVoice_WriteToBuffer stops at 0x83);
-	; AccPatch_ResolveEntryAddr_Helper10 stores its address in a slot of 0x3898.  Was `ld a, (xhl)`.
+	; AccPatch_AppendPatternEndCode stores its address in a slot of 0x3898.  Was `ld a, (xhl)`.
 	.byte	0x83
 	; (0x37C9) := 1, then AccPatch_ResolveEntryAddr_Helper, _Helper10_Helper, _Helper2 and
 	; AccVoice_SetupSlots_ForEachSlot.
@@ -29728,12 +29801,18 @@ AccVoice_SetupSlots_Apply:
 	ld	a, 1:opc
 	ld	(0x37c9:16), a
 	calr	AccPatch_ResolveEntryAddr_Helper
-	calr	AccPatch_ResolveEntryAddr_Helper10_Helper
+	calr	AccPatch_InitEasySlotHeader
 	calr	AccPatch_SetCursorToChannelStart
 	calr	AccVoice_SetupSlots_ForEachSlot
 	ret
-AccPatch_ResolveEntryAddr_Helper10_Helper:
-	calr	AccVoice_SetupStyleSlots_Helper2
+; AccPatch_InitEasySlotHeader: Fills the header of the current patch slot record (XIX from
+;   AccPatch_GetCurrentSlotAddrXix): +12 = time-signature code (0x34D8), +13 = last measure index (0x34D7), +14 =
+;   32, +15 = 0, +16/+17 = bytes from the tables at 0x38D2/0x38D9 for the drum-channel index, and the 16-character
+;   name "Easy" at +64. Basis: callers + body -- AccVoice_SetupSlots_Apply (the slot setup whose comment lists it)
+;   calls it; AccPatch_CheckAndInitDemo_Helper2 reads +12 as the beats-per-measure index and +13 + 1 as the measure
+;   count.
+AccPatch_InitEasySlotHeader:
+	calr	AccPatch_GetCurrentSlotAddrXix
 	ld	w, (0x34d8:16)
 	ld	a, 12:opc
 	ld	(xix+a), w
@@ -29786,7 +29865,7 @@ AccPatch_ResolveEntryAddr_Join5:
 	ld	(0x38d1:16), a
 	jr	AccPatch_ResolveEntryAddr_Join5
 AccPatch_ResolveEntryAddr_Skip10:
-	calr	AccPatch_ResolveEntryAddr_Helper10
+	calr	AccPatch_AppendPatternEndCode
 	ret
 AccPatch_ResolveEntryAddr_Helper11:
 	ld	a, 1:opc
@@ -31250,7 +31329,7 @@ CmpNcpTtl_Dispatch2:
 	push	xix
 	push	xiz
 	ld	w, 0:opc
-	call	CmpNcpTtl_Dispatch2_Helper
+	call	CmpNcp_StepItemA_Wrap
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -31293,7 +31372,7 @@ CmpNcpTtl_TableDispatch_Case128:	; cases 128, 129
 	push	xix
 	push	xiz
 	ld	w, 128:opc
-	call	CmpNcpTtl_Dispatch2_Helper
+	call	CmpNcp_StepItemA_Wrap
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -31712,7 +31791,7 @@ CmEsyTtlFunc_Skip:
 	push	xix
 	push	xiz
 	call	DrumKit_InlineCode1_Sub
-	call	CmEsyTtl_Dispatch_Helper
+	call	DrumKit_ValidateBank_Wrap
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -33889,7 +33968,7 @@ CmpStep_DataBlock:
 	push	xhl
 	push	xix
 	push	xiz
-	call CmpStep_DataBlock_Code_Helper
+	call CmpStep_DispatchSwitch
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -33948,7 +34027,7 @@ AccScreen_DataBlock:
 	ret
 	push	xwa
 	ld	xwa, xiy
-	call	SeGfx_BoundOp06_Helper
+	call	SeGfx_BoundOp06_PrintWord
 	pop	xwa
 	ret
 AccDraw_Secondary_Helper:
@@ -34027,7 +34106,11 @@ CmpStep_DataBlock_Helper2:
 AccDraw_Secondary_Helper3:
 	call	AccScreen_DataBlock_Helper2
 	ret
-CmpStep_DataBlock_Code_Helper:
+; CmpStep_DispatchSwitch: Body of the CmpStep title's switch-in method: dispatches switch number HL (0..15; W carries
+;   the switch's bit 7) to its handler in AccDraw_SecondarySub_Handlers through AccDraw_Secondary_Sub, preserving XIZ.
+;   Basis: callers + body -- its only caller is entry 2 (EVT_SW_IN) of CmpStepTitleFunc_ProcTable, the stub at
+;   0xF6A339.
+CmpStep_DispatchSwitch:
 	push	xiz
 	calr	AccDraw_Secondary_Helper4
 	pop	xiz
@@ -34133,7 +34216,7 @@ AccDraw_Secondary_Sub_Return3:
 	ret
 AccDraw_SecondarySub_Handler03:
 	or	(0xe3e2:16), 8
-	call	AccDraw_SecondarySub_Handler03_Helper
+	call	AccDraw_StepNoteValue_Wrap
 	ld	xwa, AccScreen_DataBlock_Code4
 	push	xwa
 	call	DrawFunc_StackEntry
@@ -34145,7 +34228,7 @@ AccScreen_DataBlock_Code4:
 	ret
 AccDraw_SecondarySub_Handler04:
 	or	(0xe3e2:16), 8
-	call	AccDraw_SecondarySub_Handler04_Helper
+	call	AccDraw_AdjustPlusNoteValue
 	ld	xwa, AccScreen_DataBlock_Code5
 	push	xwa
 	call	DrawFunc_StackEntry
@@ -34157,7 +34240,7 @@ AccScreen_DataBlock_Code5:
 	ret
 AccDraw_SecondarySub_Handler05:
 	or	(0xe3e2:16), 8
-	call	AccDraw_SecondarySub_Handler05_Helper
+	call	AccDraw_StepArticulation_Wrap
 	cp	(0x3712:16), 4
 	jr	nz, AccDraw_Secondary_Return
 	ld	xwa, AccScreen_DataBlock_Code6

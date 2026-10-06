@@ -1095,7 +1095,11 @@ SeMenu_StorePartMask:
 SeMenu_PartMask_Data:
 	ld	(xwa), (0x65e)
 	ret
-SeMenu_CopyWriteUpdate_Step3_Helper3:
+; SeMenu_SetPartEnabled: Sets (C != 0) or clears (C = 0) the enable bit of part A (1..4; bit 2A-2 of the part mask
+;   0x65E), then sends the new mask (as edit element 17, or display object 13 when the object entry is non-zero); A
+;   outside 1..4 does nothing. Basis: callers + body -- SeMenuTitleFunc_DispatchSwitch and SeTonTon1_OnColumn1 test
+;   SeMenu_IsPartEnabled and call it with C = 0 to turn an enabled part off or C = 1 to turn a disabled one on.
+SeMenu_SetPartEnabled:
 	dec	8, xsp
 	ld	(xsp+4), c
 	ld	(xsp+6), a
@@ -1212,7 +1216,12 @@ SeMenu_BitShiftMask_End_Loop3:
 	cp	de, bc
 	jr	c, SeMenu_BitShiftMask_End_Loop3
 	ret
-SeMenu_TransferPartValues_EndData_Helper:
+; SeMenu_StepParamField: Steps the bit field of edit record XWA (+0 old byte, +6 mask, +7 shift, +8 max, +9 min, +10
+;   signed step) by the step, clamped to [min,max], and writes the merged byte to +3; L = 1 if the field changed, 0 if
+;   not or if the record is unusable (mask 0, shift > 7, step 0). min < 0 takes the signed-compare copy. Basis:
+;   callers + body -- the OnColumn handlers fill +6..+10 (SeMenu_SwitchToValueStep writes +10) and test L;
+;   SeMenu_StepParamFieldAndSend wraps it and sends the byte at +3.
+SeMenu_StepParamField:
 	cp	(xwa+6), 0
 	jr	z, SeMenu_TransferPartValues_EndData_Helper_Skip
 	cp	(xwa+7), 7
@@ -1601,7 +1610,11 @@ SeMenu_TransferPartValues_EndData_Skip28:
 SeMenu_TransferPartValues_EndData_Skip29:
 	ld	(xwa), c
 	ret
-SeMenu_CopyWriteUpdate_Step3_Helper4:
+; SeCtr2_SetSelection: Stores A as the SeCtr2 page's remembered selection (RAM 0x695; the side rows store 1, 2, 5 or
+;   6), which the page draw reads back (clamped to 1..6, default 1) into page param 0 and highlights. Basis: callers +
+;   body -- SeCtr2_OnSideRow2 (choices 2/1) and SeCtr2_OnSideRow3 (6/5) store their choice here and send event 59;
+;   only UpdSeSel_DetailedUpdate_SetDisplayState_Helper reads 0x695.
+SeCtr2_SetSelection:
 	ld	(1685:16), a
 	ret
 UpdSeSel_DetailedUpdate_SetDisplayState_Helper2:
@@ -1663,7 +1676,7 @@ SeMenu_ApplyPartEdit_Helper:
 	ld	(xwa+9), 0
 	ld	c, (xsp+20)
 	ld	(xwa+10), c
-	calr	SeMenu_TransferPartValues_EndData_Helper
+	calr	SeMenu_StepParamField
 	cp	l, 0:i3
 	jr	z, SeMenu_TransferPartValues_EndData_Epilogue
 	ld	a, (xsp+22)
@@ -1711,7 +1724,7 @@ SeMenu_StepParamFieldAndSend:
 	ld	(xsp+10), a
 	ld	xiz, (xsp+16)
 	ld	xwa, xiz
-	calr	SeMenu_TransferPartValues_EndData_Helper
+	calr	SeMenu_StepParamField
 	extz	hl
 	cp	hl, 0:i3
 	jr	nz, SeMenu_TransferPartValues_EndData_Skip19
@@ -2326,7 +2339,10 @@ SeMenu_SetupPartDisplay_End_Epilogue:
 SeMenu_GetWriteMemSlot:
 	ld	(xwa), (0x6ad)
 	ret
-SeMenu_CopyWriteUpdate_Step3_Code_3_Helper4:
+; SeMenu_SetWriteMemSlot: Stores A as the WRITE TO MEMORY page's selected destination slot (RAM 0x6AD, 0..39): the
+;   setter of SeMenu_GetWriteMemSlot. Basis: callers + body -- SeWrtMem_OnSideRow3/4 read the slot with
+;   SeMenu_GetWriteMemSlot, step it up (max 39) or down (min 0) and store it back with this routine.
+SeMenu_SetWriteMemSlot:
 	ld	(1709:16), a
 	ret
 SeMenu_CopyWriteUpdate_Step3_Code_3_Helper5:
@@ -2423,7 +2439,12 @@ SeMenu_ApplyPartEdit_Helper5_Join:
 	ret	ule
 	ld	(xbc), 0
 	ret
-SeMenu_CopyWriteUpdate_Step3_Helper6:
+; SeMenu_GoToPageOnEnabledPart: Switches the sound editor to page WA (SeMenu_SendEvent with C = 0, i.e.
+;   UI_PostModeChangeEvent) after making sure the current part (0x65D) is enabled: keeps it if so, else selects the
+;   first enabled part of 1..N (N = 2 when the mode byte 0x6AE is non-zero, else 4), else part 1. Basis: callers +
+;   body -- SeTonTon1_OnSwitch15/25 and SeMenu_CopyWriteUpdate_Entry2 pass page codes 32, 38 and 61 (SeTonTon1's own
+;   code is 34).
+SeMenu_GoToPageOnEnabledPart:
 	dec	6, xsp
 	push	qiz
 	ld	(xsp+6), a
@@ -3538,7 +3559,7 @@ SeMenu_ApplyPartEdit_Join5:
 	lda	xbc, (xbc+10)
 	calr	SeMenu_SwitchToValueStep
 	lda	xwa, (xsp+2)
-	calr	SeMenu_TransferPartValues_EndData_Helper
+	calr	SeMenu_StepParamField
 	cp	l, 0:i3
 	jr	z, SeMenu_ApplyPartEdit_Epilogue6
 	ldto_berp a, 251
@@ -3642,7 +3663,7 @@ SeMenu_DrawAmpEnvGraph:
 	pushw	256
 	pushw	59
 	pushw	51
-	call	SeMenu_ApplyPartEdit_AltStore_Helper3
+	call	SeMenu_ClearRect
 	inc	8, xsp
 	lda	xbc, (xsp+18)
 	ld	wa, 2:i3
@@ -3997,7 +4018,7 @@ SeMenu_ApplyPartEdit_Helper7:
 	pushw	256
 	pushw	59
 	pushw	51
-	call	SeMenu_ApplyPartEdit_AltStore_Helper3
+	call	SeMenu_ClearRect
 	inc	8, xsp
 	lda	xbc, (xsp+30)
 	ld	wa, 3:i3
@@ -4576,7 +4597,7 @@ SeMenu_ApplyPartEdit_Join16:
 	pushm	(xsp+8)
 	pushm	(xsp+12)
 	pushm	(xsp+16)
-	call	SeMenu_ApplyPartEdit_AltStore_Helper
+	call	SeGfx_DrawLine
 	inc	8, xsp
 SeMenu_ApplyPartEdit_Helper9_Epilogue:
 	popw	iz
@@ -4627,7 +4648,7 @@ SeMenu_DrawKeyScaleGraph:
 	pushw	254	; four word arguments, not a far pointer
 	pushw	73
 	pushw	48
-	call	SeMenu_ApplyPartEdit_AltStore_Helper3
+	call	SeMenu_ClearRect
 	inc	8, xsp
 	lda	xbc, (xsp+18)
 	ldw	wa, 10
@@ -4714,17 +4735,17 @@ SeMenu_ApplyPartEdit_Helper11_Join:
 	pushw	254
 	pushw	97
 	pushw	48
-	call	SeMenu_ApplyPartEdit_AltStore_Helper
+	call	SeGfx_DrawLine
 	pushw	121
 	pushm	(xsp+24)
 	pushw	97
 	.byte 0x9f, 0x1c, 0x04
-	call	SeMenu_ApplyPartEdit_AltStore_Helper2
+	call	SeMenu_DrawDottedLine
 	pushw	121
 	pushm	(xsp+22)
 	pushw	97
 	.byte 0x9f, 0x1a, 0x04
-	call	SeMenu_ApplyPartEdit_AltStore_Helper2
+	call	SeMenu_DrawDottedLine
 	lda	xsp, (xsp+24)
 	pushw	121
 	pushm	(xsp+8)
@@ -4798,35 +4819,35 @@ SeMenu_ApplyPartEdit_Helper11_Join3:
 	pushm	(xsp+18)
 	pushw	iz
 	pushw	48
-	call	SeMenu_ApplyPartEdit_AltStore_Helper
+	call	SeGfx_DrawLine
 	push	qiz
 	pushm	(xsp+22)
 	pushw	iz
 	pushm	(xsp+30)
-	call	SeMenu_ApplyPartEdit_AltStore_Helper
+	call	SeGfx_DrawLine
 	push	qiz
 	pushw	254
 	push	qiz
 	pushm	(xsp+34)
-	call	SeMenu_ApplyPartEdit_AltStore_Helper
+	call	SeGfx_DrawLine
 	pushw	121
 	pushm	(xsp+40)
 	pushw	97
 	pushm	(xsp+44)
-	call	SeMenu_ApplyPartEdit_AltStore_Helper2
+	call	SeMenu_DrawDottedLine
 	lda	xsp, (xsp+32)
 	pushw	121
 	pushm	(xsp+6)
 	pushw	iz
 	pushm	(xsp+10)
-	call	SeMenu_ApplyPartEdit_AltStore_Helper2
+	call	SeMenu_DrawDottedLine
 	inc	8, xsp
 	pushw	121
 	pushm	(xsp+8)
 	push	qiz
 SeMenu_ApplyPartEdit_Helper11_Join4:
 	pushm	(xsp+12)
-	call	SeMenu_ApplyPartEdit_AltStore_Helper2
+	call	SeMenu_DrawDottedLine
 	inc	8, xsp
 	pop	xiz
 	lda	xsp, (xsp+28)
@@ -4874,7 +4895,7 @@ SeMenu_ApplyPartEdit_Entry5:
 	.byte 0x9f, 0x06, 0xa0
 	pushw	wa
 	pushm	(xsp+10)
-	call	SeMenu_ApplyPartEdit_AltStore_Helper3
+	call	SeMenu_ClearRect
 	inc	8, xsp
 	ld	a, (xsp+22)
 	extz	wa
@@ -4971,21 +4992,21 @@ SeMenu_ApplyPartEdit_Join18:
 	pushm	(xsp+12)
 	pushm	(xsp+4)
 	pushm	(xsp+18)
-	call	SeMenu_ApplyPartEdit_AltStore_Helper
+	call	SeGfx_DrawLine
 	ld	wa, (xsp+8)
 	sub	wa, (xsp+10)
 	pushw	wa
 	pushm	(xsp+18)
 	pushw	wa
 	pushm	(xsp+24)
-	call	SeMenu_ApplyPartEdit_AltStore_Helper
+	call	SeGfx_DrawLine
 	pushm	(xsp+16)
 	pushm	(xsp+24)
 	ld	wa, (xsp+20)
 	sub	wa, (xsp+22)
 	pushw	wa
 	pushm	(xsp+30)
-	call	SeMenu_ApplyPartEdit_AltStore_Helper
+	call	SeGfx_DrawLine
 	lda	xsp, (xsp+24)
 SeMenu_ApplyPartEdit_Epilogue7:
 	lda	xsp, (xsp+28)
@@ -5089,7 +5110,7 @@ SeMenu_ApplyPartEdit_Entry5_Code_Join:
 	pushw	232
 	pushm	(xsp+8)
 	pushw	67
-	call	SeMenu_ApplyPartEdit_AltStore_Helper3
+	call	SeMenu_ClearRect
 	inc	8, xsp
 	cp	(xsp+18), 0
 	jr	nz, SeMenu_ApplyPartEdit_Entry5_Code_Skip8
@@ -5099,14 +5120,14 @@ SeMenu_ApplyPartEdit_Entry5_Code_Join:
 	pushw	wa
 	pushm	(xsp+12)
 	pushw	67
-	call	SeMenu_ApplyPartEdit_AltStore_Helper
+	call	SeGfx_DrawLine
 	pushm	(xsp+18)
 	push	qiz
 	pushm	(xsp+20)
 	ld	wa, qiz
 	sub	wa, 10
 	pushw	wa
-	call	SeMenu_ApplyPartEdit_AltStore_Helper
+	call	SeGfx_DrawLine
 	lda	xsp, (xsp+16)
 	ldw	de, 232
 	sub	de, qiz
@@ -5177,14 +5198,14 @@ SeMenu_ApplyPartEdit_Entry5_Code_Join5:
 	push	qiz
 	pushw	wa
 	pushw	bc
-	call	SeMenu_ApplyPartEdit_AltStore_Helper
+	call	SeGfx_DrawLine
 	pushm	(xsp+16)
 	ld	wa, qiz
 	add	wa, 10
 	pushw	wa
 	pushm	(xsp+22)
 	push	qiz
-	call	SeMenu_ApplyPartEdit_AltStore_Helper
+	call	SeGfx_DrawLine
 	lda	xsp, (xsp+16)
 	pushm	(xsp+8)
 	pushw	232
@@ -5193,13 +5214,13 @@ SeMenu_ApplyPartEdit_Entry5_Code_Join5:
 	add	wa, 10
 	pushw	wa
 SeMenu_ApplyPartEdit_Entry5_Code_Join6:
-	call	SeMenu_ApplyPartEdit_AltStore_Helper
+	call	SeGfx_DrawLine
 	inc	8, xsp
 	pushm	(xsp+6)
 	push	qiz
 	pushm	(xsp+14)
 	push	qiz
-	call	SeMenu_ApplyPartEdit_AltStore_Helper2
+	call	SeMenu_DrawDottedLine
 	inc	8, xsp
 	pop	xiz
 	lda	xsp, (xsp+16)
@@ -5243,7 +5264,7 @@ SeMenu_ApplyPartEdit_Entry5_Code_Skip12:
 	pushw	SeMenu_ApplyPartEdit_AltStore_Data_2@hi16
 	pushw	SeMenu_ApplyPartEdit_AltStore_Data_2@lo16
 	pushw	67
-	call	SeMenu_ApplyPartEdit_AltStore_Helper3
+	call	SeMenu_ClearRect
 	inc	8, xsp
 	ld	a, (xsp+10)
 	.byte 0x8f, 0x04, 0xc1
@@ -5254,14 +5275,14 @@ SeMenu_ApplyPartEdit_Entry5_Code_Skip12:
 	pushw	wa
 	pushm	(xsp+12)
 	pushw	67
-	call	SeMenu_ApplyPartEdit_AltStore_Helper
+	call	SeGfx_DrawLine
 	pushw	iz
 	push	qiz
 	pushm	(xsp+20)
 	ld	wa, qiz
 	dec	6, wa
 	pushw	wa
-	call	SeMenu_ApplyPartEdit_AltStore_Helper
+	call	SeGfx_DrawLine
 	lda	xsp, (xsp+16)
 	pushw	iz
 	pushw	232
@@ -5272,14 +5293,14 @@ SeMenu_ApplyPartEdit_Entry5_Code_Skip13:
 	pushw	iz
 	push	xiz
 	pushw	67
-	call	SeMenu_ApplyPartEdit_AltStore_Helper
+	call	SeGfx_DrawLine
 	pushm	(xsp+16)
 	ld	wa, qiz
 	inc	6, wa
 	pushw	wa
 	pushw	iz
 	push	qiz
-	call	SeMenu_ApplyPartEdit_AltStore_Helper
+	call	SeGfx_DrawLine
 	lda	xsp, (xsp+16)
 	pushm	(xsp+8)
 	pushw	232
@@ -5288,12 +5309,12 @@ SeMenu_ApplyPartEdit_Entry5_Code_Skip13:
 	inc	6, wa
 	pushw	wa
 SeMenu_ApplyPartEdit_Entry5_Code_Join7:
-	call	SeMenu_ApplyPartEdit_AltStore_Helper
+	call	SeGfx_DrawLine
 	inc	8, xsp
 	pushm	(xsp+6)
 	push	xiz
 	push	qiz
-	call	SeMenu_ApplyPartEdit_AltStore_Helper2
+	call	SeMenu_DrawDottedLine
 	inc	8, xsp
 	pop	xiz
 	lda	xsp, (xsp+12)
@@ -5373,7 +5394,7 @@ SeMenu_ApplyPartEdit_Entry5_Code_Skip16:
 	pushw	SeMenu_ApplyPartEdit_AltStore_Data@hi16
 	pushw	SeMenu_ApplyPartEdit_AltStore_Data@lo16
 	pushw	67
-	call	SeMenu_ApplyPartEdit_AltStore_Helper3
+	call	SeMenu_ClearRect
 	inc	8, xsp
 	ld	bc, iz
 	sub	bc, 67
@@ -5393,7 +5414,7 @@ SeMenu_ApplyPartEdit_Entry5_Code_Join8:
 	pushw	iz
 	pushw	wa
 	pushw	de
-	call	SeMenu_ApplyPartEdit_AltStore_Helper
+	call	SeGfx_DrawLine
 	inc	8, xsp
 	cp	(xsp+4), 1
 	jr	nz, SeMenu_ApplyPartEdit_Entry5_Code_Skip18
@@ -5409,7 +5430,7 @@ SeMenu_ApplyPartEdit_Entry5_Code_Skip18:
 	pushw	wa
 	pushm	(xsp+16)
 	pushw	iz
-	call	SeMenu_ApplyPartEdit_AltStore_Helper
+	call	SeGfx_DrawLine
 	pushm	(xsp+18)
 	ld	wa, (xsp+18)
 	sub	wa, 10
@@ -5418,7 +5439,7 @@ SeMenu_ApplyPartEdit_Entry5_Code_Skip18:
 	ld	wa, iz
 	add	wa, 10
 	pushw	wa
-	call	SeMenu_ApplyPartEdit_AltStore_Helper
+	call	SeGfx_DrawLine
 	lda	xsp, (xsp+16)
 	pushm	(xsp+14)
 	pushm	(xsp+10)
@@ -5427,7 +5448,7 @@ SeMenu_ApplyPartEdit_Entry5_Code_Skip18:
 	sub	wa, 10
 	pushw	wa
 SeMenu_ApplyPartEdit_Entry5_Code_Join9:
-	call	SeMenu_ApplyPartEdit_AltStore_Helper
+	call	SeGfx_DrawLine
 	inc	8, xsp
 	ldw	bc, 232
 	sub	bc, (xsp+8)
@@ -5446,17 +5467,17 @@ SeMenu_ApplyPartEdit_Entry5_Code_Join10:
 	pushw	de
 	pushm	(xsp+18)
 	pushm	(xsp+14)
-	call	SeMenu_ApplyPartEdit_AltStore_Helper
+	call	SeGfx_DrawLine
 	pushm	(xsp+14)
 	pushw	iz
 	pushm	(xsp+24)
 	pushw	iz
-	call	SeMenu_ApplyPartEdit_AltStore_Helper2
+	call	SeMenu_DrawDottedLine
 	pushm	(xsp+22)
 	pushm	(xsp+26)
 	pushm	(xsp+34)
 	pushm	(xsp+30)
-	call	SeMenu_ApplyPartEdit_AltStore_Helper2
+	call	SeMenu_DrawDottedLine
 	lda	xsp, (xsp+24)
 	pop	xiz
 	lda	xsp, (xsp+22)
@@ -5467,7 +5488,11 @@ SeMenu_ApplyPartEdit_Entry5_Code_Join10:
 	lda	xde, (1698:16)
 	ld	(xde+wa), bc
 	ret
-SeMenu_CopyWriteUpdate_Step3_Helper8:
+; SeMenu_GetToneIndex: Copies the 16-bit TONE index of tone slot A (1..4) -- word A-1 of the four-word table at RAM
+;   0x6A2 -- to (XBC). Basis: callers + body -- the TONE column (column 3) handlers of the TONE SELECT pages fetch it,
+;   bound it by the tone count word 0x6AA (SeMenu_GetWordEntryCount) and step it; SeMenu_ApplyFilter
+;   writes the same table.
+SeMenu_GetToneIndex:
 	dec	1, a
 	extz	wa
 	add	wa, wa
@@ -5477,7 +5502,11 @@ SeMenu_CopyWriteUpdate_Step3_Helper8:
 	ret
 	ld	(1706:16), wa
 	ret
-SeMenu_CopyWriteUpdate_Step3_Helper9:
+; SeMenu_GetWordEntryCount: Copies the sound editor's 16-bit entry count (RAM 0x6AA, bytes +0..+1 of the record
+;   SeMenu_ProcessEffect loads) to (XWA); the word counterpart of SeMenu_GetEntryCount (byte 0x6AC). Basis: callers +
+;   body -- the column-3 handlers of SeTonTon1/SeTonHyb1 use it as the exclusive upper bound of the per-part 16-bit
+;   index they step.
+SeMenu_GetWordEntryCount:
 	ldw	(xwa), (0x6aa)
 	ret
 	ld	(1708:16), a
@@ -6661,7 +6690,7 @@ SePitPit1_OnColumn6:
 	lda	xbc, (xbc+10)
 	call	SeMenu_SwitchToValueStep
 	lda	xwa, (xsp+2)
-	call	SeMenu_TransferPartValues_EndData_Helper
+	call	SeMenu_StepParamField
 	cp	l, 1:i3
 	jr	nz, SeMenu_RefreshPartDisplay_Skip
 	ld	a, (xsp+5)

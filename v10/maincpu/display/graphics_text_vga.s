@@ -1497,7 +1497,12 @@ DrawFunc_Init_Join8:
 	pop	xiz
 	lda	xsp, (xsp+268)
 	ret
-SeGfx_BoundOp06_Helper:
+; SeGfx_BoundOp06_PrintWord: Bound display-record op 06: prints the 16-bit word at RAM address rec+2 with Sprintf
+;   "%1d"/"%2d"/"%3d" (digits byte rec+9 = 1, 2, else 3) at text cell rec+7 (row = cell / 40, x = (cell % 40) * 8) in
+;   font (rec+6) & 63, through DrawText_QueueOrDirect. Basis: callers + body -- entry 6 of
+;   GraphicsRender_Start_PtrTable (the per-op handler table of bound records) and the SeGfx_BoundOp06 wrapper; same
+;   frame as the op 00 / op 05 printers.
+SeGfx_BoundOp06_PrintWord:
 	lda xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa

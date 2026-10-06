@@ -5049,7 +5049,7 @@ Fat_CountContiguousClusters_Return:
 	pop	xiz
 	inc	4, xsp
 	ret
-SeqByteBlock_StyleBitmapRef_Code_Helper_Helper:
+Fat_AllocateClusters:
 	lda	xsp, (xsp-12)
 	push	xiz
 	ldw	(xsp+8), 0
@@ -5959,7 +5959,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper_Join13:
 	pushw	1
 	pushw	1
 	push	xiz
-	calr	SeqByteBlock_StyleBitmapRef_Code_Helper_Helper
+	calr	Fat_AllocateClusters
 	inc	8, xsp
 	ld	wa, hl
 	cp	wa, 0:i3
@@ -6011,7 +6011,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper2_Epilogue:
 	pop	xiz
 	inc	4, xsp
 	ret
-SeqByteBlock_StyleBitmapRef_Code_Helper3_Helper3:
+Fat_FreeFileClusters:
 	push	xiz
 	ld	xwa, (xsp+8)
 	ld	iz, (xwa+69)
@@ -6581,7 +6581,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip5:
 	jr	z, SeqByteBlock_StyleBitmapRef_Code_Join
 	ld	xwa, (xsp+14)
 	push	xwa
-	calr	SeqByteBlock_StyleBitmapRef_Code_Helper3_Helper3
+	calr	Fat_FreeFileClusters
 	inc	4, xsp
 	ld	xwa, (xsp+14)
 	setm	7, (xwa+3)
@@ -6669,7 +6669,7 @@ SeqByteBlock_StyleBitmapRef_Code_Skip4:
 	pushw	0
 	ld	xwa, (xsp+20)
 	push	xwa
-	calr	SeqByteBlock_StyleBitmapRef_Code_Helper_Helper
+	calr	Fat_AllocateClusters
 	inc	8, xsp
 	ld	wa, hl
 	cp	wa, 0:i3
@@ -6728,7 +6728,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper4_Skip4:
 	pushw	0
 	ld	xwa, (xsp+20)
 	push	xwa
-	calr	SeqByteBlock_StyleBitmapRef_Code_Helper_Helper
+	calr	Fat_AllocateClusters
 	inc	8, xsp
 	ld	wa, hl
 	cp	wa, 0:i3
@@ -6785,7 +6785,7 @@ SeqByteBlock_StyleBitmapRef_Code_Epilogue2:
 	pop	xiz
 	inc	8, xsp
 	ret
-SeqByteBlock_StyleBitmapRef_Code_Helper5:
+Fat_GetSectorAtFilePos:
 	dec	6, xsp
 	push	xiz
 	ld	xiz, (xsp+14)
@@ -6983,7 +6983,7 @@ SeqByteBlock_StyleBitmapRef_Code_Epilogue4:
 	pop	xiz
 	lda	xsp, (xsp+12)
 	ret
-SeqByteBlock_StyleBitmapRef_Code_Helper6:
+Fat_ReadFile:
 	dec	4, xsp
 	pushw	iz
 	ldw	(xsp+2), 0
@@ -7049,7 +7049,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper6_Loop2:
 	pushw	64
 	ld	xwa, (xsp+12)
 	push	xwa
-	calr	SeqByteBlock_StyleBitmapRef_Code_Helper5
+	calr	Fat_GetSectorAtFilePos
 	inc	6, xsp
 	ld	wa, hl
 	cp	wa, 0:i3
@@ -7216,7 +7216,7 @@ SeqChan_SetupAndCallHelper:
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
-	calr	SeqByteBlock_StyleBitmapRef_Code_Helper6
+	calr	Fat_ReadFile
 	lda	xsp, (xsp+12)
 	ret
 SeqChan_InitChannelState:
@@ -7228,10 +7228,10 @@ SeqChan_InitChannelState:
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
-	calr	SeqByteBlock_StyleBitmapRef_Code_Helper6
+	calr	Fat_ReadFile
 	lda	xsp, (xsp+12)
 	ret
-SeqByteBlock_StyleBitmapRef_Code_Helper7:
+Fat_WriteFile:
 	dec	6, xsp
 	pushw	iz
 	ldw	(xsp+2), 0
@@ -7292,7 +7292,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper7_Join:
 	pushw	wa
 	ld	xwa, (xsp+14)
 	push	xwa
-	calr	SeqByteBlock_StyleBitmapRef_Code_Helper5
+	calr	Fat_GetSectorAtFilePos
 	inc	6, xsp
 	ld	wa, hl
 	cp	wa, 0:i3
@@ -7484,7 +7484,7 @@ SeqChan_ProcessEventArg0:
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
-	calr	SeqByteBlock_StyleBitmapRef_Code_Helper7
+	calr	Fat_WriteFile
 	lda	xsp, (xsp+12)
 	ret
 SeqChan_ProcessEventArg1:
@@ -7494,7 +7494,7 @@ SeqChan_ProcessEventArg1:
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
-	calr	SeqByteBlock_StyleBitmapRef_Code_Helper7
+	calr	Fat_WriteFile
 	lda	xsp, (xsp+12)
 	ret
 SeqChan_ValidateAndDispatch:
@@ -7549,7 +7549,7 @@ SeqByteBlock_StyleBitmapRef_Code_Skip14:
 	pushw 32
 	ld	xwa, (xsp+14)
 	push	xwa
-	calr	SeqByteBlock_StyleBitmapRef_Code_Helper5
+	calr	Fat_GetSectorAtFilePos
 	inc	6, xsp
 	ld	(xsp+6), hl
 	ld	wa, (xsp+6)
@@ -7569,7 +7569,7 @@ SeqByteBlock_StyleBitmapRef_Code_Skip14:
 	pushw 0
 	ld	xwa, (xsp+16)
 	push	xwa
-	calr	SeqByteBlock_StyleBitmapRef_Code_Helper_Helper
+	calr	Fat_AllocateClusters
 	inc	8, xsp
 	ld	(xsp+6), hl
 	ld	wa, (xsp+6)
@@ -7631,14 +7631,14 @@ SeqChan_ReadNextFromLoop:
 	pushw	1
 	pushw	1
 	push	xiz
-	calr	SeqByteBlock_StyleBitmapRef_Code_Helper_Helper
+	calr	Fat_AllocateClusters
 	inc	8, xsp
 	ld	(xsp+4), hl
 	cpw	(xsp+4), 0
 	jrl	nz, SeqByteBlock_StyleBitmapRef_Code_Skip18
 	pushw 0
 	push	xiz
-	calr	SeqByteBlock_StyleBitmapRef_Code_Helper5
+	calr	Fat_GetSectorAtFilePos
 	inc	6, xsp
 	ld	(xsp+4), hl
 	cpw	(xsp+4), 0
@@ -7756,7 +7756,7 @@ SeqByteBlock_StyleBitmapRef_Code_Join7:
 	jr	SeqByteBlock_StyleBitmapRef_Code_Epilogue8
 SeqByteBlock_StyleBitmapRef_Code_Skip20:
 	push	xiz
-	calr	SeqByteBlock_StyleBitmapRef_Code_Helper3_Helper3
+	calr	Fat_FreeFileClusters
 	inc	4, xsp
 	ld	(xiz+52), 229
 	setm	7, (xiz+3)
@@ -8013,7 +8013,7 @@ SeqChan_ByteBlockD:
 	calr	SeqStep_ParseVariableHeader
 	lda	xsp, (xsp+16)
 	ret
-SeqChan_ByteBlockD_Helper:
+Fat_HandleDiskIoError:
 	dec	2, xsp
 	push	xiz
 	ld	xiz, (xsp+14)
@@ -8252,7 +8252,7 @@ SeqChan_ByteBlockD_Helper_Skip8:
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
-	calr	SeqChan_ByteBlockD_Helper
+	calr	Fat_HandleDiskIoError
 	inc	8, xsp
 	cp	hl, 0:i3
 	jrl	nz, SeqChan_ByteBlockD_Helper_Loop
@@ -8390,7 +8390,7 @@ SeqChan_ByteBlockD_Helper_Skip11:
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
-	calr	SeqChan_ByteBlockD_Helper
+	calr	Fat_HandleDiskIoError
 	inc	8, xsp
 	cp	hl, 0:i3
 	jrl	nz, SeqChan_ByteBlockD_Helper_Loop3

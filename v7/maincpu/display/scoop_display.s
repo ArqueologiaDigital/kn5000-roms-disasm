@@ -1687,7 +1687,7 @@ PerfMode_VolumeParam_Process:
 	pop	xix
 	ld	a, (xhl)
 	ld	(3831:16), a
-	call	PerfMode_VolumeParam_Process_Helper
+	call	PerfMode_ShowVolumeLine
 	jp	PerfMode_VolumeParam_Process_Return
 PerfMode_VolumeParam_Process_Skip:
 	xor	wa, wa
@@ -1695,7 +1695,7 @@ PerfMode_VolumeParam_Process_Skip:
 	call	SoundCtrl_SendCommand
 PerfMode_VolumeParam_Process_Return:
 	ret
-PerfMode_VolumeParam_Process_Helper:
+PerfMode_ShowVolumeLine:
 	ld	xix, 3789
 	ld	a, 32:opc
 	ldw	bc, 27
@@ -1801,13 +1801,13 @@ PerfMode_Evt04_VolumeHandler:
 	ld	w, 127:opc
 	pushw	de
 	call	SwbtWr_QueuePostEvent
-	call	PerfMode_VolumeParam_Process_Helper
+	call	PerfMode_ShowVolumeLine
 	popw	de
 	ld	c, e
 	ld	b, 3:opc
 	ldb_d8	e, (0x0ef7)
 	ld	d, 127:opc
-	call	PerfMode_Evt04_VolumeHandler_Helper2
+	call	MidiCC_SetPendingPartVolume
 	call	MidiStream_LoadAllPresets
 	call	Audio_ProcessAllMidiStreams
 	ret
@@ -12305,7 +12305,7 @@ SubCPU_ToneParamDisplay:
 	ld	(3567:16), 11
 	call	Display_UpdateRegion0
 	ld	(4380:16), 0
-	call	SubCPU_ToneParamDisplay_Helper2
+	call	PartParam_LoadSelectedValue
 	call	DisplayStr_ShowPartParamLine
 	call	SubCPU_ToneParamDisplay_Helper
 SubCPU_ToneParamDisplay_Epilogue:
@@ -12341,7 +12341,7 @@ SubCPU_ToneParamDisplay_Skip2:
 	pop	xiy
 	pop	xix
 	ret
-SubCPU_ToneParamDisplay_Helper2:
+PartParam_LoadSelectedValue:
 	push XIX
 	xor HL,HL
 	ld l, (0x0d60:16)
@@ -12442,7 +12442,7 @@ SubCPU_ToneParamRet_Target1_Skip:
 	ld	h, 3:opc
 	call	SubCPU_ToneStoreDigits
 	ld	(4380:16), a
-	call	SubCPU_ToneParamDisplay_Helper2
+	call	PartParam_LoadSelectedValue
 	call	DisplayStr_ShowPartParamLine
 	call	SubCPU_ToneParamDisplay_Helper
 SubCPU_ToneParamRet_Target1_Return:

@@ -3995,7 +3995,7 @@ DrawDesignBox_ByteData:
 	ld	xwa, xiz
 	ld	xbc, (xsp+6)
 	ld	de, (xsp+4)
-	calr	ClampColorToRange_Helper
+	calr	DrawDottedLine_Impl
 	jr	ClampColorToRange_Epilogue
 ClampColorToRange_Skip:
 	ldw	wa, 14
@@ -4026,9 +4026,9 @@ DrawDesignBox_ByteData_Code:
 	cpw	(0x03044e:24), 0
 	ret	z
 	ld	xwa, xhl
-	calr	ClampColorToRange_Helper
+	calr	DrawDottedLine_Impl
 	ret
-ClampColorToRange_Helper:
+DrawDottedLine_Impl:
 	lda	xsp, (xsp-52)
 	push	xiz
 	ld	(xsp+46), de

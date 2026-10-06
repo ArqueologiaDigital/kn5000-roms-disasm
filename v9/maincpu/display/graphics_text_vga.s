@@ -1487,7 +1487,7 @@ DrawFunc_Init_Join8:
 	pop	xiz
 	lda	xsp, (xsp+268)
 	ret
-SeGfx_BoundOp06_Helper:
+SeGfx_BoundOp06_PrintWord:
 	lda xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa

@@ -273,14 +273,14 @@ AccompSeq_AdvanceDone:
 AccompSeq_VRAMHelperData:
 	cp	(0x7e25:16), 128
 	jr	c, AccompSeq_VRAMHelperData_Skip
-	calr	AccompSeq_VRAMHelperData_Helper
+	calr	AccompSeq_GetBlockBase
 	jr	AccompSeq_VRAMHelperData_Return
 AccompSeq_VRAMHelperData_Skip:
 	ld	wa, (0x7e42:16)
 	ld	iy, wa
 AccompSeq_VRAMHelperData_Return:
 	ret
-AccompSeq_VRAMHelperData_Helper:
+AccompSeq_GetBlockBase:
 	ld	wa, (0x7e42:16)
 	and	xwa, 4095
 	sla	xwa, 8

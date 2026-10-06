@@ -1679,7 +1679,7 @@ PerfMode_VolumeParam_Process:
 	pop	xix
 	ld	a, (xhl)
 	ld	(3831:16), a
-	call	PerfMode_VolumeParam_Process_Helper
+	call	PerfMode_ShowVolumeLine
 	jp	PerfMode_VolumeParam_Process_Return
 PerfMode_VolumeParam_Process_Skip:
 	xor	wa, wa
@@ -1687,7 +1687,7 @@ PerfMode_VolumeParam_Process_Skip:
 	call	SoundCtrl_SendCommand
 PerfMode_VolumeParam_Process_Return:
 	ret
-PerfMode_VolumeParam_Process_Helper:
+PerfMode_ShowVolumeLine:
 	ld	xix, 3789
 	ld	a, 32:opc
 	ldw	bc, 27
@@ -1783,13 +1783,13 @@ PerfMode_Evt04_VolumeHandler:
 	ld	w, 127:opc
 	pushw	de
 	call	SwbtWr_QueuePostEvent
-	call	PerfMode_VolumeParam_Process_Helper
+	call	PerfMode_ShowVolumeLine
 	popw	de
 	ld	c, e
 	ld	b, 3:opc
 	ld	e, (3831:16)
 	ld	d, 127:opc
-	call	PerfMode_Evt04_VolumeHandler_Helper2
+	call	MidiCC_SetPendingPartVolume
 	call	MidiStream_LoadAllPresets
 	call	Audio_ProcessAllMidiStreams
 	ret
@@ -2902,7 +2902,7 @@ Timer_ModeHandler_1:
 	call TempoRingBuf_IsEmpty
 	cp	w, 0:i3
 	jrl nz, Timer_GuardCallSetup_Ret
-	call Timer_ModeHandler_1_Helper
+	call TempoRingBuf_DispatchEvents
 	call MemConfig_Handler_4_Helper
 	call SeqState_HasModeChanged
 	cp	hl, 0:i3
@@ -2928,7 +2928,7 @@ Timer_ModeHandler_3:
 	call	PortConfig_Handler_0_Helper4
 	jp	Timer_ModeHandler_3_Return
 Timer_ModeHandler_3_Skip:
-	call	Timer_ModeHandler_1_Helper
+	call	TempoRingBuf_DispatchEvents
 	call	SeqState_HasModeChanged
 	cp	hl, 0:i3
 	jrl	nz, Timer_ModeHandler_3_Return
@@ -2937,7 +2937,7 @@ Timer_ModeHandler_3_Skip:
 	call	SeqState_HasModeChanged
 	cp	hl, 0:i3
 	jrl	nz, Timer_ModeHandler_3_Return
-	call	Timer_ModeHandler_3_Helper
+	call	Display_UpdateRegion2_Wrap
 Timer_ModeHandler_3_Return:
 	ret
 Timer_ModeHandler_0:
@@ -4479,7 +4479,7 @@ ToneEvt_Handler_Mode9_Helper:
 	ldw (xiy+3), 8224
 	pop	xiy
 	ret
-Timer_ModeHandler_1_Helper:
+TempoRingBuf_DispatchEvents:
 	or	(0x0dd3:16), 1
 	call	VoiceSlot_ReadCurrentParams
 	ld	w, a
@@ -5281,7 +5281,7 @@ VoiceSlot_TableSetup_Code_Skip:
 	ld (3562:16), wa
 	pop	xix
 	call	VoiceSlot_TableSetup_Helper3
-	call	Timer_ModeHandler_3_Helper
+	call	Display_UpdateRegion2_Wrap
 	call	Display_UpdateRegion5
 	ld	wa, (0x371a:16)
 	cp	wa, 1000
@@ -7267,9 +7267,9 @@ PortConfig_Handler_0:
 	ld	(DISPLAY_CACHED_VAL1:24), 255
 	ld	(DISPLAY_CACHED_VAL3:24), 255
 	ld	(DISPLAY_CACHED_VAL2:24), 255
-	call	PortConfig_Handler_0_Helper8
+	call	DisplayStr_BlankLineBuffer
 	call	Display_UpdateRegion0
-	call	PortConfig_Handler_0_Helper9
+	call	DisplayStr_ShowMeasureNumber_B
 	cp	(0x28be:16), 255
 	jrl	z, PortConfig_Handler_0_Skip2
 	ldw	(3660:16), 0
@@ -7572,7 +7572,7 @@ ScoopParam_ValueTable_Sub_Helper2:
 	ret
 Display_CallMenuConfig_Helper:
 	ld	(0x370f:16), 0
-	call	Timer_ModeHandler_3_Helper
+	call	Display_UpdateRegion2_Wrap
 	ld	(3413:16), 255
 	and	(0x0f57:16), 254
 	ld	(3382:16), 0
@@ -7629,7 +7629,7 @@ ScoopParam_ValueTable_Helper6_Skip4:
 	ld	(4345:16), a
 	ld	(4346:16), a
 	res	3, (0x0d54:16)
-	call	Timer_ModeHandler_3_Helper
+	call	Display_UpdateRegion2_Wrap
 	call	ClockConfig_Handler_0_Tbl2_Helper
 	ld	wa, (0xf1d0:16)
 	ld	(3928:16), wa
@@ -7834,7 +7834,7 @@ SysEx_BytecodeDispatcher_Skip5:
 	or	a, 128
 SysEx_BytecodeDispatcher_Skip6:
 	ld	(0x3719:16), a
-	call	PortConfig_Handler_0_Helper9
+	call	DisplayStr_ShowMeasureNumber_B
 	call	Display_UpdateRegion3
 SysEx_BytecodeDispatcher_Return:
 	ret
@@ -8168,7 +8168,7 @@ MemConfig_Handler_1_Skip4:
 	call	AccPedal_CheckBitAndUpdate
 	ld	(3434:16), 0
 	call	MemConfig_Handler_5_Helper12
-	call	PortConfig_Handler_0_Helper9
+	call	DisplayStr_ShowMeasureNumber_B
 	call	PortConfig_Handler_0_Helper7
 	call	MemConfig_Handler_5_Helper11
 MemConfig_Handler_1_Skip5:
@@ -8243,7 +8243,7 @@ MemConfig_Handler_1_Skip9:
 	ld	(0x3719:16), a
 MemConfig_Handler_1_Skip10:
 	call	MemConfig_Handler_5_Helper12
-	call	PortConfig_Handler_0_Helper9
+	call	DisplayStr_ShowMeasureNumber_B
 	call	PortConfig_Handler_0_Helper7
 	call	MemConfig_Handler_5_Helper11
 	xor	a, a
@@ -11928,7 +11928,7 @@ ScoopParam_ValueTable_Helper11_Skip7:
 	sub	h, 32
 VoiceState_DataBlock2_Code_Skip15:
 	ld	(0x370f:16), h
-	call	Timer_ModeHandler_3_Helper
+	call	Display_UpdateRegion2_Wrap
 	ret
 VoiceState_DataBlock2_Helper2:
 	ld	xix, 0xf1a0
@@ -12279,7 +12279,7 @@ SubCPU_ToneParamDisplay:
 	ld	(3567:16), 11
 	call	Display_UpdateRegion0
 	ld	(4380:16), 0
-	call	SubCPU_ToneParamDisplay_Helper2
+	call	PartParam_LoadSelectedValue
 	call	DisplayStr_ShowPartParamLine
 	call	SubCPU_ToneParamDisplay_Helper
 SubCPU_ToneParamDisplay_Epilogue:
@@ -12315,7 +12315,7 @@ SubCPU_ToneParamDisplay_Skip2:
 	pop xiy
 	pop xix
 	ret
-SubCPU_ToneParamDisplay_Helper2:
+PartParam_LoadSelectedValue:
 	push xix
 	xor	hl, hl
 	ld	l, (3424:16)
@@ -12418,7 +12418,7 @@ SubCPU_ToneParamRet_Target1_Skip:
 	ld	h, 3:opc
 	call	SubCPU_ToneStoreDigits
 	ld	(4380:16), a
-	call	SubCPU_ToneParamDisplay_Helper2
+	call	PartParam_LoadSelectedValue
 	call	DisplayStr_ShowPartParamLine
 	call	SubCPU_ToneParamDisplay_Helper
 SubCPU_ToneParamRet_Target1_Return:
@@ -14028,7 +14028,7 @@ DisplayStr_ComputeTableAddr:
 DisplayStr_BytecodeBlock_B:
 	call	Display_UpdateRegion0
 DisplayStr_BytecodeBlock_B_Sub:
-	call	PortConfig_Handler_0_Helper8
+	call	DisplayStr_BlankLineBuffer
 	ld	xix, 3786
 	ldw	wa, 8224
 	ldw	bc, 15
@@ -14047,7 +14047,7 @@ DisplayStr_BytecodeBlock_B_Sub:
 SerialPort_ModeHandler_0_Helper3:
 	call	Display_UpdateRegion0
 DisplayStr_BytecodeBlock_B_Sub2:
-	call	PortConfig_Handler_0_Helper8
+	call	DisplayStr_BlankLineBuffer
 	ld	xiy, Str_Control
 	ld	xix, 3791
 	ld	bc, 7:i3
@@ -14074,7 +14074,7 @@ Str_Control_Helper:
 	ret
 VoiceCtrl_ParamSetupBytecode_Tbl3_Helper7:
 	call	Display_UpdateRegion0
-	call	PortConfig_Handler_0_Helper8
+	call	DisplayStr_BlankLineBuffer
 	ld	xiy, Str_Rhythm
 	ld	xix, 3791
 	ld	bc, 6:i3
@@ -14093,7 +14093,7 @@ Str_Rhythm:
 	.ascii	"RHYTHM   "
 VoiceCtrl_ParamSetupBytecode_Tbl3_Helper8:
 	pushw	bc
-	call	PortConfig_Handler_0_Helper8
+	call	DisplayStr_BlankLineBuffer
 	ld	xiy, DisplayStr_RhythmLabel
 	push	xiy
 	call	Str_Rhythm_Helper2
@@ -14157,7 +14157,7 @@ DisplayStr_BytecodeBlock_C_Helper:
 	ret
 DisplayStr_BytecodeBlock_C:
 	call	Display_UpdateRegion0
-	call	PortConfig_Handler_0_Helper8
+	call	DisplayStr_BlankLineBuffer
 	ld	xiy, DisplayStr_RhythmLabel
 	ld	xix, 3791
 	ldw	bc, 9
@@ -14167,7 +14167,7 @@ DisplayStr_BytecodeBlock_C:
 	call	Display_UpdateRegion3
 	ret
 VoiceCtrl_ParamSetupBytecode_Tbl3_Helper10:
-	call	PortConfig_Handler_0_Helper8
+	call	DisplayStr_BlankLineBuffer
 	ld	xix, 3786
 	ld	xiy, Str_TempoEq
 	cp	(0xfc5a:16), 7
@@ -14197,7 +14197,7 @@ DisplayStr_BytecodeBlock_C_Tbl:
 	.ascii	"=              "
 VoiceSlot_StatusRet_Helper2:
 	call	Display_UpdateRegion0
-	call	PortConfig_Handler_0_Helper8
+	call	DisplayStr_BlankLineBuffer
 	ld	xiy, DisplayStr_TempoString
 	cp	(0xfc5a:16), 7
 	jrl	nz, DisplayStr_BytecodeBlock_C_Skip2
@@ -14227,7 +14227,7 @@ DisplayStr_BytecodeBlock_C_Tbl2:
 DisplayMode_RedrawWithBlankLine:
 	call	Display_UpdateRegion0
 DisplayStr_BytecodeBlock_C_Tbl2_Sub:
-	call	PortConfig_Handler_0_Helper8
+	call	DisplayStr_BlankLineBuffer
 	ld	xiy, DisplayStr_BytecodeBlock_C_Text
 	ld	xix, 3786
 	ldw	bc, 25
@@ -14348,7 +14348,7 @@ DisplayStr_CopyStyleSectionName:	; DisplayStr_StyleSectionNames[(0x3728)] -> the
 DisplayStr_StyleSectionNames:
 	.ascii	"        START   STOP    FILL IN1FILL IN2INTRO1  COUNT INENDING1 END     REPEAT  CLEAR   ENDING2 INTRO2  "
 	.byte	0x0e
-Timer_ModeHandler_3_Helper:
+Display_UpdateRegion2_Wrap:
 	call	Display_UpdateRegion2
 	ret
 
@@ -14376,7 +14376,7 @@ Display_RedrawMenu_Update:
 Display_BytecodeBlock_F:
 	call	Display_UpdateRegion0
 Display_BytecodeBlock_F_Sub:
-	call	PortConfig_Handler_0_Helper8
+	call	DisplayStr_BlankLineBuffer
 	ld	xix, 3786
 	ldw (xix+9), 22048
 	call	Display_UpdateRegion5
@@ -14465,7 +14465,7 @@ Display_BytecodeBlock_F_Tbl2:
 	.byte	0x01, 0x02, 0x03, 0x04
 VoiceCtrl_ParamSetupBytecode_Tbl3_Helper11:
 	call	Display_UpdateRegion0
-	call	PortConfig_Handler_0_Helper8
+	call	DisplayStr_BlankLineBuffer
 	ld	xix, 3786
 	ld	(xix+4), 83
 	ldw	(xix+5), 21839
@@ -14614,7 +14614,7 @@ Display_BytecodeBlock_F_Tbl4:
 	.ascii	"="
 	.byte	0x09
 	.ascii	"       "
-PortConfig_Handler_0_Helper8:
+DisplayStr_BlankLineBuffer:
 	ldw	bc, 15
 	ld	xix, 0x0eca
 	ldw	wa, 8224
@@ -14659,7 +14659,7 @@ Display_BytecodeBlock_F_Skip12:
 	ld	(xix), 28
 Display_BytecodeBlock_F_Return:
 	ret
-PortConfig_Handler_0_Helper9:
+DisplayStr_ShowMeasureNumber_B:
 	ld	wa, (0x371a:16)
 	cp	wa, 1000
 	jrl	c, Display_BytecodeBlock_F_Skip3

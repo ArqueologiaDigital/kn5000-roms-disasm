@@ -9814,7 +9814,7 @@ VoiceMode3_EvType3:
 	ld	(0x9644:16), wa
 	ldw	wa, 0x7f00
 	ld	(0x9646:16), wa
-	call	VoiceMode3_EvType3_Helper
+	call	MidiCC_ResetAllControllers
 	ldb_d8	a, (0x91b6)
 	stb_d8	(0x90f8), a
 MidiVoice_DataBlockHandler_Skip2:
@@ -10927,7 +10927,7 @@ MidiCC_Helper_ConditionalESetup_Store_Helper:
 	ret
 	calr	MidiStream_ExtendedDispatch
 	ret
-PerfMode_Evt04_VolumeHandler_Helper2:
+MidiCC_SetPendingPartVolume:
 	cp	bc, 176
 	jr	z, MidiStream_ApplyPendingParams_Skip
 	cp	c, 31
@@ -11008,7 +11008,7 @@ MidiCC_QueuePartParam:
 	ret
 	calr	MidiStream_ExtendedDispatch
 	ret
-VoiceMode3_EvType3_Helper:
+MidiCC_ResetAllControllers:
 	ld	bc, (0x9644:16)
 	ld	de, (0x9646:16)
 	ld	(0x90f8:16), 255

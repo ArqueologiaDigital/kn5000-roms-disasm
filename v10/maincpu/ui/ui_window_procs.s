@@ -3995,7 +3995,7 @@ DrawDesignBox_ByteData:
 	ld	xwa, xiz
 	ld	xbc, (xsp+6)
 	ld	de, (xsp+4)
-	calr	ClampColorToRange_Helper
+	calr	DrawDottedLine_Impl
 	jr	ClampColorToRange_Epilogue
 ClampColorToRange_Skip:
 	ldw	wa, 14
@@ -4026,9 +4026,15 @@ DrawDesignBox_ByteData_Code:
 	cpw	(0x03044e:24), 0
 	ret	z
 	ld	xwa, xhl
-	calr	ClampColorToRange_Helper
+	calr	DrawDottedLine_Impl
 	ret
-ClampColorToRange_Helper:
+; DrawDottedLine_Impl: Draw-task body of a plain dotted line: from point (XWA) to point (XBC) (each {x, y} words) in
+;   colour DE, writing straight into OFFSCREEN_BUFFER_1 (320-byte rows) with a 2-on / 3-off pattern (counter 0,1 draw;
+;   2,3 skip; 4 resets), horizontal, vertical and fixed-point sloped cases; ends with SetChangeRect. No draw-mode
+;   dispatch, unlike DrawDottedLineWithMode_Impl. Basis: callers + body -- DrawDesignBox_ByteData (the standard
+;   direct-or-DrawQueue_Alloc wrapper; misnamed, and itself unreferenced) and its queued record function
+;   DrawDesignBox_ByteData_Code call it.
+DrawDottedLine_Impl:
 	lda	xsp, (xsp-52)
 	push	xiz
 	ld	(xsp+46), de

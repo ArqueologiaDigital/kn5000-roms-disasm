@@ -10448,7 +10448,7 @@ MidiCC_Handler_BitManipulation_Code_Helper:
 	ret
 	calr	MidiStream_ExtendedDispatch
 	ret
-PerfMode_Evt04_VolumeHandler_Helper2:
+MidiCC_SetPendingPartVolume:
 	cp	bc, 176
 	jr	z, MidiStream_ApplyPendingParams_Skip
 	cp	c, 31

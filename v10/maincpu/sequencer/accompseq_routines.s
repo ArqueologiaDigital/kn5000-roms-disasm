@@ -273,14 +273,18 @@ AccompSeq_AdvanceDone:
 AccompSeq_VRAMHelperData:
 	cp	(0x7e25:16), 128
 	jr	c, AccompSeq_VRAMHelperData_Skip
-	calr	AccompSeq_VRAMHelperData_Helper
+	calr	AccompSeq_GetBlockBase
 	jr	AccompSeq_VRAMHelperData_Return
 AccompSeq_VRAMHelperData_Skip:
 	ld	wa, (0x7e42:16)
 	ld	iy, wa
 AccompSeq_VRAMHelperData_Return:
 	ret
-AccompSeq_VRAMHelperData_Helper:
+; AccompSeq_GetBlockBase: Returns XIY = 0x1E8B00 + 256 * ((0x7E42) & 0xFFF), the start of the accompaniment
+;   sequencer's current 256-byte data block in the block pool. Basis: callers + body -- AccompSeq_VRAMHelperData uses
+;   it in pool mode ((0x7E25) >= 128); AccompSeq_InlineCodeBlock follows a 0x87 link by storing the next block in
+;   0x7E42, calling it, and setting the offset IY = 6.
+AccompSeq_GetBlockBase:
 	ld	wa, (0x7e42:16)
 	and	xwa, 4095
 	sla	xwa, 8
