@@ -15215,17 +15215,17 @@ FontIDProc:
 	push xiz
 	ld	(xsp+264), xde
 	cp xbc, EVT_SET_PROPERTY_EX
-	jrl z, SliderH_DrawTrack
+	jrl z, FontIDProc_OnSetPropertyEx
 	cp xbc, EVT_GET_PROPERTY_EX
-	jr z, SliderH_CalcRange
+	jr z, FontIDProc_OnGetOrDumpPropertyEx
 	cp xbc, EVT_DUMP_PROPERTY_EX
-	jr z, SliderH_CalcRange
+	jr z, FontIDProc_OnGetOrDumpPropertyEx
 	cp xbc, EVT_MAKE_DUMP
-	jr z, SliderH_Prologue
+	jr z, FontIDProc_OnMakeDump
 	cp xbc, EVT_GET_PROP_DATA_COUNT_SP
-	jr z, SliderH_Setup
+	jr z, FontIDProc_OnGetPropDataCountSp
 	cp xbc, EVT_GET_PROP_DATA_SP
-	jrl nz, SliderH_ReturnAlt4
+	jrl nz, FontIDProc_ForwardToCommon
 	ld XWA, (xsp + 0x0108)
 	ld xwa, (xwa + 8)
 	sll xwa, 2
@@ -15233,16 +15233,16 @@ FontIDProc:
 	add xbc, xwa
 	ld xwa, (xbc)
 	push xwa
-	jr SliderH_CalcThumb
+	jr FontIDProc_CopyNameToBuffer
 
-SliderH_Setup:
-	ld hl, (SliderH_Setup_Data:24)
+FontIDProc_OnGetPropDataCountSp:
+	ld hl, (FontIDProc_EntryCount:24)
 	exts xhl
-	jrl SliderH_ReturnAlt5
+	jrl FontIDProc_Epilogue
 
-SliderH_Prologue:
-	pushw	SliderH_Prologue_Str_id@hi16
-	pushw	SliderH_Prologue_Str_id@lo16
+FontIDProc_OnMakeDump:
+	pushw	FontIDProc_DumpPrefix@hi16
+	pushw	FontIDProc_DumpPrefix@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	Strcpy
@@ -15256,8 +15256,8 @@ SliderH_Prologue:
 	push	xwa
 	ld	xwa, (xsp+268)
 	push	xwa
-	jr	SliderH_CalcThumb_Clamp
-SliderH_CalcRange:
+	jr	FontIDProc_StrcpyReturnZero
+FontIDProc_OnGetOrDumpPropertyEx:
 	ld XWA, (xsp + 0x0108)
 	calr IDCursorAdvance
 	ld XWA, (xsp + 0x0108)
@@ -15270,23 +15270,23 @@ SliderH_CalcRange:
 	ld xwa, (xbc)
 	push xwa
 
-SliderH_CalcThumb:
+FontIDProc_CopyNameToBuffer:
 	ld XWA, (xsp + 0x010c)
 	ld xwa, (xwa + 4)
 	push xwa
 
-SliderH_CalcThumb_Clamp:
+FontIDProc_StrcpyReturnZero:
 	call	Strcpy
 	inc	8, xsp
 	ld	xhl, 0:i3
-	jr	SliderH_ReturnAlt5
-SliderH_DrawTrack:
+	jr	FontIDProc_Epilogue
+FontIDProc_OnSetPropertyEx:
 	ld xwa, 0xffffffff
 	ld (xsp + 4), xwa
 	ld xiz, 0:i3
-	jr SliderH_ReturnAlt
+	jr FontIDProc_SetProp_LoopHead
 
-SliderH_DrawThumb:
+FontIDProc_SetProp_CompareName:
 	push	xwa
 	ld	xwa, (xsp+268)
 	ld	xwa, (xwa+4)
@@ -15294,39 +15294,39 @@ SliderH_DrawThumb:
 	call	Strcmp
 	inc	8, xsp
 	cp	hl, 0:i3
-	jr	nz, SliderH_ReturnZero
+	jr	nz, FontIDProc_SetProp_NextIndex
 	ld	xwa, 0:i3
 	ld	(xsp+4), xwa
-	jr	SliderH_ReturnAlt2
-SliderH_ReturnZero:
+	jr	FontIDProc_SetProp_StoreIndex
+FontIDProc_SetProp_NextIndex:
 	inc 1, xiz
 
-SliderH_ReturnAlt:
+FontIDProc_SetProp_LoopHead:
 	ld xbc, xiz
 	sll xbc, 2
 	ld xwa, 0x3efac
 	add xwa, xbc
 	ld xwa, (xwa)
 	or xwa, xwa
-	jr nz, SliderH_DrawThumb
+	jr nz, FontIDProc_SetProp_CompareName
 	ld xwa, (xsp + 4)
 	cp xwa, 0xffffffff
-	jr z, SliderH_ReturnAlt3
+	jr z, FontIDProc_SetProp_ReturnResult
 
-SliderH_ReturnAlt2:
+FontIDProc_SetProp_StoreIndex:
 	ld XWA, (xsp + 0x0108)
 	calr IDCursorAdvance
 	ld (xhl), xiz
 
-SliderH_ReturnAlt3:
+FontIDProc_SetProp_ReturnResult:
 	ld xhl, (xsp + 4)
-	jr SliderH_ReturnAlt5
+	jr FontIDProc_Epilogue
 
-SliderH_ReturnAlt4:
+FontIDProc_ForwardToCommon:
 	ld XDE, (xsp + 0x0108)
 	calr CommonIDProc
 
-SliderH_ReturnAlt5:
+FontIDProc_Epilogue:
 	pop xiz
 	lda xsp, (xsp+264)
 	ret
@@ -15336,17 +15336,17 @@ IconIDProc:
 	push xiz
 	ld	(xsp+264), xde
 	cp xbc, EVT_SET_PROPERTY_EX
-	jrl z, SliderV_DrawTrack
+	jrl z, IconIDProc_OnSetPropertyEx
 	cp xbc, EVT_GET_PROPERTY_EX
-	jr z, SliderV_CalcRange
+	jr z, IconIDProc_OnGetOrDumpPropertyEx
 	cp xbc, EVT_DUMP_PROPERTY_EX
-	jr z, SliderV_CalcRange
+	jr z, IconIDProc_OnGetOrDumpPropertyEx
 	cp xbc, EVT_MAKE_DUMP
-	jr z, SliderV_Prologue
+	jr z, IconIDProc_OnMakeDump
 	cp xbc, EVT_GET_PROP_DATA_COUNT_SP
-	jr z, SliderV_Setup
+	jr z, IconIDProc_OnGetPropDataCountSp
 	cp xbc, EVT_GET_PROP_DATA_SP
-	jrl nz, SliderV_Return
+	jrl nz, IconIDProc_ForwardToCommon
 	ld XWA, (xsp + 0x0108)
 	ld xwa, (xwa + 8)
 	sll xwa, 2
@@ -15354,16 +15354,16 @@ IconIDProc:
 	add xbc, xwa
 	ld xwa, (xbc)
 	push xwa
-	jr SliderV_CalcThumb
+	jr IconIDProc_CopyNameToBuffer
 
-SliderV_Setup:
-	ld hl, (SliderV_Setup_Data:24)
+IconIDProc_OnGetPropDataCountSp:
+	ld hl, (IconIDProc_EntryCount:24)
 	extz xhl
-	jrl BitmapIDProc_Return
+	jrl IconIDProc_Epilogue
 
-SliderV_Prologue:
-	pushw	SliderV_Prologue_Str_idICON@hi16
-	pushw	SliderV_Prologue_Str_idICON@lo16
+IconIDProc_OnMakeDump:
+	pushw	IconIDProc_DumpPrefix@hi16
+	pushw	IconIDProc_DumpPrefix@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	Strcpy
@@ -15377,8 +15377,8 @@ SliderV_Prologue:
 	push	xwa
 	ld	xwa, (xsp+268)
 	push	xwa
-	jr	SliderV_CalcThumb_Clamp
-SliderV_CalcRange:
+	jr	IconIDProc_StrcpyReturnZero
+IconIDProc_OnGetOrDumpPropertyEx:
 	ld XWA, (xsp + 0x0108)
 	calr IDCursorAdvance
 	ld XWA, (xsp + 0x0108)
@@ -15391,23 +15391,23 @@ SliderV_CalcRange:
 	ld xwa, (xbc)
 	push xwa
 
-SliderV_CalcThumb:
+IconIDProc_CopyNameToBuffer:
 	ld XWA, (xsp + 0x010c)
 	ld xwa, (xwa + 4)
 	push xwa
 
-SliderV_CalcThumb_Clamp:
+IconIDProc_StrcpyReturnZero:
 	call	Strcpy
 	inc	8, xsp
 	ld	xhl, 0:i3
-	jr	BitmapIDProc_Return
-SliderV_DrawTrack:
+	jr	IconIDProc_Epilogue
+IconIDProc_OnSetPropertyEx:
 	ld xwa, 0xffffffff
 	ld (xsp + 4), xwa
 	ld xiz, 0:i3
-	jr SliderV_ReturnAlt
+	jr IconIDProc_SetProp_LoopHead
 
-SliderV_DrawThumb:
+IconIDProc_SetProp_CompareName:
 	push	xwa
 	ld	xwa, (xsp+268)
 	ld	xwa, (xwa+4)
@@ -15415,39 +15415,39 @@ SliderV_DrawThumb:
 	call	Strcmp
 	inc	8, xsp
 	cp	hl, 0:i3
-	jr	nz, SliderV_ReturnZero
+	jr	nz, IconIDProc_SetProp_NextIndex
 	ld	xwa, 0:i3
 	ld	(xsp+4), xwa
-	jr	SliderV_ReturnAlt2
-SliderV_ReturnZero:
+	jr	IconIDProc_SetProp_StoreIndex
+IconIDProc_SetProp_NextIndex:
 	inc 1, xiz
 
-SliderV_ReturnAlt:
+IconIDProc_SetProp_LoopHead:
 	ld xbc, xiz
 	sll xbc, 2
 	ld xwa, IconIDProc_PtrTable
 	add xwa, xbc
 	ld xwa, (xwa)
 	or xwa, xwa
-	jr nz, SliderV_DrawThumb
+	jr nz, IconIDProc_SetProp_CompareName
 	ld xwa, (xsp + 4)
 	cp xwa, 0xffffffff
-	jr z, SliderV_ReturnAlt3
+	jr z, IconIDProc_SetProp_ReturnResult
 
-SliderV_ReturnAlt2:
+IconIDProc_SetProp_StoreIndex:
 	ld XWA, (xsp + 0x0108)
 	calr IDCursorAdvance
 	ld (xhl), xiz
 
-SliderV_ReturnAlt3:
+IconIDProc_SetProp_ReturnResult:
 	ld xhl, (xsp + 4)
-	jr BitmapIDProc_Return
+	jr IconIDProc_Epilogue
 
-SliderV_Return:
+IconIDProc_ForwardToCommon:
 	ld XDE, (xsp + 0x0108)
 	calr CommonIDProc
 
-BitmapIDProc_Return:
+IconIDProc_Epilogue:
 	pop xiz
 	lda xsp, (xsp+264)
 	ret
@@ -15457,17 +15457,17 @@ BitmapIDProc:
 	push xiz
 	ld	(xsp+264), xde
 	cp xbc, EVT_SET_PROPERTY_EX
-	jrl z, DrawHelper_A_DrawTrack
+	jrl z, BitmapIDProc_OnSetPropertyEx
 	cp xbc, EVT_GET_PROPERTY_EX
-	jr z, DrawHelper_A_CalcRange
+	jr z, BitmapIDProc_OnGetOrDumpPropertyEx
 	cp xbc, EVT_DUMP_PROPERTY_EX
-	jr z, DrawHelper_A_CalcRange
+	jr z, BitmapIDProc_OnGetOrDumpPropertyEx
 	cp xbc, EVT_MAKE_DUMP
-	jr z, DrawHelper_A_Prologue
+	jr z, BitmapIDProc_OnMakeDump
 	cp xbc, EVT_GET_PROP_DATA_COUNT_SP
-	jr z, DrawHelper_A_Setup
+	jr z, BitmapIDProc_OnGetPropDataCountSp
 	cp xbc, EVT_GET_PROP_DATA_SP
-	jrl nz, DrawHelper_A_Return
+	jrl nz, BitmapIDProc_ForwardToCommon
 	ld XWA, (xsp + 0x0108)
 	ld xwa, (xwa + 8)
 	sll xwa, 2
@@ -15475,16 +15475,16 @@ BitmapIDProc:
 	add xbc, xwa
 	ld xwa, (xbc)
 	push xwa
-	jr DrawHelper_A_CalcThumb
+	jr BitmapIDProc_CopyNameToBuffer
 
-DrawHelper_A_Setup:
-	ld hl, (DrawHelper_A_Setup_Str_DQuote:24)
+BitmapIDProc_OnGetPropDataCountSp:
+	ld hl, (BitmapIDProc_EntryCount:24)
 	extz xhl
-	jrl ApFuncIDProc_Return
+	jrl BitmapIDProc_Epilogue
 
-DrawHelper_A_Prologue:
-	pushw	DrawHelper_A_Prologue_Str_id@hi16
-	pushw	DrawHelper_A_Prologue_Str_id@lo16
+BitmapIDProc_OnMakeDump:
+	pushw	BitmapIDProc_DumpPrefix@hi16
+	pushw	BitmapIDProc_DumpPrefix@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	Strcpy
@@ -15498,8 +15498,8 @@ DrawHelper_A_Prologue:
 	push	xwa
 	ld	xwa, (xsp+268)
 	push	xwa
-	jr	DrawHelper_A_ClampThumb
-DrawHelper_A_CalcRange:
+	jr	BitmapIDProc_StrcpyReturnZero
+BitmapIDProc_OnGetOrDumpPropertyEx:
 	ld XWA, (xsp + 0x0108)
 	calr IDCursorAdvance
 	ld XWA, (xsp + 0x0108)
@@ -15512,23 +15512,23 @@ DrawHelper_A_CalcRange:
 	ld xwa, (xbc)
 	push xwa
 
-DrawHelper_A_CalcThumb:
+BitmapIDProc_CopyNameToBuffer:
 	ld XWA, (xsp + 0x010c)
 	ld xwa, (xwa + 4)
 	push xwa
 
-DrawHelper_A_ClampThumb:
+BitmapIDProc_StrcpyReturnZero:
 	call	Strcpy
 	inc	8, xsp
 	ld	xhl, 0:i3
-	jr	ApFuncIDProc_Return
-DrawHelper_A_DrawTrack:
+	jr	BitmapIDProc_Epilogue
+BitmapIDProc_OnSetPropertyEx:
 	ld xwa, 0xffffffff
 	ld (xsp + 4), xwa
 	ld xiz, 0:i3
-	jr DrawHelper_A_ReturnAlt
+	jr BitmapIDProc_SetProp_LoopHead
 
-DrawHelper_A_DrawThumb:
+BitmapIDProc_SetProp_CompareName:
 	push	xwa
 	ld	xwa, (xsp+268)
 	ld	xwa, (xwa+4)
@@ -15536,39 +15536,39 @@ DrawHelper_A_DrawThumb:
 	call	Strcmp
 	inc	8, xsp
 	cp	hl, 0:i3
-	jr	nz, DrawHelper_A_ReturnZero
+	jr	nz, BitmapIDProc_SetProp_NextIndex
 	ld	xwa, 0:i3
 	ld	(xsp+4), xwa
-	jr	DrawHelper_A_ReturnAlt2
-DrawHelper_A_ReturnZero:
+	jr	BitmapIDProc_SetProp_StoreIndex
+BitmapIDProc_SetProp_NextIndex:
 	inc 1, xiz
 
-DrawHelper_A_ReturnAlt:
+BitmapIDProc_SetProp_LoopHead:
 	ld xbc, xiz
 	sll xbc, 2
 	ld xwa, BitmapIDProc_PtrTable
 	add xwa, xbc
 	ld xwa, (xwa)
 	or xwa, xwa
-	jr nz, DrawHelper_A_DrawThumb
+	jr nz, BitmapIDProc_SetProp_CompareName
 	ld xwa, (xsp + 4)
 	cp xwa, 0xffffffff
-	jr z, DrawHelper_A_ReturnAlt3
+	jr z, BitmapIDProc_SetProp_ReturnResult
 
-DrawHelper_A_ReturnAlt2:
+BitmapIDProc_SetProp_StoreIndex:
 	ld XWA, (xsp + 0x0108)
 	calr IDCursorAdvance
 	ld (xhl), xiz
 
-DrawHelper_A_ReturnAlt3:
+BitmapIDProc_SetProp_ReturnResult:
 	ld xhl, (xsp + 4)
-	jr ApFuncIDProc_Return
+	jr BitmapIDProc_Epilogue
 
-DrawHelper_A_Return:
+BitmapIDProc_ForwardToCommon:
 	ld XDE, (xsp + 0x0108)
 	calr CommonIDProc
 
-ApFuncIDProc_Return:
+BitmapIDProc_Epilogue:
 	pop xiz
 	lda xsp, (xsp+264)
 	ret

@@ -1436,7 +1436,7 @@ typedef struct __attribute__((packed)) {
     char RamEditCheck_str[14];
     char LswEditCheck_str[14];
     char DefaultFunction_str[16];
-    char DrawHelper_A_Setup_Str_DQuote[2];
+    char BitmapIDProc_EntryCount[2];
     /* BitmapIDProc_PtrTable: 256 pointers (cut from ptrs_25 by split_naka_pointer_arrays.py) */
     uint32_t BitmapIDProc_PtrTable[256];
     char w13_code[2];
@@ -5040,7 +5040,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .DefaultFunction_str = "DefaultFunction",
 
-    .DrawHelper_A_Setup_Str_DQuote = "\"",
+    .BitmapIDProc_EntryCount = "\"",
 
     .BitmapIDProc_PtrTable = {
         SELF(TrashIcon_str),

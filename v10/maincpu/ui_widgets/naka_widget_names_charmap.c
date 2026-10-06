@@ -580,7 +580,7 @@ typedef struct __attribute__((packed)) {
     char w99_code[2];
     char Object_name[8];
     char Root_ClassCount_160[2];
-    uint16_t SliderH_Setup_Data;
+    uint16_t FontIDProc_EntryCount;
     char str_13[2];
     char CHARA5W_str[8];
     char CHARA2W_str[8];
@@ -1328,7 +1328,7 @@ typedef struct __attribute__((packed)) {
     char InitializeToshi_str[16];
     char InitializeMurai_str[16];
     char InitializeRoot_str[16];
-    uint16_t SliderV_Setup_Data;
+    uint16_t IconIDProc_EntryCount;
     /* IconIDProc_PtrTable: 256 pointers (cut from ptrs_5 by split_naka_pointer_arrays.py) */
     uint32_t IconIDProc_PtrTable[256];
     char str_567[2];
@@ -2143,7 +2143,7 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .Root_ClassCount_160 = "m",
 
-    .SliderH_Setup_Data = 0x000A,
+    .FontIDProc_EntryCount = 0x000A,
 
     .str_13 = ALIGNED_STRING(""),
 
@@ -5106,7 +5106,7 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .InitializeRoot_str = ALIGNED_STRING("InitializeRoot"),
 
-    .SliderV_Setup_Data = 0x00B0,
+    .IconIDProc_EntryCount = 0x00B0,
 
     .IconIDProc_PtrTable = {
         SELF(None_str),

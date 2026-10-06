@@ -870,9 +870,9 @@ ShadowBox_A_CalcWidth_Str_RBrace:		.incbin "includes/generated/naka_disk_warning
 ShadowBox_B_Prologue_Str_idc:			.incbin "includes/generated/naka_disk_warning.bin", 0x1DF0, 0x4	; "idc"
 ScrollBar_CalcRange_Str_DQuote:			.incbin "includes/generated/naka_disk_warning.bin", 0x1DF4, 0x2	; """
 ScrollBar_CalcRange_Str_DQuote_2:		.incbin "includes/generated/naka_disk_warning.bin", 0x1DF6, 0x2	; """
-SliderH_Prologue_Str_id:			.incbin "includes/generated/naka_disk_warning.bin", 0x1DF8, 0x4	; "id"
-SliderV_Prologue_Str_idICON:			.incbin "includes/generated/naka_disk_warning.bin", 0x1DFC, 0x8	; "idICON_"
-DrawHelper_A_Prologue_Str_id:			.incbin "includes/generated/naka_disk_warning.bin", 0x1E04, 0x4	; "id"
+FontIDProc_DumpPrefix:			.incbin "includes/generated/naka_disk_warning.bin", 0x1DF8, 0x4	; "id"
+IconIDProc_DumpPrefix:			.incbin "includes/generated/naka_disk_warning.bin", 0x1DFC, 0x8	; "idICON_"
+BitmapIDProc_DumpPrefix:			.incbin "includes/generated/naka_disk_warning.bin", 0x1E04, 0x4	; "id"
 DrawHelper_B_FinishAlt_Str_idf:			.incbin "includes/generated/naka_disk_warning.bin", 0x1E08, 0x4	; "idf"
 DrawHelper_D_FinishAlt_Str_idf:			.incbin "includes/generated/naka_disk_warning.bin", 0x1E0C, 0x4	; "idf"
 ViewID_EventSwitch_Str_idNONE:			.incbin "includes/generated/naka_disk_warning.bin", 0x1E10, 0x8	; "idNONE"
@@ -1235,14 +1235,14 @@ Root_ApFunctionTable_420:	.incbin "includes/generated/naka_disk_warning.bin", 0x
 	.incbin "includes/generated/naka_disk_warning.bin", 0x2672, 0xAC
 ; [nakarest] naka_disk_warning+0x271e  +0x271e..+0x2720 (0xeab3ca, 2 B)
 ; [nakarest] Text (2 B at 0xeab3ca), first string """; no registered NAKA table points into it;
-; [nakarest] reached through source references DrawHelper_A_Setup (ui/ui_widget_defs.s: `ld hl,
-; [nakarest] (DrawHelper_A_Setup_Str_DQuote:24)`).
-DrawHelper_A_Setup_Str_DQuote:	.incbin "includes/generated/naka_disk_warning.bin", 0x271E, 0x2	; """
+; [nakarest] reached through source references BitmapIDProc_OnGetPropDataCountSp (ui/ui_widget_defs.s: `ld hl,
+; [nakarest] (BitmapIDProc_EntryCount:24)`).
+BitmapIDProc_EntryCount:	.incbin "includes/generated/naka_disk_warning.bin", 0x271E, 0x2	; """
 ; [nakarest] naka_disk_warning+0x2720  +0x2720..+0x31e8 (0xeab3cc, 2760 B)
 ; [nakarest] purpose not established: layout of 2760 B at 0xeab3cc not derived; readers below
 ; [nakarest] Readers: source references BitmapIDProc (ui/ui_widget_defs.s: `ld xbc,
-; [nakarest] BitmapIDProc_PtrTable`), DrawHelper_A_CalcRange (ui/ui_widget_defs.s: `ld
-; [nakarest] xbc, BitmapIDProc_PtrTable`), DrawHelper_A_ReturnAlt (ui/ui_widget_defs.s:
+; [nakarest] BitmapIDProc_PtrTable`), BitmapIDProc_OnGetOrDumpPropertyEx (ui/ui_widget_defs.s: `ld
+; [nakarest] xbc, BitmapIDProc_PtrTable`), BitmapIDProc_SetProp_LoopHead (ui/ui_widget_defs.s:
 ; [nakarest] `ld xwa, BitmapIDProc_PtrTable`).
 BitmapIDProc_PtrTable:	.incbin "includes/generated/naka_disk_warning.bin", 0x2720, 0xAC8	; 35 x 32-bit pointer
 ; [nakarest] naka_disk_warning+0x31e8  +0x31e8..+0x3d42 (0xeabe94, 2906 B)

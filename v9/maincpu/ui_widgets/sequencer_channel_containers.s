@@ -220,8 +220,8 @@ Naka_DrawbarSlider_Resources:	.incbin "includes/generated/naka_sequencer_channel
 ; [nakarest] purpose not established: layout of 128 B at 0xeef350 not derived; readers below
 ; [nakarest] Readers: work-RAM image: Boot_InitWorkRAM copies these bytes to RAM
 ; [nakarest] 0x3efac..0x3f02c (its ld xde/xhl/xbc + ldir blocks), where they are read by
-; [nakarest] FontIDProc (ui/ui_widget_defs.s: `ld xbc, 0x3efac`), SliderH_CalcRange
-; [nakarest] (ui/ui_widget_defs.s: `ld xbc, 0x3efac`), SliderH_ReturnAlt (ui/ui_widget_defs.s:
+; [nakarest] FontIDProc (ui/ui_widget_defs.s: `ld xbc, 0x3efac`), FontIDProc_OnGetOrDumpPropertyEx
+; [nakarest] (ui/ui_widget_defs.s: `ld xbc, 0x3efac`), FontIDProc_SetProp_LoopHead (ui/ui_widget_defs.s:
 ; [nakarest] `ld xwa, 0x3efac`).
 Naka_DrawbarDisplay_Table1:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x12D8, 0x80
 ; [nakarest] Naka_DrawbarDisplay_Table2  +0x1358..+0x1510 (0xeef3d0, 440 B)

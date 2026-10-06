@@ -920,10 +920,10 @@ NakaData_WidgetNames:	.incbin "includes/generated/naka_widget_names_charmap.bin"
 Root_ClassCount_160:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x622, 0x2
 ; [nakarest] naka_widget_names_charmap+0x624  +0x624..+0x628 (0xeada94, 4 B)
 ; [nakarest] purpose not established: layout of 4 B at 0xeada94 not derived; readers below
-; [nakarest] Readers: source references SliderH_Setup (ui/ui_widget_defs.s: `ld hl,
-; [nakarest] (SliderH_Setup_Data:24)`); 1 data word in Naka_DrawbarDisplay_Table1 (at
+; [nakarest] Readers: source references FontIDProc_OnGetPropDataCountSp (ui/ui_widget_defs.s: `ld hl,
+; [nakarest] (FontIDProc_EntryCount:24)`); 1 data word in Naka_DrawbarDisplay_Table1 (at
 ; [nakarest] 0xeef378).
-SliderH_Setup_Data:		.incbin "includes/generated/naka_widget_names_charmap.bin", 0x624, 0x2
+FontIDProc_EntryCount:		.incbin "includes/generated/naka_widget_names_charmap.bin", 0x624, 0x2
 NakaData_CharaFontTable:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x626, 0x2
 ; [nakarest] NakaInst_CHARA5W  +0x628..+0x630 (0xeada98, 8 B)
 ; [nakarest] Text (8 B at 0xeada98), first string "CHARA5W"; no registered NAKA table points
@@ -2558,14 +2558,14 @@ Str_InitializeMurai:	.incbin "includes/generated/naka_widget_names_charmap.bin",
 Str_InitializeRoot:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x44BA, 0x10
 ; [nakarest] naka_widget_names_charmap+0x44ca  +0x44ca..+0x44cc (0xeb193a, 2 B)
 ; [nakarest] purpose not established: layout of 2 B at 0xeb193a not derived; readers below
-; [nakarest] Readers: source references SliderV_Setup (ui/ui_widget_defs.s: `ld hl,
-; [nakarest] (SliderV_Setup_Data:24)`).
-SliderV_Setup_Data:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x44CA, 0x2
+; [nakarest] Readers: source references IconIDProc_OnGetPropDataCountSp (ui/ui_widget_defs.s: `ld hl,
+; [nakarest] (IconIDProc_EntryCount:24)`).
+IconIDProc_EntryCount:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x44CA, 0x2
 ; [nakarest] naka_widget_names_charmap+0x44cc  +0x44cc..+0x44d0 (0xeb193c, 4 B)
 ; [nakarest] purpose not established: layout of 4 B at 0xeb193c not derived; readers below
 ; [nakarest] Readers: source references IconIDProc (ui/ui_widget_defs.s: `ld xbc,
-; [nakarest] IconIDProc_PtrTable`), SliderV_CalcRange (ui/ui_widget_defs.s: `ld xbc,
-; [nakarest] IconIDProc_PtrTable`), SliderV_ReturnAlt (ui/ui_widget_defs.s: `ld xwa,
+; [nakarest] IconIDProc_PtrTable`), IconIDProc_OnGetOrDumpPropertyEx (ui/ui_widget_defs.s: `ld xbc,
+; [nakarest] IconIDProc_PtrTable`), IconIDProc_SetProp_LoopHead (ui/ui_widget_defs.s: `ld xwa,
 ; [nakarest] IconIDProc_PtrTable`).
 IconIDProc_PtrTable:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x44CC, 0x34	; 177 x 32-bit pointer
 	.long IconName_i11
@@ -3823,7 +3823,7 @@ IconName_i0:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4C16,
 ; [nakarest] Text (14 B at 0xeb208a), first string "Default"; no registered NAKA table points
 ; [nakarest] into it; reached through 1 data word in IconIDProc_PtrTable (at 0xeb1940); 1 data word
 ; [nakarest] in IconIDProc_PtrTable (at 0xeb193c), which is read by IconIDProc
-; [nakarest] (ui/ui_widget_defs.s: `ld xbc, IconIDProc_PtrTable`), SliderV_CalcRange
+; [nakarest] (ui/ui_widget_defs.s: `ld xbc, IconIDProc_PtrTable`), IconIDProc_OnGetOrDumpPropertyEx
 ; [nakarest] (ui/ui_widget_defs.s: `ld xbc, IconIDProc_PtrTable`), 1 more.
 IconName_Default:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4C1A, 0xE
 IconBitmapNamePtrTable:
