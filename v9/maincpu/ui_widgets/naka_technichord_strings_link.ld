@@ -83,7 +83,6 @@ PsWindowToggleProc = 0x00F95C01;
 SaveNo = 0x00F95026;
 SaveText = 0x00F94FC7;
 SaveYes = 0x00F94FD8;
-SendPartDataBlock_Data5 = 0x00FF00FF;
 SetupExitFunc = 0x00F9514F;
 SetupOkFunc = 0x00F95136;
 SmfFileNaming = 0x00F952C3;

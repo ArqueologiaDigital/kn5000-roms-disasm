@@ -158,8 +158,6 @@ extern const char PartName6_Rhythm;
 extern const char PartName6_Right1;
 extern const char PartName6_Right2;
 extern const char PartName6_TableEnd;
-extern const char SeMenu_CompareAndApply_Data6;
-extern const char SendPartDataBlock_Data5;
 extern const char SeqByteBlock_ChannelContainer;
 extern const char SeqChanContainer_ChordTypeRef_A;
 extern const char SeqChanContainer_ChordTypeRef_B;
@@ -5059,9 +5057,9 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .ptrs_4 = {
         0x00FF0010,
-        NAKA_ADDR(SendPartDataBlock_Data5),
-        NAKA_ADDR(SendPartDataBlock_Data5),
-        NAKA_ADDR(SendPartDataBlock_Data5),
+        0x00FF00FF,
+        0x00FF00FF,
+        0x00FF00FF,
     },
 
     .field_0f52 = 0x00FF,
@@ -5711,7 +5709,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .ptr_12cc = 0x00F5FFFF,
 
-    .ptr_12d0 = NAKA_ADDR(SendPartDataBlock_Data5),
+    .ptr_12d0 = 0x00FF00FF,
 
     .str_10 = ALIGNED_STRING(""),
 
@@ -7056,7 +7054,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .pad_305 = { 0 },
 
-    .ptr_1a6d = NAKA_ADDR(SendPartDataBlock_Data5),
+    .ptr_1a6d = 0x00FF00FF,
 
     .field_1a71 = 0x00FF,
 
@@ -7944,7 +7942,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .ptr_1e4c = 0x00FF9C9C,
 
-    .ptr_1e50 = NAKA_ADDR(SeMenu_CompareAndApply_Data6),
+    .ptr_1e50 = 0x00F0FBFF,
 
     .field_1e54 = 0xA0A0,
 
@@ -7964,7 +7962,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .pad_315 = { 0 },
 
-    .ptr_1e6a = NAKA_ADDR(SendPartDataBlock_Data5),
+    .ptr_1e6a = 0x00FF00FF,
 
     .field_1e6e = 0x00FF,
 

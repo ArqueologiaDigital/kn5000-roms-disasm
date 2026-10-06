@@ -33,7 +33,6 @@ extern const char NakaInst_Param_Val00_01;
 extern const char NakaInst_iduMurai;
 extern const char Naka_FileManagerEntry;
 extern const char Naka_PresentationRootState;
-extern const char SendPartDataBlock_Data5;
 extern const char SeqByteBlock_PathNormalize;
 extern const char WidgetCharMap_DataEntry1;
 extern const char WidgetName_PtrBlock_G;

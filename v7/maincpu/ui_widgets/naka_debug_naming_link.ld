@@ -34,7 +34,6 @@ NakaInst_Param_Val00_01 = 0x00EE0113;
 NakaInst_iduMurai = 0x00EB71C8;
 Naka_FileManagerEntry = 0x00EB2AE4;
 Naka_PresentationRootState = 0x00EF013F;
-SendPartDataBlock_Data5 = 0x00FF00FF;
 SeqByteBlock_PathNormalize = 0x00F500D7;
 WidgetCharMap_DataEntry1 = 0x00EB00D8;
 WidgetName_PtrBlock_G = 0x00EB00A4;

@@ -84,7 +84,6 @@ extern const char PsWindowToggleProc;
 extern const char SaveNo;
 extern const char SaveText;
 extern const char SaveYes;
-extern const char SendPartDataBlock_Data5;
 extern const char SetupExitFunc;
 extern const char SetupOkFunc;
 extern const char SmfFileNaming;
@@ -11164,9 +11163,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .ptrs_252 = {
         0x00FF0010,
-        NAKA_ADDR(SendPartDataBlock_Data5),
-        NAKA_ADDR(SendPartDataBlock_Data5),
-        NAKA_ADDR(SendPartDataBlock_Data5),
+        0x00FF00FF,
+        0x00FF00FF,
+        0x00FF00FF,
     },
 
     .field_1933c = 0x00FF,
@@ -11619,9 +11618,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .ptrs_253 = {
         0x00FF0010,
-        NAKA_ADDR(SendPartDataBlock_Data5),
-        NAKA_ADDR(SendPartDataBlock_Data5),
-        NAKA_ADDR(SendPartDataBlock_Data5),
+        0x00FF00FF,
+        0x00FF00FF,
+        0x00FF00FF,
     },
 
     .field_197b0 = 0x00FF,
