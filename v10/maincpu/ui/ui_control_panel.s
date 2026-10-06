@@ -1693,13 +1693,13 @@ IvIndexSwDelayProc:
 	ld (xsp + 4), xde
 	ld (xsp + 8), xwa
 	cp xbc, EVT_INDEXSW_DOWN_AIC
-	jrl z, Bounds_Default
+	jrl z, IvIndexSwDelayProc_OnIndexswAny
 	cp xbc, EVT_INDEXSW_UP_AIC
-	jrl z, Bounds_Default
+	jrl z, IvIndexSwDelayProc_OnIndexswAny
 	cp xbc, EVT_INDEXSW_DOWN
-	jrl z, Bounds_Default
+	jrl z, IvIndexSwDelayProc_OnIndexswAny
 	cp xbc, EVT_INDEXSW_UP
-	jr z, Bounds_Default
+	jr z, IvIndexSwDelayProc_OnIndexswAny
 	cp xbc, EVT_GET_STRING
 	jr z, IvIndexSwDelayProc_OnGetString
 	cp xbc, EVT_DRAW
@@ -1745,7 +1745,7 @@ IvIndexSwDelayProc_OnGetString:
 	inc 8, xsp
 	jr Bounds_Done
 
-Bounds_Default:
+IvIndexSwDelayProc_OnIndexswAny:
 	ld xwa, (xsp + 8)
 	ld xde, (xsp + 4)
 	call InheritedProc

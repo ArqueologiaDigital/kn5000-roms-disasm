@@ -11808,9 +11808,9 @@ GmOnOffFunc:
 	cp xbc, EVT_GET_SMALL_STEP
 	jrl z, GmOnOff_DefaultReturn
 	cp xbc, EVT_GET_LARGE_STEP
-	jr z, GmOnOff_Return1
+	jr z, GmOnOffFunc_OnGetLargeStepOrGetLswOutput
 	cp xbc, EVT_GET_LSW_OUTPUT
-	jr z, GmOnOff_Return1
+	jr z, GmOnOffFunc_OnGetLargeStepOrGetLswOutput
 	cp xbc, EVT_GET_LSW_ADDRESS
 	jr z, GmOnOff_Return0xC0
 	cp xbc, EVT_GET_LSW_STRING
@@ -11829,7 +11829,7 @@ GmOnOff_Return0xC0:
 	ld xhl, 0xc0
 	jrl VariScreen_CleanupRet
 
-GmOnOff_Return1:
+GmOnOffFunc_OnGetLargeStepOrGetLswOutput:
 	ld xhl, 1:i3
 	jrl VariScreen_CleanupRet
 

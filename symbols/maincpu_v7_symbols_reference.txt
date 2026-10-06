@@ -21360,7 +21360,7 @@ PsCmpCpFGrpBoxProc 00F1B39E
 PsCmpCpFGrpBoxProc_OnShow 00F1B3E7
 PsCmpCpFGrpBoxProc_OnHide 00F1B3F3
 PsCmpCpFGrpBox_CallInherited 00F1B3FD
-PsCmpCpFGrpBox_HandleEvtBC 00F1B404
+PsCmpCpFGrpBoxProc_OnPaintOrRepaint 00F1B404
 PsCmpCpFGrpBoxProc_OnApRhyGrpNm 00F1B425
 PsCmpCpFGrpBox_SetColorFF 00F1B45E
 PsCmpCpFGrpBox_SendNotify 00F1B466
@@ -21372,7 +21372,7 @@ PsCmpCpFVariBoxProc 00F1B4CB
 PsCmpCpFVariBoxProc_OnShow 00F1B514
 PsCmpCpFVariBoxProc_OnHide 00F1B520
 PsCmpCpFVariBox_CallInherited 00F1B52A
-PsCmpCpFVariBox_HandleEvtBC 00F1B531
+PsCmpCpFVariBoxProc_OnPaintOrRepaint 00F1B531
 PsCmpCpFVariBoxProc_OnApRhyVariNm 00F1B552
 PsCmpCpFVariBox_SetColorFF 00F1B598
 PsCmpCpFVariBox_SendNotify 00F1B5A0
@@ -21384,7 +21384,7 @@ PsCmpCpFPtnBoxProc 00F1B611
 PsCmpCpFPtnBoxProc_OnShow 00F1B648
 PsCmpCpFPtnBoxProc_OnHide 00F1B64F
 PsCmpCpFPtnBox_CallInherited 00F1B654
-PsCmpCpFPtnBox_HandleEvtBC 00F1B65B
+PsCmpCpFPtnBoxProc_OnPaintOrRepaint 00F1B65B
 PsCmpCpFPtnBox_SetColorFF 00F1B6AB
 PsCmpCpFPtnBox_SendNotify 00F1B6B3
 PsCmpCpFPtnBox_PushF5 00F1B704
@@ -21395,7 +21395,7 @@ PsCstmCpBnkBoxProc 00F1B718
 PsCstmCpBnkBoxProc_OnShow 00F1B748
 PsCstmCpBnkBoxProc_OnHide 00F1B74C
 PsCstmCpBnkBox_CallInherited 00F1B74E
-PsCstmCpBnkBox_HandleEvtBC 00F1B754
+PsCstmCpBnkBoxProc_OnPaintOrRepaint 00F1B754
 PsCstmCpBnkBox_ReadParam2 00F1B76C
 PsCstmCpBnkBox_LookupAndSend 00F1B770
 PsCstmCpBnkBox_ReturnZero 00F1B798
@@ -21404,7 +21404,7 @@ PsCstmCpSwBoxProc 00F1B7A1
 PsCstmCpSwBoxProc_OnShow 00F1B7D1
 PsCstmCpSwBoxProc_OnHide 00F1B7D5
 PsCstmCpSwBox_CallInherited 00F1B7D7
-PsCstmCpSwBox_HandleEvtBC 00F1B7DD
+PsCstmCpSwBoxProc_OnPaintOrRepaint 00F1B7DD
 PsCstmCpSwBox_PushTableAddr0 00F1B803
 PsCstmCpSwBox_ReadParam2 00F1B807
 PsCstmCpSwBox_PushTableAddr1 00F1B818
@@ -21427,14 +21427,14 @@ PsCtmAttStrBoxProc 00F1B934
 PsCtmAttStrBoxProc_OnShow 00F1B964
 PsCtmAttStrBoxProc_OnHide 00F1B968
 PsCtmAttStrBox_CallInherited 00F1B96A
-PsCtmAttStrBox_HandleEvtBC 00F1B970
+PsCtmAttStrBoxProc_OnPaintOrRepaint 00F1B970
 PsCtmAttStrBox_ReturnZero 00F1B994
 PsCtmAttStrBox_Epilogue 00F1B996
 AcMemNoBoxProc 00F1B99D
 AcMemNoBoxProc_OnShow 00F1B9D4
 AcMemNoBoxProc_OnHide 00F1B9DB
 AcMemNoBox_CallInherited 00F1B9E0
-AcMemNoBox_HandleEvtBC 00F1B9E7
+AcMemNoBoxProc_OnPaintOrRepaint 00F1B9E7
 AcMemNoBox_SetColorFF 00F1BA37
 AcMemNoBox_SendNotify 00F1BA3F
 AcMemNoBox_PushF5 00F1BA9C
@@ -21445,7 +21445,7 @@ AcCmpRecBoxProc 00F1BAB0
 AcCmpRecBoxProc_OnShow 00F1BB00
 AcCmpRecBoxProc_OnHide 00F1BB11
 AcCmpRecBox_CallInherited 00F1BB20
-AcCmpRecBox_HandleEvtBC 00F1BB27
+AcCmpRecBoxProc_OnPaintOrRepaint 00F1BB27
 AcCmpRecBox_CheckParam2 00F1BB71
 AcCmpRecBox_AdjustTable 00F1BB83
 AcCmpRecBox_InheritAndSend 00F1BB95
@@ -21455,7 +21455,7 @@ PsCmpQtzBoxProc 00F1BBC2
 PsCmpQtzBoxProc_OnShow 00F1BBF2
 PsCmpQtzBoxProc_OnHide 00F1BBF6
 PsCmpQtzBox_CallInherited 00F1BBF8
-PsCmpQtzBox_HandleEvtBC 00F1BBFE
+PsCmpQtzBoxProc_OnPaintOrRepaint 00F1BBFE
 PsCmpQtzBox_ReturnZero 00F1BC36
 PsCmpQtzBox_Epilogue 00F1BC38
 PsCmpMeasBoxProc 00F1BC3F
@@ -21475,7 +21475,7 @@ PsCmpMemBox_Epilogue 00F1BDB0
 AcCmpTempoBoxProc 00F1BDB7
 AcCmpTempoBoxProc_OnShow 00F1BDF9
 AcCmpTempoBoxProc_OnHide 00F1BE11
-AcCmpTempoBox_HandleEvtBC 00F1BE29
+AcCmpTempoBoxProc_OnPaintOrRepaint 00F1BE29
 AcCmpTempoBoxProc_OnLswData 00F1BE3C
 CmpFunc_Return 00F1BE76
 AcCmpTempoBox_Epilogue 00F1BE78
@@ -21489,7 +21489,7 @@ PsNameMemBoxProc 00F1BF02
 PsNameMemBoxProc_OnShow 00F1BF39
 PsNameMemBoxProc_OnHide 00F1BF40
 PsNameMemBox_CallInherited 00F1BF45
-PsNameMemBox_HandleEvtBC 00F1BF4C
+PsNameMemBoxProc_OnPaintOrRepaint 00F1BF4C
 PsNameMemBox_SetColorFF 00F1BF9C
 PsNameMemBox_SendNotify 00F1BFA4
 EasyCmp_TtlDispatch 00F1C003
@@ -21544,7 +21544,7 @@ PsMspNameBnkProc 00F1C508
 PsMspNameBnkProc_OnShow 00F1C538
 PsMspNameBnkProc_OnHide 00F1C53C
 PsMspNameBnk_CallInherited 00F1C53E
-PsMspNameBnk_HandleEvtBC 00F1C544
+PsMspNameBnkProc_OnPaintOrRepaint 00F1C544
 PsMspNameBnk_SetReturnZero 00F1C576
 PsMspNameBnk_Epilogue 00F1C578
 PsMspNameBnk_End 00F1C57F
@@ -21628,7 +21628,7 @@ PsRgpSetBnkBoxProc 00F1CE58
 PsRgpSetBnkBoxProc_OnShow 00F1CE88
 PsRgpSetBnkBoxProc_OnHide 00F1CE8C
 RgpSetBnkBox_CallInherited 00F1CE8E
-RgpSetBnkBox_HandleEvtBC 00F1CE94
+PsRgpSetBnkBoxProc_OnPaintOrRepaint 00F1CE94
 RgpSetBnkBox_SetReturnZero 00F1CEC6
 RgpSetBnkBox_Epilogue 00F1CEC8
 MspRGrpSetBnkFunc 00F1CECF
@@ -21646,7 +21646,7 @@ PsMspMeasBoxProc 00F1CF9F
 PsMspMeasBoxProc_OnShow 00F1CFCF
 PsMspMeasBoxProc_OnHide 00F1CFD3
 MspMeasBox_CallInherited 00F1CFD5
-MspMeasBox_HandleEvtBC 00F1CFDB
+PsMspMeasBoxProc_OnPaintOrRepaint 00F1CFDB
 MspMeasBox_SetReturnZero 00F1D00B
 MspMeasBox_Epilogue 00F1D00D
 MspMeasBox_End 00F1D014
@@ -21654,7 +21654,7 @@ PsMspMemBoxProc 00F1D014
 PsMspMemBoxProc_OnShow 00F1D044
 PsMspMemBoxProc_OnHide 00F1D048
 MspMemBox_CallInherited 00F1D04A
-MspMemBox_HandleEvtBC 00F1D050
+PsMspMemBoxProc_OnPaintOrRepaint 00F1D050
 MspMemBox_ClampValue 00F1D073
 MspMemBox_SetReturnZero 00F1D095
 MspMemBox_Epilogue 00F1D097
@@ -21663,7 +21663,7 @@ PsMspRecBnkBoxProc 00F1D09E
 PsMspRecBnkBoxProc_OnShow 00F1D0CE
 PsMspRecBnkBoxProc_OnHide 00F1D0D2
 MspRecBnkBox_CallInherited 00F1D0D4
-MspRecBnkBox_HandleEvtBC 00F1D0DA
+PsMspRecBnkBoxProc_OnPaintOrRepaint 00F1D0DA
 MspRecBnkBox_CopyMemBlock 00F1D0F7
 MspRecBnkBox_SetReturnZero 00F1D118
 MspRecBnkBox_Epilogue 00F1D11A
@@ -21672,7 +21672,7 @@ PsMspRecPadBoxProc 00F1D121
 PsMspRecPadBoxProc_OnShow 00F1D151
 PsMspRecPadBoxProc_OnHide 00F1D155
 MspRecPadBox_CallInherited 00F1D157
-MspRecPadBox_HandleEvtBC 00F1D15D
+PsMspRecPadBoxProc_OnPaintOrRepaint 00F1D15D
 AcSndArgGrid_BnkDispatch 00F1D173
 AcSndArgGrid_BnkCase1 00F1D197
 AcSndArgGrid_BnkCase2 00F1D199
@@ -21755,7 +21755,7 @@ PsSCTxtBoxProc 00F1DA6C
 PsSCTxtBoxProc_OnShow 00F1DA9C
 PsSCTxtBoxProc_OnHide 00F1DAA0
 SCTxtBox_CallInherited 00F1DAA2
-SCTxtBox_HandleEvtBC 00F1DAA8
+PsSCTxtBoxProc_OnPaintOrRepaint 00F1DAA8
 SCTxtBox_SetReturnZero 00F1DACC
 SCTxtBox_Epilogue 00F1DACE
 PsSCTxtBox2Proc 00F1DAD5
@@ -21763,7 +21763,7 @@ PsSCTxtBox2Proc_OnShow 00F1DB0D
 PsSCTxtBox2Proc_OnHide 00F1DB11
 SCTxtBox2_CallInherited 00F1DB13
 PsSCTxtBox2Proc_OnGetStrPtr 00F1DB19
-SCTxtBox2_HandleEvtBC 00F1DB1F
+PsSCTxtBox2Proc_OnPaintOrRepaint 00F1DB1F
 SCTxtBox2_SetReturnZero 00F1DB43
 SCTxtBox2_Epilogue 00F1DB45
 StylCnvStorOkFunc 00F1DB4C
@@ -21825,7 +21825,7 @@ PsStylCnvVerProc_OnShow 00F1E0DD
 PsStylCnvVerProc_OnHide 00F1E0E1
 StylCnvVer_CallInherited 00F1E0E3
 PsStylCnvVerProc_OnGetStrPtr 00F1E0E9
-StylCnvVer_HandleEvtBC 00F1E0EF
+PsStylCnvVerProc_OnPaintOrRepaint 00F1E0EF
 StylCnvVer_SetReturnZero 00F1E113
 StylCnvVer_Epilogue 00F1E115
 InitializeHama 00F1E11C
@@ -24108,7 +24108,7 @@ IvNamingExit_ScreenData_OnParaDraw 00F2BD30
 IvNamingExit_ScreenData_Skip3 00F2BE49
 IvNamingExit_ScreenData_Join2 00F2BE58
 IvNamingExit_ScreenData_Skip4 00F2BE5C
-IvNamingExit_ScreenData_Skip5 00F2BE80
+IvNamingExit_ScreenData_OnIndexswUpOrDown 00F2BE80
 IvNamingExit_ScreenData_Join3 00F2BEC9
 IvNamingExit_ScreenData_Skip6 00F2BECD
 IvNamingExit_ScreenData_Epilogue 00F2BEE0
@@ -37256,14 +37256,14 @@ PsMixer_CtlTypeProc5 00F8077C
 PsMixer_CtlTypeProc5_OnParaDraw 00F807EB
 PsMixer_CtlTypeProc5_Skip2 00F8083F
 PsMixer_CtlTypeProc5_Join 00F8084E
-PsMixer_CtlTypeProc5_Skip3 00F80855
+PsMixer_CtlTypeProc5_OnIndexswAny 00F80855
 PsMixer_CtlTypeProc5_Skip4 00F808FE
 PsMixer_CtlTypeProc5_Join2 00F80916
 PsMixer_CtlTypeProc6 00F8091D
 PsMixer_CtlTypeProc6_OnParaDraw 00F8098A
 PsMixer_CtlTypeProc6_Skip2 00F80A07
 PsMixer_CtlTypeProc6_Join 00F80A16
-PsMixer_CtlTypeProc6_Skip3 00F80A1D
+PsMixer_CtlTypeProc6_OnIndexswAny 00F80A1D
 PsMixer_CtlTypeProc6_Skip4 00F80AC6
 PsMixer_CtlTypeProc6_Join2 00F80ADE
 PsMixer_CtlTypeProc3 00F80AE5
@@ -37275,7 +37275,7 @@ PsMixer_CtlTypeProc3_Skip4 00F80C85
 PsMixer_CtlTypeProc3_Join2 00F80C94
 PsMixer_CtlTypeProc3_Skip5 00F80CF5
 PsMixer_CtlTypeProc3_Join3 00F80D03
-PsMixer_CtlTypeProc3_Skip6 00F80D0F
+PsMixer_CtlTypeProc3_OnIndexswAny 00F80D0F
 PsMixer_CtlTypeProc3_Skip7 00F80DC5
 PsMixer_CtlTypeProc3_OnIndexswBoth 00F80DE0
 PsMixer_CtlTypeProc3_Skip9 00F80E87
@@ -37287,7 +37287,7 @@ PsMixer_CtlTypeProc7_Skip3 00F80FD4
 PsMixer_CtlTypeProc7_Join 00F80FEE
 PsMixer_CtlTypeProc7_Skip4 00F81041
 PsMixer_CtlTypeProc7_Join2 00F81050
-PsMixer_CtlTypeProc7_Skip5 00F81057
+PsMixer_CtlTypeProc7_OnIndexswAny 00F81057
 PsMixer_CtlTypeProc7_Skip6 00F81105
 PsMixer_CtlTypeProc7_OnIndexswBoth 00F81120
 PsMixer_CtlTypeProc7_Skip8 00F811C2
@@ -37302,7 +37302,7 @@ PsMixer_CtlTypeProc4_Join2 00F8138F
 PsMixer_CtlTypeProc4_Skip5 00F813B2
 PsMixer_CtlTypeProc4_Skip6 00F813B9
 PsMixer_CtlTypeProc4_Join3 00F813BE
-PsMixer_CtlTypeProc4_Skip7 00F813C5
+PsMixer_CtlTypeProc4_OnIndexswAny 00F813C5
 PsMixer_CtlTypeProc4_Skip8 00F8146D
 PsMixer_CtlTypeProc4_Join4 00F81485
 PsMixer_CtlTypeProc9 00F8148C
@@ -37313,14 +37313,14 @@ PsMixer_CtlTypeProc9_Skip4 00F815DB
 PsMixer_CtlTypeProc9_Join 00F815DD
 PsMixer_CtlTypeProc9_Skip5 00F81634
 PsMixer_CtlTypeProc9_Join2 00F81643
-PsMixer_CtlTypeProc9_Skip6 00F8168B
+PsMixer_CtlTypeProc9_OnIndexswAny 00F8168B
 PsMixer_CtlTypeProc9_Skip7 00F81733
 PsMixer_CtlTypeProc9_Join3 00F8174B
 PsMixer_CtlTypeProc2 00F81752
 PsMixer_CtlTypeProc2_Skip 00F81829
 PsMixer_CtlTypeProc2_Entry 00F81845
 PsMixer_CtlTypeProc2_Loop 00F8189C
-PsMixer_CtlTypeProc2_Skip2 00F818A1
+PsMixer_CtlTypeProc2_OnIndexswAny 00F818A1
 PsMixer_CtlTypeProc2_Skip3 00F81921
 PsMixer_CtlTypeProc2_Join 00F8194F
 PsMixer_CtlTypeProc2_Skip4 00F81A00
@@ -37341,16 +37341,16 @@ PsMixer_CtlTypeProc1_Skip4 00F81D62
 PsMixer_CtlTypeProc1_Join 00F81D71
 PsMixer_CtlTypeProc1_Skip5 00F81D75
 PsMixer_CtlTypeProc1_Skip6 00F81D83
-PsMixer_CtlTypeProc1_Skip7 00F81D94
+PsMixer_CtlTypeProc1_OnIndexswAny 00F81D94
 PsMixer_CtlTypeProc1_Join2 00F81E17
 PsMixer_CtlTypeProc10 00F81E1E
 PsMixer_CtlTypeProc10_OnDraw 00F81E30
 PsMixer_CtlTypeProc10_Loop 00F81EBD
 PsMixer_CtlTypeProc10_Epilogue 00F81F12
 PsMixer_CtlTypeProc8 00F81F17
-PsMixer_CtlTypeProc8_Skip 00F81F53
+PsMixer_CtlTypeProc8_OnIndexswAny 00F81F53
 PsMixer_CtlTypeProc8_OnIndexswUpAic 00F8202A
-PsMixer_CtlTypeProc8_Skip3 00F82063
+PsMixer_CtlTypeProc8_OnIndexswDownAny 00F82063
 PsMixer_CtlTypeProc8_Join 00F8208B
 PsMixer_CtlTypeProc8_Loop 00F8208F
 PsMixer_CtlTypeProc8_Entry 00F82093
@@ -40375,7 +40375,7 @@ Scrollbar_Return 00F96548
 IvIndexSwDelayProc 00F9654D
 IvIndexSwDelayProc_OnDraw 00F965CC
 IvIndexSwDelayProc_OnGetString 00F965E6
-Bounds_Default 00F965F8
+IvIndexSwDelayProc_OnIndexswAny 00F965F8
 Bounds_Done 00F96661
 Bounds_Error 00F96665
 Bounds_Return 00F9666F
@@ -41175,7 +41175,7 @@ WndEvt_DispatchByEventCode_Case1 00F9B45F
 WndEvt_DispatchByEventCode_Case2 00F9B493
 WndEvt_DispatchByEventCode_Case3 00F9B50F
 WndEvt_EventCodeDispatch_OnIndexswUp 00F9B540
-WndEvt_EventCodeDispatch_Skip2 00F9B5B9
+WndEvt_EventCodeDispatch_OnIndexswDownAny 00F9B5B9
 WndEvt_EventCodeDispatch_Skip3 00F9B617
 WndEvt_EventCodeDispatch_Skip4 00F9B61E
 WndEvt_EventCodeDispatch_Skip5 00F9B6A3
@@ -45354,7 +45354,7 @@ PmBkName_ReturnZero 00FBD92E
 PmBkName_DataBytes 00FBD931
 GmOnOffFunc 00FBD936
 GmOnOff_Return0xC0 00FBD987
-GmOnOff_Return1 00FBD98F
+GmOnOffFunc_OnGetLargeStepOrGetLswOutput 00FBD98F
 GmOnOff_GetBoundsRect 00FBD994
 GmOnOff_CheckDesign 00FBD9F0
 GmOnOff_SendHideEvent 00FBDA05

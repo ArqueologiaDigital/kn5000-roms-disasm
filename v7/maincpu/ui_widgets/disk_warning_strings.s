@@ -365,7 +365,7 @@ Data_SoundEditorCharsLayout:	.incbin "includes/generated/naka_disk_warning.bin",
 ; [nakarest] naka_disk_warning+0x1232  +0x1232..+0x123e (0xea9ede, 12 B)
 ; [nakarest] purpose not established: layout of 12 B at 0xea9ede not derived; readers below
 ; [nakarest] Readers: source references WndEvt_EventCodeDispatch_Join (ui/ui_window_procs.s: `ld
-; [nakarest] xbc, WndScroll_ItemCountCheck_Str_Chr25`), WndEvt_EventCodeDispatch_Skip2
+; [nakarest] xbc, WndScroll_ItemCountCheck_Str_Chr25`), WndEvt_EventCodeDispatch_OnIndexswDownAny
 ; [nakarest] (ui/ui_window_procs.s: `lda xde, (WndScroll_ItemCountCheck_Str_Chr25:24)`),
 ; [nakarest] WndScroll_CheckTableEnd (ui/ui_window_procs.s: `ld xbc,
 ; [nakarest] WndScroll_ItemCountCheck_Str_Chr25`), WndScroll_HandleDialPage (ui/ui_window_procs.s:

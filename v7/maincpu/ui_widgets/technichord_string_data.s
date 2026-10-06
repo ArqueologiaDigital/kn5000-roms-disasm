@@ -933,17 +933,17 @@ LswLeftHold_DefaultStr_Data:	.incbin "includes/generated/naka_technichord_string
 SdpartUpdatePartUI_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF35C, 0x78
 ; [nakarest] naka_technichord_strings+0xf3d4  +0xf3d4..+0xf458 (0xe95322, 132 B)
 ; [nakarest] purpose not established: layout of 132 B at 0xe95322 not derived; readers below
-; [nakarest] Readers: source references PsMixer_CtlTypeProc3_Skip6 (ui/drawbar_panel_ui.s: `lda
+; [nakarest] Readers: source references PsMixer_CtlTypeProc3_OnIndexswAny (ui/drawbar_panel_ui.s: `lda
 ; [nakarest] xbc, (PsMixer_MidiScanOuterLoop_Data:24)`), PsMixer_CtlTypeProc3_OnIndexswBoth
 ; [nakarest] (ui/drawbar_panel_ui.s: `lda xbc, (PsMixer_MidiScanOuterLoop_Data:24)`),
 ; [nakarest] PsMixer_CtlTypeProc7_OnParaDraw (ui/drawbar_panel_ui.s: `lda xbc,
-; [nakarest] (PsMixer_MidiScanOuterLoop_Data:24)`), PsMixer_CtlTypeProc7_Skip5
+; [nakarest] (PsMixer_MidiScanOuterLoop_Data:24)`), PsMixer_CtlTypeProc7_OnIndexswAny
 ; [nakarest] (ui/drawbar_panel_ui.s: `lda xbc, (PsMixer_MidiScanOuterLoop_Data:24)`), 15 more.
 PsMixer_MidiScanOuterLoop_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF3D4, 0x84
 ; [nakarest] naka_technichord_strings+0xf458  +0xf458..+0xf45c (0xe953a6, 4 B)
 ; [nakarest] purpose not established: layout of 4 B at 0xe953a6 not derived; readers below
 ; [nakarest] Readers: source references PsMixer_CtlTypeProc9_Join3 (ui/drawbar_panel_ui.s: `ld
-; [nakarest] xwa, (PsMixer_CtlTypeProc2_Data:24)`), PsMixer_CtlTypeProc2_Skip2
+; [nakarest] xwa, (PsMixer_CtlTypeProc2_Data:24)`), PsMixer_CtlTypeProc2_OnIndexswAny
 ; [nakarest] (ui/drawbar_panel_ui.s: `ld xwa, (PsMixer_CtlTypeProc2_Data:24)`),
 ; [nakarest] PsMixer_CtlTypeProc2_OnIndexswBoth (ui/drawbar_panel_ui.s: `ld xwa,
 ; [nakarest] (PsMixer_CtlTypeProc2_Data:24)`).

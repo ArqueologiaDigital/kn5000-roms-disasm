@@ -7,8 +7,9 @@ QUESTION IT ANSWERS / WHAT IT DOES
   passes gave many arms names that say nothing: AcCmpRecBox_HandleEvt1 (EVT_SHOW), DpDoc_CaseA (EVT_SW_IN),
   BitmapDrawsw_Skip4 (EVT_GET_BITMAP_DATA), Bounds_Case1E0006A (EVT_GET_STRING).
   A label is renamed when:
-    - every instruction that names it is a `jr z` / `jrl z` right after `cp xbc|bc|xde|xwa, EVT_X`, all with the
-      same EVT_X;
+    - every instruction that names it is a `jr z` / `jrl z` right after `cp xbc|bc|xde|xwa, EVT_X`;
+      an arm several events share is named for the set: OnPaintOrRepaint, OnIndexswAny (UP / DOWN and their
+      _AIC repeats), OnIndexswUpOrDown ...; a set of more than three other events is left alone;
     - and its current name is generic: semantic_score's GENERIC, POSITIONAL or CONTINUATION patterns, or a
       _CaseX / _HandleEvt* / _HandleEvent<digit>* / _Evt<X> / _Handler<n> / _Return<n> / _Path<n> suffix.
   The new name is <dispatcher>_On<Event>.  The event is spelled as frame_switch_cases.py spells it (EVT_GET_STRING ->
@@ -54,6 +55,28 @@ def spell(evt):
     return "On" + "".join(w.capitalize() for w in evt[4:].split("_"))
 
 
+IDX = {"EVT_INDEXSW_UP", "EVT_INDEXSW_DOWN", "EVT_INDEXSW_UP_AIC", "EVT_INDEXSW_DOWN_AIC"}
+
+
+def spell_set(evts):
+    """An arm several events share: the index-switch family by its members, else up to three events joined
+    by Or (OnPaintOrRepaint); None when there are more."""
+    evts = set(evts)
+    if len(evts) == 1:
+        return spell(evts.pop())
+    if evts == IDX:
+        return "OnIndexswAny"
+    if evts == {"EVT_INDEXSW_UP", "EVT_INDEXSW_DOWN"}:
+        return "OnIndexswUpOrDown"
+    if evts == {"EVT_INDEXSW_DOWN", "EVT_INDEXSW_DOWN_AIC"}:
+        return "OnIndexswDownAny"
+    if evts == {"EVT_INDEXSW_UP", "EVT_INDEXSW_UP_AIC"}:
+        return "OnIndexswUpAny"
+    if len(evts) > 3:
+        return None
+    return "On" + "Or".join(spell(e)[2:] for e in sorted(evts))
+
+
 def plan(tree):
     files = {}
     for p in glob.glob(os.path.join(REPO, tree, "maincpu", "**", "*.s"), recursive=True):
@@ -97,9 +120,12 @@ def plan(tree):
     for t, uses in sorted(arms.items()):
         evts = {e for e, _ in uses}
         disps = {d for _, d in uses}
-        if len(evts) != 1 or len(disps) != 1 or None in disps or refs[t] != len(uses) or not generic(t):
+        if len(disps) != 1 or None in disps or refs[t] != len(uses) or not generic(t):
             continue
-        new = "%s_%s" % (disps.pop(), spell(evts.pop()))
+        ev = spell_set(evts)
+        if ev is None:
+            continue
+        new = "%s_%s" % (disps.pop(), ev)
         if new in defined or new in rules.values():
             refused.append((t, new))
             continue

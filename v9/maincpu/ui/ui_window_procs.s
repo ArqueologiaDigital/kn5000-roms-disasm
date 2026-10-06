@@ -352,9 +352,9 @@ WndEvt_DispatchByEventCode_Case3:
 	ld	(xsp+8), xwa
 	ld	xwa, (xsp+46)
 	cp	xwa, EVT_INDEXSW_DOWN
-	jrl	z, WndEvt_EventCodeDispatch_Skip2
+	jrl	z, WndEvt_EventCodeDispatch_OnIndexswDownAny
 	cp	xwa, EVT_INDEXSW_DOWN_AIC
-	jrl	z, WndEvt_EventCodeDispatch_Skip2
+	jrl	z, WndEvt_EventCodeDispatch_OnIndexswDownAny
 	cp	xwa, EVT_INDEXSW_UP
 	jr	z, WndEvt_EventCodeDispatch_OnIndexswUp
 	cp	xwa, EVT_INDEXSW_UP_AIC
@@ -396,7 +396,7 @@ WndEvt_EventCodeDispatch_OnIndexswUp:
 	ld	xbc, (xsp+46)
 	ld	xde, (xsp+42)
 	jrl	WndEvt_EventCodeDispatch_Join3
-WndEvt_EventCodeDispatch_Skip2:
+WndEvt_EventCodeDispatch_OnIndexswDownAny:
 	ld	wa, (0x0274da:24)
 	extz	xwa
 	sll	xwa, 2

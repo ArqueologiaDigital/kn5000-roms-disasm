@@ -2015,9 +2015,9 @@ IvNamingExit_ScreenData:
 	ld	(xsp+178), xwa
 	ld	xwa, (xsp+174)
 	cp	xwa, EVT_INDEXSW_DOWN
-	jrl	z, IvNamingExit_ScreenData_Skip5
+	jrl	z, IvNamingExit_ScreenData_OnIndexswUpOrDown
 	cp	xwa, EVT_INDEXSW_UP
-	jrl	z, IvNamingExit_ScreenData_Skip5
+	jrl	z, IvNamingExit_ScreenData_OnIndexswUpOrDown
 	cp	xwa, EVT_SET_SELECTED_FILE_NUM
 	jrl	z, IvNamingExit_ScreenData_Skip4
 	cp	xwa, EVT_PARA_DRAW
@@ -2225,7 +2225,7 @@ IvNamingExit_ScreenData_Skip4:
 	ld	xwa, (xsp+170)
 	ld	(xbc), wa
 	jr	IvNamingExit_ScreenData_Join3
-IvNamingExit_ScreenData_Skip5:
+IvNamingExit_ScreenData_OnIndexswUpOrDown:
 	ld	xwa, (xsp+178)
 	ld	xbc, (xsp+174)
 	ld	xde, (xsp+170)

@@ -15279,9 +15279,9 @@ PsCmpCpFGrpBoxProc:
 	cp xbc, EVT_AP_RHY_GRP_NM
 	jr z, PsCmpCpFGrpBoxProc_OnApRhyGrpNm
 	cp xbc, EVT_REPAINT
-	jr z, PsCmpCpFGrpBox_HandleEvtBC
+	jr z, PsCmpCpFGrpBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_PAINT
-	jr z, PsCmpCpFGrpBox_HandleEvtBC
+	jr z, PsCmpCpFGrpBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_HIDE
 	jr z, PsCmpCpFGrpBoxProc_OnHide
 	cp xbc, EVT_SHOW
@@ -15304,7 +15304,7 @@ PsCmpCpFGrpBox_CallInherited:
 	call InheritedProc
 	jrl PsCmpCpFGrpBox_ReturnZero
 
-PsCmpCpFGrpBox_HandleEvtBC:
+PsCmpCpFGrpBoxProc_OnPaintOrRepaint:
 	ld XWA, (xsp + 0x0110)
 	ld XDE, (xsp + 0x010c)
 	call InheritedProc
@@ -15388,9 +15388,9 @@ PsCmpCpFVariBoxProc:
 	cp xbc, EVT_AP_RHY_VARI_NM
 	jr z, PsCmpCpFVariBoxProc_OnApRhyVariNm
 	cp xbc, EVT_REPAINT
-	jr z, PsCmpCpFVariBox_HandleEvtBC
+	jr z, PsCmpCpFVariBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_PAINT
-	jr z, PsCmpCpFVariBox_HandleEvtBC
+	jr z, PsCmpCpFVariBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_HIDE
 	jr z, PsCmpCpFVariBoxProc_OnHide
 	cp xbc, EVT_SHOW
@@ -15413,7 +15413,7 @@ PsCmpCpFVariBox_CallInherited:
 	call InheritedProc
 	jrl DesignFrame_Return
 
-PsCmpCpFVariBox_HandleEvtBC:
+PsCmpCpFVariBoxProc_OnPaintOrRepaint:
 	ld XWA, (xsp + 0x0110)
 	ld XDE, (xsp + 0x010c)
 	call InheritedProc
@@ -15500,9 +15500,9 @@ PsCmpCpFPtnBoxProc:
 	push xiz
 	ld	(xsp+268), xwa
 	cp xbc, EVT_REPAINT
-	jr z, PsCmpCpFPtnBox_HandleEvtBC
+	jr z, PsCmpCpFPtnBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_PAINT
-	jr z, PsCmpCpFPtnBox_HandleEvtBC
+	jr z, PsCmpCpFPtnBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_HIDE
 	jr z, PsCmpCpFPtnBoxProc_OnHide
 	cp xbc, EVT_SHOW
@@ -15522,7 +15522,7 @@ PsCmpCpFPtnBox_CallInherited:
 	call InheritedProc
 	jrl PsCmpCpFPtnBox_ReturnZero
 
-PsCmpCpFPtnBox_HandleEvtBC:
+PsCmpCpFPtnBoxProc_OnPaintOrRepaint:
 	ld XWA, (xsp + 0x010c)
 	call InheritedProc
 	ld XWA, (xsp + 0x010c)
@@ -15599,9 +15599,9 @@ PsCstmCpBnkBoxProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, EVT_REPAINT
-	jr z, PsCstmCpBnkBox_HandleEvtBC
+	jr z, PsCstmCpBnkBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_PAINT
-	jr z, PsCstmCpBnkBox_HandleEvtBC
+	jr z, PsCstmCpBnkBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_HIDE
 	jr z, PsCstmCpBnkBoxProc_OnHide
 	cp xbc, EVT_SHOW
@@ -15621,7 +15621,7 @@ PsCstmCpBnkBox_CallInherited:
 	call InheritedProc
 	jr PsCstmCpBnkBox_ReturnZero
 
-PsCstmCpBnkBox_HandleEvtBC:
+PsCstmCpBnkBoxProc_OnPaintOrRepaint:
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, xiz
@@ -15662,9 +15662,9 @@ PsCstmCpSwBoxProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, EVT_REPAINT
-	jr z, PsCstmCpSwBox_HandleEvtBC
+	jr z, PsCstmCpSwBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_PAINT
-	jr z, PsCstmCpSwBox_HandleEvtBC
+	jr z, PsCstmCpSwBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_HIDE
 	jr z, PsCstmCpSwBoxProc_OnHide
 	cp xbc, EVT_SHOW
@@ -15684,7 +15684,7 @@ PsCstmCpSwBox_CallInherited:
 	call InheritedProc
 	jr PsCstmCpSwBox_ReturnZero
 
-PsCstmCpSwBox_HandleEvtBC:
+PsCstmCpSwBoxProc_OnPaintOrRepaint:
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, xiz
@@ -15835,9 +15835,9 @@ PsCtmAttStrBoxProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, EVT_REPAINT
-	jr z, PsCtmAttStrBox_HandleEvtBC
+	jr z, PsCtmAttStrBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_PAINT
-	jr z, PsCtmAttStrBox_HandleEvtBC
+	jr z, PsCtmAttStrBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_HIDE
 	jr z, PsCtmAttStrBoxProc_OnHide
 	cp xbc, EVT_SHOW
@@ -15857,7 +15857,7 @@ PsCtmAttStrBox_CallInherited:
 	call InheritedProc
 	jr PsCtmAttStrBox_ReturnZero
 
-PsCtmAttStrBox_HandleEvtBC:
+PsCtmAttStrBoxProc_OnPaintOrRepaint:
 	ld xwa, xiz
 	call InheritedProc
 	pushw 0x0
@@ -15884,9 +15884,9 @@ AcMemNoBoxProc:
 	push xiz
 	ld	(xsp+268), xwa
 	cp xbc, EVT_REPAINT
-	jr z, AcMemNoBox_HandleEvtBC
+	jr z, AcMemNoBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_PAINT
-	jr z, AcMemNoBox_HandleEvtBC
+	jr z, AcMemNoBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_HIDE
 	jr z, AcMemNoBoxProc_OnHide
 	cp xbc, EVT_SHOW
@@ -15906,7 +15906,7 @@ AcMemNoBox_CallInherited:
 	call InheritedProc
 	jrl AcMemNoBox_ReturnZero
 
-AcMemNoBox_HandleEvtBC:
+AcMemNoBoxProc_OnPaintOrRepaint:
 	ld XWA, (xsp + 0x010c)
 	call InheritedProc
 	ld XWA, (xsp + 0x010c)
@@ -15989,9 +15989,9 @@ AcCmpRecBoxProc:
 	ld	(xsp+280), xwa
 	ld XWA, (xsp + 0x0114)
 	cp xwa, EVT_REPAINT
-	jr z, AcCmpRecBox_HandleEvtBC
+	jr z, AcCmpRecBoxProc_OnPaintOrRepaint
 	cp xwa, EVT_PAINT
-	jr z, AcCmpRecBox_HandleEvtBC
+	jr z, AcCmpRecBoxProc_OnPaintOrRepaint
 	cp xwa, EVT_HIDE
 	jr z, AcCmpRecBoxProc_OnHide
 	cp xwa, EVT_SHOW
@@ -16017,7 +16017,7 @@ AcCmpRecBox_CallInherited:
 	call InheritedProc
 	jrl AcCmpRecBox_ReturnZero
 
-AcCmpRecBox_HandleEvtBC:
+AcCmpRecBoxProc_OnPaintOrRepaint:
 	ld XWA, (xsp + 0x0118)
 	call GetViewInstance
 	ld xiz, xhl
@@ -16084,9 +16084,9 @@ PsCmpQtzBoxProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, EVT_REPAINT
-	jr z, PsCmpQtzBox_HandleEvtBC
+	jr z, PsCmpQtzBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_PAINT
-	jr z, PsCmpQtzBox_HandleEvtBC
+	jr z, PsCmpQtzBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_HIDE
 	jr z, PsCmpQtzBoxProc_OnHide
 	cp xbc, EVT_SHOW
@@ -16106,7 +16106,7 @@ PsCmpQtzBox_CallInherited:
 	call InheritedProc
 	jr PsCmpQtzBox_ReturnZero
 
-PsCmpQtzBox_HandleEvtBC:
+PsCmpQtzBoxProc_OnPaintOrRepaint:
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, xiz
@@ -16277,9 +16277,9 @@ AcCmpTempoBoxProc:
 	cp xbc, EVT_LSW_DATA
 	jr z, AcCmpTempoBoxProc_OnLswData
 	cp xbc, EVT_REPAINT
-	jr z, AcCmpTempoBox_HandleEvtBC
+	jr z, AcCmpTempoBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_PAINT
-	jr z, AcCmpTempoBox_HandleEvtBC
+	jr z, AcCmpTempoBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_HIDE
 	jr z, AcCmpTempoBoxProc_OnHide
 	cp xbc, EVT_SHOW
@@ -16307,7 +16307,7 @@ AcCmpTempoBoxProc_OnHide:
 	call ResetLswFilter
 	jr CmpFunc_Return
 
-AcCmpTempoBox_HandleEvtBC:
+AcCmpTempoBoxProc_OnPaintOrRepaint:
 	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
@@ -16399,9 +16399,9 @@ PsNameMemBoxProc:
 	push xiz
 	ld	(xsp+268), xwa
 	cp xbc, EVT_REPAINT
-	jr z, PsNameMemBox_HandleEvtBC
+	jr z, PsNameMemBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_PAINT
-	jr z, PsNameMemBox_HandleEvtBC
+	jr z, PsNameMemBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_HIDE
 	jr z, PsNameMemBoxProc_OnHide
 	cp xbc, EVT_SHOW
@@ -16421,7 +16421,7 @@ PsNameMemBox_CallInherited:
 	call InheritedProc
 	jrl EasyCmp_TtlCase2
 
-PsNameMemBox_HandleEvtBC:
+PsNameMemBoxProc_OnPaintOrRepaint:
 	ld XWA, (xsp + 0x010c)
 	call InheritedProc
 	ld XWA, (xsp + 0x010c)
@@ -17005,9 +17005,9 @@ PsMspNameBnkProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, EVT_REPAINT
-	jr z, PsMspNameBnk_HandleEvtBC
+	jr z, PsMspNameBnkProc_OnPaintOrRepaint
 	cp xbc, EVT_PAINT
-	jr z, PsMspNameBnk_HandleEvtBC
+	jr z, PsMspNameBnkProc_OnPaintOrRepaint
 	cp xbc, EVT_HIDE
 	jr z, PsMspNameBnkProc_OnHide
 	cp xbc, EVT_SHOW
@@ -17027,7 +17027,7 @@ PsMspNameBnk_CallInherited:
 	call InheritedProc
 	jr PsMspNameBnk_SetReturnZero
 
-PsMspNameBnk_HandleEvtBC:
+PsMspNameBnkProc_OnPaintOrRepaint:
 	ld xwa, xiz
 	call InheritedProc
 	ld a, (0x7f3e:16)
@@ -17900,9 +17900,9 @@ PsRgpSetBnkBoxProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, EVT_REPAINT
-	jr z, RgpSetBnkBox_HandleEvtBC
+	jr z, PsRgpSetBnkBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_PAINT
-	jr z, RgpSetBnkBox_HandleEvtBC
+	jr z, PsRgpSetBnkBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_HIDE
 	jr z, PsRgpSetBnkBoxProc_OnHide
 	cp xbc, EVT_SHOW
@@ -17922,7 +17922,7 @@ RgpSetBnkBox_CallInherited:
 	call InheritedProc
 	jr RgpSetBnkBox_SetReturnZero
 
-RgpSetBnkBox_HandleEvtBC:
+PsRgpSetBnkBoxProc_OnPaintOrRepaint:
 	ld xwa, xiz
 	call InheritedProc
 	ld a, (0x7f3d:16)
@@ -18041,9 +18041,9 @@ PsMspMeasBoxProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, EVT_REPAINT
-	jr z, MspMeasBox_HandleEvtBC
+	jr z, PsMspMeasBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_PAINT
-	jr z, MspMeasBox_HandleEvtBC
+	jr z, PsMspMeasBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_HIDE
 	jr z, PsMspMeasBoxProc_OnHide
 	cp xbc, EVT_SHOW
@@ -18063,7 +18063,7 @@ MspMeasBox_CallInherited:
 	call InheritedProc
 	jr MspMeasBox_SetReturnZero
 
-MspMeasBox_HandleEvtBC:
+PsMspMeasBoxProc_OnPaintOrRepaint:
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, xiz
@@ -18095,9 +18095,9 @@ PsMspMemBoxProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, EVT_REPAINT
-	jr z, MspMemBox_HandleEvtBC
+	jr z, PsMspMemBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_PAINT
-	jr z, MspMemBox_HandleEvtBC
+	jr z, PsMspMemBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_HIDE
 	jr z, PsMspMemBoxProc_OnHide
 	cp xbc, EVT_SHOW
@@ -18117,7 +18117,7 @@ MspMemBox_CallInherited:
 	call InheritedProc
 	jr MspMemBox_SetReturnZero
 
-MspMemBox_HandleEvtBC:
+PsMspMemBoxProc_OnPaintOrRepaint:
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, xiz
@@ -18158,9 +18158,9 @@ PsMspRecBnkBoxProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, EVT_REPAINT
-	jr z, MspRecBnkBox_HandleEvtBC
+	jr z, PsMspRecBnkBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_PAINT
-	jr z, MspRecBnkBox_HandleEvtBC
+	jr z, PsMspRecBnkBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_HIDE
 	jr z, PsMspRecBnkBoxProc_OnHide
 	cp xbc, EVT_SHOW
@@ -18180,7 +18180,7 @@ MspRecBnkBox_CallInherited:
 	call InheritedProc
 	jr MspRecBnkBox_SetReturnZero
 
-MspRecBnkBox_HandleEvtBC:
+PsMspRecBnkBoxProc_OnPaintOrRepaint:
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, xiz
@@ -18217,9 +18217,9 @@ PsMspRecPadBoxProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, EVT_REPAINT
-	jr z, MspRecPadBox_HandleEvtBC
+	jr z, PsMspRecPadBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_PAINT
-	jr z, MspRecPadBox_HandleEvtBC
+	jr z, PsMspRecPadBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_HIDE
 	jr z, PsMspRecPadBoxProc_OnHide
 	cp xbc, EVT_SHOW
@@ -18239,7 +18239,7 @@ MspRecPadBox_CallInherited:
 	call InheritedProc
 	jr AcSndArgGrid_BnkCase1
 
-MspRecPadBox_HandleEvtBC:
+PsMspRecPadBoxProc_OnPaintOrRepaint:
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, xiz
@@ -19141,9 +19141,9 @@ PsSCTxtBoxProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, EVT_REPAINT
-	jr z, SCTxtBox_HandleEvtBC
+	jr z, PsSCTxtBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_PAINT
-	jr z, SCTxtBox_HandleEvtBC
+	jr z, PsSCTxtBoxProc_OnPaintOrRepaint
 	cp xbc, EVT_HIDE
 	jr z, PsSCTxtBoxProc_OnHide
 	cp xbc, EVT_SHOW
@@ -19163,7 +19163,7 @@ SCTxtBox_CallInherited:
 	call InheritedProc
 	jr SCTxtBox_SetReturnZero
 
-SCTxtBox_HandleEvtBC:
+PsSCTxtBoxProc_OnPaintOrRepaint:
 	ld xwa, xiz
 	call InheritedProc
 	pushw 0x0
@@ -19190,9 +19190,9 @@ PsSCTxtBox2Proc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, EVT_REPAINT
-	jr z, SCTxtBox2_HandleEvtBC
+	jr z, PsSCTxtBox2Proc_OnPaintOrRepaint
 	cp xbc, EVT_PAINT
-	jr z, SCTxtBox2_HandleEvtBC
+	jr z, PsSCTxtBox2Proc_OnPaintOrRepaint
 	cp xbc, EVT_GET_STR_PTR
 	jr z, PsSCTxtBox2Proc_OnGetStrPtr
 	cp xbc, EVT_HIDE
@@ -19218,7 +19218,7 @@ PsSCTxtBox2Proc_OnGetStrPtr:
 	lda xhl, (0x3d68:16)
 	jr SCTxtBox2_Epilogue
 
-SCTxtBox2_HandleEvtBC:
+PsSCTxtBox2Proc_OnPaintOrRepaint:
 	ld xwa, xiz
 	call InheritedProc
 	pushw 0x0
@@ -19820,9 +19820,9 @@ PsStylCnvVerProc:
 	push xiz
 	ld xiz, xwa
 	cp xbc, EVT_REPAINT
-	jr z, StylCnvVer_HandleEvtBC
+	jr z, PsStylCnvVerProc_OnPaintOrRepaint
 	cp xbc, EVT_PAINT
-	jr z, StylCnvVer_HandleEvtBC
+	jr z, PsStylCnvVerProc_OnPaintOrRepaint
 	cp xbc, EVT_GET_STR_PTR
 	jr z, PsStylCnvVerProc_OnGetStrPtr
 	cp xbc, EVT_HIDE
@@ -19848,7 +19848,7 @@ PsStylCnvVerProc_OnGetStrPtr:
 	lda xhl, (0x3f68:16)
 	jr StylCnvVer_Epilogue
 
-StylCnvVer_HandleEvtBC:
+PsStylCnvVerProc_OnPaintOrRepaint:
 	ld xwa, xiz
 	call InheritedProc
 	pushw 0x0

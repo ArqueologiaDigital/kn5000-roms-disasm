@@ -13187,13 +13187,13 @@ PsMixer_CtlTypeProc5:
 	ld	(xsp+14), de
 	ld	xwa, (xsp+28)
 	cp	xwa, EVT_INDEXSW_DOWN_AIC
-	jrl	z, PsMixer_CtlTypeProc5_Skip3
+	jrl	z, PsMixer_CtlTypeProc5_OnIndexswAny
 	cp	xwa, EVT_INDEXSW_DOWN
-	jrl	z, PsMixer_CtlTypeProc5_Skip3
+	jrl	z, PsMixer_CtlTypeProc5_OnIndexswAny
 	cp	xwa, EVT_INDEXSW_UP_AIC
-	jrl	z, PsMixer_CtlTypeProc5_Skip3
+	jrl	z, PsMixer_CtlTypeProc5_OnIndexswAny
 	cp	xwa, EVT_INDEXSW_UP
-	jrl	z, PsMixer_CtlTypeProc5_Skip3
+	jrl	z, PsMixer_CtlTypeProc5_OnIndexswAny
 	cp	xwa, EVT_PARA_DRAW
 	jr	z, PsMixer_CtlTypeProc5_OnParaDraw
 	cp	xwa, EVT_SELE_DRAW
@@ -13246,7 +13246,7 @@ PsMixer_CtlTypeProc5_Skip2:
 PsMixer_CtlTypeProc5_Join:
 	call	DrawStringReverse
 	jrl	PsMixer_CtlTypeProc5_Join2
-PsMixer_CtlTypeProc5_Skip3:
+PsMixer_CtlTypeProc5_OnIndexswAny:
 	ld	wa, (xsp+12)
 	calr	Util_SignExtendAndDouble
 	ld	xiz, xhl
@@ -13324,13 +13324,13 @@ PsMixer_CtlTypeProc6:
 	ld	(xsp+14), de
 	ld	xwa, (xsp+28)
 	cp	xwa, EVT_INDEXSW_DOWN_AIC
-	jrl	z, PsMixer_CtlTypeProc6_Skip3
+	jrl	z, PsMixer_CtlTypeProc6_OnIndexswAny
 	cp	xwa, EVT_INDEXSW_DOWN
-	jrl	z, PsMixer_CtlTypeProc6_Skip3
+	jrl	z, PsMixer_CtlTypeProc6_OnIndexswAny
 	cp	xwa, EVT_INDEXSW_UP_AIC
-	jrl	z, PsMixer_CtlTypeProc6_Skip3
+	jrl	z, PsMixer_CtlTypeProc6_OnIndexswAny
 	cp	xwa, EVT_INDEXSW_UP
-	jrl	z, PsMixer_CtlTypeProc6_Skip3
+	jrl	z, PsMixer_CtlTypeProc6_OnIndexswAny
 	cp	xwa, EVT_PARA_DRAW
 	jr	z, PsMixer_CtlTypeProc6_OnParaDraw
 	cp	xwa, EVT_SELE_DRAW
@@ -13396,7 +13396,7 @@ PsMixer_CtlTypeProc6_Skip2:
 PsMixer_CtlTypeProc6_Join:
 	call	DrawStringReverse
 	jrl	PsMixer_CtlTypeProc6_Join2
-PsMixer_CtlTypeProc6_Skip3:
+PsMixer_CtlTypeProc6_OnIndexswAny:
 	ld	wa, (xsp+12)
 	calr	Util_SignExtendAndDouble
 	ld	xiz, xhl
@@ -13479,13 +13479,13 @@ PsMixer_CtlTypeProc3:
 	jrl	z, PsMixer_CtlTypeProc3_OnIndexswBoth
 	ld	(xsp+12), bc
 	cp	xwa, EVT_INDEXSW_DOWN_AIC
-	jrl	z, PsMixer_CtlTypeProc3_Skip6
+	jrl	z, PsMixer_CtlTypeProc3_OnIndexswAny
 	cp	xwa, EVT_INDEXSW_DOWN
-	jrl	z, PsMixer_CtlTypeProc3_Skip6
+	jrl	z, PsMixer_CtlTypeProc3_OnIndexswAny
 	cp	xwa, EVT_INDEXSW_UP_AIC
-	jrl	z, PsMixer_CtlTypeProc3_Skip6
+	jrl	z, PsMixer_CtlTypeProc3_OnIndexswAny
 	cp	xwa, EVT_INDEXSW_UP
-	jrl	z, PsMixer_CtlTypeProc3_Skip6
+	jrl	z, PsMixer_CtlTypeProc3_OnIndexswAny
 	cp	xwa, EVT_PARA_DRAW
 	jr	z, PsMixer_CtlTypeProc3_OnParaDraw
 	cp	xwa, EVT_SELE_DRAW
@@ -13650,7 +13650,7 @@ PsMixer_CtlTypeProc3_Join3:
 	ld	xbc, 5:i3
 	call	DrawBitmap
 	jrl	PsMixer_CtlTypeProc3_Join4
-PsMixer_CtlTypeProc3_Skip6:
+PsMixer_CtlTypeProc3_OnIndexswAny:
 	ld	wa, (xsp+10)
 	calr	Util_SignExtendAndDouble
 	ld	(xsp+6), xhl
@@ -13801,13 +13801,13 @@ PsMixer_CtlTypeProc7:
 	cp	xwa, EVT_INDEXSW_BOTH
 	jrl	z, PsMixer_CtlTypeProc7_OnIndexswBoth
 	cp	xwa, EVT_INDEXSW_DOWN_AIC
-	jrl	z, PsMixer_CtlTypeProc7_Skip5
+	jrl	z, PsMixer_CtlTypeProc7_OnIndexswAny
 	cp	xwa, EVT_INDEXSW_DOWN
-	jrl	z, PsMixer_CtlTypeProc7_Skip5
+	jrl	z, PsMixer_CtlTypeProc7_OnIndexswAny
 	cp	xwa, EVT_INDEXSW_UP_AIC
-	jrl	z, PsMixer_CtlTypeProc7_Skip5
+	jrl	z, PsMixer_CtlTypeProc7_OnIndexswAny
 	cp	xwa, EVT_INDEXSW_UP
-	jrl	z, PsMixer_CtlTypeProc7_Skip5
+	jrl	z, PsMixer_CtlTypeProc7_OnIndexswAny
 	cp	xwa, EVT_PARA_DRAW
 	jr	z, PsMixer_CtlTypeProc7_OnParaDraw
 	cp	xwa, EVT_SELE_DRAW
@@ -13929,7 +13929,7 @@ PsMixer_CtlTypeProc7_Skip4:
 PsMixer_CtlTypeProc7_Join2:
 	call	DrawStringReverse
 	jrl	PsMixer_CtlTypeProc7_Join3
-PsMixer_CtlTypeProc7_Skip5:
+PsMixer_CtlTypeProc7_OnIndexswAny:
 	ld	wa, (xsp+12)
 	calr	Util_SignExtendAndDouble
 	ld	xiz, xhl
@@ -14072,13 +14072,13 @@ PsMixer_CtlTypeProc4:
 	ld	(xsp+12), bc
 	ld	xwa, (xsp+78)
 	cp	xwa, EVT_INDEXSW_DOWN_AIC
-	jrl	z, PsMixer_CtlTypeProc4_Skip7
+	jrl	z, PsMixer_CtlTypeProc4_OnIndexswAny
 	cp	xwa, EVT_INDEXSW_DOWN
-	jrl	z, PsMixer_CtlTypeProc4_Skip7
+	jrl	z, PsMixer_CtlTypeProc4_OnIndexswAny
 	cp	xwa, EVT_INDEXSW_UP_AIC
-	jrl	z, PsMixer_CtlTypeProc4_Skip7
+	jrl	z, PsMixer_CtlTypeProc4_OnIndexswAny
 	cp	xwa, EVT_INDEXSW_UP
-	jrl	z, PsMixer_CtlTypeProc4_Skip7
+	jrl	z, PsMixer_CtlTypeProc4_OnIndexswAny
 	cp	xwa, EVT_PARA_DRAW
 	jr	z, PsMixer_CtlTypeProc4_OnParaDraw
 	cp	xwa, EVT_SELE_DRAW
@@ -14223,7 +14223,7 @@ PsMixer_CtlTypeProc4_Skip6:
 PsMixer_CtlTypeProc4_Join3:
 	call	DrawBitmap
 	jrl	PsMixer_CtlTypeProc4_Join4
-PsMixer_CtlTypeProc4_Skip7:
+PsMixer_CtlTypeProc4_OnIndexswAny:
 	ld	wa, (xsp+10)
 	calr	Util_SignExtendAndDouble
 	ld	xiz, xhl
@@ -14304,13 +14304,13 @@ PsMixer_CtlTypeProc9:
 	ld	(xsp+14), bc
 	ld	xwa, (xsp+76)
 	cp	xwa, EVT_INDEXSW_DOWN_AIC
-	jrl	z, PsMixer_CtlTypeProc9_Skip6
+	jrl	z, PsMixer_CtlTypeProc9_OnIndexswAny
 	cp	xwa, EVT_INDEXSW_DOWN
-	jrl	z, PsMixer_CtlTypeProc9_Skip6
+	jrl	z, PsMixer_CtlTypeProc9_OnIndexswAny
 	cp	xwa, EVT_INDEXSW_UP_AIC
-	jrl	z, PsMixer_CtlTypeProc9_Skip6
+	jrl	z, PsMixer_CtlTypeProc9_OnIndexswAny
 	cp	xwa, EVT_INDEXSW_UP
-	jrl	z, PsMixer_CtlTypeProc9_Skip6
+	jrl	z, PsMixer_CtlTypeProc9_OnIndexswAny
 	cp	xwa, EVT_PARA_DRAW
 	jr	z, PsMixer_CtlTypeProc9_OnParaDraw
 	cp	xwa, EVT_SELE_DRAW
@@ -14461,7 +14461,7 @@ PsMixer_CtlTypeProc9_Join2:
 	ld	xbc, 3:i3
 	call	DrawBitmap
 	jrl	PsMixer_CtlTypeProc9_Join3
-PsMixer_CtlTypeProc9_Skip6:
+PsMixer_CtlTypeProc9_OnIndexswAny:
 	ld	wa, (xsp+12)
 	calr	Util_SignExtendAndDouble
 	ld	xiz, xhl
@@ -14543,13 +14543,13 @@ PsMixer_CtlTypeProc2:
 	cp	xde, EVT_INDEXSW_BOTH
 	jrl	z, PsMixer_CtlTypeProc2_OnIndexswBoth
 	cp	xde, EVT_INDEXSW_DOWN_AIC
-	jrl	z, PsMixer_CtlTypeProc2_Skip2
+	jrl	z, PsMixer_CtlTypeProc2_OnIndexswAny
 	cp	xde, EVT_INDEXSW_DOWN
-	jrl	z, PsMixer_CtlTypeProc2_Skip2
+	jrl	z, PsMixer_CtlTypeProc2_OnIndexswAny
 	cp	xde, EVT_INDEXSW_UP_AIC
-	jrl	z, PsMixer_CtlTypeProc2_Skip2
+	jrl	z, PsMixer_CtlTypeProc2_OnIndexswAny
 	cp	xde, EVT_INDEXSW_UP
-	jrl	z, PsMixer_CtlTypeProc2_Skip2
+	jrl	z, PsMixer_CtlTypeProc2_OnIndexswAny
 	cp	xde, EVT_PARA_DRAW
 	jrl	nz, PsMixer_CtlTypeProc2_Skip9
 	ld	xbc, (xsp+34)
@@ -14635,7 +14635,7 @@ PsMixer_CtlTypeProc2_Entry:
 PsMixer_CtlTypeProc2_Loop:
 	ld	xhl, 0:i3
 	jrl	PsMixer_CtlTypeProc2_Epilogue
-PsMixer_CtlTypeProc2_Skip2:
+PsMixer_CtlTypeProc2_OnIndexswAny:
 	ld	xwa, (xsp+30)
 	ld	(xsp+8), wa
 	ld	wa, bc
@@ -14832,13 +14832,13 @@ PsMixer_CtlTypeProc1:
 	ld	(xsp+20), bc
 	ld	xwa, (xsp+94)
 	cp	xwa, EVT_INDEXSW_DOWN_AIC
-	jrl	z, PsMixer_CtlTypeProc1_Skip7
+	jrl	z, PsMixer_CtlTypeProc1_OnIndexswAny
 	cp	xwa, EVT_INDEXSW_DOWN
-	jrl	z, PsMixer_CtlTypeProc1_Skip7
+	jrl	z, PsMixer_CtlTypeProc1_OnIndexswAny
 	cp	xwa, EVT_INDEXSW_UP_AIC
-	jrl	z, PsMixer_CtlTypeProc1_Skip7
+	jrl	z, PsMixer_CtlTypeProc1_OnIndexswAny
 	cp	xwa, EVT_INDEXSW_UP
-	jrl	z, PsMixer_CtlTypeProc1_Skip7
+	jrl	z, PsMixer_CtlTypeProc1_OnIndexswAny
 	cp	xwa, EVT_SOUND_NAME
 	jrl	z, PsMixer_CtlTypeProc1_OnSoundName
 	cp	xwa, EVT_PARA_DRAW
@@ -15051,7 +15051,7 @@ PsMixer_CtlTypeProc1_Skip6:
 	cpw	(xsp+18), 5
 	jrl	lt, PsMixer_CtlTypeProc1_Loop2
 	jrl	PsMixer_CtlTypeProc1_Join2
-PsMixer_CtlTypeProc1_Skip7:
+PsMixer_CtlTypeProc1_OnIndexswAny:
 	ld	wa, (xsp+18)
 	calr	Util_SignExtendAndDouble
 	ld	xiz, xhl
@@ -15197,17 +15197,17 @@ PsMixer_CtlTypeProc8:
 	cp	xbc, EVT_LSW_DATA
 	jrl	z, PsMixer_CtlTypeProc8_OnLswData
 	cp	xbc, EVT_INDEXSW_DOWN_AIC
-	jr	z, PsMixer_CtlTypeProc8_Skip
+	jr	z, PsMixer_CtlTypeProc8_OnIndexswAny
 	cp	xbc, EVT_INDEXSW_DOWN
-	jr	z, PsMixer_CtlTypeProc8_Skip
+	jr	z, PsMixer_CtlTypeProc8_OnIndexswAny
 	cp	xbc, EVT_INDEXSW_UP_AIC
-	jr	z, PsMixer_CtlTypeProc8_Skip
+	jr	z, PsMixer_CtlTypeProc8_OnIndexswAny
 	cp	xbc, EVT_INDEXSW_UP
-	jr	z, PsMixer_CtlTypeProc8_Skip
+	jr	z, PsMixer_CtlTypeProc8_OnIndexswAny
 	ld	xbc, (xsp+16)
 	calr	PsMixer_CtlTypeProc7
 	jrl	PsMixer_CtlTypeProc8_Epilogue
-PsMixer_CtlTypeProc8_Skip:
+PsMixer_CtlTypeProc8_OnIndexswAny:
 	ld	wa, de
 	srl	xde, 16
 	ld qde, 0
@@ -15266,9 +15266,9 @@ PsMixer_CtlTypeProc8_Skip:
 	jrl	z, PsMixer_CtlTypeProc8_Entry
 	ld	xwa, (xsp+16)
 	cp	xwa, EVT_INDEXSW_DOWN_AIC
-	jr	z, PsMixer_CtlTypeProc8_Skip3
+	jr	z, PsMixer_CtlTypeProc8_OnIndexswDownAny
 	cp	xwa, EVT_INDEXSW_DOWN
-	jr	z, PsMixer_CtlTypeProc8_Skip3
+	jr	z, PsMixer_CtlTypeProc8_OnIndexswDownAny
 	cp	xwa, EVT_INDEXSW_UP_AIC
 	jr	z, PsMixer_CtlTypeProc8_OnIndexswUpAic
 	cp	xwa, EVT_INDEXSW_UP
@@ -15294,7 +15294,7 @@ PsMixer_CtlTypeProc8_OnIndexswUpAic:
 	ld	bc, (xsp+14)
 	ld	de, 0:i3
 	jr	PsMixer_CtlTypeProc8_Join
-PsMixer_CtlTypeProc8_Skip3:
+PsMixer_CtlTypeProc8_OnIndexswDownAny:
 	ld	wa, (xsp+2)
 	ldw	bc, 1025
 	call	SndParam_LookupViaEncode
