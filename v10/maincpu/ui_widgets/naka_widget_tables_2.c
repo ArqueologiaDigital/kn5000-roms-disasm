@@ -1751,11 +1751,11 @@ typedef struct __attribute__((packed)) {
      * --------------------------------------------------------------------- */
     uint8_t NakaData_ModeConfig2[8];
     /* ---------------------------------------------------------------------
-     * ComSetGridCheck_JumpTable_Table -- read by ComSetGridCheck_Evt1C00017
+     * ComSetGridCheck_JumpTable_Table -- read by ComSetGridCheck_OnIndexswUp
      * (v10/v9 0xF77FC4, v7 0xF77BC0) (`lda xbc,
-     * (ComSetGridCheck_JumpTable_Table:24)`), ComSetGridCheck_Evt1C00017 (v10/v9
+     * (ComSetGridCheck_JumpTable_Table:24)`), ComSetGridCheck_OnIndexswUp (v10/v9
      * 0xF77FC4, v7 0xF77BC0) (`lda xwa, (ComSetGridCheck_JumpTable_Table:24)`),
-     * ComSetGridCheck_Evt1C00017 (v10/v9 0xF77FC4, v7 0xF77BC0) (`lda xix,
+     * ComSetGridCheck_OnIndexswUp (v10/v9 0xF77FC4, v7 0xF77BC0) (`lda xix,
      * (ComSetGridCheck_JumpTable_Table:24)`), ComSetGrid_EventHandler (v10/v9
      * 0xF781C1, v7 0xF77DBD) (`lda xbc, (ComSetGridCheck_JumpTable_Table:24)`),
      * ComSetGrid_LookupByColumn (v10/v9 0xF7827D, v7 0xF77E79) (`lda xwa,
@@ -1776,7 +1776,7 @@ typedef struct __attribute__((packed)) {
      * --------------------------------------------------------------------- */
     char NakaToggle_OnOff_Data[4];
     /* ---------------------------------------------------------------------
-     * ComSetGridCheck_JumpTable_Table_2 -- read by ComSetGridCheck_Evt1C00017
+     * ComSetGridCheck_JumpTable_Table_2 -- read by ComSetGridCheck_OnIndexswUp
      * (v10/v9 0xF77FC4, v7 0xF77BC0) (`ld xbc, ComSetGridCheck_JumpTable_Table_2`).
      * 4 bytes to the next object; the layout beyond that access is not
      * established.
@@ -1789,30 +1789,30 @@ typedef struct __attribute__((packed)) {
     uint8_t NakaInst_OFF_E80048[2];
     /* ---------------------------------------------------------------------
      * ComSetGridCheck_JumpTable_Str -- NUL-terminated string(s), 6 bytes,
-     * used by ComSetGridCheck_Evt1C00017 (v10/v9 0xF77FC4, v7 0xF77BC0) (`ld
+     * used by ComSetGridCheck_OnIndexswUp (v10/v9 0xF77FC4, v7 0xF77BC0) (`ld
      * xbc, ComSetGridCheck_JumpTable_Str`).
      * --------------------------------------------------------------------- */
     char ComSetGridCheck_JumpTable_Str[6];
     /* ---------------------------------------------------------------------
      * ComSetGridCheck_JumpTable_Str_2 -- NUL-terminated string(s), 10 bytes,
-     * used by ComSetGridCheck_Evt1C00017 (v10/v9 0xF77FC4, v7 0xF77BC0) (`ld
+     * used by ComSetGridCheck_OnIndexswUp (v10/v9 0xF77FC4, v7 0xF77BC0) (`ld
      * xwa, ComSetGridCheck_JumpTable_Str_2`).
      * --------------------------------------------------------------------- */
     char ComSetGridCheck_JumpTable_Str_2[10];
     /* ---------------------------------------------------------------------
      * NakaInst_NORMAL -- NUL-terminated string(s), 10 bytes, used by
-     * ComSetGridCheck_Evt1C00017 (v10/v9 0xF77FC4, v7 0xF77BC0) (`.long
+     * ComSetGridCheck_OnIndexswUp (v10/v9 0xF77FC4, v7 0xF77BC0) (`.long
      * NakaInst_NORMAL`).
      * --------------------------------------------------------------------- */
     char NakaInst_NORMAL[10];
     /* ---------------------------------------------------------------------
      * ComSetGridCheck_JumpTable_Str_3 -- NUL-terminated string(s), 10 bytes,
-     * used by ComSetGridCheck_Evt1C00017 (v10/v9 0xF77FC4, v7 0xF77BC0) (`ld
+     * used by ComSetGridCheck_OnIndexswUp (v10/v9 0xF77FC4, v7 0xF77BC0) (`ld
      * xwa, ComSetGridCheck_JumpTable_Str_3`).
      * --------------------------------------------------------------------- */
     char ComSetGridCheck_JumpTable_Str_3[10];
     /* ---------------------------------------------------------------------
-     * ComSetGridCheck_JumpTable_Table_3 -- read by ComSetGridCheck_Evt1C00017
+     * ComSetGridCheck_JumpTable_Table_3 -- read by ComSetGridCheck_OnIndexswUp
      * (v10/v9 0xF77FC4, v7 0xF77BC0) (`ld xwa, ComSetGridCheck_JumpTable_Table_3`). 2
      * bytes to the next object; the layout beyond that access is not
      * established.
@@ -1825,7 +1825,7 @@ typedef struct __attribute__((packed)) {
     uint8_t NakaInst_GM[8];
     /* ---------------------------------------------------------------------
      * ComSetGridCheck_JumpTable_Str_4 -- NUL-terminated string(s), 10 bytes,
-     * used by ComSetGridCheck_Evt1C00017 (v10/v9 0xF77FC4, v7 0xF77BC0) (`ld
+     * used by ComSetGridCheck_OnIndexswUp (v10/v9 0xF77FC4, v7 0xF77BC0) (`ld
      * xwa, ComSetGridCheck_JumpTable_Str_4`).
      * --------------------------------------------------------------------- */
     char ComSetGridCheck_JumpTable_Str_4[10];
@@ -1874,7 +1874,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * ComSetGridCheck_CaseTable -- jump table of a compiled `switch` in
      * ComSetGridCheck (v10/v9 0xF77F6C, v7 0xF77B68) (`add xwa,
-     * ComSetGridCheck_CaseTable`): 7 u16 case offsets from ComSetGridCheck_Evt1C00017.
+     * ComSetGridCheck_CaseTable`): 7 u16 case offsets from ComSetGridCheck_OnIndexswUp.
      * --------------------------------------------------------------------- */
     uint16_t ComSetGridCheck_CaseTable[7];
     /* ---------------------------------------------------------------------
@@ -1950,7 +1950,7 @@ typedef struct __attribute__((packed)) {
      * PmemOutLGridCheck_CaseTable -- jump table of a compiled `switch` in
      * PmemOutLGridCheck (v10/v9 0xF78988, v7 0xF78584) (`add xwa,
      * PmemOutLGridCheck_CaseTable`): 7 u16 case offsets from
-     * PmemOutLGridCheck_Evt1C00017.
+     * PmemOutLGridCheck_OnIndexswUp.
      * --------------------------------------------------------------------- */
     uint16_t PmemOutLGridCheck_CaseTable[7];
     /* ---------------------------------------------------------------------
@@ -2014,7 +2014,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * CtlMsgGridCheck_Table -- read by CtlMsgGridCheck (v10/v9 0xF79F88, v7
      * 0xF79B84) (`lda xwa, (CtlMsgGridCheck_Table:24)`),
-     * CtlMsgGridCheck_Evt1C00017 (v10/v9 0xF79FF0, v7 0xF79BEC) (`lda xwa,
+     * CtlMsgGridCheck_OnIndexswUp (v10/v9 0xF79FF0, v7 0xF79BEC) (`lda xwa,
      * (CtlMsgGridCheck_Table:24)`). 72 bytes to the next object; the
      * layout beyond that access is not established.
      * --------------------------------------------------------------------- */
@@ -2027,13 +2027,13 @@ typedef struct __attribute__((packed)) {
     uint16_t CtlMsgGridCheck_LocalInit[5];
     /* ---------------------------------------------------------------------
      * CtlMsgGridCheck_JumpTable_Str -- NUL-terminated string(s), 6 bytes,
-     * used by CtlMsgGridCheck_Evt1C00017 (v10/v9 0xF79FF0, v7 0xF79BEC) (`ld
+     * used by CtlMsgGridCheck_OnIndexswUp (v10/v9 0xF79FF0, v7 0xF79BEC) (`ld
      * xbc, CtlMsgGridCheck_JumpTable_Str`).
      * --------------------------------------------------------------------- */
     char CtlMsgGridCheck_JumpTable_Str[6];
     /* ---------------------------------------------------------------------
      * CtlMsgGridCheck_JumpTable_Str_2 -- NUL-terminated string(s), 6 bytes,
-     * used by CtlMsgGridCheck_Evt1C00017 (v10/v9 0xF79FF0, v7 0xF79BEC) (`ld
+     * used by CtlMsgGridCheck_OnIndexswUp (v10/v9 0xF79FF0, v7 0xF79BEC) (`ld
      * xbc, CtlMsgGridCheck_JumpTable_Str_2`).
      * --------------------------------------------------------------------- */
     char CtlMsgGridCheck_JumpTable_Str_2[6];
@@ -2053,7 +2053,7 @@ typedef struct __attribute__((packed)) {
      * CtlMsgGridCheck_CaseTable -- jump table of a compiled `switch` in
      * CtlMsgGridCheck (v10/v9 0xF79F88, v7 0xF79B84) (`add xwa,
      * CtlMsgGridCheck_CaseTable`): 7 u16 case offsets from
-     * CtlMsgGridCheck_Evt1C00017.
+     * CtlMsgGridCheck_OnIndexswUp.
      * --------------------------------------------------------------------- */
     uint16_t CtlMsgGridCheck_CaseTable[7];
     /* ---------------------------------------------------------------------
@@ -2184,7 +2184,7 @@ typedef struct __attribute__((packed)) {
      * MidiPartGridCheck_CaseTable -- jump table of a compiled `switch` in
      * MidiPartGridCheck (v10/v9 0xF7A869, v7 0xF7A465) (`add xwa,
      * MidiPartGridCheck_CaseTable`): 7 u16 case offsets from
-     * MidiPartGridCheck_Evt1C00017.
+     * MidiPartGridCheck_OnIndexswUp.
      * --------------------------------------------------------------------- */
     uint16_t MidiPartGridCheck_CaseTable[7];
     /* ---------------------------------------------------------------------

@@ -518,13 +518,13 @@ MasterSetup_GetNameB_DrawString_Str_Fmtc_Fmtd_Fmtd:	aligned_string "%c:%d/%d  "
 ; "ON "/"OFF" (0x258/0x25C, 0x270/0x26C) by TchSensGrid.
 ; ---------------------------------------------------------------------------
 AcMstStyleAlpGridBoxProc_EventOffsets:	; read by AcMstStyleAlpGridBoxProc via MasterSetup_EventDispatch (AcMstStyleAlpGridBoxProc_EventOffsets)
-	.short	AcMstStyleAlpGridBoxProc_Evt1C00017 - MasterSetup_EventDispatch
-	.short	AcMstStyleAlpGridBoxProc_Evt1C00018 - MasterSetup_EventDispatch
-	.short	AcMstStyleAlpGridBoxProc_Evt1C00017 - MasterSetup_EventDispatch
-	.short	AcMstStyleAlpGridBoxProc_Evt1C00018 - MasterSetup_EventDispatch
+	.short	AcMstStyleAlpGridBoxProc_OnIndexswUp - MasterSetup_EventDispatch
+	.short	AcMstStyleAlpGridBoxProc_OnIndexswDown - MasterSetup_EventDispatch
+	.short	AcMstStyleAlpGridBoxProc_OnIndexswUp - MasterSetup_EventDispatch
+	.short	AcMstStyleAlpGridBoxProc_OnIndexswDown - MasterSetup_EventDispatch
 	.short	MasterSetup_InheritedProc_Fallback - MasterSetup_EventDispatch
-	.short	AcMstStyleAlpGridBoxProc_Evt1C0001C - MasterSetup_EventDispatch
-	.short	AcMstStyleAlpGridBoxProc_Evt1C0001C - MasterSetup_EventDispatch
+	.short	AcMstStyleAlpGridBoxProc_OnLswData - MasterSetup_EventDispatch
+	.short	AcMstStyleAlpGridBoxProc_OnLswData - MasterSetup_EventDispatch
 MstStyleAlp_AppendPadChar_Data:
 	aligned_string " "
 MstStyleAlp_OverflowStr_Str_Blank32:	aligned_string "                                "
@@ -538,10 +538,10 @@ MstStyleAlpGridCheck_EventOffsets:	; read by MstStyleAlpGridCheck via MstStyleAl
 	.short	EffectMode_SendEvent_Return - MstStyleAlp_EventDispatch
 	.short	EffectMode_SendEvent_Return - MstStyleAlp_EventDispatch
 AcMstStyle1GridBoxProc_EventOffsets:	; read by AcMstStyle1GridBoxProc via MstStyle_EventDispatch (AcMstStyle1GridBoxProc_EventOffsets)
-	.short	AcMstStyle1GridBoxProc_Evt1C00017 - MstStyle_EventDispatch
-	.short	AcMstStyle1GridBoxProc_Evt1C00018 - MstStyle_EventDispatch
-	.short	AcMstStyle1GridBoxProc_Evt1C00017 - MstStyle_EventDispatch
-	.short	AcMstStyle1GridBoxProc_Evt1C00018 - MstStyle_EventDispatch
+	.short	AcMstStyle1GridBoxProc_OnIndexswUp - MstStyle_EventDispatch
+	.short	AcMstStyle1GridBoxProc_OnIndexswDown - MstStyle_EventDispatch
+	.short	AcMstStyle1GridBoxProc_OnIndexswUp - MstStyle_EventDispatch
+	.short	AcMstStyle1GridBoxProc_OnIndexswDown - MstStyle_EventDispatch
 	.short	MstStyle_InheritedProc_Fallback - MstStyle_EventDispatch
 	.short	MstStyle_ForwardToChild - MstStyle_EventDispatch
 	.short	MstStyle_ForwardToChild - MstStyle_EventDispatch
@@ -559,10 +559,10 @@ MstStyle1GridCheck_EventOffsets:	; read by MstStyle1GridCheck via MstStyle1Grid_
 	.short	MstStyle1Grid_EventDispatch - MstStyle1Grid_EventDispatch
 MstStyle1Sub_GetNameB_DrawString_Str_Fmtd_Fmtd:	aligned_string "%d/%d"
 AcMstStyle1SubGridBoxProc_EventOffsets:	; read by AcMstStyle1SubGridBoxProc via MstStyle1_EventDispatch (AcMstStyle1SubGridBoxProc_EventOffsets)
-	.short	AcMstStyle1SubGridBoxProc_Evt1C00017 - MstStyle1_EventDispatch
-	.short	AcMstStyle1SubGridBoxProc_Evt1C00018 - MstStyle1_EventDispatch
-	.short	AcMstStyle1SubGridBoxProc_Evt1C00017 - MstStyle1_EventDispatch
-	.short	AcMstStyle1SubGridBoxProc_Evt1C00018 - MstStyle1_EventDispatch
+	.short	AcMstStyle1SubGridBoxProc_OnIndexswUp - MstStyle1_EventDispatch
+	.short	AcMstStyle1SubGridBoxProc_OnIndexswDown - MstStyle1_EventDispatch
+	.short	AcMstStyle1SubGridBoxProc_OnIndexswUp - MstStyle1_EventDispatch
+	.short	AcMstStyle1SubGridBoxProc_OnIndexswDown - MstStyle1_EventDispatch
 	.short	MstStyle1Sub_InheritedFallback - MstStyle1_EventDispatch
 	.short	MstStyle1Sub_ForwardToChild - MstStyle1_EventDispatch
 	.short	MstStyle1Sub_ForwardToChild - MstStyle1_EventDispatch
@@ -590,10 +590,10 @@ MstStyle2_NameB_DrawLower_Str_TEMPO:
 	aligned_string "TEMPO"
 MstStyle2_NameB_Render_Str_Fmts:	aligned_string "%s"
 AcMstStyle2GridBoxProc_EventOffsets:	; read by AcMstStyle2GridBoxProc via MstStyle1Page_EventDispatch (AcMstStyle2GridBoxProc_EventOffsets)
-	.short	AcMstStyle2GridBoxProc_Evt1C00017 - MstStyle1Page_EventDispatch
-	.short	AcMstStyle2GridBoxProc_Evt1C00018 - MstStyle1Page_EventDispatch
-	.short	AcMstStyle2GridBoxProc_Evt1C00017 - MstStyle1Page_EventDispatch
-	.short	AcMstStyle2GridBoxProc_Evt1C00018 - MstStyle1Page_EventDispatch
+	.short	AcMstStyle2GridBoxProc_OnIndexswUp - MstStyle1Page_EventDispatch
+	.short	AcMstStyle2GridBoxProc_OnIndexswDown - MstStyle1Page_EventDispatch
+	.short	AcMstStyle2GridBoxProc_OnIndexswUp - MstStyle1Page_EventDispatch
+	.short	AcMstStyle2GridBoxProc_OnIndexswDown - MstStyle1Page_EventDispatch
 	.short	MstStyle2_InheritedFallback - MstStyle1Page_EventDispatch
 	.short	MstStyle2_ForwardToChild - MstStyle1Page_EventDispatch
 	.short	MstStyle2_ForwardToChild - MstStyle1Page_EventDispatch
@@ -621,21 +621,21 @@ MstStyle2GridCheck_EventOffsets:	; read by MstStyle2GridCheck via MstGrid2_Scrol
 	.short	MstGrid2_Return - MstGrid2_ScrollJumpTable
 	.short	MstGrid2_Return - MstGrid2_ScrollJumpTable
 AcTchSensGridBoxProc_EventOffsets:	; read by AcTchSensGridBoxProc via MstStyle2_EventDispatch (AcTchSensGridBoxProc_EventOffsets)
-	.short	AcTchSensGridBoxProc_Evt1C00017 - MstStyle2_EventDispatch
-	.short	AcTchSensGridBoxProc_Evt1C00018 - MstStyle2_EventDispatch
-	.short	AcTchSensGridBoxProc_Evt1C00017 - MstStyle2_EventDispatch
-	.short	AcTchSensGridBoxProc_Evt1C00018 - MstStyle2_EventDispatch
+	.short	AcTchSensGridBoxProc_OnIndexswUp - MstStyle2_EventDispatch
+	.short	AcTchSensGridBoxProc_OnIndexswDown - MstStyle2_EventDispatch
+	.short	AcTchSensGridBoxProc_OnIndexswUp - MstStyle2_EventDispatch
+	.short	AcTchSensGridBoxProc_OnIndexswDown - MstStyle2_EventDispatch
 	.short	TchSens_InheritedFallback - MstStyle2_EventDispatch
-	.short	AcTchSensGridBoxProc_Evt1C0001C - MstStyle2_EventDispatch
-	.short	AcTchSensGridBoxProc_Evt1C0001C - MstStyle2_EventDispatch
-TchSensGridCheck_Evt1C0001C_Data:
+	.short	AcTchSensGridBoxProc_OnLswData - MstStyle2_EventDispatch
+	.short	AcTchSensGridBoxProc_OnLswData - MstStyle2_EventDispatch
+TchSensGridCheck_OnLswData_Data:
 	aligned_string "%3d"
-TchSensGridCheck_Evt1C0001C_Str_ON:
+TchSensGridCheck_OnLswData_Str_ON:
 	aligned_string "ON "
-TchSensGridCheck_Evt1C0001C_Str_OFF:
+TchSensGridCheck_OnLswData_Str_OFF:
 	aligned_string "OFF"
-TchSensGridCheck_Evt1C0001C_Str_Fmt3d:		aligned_string "%3d"
-TchSensGridCheck_Evt1C0001C_Str_Fmt3d_2:	aligned_string "%3d"
+TchSensGridCheck_OnLswData_Str_Fmt3d:		aligned_string "%3d"
+TchSensGridCheck_OnLswData_Str_Fmt3d_2:	aligned_string "%3d"
 TchSensGrid_CellSelect_Str_Fmt3d:		aligned_string "%3d"
 TchSensGrid_CheckCell_1_4_Str_OFF:
 	aligned_string "OFF"
@@ -645,20 +645,20 @@ TchSensGrid_CheckCell_1_5_Str_Fmt3d:	aligned_string "%3d"
 TchSensGrid_CheckCell_1_6_Str_Fmt3d:	aligned_string "%3d"
 TchSensGridCheck_EventOffsets:	; read by TchSensGridCheck via TchSensGrid_EventDispatch (TchSensGridCheck_EventOffsets)
 	.short	TchSensGrid_EventDispatch - TchSensGrid_EventDispatch
-	.short	TchSensGridCheck_Evt1C00018 - TchSensGrid_EventDispatch
+	.short	TchSensGridCheck_OnIndexswDown - TchSensGrid_EventDispatch
 	.short	TchSensGrid_EventDispatch - TchSensGrid_EventDispatch
-	.short	TchSensGridCheck_Evt1C00018 - TchSensGrid_EventDispatch
+	.short	TchSensGridCheck_OnIndexswDown - TchSensGrid_EventDispatch
 	.short	TchSensGrid_ReturnZero - TchSensGrid_EventDispatch
-	.short	TchSensGridCheck_Evt1C0001C - TchSensGrid_EventDispatch
-	.short	TchSensGridCheck_Evt1C0001C - TchSensGrid_EventDispatch
+	.short	TchSensGridCheck_OnLswData - TchSensGrid_EventDispatch
+	.short	TchSensGridCheck_OnLswData - TchSensGrid_EventDispatch
 AcFSWAssGridBoxProc_EventOffsets:	; read by AcFSWAssGridBoxProc via TchSens_EventDispatch (AcFSWAssGridBoxProc_EventOffsets)
-	.short	AcFSWAssGridBoxProc_Evt1C00017 - TchSens_EventDispatch
-	.short	AcFSWAssGridBoxProc_Evt1C00018 - TchSens_EventDispatch
-	.short	AcFSWAssGridBoxProc_Evt1C00017 - TchSens_EventDispatch
-	.short	AcFSWAssGridBoxProc_Evt1C00018 - TchSens_EventDispatch
+	.short	AcFSWAssGridBoxProc_OnIndexswUp - TchSens_EventDispatch
+	.short	AcFSWAssGridBoxProc_OnIndexswDown - TchSens_EventDispatch
+	.short	AcFSWAssGridBoxProc_OnIndexswUp - TchSens_EventDispatch
+	.short	AcFSWAssGridBoxProc_OnIndexswDown - TchSens_EventDispatch
 	.short	FSWAss_InheritedFallback - TchSens_EventDispatch
-	.short	AcFSWAssGridBoxProc_Evt1C0001C - TchSens_EventDispatch
-	.short	AcFSWAssGridBoxProc_Evt1C0001C - TchSens_EventDispatch
+	.short	AcFSWAssGridBoxProc_OnLswData - TchSens_EventDispatch
+	.short	AcFSWAssGridBoxProc_OnLswData - TchSens_EventDispatch
 ; FswAssign_FunctionCodes / FswAssign_FunctionNames: the foot-switch
 ; assignable functions.  FSWAssGrid_EventDispatch (ui/ui_mode_handlers.s)
 ; indexes the codes with `ld c, (xbc+hl)` (FswAssign_FunctionCodes)
@@ -733,7 +733,7 @@ CtrlAssignStr_PMemDecrement:	aligned_string "P.MEM DECREMENT "
 CtrlAssignStr_PMemIncrement:	aligned_string "P.MEM INCREMENT "
 CtrlAssignStr_Off:	aligned_string "      OFF       "
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED11EE-0xED1226 (56 B), unreached CODE-territory, was disassembled as 42 plausible-but-dead instruction lines; per=100% dist=4 near CtrlAssignStr_Off+18
-FSWAssGridCheck_Evt1C0001C_Str_Fmts:		aligned_string "%s"
+FSWAssGridCheck_OnLswData_Str_Fmts:		aligned_string "%s"
 FSWAssGrid_EventDispatch_Entry_Str_Fmts:	aligned_string "%s"
 FSWAssGrid_EventDispatch_Entry_Str_Fmts_2:	aligned_string "%s"
 FSWAssGrid_EventDispatch_Entry_Str_Fmts_3:	aligned_string "%s"
@@ -749,12 +749,12 @@ FSWAssGrid_CheckCell_1_7_Str_Fmts:		aligned_string "%s"
 FSWAssGrid_CheckCell_1_8_Str_Fmts:		aligned_string "%s"
 FSWAssGridCheck_EventOffsets:	; read by FSWAssGridCheck via FSWAssGrid_EventDispatch (FSWAssGridCheck_EventOffsets)
 	.short	FSWAssGrid_EventDispatch - FSWAssGrid_EventDispatch
-	.short	FSWAssGridCheck_Evt1C00018 - FSWAssGrid_EventDispatch
+	.short	FSWAssGridCheck_OnIndexswDown - FSWAssGrid_EventDispatch
 	.short	FSWAssGrid_EventDispatch - FSWAssGrid_EventDispatch
-	.short	FSWAssGridCheck_Evt1C00018 - FSWAssGrid_EventDispatch
+	.short	FSWAssGridCheck_OnIndexswDown - FSWAssGrid_EventDispatch
 	.short	AudioTable_ReturnZero - FSWAssGrid_EventDispatch
-	.short	FSWAssGridCheck_Evt1C0001C - FSWAssGrid_EventDispatch
-	.short	FSWAssGridCheck_Evt1C0001C - FSWAssGrid_EventDispatch
+	.short	FSWAssGridCheck_OnLswData - FSWAssGrid_EventDispatch
+	.short	FSWAssGridCheck_OnLswData - FSWAssGrid_EventDispatch
 FswAsIniFunc_EventOffsets:	; read by FswAsIniFunc via FswAsIni_EventDispatch (FswAsIniFunc_EventOffsets), six entries
 	.short	SeqLoadFunc_ReturnZero - FswAsIni_EventDispatch
 	.short	FswAsIni_EventDispatch - FswAsIni_EventDispatch
@@ -810,13 +810,13 @@ PmExpFilter_DrawCellBank2_Str_Fmts:	.byte 0x25, 0x73, 0x00, 0xff
 PmExpFilter_DrawCellBank2_Data:
 	aligned_string "PAGE 3/3"
 AcPmExpFilterGridBoxProc_EventOffsets:	; read by AcPmExpFilterGridBoxProc via PmemPageCtl_EventDispatch (AcPmExpFilterGridBoxProc_EventOffsets)
-	.short	AcPmExpFilterGridBoxProc_Evt1C00017 - PmemPageCtl_EventDispatch
-	.short	AcPmExpFilterGridBoxProc_Evt1C00018 - PmemPageCtl_EventDispatch
-	.short	AcPmExpFilterGridBoxProc_Evt1C00017 - PmemPageCtl_EventDispatch
-	.short	AcPmExpFilterGridBoxProc_Evt1C00018 - PmemPageCtl_EventDispatch
+	.short	AcPmExpFilterGridBoxProc_OnIndexswUp - PmemPageCtl_EventDispatch
+	.short	AcPmExpFilterGridBoxProc_OnIndexswDown - PmemPageCtl_EventDispatch
+	.short	AcPmExpFilterGridBoxProc_OnIndexswUp - PmemPageCtl_EventDispatch
+	.short	AcPmExpFilterGridBoxProc_OnIndexswDown - PmemPageCtl_EventDispatch
 	.short	PmExpFilter_DefaultInherited - PmemPageCtl_EventDispatch
-	.short	AcPmExpFilterGridBoxProc_Evt1C0001C - PmemPageCtl_EventDispatch
-	.short	AcPmExpFilterGridBoxProc_Evt1C0001C - PmemPageCtl_EventDispatch
+	.short	AcPmExpFilterGridBoxProc_OnLswData - PmemPageCtl_EventDispatch
+	.short	AcPmExpFilterGridBoxProc_OnLswData - PmemPageCtl_EventDispatch
 ; PmExpFilter_CellKeys / PmExpFilter_AltKeys: two lists of nine u32 sound-
 ; parameter KEYS -- all 18 are the +0x00 key of an 18-byte descriptor in this
 ; file -- that PmExpFilterGridCheck picks with `ld xwa, (xbc+wa)` (cell
@@ -829,15 +829,15 @@ PmExpFilter_AltKeys:
 	.long 0x0000290e, 0x00002905, 0x00002907
 	.long 0x00002908, 0x0000290f, 0x00002910
 	.long 0x00002909, 0x00002906, 0x00002911
-	; ON/OFF cell texts: PmExpFilter_EventDispatch (PmExpFilterGridCheck_Evt1C0001C_Str_OFF..0xA6),
+	; ON/OFF cell texts: PmExpFilter_EventDispatch (PmExpFilterGridCheck_OnLswData_Str_OFF..0xA6),
 	; PmExpFilterCheck_CellDecode (_0xAA, _0xAE), PmExpFilterCheck_AltDecode (_0xB2, _0xB6)
-PmExpFilterGridCheck_Evt1C0001C_Str_OFF:
+PmExpFilterGridCheck_OnLswData_Str_OFF:
 	aligned_string "OFF"
-PmExpFilterGridCheck_Evt1C0001C_Str_ON:
+PmExpFilterGridCheck_OnLswData_Str_ON:
 	aligned_string "ON "
-PmExpFilterGridCheck_Evt1C0001C_Str_OFF_2:
+PmExpFilterGridCheck_OnLswData_Str_OFF_2:
 	aligned_string "OFF"
-PmExpFilterGridCheck_Evt1C0001C_Str_ON_2:
+PmExpFilterGridCheck_OnLswData_Str_ON_2:
 	aligned_string "ON "
 PmExpFilterCheck_CellDecode_Str_ON:
 	aligned_string "ON "
@@ -850,20 +850,20 @@ PmExpFilterCheck_AltDecode_Str_OFF:
 PmExpFilterCheck_PushDefault_Str_Blank3:	aligned_string "   "
 PmExpFilterGridCheck_EventOffsets:	; read by PmExpFilterGridCheck via PmExpFilter_EventDispatch (PmExpFilterGridCheck_EventOffsets)
 	.short	PmExpFilter_EventDispatch - PmExpFilter_EventDispatch
-	.short	PmExpFilterGridCheck_Evt1C00018 - PmExpFilter_EventDispatch
+	.short	PmExpFilterGridCheck_OnIndexswDown - PmExpFilter_EventDispatch
 	.short	PmExpFilter_EventDispatch - PmExpFilter_EventDispatch
-	.short	PmExpFilterGridCheck_Evt1C00018 - PmExpFilter_EventDispatch
+	.short	PmExpFilterGridCheck_OnIndexswDown - PmExpFilter_EventDispatch
 	.short	SeqLoad_StoreReturnZero - PmExpFilter_EventDispatch
-	.short	PmExpFilterGridCheck_Evt1C0001C - PmExpFilter_EventDispatch
-	.short	PmExpFilterGridCheck_Evt1C0001C - PmExpFilter_EventDispatch
+	.short	PmExpFilterGridCheck_OnLswData - PmExpFilter_EventDispatch
+	.short	PmExpFilterGridCheck_OnLswData - PmExpFilter_EventDispatch
 AcDispTimeSetGridBoxProc_EventOffsets:	; read by AcDispTimeSetGridBoxProc via PmExpFilter2_EventDispatch (AcDispTimeSetGridBoxProc_EventOffsets)
-	.short	AcDispTimeSetGridBoxProc_Evt1C00017 - PmExpFilter2_EventDispatch
-	.short	AcDispTimeSetGridBoxProc_Evt1C00018 - PmExpFilter2_EventDispatch
-	.short	AcDispTimeSetGridBoxProc_Evt1C00017 - PmExpFilter2_EventDispatch
-	.short	AcDispTimeSetGridBoxProc_Evt1C00018 - PmExpFilter2_EventDispatch
+	.short	AcDispTimeSetGridBoxProc_OnIndexswUp - PmExpFilter2_EventDispatch
+	.short	AcDispTimeSetGridBoxProc_OnIndexswDown - PmExpFilter2_EventDispatch
+	.short	AcDispTimeSetGridBoxProc_OnIndexswUp - PmExpFilter2_EventDispatch
+	.short	AcDispTimeSetGridBoxProc_OnIndexswDown - PmExpFilter2_EventDispatch
 	.short	DispTimeSet_DefaultInherited - PmExpFilter2_EventDispatch
-	.short	AcDispTimeSetGridBoxProc_Evt1C0001C - PmExpFilter2_EventDispatch
-	.short	AcDispTimeSetGridBoxProc_Evt1C0001C - PmExpFilter2_EventDispatch
+	.short	AcDispTimeSetGridBoxProc_OnLswData - PmExpFilter2_EventDispatch
+	.short	AcDispTimeSetGridBoxProc_OnLswData - PmExpFilter2_EventDispatch
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED1437-0xED1452 (27 B), unreached CODE-territory, was disassembled as 22 plausible-but-dead instruction lines; per=100% dist=8 near PmExpFilter_CellKeys+9
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED1453-0xED146E (27 B), unreached CODE-territory, was disassembled as 22 plausible-but-dead instruction lines; per=100% dist=8 near PmExpFilter_AltKeys+1
 ParamStr_Table_03:
@@ -894,12 +894,12 @@ FadeTimeStr_Hold:	aligned_string " HOLD  "
 FadeTimeStr_Default:	aligned_string "DEFAULT"
 FadeTimeStr_Off:	aligned_string "  OFF  "
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED1552-0xED1582 (48 B), unreached CODE-territory, was disassembled as 36 plausible-but-dead instruction lines; per=100% dist=4 near FadeTimeStr_Off+8
-DispTimeSetGridCheck_Evt1C0001C_Str_Fmts:	.byte	0x25, 0x73, 0x00, 0xff
-DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_3:	.byte	0x25, 0x73, 0x00, 0xff
-DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_4:	.byte	0x25, 0x73, 0x00, 0xff
-DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_5:	.byte	0x25, 0x73, 0x00, 0xff
-DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_2:	.byte	0x25, 0x73, 0x00, 0xff
-DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_6:	.byte	0x25, 0x73, 0x00, 0xff
+DispTimeSetGridCheck_OnLswData_Str_Fmts:	.byte	0x25, 0x73, 0x00, 0xff
+DispTimeSetGridCheck_OnLswData_Str_Fmts_3:	.byte	0x25, 0x73, 0x00, 0xff
+DispTimeSetGridCheck_OnLswData_Str_Fmts_4:	.byte	0x25, 0x73, 0x00, 0xff
+DispTimeSetGridCheck_OnLswData_Str_Fmts_5:	.byte	0x25, 0x73, 0x00, 0xff
+DispTimeSetGridCheck_OnLswData_Str_Fmts_2:	.byte	0x25, 0x73, 0x00, 0xff
+DispTimeSetGridCheck_OnLswData_Str_Fmts_6:	.byte	0x25, 0x73, 0x00, 0xff
 DispTimeSetCheck_CellDecode_Str_Fmts:	.byte	0x25, 0x73, 0x00, 0xff
 DispTimeSetCheck_TryRow3_Str_Fmts:	.byte	0x25, 0x73, 0x00, 0xff
 DispTimeSetCheck_TryRow4_Str_Fmts:		.byte	0x25, 0x73, 0x00, 0xff
@@ -908,12 +908,12 @@ DispTimeSetCheck_TryRow6_Str_Fmts:	.byte	0x25, 0x73, 0x00, 0xff
 DispTimeSetCheck_TryRow7_Str_Fmts:	.byte	0x25, 0x73, 0x00, 0xff
 DispTimeSetGridCheck_EventOffsets:	; read by DispTimeSetGridCheck via DispTimeSet_EventDispatch (DispTimeSetGridCheck_EventOffsets)
 	.short	DispTimeSet_EventDispatch - DispTimeSet_EventDispatch
-	.short	DispTimeSetGridCheck_Evt1C00018 - DispTimeSet_EventDispatch
+	.short	DispTimeSetGridCheck_OnIndexswDown - DispTimeSet_EventDispatch
 	.short	DispTimeSet_EventDispatch - DispTimeSet_EventDispatch
-	.short	DispTimeSetGridCheck_Evt1C00018 - DispTimeSet_EventDispatch
+	.short	DispTimeSetGridCheck_OnIndexswDown - DispTimeSet_EventDispatch
 	.short	DispTimeSet_ReturnZero - DispTimeSet_EventDispatch
-	.short	DispTimeSetGridCheck_Evt1C0001C - DispTimeSet_EventDispatch
-	.short	DispTimeSetGridCheck_Evt1C0001C - DispTimeSet_EventDispatch
+	.short	DispTimeSetGridCheck_OnLswData - DispTimeSet_EventDispatch
+	.short	DispTimeSetGridCheck_OnLswData - DispTimeSet_EventDispatch
 IvPageOverWr_GetName_Data:
 	aligned_string "PAGE"
 MssName_EventDispatch_Str_Memory_data:	aligned_string "Memory data "
@@ -921,15 +921,15 @@ MssName_EventDispatch_Str_Blank2:
 	.byte	0x20, 0x20, 0x00, 0xff
 MssName_EventDispatch_Str_Blank2_2:	.byte	0x20, 0x20, 0x00, 0xff
 MssNameFunc_Data:
-	.short	MssNameFunc_Evt1E0003E - MssName_EventDispatch
-	.short	MssNameFunc_Evt1E0003E - MssName_EventDispatch
+	.short	MssNameFunc_OnGetLargeStep - MssName_EventDispatch
+	.short	MssNameFunc_OnGetLargeStep - MssName_EventDispatch
 	.short	MssName_ReturnZero - MssName_EventDispatch
 	.short	MssName_ReturnZero - MssName_EventDispatch
 	.short	MssName_ReturnZero - MssName_EventDispatch
-	.short	MssNameFunc_Evt1E00043 - MssName_EventDispatch
-	.short	MssNameFunc_Evt1E0003E - MssName_EventDispatch
-	.short	MssNameFunc_Evt1E00045 - MssName_EventDispatch
-	.short	MssNameFunc_Evt1E00046 - MssName_EventDispatch
+	.short	MssNameFunc_OnGetMax - MssName_EventDispatch
+	.short	MssNameFunc_OnGetLargeStep - MssName_EventDispatch
+	.short	MssNameFunc_OnGetRamAddress - MssName_EventDispatch
+	.short	MssNameFunc_OnGetRamSize - MssName_EventDispatch
 	.short	MssName_EventDispatch - MssName_EventDispatch
 AcPmBkNoBox_Match_Str_Blank8:		aligned_string "        "
 AcPmBkNoBox_FormatBankNo_Str_Fmtd_Fmtd:	aligned_string "%d-%d:"
@@ -938,15 +938,15 @@ PmemMode_Paint_Str_PAGE_1_3:		aligned_string "PAGE 1/3"
 AcPmBkEdit_BankChanged_Str_BANK_Fmt2d:	aligned_string "BANK%2d:"
 AcPmBkEdit_BankEdit_Str_Fmtd:		.byte	0x25, 0x64, 0x3a, 0x00
 PmBkNameFunc_Data:
-	.short	PmBkNameFunc_Evt1E0003E - PmBkName_EventDispatch
-	.short	PmBkNameFunc_Evt1E0003E - PmBkName_EventDispatch
+	.short	PmBkNameFunc_OnGetLargeStep - PmBkName_EventDispatch
+	.short	PmBkNameFunc_OnGetLargeStep - PmBkName_EventDispatch
 	.short	PmBkName_ReturnZero - PmBkName_EventDispatch
 	.short	PmBkName_ReturnZero - PmBkName_EventDispatch
 	.short	PmBkName_ReturnZero - PmBkName_EventDispatch
-	.short	PmBkNameFunc_Evt1E00043 - PmBkName_EventDispatch
+	.short	PmBkNameFunc_OnGetMax - PmBkName_EventDispatch
 	.short	PmBkName_ReturnZero - PmBkName_EventDispatch
 	.short	PmBkName_DataBytes - PmBkName_EventDispatch
-	.short	PmBkNameFunc_Evt1E0003E - PmBkName_EventDispatch
+	.short	PmBkNameFunc_OnGetLargeStep - PmBkName_EventDispatch
 	.short	PmBkName_EventDispatch - PmBkName_EventDispatch
 GmOnOffFunc_Data:	.byte	0x00, 0xff
 VariScreen_HandlePaint_Str_SOUND:	.byte	0x53, 0x4f, 0x55, 0x4e, 0x44, 0x00

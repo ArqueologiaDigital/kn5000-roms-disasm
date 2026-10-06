@@ -1249,16 +1249,16 @@ IvSdpart_GetText_Data:	.incbin "includes/generated/naka_technichord_strings.bin"
 ; [nakarest] Readers: source references IvSdpartProc (ui/drawbar_panel_ui.s: `add xwa,
 ; [nakarest] IvSdpartProc_Data`).
 IvSdpartProc_Data:
-	.short	IvSdpartProc_Evt1C00017 - IvSdpart_Init
-	.short	IvSdpartProc_Evt1C00017 - IvSdpart_Init
-	.short	IvSdpartProc_Evt1C00017 - IvSdpart_Init
-	.short	IvSdpartProc_Evt1C00017 - IvSdpart_Init
+	.short	IvSdpartProc_OnIndexswUp - IvSdpart_Init
+	.short	IvSdpartProc_OnIndexswUp - IvSdpart_Init
+	.short	IvSdpartProc_OnIndexswUp - IvSdpart_Init
+	.short	IvSdpartProc_OnIndexswUp - IvSdpart_Init
 	.short	IvSdpart_ForwardToBase - IvSdpart_Init
-	.short	IvSdpartProc_Evt1C0001C - IvSdpart_Init
+	.short	IvSdpartProc_OnLswData - IvSdpart_Init
 	.short	IvSdpart_ForwardToBase - IvSdpart_Init
 	.short	IvSdpart_ForwardToBase - IvSdpart_Init
 	.short	IvSdpart_ForwardToBase - IvSdpart_Init
-	.short	IvSdpartProc_Evt1C00020 - IvSdpart_Init
+	.short	IvSdpartProc_OnSoundName - IvSdpart_Init
 ; [nakarest] naka_technichord_strings+0xf616  +0xf616..+0xf63e (0xe95564, 40 B)
 ; [nakarest] Text (40 B at 0xe95564), first string " ------ "; no registered NAKA table points
 ; [nakarest] into it; reached through source references SdpartUpdatePartUI_Confirm
@@ -4454,7 +4454,7 @@ TrackName4_Tr2:
 ; [nakarest] (ui_widgets/sequencer_channel_containers.s: `.long TrackName4_Tr1`); 1 data word in
 ; [nakarest] MidiPart_ConfigNameTable (at 0xeeef2c).
 TrackName4_Tr1:						.incbin "includes/generated/naka_technichord_strings.bin", 0x1962C, 0x6
-PsMixerControlProc_Evt1C00020_Str_Fmts_SOUND_Fmts:	.incbin "includes/generated/naka_technichord_strings.bin", 0x19632, 0xE	; "%s SOUND : %s"
+PsMixerControlProc_OnSoundName_Str_Fmts_SOUND_Fmts:	.incbin "includes/generated/naka_technichord_strings.bin", 0x19632, 0xE	; "%s SOUND : %s"
 PsMixer_ControlCommon_Str_RIGHT_1_Sound_Name_xxxxx:	.incbin "includes/generated/naka_technichord_strings.bin", 0x19640, 0x1A	; "RIGHT 1: Sound Name xxxxx"
 ; [nakarest] naka_technichord_strings+0x1965a  +0x1965a..+0x1966e (0xe9f5a8, 20 B)
 ; [nakarest] purpose not established: layout of 20 B at 0xe9f5a8 not derived; readers below
@@ -4466,11 +4466,11 @@ PsMixerControlProc_Data:
 	.short	PsMixer_ControlCase8 - PsMixer_ControlHandler
 	.short	PsMixer_ControlCase8 - PsMixer_ControlHandler
 	.short	PsMixer_ControlReturn - PsMixer_ControlHandler
-	.short	PsMixerControlProc_Evt1C0001C - PsMixer_ControlHandler
+	.short	PsMixerControlProc_OnLswData - PsMixer_ControlHandler
 	.short	PsMixer_ControlReturn - PsMixer_ControlHandler
-	.short	PsMixerControlProc_Evt1C0001E - PsMixer_ControlHandler
+	.short	PsMixerControlProc_OnPageChange - PsMixer_ControlHandler
 	.short	PsMixer_ControlReturn - PsMixer_ControlHandler
-	.short	PsMixerControlProc_Evt1C00020 - PsMixer_ControlHandler
+	.short	PsMixerControlProc_OnSoundName - PsMixer_ControlHandler
 ; [nakarest] naka_technichord_strings+0x1966e  +0x1966e..+0x19722 (0xe9f5bc, 180 B)
 ; [nakarest] purpose not established: layout of 180 B at 0xe9f5bc not derived; readers below
 ; [nakarest] Readers: source references PartMixer_Init (ui/drawbar_panel_ui.s: `ld xwa,
@@ -4821,10 +4821,10 @@ AcPresentationControlProc_Data:
 	.short	AcPresCtrl_DefaultCase - AcPresCtrl_EventDispatch
 	.short	AcPresCtrl_DefaultCase - AcPresCtrl_EventDispatch
 	.short	AcPresCtrl_DefaultCase - AcPresCtrl_EventDispatch
-	.short	AcPresentationControlProc_Evt1C00006 - AcPresCtrl_EventDispatch
-	.short	AcPresentationControlProc_Evt1C00007 - AcPresCtrl_EventDispatch
-	.short	AcPresentationControlProc_Evt1C00007 - AcPresCtrl_EventDispatch
-	.short	AcPresentationControlProc_Evt1C00007 - AcPresCtrl_EventDispatch
+	.short	AcPresentationControlProc_OnAction - AcPresCtrl_EventDispatch
+	.short	AcPresentationControlProc_OnSwIn - AcPresCtrl_EventDispatch
+	.short	AcPresentationControlProc_OnSwIn - AcPresCtrl_EventDispatch
+	.short	AcPresentationControlProc_OnSwIn - AcPresCtrl_EventDispatch
 	.short	AcPresCtrl_DefaultCase - AcPresCtrl_EventDispatch
 	.short	AcPresent_ReturnZeroJmp - AcPresCtrl_EventDispatch
 	.short	AcPresent_ReturnZeroJmp - AcPresCtrl_EventDispatch

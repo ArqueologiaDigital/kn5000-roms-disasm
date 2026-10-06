@@ -179,18 +179,18 @@ ComSetGridCheck:
 	add xwa, xwa
 	add xwa, ComSetGridCheck_CaseTable
 	ld wa, (xwa)
-	lda xix, (ComSetGridCheck_Evt1C00017:24)
-; Computed jump: target = ComSetGridCheck_Evt1C00017 + ComSetGridCheck_CaseTable[i], ComSetGridCheck_CaseTable = 16-bit offsets (7 words, read
+	lda xix, (ComSetGridCheck_OnIndexswUp:24)
+; Computed jump: target = ComSetGridCheck_OnIndexswUp + ComSetGridCheck_CaseTable[i], ComSetGridCheck_CaseTable = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
-;   0x1c00017 -> ComSetGridCheck_Evt1C00017
-;   0x1c00018 -> ComSetGridCheck_Evt1C00018
-;   0x1c00019 -> ComSetGridCheck_Evt1C00017
-;   0x1c0001a -> ComSetGridCheck_Evt1C00018
+;   0x1c00017 -> ComSetGridCheck_OnIndexswUp
+;   0x1c00018 -> ComSetGridCheck_OnIndexswDown
+;   0x1c00019 -> ComSetGridCheck_OnIndexswUp
+;   0x1c0001a -> ComSetGridCheck_OnIndexswDown
 ;   0x1c0001b -> UI_ReturnZero
-;   0x1c0001c -> ComSetGridCheck_Evt1C0001C
-;   0x1c0001d -> ComSetGridCheck_Evt1C0001C
+;   0x1c0001c -> ComSetGridCheck_OnLswData
+;   0x1c0001d -> ComSetGridCheck_OnLswData
 	jp	t, (xix+wa)
-ComSetGridCheck_Evt1C00017:
+ComSetGridCheck_OnIndexswUp:
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, EVT_GET_SELECTED_CEL
@@ -226,7 +226,7 @@ ComSetGridCheck_JumpTable_Skip:
 	ld	bc, 1:i3
 	ld	de, 2:i3
 	jr	ComSetGridCheck_JumpTable_Join
-ComSetGridCheck_Evt1C00018:
+ComSetGridCheck_OnIndexswDown:
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, EVT_GET_SELECTED_CEL
@@ -264,7 +264,7 @@ ComSetGridCheck_JumpTable_Skip2:
 ComSetGridCheck_JumpTable_Join:
 	call	MainLswAdd
 	jrl	UI_ReturnZero
-ComSetGridCheck_Evt1C0001C:
+ComSetGridCheck_OnLswData:
 	lda	xhl, (xsp+4)
 	ldw	(xhl), 1
 	lda	xde, (xhl+2)
@@ -525,13 +525,13 @@ AcPmemOutLGridBoxProc:
 	lda xix, (AcPmemOutL_Init:24)
 ; Computed jump: target = AcPmemOutL_Init + AcPmemOutLGridBoxProc_Data[i], AcPmemOutLGridBoxProc_Data = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
-;   0x1c00017 -> AcPmemOutLGridBoxProc_Evt1C00017
-;   0x1c00018 -> AcPmemOutLGridBoxProc_Evt1C00017
-;   0x1c00019 -> AcPmemOutLGridBoxProc_Evt1C00017
-;   0x1c0001a -> AcPmemOutLGridBoxProc_Evt1C00017
+;   0x1c00017 -> AcPmemOutLGridBoxProc_OnIndexswUp
+;   0x1c00018 -> AcPmemOutLGridBoxProc_OnIndexswUp
+;   0x1c00019 -> AcPmemOutLGridBoxProc_OnIndexswUp
+;   0x1c0001a -> AcPmemOutLGridBoxProc_OnIndexswUp
 ;   0x1c0001b -> AcPmemOutL_ForwardToBase
-;   0x1c0001c -> AcPmemOutLGridBoxProc_Evt1C0001C
-;   0x1c0001d -> AcPmemOutLGridBoxProc_Evt1C0001C
+;   0x1c0001c -> AcPmemOutLGridBoxProc_OnLswData
+;   0x1c0001d -> AcPmemOutLGridBoxProc_OnLswData
 	jp	t, (xix+bc)
 
 AcPmemOutL_Init:
@@ -605,7 +605,7 @@ AcPmemOutL_Init_ForwardBase:
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
 	jrl AcPmemOutL_CallBase
-AcPmemOutLGridBoxProc_Evt1C00017:
+AcPmemOutLGridBoxProc_OnIndexswUp:
 	ld xwa, (xsp + 8)
 	cp wa, 3:i3
 	jrl z, AcPmemOutL_AutoIncDown_Cell3
@@ -786,7 +786,7 @@ AcPmemOutL_CopyText:
 	call	Free_Compare2
 	inc	8, xsp
 	jr	AcPmemOutL_ReturnHandled
-AcPmemOutLGridBoxProc_Evt1C0001C:
+AcPmemOutLGridBoxProc_OnLswData:
 	ld	xwa, (xsp+16)
 	call	GetViewInstance
 	ld	xwa, (xhl+70)
@@ -845,13 +845,13 @@ AcPmemOutRGridBoxProc:
 	lda xix, (AcPmemOutR_Init:24)
 ; Computed jump: target = AcPmemOutR_Init + AcPmemOutRGridBoxProc_CaseTable[i], AcPmemOutRGridBoxProc_CaseTable = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
-;   0x1c00017 -> AcPmemOutRGridBoxProc_Evt1C00017
-;   0x1c00018 -> AcPmemOutRGridBoxProc_Evt1C00017
-;   0x1c00019 -> AcPmemOutRGridBoxProc_Evt1C00017
-;   0x1c0001a -> AcPmemOutRGridBoxProc_Evt1C00017
+;   0x1c00017 -> AcPmemOutRGridBoxProc_OnIndexswUp
+;   0x1c00018 -> AcPmemOutRGridBoxProc_OnIndexswUp
+;   0x1c00019 -> AcPmemOutRGridBoxProc_OnIndexswUp
+;   0x1c0001a -> AcPmemOutRGridBoxProc_OnIndexswUp
 ;   0x1c0001b -> AcPmemOutR_ForwardToBase
-;   0x1c0001c -> AcPmemOutRGridBoxProc_Evt1C0001C
-;   0x1c0001d -> AcPmemOutRGridBoxProc_Evt1C0001C
+;   0x1c0001c -> AcPmemOutRGridBoxProc_OnLswData
+;   0x1c0001d -> AcPmemOutRGridBoxProc_OnLswData
 	jp	t, (xix+bc)
 
 AcPmemOutR_Init:
@@ -896,7 +896,7 @@ AcPmemOutR_Init_ForwardBase:
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
 	jrl AcPmemOutR_CallBase
-AcPmemOutRGridBoxProc_Evt1C00017:
+AcPmemOutRGridBoxProc_OnIndexswUp:
 	ld xwa, (xsp + 8)
 	cp wa, 7:i3
 	jrl z, AcPmemOutR_AutoIncDown_Cell7
@@ -1077,7 +1077,7 @@ AcPmemOutR_CopyText:
 	call	Free_Compare2
 	inc	8, xsp
 	jr	AcPmemOutR_ReturnHandled
-AcPmemOutRGridBoxProc_Evt1C0001C:
+AcPmemOutRGridBoxProc_OnLswData:
 	ld	xwa, (xsp+16)
 	call	GetViewInstance
 	ld	xwa, (xhl+70)
@@ -1156,19 +1156,19 @@ PmemOutLGridCheck:
 	add xwa, xwa
 	add xwa, PmemOutLGridCheck_CaseTable
 	ld wa, (xwa)
-	lda xix, (PmemOutLGridCheck_Evt1C00017:24)
-; Computed jump: target = PmemOutLGridCheck_Evt1C00017 + PmemOutLGridCheck_CaseTable[i], PmemOutLGridCheck_CaseTable = 16-bit offsets (7 words, read
+	lda xix, (PmemOutLGridCheck_OnIndexswUp:24)
+; Computed jump: target = PmemOutLGridCheck_OnIndexswUp + PmemOutLGridCheck_CaseTable[i], PmemOutLGridCheck_CaseTable = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
-;   0x1c00017 -> PmemOutLGridCheck_Evt1C00017
-;   0x1c00018 -> PmemOutLGridCheck_Evt1C00018
-;   0x1c00019 -> PmemOutLGridCheck_Evt1C00017
-;   0x1c0001a -> PmemOutLGridCheck_Evt1C00018
+;   0x1c00017 -> PmemOutLGridCheck_OnIndexswUp
+;   0x1c00018 -> PmemOutLGridCheck_OnIndexswDown
+;   0x1c00019 -> PmemOutLGridCheck_OnIndexswUp
+;   0x1c0001a -> PmemOutLGridCheck_OnIndexswDown
 ;   0x1c0001b -> PmemOutGrid_ReturnZero
 ;   0x1c0001c -> PmemOutGrid_ReturnZero
-;   0x1c0001d -> PmemOutLGridCheck_Evt1C0001D
+;   0x1c0001d -> PmemOutLGridCheck_OnRamData
 	jp	t, (xix+wa)
 
-PmemOutLGridCheck_Evt1C00017:
+PmemOutLGridCheck_OnIndexswUp:
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, EVT_GET_SELECTED_CEL
@@ -1237,7 +1237,7 @@ PmemOutLGridCheck_JumpTable_Skip2:
 	ld	xbc, 2:i3
 	ld	(xwa+6), xbc
 	jrl	PmemOutLGridCheck_JumpTable_Join2
-PmemOutLGridCheck_Evt1C00018:
+PmemOutLGridCheck_OnIndexswDown:
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, EVT_GET_SELECTED_CEL
@@ -1314,7 +1314,7 @@ PmemOutLGridCheck_JumpTable_Skip4:
 PmemOutLGridCheck_JumpTable_Join2:
 	call	MainRamAdd
 	jrl	PmemOutGrid_ReturnZero
-PmemOutLGridCheck_Evt1C0001D:
+PmemOutLGridCheck_OnRamData:
 	ld	(xsp+4), xhl
 	ldw	(xbc), 1
 	lda	xwa, (xsp+44)
@@ -1421,8 +1421,8 @@ PmemOutLGridCheck_JumpTable_Skip6:
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
-	pushw	PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d@hi16
-	pushw	PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d@lo16
+	pushw	PmemOutLGridCheck_OnRamData_Str_Fmt3d@hi16
+	pushw	PmemOutLGridCheck_OnRamData_Str_Fmt3d@lo16
 	lda	xwa, (xsp+50)
 	push	xwa
 	call	Sprintf_Locked
@@ -1453,8 +1453,8 @@ PmemOutLGridCheck_JumpTable_Join4:
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
-	pushw	PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_2@hi16
-	pushw	PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_2@lo16
+	pushw	PmemOutLGridCheck_OnRamData_Str_Fmt3d_2@hi16
+	pushw	PmemOutLGridCheck_OnRamData_Str_Fmt3d_2@lo16
 	lda	xwa, (xsp+50)
 	push	xwa
 	call	Sprintf_Locked
@@ -1483,8 +1483,8 @@ PmemOutLGridCheck_JumpTable_Join4:
 	add	xwa, (xsp+32)
 	bit	7, (xwa)
 	jr	z, PmemOutLGridCheck_JumpTable_Skip7
-	pushw	PmemOutLGridCheck_Evt1C0001D_Str_OFF@hi16
-	pushw	PmemOutLGridCheck_Evt1C0001D_Str_OFF@lo16
+	pushw	PmemOutLGridCheck_OnRamData_Str_OFF@hi16
+	pushw	PmemOutLGridCheck_OnRamData_Str_OFF@lo16
 	lda	xwa, (xsp+48)
 	push	xwa
 	call	Free_Compare2
@@ -1494,8 +1494,8 @@ PmemOutLGridCheck_JumpTable_Skip7:
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
-	pushw	PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_3@hi16
-	pushw	PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_3@lo16
+	pushw	PmemOutLGridCheck_OnRamData_Str_Fmt3d_3@hi16
+	pushw	PmemOutLGridCheck_OnRamData_Str_Fmt3d_3@lo16
 	lda	xwa, (xsp+50)
 	push	xwa
 	call	Sprintf_Locked
@@ -1531,7 +1531,7 @@ PmemOutLGridCheck_JumpTable_Skip8:
 	ld	xwa, NakaInst_ON_E80168
 	jr	PmemOutLGridCheck_JumpTable_Join6
 PmemOutLGridCheck_JumpTable_Skip9:
-	ld	xwa, PmemOutLGridCheck_Evt1C0001D_Str_OFF_6
+	ld	xwa, PmemOutLGridCheck_OnRamData_Str_OFF_6
 PmemOutLGridCheck_JumpTable_Join6:
 	push	xwa
 	ld	xwa, (xsp+16)
@@ -1587,8 +1587,8 @@ PmemOutLGridCheck_JumpTable_Skip10:
 	lda	xbc, (xsp+44)
 	bit	7, (xwa)
 	jr	z, PmemOutLGridCheck_JumpTable_Skip11
-	pushw	PmemOutLGridCheck_Evt1C0001D_Str_OFF_2@hi16
-	pushw	PmemOutLGridCheck_Evt1C0001D_Str_OFF_2@lo16
+	pushw	PmemOutLGridCheck_OnRamData_Str_OFF_2@hi16
+	pushw	PmemOutLGridCheck_OnRamData_Str_OFF_2@lo16
 	push	xbc
 	call	Free_Compare2
 	inc	8, xsp
@@ -1597,8 +1597,8 @@ PmemOutLGridCheck_JumpTable_Skip11:
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
-	pushw	PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_4@hi16
-	pushw	PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_4@lo16
+	pushw	PmemOutLGridCheck_OnRamData_Str_Fmt3d_4@hi16
+	pushw	PmemOutLGridCheck_OnRamData_Str_Fmt3d_4@lo16
 	push	xbc
 	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
@@ -1628,8 +1628,8 @@ PmemOutLGridCheck_JumpTable_Join7:
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
-	pushw	PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_5@hi16
-	pushw	PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_5@lo16
+	pushw	PmemOutLGridCheck_OnRamData_Str_Fmt3d_5@hi16
+	pushw	PmemOutLGridCheck_OnRamData_Str_Fmt3d_5@lo16
 	lda	xwa, (xsp+50)
 	push	xwa
 	call	Sprintf_Locked
@@ -1658,8 +1658,8 @@ PmemOutLGridCheck_JumpTable_Join7:
 	add	xwa, (xsp+32)
 	bit	7, (xwa)
 	jr	z, PmemOutLGridCheck_JumpTable_Skip12
-	pushw	PmemOutLGridCheck_Evt1C0001D_Str_OFF_3@hi16
-	pushw	PmemOutLGridCheck_Evt1C0001D_Str_OFF_3@lo16
+	pushw	PmemOutLGridCheck_OnRamData_Str_OFF_3@hi16
+	pushw	PmemOutLGridCheck_OnRamData_Str_OFF_3@lo16
 	lda	xwa, (xsp+48)
 	push	xwa
 	call	Free_Compare2
@@ -1669,8 +1669,8 @@ PmemOutLGridCheck_JumpTable_Skip12:
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
-	pushw	PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_6@hi16
-	pushw	PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_6@lo16
+	pushw	PmemOutLGridCheck_OnRamData_Str_Fmt3d_6@hi16
+	pushw	PmemOutLGridCheck_OnRamData_Str_Fmt3d_6@lo16
 	lda	xwa, (xsp+50)
 	push	xwa
 	call	Sprintf_Locked
@@ -1703,8 +1703,8 @@ PmemOutLGridCheck_JumpTable_Skip13:
 	ld	xwa, (xwa)
 	bit	7, wa
 	jr	z, PmemOutLGridCheck_JumpTable_Skip14
-	pushw	PmemOutLGridCheck_Evt1C0001D_Str_OFF_4@hi16
-	pushw	PmemOutLGridCheck_Evt1C0001D_Str_OFF_4@lo16
+	pushw	PmemOutLGridCheck_OnRamData_Str_OFF_4@hi16
+	pushw	PmemOutLGridCheck_OnRamData_Str_OFF_4@lo16
 	ld	xwa, (xsp+16)
 	push	xwa
 	call	Free_Compare2
@@ -1712,8 +1712,8 @@ PmemOutLGridCheck_JumpTable_Skip13:
 	jr	PmemOutLGridCheck_JumpTable_Join9
 PmemOutLGridCheck_JumpTable_Skip14:
 	push	xwa
-	pushw	PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_7@hi16
-	pushw	PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_7@lo16
+	pushw	PmemOutLGridCheck_OnRamData_Str_Fmt3d_7@hi16
+	pushw	PmemOutLGridCheck_OnRamData_Str_Fmt3d_7@lo16
 	ld	xwa, (xsp+20)
 	push	xwa
 	call	Sprintf_Locked
@@ -1737,8 +1737,8 @@ PmemOutLGridCheck_JumpTable_Skip15:
 	ld	xwa, (xsp+28)
 	ld	xwa, (xwa)
 	push	xwa
-	pushw	PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_8@hi16
-	pushw	PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_8@lo16
+	pushw	PmemOutLGridCheck_OnRamData_Str_Fmt3d_8@hi16
+	pushw	PmemOutLGridCheck_OnRamData_Str_Fmt3d_8@lo16
 	ld	xwa, (xsp+20)
 	push	xwa
 	call	Sprintf_Locked
@@ -1761,8 +1761,8 @@ PmemOutLGridCheck_JumpTable_Skip16:
 	ld	xwa, (xwa)
 	bit	7, wa
 	jr	z, PmemOutLGridCheck_JumpTable_Skip17
-	pushw	PmemOutLGridCheck_Evt1C0001D_Str_OFF_5@hi16
-	pushw	PmemOutLGridCheck_Evt1C0001D_Str_OFF_5@lo16
+	pushw	PmemOutLGridCheck_OnRamData_Str_OFF_5@hi16
+	pushw	PmemOutLGridCheck_OnRamData_Str_OFF_5@lo16
 	ld	xwa, (xsp+16)
 	push	xwa
 	call	Free_Compare2
@@ -1770,8 +1770,8 @@ PmemOutLGridCheck_JumpTable_Skip16:
 	jr	PmemOutLGridCheck_JumpTable_Join10
 PmemOutLGridCheck_JumpTable_Skip17:
 	push	xwa
-	pushw	PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_9@hi16
-	pushw	PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_9@lo16
+	pushw	PmemOutLGridCheck_OnRamData_Str_Fmt3d_9@hi16
+	pushw	PmemOutLGridCheck_OnRamData_Str_Fmt3d_9@lo16
 	ld	xwa, (xsp+20)
 	push	xwa
 	call	Sprintf_Locked
@@ -1932,12 +1932,12 @@ PmemOutRGridCheck:
 ; Computed jump: target = TtMdCtlMsg_EventDispatch + PmemOutRGridCheck_CaseTable[i], PmemOutRGridCheck_CaseTable = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> TtMdCtlMsg_EventDispatch
-;   0x1c00018 -> PmemOutRGridCheck_Evt1C00018
+;   0x1c00018 -> PmemOutRGridCheck_OnIndexswDown
 ;   0x1c00019 -> TtMdCtlMsg_EventDispatch
-;   0x1c0001a -> PmemOutRGridCheck_Evt1C00018
+;   0x1c0001a -> PmemOutRGridCheck_OnIndexswDown
 ;   0x1c0001b -> TtMdCtlMsg_ReturnZero2
 ;   0x1c0001c -> TtMdCtlMsg_ReturnZero2
-;   0x1c0001d -> PmemOutRGridCheck_Evt1C0001D
+;   0x1c0001d -> PmemOutRGridCheck_OnRamData
 	jp	t, (xix+hl)
 TtMdCtlMsg_EventDispatch:
 	call	GetFocusObject
@@ -2060,7 +2060,7 @@ TtMdCtlMsg_EventDispatch_Skip7:
 	jrl	TtMdCtlMsg_ReturnZero2
 TtMdCtlMsg_EventDispatch_Skip8:
 	jrl	PmemOutLGridCheck_JumpTable_Code_Join2
-PmemOutRGridCheck_Evt1C00018:
+PmemOutRGridCheck_OnIndexswDown:
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, EVT_GET_SELECTED_CEL
@@ -2197,7 +2197,7 @@ PmemOutLGridCheck_JumpTable_Code_Skip8:
 PmemOutLGridCheck_JumpTable_Code_Join2:
 	call	MainRamAdd
 	jrl	TtMdCtlMsg_ReturnZero2
-PmemOutRGridCheck_Evt1C0001D:
+PmemOutRGridCheck_OnRamData:
 	ld	(xsp+4), xiz
 	ldw	(xbc), 1
 	lda	xbc, (xsp+40)
@@ -2241,8 +2241,8 @@ PmemOutLGridCheck_JumpTable_Code_Skip9:
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
-	pushw PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d@hi16
-	pushw PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d@lo16
+	pushw PmemOutRGridCheck_OnRamData_Str_Fmt3d@hi16
+	pushw PmemOutRGridCheck_OnRamData_Str_Fmt3d@lo16
 	ld	xwa, (xsp+18)
 	push	xwa
 	call	Sprintf_Locked
@@ -2274,8 +2274,8 @@ PmemOutLGridCheck_JumpTable_Code_Join3:
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
-	pushw PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_2@hi16
-	pushw PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_2@lo16
+	pushw PmemOutRGridCheck_OnRamData_Str_Fmt3d_2@hi16
+	pushw PmemOutRGridCheck_OnRamData_Str_Fmt3d_2@lo16
 	lda	xwa, (xsp+46)
 	push	xwa
 	call	Sprintf_Locked
@@ -2305,8 +2305,8 @@ PmemOutLGridCheck_JumpTable_Code_Join3:
 	add	xwa, (xsp+28)
 	bit	7, (xwa)
 	jr	z, PmemOutLGridCheck_JumpTable_Code_Skip10
-	pushw PmemOutRGridCheck_Evt1C0001D_Str_OFF@hi16
-	pushw PmemOutRGridCheck_Evt1C0001D_Str_OFF@lo16
+	pushw PmemOutRGridCheck_OnRamData_Str_OFF@hi16
+	pushw PmemOutRGridCheck_OnRamData_Str_OFF@lo16
 	lda	xwa, (xsp+44)
 	push	xwa
 	call	Free_Compare2
@@ -2316,8 +2316,8 @@ PmemOutLGridCheck_JumpTable_Code_Skip10:
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
-	pushw PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_3@hi16
-	pushw PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_3@lo16
+	pushw PmemOutRGridCheck_OnRamData_Str_Fmt3d_3@hi16
+	pushw PmemOutRGridCheck_OnRamData_Str_Fmt3d_3@lo16
 	lda	xwa, (xsp+46)
 	push	xwa
 	call	Sprintf_Locked
@@ -2353,8 +2353,8 @@ PmemOutLGridCheck_JumpTable_Code_Skip11:
 	add	xwa, (xsp+28)
 	bit	7, (xwa)
 	jr	z, PmemOutLGridCheck_JumpTable_Code_Skip12
-	pushw PmemOutRGridCheck_Evt1C0001D_Str_OFF_2@hi16
-	pushw PmemOutRGridCheck_Evt1C0001D_Str_OFF_2@lo16
+	pushw PmemOutRGridCheck_OnRamData_Str_OFF_2@hi16
+	pushw PmemOutRGridCheck_OnRamData_Str_OFF_2@lo16
 	ld	xwa, (xsp+16)
 	push	xwa
 	call	Free_Compare2
@@ -2364,8 +2364,8 @@ PmemOutLGridCheck_JumpTable_Code_Skip12:
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
-	pushw PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_4@hi16
-	pushw PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_4@lo16
+	pushw PmemOutRGridCheck_OnRamData_Str_Fmt3d_4@hi16
+	pushw PmemOutRGridCheck_OnRamData_Str_Fmt3d_4@lo16
 	ld	xwa, (xsp+18)
 	push	xwa
 	call	Sprintf_Locked
@@ -2397,8 +2397,8 @@ PmemOutLGridCheck_JumpTable_Code_Join5:
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
-	pushw PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_5@hi16
-	pushw PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_5@lo16
+	pushw PmemOutRGridCheck_OnRamData_Str_Fmt3d_5@hi16
+	pushw PmemOutRGridCheck_OnRamData_Str_Fmt3d_5@lo16
 	lda	xwa, (xsp+46)
 	push	xwa
 	call	Sprintf_Locked
@@ -2429,8 +2429,8 @@ PmemOutLGridCheck_JumpTable_Code_Join5:
 	lda	xbc, (xsp+40)
 	bit	7, (xwa)
 	jr	z, PmemOutLGridCheck_JumpTable_Code_Skip13
-	pushw PmemOutRGridCheck_Evt1C0001D_Str_OFF_3@hi16
-	pushw PmemOutRGridCheck_Evt1C0001D_Str_OFF_3@lo16
+	pushw PmemOutRGridCheck_OnRamData_Str_OFF_3@hi16
+	pushw PmemOutRGridCheck_OnRamData_Str_OFF_3@lo16
 	push	xbc
 	call	Free_Compare2
 	inc	8, xsp
@@ -2439,8 +2439,8 @@ PmemOutLGridCheck_JumpTable_Code_Skip13:
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
-	pushw PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_6@hi16
-	pushw PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_6@lo16
+	pushw PmemOutRGridCheck_OnRamData_Str_Fmt3d_6@hi16
+	pushw PmemOutRGridCheck_OnRamData_Str_Fmt3d_6@lo16
 	push	xbc
 	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
@@ -2476,8 +2476,8 @@ PmemOutLGridCheck_JumpTable_Code_Skip14:
 	ld	xwa, (xiz+14)
 	bit	7, wa
 	jr	z, PmemOutLGridCheck_JumpTable_Code_Skip15
-	pushw PmemOutRGridCheck_Evt1C0001D_Str_OFF_4@hi16
-	pushw PmemOutRGridCheck_Evt1C0001D_Str_OFF_4@lo16
+	pushw PmemOutRGridCheck_OnRamData_Str_OFF_4@hi16
+	pushw PmemOutRGridCheck_OnRamData_Str_OFF_4@lo16
 	ld	xwa, (xsp+16)
 	push	xwa
 	call	Free_Compare2
@@ -2485,8 +2485,8 @@ PmemOutLGridCheck_JumpTable_Code_Skip14:
 	jr	PmemOutLGridCheck_JumpTable_Code_Join7
 PmemOutLGridCheck_JumpTable_Code_Skip15:
 	push	xwa
-	pushw PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_7@hi16
-	pushw PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_7@lo16
+	pushw PmemOutRGridCheck_OnRamData_Str_Fmt3d_7@hi16
+	pushw PmemOutRGridCheck_OnRamData_Str_Fmt3d_7@lo16
 	ld	xwa, (xsp+20)
 	push	xwa
 	call	Sprintf_Locked
@@ -2511,8 +2511,8 @@ PmemOutLGridCheck_JumpTable_Code_Skip16:
 	ldw	(xwa), 1
 	ld	xwa, (xde)
 	push	xwa
-	pushw PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_8@hi16
-	pushw PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_8@lo16
+	pushw PmemOutRGridCheck_OnRamData_Str_Fmt3d_8@hi16
+	pushw PmemOutRGridCheck_OnRamData_Str_Fmt3d_8@lo16
 	ld	xwa, (xsp+20)
 	push	xwa
 	call	Sprintf_Locked
@@ -2535,8 +2535,8 @@ PmemOutLGridCheck_JumpTable_Code_Skip17:
 	ld	xwa, (xde)
 	bit	7, wa
 	jr	z, PmemOutLGridCheck_JumpTable_Code_Skip18
-	pushw PmemOutRGridCheck_Evt1C0001D_Str_OFF_5@hi16
-	pushw PmemOutRGridCheck_Evt1C0001D_Str_OFF_5@lo16
+	pushw PmemOutRGridCheck_OnRamData_Str_OFF_5@hi16
+	pushw PmemOutRGridCheck_OnRamData_Str_OFF_5@lo16
 	ld	xwa, (xsp+16)
 	push	xwa
 	call	Free_Compare2
@@ -2544,8 +2544,8 @@ PmemOutLGridCheck_JumpTable_Code_Skip17:
 	jr	PmemOutLGridCheck_JumpTable_Code_Join8
 PmemOutLGridCheck_JumpTable_Code_Skip18:
 	push	xwa
-	pushw PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_9@hi16
-	pushw PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_9@lo16
+	pushw PmemOutRGridCheck_OnRamData_Str_Fmt3d_9@hi16
+	pushw PmemOutRGridCheck_OnRamData_Str_Fmt3d_9@lo16
 	ld	xwa, (xsp+20)
 	push	xwa
 	call	Sprintf_Locked
@@ -2744,13 +2744,13 @@ AcCtlMsgGridBoxProc:
 	lda xix, (AcCtlMsgGrid_Init:24)
 ; Computed jump: target = AcCtlMsgGrid_Init + AcCtlMsgGridBoxProc_CaseTable[i], AcCtlMsgGridBoxProc_CaseTable = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
-;   0x1c00017 -> AcCtlMsgGridBoxProc_Evt1C00017
-;   0x1c00018 -> AcCtlMsgGridBoxProc_Evt1C00018
-;   0x1c00019 -> AcCtlMsgGridBoxProc_Evt1C00017
-;   0x1c0001a -> AcCtlMsgGridBoxProc_Evt1C00018
+;   0x1c00017 -> AcCtlMsgGridBoxProc_OnIndexswUp
+;   0x1c00018 -> AcCtlMsgGridBoxProc_OnIndexswDown
+;   0x1c00019 -> AcCtlMsgGridBoxProc_OnIndexswUp
+;   0x1c0001a -> AcCtlMsgGridBoxProc_OnIndexswDown
 ;   0x1c0001b -> AcCtlMsgGrid_ForwardToBase
-;   0x1c0001c -> AcCtlMsgGridBoxProc_Evt1C0001C
-;   0x1c0001d -> AcCtlMsgGridBoxProc_Evt1C0001C
+;   0x1c0001c -> AcCtlMsgGridBoxProc_OnLswData
+;   0x1c0001d -> AcCtlMsgGridBoxProc_OnLswData
 	jp	t, (xix+bc)
 
 AcCtlMsgGrid_Init:
@@ -2889,7 +2889,7 @@ AcCtlMsgGrid_OK_Down_Store:
 AcCtlMsgGrid_OK_DispatchScroll:
 	call SendEvent
 	jrl AcCtlMsgGrid_ReturnHandled
-AcCtlMsgGridBoxProc_Evt1C00017:
+AcCtlMsgGridBoxProc_OnIndexswUp:
 	ld xwa, (xsp + 32)
 	ld xbc, (xsp + 28)
 	ld xde, (xsp + 24)
@@ -2986,7 +2986,7 @@ AcCtlMsgGrid_ScrollUp_AutoScroll:
 	call SetDialDown
 	ld wa, 1:i3
 	jrl AcCtlMsgGrid_ScrollCommit
-AcCtlMsgGridBoxProc_Evt1C00018:
+AcCtlMsgGridBoxProc_OnIndexswDown:
 	ld xwa, (xsp + 32)
 	ld xbc, (xsp + 28)
 	ld xde, (xsp + 24)
@@ -3117,7 +3117,7 @@ AcCtlMsgGrid_GetRowText_Strcpy:
 	call	Free_Compare2
 	inc	8, xsp
 	jr	AcCtlMsgGrid_ReturnHandled
-AcCtlMsgGridBoxProc_Evt1C0001C:
+AcCtlMsgGridBoxProc_OnLswData:
 	ld	xwa, (xsp+32)
 	call	GetViewInstance
 	ld	xwa, (xhl+70)
@@ -3178,18 +3178,18 @@ CtlMsgGridCheck:
 	add xwa, xwa
 	add xwa, CtlMsgGridCheck_CaseTable
 	ld wa, (xwa)
-	lda xix, (CtlMsgGridCheck_Evt1C00017:24)
-; Computed jump: target = CtlMsgGridCheck_Evt1C00017 + CtlMsgGridCheck_CaseTable[i], CtlMsgGridCheck_CaseTable = 16-bit offsets (7 words, read
+	lda xix, (CtlMsgGridCheck_OnIndexswUp:24)
+; Computed jump: target = CtlMsgGridCheck_OnIndexswUp + CtlMsgGridCheck_CaseTable[i], CtlMsgGridCheck_CaseTable = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
-;   0x1c00017 -> CtlMsgGridCheck_Evt1C00017
-;   0x1c00018 -> CtlMsgGridCheck_Evt1C00018
-;   0x1c00019 -> CtlMsgGridCheck_Evt1C00017
-;   0x1c0001a -> CtlMsgGridCheck_Evt1C00018
+;   0x1c00017 -> CtlMsgGridCheck_OnIndexswUp
+;   0x1c00018 -> CtlMsgGridCheck_OnIndexswDown
+;   0x1c00019 -> CtlMsgGridCheck_OnIndexswUp
+;   0x1c0001a -> CtlMsgGridCheck_OnIndexswDown
 ;   0x1c0001b -> CtlMsgGrid_ReturnZero
-;   0x1c0001c -> CtlMsgGridCheck_Evt1C0001C
+;   0x1c0001c -> CtlMsgGridCheck_OnLswData
 ;   0x1c0001d -> CtlMsgGrid_ReturnZero
 	jp	t, (xix+wa)
-CtlMsgGridCheck_Evt1C00017:
+CtlMsgGridCheck_OnIndexswUp:
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, EVT_GET_SELECTED_CEL
@@ -3217,7 +3217,7 @@ CtlMsgGridCheck_Evt1C00017:
 	ld	bc, 1:i3
 	ld	de, 2:i3
 	jr	CtlMsgGridCheck_Join
-CtlMsgGridCheck_Evt1C00018:
+CtlMsgGridCheck_OnIndexswDown:
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, EVT_GET_SELECTED_CEL
@@ -3247,7 +3247,7 @@ CtlMsgGridCheck_Evt1C00018:
 CtlMsgGridCheck_Join:
 	call	MainLswAdd
 	jrl	CtlMsgGrid_ReturnZero
-CtlMsgGridCheck_Evt1C0001C:
+CtlMsgGridCheck_OnLswData:
 	ld	(xsp+4), xhl
 	ldw	(xhl), 1
 	ld	xde, xbc
@@ -3413,12 +3413,12 @@ AcMidiPartGridBoxProc:
 	lda xix, (MidiSetup_TtlCase3:24)
 ; Computed jump: target = MidiSetup_TtlCase3 + AcMidiPartGridBoxProc_CaseTable[i], AcMidiPartGridBoxProc_CaseTable = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
-;   0x1c00017 -> AcMidiPartGridBoxProc_Evt1C00017
+;   0x1c00017 -> AcMidiPartGridBoxProc_OnIndexswUp
 ;   0x1c00018 -> MidiPart_InitGridBox
-;   0x1c00019 -> AcMidiPartGridBoxProc_Evt1C00017
+;   0x1c00019 -> AcMidiPartGridBoxProc_OnIndexswUp
 ;   0x1c0001a -> MidiPart_InitGridBox
 ;   0x1c0001b -> MidiSetup_GridBoxCase4
-;   0x1c0001c -> AcMidiPartGridBoxProc_Evt1C0001C
+;   0x1c0001c -> AcMidiPartGridBoxProc_OnLswData
 ;   0x1c0001d -> MidiPart_ReturnZeroJmp
 	jp	t, (xix+bc)
 
@@ -3578,7 +3578,7 @@ MidiPart_StoreAndNotify:
 MidiPart_CallMainFunc:
 	call MainFuncCall
 	jrl MidiPart_ReturnZeroJmp
-AcMidiPartGridBoxProc_Evt1C00017:
+AcMidiPartGridBoxProc_OnIndexswUp:
 	ld xwa, (xsp + 32)
 	ld xbc, (xsp + 28)
 	ld xde, (xsp + 24)
@@ -3926,7 +3926,7 @@ MidiSetup_CopyStrAndReturn:
 	call	Free_Compare2
 	inc	8, xsp
 	jr	MidiPart_ReturnZeroJmp
-AcMidiPartGridBoxProc_Evt1C0001C:
+AcMidiPartGridBoxProc_OnLswData:
 	ld	xwa, (xsp+32)
 	call	GetViewInstance
 	ld	xwa, (xhl+70)
@@ -3991,19 +3991,19 @@ MidiPartGridCheck:
 	add xwa, xwa
 	add xwa, MidiPartGridCheck_CaseTable
 	ld wa, (xwa)
-	lda xix, (MidiPartGridCheck_Evt1C00017:24)
-; Computed jump: target = MidiPartGridCheck_Evt1C00017 + MidiPartGridCheck_CaseTable[i], MidiPartGridCheck_CaseTable = 16-bit offsets (7 words, read
+	lda xix, (MidiPartGridCheck_OnIndexswUp:24)
+; Computed jump: target = MidiPartGridCheck_OnIndexswUp + MidiPartGridCheck_CaseTable[i], MidiPartGridCheck_CaseTable = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
-;   0x1c00017 -> MidiPartGridCheck_Evt1C00017
-;   0x1c00018 -> MidiPartGridCheck_Evt1C00018
-;   0x1c00019 -> MidiPartGridCheck_Evt1C00017
-;   0x1c0001a -> MidiPartGridCheck_Evt1C00018
+;   0x1c00017 -> MidiPartGridCheck_OnIndexswUp
+;   0x1c00018 -> MidiPartGridCheck_OnIndexswDown
+;   0x1c00019 -> MidiPartGridCheck_OnIndexswUp
+;   0x1c0001a -> MidiPartGridCheck_OnIndexswDown
 ;   0x1c0001b -> MidiSetup_ReturnZero
-;   0x1c0001c -> MidiPartGridCheck_Evt1C0001C
+;   0x1c0001c -> MidiPartGridCheck_OnLswData
 ;   0x1c0001d -> MidiSetup_ReturnZero
 	jp	t, (xix+wa)
 
-MidiPartGridCheck_Evt1C00017:
+MidiPartGridCheck_OnIndexswUp:
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, EVT_GET_SELECTED_CEL
@@ -4077,7 +4077,7 @@ MidiPartGridCheck_Skip3:
 	call	AcApcToggleProc_Helper
 	ld	wa, hl
 	add	wa, wa
-	lda	xbc, (MidiPartGridCheck_Evt1C00017_Data:24)
+	lda	xbc, (MidiPartGridCheck_OnIndexswUp_Data:24)
 	ld	bc, (xbc+wa)
 	cp	bc, hl
 	jrl	z, MidiSetup_ReturnZero
@@ -4089,7 +4089,7 @@ MidiPartGridCheck_Skip4:
 	ld	bc, 1:i3
 	ld	de, 2:i3
 	jrl	MidiPartGridCheck_Join2
-MidiPartGridCheck_Evt1C00018:
+MidiPartGridCheck_OnIndexswDown:
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, EVT_GET_SELECTED_CEL
@@ -4165,7 +4165,7 @@ MidiPartGridCheck_Skip7:
 	call	AcApcToggleProc_Helper
 	ld	wa, hl
 	add	wa, wa
-	lda	xbc, (MidiPartGridCheck_Evt1C00018_Data:24)
+	lda	xbc, (MidiPartGridCheck_OnIndexswDown_Data:24)
 	ld	bc, (xbc+wa)
 	cp	bc, hl
 	jrl	z, MidiSetup_ReturnZero
@@ -4179,7 +4179,7 @@ MidiPartGridCheck_Skip8:
 MidiPartGridCheck_Join2:
 	call	MainLswPut
 	jrl	MidiSetup_ReturnZero
-MidiPartGridCheck_Evt1C0001C:
+MidiPartGridCheck_OnLswData:
 	ld	xix, (xsp+34)
 	ld	(xsp+4), xiy
 	ld	(xsp+8), xhl
@@ -4220,8 +4220,8 @@ MidiPartGridCheck_Skip9:
 	ld	wa, (xwa+4)
 	inc	1, wa
 	pushw	wa
-	pushw	MidiPartGridCheck_Evt1C0001C_Str_Fmt2d@hi16
-	pushw	MidiPartGridCheck_Evt1C0001C_Str_Fmt2d@lo16
+	pushw	MidiPartGridCheck_OnLswData_Str_Fmt2d@hi16
+	pushw	MidiPartGridCheck_OnLswData_Str_Fmt2d@lo16
 	lda	xwa, (xsp+30)
 	push	xwa
 	call	Sprintf_Locked
@@ -4242,8 +4242,8 @@ MidiPartGridCheck_Skip10:
 	ldw	(xwa), 1
 	cpw	(xde), 0
 	jr	nz, MidiPartGridCheck_Skip11
-	pushw	MidiPartGridCheck_Evt1C0001C_Str_OFF@hi16
-	pushw	MidiPartGridCheck_Evt1C0001C_Str_OFF@lo16
+	pushw	MidiPartGridCheck_OnLswData_Str_OFF@hi16
+	pushw	MidiPartGridCheck_OnLswData_Str_OFF@lo16
 	ld	xwa, (xsp+12)
 	push	xwa
 	call	Free_Compare2
@@ -4256,8 +4256,8 @@ MidiPartGridCheck_Skip11:
 	call	AcApcToggleProc_Helper
 	inc	1, hl
 	pushw	hl
-	pushw	MidiPartGridCheck_Evt1C0001C_Str_Fmt2d_2@hi16
-	pushw	MidiPartGridCheck_Evt1C0001C_Str_Fmt2d_2@lo16
+	pushw	MidiPartGridCheck_OnLswData_Str_Fmt2d_2@hi16
+	pushw	MidiPartGridCheck_OnLswData_Str_Fmt2d_2@lo16
 	lda	xwa, (xsp+30)
 	push	xwa
 	call	Sprintf_Locked
@@ -4297,10 +4297,10 @@ MidiPartGridCheck_Skip13:
 	jr	nz, MidiPartGridCheck_Skip15
 	ld	xwa, (xsp+4)
 	ldw	(xwa), 3
-	ld	xwa, MidiPartGridCheck_Evt1C0001C_Str_OFF_2
+	ld	xwa, MidiPartGridCheck_OnLswData_Str_OFF_2
 	cpw	(xde), 0
 	jr	z, MidiPartGridCheck_Skip14
-	ld	xwa, MidiPartGridCheck_Evt1C0001C_Str_ON
+	ld	xwa, MidiPartGridCheck_OnLswData_Str_ON
 MidiPartGridCheck_Skip14:
 	push	xwa
 	ld	xwa, (xsp+12)
@@ -5345,16 +5345,16 @@ IvSdpartProc:
 	lda xix, (IvSdpart_Init:24)
 ; Computed jump: target = IvSdpart_Init + IvSdpartProc_Data[i], IvSdpartProc_Data = 16-bit offsets (10 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
-;   0x1c00017 -> IvSdpartProc_Evt1C00017
-;   0x1c00018 -> IvSdpartProc_Evt1C00017
-;   0x1c00019 -> IvSdpartProc_Evt1C00017
-;   0x1c0001a -> IvSdpartProc_Evt1C00017
+;   0x1c00017 -> IvSdpartProc_OnIndexswUp
+;   0x1c00018 -> IvSdpartProc_OnIndexswUp
+;   0x1c00019 -> IvSdpartProc_OnIndexswUp
+;   0x1c0001a -> IvSdpartProc_OnIndexswUp
 ;   0x1c0001b -> IvSdpart_ForwardToBase
-;   0x1c0001c -> IvSdpartProc_Evt1C0001C
+;   0x1c0001c -> IvSdpartProc_OnLswData
 ;   0x1c0001d -> IvSdpart_ForwardToBase
 ;   0x1c0001e -> IvSdpart_ForwardToBase
 ;   0x1c0001f -> IvSdpart_ForwardToBase
-;   0x1c00020 -> IvSdpartProc_Evt1C00020
+;   0x1c00020 -> IvSdpartProc_OnSoundName
 	jp	t, (xix+wa)
 
 IvSdpart_Init:
@@ -5504,7 +5504,7 @@ IvSdpart_PageSelect:
 	call SendEvent
 	call SetAutoIncDefault
 	jrl IvSdpart_ReturnHandled
-IvSdpartProc_Evt1C00017:
+IvSdpartProc_OnIndexswUp:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -5587,7 +5587,7 @@ IvSdpart_Refresh:
 	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	jrl IvSdpart_DispatchEvent
-IvSdpartProc_Evt1C0001C:
+IvSdpartProc_OnLswData:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -5613,7 +5613,7 @@ IvSdpart_Match_HitTest:
 	ld xbc, EVT_GET_SOUND_NAME
 	call FuncCall
 	jr IvSdpart_ReturnHandled
-IvSdpartProc_Evt1C00020:
+IvSdpartProc_OnSoundName:
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -11917,11 +11917,11 @@ PsMixerControlProc:
 ;   0x1c00019 -> PsMixer_ControlCase8
 ;   0x1c0001a -> PsMixer_ControlCase8
 ;   0x1c0001b -> PsMixer_ControlReturn
-;   0x1c0001c -> PsMixerControlProc_Evt1C0001C
+;   0x1c0001c -> PsMixerControlProc_OnLswData
 ;   0x1c0001d -> PsMixer_ControlReturn
-;   0x1c0001e -> PsMixerControlProc_Evt1C0001E
+;   0x1c0001e -> PsMixerControlProc_OnPageChange
 ;   0x1c0001f -> PsMixer_ControlReturn
-;   0x1c00020 -> PsMixerControlProc_Evt1C00020
+;   0x1c00020 -> PsMixerControlProc_OnSoundName
 	jp	t, (xix+bc)
 
 ; PsMixerControlProc control handler dispatch (10-entry)
@@ -12170,7 +12170,7 @@ PsMixer_GridLoop:
 	ld xbc, EVT_GET_SOUND_NAME
 	call FuncCall
 	jrl AudioCtrl_ReturnZero
-PsMixerControlProc_Evt1C0001E:
+PsMixerControlProc_OnPageChange:
 	ld xwa, (xsp + 90)
 	ld xbc, (xsp + 86)
 	ld xde, (xsp + 82)
@@ -12606,7 +12606,7 @@ PsMixer_ControlCase8:
 	ld	xhl, (xhl)
 	call	(xhl)
 	jrl	AudioCtrl_ReturnZero
-PsMixerControlProc_Evt1C0001C:
+PsMixerControlProc_OnLswData:
 	ld	xwa, (xsp+90)
 	ld	xbc, (xsp+86)
 	ld	xde, (xsp+82)
@@ -12933,7 +12933,7 @@ PsMixer_VolumeSelect_Continue:
 PsMixer_SendEventAndForward:
 	call SendEvent
 	jrl t, AudioCtrl_ReturnZero
-PsMixerControlProc_Evt1C00020:
+PsMixerControlProc_OnSoundName:
 	ld XWA,(XSP+0x5a)
 	ld XBC,(XSP+0x56)
 	ld XDE,(XSP+0x52)
@@ -12955,8 +12955,8 @@ PsMixerControlProc_Evt1C00020:
 	lda xbc, (0x03ea38:24)
 	ld	xwa, (xbc+wa)
 	push XWA
-	pushw PsMixerControlProc_Evt1C00020_Str_Fmts_SOUND_Fmts@hi16
-	pushw PsMixerControlProc_Evt1C00020_Str_Fmts_SOUND_Fmts@lo16
+	pushw PsMixerControlProc_OnSoundName_Str_Fmts_SOUND_Fmts@hi16
+	pushw PsMixerControlProc_OnSoundName_Str_Fmts_SOUND_Fmts@lo16
 	lda xwa, (xsp + 0x1e)
 	push XWA
 	call Sprintf_Locked
@@ -18956,10 +18956,10 @@ AcPresentationControlProc:
 ;   0x1c00003 -> AcPresCtrl_DefaultCase
 ;   0x1c00004 -> AcPresCtrl_DefaultCase
 ;   0x1c00005 -> AcPresCtrl_DefaultCase
-;   0x1c00006 -> AcPresentationControlProc_Evt1C00006
-;   0x1c00007 -> AcPresentationControlProc_Evt1C00007
-;   0x1c00008 -> AcPresentationControlProc_Evt1C00007
-;   0x1c00009 -> AcPresentationControlProc_Evt1C00007
+;   0x1c00006 -> AcPresentationControlProc_OnAction
+;   0x1c00007 -> AcPresentationControlProc_OnSwIn
+;   0x1c00008 -> AcPresentationControlProc_OnSwIn
+;   0x1c00009 -> AcPresentationControlProc_OnSwIn
 ;   0x1c0000a -> AcPresCtrl_DefaultCase
 ;   0x1c0000b -> AcPresent_ReturnZeroJmp
 ;   0x1c0000c -> AcPresent_ReturnZeroJmp
@@ -18979,7 +18979,7 @@ AcPresCtrl_EventDispatch:
 	jrl z, AcPresent_ReturnZeroJmp			; matched -- exit
 	ld	wa, 2:i3
 	jr AcPresCtrl_ChangePalette				; skip to call FAF2C7
-AcPresentationControlProc_Evt1C00007:
+AcPresentationControlProc_OnSwIn:
 	ld xwa, 0x02600024			; workspace for SendEvent
 	ld xbc, EVT_MAKE_EDIT_SW_ID			; presentation control event
 	ld xde, (xsp + 4)			; event param
@@ -19062,7 +19062,7 @@ AcPresentCtrl_CheckSSFStart:
 AcPresCtrl_SendEventReturn:
 	call SendEvent
 	jr AcPresent_ReturnZeroJmp
-AcPresentationControlProc_Evt1C00006:
+AcPresentationControlProc_OnAction:
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)

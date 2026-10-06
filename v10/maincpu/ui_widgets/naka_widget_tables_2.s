@@ -2891,11 +2891,11 @@ NakaData_ModeConfig2:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25C70, 0x8
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ComSetGridCheck_JumpTable_Table
-; ComSetGridCheck_JumpTable_Table -- read by ComSetGridCheck_Evt1C00017
+; ComSetGridCheck_JumpTable_Table -- read by ComSetGridCheck_OnIndexswUp
 ; (v10/v9 0xf77fc4, v7 0xf77bc0) (`lda xbc,
-; (ComSetGridCheck_JumpTable_Table:24)`), ComSetGridCheck_Evt1C00017 (v10/v9
+; (ComSetGridCheck_JumpTable_Table:24)`), ComSetGridCheck_OnIndexswUp (v10/v9
 ; 0xf77fc4, v7 0xf77bc0) (`lda xwa, (ComSetGridCheck_JumpTable_Table:24)`),
-; ComSetGridCheck_Evt1C00017 (v10/v9 0xf77fc4, v7 0xf77bc0) (`lda xix,
+; ComSetGridCheck_OnIndexswUp (v10/v9 0xf77fc4, v7 0xf77bc0) (`lda xix,
 ; (ComSetGridCheck_JumpTable_Table:24)`), ComSetGrid_EventHandler (v10/v9
 ; 0xf781c1, v7 0xf77dbd) (`lda xbc, (ComSetGridCheck_JumpTable_Table:24)`),
 ; ComSetGrid_LookupByColumn (v10/v9 0xf7827d, v7 0xf77e79) (`lda xwa,
@@ -2930,7 +2930,7 @@ NakaToggle_OnOff_Data:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25CA2, 0x4
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ComSetGridCheck_JumpTable_Table_2
-; ComSetGridCheck_JumpTable_Table_2 -- read by ComSetGridCheck_Evt1C00017
+; ComSetGridCheck_JumpTable_Table_2 -- read by ComSetGridCheck_OnIndexswUp
 ; (v10/v9 0xf77fc4, v7 0xf77bc0) (`ld xbc, ComSetGridCheck_JumpTable_Table_2`).
 ; 4 bytes to the next object; the layout beyond that access is not
 ; established.
@@ -2952,7 +2952,7 @@ NakaInst_OFF_E80048:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ComSetGridCheck_JumpTable_Str
 ; ComSetGridCheck_JumpTable_Str -- NUL-terminated string(s), 6 bytes,
-; used by ComSetGridCheck_Evt1C00017 (v10/v9 0xf77fc4, v7 0xf77bc0) (`ld
+; used by ComSetGridCheck_OnIndexswUp (v10/v9 0xf77fc4, v7 0xf77bc0) (`ld
 ; xbc, ComSetGridCheck_JumpTable_Str`).
 ;
 ; Typed in naka_widget_tables_2.c as char
@@ -2964,7 +2964,7 @@ SeMenu_ApplyPartEdit_AltStore_Data:	.incbin "includes/generated/naka_widget_tabl
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ComSetGridCheck_JumpTable_Str_2
 ; ComSetGridCheck_JumpTable_Str_2 -- NUL-terminated string(s), 10 bytes,
-; used by ComSetGridCheck_Evt1C00017 (v10/v9 0xf77fc4, v7 0xf77bc0) (`ld
+; used by ComSetGridCheck_OnIndexswUp (v10/v9 0xf77fc4, v7 0xf77bc0) (`ld
 ; xwa, ComSetGridCheck_JumpTable_Str_2`).
 ;
 ; Typed in naka_widget_tables_2.c as char
@@ -2975,7 +2975,7 @@ ComSetGridCheck_JumpTable_Str_2:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] NakaInst_NORMAL
 ; NakaInst_NORMAL -- NUL-terminated string(s), 10 bytes, used by
-; ComSetGridCheck_Evt1C00017 (v10/v9 0xf77fc4, v7 0xf77bc0) (`.long
+; ComSetGridCheck_OnIndexswUp (v10/v9 0xf77fc4, v7 0xf77bc0) (`.long
 ; NakaInst_NORMAL`).
 ;
 ; Typed in naka_widget_tables_2.c as char NakaInst_NORMAL[10].
@@ -2986,7 +2986,7 @@ Str_AL:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25CC1, 0x5
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ComSetGridCheck_JumpTable_Str_3
 ; ComSetGridCheck_JumpTable_Str_3 -- NUL-terminated string(s), 10 bytes,
-; used by ComSetGridCheck_Evt1C00017 (v10/v9 0xf77fc4, v7 0xf77bc0) (`ld
+; used by ComSetGridCheck_OnIndexswUp (v10/v9 0xf77fc4, v7 0xf77bc0) (`ld
 ; xwa, ComSetGridCheck_JumpTable_Str_3`).
 ;
 ; Typed in naka_widget_tables_2.c as char
@@ -2996,7 +2996,7 @@ ComSetGridCheck_JumpTable_Str_3:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25CC6, 0xA
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ComSetGridCheck_JumpTable_Table_3
-; ComSetGridCheck_JumpTable_Table_3 -- read by ComSetGridCheck_Evt1C00017
+; ComSetGridCheck_JumpTable_Table_3 -- read by ComSetGridCheck_OnIndexswUp
 ; (v10/v9 0xf77fc4, v7 0xf77bc0) (`ld xwa, ComSetGridCheck_JumpTable_Table_3`). 2
 ; bytes to the next object; the layout beyond that access is not
 ; established.
@@ -3019,7 +3019,7 @@ SeMenu_ApplyPartEdit_AltStore_Data_2:	.incbin "includes/generated/naka_widget_ta
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ComSetGridCheck_JumpTable_Str_4
 ; ComSetGridCheck_JumpTable_Str_4 -- NUL-terminated string(s), 10 bytes,
-; used by ComSetGridCheck_Evt1C00017 (v10/v9 0xf77fc4, v7 0xf77bc0) (`ld
+; used by ComSetGridCheck_OnIndexswUp (v10/v9 0xf77fc4, v7 0xf77bc0) (`ld
 ; xwa, ComSetGridCheck_JumpTable_Str_4`).
 ;
 ; Typed in naka_widget_tables_2.c as char
@@ -3106,19 +3106,19 @@ ComSetGrid_ParamStrDefault_Str:
 ; [naka_s_headers] ComSetGridCheck_CaseTable
 ; ComSetGridCheck_CaseTable -- jump table of a compiled `switch` in
 ; ComSetGridCheck (v10/v9 0xf77f6c, v7 0xf77b68) (`add xwa,
-; ComSetGridCheck_CaseTable`): 7 u16 case offsets from ComSetGridCheck_Evt1C00017.
+; ComSetGridCheck_CaseTable`): 7 u16 case offsets from ComSetGridCheck_OnIndexswUp.
 ;
 ; Typed in naka_widget_tables_2.c as uint16_t
 ; ComSetGridCheck_CaseTable[7].
 ; -----------------------------------------------------------------------------
 ComSetGridCheck_CaseTable:
-	.short	ComSetGridCheck_Evt1C00017 - ComSetGridCheck_Evt1C00017
-	.short	ComSetGridCheck_Evt1C00018 - ComSetGridCheck_Evt1C00017
-	.short	ComSetGridCheck_Evt1C00017 - ComSetGridCheck_Evt1C00017
-	.short	ComSetGridCheck_Evt1C00018 - ComSetGridCheck_Evt1C00017
-	.short	UI_ReturnZero - ComSetGridCheck_Evt1C00017
-	.short	ComSetGridCheck_Evt1C0001C - ComSetGridCheck_Evt1C00017
-	.short	ComSetGridCheck_Evt1C0001C - ComSetGridCheck_Evt1C00017
+	.short	ComSetGridCheck_OnIndexswUp - ComSetGridCheck_OnIndexswUp
+	.short	ComSetGridCheck_OnIndexswDown - ComSetGridCheck_OnIndexswUp
+	.short	ComSetGridCheck_OnIndexswUp - ComSetGridCheck_OnIndexswUp
+	.short	ComSetGridCheck_OnIndexswDown - ComSetGridCheck_OnIndexswUp
+	.short	UI_ReturnZero - ComSetGridCheck_OnIndexswUp
+	.short	ComSetGridCheck_OnLswData - ComSetGridCheck_OnIndexswUp
+	.short	ComSetGridCheck_OnLswData - ComSetGridCheck_OnIndexswUp
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ComSetGridCheck_CaseTable_Tail
 ; ComSetGridCheck_CaseTable_Tail -- 14 bytes after
@@ -3133,13 +3133,13 @@ ComSetGridCheck_CaseTable:
 ; -----------------------------------------------------------------------------
 ComSetGridCheck_CaseTable_Tail:
 AcPmemOutLGridBoxProc_Data:
-	.short	AcPmemOutLGridBoxProc_Evt1C00017 - AcPmemOutL_Init
-	.short	AcPmemOutLGridBoxProc_Evt1C00017 - AcPmemOutL_Init
-	.short	AcPmemOutLGridBoxProc_Evt1C00017 - AcPmemOutL_Init
-	.short	AcPmemOutLGridBoxProc_Evt1C00017 - AcPmemOutL_Init
+	.short	AcPmemOutLGridBoxProc_OnIndexswUp - AcPmemOutL_Init
+	.short	AcPmemOutLGridBoxProc_OnIndexswUp - AcPmemOutL_Init
+	.short	AcPmemOutLGridBoxProc_OnIndexswUp - AcPmemOutL_Init
+	.short	AcPmemOutLGridBoxProc_OnIndexswUp - AcPmemOutL_Init
 	.short	AcPmemOutL_ForwardToBase - AcPmemOutL_Init
-	.short	AcPmemOutLGridBoxProc_Evt1C0001C - AcPmemOutL_Init
-	.short	AcPmemOutLGridBoxProc_Evt1C0001C - AcPmemOutL_Init
+	.short	AcPmemOutLGridBoxProc_OnLswData - AcPmemOutL_Init
+	.short	AcPmemOutLGridBoxProc_OnLswData - AcPmemOutL_Init
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AcPmemOutRGridBoxProc_CaseTable
 ; AcPmemOutRGridBoxProc_CaseTable -- jump table of a compiled `switch`
@@ -3150,13 +3150,13 @@ AcPmemOutLGridBoxProc_Data:
 ; AcPmemOutRGridBoxProc_CaseTable[6].
 ; -----------------------------------------------------------------------------
 AcPmemOutRGridBoxProc_CaseTable:
-	.short	AcPmemOutRGridBoxProc_Evt1C00017 - AcPmemOutR_Init
-	.short	AcPmemOutRGridBoxProc_Evt1C00017 - AcPmemOutR_Init
-	.short	AcPmemOutRGridBoxProc_Evt1C00017 - AcPmemOutR_Init
-	.short	AcPmemOutRGridBoxProc_Evt1C00017 - AcPmemOutR_Init
+	.short	AcPmemOutRGridBoxProc_OnIndexswUp - AcPmemOutR_Init
+	.short	AcPmemOutRGridBoxProc_OnIndexswUp - AcPmemOutR_Init
+	.short	AcPmemOutRGridBoxProc_OnIndexswUp - AcPmemOutR_Init
+	.short	AcPmemOutRGridBoxProc_OnIndexswUp - AcPmemOutR_Init
 	.short	AcPmemOutR_ForwardToBase - AcPmemOutR_Init
-	.short	AcPmemOutRGridBoxProc_Evt1C0001C - AcPmemOutR_Init
-	.short	AcPmemOutRGridBoxProc_Evt1C0001C - AcPmemOutR_Init
+	.short	AcPmemOutRGridBoxProc_OnLswData - AcPmemOutR_Init
+	.short	AcPmemOutRGridBoxProc_OnLswData - AcPmemOutR_Init
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] PmemOutLGridCheck_PtrTable
 ; PmemOutLGridCheck_PtrTable -- 3 u32 addresses, read by
@@ -3183,9 +3183,9 @@ PmemOutLGridCheck_Strings:
 ; tables, slice and positional labels). Contents not established.
 ;
 ; Typed in naka_widget_tables_2.c as uint8_t NakaData_PartFlags[15].
-; Readers (claims_lint.py unread-claims, 2026-10-02): PmemOutLGridCheck_Evt1C00017 (0xF78A47, 32-bit
-;   pointer); PmemOutLGridCheck_Evt1C00017 (0xF78A69, 32-bit pointer); PmemOutLGridCheck_Evt1C00017
-;   (0xF78ABA, 32-bit pointer); PmemOutLGridCheck_Evt1C00018 (0xF78B0F, 32-bit pointer);
+; Readers (claims_lint.py unread-claims, 2026-10-02): PmemOutLGridCheck_OnIndexswUp (0xF78A47, 32-bit
+;   pointer); PmemOutLGridCheck_OnIndexswUp (0xF78A69, 32-bit pointer); PmemOutLGridCheck_OnIndexswUp
+;   (0xF78ABA, 32-bit pointer); PmemOutLGridCheck_OnIndexswDown (0xF78B0F, 32-bit pointer);
 ;   drawbar_panel_ui.s:1203 (source reference); and 14 more
 ; -----------------------------------------------------------------------------
 NakaData_PartFlags:
@@ -3233,10 +3233,10 @@ AlignedStr_ON:					.incbin "includes/generated/naka_widget_tables_2.bin", 0x25D9
 PmemOutLGrid_Str_ON:				.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DA0, 0x06
 PmemOutLGrid_Str_OFF:				.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DA6, 0x06
 PmemOutLGridCheck_LocalInit_Strings_Tail:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DAC, 0x6
-PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DB2, 0x6	; " %3d "
-PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_2:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DB8, 0x6	; " %3d "
-PmemOutLGridCheck_Evt1C0001D_Str_OFF:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DBE, 0x6	; " OFF "
-PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_3:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DC4, 0x6	; " %3d "
+PmemOutLGridCheck_OnRamData_Str_Fmt3d:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DB2, 0x6	; " %3d "
+PmemOutLGridCheck_OnRamData_Str_Fmt3d_2:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DB8, 0x6	; " %3d "
+PmemOutLGridCheck_OnRamData_Str_OFF:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DBE, 0x6	; " OFF "
+PmemOutLGridCheck_OnRamData_Str_Fmt3d_3:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DC4, 0x6	; " %3d "
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] NakaInst_ON_E80168
 ; NakaInst_ON_E80168 -- label kept because other files use it; 82 bytes
@@ -3245,17 +3245,17 @@ PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_3:	.incbin "includes/generated/naka_widge
 ; Typed in naka_widget_tables_2.c as uint8_t NakaInst_ON_E80168[82].
 ; -----------------------------------------------------------------------------
 NakaInst_ON_E80168:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DCA, 0x6
-PmemOutLGridCheck_Evt1C0001D_Str_OFF_6:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DD0, 0x6	; " OFF "
-PmemOutLGridCheck_Evt1C0001D_Str_OFF_2:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DD6, 0x6	; " OFF "
-PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_4:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DDC, 0x6	; " %3d "
-PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_5:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DE2, 0x6	; " %3d "
-PmemOutLGridCheck_Evt1C0001D_Str_OFF_3:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DE8, 0x6	; " OFF "
-PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_6:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DEE, 0x6	; " %3d "
-PmemOutLGridCheck_Evt1C0001D_Str_OFF_4:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DF4, 0x6	; " OFF "
-PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_7:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DFA, 0x6	; " %3d "
-PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_8:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E00, 0x6	; " %3d "
-PmemOutLGridCheck_Evt1C0001D_Str_OFF_5:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E06, 0x6	; " OFF "
-PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_9:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E0C, 0x6	; " %3d "
+PmemOutLGridCheck_OnRamData_Str_OFF_6:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DD0, 0x6	; " OFF "
+PmemOutLGridCheck_OnRamData_Str_OFF_2:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DD6, 0x6	; " OFF "
+PmemOutLGridCheck_OnRamData_Str_Fmt3d_4:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DDC, 0x6	; " %3d "
+PmemOutLGridCheck_OnRamData_Str_Fmt3d_5:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DE2, 0x6	; " %3d "
+PmemOutLGridCheck_OnRamData_Str_OFF_3:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DE8, 0x6	; " OFF "
+PmemOutLGridCheck_OnRamData_Str_Fmt3d_6:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DEE, 0x6	; " %3d "
+PmemOutLGridCheck_OnRamData_Str_OFF_4:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DF4, 0x6	; " OFF "
+PmemOutLGridCheck_OnRamData_Str_Fmt3d_7:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DFA, 0x6	; " %3d "
+PmemOutLGridCheck_OnRamData_Str_Fmt3d_8:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E00, 0x6	; " %3d "
+PmemOutLGridCheck_OnRamData_Str_OFF_5:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E06, 0x6	; " OFF "
+PmemOutLGridCheck_OnRamData_Str_Fmt3d_9:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E0C, 0x6	; " %3d "
 PmemOutL_GridCheck_Str_Fmt2d_Fmtd:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E12, 0xA	; " %2d-%d "
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] PmemOutL_BitCheckDisplay_Str
@@ -3283,19 +3283,19 @@ PmemOutL_LoadOffStr_Str:
 ; PmemOutLGridCheck_CaseTable -- jump table of a compiled `switch` in
 ; PmemOutLGridCheck (v10/v9 0xf78988, v7 0xf78584) (`add xwa,
 ; PmemOutLGridCheck_CaseTable`): 7 u16 case offsets from
-; PmemOutLGridCheck_Evt1C00017.
+; PmemOutLGridCheck_OnIndexswUp.
 ;
 ; Typed in naka_widget_tables_2.c as uint16_t
 ; PmemOutLGridCheck_CaseTable[7].
 ; -----------------------------------------------------------------------------
 PmemOutLGridCheck_CaseTable:
-	.short	PmemOutLGridCheck_Evt1C00017 - PmemOutLGridCheck_Evt1C00017
-	.short	PmemOutLGridCheck_Evt1C00018 - PmemOutLGridCheck_Evt1C00017
-	.short	PmemOutLGridCheck_Evt1C00017 - PmemOutLGridCheck_Evt1C00017
-	.short	PmemOutLGridCheck_Evt1C00018 - PmemOutLGridCheck_Evt1C00017
-	.short	PmemOutGrid_ReturnZero - PmemOutLGridCheck_Evt1C00017
-	.short	PmemOutGrid_ReturnZero - PmemOutLGridCheck_Evt1C00017
-	.short	PmemOutLGridCheck_Evt1C0001D - PmemOutLGridCheck_Evt1C00017
+	.short	PmemOutLGridCheck_OnIndexswUp - PmemOutLGridCheck_OnIndexswUp
+	.short	PmemOutLGridCheck_OnIndexswDown - PmemOutLGridCheck_OnIndexswUp
+	.short	PmemOutLGridCheck_OnIndexswUp - PmemOutLGridCheck_OnIndexswUp
+	.short	PmemOutLGridCheck_OnIndexswDown - PmemOutLGridCheck_OnIndexswUp
+	.short	PmemOutGrid_ReturnZero - PmemOutLGridCheck_OnIndexswUp
+	.short	PmemOutGrid_ReturnZero - PmemOutLGridCheck_OnIndexswUp
+	.short	PmemOutLGridCheck_OnRamData - PmemOutLGridCheck_OnIndexswUp
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] PmemOutLGridCheck_CaseTable_Tail
 ; PmemOutLGridCheck_CaseTable_Tail -- 22 bytes after
@@ -3306,7 +3306,7 @@ PmemOutLGridCheck_CaseTable:
 ; PmemOutLGridCheck_CaseTable_Tail[22].
 ; Readers (claims_lint.py unread-claims, 2026-10-02): TtMdCtlMsg_EventDispatch (0xF7929B, 32-bit
 ;   pointer); TtMdCtlMsg_EventDispatch (0xF79306, 32-bit pointer); TtMdCtlMsg_EventDispatch
-;   (0xF7935F, 32-bit pointer); PmemOutRGridCheck_Evt1C00018 (0xF79405, 32-bit pointer); and 8 more
+;   (0xF7935F, 32-bit pointer); PmemOutRGridCheck_OnIndexswDown (0xF79405, 32-bit pointer); and 8 more
 ; -----------------------------------------------------------------------------
 PmemOutLGridCheck_CaseTable_Tail:
 TtMdCtlMsg_EventDispatch_Data:
@@ -3332,20 +3332,20 @@ PmemOutRGridCheck_LocalInit:
 ; PmemOutRGridCheck_LocalInit_Strings[120].
 ; -----------------------------------------------------------------------------
 PmemOutRGridCheck_LocalInit_Strings:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E5C, 0x6
-PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E62, 0x6	; " %3d "
-PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_2:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E68, 0x6	; " %3d "
-PmemOutRGridCheck_Evt1C0001D_Str_OFF:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E6E, 0x6	; " OFF "
-PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_3:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E74, 0x6	; " %3d "
-PmemOutRGridCheck_Evt1C0001D_Str_OFF_2:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E7A, 0x6	; " OFF "
-PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_4:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E80, 0x6	; " %3d "
-PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_5:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E86, 0x6	; " %3d "
-PmemOutRGridCheck_Evt1C0001D_Str_OFF_3:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E8C, 0x6	; " OFF "
-PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_6:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E92, 0x6	; " %3d "
-PmemOutRGridCheck_Evt1C0001D_Str_OFF_4:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E98, 0x6	; " OFF "
-PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_7:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E9E, 0x6	; " %3d "
-PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_8:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25EA4, 0x6	; " %3d "
-PmemOutRGridCheck_Evt1C0001D_Str_OFF_5:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25EAA, 0x6	; " OFF "
-PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_9:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25EB0, 0x6	; " %3d "
+PmemOutRGridCheck_OnRamData_Str_Fmt3d:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E62, 0x6	; " %3d "
+PmemOutRGridCheck_OnRamData_Str_Fmt3d_2:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E68, 0x6	; " %3d "
+PmemOutRGridCheck_OnRamData_Str_OFF:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E6E, 0x6	; " OFF "
+PmemOutRGridCheck_OnRamData_Str_Fmt3d_3:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E74, 0x6	; " %3d "
+PmemOutRGridCheck_OnRamData_Str_OFF_2:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E7A, 0x6	; " OFF "
+PmemOutRGridCheck_OnRamData_Str_Fmt3d_4:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E80, 0x6	; " %3d "
+PmemOutRGridCheck_OnRamData_Str_Fmt3d_5:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E86, 0x6	; " %3d "
+PmemOutRGridCheck_OnRamData_Str_OFF_3:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E8C, 0x6	; " OFF "
+PmemOutRGridCheck_OnRamData_Str_Fmt3d_6:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E92, 0x6	; " %3d "
+PmemOutRGridCheck_OnRamData_Str_OFF_4:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E98, 0x6	; " OFF "
+PmemOutRGridCheck_OnRamData_Str_Fmt3d_7:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E9E, 0x6	; " %3d "
+PmemOutRGridCheck_OnRamData_Str_Fmt3d_8:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25EA4, 0x6	; " %3d "
+PmemOutRGridCheck_OnRamData_Str_OFF_5:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25EAA, 0x6	; " OFF "
+PmemOutRGridCheck_OnRamData_Str_Fmt3d_9:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25EB0, 0x6	; " %3d "
 CtlMsgGrid_EventHandler_Str_OFF:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25EB6, 0x6	; " OFF "
 CtlMsg_SendAudioCommand_Str_Fmt3d:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25EBC, 0x6	; " %3d "
 CtlMsg_ReadOffsetAndSend_Str_Fmt3d:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25EC2, 0x6	; " %3d "
@@ -3363,12 +3363,12 @@ CtlMsg_SendParamValue_Str_Fmt3d:		.incbin "includes/generated/naka_widget_tables
 ; -----------------------------------------------------------------------------
 PmemOutRGridCheck_CaseTable:
 	.short	TtMdCtlMsg_EventDispatch - TtMdCtlMsg_EventDispatch
-	.short	PmemOutRGridCheck_Evt1C00018 - TtMdCtlMsg_EventDispatch
+	.short	PmemOutRGridCheck_OnIndexswDown - TtMdCtlMsg_EventDispatch
 	.short	TtMdCtlMsg_EventDispatch - TtMdCtlMsg_EventDispatch
-	.short	PmemOutRGridCheck_Evt1C00018 - TtMdCtlMsg_EventDispatch
+	.short	PmemOutRGridCheck_OnIndexswDown - TtMdCtlMsg_EventDispatch
 	.short	TtMdCtlMsg_ReturnZero2 - TtMdCtlMsg_EventDispatch
 	.short	TtMdCtlMsg_ReturnZero2 - TtMdCtlMsg_EventDispatch
-	.short	PmemOutRGridCheck_Evt1C0001D - TtMdCtlMsg_EventDispatch
+	.short	PmemOutRGridCheck_OnRamData - TtMdCtlMsg_EventDispatch
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AcCtlMsgGrid_ScrollUp_PageDec_Table
 ; AcCtlMsgGrid_ScrollUp_PageDec_Table -- read by
@@ -3426,18 +3426,18 @@ AcCtlMsgGrid_GetRowText_Page1_Str:
 ; AcCtlMsgGridBoxProc_CaseTable[7].
 ; -----------------------------------------------------------------------------
 AcCtlMsgGridBoxProc_CaseTable:
-	.short	AcCtlMsgGridBoxProc_Evt1C00017 - AcCtlMsgGrid_Init
-	.short	AcCtlMsgGridBoxProc_Evt1C00018 - AcCtlMsgGrid_Init
-	.short	AcCtlMsgGridBoxProc_Evt1C00017 - AcCtlMsgGrid_Init
-	.short	AcCtlMsgGridBoxProc_Evt1C00018 - AcCtlMsgGrid_Init
+	.short	AcCtlMsgGridBoxProc_OnIndexswUp - AcCtlMsgGrid_Init
+	.short	AcCtlMsgGridBoxProc_OnIndexswDown - AcCtlMsgGrid_Init
+	.short	AcCtlMsgGridBoxProc_OnIndexswUp - AcCtlMsgGrid_Init
+	.short	AcCtlMsgGridBoxProc_OnIndexswDown - AcCtlMsgGrid_Init
 	.short	AcCtlMsgGrid_ForwardToBase - AcCtlMsgGrid_Init
-	.short	AcCtlMsgGridBoxProc_Evt1C0001C - AcCtlMsgGrid_Init
-	.short	AcCtlMsgGridBoxProc_Evt1C0001C - AcCtlMsgGrid_Init
+	.short	AcCtlMsgGridBoxProc_OnLswData - AcCtlMsgGrid_Init
+	.short	AcCtlMsgGridBoxProc_OnLswData - AcCtlMsgGrid_Init
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] CtlMsgGridCheck_Table
 ; CtlMsgGridCheck_Table -- read by CtlMsgGridCheck (v10/v9 0xf79f88, v7
 ; 0xf79b84) (`lda xwa, (CtlMsgGridCheck_Table:24)`),
-; CtlMsgGridCheck_Evt1C00017 (v10/v9 0xf79ff0, v7 0xf79bec) (`lda xwa,
+; CtlMsgGridCheck_OnIndexswUp (v10/v9 0xf79ff0, v7 0xf79bec) (`lda xwa,
 ; (CtlMsgGridCheck_Table:24)`). 72 bytes to the next object; the
 ; layout beyond that access is not established.
 ;
@@ -3459,7 +3459,7 @@ CtlMsgGridCheck_LocalInit:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] CtlMsgGridCheck_JumpTable_Str
 ; CtlMsgGridCheck_JumpTable_Str -- NUL-terminated string(s), 6 bytes,
-; used by CtlMsgGridCheck_Evt1C00017 (v10/v9 0xf79ff0, v7 0xf79bec) (`ld
+; used by CtlMsgGridCheck_OnIndexswUp (v10/v9 0xf79ff0, v7 0xf79bec) (`ld
 ; xbc, CtlMsgGridCheck_JumpTable_Str`).
 ;
 ; Typed in naka_widget_tables_2.c as char
@@ -3470,7 +3470,7 @@ CtlMsgGridCheck_JumpTable_Str:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] CtlMsgGridCheck_JumpTable_Str_2
 ; CtlMsgGridCheck_JumpTable_Str_2 -- NUL-terminated string(s), 6 bytes,
-; used by CtlMsgGridCheck_Evt1C00017 (v10/v9 0xf79ff0, v7 0xf79bec) (`ld
+; used by CtlMsgGridCheck_OnIndexswUp (v10/v9 0xf79ff0, v7 0xf79bec) (`ld
 ; xbc, CtlMsgGridCheck_JumpTable_Str_2`).
 ;
 ; Typed in naka_widget_tables_2.c as char
@@ -3504,19 +3504,19 @@ MidiSetup_TtlDispatch_Str_2:
 ; CtlMsgGridCheck_CaseTable -- jump table of a compiled `switch` in
 ; CtlMsgGridCheck (v10/v9 0xf79f88, v7 0xf79b84) (`add xwa,
 ; CtlMsgGridCheck_CaseTable`): 7 u16 case offsets from
-; CtlMsgGridCheck_Evt1C00017.
+; CtlMsgGridCheck_OnIndexswUp.
 ;
 ; Typed in naka_widget_tables_2.c as uint16_t
 ; CtlMsgGridCheck_CaseTable[7].
 ; -----------------------------------------------------------------------------
 CtlMsgGridCheck_CaseTable:
-	.short	CtlMsgGridCheck_Evt1C00017 - CtlMsgGridCheck_Evt1C00017
-	.short	CtlMsgGridCheck_Evt1C00018 - CtlMsgGridCheck_Evt1C00017
-	.short	CtlMsgGridCheck_Evt1C00017 - CtlMsgGridCheck_Evt1C00017
-	.short	CtlMsgGridCheck_Evt1C00018 - CtlMsgGridCheck_Evt1C00017
-	.short	CtlMsgGrid_ReturnZero - CtlMsgGridCheck_Evt1C00017
-	.short	CtlMsgGridCheck_Evt1C0001C - CtlMsgGridCheck_Evt1C00017
-	.short	CtlMsgGrid_ReturnZero - CtlMsgGridCheck_Evt1C00017
+	.short	CtlMsgGridCheck_OnIndexswUp - CtlMsgGridCheck_OnIndexswUp
+	.short	CtlMsgGridCheck_OnIndexswDown - CtlMsgGridCheck_OnIndexswUp
+	.short	CtlMsgGridCheck_OnIndexswUp - CtlMsgGridCheck_OnIndexswUp
+	.short	CtlMsgGridCheck_OnIndexswDown - CtlMsgGridCheck_OnIndexswUp
+	.short	CtlMsgGrid_ReturnZero - CtlMsgGridCheck_OnIndexswUp
+	.short	CtlMsgGridCheck_OnLswData - CtlMsgGridCheck_OnIndexswUp
+	.short	CtlMsgGrid_ReturnZero - CtlMsgGridCheck_OnIndexswUp
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] MidiPart_CallMainFunc_Str
 ; MidiPart_CallMainFunc_Str -- NUL-terminated string(s), 2 bytes, used
@@ -3637,12 +3637,12 @@ MidiSetup_GridStr2_Str:
 ; AcMidiPartGridBoxProc_CaseTable[7].
 ; -----------------------------------------------------------------------------
 AcMidiPartGridBoxProc_CaseTable:
-	.short	AcMidiPartGridBoxProc_Evt1C00017 - MidiSetup_TtlCase3
+	.short	AcMidiPartGridBoxProc_OnIndexswUp - MidiSetup_TtlCase3
 	.short	MidiPart_InitGridBox - MidiSetup_TtlCase3
-	.short	AcMidiPartGridBoxProc_Evt1C00017 - MidiSetup_TtlCase3
+	.short	AcMidiPartGridBoxProc_OnIndexswUp - MidiSetup_TtlCase3
 	.short	MidiPart_InitGridBox - MidiSetup_TtlCase3
 	.short	MidiSetup_GridBoxCase4 - MidiSetup_TtlCase3
-	.short	AcMidiPartGridBoxProc_Evt1C0001C - MidiSetup_TtlCase3
+	.short	AcMidiPartGridBoxProc_OnLswData - MidiSetup_TtlCase3
 	.short	MidiPart_ReturnZeroJmp - MidiSetup_TtlCase3
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] MidiSetup_EventHandler_Table
@@ -3668,8 +3668,8 @@ MidiSetup_EventHandler_Table:
 ; -----------------------------------------------------------------------------
 MidiPart_LookupFromTable_Table:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x2618A, 0x118
-MidiPartGridCheck_Evt1C00017_Data:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x262A2, 0x10
-MidiPartGridCheck_Evt1C00018_Data:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x262B2, 0x10
+MidiPartGridCheck_OnIndexswUp_Data:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x262A2, 0x10
+MidiPartGridCheck_OnIndexswDown_Data:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x262B2, 0x10
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Transpose_ValueDisplay_Table
 ; Transpose_ValueDisplay_Table -- 8 u32 addresses, read by
@@ -3717,11 +3717,11 @@ MidiPartGridCheck_LocalInit:
 ; MidiPartGridCheck_LocalInit_Strings[54].
 ; -----------------------------------------------------------------------------
 MidiPartGridCheck_LocalInit_Strings:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x2631C, 0x6
-MidiPartGridCheck_Evt1C0001C_Str_Fmt2d:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x26322, 0x8	; " %2d  "
-MidiPartGridCheck_Evt1C0001C_Str_OFF:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x2632A, 0x6	; " OFF "
-MidiPartGridCheck_Evt1C0001C_Str_Fmt2d_2:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x26330, 0x8	; " %2d  "
-MidiPartGridCheck_Evt1C0001C_Str_ON:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x26338, 0x6	; " ON  "
-MidiPartGridCheck_Evt1C0001C_Str_OFF_2:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x2633E, 0x6	; " OFF "
+MidiPartGridCheck_OnLswData_Str_Fmt2d:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x26322, 0x8	; " %2d  "
+MidiPartGridCheck_OnLswData_Str_OFF:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x2632A, 0x6	; " OFF "
+MidiPartGridCheck_OnLswData_Str_Fmt2d_2:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x26330, 0x8	; " %2d  "
+MidiPartGridCheck_OnLswData_Str_ON:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x26338, 0x6	; " ON  "
+MidiPartGridCheck_OnLswData_Str_OFF_2:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x2633E, 0x6	; " OFF "
 MidiSetup_EventHandler_Str_OFF:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x26344, 0x6	; " OFF "
 MidiPart_AudioCmdDisplay_Str_Fmt2d:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x2634A, 0x8	; " %2d  "
 ; -----------------------------------------------------------------------------
@@ -3751,19 +3751,19 @@ MidiPart_LookupFromTable_Str_2:
 ; MidiPartGridCheck_CaseTable -- jump table of a compiled `switch` in
 ; MidiPartGridCheck (v10/v9 0xf7a869, v7 0xf7a465) (`add xwa,
 ; MidiPartGridCheck_CaseTable`): 7 u16 case offsets from
-; MidiPartGridCheck_Evt1C00017.
+; MidiPartGridCheck_OnIndexswUp.
 ;
 ; Typed in naka_widget_tables_2.c as uint16_t
 ; MidiPartGridCheck_CaseTable[7].
 ; -----------------------------------------------------------------------------
 MidiPartGridCheck_CaseTable:
-	.short	MidiPartGridCheck_Evt1C00017 - MidiPartGridCheck_Evt1C00017
-	.short	MidiPartGridCheck_Evt1C00018 - MidiPartGridCheck_Evt1C00017
-	.short	MidiPartGridCheck_Evt1C00017 - MidiPartGridCheck_Evt1C00017
-	.short	MidiPartGridCheck_Evt1C00018 - MidiPartGridCheck_Evt1C00017
-	.short	MidiSetup_ReturnZero - MidiPartGridCheck_Evt1C00017
-	.short	MidiPartGridCheck_Evt1C0001C - MidiPartGridCheck_Evt1C00017
-	.short	MidiSetup_ReturnZero - MidiPartGridCheck_Evt1C00017
+	.short	MidiPartGridCheck_OnIndexswUp - MidiPartGridCheck_OnIndexswUp
+	.short	MidiPartGridCheck_OnIndexswDown - MidiPartGridCheck_OnIndexswUp
+	.short	MidiPartGridCheck_OnIndexswUp - MidiPartGridCheck_OnIndexswUp
+	.short	MidiPartGridCheck_OnIndexswDown - MidiPartGridCheck_OnIndexswUp
+	.short	MidiSetup_ReturnZero - MidiPartGridCheck_OnIndexswUp
+	.short	MidiPartGridCheck_OnLswData - MidiPartGridCheck_OnIndexswUp
+	.short	MidiSetup_ReturnZero - MidiPartGridCheck_OnIndexswUp
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Murai_ApFuncTable_121
 ; Murai_ApFuncTable_121 -- object table: InitializeMurai (v10/v9

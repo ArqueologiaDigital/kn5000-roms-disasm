@@ -2601,13 +2601,13 @@ AcMstStyleAlpGridBoxProc:
 	lda xix, (MasterSetup_EventDispatch:24)
 ; Computed jump: target = MasterSetup_EventDispatch + AcMstStyleAlpGridBoxProc_EventOffsets[i], AcMstStyleAlpGridBoxProc_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
-;   0x1c00017 -> AcMstStyleAlpGridBoxProc_Evt1C00017
-;   0x1c00018 -> AcMstStyleAlpGridBoxProc_Evt1C00018
-;   0x1c00019 -> AcMstStyleAlpGridBoxProc_Evt1C00017
-;   0x1c0001a -> AcMstStyleAlpGridBoxProc_Evt1C00018
+;   0x1c00017 -> AcMstStyleAlpGridBoxProc_OnIndexswUp
+;   0x1c00018 -> AcMstStyleAlpGridBoxProc_OnIndexswDown
+;   0x1c00019 -> AcMstStyleAlpGridBoxProc_OnIndexswUp
+;   0x1c0001a -> AcMstStyleAlpGridBoxProc_OnIndexswDown
 ;   0x1c0001b -> MasterSetup_InheritedProc_Fallback
-;   0x1c0001c -> AcMstStyleAlpGridBoxProc_Evt1C0001C
-;   0x1c0001d -> AcMstStyleAlpGridBoxProc_Evt1C0001C
+;   0x1c0001c -> AcMstStyleAlpGridBoxProc_OnLswData
+;   0x1c0001d -> AcMstStyleAlpGridBoxProc_OnLswData
 	jp	t, (xix+bc)
 
 ; MasterSetup event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0d24)
@@ -2903,7 +2903,7 @@ MasterSetup_ScrollUp_Search_Done:
 	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, (xsp + 66)
 	jrl SeqFile_CallApFunc
-AcMstStyleAlpGridBoxProc_Evt1C00017:
+AcMstStyleAlpGridBoxProc_OnIndexswUp:
 	ld xwa, (xsp + 74)
 	ld xbc, (xsp + 70)
 	ld xde, (xsp + 66)
@@ -3106,7 +3106,7 @@ MasterSetup_FallbackEvent:
 	call SetDialDown
 	ld wa, 1:i3
 	jrl MasterSetup_SetDialEnable
-AcMstStyleAlpGridBoxProc_Evt1C00018:
+AcMstStyleAlpGridBoxProc_OnIndexswDown:
 	ld xwa, (xsp + 74)
 	ld xbc, (xsp + 70)
 	ld xde, (xsp + 66)
@@ -3382,7 +3382,7 @@ MasterSetup_GetNameB_DrawString:
 	pushw 0xf5
 	call DrawString
 	jr SeqFile_ReturnZeroJmp2
-AcMstStyleAlpGridBoxProc_Evt1C0001C:
+AcMstStyleAlpGridBoxProc_OnLswData:
 	ld xwa, (xsp + 74)
 	call GetViewInstance
 	ld xwa, (xhl + 70)
@@ -3665,10 +3665,10 @@ AcMstStyle1GridBoxProc:
 	lda xix, (MstStyle_EventDispatch:24)
 ; Computed jump: target = MstStyle_EventDispatch + AcMstStyle1GridBoxProc_EventOffsets[i], AcMstStyle1GridBoxProc_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
-;   0x1c00017 -> AcMstStyle1GridBoxProc_Evt1C00017
-;   0x1c00018 -> AcMstStyle1GridBoxProc_Evt1C00018
-;   0x1c00019 -> AcMstStyle1GridBoxProc_Evt1C00017
-;   0x1c0001a -> AcMstStyle1GridBoxProc_Evt1C00018
+;   0x1c00017 -> AcMstStyle1GridBoxProc_OnIndexswUp
+;   0x1c00018 -> AcMstStyle1GridBoxProc_OnIndexswDown
+;   0x1c00019 -> AcMstStyle1GridBoxProc_OnIndexswUp
+;   0x1c0001a -> AcMstStyle1GridBoxProc_OnIndexswDown
 ;   0x1c0001b -> MstStyle_InheritedProc_Fallback
 ;   0x1c0001c -> MstStyle_ForwardToChild
 ;   0x1c0001d -> MstStyle_ForwardToChild
@@ -3703,7 +3703,7 @@ MstStyle_EventDispatch:
 	add wa, iy
 	ld (0x0340c4:24), wa
 	jrl SeqFileAlt_ReturnZeroJmp
-AcMstStyle1GridBoxProc_Evt1C00017:
+AcMstStyle1GridBoxProc_OnIndexswUp:
 	ld xwa, (xsp + 16)
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
@@ -3791,7 +3791,7 @@ MstStyle_FallbackEvent:
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
 	jrl MstStyle_SetAutoInc_Return
-AcMstStyle1GridBoxProc_Evt1C00018:
+AcMstStyle1GridBoxProc_OnIndexswDown:
 	ld xwa, (xsp + 16)
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
@@ -4171,10 +4171,10 @@ AcMstStyle1SubGridBoxProc:
 	lda xix, (MstStyle1_EventDispatch:24)
 ; Computed jump: target = MstStyle1_EventDispatch + AcMstStyle1SubGridBoxProc_EventOffsets[i], AcMstStyle1SubGridBoxProc_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
-;   0x1c00017 -> AcMstStyle1SubGridBoxProc_Evt1C00017
-;   0x1c00018 -> AcMstStyle1SubGridBoxProc_Evt1C00018
-;   0x1c00019 -> AcMstStyle1SubGridBoxProc_Evt1C00017
-;   0x1c0001a -> AcMstStyle1SubGridBoxProc_Evt1C00018
+;   0x1c00017 -> AcMstStyle1SubGridBoxProc_OnIndexswUp
+;   0x1c00018 -> AcMstStyle1SubGridBoxProc_OnIndexswDown
+;   0x1c00019 -> AcMstStyle1SubGridBoxProc_OnIndexswUp
+;   0x1c0001a -> AcMstStyle1SubGridBoxProc_OnIndexswDown
 ;   0x1c0001b -> MstStyle1Sub_InheritedFallback
 ;   0x1c0001c -> MstStyle1Sub_ForwardToChild
 ;   0x1c0001d -> MstStyle1Sub_ForwardToChild
@@ -4353,7 +4353,7 @@ MstStyle1Sub_SubSel_Adjust:
 	ld xde, 0:i3
 	call PostEvent
 	jrl SeqFile_ReturnZeroJmp
-AcMstStyle1SubGridBoxProc_Evt1C00017:
+AcMstStyle1SubGridBoxProc_OnIndexswUp:
 	ld xwa, (xsp + 66)
 	ld xbc, (xsp + 62)
 	ld xde, (xsp + 58)
@@ -4452,7 +4452,7 @@ MstStyle1Sub_FallbackEvent:
 	call SetDialDown
 	ld wa, 1:i3
 	jrl MstStyle1Sub_SetDialEnable
-AcMstStyle1SubGridBoxProc_Evt1C00018:
+AcMstStyle1SubGridBoxProc_OnIndexswDown:
 	ld xwa, (xsp + 66)
 	ld xbc, (xsp + 62)
 	ld xde, (xsp + 58)
@@ -4879,10 +4879,10 @@ AcMstStyle2GridBoxProc:
 	lda xix, (MstStyle1Page_EventDispatch:24)
 ; Computed jump: target = MstStyle1Page_EventDispatch + AcMstStyle2GridBoxProc_EventOffsets[i], AcMstStyle2GridBoxProc_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
-;   0x1c00017 -> AcMstStyle2GridBoxProc_Evt1C00017
-;   0x1c00018 -> AcMstStyle2GridBoxProc_Evt1C00018
-;   0x1c00019 -> AcMstStyle2GridBoxProc_Evt1C00017
-;   0x1c0001a -> AcMstStyle2GridBoxProc_Evt1C00018
+;   0x1c00017 -> AcMstStyle2GridBoxProc_OnIndexswUp
+;   0x1c00018 -> AcMstStyle2GridBoxProc_OnIndexswDown
+;   0x1c00019 -> AcMstStyle2GridBoxProc_OnIndexswUp
+;   0x1c0001a -> AcMstStyle2GridBoxProc_OnIndexswDown
 ;   0x1c0001b -> MstStyle2_InheritedFallback
 ;   0x1c0001c -> MstStyle2_ForwardToChild
 ;   0x1c0001d -> MstStyle2_ForwardToChild
@@ -5437,7 +5437,7 @@ MstStyle2_DialUp_UpdateAndPost:
 	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, (xsp + 48)
 	jrl Seq_ApplyFunctionAndReturn
-AcMstStyle2GridBoxProc_Evt1C00017:
+AcMstStyle2GridBoxProc_OnIndexswUp:
 	ld xwa, (xsp + 56)
 	ld xbc, (xsp + 52)
 	ld xde, (xsp + 48)
@@ -5643,7 +5643,7 @@ MstStyle2_FallbackEvent:
 	call SetDialDown
 	ld wa, 1:i3
 	jrl MstStyle2_SetDialEnable
-AcMstStyle2GridBoxProc_Evt1C00018:
+AcMstStyle2GridBoxProc_OnIndexswDown:
 	ld xwa, (xsp + 56)
 	ld xbc, (xsp + 52)
 	ld xde, (xsp + 48)
@@ -6554,13 +6554,13 @@ AcTchSensGridBoxProc:
 	lda xix, (MstStyle2_EventDispatch:24)
 ; Computed jump: target = MstStyle2_EventDispatch + AcTchSensGridBoxProc_EventOffsets[i], AcTchSensGridBoxProc_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
-;   0x1c00017 -> AcTchSensGridBoxProc_Evt1C00017
-;   0x1c00018 -> AcTchSensGridBoxProc_Evt1C00018
-;   0x1c00019 -> AcTchSensGridBoxProc_Evt1C00017
-;   0x1c0001a -> AcTchSensGridBoxProc_Evt1C00018
+;   0x1c00017 -> AcTchSensGridBoxProc_OnIndexswUp
+;   0x1c00018 -> AcTchSensGridBoxProc_OnIndexswDown
+;   0x1c00019 -> AcTchSensGridBoxProc_OnIndexswUp
+;   0x1c0001a -> AcTchSensGridBoxProc_OnIndexswDown
 ;   0x1c0001b -> TchSens_InheritedFallback
-;   0x1c0001c -> AcTchSensGridBoxProc_Evt1C0001C
-;   0x1c0001d -> AcTchSensGridBoxProc_Evt1C0001C
+;   0x1c0001c -> AcTchSensGridBoxProc_OnLswData
+;   0x1c0001d -> AcTchSensGridBoxProc_OnLswData
 	jp	t, (xix+bc)
 
 ; MstStyle2 event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0ed2)
@@ -6601,7 +6601,7 @@ MstStyle2_EventDispatch:
 	call SetDialDown
 	ld wa, 1:i3
 	jrl TchSens_SetDialEnable
-AcTchSensGridBoxProc_Evt1C00017:
+AcTchSensGridBoxProc_OnIndexswUp:
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -6669,7 +6669,7 @@ TchSens_DialDown_Fallback:
 	call SetDialDown
 	ld wa, 1:i3
 	jrl TchSens_SetDialEnable
-AcTchSensGridBoxProc_Evt1C00018:
+AcTchSensGridBoxProc_OnIndexswDown:
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -6760,7 +6760,7 @@ TchSens_GetName_Load:
 	call Strcpy
 	inc 8, xsp
 	jr TchSens_ReturnZeroJmp
-AcTchSensGridBoxProc_Evt1C0001C:
+AcTchSensGridBoxProc_OnLswData:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 70)
@@ -6811,12 +6811,12 @@ TchSensGridCheck:
 ; Computed jump: target = TchSensGrid_EventDispatch + TchSensGridCheck_EventOffsets[i], TchSensGridCheck_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> TchSensGrid_EventDispatch
-;   0x1c00018 -> TchSensGridCheck_Evt1C00018
+;   0x1c00018 -> TchSensGridCheck_OnIndexswDown
 ;   0x1c00019 -> TchSensGrid_EventDispatch
-;   0x1c0001a -> TchSensGridCheck_Evt1C00018
+;   0x1c0001a -> TchSensGridCheck_OnIndexswDown
 ;   0x1c0001b -> TchSensGrid_ReturnZero
-;   0x1c0001c -> TchSensGridCheck_Evt1C0001C
-;   0x1c0001d -> TchSensGridCheck_Evt1C0001C
+;   0x1c0001c -> TchSensGridCheck_OnLswData
+;   0x1c0001d -> TchSensGridCheck_OnLswData
 	jp	t, (xix+wa)
 
 ; TchSensGridCheck event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0f08)
@@ -6868,7 +6868,7 @@ TchSensGrid_EventDispatch_Skip_Skip2:
 	ld	bc, 1:i3
 	ld	de, 2:i3
 	jr	TchSensGrid_EventDispatch_Join
-TchSensGridCheck_Evt1C00018:
+TchSensGridCheck_OnIndexswDown:
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, EVT_GET_SELECTED_CEL
@@ -6918,7 +6918,7 @@ TchSensGrid_EventDispatch_Skip_Skip5:
 TchSensGrid_EventDispatch_Join:
 	call	MainLswAdd
 	jrl	TchSensGrid_ReturnZero
-TchSensGridCheck_Evt1C0001C:
+TchSensGridCheck_OnLswData:
 	lda	xix, (xde+4)
 	ld	xwa, (xde)
 	cp	xwa, 256
@@ -6929,8 +6929,8 @@ TchSensGridCheck_Evt1C0001C:
 	lda	xbc, (xsp+4)
 	ld	(xwa+4), xbc
 	pushw	(xix)	; FBABB9 (pushw (xix))
-	pushw	TchSensGridCheck_Evt1C0001C_Data@hi16
-	pushw	TchSensGridCheck_Evt1C0001C_Data@lo16
+	pushw	TchSensGridCheck_OnLswData_Data@hi16
+	pushw	TchSensGridCheck_OnLswData_Data@lo16
 	push	xbc
 	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
@@ -6948,10 +6948,10 @@ TchSensGrid_EventDispatch_Skip2:
 	ldw	(xwa+2), 4
 	lda	xbc, (xsp+4)
 	ld	(xwa+4), xbc
-	ld	xwa, TchSensGridCheck_Evt1C0001C_Str_OFF
+	ld	xwa, TchSensGridCheck_OnLswData_Str_OFF
 	cpw	(xix), 0
 	jr	z, TchSensGrid_EventDispatch_Skip2_Skip
-	ld	xwa, TchSensGridCheck_Evt1C0001C_Str_ON
+	ld	xwa, TchSensGridCheck_OnLswData_Str_ON
 TchSensGrid_EventDispatch_Skip2_Skip:
 	push	xwa
 	push	xbc
@@ -6974,8 +6974,8 @@ TchSensGrid_EventDispatch_Skip2_Skip2:
 	ldw	(xbc), 5
 	ld	(xhl), xiz
 	pushw	(xix)
-	pushw	TchSensGridCheck_Evt1C0001C_Str_Fmt3d@hi16
-	pushw	TchSensGridCheck_Evt1C0001C_Str_Fmt3d@lo16
+	pushw	TchSensGridCheck_OnLswData_Str_Fmt3d@hi16
+	pushw	TchSensGridCheck_OnLswData_Str_Fmt3d@lo16
 	push	xiz
 	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
@@ -6992,8 +6992,8 @@ TchSensGrid_EventDispatch_Skip3:
 	ldw (xbc), 6
 	ld	(xhl), xiz
 	pushw	(xix)
-	pushw	TchSensGridCheck_Evt1C0001C_Str_Fmt3d_2@hi16
-	pushw	TchSensGridCheck_Evt1C0001C_Str_Fmt3d_2@lo16
+	pushw	TchSensGridCheck_OnLswData_Str_Fmt3d_2@hi16
+	pushw	TchSensGridCheck_OnLswData_Str_Fmt3d_2@lo16
 	push	xiz
 	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
@@ -7131,13 +7131,13 @@ AcFSWAssGridBoxProc:
 	lda xix, (TchSens_EventDispatch:24)
 ; Computed jump: target = TchSens_EventDispatch + AcFSWAssGridBoxProc_EventOffsets[i], AcFSWAssGridBoxProc_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
-;   0x1c00017 -> AcFSWAssGridBoxProc_Evt1C00017
-;   0x1c00018 -> AcFSWAssGridBoxProc_Evt1C00018
-;   0x1c00019 -> AcFSWAssGridBoxProc_Evt1C00017
-;   0x1c0001a -> AcFSWAssGridBoxProc_Evt1C00018
+;   0x1c00017 -> AcFSWAssGridBoxProc_OnIndexswUp
+;   0x1c00018 -> AcFSWAssGridBoxProc_OnIndexswDown
+;   0x1c00019 -> AcFSWAssGridBoxProc_OnIndexswUp
+;   0x1c0001a -> AcFSWAssGridBoxProc_OnIndexswDown
 ;   0x1c0001b -> FSWAss_InheritedFallback
-;   0x1c0001c -> AcFSWAssGridBoxProc_Evt1C0001C
-;   0x1c0001d -> AcFSWAssGridBoxProc_Evt1C0001C
+;   0x1c0001c -> AcFSWAssGridBoxProc_OnLswData
+;   0x1c0001d -> AcFSWAssGridBoxProc_OnLswData
 	jp	t, (xix+bc)
 
 ; TouchSensitivity event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0f16)
@@ -7178,7 +7178,7 @@ TchSens_EventDispatch:
 	call SetDialDown
 	ld wa, 1:i3
 	jrl FSWAss_SetDialEnable
-AcFSWAssGridBoxProc_Evt1C00017:
+AcFSWAssGridBoxProc_OnIndexswUp:
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -7233,7 +7233,7 @@ FSWAss_DialDown_Fallback:
 	call SetDialDown
 	ld wa, 1:i3
 	jrl FSWAss_SetDialEnable
-AcFSWAssGridBoxProc_Evt1C00018:
+AcFSWAssGridBoxProc_OnIndexswDown:
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -7311,7 +7311,7 @@ FSWAss_GetName_Load:
 	call Strcpy
 	inc 8, xsp
 	jr FSWAss_ReturnZeroJmp
-AcFSWAssGridBoxProc_Evt1C0001C:
+AcFSWAssGridBoxProc_OnLswData:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 70)
@@ -7362,12 +7362,12 @@ FSWAssGridCheck:
 ; Computed jump: target = FSWAssGrid_EventDispatch + FSWAssGridCheck_EventOffsets[i], FSWAssGridCheck_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> FSWAssGrid_EventDispatch
-;   0x1c00018 -> FSWAssGridCheck_Evt1C00018
+;   0x1c00018 -> FSWAssGridCheck_OnIndexswDown
 ;   0x1c00019 -> FSWAssGrid_EventDispatch
-;   0x1c0001a -> FSWAssGridCheck_Evt1C00018
+;   0x1c0001a -> FSWAssGridCheck_OnIndexswDown
 ;   0x1c0001b -> AudioTable_ReturnZero
-;   0x1c0001c -> FSWAssGridCheck_Evt1C0001C
-;   0x1c0001d -> FSWAssGridCheck_Evt1C0001C
+;   0x1c0001c -> FSWAssGridCheck_OnLswData
+;   0x1c0001d -> FSWAssGridCheck_OnLswData
 	jp	t, (xix+wa)
 
 ; FSWAssGridCheck event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed1226)
@@ -7558,7 +7558,7 @@ FSWAssGrid_EventDispatch_Skip9:
 	ld	xwa, 0x2880
 	ld	de, 2:i3
 	jrl	FSWAssGrid_EventDispatch_Join
-FSWAssGridCheck_Evt1C00018:
+FSWAssGridCheck_OnIndexswDown:
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, EVT_GET_SELECTED_CEL
@@ -7747,7 +7747,7 @@ FSWAssGrid_EventDispatch_Skip15:
 FSWAssGrid_EventDispatch_Join:
 	call	MainLswPut
 	jrl	AudioTable_ReturnZero
-FSWAssGridCheck_Evt1C0001C:
+FSWAssGridCheck_OnLswData:
 	lda	xix, (xde+4)
 	lda	xiy, (xsp+4)
 	ld	xwa, (xde)
@@ -7765,8 +7765,8 @@ FSWAssGridCheck_Evt1C0001C:
 	lda	xbc, (FswAssign_FunctionNames:24)
 	ld	xwa, (xbc+hl)
 	push xwa
-	pushw	FSWAssGridCheck_Evt1C0001C_Str_Fmts@hi16
-	pushw	FSWAssGridCheck_Evt1C0001C_Str_Fmts@lo16
+	pushw	FSWAssGridCheck_OnLswData_Str_Fmts@hi16
+	pushw	FSWAssGridCheck_OnLswData_Str_Fmts@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	Sprintf_Locked
@@ -8387,13 +8387,13 @@ AcPmExpFilterGridBoxProc:
 	lda xix, (PmemPageCtl_EventDispatch:24)
 ; Computed jump: target = PmemPageCtl_EventDispatch + AcPmExpFilterGridBoxProc_EventOffsets[i], AcPmExpFilterGridBoxProc_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
-;   0x1c00017 -> AcPmExpFilterGridBoxProc_Evt1C00017
-;   0x1c00018 -> AcPmExpFilterGridBoxProc_Evt1C00018
-;   0x1c00019 -> AcPmExpFilterGridBoxProc_Evt1C00017
-;   0x1c0001a -> AcPmExpFilterGridBoxProc_Evt1C00018
+;   0x1c00017 -> AcPmExpFilterGridBoxProc_OnIndexswUp
+;   0x1c00018 -> AcPmExpFilterGridBoxProc_OnIndexswDown
+;   0x1c00019 -> AcPmExpFilterGridBoxProc_OnIndexswUp
+;   0x1c0001a -> AcPmExpFilterGridBoxProc_OnIndexswDown
 ;   0x1c0001b -> PmExpFilter_DefaultInherited
-;   0x1c0001c -> AcPmExpFilterGridBoxProc_Evt1C0001C
-;   0x1c0001d -> AcPmExpFilterGridBoxProc_Evt1C0001C
+;   0x1c0001c -> AcPmExpFilterGridBoxProc_OnLswData
+;   0x1c0001d -> AcPmExpFilterGridBoxProc_OnLswData
 	jp	t, (xix+bc)
 
 ; IvPmemWindowPageCtl event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed1420)
@@ -8635,7 +8635,7 @@ PmExpFilter_DrawCellBank2:
 PmExpFilter_DrawCentered:
 	call DrawStringCentered
 	jrl SeqLoad_ReturnZeroJmp
-AcPmExpFilterGridBoxProc_Evt1C00017:
+AcPmExpFilterGridBoxProc_OnIndexswUp:
 	ld xwa, xiz
 	ld XBC, (xsp + 0x0124)
 	ld XDE, (xsp + 0x0120)
@@ -8707,7 +8707,7 @@ PmExpFilter_FallbackForward:
 	call SetDialDown
 	ld wa, 1:i3
 	jrl PmExpFilter_SetDialEnable
-AcPmExpFilterGridBoxProc_Evt1C00018:
+AcPmExpFilterGridBoxProc_OnIndexswDown:
 	ld xwa, xiz
 	ld XBC, (xsp + 0x0124)
 	ld XDE, (xsp + 0x0120)
@@ -8809,7 +8809,7 @@ PmExpFilter_GetNameCommon:
 	call Strcpy
 	inc 8, xsp
 	jr SeqLoad_ReturnZeroJmp
-AcPmExpFilterGridBoxProc_Evt1C0001C:
+AcPmExpFilterGridBoxProc_OnLswData:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 70)
@@ -8891,12 +8891,12 @@ PmExpFilterGridCheck:
 ; Computed jump: target = PmExpFilter_EventDispatch + PmExpFilterGridCheck_EventOffsets[i], PmExpFilterGridCheck_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> PmExpFilter_EventDispatch
-;   0x1c00018 -> PmExpFilterGridCheck_Evt1C00018
+;   0x1c00018 -> PmExpFilterGridCheck_OnIndexswDown
 ;   0x1c00019 -> PmExpFilter_EventDispatch
-;   0x1c0001a -> PmExpFilterGridCheck_Evt1C00018
+;   0x1c0001a -> PmExpFilterGridCheck_OnIndexswDown
 ;   0x1c0001b -> SeqLoad_StoreReturnZero
-;   0x1c0001c -> PmExpFilterGridCheck_Evt1C0001C
-;   0x1c0001d -> PmExpFilterGridCheck_Evt1C0001C
+;   0x1c0001c -> PmExpFilterGridCheck_OnLswData
+;   0x1c0001d -> PmExpFilterGridCheck_OnLswData
 	jp	t, (xix+wa)
 
 ; PmExpFilterGridCheck event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed149a)
@@ -8942,7 +8942,7 @@ FSWAss_RefreshAllVoices_Skip:
 	ldw	bc, 0xffff
 	ld	de, 2:i3
 	jr	FSWAss_RefreshAllVoices_Join
-PmExpFilterGridCheck_Evt1C00018:
+PmExpFilterGridCheck_OnIndexswDown:
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, EVT_GET_SELECTED_CEL
@@ -8986,7 +8986,7 @@ FSWAss_RefreshAllVoices_Skip2:
 FSWAss_RefreshAllVoices_Join:
 	call	MainLswAdd
 	jrl	SeqLoad_StoreReturnZero
-PmExpFilterGridCheck_Evt1C0001C:
+PmExpFilterGridCheck_OnLswData:
 	ld	a, (0x340e2:24)
 	cp	a, 2:i3
 	jr	z, FSWAss_RefreshAllVoices_Skip11
@@ -9008,10 +9008,10 @@ FSWAss_RefreshAllVoices_Loop:
 	ld	(xbc+2), hl
 	lda	xhl, (xsp)
 	ld	(xbc+4), xhl
-	ld	xwa, PmExpFilterGridCheck_Evt1C0001C_Str_ON
+	ld	xwa, PmExpFilterGridCheck_OnLswData_Str_ON
 	cpw	(xde+4), 0
 	jr	z, FSWAss_RefreshAllVoices_Skip9
-	ld	xwa, PmExpFilterGridCheck_Evt1C0001C_Str_OFF
+	ld	xwa, PmExpFilterGridCheck_OnLswData_Str_OFF
 FSWAss_RefreshAllVoices_Skip9:
 	push	xwa
 	push	xhl
@@ -9044,10 +9044,10 @@ FSWAss_RefreshAllVoices_Loop2:
 	ld	(xbc+2), hl
 	lda	xhl, (xsp)
 	ld	(xbc+4), xhl
-	ld	xwa, PmExpFilterGridCheck_Evt1C0001C_Str_ON_2
+	ld	xwa, PmExpFilterGridCheck_OnLswData_Str_ON_2
 	cpw	(xde+4), 0
 	jr	z, FSWAss_RefreshAllVoices_Skip12
-	ld	xwa, PmExpFilterGridCheck_Evt1C0001C_Str_OFF_2
+	ld	xwa, PmExpFilterGridCheck_OnLswData_Str_OFF_2
 FSWAss_RefreshAllVoices_Skip12:
 	push	xwa
 	push	xhl
@@ -9179,13 +9179,13 @@ AcDispTimeSetGridBoxProc:
 	lda xix, (PmExpFilter2_EventDispatch:24)
 ; Computed jump: target = PmExpFilter2_EventDispatch + AcDispTimeSetGridBoxProc_EventOffsets[i], AcDispTimeSetGridBoxProc_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
-;   0x1c00017 -> AcDispTimeSetGridBoxProc_Evt1C00017
-;   0x1c00018 -> AcDispTimeSetGridBoxProc_Evt1C00018
-;   0x1c00019 -> AcDispTimeSetGridBoxProc_Evt1C00017
-;   0x1c0001a -> AcDispTimeSetGridBoxProc_Evt1C00018
+;   0x1c00017 -> AcDispTimeSetGridBoxProc_OnIndexswUp
+;   0x1c00018 -> AcDispTimeSetGridBoxProc_OnIndexswDown
+;   0x1c00019 -> AcDispTimeSetGridBoxProc_OnIndexswUp
+;   0x1c0001a -> AcDispTimeSetGridBoxProc_OnIndexswDown
 ;   0x1c0001b -> DispTimeSet_DefaultInherited
-;   0x1c0001c -> AcDispTimeSetGridBoxProc_Evt1C0001C
-;   0x1c0001d -> AcDispTimeSetGridBoxProc_Evt1C0001C
+;   0x1c0001c -> AcDispTimeSetGridBoxProc_OnLswData
+;   0x1c0001d -> AcDispTimeSetGridBoxProc_OnLswData
 	jp	t, (xix+bc)
 
 ; PmExpFilter event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed14a8)
@@ -9257,7 +9257,7 @@ DispTimeSet_SelectInit:
 	ld xde, (xsp + 12)
 	call MainFuncCall
 	jrl SeqSave_ReturnZeroJmp
-AcDispTimeSetGridBoxProc_Evt1C00017:
+AcDispTimeSetGridBoxProc_OnIndexswUp:
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -9312,7 +9312,7 @@ DispTimeSet_DialFallback:
 	call SetDialDown
 	ld wa, 1:i3
 	jrl DispTimeSet_SetDialEnabled
-AcDispTimeSetGridBoxProc_Evt1C00018:
+AcDispTimeSetGridBoxProc_OnIndexswDown:
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -9390,7 +9390,7 @@ DispTimeSet_GetNameCommon:
 	call Strcpy
 	inc 8, xsp
 	jr SeqSave_ReturnZeroJmp
-AcDispTimeSetGridBoxProc_Evt1C0001C:
+AcDispTimeSetGridBoxProc_OnLswData:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 70)
@@ -9441,12 +9441,12 @@ DispTimeSetGridCheck:
 ; Computed jump: target = DispTimeSet_EventDispatch + DispTimeSetGridCheck_EventOffsets[i], DispTimeSetGridCheck_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> DispTimeSet_EventDispatch
-;   0x1c00018 -> DispTimeSetGridCheck_Evt1C00018
+;   0x1c00018 -> DispTimeSetGridCheck_OnIndexswDown
 ;   0x1c00019 -> DispTimeSet_EventDispatch
-;   0x1c0001a -> DispTimeSetGridCheck_Evt1C00018
+;   0x1c0001a -> DispTimeSetGridCheck_OnIndexswDown
 ;   0x1c0001b -> DispTimeSet_ReturnZero
-;   0x1c0001c -> DispTimeSetGridCheck_Evt1C0001C
-;   0x1c0001d -> DispTimeSetGridCheck_Evt1C0001C
+;   0x1c0001c -> DispTimeSetGridCheck_OnLswData
+;   0x1c0001d -> DispTimeSetGridCheck_OnLswData
 	jp	t, (xix+wa)
 
 ; DispTimeSetGridCheck event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed1582)
@@ -9558,7 +9558,7 @@ FSWAss_RefreshAllVoices_Skip16:
 	ld	xbc, 1:i3
 	ld	(xwa+10), xbc
 	jrl	FSWAss_RefreshAllVoices_Join2
-DispTimeSetGridCheck_Evt1C00018:
+DispTimeSetGridCheck_OnIndexswDown:
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, EVT_GET_SELECTED_CEL
@@ -9672,7 +9672,7 @@ FSWAss_RefreshAllVoices_Skip21:
 FSWAss_RefreshAllVoices_Join2:
 	call	MainRamAdd
 	jrl	DispTimeSet_ReturnZero
-DispTimeSetGridCheck_Evt1C0001C:
+DispTimeSetGridCheck_OnLswData:
 	lda	xwa, (0x0340e6:24)
 	lda	xiy, (xde+14)
 	cp	xwa, (xde)	; FBC9C0 (cp xwa,(xde))
@@ -9688,8 +9688,8 @@ DispTimeSetGridCheck_Evt1C0001C:
 	add	xde, xwa
 	ld	xwa, (xde)
 	push	xwa
-	pushw	DispTimeSetGridCheck_Evt1C0001C_Str_Fmts@hi16
-	pushw	DispTimeSetGridCheck_Evt1C0001C_Str_Fmts@lo16
+	pushw	DispTimeSetGridCheck_OnLswData_Str_Fmts@hi16
+	pushw	DispTimeSetGridCheck_OnLswData_Str_Fmts@lo16
 	push	xbc
 	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
@@ -9713,8 +9713,8 @@ FSWAss_RefreshAllVoices_Skip4:
 	add	xde, xwa
 	ld	xwa, (xde)
 	push	xwa
-	pushw	DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_3@hi16
-	pushw	DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_3@lo16
+	pushw	DispTimeSetGridCheck_OnLswData_Str_Fmts_3@hi16
+	pushw	DispTimeSetGridCheck_OnLswData_Str_Fmts_3@lo16
 	push	xbc
 	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
@@ -9740,8 +9740,8 @@ FSWAss_RefreshAllVoices_Skip5:
 	add	xde, xwa
 	ld	xwa, (xde)
 	push	xwa
-	pushw	DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_4@hi16
-	pushw	DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_4@lo16
+	pushw	DispTimeSetGridCheck_OnLswData_Str_Fmts_4@hi16
+	pushw	DispTimeSetGridCheck_OnLswData_Str_Fmts_4@lo16
 	push	xbc
 	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
@@ -9765,8 +9765,8 @@ FSWAss_RefreshAllVoices_Skip6:
 	add	xde, xwa
 	ld	xwa, (xde)
 	push	xwa
-	pushw	DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_5@hi16
-	pushw	DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_5@lo16
+	pushw	DispTimeSetGridCheck_OnLswData_Str_Fmts_5@hi16
+	pushw	DispTimeSetGridCheck_OnLswData_Str_Fmts_5@lo16
 	push	xbc
 	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
@@ -9792,8 +9792,8 @@ FSWAss_RefreshAllVoices_Skip7:
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
-	pushw	DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_2@hi16
-	pushw	DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_2@lo16
+	pushw	DispTimeSetGridCheck_OnLswData_Str_Fmts_2@hi16
+	pushw	DispTimeSetGridCheck_OnLswData_Str_Fmts_2@lo16
 	push	xix
 	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
@@ -9815,8 +9815,8 @@ FSWAss_RefreshAllVoices_Skip8:
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
-	pushw	DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_6@hi16
-	pushw	DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_6@lo16
+	pushw	DispTimeSetGridCheck_OnLswData_Str_Fmts_6@hi16
+	pushw	DispTimeSetGridCheck_OnLswData_Str_Fmts_6@lo16
 	push	xix
 	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
@@ -10544,15 +10544,15 @@ MssNameFunc:
 	lda xix, (MssName_EventDispatch:24)
 ; Computed jump: target = MssName_EventDispatch + MssNameFunc_Data[i], MssNameFunc_Data = 16-bit offsets (10 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1e0003e:
-;   0x1e0003e -> MssNameFunc_Evt1E0003E
-;   0x1e0003f -> MssNameFunc_Evt1E0003E
+;   0x1e0003e -> MssNameFunc_OnGetLargeStep
+;   0x1e0003f -> MssNameFunc_OnGetLargeStep
 ;   0x1e00040 -> MssName_ReturnZero
 ;   0x1e00041 -> MssName_ReturnZero
 ;   0x1e00042 -> MssName_ReturnZero
-;   0x1e00043 -> MssNameFunc_Evt1E00043
-;   0x1e00044 -> MssNameFunc_Evt1E0003E
-;   0x1e00045 -> MssNameFunc_Evt1E00045
-;   0x1e00046 -> MssNameFunc_Evt1E00046
+;   0x1e00043 -> MssNameFunc_OnGetMax
+;   0x1e00044 -> MssNameFunc_OnGetLargeStep
+;   0x1e00045 -> MssNameFunc_OnGetRamAddress
+;   0x1e00046 -> MssNameFunc_OnGetRamSize
 ;   0x1e00047 -> MssName_EventDispatch
 	jp	t, (xix+bc)
 ; MssNameFunc event dispatch (10-entry, event 0x1c00013, table 0xed15ac)
@@ -10622,16 +10622,16 @@ NormScreenProc_Join:
 NormScreenProc_Join2:
 	ld	xhl, (xsp+4)
 	jr	NormScreenProc_Epilogue
-MssNameFunc_Evt1E0003E:
+MssNameFunc_OnGetLargeStep:
 	ld	xhl, 1:i3
 	jr	NormScreenProc_Epilogue
-MssNameFunc_Evt1E00043:
+MssNameFunc_OnGetMax:
 	ld	xhl, 512
 	jr	NormScreenProc_Epilogue
-MssNameFunc_Evt1E00045:
+MssNameFunc_OnGetRamAddress:
 	lda	xhl, (0x8d56:16)
 	jr	NormScreenProc_Epilogue
-MssNameFunc_Evt1E00046:
+MssNameFunc_OnGetRamSize:
 	ld	xhl, 2:i3
 	jr	NormScreenProc_Epilogue
 
@@ -11770,24 +11770,24 @@ PmBkNameFunc:
 	lda xix, (PmBkName_EventDispatch:24)
 ; Computed jump: target = PmBkName_EventDispatch + PmBkNameFunc_Data[i], PmBkNameFunc_Data = 16-bit offsets (10 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1e0003e:
-;   0x1e0003e -> PmBkNameFunc_Evt1E0003E
-;   0x1e0003f -> PmBkNameFunc_Evt1E0003E
+;   0x1e0003e -> PmBkNameFunc_OnGetLargeStep
+;   0x1e0003f -> PmBkNameFunc_OnGetLargeStep
 ;   0x1e00040 -> PmBkName_ReturnZero
 ;   0x1e00041 -> PmBkName_ReturnZero
 ;   0x1e00042 -> PmBkName_ReturnZero
-;   0x1e00043 -> PmBkNameFunc_Evt1E00043
+;   0x1e00043 -> PmBkNameFunc_OnGetMax
 ;   0x1e00044 -> PmBkName_ReturnZero
 ;   0x1e00045 -> PmBkName_DataBytes
-;   0x1e00046 -> PmBkNameFunc_Evt1E0003E
+;   0x1e00046 -> PmBkNameFunc_OnGetLargeStep
 ;   0x1e00047 -> PmBkName_EventDispatch
 	jp	t, (xix+bc)
 ; PmBkNameFunc event dispatch (10-entry, event 0x1c00013, table 0xed15ee)
 PmBkName_EventDispatch:
 	ret
-PmBkNameFunc_Evt1E0003E:
+PmBkNameFunc_OnGetLargeStep:
 	ld	xhl, 1:i3
 	ret
-PmBkNameFunc_Evt1E00043:
+PmBkNameFunc_OnGetMax:
 	ld	xhl, 9
 	ret
 

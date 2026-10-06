@@ -448,10 +448,10 @@ PsGridBoxProc_Data:
 ; [nakarest] Readers: source references AcGridBoxProc (ui/ui_widget_defs.s: `add xwa,
 ; [nakarest] AcGridBoxProc_Data`).
 AcGridBoxProc_Data:
-	.short	AcGridBoxProc_Evt1C00017 - AcGridBox_Init
-	.short	AcGridBoxProc_Evt1C00018 - AcGridBox_Init
-	.short	AcGridBoxProc_Evt1C00017 - AcGridBox_Init
-	.short	AcGridBoxProc_Evt1C00018 - AcGridBox_Init
+	.short	AcGridBoxProc_OnIndexswUp - AcGridBox_Init
+	.short	AcGridBoxProc_OnIndexswDown - AcGridBox_Init
+	.short	AcGridBoxProc_OnIndexswUp - AcGridBox_Init
+	.short	AcGridBoxProc_OnIndexswDown - AcGridBox_Init
 	.short	AcGridBox_Default - AcGridBox_Init
 	.short	AcGridBox_CellSelect - AcGridBox_Init
 	.short	AcGridBox_CellSelect - AcGridBox_Init
@@ -483,15 +483,15 @@ RamEditCheck_JumpStart_Str_Fmt3d:	.incbin "includes/generated/naka_disk_warning.
 ; [nakarest] Readers: source references RamEditCheck (ui/ui_widget_defs.s: `add xwa,
 ; [nakarest] RamEditCheck_Data`).
 RamEditCheck_Data:
-	.short	RamEditCheck_Evt1E0003E - RamEditCheck_JumpStart
-	.short	RamEditCheck_Evt1E0003F - RamEditCheck_JumpStart
+	.short	RamEditCheck_OnGetLargeStep - RamEditCheck_JumpStart
+	.short	RamEditCheck_OnGetSmallStep - RamEditCheck_JumpStart
 	.short	RamEditCheck_NotHandled - RamEditCheck_JumpStart
 	.short	RamEditCheck_NotHandled - RamEditCheck_JumpStart
 	.short	RamEditCheck_NotHandled - RamEditCheck_JumpStart
-	.short	RamEditCheck_Evt1E00043 - RamEditCheck_JumpStart
-	.short	RamEditCheck_Evt1E00044 - RamEditCheck_JumpStart
-	.short	RamEditCheck_Evt1E00045 - RamEditCheck_JumpStart
-	.short	RamEditCheck_Evt1E0003E - RamEditCheck_JumpStart
+	.short	RamEditCheck_OnGetMax - RamEditCheck_JumpStart
+	.short	RamEditCheck_OnGetMin - RamEditCheck_JumpStart
+	.short	RamEditCheck_OnGetRamAddress - RamEditCheck_JumpStart
+	.short	RamEditCheck_OnGetLargeStep - RamEditCheck_JumpStart
 	.short	RamEditCheck_JumpStart - RamEditCheck_JumpStart
 BitEditCheck_PtrTable:	.incbin "includes/generated/naka_disk_warning.bin", 0x1622, 0x14	; 2 x 32-bit pointer
 ; [nakarest] naka_disk_warning+0x1636  +0x1636..+0x163a (0xeaa2e2, 4 B)
@@ -688,35 +688,35 @@ AcTrkSw_ShowHide_CheckDirty_Str_AcLanguageText:	.incbin "includes/generated/naka
 ; [nakarest] Readers: source references LanguageCheck (ui/ui_widget_defs.s: `lda xhl,
 ; [nakarest] (LanguageCheck_PtrTable:24)`).
 LanguageCheck_PtrTable:			.incbin "includes/generated/naka_disk_warning.bin", 0x1B98, 0x4C	; 6 x 32-bit pointer
-ObjectProc_Evt1E00019_Str_YZ:		.incbin "includes/generated/naka_disk_warning.bin", 0x1BE4, 0x4	; "YZ"
-ObjectProc_Evt1E00018_Str_name:		.incbin "includes/generated/naka_disk_warning.bin", 0x1BE8, 0x6	; "name"
-ObjectProc_Evt1E00018_Str_romram:	.incbin "includes/generated/naka_disk_warning.bin", 0x1BEE, 0x8	; "romram"
-ObjectProc_Evt1E00018_Str_Empty:	.incbin "includes/generated/naka_disk_warning.bin", 0x1BF6, 0x2	; ""
+ObjectProc_OnGetPropString_Str_YZ:		.incbin "includes/generated/naka_disk_warning.bin", 0x1BE4, 0x4	; "YZ"
+ObjectProc_OnGetPropName_Str_name:		.incbin "includes/generated/naka_disk_warning.bin", 0x1BE8, 0x6	; "name"
+ObjectProc_OnGetPropName_Str_romram:	.incbin "includes/generated/naka_disk_warning.bin", 0x1BEE, 0x8	; "romram"
+ObjectProc_OnGetPropName_Str_Empty:	.incbin "includes/generated/naka_disk_warning.bin", 0x1BF6, 0x2	; ""
 ; [nakarest] naka_disk_warning+0x1bf8  +0x1bf8..+0x1c20 (0xeaa8a4, 40 B)
 ; [nakarest] purpose not established: layout of 40 B at 0xeaa8a4 not derived; readers below
 ; [nakarest] Readers: source references ObjectProc (ui/ui_widget_defs.s: `add xwa,
 ; [nakarest] ObjectProc_Data`).
 ObjectProc_Data:
 	.short	AcTrkSw_Return - AcTrkSw_Return
-	.short	ObjectProc_Evt1E00011 - AcTrkSw_Return
-	.short	ObjectProc_Evt1E00012 - AcTrkSw_Return
-	.short	ObjectProc_Evt1E00013 - AcTrkSw_Return
-	.short	ObjectProc_Evt1E00014 - AcTrkSw_Return
+	.short	ObjectProc_OnGetParentClass - AcTrkSw_Return
+	.short	ObjectProc_OnGetClassName - AcTrkSw_Return
+	.short	ObjectProc_OnGetProcedure - AcTrkSw_Return
+	.short	ObjectProc_OnCheckClass - AcTrkSw_Return
 	.short	ExitWindow_Init - AcTrkSw_Return
 	.short	ExitWindow_Init - AcTrkSw_Return
-	.short	ObjectProc_Evt1E00017 - AcTrkSw_Return
-	.short	ObjectProc_Evt1E00018 - AcTrkSw_Return
-	.short	ObjectProc_Evt1E00019 - AcTrkSw_Return
-	.short	ObjectProc_Evt1E0001A - AcTrkSw_Return
-	.short	ObjectProc_Evt1E0001B - AcTrkSw_Return
-	.short	ObjectProc_Evt1E0001C - AcTrkSw_Return
-	.short	ObjectProc_Evt1E0001D - AcTrkSw_Return
-	.short	ObjectProc_Evt1E0001E - AcTrkSw_Return
-	.short	ObjectProc_Evt1E0001F - AcTrkSw_Return
-	.short	ObjectProc_Evt1E00020 - AcTrkSw_Return
-	.short	ObjectProc_Evt1E00021 - AcTrkSw_Return
-	.short	ObjectProc_Evt1E00022 - AcTrkSw_Return
-	.short	ObjectProc_Evt1E00023 - AcTrkSw_Return
+	.short	ObjectProc_OnGetPropCount - AcTrkSw_Return
+	.short	ObjectProc_OnGetPropName - AcTrkSw_Return
+	.short	ObjectProc_OnGetPropString - AcTrkSw_Return
+	.short	ObjectProc_OnCopyProperty - AcTrkSw_Return
+	.short	ObjectProc_OnDumpProperty - AcTrkSw_Return
+	.short	ObjectProc_OnDumpPointer - AcTrkSw_Return
+	.short	ObjectProc_OnGetProperty - AcTrkSw_Return
+	.short	ObjectProc_OnSetProperty - AcTrkSw_Return
+	.short	ObjectProc_OnGetPropData - AcTrkSw_Return
+	.short	ObjectProc_OnGetPropDataCount - AcTrkSw_Return
+	.short	ObjectProc_OnGetInstanceSize - AcTrkSw_Return
+	.short	ObjectProc_OnGetPropChar - AcTrkSw_Return
+	.short	ObjectProc_OnAutoFree - AcTrkSw_Return
 ; [nakarest] naka_disk_warning+0x1c20  +0x1c20..+0x1c30 (0xeaa8cc, 16 B)
 ; [nakarest] purpose not established: layout of 16 B at 0xeaa8cc not derived; readers below
 ; [nakarest] Readers: source references ExitWindow_Confirm (ui/ui_widget_defs.s: `ld xiy,
@@ -749,21 +749,21 @@ ClassProc_Data:
 	.short	ClassProc_Event_LoadFromWA - ClassProc_Event_LoadFromWA
 	.short	ClassProc_Event_LoadFromHL - ClassProc_Event_LoadFromWA
 	.short	ClassProc_Event_LoadFromIZ - ClassProc_Event_LoadFromWA
-	.short	ClassProc_Evt1E00003 - ClassProc_Event_LoadFromWA
-	.short	ClassProc_Evt1E00004 - ClassProc_Event_LoadFromWA
-	.short	ClassProc_Evt1E00005 - ClassProc_Event_LoadFromWA
-	.short	ClassProc_Evt1E00006 - ClassProc_Event_LoadFromWA
-	.short	ClassProc_Evt1E00007 - ClassProc_Event_LoadFromWA
+	.short	ClassProc_OnGetInstanceSizeSp - ClassProc_Event_LoadFromWA
+	.short	ClassProc_OnCheckClassSp - ClassProc_Event_LoadFromWA
+	.short	ClassProc_OnGetPropStringEx - ClassProc_Event_LoadFromWA
+	.short	ClassProc_OnGetPropCountSp - ClassProc_Event_LoadFromWA
+	.short	ClassProc_OnGetPropNameSp - ClassProc_Event_LoadFromWA
 ; [nakarest] naka_disk_warning+0x1c5c  +0x1c5c..+0x1c68 (0xeaa908, 12 B)
 ; [nakarest] purpose not established: layout of 12 B at 0xeaa908 not derived; readers below
 ; [nakarest] Readers: source references ModeProc (ui/ui_widget_defs.s: `add xbc, ModeProc_Data`).
 ModeProc_Data:
-	.short	ModeProc_Evt1E0002B - NakaWidget_ReturnConst_0x1600006
-	.short	ModeProc_Evt1E0002C - NakaWidget_ReturnConst_0x1600006
-	.short	ModeProc_Evt1E0002D - NakaWidget_ReturnConst_0x1600006
-	.short	ModeProc_Evt1E0002E - NakaWidget_ReturnConst_0x1600006
-	.short	ModeProc_Evt1E0002F - NakaWidget_ReturnConst_0x1600006
-	.short	ModeProc_Evt1E00030 - NakaWidget_ReturnConst_0x1600006
+	.short	ModeProc_OnGetModeProc - NakaWidget_ReturnConst_0x1600006
+	.short	ModeProc_OnGetModeProcId - NakaWidget_ReturnConst_0x1600006
+	.short	ModeProc_OnGetStartTitle - NakaWidget_ReturnConst_0x1600006
+	.short	ModeProc_OnGetModeNow - NakaWidget_ReturnConst_0x1600006
+	.short	ModeProc_OnGetModeOld - NakaWidget_ReturnConst_0x1600006
+	.short	ModeProc_OnGetUserId - NakaWidget_ReturnConst_0x1600006
 ; [nakarest] naka_disk_warning+0x1c68  +0x1c68..+0x1c6c (0xeaa914, 4 B)
 ; [nakarest] purpose not established: layout of 4 B at 0xeaa914 not derived; readers below
 ; [nakarest] Readers: source references UnregisteredMode (ui/ui_widget_defs.s: `lda xwa,
@@ -789,12 +789,12 @@ EnumList_HitTest_Data:
 ; [nakarest] Readers: source references TitleProc (ui/ui_widget_defs.s: `add xde,
 ; [nakarest] TitleProc_Str_j`).
 TitleProc_Str_j:
-	.short	TitleProc_Evt1E00030 - TitleProc_EventDispatch
-	.short	TitleProc_Evt1E00031 - TitleProc_EventDispatch
-	.short	TitleProc_Evt1E00032 - TitleProc_EventDispatch
-	.short	TitleProc_Evt1E00033 - TitleProc_EventDispatch
-	.short	TitleProc_Evt1E00034 - TitleProc_EventDispatch
-	.short	TitleProc_Evt1E00035 - TitleProc_EventDispatch
+	.short	TitleProc_OnGetUserId - TitleProc_EventDispatch
+	.short	TitleProc_OnGetTitleProc - TitleProc_EventDispatch
+	.short	TitleProc_OnGetTitleProcId - TitleProc_EventDispatch
+	.short	TitleProc_OnGetStartScreen - TitleProc_EventDispatch
+	.short	TitleProc_OnGetTitleNow - TitleProc_EventDispatch
+	.short	TitleProc_OnGetTitleOld - TitleProc_EventDispatch
 ; [nakarest] naka_disk_warning+0x1d20  +0x1d20..+0x1d3a (0xeaa9cc, 26 B)
 ; [nakarest] purpose not established: layout of 26 B at 0xeaa9cc not derived; readers below
 ; [nakarest] Readers: source references EnumList_Reset (ui/ui_widget_defs.s: `ld xbc,
@@ -806,8 +806,8 @@ EnumList_Reset_Data:
 ; [nakarest] Readers: source references ViewableProc (ui/ui_widget_defs.s: `add xwa,
 ; [nakarest] ViewableProc_Data`).
 ViewableProc_Data:
-	.short	ViewableProc_Evt1C0000B - Viewable_GetClassProc
-	.short	ViewableProc_Evt1C0000C - Viewable_GetClassProc
+	.short	ViewableProc_OnPaint - Viewable_GetClassProc
+	.short	ViewableProc_OnRepaint - Viewable_GetClassProc
 	.short	Viewable_ReturnZero - Viewable_GetClassProc
 	.short	Viewable_ReturnZero - Viewable_GetClassProc
 	.short	Viewable_ReturnZero - Viewable_GetClassProc
@@ -983,19 +983,19 @@ ConstFlagProc_GetValue_Str_romram:	.incbin "includes/generated/naka_disk_warning
 ConstFlagProc_GetValue_Set_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x1F32, 0x2
 ConstFlagProc_SetValue_Check_Str_Empty:	.incbin "includes/generated/naka_disk_warning.bin", 0x1F34, 0x2	; ""
-CommonIDProc_Evt1E0000A_Data:		.incbin "includes/generated/naka_disk_warning.bin", 0x1F36, 0x2
+CommonIDProc_OnDumpPointerEx_Data:		.incbin "includes/generated/naka_disk_warning.bin", 0x1F36, 0x2
 ; [nakarest] naka_disk_warning+0x1f38  +0x1f38..+0x1f46 (0xeaabe4, 14 B)
 ; [nakarest] purpose not established: layout of 14 B at 0xeaabe4 not derived; readers below
 ; [nakarest] Readers: source references CommonIDProc (ui/ui_widget_defs.s: `add xde,
 ; [nakarest] CommonIDProc_Data`).
 CommonIDProc_Data:
-	.short	CommonIDProc_ReturnZero - CommonIDProc_Evt1E0000D
-	.short	CommonIDProc_Evt1E00009 - CommonIDProc_Evt1E0000D
-	.short	CommonIDProc_Evt1E0000A - CommonIDProc_Evt1E0000D
-	.short	CommonIDProc_Evt1E00009 - CommonIDProc_Evt1E0000D
-	.short	CommonIDProc_Evt1E0000C - CommonIDProc_Evt1E0000D
-	.short	CommonIDProc_Evt1E0000D - CommonIDProc_Evt1E0000D
-	.short	CommonIDProc_Evt1E0000E - CommonIDProc_Evt1E0000D
+	.short	CommonIDProc_ReturnZero - CommonIDProc_OnGetPropDataSp
+	.short	CommonIDProc_OnDumpPropertyEx - CommonIDProc_OnGetPropDataSp
+	.short	CommonIDProc_OnDumpPointerEx - CommonIDProc_OnGetPropDataSp
+	.short	CommonIDProc_OnDumpPropertyEx - CommonIDProc_OnGetPropDataSp
+	.short	CommonIDProc_OnSetPropertyEx - CommonIDProc_OnGetPropDataSp
+	.short	CommonIDProc_OnGetPropDataSp - CommonIDProc_OnGetPropDataSp
+	.short	CommonIDProc_OnGetPropDataCountSp - CommonIDProc_OnGetPropDataSp
 ; [nakarest] naka_disk_warning+0x1f46  +0x1f46..+0x214a (0xeaabf2, 516 B)
 ; [nakarest] purpose not established: layout of 516 B at 0xeaabf2 not derived; readers below
 ; [nakarest] Readers: source references DrawIcons_Impl_ColLoop (ui/drawing_primitives.s: `lda

@@ -33,10 +33,10 @@ AcGridBoxProc:
 	lda xix, (AcGridBox_Init:24)
 ; Computed jump: target = AcGridBox_Init + AcGridBoxProc_Data[i], AcGridBoxProc_Data = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
-;   0x1c00017 -> AcGridBoxProc_Evt1C00017
-;   0x1c00018 -> AcGridBoxProc_Evt1C00018
-;   0x1c00019 -> AcGridBoxProc_Evt1C00017
-;   0x1c0001a -> AcGridBoxProc_Evt1C00018
+;   0x1c00017 -> AcGridBoxProc_OnIndexswUp
+;   0x1c00018 -> AcGridBoxProc_OnIndexswDown
+;   0x1c00019 -> AcGridBoxProc_OnIndexswUp
+;   0x1c0001a -> AcGridBoxProc_OnIndexswDown
 ;   0x1c0001b -> AcGridBox_Default
 ;   0x1c0001c -> AcGridBox_CellSelect
 ;   0x1c0001d -> AcGridBox_CellSelect
@@ -79,7 +79,7 @@ AcGridBox_Init:
 	calr SetDialDown
 	ld wa, 1:i3
 	jrl AcGridBox_EnableDials
-AcGridBoxProc_Evt1C00017:
+AcGridBoxProc_OnIndexswUp:
 	ld xwa, (xsp + 16)
 	ld xbc, xiz
 	ld xde, (xsp + 12)
@@ -134,7 +134,7 @@ AcGridBox_ScrollUp_Alt:
 	calr SetDialDown
 	ld wa, 1:i3
 	jrl AcGridBox_EnableDials
-AcGridBoxProc_Evt1C00018:
+AcGridBoxProc_OnIndexswDown:
 	ld xwa, (xsp + 16)
 	ld xbc, xiz
 	ld xde, (xsp + 12)
@@ -2004,15 +2004,15 @@ RamEditCheck:
 	lda xix, (RamEditCheck_JumpStart:24)
 ; Computed jump: target = RamEditCheck_JumpStart + RamEditCheck_Data[i], RamEditCheck_Data = 16-bit offsets (10 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1e0003e:
-;   0x1e0003e -> RamEditCheck_Evt1E0003E
-;   0x1e0003f -> RamEditCheck_Evt1E0003F
+;   0x1e0003e -> RamEditCheck_OnGetLargeStep
+;   0x1e0003f -> RamEditCheck_OnGetSmallStep
 ;   0x1e00040 -> RamEditCheck_NotHandled
 ;   0x1e00041 -> RamEditCheck_NotHandled
 ;   0x1e00042 -> RamEditCheck_NotHandled
-;   0x1e00043 -> RamEditCheck_Evt1E00043
-;   0x1e00044 -> RamEditCheck_Evt1E00044
-;   0x1e00045 -> RamEditCheck_Evt1E00045
-;   0x1e00046 -> RamEditCheck_Evt1E0003E
+;   0x1e00043 -> RamEditCheck_OnGetMax
+;   0x1e00044 -> RamEditCheck_OnGetMin
+;   0x1e00045 -> RamEditCheck_OnGetRamAddress
+;   0x1e00046 -> RamEditCheck_OnGetLargeStep
 ;   0x1e00047 -> RamEditCheck_JumpStart
 	jp	t, (xix+wa)
 
@@ -2027,19 +2027,19 @@ RamEditCheck_JumpStart:
 	lda	xsp, (xsp+12)
 	ld	xhl, xiz
 	jr	ResetLswFilter_Epilogue
-RamEditCheck_Evt1E0003E:
+RamEditCheck_OnGetLargeStep:
 	ld	xhl, 4:i3
 	jr	ResetLswFilter_Epilogue
-RamEditCheck_Evt1E0003F:
+RamEditCheck_OnGetSmallStep:
 	ld	xhl, 1:i3
 	jr	ResetLswFilter_Epilogue
-RamEditCheck_Evt1E00043:
+RamEditCheck_OnGetMax:
 	ld	xhl, 16
 	jr	ResetLswFilter_Epilogue
-RamEditCheck_Evt1E00044:
+RamEditCheck_OnGetMin:
 	ld	xhl, 4294967267
 	jr	ResetLswFilter_Epilogue
-RamEditCheck_Evt1E00045:
+RamEditCheck_OnGetRamAddress:
 	lda	xhl, (161482:24)
 	jr	ResetLswFilter_Epilogue
 RamEditCheck_NotHandled:
@@ -8504,55 +8504,55 @@ ObjectProc:
 ; Computed jump: target = AcTrkSw_Return + ObjectProc_Data[i], ObjectProc_Data = 16-bit offsets (20 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1e00010:
 ;   0x1e00010 -> AcTrkSw_Return
-;   0x1e00011 -> ObjectProc_Evt1E00011
-;   0x1e00012 -> ObjectProc_Evt1E00012
-;   0x1e00013 -> ObjectProc_Evt1E00013
-;   0x1e00014 -> ObjectProc_Evt1E00014
+;   0x1e00011 -> ObjectProc_OnGetParentClass
+;   0x1e00012 -> ObjectProc_OnGetClassName
+;   0x1e00013 -> ObjectProc_OnGetProcedure
+;   0x1e00014 -> ObjectProc_OnCheckClass
 ;   0x1e00015 -> ExitWindow_Init
 ;   0x1e00016 -> ExitWindow_Init
-;   0x1e00017 -> ObjectProc_Evt1E00017
-;   0x1e00018 -> ObjectProc_Evt1E00018
-;   0x1e00019 -> ObjectProc_Evt1E00019
-;   0x1e0001a -> ObjectProc_Evt1E0001A
-;   0x1e0001b -> ObjectProc_Evt1E0001B
-;   0x1e0001c -> ObjectProc_Evt1E0001C
-;   0x1e0001d -> ObjectProc_Evt1E0001D
-;   0x1e0001e -> ObjectProc_Evt1E0001E
-;   0x1e0001f -> ObjectProc_Evt1E0001F
-;   0x1e00020 -> ObjectProc_Evt1E00020
-;   0x1e00021 -> ObjectProc_Evt1E00021
-;   0x1e00022 -> ObjectProc_Evt1E00022
-;   0x1e00023 -> ObjectProc_Evt1E00023
+;   0x1e00017 -> ObjectProc_OnGetPropCount
+;   0x1e00018 -> ObjectProc_OnGetPropName
+;   0x1e00019 -> ObjectProc_OnGetPropString
+;   0x1e0001a -> ObjectProc_OnCopyProperty
+;   0x1e0001b -> ObjectProc_OnDumpProperty
+;   0x1e0001c -> ObjectProc_OnDumpPointer
+;   0x1e0001d -> ObjectProc_OnGetProperty
+;   0x1e0001e -> ObjectProc_OnSetProperty
+;   0x1e0001f -> ObjectProc_OnGetPropData
+;   0x1e00020 -> ObjectProc_OnGetPropDataCount
+;   0x1e00021 -> ObjectProc_OnGetInstanceSize
+;   0x1e00022 -> ObjectProc_OnGetPropChar
+;   0x1e00023 -> ObjectProc_OnAutoFree
 	jp	t, (xix+wa)
 AcTrkSw_Return:
 	ld	xhl, xiz
 	jrl	ObjectProc_Join5
-ObjectProc_Evt1E00011:
+ObjectProc_OnGetParentClass:
 	ld	xwa, xiz
 	ld	xbc, EVT_GET_PARENT_CLASS_SP
 	ld	xde, (xsp+136)
 	jrl	ObjectProc_Join3
-ObjectProc_Evt1E00013:
+ObjectProc_OnGetProcedure:
 	ld	xwa, xiz
 	ld	xbc, EVT_GET_PROCEDURE_SP
 	ld	xde, (xsp+136)
 	jrl	ObjectProc_Join3
-ObjectProc_Evt1E00021:
+ObjectProc_OnGetInstanceSize:
 	ld	xwa, xiz
 	ld	xbc, EVT_GET_INSTANCE_SIZE_SP
 	ld	xde, (xsp+136)
 	jrl	ObjectProc_Join3
-ObjectProc_Evt1E00012:
+ObjectProc_OnGetClassName:
 	ld	xwa, xiz
 	ld	xbc, EVT_GET_NAME
 	ld	xde, (xsp+136)
 	jrl	ObjectProc_Join3
-ObjectProc_Evt1E00014:
+ObjectProc_OnCheckClass:
 	ld	xwa, xiz
 	ld	xbc, EVT_CHECK_CLASS_SP
 	ld	xde, (xsp+136)
 	jrl	ObjectProc_Join3
-ObjectProc_Evt1E00019:
+ObjectProc_OnGetPropString:
 	ld	xwa, (xsp+136)
 	ld	(xwa), 0
 	ld	xwa, xiz
@@ -8566,8 +8566,8 @@ ObjectProc_Evt1E00019:
 	call	SendEvent
 	or	xhl, xhl
 	jr	z, ObjectProc_Skip
-	pushw ObjectProc_Evt1E00019_Str_YZ@hi16
-	pushw ObjectProc_Evt1E00019_Str_YZ@lo16
+	pushw ObjectProc_OnGetPropString_Str_YZ@hi16
+	pushw ObjectProc_OnGetPropString_Str_YZ@lo16
 	ld	xwa, (xsp+140)
 	push	xwa
 	call	Strcat
@@ -8575,12 +8575,12 @@ ObjectProc_Evt1E00019:
 ObjectProc_Skip:
 	ld	xhl, (xsp+4)
 	jrl	ObjectProc_Join5
-ObjectProc_Evt1E00017:
+ObjectProc_OnGetPropCount:
 	ld	xwa, xiz
 	ld	xbc, EVT_GET_PROP_COUNT_SP
 	ld	xde, (xsp+136)
 	jrl	ObjectProc_Join3
-ObjectProc_Evt1E00018:
+ObjectProc_OnGetPropName:
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, EVT_GET_PROP_STRING
@@ -8592,8 +8592,8 @@ ObjectProc_Evt1E00018:
 	lda	xde, (xwa+4)
 	cp	(xhl), 89
 	jr	nz, ObjectProc_Skip2
-	pushw ObjectProc_Evt1E00018_Str_name@hi16
-	pushw ObjectProc_Evt1E00018_Str_name@lo16
+	pushw ObjectProc_OnGetPropName_Str_name@hi16
+	pushw ObjectProc_OnGetPropName_Str_name@lo16
 	ld	xwa, (xde)
 	push	xwa
 	jr	ObjectProc_Join
@@ -8603,16 +8603,16 @@ ObjectProc_Skip2:
 	ld	xwa, (xde)
 	cp	(xbc), 90
 	jr	nz, ObjectProc_Skip3
-	pushw ObjectProc_Evt1E00018_Str_romram@hi16
-	pushw ObjectProc_Evt1E00018_Str_romram@lo16
+	pushw ObjectProc_OnGetPropName_Str_romram@hi16
+	pushw ObjectProc_OnGetPropName_Str_romram@lo16
 	push	xwa
 ObjectProc_Join:
 	call	Free_Compare2
 	inc	8, xsp
 	jrl	ObjectProc_Join4
 ObjectProc_Skip3:
-	pushw ObjectProc_Evt1E00018_Str_Empty@hi16
-	pushw ObjectProc_Evt1E00018_Str_Empty@lo16
+	pushw ObjectProc_OnGetPropName_Str_Empty@hi16
+	pushw ObjectProc_OnGetPropName_Str_Empty@lo16
 	push	xwa
 	call	Free_Compare2
 	inc	8, xsp
@@ -8620,7 +8620,7 @@ ObjectProc_Skip3:
 	ld	xbc, EVT_GET_PROP_NAME_SP
 	ld	xde, (xsp+136)
 	jrl	ObjectProc_Join3
-ObjectProc_Evt1E0001A:
+ObjectProc_OnCopyProperty:
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, EVT_GET_PROP_STRING
@@ -8638,7 +8638,7 @@ ObjectProc_Evt1E0001A:
 	ld	xbc, EVT_COPY_PROPERTY_EX
 	ld	xde, (xsp+136)
 	jrl	ObjectProc_Join2
-ObjectProc_Evt1E0001B:
+ObjectProc_OnDumpProperty:
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, EVT_GET_PROP_STRING
@@ -8656,7 +8656,7 @@ ObjectProc_Evt1E0001B:
 	ld	xbc, EVT_DUMP_PROPERTY_EX
 	ld	xde, (xsp+136)
 	jr	ObjectProc_Join2
-ObjectProc_Evt1E0001C:
+ObjectProc_OnDumpPointer:
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, EVT_GET_PROP_STRING
@@ -8674,7 +8674,7 @@ ObjectProc_Evt1E0001C:
 	ld	xbc, EVT_DUMP_POINTER_EX
 	ld	xde, (xsp+136)
 	jr	ObjectProc_Join2
-ObjectProc_Evt1E0001D:
+ObjectProc_OnGetProperty:
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, EVT_GET_PROP_STRING
@@ -8694,7 +8694,7 @@ ObjectProc_Evt1E0001D:
 ObjectProc_Join2:
 	call	SendEvent
 	jrl	ObjectProc_Join4
-ObjectProc_Evt1E0001E:
+ObjectProc_OnSetProperty:
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, EVT_GET_PROP_STRING
@@ -8713,19 +8713,19 @@ ObjectProc_Evt1E0001E:
 	ld	xde, (xsp+136)
 	call	SendEvent
 	jr	ObjectProc_Join5
-ObjectProc_Evt1E0001F:
+ObjectProc_OnGetPropData:
 	ld	xwa, xiz
 	ld	xbc, EVT_GET_PROP_DATA_SP
 	ld	xde, (xsp+136)
 	jr	ObjectProc_Join3
-ObjectProc_Evt1E00020:
+ObjectProc_OnGetPropDataCount:
 	ld	xwa, xiz
 	ld	xbc, EVT_GET_PROP_DATA_COUNT_SP
 	ld	xde, (xsp+136)
 ObjectProc_Join3:
 	calr	ClassProc
 	jr	ObjectProc_Join5
-ObjectProc_Evt1E00022:
+ObjectProc_OnGetPropChar:
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
 	ld	xbc, EVT_GET_PROP_STRING
@@ -8735,7 +8735,7 @@ ObjectProc_Evt1E00022:
 	ld	xhl, 0:i3
 	ld	l, (xwa)
 	jr	ObjectProc_Join5
-ObjectProc_Evt1E00023:
+ObjectProc_OnAutoFree:
 	ld	xwa, (xsp+136)
 	push	xwa
 	call	Free
@@ -9248,11 +9248,11 @@ ClassProc:
 ;   0x1e00000 -> ClassProc_Event_LoadFromWA
 ;   0x1e00001 -> ClassProc_Event_LoadFromHL
 ;   0x1e00002 -> ClassProc_Event_LoadFromIZ
-;   0x1e00003 -> ClassProc_Evt1E00003
-;   0x1e00004 -> ClassProc_Evt1E00004
-;   0x1e00005 -> ClassProc_Evt1E00005
-;   0x1e00006 -> ClassProc_Evt1E00006
-;   0x1e00007 -> ClassProc_Evt1E00007
+;   0x1e00003 -> ClassProc_OnGetInstanceSizeSp
+;   0x1e00004 -> ClassProc_OnCheckClassSp
+;   0x1e00005 -> ClassProc_OnGetPropStringEx
+;   0x1e00006 -> ClassProc_OnGetPropCountSp
+;   0x1e00007 -> ClassProc_OnGetPropNameSp
 	jp	t, (xix+bc)
 ;-----------------------------------------------------------------------------
 ; ClassProc_EventHandlers - Dispatch table for UI event types
@@ -9280,11 +9280,11 @@ ClassProc_Event_LoadFromOffset:	; FA45A7 - Event handler: load XHL from (XHL+0Ch
 
 TitleWidget_Paint:
 	jrl ClassProc_ReturnWithStatus
-ClassProc_Evt1E00003:
+ClassProc_OnGetInstanceSizeSp:
 	ld hl, (xiz + 8)
 	extz xhl
 	jrl ClassProc_ReturnWithStatus
-ClassProc_Evt1E00004:
+ClassProc_OnCheckClassSp:
 	ld XBC, (xsp + 0x0112)
 	ld xde, xwa
 	cp xwa, 0xffffffff
@@ -9320,7 +9320,7 @@ TitleWidget_Paint_DrawText:
 	cp	xde, 4294967295
 	jr	nz, TitleWidget_Paint_CheckState
 	jrl	ClassProc_ReturnZeroJmp
-ClassProc_Evt1E00005:
+ClassProc_OnGetPropStringEx:
 	ld	xwa, (xiz+16)
 	push	xwa
 	push	xde
@@ -9370,7 +9370,7 @@ TitleWidget_Confirm:
 	ld	xde, (xsp+274)
 	calr	ClassProc
 	jrl	ClassProc_ReturnZeroJmp
-ClassProc_Evt1E00006:
+ClassProc_OnGetPropCountSp:
 	ld	xbc, EVT_GET_PROP_STRING
 	call	SendEvent
 	lda	xwa, (xsp+146)
@@ -9379,7 +9379,7 @@ ClassProc_Evt1E00006:
 	inc	4, xsp
 	extz	xhl
 	jrl	ClassProc_ReturnWithStatus
-ClassProc_Evt1E00007:
+ClassProc_OnGetPropNameSp:
 	ld	xbc, (xhl)
 	cp	xbc, 4294967295
 	jr	z, TitleWidget_Confirm_DrawLayout
@@ -9832,12 +9832,12 @@ ModeProc:
 	lda xix, (NakaWidget_ReturnConst_0x1600006:24)
 ; Computed jump: target = NakaWidget_ReturnConst_0x1600006 + ModeProc_Data[i], ModeProc_Data = 16-bit offsets (6 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1e0002b:
-;   0x1e0002b -> ModeProc_Evt1E0002B
-;   0x1e0002c -> ModeProc_Evt1E0002C
-;   0x1e0002d -> ModeProc_Evt1E0002D
-;   0x1e0002e -> ModeProc_Evt1E0002E
-;   0x1e0002f -> ModeProc_Evt1E0002F
-;   0x1e00030 -> ModeProc_Evt1E00030
+;   0x1e0002b -> ModeProc_OnGetModeProc
+;   0x1e0002c -> ModeProc_OnGetModeProcId
+;   0x1e0002d -> ModeProc_OnGetStartTitle
+;   0x1e0002e -> ModeProc_OnGetModeNow
+;   0x1e0002f -> ModeProc_OnGetModeOld
+;   0x1e00030 -> ModeProc_OnGetUserId
 	jp	t, (xix+bc)
 
 NakaWidget_ReturnConst_0x1600006:
@@ -9853,7 +9853,7 @@ NakaWidget_Return:
 	add xhl, xhl
 	add xhl, (xsp + 4)
 	jrl GetMode_Epilogue10
-ModeProc_Evt1E0002B:
+ModeProc_OnGetModeProc:
 	ld wa, (xsp + 8)
 	extz xwa
 	ld xbc, xwa
@@ -9866,7 +9866,7 @@ ModeProc_Evt1E0002B:
 	ld xde, 0:i3
 	call SendEvent
 	jrl GetMode_Epilogue10
-ModeProc_Evt1E0002C:
+ModeProc_OnGetModeProcId:
 	ld wa, (xsp + 8)
 	extz xwa
 	ld xbc, xwa
@@ -9876,7 +9876,7 @@ ModeProc_Evt1E0002C:
 	add xbc, (xsp + 4)
 	ld xhl, (xbc)
 	jrl GetMode_Epilogue10
-ModeProc_Evt1E0002D:
+ModeProc_OnGetStartTitle:
 	ld wa, (xsp + 8)
 	extz xwa
 	ld xbc, xwa
@@ -9886,7 +9886,7 @@ ModeProc_Evt1E0002D:
 	add xbc, (xsp + 4)
 	ld xhl, (xbc + 4)
 	jrl GetMode_Epilogue10
-ModeProc_Evt1E00030:
+ModeProc_OnGetUserId:
 	ld wa, (xsp + 8)
 	extz xwa
 	ld xbc, xwa
@@ -9908,10 +9908,10 @@ ObjectEnum_Init:
 	add xbc, (xsp + 4)
 	ld xhl, (xbc + 10)
 	jrl GetMode_Epilogue10
-ModeProc_Evt1E0002E:
+ModeProc_OnGetModeNow:
 	ld xhl, (MODE_NOW:24)
 	jrl GetMode_Epilogue10
-ModeProc_Evt1E0002F:
+ModeProc_OnGetModeOld:
 	ld xhl, (MODE_OLD:24)
 	jrl GetMode_Epilogue10
 
@@ -10251,12 +10251,12 @@ TitleProc:
 	lda xix, (TitleProc_EventDispatch:24)
 ; Computed jump: target = TitleProc_EventDispatch + TitleProc_Str_j[i], TitleProc_Str_j = 16-bit offsets (6 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1e00030:
-;   0x1e00030 -> TitleProc_Evt1E00030
-;   0x1e00031 -> TitleProc_Evt1E00031
-;   0x1e00032 -> TitleProc_Evt1E00032
-;   0x1e00033 -> TitleProc_Evt1E00033
-;   0x1e00034 -> TitleProc_Evt1E00034
-;   0x1e00035 -> TitleProc_Evt1E00035
+;   0x1e00030 -> TitleProc_OnGetUserId
+;   0x1e00031 -> TitleProc_OnGetTitleProc
+;   0x1e00032 -> TitleProc_OnGetTitleProcId
+;   0x1e00033 -> TitleProc_OnGetStartScreen
+;   0x1e00034 -> TitleProc_OnGetTitleNow
+;   0x1e00035 -> TitleProc_OnGetTitleOld
 	jp	t, (xix+de)
 
 ; TitleProc event dispatch
@@ -10271,7 +10271,7 @@ EventDispatch_ScanLoop:
 	call	Math_MultiplyAccumulate
 	add	xhl, (xsp+4)
 	jrl	TitleFunc_Epilogue34
-TitleProc_Evt1E00031:
+TitleProc_OnGetTitleProc:
 	ld	wa, (xsp+22)
 	extz	xwa
 	ld	xbc, 22
@@ -10282,7 +10282,7 @@ TitleProc_Evt1E00031:
 	ld	xde, 0:i3
 	call	SendEvent
 	jrl	TitleFunc_Epilogue34
-TitleProc_Evt1E00032:
+TitleProc_OnGetTitleProcId:
 	ld	wa, (xsp+22)
 	extz	xwa
 	ld	xbc, 22
@@ -10290,7 +10290,7 @@ TitleProc_Evt1E00032:
 	add	xhl, (xsp+4)
 	ld	xhl, (xhl)
 	jrl	TitleFunc_Epilogue34
-TitleProc_Evt1E00033:
+TitleProc_OnGetStartScreen:
 	ld	wa, (xsp+22)
 	extz	xwa
 	ld	xbc, 22
@@ -10298,7 +10298,7 @@ TitleProc_Evt1E00033:
 	add	xhl, (xsp+4)
 	ld	xhl, (xhl+4)
 	jrl	TitleFunc_Epilogue34
-TitleProc_Evt1E00030:
+TitleProc_OnGetUserId:
 	ld	wa, (xsp+22)
 	extz	xwa
 	ld	xbc, 22
@@ -10322,12 +10322,12 @@ EventDispatch_Select:
 
 	jrl	TitleFunc_Epilogue34	; jrl TitleFunc_Epilogue34 (v7 displacement)
 
-TitleProc_Evt1E00034:
+TitleProc_OnGetTitleNow:
 	ld xhl, (TITLE_NOW:24)
 
 	jrl	TitleFunc_Epilogue34	; jrl TitleFunc_Epilogue34 (v7 displacement)
 
-TitleProc_Evt1E00035:
+TitleProc_OnGetTitleOld:
 	ld xhl, (TITLE_OLD:24)
 
 	jrl	TitleFunc_Epilogue34	; jrl TitleFunc_Epilogue34 (v7 displacement)
@@ -11401,8 +11401,8 @@ ViewableProc:
 	lda xix, (Viewable_GetClassProc:24)
 ; Computed jump: target = Viewable_GetClassProc + ViewableProc_Data[i], ViewableProc_Data = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c0000b:
-;   0x1c0000b -> ViewableProc_Evt1C0000B
-;   0x1c0000c -> ViewableProc_Evt1C0000C
+;   0x1c0000b -> ViewableProc_OnPaint
+;   0x1c0000c -> ViewableProc_OnRepaint
 ;   0x1c0000d -> Viewable_ReturnZero
 ;   0x1c0000e -> Viewable_ReturnZero
 ;   0x1c0000f -> Viewable_ReturnZero
@@ -11443,7 +11443,7 @@ Viewable_InitClose_ToChild:
 	ld xbc, (xsp + 20)
 	ld xde, (xsp + 16)
 	jr Viewable_Show_DispatchTail
-ViewableProc_Evt1C0000B:
+ViewableProc_OnPaint:
 	ld xwa, xiz
 	calr GetVisible
 	cp hl, 0:i3
@@ -11470,7 +11470,7 @@ Viewable_Show_DispatchChild:
 	ld xbc, (xsp + 20)
 	ld xde, (xsp + 16)
 	jr Viewable_Show_DispatchTail
-ViewableProc_Evt1C0000C:
+ViewableProc_OnRepaint:
 	ld xwa, xiz
 	calr GetVisible
 	cp hl, 0:i3
@@ -17615,18 +17615,18 @@ CommonIDProc:
 	add xde, xde
 	add xde, CommonIDProc_Data
 	ld de, (xde)
-	lda xix, (CommonIDProc_Evt1E0000D:24)
-; Computed jump: target = CommonIDProc_Evt1E0000D + CommonIDProc_Data[i], CommonIDProc_Data = 16-bit offsets (7 words, read
+	lda xix, (CommonIDProc_OnGetPropDataSp:24)
+; Computed jump: target = CommonIDProc_OnGetPropDataSp + CommonIDProc_Data[i], CommonIDProc_Data = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1e00008:
 ;   0x1e00008 -> CommonIDProc_ReturnZero
-;   0x1e00009 -> CommonIDProc_Evt1E00009
-;   0x1e0000a -> CommonIDProc_Evt1E0000A
-;   0x1e0000b -> CommonIDProc_Evt1E00009
-;   0x1e0000c -> CommonIDProc_Evt1E0000C
-;   0x1e0000d -> CommonIDProc_Evt1E0000D
-;   0x1e0000e -> CommonIDProc_Evt1E0000E
+;   0x1e00009 -> CommonIDProc_OnDumpPropertyEx
+;   0x1e0000a -> CommonIDProc_OnDumpPointerEx
+;   0x1e0000b -> CommonIDProc_OnDumpPropertyEx
+;   0x1e0000c -> CommonIDProc_OnSetPropertyEx
+;   0x1e0000d -> CommonIDProc_OnGetPropDataSp
+;   0x1e0000e -> CommonIDProc_OnGetPropDataCountSp
 	jp	t, (xix+de)
-CommonIDProc_Evt1E0000D:
+CommonIDProc_OnGetPropDataSp:
 	ld	xwa, (xsp+16)
 	ld	(xsp+4), xwa
 	ld	xbc, (xwa+8)
@@ -17636,18 +17636,18 @@ CommonIDProc_Evt1E0000D:
 	ld	xwa, (xbc)
 	push	xwa
 	jr	CommonIDProc_Join
-CommonIDProc_Evt1E0000E:
+CommonIDProc_OnGetPropDataCountSp:
 	ld	hl, (xbc)
 	extz	xhl
 	jrl	CommonIDProc_Epilogue
 CommonIDProc_CheckAvail:
 	ld	xhl, 1:i3
 	jrl	CommonIDProc_Epilogue
-CommonIDProc_Evt1E0000A:
+CommonIDProc_OnDumpPointerEx:
 	ld	xwa, (xsp+16)
 	ld	(xsp+4), xwa
-	pushw CommonIDProc_Evt1E0000A_Data@hi16
-	pushw CommonIDProc_Evt1E0000A_Data@lo16
+	pushw CommonIDProc_OnDumpPointerEx_Data@hi16
+	pushw CommonIDProc_OnDumpPointerEx_Data@lo16
 CommonIDProc_Join:
 	ld	xwa, (xsp+8)
 	ld	xwa, (xwa+4)
@@ -17655,7 +17655,7 @@ CommonIDProc_Join:
 	call	Free_Compare2
 	inc	8, xsp
 	jr	CommonIDProc_ReturnZero
-CommonIDProc_Evt1E00009:
+CommonIDProc_OnDumpPropertyEx:
 	ld	xwa, (xsp+16)
 	ld	(xsp+4), xwa
 	pushw 10
@@ -17700,7 +17700,7 @@ CommonIDProc_SearchLoop_Check:
 CommonIDProc_ReturnZero:
 	ld xhl, 0:i3
 	jrl CommonIDProc_Epilogue
-CommonIDProc_Evt1E0000C:
+CommonIDProc_OnSetPropertyEx:
 	ld xwa, 0:i3
 	ld (xsp + 8), xwa
 	ld xwa, (xsp + 16)
