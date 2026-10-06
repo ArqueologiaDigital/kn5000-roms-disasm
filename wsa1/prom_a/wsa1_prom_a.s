@@ -25801,6 +25801,7 @@ ZeroInitData_F8E773:   ; 9 B, all zero -- LDIR source named by the
 ;   and 0xF8E7A9 is chosen only to mirror it.  The bytes are identical either
 ;   way; only the label moves.
 ; ---------------------------------------------------------------------
+; census: stale -- nothing in the image reads it, and 5 of its 8 targets are mid-instruction, where no live entry can land.
 AddrTable_F8E77C:   ; 8 entries
 	.long 0x00f8e68b   ; F8E77C  [0]
 	.long 0x00f8e67a   ; F8E780  [1]
@@ -25814,6 +25815,7 @@ AddrTable_F8E77C:   ; 8 entries
 ; `jr nz / ret / reti` closing the init routine at 0xF8E74B, then the
 ; nine-byte LDIR source that follows it.  Left as bytes on purpose: framing
 ; these four as instructions would assert a control path nothing reaches.
+; census: stale -- AddrTable_F8E7A9 below: nothing in the image reads it, and 2 of its 9 targets are mid-instruction.
 	.byte 0x6e, 0xf7, 0x0e, 0x07                         ; F8E79C
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 ; F8E7A0
 AddrTable_F8E7A9:   ; 9 entries; ends exactly where the 0x0E pad begins
@@ -77947,6 +77949,7 @@ MidiOut_PartRecordPtrs_CC51General6:
 ; =====================================================================
 ; The stale vector: each slot holds the live slot's target (ParamModule_PhaseVector) minus how far that
 ; routine moved -- 0x400, the distance between the copies, for slots 0 and 2.
+; census: stale -- nothing reaches this copy (no directory slot names it); 4 of its 5 targets are now mid-instruction.
 ParamModule_PhaseVector_StaleCopy:
 	jp	ParamModule_BootPhase0 - 0x400                                ; FAA000  1b 2a a4 fa
 	jp	ParamModule_BootPhase1_MemoryIntact - 0x439                                ; FAA004  1b b7 a4 fa

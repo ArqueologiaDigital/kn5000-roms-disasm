@@ -2729,6 +2729,7 @@ sub_F002F4_Return:
 ;          2026-10-02).  A 32-bit 0x00F00380 (slot 16) also sits at 0xF513FB,
 ;          inside RecordArray_F511DD's records.
 ; --------------------------------------------------------------------------
+; census: stale -- read only inside the orphaned older-build PITCH module (sub_F00D65); its 0xFDB10E slots are that build's prom_a stub, mid-instruction here (notes/FINDINGS-prom_b-f00c4d-orphan-cluster.md).
 PtrTable_F00340:
 	.long sub_F01200	; F00340  [  0]
 	.long OldCopy_SoftKeyCol3_SoundEditPitchEnvelope2	; F00344  [  1]
@@ -3106,6 +3107,7 @@ Data_F00759:
 ;   about this span, it is a property of the SPAN and not of one table, and
 ;   whoever picks it up should treat all three together.
 ; --------------------------------------------------------------------------
+; census: stale -- nothing in the image reads it; its sentinel 0xFDB10E is the older build's stub (PtrTable_F00340), and 6 of its 21 distinct targets land on instruction starts, chance level.
 PtrTable_F00762:
 	.long 0x00FDB10E	; F00762  [  0]  absent (sentinel)
 	.long 0x00FE28B2	; F00766  [  1]
@@ -3556,6 +3558,7 @@ Data_F00B48:
 ; ⚠ WHAT the slots select is NOT decoded -- see the ANOMALY in the
 ;   generator before reading any meaning into a target address.
 ; --------------------------------------------------------------------------
+; census: stale -- the orphaned older-build module's array: its targets are that build's prom_a (notes/FINDINGS-prom_b-f00c4d-orphan-cluster.md, N2).
 	.byte	0x00	; F00C4D  high byte of the pointer at 0xF00C4A
 PtrArray_F00C4E:
 	.long	0x00FD8E21	; F00C4E
@@ -4680,6 +4683,7 @@ sub_F014CE_Skip:
 ;   is deferred -- and see the ANOMALY (N2) before assuming a target is a
 ;   routine in the prom_a next door.
 ; --------------------------------------------------------------------------
+; census: stale -- the same module's 196-slot array; its targets are that build's prom_a (FINDINGS N2: 58 of 155 on an instruction start, and no constant offset fixes it).
 PtrArray_F014EE:
 	.long	0x00FDD45D	; F014EE	record 0
 	.long	0x00FDD46E	; F014F2
@@ -28569,6 +28573,7 @@ sub_F0EC4A_Join5:
 ;   the address an OLDER BUILD gave one display-list handler -- see the
 ;   banner above.  Spelled `<live handler> - 0x2300N` below.
 ; --------------------------------------------------------------------------
+; census: stale -- each entry is an older build's handler address (live - 0x23000 / - 0x23001); nothing reads it (notes/promb-2026-09-25/stale_dl_tables_f0ed50.py).
 OldBuild_DLHandlerTables_Tail:
 	.long	DLHandler_Ignore - 0x23000	; F0ED50  [0] -> 0xF0EAEB
 	.long	DLHandler_Ignore - 0x23000	; F0ED54  [1] -> 0xF0EAEB
@@ -28667,6 +28672,7 @@ OldBuild_ValueGlyph_Quantiser:
 ;   object); entries 4-28 name 0xF0F000 onwards, which this build filled
 ;   with other bytes -- spelled `OldBuild_ValueGlyph_Bitmaps + 72 k` below.
 ; --------------------------------------------------------------------------
+; census: stale -- ValueGlyph_Table - 0x23001, the older build's glyph pointers; nothing in this build indexes it.
 OldBuild_ValueGlyph_Table:
 	.long	OldBuild_ValueGlyph_Bitmaps	; F0EE6C  [0] -> OldBuild_ValueGlyph_Bitmaps
 	.long	OldBuild_ValueGlyph_Bitmaps + 0x48	; F0EE70  [1] -> 0xF0EF28
@@ -90100,6 +90106,7 @@ T_Msg0716_EventPartPostCC78_AllSoundOff:	jp Msg0716_EventPartPostCC78_AllSoundOf
 ; of `ld XIY,Msg0716_HandlerTables` at 0xFC0425, 0xFC043D the second byte of the `calr` at 0xFC043C, 0xFC0452-0xFC0454
 ; the last three bytes of `ld XIZ,...` at 0xFC0450.  No `call`/`jp` in either image names these five slots: stale
 ; entries, left as numbers.
+; census: stale -- T_F41184, T_F4118C and T_F41190-T_F41198 (the live slots between them still count as live).
 T_F41184:	jp 0xFC0427  ; -> prom_a 0x40427
 T_Msg0716_DispatchIndex_Entry:	jp Msg0716_DispatchIndex_Entry  ; -> prom_a 0x4043C
 T_F4118C:	jp 0xFC043D  ; -> prom_a 0x4043D
@@ -92110,6 +92117,7 @@ T_F42FAC:	jp sub_FDA252  ; -> prom_a 0x5A252   x2
 ;   build -- rather than under a code label; the symboliser's
 ;   `DL_Configure_F19C39_Code_Entry`, a label inside a record's operand bytes,
 ;   is removed.
+; census: stale -- the thirteen slots below.
 T_F42FD0:	jp DL_CombinationNaming_F19BE5 + 0x33  ; -> prom_b 0x19C18
 T_F42FD4:	jp DL_CombinationNaming_F19BE5 + 0x34  ; -> prom_b 0x19C19
 T_F42FD8:	jp DL_Configure_F19C39 + 0x5B  ; -> prom_b 0x19C94

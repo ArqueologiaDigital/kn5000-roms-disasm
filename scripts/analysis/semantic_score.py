@@ -23,7 +23,8 @@ QUESTION IT ANSWERS
               until each case is understood.
   entry   L2  jump/call tables whose every code entry lands on a labelled instruction and is spelled
               symbolically / all tables.  Source: the newest COMMITTED docs/coverage/dispatch-census-*.json
-              (framed tables and unframed runs).
+              (framed tables and unframed runs).  A table the census classes STALE (declared `census: stale`
+              in the source and accepted by its checks, 2026-10-06) is not counted as not used.
   fields  L3  C struct/union members with a meaningful name / all declared members, in every *.c / *.h of
               the image trees.  A name is a placeholder when nothing is left once index tokens (3, w0, v80,
               0a38) and generic words (str, ptr, field, unk, pad, reserved, data, ...) are dropped:

@@ -857,6 +857,14 @@ that we can have strong evidence whenever we reach true full code-coverage"*.
 4. **What a full-coverage claim needs.** Every image shows NOT = 0, newT = newT(x) = spellT = 0, U-NOT = 0
    and D-unres = 0 on a committed snapshot. The spec's other L1/L2 measurements must also hold. The claim names
    the snapshot file and its commit.
+   **Stale tables** (added 2026-10-06; rule in `census.py`'s docstring, STALE) are not blockers, but the claim
+   must name them too. A stale table is not this build's entry points: an older build's table left in the image,
+   or thunks whose targets moved. It counts as stale only when:
+   - its source declares it with `; census: stale -- <why>`;
+   - one of its entries lands where no live pointer can;
+   - its distinct targets hit instruction starts no more often than chance.
+   Every stale group is listed in each snapshot. A rise in `stale` is reported as ROSE, like any other rise,
+   so each new declaration has to be explained in its commit message.
 5. **The limits are part of the evidence.** The census is a lower bound, and its README lists what it
    cannot see. A table found by hand that the census misses is a detector gap: widen the detector or list
    the table in it in the same commit, so the census never knows less than the people do.
@@ -884,6 +892,18 @@ that we can have strong evidence whenever we reach true full code-coverage"*.
    That meets the census half of the full-coverage criterion for KN5000 only. The spec's other L1/L2
    measurements still have to be shown before anyone claims it. The census work left is WSA1: prom_a
    NOT 3 / newT 12, prom_b NOT 7 / newT 44 / newT(x) 179, prom_c NOT 1 / newT 5.
+   **Updated again (`dispatch-census-2026-10-06-25`).** Every WSA1 table that was still not used turned out to be
+   documented as dead or older-build, except prom_b slot T_F42250. That slot is module 18's phase vector,
+   labelled in -24. The dead ones:
+   - prom_a: AddrTable_F8E77C / _F8E7A9 and ParamModule_PhaseVector_StaleCopy;
+   - prom_b: the orphaned older-build PITCH module's tables, the OldBuild_* display-list data, and two runs of
+     stale directory slots;
+   - prom_c: UNREFERENCED_TRAMPOLINES.
+   They are now declared `census: stale` (`wsa1/notes/census_stale_markers.py`), and all 12 groups pass the
+   checks. The stale columns read prom_a 3 tables / 13 targets, prom_b 7 / 223 (the routine directory counts as
+   one of the 7, for its 18 stale slots) and prom_c 1 / 5. With that, all eleven images show NOT = newT = newT(x)
+   = spellT = U-NOT = U-newT = D-unres = 0. The census half of the criterion holds for both models, with those
+   stale tables named. The spec's other L1/L2 measurements are still unshown.
 
 ### Semantic Score Badges
 

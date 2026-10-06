@@ -226,6 +226,7 @@ IRQ_INTTC3:				; vector 0x80
 ; these are leftovers whose targets moved.  Each operand is written as the nearest
 ; label + offset, which is where it lands now, with the address alongside.
 ; ------------------------------------------------------------------------------
+; census: stale -- unreferenced, and every target is mid-instruction (above).
 UNREFERENCED_TRAMPOLINES:
 	ei 0x07
 	call Kernel_SemaWait+21			; 0xF98610

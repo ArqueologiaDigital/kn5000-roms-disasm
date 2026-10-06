@@ -64,12 +64,37 @@ BLOCKERS
   spelled numerically ("numeric" when the target is labelled code: spelling only)
   or its target class is not `code`.  A table is USED iff nothing blocks.
 
+STALE (added 2026-10-06): tables, or directory slots, that are not this build's entry points
+  Some tables are dead: an older build's table left in the image, or stale linker thunks whose
+  targets moved.  The WSA1 examples are prom_b's older PITCH-editor module and prom_a's stale
+  phase-vector copy.  Their targets land mid-instruction or in data, so no label can make them
+  used, and a label there would be wrong.  A blocking entry is STALE (it no longer blocks) only
+  when all three of these hold:
+    1. DECLARED.  The nearest full-line comment block above the entry's source line holds a line
+       `; census: stale -- <why>`.  Lines that are neither comments nor blank may lie between,
+       at most STALE_REACH of them.  For a framed table the first entry's line decides for the
+       whole table.  For the prom_b routine directory (one table of 2,002 slots) each slot is
+       decided by its own line.
+    2. IMPOSSIBLE FOR A LIVE TABLE.  At least one entry of the marker's group lands where no
+       live pointer can: mid-instruction, data, text or fill.
+    3. NOT BETTER THAN CHANCE.  For each image holding a blocking entry of the group, count the
+       distinct target values of the group that lie in instruction territory: n of them, k on an
+       instruction start.  Let p be the image's instruction-start density around those targets
+       (starts / instruction bytes, +-256 B).  The binomial tail P(X >= k | n, p) must be at least
+       STALE_ALPHA.  A live table puts every entry on a start: 7 entries at p = 0.4 already give
+       P < 0.002.
+  A group failing 2 or 3 keeps blocking, and the report lists the marker as REJECTED with the
+  reason.  Stale tables and their targets are counted in their own columns (stale, staleT) and
+  listed one by one in every snapshot.  They leave NOT; they never disappear.
+
 RUN (from the repository root; `make dispatch-census` does the first and the --snapshot step)
   python3 scripts/analysis/dispatch_table_census/build_maps.py          # once per tree state (~2 min)
   python3 scripts/analysis/dispatch_table_census/census.py --report     # the per-image table
   python3 scripts/analysis/dispatch_table_census/census.py --top        # summary + top-10 framed tables per image
   python3 scripts/analysis/dispatch_table_census/census.py --list KEY   # every not-used framed table of one image
   python3 scripts/analysis/dispatch_table_census/census.py --unresolved KEY   # D sites it could not read, and why
+  python3 scripts/analysis/dispatch_table_census/census.py --stale KEY        # every stale group of one image, entries and test
+  python3 scripts/analysis/dispatch_table_census/census.py --selftest        # the STALE checks reject a live-shaped group
   python3 scripts/analysis/dispatch_table_census/census.py --snapshot docs/coverage
         # writes dispatch-census-<date>-NN.txt (report + top) and .json (per-image summary, every not-used table);
         # NN numbers the day's snapshots, so a committed one is never overwritten
@@ -244,13 +269,141 @@ def mk_entry(key, val, spelled_numeric, operand):
     return dict(val=val, owner=ok_, tcls=tcls, sub=sub, num=bool(spelled_numeric), op=operand)
 
 
-def blocker(t, e):
+def blocker(t, e, honour_stale=True):
     """None if the entry does not block, else its reason."""
+    if honour_stale and e.get("stale"):
+        return None                      # declared and checked stale: listed, not blocking
     if not e.get("jump") and e["tcls"] not in CODEISH:
         return None                      # a data pointer in a code table: not an entry point
     if e["tcls"] == "code":
         return "numeric" if e["num"] else None
     return e["tcls"] + ("/num" if e["num"] else "")
+
+
+STALE_MARK = re.compile(r'^\s*;.*\bcensus:\s*stale\b')
+STALE_REACH = 32           # non-comment lines allowed between the marker's block and the entry line
+STALE_ALPHA = 0.001        # a group whose instruction-start hits are this unlikely by chance is not stale
+_MIRROR = {}
+_SRC = {}
+
+
+def src_lines(key, rel):
+    if not _MIRROR:
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("drc", os.path.join(REPO, "scripts/analysis/data_range_census.py"))
+        drc = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(drc)
+        _MIRROR.update({img["key"]: img["mirror"] for img in drc.IMAGES})
+    p = os.path.join(REPO, _MIRROR[key], rel)
+    if p not in _SRC:
+        _SRC[p] = open(p, "rb").read().decode("latin-1").split("\n")
+    return _SRC[p]
+
+
+def stale_marker(key, rel, li):
+    """'file:line' of the `census: stale` line in the nearest full-line comment block above source line li."""
+    L = src_lines(key, rel)
+    j, steps = li - 1, 0
+    while j >= 0 and not L[j].lstrip().startswith(";"):
+        j -= 1
+        steps += 1
+        if steps > STALE_REACH:
+            return None
+    while j >= 0 and L[j].lstrip().startswith(";"):
+        if STALE_MARK.match(L[j]):
+            return "%s:%d" % (rel, j + 1)
+        j -= 1
+    return None
+
+
+def binom_tail(k, n, p):
+    import math
+    return sum(math.comb(n, i) * p ** i * (1 - p) ** (n - i) for i in range(k, n + 1))
+
+
+def start_density(key, lo, hi):
+    """instruction starts per instruction byte of image key in [lo, hi)."""
+    m = load(key)
+    if "starts_sorted" not in m:
+        m["starts_sorted"] = sorted(m["starts"])
+    ss = m["starts_sorted"]
+    st = bisect.bisect_left(ss, hi) - bisect.bisect_left(ss, lo)
+    rows, nb = m["rows"], 0
+    i = max(bisect.bisect_right(m["los"], lo) - 1, 0)
+    while i < len(rows) and rows[i][0] < hi:
+        r = rows[i]
+        if is_insn_row(key, r):
+            nb += max(0, min(r[1], hi) - max(r[0], lo))
+        i += 1
+    return st / nb if nb else 0.0
+
+
+def stale_test(es, blk):
+    """(ok, why, stats) for one marker group: es = every entry the marker covers, blk = those that block."""
+    if all(e["tcls"] in INSN_START for e in blk):
+        return False, "no covered entry lands where a live one cannot (all on instruction starts)", {}
+    worst = None
+    for ow in sorted({e["owner"] for e in blk}):
+        vals = {e["val"]: e["tcls"] for e in es if e["owner"] == ow and e["tcls"] in INSN_START | {"midinsn"}}
+        if not vals:
+            continue
+        n, k = len(vals), sum(1 for c in vals.values() if c in INSN_START)
+        p = start_density(ow, min(vals) - 256, max(vals) + 256)
+        P = binom_tail(k, n, p)
+        if worst is None or P < worst["P"]:
+            worst = dict(owner=ow, k=k, n=n, p=round(p, 3), P=P)
+    stats = worst or dict(owner=None, k=0, n=0, p=0.0, P=1.0)
+    if stats["P"] < STALE_ALPHA:
+        return False, "%d of %d distinct targets in %s on instruction starts: better than chance (P = %.2g)" % (
+            stats["k"], stats["n"], stats["owner"], stats["P"]), stats
+    return True, "", stats
+
+
+def assess_stale(key, tabs):
+    """Mark the blocking entries that a `census: stale` marker covers and the group's checks accept."""
+    m = load(key)
+    for t in tabs:
+        groups = collections.defaultdict(list)
+        for e in t["ents"]:
+            r = find(m, e["at"] if t.get("perentry") else t["addr"])
+            mk = stale_marker(key, r[2], r[3]) if r else None
+            if mk:
+                groups[mk].append(e)
+        for mk, es in groups.items():
+            blk = [e for e in es if blocker(t, e, honour_stale=False)]
+            if not blk:
+                continue
+            ok, why, st = stale_test(es, blk)
+            t.setdefault("stale", []).append(dict(marker=mk, entries=len(es), blocking=len(blk), ok=ok, why=why,
+                                                  owner=st["owner"], k=st["k"], n=st["n"], p=st["p"], P=st["P"]))
+            if ok:
+                for e in blk:
+                    e["stale"] = mk
+
+
+def stale_selftest():
+    """The STALE checks on synthetic groups built from prom_a's real map: a live-shaped group must be rejected."""
+    import random
+    m = load("prom_a")
+    rnd = random.Random(20261006)
+    lab = sorted(a for a in m["starts"] if a in m["lab"] and 0xFD0000 <= a < 0xFE0000)
+    mids = [r[0] + 1 for r in m["rows"] if is_insn_row("prom_a", r) and r[1] - r[0] >= 3 and 0xFD0000 <= r[0] < 0xFE0000]
+
+    def ent(a):
+        return dict(val=a, owner="prom_a", tcls=classify("prom_a", a)[0], num=True)
+    live = [ent(a) for a in rnd.sample(lab, 20)] + [ent(rnd.choice(mids))]
+    ok_live = stale_test(live, [e for e in live if e["tcls"] != "code"] + [live[0]])[0]
+    every = sorted(a for r in m["rows"] if 0xFD0000 <= r[0] < 0xFE0000 for a in range(r[0], r[1]))
+    chance = [ent(a) for a in rnd.sample(every, 40)]
+    ok_chance = stale_test(chance, chance)[0]
+    starts = [ent(a) for a in rnd.sample(lab, 5)]
+    ok_starts = stale_test(starts, starts)[0]
+    checks = [("a live-shaped group (20 labelled starts + 1 mid-instruction) is REJECTED", not ok_live),
+              ("40 random addresses of the same window are ACCEPTED", ok_chance),
+              ("a group with every entry on an instruction start is REJECTED (rule 2)", not ok_starts)]
+    for what, good in checks:
+        print("%-4s %s" % ("ok" if good else "FAIL", what))
+    return all(g for _, g in checks)
 
 
 def detect_A(key):
@@ -383,7 +536,7 @@ def detect_J(key):
                 e["at"] = r[0]
                 ents.append(e)
         out.append(dict(kind="J", addr=0xF40000, name="prom_b routine directory",
-                        nwords=n, file="prom_b/wsa1_prom_b.s", ents=ents))
+                        nwords=n, file="prom_b/wsa1_prom_b.s", ents=ents, perentry=True))
     return out
 
 
@@ -653,8 +806,11 @@ def blockers(t):
 
 def summarise(key, res):
     tabs = res[key]["tables"]
-    used = [t for t in tabs if not blockers(t)]
+    stale = [t for t in tabs if not blockers(t) and any(e.get("stale") for e in t["ents"])]
+    used = [t for t in tabs if not blockers(t) and t not in stale]
     notu = [t for t in tabs if blockers(t)]
+    stalet = {(e["owner"], e["val"]) for t in tabs for e in t["ents"] if e.get("stale")}
+    rejected = [(t, g) for t in tabs for g in t.get("stale", ()) if not g["ok"]]
     newp, nump = set(), set()
     reasons = collections.Counter()
     for t in notu:
@@ -664,7 +820,7 @@ def summarise(key, res):
                 continue
             reasons[b] += 1
             (nump if b == "numeric" else newp).add((e["owner"], e["val"]))
-    return dict(n=len(tabs), used=len(used), notu=len(notu),
+    return dict(n=len(tabs), used=len(used), notu=len(notu), stale=len(stale), stalet=stalet, rejected=rejected,
                 newp_same={x for x in newp if x[0] == key},
                 newp_other={x for x in newp if x[0] != key},
                 nump=nump, reasons=reasons, notu_tables=notu)
@@ -672,11 +828,14 @@ def summarise(key, res):
 
 def main():
     args = sys.argv[1:]
+    if "--selftest" in args:
+        sys.exit(0 if stale_selftest() else 1)
     res = {}
     for key in KEYS:
         o_tabs = detect_O(key)
         tabs = detect_A(key) + detect_J(key) + o_tabs + detect_D(key, {t["addr"] for t in o_tabs})
         tabs = [t for t in tabs if t["ents"] and is_code_table(t)]
+        assess_stale(key, tabs)
         un = detect_U(key)
         spans = [(t["addr"], t["addr"] + 4 * t["nwords"]) for t in un]
         un += detect_U(key, stride=8, skip=spans)
@@ -696,6 +855,17 @@ def main():
         key = args[args.index("--unresolved") + 1]
         for where, why in UNRESOLVED_SITES.get(key, []):
             print("%-60s %s" % (where, why))
+        return
+    if "--stale" in args:
+        key = args[args.index("--stale") + 1]
+        for t in res[key]["tables"]:
+            for g in t.get("stale", ()):
+                print("%s 0x%06X %-40s %s  marker %s  covers %d, blocking %d; %s k=%d of n=%d distinct, p=%.3f, P=%.2g%s" % (
+                    t["kind"], t["addr"], t["name"], "STALE" if g["ok"] else "REJECTED", g["marker"], g["entries"],
+                    g["blocking"], g["owner"], g["k"], g["n"], g["p"], g["P"], "" if g["ok"] else "  -- " + g["why"]))
+                for e in t["ents"]:
+                    if e.get("stale") == g["marker"]:
+                        print("     @%06X -> %06X [%s] %-10s op=%s" % (e["at"], e["val"], e["owner"], e["tcls"], e["op"]))
         return
     if "--list" in args:
         key = args[args.index("--list") + 1]
@@ -743,18 +913,29 @@ def top(res):
 
 def report(res):
     """The per-image answer: framed tables (A/J/O) and unframed runs (U) separately."""
-    hdr = ("image", "framed", "used", "NOT", "newT", "newT(x)", "spellT", "U", "U-NOT", "U-newT", "null", "D-unres")
-    print("%-10s %6s %5s %4s %6s %7s %6s | %3s %5s %6s %4s | %7s" % hdr)
+    hdr = ("image", "framed", "used", "NOT", "newT", "newT(x)", "spellT", "stale", "staleT", "U", "U-NOT", "U-newT", "null",
+           "D-unres")
+    print("%-10s %6s %5s %4s %6s %7s %6s %5s %6s | %3s %5s %6s %4s | %7s" % hdr)
     for key in KEYS:
         S = summarise(key, res)
         un = res[key]["unframed"]
         unot = [t for t in un if blockers(t)]
         unew = {(e["owner"], e["val"]) for t in unot for e in t["ents"]
                 if blocker(t, e) and blocker(t, e) != "numeric"}
-        print("%-10s %6d %5d %4d %6d %7d %6d | %3d %5d %6d %4d | %7d" % (
+        print("%-10s %6d %5d %4d %6d %7d %6d %5d %6d | %3d %5d %6d %4d | %7d" % (
             key, S["n"], S["used"], S["notu"], len(S["newp_same"]), len(S["newp_other"]),
-            len(S["nump"]), len(un), len(unot), len(unew), res[key]["null"], res[key].get("d_unresolved", 0)))
+            len(S["nump"]), S["stale"], len(S["stalet"]), len(un), len(unot), len(unew), res[key]["null"],
+            res[key].get("d_unresolved", 0)))
     print("D-unres: `jp t, (xR+rr)` dispatch sites whose base, table or bound the D detector could not read")
+    print("stale / staleT: tables (and their distinct targets) whose only blockers are entries declared")
+    print("  `census: stale` in the source and accepted by the census's checks (docstring, STALE); listed below")
+    print("\nstale groups (declared in the source, checked here; k of n distinct targets on instruction starts):")
+    for key in KEYS:
+        for t in res[key]["tables"]:
+            for g in t.get("stale", ()):
+                print("  %-10s %s 0x%06X %-40s %-8s %-38s blocking=%-3d k=%d/%d p=%.3f P=%.2g%s" % (
+                    key, t["kind"], t["addr"], t["name"][:40], "STALE" if g["ok"] else "REJECTED", g["marker"],
+                    g["blocking"], g["k"], g["n"], g["p"], g["P"], "" if g["ok"] else "  -- " + g["why"]))
     print("\ndistinct new-entry-point targets by blocking class (framed tables, all owners):")
     for key in KEYS:
         S = summarise(key, res)
@@ -780,11 +961,15 @@ def summary_json(res):
             tg = {e["val"] for e in t["ents"] if blocker(t, e)}
             tabs.append(dict(kind=t["kind"], addr="0x%06X" % t["addr"], name=t["name"], entries=t["nwords"],
                              pointers=len(t["ents"]), unused_targets=len(tg), blockers=dict(blockers(t))))
+        stl = [dict(kind=t["kind"], addr="0x%06X" % t["addr"], name=t["name"], marker=g["marker"], ok=g["ok"],
+                    why=g["why"], covered=g["entries"], blocking=g["blocking"], owner=g["owner"], k=g["k"], n=g["n"],
+                    p=g["p"], P=g["P"]) for t in res[key]["tables"] for g in t.get("stale", ())]
         out[key] = dict(framed=S["n"], used=S["used"], not_used=S["notu"], new_targets_same_image=len(S["newp_same"]),
                         new_targets_other_image=len(S["newp_other"]), spelling_only_targets=len(S["nump"]),
                         unframed_runs=len(un), unframed_not_used=len(unot), unframed_new_targets=len(unew),
                         null_control=res[key]["null"], d_unresolved_sites=res[key].get("d_unresolved", 0),
-                        not_used_tables=tabs)
+                        stale_tables=S["stale"], stale_targets=len(S["stalet"]), stale_rejected=len(S["rejected"]),
+                        not_used_tables=tabs, stale_groups=stl)
     return out
 
 
@@ -836,7 +1021,8 @@ def compare(res, old_path):
         if o is None:
             continue
         for f in ("not_used", "new_targets_same_image", "new_targets_other_image", "spelling_only_targets",
-                  "unframed_not_used", "unframed_new_targets", "d_unresolved_sites"):
+                  "unframed_not_used", "unframed_new_targets", "d_unresolved_sites",
+                  "stale_tables", "stale_targets", "stale_rejected"):
             if f not in o:
                 continue
             if n[f] > o[f]:
@@ -845,6 +1031,8 @@ def compare(res, old_path):
             elif n[f] < o[f]:
                 print("fell  %-10s %-26s %d -> %d" % (key, f, o[f], n[f]))
     print("compared with %s: %s" % (old_path, "%d figure(s) ROSE" % rose if rose else "nothing rose"))
+    if any(new[k]["stale_tables"] > old.get(k, {}).get("stale_tables", 0) for k in KEYS):
+        print("  (a stale rise moves tables out of NOT: the commit message must say which, and why they are dead)")
     return 1 if rose else 0
 
 
