@@ -162,7 +162,7 @@ label with the same number, and now read `PromC_PresetBank_Records`.
 > `notes/prom_a_xref.py`'s 22 candidates is still `.incbin`: `0xF98977`.
 
 **What is unknown.** `0xFB6FD1` is the odd one out: it reaches the wait after
-`call sub_FB2877_Nop` — which is a bare `ret` at `0xFB7E9A`, i.e. a stub — and
+`call SysExSession_RepaintProgressIfChanged_Nop` — which is a bare `ret` at `0xFB7E9A`, i.e. a stub — and
 `calr SysExTx_AppendContHeaderIfCont`, whose body (`0xFB7025-0xFB703F`) only calls `SysExTx_AppendAndSendOnF7`, a
 RAM ring-buffer writer. Nothing on that path touches `0xF40EF0`. What transfer
 this site believes is in flight is not established. `INTTC3_LinkDmaDone`'s three

@@ -4076,9 +4076,9 @@ ButtonTable_MeasureInsert_StageNonZero_Nop11:
 ; The slot -> control map is notes/wave7_panel_names_round11.py's CONTROL (variant 2).
 LcdKeyRow5_MeasureInsert_StageNonZero:
 	bit 0x07,W                                           ; F80CE4  c8 33 07
-	jr nz, sub_F80C04_Return                                    ; F80CE7  6e 04
+	jr nz, LcdKeyRow5_MeasureInsert_StageNonZero_Return                                    ; F80CE7  6e 04
 	call T_MeasureInsert_ReturnToStageZero                                        ; F80CE9  1d d0 29 f4
-sub_F80C04_Return:
+LcdKeyRow5_MeasureInsert_StageNonZero_Return:
 	ret                                                  ; F80CED  0e
 ; ButtonTable_MeasureInsert_StageNonZero_Nop13: a bare ret -- ButtonTable_MeasureInsert_StageNonZero slot 0x0D.
 ButtonTable_MeasureInsert_StageNonZero_Nop13:
@@ -6010,8 +6010,8 @@ LCD_ClearLayer2_32Cols10Rows:
 ; Str_End -- three characters for LCD service 6: the reader at 0xF81E42 loads it into XIY with BC = 3 and
 ;          `swi 7`.  Was decoded as `ld XIY,0x0e0e444e`, swallowing the two `ret`s after it.
 Str_End:	.ascii	"END"	; F81E79
-; sub_F81E7C_Nop -- a bare `ret`, the target of prom_b's veneer at 0xF7D009
-sub_F81E7C_Nop:
+; LCD_ClearLayer2_32Cols10Rows_Nop -- a bare `ret`, the target of prom_b's veneer at 0xF7D009
+LCD_ClearLayer2_32Cols10Rows_Nop:
 	ret                                                  ; F81E7C  0e
 	ret                                                  ; F81E7D  0e
 sub_F81E7E:
@@ -33587,7 +33587,7 @@ InstallPainter_C0mbinati0nM0de:
 .LF9163B:
 	m_or_mi8 MB16, UI_RequestBits, 0x01                          ; F9163B  c1 75 20 3e 01
 	m_bit 4, MD16, UI_ScreenFlags                                ; F91640  f1 95 20 cc
-	jr nz, sub_F91678_Join                                    ; F91644  6e 36
+	jr nz, InstallPainter_C0mbinati0nM0de_Join                                    ; F91644  6e 36
 	m_cp_mi8 MB16, CombinationMode_Page, 0x00                          ; F91646  c1 87 26 3f 00
 	jr nz, .LF91667                                      ; F9164B  6e 1a
 	ldw (PanelDial_DownButton:16), 0x0181                              ; F9164D  f1 9b 20 02 81 01
@@ -33597,7 +33597,7 @@ InstallPainter_C0mbinati0nM0de:
 	inc 4,XSP                                            ; F9165D  ef 64
 	ld a, 0x01:opc                                          ; F9165F  21 01
 	call T_Kernel_SemaSignal                             ; F91661  1d 88 2d f4
-	jr sub_F91678_Join                                        ; F91665  68 15
+	jr InstallPainter_C0mbinati0nM0de_Join                                        ; F91665  68 15
 .LF91667:
 	calr PanelDial_BindToPartColumn                                      ; F91667  1e 27 01
 	ld XWA,Draw_C0mbinati0nM0dePage22Sound                                    ; F9166A  40 aa 16 f9 00
@@ -33608,7 +33608,7 @@ InstallPainter_C0mbinati0nM0de:
 ; (sub_F91678 removed 2026-10-04: no code names it and the line above falls through into it -- part of InstallPainter_C0mbinati0nM0de;
 ;  notes/prom_a_stray_label_removal.py)
 	call T_Kernel_SemaSignal                             ; F91678  1d 88 2d f4
-; sub_F91678_Join -- paints the screen whose own text reads "C0MBINATI0N M0DE", "PAGE2/2", "SOUND:"
+; InstallPainter_C0mbinati0nM0de_Join -- paints the screen whose own text reads "C0MBINATI0N M0DE", "PAGE2/2", "SOUND:"
 ;
 ; It reaches the display-list interpreters at 0xF417F0 (A) and 0xF417F4 (B)
 ; 4 time(s); XIY = list start, XIX = list end.  1 of those 4 list(s)
@@ -33643,7 +33643,7 @@ InstallPainter_C0mbinati0nM0de:
 ;    not established is that THIS routine paints it.
 ; Unknown: what this routine is for. Its body contains ZERO display-list calls.
 ; ---------------------------------------------------------------------
-sub_F91678_Join:
+InstallPainter_C0mbinati0nM0de_Join:
 	m_cp_mi8 MB16, CombinationMode_Page, 0x00                          ; F9167C  c1 87 26 3f 00
 	jr nz, .LF91697                                      ; F91681  6e 14
 	ld XWA,C0mbinati0nM0de_RepaintPage1Fields                                    ; F91683  40 f2 1c f9 00
@@ -61484,7 +61484,7 @@ Initial_ExecuteSelected:
 	extz BC                                              ; FA145A  d9 12
 	extz XBC                                             ; FA145C  e9 12
 	cp bc, 0x06:i3                                         ; FA145E  d9 de
-	jr ugt, sub_FA14C2_Join                                         ; FA1460  6b 64
+	jr ugt, Initial_Sequencer_Join                                         ; FA1460  6b 64
 	sll bc, 0x02                                         ; FA1462  d9 ee 02
 	add XBC,Initial_ItemTable                             ; FA1465  e9 c8 6f 14 fa 00
 	ld XBC,(XBC)                                         ; FA146B  a1 21
@@ -61508,7 +61508,7 @@ Initial_Total:   ; entry: jump-table target (Initial_ItemTable[0])
 ; Initial_PartSetting: item 1 PART SETTING (notes/FINDINGS-prom_a-initial.md)
 Initial_PartSetting:   ; entry: named by 1 `.long` operand, first at 0xFA1473
 	call T_PartSettings_ResetToDefault                                        ; FA1499  1d 40 34 f4
-	jr sub_FA14C2_Join                                     ; FA149D  68 27
+	jr Initial_Sequencer_Join                                     ; FA149D  68 27
 ; entry: jump-table target (Initial_ItemTable[2])
 ; Initial_System: item 2 SYSTEM (notes/FINDINGS-prom_a-initial.md)
 Initial_System:   ; entry: named by 1 `.long` operand, first at 0xFA1477
@@ -61516,28 +61516,28 @@ Initial_System:   ; entry: named by 1 `.long` operand, first at 0xFA1477
 	call T_SystemSettings_ResetToDefault                                        ; FA14A3  1d 44 34 f4
 .LFA14A7:
 	calr sub_FA0DCC                                      ; FA14A7  1e 22 f9
-	jr sub_FA14C2_Join                                     ; FA14AA  68 1a
+	jr Initial_Sequencer_Join                                     ; FA14AA  68 1a
 ; entry: jump-table target (Initial_ItemTable[3])
 ; Initial_MidiSetting: item 3 MIDI SETTING (notes/FINDINGS-prom_a-initial.md)
 Initial_MidiSetting:   ; entry: named by 1 `.long` operand, first at 0xFA147B
 	call T_MidiSettings_ResetToDefault                                        ; FA14AC  1d 7c 07 f4
-	jr sub_FA14C2_Join                                     ; FA14B0  68 14
+	jr Initial_Sequencer_Join                                     ; FA14B0  68 14
 ; entry: jump-table target (Initial_ItemTable[4])
 ; Initial_ReMap: item 4 RE-MAP: both remap resets (notes/FINDINGS-prom_a-initial.md)
 Initial_ReMap:   ; entry: named by 1 `.long` operand, first at 0xFA147F
 	call T_SoundRemap_ResetToDefault                                        ; FA14B2  1d 48 10 f4
 	call T_CombiRemap_ResetToDefault                                        ; FA14B6  1d 4c 10 f4
-	jr sub_FA14C2_Join                                     ; FA14BA  68 0a
+	jr Initial_Sequencer_Join                                     ; FA14BA  68 0a
 ; entry: jump-table target (Initial_ItemTable[5])
 ; Initial_DrumsMap: item 5 DRUMS MAP (notes/FINDINGS-prom_a-initial.md)
 Initial_DrumsMap:   ; entry: named by 1 `.long` operand, first at 0xFA1483
 	call T_DrumMap_ResetToDefault                                        ; FA14BC  1d 50 10 f4
-	jr sub_FA14C2_Join                                     ; FA14C0  68 04
+	jr Initial_Sequencer_Join                                     ; FA14C0  68 04
 ; entry: jump-table target (Initial_ItemTable[6])
 ; Initial_Sequencer: item 6 SEQUENCER (notes/FINDINGS-prom_a-initial.md)
 Initial_Sequencer:   ; entry: named by 1 `.long` operand, first at 0xFA1487
 	call T_Sequencer_ResetToDefault                                        ; FA14C2  1d 18 0a f4
-sub_FA14C2_Join:   ; entry: reachable-run entry
+Initial_Sequencer_Join:   ; entry: reachable-run entry
 	m_and_mi8 MB16, UI_RequestBits, 0x6f                         ; FA14C6  c1 75 20 3c 6f
 	ld (UI_StatusCode:16), 0x23                                 ; FA14CB  f1 80 28 00 23
 	m_set 6, MD16, UI_Request_Hi                                ; FA14D0  f1 71 20 be
@@ -79151,7 +79151,7 @@ ParamModule_BootPhase0:
 	ld (0x60f01e:24), 0x7f                             ; FAA86D  f2 1e f0 60 00 7f
 	lda xbc, (ParamNumber_RecordPtrs:24)                 ; FAA873  f2 ea cd fa 31
 	ld (IndexedTable_Base:24), xbc                               ; FAA878  f2 18 f0 60 61
-	calr sub_FAA82A_Nop                                      ; FAA87D  1e 8e 03
+	calr Mode_InitSavedPartBlocks_Nop                                      ; FAA87D  1e 8e 03
 	popw hl                                              ; FAA880  4b
 	ret                                                  ; FAA881  0e
 ; ParamModule_BootPhase2_MemoryLost: module 11's boot phase 2 handler -- ModuleInitDirectory_F82641[11]'s vector 0xFAA400, slot 2
@@ -79598,7 +79598,7 @@ Mode_InitSavedPartBlocks:
 	popw hl                                              ; FAAC0A  4b
 	unlk XIZ                                             ; FAAC0B  ee 0d
 	ret                                                  ; FAAC0D  0e
-sub_FAA82A_Nop:
+Mode_InitSavedPartBlocks_Nop:
 	ret                                                  ; FAAC0E  0e
 ; ParamImage_PostPartRecordAsChangeEvents: For one parameter-image record {id, length, data} with id <= 0x1F posts
 ;   data byte 1, then byte 0, then bytes 2.. as change events {id, i, value, 0xFF} into the 0x2C00 queue.
@@ -86143,16 +86143,16 @@ T_F41F2C_Nop:
 ; --- 0xFAE801-0xFAE802  align (1 bytes) ---
 	.byte 0x00   ; FAE801
 ; --- 0xFAE802-0xFAE822  pointer table (32 bytes) ---
-	.long sub_FAE800_Nop0   ; -> sub_FAE800_Nop0   ; FAE802
-	.long sub_FAE800_Nop1   ; -> sub_FAE800_Nop1   ; FAE806
-	.long sub_FAE800_Nop2   ; -> sub_FAE800_Nop2   ; FAE80A
-	.long sub_FAE800_Nop3   ; -> sub_FAE800_Nop3   ; FAE80E
-	.long sub_FAE800_Nop4   ; -> sub_FAE800_Nop4   ; FAE812
-	.long sub_FAE800_Nop5   ; -> sub_FAE800_Nop5   ; FAE816
-	.long sub_FAE800_Nop5   ; -> sub_FAE800_Nop5   ; FAE81A
-	.long sub_FAE800_Nop5   ; -> sub_FAE800_Nop5   ; FAE81E
+	.long Evt2030_ClassHandlers_Nop0   ; -> Evt2030_ClassHandlers_Nop0   ; FAE802
+	.long Evt2030_ClassHandlers_Nop1   ; -> Evt2030_ClassHandlers_Nop1   ; FAE806
+	.long Evt2030_ClassHandlers_Nop2   ; -> Evt2030_ClassHandlers_Nop2   ; FAE80A
+	.long Evt2030_ClassHandlers_Nop3   ; -> Evt2030_ClassHandlers_Nop3   ; FAE80E
+	.long Evt2030_ClassHandlers_Nop4   ; -> Evt2030_ClassHandlers_Nop4   ; FAE812
+	.long Evt2030_ClassHandlers_Nop5   ; -> Evt2030_ClassHandlers_Nop5   ; FAE816
+	.long Evt2030_ClassHandlers_Nop5   ; -> Evt2030_ClassHandlers_Nop5   ; FAE81A
+	.long Evt2030_ClassHandlers_Nop5   ; -> Evt2030_ClassHandlers_Nop5   ; FAE81E
 ; ---------------------------------------------------------------------
-; sub_FAE800_Nop5 -- arm 5, 6, 7 of the 8-entry jump table at 0xFAE802
+; Evt2030_ClassHandlers_Nop5 -- arm 5, 6, 7 of the 8-entry jump table at 0xFAE802
 ;
 ; Called from: NOTHING -- no instruction in prom_a loads this table, through XIX/XIY.
 ;          Index: -- no reader found --.
@@ -86163,11 +86163,11 @@ T_F41F2C_Nop:
 ; Unknown:  everything.  Nothing loads the table, so nothing
 ;          is known to reach this arm at all.
 ; ---------------------------------------------------------------------
-sub_FAE800_Nop5:   ; entry: pointer-table entry
+Evt2030_ClassHandlers_Nop5:   ; entry: pointer-table entry
 	ret
 	ret
 ; ---------------------------------------------------------------------
-; sub_FAE800_Nop0 -- arm 0 of the 8-entry jump table at 0xFAE802
+; Evt2030_ClassHandlers_Nop0 -- arm 0 of the 8-entry jump table at 0xFAE802
 ;
 ; Called from: NOTHING -- no instruction in prom_a loads this table, through XIX/XIY.
 ;          Index: -- no reader found --.
@@ -86178,10 +86178,10 @@ sub_FAE800_Nop5:   ; entry: pointer-table entry
 ; Unknown:  everything.  Nothing loads the table, so nothing
 ;          is known to reach this arm at all.
 ; ---------------------------------------------------------------------
-sub_FAE800_Nop0:   ; entry: pointer-table entry
+Evt2030_ClassHandlers_Nop0:   ; entry: pointer-table entry
 	ret
 ; ---------------------------------------------------------------------
-; sub_FAE800_Nop1 -- arm 1 of the 8-entry jump table at 0xFAE802
+; Evt2030_ClassHandlers_Nop1 -- arm 1 of the 8-entry jump table at 0xFAE802
 ;
 ; Called from: NOTHING -- no instruction in prom_a loads this table, through XIX/XIY.
 ;          Index: -- no reader found --.
@@ -86192,10 +86192,10 @@ sub_FAE800_Nop0:   ; entry: pointer-table entry
 ; Unknown:  everything.  Nothing loads the table, so nothing
 ;          is known to reach this arm at all.
 ; ---------------------------------------------------------------------
-sub_FAE800_Nop1:   ; entry: pointer-table entry
+Evt2030_ClassHandlers_Nop1:   ; entry: pointer-table entry
 	ret
 ; ---------------------------------------------------------------------
-; sub_FAE800_Nop2 -- arm 2 of the 8-entry jump table at 0xFAE802
+; Evt2030_ClassHandlers_Nop2 -- arm 2 of the 8-entry jump table at 0xFAE802
 ;
 ; Called from: NOTHING -- no instruction in prom_a loads this table, through XIX/XIY.
 ;          Index: -- no reader found --.
@@ -86206,10 +86206,10 @@ sub_FAE800_Nop1:   ; entry: pointer-table entry
 ; Unknown:  everything.  Nothing loads the table, so nothing
 ;          is known to reach this arm at all.
 ; ---------------------------------------------------------------------
-sub_FAE800_Nop2:   ; entry: pointer-table entry
+Evt2030_ClassHandlers_Nop2:   ; entry: pointer-table entry
 	ret
 ; ---------------------------------------------------------------------
-; sub_FAE800_Nop3 -- arm 3 of the 8-entry jump table at 0xFAE802
+; Evt2030_ClassHandlers_Nop3 -- arm 3 of the 8-entry jump table at 0xFAE802
 ;
 ; Called from: NOTHING -- no instruction in prom_a loads this table, through XIX/XIY.
 ;          Index: -- no reader found --.
@@ -86220,10 +86220,10 @@ sub_FAE800_Nop2:   ; entry: pointer-table entry
 ; Unknown:  everything.  Nothing loads the table, so nothing
 ;          is known to reach this arm at all.
 ; ---------------------------------------------------------------------
-sub_FAE800_Nop3:   ; entry: pointer-table entry
+Evt2030_ClassHandlers_Nop3:   ; entry: pointer-table entry
 	ret
 ; ---------------------------------------------------------------------
-; sub_FAE800_Nop4 -- arm 4 of the 8-entry jump table at 0xFAE802
+; Evt2030_ClassHandlers_Nop4 -- arm 4 of the 8-entry jump table at 0xFAE802
 ;
 ; Called from: NOTHING -- no instruction in prom_a loads this table, through XIX/XIY.
 ;          Index: -- no reader found --.
@@ -86234,7 +86234,7 @@ sub_FAE800_Nop3:   ; entry: pointer-table entry
 ; Unknown:  everything.  Nothing loads the table, so nothing
 ;          is known to reach this arm at all.
 ; ---------------------------------------------------------------------
-sub_FAE800_Nop4:   ; entry: pointer-table entry
+Evt2030_ClassHandlers_Nop4:   ; entry: pointer-table entry
 	ret
 T_F41F3C_Nop:
 	ret
@@ -86244,11 +86244,11 @@ T_F41F3C_Nop:
 	.long SeqBuf_PutPitchBendEvent   ; -> SeqBuf_PutPitchBendEvent   ; FAE832
 	.long SeqBuf_PutModulationEvent   ; -> SeqBuf_PutModulationEvent   ; FAE836
 	.long SeqBuf_PutExpressionEvent   ; -> SeqBuf_PutExpressionEvent   ; FAE83A
-	.long sub_FAE829_Nop5   ; -> sub_FAE829_Nop5   ; FAE83E
-	.long sub_FAE829_Nop5   ; -> sub_FAE829_Nop5   ; FAE842
-	.long sub_FAE829_Nop5   ; -> sub_FAE829_Nop5   ; FAE846
+	.long Evt2030_ClassHandlers_Nop6   ; -> Evt2030_ClassHandlers_Nop6   ; FAE83E
+	.long Evt2030_ClassHandlers_Nop6   ; -> Evt2030_ClassHandlers_Nop6   ; FAE842
+	.long Evt2030_ClassHandlers_Nop6   ; -> Evt2030_ClassHandlers_Nop6   ; FAE846
 ; ---------------------------------------------------------------------
-; sub_FAE829_Nop5 -- arm 0, 1, 2 of the 3-entry jump table at 0xFAE83E
+; Evt2030_ClassHandlers_Nop6 -- arm 0, 1, 2 of the 3-entry jump table at 0xFAE83E
 ;
 ; Called from: NOTHING -- no instruction in prom_a loads this table, through XIX/XIY.
 ;          Index: -- no reader found --.
@@ -86259,7 +86259,7 @@ T_F41F3C_Nop:
 ; Unknown:  everything.  Nothing loads the table, so nothing
 ;          is known to reach this arm at all.
 ; ---------------------------------------------------------------------
-sub_FAE829_Nop5:   ; entry: pointer-table entry
+Evt2030_ClassHandlers_Nop6:   ; entry: pointer-table entry
 	ret
 	ret
 T_F41F38_Nop:
@@ -89292,7 +89292,7 @@ PatchList_RecordBytes2B_Ptr:
 ;   as the immediately preceding call, two with it two calls back in the same
 ;   block (0xFB2560, 0xFB275B), three one call deeper inside CombiName_RequestRead /
 ;   SoundGroupName_RequestRead / CombiGroupName_RequestRead.  The fifteenth, 0xFB6FD1, reaches the wait after
-;   `call sub_FB2877_Nop` (which is a bare `ret` at 0xFB7E9A) and `calr SysExTx_AppendContHeaderIfCont`,
+;   `call SysExSession_RepaintProgressIfChanged_Nop` (which is a bare `ret` at 0xFB7E9A) and `calr SysExTx_AppendContHeaderIfCont`,
 ;   and neither of those touches 0xF40EF0 -- so what it is waiting on is NOT
 ;   established.
 ;   And the SOURCE handed to the builder is not always remote flash: the eight
@@ -89426,7 +89426,7 @@ SysExDump_Job0_TotalKeyboard:   ; entry: named by 1 `.long` operand, first at 0x
 	call SysExJob_TotalKeyboard                                      ; FB2099  1d cd 22 fb
 	jr .LFB20BB                                          ; FB209D  68 1c
 SysExDump_Job1_None:   ; entry: named by 1 `.long` operand, first at 0xFB2085
-	call sub_FB209F_Nop                                      ; FB209F  1d e6 22 fb
+	call SysExJob_TotalKeyboard_Nop                                      ; FB209F  1d e6 22 fb
 	jr .LFB20BB                                          ; FB20A3  68 16
 SysExDump_Job2_Sequencer:   ; entry: named by 1 `.long` operand, first at 0xFB2089
 	call SysExJob_Sequencer                                      ; FB20A5  1d e7 22 fb
@@ -89698,7 +89698,7 @@ SysExJob_TotalKeyboard:
 	m_res 3, MD24, 0x60fd40                              ; FB22DF  f2 40 fd 60 b3
 	pop XBC                                              ; FB22E4  59
 	ret                                                  ; FB22E5  0e
-sub_FB209F_Nop:
+SysExJob_TotalKeyboard_Nop:
 	ret                                                  ; FB22E6  0e
 ; SysExJob_Sequencer: SysExXfer_SetJobTotal_Sequencer((0x60FCE8)), SysExDump_SendSequencer.
 SysExJob_Sequencer:
@@ -90331,7 +90331,7 @@ SysExSession_DispatchCommand:
 	inc 6,XSP                                            ; FB2885  ef 66
 	cp a, 0x00:i3                                          ; FB2887  c9 d8
 	jr nz, .LFB28BC                                      ; FB2889  6e 31
-	call sub_FB2877_Nop                                      ; FB288B  1d 9a 7e fb
+	call SysExSession_RepaintProgressIfChanged_Nop                                      ; FB288B  1d 9a 7e fb
 	ld xbc, (0x60fcd8:24)                               ; FB288F  e2 d8 fc 60 21
 	ld H,(XBC)                                           ; FB2894  81 26
 	cp H,0x22                                            ; FB2896  ce cf 22
@@ -90545,13 +90545,13 @@ SysExSession_RecvStub0F:
 	inc 6,XSP                                            ; FB2A88  ef 66
 	cp a, 0x00:i3                                          ; FB2A8A  c9 d8
 	jr nz, .LFB2AAB                                      ; FB2A8C  6e 1d
-	call sub_FB28BE_Nop5                                      ; FB2A8E  1d e3 7e fb
+	call SysExSession_OnAbort_Sound_Nop5                                      ; FB2A8E  1d e3 7e fb
 	lda xbc, (0x60fd08:24)                               ; FB2A92  f2 08 fd 60 31
 	push XBC                                             ; FB2A97  39
-	call sub_FB28BE_Nop                                      ; FB2A98  1d 3d 75 fb
+	call SysExXfer_SetJobTotal_Sound_Nop                                      ; FB2A98  1d 3d 75 fb
 	lda xbc, (0x60fd18:24)                               ; FB2A9C  f2 18 fd 60 31
 	push XBC                                             ; FB2AA1  39
-	call sub_FB28BE_Nop2                                      ; FB2AA2  1d 6c 76 fb
+	call SysExXfer_SetPart_SoundBlock_Nop2                                      ; FB2AA2  1d 6c 76 fb
 	calr SysExSession_RecvBody_Stub0F                                      ; FB2AA6  1e c9 02
 	jr .LFB2ABB                                          ; FB2AA9  68 10
 .LFB2AAB:
@@ -90574,7 +90574,7 @@ SysExSession_RecvStub10:
 	jr nz, .LFB2AE2                                      ; FB2AD0  6e 10
 	lda xbc, (0x60fd18:24)                               ; FB2AD2  f2 18 fd 60 31
 	push XBC                                             ; FB2AD7  39
-	call sub_FB28BE_Nop3                                      ; FB2AD8  1d 6d 76 fb
+	call SysExXfer_SetPart_SoundBlock_Nop3                                      ; FB2AD8  1d 6d 76 fb
 	calr SysExSession_RecvBody_Stub10                                      ; FB2ADC  1e cd 02
 	pop XIY                                              ; FB2ADF  5d
 	jr .LFB2AF4                                          ; FB2AE0  68 12
@@ -90598,7 +90598,7 @@ SysExSession_RecvStub11:
 	jr nz, .LFB2B1D                                      ; FB2B07  6e 14
 	lda xbc, (0x60fd18:24)                               ; FB2B09  f2 18 fd 60 31
 	push XBC                                             ; FB2B0E  39
-	call sub_FB28BE_Nop4                                      ; FB2B0F  1d 6e 76 fb
+	call SysExXfer_SetPart_SoundBlock_Nop4                                      ; FB2B0F  1d 6e 76 fb
 	call SysExRx_SetRunTimeSize                                      ; FB2B13  1d 1a 74 fb
 	calr SysExSession_RecvBody_Stub11                                      ; FB2B17  1e cc 02
 	pop XIY                                              ; FB2B1A  5d
@@ -91465,7 +91465,7 @@ SysExSession_AbortStep_Sound:
 	call SysExSession_OnAbort_Sound                                      ; FB327D  1d d2 7e fb
 	ret                                                  ; FB3281  0e
 SysExSession_AbortStep_Stub:
-	call sub_FB3251_Nop                                      ; FB3282  1d e4 7e fb
+	call SysExSession_OnAbort_Sound_Nop                                      ; FB3282  1d e4 7e fb
 	ret                                                  ; FB3286  0e
 SysExSession_AbortStep_Sequencer:
 	call SysExSession_OnAbort_Sequencer                                      ; FB3287  1d e5 7e fb
@@ -92470,13 +92470,13 @@ SysExParam_SetMidiMultipleMessagesOutput:
 	ld W,(XBC+0x09)                                      ; FB3B1A  89 09 20
 	pop XIY                                              ; FB3B1D  5d
 	cp W,A                                               ; FB3B1E  c9 f0
-	jrl ugt, sub_FB3B8C_Skip                                  ; FB3B20  7b a6 00
+	jrl ugt, SysExParam_SetMidiMultipleMessagesOutput_Skip                                  ; FB3B20  7b a6 00
 	ld W,(XBC+0x0a)                                      ; FB3B23  89 0a 20
 	cp A,W                                               ; FB3B26  c8 f1
-	jrl ugt, sub_FB3B8C_Skip                                  ; FB3B28  7b 9e 00
+	jrl ugt, SysExParam_SetMidiMultipleMessagesOutput_Skip                                  ; FB3B28  7b 9e 00
 	ld H,(XBC+0x0e)                                      ; FB3B2B  89 0e 26
 	cp h, 0x05:i3                                          ; FB3B2E  ce dd
-	jrl nc, sub_FB3B8C_Skip                                   ; FB3B30  7f 96 00
+	jrl nc, SysExParam_SetMidiMultipleMessagesOutput_Skip                                   ; FB3B30  7f 96 00
 	ld a, 0x04:opc                                          ; FB3B33  21 04
 	mul wa, h                                          ; FB3B35  ce 41
 	extz XWA                                             ; FB3B37  e8 12
@@ -92539,7 +92539,7 @@ SysExParam_SetMidiMultipleMessagesOutput:
 	push XBC                                             ; FB3BC3  39
 	call IndexedTable_MergeMaskedByteAndPost                                      ; FB3BC4  1d 90 78 fb
 	pop XIY                                              ; FB3BC8  5d
-sub_FB3B8C_Skip:
+SysExParam_SetMidiMultipleMessagesOutput_Skip:
 	pop XIX                                              ; FB3BC9  5c
 	popw de                                              ; FB3BCA  4a
 	popw hl                                              ; FB3BCB  4b
@@ -95798,7 +95798,7 @@ GmMode_ResetToDefaults:
 	calr sub_FB5A17                                      ; FB58CF  1e 45 01
 	calr ParamApply_ResetPairTablesForGm                                      ; FB58D2  1e fe fd
 	calr GmReset_PartVolume                                      ; FB58D5  1e 92 02
-	calr sub_FB58CC_Nop                                      ; FB58D8  1e bb 02
+	calr GmReset_PartVolume_Nop                                      ; FB58D8  1e bb 02
 	calr GmReset_PartEffect3Depth                                      ; FB58DB  1e b9 02
 	calr sub_FB5BC3                                      ; FB58DE  1e e2 02
 	calr GmReset_PartEffect4Depth                                      ; FB58E1  1e 0b 03
@@ -95923,7 +95923,7 @@ GmMode_ApplyChange:
 	calr GmReset_AllPartsHold                                      ; FB59F1  1e 38 04
 	calr GmReset_AllPartsParamB7                                      ; FB59F4  1e 67 04
 	calr GmReset_AllPartsParamB6                                      ; FB59F7  1e 96 04
-	calr sub_FB5972_Nop                                      ; FB59FA  1e c5 04
+	calr GmReset_AllPartsParamB6_Nop                                      ; FB59FA  1e c5 04
 	calr sub_FB5EC3                                      ; FB59FD  1e c3 04
 	ret                                                  ; FB5A00  0e
 sub_FB5A01:
@@ -96076,7 +96076,7 @@ GmReset_PartVolume:
 	pop XIX                                              ; FB5B92  5c
 	unlk XIZ                                             ; FB5B93  ee 0d
 	ret                                                  ; FB5B95  0e
-sub_FB58CC_Nop:
+GmReset_PartVolume_Nop:
 	ret                                                  ; FB5B96  0e
 ; GmReset_PartEffect3Depth: for records 0..31: IndexedTable_MergeMaskedByte of {record, byte 5, 0, mask 0x7F} -- every part's Effect3Depth set to the
 ;   GM default.  One step of GmMode_ResetToDefaults.
@@ -96488,7 +96488,7 @@ GmReset_AllPartsParamB6:
 	jr ule, .LFB5EA5                                     ; FB5EBE  63 e5
 	pop XIX                                              ; FB5EC0  5c
 	ret                                                  ; FB5EC1  0e
-sub_FB5972_Nop:
+GmReset_AllPartsParamB6_Nop:
 	ret                                                  ; FB5EC2  0e
 sub_FB5EC3:
 	pushw hl                                             ; FB5EC3  2b
@@ -98519,7 +98519,7 @@ SysExDump_SendFrames:
 	ld A,(XBC+0x04)                                      ; FB6F7C  89 04 21
 	cp a, 0x00:i3                                          ; FB6F7F  c9 d8
 	jr nz, .LFB6FB1                                      ; FB6F81  6e 2e
-	call sub_FB2877_Nop                                      ; FB6F83  1d 9a 7e fb
+	call SysExSession_RepaintProgressIfChanged_Nop                                      ; FB6F83  1d 9a 7e fb
 	calr SysExTx_AppendContHeaderIfCont                                      ; FB6F87  1e 9b 00
 	calr SysExTx_AppendNibbles                                      ; FB6F8A  1e b3 00
 	calr SysExTx_AppendContFlag                                      ; FB6F8D  1e 1e 01
@@ -98550,7 +98550,7 @@ SysExDump_SendFramesStreamed:
 	ld A,(XBC+0x04)                                      ; FB6FC3  89 04 21
 	cp a, 0x00:i3                                          ; FB6FC6  c9 d8
 	jr nz, .LFB7023                                      ; FB6FC8  6e 59
-	call sub_FB2877_Nop                                      ; FB6FCA  1d 9a 7e fb
+	call SysExSession_RepaintProgressIfChanged_Nop                                      ; FB6FCA  1d 9a 7e fb
 	calr SysExTx_AppendContHeaderIfCont                                      ; FB6FCE  1e 54 00
 	call T_Link_WaitBlockDone                            ; FB6FD1  1d 3c 12 f4
 	cp WA,0xffff                                         ; FB6FD5  d8 cf ff ff
@@ -99138,7 +99138,7 @@ SysExXfer_SetJobTotal_Sound:
 	pop XIX                                              ; FB7539  5c
 	unlk XIZ                                             ; FB753A  ee 0d
 	ret                                                  ; FB753C  0e
-sub_FB28BE_Nop:
+SysExXfer_SetJobTotal_Sound_Nop:
 	ret                                                  ; FB753D  0e
 ; SysExXfer_SetJobTotal_Sequencer(desc): {0x603400, 0x65C400, 0x59000}; on a SEND (bit 6 of (0x60FD40)) part 3 at its run-time size.
 SysExXfer_SetJobTotal_Sequencer:
@@ -99263,11 +99263,11 @@ SysExXfer_SetPart_SoundBlock:
 	pop XIX                                              ; FB7668  5c
 	unlk XIZ                                             ; FB7669  ee 0d
 	ret                                                  ; FB766B  0e
-sub_FB28BE_Nop2:
+SysExXfer_SetPart_SoundBlock_Nop2:
 	ret                                                  ; FB766C  0e
-sub_FB28BE_Nop3:
+SysExXfer_SetPart_SoundBlock_Nop3:
 	ret                                                  ; FB766D  0e
-sub_FB28BE_Nop4:
+SysExXfer_SetPart_SoundBlock_Nop4:
 	ret                                                  ; FB766E  0e
 ; SysExXfer_SetPart_Sequencer1(desc): {0x603400, 0x604000, 0xC00}.
 SysExXfer_SetPart_Sequencer1:
@@ -100202,7 +100202,7 @@ SysExSession_RepaintProgressIfChanged:
 	m_res 6, MD24, 0x60fd42                              ; FB7E94  f2 42 fd 60 b6
 .LFB7E99:
 	ret                                                  ; FB7E99  0e
-sub_FB2877_Nop:
+SysExSession_RepaintProgressIfChanged_Nop:
 	ret                                                  ; FB7E9A  0e
 MessageScreen_Paint_SaveRegs:
 	push XDE                                             ; FB7E9B  3a
@@ -100249,9 +100249,9 @@ SysExSession_OnAbort_Sound:
 	pop XHL                                              ; FB7EE0  5b
 	pop XDE                                              ; FB7EE1  5a
 	ret                                                  ; FB7EE2  0e
-sub_FB28BE_Nop5:
+SysExSession_OnAbort_Sound_Nop5:
 	ret                                                  ; FB7EE3  0e
-sub_FB3251_Nop:
+SysExSession_OnAbort_Sound_Nop:
 	ret                                                  ; FB7EE4  0e
 ; SysExSession_OnAbort_Sequencer: the abort arm for steps 11-14: the routine at prom_b 0xF409C0 slot +8.
 SysExSession_OnAbort_Sequencer:
@@ -101162,12 +101162,12 @@ MidiFilePlay_Stop:
 	ld	d, (TransportB_State:8)                                      ; FB91F5  c0 96 24
 	and D,0x04                                           ; FB91F8  cc cc 04
 	ldw hl, 0x7fff                                       ; FB91FB  33 ff 7f
-sub_FB91EE_Loop:
+MidiFilePlay_Stop_Loop:
 	cp d, 0x00:i3                                          ; FB91FE  cc d8
 	jr nz, .LFB9208                                      ; FB9200  6e 06
 	dec 1,HL                                             ; FB9202  db 69
 	cp hl, 0x00:i3                                         ; FB9204  db d8
-	jr nz, sub_FB91EE_Loop                                    ; FB9206  6e f6
+	jr nz, MidiFilePlay_Stop_Loop                                    ; FB9206  6e f6
 .LFB9208:
 	calr SeqClock_ResetBeatAndTick                                      ; FB9208  1e 5f ff
 	call T_MidiFileStream_Close                                        ; FB920B  1d 20 26 f4
@@ -106587,7 +106587,7 @@ SoftKeyCols1to4_CombiEditInternalSound:
 	ld H,A                                               ; FBCF98  c9 8e
 	ld (xiz-1), a                                        ; FBCF9A  be ff 41
 	cp H,0xff                                            ; FBCF9D  ce cf ff
-	jr z, sub_FBCF81_Skip                                     ; FBCFA0  66 2a
+	jr z, SoftKeyCols1to4_CombiEditInternalSound_Skip                                     ; FBCFA0  66 2a
 	extz WA                                              ; FBCFA2  d8 12
 	extz XWA                                             ; FBCFA4  e8 12
 	add XWA,IndexMap_F1AF6D                              ; FBCFA6  e8 c8 6d af f1 00
@@ -106600,10 +106600,10 @@ SoftKeyCols1to4_CombiEditInternalSound:
 	call T_EditValue_StepBitField                                        ; FBCFBA  1d 78 2c f4
 	inc 8,XSP                                            ; FBCFBE  ef 60
 	cp a, 0x01:i3                                          ; FBCFC0  c9 d9
-	jr nz, sub_FBCF81_Skip                                    ; FBCFC2  6e 08
+	jr nz, SoftKeyCols1to4_CombiEditInternalSound_Skip                                    ; FBCFC2  6e 08
 	call T_Blink_Stop                                    ; FBCFC4  1d 24 2e f4
 	m_set 4, MD16, UI_Request_Hi                                ; FBCFC8  f1 71 20 bc
-sub_FBCF81_Skip:
+SoftKeyCols1to4_CombiEditInternalSound_Skip:
 	pop XIX                                              ; FBCFCC  5c
 	popw hl                                              ; FBCFCD  4b
 	unlk XIZ                                             ; FBCFCE  ee 0d
@@ -107971,9 +107971,9 @@ ScreenEnterBody_CombiEditMixer:
 .LFBDC57:
 	ld c, (UI_ScreenHoldState:16)                                   ; FBDC57  c1 92 20 23
 	and C,0x01                                           ; FBDC5B  cb cc 01
-	jr z, sub_FBDB95_Skip                                     ; FBDC5E  66 04
+	jr z, ScreenEnterBody_CombiEditMixer_Skip                                     ; FBDC5E  66 04
 	m_set 7, MD16, UI_RequestBits                                ; FBDC60  f1 75 20 bf
-sub_FBDB95_Skip:
+ScreenEnterBody_CombiEditMixer_Skip:
 	ld c, (CombiEdit_Page:16)                                   ; FBDC64  c1 67 27 23
 	m_cp_rm MB16, 0x2768, r3                             ; FBDC68  c1 68 27 f3
 	jr nz, .LFBDC80                                      ; FBDC6C  6e 12
@@ -108984,7 +108984,7 @@ CombiEditMixer_DrawSwitchCell:
 	ld BC,HL                                             ; FBE502  db 89
 	inc 7,BC                                             ; FBE504  d9 67
 	ld (XIX+0x12),BC                                     ; FBE506  bc 12 51
-	jr sub_FBE4B0_Join                                        ; FBE509  68 20
+	jr CombiEditMixer_DrawSwitchCell_Join                                        ; FBE509  68 20
 .LFBE50B:
 	ld BC,HL                                             ; FBE50B  db 89
 	inc 1,BC                                             ; FBE50D  d9 61
@@ -108998,7 +108998,7 @@ CombiEditMixer_DrawSwitchCell:
 	ld BC,HL                                             ; FBE522  db 89
 	add BC,0x000f                                        ; FBE524  d9 c8 0f 00
 	ld (XIX+0x12),BC                                     ; FBE528  bc 12 51
-sub_FBE4B0_Join:
+CombiEditMixer_DrawSwitchCell_Join:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FBE52B  f1 40 25 00 01
 	ld XBC,XIX                                           ; FBE530  ec 89
 	add XBC,0x00000014                                   ; FBE532  e9 c8 14 00 00 00
@@ -110919,9 +110919,9 @@ ScreenButtonBody_CombiEditConfigure:
 .LFBF491:
 	unlk XIZ                                             ; FBF491  ee 0d
 	ret                                                  ; FBF493  0e
-	calr sub_FBF453_Nop                                      ; FBF494  1e 01 00
+	calr ScreenButtonBody_CombiEditConfigure_Nop                                      ; FBF494  1e 01 00
 	ret                                                  ; FBF497  0e
-sub_FBF453_Nop:
+ScreenButtonBody_CombiEditConfigure_Nop:
 	ret                                                  ; FBF498  0e
 ; SoftKeyCol2_CombiEditConfigure: ScreenButtons_CombiEditConfigure[1], the 23-slot button table ScreenButtonBody_CombiEditConfigure reads through T_PanelCode_ToSlotAndFlags -- the
 ;   SoftKeyCol2 handler of CombiEditConfigure (notes/prom_ab_promb_slot23_targets.py).
@@ -112171,7 +112171,7 @@ WriteProtectError_Dismiss:
 	swi 3                                                ; FBFF87  fb
 	swi 2                                                ; FBFF88  fa
 	swi 1                                                ; FBFF89  f9
-	jp sub_FBFEDA_Join                                        ; FBFF8A  1b a2 ff fb
+	jp WriteProtectError_Dismiss_Join                                        ; FBFF8A  1b a2 ff fb
 	ret                                                  ; FBFF8E  0e
 	nop                                                  ; FBFF8F  00
 	nop                                                  ; FBFF90  00
@@ -112192,7 +112192,7 @@ WriteProtectError_Dismiss:
 	nop                                                  ; FBFF9F  00
 	nop                                                  ; FBFFA0  00
 	nop                                                  ; FBFFA1  00
-sub_FBFEDA_Join:
+WriteProtectError_Dismiss_Join:
 	calr sub_FBFFA6                                      ; FBFFA2  1e 01 00
 	ret                                                  ; FBFFA5  0e
 sub_FBFFA6:
@@ -162068,7 +162068,7 @@ Disk_MountAndScanDirectory:
 	m_push MB24, 0x001735                                ; FE054A  c2 35 17 00 04
 	calr Disk_ShowMountError                                          ; FE054F  1e 1e 04
 	calr Disk_PortA3_Release                                          ; FE0552  1e a2 13
-	calr sub_FE0527_Nop                                          ; FE0555  1e 6f 2a
+	calr Var2216_SetW145A_Nop                                          ; FE0555  1e 6f 2a
 	popw bc                                              ; FE0558  49
 .LFE0559:
 	popw hl                                              ; FE0559  4b
@@ -162582,9 +162582,9 @@ Disk_RestoreFileName:
 	jr le, .LFE0945                                           ; FE0959  62 ea
 	pop XHL                                              ; FE095B  5b
 	ret                                                  ; FE095C  0e
-sub_FE1D52_Nop:
+Disk_RestoreFileName_Nop:
 	ret                                                  ; FE095D  0e
-sub_FE1D52_Nop2:
+Disk_RestoreFileName_Nop2:
 	ret                                                  ; FE095E  0e
 Disk_PortA3_Release_Call:
 	calr Disk_PortA3_Release                                          ; FE095F  1e 95 0f
@@ -164184,7 +164184,7 @@ StatusMsg_ShowByIndex:
 	unlk XIZ                                             ; FE185E  ee 0d
 	ret                                                  ; FE1860  0e
 	ret                                                  ; FE1861  0e
-sub_FE237B_Nop:
+StatusMsg_ShowByIndex_Nop:
 	ret                                                  ; FE1862  0e
 ; NameEdit_StepChar: SoftKeyCol4/5 on page 0 (through NameEdit_StepChar_Call): NameEdit_CharIndex -1 when (0x272C) bit 7 is set (not below 0),
 ;   else +1 (not above 0x24); the character set[index] goes into Disk_FileName at the cursor.
@@ -164903,11 +164903,11 @@ DiskLoad_ByContentType:
 	ld C,(XIX)                                           ; FE1D5E  84 23
 	cp c, 0x00:i3                                          ; FE1D60  cb d8
 	jr nz, .LFE1DB5                                          ; FE1D62  6e 51
-	calr sub_FE1D52_Nop                                          ; FE1D64  1e f6 eb
+	calr Disk_RestoreFileName_Nop                                          ; FE1D64  1e f6 eb
 	calr DiskLoad_PanelSlsFile                                          ; FE1D67  1e c6 06
 	calr DiskLoad_PanelLswFile                                            ; FE1D6A  1e cf 00
 	ld H,A                                               ; FE1D6D  c9 8e
-	calr sub_FE1D52_Nop2                                          ; FE1D6F  1e ec eb
+	calr Disk_RestoreFileName_Nop2                                          ; FE1D6F  1e ec eb
 	cp h, 0x01:i3                                          ; FE1D72  ce d9
 	jrl nz, .LFE1E20                                         ; FE1D74  7e a9 00
 	calr DiskLoad_Sound                                          ; FE1D77  1e b5 02
@@ -164938,11 +164938,11 @@ DiskLoad_ByContentType:
 	ld C,(XIX)                                           ; FE1DB5  84 23
 	cp c, 0x04:i3                                          ; FE1DB7  cb dc
 	jr nz, .LFE1DCC                                          ; FE1DB9  6e 11
-	calr sub_FE1D52_Nop                                          ; FE1DBB  1e 9f eb
+	calr Disk_RestoreFileName_Nop                                          ; FE1DBB  1e 9f eb
 	calr DiskLoad_PanelLswFile                                            ; FE1DBE  1e 7b 00
 	calr DiskLoad_PanelSlsFile                                          ; FE1DC1  1e 6c 06
 	ld H,A                                               ; FE1DC4  c9 8e
-	calr sub_FE1D52_Nop2                                          ; FE1DC6  1e 95 eb
+	calr Disk_RestoreFileName_Nop2                                          ; FE1DC6  1e 95 eb
 	jrl .LFE1E20                                             ; FE1DC9  78 54 00
 .LFE1DCC:
 	ld C,(XIX)                                           ; FE1DCC  84 23
@@ -165618,7 +165618,7 @@ Disk_LoadSqfToWorkspace:
 	ld A,H                                               ; FE23A9  ce 89
 	jr .LFE23BA                                              ; FE23AB  68 0d
 .LFE23AD:
-	calr sub_FE237B_Nop                                          ; FE23AD  1e b2 f4
+	calr StatusMsg_ShowByIndex_Nop                                          ; FE23AD  1e b2 f4
 	calr ParamImageAlt_SanitizeCombination_Entry_SaveRegs                                          ; FE23B0  1e 9d dd
 	ld (Disk_LastError:16), 0x01                                 ; FE23B3  f1 43 22 00 01
 	ld a, 0x01:opc                                          ; FE23B8  21 01
@@ -165825,14 +165825,14 @@ DiskSave_ByContentType:
 	calr DiskSave_DrumMap                                          ; FE255B  1e 55 03
 	ld H,A                                               ; FE255E  c9 8e
 .LFE2560:
-	calr sub_FE1D52_Nop                                          ; FE2560  1e fa e3
+	calr Disk_RestoreFileName_Nop                                          ; FE2560  1e fa e3
 	cp h, 0x03:i3                                          ; FE2563  ce db
 	jr nz, .LFE256F                                          ; FE2565  6e 08
 	calr DiskSave_PanelLswFile                                          ; FE2567  1e 78 01
 	calr DiskSave_PanelSlsFile                                          ; FE256A  1e 68 03
 	ld H,A                                               ; FE256D  c9 8e
 .LFE256F:
-	calr sub_FE1D52_Nop2                                          ; FE256F  1e ec e3
+	calr Disk_RestoreFileName_Nop2                                          ; FE256F  1e ec e3
 	cp h, 0x03:i3                                          ; FE2572  ce db
 	jr nz, .LFE257B                                          ; FE2574  6e 05
 	calr DiskSave_Sound                                          ; FE2576  1e 1a 04
@@ -165851,7 +165851,7 @@ DiskSave_ByContentType:
 	ld H,A                                               ; FE2593  c9 8e
 	jrl .LFE25FA                                             ; FE2595  78 62 00
 .LFE2598:
-	calr sub_FE1D52_Nop                                          ; FE2598  1e c2 e3
+	calr Disk_RestoreFileName_Nop                                          ; FE2598  1e c2 e3
 	ld C,(XIX)                                           ; FE259B  84 23
 	cp c, 0x04:i3                                          ; FE259D  cb dc
 	jr nz, .LFE25A9                                          ; FE259F  6e 08
@@ -165859,7 +165859,7 @@ DiskSave_ByContentType:
 	calr DiskSave_PanelSlsFile                                          ; FE25A4  1e 2e 03
 	ld H,A                                               ; FE25A7  c9 8e
 .LFE25A9:
-	calr sub_FE1D52_Nop2                                          ; FE25A9  1e b2 e3
+	calr Disk_RestoreFileName_Nop2                                          ; FE25A9  1e b2 e3
 	ld C,(XIX)                                           ; FE25AC  84 23
 	cp c, 0x03:i3                                          ; FE25AE  cb db
 	jr nz, .LFE25B7                                          ; FE25B0  6e 05
@@ -166996,7 +166996,7 @@ Var2216_SetW145C:
 Var2216_SetW145A:
 	ldw (0x2216:16), 0x145a                              ; FE2FC0  f1 16 22 02 5a 14
 	ret                                                  ; FE2FC6  0e
-sub_FE0527_Nop:
+Var2216_SetW145A_Nop:
 	ret                                                  ; FE2FC7  0e
 ; StatusMsg_HoldForCode: after StatusMsg_ShowByIndex paints: UI_StatusCode 0 -> Delay_Ticks(1500), 0x2B -> Delay_Ticks(500), else nothing.
 StatusMsg_HoldForCode:
@@ -167967,18 +167967,18 @@ DiskCmd_CloseFile:
 	cp (XWA),0x01                                        ; FE3961  80 3f 01
 	jr nz, .LFE396B                                          ; FE3964  6e 05
 	ldw bc, 0x1000                                       ; FE3966  31 00 10
-	jr sub_FE395A_Join                                              ; FE3969  68 1b
+	jr DiskCmd_CloseFile_Join                                              ; FE3969  68 1b
 .LFE396B:
 	ld wa, (0x605d36:24)                                ; FE396B  d2 36 5d 60 20
 	cp wa, 0x00:i3                                         ; FE3970  d8 d8
-	jr mi, sub_FE395A_Join                                          ; FE3972  65 12
+	jr mi, DiskCmd_CloseFile_Join                                          ; FE3972  65 12
 	cp wa, 0x05:i3                                         ; FE3974  d8 dd
-	jr gt, sub_FE395A_Join                                          ; FE3976  6a 0e
+	jr gt, DiskCmd_CloseFile_Join                                          ; FE3976  6a 0e
 	add WA,WA                                            ; FE3978  d8 80
 	lda xix, (Table_FE6DBF+0xD:24)                       ; FE397A  f2 cc 6d fe 34
 	mx_ld_rm MXW, ra_IX, ra_WA, r0                       ; FE397F  d3 07 f0 e0 20
 	ld BC,WA                                             ; FE3984  d8 89
-sub_FE395A_Join:
+DiskCmd_CloseFile_Join:
 	ld XWA,(XSP+0x06)                                    ; FE3986  af 06 20
 	ld WA,(XWA+0x10)                                     ; FE3989  98 10 20
 	extz XWA                                             ; FE398C  e8 12
@@ -176585,7 +176585,7 @@ Transport_ResetAndStartBC:
 	ld (TransportC_State:8), 0x01:io                                      ; FE8039  08 95 01
 	ei 0x00                                              ; FE803C  06 00
 	ret                                                  ; FE803E  0e
-sub_FE9CFC_Nop:
+Transport_ResetAndStartBC_Nop:
 	ret                                                  ; FE803F  0e
 ; NoteRouting_RebuildForSong_Call: calls T_NoteRouting_RebuildForSong and returns (notes/prom_ab_wrapper_names.py; DERIVATIVE)
 NoteRouting_RebuildForSong_Call:
@@ -176903,12 +176903,12 @@ ExitKey_Sequencer:   ; entry: named by 1 `.long` operand, first at 0xFE80B3
 	ldw (UI_Request:16), 0x0201                              ; FE81D9  f1 70 20 02 01 02
 	jr .LFE81E4                                          ; FE81DF  68 03
 .LFE81E1:
-	calr sub_FE81D4_Nop                                      ; FE81E1  1e 02 00
+	calr ExitKey_Sequencer_Nop                                      ; FE81E1  1e 02 00
 .LFE81E4:
 	ret                                                  ; FE81E4  0e
 Sequencer_ButtonTable_Nop16:   ; entry: named by 16 `.long` operands, first at 0xFE80B7
 	ret                                                  ; FE81E5  0e
-sub_FE81D4_Nop:
+ExitKey_Sequencer_Nop:
 	ret                                                  ; FE81E6  0e
 ; sub_FE81E7 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
@@ -177555,15 +177555,15 @@ EditPartSelect_ButtonTable:
 	.long SoftKeyCol6_EditPartSelect                                 ; FE8590  [  5]
 	.long SoftKeyCol7_EditPartSelect                                 ; FE8594  [  6]
 	.long SoftKeyCol8_EditPartSelect                                 ; FE8598  [  7]
-	.long ScreenDispatch_FE857C_Nop8                                 ; FE859C  [  8]
-	.long ScreenDispatch_FE857C_Nop8                                 ; FE85A0  [  9]
-	.long ScreenDispatch_FE857C_Nop8                                 ; FE85A4  [ 10]
-	.long ScreenDispatch_FE857C_Nop8                                 ; FE85A8  [ 11]
-	.long ScreenDispatch_FE857C_Nop8                                 ; FE85AC  [ 12]
-	.long ScreenDispatch_FE857C_Nop8                                 ; FE85B0  [ 13]
-	.long ScreenDispatch_FE857C_Nop8                                 ; FE85B4  [ 14]
+	.long SoftKeyCol8_EditPartSelect_Nop8                                 ; FE859C  [  8]
+	.long SoftKeyCol8_EditPartSelect_Nop8                                 ; FE85A0  [  9]
+	.long SoftKeyCol8_EditPartSelect_Nop8                                 ; FE85A4  [ 10]
+	.long SoftKeyCol8_EditPartSelect_Nop8                                 ; FE85A8  [ 11]
+	.long SoftKeyCol8_EditPartSelect_Nop8                                 ; FE85AC  [ 12]
+	.long SoftKeyCol8_EditPartSelect_Nop8                                 ; FE85B0  [ 13]
+	.long SoftKeyCol8_EditPartSelect_Nop8                                 ; FE85B4  [ 14]
 	.long ExitKey_EditPartSelect                                 ; FE85B8  [ 15]
-	.long ScreenDispatch_FE857C_Nop8                                 ; FE85BC  [ 16]
+	.long SoftKeyCol8_EditPartSelect_Nop8                                 ; FE85BC  [ 16]
 	.long SoftKeyCol1_EditPartSelect                                 ; FE85C0  [ 17]
 	.long SoftKeyCol2_EditPartSelect                                 ; FE85C4  [ 18]
 	.long SoftKeyCol3_EditPartSelect                                 ; FE85C8  [ 19]
@@ -177572,13 +177572,13 @@ EditPartSelect_ButtonTable:
 	.long SoftKeyCol6_EditPartSelect                                 ; FE85D4  [ 22]
 	.long SoftKeyCol7_EditPartSelect                                 ; FE85D8  [ 23]
 	.long SoftKeyCol8_EditPartSelect                                 ; FE85DC  [ 24]
-	.long ScreenDispatch_FE857C_Nop25                                 ; FE85E0  [ 25]
-	.long ScreenDispatch_FE857C_Nop25                                 ; FE85E4  [ 26]
-	.long ScreenDispatch_FE857C_Nop25                                 ; FE85E8  [ 27]
-	.long ScreenDispatch_FE857C_Nop25                                 ; FE85EC  [ 28]
-	.long ScreenDispatch_FE857C_Nop25                                 ; FE85F0  [ 29]
-	.long ScreenDispatch_FE857C_Nop25                                 ; FE85F4  [ 30]
-	.long ScreenDispatch_FE857C_Nop25                                 ; FE85F8  [ 31]
+	.long ExitKey_EditPartSelect_Nop25                                 ; FE85E0  [ 25]
+	.long ExitKey_EditPartSelect_Nop25                                 ; FE85E4  [ 26]
+	.long ExitKey_EditPartSelect_Nop25                                 ; FE85E8  [ 27]
+	.long ExitKey_EditPartSelect_Nop25                                 ; FE85EC  [ 28]
+	.long ExitKey_EditPartSelect_Nop25                                 ; FE85F0  [ 29]
+	.long ExitKey_EditPartSelect_Nop25                                 ; FE85F4  [ 30]
+	.long ExitKey_EditPartSelect_Nop25                                 ; FE85F8  [ 31]
 ; EditPartSelect_PartRefused_Always0(part): `xor A,A / ret` -- every SoftKeyCol<n>_EditPartSelect asks it before EditPartSelect_OpenEditor and
 ;   opens the editor only on A == 0, so in this build no part is ever refused.
 EditPartSelect_PartRefused_Always0:
@@ -177771,7 +177771,7 @@ SoftKeyCol8_EditPartSelect:   ; entry: named by 2 `.long` operands, first at 0xF
 	call EditPartSelect_OpenEditor                                      ; FE875C  1d 73 87 fe
 .LFE8760:
 	ret                                                  ; FE8760  0e
-ScreenDispatch_FE857C_Nop8:   ; entry: named by 8 `.long` operands, first at 0xFE859C
+SoftKeyCol8_EditPartSelect_Nop8:   ; entry: named by 8 `.long` operands, first at 0xFE859C
 	ret                                                  ; FE8761  0e
 ; ExitKey_EditPartSelect: the EXIT key; EditPartSelect_ButtonTable slot 0x0F.  Slot -> control: wave7_panel_names_round11.CONTROL.
 ExitKey_EditPartSelect:   ; entry: named by 1 `.long` operand, first at 0xFE85B8
@@ -177780,9 +177780,9 @@ ExitKey_EditPartSelect:   ; entry: named by 1 `.long` operand, first at 0xFE85B8
 	ldw (UI_Request:16), 0x801a                              ; FE8767  f1 70 20 02 1a 80
 	ret                                                  ; FE876D  0e
 .LFE876E:
-	calr sub_FE81D4_Nop                                          ; FE876E  1e 75 fa
+	calr ExitKey_Sequencer_Nop                                          ; FE876E  1e 75 fa
 	ret                                                  ; FE8771  0e
-ScreenDispatch_FE857C_Nop25:   ; entry: named by 7 `.long` operands, first at 0xFE85E0
+ExitKey_EditPartSelect_Nop25:   ; entry: named by 7 `.long` operands, first at 0xFE85E0
 	ret                                                  ; FE8772  0e
 ; EditPartSelect_OpenEditor(BC = part 1..16): (0x601F00) = part, (0x601F01) = the long for that part from the word table
 ;   after EditPartSelect_PartRefused_Always0; UI_Request = 0x8028 (DRUM EDIT, screen 0x28) when EditScreen_Mode bit 0 is set, else 0x8025
@@ -179725,11 +179725,11 @@ NoteEdit_ButtonTable:
 	.long LcdKeyRow2_NoteEdit                                 ; FE9A6E  [  9]
 	.long LcdKeyRow3_NoteEdit                                 ; FE9A72  [ 10]
 	.long LcdKeyRow4_NoteEdit                                 ; FE9A76  [ 11]
-	.long ScreenDispatch_FE9A4A_Nop12                                 ; FE9A7A  [ 12]
-	.long ScreenDispatch_FE9A4A_Nop12                                 ; FE9A7E  [ 13]
-	.long ScreenDispatch_FE9A4A_Nop12                                 ; FE9A82  [ 14]
+	.long LcdKeyRow4_NoteEdit_Nop12                                 ; FE9A7A  [ 12]
+	.long LcdKeyRow4_NoteEdit_Nop12                                 ; FE9A7E  [ 13]
+	.long LcdKeyRow4_NoteEdit_Nop12                                 ; FE9A82  [ 14]
 	.long ExitKey_NoteEdit                                 ; FE9A86  [ 15]
-	.long ScreenDispatch_FE9A4A_Nop12                                 ; FE9A8A  [ 16]
+	.long LcdKeyRow4_NoteEdit_Nop12                                 ; FE9A8A  [ 16]
 	.long NoteEdit_Button17                                 ; FE9A8E  [ 17]
 	.long NoteEdit_Button18                                 ; FE9A92  [ 18]
 	.long NoteEdit_Button19                                 ; FE9A96  [ 19]
@@ -179738,13 +179738,13 @@ NoteEdit_ButtonTable:
 	.long NoteEdit_Button22                                 ; FE9AA2  [ 22]
 	.long NoteEdit_Button23                                 ; FE9AA6  [ 23]
 	.long NoteEdit_Button24                                 ; FE9AAA  [ 24]
-	.long ScreenDispatch_FE9A4A_Nop25                                 ; FE9AAE  [ 25]
-	.long ScreenDispatch_FE9A4A_Nop25                                 ; FE9AB2  [ 26]
-	.long ScreenDispatch_FE9A4A_Nop25                                 ; FE9AB6  [ 27]
-	.long ScreenDispatch_FE9A4A_Nop25                                 ; FE9ABA  [ 28]
-	.long ScreenDispatch_FE9A4A_Nop25                                 ; FE9ABE  [ 29]
-	.long ScreenDispatch_FE9A4A_Nop25                                 ; FE9AC2  [ 30]
-	.long ScreenDispatch_FE9A4A_Nop25                                 ; FE9AC6  [ 31]
+	.long NoteEdit_Button24_Nop25                                 ; FE9AAE  [ 25]
+	.long NoteEdit_Button24_Nop25                                 ; FE9AB2  [ 26]
+	.long NoteEdit_Button24_Nop25                                 ; FE9AB6  [ 27]
+	.long NoteEdit_Button24_Nop25                                 ; FE9ABA  [ 28]
+	.long NoteEdit_Button24_Nop25                                 ; FE9ABE  [ 29]
+	.long NoteEdit_Button24_Nop25                                 ; FE9AC2  [ 30]
+	.long NoteEdit_Button24_Nop25                                 ; FE9AC6  [ 31]
 ; SoftKeyCol1_NoteEdit: the 1st of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; NoteEdit_ButtonTable slot 0x00.  Slot -> control: wave7_panel_names_round11.CONTROL.
 SoftKeyCol1_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A4A
 	ld (PanelDial_UpButton:16), 0x00                                 ; FE9ACA  f1 9c 20 00 00
@@ -179813,7 +179813,7 @@ LcdKeyRow3_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A72
 LcdKeyRow4_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A76
 	calr EditScreen_LcdKeyRow4                                          ; FE9B5A  1e c3 0e
 	ret                                                  ; FE9B5D  0e
-ScreenDispatch_FE9A4A_Nop12:   ; entry: named by 4 `.long` operands, first at 0xFE9A7A
+LcdKeyRow4_NoteEdit_Nop12:   ; entry: named by 4 `.long` operands, first at 0xFE9A7A
 	ret                                                  ; FE9B5E  0e
 ; ExitKey_NoteEdit: the EXIT key; NoteEdit_ButtonTable slot 0x0F.  Slot -> control: wave7_panel_names_round11.CONTROL.
 ExitKey_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A86
@@ -179822,7 +179822,7 @@ ExitKey_NoteEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9A86
 	calr UI_GotoNoteEditPartSelect                                          ; FE9B64  1e 1f 0f
 	ret                                                  ; FE9B67  0e
 .LFE9B68:
-	calr sub_FE81D4_Nop                                          ; FE9B68  1e 7b e6
+	calr ExitKey_Sequencer_Nop                                          ; FE9B68  1e 7b e6
 	ret                                                  ; FE9B6B  0e
 ; NoteEdit_Button17 -- NoteEdit_ButtonTable slot 0x11, NOT NAMED: slot 0x11 is only the VARIANT-1 already-held rewrite of base code 0x00
 ;   (SoftKeyCol1); the SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
@@ -179864,7 +179864,7 @@ NoteEdit_Button23:   ; entry: named by 1 `.long` operand, first at 0xFE9AA6
 NoteEdit_Button24:   ; entry: named by 1 `.long` operand, first at 0xFE9AAA
 	calr EditCursor_NextBeatStart                                          ; FE9B88  1e 70 12
 	ret                                                  ; FE9B8B  0e
-ScreenDispatch_FE9A4A_Nop25:   ; entry: named by 7 `.long` operands, first at 0xFE9AAE
+NoteEdit_Button24_Nop25:   ; entry: named by 7 `.long` operands, first at 0xFE9AAE
 	ret                                                  ; FE9B8C  0e
 ; ScreenButton_DrumEdit: the +8 BUTTON method of the screen object for screen id 0x28 -- PanelScreen_VtableTable entry 0x48
 ;   (ViewB entry 0x28) points at the thunk triple starting at T_EditScreen_EnterDrumEdit, and slot T_ScreenButton_DrumEdit jumps here.
@@ -179900,11 +179900,11 @@ DrumEdit_ButtonTable:
 	.long LcdKeyRow2_DrumEdit                                 ; FE9BC8  [  9]
 	.long LcdKeyRow3_DrumEdit                                 ; FE9BCC  [ 10]
 	.long LcdKeyRow4_DrumEdit                                 ; FE9BD0  [ 11]
-	.long ScreenDispatch_FE9BA4_Nop12                                 ; FE9BD4  [ 12]
-	.long ScreenDispatch_FE9BA4_Nop12                                 ; FE9BD8  [ 13]
-	.long ScreenDispatch_FE9BA4_Nop12                                 ; FE9BDC  [ 14]
+	.long LcdKeyRow4_DrumEdit_Nop12                                 ; FE9BD4  [ 12]
+	.long LcdKeyRow4_DrumEdit_Nop12                                 ; FE9BD8  [ 13]
+	.long LcdKeyRow4_DrumEdit_Nop12                                 ; FE9BDC  [ 14]
 	.long ExitKey_DrumEdit                                 ; FE9BE0  [ 15]
-	.long ScreenDispatch_FE9BA4_Nop12                                 ; FE9BE4  [ 16]
+	.long LcdKeyRow4_DrumEdit_Nop12                                 ; FE9BE4  [ 16]
 	.long DrumEdit_Button17                                 ; FE9BE8  [ 17]
 	.long DrumEdit_Button18                                 ; FE9BEC  [ 18]
 	.long DrumEdit_Button19                                 ; FE9BF0  [ 19]
@@ -179912,14 +179912,14 @@ DrumEdit_ButtonTable:
 	.long DrumEdit_Button21                                 ; FE9BF8  [ 21]
 	.long DrumEdit_Button22                                 ; FE9BFC  [ 22]
 	.long DrumEdit_Button23                                 ; FE9C00  [ 23]
-	.long ScreenDispatch_FE9BA4_Nop24                                 ; FE9C04  [ 24]
-	.long ScreenDispatch_FE9BA4_Nop25                                 ; FE9C08  [ 25]
-	.long ScreenDispatch_FE9BA4_Nop25                                 ; FE9C0C  [ 26]
-	.long ScreenDispatch_FE9BA4_Nop25                                 ; FE9C10  [ 27]
-	.long ScreenDispatch_FE9BA4_Nop25                                 ; FE9C14  [ 28]
-	.long ScreenDispatch_FE9BA4_Nop25                                 ; FE9C18  [ 29]
-	.long ScreenDispatch_FE9BA4_Nop25                                 ; FE9C1C  [ 30]
-	.long ScreenDispatch_FE9BA4_Nop25                                 ; FE9C20  [ 31]
+	.long DrumEdit_Button23_Nop24                                 ; FE9C04  [ 24]
+	.long DrumEdit_Button23_Nop25                                 ; FE9C08  [ 25]
+	.long DrumEdit_Button23_Nop25                                 ; FE9C0C  [ 26]
+	.long DrumEdit_Button23_Nop25                                 ; FE9C10  [ 27]
+	.long DrumEdit_Button23_Nop25                                 ; FE9C14  [ 28]
+	.long DrumEdit_Button23_Nop25                                 ; FE9C18  [ 29]
+	.long DrumEdit_Button23_Nop25                                 ; FE9C1C  [ 30]
+	.long DrumEdit_Button23_Nop25                                 ; FE9C20  [ 31]
 ; SoftKeyCol1_DrumEdit: the 1st of the eight soft keys under the LCD; bit 7 of the code picks the LOWER (set) or UPPER (clear) of the column's two switches; DrumEdit_ButtonTable slot 0x00.  Slot -> control: wave7_panel_names_round11.CONTROL.
 SoftKeyCol1_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BA4
 	ld (PanelDial_UpButton:16), 0x00                                 ; FE9C24  f1 9c 20 00 00
@@ -179986,7 +179986,7 @@ LcdKeyRow3_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BCC
 LcdKeyRow4_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BD0
 	calr EditScreen_LcdKeyRow4                                      ; FE9CAA  1e 73 0d
 	ret                                                  ; FE9CAD  0e
-ScreenDispatch_FE9BA4_Nop12:   ; entry: named by 4 `.long` operands, first at 0xFE9BD4
+LcdKeyRow4_DrumEdit_Nop12:   ; entry: named by 4 `.long` operands, first at 0xFE9BD4
 	ret                                                  ; FE9CAE  0e
 ; ExitKey_DrumEdit: the EXIT key; DrumEdit_ButtonTable slot 0x0F.  Slot -> control: wave7_panel_names_round11.CONTROL.
 ExitKey_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BE0
@@ -179995,7 +179995,7 @@ ExitKey_DrumEdit:   ; entry: named by 1 `.long` operand, first at 0xFE9BE0
 	calr UI_GotoDrumEditPartSelect                                      ; FE9CB4  1e d6 0d
 	ret                                                  ; FE9CB7  0e
 .LFE9CB8:
-	calr sub_FE81D4_Nop                                          ; FE9CB8  1e 2b e5
+	calr ExitKey_Sequencer_Nop                                          ; FE9CB8  1e 2b e5
 	ret                                                  ; FE9CBB  0e
 ; DrumEdit_Button17 -- DrumEdit_ButtonTable slot 0x11, NOT NAMED: slot 0x11 is only the VARIANT-1 already-held rewrite of base code 0x00
 ;   (SoftKeyCol1); the SX-WSA1R is variant 2, so the slot is never delivered here (wave7_panel_names_round11).
@@ -180032,9 +180032,9 @@ DrumEdit_Button22:   ; entry: named by 1 `.long` operand, first at 0xFE9BFC
 DrumEdit_Button23:   ; entry: named by 1 `.long` operand, first at 0xFE9C00
 	calr EditCursor_NextBeatStart                                      ; FE9CD4  1e 24 11
 	ret                                                  ; FE9CD7  0e
-ScreenDispatch_FE9BA4_Nop24:   ; entry: named by 1 `.long` operand, first at 0xFE9C04
+DrumEdit_Button23_Nop24:   ; entry: named by 1 `.long` operand, first at 0xFE9C04
 	ret                                                  ; FE9CD8  0e
-ScreenDispatch_FE9BA4_Nop25:   ; entry: named by 7 `.long` operands, first at 0xFE9C08
+DrumEdit_Button23_Nop25:   ; entry: named by 7 `.long` operands, first at 0xFE9C08
 	ret                                                  ; FE9CD9  0e
 ; EditScreen_SoftKeyCol1: the SoftKeyCol1 action of DrumEdit, NoteEdit -- called only by SoftKeyCol1_DrumEdit, SoftKeyCol1_NoteEdit.
 EditScreen_SoftKeyCol1:
@@ -180061,7 +180061,7 @@ EditCursor_MeasurePlus1:
 	calr EditCursor_MeasureChanged                                      ; FE9D0E  1e 1d 00
 	ret                                                  ; FE9D11  0e
 .LFE9D12:
-	calr sub_FE9CFC_Nop                                          ; FE9D12  1e 2a e3
+	calr Transport_ResetAndStartBC_Nop                                          ; FE9D12  1e 2a e3
 	ret                                                  ; FE9D15  0e
 ; EditCursor_MeasureMinus1: EditCursor_Measure - 1 unless it is 1, then EditCursor_MeasureChanged.  EditScreen_SoftKeyCol1 (MEAS), bit 7 set.
 EditCursor_MeasureMinus1:
@@ -180072,7 +180072,7 @@ EditCursor_MeasureMinus1:
 	calr EditCursor_MeasureChanged                                      ; FE9D26  1e 05 00
 	ret                                                  ; FE9D29  0e
 .LFE9D2A:
-	calr sub_FE9CFC_Nop                                          ; FE9D2A  1e 12 e3
+	calr Transport_ResetAndStartBC_Nop                                          ; FE9D2A  1e 12 e3
 	ret                                                  ; FE9D2D  0e
 ; EditCursor_MeasureChanged: redraws the measure (EditScreen_DrawMeasure between the bottom-row erases), (0x601F54) = 0, erases the edit area on
 ;   both layers, EditCursor_Beat = EditCursor_Tick = 0, (0x601F58) = 0x82, (0x601F59) = 0.  Called by the MEAS +-1 / +-10 steps.
@@ -181519,7 +181519,7 @@ EditCursor_MeasurePlus10:
 ;  notes/prom_a_stray_label_removal.py)
 	ret                                                  ; FEAADB  0e
 .LFEAADC:
-	calr sub_FE9CFC_Nop                                          ; FEAADC  1e 60 d5
+	calr Transport_ResetAndStartBC_Nop                                          ; FEAADC  1e 60 d5
 	ret                                                  ; FEAADF  0e
 ; EditCursor_MeasureMinus10: EditCursor_Measure - 10, floored at 1.
 EditCursor_MeasureMinus10:
@@ -181539,7 +181539,7 @@ EditCursor_MeasureMinus10:
 	ldw (EditCursor_Measure:24), 0x01                             ; FEAB01  f2 3f 1f 60 02 01 00
 	jr .LFEAAFD                                          ; FEAB08  68 f3
 .LFEAB0A:
-	calr sub_FE9CFC_Nop                                          ; FEAB0A  1e 32 d5
+	calr Transport_ResetAndStartBC_Nop                                          ; FEAB0A  1e 32 d5
 	ret                                                  ; FEAB0D  0e
 ; EditCursor_TickStepHeld: Button18 -- the held SoftKeyCol2: EditCursor_TickPlus5 / _TickMinus5, unless deferred action 1 is pending.
 EditCursor_TickStepHeld:

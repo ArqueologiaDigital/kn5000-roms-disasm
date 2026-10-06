@@ -123,10 +123,17 @@ def main():
     have = collections.Counter(new)
     new_label_set = {LABEL.match(l).group(1) for l in new if LABEL.match(l)}
 
+    # One alternation, applied until nothing changes (so a chain old -> mid -> new still resolves).  It used to be
+    # one re.sub per rename per line: with ~10,000 declared renames that ran for hours (2026-10-06).
+    alt = re.compile(r"\b(" + "|".join(sorted(map(re.escape, ren), key=len, reverse=True)) + r")\b")
+
     def rewrite(line):
         out = line
-        for o, n in ren.items():
-            out = re.sub(r"\b" + o + r"\b", n, out)
+        for _ in range(8):
+            nxt = alt.sub(lambda m: ren[m.group(1)], out)
+            if nxt == out:
+                break
+            out = nxt
         return out
 
     # Two more shapes this round produces on purpose, each of which REPLACES a
