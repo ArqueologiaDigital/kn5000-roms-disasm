@@ -1017,33 +1017,33 @@ typedef struct __attribute__((packed)) {
     char w6_text[16];
     /* element 1 of Viewable slot 0x18: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v18_e1;
-    char str_20[10];
+    char HugeRoom_str[10];
     /* element 2 of Viewable slot 0x18: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v18_e2;
-    char str_24[10];
+    char BoxRoom_str[10];
     /* element 3 of Viewable slot 0x18: IvCatchEvent (class id 0x01600052) */
     naka_cls_IvCatchEvent_t v18_e3;
     /* element 4 of Viewable slot 0x18: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v18_e4;
-    char str_29[12];
+    char SmallPlate_str[12];
     /* element 5 of Viewable slot 0x18: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v18_e5;
-    char str_31[12];
+    char SportsHall_str[12];
     /* element 6 of Viewable slot 0x18: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v18_e6;
-    char str_33[12];
+    char BrightHall_str[12];
     /* element 7 of Viewable slot 0x18: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v18_e7;
-    char str_36[14];
+    char DarkConfines_str[14];
     /* element 8 of Viewable slot 0x18: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v18_e8;
     char Reflection_str[12];
     /* element 9 of Viewable slot 0x18: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v18_e9;
-    char str_43[12];
+    char HighOpen_str[12];
     /* element 10 of Viewable slot 0x18: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v18_e10;
-    char str_45[14];
+    char LeftToRight_str[14];
     /* element 11 of Viewable slot 0x18: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v18_e11;
     char Cavernous_str[10];
@@ -1052,31 +1052,31 @@ typedef struct __attribute__((packed)) {
     char w7_text[18];
     /* element 1 of Viewable slot 0x19: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v19_e1;
-    char str_50[8];
+    char MakeUp_str[8];
     /* element 2 of Viewable slot 0x19: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v19_e2;
-    char str_54[12];
+    char MiddleCut_str[12];
     /* element 3 of Viewable slot 0x19: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v19_e3;
-    char str_57[18];
+    char TransistorRadio_str[18];
     /* element 4 of Viewable slot 0x19: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v19_e4;
-    char str_59[14];
+    char TrebleBoost_str[14];
     /* element 5 of Viewable slot 0x19: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v19_e5;
-    char str_61[12];
+    char TrebleCut_str[12];
     /* element 6 of Viewable slot 0x19: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v19_e6;
-    char str_64[10];
+    char NoHiHat_str[10];
     /* element 7 of Viewable slot 0x19: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v19_e7;
-    char str_68[12];
+    char TubbyBass_str[12];
     /* element 8 of Viewable slot 0x19: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v19_e8;
-    char str_71[10];
+    char BassCut_str[10];
     /* element 9 of Viewable slot 0x19: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v19_e9;
-    char str_73[12];
+    char TooBright_str[12];
     /* element 10 of Viewable slot 0x19: IvCatchEvent (class id 0x01600052) */
     naka_cls_IvCatchEvent_t v19_e10;
     /* element 11 of Viewable slot 0x19 "EqOnOffBox": AcFuncToggle (class id 0x01600044) */
@@ -1088,31 +1088,31 @@ typedef struct __attribute__((packed)) {
     char w9_text[28];
     /* element 1 of Viewable slot 0x1A: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v1A_e1;
-    char str_81[12];
+    char WarmWide_str[12];
     /* element 2 of Viewable slot 0x1A: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v1A_e2;
-    char str_85[14];
+    char InYourFace_str[14];
     /* element 3 of Viewable slot 0x1A: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v1A_e3;
-    char str_88[10];
+    char OilTank_str[10];
     /* element 4 of Viewable slot 0x1A: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v1A_e4;
-    char str_90[12];
+    char WarmPlate_str[12];
     /* element 5 of Viewable slot 0x1A: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v1A_e5;
-    char str_92[14];
+    char LightShade_str[14];
     /* element 6 of Viewable slot 0x1A: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v1A_e6;
-    char str_95[14];
+    char WarmFuzzy_str[14];
     /* element 7 of Viewable slot 0x1A: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v1A_e7;
-    char str_99[8];
+    char IceBox_str[8];
     /* element 8 of Viewable slot 0x1A: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v1A_e8;
     char Stadium_str[8];
     /* element 9 of Viewable slot 0x1A: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v1A_e9;
-    char str_104[10];
+    char LiveRoom_str[10];
     /* element 10 of Viewable slot 0x1A "RevEqOnOffBox": AcFuncToggle (class id 0x01600044) */
     naka_cls_AcFuncToggle_t RevEqOnOffBox;
     char RevEqOnOffBox_stroff[10];
@@ -2042,10 +2042,10 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .editsw = 0x0088,
         .selected = 0x0003E408,
         .tag = 0x0000,
-        .str = SELF(str_20),
+        .str = SELF(HugeRoom_str),
     },
 
-    .str_20 = "Huge Room",
+    .HugeRoom_str = "Huge Room",
 
     .v18_e2 = {
         .class_ = 0x01600051,
@@ -2064,10 +2064,10 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .editsw = 0x0089,
         .selected = 0x0003E40A,
         .tag = 0x0001,
-        .str = SELF(str_24),
+        .str = SELF(BoxRoom_str),
     },
 
-    .str_24 = ALIGNED_STRING("Box Room"),
+    .BoxRoom_str = ALIGNED_STRING("Box Room"),
 
     .v18_e3 = {
         .class_ = 0x01600052,
@@ -2097,10 +2097,10 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .editsw = 0x008A,
         .selected = 0x0003E40C,
         .tag = 0x0002,
-        .str = SELF(str_29),
+        .str = SELF(SmallPlate_str),
     },
 
-    .str_29 = "Small Plate",
+    .SmallPlate_str = "Small Plate",
 
     .v18_e5 = {
         .class_ = 0x01600051,
@@ -2119,10 +2119,10 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .editsw = 0x008B,
         .selected = 0x0003E40E,
         .tag = 0x0003,
-        .str = SELF(str_31),
+        .str = SELF(SportsHall_str),
     },
 
-    .str_31 = "Sports Hall",
+    .SportsHall_str = "Sports Hall",
 
     .v18_e6 = {
         .class_ = 0x01600051,
@@ -2141,10 +2141,10 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .editsw = 0x008C,
         .selected = 0x0003E410,
         .tag = 0x0004,
-        .str = SELF(str_33),
+        .str = SELF(BrightHall_str),
     },
 
-    .str_33 = "Bright Hall",
+    .BrightHall_str = "Bright Hall",
 
     .v18_e7 = {
         .class_ = 0x01600051,
@@ -2163,10 +2163,10 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .editsw = 0x0008,
         .selected = 0x0003E412,
         .tag = 0x0005,
-        .str = SELF(str_36),
+        .str = SELF(DarkConfines_str),
     },
 
-    .str_36 = "Dark Confines",
+    .DarkConfines_str = "Dark Confines",
 
     .v18_e8 = {
         .class_ = 0x01600051,
@@ -2207,10 +2207,10 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .editsw = 0x000A,
         .selected = 0x0003E416,
         .tag = 0x0007,
-        .str = SELF(str_43),
+        .str = SELF(HighOpen_str),
     },
 
-    .str_43 = "High & Open",
+    .HighOpen_str = "High & Open",
 
     .v18_e10 = {
         .class_ = 0x01600051,
@@ -2229,10 +2229,10 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .editsw = 0x000B,
         .selected = 0x0003E418,
         .tag = 0x0008,
-        .str = SELF(str_45),
+        .str = SELF(LeftToRight_str),
     },
 
-    .str_45 = "Left To Right",
+    .LeftToRight_str = "Left To Right",
 
     .v18_e11 = {
         .class_ = 0x01600051,
@@ -2291,10 +2291,10 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .editsw = 0x0088,
         .selected = 0x0003E420,
         .tag = 0x0000,
-        .str = SELF(str_50),
+        .str = SELF(MakeUp_str),
     },
 
-    .str_50 = "Make Up",
+    .MakeUp_str = "Make Up",
 
     .v19_e2 = {
         .class_ = 0x01600051,
@@ -2313,10 +2313,10 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .editsw = 0x0089,
         .selected = 0x0003E422,
         .tag = 0x0001,
-        .str = SELF(str_54),
+        .str = SELF(MiddleCut_str),
     },
 
-    .str_54 = ALIGNED_STRING("Middle Cut"),
+    .MiddleCut_str = ALIGNED_STRING("Middle Cut"),
 
     .v19_e3 = {
         .class_ = 0x01600051,
@@ -2335,10 +2335,10 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .editsw = 0x008A,
         .selected = 0x0003E424,
         .tag = 0x0002,
-        .str = SELF(str_57),
+        .str = SELF(TransistorRadio_str),
     },
 
-    .str_57 = ALIGNED_STRING("Transistor Radio"),
+    .TransistorRadio_str = ALIGNED_STRING("Transistor Radio"),
 
     .v19_e4 = {
         .class_ = 0x01600051,
@@ -2357,10 +2357,10 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .editsw = 0x008B,
         .selected = 0x0003E426,
         .tag = 0x0003,
-        .str = SELF(str_59),
+        .str = SELF(TrebleBoost_str),
     },
 
-    .str_59 = ALIGNED_STRING("Treble Boost"),
+    .TrebleBoost_str = ALIGNED_STRING("Treble Boost"),
 
     .v19_e5 = {
         .class_ = 0x01600051,
@@ -2379,10 +2379,10 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .editsw = 0x008C,
         .selected = 0x0003E428,
         .tag = 0x0004,
-        .str = SELF(str_61),
+        .str = SELF(TrebleCut_str),
     },
 
-    .str_61 = ALIGNED_STRING("Treble Cut"),
+    .TrebleCut_str = ALIGNED_STRING("Treble Cut"),
 
     .v19_e6 = {
         .class_ = 0x01600051,
@@ -2401,10 +2401,10 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .editsw = 0x0008,
         .selected = 0x0003E42A,
         .tag = 0x0005,
-        .str = SELF(str_64),
+        .str = SELF(NoHiHat_str),
     },
 
-    .str_64 = "No Hi Hat",
+    .NoHiHat_str = "No Hi Hat",
 
     .v19_e7 = {
         .class_ = 0x01600051,
@@ -2423,10 +2423,10 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .editsw = 0x0009,
         .selected = 0x0003E42C,
         .tag = 0x0006,
-        .str = SELF(str_68),
+        .str = SELF(TubbyBass_str),
     },
 
-    .str_68 = ALIGNED_STRING("Tubby Bass"),
+    .TubbyBass_str = ALIGNED_STRING("Tubby Bass"),
 
     .v19_e8 = {
         .class_ = 0x01600051,
@@ -2445,10 +2445,10 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .editsw = 0x000A,
         .selected = 0x0003E42E,
         .tag = 0x0007,
-        .str = SELF(str_71),
+        .str = SELF(BassCut_str),
     },
 
-    .str_71 = ALIGNED_STRING("Bass Cut"),
+    .BassCut_str = ALIGNED_STRING("Bass Cut"),
 
     .v19_e9 = {
         .class_ = 0x01600051,
@@ -2467,10 +2467,10 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .editsw = 0x000B,
         .selected = 0x0003E430,
         .tag = 0x0008,
-        .str = SELF(str_73),
+        .str = SELF(TooBright_str),
     },
 
-    .str_73 = ALIGNED_STRING("Too Bright"),
+    .TooBright_str = ALIGNED_STRING("Too Bright"),
 
     .v19_e10 = {
         .class_ = 0x01600052,
@@ -2538,10 +2538,10 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .editsw = 0x0088,
         .selected = 0x0003E438,
         .tag = 0x0000,
-        .str = SELF(str_81),
+        .str = SELF(WarmWide_str),
     },
 
-    .str_81 = "Warm & Wide",
+    .WarmWide_str = "Warm & Wide",
 
     .v1A_e2 = {
         .class_ = 0x01600051,
@@ -2560,10 +2560,10 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .editsw = 0x0089,
         .selected = 0x0003E43A,
         .tag = 0x0001,
-        .str = SELF(str_85),
+        .str = SELF(InYourFace_str),
     },
 
-    .str_85 = ALIGNED_STRING("In Your Face"),
+    .InYourFace_str = ALIGNED_STRING("In Your Face"),
 
     .v1A_e3 = {
         .class_ = 0x01600051,
@@ -2582,10 +2582,10 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .editsw = 0x008A,
         .selected = 0x0003E43C,
         .tag = 0x0002,
-        .str = SELF(str_88),
+        .str = SELF(OilTank_str),
     },
 
-    .str_88 = ALIGNED_STRING("Oil Tank"),
+    .OilTank_str = ALIGNED_STRING("Oil Tank"),
 
     .v1A_e4 = {
         .class_ = 0x01600051,
@@ -2604,10 +2604,10 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .editsw = 0x008B,
         .selected = 0x0003E43E,
         .tag = 0x0003,
-        .str = SELF(str_90),
+        .str = SELF(WarmPlate_str),
     },
 
-    .str_90 = ALIGNED_STRING("Warm Plate"),
+    .WarmPlate_str = ALIGNED_STRING("Warm Plate"),
 
     .v1A_e5 = {
         .class_ = 0x01600051,
@@ -2626,10 +2626,10 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .editsw = 0x008C,
         .selected = 0x0003E440,
         .tag = 0x0004,
-        .str = SELF(str_92),
+        .str = SELF(LightShade_str),
     },
 
-    .str_92 = "Light & Shade",
+    .LightShade_str = "Light & Shade",
 
     .v1A_e6 = {
         .class_ = 0x01600051,
@@ -2648,10 +2648,10 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .editsw = 0x0008,
         .selected = 0x0003E442,
         .tag = 0x0005,
-        .str = SELF(str_95),
+        .str = SELF(WarmFuzzy_str),
     },
 
-    .str_95 = ALIGNED_STRING("Warm & Fuzzy"),
+    .WarmFuzzy_str = ALIGNED_STRING("Warm & Fuzzy"),
 
     .v1A_e7 = {
         .class_ = 0x01600051,
@@ -2670,10 +2670,10 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .editsw = 0x0009,
         .selected = 0x0003E444,
         .tag = 0x0006,
-        .str = SELF(str_99),
+        .str = SELF(IceBox_str),
     },
 
-    .str_99 = "Ice Box",
+    .IceBox_str = "Ice Box",
 
     .v1A_e8 = {
         .class_ = 0x01600051,
@@ -2714,10 +2714,10 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .editsw = 0x000B,
         .selected = 0x0003E448,
         .tag = 0x0008,
-        .str = SELF(str_104),
+        .str = SELF(LiveRoom_str),
     },
 
-    .str_104 = "Live Room",
+    .LiveRoom_str = "Live Room",
 
     .RevEqOnOffBox = {
         .class_ = 0x01600044,

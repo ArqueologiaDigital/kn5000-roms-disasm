@@ -1957,7 +1957,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_2b62;
     uint16_t field_2b64;
     uint8_t pad_146[8];  /* zero padding */
-    char str_508[4];
+    char Hk_str[4];
     uint8_t pad_147[10];  /* zero padding */
     uint16_t field_2b7c;
     uint16_t field_2b7e;
@@ -8509,7 +8509,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .pad_146 = { 0 },
 
-    .str_508 = "HK ",
+    .Hk_str = "HK ",
 
     .pad_147 = { 0 },
 

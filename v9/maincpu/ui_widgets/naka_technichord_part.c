@@ -1227,7 +1227,7 @@ typedef struct __attribute__((packed)) {
 } naka_cls_IvSoftver_t;
 
 typedef struct __attribute__((packed)) {
-    char str_0[14];
+    char TechniChord_str[14];
     /* element 0 of Viewable slot 0x3 "Sdpart": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t Sdpart;
     char w0_text[20];
@@ -1611,7 +1611,7 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_1af8;
     uint16_t field_1afc;
     uint8_t pad_236[2];  /* zero padding */
-    char str_338[14];
+    char TechniChord_str_2[14];
     /* element 1 of Viewable slot 0xD "SdtecdPage": AcWindowPage (class id 0x01600025) */
     naka_cls_AcWindowPage_t SdtecdPage;
     /* element 2 of Viewable slot 0xD: IvPageControl (class id 0x01600028) */
@@ -1635,16 +1635,16 @@ typedef struct __attribute__((packed)) {
     char CLOSE_str[6];
     /* element 11 of Viewable slot 0xD "TcOpen1": PsLabelBox (class id 0x01610007) */
     naka_cls_PsLabelBox_t TcOpen1;
-    char str_362[8];
+    char Open_str[8];
     /* element 12 of Viewable slot 0xD "TcOpen2": PsLabelBox (class id 0x01610007) */
     naka_cls_PsLabelBox_t TcOpen2;
-    char str_367[8];
+    char Open_str_2[8];
     /* element 13 of Viewable slot 0xD "TcDuet1": PsLabelBox (class id 0x01610007) */
     naka_cls_PsLabelBox_t TcDuet1;
-    char str_371[8];
+    char Duet_str[8];
     /* element 14 of Viewable slot 0xD "TcDuet2": PsLabelBox (class id 0x01610007) */
     naka_cls_PsLabelBox_t TcDuet2;
-    char str_374[8];
+    char Duet_str_2[8];
     /* element 15 of Viewable slot 0xD "TcCountry": PsLabelBox (class id 0x01610007) */
     naka_cls_PsLabelBox_t TcCountry;
     char COUNTRY_str[8];
@@ -1656,10 +1656,10 @@ typedef struct __attribute__((packed)) {
     char HYMN_str[6];
     /* element 18 of Viewable slot 0xD "TcBigBandBrass": PsLabelBox (class id 0x01610007) */
     naka_cls_PsLabelBox_t TcBigBandBrass;
-    char str_384[16];
+    char BigBandBrass_str[16];
     /* element 19 of Viewable slot 0xD "TcBigBandReeds": PsLabelBox (class id 0x01610007) */
     naka_cls_PsLabelBox_t TcBigBandReeds;
-    char str_386[16];
+    char BigBandReeds_str[16];
     /* element 20 of Viewable slot 0xD "TcOctave": PsLabelBox (class id 0x01610007) */
     naka_cls_PsLabelBox_t TcOctave;
     char OCTAVE_str[8];
@@ -1668,7 +1668,7 @@ typedef struct __attribute__((packed)) {
     char BLOCK_str[6];
     /* element 22 of Viewable slot 0xD "TcHardRock": PsLabelBox (class id 0x01610007) */
     naka_cls_PsLabelBox_t TcHardRock;
-    char str_391[10];
+    char HardRock_str[10];
     /* element 23 of Viewable slot 0xD "TcFanfare": PsLabelBox (class id 0x01610007) */
     naka_cls_PsLabelBox_t TcFanfare;
     char FANFARE_str[8];
@@ -1709,10 +1709,10 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_20dc;
     uint16_t field_20e0;
     uint8_t pad_289[2];  /* zero padding */
-    char str_402[22];
+    char FeaturePresentation_str[22];
     /* element 1 of Viewable slot 0xE4: AcPresentationBox (class id 0x0161001D) */
     naka_cls_AcPresentationBox_t vE4_e1;
-    char str_405[24];
+    char StartTheInternalDemo_str[24];
     /* element 2 of Viewable slot 0xE4 "Demofeature1": Window (class id 0x01600035) */
     naka_cls_Window_t Demofeature1;
     /* element 3 of Viewable slot 0xE4: IvDemofeature1 (class id 0x01610019) */
@@ -1725,7 +1725,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_IvDemofeature2_t vE4_e6;
     /* element 7 of Viewable slot 0xE4: AcPresentationBox (class id 0x0161001D) */
     naka_cls_AcPresentationBox_t vE4_e7;
-    char str_413[22];
+    char StartTheLoadedDemo_str[22];
     /* element 8 of Viewable slot 0xE4 "FDemoTitleBox": PsParaBox (class id 0x01600012) */
     naka_cls_PsParaBox_t FDemoTitleBox;
     /* element 9 of Viewable slot 0xE4 "PlainScreen": Screen (class id 0x01600033) */
@@ -2293,7 +2293,7 @@ _Static_assert(sizeof(naka_technichord_part_t) == 17024,
 const naka_technichord_part_t naka_technichord_part_data
     __attribute__((section(".text"), used)) = {
 
-    .str_0 = ALIGNED_STRING("TECHNI-CHORD"),
+    .TechniChord_str = ALIGNED_STRING("TECHNI-CHORD"),
 
     .Sdpart = {
         .class_ = 0x01600034,
@@ -5056,13 +5056,13 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .field_1af6 = 0x0003,
 
-    .ptr_1af8 = SELF(str_338),
+    .ptr_1af8 = SELF(TechniChord_str_2),
 
     .field_1afc = 0x0018,
 
     .pad_236 = { 0 },
 
-    .str_338 = ALIGNED_STRING("TECHNI-CHORD"),
+    .TechniChord_str_2 = ALIGNED_STRING("TECHNI-CHORD"),
 
     .SdtecdPage = {
         .class_ = 0x01600025,
@@ -5227,7 +5227,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0002,
-        .str = SELF(str_362),
+        .str = SELF(Open_str),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -5235,7 +5235,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .dialfocus = 0x0003E7D6,
     },
 
-    .str_362 = ALIGNED_STRING("OPEN 1"),
+    .Open_str = ALIGNED_STRING("OPEN 1"),
 
     .TcOpen2 = {
         .class_ = 0x01610007,
@@ -5248,7 +5248,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0002,
-        .str = SELF(str_367),
+        .str = SELF(Open_str_2),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -5256,7 +5256,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .dialfocus = 0x0003E7DA,
     },
 
-    .str_367 = ALIGNED_STRING("OPEN 2"),
+    .Open_str_2 = ALIGNED_STRING("OPEN 2"),
 
     .TcDuet1 = {
         .class_ = 0x01610007,
@@ -5269,7 +5269,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0002,
-        .str = SELF(str_371),
+        .str = SELF(Duet_str),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -5277,7 +5277,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .dialfocus = 0x0003E7DE,
     },
 
-    .str_371 = ALIGNED_STRING("DUET 1"),
+    .Duet_str = ALIGNED_STRING("DUET 1"),
 
     .TcDuet2 = {
         .class_ = 0x01610007,
@@ -5290,7 +5290,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0002,
-        .str = SELF(str_374),
+        .str = SELF(Duet_str_2),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -5298,7 +5298,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .dialfocus = 0x0003E7E2,
     },
 
-    .str_374 = ALIGNED_STRING("DUET 2"),
+    .Duet_str_2 = ALIGNED_STRING("DUET 2"),
 
     .TcCountry = {
         .class_ = 0x01610007,
@@ -5374,7 +5374,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0002,
-        .str = SELF(str_384),
+        .str = SELF(BigBandBrass_str),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -5382,7 +5382,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .dialfocus = 0x0003E7F2,
     },
 
-    .str_384 = ALIGNED_STRING("BIG BAND BRASS"),
+    .BigBandBrass_str = ALIGNED_STRING("BIG BAND BRASS"),
 
     .TcBigBandReeds = {
         .class_ = 0x01610007,
@@ -5395,7 +5395,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0002,
-        .str = SELF(str_386),
+        .str = SELF(BigBandReeds_str),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -5403,7 +5403,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .dialfocus = 0x0003E7F6,
     },
 
-    .str_386 = ALIGNED_STRING("BIG BAND REEDS"),
+    .BigBandReeds_str = ALIGNED_STRING("BIG BAND REEDS"),
 
     .TcOctave = {
         .class_ = 0x01610007,
@@ -5458,7 +5458,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0002,
-        .str = SELF(str_391),
+        .str = SELF(HardRock_str),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -5466,7 +5466,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .dialfocus = 0x0003E802,
     },
 
-    .str_391 = "HARD ROCK",
+    .HardRock_str = "HARD ROCK",
 
     .TcFanfare = {
         .class_ = 0x01610007,
@@ -5661,13 +5661,13 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .field_20da = 0x0003,
 
-    .ptr_20dc = SELF(str_402),
+    .ptr_20dc = SELF(FeaturePresentation_str),
 
     .field_20e0 = 0x00AB,
 
     .pad_289 = { 0 },
 
-    .str_402 = ALIGNED_STRING("FEATURE PRESENTATION"),
+    .FeaturePresentation_str = ALIGNED_STRING("FEATURE PRESENTATION"),
 
     .vE4_e1 = {
         .class_ = 0x0161001D,
@@ -5683,13 +5683,13 @@ const naka_technichord_part_t naka_technichord_part_data
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0000,
-        .str = SELF(str_405),
+        .str = SELF(StartTheInternalDemo_str),
         .editsw = 0x0089,
         .selected = 0x0003E81E,
         .song = 0x0012,
     },
 
-    .str_405 = "Start the internal DEMO",
+    .StartTheInternalDemo_str = "Start the internal DEMO",
 
     .Demofeature1 = {
         .class_ = 0x01600035,
@@ -5773,13 +5773,13 @@ const naka_technichord_part_t naka_technichord_part_data
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0000,
-        .str = SELF(str_413),
+        .str = SELF(StartTheLoadedDemo_str),
         .editsw = 0x008B,
         .selected = 0x0003E830,
         .song = 0x0013,
     },
 
-    .str_413 = "Start the loaded DEMO",
+    .StartTheLoadedDemo_str = "Start the loaded DEMO",
 
     .FDemoTitleBox = {
         .class_ = 0x01600012,

@@ -15,7 +15,10 @@ QUESTION IT ANSWERS / WHAT IT DOES
     2. a str_N that a widget field references -> <element>_<field> (`str_3` -> `SYSINI_list`), from the first
        reference in the initializer, unless that field is itself a placeholder (`.ptr_0160`);
     3. any other str_N whose text is an identifier (a resource, bitmap or style name such as "FTBMP01" or
-       "TcBigBandBrass") -> <text>_str.  Empty strings, prose and single symbols keep their names.
+       "TcBigBandBrass") -> <text>_str;
+    4. any other str_N whose text has words -> its first (up to four) words in CamelCase + _str, at most 32
+       characters ("Bass Port Speaker" -> BassPortSpeaker_str).  Empty strings and single symbols keep
+       their names.
   Only member names change, never a type, size or order, so every compiled blob must stay byte-identical
   (`make all`).  Comments are kept; the position stays in the element comments.
 
@@ -90,6 +93,22 @@ def plan_file(text):
         nm, n = base, 2
         while nm in used:
             nm, n = "%s_%d" % (base, n), n + 1
+        ren[s] = nm
+        used.add(nm)
+    # 4. any other str_N whose text has words: the first words in CamelCase + _str (ASCII letters and digits)
+    for m in re.finditer(r'\n\s+\.(str_\d+)\s*=\s*(?:ALIGNED_STRING\()?\s*"((?:[^"\\]|\\.)*)"', text):
+        s, body = m.group(1), m.group(2)
+        if s in ren:
+            continue
+        words = re.findall(r'[A-Za-z][A-Za-z0-9]*', re.sub(r'\\[nrt0x][0-9a-fA-F]*', ' ', body))
+        words = [w for w in words if len(w) > 1 or w.isupper()][:4]
+        if not words:
+            continue
+        stem = "".join((w.capitalize() if w.isupper() else w[:1].upper() + w[1:]) for w in words)[:32]
+        base = "%s_str" % stem
+        nm, k = base, 2
+        while nm in used:
+            nm, k = "%s_%d" % (base, k), k + 1
         ren[s] = nm
         used.add(nm)
     return ren

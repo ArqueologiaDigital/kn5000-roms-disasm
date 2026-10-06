@@ -1231,7 +1231,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_AcIndexWideES_t v45_e16;
     /* element 17 of Viewable slot 0x45: StringBox (class id 0x01600037) */
     naka_cls_StringBox_t v45_e17;
-    char str_54[20];
+    char ExpandModeFilter_str[20];
     /* element 18 of Viewable slot 0x45: Window (class id 0x01600035) */
     naka_cls_Window_t v45_e18;
     /* element 0 of Viewable slot 0x47 "ControlSys": TtlScreen (class id 0x01600034) */
@@ -1484,7 +1484,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_Icon_t vD0_e1;
     /* element 2 of Viewable slot 0xD0: StringBox (class id 0x01600037) */
     naka_cls_StringBox_t vD0_e2;
-    char str_135[18];
+    char PmemBankSelect_str[18];
     /* element 3 of Viewable slot 0xD0: PsPageBox (class id 0x01600024) */
     naka_cls_PsPageBox_t vD0_e3;
     /* element 4 of Viewable slot 0xD0: Label (class id 0x0160002B) */
@@ -2779,13 +2779,13 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .rect = { 39, 2, 238, 29 },
         .color = 0x00F5,
         .border = 0x0000,
-        .str = SELF(str_54),
+        .str = SELF(ExpandModeFilter_str),
         .font = 0x00000004,
         .fontcolor = 0x00FF,
         .alignment = 0x0000,
     },
 
-    .str_54 = ALIGNED_STRING("EXPAND MODE FILTER"),
+    .ExpandModeFilter_str = ALIGNED_STRING("EXPAND MODE FILTER"),
 
     .v45_e18 = {
         .class_ = 0x01600035,
@@ -4527,13 +4527,13 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .rect = { 56, 6, 235, 22 },
         .color = 0x00F5,
         .border = 0x0000,
-        .str = SELF(str_135),
+        .str = SELF(PmemBankSelect_str),
         .font = 0x00000004,
         .fontcolor = 0x00FF,
         .alignment = 0x0000,
     },
 
-    .str_135 = ALIGNED_STRING("PMEM BANK SELECT"),
+    .PmemBankSelect_str = ALIGNED_STRING("PMEM BANK SELECT"),
 
     .vD0_e3 = {
         .class_ = 0x01600024,

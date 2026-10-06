@@ -397,7 +397,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_IvExitMode_t v0_e4;
     /* element 5 of Viewable slot 0x0: AcWindowMenu (class id 0x01600042) */
     naka_cls_AcWindowMenu_t v0_e5;
-    char str_1[14];
+    char DebugWindow_str[14];
     /* element 6 of Viewable slot 0x0 "ClipBoard": Screen (class id 0x01600033) */
     naka_cls_Screen_t ClipBoard;
     /* element 7 of Viewable slot 0x0 "DebugWindow": Window (class id 0x01600035) */
@@ -1284,12 +1284,12 @@ const naka_debug_naming_t naka_debug_naming_data
         .align = 0x0000,
         .editsw = 0x008C,
         .selected = 0x0003F0B2,
-        .str = SELF(str_1),
+        .str = SELF(DebugWindow_str),
         .window = 0x00000007,
         .icon = 0x00000001,
     },
 
-    .str_1 = ALIGNED_STRING("DEBUG WINDOW"),
+    .DebugWindow_str = ALIGNED_STRING("DEBUG WINDOW"),
 
     .ClipBoard = {
         .class_ = 0x01600033,

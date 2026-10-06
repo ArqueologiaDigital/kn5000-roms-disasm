@@ -1938,12 +1938,12 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_5eb4;
     char str_868[2];
     uint32_t ptrs_1[6];  /* 6 pointers */
-    char str_869[18];
+    char BassPortSpeaker_str[18];
     char Italian_str[8];
     char str_871[2];
-    char str_872[26];
-    char str_873[18];
-    char str_874[18];
+    char AmplificationDesGraves_str[26];
+    char BassPortSpeaker_str_2[18];
+    char BassPortSpeaker_str_3[18];
     uint32_t ptrs_2[6];  /* 6 pointers */
     char str_875[2];
     char str_876[2];
@@ -1952,10 +1952,10 @@ typedef struct __attribute__((packed)) {
     char str_879[2];
     char str_880[2];
     uint32_t ptrs_3[6];  /* 6 pointers */
-    char str_881[96];
+    char SpecialWooferDanBass_str[96];
     char Italian_str_2[8];
     char txt_El_porton_para_bajos_y_graves[84];
-    char str_883[8];
+    char Rico_str[8];
     uint16_t field_6048;
     uint16_t field_604a;
     uint16_t field_604c;
@@ -1963,71 +1963,71 @@ typedef struct __attribute__((packed)) {
     uint16_t field_6050;
     uint16_t field_6052;
     uint16_t field_6054;
-    char str_884[98];
-    char str_885[92];
-    char str_886[74];
+    char CialAmplificationDesGraves_str[98];
+    char DerSpezielleWooferBass_str[92];
+    char TheKn5000SpecialWoofer_str[74];
     uint32_t ptrs_4[6];  /* 6 pointers */
-    char str_887[12];
+    char HugeStyles_str[12];
     char Italian_str_3[8];
-    char str_889[16];
+    char EstilosEnormes_str[16];
     char txt_Diversite_des_styles[22];
-    char str_891[26];
-    char str_892[12];
+    char RiesigeAuswahlAnStyles_str[26];
+    char HugeStyles_str_2[12];
     uint32_t ptrs_5[6];  /* 6 pointers */
-    char str_893[56];
+    char MenghasilkanGayaPermainanDengan_str[56];
     char Italian_str_4[8];
-    char str_895[58];
+    char ExploreLosEstilosMusicales_str[58];
     char txt_Grace_au_Music_Stylist_explorez[86];
     uint16_t field_62be;
-    char str_897[82];
-    char str_898[52];
+    char HlenSieAusStilistisch_str[82];
+    char ExploreMusicalStylesWith_str[52];
     uint32_t ptrs_6[6];  /* 6 pointers */
-    char str_899[78];
+    char TambahkanKesenanganAndaDengan_str[78];
     char Italian_str_5[8];
     char txt_Disfrute_mas_con_la_gran[72];
     char txt_Encore_plus_de_possibilites[70];
     char txt_Nutzen_Sie_das_groe_Technics[88];
-    char str_904[62];
+    char AddToYourEnjoyment_str[62];
     uint32_t ptrs_7[6];  /* 6 pointers */
-    char str_905[78];
+    char DanDapatMengubahHampir_str[78];
     char Italian_str_6[8];
     uint16_t field_6546;
-    char str_907[54];
-    char str_908[88];
-    char str_909[84];
-    char str_910[58];
+    char ConviertaElSoftwareDe_str[54];
+    char EtVousPouvezConvertir_str[88];
+    char KonvertierenSieSoftwareVieler_str[84];
+    char AndConvertSoftwareFrom_str[58];
     uint32_t ptrs_8[6];  /* 6 pointers */
-    char str_911[90];
+    char SimpanPolaPolaSoftware_str[90];
     char Italian_str_7[8];
     uint16_t field_66de;
-    char str_913[92];
+    char EmoriceSusPatronesDe_str[92];
     char txt_Enregistrez_vos_motifs_preferes[96];
-    char str_915[88];
-    char str_916[84];
+    char SpeichernSieIhreLieblings_str[88];
+    char StoreYourFavoriteSoftware_str[84];
     uint32_t ptrs_9[6];  /* 6 pointers */
-    char str_917[20];
+    char AccordionRegister_str[20];
     char Italian_str_8[8];
-    char str_919[20];
-    char str_920[20];
-    char str_921[20];
-    char str_922[20];
+    char AccordionRegister_str_2[20];
+    char AccordionRegister_str_3[20];
+    char AccordionRegister_str_4[20];
+    char AccordionRegister_str_5[20];
     uint32_t ptrs_10[6];  /* 6 pointers */
-    char str_923[72];
+    char SuaraSuaraAkordionPada_str[72];
     char Italian_str_9[8];
     char txt_Un_mundo_de_sonidos_de_acordeon[86];
     char txt_Avec_la_fonction_Accordion[86];
     char txt_ACCORDION_REGISTER_eroffnet[60];
-    char str_927[6];
-    char str_928[76];
+    char Nge_str[6];
+    char AWorldOfAccordion_str[76];
     uint32_t ptrs_11[6];  /* 6 pointers */
-    char str_929[16];
+    char DigitalDrawbar_str[16];
     char Italian_str_10[8];
-    char str_931[16];
-    char str_932[16];
-    char str_933[16];
-    char str_934[16];
+    char DigitalDrawbar_str_2[16];
+    char DigitalDrawbar_str_3[16];
+    char DigitalDrawbar_str_4[16];
+    char DigitalDrawbar_str_5[16];
     uint32_t ptrs_12[6];  /* 6 pointers */
-    char str_935[58];
+    char SuaraSuaraOrganClassic_str[58];
     char Italian_str_11[8];
     uint16_t field_6b38;
     uint16_t field_6b3a;
@@ -2040,52 +2040,52 @@ typedef struct __attribute__((packed)) {
     uint16_t field_6b48;
     uint16_t field_6b4a;
     uint16_t field_6b4c;
-    char str_937[36];
+    char SicosConBarrasPara_str[36];
     char txt_Avec_les_tirettes_harmoniques[86];
     char txt_Erzeugen_Sie_legendare[70];
-    char str_940[50];
+    char ClassicOrganSoundsWith_str[50];
     uint32_t ptrs_13[6];  /* 6 pointers */
-    char str_941[18];
+    char AcousticIllusion_str[18];
     char Italian_str_12[8];
-    char str_943[18];
-    char str_944[18];
-    char str_945[18];
-    char str_946[18];
+    char AcousticIllusion_str_2[18];
+    char AcousticIllusion_str_3[18];
+    char AcousticIllusion_str_4[18];
+    char AcousticIllusion_str_5[18];
     uint32_t ptrs_14[6];  /* 6 pointers */
-    char str_947[60];
+    char AcousticIllusionMemperluasMusik_str[60];
     char Italian_str_13[8];
     char txt_El_Acoustic_Illusion_amplia_su[56];
     char txt_La_fonction_Acoustic_Illusion[80];
     char txt_ACCOUSTIC_ILLUSION_verleiht_dem[70];
-    char str_952[56];
+    char AcousticIllusionBroadensYour_str[56];
     uint32_t ptrs_15[6];  /* 6 pointers */
-    char str_953[74];
+    char SatuPilihanDaripadaGambar_str[74];
     char Italian_str_14[8];
     char txt_Una_serie_de_funciones[70];
     char txt_Une_grande_diversite_de[52];
     char txt_Viele_weitere_leistungsfahige[86];
-    char str_958[54];
+    char AHostOfFeatures_str[54];
     uint32_t ptrs_16[6];  /* 6 pointers */
-    char str_959[12];
+    char HugeStyles_str_3[12];
     char Italian_str_15[8];
-    char str_961[12];
-    char str_962[12];
-    char str_963[16];
-    char str_964[12];
+    char HugeStyles_str_4[12];
+    char HugeStyles_str_5[12];
+    char HugeStylesG_str[16];
+    char HugeStyles_str_6[12];
     uint32_t ptrs_17[6];  /* 6 pointers */
-    char str_965[12];
+    char HugeStyles_str_7[12];
     char Italian_str_16[8];
-    char str_967[12];
-    char str_968[12];
-    char str_969[16];
-    char str_970[12];
+    char HugeStyles_str_8[12];
+    char HugeStyles_str_9[12];
+    char HugeStylesG_str_2[16];
+    char HugeStyles_str_10[12];
     uint32_t ptrs_18[6];  /* 6 pointers */
-    char str_971[12];
+    char HugeStyles_str_11[12];
     char Italian_str_17[8];
-    char str_973[12];
-    char str_974[12];
-    char str_975[16];
-    char str_976[12];
+    char HugeStyles_str_12[12];
+    char HugeStyles_str_13[12];
+    char HugeStylesG_str_3[16];
+    char HugeStyles_str_14[12];
     uint16_t field_70ac;
     uint16_t field_70ae;
     uint16_t field_70b0;
@@ -11026,25 +11026,25 @@ const naka_perf_style_t naka_perf_style_data
     .str_868 = ALIGNED_STRING(""),
 
     .ptrs_1 = {
-        SELF(str_874),
-        SELF(str_873),
-        SELF(str_872),
+        SELF(BassPortSpeaker_str_3),
+        SELF(BassPortSpeaker_str_2),
+        SELF(AmplificationDesGraves_str),
         SELF(str_871),
         SELF(Italian_str),
-        SELF(str_869),
+        SELF(BassPortSpeaker_str),
     },
 
-    .str_869 = "Bass Port Speaker",
+    .BassPortSpeaker_str = "Bass Port Speaker",
 
     .Italian_str = "Italian",
 
     .str_871 = ALIGNED_STRING(""),
 
-    .str_872 = ALIGNED_STRING("Amplification des graves"),
+    .AmplificationDesGraves_str = ALIGNED_STRING("Amplification des graves"),
 
-    .str_873 = "Bass Port Speaker",
+    .BassPortSpeaker_str_2 = "Bass Port Speaker",
 
-    .str_874 = "Bass Port Speaker",
+    .BassPortSpeaker_str_3 = "Bass Port Speaker",
 
     .ptrs_2 = {
         SELF(str_880),
@@ -11068,21 +11068,21 @@ const naka_perf_style_t naka_perf_style_data
     .str_880 = ALIGNED_STRING(""),
 
     .ptrs_3 = {
-        SELF(str_886),
-        SELF(str_885),
+        SELF(TheKn5000SpecialWoofer_str),
+        SELF(DerSpezielleWooferBass_str),
         SELF(field_6048),
         SELF(txt_El_porton_para_bajos_y_graves),
         SELF(Italian_str_2),
-        SELF(str_881),
+        SELF(SpecialWooferDanBass_str),
     },
 
-    .str_881 = ALIGNED_STRING("Special Woofer dan Bass Port yang terdapat pada KN-5000 menghasilkan suara yang kuat dan baik."),
+    .SpecialWooferDanBass_str = ALIGNED_STRING("Special Woofer dan Bass Port yang terdapat pada KN-5000 menghasilkan suara yang kuat dan baik."),
 
     .Italian_str_2 = "Italian",
 
     .txt_El_porton_para_bajos_y_graves = "\241El port\363n para bajos y graves especiales del KN5000 produce un sonido potente y m\341s",
 
-    .str_883 = ALIGNED_STRING(" rico!"),
+    .Rico_str = ALIGNED_STRING(" rico!"),
 
     .field_6048 = 0x654C,
 
@@ -11098,66 +11098,66 @@ const naka_perf_style_t naka_perf_style_data
 
     .field_6054 = 0xE970,
 
-    .str_884 = ALIGNED_STRING("cial d'amplification des graves du KN-5000 donne encore plus de puissance et de richesse sonore!"),
+    .CialAmplificationDesGraves_str = ALIGNED_STRING("cial d'amplification des graves du KN-5000 donne encore plus de puissance et de richesse sonore!"),
 
-    .str_885 = ALIGNED_STRING("Der spezielle Woofer & Bass Port des SX-KN5000 erzeugt einen kraft- und druckvollen Klang."),
+    .DerSpezielleWooferBass_str = ALIGNED_STRING("Der spezielle Woofer & Bass Port des SX-KN5000 erzeugt einen kraft- und druckvollen Klang."),
 
-    .str_886 = ALIGNED_STRING("The KN5000's Special Woofer & Bass Port produce a Rich & Powerful sound!"),
+    .TheKn5000SpecialWoofer_str = ALIGNED_STRING("The KN5000's Special Woofer & Bass Port produce a Rich & Powerful sound!"),
 
     .ptrs_4 = {
-        SELF(str_892),
-        SELF(str_891),
+        SELF(HugeStyles_str_2),
+        SELF(RiesigeAuswahlAnStyles_str),
         SELF(txt_Diversite_des_styles),
-        SELF(str_889),
+        SELF(EstilosEnormes_str),
         SELF(Italian_str_3),
-        SELF(str_887),
+        SELF(HugeStyles_str),
     },
 
-    .str_887 = "Huge Styles",
+    .HugeStyles_str = "Huge Styles",
 
     .Italian_str_3 = "Italian",
 
-    .str_889 = "Estilos enormes",
+    .EstilosEnormes_str = "Estilos enormes",
 
     .txt_Diversite_des_styles = "Diversit\351 des styles\0\377",
 
-    .str_891 = "Riesige Auswahl an Styles",
+    .RiesigeAuswahlAnStyles_str = "Riesige Auswahl an Styles",
 
-    .str_892 = "Huge Styles",
+    .HugeStyles_str_2 = "Huge Styles",
 
     .ptrs_5 = {
-        SELF(str_898),
+        SELF(ExploreMusicalStylesWith_str),
         SELF(field_62be),
         SELF(txt_Grace_au_Music_Stylist_explorez),
-        SELF(str_895),
+        SELF(ExploreLosEstilosMusicales_str),
         SELF(Italian_str_4),
-        SELF(str_893),
+        SELF(MenghasilkanGayaPermainanDengan_str),
     },
 
-    .str_893 = ALIGNED_STRING("Menghasilkan 1000 gaya permainan dengan Music Stylist."),
+    .MenghasilkanGayaPermainanDengan_str = ALIGNED_STRING("Menghasilkan 1000 gaya permainan dengan Music Stylist."),
 
     .Italian_str_4 = "Italian",
 
-    .str_895 = ALIGNED_STRING("Explore los 1000 estilos musicales con el Music Stylist."),
+    .ExploreLosEstilosMusicales_str = ALIGNED_STRING("Explore los 1000 estilos musicales con el Music Stylist."),
 
     .txt_Grace_au_Music_Stylist_explorez = "Gr\342ce au \253 Music Stylist \273, explorez l'un apr\350s l'autre les 1000 styles disponibles.\0\377",
 
     .field_62be = 0xE457,
 
-    .str_897 = ALIGNED_STRING("hlen Sie aus 1000 stilistisch sortierten Gesamtregistrierungen im MUSIC STYLIST."),
+    .HlenSieAusStilistisch_str = ALIGNED_STRING("hlen Sie aus 1000 stilistisch sortierten Gesamtregistrierungen im MUSIC STYLIST."),
 
-    .str_898 = "Explore 1000 Musical Styles with the Music Stylist.",
+    .ExploreMusicalStylesWith_str = "Explore 1000 Musical Styles with the Music Stylist.",
 
     .ptrs_6 = {
-        SELF(str_904),
+        SELF(AddToYourEnjoyment_str),
         SELF(txt_Nutzen_Sie_das_groe_Technics),
         SELF(txt_Encore_plus_de_possibilites),
         SELF(txt_Disfrute_mas_con_la_gran),
         SELF(Italian_str_5),
-        SELF(str_899),
+        SELF(TambahkanKesenanganAndaDengan_str),
     },
 
-    .str_899 = "Tambahkan kesenangan Anda dengan berbagai jenis Software Music dari Technics.",
+    .TambahkanKesenanganAndaDengan_str = "Tambahkan kesenangan Anda dengan berbagai jenis Software Music dari Technics.",
 
     .Italian_str_5 = "Italian",
 
@@ -11167,85 +11167,85 @@ const naka_perf_style_t naka_perf_style_data
 
     .txt_Nutzen_Sie_das_groe_Technics = "Nutzen Sie das gro\337e Technics-Softwareangebot zur individuellen Gestaltung Ihrer Musik.\0",
 
-    .str_904 = ALIGNED_STRING("Add to your enjoyment with a wide range of Technics Software"),
+    .AddToYourEnjoyment_str = ALIGNED_STRING("Add to your enjoyment with a wide range of Technics Software"),
 
     .ptrs_7 = {
-        SELF(str_910),
-        SELF(str_909),
-        SELF(str_908),
+        SELF(AndConvertSoftwareFrom_str),
+        SELF(KonvertierenSieSoftwareVieler_str),
+        SELF(EtVousPouvezConvertir_str),
         SELF(field_6546),
         SELF(Italian_str_6),
-        SELF(str_905),
+        SELF(DanDapatMengubahHampir_str),
     },
 
-    .str_905 = "Dan dapat mengubah hampir semua software yang dihasilkan oleh pabrik manapun!",
+    .DanDapatMengubahHampir_str = "Dan dapat mengubah hampir semua software yang dihasilkan oleh pabrik manapun!",
 
     .Italian_str_6 = "Italian",
 
     .field_6546 = 0x59A1,
 
-    .str_907 = " convierta el software de casi todos los fabricantes!",
+    .ConviertaElSoftwareDe_str = " convierta el software de casi todos los fabricantes!",
 
-    .str_908 = ALIGNED_STRING("Et vous pouvez convertir les softwares de la plupart des autres principaux fabricants!"),
+    .EtVousPouvezConvertir_str = ALIGNED_STRING("Et vous pouvez convertir les softwares de la plupart des autres principaux fabricants!"),
 
-    .str_909 = ALIGNED_STRING("Konvertieren Sie Software vieler anderer Hersteller zur Verwendung auf dem KN5000."),
+    .KonvertierenSieSoftwareVieler_str = ALIGNED_STRING("Konvertieren Sie Software vieler anderer Hersteller zur Verwendung auf dem KN5000."),
 
-    .str_910 = ALIGNED_STRING("And convert software from almost any other manufacturer!"),
+    .AndConvertSoftwareFrom_str = ALIGNED_STRING("And convert software from almost any other manufacturer!"),
 
     .ptrs_8 = {
-        SELF(str_916),
-        SELF(str_915),
+        SELF(StoreYourFavoriteSoftware_str),
+        SELF(SpeichernSieIhreLieblings_str),
         SELF(txt_Enregistrez_vos_motifs_preferes),
         SELF(field_66de),
         SELF(Italian_str_7),
-        SELF(str_911),
+        SELF(SimpanPolaPolaSoftware_str),
     },
 
-    .str_911 = "Simpan pola-pola software favorit Anda kedalam Custom Rhythm Group ..... secara permanen!",
+    .SimpanPolaPolaSoftware_str = "Simpan pola-pola software favorit Anda kedalam Custom Rhythm Group ..... secara permanen!",
 
     .Italian_str_7 = "Italian",
 
     .field_66de = 0x4DA1,
 
-    .str_913 = ALIGNED_STRING("emorice sus patrones de software favoritos con el Custom Rhythm Group ... permanentemente!"),
+    .EmoriceSusPatronesDe_str = ALIGNED_STRING("emorice sus patrones de software favoritos con el Custom Rhythm Group ... permanentemente!"),
 
     .txt_Enregistrez_vos_motifs_preferes = "Enregistrez vos motifs pr\351f\351r\351s dans le groupe  \253 Custom Rhythm Group \273 ...de fa\347on permanente!\0",
 
-    .str_915 = "Speichern Sie Ihre Lieblings Software-Rhythmen permanent in der CUSTOM-Rhythmus Gruppe!",
+    .SpeichernSieIhreLieblings_str = "Speichern Sie Ihre Lieblings Software-Rhythmen permanent in der CUSTOM-Rhythmus Gruppe!",
 
-    .str_916 = ALIGNED_STRING("Store your favorite software patterns in the Custom Rhythm Group .....permanently!"),
+    .StoreYourFavoriteSoftware_str = ALIGNED_STRING("Store your favorite software patterns in the Custom Rhythm Group .....permanently!"),
 
     .ptrs_9 = {
-        SELF(str_922),
-        SELF(str_921),
-        SELF(str_920),
-        SELF(str_919),
+        SELF(AccordionRegister_str_5),
+        SELF(AccordionRegister_str_4),
+        SELF(AccordionRegister_str_3),
+        SELF(AccordionRegister_str_2),
         SELF(Italian_str_8),
-        SELF(str_917),
+        SELF(AccordionRegister_str),
     },
 
-    .str_917 = ALIGNED_STRING("Accordion Register"),
+    .AccordionRegister_str = ALIGNED_STRING("Accordion Register"),
 
     .Italian_str_8 = "Italian",
 
-    .str_919 = ALIGNED_STRING("Accordion Register"),
+    .AccordionRegister_str_2 = ALIGNED_STRING("Accordion Register"),
 
-    .str_920 = ALIGNED_STRING("Accordion Register"),
+    .AccordionRegister_str_3 = ALIGNED_STRING("Accordion Register"),
 
-    .str_921 = ALIGNED_STRING("Accordion Register"),
+    .AccordionRegister_str_4 = ALIGNED_STRING("Accordion Register"),
 
-    .str_922 = ALIGNED_STRING("Accordion Register"),
+    .AccordionRegister_str_5 = ALIGNED_STRING("Accordion Register"),
 
     .ptrs_10 = {
-        SELF(str_928),
+        SELF(AWorldOfAccordion_str),
         SELF(txt_ACCORDION_REGISTER_eroffnet),
         SELF(txt_Avec_la_fonction_Accordion),
         SELF(txt_Un_mundo_de_sonidos_de_acordeon),
         SELF(Italian_str_9),
-        SELF(str_923),
+        SELF(SuaraSuaraAkordionPada_str),
     },
 
-    .str_923 = ALIGNED_STRING("Suara-suara akordion pada ujung jari Anda ada pada Accordion Register!"),
+    .SuaraSuaraAkordionPada_str = ALIGNED_STRING("Suara-suara akordion pada ujung jari Anda ada pada Accordion Register!"),
 
     .Italian_str_9 = "Italian",
 
@@ -11255,41 +11255,41 @@ const naka_perf_style_t naka_perf_style_data
 
     .txt_ACCORDION_REGISTER_eroffnet = "ACCORDION REGISTER er\366ffnet Ihnen die Welt der Akkordeon Kl\344",
 
-    .str_927 = ALIGNED_STRING("nge!"),
+    .Nge_str = ALIGNED_STRING("nge!"),
 
-    .str_928 = "A World of Accordion Sounds at your fingertips with the Accordion Register!",
+    .AWorldOfAccordion_str = "A World of Accordion Sounds at your fingertips with the Accordion Register!",
 
     .ptrs_11 = {
-        SELF(str_934),
-        SELF(str_933),
-        SELF(str_932),
-        SELF(str_931),
+        SELF(DigitalDrawbar_str_5),
+        SELF(DigitalDrawbar_str_4),
+        SELF(DigitalDrawbar_str_3),
+        SELF(DigitalDrawbar_str_2),
         SELF(Italian_str_10),
-        SELF(str_929),
+        SELF(DigitalDrawbar_str),
     },
 
-    .str_929 = "Digital Drawbar",
+    .DigitalDrawbar_str = "Digital Drawbar",
 
     .Italian_str_10 = "Italian",
 
-    .str_931 = "Digital Drawbar",
+    .DigitalDrawbar_str_2 = "Digital Drawbar",
 
-    .str_932 = "Digital Drawbar",
+    .DigitalDrawbar_str_3 = "Digital Drawbar",
 
-    .str_933 = "Digital Drawbar",
+    .DigitalDrawbar_str_4 = "Digital Drawbar",
 
-    .str_934 = "Digital Drawbar",
+    .DigitalDrawbar_str_5 = "Digital Drawbar",
 
     .ptrs_12 = {
-        SELF(str_940),
+        SELF(ClassicOrganSoundsWith_str),
         SELF(txt_Erzeugen_Sie_legendare),
         SELF(txt_Avec_les_tirettes_harmoniques),
         SELF(field_6b38),
         SELF(Italian_str_11),
-        SELF(str_935),
+        SELF(SuaraSuaraOrganClassic_str),
     },
 
-    .str_935 = ALIGNED_STRING("Suara-suara Organ Classic dengan Jazz dan Rock Drawbars!"),
+    .SuaraSuaraOrganClassic_str = ALIGNED_STRING("Suara-suara Organ Classic dengan Jazz dan Rock Drawbars!"),
 
     .Italian_str_11 = "Italian",
 
@@ -11315,45 +11315,45 @@ const naka_perf_style_t naka_perf_style_data
 
     .field_6b4c = 0xE16C,
 
-    .str_937 = ALIGNED_STRING("sicos con barras para Jazz y Rock!"),
+    .SicosConBarrasPara_str = ALIGNED_STRING("sicos con barras para Jazz y Rock!"),
 
     .txt_Avec_les_tirettes_harmoniques = "Avec les tirettes harmoniques, des sonorit\351s d'Orgues Classiques, de Jazz et de Rock!\0",
 
     .txt_Erzeugen_Sie_legendare = "Erzeugen Sie legend\344re Orgelsounds mit den Jazz- und Rock-Zugriegeln!\0",
 
-    .str_940 = "Classic Organ Sounds with Jazz and Rock Drawbars!",
+    .ClassicOrganSoundsWith_str = "Classic Organ Sounds with Jazz and Rock Drawbars!",
 
     .ptrs_13 = {
-        SELF(str_946),
-        SELF(str_945),
-        SELF(str_944),
-        SELF(str_943),
+        SELF(AcousticIllusion_str_5),
+        SELF(AcousticIllusion_str_4),
+        SELF(AcousticIllusion_str_3),
+        SELF(AcousticIllusion_str_2),
         SELF(Italian_str_12),
-        SELF(str_941),
+        SELF(AcousticIllusion_str),
     },
 
-    .str_941 = "Acoustic Illusion",
+    .AcousticIllusion_str = "Acoustic Illusion",
 
     .Italian_str_12 = "Italian",
 
-    .str_943 = "Acoustic Illusion",
+    .AcousticIllusion_str_2 = "Acoustic Illusion",
 
-    .str_944 = "Acoustic Illusion",
+    .AcousticIllusion_str_3 = "Acoustic Illusion",
 
-    .str_945 = "Acoustic Illusion",
+    .AcousticIllusion_str_4 = "Acoustic Illusion",
 
-    .str_946 = "Acoustic Illusion",
+    .AcousticIllusion_str_5 = "Acoustic Illusion",
 
     .ptrs_14 = {
-        SELF(str_952),
+        SELF(AcousticIllusionBroadensYour_str),
         SELF(txt_ACCOUSTIC_ILLUSION_verleiht_dem),
         SELF(txt_La_fonction_Acoustic_Illusion),
         SELF(txt_El_Acoustic_Illusion_amplia_su),
         SELF(Italian_str_13),
-        SELF(str_947),
+        SELF(AcousticIllusionMemperluasMusik_str),
     },
 
-    .str_947 = ALIGNED_STRING("Acoustic Illusion memperluas musik Anda kedalam 3 Dimensi!"),
+    .AcousticIllusionMemperluasMusik_str = ALIGNED_STRING("Acoustic Illusion memperluas musik Anda kedalam 3 Dimensi!"),
 
     .Italian_str_13 = "Italian",
 
@@ -11363,18 +11363,18 @@ const naka_perf_style_t naka_perf_style_data
 
     .txt_ACCOUSTIC_ILLUSION_verleiht_dem = "ACCOUSTIC ILLUSION verleiht dem Klang dreidimensionale R\344umlichkeit.\0\377",
 
-    .str_952 = ALIGNED_STRING("Acoustic Illusion broadens your music to 3-Dimensions!"),
+    .AcousticIllusionBroadensYour_str = ALIGNED_STRING("Acoustic Illusion broadens your music to 3-Dimensions!"),
 
     .ptrs_15 = {
-        SELF(str_958),
+        SELF(AHostOfFeatures_str),
         SELF(txt_Viele_weitere_leistungsfahige),
         SELF(txt_Une_grande_diversite_de),
         SELF(txt_Una_serie_de_funciones),
         SELF(Italian_str_14),
-        SELF(str_953),
+        SELF(SatuPilihanDaripadaGambar_str),
     },
 
-    .str_953 = ALIGNED_STRING("Satu pilihan daripada gambar-gambar untuk disesuaikan ke gaya permainan!"),
+    .SatuPilihanDaripadaGambar_str = ALIGNED_STRING("Satu pilihan daripada gambar-gambar untuk disesuaikan ke gaya permainan!"),
 
     .Italian_str_14 = "Italian",
 
@@ -11384,70 +11384,70 @@ const naka_perf_style_t naka_perf_style_data
 
     .txt_Viele_weitere_leistungsfahige = "Viele weitere leistungsf\344hige Funktionen zur Darbietung und Bearbeitung Ihrer Musik!\0\377",
 
-    .str_958 = ALIGNED_STRING("A host of features to suit any style of performance!"),
+    .AHostOfFeatures_str = ALIGNED_STRING("A host of features to suit any style of performance!"),
 
     .ptrs_16 = {
-        SELF(str_964),
-        SELF(str_963),
-        SELF(str_962),
-        SELF(str_961),
+        SELF(HugeStyles_str_6),
+        SELF(HugeStylesG_str),
+        SELF(HugeStyles_str_5),
+        SELF(HugeStyles_str_4),
         SELF(Italian_str_15),
-        SELF(str_959),
+        SELF(HugeStyles_str_3),
     },
 
-    .str_959 = "Huge Styles",
+    .HugeStyles_str_3 = "Huge Styles",
 
     .Italian_str_15 = "Italian",
 
-    .str_961 = "Huge Styles",
+    .HugeStyles_str_4 = "Huge Styles",
 
-    .str_962 = "Huge Styles",
+    .HugeStyles_str_5 = "Huge Styles",
 
-    .str_963 = ALIGNED_STRING("Huge Styles(G)"),
+    .HugeStylesG_str = ALIGNED_STRING("Huge Styles(G)"),
 
-    .str_964 = "Huge Styles",
+    .HugeStyles_str_6 = "Huge Styles",
 
     .ptrs_17 = {
-        SELF(str_970),
-        SELF(str_969),
-        SELF(str_968),
-        SELF(str_967),
+        SELF(HugeStyles_str_10),
+        SELF(HugeStylesG_str_2),
+        SELF(HugeStyles_str_9),
+        SELF(HugeStyles_str_8),
         SELF(Italian_str_16),
-        SELF(str_965),
+        SELF(HugeStyles_str_7),
     },
 
-    .str_965 = "Huge Styles",
+    .HugeStyles_str_7 = "Huge Styles",
 
     .Italian_str_16 = "Italian",
 
-    .str_967 = "Huge Styles",
+    .HugeStyles_str_8 = "Huge Styles",
 
-    .str_968 = "Huge Styles",
+    .HugeStyles_str_9 = "Huge Styles",
 
-    .str_969 = ALIGNED_STRING("Huge Styles(G)"),
+    .HugeStylesG_str_2 = ALIGNED_STRING("Huge Styles(G)"),
 
-    .str_970 = "Huge Styles",
+    .HugeStyles_str_10 = "Huge Styles",
 
     .ptrs_18 = {
-        SELF(str_976),
-        SELF(str_975),
-        SELF(str_974),
-        SELF(str_973),
+        SELF(HugeStyles_str_14),
+        SELF(HugeStylesG_str_3),
+        SELF(HugeStyles_str_13),
+        SELF(HugeStyles_str_12),
         SELF(Italian_str_17),
-        SELF(str_971),
+        SELF(HugeStyles_str_11),
     },
 
-    .str_971 = "Huge Styles",
+    .HugeStyles_str_11 = "Huge Styles",
 
     .Italian_str_17 = "Italian",
 
-    .str_973 = "Huge Styles",
+    .HugeStyles_str_12 = "Huge Styles",
 
-    .str_974 = "Huge Styles",
+    .HugeStyles_str_13 = "Huge Styles",
 
-    .str_975 = ALIGNED_STRING("Huge Styles(G)"),
+    .HugeStylesG_str_3 = ALIGNED_STRING("Huge Styles(G)"),
 
-    .str_976 = "Huge Styles",
+    .HugeStyles_str_14 = "Huge Styles",
 
     .field_70ac = 0xFF80,
 

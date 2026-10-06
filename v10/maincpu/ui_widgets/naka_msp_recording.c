@@ -640,7 +640,7 @@ typedef struct __attribute__((packed)) {
     char w21_text[16];
     /* element 1 of Viewable slot 0xDC: StringBox (class id 0x01600037) */
     naka_cls_StringBox_t vDC_e1;
-    char str_36[12];
+    char Pattern_str[12];
     /* element 2 of Viewable slot 0xDC "SndArgRhyName": PsCmpCpFVariBox (class id 0x01640013) */
     naka_cls_PsCmpCpFVariBox_t SndArgRhyName;
     /* element 3 of Viewable slot 0xDC: IvExitMode (class id 0x01600048) */
@@ -1335,13 +1335,13 @@ const naka_msp_recording_t naka_msp_recording_data
         .rect = { 45, 36, 274, 62 },
         .color = 0x00F5,
         .border = 0x00C1,
-        .str = SELF(str_36),
+        .str = SELF(Pattern_str),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .alignment = 0x0001,
     },
 
-    .str_36 = ALIGNED_STRING(" PATTERN :"),
+    .Pattern_str = ALIGNED_STRING(" PATTERN :"),
 
     .SndArgRhyName = {
         .class_ = 0x01640013,

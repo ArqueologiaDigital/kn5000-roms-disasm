@@ -409,7 +409,7 @@ typedef struct __attribute__((packed)) {
     char w19_name[10];
     char w20_code[4];
     char w20_name[10];
-    char str_0[12];
+    char DBBGnnsss_str[12];
     char PsGridBox_str[10];
     char w21_code[6];
     char w21_name[10];
@@ -543,9 +543,9 @@ typedef struct __attribute__((packed)) {
     char w84_name[10];
     char w85_code[4];
     char w85_name[10];
-    char str_4[4];
+    char A_str[4];
     char VwBox_str[6];
-    char str_6[8];
+    char MP_str[8];
     char Viewable_str[10];
     char w86_code[2];
     char w86_name[8];
@@ -593,16 +593,16 @@ typedef struct __attribute__((packed)) {
     char CHARA2_str[8];
     char CHARA1_str[8];
     char str_24[2];
-    char str_25[12];
-    char str_26[12];
-    char str_27[12];
-    char str_28[12];
-    char str_29[12];
-    char str_30[12];
-    char str_31[12];
-    char str_32[12];
-    char str_33[12];
-    char str_34[12];
+    char Chara5wFnt_str[12];
+    char Chara2wFnt_str[12];
+    char Chara1wFnt_str[12];
+    char Chara6Fnt_str[12];
+    char Chara1pFnt_str[12];
+    char Chara5Fnt_str[12];
+    char Chara4Fnt_str[12];
+    char Chara3Fnt_str[12];
+    char Chara2Fnt_str[12];
+    char Chara1Fnt_str[12];
     uint32_t ptrs_0[256];  /* 256 pointers */
     char w100_code[2];
     char w100_name[10];
@@ -665,50 +665,50 @@ typedef struct __attribute__((packed)) {
     char w123_name[12];
     char w124_code[12];
     char w124_name[12];
-    char str_45[12];
-    char str_46[12];
-    char str_47[12];
-    char str_48[12];
+    char Edit95DBmp_str[12];
+    char Edit95CBmp_str[12];
+    char Edit95BBmp_str[12];
+    char Edit95ABmp_str[12];
     char w125_code[10];
     char w125_name[10];
     char w126_code[10];
     char w126_name[10];
-    char str_49[12];
-    char str_50[12];
-    char str_51[14];
-    char str_52[14];
-    char str_53[14];
-    char str_54[14];
-    char str_55[14];
-    char str_56[14];
-    char str_57[14];
-    char str_58[14];
+    char RightSwBmp_str[12];
+    char LeftSwBmp_str[12];
+    char ROnOff48Bmp_str[14];
+    char ROnOff32Bmp_str[14];
+    char ROnOff24Bmp_str[14];
+    char ROnOff16Bmp_str[14];
+    char LOnOff48Bmp_str[14];
+    char LOnOff32Bmp_str[14];
+    char LOnOff24Bmp_str[14];
+    char LOnOff16Bmp_str[14];
     char w127_code[12];
     char w127_name[12];
     char w128_code[12];
     char w128_name[12];
     char w129_code[12];
     char w129_name[12];
-    char str_59[12];
-    char str_60[12];
-    char str_61[12];
-    char str_62[12];
-    char str_63[14];
-    char str_64[14];
-    char str_65[14];
-    char str_66[14];
-    char str_67[12];
-    char str_68[12];
-    char str_69[12];
-    char str_70[12];
-    char str_71[12];
-    char str_72[12];
-    char str_73[12];
-    char str_74[12];
-    char str_75[12];
-    char str_76[12];
-    char str_77[12];
-    char str_78[12];
+    char Right32Bmp_str[12];
+    char Right24Bmp_str[12];
+    char Right16Bmp_str[12];
+    char Right12Bmp_str[12];
+    char Round14dBmp_str[14];
+    char Round14cBmp_str[14];
+    char Round14bBmp_str[14];
+    char Round14aBmp_str[14];
+    char Round9dBmp_str[12];
+    char Round9cBmp_str[12];
+    char Round9bBmp_str[12];
+    char Round9aBmp_str[12];
+    char Round5dBmp_str[12];
+    char Round5cBmp_str[12];
+    char Round5bBmp_str[12];
+    char Round5aBmp_str[12];
+    char Round2dBmp_str[12];
+    char Round2cBmp_str[12];
+    char Round2bBmp_str[12];
+    char Round2aBmp_str[12];
     char w130_code[12];
     char w130_name[12];
     char w131_code[12];
@@ -1500,182 +1500,182 @@ typedef struct __attribute__((packed)) {
     char None_str[6];
     uint32_t ptrs_6[256];  /* 256 pointers */
     char str_742[2];
-    char str_743[10];
-    char str_744[10];
-    char str_745[10];
-    char str_746[10];
-    char str_747[10];
-    char str_748[10];
-    char str_749[10];
-    char str_750[10];
-    char str_751[10];
-    char str_752[10];
-    char str_753[10];
-    char str_754[10];
-    char str_755[10];
-    char str_756[10];
-    char str_757[10];
-    char str_758[10];
-    char str_759[10];
-    char str_760[10];
-    char str_761[10];
-    char str_762[10];
-    char str_763[10];
-    char str_764[10];
-    char str_765[10];
-    char str_766[10];
-    char str_767[10];
-    char str_768[10];
-    char str_769[10];
-    char str_770[10];
-    char str_771[10];
-    char str_772[10];
-    char str_773[10];
-    char str_774[10];
-    char str_775[10];
-    char str_776[10];
-    char str_777[10];
-    char str_778[10];
-    char str_779[10];
-    char str_780[10];
-    char str_781[10];
-    char str_782[10];
-    char str_783[10];
-    char str_784[10];
-    char str_785[10];
-    char str_786[10];
-    char str_787[10];
-    char str_788[10];
-    char str_789[10];
-    char str_790[10];
-    char str_791[10];
-    char str_792[10];
-    char str_793[10];
-    char str_794[10];
-    char str_795[10];
-    char str_796[10];
-    char str_797[10];
-    char str_798[10];
-    char str_799[10];
-    char str_800[10];
-    char str_801[10];
-    char str_802[10];
-    char str_803[10];
-    char str_804[10];
-    char str_805[10];
-    char str_806[10];
-    char str_807[10];
-    char str_808[10];
-    char str_809[10];
-    char str_810[10];
-    char str_811[10];
-    char str_812[10];
-    char str_813[10];
-    char str_814[10];
-    char str_815[10];
-    char str_816[10];
-    char str_817[8];
-    char str_818[8];
-    char str_819[8];
-    char str_820[10];
-    char str_821[8];
-    char str_822[8];
-    char str_823[10];
-    char str_824[10];
-    char str_825[10];
-    char str_826[10];
-    char str_827[8];
-    char str_828[8];
-    char str_829[8];
-    char str_830[8];
-    char str_831[8];
-    char str_832[10];
-    char str_833[8];
-    char str_834[8];
-    char str_835[8];
-    char str_836[8];
-    char str_837[8];
-    char str_838[8];
-    char str_839[8];
-    char str_840[8];
-    char str_841[8];
-    char str_842[10];
-    char str_843[10];
-    char str_844[8];
-    char str_845[8];
-    char str_846[8];
-    char str_847[8];
-    char str_848[8];
-    char str_849[8];
-    char str_850[8];
-    char str_851[8];
-    char str_852[8];
-    char str_853[8];
-    char str_854[8];
-    char str_855[8];
-    char str_856[8];
-    char str_857[8];
-    char str_858[8];
-    char str_859[8];
-    char str_860[8];
-    char str_861[8];
-    char str_862[8];
-    char str_863[8];
-    char str_864[8];
-    char str_865[8];
-    char str_866[8];
-    char str_867[8];
-    char str_868[8];
-    char str_869[8];
-    char str_870[8];
-    char str_871[8];
-    char str_872[8];
-    char str_873[8];
-    char str_874[8];
-    char str_875[8];
-    char str_876[8];
-    char str_877[8];
-    char str_878[8];
-    char str_879[8];
-    char str_880[8];
-    char str_881[8];
-    char str_882[8];
-    char str_883[8];
-    char str_884[8];
-    char str_885[8];
-    char str_886[8];
-    char str_887[8];
-    char str_888[8];
-    char str_889[8];
-    char str_890[8];
-    char str_891[8];
-    char str_892[8];
-    char str_893[8];
-    char str_894[8];
-    char str_895[8];
-    char str_896[8];
-    char str_897[8];
-    char str_898[8];
-    char str_899[8];
-    char str_900[8];
-    char str_901[8];
-    char str_902[8];
-    char str_903[8];
-    char str_904[8];
-    char str_905[8];
-    char str_906[8];
-    char str_907[8];
-    char str_908[8];
-    char str_909[8];
-    char str_910[8];
-    char str_911[8];
-    char str_912[8];
-    char str_913[8];
-    char str_914[8];
-    char str_915[8];
-    char str_916[8];
-    char str_917[10];
-    char str_918[10];
+    char I173Bmp_str[10];
+    char I172Bmp_str[10];
+    char I171Bmp_str[10];
+    char I170Bmp_str[10];
+    char I169Bmp_str[10];
+    char I168Bmp_str[10];
+    char I167Bmp_str[10];
+    char I166Bmp_str[10];
+    char I165Bmp_str[10];
+    char I164Bmp_str[10];
+    char I163Bmp_str[10];
+    char I162Bmp_str[10];
+    char I161Bmp_str[10];
+    char I160Bmp_str[10];
+    char I159Bmp_str[10];
+    char I158Bmp_str[10];
+    char I157Bmp_str[10];
+    char I156Bmp_str[10];
+    char I155Bmp_str[10];
+    char I154Bmp_str[10];
+    char I153Bmp_str[10];
+    char I152Bmp_str[10];
+    char I151Bmp_str[10];
+    char I150Bmp_str[10];
+    char I149Bmp_str[10];
+    char I148Bmp_str[10];
+    char I147Bmp_str[10];
+    char I146Bmp_str[10];
+    char I145Bmp_str[10];
+    char I144Bmp_str[10];
+    char I143Bmp_str[10];
+    char I142Bmp_str[10];
+    char I141Bmp_str[10];
+    char I140Bmp_str[10];
+    char I139Bmp_str[10];
+    char I138Bmp_str[10];
+    char I137Bmp_str[10];
+    char I136Bmp_str[10];
+    char I135Bmp_str[10];
+    char I134Bmp_str[10];
+    char I133Bmp_str[10];
+    char I132Bmp_str[10];
+    char I131Bmp_str[10];
+    char I130Bmp_str[10];
+    char I129Bmp_str[10];
+    char I128Bmp_str[10];
+    char I127Bmp_str[10];
+    char I126Bmp_str[10];
+    char I125Bmp_str[10];
+    char I124Bmp_str[10];
+    char I123Bmp_str[10];
+    char I122Bmp_str[10];
+    char I121Bmp_str[10];
+    char I120Bmp_str[10];
+    char I119Bmp_str[10];
+    char I118Bmp_str[10];
+    char I117Bmp_str[10];
+    char I116Bmp_str[10];
+    char I115Bmp_str[10];
+    char I114Bmp_str[10];
+    char I113Bmp_str[10];
+    char I112Bmp_str[10];
+    char I111Bmp_str[10];
+    char I110Bmp_str[10];
+    char I109Bmp_str[10];
+    char I108Bmp_str[10];
+    char I107oBmp_str[10];
+    char I106Bmp_str[10];
+    char I105Bmp_str[10];
+    char I104Bmp_str[10];
+    char I103Bmp_str[10];
+    char I102Bmp_str[10];
+    char I101Bmp_str[10];
+    char I100Bmp_str[10];
+    char I99Bmp_str[8];
+    char I98Bmp_str[8];
+    char I97Bmp_str[8];
+    char I96oBmp_str[10];
+    char I95Bmp_str[8];
+    char I94Bmp_str[8];
+    char I93oBmp_str[10];
+    char I92oBmp_str[10];
+    char I91oBmp_str[10];
+    char I90oBmp_str[10];
+    char I89Bmp_str[8];
+    char I88Bmp_str[8];
+    char I87Bmp_str[8];
+    char I86Bmp_str[8];
+    char I85Bmp_str[8];
+    char I84oBmp_str[10];
+    char I83Bmp_str[8];
+    char I82Bmp_str[8];
+    char I81Bmp_str[8];
+    char I80Bmp_str[8];
+    char I79Bmp_str[8];
+    char I78Bmp_str[8];
+    char I77Bmp_str[8];
+    char I76Bmp_str[8];
+    char I75Bmp_str[8];
+    char I74oBmp_str[10];
+    char I73oBmp_str[10];
+    char I72Bmp_str[8];
+    char I71Bmp_str[8];
+    char I70Bmp_str[8];
+    char I69Bmp_str[8];
+    char I68Bmp_str[8];
+    char I67Bmp_str[8];
+    char I66Bmp_str[8];
+    char I65Bmp_str[8];
+    char I64Bmp_str[8];
+    char I63Bmp_str[8];
+    char I62Bmp_str[8];
+    char I61Bmp_str[8];
+    char I60Bmp_str[8];
+    char I59Bmp_str[8];
+    char I58Bmp_str[8];
+    char I57Bmp_str[8];
+    char I56Bmp_str[8];
+    char I55Bmp_str[8];
+    char I54Bmp_str[8];
+    char I53Bmp_str[8];
+    char I52Bmp_str[8];
+    char I51Bmp_str[8];
+    char I50Bmp_str[8];
+    char I49Bmp_str[8];
+    char I48Bmp_str[8];
+    char I47Bmp_str[8];
+    char I46Bmp_str[8];
+    char I45Bmp_str[8];
+    char I44Bmp_str[8];
+    char I43Bmp_str[8];
+    char I42Bmp_str[8];
+    char I41Bmp_str[8];
+    char I40Bmp_str[8];
+    char I39Bmp_str[8];
+    char I38Bmp_str[8];
+    char I37Bmp_str[8];
+    char I36Bmp_str[8];
+    char I35Bmp_str[8];
+    char I34Bmp_str[8];
+    char I33Bmp_str[8];
+    char I32Bmp_str[8];
+    char I31Bmp_str[8];
+    char I30Bmp_str[8];
+    char I29Bmp_str[8];
+    char I28Bmp_str[8];
+    char I27Bmp_str[8];
+    char I26Bmp_str[8];
+    char I25Bmp_str[8];
+    char I24Bmp_str[8];
+    char I23Bmp_str[8];
+    char I22Bmp_str[8];
+    char I21Bmp_str[8];
+    char I20Bmp_str[8];
+    char I19Bmp_str[8];
+    char I18Bmp_str[8];
+    char I17Bmp_str[8];
+    char I16Bmp_str[8];
+    char I15Bmp_str[8];
+    char I14Bmp_str[8];
+    char I13Bmp_str[8];
+    char I12Bmp_str[8];
+    char I11Bmp_str[8];
+    char I10Bmp_str[8];
+    char I9Bmp_str[8];
+    char I8Bmp_str[8];
+    char I7Bmp_str[8];
+    char I6oBmp_str[8];
+    char I5Bmp_str[8];
+    char I4oBmp_str[8];
+    char I3oBmp_str[8];
+    char I2Bmp_str[8];
+    char I1Bmp_str[8];
+    char I0Bmp_str[8];
+    char TrashBmp_str[10];
+    char TrashBmp_str_2[10];
     naka_dispatch_t w190;  /* 0x33 */
     uint16_t field_566a;
     uint8_t pad_0[2];  /* zero padding */
@@ -1790,7 +1790,7 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .w20_name = "AcListBox",
 
-    .str_0 = "c^dBBGnnsss",
+    .DBBGnnsss_str = "c^dBBGnnsss",
 
     .PsGridBox_str = "PsGridBox",
 
@@ -2058,11 +2058,11 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .w85_name = "PsParaBox",
 
-    .str_4 = "^_A",
+    .A_str = "^_A",
 
     .VwBox_str = "VwBox",
 
-    .str_6 = "M[[[[]P",
+    .MP_str = "M[[[[]P",
 
     .Viewable_str = ALIGNED_STRING("Viewable"),
 
@@ -2158,25 +2158,25 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .str_24 = ALIGNED_STRING(""),
 
-    .str_25 = "chara5w.fnt",
+    .Chara5wFnt_str = "chara5w.fnt",
 
-    .str_26 = "chara2w.fnt",
+    .Chara2wFnt_str = "chara2w.fnt",
 
-    .str_27 = "chara1w.fnt",
+    .Chara1wFnt_str = "chara1w.fnt",
 
-    .str_28 = ALIGNED_STRING("chara6.fnt"),
+    .Chara6Fnt_str = ALIGNED_STRING("chara6.fnt"),
 
-    .str_29 = "chara1p.fnt",
+    .Chara1pFnt_str = "chara1p.fnt",
 
-    .str_30 = ALIGNED_STRING("chara5.fnt"),
+    .Chara5Fnt_str = ALIGNED_STRING("chara5.fnt"),
 
-    .str_31 = ALIGNED_STRING("chara4.fnt"),
+    .Chara4Fnt_str = ALIGNED_STRING("chara4.fnt"),
 
-    .str_32 = ALIGNED_STRING("chara3.fnt"),
+    .Chara3Fnt_str = ALIGNED_STRING("chara3.fnt"),
 
-    .str_33 = ALIGNED_STRING("chara2.fnt"),
+    .Chara2Fnt_str = ALIGNED_STRING("chara2.fnt"),
 
-    .str_34 = ALIGNED_STRING("chara1.fnt"),
+    .Chara1Fnt_str = ALIGNED_STRING("chara1.fnt"),
 
     .ptrs_0 = {
         SELF(Round1a_str),
@@ -2550,50 +2550,50 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
         SELF(w131_code),
         SELF(w130_name),
         SELF(w130_code),
-        SELF(str_78),
-        SELF(str_77),
-        SELF(str_76),
-        SELF(str_75),
-        SELF(str_74),
-        SELF(str_73),
-        SELF(str_72),
-        SELF(str_71),
-        SELF(str_70),
-        SELF(str_69),
-        SELF(str_68),
-        SELF(str_67),
-        SELF(str_66),
-        SELF(str_65),
-        SELF(str_64),
-        SELF(str_63),
-        SELF(str_62),
-        SELF(str_61),
-        SELF(str_60),
-        SELF(str_59),
+        SELF(Round2aBmp_str),
+        SELF(Round2bBmp_str),
+        SELF(Round2cBmp_str),
+        SELF(Round2dBmp_str),
+        SELF(Round5aBmp_str),
+        SELF(Round5bBmp_str),
+        SELF(Round5cBmp_str),
+        SELF(Round5dBmp_str),
+        SELF(Round9aBmp_str),
+        SELF(Round9bBmp_str),
+        SELF(Round9cBmp_str),
+        SELF(Round9dBmp_str),
+        SELF(Round14aBmp_str),
+        SELF(Round14bBmp_str),
+        SELF(Round14cBmp_str),
+        SELF(Round14dBmp_str),
+        SELF(Right12Bmp_str),
+        SELF(Right16Bmp_str),
+        SELF(Right24Bmp_str),
+        SELF(Right32Bmp_str),
         SELF(w129_name),
         SELF(w129_code),
         SELF(w128_name),
         SELF(w128_code),
         SELF(w127_name),
         SELF(w127_code),
-        SELF(str_58),
-        SELF(str_57),
-        SELF(str_56),
-        SELF(str_55),
-        SELF(str_54),
-        SELF(str_53),
-        SELF(str_52),
-        SELF(str_51),
-        SELF(str_50),
-        SELF(str_49),
+        SELF(LOnOff16Bmp_str),
+        SELF(LOnOff24Bmp_str),
+        SELF(LOnOff32Bmp_str),
+        SELF(LOnOff48Bmp_str),
+        SELF(ROnOff16Bmp_str),
+        SELF(ROnOff24Bmp_str),
+        SELF(ROnOff32Bmp_str),
+        SELF(ROnOff48Bmp_str),
+        SELF(LeftSwBmp_str),
+        SELF(RightSwBmp_str),
         SELF(w126_name),
         SELF(w126_code),
         SELF(w125_name),
         SELF(w125_code),
-        SELF(str_48),
-        SELF(str_47),
-        SELF(str_46),
-        SELF(str_45),
+        SELF(Edit95ABmp_str),
+        SELF(Edit95BBmp_str),
+        SELF(Edit95CBmp_str),
+        SELF(Edit95DBmp_str),
         SELF(w124_name),
         SELF(w124_code),
         SELF(w123_name),
@@ -2816,13 +2816,13 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .w124_name = ALIGNED_STRING("EditDA.bmp"),
 
-    .str_45 = "Edit95D.bmp",
+    .Edit95DBmp_str = "Edit95D.bmp",
 
-    .str_46 = "Edit95C.bmp",
+    .Edit95CBmp_str = "Edit95C.bmp",
 
-    .str_47 = "Edit95B.bmp",
+    .Edit95BBmp_str = "Edit95B.bmp",
 
-    .str_48 = "Edit95A.bmp",
+    .Edit95ABmp_str = "Edit95A.bmp",
 
     .w125_code = "EditD.bmp",
 
@@ -2832,25 +2832,25 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .w126_name = "EditA.bmp",
 
-    .str_49 = "RightSw.bmp",
+    .RightSwBmp_str = "RightSw.bmp",
 
-    .str_50 = ALIGNED_STRING("LeftSw.bmp"),
+    .LeftSwBmp_str = ALIGNED_STRING("LeftSw.bmp"),
 
-    .str_51 = ALIGNED_STRING("ROnOff48.bmp"),
+    .ROnOff48Bmp_str = ALIGNED_STRING("ROnOff48.bmp"),
 
-    .str_52 = ALIGNED_STRING("ROnOff32.bmp"),
+    .ROnOff32Bmp_str = ALIGNED_STRING("ROnOff32.bmp"),
 
-    .str_53 = ALIGNED_STRING("ROnOff24.bmp"),
+    .ROnOff24Bmp_str = ALIGNED_STRING("ROnOff24.bmp"),
 
-    .str_54 = ALIGNED_STRING("ROnOff16.bmp"),
+    .ROnOff16Bmp_str = ALIGNED_STRING("ROnOff16.bmp"),
 
-    .str_55 = ALIGNED_STRING("LOnOff48.bmp"),
+    .LOnOff48Bmp_str = ALIGNED_STRING("LOnOff48.bmp"),
 
-    .str_56 = ALIGNED_STRING("LOnOff32.bmp"),
+    .LOnOff32Bmp_str = ALIGNED_STRING("LOnOff32.bmp"),
 
-    .str_57 = ALIGNED_STRING("LOnOff24.bmp"),
+    .LOnOff24Bmp_str = ALIGNED_STRING("LOnOff24.bmp"),
 
-    .str_58 = ALIGNED_STRING("LOnOff16.bmp"),
+    .LOnOff16Bmp_str = ALIGNED_STRING("LOnOff16.bmp"),
 
     .w127_code = ALIGNED_STRING("Left48.bmp"),
 
@@ -2864,45 +2864,45 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .w129_name = "Right48.bmp",
 
-    .str_59 = "Right32.bmp",
+    .Right32Bmp_str = "Right32.bmp",
 
-    .str_60 = "Right24.bmp",
+    .Right24Bmp_str = "Right24.bmp",
 
-    .str_61 = "Right16.bmp",
+    .Right16Bmp_str = "Right16.bmp",
 
-    .str_62 = "Right12.bmp",
+    .Right12Bmp_str = "Right12.bmp",
 
-    .str_63 = ALIGNED_STRING("Round14d.bmp"),
+    .Round14dBmp_str = ALIGNED_STRING("Round14d.bmp"),
 
-    .str_64 = ALIGNED_STRING("Round14c.bmp"),
+    .Round14cBmp_str = ALIGNED_STRING("Round14c.bmp"),
 
-    .str_65 = ALIGNED_STRING("Round14b.bmp"),
+    .Round14bBmp_str = ALIGNED_STRING("Round14b.bmp"),
 
-    .str_66 = ALIGNED_STRING("Round14a.bmp"),
+    .Round14aBmp_str = ALIGNED_STRING("Round14a.bmp"),
 
-    .str_67 = "Round9d.bmp",
+    .Round9dBmp_str = "Round9d.bmp",
 
-    .str_68 = "Round9c.bmp",
+    .Round9cBmp_str = "Round9c.bmp",
 
-    .str_69 = "Round9b.bmp",
+    .Round9bBmp_str = "Round9b.bmp",
 
-    .str_70 = "Round9a.bmp",
+    .Round9aBmp_str = "Round9a.bmp",
 
-    .str_71 = "Round5d.bmp",
+    .Round5dBmp_str = "Round5d.bmp",
 
-    .str_72 = "Round5c.bmp",
+    .Round5cBmp_str = "Round5c.bmp",
 
-    .str_73 = "Round5b.bmp",
+    .Round5bBmp_str = "Round5b.bmp",
 
-    .str_74 = "Round5a.bmp",
+    .Round5aBmp_str = "Round5a.bmp",
 
-    .str_75 = "Round2d.bmp",
+    .Round2dBmp_str = "Round2d.bmp",
 
-    .str_76 = "Round2c.bmp",
+    .Round2cBmp_str = "Round2c.bmp",
 
-    .str_77 = "Round2b.bmp",
+    .Round2bBmp_str = "Round2b.bmp",
 
-    .str_78 = "Round2a.bmp",
+    .Round2aBmp_str = "Round2a.bmp",
 
     .w130_code = ALIGNED_STRING("Round1.bmp"),
 
@@ -5699,182 +5699,182 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
     .None_str = ALIGNED_STRING("None"),
 
     .ptrs_6 = {
-        SELF(str_918),
-        SELF(str_917),
-        SELF(str_916),
-        SELF(str_915),
-        SELF(str_914),
-        SELF(str_913),
-        SELF(str_912),
-        SELF(str_911),
-        SELF(str_910),
-        SELF(str_909),
-        SELF(str_908),
-        SELF(str_907),
-        SELF(str_906),
-        SELF(str_905),
-        SELF(str_904),
-        SELF(str_903),
-        SELF(str_902),
-        SELF(str_901),
-        SELF(str_900),
-        SELF(str_899),
-        SELF(str_898),
-        SELF(str_897),
-        SELF(str_896),
-        SELF(str_895),
-        SELF(str_894),
-        SELF(str_893),
-        SELF(str_892),
-        SELF(str_891),
-        SELF(str_890),
-        SELF(str_889),
-        SELF(str_888),
-        SELF(str_887),
-        SELF(str_886),
-        SELF(str_885),
-        SELF(str_884),
-        SELF(str_883),
-        SELF(str_882),
-        SELF(str_881),
-        SELF(str_880),
-        SELF(str_879),
-        SELF(str_878),
-        SELF(str_877),
-        SELF(str_876),
-        SELF(str_875),
-        SELF(str_874),
-        SELF(str_873),
-        SELF(str_872),
-        SELF(str_871),
-        SELF(str_870),
-        SELF(str_869),
-        SELF(str_868),
-        SELF(str_867),
-        SELF(str_866),
-        SELF(str_865),
-        SELF(str_864),
-        SELF(str_863),
-        SELF(str_862),
-        SELF(str_861),
-        SELF(str_860),
-        SELF(str_859),
-        SELF(str_858),
-        SELF(str_857),
-        SELF(str_856),
-        SELF(str_855),
-        SELF(str_854),
-        SELF(str_853),
-        SELF(str_852),
-        SELF(str_851),
-        SELF(str_850),
-        SELF(str_849),
-        SELF(str_848),
-        SELF(str_847),
-        SELF(str_846),
-        SELF(str_845),
-        SELF(str_844),
-        SELF(str_843),
-        SELF(str_842),
-        SELF(str_841),
-        SELF(str_840),
-        SELF(str_839),
-        SELF(str_838),
-        SELF(str_837),
-        SELF(str_836),
-        SELF(str_835),
-        SELF(str_834),
-        SELF(str_833),
-        SELF(str_832),
-        SELF(str_831),
-        SELF(str_830),
-        SELF(str_829),
-        SELF(str_828),
-        SELF(str_827),
-        SELF(str_826),
-        SELF(str_825),
-        SELF(str_824),
-        SELF(str_823),
-        SELF(str_822),
-        SELF(str_821),
-        SELF(str_820),
-        SELF(str_819),
-        SELF(str_818),
-        SELF(str_817),
-        SELF(str_816),
-        SELF(str_815),
-        SELF(str_814),
-        SELF(str_813),
-        SELF(str_812),
-        SELF(str_811),
-        SELF(str_810),
-        SELF(str_809),
-        SELF(str_808),
-        SELF(str_807),
-        SELF(str_806),
-        SELF(str_805),
-        SELF(str_804),
-        SELF(str_803),
-        SELF(str_802),
-        SELF(str_801),
-        SELF(str_800),
-        SELF(str_799),
-        SELF(str_798),
-        SELF(str_797),
-        SELF(str_796),
-        SELF(str_795),
-        SELF(str_794),
-        SELF(str_793),
-        SELF(str_792),
-        SELF(str_791),
-        SELF(str_790),
-        SELF(str_789),
-        SELF(str_788),
-        SELF(str_787),
-        SELF(str_786),
-        SELF(str_785),
-        SELF(str_784),
-        SELF(str_783),
-        SELF(str_782),
-        SELF(str_781),
-        SELF(str_780),
-        SELF(str_779),
-        SELF(str_778),
-        SELF(str_777),
-        SELF(str_776),
-        SELF(str_775),
-        SELF(str_774),
-        SELF(str_773),
-        SELF(str_772),
-        SELF(str_771),
-        SELF(str_770),
-        SELF(str_769),
-        SELF(str_768),
-        SELF(str_767),
-        SELF(str_766),
-        SELF(str_765),
-        SELF(str_764),
-        SELF(str_763),
-        SELF(str_762),
-        SELF(str_761),
-        SELF(str_760),
-        SELF(str_759),
-        SELF(str_758),
-        SELF(str_757),
-        SELF(str_756),
-        SELF(str_755),
-        SELF(str_754),
-        SELF(str_753),
-        SELF(str_752),
-        SELF(str_751),
-        SELF(str_750),
-        SELF(str_749),
-        SELF(str_748),
-        SELF(str_747),
-        SELF(str_746),
-        SELF(str_745),
-        SELF(str_744),
-        SELF(str_743),
+        SELF(TrashBmp_str_2),
+        SELF(TrashBmp_str),
+        SELF(I0Bmp_str),
+        SELF(I1Bmp_str),
+        SELF(I2Bmp_str),
+        SELF(I3oBmp_str),
+        SELF(I4oBmp_str),
+        SELF(I5Bmp_str),
+        SELF(I6oBmp_str),
+        SELF(I7Bmp_str),
+        SELF(I8Bmp_str),
+        SELF(I9Bmp_str),
+        SELF(I10Bmp_str),
+        SELF(I11Bmp_str),
+        SELF(I12Bmp_str),
+        SELF(I13Bmp_str),
+        SELF(I14Bmp_str),
+        SELF(I15Bmp_str),
+        SELF(I16Bmp_str),
+        SELF(I17Bmp_str),
+        SELF(I18Bmp_str),
+        SELF(I19Bmp_str),
+        SELF(I20Bmp_str),
+        SELF(I21Bmp_str),
+        SELF(I22Bmp_str),
+        SELF(I23Bmp_str),
+        SELF(I24Bmp_str),
+        SELF(I25Bmp_str),
+        SELF(I26Bmp_str),
+        SELF(I27Bmp_str),
+        SELF(I28Bmp_str),
+        SELF(I29Bmp_str),
+        SELF(I30Bmp_str),
+        SELF(I31Bmp_str),
+        SELF(I32Bmp_str),
+        SELF(I33Bmp_str),
+        SELF(I34Bmp_str),
+        SELF(I35Bmp_str),
+        SELF(I36Bmp_str),
+        SELF(I37Bmp_str),
+        SELF(I38Bmp_str),
+        SELF(I39Bmp_str),
+        SELF(I40Bmp_str),
+        SELF(I41Bmp_str),
+        SELF(I42Bmp_str),
+        SELF(I43Bmp_str),
+        SELF(I44Bmp_str),
+        SELF(I45Bmp_str),
+        SELF(I46Bmp_str),
+        SELF(I47Bmp_str),
+        SELF(I48Bmp_str),
+        SELF(I49Bmp_str),
+        SELF(I50Bmp_str),
+        SELF(I51Bmp_str),
+        SELF(I52Bmp_str),
+        SELF(I53Bmp_str),
+        SELF(I54Bmp_str),
+        SELF(I55Bmp_str),
+        SELF(I56Bmp_str),
+        SELF(I57Bmp_str),
+        SELF(I58Bmp_str),
+        SELF(I59Bmp_str),
+        SELF(I60Bmp_str),
+        SELF(I61Bmp_str),
+        SELF(I62Bmp_str),
+        SELF(I63Bmp_str),
+        SELF(I64Bmp_str),
+        SELF(I65Bmp_str),
+        SELF(I66Bmp_str),
+        SELF(I67Bmp_str),
+        SELF(I68Bmp_str),
+        SELF(I69Bmp_str),
+        SELF(I70Bmp_str),
+        SELF(I71Bmp_str),
+        SELF(I72Bmp_str),
+        SELF(I73oBmp_str),
+        SELF(I74oBmp_str),
+        SELF(I75Bmp_str),
+        SELF(I76Bmp_str),
+        SELF(I77Bmp_str),
+        SELF(I78Bmp_str),
+        SELF(I79Bmp_str),
+        SELF(I80Bmp_str),
+        SELF(I81Bmp_str),
+        SELF(I82Bmp_str),
+        SELF(I83Bmp_str),
+        SELF(I84oBmp_str),
+        SELF(I85Bmp_str),
+        SELF(I86Bmp_str),
+        SELF(I87Bmp_str),
+        SELF(I88Bmp_str),
+        SELF(I89Bmp_str),
+        SELF(I90oBmp_str),
+        SELF(I91oBmp_str),
+        SELF(I92oBmp_str),
+        SELF(I93oBmp_str),
+        SELF(I94Bmp_str),
+        SELF(I95Bmp_str),
+        SELF(I96oBmp_str),
+        SELF(I97Bmp_str),
+        SELF(I98Bmp_str),
+        SELF(I99Bmp_str),
+        SELF(I100Bmp_str),
+        SELF(I101Bmp_str),
+        SELF(I102Bmp_str),
+        SELF(I103Bmp_str),
+        SELF(I104Bmp_str),
+        SELF(I105Bmp_str),
+        SELF(I106Bmp_str),
+        SELF(I107oBmp_str),
+        SELF(I108Bmp_str),
+        SELF(I109Bmp_str),
+        SELF(I110Bmp_str),
+        SELF(I111Bmp_str),
+        SELF(I112Bmp_str),
+        SELF(I113Bmp_str),
+        SELF(I114Bmp_str),
+        SELF(I115Bmp_str),
+        SELF(I116Bmp_str),
+        SELF(I117Bmp_str),
+        SELF(I118Bmp_str),
+        SELF(I119Bmp_str),
+        SELF(I120Bmp_str),
+        SELF(I121Bmp_str),
+        SELF(I122Bmp_str),
+        SELF(I123Bmp_str),
+        SELF(I124Bmp_str),
+        SELF(I125Bmp_str),
+        SELF(I126Bmp_str),
+        SELF(I127Bmp_str),
+        SELF(I128Bmp_str),
+        SELF(I129Bmp_str),
+        SELF(I130Bmp_str),
+        SELF(I131Bmp_str),
+        SELF(I132Bmp_str),
+        SELF(I133Bmp_str),
+        SELF(I134Bmp_str),
+        SELF(I135Bmp_str),
+        SELF(I136Bmp_str),
+        SELF(I137Bmp_str),
+        SELF(I138Bmp_str),
+        SELF(I139Bmp_str),
+        SELF(I140Bmp_str),
+        SELF(I141Bmp_str),
+        SELF(I142Bmp_str),
+        SELF(I143Bmp_str),
+        SELF(I144Bmp_str),
+        SELF(I145Bmp_str),
+        SELF(I146Bmp_str),
+        SELF(I147Bmp_str),
+        SELF(I148Bmp_str),
+        SELF(I149Bmp_str),
+        SELF(I150Bmp_str),
+        SELF(I151Bmp_str),
+        SELF(I152Bmp_str),
+        SELF(I153Bmp_str),
+        SELF(I154Bmp_str),
+        SELF(I155Bmp_str),
+        SELF(I156Bmp_str),
+        SELF(I157Bmp_str),
+        SELF(I158Bmp_str),
+        SELF(I159Bmp_str),
+        SELF(I160Bmp_str),
+        SELF(I161Bmp_str),
+        SELF(I162Bmp_str),
+        SELF(I163Bmp_str),
+        SELF(I164Bmp_str),
+        SELF(I165Bmp_str),
+        SELF(I166Bmp_str),
+        SELF(I167Bmp_str),
+        SELF(I168Bmp_str),
+        SELF(I169Bmp_str),
+        SELF(I170Bmp_str),
+        SELF(I171Bmp_str),
+        SELF(I172Bmp_str),
+        SELF(I173Bmp_str),
         SELF(str_742),
         0x00000000,
         0x00000000,
@@ -5959,357 +5959,357 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .str_742 = ALIGNED_STRING(""),
 
-    .str_743 = ALIGNED_STRING("i173.bmp"),
+    .I173Bmp_str = ALIGNED_STRING("i173.bmp"),
 
-    .str_744 = ALIGNED_STRING("i172.bmp"),
+    .I172Bmp_str = ALIGNED_STRING("i172.bmp"),
 
-    .str_745 = ALIGNED_STRING("i171.bmp"),
+    .I171Bmp_str = ALIGNED_STRING("i171.bmp"),
 
-    .str_746 = ALIGNED_STRING("i170.bmp"),
+    .I170Bmp_str = ALIGNED_STRING("i170.bmp"),
 
-    .str_747 = ALIGNED_STRING("i169.bmp"),
+    .I169Bmp_str = ALIGNED_STRING("i169.bmp"),
 
-    .str_748 = ALIGNED_STRING("i168.bmp"),
+    .I168Bmp_str = ALIGNED_STRING("i168.bmp"),
 
-    .str_749 = ALIGNED_STRING("i167.bmp"),
+    .I167Bmp_str = ALIGNED_STRING("i167.bmp"),
 
-    .str_750 = ALIGNED_STRING("i166.bmp"),
+    .I166Bmp_str = ALIGNED_STRING("i166.bmp"),
 
-    .str_751 = ALIGNED_STRING("i165.bmp"),
+    .I165Bmp_str = ALIGNED_STRING("i165.bmp"),
 
-    .str_752 = ALIGNED_STRING("i164.bmp"),
+    .I164Bmp_str = ALIGNED_STRING("i164.bmp"),
 
-    .str_753 = ALIGNED_STRING("i163.bmp"),
+    .I163Bmp_str = ALIGNED_STRING("i163.bmp"),
 
-    .str_754 = ALIGNED_STRING("i162.bmp"),
+    .I162Bmp_str = ALIGNED_STRING("i162.bmp"),
 
-    .str_755 = ALIGNED_STRING("i161.bmp"),
+    .I161Bmp_str = ALIGNED_STRING("i161.bmp"),
 
-    .str_756 = ALIGNED_STRING("i160.bmp"),
+    .I160Bmp_str = ALIGNED_STRING("i160.bmp"),
 
-    .str_757 = ALIGNED_STRING("i159.bmp"),
+    .I159Bmp_str = ALIGNED_STRING("i159.bmp"),
 
-    .str_758 = ALIGNED_STRING("i158.bmp"),
+    .I158Bmp_str = ALIGNED_STRING("i158.bmp"),
 
-    .str_759 = ALIGNED_STRING("i157.bmp"),
+    .I157Bmp_str = ALIGNED_STRING("i157.bmp"),
 
-    .str_760 = ALIGNED_STRING("i156.bmp"),
+    .I156Bmp_str = ALIGNED_STRING("i156.bmp"),
 
-    .str_761 = ALIGNED_STRING("i155.bmp"),
+    .I155Bmp_str = ALIGNED_STRING("i155.bmp"),
 
-    .str_762 = ALIGNED_STRING("i154.bmp"),
+    .I154Bmp_str = ALIGNED_STRING("i154.bmp"),
 
-    .str_763 = ALIGNED_STRING("i153.bmp"),
+    .I153Bmp_str = ALIGNED_STRING("i153.bmp"),
 
-    .str_764 = ALIGNED_STRING("i152.bmp"),
+    .I152Bmp_str = ALIGNED_STRING("i152.bmp"),
 
-    .str_765 = ALIGNED_STRING("i151.bmp"),
+    .I151Bmp_str = ALIGNED_STRING("i151.bmp"),
 
-    .str_766 = ALIGNED_STRING("i150.bmp"),
+    .I150Bmp_str = ALIGNED_STRING("i150.bmp"),
 
-    .str_767 = ALIGNED_STRING("i149.bmp"),
+    .I149Bmp_str = ALIGNED_STRING("i149.bmp"),
 
-    .str_768 = ALIGNED_STRING("i148.bmp"),
+    .I148Bmp_str = ALIGNED_STRING("i148.bmp"),
 
-    .str_769 = ALIGNED_STRING("i147.bmp"),
+    .I147Bmp_str = ALIGNED_STRING("i147.bmp"),
 
-    .str_770 = ALIGNED_STRING("i146.bmp"),
+    .I146Bmp_str = ALIGNED_STRING("i146.bmp"),
 
-    .str_771 = ALIGNED_STRING("i145.bmp"),
+    .I145Bmp_str = ALIGNED_STRING("i145.bmp"),
 
-    .str_772 = ALIGNED_STRING("i144.bmp"),
+    .I144Bmp_str = ALIGNED_STRING("i144.bmp"),
 
-    .str_773 = ALIGNED_STRING("i143.bmp"),
+    .I143Bmp_str = ALIGNED_STRING("i143.bmp"),
 
-    .str_774 = ALIGNED_STRING("i142.bmp"),
+    .I142Bmp_str = ALIGNED_STRING("i142.bmp"),
 
-    .str_775 = ALIGNED_STRING("i141.bmp"),
+    .I141Bmp_str = ALIGNED_STRING("i141.bmp"),
 
-    .str_776 = ALIGNED_STRING("i140.bmp"),
+    .I140Bmp_str = ALIGNED_STRING("i140.bmp"),
 
-    .str_777 = ALIGNED_STRING("i139.bmp"),
+    .I139Bmp_str = ALIGNED_STRING("i139.bmp"),
 
-    .str_778 = ALIGNED_STRING("i138.bmp"),
+    .I138Bmp_str = ALIGNED_STRING("i138.bmp"),
 
-    .str_779 = ALIGNED_STRING("i137.bmp"),
+    .I137Bmp_str = ALIGNED_STRING("i137.bmp"),
 
-    .str_780 = ALIGNED_STRING("i136.bmp"),
+    .I136Bmp_str = ALIGNED_STRING("i136.bmp"),
 
-    .str_781 = ALIGNED_STRING("i135.bmp"),
+    .I135Bmp_str = ALIGNED_STRING("i135.bmp"),
 
-    .str_782 = ALIGNED_STRING("i134.bmp"),
+    .I134Bmp_str = ALIGNED_STRING("i134.bmp"),
 
-    .str_783 = ALIGNED_STRING("i133.bmp"),
+    .I133Bmp_str = ALIGNED_STRING("i133.bmp"),
 
-    .str_784 = ALIGNED_STRING("i132.bmp"),
+    .I132Bmp_str = ALIGNED_STRING("i132.bmp"),
 
-    .str_785 = ALIGNED_STRING("i131.bmp"),
+    .I131Bmp_str = ALIGNED_STRING("i131.bmp"),
 
-    .str_786 = ALIGNED_STRING("i130.bmp"),
+    .I130Bmp_str = ALIGNED_STRING("i130.bmp"),
 
-    .str_787 = ALIGNED_STRING("i129.bmp"),
+    .I129Bmp_str = ALIGNED_STRING("i129.bmp"),
 
-    .str_788 = ALIGNED_STRING("i128.bmp"),
+    .I128Bmp_str = ALIGNED_STRING("i128.bmp"),
 
-    .str_789 = ALIGNED_STRING("i127.bmp"),
+    .I127Bmp_str = ALIGNED_STRING("i127.bmp"),
 
-    .str_790 = ALIGNED_STRING("i126.bmp"),
+    .I126Bmp_str = ALIGNED_STRING("i126.bmp"),
 
-    .str_791 = ALIGNED_STRING("i125.bmp"),
+    .I125Bmp_str = ALIGNED_STRING("i125.bmp"),
 
-    .str_792 = ALIGNED_STRING("i124.bmp"),
+    .I124Bmp_str = ALIGNED_STRING("i124.bmp"),
 
-    .str_793 = ALIGNED_STRING("i123.bmp"),
+    .I123Bmp_str = ALIGNED_STRING("i123.bmp"),
 
-    .str_794 = ALIGNED_STRING("i122.bmp"),
+    .I122Bmp_str = ALIGNED_STRING("i122.bmp"),
 
-    .str_795 = ALIGNED_STRING("i121.bmp"),
+    .I121Bmp_str = ALIGNED_STRING("i121.bmp"),
 
-    .str_796 = ALIGNED_STRING("i120.bmp"),
+    .I120Bmp_str = ALIGNED_STRING("i120.bmp"),
 
-    .str_797 = ALIGNED_STRING("i119.bmp"),
+    .I119Bmp_str = ALIGNED_STRING("i119.bmp"),
 
-    .str_798 = ALIGNED_STRING("i118.bmp"),
+    .I118Bmp_str = ALIGNED_STRING("i118.bmp"),
 
-    .str_799 = ALIGNED_STRING("i117.bmp"),
+    .I117Bmp_str = ALIGNED_STRING("i117.bmp"),
 
-    .str_800 = ALIGNED_STRING("i116.bmp"),
+    .I116Bmp_str = ALIGNED_STRING("i116.bmp"),
 
-    .str_801 = ALIGNED_STRING("i115.bmp"),
+    .I115Bmp_str = ALIGNED_STRING("i115.bmp"),
 
-    .str_802 = ALIGNED_STRING("i114.bmp"),
+    .I114Bmp_str = ALIGNED_STRING("i114.bmp"),
 
-    .str_803 = ALIGNED_STRING("i113.bmp"),
+    .I113Bmp_str = ALIGNED_STRING("i113.bmp"),
 
-    .str_804 = ALIGNED_STRING("i112.bmp"),
+    .I112Bmp_str = ALIGNED_STRING("i112.bmp"),
 
-    .str_805 = ALIGNED_STRING("i111.bmp"),
+    .I111Bmp_str = ALIGNED_STRING("i111.bmp"),
 
-    .str_806 = ALIGNED_STRING("i110.bmp"),
+    .I110Bmp_str = ALIGNED_STRING("i110.bmp"),
 
-    .str_807 = ALIGNED_STRING("i109.bmp"),
+    .I109Bmp_str = ALIGNED_STRING("i109.bmp"),
 
-    .str_808 = ALIGNED_STRING("i108.bmp"),
+    .I108Bmp_str = ALIGNED_STRING("i108.bmp"),
 
-    .str_809 = "i107o.bmp",
+    .I107oBmp_str = "i107o.bmp",
 
-    .str_810 = ALIGNED_STRING("i106.bmp"),
+    .I106Bmp_str = ALIGNED_STRING("i106.bmp"),
 
-    .str_811 = ALIGNED_STRING("i105.bmp"),
+    .I105Bmp_str = ALIGNED_STRING("i105.bmp"),
 
-    .str_812 = ALIGNED_STRING("i104.bmp"),
+    .I104Bmp_str = ALIGNED_STRING("i104.bmp"),
 
-    .str_813 = ALIGNED_STRING("i103.bmp"),
+    .I103Bmp_str = ALIGNED_STRING("i103.bmp"),
 
-    .str_814 = ALIGNED_STRING("i102.bmp"),
+    .I102Bmp_str = ALIGNED_STRING("i102.bmp"),
 
-    .str_815 = ALIGNED_STRING("i101.bmp"),
+    .I101Bmp_str = ALIGNED_STRING("i101.bmp"),
 
-    .str_816 = ALIGNED_STRING("i100.bmp"),
+    .I100Bmp_str = ALIGNED_STRING("i100.bmp"),
 
-    .str_817 = "i99.bmp",
+    .I99Bmp_str = "i99.bmp",
 
-    .str_818 = "i98.bmp",
+    .I98Bmp_str = "i98.bmp",
 
-    .str_819 = "i97.bmp",
+    .I97Bmp_str = "i97.bmp",
 
-    .str_820 = ALIGNED_STRING("i96o.bmp"),
+    .I96oBmp_str = ALIGNED_STRING("i96o.bmp"),
 
-    .str_821 = "i95.bmp",
+    .I95Bmp_str = "i95.bmp",
 
-    .str_822 = "i94.bmp",
+    .I94Bmp_str = "i94.bmp",
 
-    .str_823 = ALIGNED_STRING("i93o.bmp"),
+    .I93oBmp_str = ALIGNED_STRING("i93o.bmp"),
 
-    .str_824 = ALIGNED_STRING("i92o.bmp"),
+    .I92oBmp_str = ALIGNED_STRING("i92o.bmp"),
 
-    .str_825 = ALIGNED_STRING("i91o.bmp"),
+    .I91oBmp_str = ALIGNED_STRING("i91o.bmp"),
 
-    .str_826 = ALIGNED_STRING("i90o.bmp"),
+    .I90oBmp_str = ALIGNED_STRING("i90o.bmp"),
 
-    .str_827 = "i89.bmp",
+    .I89Bmp_str = "i89.bmp",
 
-    .str_828 = "i88.bmp",
+    .I88Bmp_str = "i88.bmp",
 
-    .str_829 = "i87.bmp",
+    .I87Bmp_str = "i87.bmp",
 
-    .str_830 = "i86.bmp",
+    .I86Bmp_str = "i86.bmp",
 
-    .str_831 = "i85.bmp",
+    .I85Bmp_str = "i85.bmp",
 
-    .str_832 = ALIGNED_STRING("i84o.bmp"),
+    .I84oBmp_str = ALIGNED_STRING("i84o.bmp"),
 
-    .str_833 = "i83.bmp",
+    .I83Bmp_str = "i83.bmp",
 
-    .str_834 = "i82.bmp",
+    .I82Bmp_str = "i82.bmp",
 
-    .str_835 = "i81.bmp",
+    .I81Bmp_str = "i81.bmp",
 
-    .str_836 = "i80.bmp",
+    .I80Bmp_str = "i80.bmp",
 
-    .str_837 = "i79.bmp",
+    .I79Bmp_str = "i79.bmp",
 
-    .str_838 = "i78.bmp",
+    .I78Bmp_str = "i78.bmp",
 
-    .str_839 = "i77.bmp",
+    .I77Bmp_str = "i77.bmp",
 
-    .str_840 = "i76.bmp",
+    .I76Bmp_str = "i76.bmp",
 
-    .str_841 = "i75.bmp",
+    .I75Bmp_str = "i75.bmp",
 
-    .str_842 = ALIGNED_STRING("i74o.bmp"),
+    .I74oBmp_str = ALIGNED_STRING("i74o.bmp"),
 
-    .str_843 = ALIGNED_STRING("i73o.bmp"),
+    .I73oBmp_str = ALIGNED_STRING("i73o.bmp"),
 
-    .str_844 = "i72.bmp",
+    .I72Bmp_str = "i72.bmp",
 
-    .str_845 = "i71.bmp",
+    .I71Bmp_str = "i71.bmp",
 
-    .str_846 = "i70.bmp",
+    .I70Bmp_str = "i70.bmp",
 
-    .str_847 = "i69.bmp",
+    .I69Bmp_str = "i69.bmp",
 
-    .str_848 = "i68.bmp",
+    .I68Bmp_str = "i68.bmp",
 
-    .str_849 = "i67.bmp",
+    .I67Bmp_str = "i67.bmp",
 
-    .str_850 = "i66.bmp",
+    .I66Bmp_str = "i66.bmp",
 
-    .str_851 = "i65.bmp",
+    .I65Bmp_str = "i65.bmp",
 
-    .str_852 = "i64.bmp",
+    .I64Bmp_str = "i64.bmp",
 
-    .str_853 = "i63.bmp",
+    .I63Bmp_str = "i63.bmp",
 
-    .str_854 = "i62.bmp",
+    .I62Bmp_str = "i62.bmp",
 
-    .str_855 = "i61.bmp",
+    .I61Bmp_str = "i61.bmp",
 
-    .str_856 = "i60.bmp",
+    .I60Bmp_str = "i60.bmp",
 
-    .str_857 = "i59.bmp",
+    .I59Bmp_str = "i59.bmp",
 
-    .str_858 = "i58.bmp",
+    .I58Bmp_str = "i58.bmp",
 
-    .str_859 = "i57.bmp",
+    .I57Bmp_str = "i57.bmp",
 
-    .str_860 = "i56.bmp",
+    .I56Bmp_str = "i56.bmp",
 
-    .str_861 = "i55.bmp",
+    .I55Bmp_str = "i55.bmp",
 
-    .str_862 = "i54.bmp",
+    .I54Bmp_str = "i54.bmp",
 
-    .str_863 = "i53.bmp",
+    .I53Bmp_str = "i53.bmp",
 
-    .str_864 = "i52.bmp",
+    .I52Bmp_str = "i52.bmp",
 
-    .str_865 = "i51.bmp",
+    .I51Bmp_str = "i51.bmp",
 
-    .str_866 = "i50.bmp",
+    .I50Bmp_str = "i50.bmp",
 
-    .str_867 = "i49.bmp",
+    .I49Bmp_str = "i49.bmp",
 
-    .str_868 = "i48.bmp",
+    .I48Bmp_str = "i48.bmp",
 
-    .str_869 = "i47.bmp",
+    .I47Bmp_str = "i47.bmp",
 
-    .str_870 = "i46.bmp",
+    .I46Bmp_str = "i46.bmp",
 
-    .str_871 = "i45.bmp",
+    .I45Bmp_str = "i45.bmp",
 
-    .str_872 = "i44.bmp",
+    .I44Bmp_str = "i44.bmp",
 
-    .str_873 = "i43.bmp",
+    .I43Bmp_str = "i43.bmp",
 
-    .str_874 = "i42.bmp",
+    .I42Bmp_str = "i42.bmp",
 
-    .str_875 = "i41.bmp",
+    .I41Bmp_str = "i41.bmp",
 
-    .str_876 = "i40.bmp",
+    .I40Bmp_str = "i40.bmp",
 
-    .str_877 = "i39.bmp",
+    .I39Bmp_str = "i39.bmp",
 
-    .str_878 = "i38.bmp",
+    .I38Bmp_str = "i38.bmp",
 
-    .str_879 = "i37.bmp",
+    .I37Bmp_str = "i37.bmp",
 
-    .str_880 = "i36.bmp",
+    .I36Bmp_str = "i36.bmp",
 
-    .str_881 = "i35.bmp",
+    .I35Bmp_str = "i35.bmp",
 
-    .str_882 = "i34.bmp",
+    .I34Bmp_str = "i34.bmp",
 
-    .str_883 = "i33.bmp",
+    .I33Bmp_str = "i33.bmp",
 
-    .str_884 = "i32.bmp",
+    .I32Bmp_str = "i32.bmp",
 
-    .str_885 = "i31.bmp",
+    .I31Bmp_str = "i31.bmp",
 
-    .str_886 = "i30.bmp",
+    .I30Bmp_str = "i30.bmp",
 
-    .str_887 = "i29.bmp",
+    .I29Bmp_str = "i29.bmp",
 
-    .str_888 = "i28.bmp",
+    .I28Bmp_str = "i28.bmp",
 
-    .str_889 = "i27.bmp",
+    .I27Bmp_str = "i27.bmp",
 
-    .str_890 = "i26.bmp",
+    .I26Bmp_str = "i26.bmp",
 
-    .str_891 = "i25.bmp",
+    .I25Bmp_str = "i25.bmp",
 
-    .str_892 = "i24.bmp",
+    .I24Bmp_str = "i24.bmp",
 
-    .str_893 = "i23.bmp",
+    .I23Bmp_str = "i23.bmp",
 
-    .str_894 = "i22.bmp",
+    .I22Bmp_str = "i22.bmp",
 
-    .str_895 = "i21.bmp",
+    .I21Bmp_str = "i21.bmp",
 
-    .str_896 = "i20.bmp",
+    .I20Bmp_str = "i20.bmp",
 
-    .str_897 = "i19.bmp",
+    .I19Bmp_str = "i19.bmp",
 
-    .str_898 = "i18.bmp",
+    .I18Bmp_str = "i18.bmp",
 
-    .str_899 = "i17.bmp",
+    .I17Bmp_str = "i17.bmp",
 
-    .str_900 = "i16.bmp",
+    .I16Bmp_str = "i16.bmp",
 
-    .str_901 = "i15.bmp",
+    .I15Bmp_str = "i15.bmp",
 
-    .str_902 = "i14.bmp",
+    .I14Bmp_str = "i14.bmp",
 
-    .str_903 = "i13.bmp",
+    .I13Bmp_str = "i13.bmp",
 
-    .str_904 = "i12.bmp",
+    .I12Bmp_str = "i12.bmp",
 
-    .str_905 = "i11.bmp",
+    .I11Bmp_str = "i11.bmp",
 
-    .str_906 = "i10.bmp",
+    .I10Bmp_str = "i10.bmp",
 
-    .str_907 = ALIGNED_STRING("i9.bmp"),
+    .I9Bmp_str = ALIGNED_STRING("i9.bmp"),
 
-    .str_908 = ALIGNED_STRING("i8.bmp"),
+    .I8Bmp_str = ALIGNED_STRING("i8.bmp"),
 
-    .str_909 = ALIGNED_STRING("i7.bmp"),
+    .I7Bmp_str = ALIGNED_STRING("i7.bmp"),
 
-    .str_910 = "i6o.bmp",
+    .I6oBmp_str = "i6o.bmp",
 
-    .str_911 = ALIGNED_STRING("i5.bmp"),
+    .I5Bmp_str = ALIGNED_STRING("i5.bmp"),
 
-    .str_912 = "i4o.bmp",
+    .I4oBmp_str = "i4o.bmp",
 
-    .str_913 = "i3o.bmp",
+    .I3oBmp_str = "i3o.bmp",
 
-    .str_914 = ALIGNED_STRING("i2.bmp"),
+    .I2Bmp_str = ALIGNED_STRING("i2.bmp"),
 
-    .str_915 = ALIGNED_STRING("i1.bmp"),
+    .I1Bmp_str = ALIGNED_STRING("i1.bmp"),
 
-    .str_916 = ALIGNED_STRING("i0.bmp"),
+    .I0Bmp_str = ALIGNED_STRING("i0.bmp"),
 
-    .str_917 = "trash.bmp",
+    .TrashBmp_str = "trash.bmp",
 
-    .str_918 = "trash.bmp",
+    .TrashBmp_str_2 = "trash.bmp",
 
     .w190 = {
         .header    = NAKA_HDR(0x33),

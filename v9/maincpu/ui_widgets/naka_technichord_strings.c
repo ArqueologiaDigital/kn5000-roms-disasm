@@ -800,35 +800,35 @@ typedef struct __attribute__((packed)) {
     char str_191[2];
     uint16_t field_f4ba;
     char str_192[10];
-    char str_193[12];
-    char str_194[10];
-    char str_195[10];
-    char str_196[10];
+    char Rhythm_str[12];
+    char Control_str[10];
+    char Apc_str[10];
+    char Mic_str[10];
     char METRONOME_str[10];
-    char str_198[10];
-    char str_199[10];
-    char str_200[12];
-    char str_201[10];
-    char str_202[10];
-    char str_203[10];
-    char str_204[12];
-    char str_205[10];
-    char str_206[10];
-    char str_207[10];
-    char str_208[10];
-    char str_209[10];
-    char str_210[10];
-    char str_211[10];
-    char str_212[10];
-    char str_213[12];
-    char str_214[12];
-    char str_215[12];
-    char str_216[12];
-    char str_217[12];
-    char str_218[12];
-    char str_219[12];
-    char str_220[10];
-    char str_221[10];
+    char Msp_str[10];
+    char Drums_str[10];
+    char Bass_str[12];
+    char Accomp3_str[10];
+    char Accomp2_str[10];
+    char Accomp1_str[10];
+    char RBass_str[12];
+    char Chord_str[10];
+    char Part_str[10];
+    char Part_str_2[10];
+    char Part_str_3[10];
+    char Part_str_4[10];
+    char Part_str_5[10];
+    char Part_str_6[10];
+    char Part_str_7[10];
+    char Part_str_8[12];
+    char Part_str_9[12];
+    char Part_str_10[12];
+    char Part_str_11[12];
+    char Part_str_12[12];
+    char Part_str_13[12];
+    char Left_str[12];
+    char Right_str[10];
+    char Right_str_2[10];
     char SdPT_str[6];
     uint16_t field_f602;
     uint16_t field_f604;
@@ -849,17 +849,17 @@ typedef struct __attribute__((packed)) {
     char MUTE_str_2[6];
     char str_230[6];
     char CTR_str[4];
-    char str_232[6];
-    char str_233[6];
+    char L_str[6];
+    char R_str[6];
     char str_234[4];
     char str_235[4];
     char str_236[4];
     char str_237[4];
     char str_238[4];
-    char str_239[4];
+    char On_str[4];
     char OFF_str_2[4];
     char str_241[4];
-    char str_242[4];
+    char On_str_2[4];
     char OFF_str_3[4];
     char str_244[4];
     char str_245[4];
@@ -872,41 +872,41 @@ typedef struct __attribute__((packed)) {
     char str_252[6];
     char str_253[4];
     char str_254[4];
-    char str_255[4];
+    char On_str_3[4];
     char OFF_str_4[4];
     char str_257[4];
-    char str_258[4];
+    char On_str_4[4];
     char OFF_str_5[4];
     char str_260[4];
-    char str_261[4];
+    char On_str_5[4];
     char OFF_str_6[4];
     char str_263[4];
-    char str_264[4];
+    char On_str_6[4];
     char OFF_str_7[4];
     char str_266[4];
-    char str_267[4];
+    char On_str_7[4];
     char OFF_str_8[4];
     char str_269[4];
-    char str_270[4];
+    char On_str_8[4];
     char OFF_str_9[4];
     char str_272[4];
-    char str_273[6];
-    char str_274[6];
+    char Ch_str[6];
+    char Off_str[6];
     char str_275[6];
     uint32_t ptrs_182[6];  /* 6 pointers */
-    char str_276[18];
-    char str_277[16];
-    char str_278[16];
-    char str_279[14];
-    char str_280[14];
-    char str_281[16];
+    char IndonesianHeader_str[18];
+    char ItalianHeader_str[16];
+    char SpanishHeader_str[16];
+    char FrenchHeader_str[14];
+    char GermanHeader_str[14];
+    char EnglishHeader_str[16];
     uint32_t ptrs_183[6];  /* 6 pointers */
-    char str_282[16];
-    char str_283[14];
-    char str_284[14];
-    char str_285[12];
-    char str_286[12];
-    char str_287[14];
+    char IndonesianText_str[16];
+    char ItalianText_str[14];
+    char SpanishText_str[14];
+    char FrenchText_str[12];
+    char GermanText_str[12];
+    char EnglishText_str[14];
     uint32_t ptrs_184[6];  /* 6 pointers */
     char ERROR_str[6];
     char ERROR_str_2[6];
@@ -915,119 +915,119 @@ typedef struct __attribute__((packed)) {
     char ERROR_str_4[6];
     char ERROR_str_5[6];
     uint32_t ptrs_185[6];  /* 6 pointers */
-    char str_294[12];
-    char str_295[12];
+    char Reminder_str[12];
+    char Reminder_str_2[12];
     uint16_t field_f86e;
-    char str_296[10];
-    char str_297[10];
-    char str_298[12];
-    char str_299[12];
+    char Ecuerde_str[10];
+    char Rappel_str[10];
+    char Hinweis_str[12];
+    char Reminder_str_3[12];
     uint32_t ptrs_186[6];  /* 6 pointers */
-    char str_300[14];
-    char str_301[12];
+    char Lengkapilah_str[14];
+    char Completed_str[12];
     uint16_t field_f8ce;
-    char str_302[12];
-    char str_303[10];
-    char str_304[18];
-    char str_305[12];
+    char Inalizado_str[12];
+    char Termine_str[10];
+    char VorgangBeendet_str[18];
+    char Completed_str_2[12];
     uint32_t ptrs_187[6];  /* 6 pointers */
-    char str_306[18];
-    char str_307[14];
+    char SilahkanTunggu_str[18];
+    char PleaseWait_str[14];
     uint16_t field_f93c;
-    char str_308[18];
-    char str_309[20];
-    char str_310[14];
-    char str_311[14];
+    char OrFavorEspere_str[18];
+    char VeuillezPatienter_str[20];
+    char BitteWarten_str[14];
+    char PleaseWait_str_2[14];
     uint32_t ptrs_188[6];  /* 6 pointers */
-    char str_312[122];
+    char MemoriInternalDiterimaUntuk_str[122];
     char REMINDER_str[10];
     char txt_La_memoria_interna_es_retenida[130];
     char txt_La_memoire_interne_est_conservee[168];
-    char str_316[130];
-    char str_317[114];
+    char DerSpeicherinhaltBleibtEtwa_str[130];
+    char TheInternalMemoryIs_str[114];
     uint32_t ptrs_189[6];  /* 6 pointers */
-    char str_318[146];
+    char AturanSudahDibatalkanKarena_str[146];
     char REMINDER_str_2[10];
     char txt_Las_configuraciones_fueron[210];
     char txt_Vous_n_avez_pas_presse_le_bouton[158];
     char txt_Die_Einstellungen_wurden_nicht[166];
-    char str_323[168];
+    char TheSettingsHaveBeen_str[168];
     uint32_t ptrs_190[6];  /* 6 pointers */
-    char str_324[8];
-    char str_325[8];
-    char str_326[8];
-    char str_327[8];
-    char str_328[8];
-    char str_329[8];
+    char Error_str[8];
+    char Error_str_2[8];
+    char Error_str_3[8];
+    char Erreur_str[8];
+    char Error_str_4[8];
+    char Error_str_5[8];
     uint32_t ptrs_191[6];  /* 6 pointers */
-    char str_330[78];
-    char str_331[10];
+    char DataPadaDiskYang_str[78];
+    char Error_str_6[10];
     char txt_Los_datos_del_disco_que_usted[78];
     char txt_Les_informations_contenues_dans[84];
     char txt_Die_Daten_auf_dieser_Diskette[60];
     char str_334[4];
-    char str_335[68];
+    char TheDataOnThe_str[68];
     uint32_t ptrs_192[6];  /* 6 pointers */
-    char str_336[76];
-    char str_337[10];
-    char str_338[72];
+    char KesalahanSudahTerjadiKetika_str[76];
+    char Error_str_7[10];
+    char SeHaProducidoUn_str[72];
     char txt_Une_erreur_s_est_produite[78];
-    char str_340[86];
-    char str_341[68];
+    char BeimLadenVonDer_str[86];
+    char AnErrorHasOccurred_str[68];
     uint32_t ptrs_193[6];  /* 6 pointers */
-    char str_342[36];
-    char str_343[10];
-    char str_344[28];
-    char str_345[44];
-    char str_346[28];
-    char str_347[36];
+    char TidakAdaDisketDalam_str[36];
+    char Error_str_8[10];
+    char NoHayDiscoEn_str[28];
+    char IlPasDeDisquette_str[44];
+    char KeineDisketteImLaufwerk_str[28];
+    char ThereIsNoDisk_str[36];
     uint32_t ptrs_194[6];  /* 6 pointers */
-    char str_348[86];
-    char str_349[10];
+    char FileYangDicobaUntuk_str[86];
+    char Error_str_9[10];
     char txt_El_disco_que_trato_de_cargar[40];
     char str_350[4];
     char txt_Le_fichier_que_vous_avez_essaye[54];
-    char str_352[58];
-    char str_353[42];
+    char DieDiskettenbankDieSie_str[58];
+    char TheFileThatYou_str[42];
     uint32_t ptrs_195[6];  /* 6 pointers */
-    char str_354[66];
-    char str_355[10];
-    char str_356[86];
+    char KesalahanTerjadiKetikaDisket_str[66];
+    char Error_str_10[10];
+    char SeHaProducidoUn_str_2[86];
     char txt_Une_erreur_s_est_produite_2[78];
-    char str_358[90];
-    char str_359[68];
+    char BeimSpeichernAufDie_str[90];
+    char AnErrorHasOccurred_str_2[68];
     uint32_t ptrs_196[6];  /* 6 pointers */
-    char str_360[98];
-    char str_361[10];
+    char DisketYangAndaPergunakan_str[98];
+    char Error_str_11[10];
     char txt_El_disco_que_esta_utilizando[120];
     char txt_La_disquette_que_vous_utilisez[114];
     char txt_Ihre_Diskette_ist[102];
-    char str_365[98];
+    char TheDiskThatYou_str[98];
     uint32_t ptrs_197[6];  /* 6 pointers */
-    char str_366[74];
-    char str_367[10];
+    char DisketYangAndaDipergunakan_str[74];
+    char Error_str_12[10];
     char txt_El_disco_que_esta_utilizando_2[62];
     char txt_La_disquette_que_vous_utilisez_2[74];
-    char str_370[56];
-    char str_371[62];
+    char IhreDisketteIstVoll_str[56];
+    char TheDiskThatYou_str_2[62];
     uint32_t ptrs_198[6];  /* 6 pointers */
-    char str_372[126];
-    char str_373[10];
+    char KesalahanSudahTerjadiKetika_str_2[126];
+    char Error_str_13[10];
     char txt_Se_ha_producido_un_error[158];
     char txt_Une_erreur_s_est_produite_3[160];
-    char str_376[78];
-    char str_377[132];
+    char BeimFormatierenIstEin_str[78];
+    char AnErrorHasOccurred_str_3[132];
     uint32_t ptrs_199[6];  /* 6 pointers */
-    char str_378[72];
-    char str_379[20];
+    char DataDidalamDiskDiprotek_str[72];
+    char ErrorCpPrtct_str[20];
     char txt_Los_datos_del_disco_estan[82];
     char str_380[4];
     char txt_Cette_disquette_est_protegee[66];
     char txt_Die_Daten_auf_dieser_Diskette_2[88];
-    char str_383[68];
+    char TheDataOnThe_str_2[68];
     uint32_t ptrs_200[6];  /* 6 pointers */
-    char str_384[22];
-    char str_385[10];
+    char DataSudahDiprotek_str[22];
+    char Error_str_14[10];
     char txt_Los_datos_ya_estan_protegidos[48];
     uint16_t field_10f3a;
     uint16_t field_10f3c;
@@ -1041,75 +1041,75 @@ typedef struct __attribute__((packed)) {
     uint16_t field_10f4c;
     uint16_t field_10f4e;
     uint16_t field_10f50;
-    char str_387[20];
+    char EsContreLaCopie_str[20];
     char txt_Diese_Daten_sind_bereits[42];
-    char str_389[36];
+    char TheDataIsAlready_str[36];
     uint32_t ptrs_201[6];  /* 6 pointers */
-    char str_390[36];
-    char str_391[10];
+    char PasswordYangAndaMasukkan_str[36];
+    char Error_str_15[10];
     char txt_La_contrasena_ingresada_es[40];
-    char str_393[34];
-    char str_394[38];
-    char str_395[44];
+    char VotreMotDePasse_str[34];
+    char DasEingegebenePasswordIst_str[38];
+    char ThePasswordThatYou_str[44];
     uint32_t ptrs_202[6];  /* 6 pointers */
-    char str_396[76];
-    char str_397[10];
+    char BatuBatereiSudahLemah_str[76];
+    char Error_str_16[10];
     char txt_La_carga_de_las_baterias_es_muy[104];
     char txt_La_batterie_interne_est[90];
     char txt_Die_verbleibende_Kapazitat_der[108];
-    char str_401[94];
+    char TheRemainingBatteryPower_str[94];
     uint32_t ptrs_203[6];  /* 6 pointers */
-    char str_402[60];
-    char str_403[18];
+    char LaguYangAndaSedang_str[60];
+    char ErrorErrSeq_str[18];
     char txt_La_cancion_que_intenta_grabar[40];
     char str_404[2];
     uint16_t field_11320;
     uint16_t field_11322;
     uint16_t field_11324;
-    char str_405[48];
+    char UenceQueVousEssayez_str[48];
     char txt_Der_Song_den_Sie_speichern[46];
-    char str_407[42];
+    char TheSongYouAre_str[42];
     uint32_t ptrs_204[6];  /* 6 pointers */
-    char str_408[80];
-    char str_409[18];
+    char StandardMidiFileTidak_str[80];
+    char ErrorErrCnv_str[18];
     char txt_Este_archivo_MIDI_estandar_es[82];
     char txt_Cette_sequence_STANDARD_MIDI[88];
     char str_411[4];
-    char str_412[98];
-    char str_413[78];
+    char DiesesStandardMidiFile_str[98];
+    char ThisStandardMidiFile_str[78];
     uint32_t ptrs_205[6];  /* 6 pointers */
-    char str_414[30];
-    char str_415[22];
+    char IniTidakStandardMidi_str[30];
+    char ErrorErrNoMidi_str[22];
     char txt_Este_no_es_un_archivo_MIDI_estan[32];
-    char str_416[6];
+    char Dar_str[6];
     char txt_Ceci_n_est_pas_une_sequence[48];
-    char str_418[34];
-    char str_419[34];
+    char DiesIstKeinStandard_str[34];
+    char ThisIsNotStandard_str[34];
     uint32_t ptrs_206[6];  /* 6 pointers */
-    char str_420[84];
-    char str_421[24];
+    char TimebaseResolusiPpqYang_str[84];
+    char ErrorErrTimebase_str[24];
     char txt_La_base_de_tiempo_resolucion_de[90];
     char txt_La_resolution_PPQ_que_vous_avez[88];
     char txt_Die_Zeiteinheit_PPQ_Auflosung[104];
-    char str_425[86];
+    char TheTimebasePpqResolution_str[86];
     uint32_t ptrs_207[6];  /* 6 pointers */
-    char str_426[88];
-    char str_427[16];
-    char str_428[66];
+    char DisketIniAdalahSatu_str[88];
+    char ErrorDctp_str[16];
+    char EsteEsUnArchivo_str[66];
     char txt_Ceci_est_une_sequence_STANDARD[98];
-    char str_430[122];
-    char str_431[62];
+    char DiesIstEinFormat_str[122];
+    char ThisIsFormatMidi_str[62];
     uint32_t ptrs_208[6];  /* 6 pointers */
-    char str_432[108];
-    char str_433[10];
+    char SatuMasalahTerjadiTerhadap_str[108];
+    char Error_str_17[10];
     char txt_Se_ha_producido_un_problema_con[104];
     char txt_Je_ne_peux_pas_charger_le[146];
     char txt_Die_Sequenzerdaten_sind_nicht_in[108];
-    char str_437[96];
+    char AProblemHasOccurred_str[96];
     uint32_t ptrs_209[6];  /* 6 pointers */
-    char str_438[46];
-    char str_439[10];
-    char str_440[14];
+    char KapasitasPenyimpananPenuhMemory_str[46];
+    char Error_str_18[10];
+    char MemoriaLlena_str[14];
     uint16_t field_11cee;
     uint16_t field_11cf0;
     uint16_t field_11cf2;
@@ -1118,69 +1118,69 @@ typedef struct __attribute__((packed)) {
     uint16_t field_11cf8;
     uint16_t field_11cfa;
     char str_441[4];
-    char str_442[16];
-    char str_443[12];
+    char SpeicherVoll_str[16];
+    char MemoryFull_str[12];
     uint32_t ptrs_210[6];  /* 6 pointers */
-    char str_444[50];
-    char str_445[10];
-    char str_446[66];
+    char PerluTekanPunchOut_str[50];
+    char Error_str_19[10];
+    char EsNecesarioPulsarPunch_str[66];
     char txt_Vous_devez_presser_PUNCH_OUT[60];
     char txt_Um_diesen_Vorgang_abzuschlien[64];
-    char str_448[6];
-    char str_449[64];
+    char Ken_str[6];
+    char ItIsNecessaryTo_str[64];
     uint32_t ptrs_211[6];  /* 6 pointers */
-    char str_450[104];
-    char str_451[10];
+    char TidakMungkinDiubahKe_str[104];
+    char Error_str_20[10];
     char txt_No_es_posible_cambiar_la[104];
     char txt_Je_ne_peux_pas_changer_de_mesure[112];
     char txt_Es_ist_jetzt_nicht_mehr_moglich[98];
-    char str_455[102];
+    char ItIsImpossibleTo_str[102];
     uint32_t ptrs_212[6];  /* 6 pointers */
-    char str_456[80];
-    char str_457[10];
-    char str_458[74];
+    char SatuRhythmTrackSudah_str[80];
+    char Error_str_21[10];
+    char YaExisteUnaPista_str[74];
     char txt_Vous_avez_deja_choisi_une_piste[100];
     char txt_Es_ist_nicht_moglich_zwei_RHYTHM[92];
-    char str_461[80];
+    char ARhythmTrackAlready_str[80];
     uint32_t ptrs_213[6];  /* 6 pointers */
-    char str_462[78];
-    char str_463[10];
-    char str_464[76];
+    char SatuChordTrackSudah_str[78];
+    char Error_str_22[10];
+    char YaExisteUnaPista_str_2[76];
     char txt_Vous_avez_deja_choisi_une_piste_2[100];
     char txt_Es_ist_nicht_moglich_zwei_CHORD[92];
-    char str_467[78];
+    char AChordTrackAlready_str[78];
     uint32_t ptrs_214[6];  /* 6 pointers */
-    char str_468[82];
-    char str_469[10];
+    char SatuControlTrackSudah_str[82];
+    char Error_str_23[10];
     char txt_Ya_existe_una_pista_de_ritmo_No[72];
-    char str_470[8];
+    char Ticos_str[8];
     char txt_Vous_avez_deja_choisi_une_piste_3[102];
     char txt_Es_ist_nicht_moglich_zwei[94];
-    char str_473[82];
+    char AControlTrackAlready_str[82];
     uint32_t ptrs_215[6];  /* 6 pointers */
-    char str_474[74];
-    char str_475[10];
-    char str_476[76];
+    char SatuApcTrackSudah_str[74];
+    char Error_str_24[10];
+    char YaExisteUnaPista_str_3[76];
     char txt_Vous_avez_deja_choisi_une_piste_4[98];
     char txt_Es_ist_nicht_moglich_zwei_APC[90];
-    char str_479[74];
+    char AApcTrackAlready_str[74];
     uint32_t ptrs_216[6];  /* 6 pointers */
-    char str_480[62];
-    char str_481[10];
+    char IniHanyaMungkinUntuk_str[62];
+    char Error_str_25[10];
     char txt_Solo_es_posible_cambiar_la[62];
     char txt_Je_ne_peux_changer_la_velocite[70];
     char txt_Es_ist_nicht_moglich_die[86];
-    char str_485[62];
+    char ItIsOnlyPossible_str[62];
     uint32_t ptrs_217[6];  /* 6 pointers */
-    char str_486[118];
-    char str_487[10];
+    char IniHanyaMungkinUntuk_str_2[118];
+    char Error_str_26[10];
     char txt_Solo_es_posible_mezclar_pistas[104];
     char txt_Je_ne_peux_fusionner_que_des[140];
     char txt_Spuren_wie_RHYTHM_CHORD_und[104];
-    char str_491[104];
+    char ItIsOnlyPossible_str_2[104];
     uint32_t ptrs_218[6];  /* 6 pointers */
-    char str_492[118];
-    char str_493[10];
+    char IniHanyaMungkinUntuk_str_3[118];
+    char Error_str_27[10];
     char txt_Solo_es_posible_copiar_pistas_de[102];
     char txt_Je_ne_peux_copier_que_des_pistes[138];
     uint16_t field_12d28;
@@ -1229,42 +1229,42 @@ typedef struct __attribute__((packed)) {
     uint16_t field_12d7e;
     uint16_t field_12d80;
     uint16_t field_12d82;
-    char str_496[28];
-    char str_497[102];
+    char NnenNichtKopiertWerden_str[28];
+    char ItIsOnlyPossible_str_3[102];
     uint32_t ptrs_219[6];  /* 6 pointers */
-    char str_498[58];
-    char str_499[10];
+    char LaguIniTerlaluPanjang_str[58];
+    char Error_str_28[10];
     char txt_Esta_cancion_dura_demasiado_para[74];
     char txt_Cette_sequence_est_trop_longue[88];
-    char str_502[66];
-    char str_503[50];
+    char DieserTitelIstZu_str[66];
+    char ThisSongIsToo_str[50];
     uint32_t ptrs_220[6];  /* 6 pointers */
-    char str_504[138];
-    char str_505[10];
-    char str_506[156];
+    char MidiFileYangAnda_str[138];
+    char Error_str_29[10];
+    char ElFicheroMidiQue_str[156];
     char txt_La_sequence_MIDI_File_que_vous[172];
-    char str_507[10];
+    char Uenceur_str[10];
     char txt_Der_zu_ladende_MIDI_File_Song[152];
-    char str_509[146];
+    char TheMidiFileThat_str[146];
     uint32_t ptrs_221[6];  /* 6 pointers */
-    char str_510[202];
-    char str_511[10];
+    char IniTidakMungkinUntuk_str[202];
+    char Error_str_30[10];
     char txt_No_es_posible_cambiar_la_2[202];
     char txt_Je_ne_peux_pas_changer_la_mesure[198];
     char txt_Nach_einer_Aufnahme_im_COMPOSER[106];
-    char str_515[190];
+    char ItIsNotPossible_str[190];
     uint32_t ptrs_222[6];  /* 6 pointers */
-    char str_516[240];
-    char str_517[10];
+    char TimeSignatureDaripadaPattern_str[240];
+    char Error_str_31[10];
     char txt_La_signatura_de_tiempo_del[244];
     char txt_La_mesure_du_style_que_vous[214];
-    char str_519[10];
+    char Emesure_str[10];
     char txt_Das_gerade_kopierte_Pattern_hat[172];
-    char str_521[234];
+    char TheTimeSignatureOf_str[234];
     uint32_t ptrs_223[6];  /* 6 pointers */
-    char str_522[14];
-    char str_523[10];
-    char str_524[14];
+    char MemoryPenuh_str[14];
+    char Error_str_32[10];
+    char MemoriaLlena_str_2[14];
     uint16_t field_13afe;
     uint16_t field_13b00;
     uint16_t field_13b02;
@@ -1273,33 +1273,33 @@ typedef struct __attribute__((packed)) {
     uint16_t field_13b08;
     uint16_t field_13b0a;
     char str_525[4];
-    char str_526[16];
-    char str_527[12];
+    char SpeicherVoll_str_2[16];
+    char MemoryFull_str_2[12];
     uint32_t ptrs_224[6];  /* 6 pointers */
-    char str_528[92];
-    char str_529[10];
+    char KodeIdentifikasiIdDari_str[92];
+    char Error_str_33[10];
     char txt_El_codigo_de_identificacion_ID[124];
     char txt_Le_code_d_identificaiton_ID_de[124];
-    char str_531[12];
+    char UnKn3000_str[12];
     char txt_Der_Identifikations_ID_Code_der[112];
-    char str_533[104];
+    char TheIdentificationIdCode_str[104];
     uint32_t ptrs_225[6];  /* 6 pointers */
-    char str_534[154];
-    char str_535[10];
+    char SatuKesalahanSudahTerjadi_str[154];
+    char Error_str_34[10];
     char txt_Se_ha_producido_un_error_durante[164];
     char txt_Une_erreur_s_est_produite_4[168];
     char txt_Beim_Empfang_der_System[148];
-    char str_539[138];
+    char AnErrorHasOccurred_str_4[138];
     uint32_t ptrs_226[6];  /* 6 pointers */
-    char str_540[126];
-    char str_541[10];
+    char SatuKesalahanSudahTerjadi_str_2[126];
+    char Error_str_35[10];
     char txt_Se_ha_producido_un_error_durante_2[132];
     char txt_Une_erreur_s_est_produite_lors[160];
     char txt_Bei_der_Ubertragung_der_System[142];
-    char str_545[120];
+    char AnErrorHasOccurred_str_5[120];
     uint32_t ptrs_227[6];  /* 6 pointers */
-    char str_546[156];
-    char str_547[10];
+    char FileYangSedangAnda_str[156];
+    char Error_str_36[10];
     uint16_t field_14434;
     uint16_t field_14436;
     uint16_t field_14438;
@@ -1512,33 +1512,33 @@ typedef struct __attribute__((packed)) {
     uint16_t field_145d6;
     uint16_t field_145d8;
     uint16_t field_145da;
-    char str_550[24];
-    char str_551[134];
+    char OptionGeladenWerden_str[24];
+    char TheFileThatYou_str_2[134];
     uint32_t ptrs_228[6];  /* 6 pointers */
-    char str_552[130];
-    char str_553[10];
+    char TidakMungkinUntukMeng_str[130];
+    char Error_str_37[10];
     char txt_No_es_posible_editar_un_juego_de[134];
     char txt_Il_est_impossible_d_editer_un[134];
     char txt_Es_ist_nicht_moglich_ein_Drum[130];
-    char str_557[112];
+    char ItIsImpossibleTo_str_2[112];
     uint32_t ptrs_229[6];  /* 6 pointers */
-    char str_558[106];
-    char str_559[10];
+    char HanyaMungkinDimasukkanMelody_str[106];
+    char Error_str_38[10];
     char txt_Solo_es_posible_insertar_pistas[118];
     char txt_Il_est_seulement_possible_d[142];
-    char str_561[4];
+    char Es_str[4];
     char txt_Es_konnen_nur_Melodie_Spuren[116];
-    char str_563[106];
+    char ItIsOnlyPossible_str_4[106];
     uint32_t ptrs_230[6];  /* 6 pointers */
-    char str_564[124];
-    char str_565[10];
-    char str_566[126];
+    char TidakMungkinUntukMenggunakan_str[124];
+    char Error_str_39[10];
+    char NoEsPosibleUtilizar_str[126];
     char txt_L_utilisation_du_Sound_Arranger[116];
     char txt_Der_Sound_Arranger_kann_nicht[118];
-    char str_569[102];
+    char ItIsNotPossible_str_2[102];
     uint32_t ptrs_231[6];  /* 6 pointers */
-    char str_570[96];
-    char str_571[10];
+    char TipeDisketYangDigunakan_str[96];
+    char Err0r_str[10];
     char txt_El_disquete_insertado_es_de_tipo[102];
     char txt_La_disquette_inseree_est_de_type[106];
     uint16_t field_14f4c;
@@ -1577,115 +1577,115 @@ typedef struct __attribute__((packed)) {
     uint16_t field_14f8e;
     uint16_t field_14f90;
     uint16_t field_14f92;
-    char str_574[32];
-    char str_575[84];
+    char DdDiskettenVerwendetWerden_str[32];
+    char TheTypeOfInserted_str[84];
     uint32_t ptrs_232[6];  /* 6 pointers */
-    char str_576[120];
-    char str_577[10];
+    char JumlahLaguMelebihiKapasitas_str[120];
+    char Error_str_40[10];
     char txt_La_longitud_de_esta_cancion[154];
     char txt_La_taille_de_cette_sequence[172];
     char txt_Die_Groe_dieses_Songs_ubersteigt[180];
-    char str_581[146];
+    char TheQuantityOfThis_str[146];
     uint32_t ptrs_233[6];  /* 6 pointers */
-    char str_582[136];
-    char str_583[10];
-    char str_584[158];
+    char TidakMungkinMerekamDengan_str[136];
+    char Error_str_41[10];
+    char NoEsPosibleGrabar_str[158];
     char txt_Il_n_est_pas_possible_d[188];
     char txt_Es_ist_nicht_moglich_auf_Preset[118];
-    char str_587[120];
+    char ItIsNotPossible_str_3[120];
     uint32_t ptrs_234[6];  /* 6 pointers */
-    char str_588[174];
-    char str_589[10];
+    char SpecialTracksSepertiChord_str[174];
+    char Error_str_42[10];
     char txt_En_la_cancion_que_usted_esta[222];
     char txt_Des_pistes_assignees_a_Chord_APC[168];
     char txt_In_dem_Song_den_Sie_kopieren[186];
-    char str_593[172];
+    char SpecialTracksSuchAs_str[172];
     uint32_t ptrs_235[6];  /* 6 pointers */
-    char str_594[114];
-    char str_595[10];
+    char RekamanAutoPunchBelum_str[114];
+    char Error_str_43[10];
     char txt_No_ha_tenido_exito_la_grabacion[138];
     char txt_L_enregistrement_AUTO_PUNCH_a[126];
-    char str_597[12];
+    char Atteinte_str[12];
     char txt_Der_AUTO_PUNCH_Aufnahmevorgang[162];
-    char str_599[130];
+    char AutoPunchRecordingHas_str[130];
     uint32_t ptrs_236[6];  /* 6 pointers */
-    char str_600[174];
-    char str_601[10];
+    char ContohContohComposerYang_str[174];
+    char Error_str_44[10];
     char txt_El_patron_del_Composer[170];
     char txt_Le_motif_COMPOSER_que_vous_avez[142];
     char txt_Das_gewahlte_COMPOSER_Muster[174];
-    char str_605[142];
+    char TheComposerPatternYou_str[142];
     uint32_t ptrs_237[6];  /* 6 pointers */
-    char str_606[132];
-    char str_607[10];
+    char LaguYangAndaCoba_str[132];
+    char Error_str_45[10];
     char txt_La_cancion_que_ha_tratado_de[150];
     char txt_Le_morceau_que_vous_avez_essaye[164];
     char str_609[4];
     char txt_Die_Melodie_die_Sie_zu_laden[202];
-    char str_611[142];
+    char TheSongThatYou_str[142];
     uint32_t ptrs_238[6];  /* 6 pointers */
     uint16_t field_16340;
     uint16_t field_16342;
     char str_612[2];
-    char str_613[10];
-    char str_614[172];
+    char Error_str_46[10];
+    char RkbLkbSonPistas_str[172];
     char txt_RKB_et_LKB_sont_des_pistes[164];
     char str_615[4];
     char txt_RKB_und_LKB_sind_spezielle[172];
-    char str_617[134];
+    char RkbAndLkbAre_str[134];
     uint32_t ptrs_239[6];  /* 6 pointers */
     uint16_t field_165ee;
     uint16_t field_165f0;
     char str_618[2];
-    char str_619[10];
+    char Error_str_47[10];
     char txt_RKB_y_LKB_son_pistas_especiales[222];
     char txt_RKB_et_LKB_sont_des_pistes_2[200];
-    char str_621[10];
+    char Nouveau_str[10];
     char txt_RKB_und_LKB_sind_spezielle_2[228];
-    char str_623[170];
+    char RkbAndLkbAre_str_2[170];
     uint32_t ptrs_240[6];  /* 6 pointers */
-    char str_624[110];
-    char str_625[16];
+    char TidakMungkinUntukMeng_str_2[110];
+    char ErrorDkit_str[16];
     char txt_No_es_posible_editar_ni_el[142];
     char txt_Il_est_impossible_d_editer_les[122];
     char txt_Das_Orchestral_Kit_und_das_Sound[118];
-    char str_629[104];
+    char ItIsImpossibleTo_str_3[104];
     uint32_t ptrs_241[6];  /* 6 pointers */
-    char str_630[188];
-    char str_631[10];
+    char HubunganKomputerTidakAktif_str[188];
+    char Error_str_48[10];
     char txt_La_conexion_con_la_computadora[224];
     char str_632[4];
     char txt_La_connexion_micro_ordinateur_n[208];
-    char str_634[200];
-    char str_635[180];
+    char DieComputerverbindungIstNicht_str[200];
+    char TheComputerConnectionIs_str[180];
     uint32_t ptrs_242[6];  /* 6 pointers */
-    char str_636[130];
-    char str_637[10];
+    char BitmapAdalahSalahFormat_str[130];
+    char Error_str_49[10];
     char txt_Este_mapa_de_bits_tiene_en_un[146];
     char txt_Cette_configuration_Bitmap_n_est[142];
-    char str_639[8];
+    char Ails_str[8];
     char txt_Das_Format_dieses_Bitmaps_kann[128];
-    char str_641[114];
+    char ThisBitmapIsIn_str[114];
     uint32_t ptrs_243[6];  /* 6 pointers */
-    char str_642[52];
-    char str_643[10];
-    char str_644[62];
+    char PilihlahPanelMemoryYang_str[52];
+    char Error_str_50[10];
+    char PorFavorSeleccioneEl_str[62];
     char txt_Veuillez_selectionner_le_Panel[80];
     char txt_Bitte_wahlen_Sie_den_Panel[84];
-    char str_647[54];
+    char PleaseSelectThePanel_str[54];
     /* the IvMesage message catalog: 80 records + a terminator {0, 0xFFFFFFFF, 0, 0} (both pointers 0; see msg_record_t) */
     msg_record_t IvMesage_Catalog[81];
     /* the 6 window object ids `kind` selects: Viewable slot 0xEE elements 0x14 NoMessage, 0x02 Completed, 0x05 Reminder, 0x09 Error, 0x0D Other, 0x16 PleaseWait (all class Window) */
     uint32_t IvMesage_Windows[6];
     char Msg_str[4];
     uint32_t ptrs_245[6];  /* 6 pointers */
-    char str_670[18];
-    char str_671[14];
+    char SilahkanTunggu_str_2[18];
+    char PleaseWait_str_3[14];
     uint16_t field_178b4;
-    char str_672[18];
-    char str_673[20];
-    char str_674[14];
-    char str_675[14];
+    char OrFavorEspere_str_2[18];
+    char VeuillezPatienter_str_2[20];
+    char BitteWarten_str_2[14];
+    char PleaseWait_str_4[14];
     uint32_t ptrs_246[6];  /* 6 pointers */
     char w41_code[12];
     char w41_name[8];
@@ -1693,35 +1693,35 @@ typedef struct __attribute__((packed)) {
     char w42_name[8];
     char w43_code[8];
     char w43_name[8];
-    char str_676[16];
+    char MessageID_str[16];
     char str_677[10];
-    char str_678[10];
-    char str_679[10];
-    char str_680[10];
-    char str_681[10];
-    char str_682[10];
-    char str_683[10];
-    char str_684[10];
-    char str_685[10];
-    char str_686[10];
-    char str_687[10];
-    char str_688[10];
-    char str_689[10];
-    char str_690[10];
-    char str_691[10];
-    char str_692[10];
-    char str_693[10];
-    char str_694[10];
-    char str_695[10];
-    char str_696[10];
-    char str_697[10];
-    char str_698[10];
-    char str_699[10];
-    char str_700[10];
-    char str_701[10];
-    char str_702[10];
-    char str_703[10];
-    char str_704[10];
+    char Metro_str[10];
+    char Control_str_2[10];
+    char Msp_str_2[10];
+    char Msp_str_3[10];
+    char RBass_str_2[10];
+    char Chord_str_2[10];
+    char Drum_str[10];
+    char Bass_str_2[10];
+    char Accomp3_str_2[10];
+    char Accomp2_str_2[10];
+    char Accomp1_str_2[10];
+    char Part_str_14[10];
+    char Part_str_15[10];
+    char Part_str_16[10];
+    char Part_str_17[10];
+    char Part_str_18[10];
+    char Part_str_19[10];
+    char Part_str_20[10];
+    char Part_str_21[10];
+    char Part_str_22[10];
+    char Part_str_23[10];
+    char Part_str_24[10];
+    char Part_str_25[10];
+    char Part_str_26[10];
+    char Left_str_2[10];
+    char Right_str_3[10];
+    char Right_str_4[10];
     char w44_code[6];
     char w44_name[6];
     char TeCd_str[6];
@@ -1771,22 +1771,22 @@ typedef struct __attribute__((packed)) {
     char TeC1_str[6];
     uint32_t ptrs_247[17];  /* 17 pointers */
     char CONDUCTOR_str[10];
-    char str_708[10];
-    char str_709[10];
-    char str_710[10];
-    char str_711[10];
-    char str_712[10];
-    char str_713[10];
-    char str_714[10];
-    char str_715[10];
-    char str_716[10];
-    char str_717[10];
-    char str_718[10];
-    char str_719[10];
-    char str_720[10];
-    char str_721[10];
-    char str_722[10];
-    char str_723[10];
+    char Part_str_27[10];
+    char Part_str_28[10];
+    char Part_str_29[10];
+    char Part_str_30[10];
+    char Part_str_31[10];
+    char Part_str_32[10];
+    char Part_str_33[10];
+    char Part_str_34[10];
+    char Part_str_35[10];
+    char Part_str_36[10];
+    char Part_str_37[10];
+    char Part_str_38[10];
+    char Part_str_39[10];
+    char Left_str_3[10];
+    char Right_str_5[10];
+    char Right_str_6[10];
     char CONDUCTOR_str_2[10];
     uint16_t field_17bd2;
     uint16_t field_17bd4;
@@ -1873,24 +1873,24 @@ typedef struct __attribute__((packed)) {
     uint16_t field_17c84;
     uint16_t field_17c86;
     uint32_t ptrs_248[17];  /* 17 pointers */
-    char str_731[14];
-    char str_732[14];
-    char str_733[14];
-    char str_734[14];
-    char str_735[14];
-    char str_736[14];
-    char str_737[14];
-    char str_738[14];
-    char str_739[14];
-    char str_740[14];
-    char str_741[14];
+    char NoType_str[14];
+    char User_str[14];
+    char User_str_2[14];
+    char Pelog_str[14];
+    char Slendro_str[14];
+    char Arabic_str[14];
+    char Arabic_str_2[14];
+    char Arabic_str_3[14];
+    char Arabic_str_4[14];
+    char Arabic_str_5[14];
+    char Kirnberger_str[14];
     char WERCKMEISTER_str[14];
-    char str_743[14];
-    char str_744[14];
-    char str_745[14];
-    char str_746[14];
-    char str_747[14];
-    char str_748[14];
+    char Pythagorean_str[14];
+    char Orchestra_str[14];
+    char Piano_str[14];
+    char Random_str[14];
+    char Off_str_2[14];
+    char NoType_str_2[14];
     uint32_t ptrs_249[12];  /* 12 pointers */
     char str_749[4];
     char str_750[4];
@@ -1905,18 +1905,18 @@ typedef struct __attribute__((packed)) {
     char str_759[4];
     char str_760[4];
     uint32_t ptrs_250[12];  /* 12 pointers */
-    char str_761[10];
-    char str_762[10];
-    char str_763[10];
-    char str_764[10];
-    char str_765[10];
-    char str_766[10];
-    char str_767[10];
-    char str_768[10];
-    char str_769[10];
-    char str_770[10];
-    char str_771[10];
-    char str_772[10];
+    char KeyB_str[10];
+    char KeyA_str[10];
+    char KeyA_str_2[10];
+    char KeyG_str[10];
+    char KeyG_str_2[10];
+    char KeyF_str[10];
+    char KeyF_str_2[10];
+    char KeyE_str[10];
+    char KeyD_str[10];
+    char KeyD_str_2[10];
+    char KeyC_str[10];
+    char KeyC_str_2[10];
     uint32_t ptr_17ed0;
     uint32_t ptr_17ed4;
     char SOUND_str[6];
@@ -1928,7 +1928,7 @@ typedef struct __attribute__((packed)) {
     char str_779[4];
     char w45_code[4];
     char w45_name[6];
-    char str_780[8];
+    char VerX_str[8];
     char MPv_str[4];
     /* ---------------------------------------------------------------------
      * WelcomeGlyph_C  --  'C', 1 glyph of 16 x 17 pixels, 1 bpp, 34 bytes
@@ -2217,9 +2217,9 @@ typedef struct __attribute__((packed)) {
     char str_1140[2];
     char str_1141[2];
     char str_1142[2];
-    char str_1143[10];
-    char str_1144[12];
-    char str_1145[8];
+    char KeyShift_str[10];
+    char DigitalEff_str[12];
+    char DspEff_str[8];
     char REVERB_str[8];
     char str_1147[2];
     char VOLUME_str[8];
@@ -2253,18 +2253,18 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1933c;
     char str_1152[8];
     char RHYTHM_str[8];
-    char str_1154[8];
-    char str_1155[8];
-    char str_1156[8];
-    char str_1157[8];
-    char str_1158[8];
-    char str_1159[8];
-    char str_1160[8];
+    char Ctrl_str[8];
+    char Apc_str_2[8];
+    char Mic_str_2[8];
+    char Metro_str_2[8];
+    char Msp_str_4[8];
+    char Drums_str_2[8];
+    char Bass_str_3[8];
     char ACOMP3_str[8];
     char ACOMP2_str[8];
     char ACOMP1_str[8];
-    char str_1164[8];
-    char str_1165[8];
+    char RBass_str_3[8];
+    char Chord_str_3[8];
     char PART16_str[8];
     char PART15_str[8];
     char PART14_str[8];
@@ -2272,28 +2272,28 @@ typedef struct __attribute__((packed)) {
     char PART12_str[8];
     char PART11_str[8];
     char PART10_str[8];
-    char str_1173[8];
-    char str_1174[8];
-    char str_1175[8];
-    char str_1176[8];
-    char str_1177[8];
-    char str_1178[8];
-    char str_1179[8];
+    char Part_str_40[8];
+    char Part_str_41[8];
+    char Part_str_42[8];
+    char Part_str_43[8];
+    char Part_str_44[8];
+    char Part_str_45[8];
+    char Left_str_4[8];
     char RIGHT2_str[8];
     char RIGHT1_str[8];
     char str_1182[6];
-    char str_1183[6];
+    char Rhy_str[6];
     char CTRL_str[6];
-    char str_1185[6];
-    char str_1186[6];
+    char Apc_str_3[6];
+    char Mic_str_3[6];
     char METR_str[6];
-    char str_1188[6];
+    char Msp_str_5[6];
     char DRUM_str[6];
     char BASS_str[6];
     char ACP3_str[6];
     char ACP2_str[6];
     char ACP1_str[6];
-    char str_1194[6];
+    char RBa_str[6];
     char CHRD_str[6];
     char PT16_str[6];
     char PT15_str[6];
@@ -2302,39 +2302,39 @@ typedef struct __attribute__((packed)) {
     char PT12_str[6];
     char PT11_str[6];
     char PT10_str[6];
-    char str_1203[6];
-    char str_1204[6];
-    char str_1205[6];
-    char str_1206[6];
-    char str_1207[6];
-    char str_1208[6];
+    char Pt_str[6];
+    char Pt_str_2[6];
+    char Pt_str_3[6];
+    char Pt_str_4[6];
+    char Pt_str_5[6];
+    char Pt_str_6[6];
     char LEFT_str[6];
-    char str_1210[6];
-    char str_1211[6];
-    char str_1212[8];
-    char str_1213[8];
-    char str_1214[8];
-    char str_1215[8];
+    char Rt_str[6];
+    char Rt_str_2[6];
+    char Chord_str_4[8];
+    char RBass_str_4[8];
+    char Msp_str_6[8];
+    char Bass_str_4[8];
     char ACOMP1_str_2[8];
     char ACOMP2_str_2[8];
     char ACOMP3_str_2[8];
-    char str_1219[8];
-    char str_1220[8];
-    char str_1221[8];
-    char str_1222[8];
-    char str_1223[8];
-    char str_1224[8];
-    char str_1225[8];
-    char str_1226[8];
-    char str_1227[8];
-    char str_1228[8];
-    char str_1229[8];
-    char str_1230[8];
-    char str_1231[8];
-    char str_1232[8];
-    char str_1233[8];
-    char str_1234[8];
-    char str_1235[8];
+    char Drums_str_3[8];
+    char Tr16_str[8];
+    char Tr15_str[8];
+    char Tr14_str[8];
+    char Tr13_str[8];
+    char Tr12_str[8];
+    char Tr11_str[8];
+    char Tr10_str[8];
+    char Tr_str[8];
+    char Tr_str_2[8];
+    char Tr_str_3[8];
+    char Tr_str_4[8];
+    char Tr_str_5[8];
+    char Tr_str_6[8];
+    char Tr_str_7[8];
+    char Tr_str_8[8];
+    char Tr_str_9[8];
     char str_1236[6];
     char str_1237[6];
     char str_1238[6];
@@ -2350,17 +2350,17 @@ typedef struct __attribute__((packed)) {
     char TR12_str[6];
     char TR11_str[6];
     char TR10_str[6];
-    char str_1251[6];
-    char str_1252[6];
-    char str_1253[6];
-    char str_1254[6];
-    char str_1255[6];
-    char str_1256[6];
-    char str_1257[6];
-    char str_1258[6];
-    char str_1259[6];
-    char str_1260[14];
-    char str_1261[26];
+    char Tr_str_10[6];
+    char Tr_str_11[6];
+    char Tr_str_12[6];
+    char Tr_str_13[6];
+    char Tr_str_14[6];
+    char Tr_str_15[6];
+    char Tr_str_16[6];
+    char Tr_str_17[6];
+    char Tr_str_18[6];
+    char Sound_str[14];
+    char RightSoundNameXxxxx_str[26];
     uint16_t field_1965a;
     uint16_t field_1965c;
     uint16_t field_1965e;
@@ -2442,9 +2442,9 @@ typedef struct __attribute__((packed)) {
     char str_1271[2];
     char str_1272[2];
     char str_1273[2];
-    char str_1274[10];
-    char str_1275[12];
-    char str_1276[8];
+    char KeyShift_str_2[10];
+    char DigitalEff_str_2[12];
+    char DspEff_str_2[8];
     char REVERB_str_2[8];
     char str_1278[2];
     char VOLUME_str_2[8];
@@ -2547,9 +2547,9 @@ typedef struct __attribute__((packed)) {
     char str_1292[2];
     char str_1293[2];
     char str_1294[2];
-    char str_1295[10];
-    char str_1296[12];
-    char str_1297[8];
+    char KeyShift_str_3[10];
+    char DigitalEff_str_3[12];
+    char DspEff_str_3[8];
     char REVERB_str_3[8];
     char str_1299[2];
     char VOLUME_str_3[8];
@@ -2707,12 +2707,12 @@ typedef struct __attribute__((packed)) {
     uint16_t field_19a76;
     uint16_t field_19a78;
     uint32_t ptrs_255[6];  /* 6 pointers */
-    char str_1328[162];
+    char UntukMemulaiSuatuDemo_str[162];
     char Italian_str[8];
-    char str_1330[134];
-    char str_1331[134];
+    char ToStartingAnExternal_str[134];
+    char ToStartingAnExternal_str_2[134];
     char txt_Um_eine_externe_DEMO_zu_starten[168];
-    char str_1333[134];
+    char ToStartingAnExternal_str_3[134];
     uint16_t field_19d76;
     uint16_t field_19d78;
     uint16_t field_19d7a;
@@ -2728,23 +2728,23 @@ typedef struct __attribute__((packed)) {
     uint16_t field_19d90;
     uint16_t field_19d92;
     uint32_t ptrs_256[34];  /* 34 pointers */
-    char str_1334[8];
+    char Action_str[8];
     char ACTION_str[8];
-    char str_1336[14];
+    char Presentation_str[14];
     char PRESENTATION_str[14];
-    char str_1338[6];
+    char Act_str[6];
     char ACT_str[4];
     char EXEC_str[6];
     char SHOW_str[6];
     char IMG_str[4];
-    char str_1343[6];
+    char Font_str[6];
     char FONT_str[6];
-    char str_1345[8];
+    char Center_str[8];
     char CENTER_str[8];
     char BR_str[4];
     char NONE_str[6];
     char str_1349[6];
-    char str_1350[24];
+    char ErrorGetInstanceID_str[24];
     uint32_t ptrs_257[4];  /* 4 pointers */
     char str_1351[2];
     char NAME_str[6];
@@ -2808,16 +2808,16 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_1a0b2;
     char str_1373[2];
     char str_1374[2];
-    char str_1375[16];
-    char str_1376[16];
+    char Presentation_str_2[16];
+    char Presentation_str_3[16];
     uint8_t pad_2070[32];  /* zero padding */
-    char str_1377[6];
+    char Pre_str[6];
     char rt_str[4];
-    char str_1379[10];
-    char str_1380[10];
-    char str_1381[6];
+    char Action_str_2[10];
+    char Action_str_3[10];
+    char Act_str_2[6];
     char rt_str_2[4];
-    char str_1383[6];
+    char Sqt_str[6];
     char rb_str[4];
     uint16_t field_1a12c;
     char str_1385[2];
@@ -2837,7 +2837,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1a14a;
     uint16_t field_1a14c;
     uint16_t field_1a14e;
-    char str_1391[10];
+    char Feature_str[10];
     char rb_str_2[4];
     uint16_t field_1a15e;
     uint16_t field_1a160;
@@ -2912,7 +2912,7 @@ typedef struct __attribute__((packed)) {
     char K_str[2];
     char H_str_2[2];
     char K_str_2[2];
-    char str_1400[18];
+    char Kn5000SoundRam_str[18];
     char H_str_3[2];
     char K_str_3[2];
     uint16_t field_1a218;
@@ -2991,27 +2991,27 @@ typedef struct __attribute__((packed)) {
     char rb_str_23[4];
     char rb_str_24[4];
     char rb_str_25[4];
-    char str_1444[4];
+    char A_str_3[4];
     uint8_t pad_2080[124];  /* zero padding */
-    char str_1445[4];
+    char A_str_4[4];
     uint8_t pad_2081[12];  /* zero padding */
-    char str_1446[4];
+    char A_str_5[4];
     uint8_t pad_2082[12];  /* zero padding */
-    char str_1447[4];
+    char A_str_6[4];
     uint8_t pad_2083[12];  /* zero padding */
-    char str_1448[4];
+    char A_str_7[4];
     uint8_t pad_2084[12];  /* zero padding */
-    char str_1449[4];
+    char A_str_8[4];
     uint8_t pad_2085[12];  /* zero padding */
     char wb_str_11[4];
     char rb_str_26[4];
     uint32_t ptrs_261[10];  /* 10 pointers */
     char SEQ_str[4];
     char SQF_str[4];
-    char str_1454[4];
+    char Md_str[4];
     char RCM_str[4];
     char MSP_str[4];
-    char str_1457[4];
+    char Tm_str[4];
     char CMP_str[4];
     char SQT_str[4];
     char PMT_str[4];
@@ -3024,14 +3024,14 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1a4fb;
     char ______str[6];
     uint16_t field_1a503;
-    char str_1463[12];
+    char Mid_str[12];
     uint16_t field_1a511;
     uint16_t field_1a513;
     char ___________str[11];
     uint8_t pad_2088[32];  /* zero padding */
     char str_1465[4];
     char str_1466[4];
-    char str_1467[6];
+    char Mid_str_2[6];
     uint8_t pad_2089[16];  /* zero padding */
     char MThd_str[6];
     char MTrk_str[6];
@@ -3046,44 +3046,44 @@ typedef struct __attribute__((packed)) {
     char rb_str_34[4];
     char str_1479[2];
     char rb_str_35[4];
-    char str_1481[10];
+    char MusicDir_str[10];
     char rb_str_36[4];
-    char str_1483[14];
+    char PianodirFil_str[14];
     char rb_str_37[4];
-    char str_1485[10];
+    char MusicDir_str_2[10];
     char rb_str_38[4];
-    char str_1487[14];
+    char PianodirFil_str_2[14];
     char rb_str_39[4];
-    char str_1489[10];
+    char NameMda_str[10];
     char rb_str_40[4];
-    char str_1491[14];
+    char PianodirFil_str_3[14];
     char str_1492[4];
     char str_1493[4];
-    char str_1494[4];
-    char str_1495[6];
+    char A_str_9[4];
+    char Bmp_str[6];
     uint16_t field_1a604;
     uint16_t field_1a606;
     uint16_t field_1a608;
     uint32_t ptrs_262[8];  /* 8 pointers */
     char DOC_str[4];
     char DOC_str_2[4];
-    char str_1498[4];
-    char str_1499[4];
-    char str_1500[4];
-    char str_1501[4];
+    char Pd_str[4];
+    char Dd_str[4];
+    char Hd_str[4];
+    char Dd_str_2[4];
     char str_1502[4];
     char str_1503[4];
     uint32_t ptrs_263[5];  /* 5 pointers */
     uint16_t field_1a65e;
     char str_1504[12];
     uint16_t field_1a66c;
-    char str_1505[12];
+    char OundMemory_str[12];
     uint16_t field_1a67a;
-    char str_1506[12];
+    char Composer_str[12];
     uint16_t field_1a688;
-    char str_1507[12];
+    char Sequencer_str[12];
     uint16_t field_1a696;
-    char str_1508[12];
+    char AnelMemory_str[12];
     uint32_t ptrs_264[5];  /* 5 pointers */
     uint16_t field_1a6b8;
     char str_1509[4];
@@ -3099,13 +3099,13 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1a6ea;
     char str_1514[8];
     uint16_t field_1a6f4;
-    char str_1515[8];
+    char Emory_str[8];
     uint16_t field_1a6fe;
     char ATTERN_str[8];
     uint16_t field_1a708;
-    char str_1517[8];
+    char Song_str[8];
     uint16_t field_1a712;
-    char str_1518[8];
+    char Emory_str_2[8];
     uint8_t pad_2090[2];  /* zero padding */
     uint32_t ptrs_266[4];  /* 4 pointers */
     uint16_t field_1a72e;
@@ -3134,37 +3134,37 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1a75c;
     uint8_t pad_2093[2];  /* zero padding */
     uint16_t field_1a760;
-    char str_1520[14];
+    char FeaturePre_str[14];
     char _______str[8];
     char _________str[10];
-    char str_1523[6];
+    char Mid_str_3[6];
     char str_1524[4];
-    char str_1525[10];
-    char str_1526[8];
+    char KbFree_str[10];
+    char Used_str[8];
     char str_1527[2];
     char str_1528[6];
-    char str_1529[6];
-    char str_1530[6];
+    char Yes_str[6];
+    char No_str[6];
     char str_1531[6];
-    char str_1532[6];
-    char str_1533[6];
-    char str_1534[6];
-    char str_1535[6];
+    char Yes_str_2[6];
+    char No_str_2[6];
+    char Yes_str_3[6];
+    char No_str_3[6];
     char str_1536[6];
-    char str_1537[6];
-    char str_1538[6];
-    char str_1539[6];
-    char str_1540[6];
-    char str_1541[12];
-    char str_1542[12];
+    char Bank_str[6];
+    char Yes_str_4[6];
+    char No_str_4[6];
+    char Mid_str_4[6];
+    char ToSong_str[12];
+    char FromSong_str[12];
     uint32_t ptrs_267[3];  /* 3 pointers */
     uint16_t field_1a812;
-    char str_1543[14];
+    char GmTech_str[14];
     uint16_t field_1a822;
-    char str_1544[14];
+    char EchTech_str[14];
     uint16_t field_1a832;
-    char str_1545[14];
-    char str_1546[14];
+    char GmGm_str[14];
+    char Mid_str_5[14];
     uint16_t field_1a850;
     uint16_t field_1a852;
     uint8_t pad_2094[2];  /* zero padding */
@@ -3174,9 +3174,9 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1a85c;
     uint16_t field_1a85e;
     uint32_t ptrs_268[3];  /* 3 pointers */
-    char str_1547[16];
-    char str_1548[16];
-    char str_1549[16];
+    char MemoryC_str[16];
+    char MemoryB_str[16];
+    char MemoryA_str[16];
     uint32_t ptrs_269[10];  /* 10 pointers */
     char str_1550[2];
     char str_1551[2];
@@ -3184,46 +3184,46 @@ typedef struct __attribute__((packed)) {
     char str_1553[2];
     char str_1554[2];
     char str_1555[2];
-    char str_1556[8];
-    char str_1557[8];
-    char str_1558[8];
-    char str_1559[8];
+    char Vari_str[8];
+    char Vari_str_2[8];
+    char Vari_str_3[8];
+    char Vari_str_4[8];
     uint32_t ptrs_270[10];  /* 10 pointers */
-    char str_1560[18];
-    char str_1561[18];
-    char str_1562[18];
-    char str_1563[18];
-    char str_1564[18];
-    char str_1565[18];
+    char Ending_str[18];
+    char Ending_str_2[18];
+    char FillIn_str[18];
+    char FillIn_str_2[18];
+    char Intro_str[18];
+    char Intro_str_2[18];
     char str_1566[2];
     char str_1567[2];
     char str_1568[2];
     char str_1569[2];
     uint32_t ptrs_271[10];  /* 10 pointers */
-    char str_1570[18];
-    char str_1571[18];
-    char str_1572[18];
+    char UserKit_str[18];
+    char MemoryB_str_2[18];
+    char MemoryA_str_2[18];
     char str_1573[4];
     char str_1574[4];
-    char str_1575[18];
+    char All_str[18];
     uint16_t field_1aa04;
     uint16_t field_1aa06;
     uint16_t field_1aa08;
     char str_1576[2];
     char str_1577[4];
     char str_1578[4];
-    char str_1579[18];
+    char All_str_2[18];
     uint16_t field_1aa26;
     uint16_t field_1aa28;
     char str_1580[4];
     char str_1581[4];
-    char str_1582[18];
+    char All_str_3[18];
     uint16_t field_1aa44;
     uint16_t field_1aa46;
     uint32_t ptrs_272[5];  /* 5 pointers */
     char str_1583[4];
     char str_1584[4];
-    char str_1585[18];
+    char All_str_4[18];
     char str_1586[4];
     uint16_t field_1aa7a;
     uint16_t field_1aa7c;
@@ -3231,12 +3231,12 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1aa82;
     char str_1588[4];
     char str_1589[4];
-    char str_1590[18];
+    char All_str_5[18];
     uint16_t field_1aa9e;
     uint16_t field_1aaa0;
     char str_1591[4];
     char str_1592[4];
-    char str_1593[18];
+    char All_str_6[18];
     char str_1594[4];
     char str_1595[4];
     uint16_t field_1aac4;
@@ -7566,63 +7566,63 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_192 = "         ",
 
-    .str_193 = ALIGNED_STRING("  RHYTHM  "),
+    .Rhythm_str = ALIGNED_STRING("  RHYTHM  "),
 
-    .str_194 = " CONTROL ",
+    .Control_str = " CONTROL ",
 
-    .str_195 = "   APC   ",
+    .Apc_str = "   APC   ",
 
-    .str_196 = "   MIC   ",
+    .Mic_str = "   MIC   ",
 
     .METRONOME_str = "METRONOME",
 
-    .str_198 = "   MSP   ",
+    .Msp_str = "   MSP   ",
 
-    .str_199 = "  DRUMS  ",
+    .Drums_str = "  DRUMS  ",
 
-    .str_200 = ALIGNED_STRING("   BASS   "),
+    .Bass_str = ALIGNED_STRING("   BASS   "),
 
-    .str_201 = " ACCOMP3 ",
+    .Accomp3_str = " ACCOMP3 ",
 
-    .str_202 = " ACCOMP2 ",
+    .Accomp2_str = " ACCOMP2 ",
 
-    .str_203 = " ACCOMP1 ",
+    .Accomp1_str = " ACCOMP1 ",
 
-    .str_204 = ALIGNED_STRING("  R.BASS  "),
+    .RBass_str = ALIGNED_STRING("  R.BASS  "),
 
-    .str_205 = "  CHORD  ",
+    .Chord_str = "  CHORD  ",
 
-    .str_206 = " PART 16 ",
+    .Part_str = " PART 16 ",
 
-    .str_207 = " PART 15 ",
+    .Part_str_2 = " PART 15 ",
 
-    .str_208 = " PART 14 ",
+    .Part_str_3 = " PART 14 ",
 
-    .str_209 = " PART 13 ",
+    .Part_str_4 = " PART 13 ",
 
-    .str_210 = " PART 12 ",
+    .Part_str_5 = " PART 12 ",
 
-    .str_211 = " PART 11 ",
+    .Part_str_6 = " PART 11 ",
 
-    .str_212 = " PART 10 ",
+    .Part_str_7 = " PART 10 ",
 
-    .str_213 = ALIGNED_STRING("  PART 9  "),
+    .Part_str_8 = ALIGNED_STRING("  PART 9  "),
 
-    .str_214 = ALIGNED_STRING("  PART 8  "),
+    .Part_str_9 = ALIGNED_STRING("  PART 8  "),
 
-    .str_215 = ALIGNED_STRING("  PART 7  "),
+    .Part_str_10 = ALIGNED_STRING("  PART 7  "),
 
-    .str_216 = ALIGNED_STRING("  PART 6  "),
+    .Part_str_11 = ALIGNED_STRING("  PART 6  "),
 
-    .str_217 = ALIGNED_STRING("  PART 5  "),
+    .Part_str_12 = ALIGNED_STRING("  PART 5  "),
 
-    .str_218 = ALIGNED_STRING("  PART 4  "),
+    .Part_str_13 = ALIGNED_STRING("  PART 4  "),
 
-    .str_219 = ALIGNED_STRING("   LEFT   "),
+    .Left_str = ALIGNED_STRING("   LEFT   "),
 
-    .str_220 = " RIGHT 2 ",
+    .Right_str = " RIGHT 2 ",
 
-    .str_221 = " RIGHT 1 ",
+    .Right_str_2 = " RIGHT 1 ",
 
     .SdPT_str = ALIGNED_STRING("SdPT"),
 
@@ -7664,9 +7664,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .CTR_str = "CTR",
 
-    .str_232 = ALIGNED_STRING("L%2d"),
+    .L_str = ALIGNED_STRING("L%2d"),
 
-    .str_233 = ALIGNED_STRING("R%2d"),
+    .R_str = ALIGNED_STRING("R%2d"),
 
     .str_234 = " --",
 
@@ -7678,13 +7678,13 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_238 = " --",
 
-    .str_239 = "ON ",
+    .On_str = "ON ",
 
     .OFF_str_2 = "OFF",
 
     .str_241 = " --",
 
-    .str_242 = "ON ",
+    .On_str_2 = "ON ",
 
     .OFF_str_3 = "OFF",
 
@@ -7710,89 +7710,89 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_254 = " --",
 
-    .str_255 = "ON ",
+    .On_str_3 = "ON ",
 
     .OFF_str_4 = "OFF",
 
     .str_257 = " --",
 
-    .str_258 = "ON ",
+    .On_str_4 = "ON ",
 
     .OFF_str_5 = "OFF",
 
     .str_260 = " --",
 
-    .str_261 = "ON ",
+    .On_str_5 = "ON ",
 
     .OFF_str_6 = "OFF",
 
     .str_263 = " --",
 
-    .str_264 = "ON ",
+    .On_str_6 = "ON ",
 
     .OFF_str_7 = "OFF",
 
     .str_266 = " --",
 
-    .str_267 = "ON ",
+    .On_str_7 = "ON ",
 
     .OFF_str_8 = "OFF",
 
     .str_269 = " --",
 
-    .str_270 = "ON ",
+    .On_str_8 = "ON ",
 
     .OFF_str_9 = "OFF",
 
     .str_272 = " --",
 
-    .str_273 = "CH%2d",
+    .Ch_str = "CH%2d",
 
-    .str_274 = ALIGNED_STRING(" OFF"),
+    .Off_str = ALIGNED_STRING(" OFF"),
 
     .str_275 = ALIGNED_STRING(" -- "),
 
     .ptrs_182 = {
-        SELF(str_281),
-        SELF(str_280),
-        SELF(str_279),
-        SELF(str_278),
-        SELF(str_277),
-        SELF(str_276),
+        SELF(EnglishHeader_str),
+        SELF(GermanHeader_str),
+        SELF(FrenchHeader_str),
+        SELF(SpanishHeader_str),
+        SELF(ItalianHeader_str),
+        SELF(IndonesianHeader_str),
     },
 
-    .str_276 = "Indonesian Header",
+    .IndonesianHeader_str = "Indonesian Header",
 
-    .str_277 = ALIGNED_STRING("Italian Header"),
+    .ItalianHeader_str = ALIGNED_STRING("Italian Header"),
 
-    .str_278 = ALIGNED_STRING("Spanish Header"),
+    .SpanishHeader_str = ALIGNED_STRING("Spanish Header"),
 
-    .str_279 = "French Header",
+    .FrenchHeader_str = "French Header",
 
-    .str_280 = "German Header",
+    .GermanHeader_str = "German Header",
 
-    .str_281 = ALIGNED_STRING("English Header"),
+    .EnglishHeader_str = ALIGNED_STRING("English Header"),
 
     .ptrs_183 = {
-        SELF(str_287),
-        SELF(str_286),
-        SELF(str_285),
-        SELF(str_284),
-        SELF(str_283),
-        SELF(str_282),
+        SELF(EnglishText_str),
+        SELF(GermanText_str),
+        SELF(FrenchText_str),
+        SELF(SpanishText_str),
+        SELF(ItalianText_str),
+        SELF(IndonesianText_str),
     },
 
-    .str_282 = "Indonesian Text",
+    .IndonesianText_str = "Indonesian Text",
 
-    .str_283 = ALIGNED_STRING("Italian Text"),
+    .ItalianText_str = ALIGNED_STRING("Italian Text"),
 
-    .str_284 = ALIGNED_STRING("Spanish Text"),
+    .SpanishText_str = ALIGNED_STRING("Spanish Text"),
 
-    .str_285 = "French Text",
+    .FrenchText_str = "French Text",
 
-    .str_286 = "German Text",
+    .GermanText_str = "German Text",
 
-    .str_287 = ALIGNED_STRING("English Text"),
+    .EnglishText_str = ALIGNED_STRING("English Text"),
 
     .ptrs_184 = {
         SELF(ERROR_str_5),
@@ -7816,84 +7816,84 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .ERROR_str_5 = "ERROR",
 
     .ptrs_185 = {
-        SELF(str_299),
-        SELF(str_298),
-        SELF(str_297),
+        SELF(Reminder_str_3),
+        SELF(Hinweis_str),
+        SELF(Rappel_str),
         SELF(field_f86e),
-        SELF(str_295),
-        SELF(str_294),
+        SELF(Reminder_str_2),
+        SELF(Reminder_str),
     },
 
-    .str_294 = ALIGNED_STRING("REMINDER !"),
+    .Reminder_str = ALIGNED_STRING("REMINDER !"),
 
-    .str_295 = ALIGNED_STRING("REMINDER! "),
+    .Reminder_str_2 = ALIGNED_STRING("REMINDER! "),
 
     .field_f86e = 0x52A1,
 
-    .str_296 = ALIGNED_STRING("ECUERDE!"),
+    .Ecuerde_str = ALIGNED_STRING("ECUERDE!"),
 
-    .str_297 = ALIGNED_STRING("RAPPEL! "),
+    .Rappel_str = ALIGNED_STRING("RAPPEL! "),
 
-    .str_298 = ALIGNED_STRING("HINWEIS ! "),
+    .Hinweis_str = ALIGNED_STRING("HINWEIS ! "),
 
-    .str_299 = ALIGNED_STRING("REMINDER! "),
+    .Reminder_str_3 = ALIGNED_STRING("REMINDER! "),
 
     .ptrs_186 = {
-        SELF(str_305),
-        SELF(str_304),
-        SELF(str_303),
+        SELF(Completed_str_2),
+        SELF(VorgangBeendet_str),
+        SELF(Termine_str),
         SELF(field_f8ce),
-        SELF(str_301),
-        SELF(str_300),
+        SELF(Completed_str),
+        SELF(Lengkapilah_str),
     },
 
-    .str_300 = ALIGNED_STRING("LENGKAPILAH!"),
+    .Lengkapilah_str = ALIGNED_STRING("LENGKAPILAH!"),
 
-    .str_301 = ALIGNED_STRING("COMPLETED!"),
+    .Completed_str = ALIGNED_STRING("COMPLETED!"),
 
     .field_f8ce = 0x46A1,
 
-    .str_302 = ALIGNED_STRING("INALIZADO!"),
+    .Inalizado_str = ALIGNED_STRING("INALIZADO!"),
 
-    .str_303 = ALIGNED_STRING("TERMINE!"),
+    .Termine_str = ALIGNED_STRING("TERMINE!"),
 
-    .str_304 = ALIGNED_STRING("Vorgang beendet!"),
+    .VorgangBeendet_str = ALIGNED_STRING("Vorgang beendet!"),
 
-    .str_305 = ALIGNED_STRING("COMPLETED!"),
+    .Completed_str_2 = ALIGNED_STRING("COMPLETED!"),
 
     .ptrs_187 = {
-        SELF(str_311),
-        SELF(str_310),
-        SELF(str_309),
+        SELF(PleaseWait_str_2),
+        SELF(BitteWarten_str),
+        SELF(VeuillezPatienter_str),
         SELF(field_f93c),
-        SELF(str_307),
-        SELF(str_306),
+        SELF(PleaseWait_str),
+        SELF(SilahkanTunggu_str),
     },
 
-    .str_306 = ALIGNED_STRING("SILAHKAN TUNGGU!"),
+    .SilahkanTunggu_str = ALIGNED_STRING("SILAHKAN TUNGGU!"),
 
-    .str_307 = ALIGNED_STRING("PLEASE WAIT!"),
+    .PleaseWait_str = ALIGNED_STRING("PLEASE WAIT!"),
 
     .field_f93c = 0x50A1,
 
-    .str_308 = "OR FAVOR, ESPERE!",
+    .OrFavorEspere_str = "OR FAVOR, ESPERE!",
 
-    .str_309 = "VEUILLEZ PATIENTER!",
+    .VeuillezPatienter_str = "VEUILLEZ PATIENTER!",
 
-    .str_310 = "BITTE WARTEN!",
+    .BitteWarten_str = "BITTE WARTEN!",
 
-    .str_311 = ALIGNED_STRING("PLEASE WAIT!"),
+    .PleaseWait_str_2 = ALIGNED_STRING("PLEASE WAIT!"),
 
     .ptrs_188 = {
-        SELF(str_317),
-        SELF(str_316),
+        SELF(TheInternalMemoryIs_str),
+        SELF(DerSpeicherinhaltBleibtEtwa_str),
         SELF(txt_La_memoire_interne_est_conservee),
         SELF(txt_La_memoria_interna_es_retenida),
         SELF(REMINDER_str),
-        SELF(str_312),
+        SELF(MemoriInternalDiterimaUntuk_str),
     },
 
-    .str_312 = "Memori internal diterima untuk selama 80 menit setelah power dimatikan. Simpan hasil pekerjaan anda kedalam  Floppy Disk.",
+    .MemoriInternalDiterimaUntuk_str = "Memori internal diterima untuk selama 80 menit setelah power dimatikan. Simpan hasil pekerjaan anda kedalam  Floppy Disk.",
 
     .REMINDER_str = ALIGNED_STRING("REMINDER"),
 
@@ -7901,20 +7901,20 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .txt_La_memoire_interne_est_conservee = "La m\351moire interne est conserv\351e pendant environ 80 minutes apr\350s la coupure de l'alimentation g\351n\351rale de l'instrument. Sauvegardez SAVE votre travail sur disquette !\0",
 
-    .str_316 = ALIGNED_STRING("Der Speicherinhalt bleibt etwa 80 Minuten nach Ausschalten des Keyboards erhalten. Speichern Sie Ihre Daten daher auf Diskette !"),
+    .DerSpeicherinhaltBleibtEtwa_str = ALIGNED_STRING("Der Speicherinhalt bleibt etwa 80 Minuten nach Ausschalten des Keyboards erhalten. Speichern Sie Ihre Daten daher auf Diskette !"),
 
-    .str_317 = ALIGNED_STRING("The internal memory is retained for about 80 minutes after turning off the power. SAVE your work on Floppy Disk!"),
+    .TheInternalMemoryIs_str = ALIGNED_STRING("The internal memory is retained for about 80 minutes after turning off the power. SAVE your work on Floppy Disk!"),
 
     .ptrs_189 = {
-        SELF(str_323),
+        SELF(TheSettingsHaveBeen_str),
         SELF(txt_Die_Einstellungen_wurden_nicht),
         SELF(txt_Vous_n_avez_pas_presse_le_bouton),
         SELF(txt_Las_configuraciones_fueron),
         SELF(REMINDER_str_2),
-        SELF(str_318),
+        SELF(AturanSudahDibatalkanKarena_str),
     },
 
-    .str_318 = ALIGNED_STRING("Aturan sudah dibatalkan karena prosedur penyimpanan tidak dilengkapi dengan tombol OK. Silahkan setting kembali dan tekan OK untuk menyimpannya."),
+    .AturanSudahDibatalkanKarena_str = ALIGNED_STRING("Aturan sudah dibatalkan karena prosedur penyimpanan tidak dilengkapi dengan tombol OK. Silahkan setting kembali dan tekan OK untuk menyimpannya."),
 
     .REMINDER_str_2 = ALIGNED_STRING("REMINDER"),
 
@@ -7924,41 +7924,41 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .txt_Die_Einstellungen_wurden_nicht = "Die Einstellungen wurden nicht gespeichert da die Speicherung nicht mit OK best\344tigt wurde. Nehmen Sie die Einstellungen noch einmal vor und best\344tigen dann mit OK.\0\377",
 
-    .str_323 = "The settings have been canceled because the storage procedure was not completed by pressing the OK button. Please enter the settings again and press OK to store them. ",
+    .TheSettingsHaveBeen_str = "The settings have been canceled because the storage procedure was not completed by pressing the OK button. Please enter the settings again and press OK to store them. ",
 
     .ptrs_190 = {
-        SELF(str_329),
-        SELF(str_328),
-        SELF(str_327),
-        SELF(str_326),
-        SELF(str_325),
-        SELF(str_324),
+        SELF(Error_str_5),
+        SELF(Error_str_4),
+        SELF(Erreur_str),
+        SELF(Error_str_3),
+        SELF(Error_str_2),
+        SELF(Error_str),
     },
 
-    .str_324 = ALIGNED_STRING("ERROR!"),
+    .Error_str = ALIGNED_STRING("ERROR!"),
 
-    .str_325 = ALIGNED_STRING("ERROR!"),
+    .Error_str_2 = ALIGNED_STRING("ERROR!"),
 
-    .str_326 = ALIGNED_STRING("ERROR!"),
+    .Error_str_3 = ALIGNED_STRING("ERROR!"),
 
-    .str_327 = "ERREUR!",
+    .Erreur_str = "ERREUR!",
 
-    .str_328 = ALIGNED_STRING("ERROR!"),
+    .Error_str_4 = ALIGNED_STRING("ERROR!"),
 
-    .str_329 = ALIGNED_STRING("ERROR!"),
+    .Error_str_5 = ALIGNED_STRING("ERROR!"),
 
     .ptrs_191 = {
-        SELF(str_335),
+        SELF(TheDataOnThe_str),
         SELF(txt_Die_Daten_auf_dieser_Diskette),
         SELF(txt_Les_informations_contenues_dans),
         SELF(txt_Los_datos_del_disco_que_usted),
-        SELF(str_331),
-        SELF(str_330),
+        SELF(Error_str_6),
+        SELF(DataPadaDiskYang_str),
     },
 
-    .str_330 = ALIGNED_STRING("Data pada disk yang Anda pergunakan untuk produk lain (bukan untuk Technics)"),
+    .DataPadaDiskYang_str = ALIGNED_STRING("Data pada disk yang Anda pergunakan untuk produk lain (bukan untuk Technics)"),
 
-    .str_331 = ALIGNED_STRING("ERROR 00"),
+    .Error_str_6 = ALIGNED_STRING("ERROR 00"),
 
     .txt_Los_datos_del_disco_que_usted = "Los datos del disco que usted est\341 utilizando son para un aparato diferente.\0\377",
 
@@ -7968,62 +7968,62 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_334 = ALIGNED_STRING("t."),
 
-    .str_335 = "The data on the disk that you are using is for a different product.",
+    .TheDataOnThe_str = "The data on the disk that you are using is for a different product.",
 
     .ptrs_192 = {
-        SELF(str_341),
-        SELF(str_340),
+        SELF(AnErrorHasOccurred_str),
+        SELF(BeimLadenVonDer_str),
         SELF(txt_Une_erreur_s_est_produite),
-        SELF(str_338),
-        SELF(str_337),
-        SELF(str_336),
+        SELF(SeHaProducidoUn_str),
+        SELF(Error_str_7),
+        SELF(KesalahanSudahTerjadiKetika_str),
     },
 
-    .str_336 = ALIGNED_STRING("Kesalahan sudah terjadi ketika disket sedang dipanggil. Harap dicoba lagi."),
+    .KesalahanSudahTerjadiKetika_str = ALIGNED_STRING("Kesalahan sudah terjadi ketika disket sedang dipanggil. Harap dicoba lagi."),
 
-    .str_337 = ALIGNED_STRING("ERROR 01"),
+    .Error_str_7 = ALIGNED_STRING("ERROR 01"),
 
-    .str_338 = "Se ha producido un error mientras se cargaba el disco. Pruebe otra vez.",
+    .SeHaProducidoUn_str = "Se ha producido un error mientras se cargaba el disco. Pruebe otra vez.",
 
     .txt_Une_erreur_s_est_produite = "Une erreur s'est produite pendant la proc\351dure de chargement. Essayez encore!\0",
 
-    .str_340 = ALIGNED_STRING("Beim Laden von der Diskette ist ein Fehler aufgetreten. Bitte noch einmal versuchen."),
+    .BeimLadenVonDer_str = ALIGNED_STRING("Beim Laden von der Diskette ist ein Fehler aufgetreten. Bitte noch einmal versuchen."),
 
-    .str_341 = "An error has occurred while the disk was loading. Please try again!",
+    .AnErrorHasOccurred_str = "An error has occurred while the disk was loading. Please try again!",
 
     .ptrs_193 = {
-        SELF(str_347),
-        SELF(str_346),
-        SELF(str_345),
-        SELF(str_344),
-        SELF(str_343),
-        SELF(str_342),
+        SELF(ThereIsNoDisk_str),
+        SELF(KeineDisketteImLaufwerk_str),
+        SELF(IlPasDeDisquette_str),
+        SELF(NoHayDiscoEn_str),
+        SELF(Error_str_8),
+        SELF(TidakAdaDisketDalam_str),
     },
 
-    .str_342 = ALIGNED_STRING("Tidak ada disket dalam disk drive."),
+    .TidakAdaDisketDalam_str = ALIGNED_STRING("Tidak ada disket dalam disk drive."),
 
-    .str_343 = ALIGNED_STRING("ERROR 02"),
+    .Error_str_8 = ALIGNED_STRING("ERROR 02"),
 
-    .str_344 = "No hay disco en Disk Drive.",
+    .NoHayDiscoEn_str = "No hay disco en Disk Drive.",
 
-    .str_345 = ALIGNED_STRING("Il n'y a pas de disquette dans le lecteur."),
+    .IlPasDeDisquette_str = ALIGNED_STRING("Il n'y a pas de disquette dans le lecteur."),
 
-    .str_346 = "Keine Diskette im Laufwerk!",
+    .KeineDisketteImLaufwerk_str = "Keine Diskette im Laufwerk!",
 
-    .str_347 = "There is no disk in the disk drive.",
+    .ThereIsNoDisk_str = "There is no disk in the disk drive.",
 
     .ptrs_194 = {
-        SELF(str_353),
-        SELF(str_352),
+        SELF(TheFileThatYou_str),
+        SELF(DieDiskettenbankDieSie_str),
         SELF(txt_Le_fichier_que_vous_avez_essaye),
         SELF(txt_El_disco_que_trato_de_cargar),
-        SELF(str_349),
-        SELF(str_348),
+        SELF(Error_str_9),
+        SELF(FileYangDicobaUntuk_str),
     },
 
-    .str_348 = "File yang dicoba untuk dikeluarkan/ditampilkan, kosong.( File didalam disket kosong )",
+    .FileYangDicobaUntuk_str = "File yang dicoba untuk dikeluarkan/ditampilkan, kosong.( File didalam disket kosong )",
 
-    .str_349 = ALIGNED_STRING("ERROR 03"),
+    .Error_str_9 = ALIGNED_STRING("ERROR 03"),
 
     .txt_El_disco_que_trato_de_cargar = "El disco que trat\363 de cargar estaba vac\355",
 
@@ -8031,43 +8031,43 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .txt_Le_fichier_que_vous_avez_essaye = "Le fichier que vous avez essay\351 de charger est vide!\0\377",
 
-    .str_352 = "Die Diskettenbank, die Sie gerade laden wollen, ist leer.",
+    .DieDiskettenbankDieSie_str = "Die Diskettenbank, die Sie gerade laden wollen, ist leer.",
 
-    .str_353 = "The file that you tried to load is empty.",
+    .TheFileThatYou_str = "The file that you tried to load is empty.",
 
     .ptrs_195 = {
-        SELF(str_359),
-        SELF(str_358),
+        SELF(AnErrorHasOccurred_str_2),
+        SELF(BeimSpeichernAufDie_str),
         SELF(txt_Une_erreur_s_est_produite_2),
-        SELF(str_356),
-        SELF(str_355),
-        SELF(str_354),
+        SELF(SeHaProducidoUn_str_2),
+        SELF(Error_str_10),
+        SELF(KesalahanTerjadiKetikaDisket_str),
     },
 
-    .str_354 = ALIGNED_STRING("Kesalahan terjadi ketika disket sedang diisi. Harap dicoba lagi."),
+    .KesalahanTerjadiKetikaDisket_str = ALIGNED_STRING("Kesalahan terjadi ketika disket sedang diisi. Harap dicoba lagi."),
 
-    .str_355 = ALIGNED_STRING("ERROR 05"),
+    .Error_str_10 = ALIGNED_STRING("ERROR 05"),
 
-    .str_356 = ALIGNED_STRING("Se ha producido un error mientras se almacenaban datos en el disco. Pruebe otra vez."),
+    .SeHaProducidoUn_str_2 = ALIGNED_STRING("Se ha producido un error mientras se almacenaban datos en el disco. Pruebe otra vez."),
 
     .txt_Une_erreur_s_est_produite_2 = "Une erreur s'est produite pendant la proc\351dure de sauvegarde. Essayez encore!\0",
 
-    .str_358 = ALIGNED_STRING("Beim Speichern auf die Diskette ist ein Fehler aufgetreten. Bitte noch einmal versuchen."),
+    .BeimSpeichernAufDie_str = ALIGNED_STRING("Beim Speichern auf die Diskette ist ein Fehler aufgetreten. Bitte noch einmal versuchen."),
 
-    .str_359 = ALIGNED_STRING("An error has occurred while the disk was saving. Please try again!"),
+    .AnErrorHasOccurred_str_2 = ALIGNED_STRING("An error has occurred while the disk was saving. Please try again!"),
 
     .ptrs_196 = {
-        SELF(str_365),
+        SELF(TheDiskThatYou_str),
         SELF(txt_Ihre_Diskette_ist),
         SELF(txt_La_disquette_que_vous_utilisez),
         SELF(txt_El_disco_que_esta_utilizando),
-        SELF(str_361),
-        SELF(str_360),
+        SELF(Error_str_11),
+        SELF(DisketYangAndaPergunakan_str),
     },
 
-    .str_360 = "Disket yang Anda pergunakan sedang dikunci/diprotek. Bukalah proteksinya dan silahkan coba lagi. ",
+    .DisketYangAndaPergunakan_str = "Disket yang Anda pergunakan sedang dikunci/diprotek. Bukalah proteksinya dan silahkan coba lagi. ",
 
-    .str_361 = ALIGNED_STRING("ERROR 06"),
+    .Error_str_11 = ALIGNED_STRING("ERROR 06"),
 
     .txt_El_disco_que_esta_utilizando = "El disco que est\341 utilizando est\341 protegido contra escritura. Retire la protecci\363n contra escritura y pruebe otra vez.\0\377",
 
@@ -8075,62 +8075,62 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .txt_Ihre_Diskette_ist = "Ihre Diskette ist schreibgesch\374tzt. Schieben Sie den Schreibschutz zur\374ck und speichern noch einmal.\0\377",
 
-    .str_365 = "The disk that you are using is write protected. Please remove the write protection and try again.",
+    .TheDiskThatYou_str = "The disk that you are using is write protected. Please remove the write protection and try again.",
 
     .ptrs_197 = {
-        SELF(str_371),
-        SELF(str_370),
+        SELF(TheDiskThatYou_str_2),
+        SELF(IhreDisketteIstVoll_str),
         SELF(txt_La_disquette_que_vous_utilisez_2),
         SELF(txt_El_disco_que_esta_utilizando_2),
-        SELF(str_367),
-        SELF(str_366),
+        SELF(Error_str_12),
+        SELF(DisketYangAndaDipergunakan_str),
     },
 
-    .str_366 = ALIGNED_STRING("Disket yang Anda dipergunakan sudah penuh. Harap pergunakan disket lain/"),
+    .DisketYangAndaDipergunakan_str = ALIGNED_STRING("Disket yang Anda dipergunakan sudah penuh. Harap pergunakan disket lain/"),
 
-    .str_367 = ALIGNED_STRING("ERROR 07"),
+    .Error_str_12 = ALIGNED_STRING("ERROR 07"),
 
     .txt_El_disco_que_esta_utilizando_2 = "El disco que est\341 utilizando est\341 lleno. Utilice otro disco.\0\377",
 
     .txt_La_disquette_que_vous_utilisez_2 = "La disquette que vous utilisez est satur\351e. Utilisez une autre disquette!\0",
 
-    .str_370 = "Ihre Diskette ist voll. Benutzen Sie bette eine andere.",
+    .IhreDisketteIstVoll_str = "Ihre Diskette ist voll. Benutzen Sie bette eine andere.",
 
-    .str_371 = "The disk that you are using is full. Please use another disk.",
+    .TheDiskThatYou_str_2 = "The disk that you are using is full. Please use another disk.",
 
     .ptrs_198 = {
-        SELF(str_377),
-        SELF(str_376),
+        SELF(AnErrorHasOccurred_str_3),
+        SELF(BeimFormatierenIstEin_str),
         SELF(txt_Une_erreur_s_est_produite_3),
         SELF(txt_Se_ha_producido_un_error),
-        SELF(str_373),
-        SELF(str_372),
+        SELF(Error_str_13),
+        SELF(KesalahanSudahTerjadiKetika_str_2),
     },
 
-    .str_372 = "Kesalahan sudah terjadi ketika disket sedang diformat. Disket yang anda pergunakan mungkin rusak. Cobalah format disket lain.",
+    .KesalahanSudahTerjadiKetika_str_2 = "Kesalahan sudah terjadi ketika disket sedang diformat. Disket yang anda pergunakan mungkin rusak. Cobalah format disket lain.",
 
-    .str_373 = ALIGNED_STRING("ERROR 08"),
+    .Error_str_13 = ALIGNED_STRING("ERROR 08"),
 
     .txt_Se_ha_producido_un_error = "Se ha producido un error mientras se hac\355a el formato del disco. El disco que est\341 utilizando puede estar defectuoso. Intente hacer el formato de otro disco.\0",
 
     .txt_Une_erreur_s_est_produite_3 = "Une erreur s'est produite pendant la proc\351dure de formatage. La disquette que vous utilisez est peut \352tre d\351t\351rior\351e. Essayez de formater une autre disquette.\0\377",
 
-    .str_376 = ALIGNED_STRING("Beim Formatieren ist ein Fehler aufgetreten. Benutzen Sie bette eine andere."),
+    .BeimFormatierenIstEin_str = ALIGNED_STRING("Beim Formatieren ist ein Fehler aufgetreten. Benutzen Sie bette eine andere."),
 
-    .str_377 = "An error has occurred while the disk was formatting. The disk that you are using may be faulty. Please try formatting another disk.",
+    .AnErrorHasOccurred_str_3 = "An error has occurred while the disk was formatting. The disk that you are using may be faulty. Please try formatting another disk.",
 
     .ptrs_199 = {
-        SELF(str_383),
+        SELF(TheDataOnThe_str_2),
         SELF(txt_Die_Daten_auf_dieser_Diskette_2),
         SELF(txt_Cette_disquette_est_protegee),
         SELF(txt_Los_datos_del_disco_estan),
-        SELF(str_379),
-        SELF(str_378),
+        SELF(ErrorCpPrtct_str),
+        SELF(DataDidalamDiskDiprotek_str),
     },
 
-    .str_378 = ALIGNED_STRING("Data didalam disk diprotek, tidak bisa dicopy. Masukkan kode password."),
+    .DataDidalamDiskDiprotek_str = ALIGNED_STRING("Data didalam disk diprotek, tidak bisa dicopy. Masukkan kode password."),
 
-    .str_379 = ALIGNED_STRING("(ERROR 09)cp_prtct"),
+    .ErrorCpPrtct_str = ALIGNED_STRING("(ERROR 09)cp_prtct"),
 
     .txt_Los_datos_del_disco_estan = "Los datos del disco est\341n protegidos contra copia. Por favor, ingrese la contrase\361",
 
@@ -8140,20 +8140,20 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .txt_Die_Daten_auf_dieser_Diskette_2 = "Die Daten auf dieser Diskette sind schreibgesch\374tzt. Bitte geben Sie das Password ein.\0\377",
 
-    .str_383 = ALIGNED_STRING("The data on the disk is copy protected. Please enter the password."),
+    .TheDataOnThe_str_2 = ALIGNED_STRING("The data on the disk is copy protected. Please enter the password."),
 
     .ptrs_200 = {
-        SELF(str_389),
+        SELF(TheDataIsAlready_str),
         SELF(txt_Diese_Daten_sind_bereits),
         SELF(field_10f3a),
         SELF(txt_Los_datos_ya_estan_protegidos),
-        SELF(str_385),
-        SELF(str_384),
+        SELF(Error_str_14),
+        SELF(DataSudahDiprotek_str),
     },
 
-    .str_384 = "Data  sudah diprotek.",
+    .DataSudahDiprotek_str = "Data  sudah diprotek.",
 
-    .str_385 = ALIGNED_STRING("ERROR 10"),
+    .Error_str_14 = ALIGNED_STRING("ERROR 10"),
 
     .txt_Los_datos_ya_estan_protegidos = "Los datos ya est\341n protegidos contra la copia.\0\377",
 
@@ -8181,45 +8181,45 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_10f50 = 0xE967,
 
-    .str_387 = "es contre la copie!",
+    .EsContreLaCopie_str = "es contre la copie!",
 
     .txt_Diese_Daten_sind_bereits = "Diese Daten sind bereits kopiergesch\374tzt.\0",
 
-    .str_389 = "The data is already copy protected.",
+    .TheDataIsAlready_str = "The data is already copy protected.",
 
     .ptrs_201 = {
-        SELF(str_395),
-        SELF(str_394),
-        SELF(str_393),
+        SELF(ThePasswordThatYou_str),
+        SELF(DasEingegebenePasswordIst_str),
+        SELF(VotreMotDePasse_str),
         SELF(txt_La_contrasena_ingresada_es),
-        SELF(str_391),
-        SELF(str_390),
+        SELF(Error_str_15),
+        SELF(PasswordYangAndaMasukkan_str),
     },
 
-    .str_390 = ALIGNED_STRING("Password yang anda masukkan salah."),
+    .PasswordYangAndaMasukkan_str = ALIGNED_STRING("Password yang anda masukkan salah."),
 
-    .str_391 = ALIGNED_STRING("ERROR 11"),
+    .Error_str_15 = ALIGNED_STRING("ERROR 11"),
 
     .txt_La_contrasena_ingresada_es = "La contrase\361a ingresada es incorrecta.\0\377",
 
-    .str_393 = ALIGNED_STRING("Votre mot de passe est incorrect"),
+    .VotreMotDePasse_str = ALIGNED_STRING("Votre mot de passe est incorrect"),
 
-    .str_394 = ALIGNED_STRING("Das eingegebene Password ist falsch."),
+    .DasEingegebenePasswordIst_str = ALIGNED_STRING("Das eingegebene Password ist falsch."),
 
-    .str_395 = "The password that you entered is incorrect.",
+    .ThePasswordThatYou_str = "The password that you entered is incorrect.",
 
     .ptrs_202 = {
-        SELF(str_401),
+        SELF(TheRemainingBatteryPower_str),
         SELF(txt_Die_verbleibende_Kapazitat_der),
         SELF(txt_La_batterie_interne_est),
         SELF(txt_La_carga_de_las_baterias_es_muy),
-        SELF(str_397),
-        SELF(str_396),
+        SELF(Error_str_16),
+        SELF(BatuBatereiSudahLemah_str),
     },
 
-    .str_396 = "Batu Baterei sudah lemah. Ganti segera semua batu baterei dengan yang baru.",
+    .BatuBatereiSudahLemah_str = "Batu Baterei sudah lemah. Ganti segera semua batu baterei dengan yang baru.",
 
-    .str_397 = ALIGNED_STRING("ERROR 12"),
+    .Error_str_16 = ALIGNED_STRING("ERROR 12"),
 
     .txt_La_carga_de_las_baterias_es_muy = "La carga de las bater\355as es muy baja. Reemplace inmediatamente todas las bater\355as por bater\355as nuevas.\0\377",
 
@@ -8227,20 +8227,20 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .txt_Die_verbleibende_Kapazitat_der = "Die verbleibende Kapazit\344t der Batterien ist sehr schwach. Ersetzen Sie umgehend alle Batterien gegen neue.\0",
 
-    .str_401 = "The remaining battery power is very low. Replace all the batteries with new ones immediately.",
+    .TheRemainingBatteryPower_str = "The remaining battery power is very low. Replace all the batteries with new ones immediately.",
 
     .ptrs_203 = {
-        SELF(str_407),
+        SELF(TheSongYouAre_str),
         SELF(txt_Der_Song_den_Sie_speichern),
         SELF(field_11320),
         SELF(txt_La_cancion_que_intenta_grabar),
-        SELF(str_403),
-        SELF(str_402),
+        SELF(ErrorErrSeq_str),
+        SELF(LaguYangAndaSedang_str),
     },
 
-    .str_402 = "Lagu yang anda sedang coba untuk disimpan tidak ada isinya.",
+    .LaguYangAndaSedang_str = "Lagu yang anda sedang coba untuk disimpan tidak ada isinya.",
 
-    .str_403 = "(ERROR 15)err_seq",
+    .ErrorErrSeq_str = "(ERROR 15)err_seq",
 
     .txt_La_cancion_que_intenta_grabar = "La canci\363n que intenta grabar est\341 vac\355a",
 
@@ -8252,24 +8252,24 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_11324 = 0x71E9,
 
-    .str_405 = ALIGNED_STRING("uence que vous essayez de sauvegarder est vide"),
+    .UenceQueVousEssayez_str = ALIGNED_STRING("uence que vous essayez de sauvegarder est vide"),
 
     .txt_Der_Song_den_Sie_speichern = "Der Song den Sie speichern m\366chten ist leer.\0\377",
 
-    .str_407 = "The song you are trying to save is empty.",
+    .TheSongYouAre_str = "The song you are trying to save is empty.",
 
     .ptrs_204 = {
-        SELF(str_413),
-        SELF(str_412),
+        SELF(ThisStandardMidiFile_str),
+        SELF(DiesesStandardMidiFile_str),
         SELF(txt_Cette_sequence_STANDARD_MIDI),
         SELF(txt_Este_archivo_MIDI_estandar_es),
-        SELF(str_409),
-        SELF(str_408),
+        SELF(ErrorErrCnv_str),
+        SELF(StandardMidiFileTidak_str),
     },
 
-    .str_408 = "Standard MIDI File tidak kompatibel dengan KN-5000 dan tidak bisa dimuat/diisi.",
+    .StandardMidiFileTidak_str = "Standard MIDI File tidak kompatibel dengan KN-5000 dan tidak bisa dimuat/diisi.",
 
-    .str_409 = "(ERROR 16)err_cnv",
+    .ErrorErrCnv_str = "(ERROR 16)err_cnv",
 
     .txt_Este_archivo_MIDI_estandar_es = "Este archivo MIDI est\341ndar es incompatible con el KN5000 y no puede ser cargado.\0\377",
 
@@ -8277,45 +8277,45 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_411 = ALIGNED_STRING("e."),
 
-    .str_412 = "Dieses STANDARD MIDI FILE ist nicht kompatibel zum SX-KN5000 und kann daher nicht geladen werden.",
+    .DiesesStandardMidiFile_str = "Dieses STANDARD MIDI FILE ist nicht kompatibel zum SX-KN5000 und kann daher nicht geladen werden.",
 
-    .str_413 = "This Standard MIDI File is incompatible with the KN5000 and cannot be loaded.",
+    .ThisStandardMidiFile_str = "This Standard MIDI File is incompatible with the KN5000 and cannot be loaded.",
 
     .ptrs_205 = {
-        SELF(str_419),
-        SELF(str_418),
+        SELF(ThisIsNotStandard_str),
+        SELF(DiesIstKeinStandard_str),
         SELF(txt_Ceci_n_est_pas_une_sequence),
         SELF(txt_Este_no_es_un_archivo_MIDI_estan),
-        SELF(str_415),
-        SELF(str_414),
+        SELF(ErrorErrNoMidi_str),
+        SELF(IniTidakStandardMidi_str),
     },
 
-    .str_414 = "Ini tidak STANDARD MIDI FILE.",
+    .IniTidakStandardMidi_str = "Ini tidak STANDARD MIDI FILE.",
 
-    .str_415 = "(ERROR 17)err_no_midi",
+    .ErrorErrNoMidi_str = "(ERROR 17)err_no_midi",
 
     .txt_Este_no_es_un_archivo_MIDI_estan = "Este no es un archivo MIDI est\341n",
 
-    .str_416 = ALIGNED_STRING("dar."),
+    .Dar_str = ALIGNED_STRING("dar."),
 
     .txt_Ceci_n_est_pas_une_sequence = "Ceci n'est pas une s\351quence STANDARD MIDI FILE.\0",
 
-    .str_418 = "Dies ist kein STANDARD MIDI FILE.",
+    .DiesIstKeinStandard_str = "Dies ist kein STANDARD MIDI FILE.",
 
-    .str_419 = "This is not a STANDARD MIDI FILE.",
+    .ThisIsNotStandard_str = "This is not a STANDARD MIDI FILE.",
 
     .ptrs_206 = {
-        SELF(str_425),
+        SELF(TheTimebasePpqResolution_str),
         SELF(txt_Die_Zeiteinheit_PPQ_Auflosung),
         SELF(txt_La_resolution_PPQ_que_vous_avez),
         SELF(txt_La_base_de_tiempo_resolucion_de),
-        SELF(str_421),
-        SELF(str_420),
+        SELF(ErrorErrTimebase_str),
+        SELF(TimebaseResolusiPpqYang_str),
     },
 
-    .str_420 = "Timebase (resolusi PPQ) yang anda coba untuk dimuat bukan 24/48/96/192/288/384 PPQ.",
+    .TimebaseResolusiPpqYang_str = "Timebase (resolusi PPQ) yang anda coba untuk dimuat bukan 24/48/96/192/288/384 PPQ.",
 
-    .str_421 = ALIGNED_STRING("(ERROR 18)err_timebase"),
+    .ErrorErrTimebase_str = ALIGNED_STRING("(ERROR 18)err_timebase"),
 
     .txt_La_base_de_tiempo_resolucion_de = "La base de tiempo (resoluci\363n de PPQ) que intenta cargar no es 24/48/96/192/288/384 PPQ.\0\377",
 
@@ -8323,41 +8323,41 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .txt_Die_Zeiteinheit_PPQ_Auflosung = "Die Zeiteinheit (PPQ Aufl\366sung) die Sie zu laden versuchten entspricht nicht 24/48/96/192/288/384 PPQ.\0\377",
 
-    .str_425 = "The timebase {PPQ resolution} that you tried to load is not 24/48/96/192/288/384 PPQ.",
+    .TheTimebasePpqResolution_str = "The timebase {PPQ resolution} that you tried to load is not 24/48/96/192/288/384 PPQ.",
 
     .ptrs_207 = {
-        SELF(str_431),
-        SELF(str_430),
+        SELF(ThisIsFormatMidi_str),
+        SELF(DiesIstEinFormat_str),
         SELF(txt_Ceci_est_une_sequence_STANDARD),
-        SELF(str_428),
-        SELF(str_427),
-        SELF(str_426),
+        SELF(EsteEsUnArchivo_str),
+        SELF(ErrorDctp_str),
+        SELF(DisketIniAdalahSatu_str),
     },
 
-    .str_426 = "Disket ini adalah satu FORMAT 1 MIDI FILE dan tidak dapat dimainkan kembali (Play Back)",
+    .DisketIniAdalahSatu_str = "Disket ini adalah satu FORMAT 1 MIDI FILE dan tidak dapat dimainkan kembali (Play Back)",
 
-    .str_427 = ALIGNED_STRING("(ERROR 19)dctp"),
+    .ErrorDctp_str = ALIGNED_STRING("(ERROR 19)dctp"),
 
-    .str_428 = ALIGNED_STRING("Este es un archivo MIDI de FORMATO 1 y no puede ser reproducido."),
+    .EsteEsUnArchivo_str = ALIGNED_STRING("Este es un archivo MIDI de FORMATO 1 y no puede ser reproducido."),
 
     .txt_Ceci_est_une_sequence_STANDARD = "Ceci est une s\351quence STANDARD MIDI FILE au FORMAT 1 et ne peut pas \352tre reproduite dans ce mode.\0",
 
-    .str_430 = ALIGNED_STRING("Dies ist ein FORMAT 1 MIDI FILE und kann daher nicht direkt abgespielt werden. Bitte laden Sie diesen Song komplett ein."),
+    .DiesIstEinFormat_str = ALIGNED_STRING("Dies ist ein FORMAT 1 MIDI FILE und kann daher nicht direkt abgespielt werden. Bitte laden Sie diesen Song komplett ein."),
 
-    .str_431 = ALIGNED_STRING("This is a FORMAT 1 MIDI FILE disk and cannot be played back."),
+    .ThisIsFormatMidi_str = ALIGNED_STRING("This is a FORMAT 1 MIDI FILE disk and cannot be played back."),
 
     .ptrs_208 = {
-        SELF(str_437),
+        SELF(AProblemHasOccurred_str),
         SELF(txt_Die_Sequenzerdaten_sind_nicht_in),
         SELF(txt_Je_ne_peux_pas_charger_le),
         SELF(txt_Se_ha_producido_un_problema_con),
-        SELF(str_433),
-        SELF(str_432),
+        SELF(Error_str_17),
+        SELF(SatuMasalahTerjadiTerhadap_str),
     },
 
-    .str_432 = "Satu masalah  terjadi terhadap data Sequencer anda. Ini mungkin berhubungan dengan dikset salah atau rusak.",
+    .SatuMasalahTerjadiTerhadap_str = "Satu masalah  terjadi terhadap data Sequencer anda. Ini mungkin berhubungan dengan dikset salah atau rusak.",
 
-    .str_433 = ALIGNED_STRING("ERROR 20"),
+    .Error_str_17 = ALIGNED_STRING("ERROR 20"),
 
     .txt_Se_ha_producido_un_problema_con = "Se ha producido un problema con sus datos SEQUENCER. Esto puede deberse a que el disco est\341 estropeado.\0",
 
@@ -8365,22 +8365,22 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .txt_Die_Sequenzerdaten_sind_nicht_in = "Die Sequenzerdaten sind nicht in Ordnung. Das kann an einer besch\344digten oder fehlerhaften Diskette liegen.\0",
 
-    .str_437 = "A problem has occurred with your Sequencer Data. This might be due to a damaged or faulty Disk.",
+    .AProblemHasOccurred_str = "A problem has occurred with your Sequencer Data. This might be due to a damaged or faulty Disk.",
 
     .ptrs_209 = {
-        SELF(str_443),
-        SELF(str_442),
+        SELF(MemoryFull_str),
+        SELF(SpeicherVoll_str),
         SELF(field_11cee),
-        SELF(str_440),
-        SELF(str_439),
-        SELF(str_438),
+        SELF(MemoriaLlena_str),
+        SELF(Error_str_18),
+        SELF(KapasitasPenyimpananPenuhMemory_str),
     },
 
-    .str_438 = ALIGNED_STRING("Kapasitas penyimpanan penuh. (Memory penuh)."),
+    .KapasitasPenyimpananPenuhMemory_str = ALIGNED_STRING("Kapasitas penyimpanan penuh. (Memory penuh)."),
 
-    .str_439 = ALIGNED_STRING("ERROR 21"),
+    .Error_str_18 = ALIGNED_STRING("ERROR 21"),
 
-    .str_440 = "Memoria llena",
+    .MemoriaLlena_str = "Memoria llena",
 
     .field_11cee = 0xE94D,
 
@@ -8398,45 +8398,45 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_441 = ALIGNED_STRING("e!"),
 
-    .str_442 = "Speicher voll !",
+    .SpeicherVoll_str = "Speicher voll !",
 
-    .str_443 = "Memory full",
+    .MemoryFull_str = "Memory full",
 
     .ptrs_210 = {
-        SELF(str_449),
+        SELF(ItIsNecessaryTo_str),
         SELF(txt_Um_diesen_Vorgang_abzuschlien),
         SELF(txt_Vous_devez_presser_PUNCH_OUT),
-        SELF(str_446),
-        SELF(str_445),
-        SELF(str_444),
+        SELF(EsNecesarioPulsarPunch_str),
+        SELF(Error_str_19),
+        SELF(PerluTekanPunchOut_str),
     },
 
-    .str_444 = ALIGNED_STRING("Perlu tekan PUNCH OUT untuk melengkapi prosedur."),
+    .PerluTekanPunchOut_str = ALIGNED_STRING("Perlu tekan PUNCH OUT untuk melengkapi prosedur."),
 
-    .str_445 = ALIGNED_STRING("ERROR 22"),
+    .Error_str_19 = ALIGNED_STRING("ERROR 22"),
 
-    .str_446 = ALIGNED_STRING("Es necesario pulsar PUNCH OUT para completar este procedimiento."),
+    .EsNecesarioPulsarPunch_str = ALIGNED_STRING("Es necesario pulsar PUNCH OUT para completar este procedimiento."),
 
     .txt_Vous_devez_presser_PUNCH_OUT = "Vous devez presser PUNCH OUT pour terminer cette proc\351dure.\0",
 
     .txt_Um_diesen_Vorgang_abzuschlien = "Um diesen Vorgang abzuschli\337en, m\374ssen Sie vorher PUNCH OUT dr\374c",
 
-    .str_448 = ALIGNED_STRING("ken."),
+    .Ken_str = ALIGNED_STRING("ken."),
 
-    .str_449 = ALIGNED_STRING("It is necessary to press PUNCH OUT to complete this procedure."),
+    .ItIsNecessaryTo_str = ALIGNED_STRING("It is necessary to press PUNCH OUT to complete this procedure."),
 
     .ptrs_211 = {
-        SELF(str_455),
+        SELF(ItIsImpossibleTo_str),
         SELF(txt_Es_ist_jetzt_nicht_mehr_moglich),
         SELF(txt_Je_ne_peux_pas_changer_de_mesure),
         SELF(txt_No_es_posible_cambiar_la),
-        SELF(str_451),
-        SELF(str_450),
+        SELF(Error_str_20),
+        SELF(TidakMungkinDiubahKe_str),
     },
 
-    .str_450 = ALIGNED_STRING("Tidak mungkin diubah ke Time Signature (tanda waktu) karena sudah diset didalam Track yang sudah ada. "),
+    .TidakMungkinDiubahKe_str = ALIGNED_STRING("Tidak mungkin diubah ke Time Signature (tanda waktu) karena sudah diset didalam Track yang sudah ada. "),
 
-    .str_451 = ALIGNED_STRING("ERROR 23"),
+    .Error_str_20 = ALIGNED_STRING("ERROR 23"),
 
     .txt_No_es_posible_cambiar_la = "No es posible cambiar la signatura de tiempo porque \351ste ya ha sido ajustado en las pistas existentes.\0\377",
 
@@ -8444,106 +8444,106 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .txt_Es_ist_jetzt_nicht_mehr_moglich = "Es ist jetzt nicht mehr m\366glich das Taktvorzeichen zu \344ndern, da dieses bereits festgelegt wurde.\0",
 
-    .str_455 = "It is impossible to change the Time Signature because it has already been set in the existing Tracks.",
+    .ItIsImpossibleTo_str = "It is impossible to change the Time Signature because it has already been set in the existing Tracks.",
 
     .ptrs_212 = {
-        SELF(str_461),
+        SELF(ARhythmTrackAlready_str),
         SELF(txt_Es_ist_nicht_moglich_zwei_RHYTHM),
         SELF(txt_Vous_avez_deja_choisi_une_piste),
-        SELF(str_458),
-        SELF(str_457),
-        SELF(str_456),
+        SELF(YaExisteUnaPista_str),
+        SELF(Error_str_21),
+        SELF(SatuRhythmTrackSudah_str),
     },
 
-    .str_456 = ALIGNED_STRING("Satu Rhythm Track sudah ada. Tidak mungkin menunjuk 2 Track untuk satu Rhythm."),
+    .SatuRhythmTrackSudah_str = ALIGNED_STRING("Satu Rhythm Track sudah ada. Tidak mungkin menunjuk 2 Track untuk satu Rhythm."),
 
-    .str_457 = ALIGNED_STRING("ERROR 24"),
+    .Error_str_21 = ALIGNED_STRING("ERROR 24"),
 
-    .str_458 = ALIGNED_STRING("Ya existe una pista de ritmo. No es posible asignar dos pistas al ritmo."),
+    .YaExisteUnaPista_str = ALIGNED_STRING("Ya existe una pista de ritmo. No es posible asignar dos pistas al ritmo."),
 
     .txt_Vous_avez_deja_choisi_une_piste = "Vous avez d\351j\340 choisi une piste pour le rythme! Vous ne pouvez pas assigner deux pistes \340 celui-ci.\0",
 
     .txt_Es_ist_nicht_moglich_zwei_RHYTHM = "Es ist nicht m\366glich, zwei RHYTHM-Spuren die gleiche Spurzuweisung (TRACK ASSIGN) zu geben.\0",
 
-    .str_461 = "A Rhythm Track already exists. It is impossible to assign two Tracks to Rhythm.",
+    .ARhythmTrackAlready_str = "A Rhythm Track already exists. It is impossible to assign two Tracks to Rhythm.",
 
     .ptrs_213 = {
-        SELF(str_467),
+        SELF(AChordTrackAlready_str),
         SELF(txt_Es_ist_nicht_moglich_zwei_CHORD),
         SELF(txt_Vous_avez_deja_choisi_une_piste_2),
-        SELF(str_464),
-        SELF(str_463),
-        SELF(str_462),
+        SELF(YaExisteUnaPista_str_2),
+        SELF(Error_str_22),
+        SELF(SatuChordTrackSudah_str),
     },
 
-    .str_462 = ALIGNED_STRING("Satu Chord Track sudah ada. tidak mungkin menunjuk 2 Track untuk satu Chord."),
+    .SatuChordTrackSudah_str = ALIGNED_STRING("Satu Chord Track sudah ada. tidak mungkin menunjuk 2 Track untuk satu Chord."),
 
-    .str_463 = ALIGNED_STRING("ERROR 24"),
+    .Error_str_22 = ALIGNED_STRING("ERROR 24"),
 
-    .str_464 = ALIGNED_STRING("Ya existe una pista de ritmo. No es posible asignar dos pistas al acordes."),
+    .YaExisteUnaPista_str_2 = ALIGNED_STRING("Ya existe una pista de ritmo. No es posible asignar dos pistas al acordes."),
 
     .txt_Vous_avez_deja_choisi_une_piste_2 = "Vous avez d\351j\340 choisi une piste pour le Chord! Vous ne pouvez pas assigner deux pistes \340 celui-ci.\0\377",
 
     .txt_Es_ist_nicht_moglich_zwei_CHORD = "Es ist nicht m\366glich, zwei CHORD-Spuren die gleiche Spurzuweisung (TRACK ASSIGN) zu geben.\0\377",
 
-    .str_467 = "A Chord Track already exists. It is impossible to assign two Tracks to Chord.",
+    .AChordTrackAlready_str = "A Chord Track already exists. It is impossible to assign two Tracks to Chord.",
 
     .ptrs_214 = {
-        SELF(str_473),
+        SELF(AControlTrackAlready_str),
         SELF(txt_Es_ist_nicht_moglich_zwei),
         SELF(txt_Vous_avez_deja_choisi_une_piste_3),
         SELF(txt_Ya_existe_una_pista_de_ritmo_No),
-        SELF(str_469),
-        SELF(str_468),
+        SELF(Error_str_23),
+        SELF(SatuControlTrackSudah_str),
     },
 
-    .str_468 = ALIGNED_STRING("Satu Control Track sudah ada. Tidak mungkin menunjuk 2 Track untuk satu Control."),
+    .SatuControlTrackSudah_str = ALIGNED_STRING("Satu Control Track sudah ada. Tidak mungkin menunjuk 2 Track untuk satu Control."),
 
-    .str_469 = ALIGNED_STRING("ERROR 24"),
+    .Error_str_23 = ALIGNED_STRING("ERROR 24"),
 
     .txt_Ya_existe_una_pista_de_ritmo_No = "Ya existe una pista de ritmo. No es posible asignar dos pistas al autom\341",
 
-    .str_470 = ALIGNED_STRING("ticos."),
+    .Ticos_str = ALIGNED_STRING("ticos."),
 
     .txt_Vous_avez_deja_choisi_une_piste_3 = "Vous avez d\351j\340 choisi une piste pour le Control! Vous ne pouvez pas assigner deux pistes \340 celui-ci.\0\377",
 
     .txt_Es_ist_nicht_moglich_zwei = "Es ist nicht m\366glich, zwei CONTROL-Spuren die gleiche Spurzuweisung (TRACK ASSIGN) zu geben.\0\377",
 
-    .str_473 = "A Control Track already exists. It is impossible to assign two Tracks to Control.",
+    .AControlTrackAlready_str = "A Control Track already exists. It is impossible to assign two Tracks to Control.",
 
     .ptrs_215 = {
-        SELF(str_479),
+        SELF(AApcTrackAlready_str),
         SELF(txt_Es_ist_nicht_moglich_zwei_APC),
         SELF(txt_Vous_avez_deja_choisi_une_piste_4),
-        SELF(str_476),
-        SELF(str_475),
-        SELF(str_474),
+        SELF(YaExisteUnaPista_str_3),
+        SELF(Error_str_24),
+        SELF(SatuApcTrackSudah_str),
     },
 
-    .str_474 = ALIGNED_STRING("Satu APC Track sudah ada. Tidak mungkin menunjuk 2 Track untuk satu APC."),
+    .SatuApcTrackSudah_str = ALIGNED_STRING("Satu APC Track sudah ada. Tidak mungkin menunjuk 2 Track untuk satu APC."),
 
-    .str_475 = ALIGNED_STRING("ERROR 24"),
+    .Error_str_24 = ALIGNED_STRING("ERROR 24"),
 
-    .str_476 = ALIGNED_STRING("Ya existe una pista de ritmo. No es posible asignar dos pistas al acordes."),
+    .YaExisteUnaPista_str_3 = ALIGNED_STRING("Ya existe una pista de ritmo. No es posible asignar dos pistas al acordes."),
 
     .txt_Vous_avez_deja_choisi_une_piste_4 = "Vous avez d\351j\340 choisi une piste pour le APC! Vous ne pouvez pas assigner deux pistes \340 celui-ci.\0\377",
 
     .txt_Es_ist_nicht_moglich_zwei_APC = "Es ist nicht m\366glich, zwei APC-Spuren die gleiche Spurzuweisung (TRACK ASSIGN) zu geben.\0\377",
 
-    .str_479 = "A APC Track already exists. It is impossible to assign two Tracks to APC.",
+    .AApcTrackAlready_str = "A APC Track already exists. It is impossible to assign two Tracks to APC.",
 
     .ptrs_216 = {
-        SELF(str_485),
+        SELF(ItIsOnlyPossible_str),
         SELF(txt_Es_ist_nicht_moglich_die),
         SELF(txt_Je_ne_peux_changer_la_velocite),
         SELF(txt_Solo_es_posible_cambiar_la),
-        SELF(str_481),
-        SELF(str_480),
+        SELF(Error_str_25),
+        SELF(IniHanyaMungkinUntuk_str),
     },
 
-    .str_480 = "Ini hanya mungkin untuk mengubah kecepatan pada Melody Track.",
+    .IniHanyaMungkinUntuk_str = "Ini hanya mungkin untuk mengubah kecepatan pada Melody Track.",
 
-    .str_481 = ALIGNED_STRING("ERROR 25"),
+    .Error_str_25 = ALIGNED_STRING("ERROR 25"),
 
     .txt_Solo_es_posible_cambiar_la = "S\363lo es posible cambiar la velocidad en una pista de melod\355a.\0",
 
@@ -8551,20 +8551,20 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .txt_Es_ist_nicht_moglich_die = "Es ist nicht m\366glich, die VELOCITY in einer Spur au\337er der Melodie-Spur zu ver\344ndern.\0",
 
-    .str_485 = "It is only possible to change the velocity on a Melody Track.",
+    .ItIsOnlyPossible_str = "It is only possible to change the velocity on a Melody Track.",
 
     .ptrs_217 = {
-        SELF(str_491),
+        SELF(ItIsOnlyPossible_str_2),
         SELF(txt_Spuren_wie_RHYTHM_CHORD_und),
         SELF(txt_Je_ne_peux_fusionner_que_des),
         SELF(txt_Solo_es_posible_mezclar_pistas),
-        SELF(str_487),
-        SELF(str_486),
+        SELF(Error_str_26),
+        SELF(IniHanyaMungkinUntuk_str_2),
     },
 
-    .str_486 = "Ini hanya mungkin untuk menggabungkan Melody Tracks. Track seperti Rhythm, Chord dan Control tidak dapat digabungkan.",
+    .IniHanyaMungkinUntuk_str_2 = "Ini hanya mungkin untuk menggabungkan Melody Tracks. Track seperti Rhythm, Chord dan Control tidak dapat digabungkan.",
 
-    .str_487 = ALIGNED_STRING("ERROR 26"),
+    .Error_str_26 = ALIGNED_STRING("ERROR 26"),
 
     .txt_Solo_es_posible_mezclar_pistas = "S\363lo es posible mezclar pistas de melod\355as. Las pistas de ritmo, acorde y control no pueden mezclarse.\0\377",
 
@@ -8572,20 +8572,20 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .txt_Spuren_wie_RHYTHM_CHORD_und = "Spuren wie RHYTHM, CHORD und CONTROL k\366nnen nicht gemischt werden. Dieses geht nur mit Melodie-Spuren.\0\377",
 
-    .str_491 = ALIGNED_STRING("It is only possible to merge Melody Tracks. Tracks such as Rhythm, Chord and Control cannot be merged."),
+    .ItIsOnlyPossible_str_2 = ALIGNED_STRING("It is only possible to merge Melody Tracks. Tracks such as Rhythm, Chord and Control cannot be merged."),
 
     .ptrs_218 = {
-        SELF(str_497),
+        SELF(ItIsOnlyPossible_str_3),
         SELF(field_12d28),
         SELF(txt_Je_ne_peux_copier_que_des_pistes),
         SELF(txt_Solo_es_posible_copiar_pistas_de),
-        SELF(str_493),
-        SELF(str_492),
+        SELF(Error_str_27),
+        SELF(IniHanyaMungkinUntuk_str_3),
     },
 
-    .str_492 = ALIGNED_STRING("Ini hanya mungkin untuk menggandakan Melody Tracks. Tracks seperti Rhythm, CHord and Control tidak dapat digandakan."),
+    .IniHanyaMungkinUntuk_str_3 = ALIGNED_STRING("Ini hanya mungkin untuk menggandakan Melody Tracks. Tracks seperti Rhythm, CHord and Control tidak dapat digandakan."),
 
-    .str_493 = ALIGNED_STRING("ERROR 27"),
+    .Error_str_27 = ALIGNED_STRING("ERROR 27"),
 
     .txt_Solo_es_posible_copiar_pistas_de = "S\363lo es posible copiar pistas de melod\355as. Las pistas de ritmo, acorde y control no pueden mezclarse.\0",
 
@@ -8683,66 +8683,66 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_12d82 = 0xF66B,
 
-    .str_496 = ALIGNED_STRING("nnen nicht kopiert werden."),
+    .NnenNichtKopiertWerden_str = ALIGNED_STRING("nnen nicht kopiert werden."),
 
-    .str_497 = "It is only possible to copy Melody Tracks. Tracks such as Rhythm, Chord and Control cannot be copied.",
+    .ItIsOnlyPossible_str_3 = "It is only possible to copy Melody Tracks. Tracks such as Rhythm, Chord and Control cannot be copied.",
 
     .ptrs_219 = {
-        SELF(str_503),
-        SELF(str_502),
+        SELF(ThisSongIsToo_str),
+        SELF(DieserTitelIstZu_str),
         SELF(txt_Cette_sequence_est_trop_longue),
         SELF(txt_Esta_cancion_dura_demasiado_para),
-        SELF(str_499),
-        SELF(str_498),
+        SELF(Error_str_28),
+        SELF(LaguIniTerlaluPanjang_str),
     },
 
-    .str_498 = ALIGNED_STRING("Lagu ini terlalu panjang untuk disimpan dalam MIDI FILE."),
+    .LaguIniTerlaluPanjang_str = ALIGNED_STRING("Lagu ini terlalu panjang untuk disimpan dalam MIDI FILE."),
 
-    .str_499 = ALIGNED_STRING("ERROR 28"),
+    .Error_str_28 = ALIGNED_STRING("ERROR 28"),
 
     .txt_Esta_cancion_dura_demasiado_para = "Esta canci\363n dura demasiado para poder ser almacenada en un fichero MIDI.\0",
 
     .txt_Cette_sequence_est_trop_longue = "Cette s\351quence est trop longue pour pouvoir \352tre sauvegard\351e sous le format MIDI File.\0\377",
 
-    .str_502 = "Dieser Titel ist zu lang, um als MIDI File gespeichert zu werden.",
+    .DieserTitelIstZu_str = "Dieser Titel ist zu lang, um als MIDI File gespeichert zu werden.",
 
-    .str_503 = "This song is too long to be saved as a MIDI FILE.",
+    .ThisSongIsToo_str = "This song is too long to be saved as a MIDI FILE.",
 
     .ptrs_220 = {
-        SELF(str_509),
+        SELF(TheMidiFileThat_str),
         SELF(txt_Der_zu_ladende_MIDI_File_Song),
         SELF(txt_La_sequence_MIDI_File_que_vous),
-        SELF(str_506),
-        SELF(str_505),
-        SELF(str_504),
+        SELF(ElFicheroMidiQue_str),
+        SELF(Error_str_29),
+        SELF(MidiFileYangAnda_str),
     },
 
-    .str_504 = "MIDI FILE yang anda coba untuk dimuat melampaui kapasitas memori dari KN-5000 dan tidak dapat dimainkan.  Memori Sequencer sudah dihapus.",
+    .MidiFileYangAnda_str = "MIDI FILE yang anda coba untuk dimuat melampaui kapasitas memori dari KN-5000 dan tidak dapat dimainkan.  Memori Sequencer sudah dihapus.",
 
-    .str_505 = ALIGNED_STRING("ERROR 29"),
+    .Error_str_29 = ALIGNED_STRING("ERROR 29"),
 
-    .str_506 = ALIGNED_STRING("El fichero MIDI que usted ha tratado de cargar excede la capacidad de la memoria del KN3000 y no puede reproducirse. La memoria SEQUENCER ha sido borrada."),
+    .ElFicheroMidiQue_str = ALIGNED_STRING("El fichero MIDI que usted ha tratado de cargar excede la capacidad de la memoria del KN3000 y no puede reproducirse. La memoria SEQUENCER ha sido borrada."),
 
     .txt_La_sequence_MIDI_File_que_vous = "La s\351quence MIDI File que vous essayez de charger est trop longue pour ma capacit\351 de m\351moire et je ne peux pas vous l'interpr\351ter. J'ai r\351-initialis\351 la m\351moire de mon s\351q",
 
-    .str_507 = ALIGNED_STRING("uenceur."),
+    .Uenceur_str = ALIGNED_STRING("uenceur."),
 
     .txt_Der_zu_ladende_MIDI_File_Song = "Der zu ladende MIDI File-Song \374berschreitet die interne Speicherkapazit\344t, und kann somit nicht gespielt werden. Der Sequenzer-Speicher wurde gel\366scht.\0",
 
-    .str_509 = ALIGNED_STRING("The MIDI FILE that you have tried to load exceeds the memory capacity of the KN5000 and cannot be played. The Sequencer memory has been cleared."),
+    .TheMidiFileThat_str = ALIGNED_STRING("The MIDI FILE that you have tried to load exceeds the memory capacity of the KN5000 and cannot be played. The Sequencer memory has been cleared."),
 
     .ptrs_221 = {
-        SELF(str_515),
+        SELF(ItIsNotPossible_str),
         SELF(txt_Nach_einer_Aufnahme_im_COMPOSER),
         SELF(txt_Je_ne_peux_pas_changer_la_mesure),
         SELF(txt_No_es_posible_cambiar_la_2),
-        SELF(str_511),
-        SELF(str_510),
+        SELF(Error_str_30),
+        SELF(IniTidakMungkinUntuk_str),
     },
 
-    .str_510 = ALIGNED_STRING("Ini tidak mungkin untuk mengubah Time Signature atau ukuran panjang Composer Pattern yang telah direkam. Jika anda ingin mengubahnya, pertama anda harus menghapus/menghilangkan semua Composer Pattern."),
+    .IniTidakMungkinUntuk_str = ALIGNED_STRING("Ini tidak mungkin untuk mengubah Time Signature atau ukuran panjang Composer Pattern yang telah direkam. Jika anda ingin mengubahnya, pertama anda harus menghapus/menghilangkan semua Composer Pattern."),
 
-    .str_511 = ALIGNED_STRING("ERROR 30"),
+    .Error_str_30 = ALIGNED_STRING("ERROR 30"),
 
     .txt_No_es_posible_cambiar_la_2 = "No es posible cambiar la signatura de tiempo ni la duraci\363n del comp\341s de un patr\363n COMPOSER despu\351s de haber sido grabado. Si desea proseguir, usted tendr\341 que borrar primero todo el patr\363n COMPOSER.\0\377",
 
@@ -8750,45 +8750,45 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .txt_Nach_einer_Aufnahme_im_COMPOSER = "Nach einer Aufnahme im COMPOSER ist es nicht mehr m\366glich, das Takt-Ma\337 bzw. die Pattern-L\344nge zu \344ndern.\0",
 
-    .str_515 = "It is not possible to change the Time Signature or measure length of a Composer Pattern after it has been recorded. If you want to proceed, you must first clear the entire Composer Pattern.",
+    .ItIsNotPossible_str = "It is not possible to change the Time Signature or measure length of a Composer Pattern after it has been recorded. If you want to proceed, you must first clear the entire Composer Pattern.",
 
     .ptrs_222 = {
-        SELF(str_521),
+        SELF(TheTimeSignatureOf_str),
         SELF(txt_Das_gerade_kopierte_Pattern_hat),
         SELF(txt_La_mesure_du_style_que_vous),
         SELF(txt_La_signatura_de_tiempo_del),
-        SELF(str_517),
-        SELF(str_516),
+        SELF(Error_str_31),
+        SELF(TimeSignatureDaripadaPattern_str),
     },
 
-    .str_516 = ALIGNED_STRING("Time Signature daripada Pattern yang anda sedang gandakan berbeda dari Composer Memory yang sedang dipergunakan. Juga : Ubahlah Time Signature dari Composer Memory atau, gandakan dari satu Pattern yang mempunyai Time Signature  yang sama."),
+    .TimeSignatureDaripadaPattern_str = ALIGNED_STRING("Time Signature daripada Pattern yang anda sedang gandakan berbeda dari Composer Memory yang sedang dipergunakan. Juga : Ubahlah Time Signature dari Composer Memory atau, gandakan dari satu Pattern yang mempunyai Time Signature  yang sama."),
 
-    .str_517 = ALIGNED_STRING("ERROR 31"),
+    .Error_str_31 = ALIGNED_STRING("ERROR 31"),
 
     .txt_La_signatura_de_tiempo_del = "La signatura de tiempo del patr\363n del que est\341 copiando es diferente de la que est\341 en la memoria COMPOSER que est\341 utilizando. Bien: Cambie la signatura de tiempode la memoria COMPOSER o: Copie un patr\363n que tenga la misma signatura de tiempo\0",
 
     .txt_La_mesure_du_style_que_vous = "La mesure du style que vous d\351sirez copier est diff\351rente de celle qui est m\351moris\351e dans le COMPOSER que vous voulez utiliser. Vous pouvez: changer la mesure du COMPOSER ou: copier un style enre-gistr\351 avec la m\352m",
 
-    .str_519 = ALIGNED_STRING("emesure."),
+    .Emesure_str = ALIGNED_STRING("emesure."),
 
     .txt_Das_gerade_kopierte_Pattern_hat = "Das gerade kopierte Pattern hat ein anderes Takt-Ma\337 als Ihr COMPOSER. Entweder: Sie \344ndern das Takt-Ma\337 im COMPOSER. oder: Sie kopieren ein Pattern mit gleichem Takt-Ma\337.\0",
 
-    .str_521 = "The Time Signature of the Pattern from which you are copying is different from the Composer Memory that you are using. Either: Change the Time Signature of the Composer Memory or: Copy from a Pattern that has the same Time Signature.",
+    .TheTimeSignatureOf_str = "The Time Signature of the Pattern from which you are copying is different from the Composer Memory that you are using. Either: Change the Time Signature of the Composer Memory or: Copy from a Pattern that has the same Time Signature.",
 
     .ptrs_223 = {
-        SELF(str_527),
-        SELF(str_526),
+        SELF(MemoryFull_str_2),
+        SELF(SpeicherVoll_str_2),
         SELF(field_13afe),
-        SELF(str_524),
-        SELF(str_523),
-        SELF(str_522),
+        SELF(MemoriaLlena_str_2),
+        SELF(Error_str_32),
+        SELF(MemoryPenuh_str),
     },
 
-    .str_522 = "Memory penuh.",
+    .MemoryPenuh_str = "Memory penuh.",
 
-    .str_523 = ALIGNED_STRING("ERROR 32"),
+    .Error_str_32 = ALIGNED_STRING("ERROR 32"),
 
-    .str_524 = "Memoria llena",
+    .MemoriaLlena_str_2 = "Memoria llena",
 
     .field_13afe = 0xE94D,
 
@@ -8806,45 +8806,45 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_525 = ALIGNED_STRING("e!"),
 
-    .str_526 = "Speicher voll !",
+    .SpeicherVoll_str_2 = "Speicher voll !",
 
-    .str_527 = "Memory full",
+    .MemoryFull_str_2 = "Memory full",
 
     .ptrs_224 = {
-        SELF(str_533),
+        SELF(TheIdentificationIdCode_str),
         SELF(txt_Der_Identifikations_ID_Code_der),
         SELF(txt_Le_code_d_identificaiton_ID_de),
         SELF(txt_El_codigo_de_identificacion_ID),
-        SELF(str_529),
-        SELF(str_528),
+        SELF(Error_str_33),
+        SELF(KodeIdentifikasiIdDari_str),
     },
 
-    .str_528 = "Kode identifikasi (ID) dari data System Exclusive produk yang berbeda diterima oleh KN-5000",
+    .KodeIdentifikasiIdDari_str = "Kode identifikasi (ID) dari data System Exclusive produk yang berbeda diterima oleh KN-5000",
 
-    .str_529 = ALIGNED_STRING("ERROR 40"),
+    .Error_str_33 = ALIGNED_STRING("ERROR 40"),
 
     .txt_El_codigo_de_identificacion_ID = "El c\363digo de identificaci\363n (ID) de los datos exclusivos del sistema recibidos por el KN3000 son para un aparato diferente.\0",
 
     .txt_Le_code_d_identificaiton_ID_de = "Le code d'identificaiton (ID) de donn\351es de Syst\350me Exclusif ne correspond pas au mien. Ces donn\351es ne sont pas destin\351es \340 ",
 
-    .str_531 = ALIGNED_STRING("un KN3000!"),
+    .UnKn3000_str = ALIGNED_STRING("un KN3000!"),
 
     .txt_Der_Identifikations_ID_Code_der = "Der Identifikations (ID) Code der zu empfangenden System Exclusive Daten ist f\374r ein anderes Produkt bestimmt.\0\377",
 
-    .str_533 = ALIGNED_STRING("The Identification (ID) code of the System Exclusive data received by the KN5000 is different product."),
+    .TheIdentificationIdCode_str = ALIGNED_STRING("The Identification (ID) code of the System Exclusive data received by the KN5000 is different product."),
 
     .ptrs_225 = {
-        SELF(str_539),
+        SELF(AnErrorHasOccurred_str_4),
         SELF(txt_Beim_Empfang_der_System),
         SELF(txt_Une_erreur_s_est_produite_4),
         SELF(txt_Se_ha_producido_un_error_durante),
-        SELF(str_535),
-        SELF(str_534),
+        SELF(Error_str_34),
+        SELF(SatuKesalahanSudahTerjadi_str),
     },
 
-    .str_534 = ALIGNED_STRING("Satu kesalahan sudah terjadi sejak penerimaan data System Exclusive. Data dari yang dimaksudkan (transmitting device) tidak lengkap.  Harap dicoba lagi."),
+    .SatuKesalahanSudahTerjadi_str = ALIGNED_STRING("Satu kesalahan sudah terjadi sejak penerimaan data System Exclusive. Data dari yang dimaksudkan (transmitting device) tidak lengkap.  Harap dicoba lagi."),
 
-    .str_535 = ALIGNED_STRING("ERROR 41"),
+    .Error_str_34 = ALIGNED_STRING("ERROR 41"),
 
     .txt_Se_ha_producido_un_error_durante = "Se ha producido un error durante la recepci\363n de datos exclusivos del sistema. Los datos del dispositivo de transmisi\363n quiz\341 no est\351n completos. Pruebe otra vez.\0\377",
 
@@ -8852,20 +8852,20 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .txt_Beim_Empfang_der_System = "Beim Empfang der System Exclusive Daten ist ein Fehler aufgetreten. M\366glicherweise war die \334bertragung unvollst\344ndig. Bitte noch einmal versuchen.\0\377",
 
-    .str_539 = ALIGNED_STRING("An error has occurred during System Exclusive data reception. The data from the transmitting device may be incomplete. Please try again."),
+    .AnErrorHasOccurred_str_4 = ALIGNED_STRING("An error has occurred during System Exclusive data reception. The data from the transmitting device may be incomplete. Please try again."),
 
     .ptrs_226 = {
-        SELF(str_545),
+        SELF(AnErrorHasOccurred_str_5),
         SELF(txt_Bei_der_Ubertragung_der_System),
         SELF(txt_Une_erreur_s_est_produite_lors),
         SELF(txt_Se_ha_producido_un_error_durante_2),
-        SELF(str_541),
-        SELF(str_540),
+        SELF(Error_str_35),
+        SELF(SatuKesalahanSudahTerjadi_str_2),
     },
 
-    .str_540 = "Satu kesalahan sudah terjadi sejak System Exclusive ditransfer. Data masih belum diterima dengan benar. Harap dicoba kembali.",
+    .SatuKesalahanSudahTerjadi_str_2 = "Satu kesalahan sudah terjadi sejak System Exclusive ditransfer. Data masih belum diterima dengan benar. Harap dicoba kembali.",
 
-    .str_541 = ALIGNED_STRING("ERROR 42"),
+    .Error_str_35 = ALIGNED_STRING("ERROR 42"),
 
     .txt_Se_ha_producido_un_error_durante_2 = "Se ha producido un error durante la transmisi\363n exclusiva del sistema. Los datos no se han recibido correctamente. Pruebe otra vez.\0",
 
@@ -8873,20 +8873,20 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .txt_Bei_der_Ubertragung_der_System = "Bei der \334bertragung der System Exclusive Daten ist ein Fehler aufgetreten. Die Daten wurden vom empfangenden Ger\344t nicht korrekt verstanden.\0\377",
 
-    .str_545 = "An error has occurred during System Exclusive transmission. The data has not been received correctly. Please try again.",
+    .AnErrorHasOccurred_str_5 = "An error has occurred during System Exclusive transmission. The data has not been received correctly. Please try again.",
 
     .ptrs_227 = {
-        SELF(str_551),
+        SELF(TheFileThatYou_str_2),
         SELF(field_14546),
         SELF(field_144b0),
         SELF(field_14434),
-        SELF(str_547),
-        SELF(str_546),
+        SELF(Error_str_36),
+        SELF(FileYangSedangAnda_str),
     },
 
-    .str_546 = ALIGNED_STRING("File yang sedang anda coba untuk dimuat/disimpan sudah disimpan pada keyboard  KN terdahulu.Hanya mungkin menyimpan dengan menggunakan tambahan PERMAINAN."),
+    .FileYangSedangAnda_str = ALIGNED_STRING("File yang sedang anda coba untuk dimuat/disimpan sudah disimpan pada keyboard  KN terdahulu.Hanya mungkin menyimpan dengan menggunakan tambahan PERMAINAN."),
 
-    .str_547 = ALIGNED_STRING("ERROR 43"),
+    .Error_str_36 = ALIGNED_STRING("ERROR 43"),
 
     .field_14434 = 0x6C45,
 
@@ -9312,22 +9312,22 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_145da = 0x934C,
 
-    .str_550 = "-Option geladen werden.",
+    .OptionGeladenWerden_str = "-Option geladen werden.",
 
-    .str_551 = "The file that you are trying to load was saved on a previous KN keyboard. It is only possible to load using the \"PERFORMANCE\" option.",
+    .TheFileThatYou_str_2 = "The file that you are trying to load was saved on a previous KN keyboard. It is only possible to load using the \"PERFORMANCE\" option.",
 
     .ptrs_228 = {
-        SELF(str_557),
+        SELF(ItIsImpossibleTo_str_2),
         SELF(txt_Es_ist_nicht_moglich_ein_Drum),
         SELF(txt_Il_est_impossible_d_editer_un),
         SELF(txt_No_es_posible_editar_un_juego_de),
-        SELF(str_553),
-        SELF(str_552),
+        SELF(Error_str_37),
+        SELF(TidakMungkinUntukMeng_str),
     },
 
-    .str_552 = ALIGNED_STRING("Tidak mungkin untuk meng-edit satu Drum Kit. Silahkan pilih suara yang berbeda dari group apa saja, kecuali Keyboard Percussion."),
+    .TidakMungkinUntukMeng_str = ALIGNED_STRING("Tidak mungkin untuk meng-edit satu Drum Kit. Silahkan pilih suara yang berbeda dari group apa saja, kecuali Keyboard Percussion."),
 
-    .str_553 = ALIGNED_STRING("ERROR 44"),
+    .Error_str_37 = ALIGNED_STRING("ERROR 44"),
 
     .txt_No_es_posible_editar_un_juego_de = "No es posible editar un juego de bater\355a. Por favor, seleccione un sonido diferente de cualquier grupo excepto percusi\363n de teclado.\0\377",
 
@@ -9335,64 +9335,64 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .txt_Es_ist_nicht_moglich_ein_Drum = "Es ist nicht m\366glich ein Drum Kit zu editieren. Bitte w\344hlen Sie einen Klang aus einer anderen Gruppe ausser Keyboard Percussion.\0",
 
-    .str_557 = "It is impossible to edit a Drum Kit. Please select a different sound from any group except Keyboard Percussion.",
+    .ItIsImpossibleTo_str_2 = "It is impossible to edit a Drum Kit. Please select a different sound from any group except Keyboard Percussion.",
 
     .ptrs_229 = {
-        SELF(str_563),
+        SELF(ItIsOnlyPossible_str_4),
         SELF(txt_Es_konnen_nur_Melodie_Spuren),
         SELF(txt_Il_est_seulement_possible_d),
         SELF(txt_Solo_es_posible_insertar_pistas),
-        SELF(str_559),
-        SELF(str_558),
+        SELF(Error_str_38),
+        SELF(HanyaMungkinDimasukkanMelody_str),
     },
 
-    .str_558 = ALIGNED_STRING("Hanya mungkin dimasukkan Melody Tracks. Tracks seperti Rhythm, Chord dan Control tidak dapat dimasukkan."),
+    .HanyaMungkinDimasukkanMelody_str = ALIGNED_STRING("Hanya mungkin dimasukkan Melody Tracks. Tracks seperti Rhythm, Chord dan Control tidak dapat dimasukkan."),
 
-    .str_559 = ALIGNED_STRING("ERROR 46"),
+    .Error_str_38 = ALIGNED_STRING("ERROR 46"),
 
     .txt_Solo_es_posible_insertar_pistas = "S\363lo es posible insertar pistas de melod\355as. Las pistas tales como ritmo, acorde y control no pueden ser insertadas.\0\377",
 
     .txt_Il_est_seulement_possible_d = "Il est seulement possible d'ins\351rer des pistes comportant une m\351lodie. Des pistes assign\351es \340 Rhythm, Chord and Control ne peuvent \352tre ins\351r\351",
 
-    .str_561 = "es.",
+    .Es_str = "es.",
 
     .txt_Es_konnen_nur_Melodie_Spuren = "Es k\366nnen nur Melodie-Spuren eingef\374gt werden. Spuren wie Rhythm, Chord und Control k\366nnen nicht eingef\374gt werden.\0\377",
 
-    .str_563 = "It is only possible to insert Melody Tracks. Tracks such as Rhythm, Chord and Control cannot be inserted.",
+    .ItIsOnlyPossible_str_4 = "It is only possible to insert Melody Tracks. Tracks such as Rhythm, Chord and Control cannot be inserted.",
 
     .ptrs_230 = {
-        SELF(str_569),
+        SELF(ItIsNotPossible_str_2),
         SELF(txt_Der_Sound_Arranger_kann_nicht),
         SELF(txt_L_utilisation_du_Sound_Arranger),
-        SELF(str_566),
-        SELF(str_565),
-        SELF(str_564),
+        SELF(NoEsPosibleUtilizar_str),
+        SELF(Error_str_39),
+        SELF(TidakMungkinUntukMenggunakan_str),
     },
 
-    .str_564 = "Tidak mungkin untuk menggunakan Sound Arranger dengan Composer Pattern. Silahkan pilih satu contoh preset (Preset Pattern).",
+    .TidakMungkinUntukMenggunakan_str = "Tidak mungkin untuk menggunakan Sound Arranger dengan Composer Pattern. Silahkan pilih satu contoh preset (Preset Pattern).",
 
-    .str_565 = ALIGNED_STRING("ERROR 47"),
+    .Error_str_39 = ALIGNED_STRING("ERROR 47"),
 
-    .str_566 = ALIGNED_STRING("No es posible utilizar el arreglador musical con un esquema del compositor. Por favor, seleccione un esquema preconfigurado."),
+    .NoEsPosibleUtilizar_str = ALIGNED_STRING("No es posible utilizar el arreglador musical con un esquema del compositor. Por favor, seleccione un esquema preconfigurado."),
 
     .txt_L_utilisation_du_Sound_Arranger = "L'utilisation du \"Sound Arranger\" n'est pas possible avec un \"Composer\". Veuillez choisir un rythme pr\351s\351lectionn\351.\0",
 
     .txt_Der_Sound_Arranger_kann_nicht = "Der Sound Arranger kann nicht mit einem Composer Pattern verwendet werden. Bitte w\344hlen Sie einen Werksrhythmus aus.\0\377",
 
-    .str_569 = "It is not possible to use the Sound Arranger with a composer pattern. Please select a preset pattern.",
+    .ItIsNotPossible_str_2 = "It is not possible to use the Sound Arranger with a composer pattern. Please select a preset pattern.",
 
     .ptrs_231 = {
-        SELF(str_575),
+        SELF(TheTypeOfInserted_str),
         SELF(field_14f4c),
         SELF(txt_La_disquette_inseree_est_de_type),
         SELF(txt_El_disquete_insertado_es_de_tipo),
-        SELF(str_571),
-        SELF(str_570),
+        SELF(Err0r_str),
+        SELF(TipeDisketYangDigunakan_str),
     },
 
-    .str_570 = ALIGNED_STRING("Tipe disket yang digunakan \" 2HD \".  Model ini hanya bisa digunakan untuk disket tipe \" 2DD \"."),
+    .TipeDisketYangDigunakan_str = ALIGNED_STRING("Tipe disket yang digunakan \" 2HD \".  Model ini hanya bisa digunakan untuk disket tipe \" 2DD \"."),
 
-    .str_571 = ALIGNED_STRING("ERR0R 48"),
+    .Err0r_str = ALIGNED_STRING("ERR0R 48"),
 
     .txt_El_disquete_insertado_es_de_tipo = "El disquete insertado es de tipo \"2HD\". En este modo s\363lo pueden usarse los disquetes de tipo \"2DD\".\0\377",
 
@@ -9470,22 +9470,22 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_14f92 = 0x3284,
 
-    .str_574 = "DD\" Disketten verwendet werden.",
+    .DdDiskettenVerwendetWerden_str = "DD\" Disketten verwendet werden.",
 
-    .str_575 = ALIGNED_STRING("The type of inserted DISK is \"2HD\".  It can be used only \"2DD\"  type in this mode."),
+    .TheTypeOfInserted_str = ALIGNED_STRING("The type of inserted DISK is \"2HD\".  It can be used only \"2DD\"  type in this mode."),
 
     .ptrs_232 = {
-        SELF(str_581),
+        SELF(TheQuantityOfThis_str),
         SELF(txt_Die_Groe_dieses_Songs_ubersteigt),
         SELF(txt_La_taille_de_cette_sequence),
         SELF(txt_La_longitud_de_esta_cancion),
-        SELF(str_577),
-        SELF(str_576),
+        SELF(Error_str_40),
+        SELF(JumlahLaguMelebihiKapasitas_str),
     },
 
-    .str_576 = "Jumlah lagu melebihi kapasitas KN-5000. Coba lagi sesudah dikurangi jumlahnya seperti menghilangkan TRACK atau MEASURE.",
+    .JumlahLaguMelebihiKapasitas_str = "Jumlah lagu melebihi kapasitas KN-5000. Coba lagi sesudah dikurangi jumlahnya seperti menghilangkan TRACK atau MEASURE.",
 
-    .str_577 = ALIGNED_STRING("ERROR 49"),
+    .Error_str_40 = ALIGNED_STRING("ERROR 49"),
 
     .txt_La_longitud_de_esta_cancion = "La longitud de esta canci\363n supera la capacidad del KN5000. Por favor trate de reducir la longitud (por ejemplo, omita los par\341metros de pista o comp\341s).\0",
 
@@ -9493,41 +9493,41 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .txt_Die_Groe_dieses_Songs_ubersteigt = "Die Gr\366\337e dieses Songs \374bersteigt die Kapazit\344t des SX-KN5000. Versuchen Sie es nocheinmal, nachdem Sie den Song verkleinert haben, z.B. durch L\366schen von Spuren oder von Takten.\0\377",
 
-    .str_581 = ALIGNED_STRING("The quantity of  this song is over the capacity of GN7/GN9/FN3. Please try again after reducing the quantity like omitting the TRACK or MEASURE."),
+    .TheQuantityOfThis_str = ALIGNED_STRING("The quantity of  this song is over the capacity of GN7/GN9/FN3. Please try again after reducing the quantity like omitting the TRACK or MEASURE."),
 
     .ptrs_233 = {
-        SELF(str_587),
+        SELF(ItIsNotPossible_str_3),
         SELF(txt_Es_ist_nicht_moglich_auf_Preset),
         SELF(txt_Il_n_est_pas_possible_d),
-        SELF(str_584),
-        SELF(str_583),
-        SELF(str_582),
+        SELF(NoEsPosibleGrabar_str),
+        SELF(Error_str_41),
+        SELF(TidakMungkinMerekamDengan_str),
     },
 
-    .str_582 = "Tidak mungkin merekam dengan menggunakan Preset Banks, Compile banks atau Control Banks.  Silahkan pilih satu dari User Banks yang ada.",
+    .TidakMungkinMerekamDengan_str = "Tidak mungkin merekam dengan menggunakan Preset Banks, Compile banks atau Control Banks.  Silahkan pilih satu dari User Banks yang ada.",
 
-    .str_583 = ALIGNED_STRING("ERROR 54"),
+    .Error_str_41 = ALIGNED_STRING("ERROR 54"),
 
-    .str_584 = ALIGNED_STRING("No es posible grabar sobre los bancos preconfigurados, los bancos del compilador o los bancos de control. Por favor seleccione uno de los bancos de usuario."),
+    .NoEsPosibleGrabar_str = ALIGNED_STRING("No es posible grabar sobre los bancos preconfigurados, los bancos del compilador o los bancos de control. Por favor seleccione uno de los bancos de usuario."),
 
     .txt_Il_n_est_pas_possible_d = "Il n'est pas possible d'effectuer un enregistrement en utilisant des banques pr\351s\351lectionn\351es, compil\351es ou de contr\364le. Veuillez s\351lectionner l'une des banques r\351serv\351es \340 l'utilisateur.\0",
 
     .txt_Es_ist_nicht_moglich_auf_Preset = "Es ist nicht m\366glich auf Preset-, Re-Group- oder Control-B\344nke aufzunehmen. Bitte w\344hlen Sie eine der User-B\344nke aus.\0",
 
-    .str_587 = "It is not possible to record using preset banks, compile banks, or control banks.  Please select one of the user banks.",
+    .ItIsNotPossible_str_3 = "It is not possible to record using preset banks, compile banks, or control banks.  Please select one of the user banks.",
 
     .ptrs_234 = {
-        SELF(str_593),
+        SELF(SpecialTracksSuchAs_str),
         SELF(txt_In_dem_Song_den_Sie_kopieren),
         SELF(txt_Des_pistes_assignees_a_Chord_APC),
         SELF(txt_En_la_cancion_que_usted_esta),
-        SELF(str_589),
-        SELF(str_588),
+        SELF(Error_str_42),
+        SELF(SpecialTracksSepertiChord_str),
     },
 
-    .str_588 = "Special Tracks seperti Chord/APC, Rhythm dan Control sudah tersedia dari lagu yang sedang anda gandakan dan tidak kompatibel dengan tujuan lagu karena ini ada dalam GM Mode.",
+    .SpecialTracksSepertiChord_str = "Special Tracks seperti Chord/APC, Rhythm dan Control sudah tersedia dari lagu yang sedang anda gandakan dan tidak kompatibel dengan tujuan lagu karena ini ada dalam GM Mode.",
 
-    .str_589 = ALIGNED_STRING("ERROR 55"),
+    .Error_str_42 = ALIGNED_STRING("ERROR 55"),
 
     .txt_En_la_cancion_que_usted_esta = "En la canci\363n que usted est\341 tratando de copiar existen pistas especiales tales como acordes/acordes autom\341ticos, ritmo y control que son incompatibles con la canci\363n de destino, porque \351sta utiliza el modo MIDI General.\0\377",
 
@@ -9535,43 +9535,43 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .txt_In_dem_Song_den_Sie_kopieren = "In dem Song den Sie kopieren m\366chten befinden sich Spuren wie Chord/APC, Rhythm und Control. Diese Spuren sind mit dem Ziel-Song nicht kompatibel, da dieser im GM-Modus gespeichert ist.\0",
 
-    .str_593 = "Special Tracks such as Chord/APC, Rhythm and Control exist in the song from which you are copying and are  incompatible with the destination song because it is in GM mode.",
+    .SpecialTracksSuchAs_str = "Special Tracks such as Chord/APC, Rhythm and Control exist in the song from which you are copying and are  incompatible with the destination song because it is in GM mode.",
 
     .ptrs_235 = {
-        SELF(str_599),
+        SELF(AutoPunchRecordingHas_str),
         SELF(txt_Der_AUTO_PUNCH_Aufnahmevorgang),
         SELF(txt_L_enregistrement_AUTO_PUNCH_a),
         SELF(txt_No_ha_tenido_exito_la_grabacion),
-        SELF(str_595),
-        SELF(str_594),
+        SELF(Error_str_43),
+        SELF(RekamanAutoPunchBelum_str),
     },
 
-    .str_594 = ALIGNED_STRING("Rekaman AUTO PUNCH belum berhasil karena pengoperasian SEQUENCER terganggu sebelum ukuran Punch Out  dinaikkan. "),
+    .RekamanAutoPunchBelum_str = ALIGNED_STRING("Rekaman AUTO PUNCH belum berhasil karena pengoperasian SEQUENCER terganggu sebelum ukuran Punch Out  dinaikkan. "),
 
-    .str_595 = ALIGNED_STRING("ERROR 56"),
+    .Error_str_43 = ALIGNED_STRING("ERROR 56"),
 
     .txt_No_ha_tenido_exito_la_grabacion = "No ha tenido \351xito la grabaci\363n GOLPE AUTOMATICO porque se interrumpi\363 la operaci\363n del secuenciador antes de llegar al comp\341s SIN GOLPE.\0",
 
     .txt_L_enregistrement_AUTO_PUNCH_a = "L'enregistrement AUTO PUNCH a \351chou\351 car le fonctionnement du SEQUENCER a \351t\351 interrompu avant que la mesure PUNCH OUT ait \351t\351",
 
-    .str_597 = ALIGNED_STRING(" atteinte."),
+    .Atteinte_str = ALIGNED_STRING(" atteinte."),
 
     .txt_Der_AUTO_PUNCH_Aufnahmevorgang = "Der AUTO PUNCH-Aufnahmevorgang konnte nicht erfolgreich abgeschlossen werden, da der SEQUENCER-Betrieb vor Erreichen des PUNCH OUT-Taktma\337es unterbrochen wurde.\0\377",
 
-    .str_599 = ALIGNED_STRING("AUTO PUNCH recording has been unsuccessful because SEQUENCER operation was interrupted before the PUNCH OUT measure was reached."),
+    .AutoPunchRecordingHas_str = ALIGNED_STRING("AUTO PUNCH recording has been unsuccessful because SEQUENCER operation was interrupted before the PUNCH OUT measure was reached."),
 
     .ptrs_236 = {
-        SELF(str_605),
+        SELF(TheComposerPatternYou_str),
         SELF(txt_Das_gewahlte_COMPOSER_Muster),
         SELF(txt_Le_motif_COMPOSER_que_vous_avez),
         SELF(txt_El_patron_del_Composer),
-        SELF(str_601),
-        SELF(str_600),
+        SELF(Error_str_44),
+        SELF(ContohContohComposerYang_str),
     },
 
-    .str_600 = "Contoh-contoh Composer yang sudah dipilih mempunyai satu perbedaan tanda waktu (perbedaan Time Signature) atau nomor-nomor ukuran dari pattern lain dalam COMPOSER CHORD MAP.",
+    .ContohContohComposerYang_str = "Contoh-contoh Composer yang sudah dipilih mempunyai satu perbedaan tanda waktu (perbedaan Time Signature) atau nomor-nomor ukuran dari pattern lain dalam COMPOSER CHORD MAP.",
 
-    .str_601 = ALIGNED_STRING("ERROR 57"),
+    .Error_str_44 = ALIGNED_STRING("ERROR 57"),
 
     .txt_El_patron_del_Composer = "El patr\363n del Composer seleccionado tiene una se\361al musical de identificaci\363n o n\372mero de compases diferente de los otros patrones de este mapa de acordes del Composer.\0\377",
 
@@ -9579,20 +9579,20 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .txt_Das_gewahlte_COMPOSER_Muster = "Das gew\344hlte COMPOSER-Muster weist ein unterschiedliches Taktvorzeichen oder eine unterschiedliche Anzahl von Taktma\337en als andere Muster in dieser COMPOSER CHORD MAP auf. \0\377",
 
-    .str_605 = "The COMPOSER pattern you have chosen has a different time signature or number of measures from the other patterns in this COMPOSER CHORD MAP.",
+    .TheComposerPatternYou_str = "The COMPOSER pattern you have chosen has a different time signature or number of measures from the other patterns in this COMPOSER CHORD MAP.",
 
     .ptrs_237 = {
-        SELF(str_611),
+        SELF(TheSongThatYou_str),
         SELF(txt_Die_Melodie_die_Sie_zu_laden),
         SELF(txt_Le_morceau_que_vous_avez_essaye),
         SELF(txt_La_cancion_que_ha_tratado_de),
-        SELF(str_607),
-        SELF(str_606),
+        SELF(Error_str_45),
+        SELF(LaguYangAndaCoba_str),
     },
 
-    .str_606 = ALIGNED_STRING("Lagu yang anda coba panggil,  melebihi kemampuan memori KN-5000 , dan tidak dapat dipanggil. Penyimpanan lagu pilihan sudah jelas."),
+    .LaguYangAndaCoba_str = ALIGNED_STRING("Lagu yang anda coba panggil,  melebihi kemampuan memori KN-5000 , dan tidak dapat dipanggil. Penyimpanan lagu pilihan sudah jelas."),
 
-    .str_607 = ALIGNED_STRING("ERROR 58"),
+    .Error_str_45 = ALIGNED_STRING("ERROR 58"),
 
     .txt_La_cancion_que_ha_tratado_de = "La canci\363n que ha tratado de cargar supera la memoria disponible del KN3000 y no puede cargarse. Se ha borrado la memoria de la canci\363n seleccionada.\0",
 
@@ -9602,14 +9602,14 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .txt_Die_Melodie_die_Sie_zu_laden = "Die Melodie, die Sie zu laden versuchten, \374bersteigt die verf\374gbare Speicherkapazit\344t des Modells KN3000, und kann daher nicht geladen werden. Der Inhalt des gew\344hlten Melodiespeichers wurde gel\366scht. \0",
 
-    .str_611 = ALIGNED_STRING("The song that you have tried to load exceeds the KN5000's available memory and cannot be loaded. The selected song memory has been cleared. "),
+    .TheSongThatYou_str = ALIGNED_STRING("The song that you have tried to load exceeds the KN5000's available memory and cannot be loaded. The selected song memory has been cleared. "),
 
     .ptrs_238 = {
-        SELF(str_617),
+        SELF(RkbAndLkbAre_str),
         SELF(txt_RKB_und_LKB_sind_spezielle),
         SELF(txt_RKB_et_LKB_sont_des_pistes),
-        SELF(str_614),
-        SELF(str_613),
+        SELF(RkbLkbSonPistas_str),
+        SELF(Error_str_46),
         SELF(field_16340),
     },
 
@@ -9619,9 +9619,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_612 = ALIGNED_STRING(""),
 
-    .str_613 = ALIGNED_STRING("ERROR 59"),
+    .Error_str_46 = ALIGNED_STRING("ERROR 59"),
 
-    .str_614 = ALIGNED_STRING("RKB y LKB son pistas especiales que mantienen la compatibilidad con datos de secuenciador correspondientes a productos anteriores. No pueden ser editadas o sobregrabadas."),
+    .RkbLkbSonPistas_str = ALIGNED_STRING("RKB y LKB son pistas especiales que mantienen la compatibilidad con datos de secuenciador correspondientes a productos anteriores. No pueden ser editadas o sobregrabadas."),
 
     .txt_RKB_et_LKB_sont_des_pistes = "RKB et LKB sont des pistes d\351di\351es \340 la compatibilit\351 avec les donn\351es de s\351quence issues des mod\350les PR pr\351c\351dents. Elles ne peuvent \352tre \351dit\351es ou r\351-enregistr\351e",
 
@@ -9629,14 +9629,14 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .txt_RKB_und_LKB_sind_spezielle = "RKB und LKB sind spezielle Spuren f\374r die Kompatibilit\344t mit Sequenzerdaten der aktuellen PR Digital Ensembles. Diese Spuren k\366nnen nicht aufgenommen oder editiert werden.\0",
 
-    .str_617 = "RKB and LKB are special tracks for compatibility with sequencer data from previous PR products. They cannot be edited or recorded on.",
+    .RkbAndLkbAre_str = "RKB and LKB are special tracks for compatibility with sequencer data from previous PR products. They cannot be edited or recorded on.",
 
     .ptrs_239 = {
-        SELF(str_623),
+        SELF(RkbAndLkbAre_str_2),
         SELF(txt_RKB_und_LKB_sind_spezielle_2),
         SELF(txt_RKB_et_LKB_sont_des_pistes_2),
         SELF(txt_RKB_y_LKB_son_pistas_especiales),
-        SELF(str_619),
+        SELF(Error_str_47),
         SELF(field_165ee),
     },
 
@@ -9646,30 +9646,30 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_618 = ALIGNED_STRING(""),
 
-    .str_619 = ALIGNED_STRING("ERROR 60"),
+    .Error_str_47 = ALIGNED_STRING("ERROR 60"),
 
     .txt_RKB_y_LKB_son_pistas_especiales = "RKB y LKB son pistas especiales que no pueden ser empleadas en conjuntamente con derecha 1, derecha 2, izquierda y las pistas de acordes autom\341ticos. Por favor, asigne RKB y LKB a cualquier otra parte y pruebe nuevamente.\0",
 
     .txt_RKB_et_LKB_sont_des_pistes_2 = "RKB et LKB sont des pistes d\351di\351es qui ne peuvent \352tre utilis\351es en association avec les pistes assign\351es \340 Right1,Right2,Left et APC. Veuillez r\351- assigner RKB et LKB \340 d'autres parties et essayez \340 ",
 
-    .str_621 = ALIGNED_STRING("nouveau."),
+    .Nouveau_str = ALIGNED_STRING("nouveau."),
 
     .txt_RKB_und_LKB_sind_spezielle_2 = "RKB und LKB sind spezielle Spuren, die nicht in Verbindung mit Right 1, Right 2, Left und APC Spuren verwendet werden k\366nnen. Bitte belegen Sie die RKB und LKB Spuren mit einer anderen Klanggruppe und versuchen es noch einmal.\0\377",
 
-    .str_623 = ALIGNED_STRING("RKB and LKB are special tracks which cannot be used in conjunction with Right1,Right2,Left and APC tracks. Please re-assign RKB and LKB to any other part and try again."),
+    .RkbAndLkbAre_str_2 = ALIGNED_STRING("RKB and LKB are special tracks which cannot be used in conjunction with Right1,Right2,Left and APC tracks. Please re-assign RKB and LKB to any other part and try again."),
 
     .ptrs_240 = {
-        SELF(str_629),
+        SELF(ItIsImpossibleTo_str_3),
         SELF(txt_Das_Orchestral_Kit_und_das_Sound),
         SELF(txt_Il_est_impossible_d_editer_les),
         SELF(txt_No_es_posible_editar_ni_el),
-        SELF(str_625),
-        SELF(str_624),
+        SELF(ErrorDkit_str),
+        SELF(TidakMungkinUntukMeng_str_2),
     },
 
-    .str_624 = "Tidak mungkin untuk meng-edit Orchestral Kit dan Sound Effect Kit. Silahkan pilih satu Drum Kit yang berbeda.",
+    .TidakMungkinUntukMeng_str_2 = "Tidak mungkin untuk meng-edit Orchestral Kit dan Sound Effect Kit. Silahkan pilih satu Drum Kit yang berbeda.",
 
-    .str_625 = ALIGNED_STRING("(ERROR 61)dkit"),
+    .ErrorDkit_str = ALIGNED_STRING("(ERROR 61)dkit"),
 
     .txt_No_es_posible_editar_ni_el = "No es posible editar ni el conjunto de orquesta ni el conjunto de efectos de sonido. Por favor, seleccione un conjunto de bater\355a diferente.\0\377",
 
@@ -9677,20 +9677,20 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .txt_Das_Orchestral_Kit_und_das_Sound = "Das Orchestral Kit und das Sound Effect Kit k\366nnen nicht editiert werden. Bitte w\344hlen Sie ein anderes Drum-Kit aus.\0\377",
 
-    .str_629 = ALIGNED_STRING("It is impossible to edit the Orchestral Kit and Sound Effect Kit. Please select a different Drum Kit ."),
+    .ItIsImpossibleTo_str_3 = ALIGNED_STRING("It is impossible to edit the Orchestral Kit and Sound Effect Kit. Please select a different Drum Kit ."),
 
     .ptrs_241 = {
-        SELF(str_635),
-        SELF(str_634),
+        SELF(TheComputerConnectionIs_str),
+        SELF(DieComputerverbindungIstNicht_str),
         SELF(txt_La_connexion_micro_ordinateur_n),
         SELF(txt_La_conexion_con_la_computadora),
-        SELF(str_631),
-        SELF(str_630),
+        SELF(Error_str_48),
+        SELF(HubunganKomputerTidakAktif_str),
     },
 
-    .str_630 = "Hubungan komputer tidak aktif karena \" pintu masuk \" komputer diset ke MIDI.  Silahkan matikan arus listrik (power off), dan atur posisi seting yang dikehendaki kemudian hidupkan kembali.",
+    .HubunganKomputerTidakAktif_str = "Hubungan komputer tidak aktif karena \" pintu masuk \" komputer diset ke MIDI.  Silahkan matikan arus listrik (power off), dan atur posisi seting yang dikehendaki kemudian hidupkan kembali.",
 
-    .str_631 = ALIGNED_STRING("ERROR 62"),
+    .Error_str_48 = ALIGNED_STRING("ERROR 62"),
 
     .txt_La_conexion_con_la_computadora = "La conexi\363n con la computadora no est\341 activa porque su conmutador de puerto est\341 configurado para MIDI. Por favor, desconecte la alimentaci\363n, coloque el conmutador en la posici\363n deseada y conecte nuevamente la alimentaci\363",
 
@@ -9698,53 +9698,53 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .txt_La_connexion_micro_ordinateur_n = "La connexion micro-ordinateur n'est pas active. Le s\351lecteur est sur la position IDI. Veuillez couper l'alimentation, s\351lectionner la position d\351sir\351e, puis r\351tablir l'alimentation g\351n\351rale de l'instrument.\0\377",
 
-    .str_634 = ALIGNED_STRING("Die Computerverbindung ist nicht aktiv, da der Anschluss auf MIDI eingestellt ist. Schalten Sie das Keyboard aus, stellen den Schalter auf die richtige Position und schalten das Keyboard wieder ein."),
+    .DieComputerverbindungIstNicht_str = ALIGNED_STRING("Die Computerverbindung ist nicht aktiv, da der Anschluss auf MIDI eingestellt ist. Schalten Sie das Keyboard aus, stellen den Schalter auf die richtige Position und schalten das Keyboard wieder ein."),
 
-    .str_635 = "The computer connection is not active because the computer port switch is set to MIDI. Please turn the power off, set the switch to the desired setting and turn the power back on.",
+    .TheComputerConnectionIs_str = "The computer connection is not active because the computer port switch is set to MIDI. Please turn the power off, set the switch to the desired setting and turn the power back on.",
 
     .ptrs_242 = {
-        SELF(str_641),
+        SELF(ThisBitmapIsIn_str),
         SELF(txt_Das_Format_dieses_Bitmaps_kann),
         SELF(txt_Cette_configuration_Bitmap_n_est),
         SELF(txt_Este_mapa_de_bits_tiene_en_un),
-        SELF(str_637),
-        SELF(str_636),
+        SELF(Error_str_49),
+        SELF(BitmapAdalahSalahFormat_str),
     },
 
-    .str_636 = "Bitmap adalah salah format dari KN-5000 dan disket tidak dapat dipanggil. Lihat Pedoman Pemakaian untuk penjelasan yang mendetil.",
+    .BitmapAdalahSalahFormat_str = "Bitmap adalah salah format dari KN-5000 dan disket tidak dapat dipanggil. Lihat Pedoman Pemakaian untuk penjelasan yang mendetil.",
 
-    .str_637 = ALIGNED_STRING("ERROR 63"),
+    .Error_str_49 = ALIGNED_STRING("ERROR 63"),
 
     .txt_Este_mapa_de_bits_tiene_en_un = "Este mapa de bits tiene en un formato incorrecto para el KN5000 y no puede ser cargado. Para obtener m\341s detalles, vea el Manual del Propietario.\0",
 
     .txt_Cette_configuration_Bitmap_n_est = "Cette configuration Bitmap n'est pas au bon format pour le KN5000 et ne peut pas \352tre charg\351e. Reportez-vous au mode d'emploi pour plus de d\351t",
 
-    .str_639 = ALIGNED_STRING("ails. "),
+    .Ails_str = ALIGNED_STRING("ails. "),
 
     .txt_Das_Format_dieses_Bitmaps_kann = "Das Format dieses Bitmaps kann vom SX-KN5000 nicht geladen werden. Lesen Sie die Bedienungsanleitung f\374r weitere Informationen.\0",
 
-    .str_641 = ALIGNED_STRING("This Bitmap is in the wrong format for the KN5000 and cannot be loaded. See the Owners Manual for more details. "),
+    .ThisBitmapIsIn_str = ALIGNED_STRING("This Bitmap is in the wrong format for the KN5000 and cannot be loaded. See the Owners Manual for more details. "),
 
     .ptrs_243 = {
-        SELF(str_647),
+        SELF(PleaseSelectThePanel_str),
         SELF(txt_Bitte_wahlen_Sie_den_Panel),
         SELF(txt_Veuillez_selectionner_le_Panel),
-        SELF(str_644),
-        SELF(str_643),
-        SELF(str_642),
+        SELF(PorFavorSeleccioneEl_str),
+        SELF(Error_str_50),
+        SELF(PilihlahPanelMemoryYang_str),
     },
 
-    .str_642 = "Pilihlah Panel Memory yang ingin anda berikan nama.",
+    .PilihlahPanelMemoryYang_str = "Pilihlah Panel Memory yang ingin anda berikan nama.",
 
-    .str_643 = ALIGNED_STRING("ERROR 64"),
+    .Error_str_50 = ALIGNED_STRING("ERROR 64"),
 
-    .str_644 = "Por favor seleccione el Panel Memory al que desea dar nombre.",
+    .PorFavorSeleccioneEl_str = "Por favor seleccione el Panel Memory al que desea dar nombre.",
 
     .txt_Veuillez_selectionner_le_Panel = "Veuillez s\351lectionner le \253 Panel Memory \273 auquel vous d\351sirez assigner un nom.\0\377",
 
     .txt_Bitte_wahlen_Sie_den_Panel = "Bitte w\344hlen Sie den Panel Memory-Platz, dem Sie gern einen Namen vergeben m\366chten.\0",
 
-    .str_647 = "Please select the Panel Memory that you want to name.",
+    .PleaseSelectThePanel_str = "Please select the Panel Memory that you want to name.",
 
     .IvMesage_Catalog = {
         /*  0 */ { 3, 0x0000FFFF, SELF(ptrs_184), SELF(ptrs_191) },
@@ -9835,27 +9835,27 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .Msg_str = "Msg",
 
     .ptrs_245 = {
-        SELF(str_675),
-        SELF(str_674),
-        SELF(str_673),
+        SELF(PleaseWait_str_4),
+        SELF(BitteWarten_str_2),
+        SELF(VeuillezPatienter_str_2),
         SELF(field_178b4),
-        SELF(str_671),
-        SELF(str_670),
+        SELF(PleaseWait_str_3),
+        SELF(SilahkanTunggu_str_2),
     },
 
-    .str_670 = ALIGNED_STRING("SILAHKAN TUNGGU!"),
+    .SilahkanTunggu_str_2 = ALIGNED_STRING("SILAHKAN TUNGGU!"),
 
-    .str_671 = ALIGNED_STRING("PLEASE WAIT!"),
+    .PleaseWait_str_3 = ALIGNED_STRING("PLEASE WAIT!"),
 
     .field_178b4 = 0x50A1,
 
-    .str_672 = "OR FAVOR, ESPERE!",
+    .OrFavorEspere_str_2 = "OR FAVOR, ESPERE!",
 
-    .str_673 = "VEUILLEZ PATIENTER!",
+    .VeuillezPatienter_str_2 = "VEUILLEZ PATIENTER!",
 
-    .str_674 = "BITTE WARTEN!",
+    .BitteWarten_str_2 = "BITTE WARTEN!",
 
-    .str_675 = ALIGNED_STRING("PLEASE WAIT!"),
+    .PleaseWait_str_4 = ALIGNED_STRING("PLEASE WAIT!"),
 
     .ptrs_246 = {
         SELF(w43_name),
@@ -9878,63 +9878,63 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .w43_name = "English",
 
-    .str_676 = "MessageID : %3d",
+    .MessageID_str = "MessageID : %3d",
 
     .str_677 = ALIGNED_STRING("%s %02d!"),
 
-    .str_678 = ALIGNED_STRING("METRO  :"),
+    .Metro_str = ALIGNED_STRING("METRO  :"),
 
-    .str_679 = ALIGNED_STRING("CONTROL:"),
+    .Control_str_2 = ALIGNED_STRING("CONTROL:"),
 
-    .str_680 = ALIGNED_STRING("MSP    :"),
+    .Msp_str_2 = ALIGNED_STRING("MSP    :"),
 
-    .str_681 = ALIGNED_STRING("MSP    :"),
+    .Msp_str_3 = ALIGNED_STRING("MSP    :"),
 
-    .str_682 = ALIGNED_STRING("R.BASS :"),
+    .RBass_str_2 = ALIGNED_STRING("R.BASS :"),
 
-    .str_683 = ALIGNED_STRING("CHORD  :"),
+    .Chord_str_2 = ALIGNED_STRING("CHORD  :"),
 
-    .str_684 = ALIGNED_STRING("DRUM   :"),
+    .Drum_str = ALIGNED_STRING("DRUM   :"),
 
-    .str_685 = ALIGNED_STRING("BASS   :"),
+    .Bass_str_2 = ALIGNED_STRING("BASS   :"),
 
-    .str_686 = ALIGNED_STRING("ACCOMP3:"),
+    .Accomp3_str_2 = ALIGNED_STRING("ACCOMP3:"),
 
-    .str_687 = ALIGNED_STRING("ACCOMP2:"),
+    .Accomp2_str_2 = ALIGNED_STRING("ACCOMP2:"),
 
-    .str_688 = ALIGNED_STRING("ACCOMP1:"),
+    .Accomp1_str_2 = ALIGNED_STRING("ACCOMP1:"),
 
-    .str_689 = ALIGNED_STRING("PART 16:"),
+    .Part_str_14 = ALIGNED_STRING("PART 16:"),
 
-    .str_690 = ALIGNED_STRING("PART 15:"),
+    .Part_str_15 = ALIGNED_STRING("PART 15:"),
 
-    .str_691 = ALIGNED_STRING("PART 14:"),
+    .Part_str_16 = ALIGNED_STRING("PART 14:"),
 
-    .str_692 = ALIGNED_STRING("PART 13:"),
+    .Part_str_17 = ALIGNED_STRING("PART 13:"),
 
-    .str_693 = ALIGNED_STRING("PART 12:"),
+    .Part_str_18 = ALIGNED_STRING("PART 12:"),
 
-    .str_694 = ALIGNED_STRING("PART 11:"),
+    .Part_str_19 = ALIGNED_STRING("PART 11:"),
 
-    .str_695 = ALIGNED_STRING("PART 10:"),
+    .Part_str_20 = ALIGNED_STRING("PART 10:"),
 
-    .str_696 = ALIGNED_STRING("PART 9 :"),
+    .Part_str_21 = ALIGNED_STRING("PART 9 :"),
 
-    .str_697 = ALIGNED_STRING("PART 8 :"),
+    .Part_str_22 = ALIGNED_STRING("PART 8 :"),
 
-    .str_698 = ALIGNED_STRING("PART 7 :"),
+    .Part_str_23 = ALIGNED_STRING("PART 7 :"),
 
-    .str_699 = ALIGNED_STRING("PART 6 :"),
+    .Part_str_24 = ALIGNED_STRING("PART 6 :"),
 
-    .str_700 = ALIGNED_STRING("PART 5 :"),
+    .Part_str_25 = ALIGNED_STRING("PART 5 :"),
 
-    .str_701 = ALIGNED_STRING("PART 4 :"),
+    .Part_str_26 = ALIGNED_STRING("PART 4 :"),
 
-    .str_702 = ALIGNED_STRING("LEFT   :"),
+    .Left_str_2 = ALIGNED_STRING("LEFT   :"),
 
-    .str_703 = ALIGNED_STRING("RIGHT 2:"),
+    .Right_str_3 = ALIGNED_STRING("RIGHT 2:"),
 
-    .str_704 = ALIGNED_STRING("RIGHT 1:"),
+    .Right_str_4 = ALIGNED_STRING("RIGHT 1:"),
 
     .w44_code = ALIGNED_STRING("Acdn"),
 
@@ -10031,58 +10031,58 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .TeC1_str = ALIGNED_STRING("TeC1"),
 
     .ptrs_247 = {
-        SELF(str_723),
-        SELF(str_722),
-        SELF(str_721),
-        SELF(str_720),
-        SELF(str_719),
-        SELF(str_718),
-        SELF(str_717),
-        SELF(str_716),
-        SELF(str_715),
-        SELF(str_714),
-        SELF(str_713),
-        SELF(str_712),
-        SELF(str_711),
-        SELF(str_710),
-        SELF(str_709),
-        SELF(str_708),
+        SELF(Right_str_6),
+        SELF(Right_str_5),
+        SELF(Left_str_3),
+        SELF(Part_str_39),
+        SELF(Part_str_38),
+        SELF(Part_str_37),
+        SELF(Part_str_36),
+        SELF(Part_str_35),
+        SELF(Part_str_34),
+        SELF(Part_str_33),
+        SELF(Part_str_32),
+        SELF(Part_str_31),
+        SELF(Part_str_30),
+        SELF(Part_str_29),
+        SELF(Part_str_28),
+        SELF(Part_str_27),
         SELF(CONDUCTOR_str),
     },
 
     .CONDUCTOR_str = "CONDUCTOR",
 
-    .str_708 = " PART 16 ",
+    .Part_str_27 = " PART 16 ",
 
-    .str_709 = " PART 15 ",
+    .Part_str_28 = " PART 15 ",
 
-    .str_710 = " PART 14 ",
+    .Part_str_29 = " PART 14 ",
 
-    .str_711 = " PART 13 ",
+    .Part_str_30 = " PART 13 ",
 
-    .str_712 = " PART 12 ",
+    .Part_str_31 = " PART 12 ",
 
-    .str_713 = " PART 11 ",
+    .Part_str_32 = " PART 11 ",
 
-    .str_714 = " PART 10 ",
+    .Part_str_33 = " PART 10 ",
 
-    .str_715 = " PART 9  ",
+    .Part_str_34 = " PART 9  ",
 
-    .str_716 = " PART 8  ",
+    .Part_str_35 = " PART 8  ",
 
-    .str_717 = " PART 7  ",
+    .Part_str_36 = " PART 7  ",
 
-    .str_718 = " PART 6  ",
+    .Part_str_37 = " PART 6  ",
 
-    .str_719 = " PART 5  ",
+    .Part_str_38 = " PART 5  ",
 
-    .str_720 = " PART 4  ",
+    .Part_str_39 = " PART 4  ",
 
-    .str_721 = "  LEFT   ",
+    .Left_str_3 = "  LEFT   ",
 
-    .str_722 = " RIGHT 2 ",
+    .Right_str_5 = " RIGHT 2 ",
 
-    .str_723 = " RIGHT 1 ",
+    .Right_str_6 = " RIGHT 1 ",
 
     .CONDUCTOR_str_2 = "CONDUCTOR",
 
@@ -10255,60 +10255,60 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .field_17c86 = NAKA_NONE,
 
     .ptrs_248 = {
-        SELF(str_747),
-        SELF(str_746),
-        SELF(str_745),
-        SELF(str_744),
-        SELF(str_743),
+        SELF(Off_str_2),
+        SELF(Random_str),
+        SELF(Piano_str),
+        SELF(Orchestra_str),
+        SELF(Pythagorean_str),
         SELF(WERCKMEISTER_str),
-        SELF(str_741),
-        SELF(str_740),
-        SELF(str_739),
-        SELF(str_738),
-        SELF(str_737),
-        SELF(str_736),
-        SELF(str_735),
-        SELF(str_734),
-        SELF(str_733),
-        SELF(str_732),
-        SELF(str_731),
+        SELF(Kirnberger_str),
+        SELF(Arabic_str_5),
+        SELF(Arabic_str_4),
+        SELF(Arabic_str_3),
+        SELF(Arabic_str_2),
+        SELF(Arabic_str),
+        SELF(Slendro_str),
+        SELF(Pelog_str),
+        SELF(User_str_2),
+        SELF(User_str),
+        SELF(NoType_str),
     },
 
-    .str_731 = ALIGNED_STRING(" NO TYPE !! "),
+    .NoType_str = ALIGNED_STRING(" NO TYPE !! "),
 
-    .str_732 = ALIGNED_STRING("    USER    "),
+    .User_str = ALIGNED_STRING("    USER    "),
 
-    .str_733 = ALIGNED_STRING("    USER    "),
+    .User_str_2 = ALIGNED_STRING("    USER    "),
 
-    .str_734 = ALIGNED_STRING("   PELOG    "),
+    .Pelog_str = ALIGNED_STRING("   PELOG    "),
 
-    .str_735 = ALIGNED_STRING("  SLENDRO   "),
+    .Slendro_str = ALIGNED_STRING("  SLENDRO   "),
 
-    .str_736 = ALIGNED_STRING("  ARABIC 5  "),
+    .Arabic_str = ALIGNED_STRING("  ARABIC 5  "),
 
-    .str_737 = ALIGNED_STRING("  ARABIC 4  "),
+    .Arabic_str_2 = ALIGNED_STRING("  ARABIC 4  "),
 
-    .str_738 = ALIGNED_STRING("  ARABIC 3  "),
+    .Arabic_str_3 = ALIGNED_STRING("  ARABIC 3  "),
 
-    .str_739 = ALIGNED_STRING("  ARABIC 2  "),
+    .Arabic_str_4 = ALIGNED_STRING("  ARABIC 2  "),
 
-    .str_740 = ALIGNED_STRING("  ARABIC 1  "),
+    .Arabic_str_5 = ALIGNED_STRING("  ARABIC 1  "),
 
-    .str_741 = ALIGNED_STRING(" KIRNBERGER "),
+    .Kirnberger_str = ALIGNED_STRING(" KIRNBERGER "),
 
     .WERCKMEISTER_str = ALIGNED_STRING("WERCKMEISTER"),
 
-    .str_743 = ALIGNED_STRING("PYTHAGOREAN "),
+    .Pythagorean_str = ALIGNED_STRING("PYTHAGOREAN "),
 
-    .str_744 = ALIGNED_STRING(" ORCHESTRA  "),
+    .Orchestra_str = ALIGNED_STRING(" ORCHESTRA  "),
 
-    .str_745 = ALIGNED_STRING("   PIANO    "),
+    .Piano_str = ALIGNED_STRING("   PIANO    "),
 
-    .str_746 = ALIGNED_STRING("   RANDOM   "),
+    .Random_str = ALIGNED_STRING("   RANDOM   "),
 
-    .str_747 = ALIGNED_STRING("    OFF     "),
+    .Off_str_2 = ALIGNED_STRING("    OFF     "),
 
-    .str_748 = ALIGNED_STRING(" NO TYPE !! "),
+    .NoType_str_2 = ALIGNED_STRING(" NO TYPE !! "),
 
     .ptrs_249 = {
         SELF(str_760),
@@ -10350,43 +10350,43 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .str_760 = "  0",
 
     .ptrs_250 = {
-        SELF(str_772),
-        SELF(str_771),
-        SELF(str_770),
-        SELF(str_769),
-        SELF(str_768),
-        SELF(str_767),
-        SELF(str_766),
-        SELF(str_765),
-        SELF(str_764),
-        SELF(str_763),
-        SELF(str_762),
-        SELF(str_761),
+        SELF(KeyC_str_2),
+        SELF(KeyC_str),
+        SELF(KeyD_str_2),
+        SELF(KeyD_str),
+        SELF(KeyE_str),
+        SELF(KeyF_str_2),
+        SELF(KeyF_str),
+        SELF(KeyG_str_2),
+        SELF(KeyG_str),
+        SELF(KeyA_str_2),
+        SELF(KeyA_str),
+        SELF(KeyB_str),
     },
 
-    .str_761 = ALIGNED_STRING("[KEY=B ]"),
+    .KeyB_str = ALIGNED_STRING("[KEY=B ]"),
 
-    .str_762 = ALIGNED_STRING("[KEY=A#]"),
+    .KeyA_str = ALIGNED_STRING("[KEY=A#]"),
 
-    .str_763 = ALIGNED_STRING("[KEY=A ]"),
+    .KeyA_str_2 = ALIGNED_STRING("[KEY=A ]"),
 
-    .str_764 = ALIGNED_STRING("[KEY=G#]"),
+    .KeyG_str = ALIGNED_STRING("[KEY=G#]"),
 
-    .str_765 = ALIGNED_STRING("[KEY=G ]"),
+    .KeyG_str_2 = ALIGNED_STRING("[KEY=G ]"),
 
-    .str_766 = ALIGNED_STRING("[KEY=F#]"),
+    .KeyF_str = ALIGNED_STRING("[KEY=F#]"),
 
-    .str_767 = ALIGNED_STRING("[KEY=F ]"),
+    .KeyF_str_2 = ALIGNED_STRING("[KEY=F ]"),
 
-    .str_768 = ALIGNED_STRING("[KEY=E ]"),
+    .KeyE_str = ALIGNED_STRING("[KEY=E ]"),
 
-    .str_769 = ALIGNED_STRING("[KEY=D#]"),
+    .KeyD_str = ALIGNED_STRING("[KEY=D#]"),
 
-    .str_770 = ALIGNED_STRING("[KEY=D ]"),
+    .KeyD_str_2 = ALIGNED_STRING("[KEY=D ]"),
 
-    .str_771 = ALIGNED_STRING("[KEY=C#]"),
+    .KeyC_str = ALIGNED_STRING("[KEY=C#]"),
 
-    .str_772 = ALIGNED_STRING("[KEY=C ]"),
+    .KeyC_str_2 = ALIGNED_STRING("[KEY=C ]"),
 
     .ptr_17ed0 = SELF(TOTAL_str),
 
@@ -10410,7 +10410,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .w45_name = ALIGNED_STRING("Soft"),
 
-    .str_780 = ALIGNED_STRING("Ver%2X"),
+    .VerX_str = ALIGNED_STRING("Ver%2X"),
 
     .MPv_str = "MPv",
 
@@ -11017,7 +11017,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2002 = { 0 },
 
-    .ptr_1924a = SELF(str_1145),
+    .ptr_1924a = SELF(DspEff_str),
 
     .field_1924e = 0x0003,
 
@@ -11027,7 +11027,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2003 = { 0 },
 
-    .ptr_19256 = SELF(str_1144),
+    .ptr_19256 = SELF(DigitalEff_str),
 
     .field_1925a = 0x0009,
 
@@ -11037,7 +11037,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2004 = { 0 },
 
-    .ptr_19262 = SELF(str_1143),
+    .ptr_19262 = SELF(KeyShift_str),
 
     .str_1133 = " ",
 
@@ -11097,11 +11097,11 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_1142 = ALIGNED_STRING(""),
 
-    .str_1143 = "KEY SHIFT",
+    .KeyShift_str = "KEY SHIFT",
 
-    .str_1144 = "DIGITAL EFF",
+    .DigitalEff_str = "DIGITAL EFF",
 
-    .str_1145 = "DSP EFF",
+    .DspEff_str = "DSP EFF",
 
     .REVERB_str = ALIGNED_STRING("REVERB"),
 
@@ -11174,19 +11174,19 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .RHYTHM_str = ALIGNED_STRING("RHYTHM"),
 
-    .str_1154 = ALIGNED_STRING("CTRL  "),
+    .Ctrl_str = ALIGNED_STRING("CTRL  "),
 
-    .str_1155 = ALIGNED_STRING("APC   "),
+    .Apc_str_2 = ALIGNED_STRING("APC   "),
 
-    .str_1156 = ALIGNED_STRING("MIC   "),
+    .Mic_str_2 = ALIGNED_STRING("MIC   "),
 
-    .str_1157 = ALIGNED_STRING("METRO "),
+    .Metro_str_2 = ALIGNED_STRING("METRO "),
 
-    .str_1158 = ALIGNED_STRING("MSP   "),
+    .Msp_str_4 = ALIGNED_STRING("MSP   "),
 
-    .str_1159 = ALIGNED_STRING("DRUMS "),
+    .Drums_str_2 = ALIGNED_STRING("DRUMS "),
 
-    .str_1160 = ALIGNED_STRING("BASS  "),
+    .Bass_str_3 = ALIGNED_STRING("BASS  "),
 
     .ACOMP3_str = ALIGNED_STRING("ACOMP3"),
 
@@ -11194,9 +11194,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .ACOMP1_str = ALIGNED_STRING("ACOMP1"),
 
-    .str_1164 = ALIGNED_STRING("R.BASS"),
+    .RBass_str_3 = ALIGNED_STRING("R.BASS"),
 
-    .str_1165 = ALIGNED_STRING("CHORD "),
+    .Chord_str_3 = ALIGNED_STRING("CHORD "),
 
     .PART16_str = ALIGNED_STRING("PART16"),
 
@@ -11212,19 +11212,19 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .PART10_str = ALIGNED_STRING("PART10"),
 
-    .str_1173 = ALIGNED_STRING("PART 9"),
+    .Part_str_40 = ALIGNED_STRING("PART 9"),
 
-    .str_1174 = ALIGNED_STRING("PART 8"),
+    .Part_str_41 = ALIGNED_STRING("PART 8"),
 
-    .str_1175 = ALIGNED_STRING("PART 7"),
+    .Part_str_42 = ALIGNED_STRING("PART 7"),
 
-    .str_1176 = ALIGNED_STRING("PART 6"),
+    .Part_str_43 = ALIGNED_STRING("PART 6"),
 
-    .str_1177 = ALIGNED_STRING("PART 5"),
+    .Part_str_44 = ALIGNED_STRING("PART 5"),
 
-    .str_1178 = ALIGNED_STRING("PART 4"),
+    .Part_str_45 = ALIGNED_STRING("PART 4"),
 
-    .str_1179 = ALIGNED_STRING("LEFT  "),
+    .Left_str_4 = ALIGNED_STRING("LEFT  "),
 
     .RIGHT2_str = ALIGNED_STRING("RIGHT2"),
 
@@ -11232,17 +11232,17 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_1182 = ALIGNED_STRING("    "),
 
-    .str_1183 = ALIGNED_STRING("RHY "),
+    .Rhy_str = ALIGNED_STRING("RHY "),
 
     .CTRL_str = ALIGNED_STRING("CTRL"),
 
-    .str_1185 = ALIGNED_STRING("APC "),
+    .Apc_str_3 = ALIGNED_STRING("APC "),
 
-    .str_1186 = ALIGNED_STRING("MIC "),
+    .Mic_str_3 = ALIGNED_STRING("MIC "),
 
     .METR_str = ALIGNED_STRING("METR"),
 
-    .str_1188 = ALIGNED_STRING("MSP "),
+    .Msp_str_5 = ALIGNED_STRING("MSP "),
 
     .DRUM_str = ALIGNED_STRING("DRUM"),
 
@@ -11254,7 +11254,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .ACP1_str = ALIGNED_STRING("ACP1"),
 
-    .str_1194 = ALIGNED_STRING("R.BA"),
+    .RBa_str = ALIGNED_STRING("R.BA"),
 
     .CHRD_str = ALIGNED_STRING("CHRD"),
 
@@ -11272,31 +11272,31 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .PT10_str = ALIGNED_STRING("PT10"),
 
-    .str_1203 = ALIGNED_STRING("PT 9"),
+    .Pt_str = ALIGNED_STRING("PT 9"),
 
-    .str_1204 = ALIGNED_STRING("PT 8"),
+    .Pt_str_2 = ALIGNED_STRING("PT 8"),
 
-    .str_1205 = ALIGNED_STRING("PT 7"),
+    .Pt_str_3 = ALIGNED_STRING("PT 7"),
 
-    .str_1206 = ALIGNED_STRING("PT 6"),
+    .Pt_str_4 = ALIGNED_STRING("PT 6"),
 
-    .str_1207 = ALIGNED_STRING("PT 5"),
+    .Pt_str_5 = ALIGNED_STRING("PT 5"),
 
-    .str_1208 = ALIGNED_STRING("PT 4"),
+    .Pt_str_6 = ALIGNED_STRING("PT 4"),
 
     .LEFT_str = ALIGNED_STRING("LEFT"),
 
-    .str_1210 = ALIGNED_STRING("RT 2"),
+    .Rt_str = ALIGNED_STRING("RT 2"),
 
-    .str_1211 = ALIGNED_STRING("RT 1"),
+    .Rt_str_2 = ALIGNED_STRING("RT 1"),
 
-    .str_1212 = ALIGNED_STRING("CHORD "),
+    .Chord_str_4 = ALIGNED_STRING("CHORD "),
 
-    .str_1213 = ALIGNED_STRING("R.BASS"),
+    .RBass_str_4 = ALIGNED_STRING("R.BASS"),
 
-    .str_1214 = ALIGNED_STRING("MSP   "),
+    .Msp_str_6 = ALIGNED_STRING("MSP   "),
 
-    .str_1215 = ALIGNED_STRING("BASS  "),
+    .Bass_str_4 = ALIGNED_STRING("BASS  "),
 
     .ACOMP1_str_2 = ALIGNED_STRING("ACOMP1"),
 
@@ -11304,39 +11304,39 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .ACOMP3_str_2 = ALIGNED_STRING("ACOMP3"),
 
-    .str_1219 = ALIGNED_STRING("DRUMS "),
+    .Drums_str_3 = ALIGNED_STRING("DRUMS "),
 
-    .str_1220 = ALIGNED_STRING(" TR16 "),
+    .Tr16_str = ALIGNED_STRING(" TR16 "),
 
-    .str_1221 = ALIGNED_STRING(" TR15 "),
+    .Tr15_str = ALIGNED_STRING(" TR15 "),
 
-    .str_1222 = ALIGNED_STRING(" TR14 "),
+    .Tr14_str = ALIGNED_STRING(" TR14 "),
 
-    .str_1223 = ALIGNED_STRING(" TR13 "),
+    .Tr13_str = ALIGNED_STRING(" TR13 "),
 
-    .str_1224 = ALIGNED_STRING(" TR12 "),
+    .Tr12_str = ALIGNED_STRING(" TR12 "),
 
-    .str_1225 = ALIGNED_STRING(" TR11 "),
+    .Tr11_str = ALIGNED_STRING(" TR11 "),
 
-    .str_1226 = ALIGNED_STRING(" TR10 "),
+    .Tr10_str = ALIGNED_STRING(" TR10 "),
 
-    .str_1227 = ALIGNED_STRING(" TR 9 "),
+    .Tr_str = ALIGNED_STRING(" TR 9 "),
 
-    .str_1228 = ALIGNED_STRING(" TR 8 "),
+    .Tr_str_2 = ALIGNED_STRING(" TR 8 "),
 
-    .str_1229 = ALIGNED_STRING(" TR 7 "),
+    .Tr_str_3 = ALIGNED_STRING(" TR 7 "),
 
-    .str_1230 = ALIGNED_STRING(" TR 6 "),
+    .Tr_str_4 = ALIGNED_STRING(" TR 6 "),
 
-    .str_1231 = ALIGNED_STRING(" TR 5 "),
+    .Tr_str_5 = ALIGNED_STRING(" TR 5 "),
 
-    .str_1232 = ALIGNED_STRING(" TR 4 "),
+    .Tr_str_6 = ALIGNED_STRING(" TR 4 "),
 
-    .str_1233 = ALIGNED_STRING(" TR 3 "),
+    .Tr_str_7 = ALIGNED_STRING(" TR 3 "),
 
-    .str_1234 = ALIGNED_STRING(" TR 2 "),
+    .Tr_str_8 = ALIGNED_STRING(" TR 2 "),
 
-    .str_1235 = ALIGNED_STRING(" TR 1 "),
+    .Tr_str_9 = ALIGNED_STRING(" TR 1 "),
 
     .str_1236 = ALIGNED_STRING(" -- "),
 
@@ -11368,27 +11368,27 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .TR10_str = ALIGNED_STRING("TR10"),
 
-    .str_1251 = ALIGNED_STRING("TR 9"),
+    .Tr_str_10 = ALIGNED_STRING("TR 9"),
 
-    .str_1252 = ALIGNED_STRING("TR 8"),
+    .Tr_str_11 = ALIGNED_STRING("TR 8"),
 
-    .str_1253 = ALIGNED_STRING("TR 7"),
+    .Tr_str_12 = ALIGNED_STRING("TR 7"),
 
-    .str_1254 = ALIGNED_STRING("TR 6"),
+    .Tr_str_13 = ALIGNED_STRING("TR 6"),
 
-    .str_1255 = ALIGNED_STRING("TR 5"),
+    .Tr_str_14 = ALIGNED_STRING("TR 5"),
 
-    .str_1256 = ALIGNED_STRING("TR 4"),
+    .Tr_str_15 = ALIGNED_STRING("TR 4"),
 
-    .str_1257 = ALIGNED_STRING("TR 3"),
+    .Tr_str_16 = ALIGNED_STRING("TR 3"),
 
-    .str_1258 = ALIGNED_STRING("TR 2"),
+    .Tr_str_17 = ALIGNED_STRING("TR 2"),
 
-    .str_1259 = ALIGNED_STRING("TR 1"),
+    .Tr_str_18 = ALIGNED_STRING("TR 1"),
 
-    .str_1260 = "%s SOUND : %s",
+    .Sound_str = "%s SOUND : %s",
 
-    .str_1261 = "RIGHT 1: Sound Name xxxxx",
+    .RightSoundNameXxxxx_str = "RIGHT 1: Sound Name xxxxx",
 
     .field_1965a = 0x0770,
 
@@ -11472,7 +11472,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2017 = { 0 },
 
-    .ptr_196be = SELF(str_1276),
+    .ptr_196be = SELF(DspEff_str_2),
 
     .field_196c2 = 0x0003,
 
@@ -11482,7 +11482,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2018 = { 0 },
 
-    .ptr_196ca = SELF(str_1275),
+    .ptr_196ca = SELF(DigitalEff_str_2),
 
     .field_196ce = 0x0009,
 
@@ -11492,7 +11492,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2019 = { 0 },
 
-    .ptr_196d6 = SELF(str_1274),
+    .ptr_196d6 = SELF(KeyShift_str_2),
 
     .str_1264 = " ",
 
@@ -11552,11 +11552,11 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_1273 = ALIGNED_STRING(""),
 
-    .str_1274 = "KEY SHIFT",
+    .KeyShift_str_2 = "KEY SHIFT",
 
-    .str_1275 = "DIGITAL EFF",
+    .DigitalEff_str_2 = "DIGITAL EFF",
 
-    .str_1276 = "DSP EFF",
+    .DspEff_str_2 = "DSP EFF",
 
     .REVERB_str_2 = ALIGNED_STRING("REVERB"),
 
@@ -11687,7 +11687,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2032 = { 0 },
 
-    .ptr_19802 = SELF(str_1297),
+    .ptr_19802 = SELF(DspEff_str_3),
 
     .field_19806 = 0x0003,
 
@@ -11697,7 +11697,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2033 = { 0 },
 
-    .ptr_1980e = SELF(str_1296),
+    .ptr_1980e = SELF(DigitalEff_str_3),
 
     .field_19812 = 0x0009,
 
@@ -11707,7 +11707,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2034 = { 0 },
 
-    .ptr_1981a = SELF(str_1295),
+    .ptr_1981a = SELF(KeyShift_str_3),
 
     .str_1285 = " ",
 
@@ -11767,11 +11767,11 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_1294 = ALIGNED_STRING(""),
 
-    .str_1295 = "KEY SHIFT",
+    .KeyShift_str_3 = "KEY SHIFT",
 
-    .str_1296 = "DIGITAL EFF",
+    .DigitalEff_str_3 = "DIGITAL EFF",
 
-    .str_1297 = "DSP EFF",
+    .DspEff_str_3 = "DSP EFF",
 
     .REVERB_str_3 = ALIGNED_STRING("REVERB"),
 
@@ -12103,25 +12103,25 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .field_19a78 = 0x0124,
 
     .ptrs_255 = {
-        SELF(str_1333),
+        SELF(ToStartingAnExternal_str_3),
         SELF(txt_Um_eine_externe_DEMO_zu_starten),
-        SELF(str_1331),
-        SELF(str_1330),
+        SELF(ToStartingAnExternal_str_2),
+        SELF(ToStartingAnExternal_str),
         SELF(Italian_str),
-        SELF(str_1328),
+        SELF(UntukMemulaiSuatuDemo_str),
     },
 
-    .str_1328 = ALIGNED_STRING("Untuk memulai suatu DEMO eksternal, masukkanlah disket fasilitas Demo.~0dMemanggil satu data demo eksternal akan menghapus seluruh data yang ada Data Sequencer."),
+    .UntukMemulaiSuatuDemo_str = ALIGNED_STRING("Untuk memulai suatu DEMO eksternal, masukkanlah disket fasilitas Demo.~0dMemanggil satu data demo eksternal akan menghapus seluruh data yang ada Data Sequencer."),
 
     .Italian_str = "Italian",
 
-    .str_1330 = "To Starting an external DEMO, please insert a feature demo disk.~0dLoading external demo data will erase any existing Sequencer data.",
+    .ToStartingAnExternal_str = "To Starting an external DEMO, please insert a feature demo disk.~0dLoading external demo data will erase any existing Sequencer data.",
 
-    .str_1331 = "To Starting an external DEMO, please insert a feature demo disk.~0dLoading external demo data will erase any existing Sequencer data.",
+    .ToStartingAnExternal_str_2 = "To Starting an external DEMO, please insert a feature demo disk.~0dLoading external demo data will erase any existing Sequencer data.",
 
     .txt_Um_eine_externe_DEMO_zu_starten = "Um eine externe DEMO zu starten, legen Sie bitte eine Feature-Demo-Disk in das Laufwerk ein.~0dDurch das Laden einer externen Demo werden alle Sequenzerdaten gel\366scht.\0",
 
-    .str_1333 = "To Starting an external DEMO, please insert a feature demo disk.~0dLoading external demo data will erase any existing Sequencer data.",
+    .ToStartingAnExternal_str_3 = "To Starting an external DEMO, please insert a feature demo disk.~0dLoading external demo data will erase any existing Sequencer data.",
 
     .field_19d76 = 0x0201,
 
@@ -12160,11 +12160,11 @@ const naka_technichord_strings_t naka_technichord_strings_data
         0x00F85A28,
         SELF(CENTER_str),
         0x00F85A36,
-        SELF(str_1345),
+        SELF(Center_str),
         0x00F85A61,
         SELF(FONT_str),
         0x00F85A96,
-        SELF(str_1343),
+        SELF(Font_str),
         0x00F85BCC,
         SELF(IMG_str),
         0x00F85C22,
@@ -12174,29 +12174,29 @@ const naka_technichord_strings_t naka_technichord_strings_data
         NAKA_ADDR(FDemoText_ByteData_LayoutEngine),
         SELF(ACT_str),
         0x00F858D5,
-        SELF(str_1338),
+        SELF(Act_str),
         0x00F85A1C,
         SELF(PRESENTATION_str),
         0x00000000,
-        SELF(str_1336),
+        SELF(Presentation_str),
         0x00000000,
         SELF(ACTION_str),
         0x00000000,
-        SELF(str_1334),
+        SELF(Action_str),
         0x00000000,
         0x00000000,
         0x00000000,
     },
 
-    .str_1334 = "/ACTION",
+    .Action_str = "/ACTION",
 
     .ACTION_str = ALIGNED_STRING("ACTION"),
 
-    .str_1336 = "/PRESENTATION",
+    .Presentation_str = "/PRESENTATION",
 
     .PRESENTATION_str = ALIGNED_STRING("PRESENTATION"),
 
-    .str_1338 = ALIGNED_STRING("/ACT"),
+    .Act_str = ALIGNED_STRING("/ACT"),
 
     .ACT_str = "ACT",
 
@@ -12206,11 +12206,11 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .IMG_str = "IMG",
 
-    .str_1343 = "/FONT",
+    .Font_str = "/FONT",
 
     .FONT_str = ALIGNED_STRING("FONT"),
 
-    .str_1345 = "/CENTER",
+    .Center_str = "/CENTER",
 
     .CENTER_str = ALIGNED_STRING("CENTER"),
 
@@ -12220,7 +12220,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_1349 = ALIGNED_STRING("%s%d"),
 
-    .str_1350 = ALIGNED_STRING("Error! (GetInstanceID)"),
+    .ErrorGetInstanceID_str = ALIGNED_STRING("Error! (GetInstanceID)"),
 
     .ptrs_257 = {
         SELF(SONG_str),
@@ -12372,25 +12372,25 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_1374 = ALIGNED_STRING(""),
 
-    .str_1375 = ALIGNED_STRING("<PRESENTATION>"),
+    .Presentation_str_2 = ALIGNED_STRING("<PRESENTATION>"),
 
-    .str_1376 = "</PRESENTATION>",
+    .Presentation_str_3 = "</PRESENTATION>",
 
     .pad_2070 = { 0 },
 
-    .str_1377 = ALIGNED_STRING(".PRE"),
+    .Pre_str = ALIGNED_STRING(".PRE"),
 
     .rt_str = ALIGNED_STRING("rt"),
 
-    .str_1379 = ALIGNED_STRING("<ACTION>"),
+    .Action_str_2 = ALIGNED_STRING("<ACTION>"),
 
-    .str_1380 = "</ACTION>",
+    .Action_str_3 = "</ACTION>",
 
-    .str_1381 = ALIGNED_STRING(".ACT"),
+    .Act_str_2 = ALIGNED_STRING(".ACT"),
 
     .rt_str_2 = ALIGNED_STRING("rt"),
 
-    .str_1383 = ALIGNED_STRING(".SQT"),
+    .Sqt_str = ALIGNED_STRING(".SQT"),
 
     .rb_str = ALIGNED_STRING("rb"),
 
@@ -12430,7 +12430,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_1a14e = 0x0010,
 
-    .str_1391 = ALIGNED_STRING("FEATURE "),
+    .Feature_str = ALIGNED_STRING("FEATURE "),
 
     .rb_str_2 = ALIGNED_STRING("rb"),
 
@@ -12546,7 +12546,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_1a1d4 = 0x0003,
 
-    .ptr_1a1d6 = SELF(str_1400),
+    .ptr_1a1d6 = SELF(Kn5000SoundRam_str),
 
     .pad_2074 = { 0 },
 
@@ -12580,7 +12580,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .K_str_2 = "K",
 
-    .str_1400 = ALIGNED_STRING("KN5000 SOUND RAM"),
+    .Kn5000SoundRam_str = ALIGNED_STRING("KN5000 SOUND RAM"),
 
     .H_str_3 = "H",
 
@@ -12738,27 +12738,27 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .rb_str_25 = ALIGNED_STRING("rb"),
 
-    .str_1444 = "A:\\",
+    .A_str_3 = "A:\\",
 
     .pad_2080 = { 0 },
 
-    .str_1445 = "A:\\",
+    .A_str_4 = "A:\\",
 
     .pad_2081 = { 0 },
 
-    .str_1446 = "A:\\",
+    .A_str_5 = "A:\\",
 
     .pad_2082 = { 0 },
 
-    .str_1447 = "A:\\",
+    .A_str_6 = "A:\\",
 
     .pad_2083 = { 0 },
 
-    .str_1448 = "A:\\",
+    .A_str_7 = "A:\\",
 
     .pad_2084 = { 0 },
 
-    .str_1449 = "A:\\",
+    .A_str_8 = "A:\\",
 
     .pad_2085 = { 0 },
 
@@ -12771,10 +12771,10 @@ const naka_technichord_strings_t naka_technichord_strings_data
         SELF(PMT_str),
         SELF(SQT_str),
         SELF(CMP_str),
-        SELF(str_1457),
+        SELF(Tm_str),
         SELF(MSP_str),
         SELF(RCM_str),
-        SELF(str_1454),
+        SELF(Md_str),
         SELF(SQF_str),
         SELF(SEQ_str),
     },
@@ -12783,13 +12783,13 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .SQF_str = "SQF",
 
-    .str_1454 = "MD ",
+    .Md_str = "MD ",
 
     .RCM_str = "RCM",
 
     .MSP_str = "MSP",
 
-    .str_1457 = "TM ",
+    .Tm_str = "TM ",
 
     .CMP_str = "CMP",
 
@@ -12815,7 +12815,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_1a503 = 0x5FFF,
 
-    .str_1463 = "_______.MID",
+    .Mid_str = "_______.MID",
 
     .field_1a511 = 0x2EFF,
 
@@ -12829,7 +12829,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_1466 = ALIGNED_STRING(".*"),
 
-    .str_1467 = "*.MID",
+    .Mid_str_2 = "*.MID",
 
     .pad_2089 = { 0 },
 
@@ -12859,35 +12859,35 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .rb_str_35 = ALIGNED_STRING("rb"),
 
-    .str_1481 = "MUSIC.DIR",
+    .MusicDir_str = "MUSIC.DIR",
 
     .rb_str_36 = ALIGNED_STRING("rb"),
 
-    .str_1483 = ALIGNED_STRING("PIANODIR.FIL"),
+    .PianodirFil_str = ALIGNED_STRING("PIANODIR.FIL"),
 
     .rb_str_37 = ALIGNED_STRING("rb"),
 
-    .str_1485 = "MUSIC.DIR",
+    .MusicDir_str_2 = "MUSIC.DIR",
 
     .rb_str_38 = ALIGNED_STRING("rb"),
 
-    .str_1487 = ALIGNED_STRING("PIANODIR.FIL"),
+    .PianodirFil_str_2 = ALIGNED_STRING("PIANODIR.FIL"),
 
     .rb_str_39 = ALIGNED_STRING("rb"),
 
-    .str_1489 = ALIGNED_STRING("NAME.MDA"),
+    .NameMda_str = ALIGNED_STRING("NAME.MDA"),
 
     .rb_str_40 = ALIGNED_STRING("rb"),
 
-    .str_1491 = ALIGNED_STRING("PIANODIR.FIL"),
+    .PianodirFil_str_3 = ALIGNED_STRING("PIANODIR.FIL"),
 
     .str_1492 = "***",
 
     .str_1493 = "***",
 
-    .str_1494 = "A:\\",
+    .A_str_9 = "A:\\",
 
-    .str_1495 = "*.BMP",
+    .Bmp_str = "*.BMP",
 
     .field_1a604 = 0x6060,
 
@@ -12898,10 +12898,10 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .ptrs_262 = {
         SELF(str_1503),
         SELF(str_1502),
-        SELF(str_1501),
-        SELF(str_1500),
-        SELF(str_1499),
-        SELF(str_1498),
+        SELF(Dd_str_2),
+        SELF(Hd_str),
+        SELF(Dd_str),
+        SELF(Pd_str),
         SELF(DOC_str_2),
         SELF(DOC_str),
     },
@@ -12910,13 +12910,13 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .DOC_str_2 = "DOC",
 
-    .str_1498 = "PD ",
+    .Pd_str = "PD ",
 
-    .str_1499 = "2DD",
+    .Dd_str = "2DD",
 
-    .str_1500 = "2HD",
+    .Hd_str = "2HD",
 
-    .str_1501 = "2DD",
+    .Dd_str_2 = "2DD",
 
     .str_1502 = "---",
 
@@ -12936,19 +12936,19 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_1a66c = 0x5300,
 
-    .str_1505 = "OUND MEMORY",
+    .OundMemory_str = "OUND MEMORY",
 
     .field_1a67a = 0x2000,
 
-    .str_1506 = " COMPOSER  ",
+    .Composer_str = " COMPOSER  ",
 
     .field_1a688 = 0x2000,
 
-    .str_1507 = "SEQUENCER  ",
+    .Sequencer_str = "SEQUENCER  ",
 
     .field_1a696 = 0x5000,
 
-    .str_1508 = "ANEL MEMORY",
+    .AnelMemory_str = "ANEL MEMORY",
 
     .ptrs_264 = {
         SELF(field_1a6d0),
@@ -12992,7 +12992,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_1a6f4 = 0x4D00,
 
-    .str_1515 = ALIGNED_STRING("EMORY "),
+    .Emory_str = ALIGNED_STRING("EMORY "),
 
     .field_1a6fe = 0x5000,
 
@@ -13000,11 +13000,11 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_1a708 = 0x2000,
 
-    .str_1517 = ALIGNED_STRING("SONG  "),
+    .Song_str = ALIGNED_STRING("SONG  "),
 
     .field_1a712 = 0x4D00,
 
-    .str_1518 = ALIGNED_STRING("EMORY "),
+    .Emory_str_2 = ALIGNED_STRING("EMORY "),
 
     .pad_2090 = { 0 },
 
@@ -13067,51 +13067,51 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_1a760 = 0x00FF,
 
-    .str_1520 = ALIGNED_STRING("FEATURE .PRE"),
+    .FeaturePre_str = ALIGNED_STRING("FEATURE .PRE"),
 
     ._______str = ALIGNED_STRING("______"),
 
     ._________str = ALIGNED_STRING("________"),
 
-    .str_1523 = ALIGNED_STRING(".MID"),
+    .Mid_str_3 = ALIGNED_STRING(".MID"),
 
     .str_1524 = " : ",
 
-    .str_1525 = "KB free (",
+    .KbFree_str = "KB free (",
 
-    .str_1526 = "% used)",
+    .Used_str = "% used)",
 
     .str_1527 = ALIGNED_STRING(""),
 
     .str_1528 = "-----",
 
-    .str_1529 = " YES ",
+    .Yes_str = " YES ",
 
-    .str_1530 = ALIGNED_STRING(" NO "),
+    .No_str = ALIGNED_STRING(" NO "),
 
     .str_1531 = "-----",
 
-    .str_1532 = " YES ",
+    .Yes_str_2 = " YES ",
 
-    .str_1533 = ALIGNED_STRING(" NO "),
+    .No_str_2 = ALIGNED_STRING(" NO "),
 
-    .str_1534 = " YES ",
+    .Yes_str_3 = " YES ",
 
-    .str_1535 = ALIGNED_STRING(" NO "),
+    .No_str_3 = ALIGNED_STRING(" NO "),
 
     .str_1536 = "-----",
 
-    .str_1537 = "1BANK",
+    .Bank_str = "1BANK",
 
-    .str_1538 = " YES ",
+    .Yes_str_4 = " YES ",
 
-    .str_1539 = " NO  ",
+    .No_str_4 = " NO  ",
 
-    .str_1540 = ALIGNED_STRING(".MID"),
+    .Mid_str_4 = ALIGNED_STRING(".MID"),
 
-    .str_1541 = ALIGNED_STRING("TO SONG : "),
+    .ToSong_str = ALIGNED_STRING("TO SONG : "),
 
-    .str_1542 = ALIGNED_STRING("FROM SONG:"),
+    .FromSong_str = ALIGNED_STRING("FROM SONG:"),
 
     .ptrs_267 = {
         SELF(field_1a832),
@@ -13121,17 +13121,17 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_1a812 = 0x2000,
 
-    .str_1543 = ALIGNED_STRING(" GM ~8d TECH"),
+    .GmTech_str = ALIGNED_STRING(" GM ~8d TECH"),
 
     .field_1a822 = 0x5400,
 
-    .str_1544 = ALIGNED_STRING("ECH ~8d TECH"),
+    .EchTech_str = ALIGNED_STRING("ECH ~8d TECH"),
 
     .field_1a832 = 0x2000,
 
-    .str_1545 = ALIGNED_STRING(" GM ~8d GM  "),
+    .GmGm_str = ALIGNED_STRING(" GM ~8d GM  "),
 
-    .str_1546 = ALIGNED_STRING("________.MID"),
+    .Mid_str_5 = ALIGNED_STRING("________.MID"),
 
     .field_1a850 = 0x07B5,
 
@@ -13150,22 +13150,22 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .field_1a85e = 0x0403,
 
     .ptrs_268 = {
-        SELF(str_1549),
-        SELF(str_1548),
-        SELF(str_1547),
+        SELF(MemoryA_str),
+        SELF(MemoryB_str),
+        SELF(MemoryC_str),
     },
 
-    .str_1547 = "   MEMORY-C    ",
+    .MemoryC_str = "   MEMORY-C    ",
 
-    .str_1548 = "   MEMORY-B    ",
+    .MemoryB_str = "   MEMORY-B    ",
 
-    .str_1549 = "   MEMORY-A    ",
+    .MemoryA_str = "   MEMORY-A    ",
 
     .ptrs_269 = {
-        SELF(str_1559),
-        SELF(str_1558),
-        SELF(str_1557),
-        SELF(str_1556),
+        SELF(Vari_str_4),
+        SELF(Vari_str_3),
+        SELF(Vari_str_2),
+        SELF(Vari_str),
         SELF(str_1555),
         SELF(str_1554),
         SELF(str_1553),
@@ -13186,38 +13186,38 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_1555 = ALIGNED_STRING(""),
 
-    .str_1556 = ALIGNED_STRING("VARI 4"),
+    .Vari_str = ALIGNED_STRING("VARI 4"),
 
-    .str_1557 = ALIGNED_STRING("VARI 3"),
+    .Vari_str_2 = ALIGNED_STRING("VARI 3"),
 
-    .str_1558 = ALIGNED_STRING("VARI 2"),
+    .Vari_str_3 = ALIGNED_STRING("VARI 2"),
 
-    .str_1559 = ALIGNED_STRING("VARI 1"),
+    .Vari_str_4 = ALIGNED_STRING("VARI 1"),
 
     .ptrs_270 = {
         SELF(str_1569),
         SELF(str_1568),
         SELF(str_1567),
         SELF(str_1566),
-        SELF(str_1565),
-        SELF(str_1564),
-        SELF(str_1563),
-        SELF(str_1562),
-        SELF(str_1561),
-        SELF(str_1560),
+        SELF(Intro_str_2),
+        SELF(Intro_str),
+        SELF(FillIn_str_2),
+        SELF(FillIn_str),
+        SELF(Ending_str_2),
+        SELF(Ending_str),
     },
 
-    .str_1560 = ALIGNED_STRING("   ENDING 2     "),
+    .Ending_str = ALIGNED_STRING("   ENDING 2     "),
 
-    .str_1561 = ALIGNED_STRING("   ENDING 1     "),
+    .Ending_str_2 = ALIGNED_STRING("   ENDING 1     "),
 
-    .str_1562 = ALIGNED_STRING("   FILL IN 2    "),
+    .FillIn_str = ALIGNED_STRING("   FILL IN 2    "),
 
-    .str_1563 = ALIGNED_STRING("   FILL IN 1    "),
+    .FillIn_str_2 = ALIGNED_STRING("   FILL IN 1    "),
 
-    .str_1564 = ALIGNED_STRING("    INTRO 2     "),
+    .Intro_str = ALIGNED_STRING("    INTRO 2     "),
 
-    .str_1565 = ALIGNED_STRING("    INTRO 1     "),
+    .Intro_str_2 = ALIGNED_STRING("    INTRO 1     "),
 
     .str_1566 = ALIGNED_STRING(""),
 
@@ -13228,9 +13228,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
     .str_1569 = ALIGNED_STRING(""),
 
     .ptrs_271 = {
-        SELF(str_1572),
-        SELF(str_1571),
-        SELF(str_1570),
+        SELF(MemoryA_str_2),
+        SELF(MemoryB_str_2),
+        SELF(UserKit_str),
         0x00000000,
         0x00000000,
         0x00000000,
@@ -13240,17 +13240,17 @@ const naka_technichord_strings_t naka_technichord_strings_data
         0x00000000,
     },
 
-    .str_1570 = ALIGNED_STRING("    USER KIT    "),
+    .UserKit_str = ALIGNED_STRING("    USER KIT    "),
 
-    .str_1571 = ALIGNED_STRING("    MEMORY B    "),
+    .MemoryB_str_2 = ALIGNED_STRING("    MEMORY B    "),
 
-    .str_1572 = ALIGNED_STRING("    MEMORY A    "),
+    .MemoryA_str_2 = ALIGNED_STRING("    MEMORY A    "),
 
     .str_1573 = ALIGNED_STRING(": "),
 
     .str_1574 = ALIGNED_STRING(": "),
 
-    .str_1575 = ALIGNED_STRING("      ALL       "),
+    .All_str = ALIGNED_STRING("      ALL       "),
 
     .field_1aa04 = 0xFF08,
 
@@ -13264,7 +13264,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_1578 = ALIGNED_STRING(": "),
 
-    .str_1579 = ALIGNED_STRING("      ALL       "),
+    .All_str_2 = ALIGNED_STRING("      ALL       "),
 
     .field_1aa26 = 0xFF0A,
 
@@ -13274,7 +13274,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_1581 = ALIGNED_STRING(": "),
 
-    .str_1582 = ALIGNED_STRING("      ALL       "),
+    .All_str_3 = ALIGNED_STRING("      ALL       "),
 
     .field_1aa44 = 0xFF14,
 
@@ -13292,7 +13292,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_1584 = ALIGNED_STRING(": "),
 
-    .str_1585 = ALIGNED_STRING("      ALL       "),
+    .All_str_4 = ALIGNED_STRING("      ALL       "),
 
     .str_1586 = ALIGNED_STRING(": "),
 
@@ -13308,7 +13308,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_1589 = ALIGNED_STRING(": "),
 
-    .str_1590 = ALIGNED_STRING("      ALL       "),
+    .All_str_5 = ALIGNED_STRING("      ALL       "),
 
     .field_1aa9e = 0xFF0A,
 
@@ -13318,7 +13318,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .str_1592 = ALIGNED_STRING(": "),
 
-    .str_1593 = ALIGNED_STRING("      ALL       "),
+    .All_str_6 = ALIGNED_STRING("      ALL       "),
 
     .str_1594 = ALIGNED_STRING(": "),
 

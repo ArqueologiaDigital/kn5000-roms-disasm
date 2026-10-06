@@ -1329,7 +1329,7 @@ typedef struct __attribute__((packed)) {
     /* element 3 of Viewable slot 0x81 "CycPlySw": AcFuncToggle (class id 0x01600044) */
     naka_cls_AcFuncToggle_t CycPlySw;
     uint8_t field_0d52;
-    char str_60[9];
+    char YcleOff_str[9];
     char CycPlySw_stron[10];
     /* element 4 of Viewable slot 0x81: Box (class id 0x01600031) */
     naka_cls_Box_t v81_e4;
@@ -1465,10 +1465,10 @@ typedef struct __attribute__((packed)) {
     char w87_text[16];
     /* element 7 of Viewable slot 0x84: AcModeMenu (class id 0x01600040) */
     naka_cls_AcModeMenu_t v84_e7;
-    char str_131[16];
+    char RealtimeRecord_str[16];
     /* element 8 of Viewable slot 0x84: AcModeMenu (class id 0x01600040) */
     naka_cls_AcModeMenu_t v84_e8;
-    char str_133[12];
+    char StepRecord_str[12];
     /* element 9 of Viewable slot 0x84: AcTitleMenu (class id 0x0160001D) */
     naka_cls_AcTitleMenu_t v84_e9;
     char w90_text[14];
@@ -2478,10 +2478,10 @@ typedef struct __attribute__((packed)) {
     /* element 2 of Viewable slot 0xD6: Label (class id 0x0160002B) */
     naka_cls_Label_t vD6_e2;
     char w335_text[14];
-    char str_557[22];
-    char str_558[20];
+    char VocalistWorkstation_str[22];
+    char FadeInOutSetting_str[20];
     char MIXER_str[6];
-    char str_560[10];
+    char DiskLoad_str[10];
     /* element 7 of Viewable slot 0xD6: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t vD6_e7;
     /* element 8 of Viewable slot 0xD6: AcIndexWideES (class id 0x01600022) */
@@ -3460,7 +3460,7 @@ typedef struct __attribute__((packed)) {
     char MainExeCall_str[12];
     char ApEditSyori_str[12];
     uint8_t pad_720[8];  /* zero padding */
-    char str_1412[1154];
+    char A0BcA0Bc_str[1154];
     char str_1413[2];
     char str_1414[2];
     char E_str[2];
@@ -4938,7 +4938,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .field_0d52 = 0x43,
 
-    .str_60 = ALIGNED_STRING("YCLE:OFF"),
+    .YcleOff_str = ALIGNED_STRING("YCLE:OFF"),
 
     .CycPlySw_stron = ALIGNED_STRING("CYCLE:ON"),
 
@@ -5894,12 +5894,12 @@ const naka_effects_seq_t naka_effects_seq_data
         .align = 0x0000,
         .editsw = 0x0088,
         .selected = 0x0003DF8A,
-        .str = SELF(str_131),
+        .str = SELF(RealtimeRecord_str),
         .mode = 0x0180000B,
         .icon = 0x00000034,
     },
 
-    .str_131 = "REALTIME RECORD",
+    .RealtimeRecord_str = "REALTIME RECORD",
 
     .v84_e8 = {
         .class_ = 0x01600040,
@@ -5917,12 +5917,12 @@ const naka_effects_seq_t naka_effects_seq_data
         .align = 0x0000,
         .editsw = 0x008A,
         .selected = 0x0003DF8C,
-        .str = SELF(str_133),
+        .str = SELF(StepRecord_str),
         .mode = 0x0180000D,
         .icon = 0x00000036,
     },
 
-    .str_133 = "STEP RECORD",
+    .StepRecord_str = "STEP RECORD",
 
     .v84_e9 = {
         .class_ = 0x0160001D,
@@ -12895,13 +12895,13 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .w335_text = ALIGNED_STRING("VOCAL REVERB"),
 
-    .str_557 = ALIGNED_STRING("VOCALIST WORKSTATION"),
+    .VocalistWorkstation_str = ALIGNED_STRING("VOCALIST WORKSTATION"),
 
-    .str_558 = "FADE IN/OUT SETTING",
+    .FadeInOutSetting_str = "FADE IN/OUT SETTING",
 
     .MIXER_str = "MIXER",
 
-    .str_560 = "DISK LOAD",
+    .DiskLoad_str = "DISK LOAD",
 
     .vD6_e7 = {
         .class_ = 0x01600022,
@@ -17091,7 +17091,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .pad_720 = { 0 },
 
-    .str_1412 = "~43~2d~32~44~a0~bc~44~2d~32~45~a0~bc~45~2d~32~46~2d~32~46~9e~bc~47~2d~32~41~a0~bc~41~2d~32~42~a0~bc~42~2d~32~43~2d~31~44~a0~bb~44~2d~31~45~a0~bb~45~2d~31~46~2d~31~46~9e~bb~47~2d~31~41~a0~bb~41~2d~31~42~a0~bb~42~2d~31~43~30~20~44~a0~30~44~30~20~45~a0~30~45~30~20~46~30~20~46~9e~30~47~30~20~41~a0~30~41~30~20~42~a0~30~42~30~20~43~31~20~44~a0~31~44~31~20~45~a0~31~45~31~20~46~31~20~46~9e~31~47~31~20~41~a0~31~41~31~20~42~a0~31~42~31~20~43~32~20~44~a0~32~44~32~20~45~a0~32~45~32~20~46~32~20~46~9e~32~47~32~20~41~a0~32~41~32~20~42~a0~32~42~32~20~43~33~20~44~a0~33~44~33~20~45~a0~33~45~33~20~46~33~20~46~9e~33~47~33~20~41~a0~33~41~33~20~42~a0~33~42~33~20~43~34~20~44~a0~34~44~34~20~45~a0~34~45~34~20~46~34~20~46~9e~34~47~34~20~41~a0~34~41~34~20~42~a0~34~42~34~20~43~35~20~44~a0~35~44~35~20~45~a0~35~45~35~20~46~35~20~46~9e~35~47~35~20~41~a0~35~41~35~20~42~a0~35~42~35~20~43~36~20~44~a0~36~44~36~20~45~a0~36~45~36~20~46~36~20~46~9e~36~47~36~20~41~a0~36~41~36~20~42~a0~36~42~36~20~43~37~20~44~a0~37~44~37~20~45~a0~37~45~37~20~46~37~20~46~9e~37~47~37~20~41~a0~37~41~37~20~42~a0~37~42~37~20~43~38~20~44~a0~38~44~38~20~45~a0~38~45~38~20~46~38~20~46~9e~38~47~38~200",
+    .A0BcA0Bc_str = "~43~2d~32~44~a0~bc~44~2d~32~45~a0~bc~45~2d~32~46~2d~32~46~9e~bc~47~2d~32~41~a0~bc~41~2d~32~42~a0~bc~42~2d~32~43~2d~31~44~a0~bb~44~2d~31~45~a0~bb~45~2d~31~46~2d~31~46~9e~bb~47~2d~31~41~a0~bb~41~2d~31~42~a0~bb~42~2d~31~43~30~20~44~a0~30~44~30~20~45~a0~30~45~30~20~46~30~20~46~9e~30~47~30~20~41~a0~30~41~30~20~42~a0~30~42~30~20~43~31~20~44~a0~31~44~31~20~45~a0~31~45~31~20~46~31~20~46~9e~31~47~31~20~41~a0~31~41~31~20~42~a0~31~42~31~20~43~32~20~44~a0~32~44~32~20~45~a0~32~45~32~20~46~32~20~46~9e~32~47~32~20~41~a0~32~41~32~20~42~a0~32~42~32~20~43~33~20~44~a0~33~44~33~20~45~a0~33~45~33~20~46~33~20~46~9e~33~47~33~20~41~a0~33~41~33~20~42~a0~33~42~33~20~43~34~20~44~a0~34~44~34~20~45~a0~34~45~34~20~46~34~20~46~9e~34~47~34~20~41~a0~34~41~34~20~42~a0~34~42~34~20~43~35~20~44~a0~35~44~35~20~45~a0~35~45~35~20~46~35~20~46~9e~35~47~35~20~41~a0~35~41~35~20~42~a0~35~42~35~20~43~36~20~44~a0~36~44~36~20~45~a0~36~45~36~20~46~36~20~46~9e~36~47~36~20~41~a0~36~41~36~20~42~a0~36~42~36~20~43~37~20~44~a0~37~44~37~20~45~a0~37~45~37~20~46~37~20~46~9e~37~47~37~20~41~a0~37~41~37~20~42~a0~37~42~37~20~43~38~20~44~a0~38~44~38~20~45~a0~38~45~38~20~46~38~20~46~9e~38~47~38~200",
 
     .str_1413 = "7",
 

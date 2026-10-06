@@ -1176,34 +1176,34 @@ typedef struct __attribute__((packed)) {
     naka_cls_IvMainEditSw_t vB1_e1;
     /* element 2 of Viewable slot 0xB1: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t vB1_e2;
-    char str_71[12];
+    char Variation_str[12];
     /* element 3 of Viewable slot 0xB1: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t vB1_e3;
-    char str_75[12];
+    char Variation_str_2[12];
     /* element 4 of Viewable slot 0xB1: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t vB1_e4;
-    char str_78[8];
+    char Intro_str[8];
     /* element 5 of Viewable slot 0xB1: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t vB1_e5;
-    char str_80[10];
+    char FillIn_str[10];
     /* element 6 of Viewable slot 0xB1: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t vB1_e6;
-    char str_82[10];
+    char Ending_str[10];
     /* element 7 of Viewable slot 0xB1: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t vB1_e7;
-    char str_85[18];
+    char Variation_str_3[18];
     /* element 8 of Viewable slot 0xB1: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t vB1_e8;
-    char str_89[18];
+    char Variation_str_4[18];
     /* element 9 of Viewable slot 0xB1: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t vB1_e9;
-    char str_92[8];
+    char Intro_str_2[8];
     /* element 10 of Viewable slot 0xB1: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t vB1_e10;
-    char str_94[10];
+    char FillIn_str_2[10];
     /* element 11 of Viewable slot 0xB1: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t vB1_e11;
-    char str_96[10];
+    char Ending_str_2[10];
     /* element 0 of Viewable slot 0xB2 "CmpBkslSScreen": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t CmpBkslSScreen;
     char w44_text[10];
@@ -1216,7 +1216,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_IvMainEditSw_t vB2_e3;
     /* element 4 of Viewable slot 0xB2: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t vB2_e4;
-    char str_99[16];
+    char RecordSetting_str[16];
     /* element 5 of Viewable slot 0xB2: VwEditSwBox (class id 0x0160003E) */
     naka_cls_VwEditSwBox_t vB2_e5;
     char DRM_str[4];
@@ -1247,10 +1247,10 @@ typedef struct __attribute__((packed)) {
     naka_cls_Line_t vB2_e15;
     /* element 16 of Viewable slot 0xB2 "CmpNameMenu": CmpNameMenuBox (class id 0x01640026) */
     naka_cls_CmpNameMenuBox_t CmpNameMenu;
-    char str_115[18];
+    char VariationNaming_str[18];
     /* element 17 of Viewable slot 0xB2: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t vB2_e17;
-    char str_118[26];
+    char ClearTheEntirePattern_str[26];
     /* element 18 of Viewable slot 0xB2 "CmpClrSure": Window (class id 0x01600035) */
     naka_cls_Window_t CmpClrSure;
     /* element 19 of Viewable slot 0xB2 "CmpClrYesSw": AcFuncEditSw (class id 0x01600020) */
@@ -1369,19 +1369,19 @@ typedef struct __attribute__((packed)) {
     naka_cls_AcMemNoBox_t vB5_e18;
     /* element 19 of Viewable slot 0xB5: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t vB5_e19;
-    char str_153[10];
+    char PartClr_str[10];
     /* element 20 of Viewable slot 0xB5: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t vB5_e20;
-    char str_157[10];
+    char AllEras_str[10];
     /* element 21 of Viewable slot 0xB5: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t vB5_e21;
-    char str_160[10];
+    char InstErs_str[10];
     /* element 22 of Viewable slot 0xB5: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t vB5_e22;
     char QUANTIZE_str[10];
     /* element 23 of Viewable slot 0xB5: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t vB5_e23;
-    char str_164[8];
+    char Solo_str[8];
     /* element 29 of Viewable slot 0xB5 "CmpQtz": PsCmpQtzBox (class id 0x01640002) */
     naka_cls_PsCmpQtzBox_t CmpQtz;
     /* element 30 of Viewable slot 0xB5 "CmpMeas": PsCmpMeasBox (class id 0x01640003) */
@@ -2836,11 +2836,11 @@ const naka_composer_style_t naka_composer_style_data
         .align = 0x0000,
         .editsw = 0x0088,
         .selected = 0x0003D65A,
-        .str = SELF(str_71),
+        .str = SELF(Variation_str),
         .icon = 0x00000000,
     },
 
-    .str_71 = "VARIATION 1",
+    .Variation_str = "VARIATION 1",
 
     .vB1_e3 = {
         .class_ = 0x0160003D,
@@ -2858,11 +2858,11 @@ const naka_composer_style_t naka_composer_style_data
         .align = 0x0000,
         .editsw = 0x0089,
         .selected = 0x0003D65C,
-        .str = SELF(str_75),
+        .str = SELF(Variation_str_2),
         .icon = 0x00000000,
     },
 
-    .str_75 = "VARIATION 3",
+    .Variation_str_2 = "VARIATION 3",
 
     .vB1_e4 = {
         .class_ = 0x0160003D,
@@ -2880,11 +2880,11 @@ const naka_composer_style_t naka_composer_style_data
         .align = 0x0000,
         .editsw = 0x008A,
         .selected = 0x0003D65E,
-        .str = SELF(str_78),
+        .str = SELF(Intro_str),
         .icon = 0x00000000,
     },
 
-    .str_78 = "INTRO 1",
+    .Intro_str = "INTRO 1",
 
     .vB1_e5 = {
         .class_ = 0x0160003D,
@@ -2902,11 +2902,11 @@ const naka_composer_style_t naka_composer_style_data
         .align = 0x0000,
         .editsw = 0x008B,
         .selected = 0x0003D660,
-        .str = SELF(str_80),
+        .str = SELF(FillIn_str),
         .icon = 0x00000000,
     },
 
-    .str_80 = "FILL IN 1",
+    .FillIn_str = "FILL IN 1",
 
     .vB1_e6 = {
         .class_ = 0x0160003D,
@@ -2924,11 +2924,11 @@ const naka_composer_style_t naka_composer_style_data
         .align = 0x0000,
         .editsw = 0x008C,
         .selected = 0x0003D662,
-        .str = SELF(str_82),
+        .str = SELF(Ending_str),
         .icon = 0x00000000,
     },
 
-    .str_82 = ALIGNED_STRING("ENDING 1"),
+    .Ending_str = ALIGNED_STRING("ENDING 1"),
 
     .vB1_e7 = {
         .class_ = 0x0160003D,
@@ -2946,11 +2946,11 @@ const naka_composer_style_t naka_composer_style_data
         .align = 0x0000,
         .editsw = 0x0008,
         .selected = 0x0003D664,
-        .str = SELF(str_85),
+        .str = SELF(Variation_str_3),
         .icon = 0x00000000,
     },
 
-    .str_85 = "      VARIATION 2",
+    .Variation_str_3 = "      VARIATION 2",
 
     .vB1_e8 = {
         .class_ = 0x0160003D,
@@ -2968,11 +2968,11 @@ const naka_composer_style_t naka_composer_style_data
         .align = 0x0000,
         .editsw = 0x0009,
         .selected = 0x0003D666,
-        .str = SELF(str_89),
+        .str = SELF(Variation_str_4),
         .icon = 0x00000000,
     },
 
-    .str_89 = "      VARIATION 4",
+    .Variation_str_4 = "      VARIATION 4",
 
     .vB1_e9 = {
         .class_ = 0x0160003D,
@@ -2990,11 +2990,11 @@ const naka_composer_style_t naka_composer_style_data
         .align = 0x0002,
         .editsw = 0x000A,
         .selected = 0x0003D668,
-        .str = SELF(str_92),
+        .str = SELF(Intro_str_2),
         .icon = 0x00000000,
     },
 
-    .str_92 = "INTRO 2",
+    .Intro_str_2 = "INTRO 2",
 
     .vB1_e10 = {
         .class_ = 0x0160003D,
@@ -3012,11 +3012,11 @@ const naka_composer_style_t naka_composer_style_data
         .align = 0x0002,
         .editsw = 0x000B,
         .selected = 0x0003D66A,
-        .str = SELF(str_94),
+        .str = SELF(FillIn_str_2),
         .icon = 0x00000000,
     },
 
-    .str_94 = "FILL IN 2",
+    .FillIn_str_2 = "FILL IN 2",
 
     .vB1_e11 = {
         .class_ = 0x0160003D,
@@ -3034,11 +3034,11 @@ const naka_composer_style_t naka_composer_style_data
         .align = 0x0002,
         .editsw = 0x000C,
         .selected = 0x0003D66C,
-        .str = SELF(str_96),
+        .str = SELF(Ending_str_2),
         .icon = 0x00000000,
     },
 
-    .str_96 = ALIGNED_STRING("ENDING 2"),
+    .Ending_str_2 = ALIGNED_STRING("ENDING 2"),
 
     .CmpBkslSScreen = {
         .class_ = 0x01600034,
@@ -3112,11 +3112,11 @@ const naka_composer_style_t naka_composer_style_data
         .align = 0x0000,
         .editsw = 0x008A,
         .selected = 0x0003D672,
-        .str = SELF(str_99),
+        .str = SELF(RecordSetting_str),
         .icon = 0x0000009F,
     },
 
-    .str_99 = ALIGNED_STRING("RECORD SETTING"),
+    .RecordSetting_str = ALIGNED_STRING("RECORD SETTING"),
 
     .vB2_e5 = {
         .class_ = 0x0160003E,
@@ -3318,11 +3318,11 @@ const naka_composer_style_t naka_composer_style_data
         .align = 0x0001,
         .editsw = 0x0089,
         .selected = 0x0003D674,
-        .str = SELF(str_115),
+        .str = SELF(VariationNaming_str),
         .icon = 0x00000099,
     },
 
-    .str_115 = ALIGNED_STRING("VARIATION NAMING"),
+    .VariationNaming_str = ALIGNED_STRING("VARIATION NAMING"),
 
     .vB2_e17 = {
         .class_ = 0x0160003D,
@@ -3340,11 +3340,11 @@ const naka_composer_style_t naka_composer_style_data
         .align = 0x0001,
         .editsw = 0x0088,
         .selected = 0x0003D676,
-        .str = SELF(str_118),
+        .str = SELF(ClearTheEntirePattern_str),
         .icon = 0x00000000,
     },
 
-    .str_118 = ALIGNED_STRING("CLEAR THE ENTIRE PATTERN"),
+    .ClearTheEntirePattern_str = ALIGNED_STRING("CLEAR THE ENTIRE PATTERN"),
 
     .CmpClrSure = {
         .class_ = 0x01600035,
@@ -4154,11 +4154,11 @@ const naka_composer_style_t naka_composer_style_data
         .align = 0x0000,
         .editsw = 0x0008,
         .selected = 0x0003D6C2,
-        .str = SELF(str_153),
+        .str = SELF(PartClr_str),
         .icon = 0x00000000,
     },
 
-    .str_153 = ALIGNED_STRING("PART CLR"),
+    .PartClr_str = ALIGNED_STRING("PART CLR"),
 
     .vB5_e20 = {
         .class_ = 0x0160003D,
@@ -4176,11 +4176,11 @@ const naka_composer_style_t naka_composer_style_data
         .align = 0x0000,
         .editsw = 0x0009,
         .selected = 0x0003D6C4,
-        .str = SELF(str_157),
+        .str = SELF(AllEras_str),
         .icon = 0x00000000,
     },
 
-    .str_157 = ALIGNED_STRING("ALL ERAS"),
+    .AllEras_str = ALIGNED_STRING("ALL ERAS"),
 
     .vB5_e21 = {
         .class_ = 0x0160003D,
@@ -4198,11 +4198,11 @@ const naka_composer_style_t naka_composer_style_data
         .align = 0x0000,
         .editsw = 0x000A,
         .selected = 0x0003D6C6,
-        .str = SELF(str_160),
+        .str = SELF(InstErs_str),
         .icon = 0x00000000,
     },
 
-    .str_160 = ALIGNED_STRING("INST ERS"),
+    .InstErs_str = ALIGNED_STRING("INST ERS"),
 
     .vB5_e22 = {
         .class_ = 0x0160003D,
@@ -4242,11 +4242,11 @@ const naka_composer_style_t naka_composer_style_data
         .align = 0x0000,
         .editsw = 0x000C,
         .selected = 0x0003D6CA,
-        .str = SELF(str_164),
+        .str = SELF(Solo_str),
         .icon = 0x00000000,
     },
 
-    .str_164 = ALIGNED_STRING("  SOLO"),
+    .Solo_str = ALIGNED_STRING("  SOLO"),
 
     .CmpQtz = {
         .class_ = 0x01640002,

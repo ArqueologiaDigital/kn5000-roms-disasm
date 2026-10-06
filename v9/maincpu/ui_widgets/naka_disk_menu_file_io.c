@@ -830,7 +830,7 @@ typedef struct __attribute__((packed)) {
     /* element 1 of Viewable slot 0x60: AcTitleMenu (class id 0x0160001D) */
     naka_cls_AcTitleMenu_t v60_e1;
     char w2_text[14];
-    char str_11[20];
+    char HardDiskMainMenu_str[20];
     /* element 3 of Viewable slot 0x60: AcTitleMenu (class id 0x0160001D) */
     naka_cls_AcTitleMenu_t v60_e3;
     char w3_text[12];
@@ -839,7 +839,7 @@ typedef struct __attribute__((packed)) {
     char w4_text[6];
     /* element 5 of Viewable slot 0x60: AcTtlJgBox (class id 0x01650002) */
     naka_cls_AcTtlJgBox_t v60_e5;
-    char str_13[12];
+    char DiskTools_str[12];
     /* element 6 of Viewable slot 0x60: AcTtlJgBox (class id 0x01650002) */
     naka_cls_AcTtlJgBox_t v60_e6;
     char LOAD_str[6];
@@ -847,10 +847,10 @@ typedef struct __attribute__((packed)) {
     naka_cls_IvExitMode_t v60_e7;
     /* element 8 of Viewable slot 0x60: AcTtlJgBox (class id 0x01650002) */
     naka_cls_AcTtlJgBox_t v60_e8;
-    char str_19[12];
+    char DirectPlay_str[12];
     /* element 9 of Viewable slot 0x60: AcTtlJgBox (class id 0x01650002) */
     naka_cls_AcTtlJgBox_t v60_e9;
-    char str_21[12];
+    char SongMedley_str[12];
     /* element 10 of Viewable slot 0x60 "IntSongMedley": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t IntSongMedley;
     char w6_text[22];
@@ -1322,10 +1322,10 @@ typedef struct __attribute__((packed)) {
     char w88_text[6];
     /* element 1 of Viewable slot 0x65: AcTtlJgBox (class id 0x01650002) */
     naka_cls_AcTtlJgBox_t v65_e1;
-    char str_418[16];
+    char TechnicsFormat_str[16];
     /* element 2 of Viewable slot 0x65: AcTtlJgBox (class id 0x01650002) */
     naka_cls_AcTtlJgBox_t v65_e2;
-    char str_419[14];
+    char SmfFormat_str[14];
     /* element 0 of Viewable slot 0x67 "DiskSave": TtlScreen (class id 0x01600034) */
     naka_cls_TtlScreen_t DiskSave;
     char w89_text[2];
@@ -1988,10 +1988,10 @@ typedef struct __attribute__((packed)) {
     char w201_text[38];
     /* element 66 of Viewable slot 0x7B: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t v7B_e66;
-    char str_876[28];
+    char KByteFormatDd_str[28];
     /* element 67 of Viewable slot 0x7B: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t v7B_e67;
-    char str_881[28];
+    char MByteFormatHd_str[28];
     /* element 68 of Viewable slot 0x7B "FileCopy": Screen (class id 0x01600033) */
     naka_cls_Screen_t FileCopy;
     /* element 69 of Viewable slot 0x7B: VwScreenTitle (class id 0x01650007) */
@@ -2700,54 +2700,54 @@ typedef struct __attribute__((packed)) {
     char FmmSmfFileNameFunc_str[20];
     char FmmFileNameFunc_str[16];
     uint32_t ptrs_14[6];  /* 6 pointers */
-    char str_1449[28];
-    char str_1450[28];
-    char str_1451[28];
-    char str_1452[28];
-    char str_1453[34];
-    char str_1454[28];
+    char PleaseEnterThePassword_str[28];
+    char PleaseEnterThePassword_str_2[28];
+    char PleaseEnterThePassword_str_3[28];
+    char PleaseEnterThePassword_str_4[28];
+    char BitteGebenSieDas_str[34];
+    char PleaseEnterThePassword_str_5[28];
     uint32_t ptrs_15[6];  /* 6 pointers */
-    char str_1455[64];
-    char str_1456[64];
-    char str_1457[64];
-    char str_1458[64];
+    char TheDataIsAlready_str[64];
+    char TheDataIsAlready_str_2[64];
+    char TheDataIsAlready_str_3[64];
+    char TheDataIsAlready_str_4[64];
     char txt_Diese_Daten_sind_bereits[76];
-    char str_1460[64];
+    char TheDataIsAlready_str_5[64];
     uint32_t ptrs_16[6];  /* 6 pointers */
-    char str_1461[74];
-    char str_1462[74];
-    char str_1463[74];
-    char str_1464[74];
+    char TheSongsInThe_str[74];
+    char TheSongsInThe_str_2[74];
+    char TheSongsInThe_str_3[74];
+    char TheSongsInThe_str_4[74];
     char txt_Die_Songs_im_Sequenzer_sind[80];
-    char str_1466[74];
+    char TheSongsInThe_str_5[74];
     uint32_t ptrs_17[6];  /* 6 pointers */
-    char str_1467[76];
-    char str_1468[76];
-    char str_1469[76];
-    char str_1470[76];
+    char ThePatternsInThe_str[76];
+    char ThePatternsInThe_str_2[76];
+    char ThePatternsInThe_str_3[76];
+    char ThePatternsInThe_str_4[76];
     char txt_Die_Pattern_im_Composer_sind[80];
-    char str_1472[76];
+    char ThePatternsInThe_str_5[76];
     char CcEv_str[6];
     char str_1474[4];
     char str_1475[4];
     uint32_t ptrs_18[6];  /* 6 pointers */
-    char str_1476[12];
-    char str_1477[12];
+    char Perhatian_str[12];
+    char Attention_str[12];
     uint16_t field_7862;
     uint16_t field_7864;
     uint16_t field_7866;
     uint16_t field_7868;
-    char str_1478[4];
-    char str_1479[12];
-    char str_1480[10];
-    char str_1481[12];
+    char N_str[4];
+    char Attention_str_2[12];
+    char Achtung_str[10];
+    char Attention_str_3[12];
     uint32_t ptrs_19[6];  /* 6 pointers */
-    char str_1482[28];
-    char str_1483[14];
+    char ApakahYakinAkanDihapus_str[28];
+    char AreYouSure_str[14];
     uint16_t field_78d2;
     uint16_t field_78d4;
     uint16_t field_78d6;
-    char str_1484[8];
+    char Seguro_str[8];
 } naka_disk_menu_file_io_t;
 
 #define SELF(field) \
@@ -2826,7 +2826,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .w2_text = "STYLE CONVERT",
 
-    .str_11 = "HARD DISK MAIN MENU",
+    .HardDiskMainMenu_str = "HARD DISK MAIN MENU",
 
     .v60_e3 = {
         .class_ = 0x0160001D,
@@ -2890,12 +2890,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .align = 0x0000,
         .editsw = 0x0088,
         .selected = 0x0003EC5C,
-        .str = SELF(str_13),
+        .str = SELF(DiskTools_str),
         .icon = 0x00000096,
         .main_func = 0x0145000A,
     },
 
-    .str_13 = ALIGNED_STRING("DISK TOOLS"),
+    .DiskTools_str = ALIGNED_STRING("DISK TOOLS"),
 
     .v60_e6 = {
         .class_ = 0x01650002,
@@ -2947,12 +2947,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .align = 0x0000,
         .editsw = 0x000A,
         .selected = 0x0003EC60,
-        .str = SELF(str_19),
+        .str = SELF(DirectPlay_str),
         .icon = 0x0000002E,
         .main_func = 0x01450008,
     },
 
-    .str_19 = "DIRECT PLAY",
+    .DirectPlay_str = "DIRECT PLAY",
 
     .v60_e9 = {
         .class_ = 0x01650002,
@@ -2970,12 +2970,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .align = 0x0000,
         .editsw = 0x000B,
         .selected = 0x0003EC62,
-        .str = SELF(str_21),
+        .str = SELF(SongMedley_str),
         .icon = 0x0000003A,
         .main_func = 0x01450009,
     },
 
-    .str_21 = "SONG MEDLEY",
+    .SongMedley_str = "SONG MEDLEY",
 
     .IntSongMedley = {
         .class_ = 0x01600034,
@@ -6337,12 +6337,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .align = 0x0002,
         .editsw = 0x0009,
         .selected = 0x0003ED88,
-        .str = SELF(str_418),
+        .str = SELF(TechnicsFormat_str),
         .icon = 0x00000000,
         .main_func = 0x01450006,
     },
 
-    .str_418 = "TECHNICS FORMAT",
+    .TechnicsFormat_str = "TECHNICS FORMAT",
 
     .v65_e2 = {
         .class_ = 0x01650002,
@@ -6360,12 +6360,12 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .align = 0x0002,
         .editsw = 0x000B,
         .selected = 0x0003ED8A,
-        .str = SELF(str_419),
+        .str = SELF(SmfFormat_str),
         .icon = 0x00000000,
         .main_func = 0x01450007,
     },
 
-    .str_419 = ALIGNED_STRING("SMF FORMAT 0"),
+    .SmfFormat_str = ALIGNED_STRING("SMF FORMAT 0"),
 
     .DiskSave = {
         .class_ = 0x01600034,
@@ -10783,11 +10783,11 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .align = 0x0000,
         .editsw = 0x000B,
         .selected = 0x0003EEBC,
-        .str = SELF(str_876),
+        .str = SELF(KByteFormatDd_str),
         .icon = 0x00000000,
     },
 
-    .str_876 = "     720K Byte format : 2DD",
+    .KByteFormatDd_str = "     720K Byte format : 2DD",
 
     .v7B_e67 = {
         .class_ = 0x0160003D,
@@ -10805,11 +10805,11 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .align = 0x0000,
         .editsw = 0x000A,
         .selected = 0x0003EEBE,
-        .str = SELF(str_881),
+        .str = SELF(MByteFormatHd_str),
         .icon = 0x00000000,
     },
 
-    .str_881 = "    1.44M Byte format : 2HD",
+    .MByteFormatHd_str = "    1.44M Byte format : 2HD",
 
     .FileCopy = {
         .class_ = 0x01600033,
@@ -13809,88 +13809,88 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
     .FmmFileNameFunc_str = "FmmFileNameFunc",
 
     .ptrs_14 = {
-        SELF(str_1454),
-        SELF(str_1453),
-        SELF(str_1452),
-        SELF(str_1451),
-        SELF(str_1450),
-        SELF(str_1449),
+        SELF(PleaseEnterThePassword_str_5),
+        SELF(BitteGebenSieDas_str),
+        SELF(PleaseEnterThePassword_str_4),
+        SELF(PleaseEnterThePassword_str_3),
+        SELF(PleaseEnterThePassword_str_2),
+        SELF(PleaseEnterThePassword_str),
     },
 
-    .str_1449 = ALIGNED_STRING("Please enter the password."),
+    .PleaseEnterThePassword_str = ALIGNED_STRING("Please enter the password."),
 
-    .str_1450 = ALIGNED_STRING("Please enter the password."),
+    .PleaseEnterThePassword_str_2 = ALIGNED_STRING("Please enter the password."),
 
-    .str_1451 = ALIGNED_STRING("Please enter the password."),
+    .PleaseEnterThePassword_str_3 = ALIGNED_STRING("Please enter the password."),
 
-    .str_1452 = ALIGNED_STRING("Please enter the password."),
+    .PleaseEnterThePassword_str_4 = ALIGNED_STRING("Please enter the password."),
 
-    .str_1453 = "Bitte geben Sie das Password ein.",
+    .BitteGebenSieDas_str = "Bitte geben Sie das Password ein.",
 
-    .str_1454 = ALIGNED_STRING("Please enter the password."),
+    .PleaseEnterThePassword_str_5 = ALIGNED_STRING("Please enter the password."),
 
     .ptrs_15 = {
-        SELF(str_1460),
+        SELF(TheDataIsAlready_str_5),
         SELF(txt_Diese_Daten_sind_bereits),
-        SELF(str_1458),
-        SELF(str_1457),
-        SELF(str_1456),
-        SELF(str_1455),
+        SELF(TheDataIsAlready_str_4),
+        SELF(TheDataIsAlready_str_3),
+        SELF(TheDataIsAlready_str_2),
+        SELF(TheDataIsAlready_str),
     },
 
-    .str_1455 = ALIGNED_STRING("The data is already copy protected. Please enter the password."),
+    .TheDataIsAlready_str = ALIGNED_STRING("The data is already copy protected. Please enter the password."),
 
-    .str_1456 = ALIGNED_STRING("The data is already copy protected. Please enter the password."),
+    .TheDataIsAlready_str_2 = ALIGNED_STRING("The data is already copy protected. Please enter the password."),
 
-    .str_1457 = ALIGNED_STRING("The data is already copy protected. Please enter the password."),
+    .TheDataIsAlready_str_3 = ALIGNED_STRING("The data is already copy protected. Please enter the password."),
 
-    .str_1458 = ALIGNED_STRING("The data is already copy protected. Please enter the password."),
+    .TheDataIsAlready_str_4 = ALIGNED_STRING("The data is already copy protected. Please enter the password."),
 
     .txt_Diese_Daten_sind_bereits = "Diese Daten sind bereits kopiergesch\374tzt. Bitte geben Sie das Password ein.\0",
 
-    .str_1460 = ALIGNED_STRING("The data is already copy protected. Please enter the password."),
+    .TheDataIsAlready_str_5 = ALIGNED_STRING("The data is already copy protected. Please enter the password."),
 
     .ptrs_16 = {
-        SELF(str_1466),
+        SELF(TheSongsInThe_str_5),
         SELF(txt_Die_Songs_im_Sequenzer_sind),
-        SELF(str_1464),
-        SELF(str_1463),
-        SELF(str_1462),
-        SELF(str_1461),
+        SELF(TheSongsInThe_str_4),
+        SELF(TheSongsInThe_str_3),
+        SELF(TheSongsInThe_str_2),
+        SELF(TheSongsInThe_str),
     },
 
-    .str_1461 = "The songs in the Sequencer are copy protected. Please enter the password.",
+    .TheSongsInThe_str = "The songs in the Sequencer are copy protected. Please enter the password.",
 
-    .str_1462 = "The songs in the Sequencer are copy protected. Please enter the password.",
+    .TheSongsInThe_str_2 = "The songs in the Sequencer are copy protected. Please enter the password.",
 
-    .str_1463 = "The songs in the Sequencer are copy protected. Please enter the password.",
+    .TheSongsInThe_str_3 = "The songs in the Sequencer are copy protected. Please enter the password.",
 
-    .str_1464 = "The songs in the Sequencer are copy protected. Please enter the password.",
+    .TheSongsInThe_str_4 = "The songs in the Sequencer are copy protected. Please enter the password.",
 
     .txt_Die_Songs_im_Sequenzer_sind = "Die Songs im Sequenzer sind kopiergesch\374tzt. Bitte geben Sie das Password ein.\0\377",
 
-    .str_1466 = "The songs in the Sequencer are copy protected. Please enter the password.",
+    .TheSongsInThe_str_5 = "The songs in the Sequencer are copy protected. Please enter the password.",
 
     .ptrs_17 = {
-        SELF(str_1472),
+        SELF(ThePatternsInThe_str_5),
         SELF(txt_Die_Pattern_im_Composer_sind),
-        SELF(str_1470),
-        SELF(str_1469),
-        SELF(str_1468),
-        SELF(str_1467),
+        SELF(ThePatternsInThe_str_4),
+        SELF(ThePatternsInThe_str_3),
+        SELF(ThePatternsInThe_str_2),
+        SELF(ThePatternsInThe_str),
     },
 
-    .str_1467 = "The patterns in the Composer are copy protected. Please enter the password.",
+    .ThePatternsInThe_str = "The patterns in the Composer are copy protected. Please enter the password.",
 
-    .str_1468 = "The patterns in the Composer are copy protected. Please enter the password.",
+    .ThePatternsInThe_str_2 = "The patterns in the Composer are copy protected. Please enter the password.",
 
-    .str_1469 = "The patterns in the Composer are copy protected. Please enter the password.",
+    .ThePatternsInThe_str_3 = "The patterns in the Composer are copy protected. Please enter the password.",
 
-    .str_1470 = "The patterns in the Composer are copy protected. Please enter the password.",
+    .ThePatternsInThe_str_4 = "The patterns in the Composer are copy protected. Please enter the password.",
 
     .txt_Die_Pattern_im_Composer_sind = "Die Pattern im Composer sind kopiergesch\374tzt. Bitte geben Sie das Password ein.\0",
 
-    .str_1472 = "The patterns in the Composer are copy protected. Please enter the password.",
+    .ThePatternsInThe_str_5 = "The patterns in the Composer are copy protected. Please enter the password.",
 
     .CcEv_str = ALIGNED_STRING("CcEv"),
 
@@ -13899,17 +13899,17 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
     .str_1475 = ALIGNED_STRING("??"),
 
     .ptrs_18 = {
-        SELF(str_1481),
-        SELF(str_1480),
-        SELF(str_1479),
+        SELF(Attention_str_3),
+        SELF(Achtung_str),
+        SELF(Attention_str_2),
         SELF(field_7862),
-        SELF(str_1477),
-        SELF(str_1476),
+        SELF(Attention_str),
+        SELF(Perhatian_str),
     },
 
-    .str_1476 = "Perhatian !",
+    .Perhatian_str = "Perhatian !",
 
-    .str_1477 = ALIGNED_STRING("ATTENTION!"),
+    .Attention_str = ALIGNED_STRING("ATTENTION!"),
 
     .field_7862 = 0x41A1,
 
@@ -13919,26 +13919,26 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .field_7868 = 0xD349,
 
-    .str_1478 = ALIGNED_STRING("N!"),
+    .N_str = ALIGNED_STRING("N!"),
 
-    .str_1479 = ALIGNED_STRING("ATTENTION!"),
+    .Attention_str_2 = ALIGNED_STRING("ATTENTION!"),
 
-    .str_1480 = "ACHTUNG !",
+    .Achtung_str = "ACHTUNG !",
 
-    .str_1481 = ALIGNED_STRING("ATTENTION!"),
+    .Attention_str_3 = ALIGNED_STRING("ATTENTION!"),
 
     .ptrs_19 = {
         0x00EA8CCE,
         NAKA_ADDR(DiskWarning_GermanConfirm),
         NAKA_ADDR(DiskWarning_ConfirmStrings),
         SELF(field_78d2),
-        SELF(str_1483),
-        SELF(str_1482),
+        SELF(AreYouSure_str),
+        SELF(ApakahYakinAkanDihapus_str),
     },
 
-    .str_1482 = "Apakah yakin akan dihapus ?",
+    .ApakahYakinAkanDihapus_str = "Apakah yakin akan dihapus ?",
 
-    .str_1483 = "Are You Sure?",
+    .AreYouSure_str = "Are You Sure?",
 
     .field_78d2 = 0x45BF,
 
@@ -13946,7 +13946,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .field_78d6 = 0x20E1,
 
-    .str_1484 = "seguro?",
+    .Seguro_str = "seguro?",
 
 };
 

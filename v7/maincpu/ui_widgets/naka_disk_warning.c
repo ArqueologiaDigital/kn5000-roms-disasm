@@ -94,50 +94,50 @@ typedef struct __attribute__((packed)) {
 typedef struct __attribute__((packed)) {
     char txt_Etes_vous_su[12];
     char str_0[4];
-    char str_1[18];
-    char str_2[14];
+    char SindSieSicher_str[18];
+    char AreYouSure_str[14];
     uint32_t ptrs_0[6];  /* 6 pointers */
-    char str_3[80];
-    char str_4[60];
-    char str_5[54];
+    char GunakanDiskFormatUntuk_str[80];
+    char UsingDiskFormatWill_str[60];
+    char AlFormatearElDisco_str[54];
     char txt_L_utilisation_deDISK_FORMAT[78];
     char txt_DISK_FORMAT_loscht_alle_Daten[48];
-    char str_8[60];
+    char UsingDiskFormatWill_str_2[60];
     uint32_t ptrs_1[6];  /* 6 pointers */
     char txt_Usando_FILE_DELETE_si[118];
-    char str_10[116];
+    char UsingFileDeleteWill_str[116];
     char txt_El_uso_del_FILE_DELETE_borrara[124];
     char txt_La_fonction_FILE_DELETE_va[148];
     char txt_Die_gewahlte_Disketten_Bank_wird[52];
-    char str_14[116];
+    char UsingFileDeleteWill_str_2[116];
     uint32_t ptrs_2[6];  /* 6 pointers */
     char txt_Esiste_gia_un_file_nella[120];
-    char str_16[114];
+    char AFileAlreadyExists_str[114];
     char txt_Ya_existe_un_archivo_en_el_lugar[122];
     char txt_Un_fichier_existe_deja_sous_le[158];
     char txt_Die_soeben_gewahlte_Disketten[128];
-    char str_19[6];
-    char str_20[114];
+    char Cht_str[6];
+    char AFileAlreadyExists_str_2[114];
     uint32_t ptrs_3[6];  /* 6 pointers */
-    char str_21[40];
-    char str_22[40];
-    char str_23[40];
-    char str_24[40];
+    char WhenDiskIsInserted_str[40];
+    char WhenDiskIsInserted_str_2[40];
+    char WhenDiskIsInserted_str_3[40];
+    char WhenDiskIsInserted_str_4[40];
     char txt_Diese_Seite_wird_geoffnet_wenn[60];
-    char str_26[40];
+    char WhenDiskIsInserted_str_5[40];
     uint32_t ptrs_4[6];  /* 6 pointers */
-    char str_27[44];
-    char str_28[44];
-    char str_29[44];
-    char str_30[44];
+    char WhenDiskContainsTechnics_str[44];
+    char WhenDiskContainsTechnics_str_2[44];
+    char WhenDiskContainsTechnics_str_3[44];
+    char WhenDiskContainsTechnics_str_4[44];
     char txt_Prioritat_wenn_eine_Diskette[62];
-    char str_32[44];
+    char WhenDiskContainsTechnics_str_5[44];
     uint32_t ptrs_5[5];  /* 5 pointers */
-    char str_33[14];
-    char str_34[14];
-    char str_35[14];
-    char str_36[14];
-    char str_37[14];
+    char SongMedley_str[14];
+    char DirectPlay_str[14];
+    char Load_str[14];
+    char DiskMenu_str[14];
+    char Off_str[14];
     uint16_t field_0a38;
     uint16_t field_0a3a;
     char str_38[2];
@@ -150,27 +150,27 @@ typedef struct __attribute__((packed)) {
     uint8_t pad_0[2];  /* zero padding */
     uint32_t ptr_0a4c;
     uint32_t ptr_0a50;
-    char str_44[12];
-    char str_45[12];
+    char Smf_str[12];
+    char Technics_str[12];
     uint32_t ptrs_6[6];  /* 6 pointers */
-    char str_46[34];
-    char str_47[26];
+    char SilahkanTunggu_str[34];
+    char PleaseWait_str[26];
     uint16_t field_0ac0;
-    char str_48[38];
-    char str_49[40];
-    char str_50[28];
-    char str_51[26];
+    char OrFavorEspere_str[38];
+    char VeuillezPatienter_str[40];
+    char BitteWarten_str[28];
+    char PleaseWait_str_2[26];
     uint32_t ptrs_7[9];  /* 9 pointers */
-    char str_52[14];
-    char str_53[14];
-    char str_54[14];
-    char str_55[14];
-    char str_56[14];
-    char str_57[14];
-    char str_58[14];
-    char str_59[14];
+    char UserMidi_str[14];
+    char RhythmCustom_str[14];
+    char Msp_str[14];
+    char SoundMemory_str[14];
+    char Composer_str[14];
+    char Sequencer_str[14];
+    char PanelMemory_str[14];
+    char CurrentPanel_str[14];
     char str_60[14];
-    char str_61[6];
+    char Shot_str[6];
     char ISC_str[4];
     char ISD_str[4];
     char WWC_str[4];
@@ -491,10 +491,10 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0eb0;
     uint16_t field_0eb2;
     uint32_t ptrs_9[4];  /* 4 pointers */
-    char str_107[18];
-    char str_108[18];
-    char str_109[24];
-    char str_110[18];
+    char DirmdTitleNew_str[18];
+    char DirmdTitleOld_str[18];
+    char DirmdTitleESw_str[24];
+    char DirmdTitleCur_str[18];
     uint16_t field_0f12;
     uint16_t field_0f14;
     uint8_t pad_77[2];  /* zero padding */
@@ -523,8 +523,8 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0f44;
     uint32_t ptrs_10[3];  /* 3 pointers */
     char str_113[14];
-    char str_114[14];
-    char str_115[14];
+    char Abc_str[14];
+    char Abc_str_2[14];
     uint32_t ptrs_11[39];  /* 39 pointers */
     char str_116[2];
     char SPC_str[4];
@@ -659,8 +659,8 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1256;
     uint16_t field_1258;
     uint16_t field_125a;
-    char str_235[12];
-    char str_236[12];
+    char X_str_2[12];
+    char X_str_3[12];
     uint16_t field_1274;
     uint16_t field_1276;
     uint16_t field_1278;
@@ -907,12 +907,12 @@ typedef struct __attribute__((packed)) {
     char str_245[4];
     char str_246[4];
     uint16_t field_14d2;
-    char str_247[8];
-    char str_248[8];
-    char str_249[92];
+    char Aa_str[8];
+    char Aa_str_2[8];
+    char NoMyCarDay_str[92];
     char str_250[6];
-    char str_251[32];
-    char str_252[54];
+    char PartChannelOctaveLocal_str[32];
+    char Right1Right2LeftPart4_str[54];
     uint16_t field_159c;
     uint16_t field_159e;
     uint16_t field_15a0;
@@ -937,11 +937,11 @@ typedef struct __attribute__((packed)) {
     char d_str_3[2];
     uint32_t ptr_15d6;
     uint32_t ptr_15da;
-    char str_260[8];
+    char Active_str[8];
     char PASSIVE_str[8];
     uint32_t ptr_15ee;
     uint32_t ptr_15f2;
-    char str_262[4];
+    char On_str[4];
     char OFF_str[4];
     char str_264[2];
     char str_265[4];
@@ -960,7 +960,7 @@ typedef struct __attribute__((packed)) {
     uint8_t pad_106[2];  /* zero padding */
     uint32_t ptr_1622;
     uint32_t ptr_1626;
-    char str_275[6];
+    char True_str[6];
     char FALSE_str[6];
     char ON_str[4];
     char OFF_str_2[4];
@@ -1006,7 +1006,7 @@ typedef struct __attribute__((packed)) {
     uint8_t pad_108[2];  /* zero padding */
     char str_306[2];
     char str_307[2];
-    char str_308[12];
+    char Page_str[12];
     char PAGE_str[6];
     char MnSw_str[6];
     char EXIT_str[6];
@@ -1025,9 +1025,9 @@ typedef struct __attribute__((packed)) {
     char iEsy_str[6];
     char w3_code[6];
     char w3_name[6];
-    char str_319[18];
-    char str_320[16];
-    char str_321[28];
+    char Pmem_str[18];
+    char Pmem_str_2[16];
+    char Pmem_str_3[28];
     uint32_t ptrs_15[28];  /* 28 pointers */
     char MIC_str[4];
     char METR_str[6];
@@ -1238,9 +1238,9 @@ typedef struct __attribute__((packed)) {
     uint8_t pad_178[62];  /* zero padding */
     char str_354[4];
     char MUTE_str[6];
-    char str_356[12];
-    char str_357[12];
-    char str_358[40];
+    char DebugTime_str[12];
+    char XX_str[12];
+    char XXXX_str[40];
     uint8_t pad_179[2];  /* zero padding */
     uint16_t field_1a50;
     uint8_t pad_180[2];  /* zero padding */
@@ -1254,9 +1254,9 @@ typedef struct __attribute__((packed)) {
     uint8_t pad_183[2];  /* zero padding */
     uint32_t ptrs_16[4];  /* 4 pointers */
     char str_359[2];
-    char str_360[10];
-    char str_361[8];
-    char str_362[14];
+    char Debug3_str[10];
+    char Memo_str[8];
+    char MemoryDump_str[14];
     char str_363[2];
     uint8_t pad_184[2];  /* zero padding */
     uint16_t field_1a9c;
@@ -1272,15 +1272,15 @@ typedef struct __attribute__((packed)) {
     char APC_str[4];
     char CHD_str[4];
     char DRM_str[4];
-    char str_372[4];
-    char str_373[4];
-    char str_374[4];
-    char str_375[4];
+    char P_str_4[4];
+    char P_str_5[4];
+    char P_str_6[4];
+    char P_str_7[4];
     char P12_str[4];
     char P11_str[4];
     char P10_str[4];
-    char str_379[4];
-    char str_380[4];
+    char P_str_8[4];
+    char P_str_9[4];
     char RT2_str_2[4];
     char LFT_str[4];
     char RT1_str_2[4];
@@ -1493,11 +1493,11 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1db6;
     char str_443[6];
     char str_444[6];
-    char str_445[6];
+    char Left_str[6];
     char str_446[2];
-    char str_447[6];
-    char str_448[8];
-    char str_449[8];
+    char Top_str[6];
+    char Width_str[8];
+    char Height_str[8];
     char str_450[2];
     char str_451[4];
     char str_452[2];
@@ -1512,38 +1512,38 @@ typedef struct __attribute__((packed)) {
     char idf_str[4];
     char idf_str_2[4];
     char idNONE_str[8];
-    char str_464[6];
-    char str_465[8];
-    char str_466[8];
-    char str_467[6];
-    char str_468[8];
+    char Idi_str[6];
+    char Idi_str_2[8];
+    char Sword_str[8];
+    char Idi_str_3[6];
+    char Idi_str_4[8];
     char idNONE_str_2[8];
     char idNONE_str_3[8];
-    char str_471[6];
-    char str_472[8];
-    char str_473[6];
-    char str_474[8];
+    char Idi_str_5[6];
+    char Idi_str_6[8];
+    char Idi_str_7[6];
+    char Idi_str_8[8];
     char idNONE_str_4[8];
-    char str_476[6];
-    char str_477[8];
+    char Idi_str_9[6];
+    char Idi_str_10[8];
     char idNONE_str_5[8];
     char idNONE_str_6[8];
-    char str_480[6];
-    char str_481[8];
-    char str_482[6];
-    char str_483[8];
+    char Idi_str_11[6];
+    char Idi_str_12[8];
+    char Idi_str_13[6];
+    char Idi_str_14[8];
     char idNONE_str_7[8];
-    char str_485[6];
-    char str_486[8];
+    char Idi_str_15[6];
+    char Idi_str_16[8];
     char w8_code[8];
     char w8_name[8];
     char str_487[4];
-    char str_488[16];
+    char Makemodeid_str[16];
     char w9_code[8];
     char w9_name[8];
-    char str_489[8];
+    char Title_str[8];
     char str_490[4];
-    char str_491[16];
+    char Maketitleid_str[16];
     char w10_code[8];
     char w10_name[8];
     char name_str_2[6];
@@ -1856,7 +1856,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_219f;
     char M_str_4[2];
     uint16_t field_21a3;
-    char str_506[13];
+    char KlcdBmp_str[13];
     char wb_str[4];
     uint16_t field_21b6;
     uint16_t field_21b8;
@@ -2165,40 +2165,40 @@ typedef struct __attribute__((packed)) {
     char TrashIcon_str[10];
     uint32_t ptrs_26[256];  /* 256 pointers */
     char str_551[2];
-    char str_552[10];
-    char str_553[12];
-    char str_554[12];
-    char str_555[14];
-    char str_556[12];
-    char str_557[12];
-    char str_558[12];
-    char str_559[12];
-    char str_560[14];
-    char str_561[10];
-    char str_562[12];
-    char str_563[12];
-    char str_564[12];
-    char str_565[12];
-    char str_566[12];
-    char str_567[14];
-    char str_568[12];
-    char str_569[14];
-    char str_570[12];
-    char str_571[12];
-    char str_572[12];
-    char str_573[12];
-    char str_574[10];
-    char str_575[12];
-    char str_576[10];
-    char str_577[10];
-    char str_578[8];
-    char str_579[8];
-    char str_580[14];
-    char str_581[12];
-    char str_582[12];
-    char str_583[10];
-    char str_584[14];
-    char str_585[10];
+    char MicBmp_str[10];
+    char MetroBmp_str[12];
+    char GmspBmp_str[12];
+    char LedswoffBmp_str[14];
+    char LedswonBmp_str[12];
+    char AccodBmp_str[12];
+    char DrawBmp_str[12];
+    char SynthBmp_str[12];
+    char StringBmp_str[14];
+    char SaxBmp_str[10];
+    char PianoBmp_str[12];
+    char OrchBmp_str[12];
+    char OrganBmp_str[12];
+    char MembBmp_str[12];
+    char MemaBmp_str[12];
+    char MalletBmp_str[14];
+    char WorldBmp_str[12];
+    char GuitarBmp_str[14];
+    char FluteBmp_str[12];
+    char DrumBmp_str[12];
+    char BrassBmp_str[12];
+    char BassBmp_str[12];
+    char NextBmp_str[10];
+    char BeforeBmp_str[12];
+    char StartBmp_str[10];
+    char PauseBmp_str[10];
+    char BwdBmp_str[8];
+    char FwdBmp_str[8];
+    char MixpointBmp_str[14];
+    char MixctrBmp_str[12];
+    char SlmoveBmp_str[12];
+    char SlideBmp_str[10];
+    char TechnicsBmp_str[14];
+    char TrashBmp_str[10];
     uint32_t ptr_31e8;
     char str_586[2];
     uint32_t ptr_31ee;
@@ -2745,43 +2745,43 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_0 = ALIGNED_STRING("r?"),
 
-    .str_1 = "Sind Sie sicher ?",
+    .SindSieSicher_str = "Sind Sie sicher ?",
 
-    .str_2 = "Are You Sure?",
+    .AreYouSure_str = "Are You Sure?",
 
     .ptrs_0 = {
-        SELF(str_8),
+        SELF(UsingDiskFormatWill_str_2),
         SELF(txt_DISK_FORMAT_loscht_alle_Daten),
         SELF(txt_L_utilisation_deDISK_FORMAT),
-        SELF(str_5),
-        SELF(str_4),
-        SELF(str_3),
+        SELF(AlFormatearElDisco_str),
+        SELF(UsingDiskFormatWill_str),
+        SELF(GunakanDiskFormatUntuk_str),
     },
 
-    .str_3 = ALIGNED_STRING("Gunakan Disk Format untuk menghapus suatu data yang ada sekarang didalam disk."),
+    .GunakanDiskFormatUntuk_str = ALIGNED_STRING("Gunakan Disk Format untuk menghapus suatu data yang ada sekarang didalam disk."),
 
-    .str_4 = ALIGNED_STRING("Using DISK FORMAT will erase any current data on the disk."),
+    .UsingDiskFormatWill_str = ALIGNED_STRING("Using DISK FORMAT will erase any current data on the disk."),
 
-    .str_5 = "Al formatear el disco  se borran los datos del disco.",
+    .AlFormatearElDisco_str = "Al formatear el disco  se borran los datos del disco.",
 
     .txt_L_utilisation_deDISK_FORMAT = "L'utilisation deDISK FORMAT effacera toute donn\351e existante sur la disquette.\0",
 
     .txt_DISK_FORMAT_loscht_alle_Daten = "DISK FORMAT l\366scht alle Daten auf der Diskette.\0",
 
-    .str_8 = ALIGNED_STRING("Using DISK FORMAT will erase any current data on the disk."),
+    .UsingDiskFormatWill_str_2 = ALIGNED_STRING("Using DISK FORMAT will erase any current data on the disk."),
 
     .ptrs_1 = {
-        SELF(str_14),
+        SELF(UsingFileDeleteWill_str_2),
         SELF(txt_Die_gewahlte_Disketten_Bank_wird),
         SELF(txt_La_fonction_FILE_DELETE_va),
         SELF(txt_El_uso_del_FILE_DELETE_borrara),
-        SELF(str_10),
+        SELF(UsingFileDeleteWill_str),
         SELF(txt_Usando_FILE_DELETE_si),
     },
 
     .txt_Usando_FILE_DELETE_si = "Usando FILE DELETE si canceller\340il file completamente. Se sei incerto per favore conferma la tua selezione del file.\0\377",
 
-    .str_10 = "Using FILE DELETE will erase the selected file completely. If you are uncertain please confirm your file selection.",
+    .UsingFileDeleteWill_str = "Using FILE DELETE will erase the selected file completely. If you are uncertain please confirm your file selection.",
 
     .txt_El_uso_del_FILE_DELETE_borrara = "El uso del FILE DELETE borrar\341 completamente el archivo seleccionado. Si no est\341 seguro, confirme la selecci\363n del archivo.\0",
 
@@ -2789,20 +2789,20 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .txt_Die_gewahlte_Disketten_Bank_wird = "Die gew\344hlte Disketten-Bank wird komplett gel\366scht.\0",
 
-    .str_14 = "Using FILE DELETE will erase the selected file completely. If you are uncertain please confirm your file selection.",
+    .UsingFileDeleteWill_str_2 = "Using FILE DELETE will erase the selected file completely. If you are uncertain please confirm your file selection.",
 
     .ptrs_2 = {
-        SELF(str_20),
+        SELF(AFileAlreadyExists_str_2),
         SELF(txt_Die_soeben_gewahlte_Disketten),
         SELF(txt_Un_fichier_existe_deja_sous_le),
         SELF(txt_Ya_existe_un_archivo_en_el_lugar),
-        SELF(str_16),
+        SELF(AFileAlreadyExists_str),
         SELF(txt_Esiste_gia_un_file_nella),
     },
 
     .txt_Esiste_gia_un_file_nella = "Esiste gi\340 un file nella locazione scelta, Procedendo. il file presente verr\340 sostituito da quello che state salvando.\0\377",
 
-    .str_16 = "A file already exists at the chosen location. If you proceed it will be replaced by the file that you are saving.",
+    .AFileAlreadyExists_str = "A file already exists at the chosen location. If you proceed it will be replaced by the file that you are saving.",
 
     .txt_Ya_existe_un_archivo_en_el_lugar = "Ya existe un archivo en el lugar seleccionado. Si contin\372a, este archivo se ver\341 reemplazado por el que est\341 memorizando.\0",
 
@@ -2810,69 +2810,69 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .txt_Die_soeben_gewahlte_Disketten = "Die soeben gew\344hlte Disketten-Bank ist bereits wit Daten belegt. Wenn Sie jetzt trotzdem speichern, werden die alten Daten gel\366s",
 
-    .str_19 = ALIGNED_STRING("cht."),
+    .Cht_str = ALIGNED_STRING("cht."),
 
-    .str_20 = "A file already exists at the chosen location. If you proceed it will be replaced by the file that you are saving.",
+    .AFileAlreadyExists_str_2 = "A file already exists at the chosen location. If you proceed it will be replaced by the file that you are saving.",
 
     .ptrs_3 = {
-        SELF(str_26),
+        SELF(WhenDiskIsInserted_str_5),
         SELF(txt_Diese_Seite_wird_geoffnet_wenn),
-        SELF(str_24),
-        SELF(str_23),
-        SELF(str_22),
-        SELF(str_21),
+        SELF(WhenDiskIsInserted_str_4),
+        SELF(WhenDiskIsInserted_str_3),
+        SELF(WhenDiskIsInserted_str_2),
+        SELF(WhenDiskIsInserted_str),
     },
 
-    .str_21 = "When a disk is inserted open this page.",
+    .WhenDiskIsInserted_str = "When a disk is inserted open this page.",
 
-    .str_22 = "When a disk is inserted open this page.",
+    .WhenDiskIsInserted_str_2 = "When a disk is inserted open this page.",
 
-    .str_23 = "When a disk is inserted open this page.",
+    .WhenDiskIsInserted_str_3 = "When a disk is inserted open this page.",
 
-    .str_24 = "When a disk is inserted open this page.",
+    .WhenDiskIsInserted_str_4 = "When a disk is inserted open this page.",
 
     .txt_Diese_Seite_wird_geoffnet_wenn = "Diese Seite wird ge\366ffnet, wenn Sie eine Diskette einlegen.\0",
 
-    .str_26 = "When a disk is inserted open this page.",
+    .WhenDiskIsInserted_str_5 = "When a disk is inserted open this page.",
 
     .ptrs_4 = {
-        SELF(str_32),
+        SELF(WhenDiskContainsTechnics_str_5),
         SELF(txt_Prioritat_wenn_eine_Diskette),
-        SELF(str_30),
-        SELF(str_29),
-        SELF(str_28),
-        SELF(str_27),
+        SELF(WhenDiskContainsTechnics_str_4),
+        SELF(WhenDiskContainsTechnics_str_3),
+        SELF(WhenDiskContainsTechnics_str_2),
+        SELF(WhenDiskContainsTechnics_str),
     },
 
-    .str_27 = ALIGNED_STRING("When a disk contains Technics & SMF files."),
+    .WhenDiskContainsTechnics_str = ALIGNED_STRING("When a disk contains Technics & SMF files."),
 
-    .str_28 = ALIGNED_STRING("When a disk contains Technics & SMF files."),
+    .WhenDiskContainsTechnics_str_2 = ALIGNED_STRING("When a disk contains Technics & SMF files."),
 
-    .str_29 = ALIGNED_STRING("When a disk contains Technics & SMF files."),
+    .WhenDiskContainsTechnics_str_3 = ALIGNED_STRING("When a disk contains Technics & SMF files."),
 
-    .str_30 = ALIGNED_STRING("When a disk contains Technics & SMF files."),
+    .WhenDiskContainsTechnics_str_4 = ALIGNED_STRING("When a disk contains Technics & SMF files."),
 
     .txt_Prioritat_wenn_eine_Diskette = "Priorit\344t, wenn eine Diskette Technics und SMF Files enth\344lt.\0",
 
-    .str_32 = ALIGNED_STRING("When a disk contains Technics & SMF files."),
+    .WhenDiskContainsTechnics_str_5 = ALIGNED_STRING("When a disk contains Technics & SMF files."),
 
     .ptrs_5 = {
-        SELF(str_37),
-        SELF(str_36),
-        SELF(str_35),
-        SELF(str_34),
-        SELF(str_33),
+        SELF(Off_str),
+        SELF(DiskMenu_str),
+        SELF(Load_str),
+        SELF(DirectPlay_str),
+        SELF(SongMedley_str),
     },
 
-    .str_33 = " SONG MEDLEY ",
+    .SongMedley_str = " SONG MEDLEY ",
 
-    .str_34 = " DIRECT PLAY ",
+    .DirectPlay_str = " DIRECT PLAY ",
 
-    .str_35 = "    LOAD     ",
+    .Load_str = "    LOAD     ",
 
-    .str_36 = "  DISK MENU  ",
+    .DiskMenu_str = "  DISK MENU  ",
 
-    .str_37 = "     OFF     ",
+    .Off_str = "     OFF     ",
 
     .field_0a38 = 0x001E,
 
@@ -2894,68 +2894,68 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .pad_0 = { 0 },
 
-    .ptr_0a4c = SELF(str_45),
+    .ptr_0a4c = SELF(Technics_str),
 
-    .ptr_0a50 = SELF(str_44),
+    .ptr_0a50 = SELF(Smf_str),
 
-    .str_44 = ALIGNED_STRING("   SMF    "),
+    .Smf_str = ALIGNED_STRING("   SMF    "),
 
-    .str_45 = ALIGNED_STRING(" TECHNICS "),
+    .Technics_str = ALIGNED_STRING(" TECHNICS "),
 
     .ptrs_6 = {
-        SELF(str_51),
-        SELF(str_50),
-        SELF(str_49),
+        SELF(PleaseWait_str_2),
+        SELF(BitteWarten_str),
+        SELF(VeuillezPatienter_str),
         SELF(field_0ac0),
-        SELF(str_47),
-        SELF(str_46),
+        SELF(PleaseWait_str),
+        SELF(SilahkanTunggu_str),
     },
 
-    .str_46 = ALIGNED_STRING("SILAHKAN TUNGGU!................"),
+    .SilahkanTunggu_str = ALIGNED_STRING("SILAHKAN TUNGGU!................"),
 
-    .str_47 = ALIGNED_STRING("PLEASE WAIT!............"),
+    .PleaseWait_str = ALIGNED_STRING("PLEASE WAIT!............"),
 
     .field_0ac0 = 0x50A1,
 
-    .str_48 = ALIGNED_STRING("OR FAVOR, ESPERE!..................."),
+    .OrFavorEspere_str = ALIGNED_STRING("OR FAVOR, ESPERE!..................."),
 
-    .str_49 = ALIGNED_STRING("VEUILLEZ PATIENTER!..................."),
+    .VeuillezPatienter_str = ALIGNED_STRING("VEUILLEZ PATIENTER!..................."),
 
-    .str_50 = ALIGNED_STRING("BITTE WARTEN!............."),
+    .BitteWarten_str = ALIGNED_STRING("BITTE WARTEN!............."),
 
-    .str_51 = ALIGNED_STRING("PLEASE WAIT!............"),
+    .PleaseWait_str_2 = ALIGNED_STRING("PLEASE WAIT!............"),
 
     .ptrs_7 = {
         SELF(str_60),
-        SELF(str_59),
-        SELF(str_58),
-        SELF(str_57),
-        SELF(str_56),
-        SELF(str_55),
-        SELF(str_54),
-        SELF(str_53),
-        SELF(str_52),
+        SELF(CurrentPanel_str),
+        SELF(PanelMemory_str),
+        SELF(Sequencer_str),
+        SELF(Composer_str),
+        SELF(SoundMemory_str),
+        SELF(Msp_str),
+        SELF(RhythmCustom_str),
+        SELF(UserMidi_str),
     },
 
-    .str_52 = "  USER MIDI  ",
+    .UserMidi_str = "  USER MIDI  ",
 
-    .str_53 = "RHYTHM CUSTOM",
+    .RhythmCustom_str = "RHYTHM CUSTOM",
 
-    .str_54 = "     MSP     ",
+    .Msp_str = "     MSP     ",
 
-    .str_55 = "SOUND MEMORY ",
+    .SoundMemory_str = "SOUND MEMORY ",
 
-    .str_56 = "  COMPOSER   ",
+    .Composer_str = "  COMPOSER   ",
 
-    .str_57 = "  SEQUENCER  ",
+    .Sequencer_str = "  SEQUENCER  ",
 
-    .str_58 = "PANEL MEMORY ",
+    .PanelMemory_str = "PANEL MEMORY ",
 
-    .str_59 = "CURRENT PANEL",
+    .CurrentPanel_str = "CURRENT PANEL",
 
     .str_60 = "             ",
 
-    .str_61 = "1shot",
+    .Shot_str = "1shot",
 
     .ISC_str = "ISC",
 
@@ -3612,13 +3612,13 @@ const naka_disk_warning_t naka_disk_warning_data
         0x00F9AE8A,
     },
 
-    .str_107 = ALIGNED_STRING("DirmdTitleNew();"),
+    .DirmdTitleNew_str = ALIGNED_STRING("DirmdTitleNew();"),
 
-    .str_108 = ALIGNED_STRING("DirmdTitleOld();"),
+    .DirmdTitleOld_str = ALIGNED_STRING("DirmdTitleOld();"),
 
-    .str_109 = ALIGNED_STRING("DirmdTitleESw(%d, %d);"),
+    .DirmdTitleESw_str = ALIGNED_STRING("DirmdTitleESw(%d, %d);"),
 
-    .str_110 = ALIGNED_STRING("DirmdTitleCur();"),
+    .DirmdTitleCur_str = ALIGNED_STRING("DirmdTitleCur();"),
 
     .field_0f12 = 0x0080,
 
@@ -3673,16 +3673,16 @@ const naka_disk_warning_t naka_disk_warning_data
     .field_0f44 = 0x01E8,
 
     .ptrs_10 = {
-        SELF(str_115),
-        SELF(str_114),
+        SELF(Abc_str_2),
+        SELF(Abc_str),
         SELF(str_113),
     },
 
     .str_113 = ALIGNED_STRING(" !#$%&?.... "),
 
-    .str_114 = ALIGNED_STRING("abc...123..."),
+    .Abc_str = ALIGNED_STRING("abc...123..."),
 
-    .str_115 = ALIGNED_STRING("ABC...123..."),
+    .Abc_str_2 = ALIGNED_STRING("ABC...123..."),
 
     .ptrs_11 = {
         SELF(A_str_3),
@@ -4070,9 +4070,9 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .field_125a = 0x059E,
 
-    .str_235 = "0x%02X : %s",
+    .X_str_2 = "0x%02X : %s",
 
-    .str_236 = "0x%02X : %s",
+    .X_str_3 = "0x%02X : %s",
 
     .field_1274 = 0x0707,
 
@@ -4566,17 +4566,17 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .field_14d2 = 0x000D,
 
-    .str_247 = "~aa=%3d",
+    .Aa_str = "~aa=%3d",
 
-    .str_248 = "~aa=---",
+    .Aa_str_2 = "~aa=---",
 
-    .str_249 = ALIGNED_STRING("No My Car Day|Memory|AyaSam|Sweet Home Town|I am Rocker|Sunday Song|Two Day Drunk?|Samba 2"),
+    .NoMyCarDay_str = ALIGNED_STRING("No My Car Day|Memory|AyaSam|Sweet Home Town|I am Rocker|Sunday Song|Two Day Drunk?|Samba 2"),
 
     .str_250 = "%d-%d",
 
-    .str_251 = " PART  |CHANNEL|OCTAVE | LOCAL ",
+    .PartChannelOctaveLocal_str = " PART  |CHANNEL|OCTAVE | LOCAL ",
 
-    .str_252 = ALIGNED_STRING("|-|RIGHT1|RIGHT2|LEFT|PART4|PART5|PART6|PART7|PART8|"),
+    .Right1Right2LeftPart4_str = ALIGNED_STRING("|-|RIGHT1|RIGHT2|LEFT|PART4|PART5|PART6|PART7|PART8|"),
 
     .field_159c = 0x09C3,
 
@@ -4624,17 +4624,17 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .ptr_15d6 = SELF(PASSIVE_str),
 
-    .ptr_15da = SELF(str_260),
+    .ptr_15da = SELF(Active_str),
 
-    .str_260 = "ACTIVE ",
+    .Active_str = "ACTIVE ",
 
     .PASSIVE_str = "PASSIVE",
 
     .ptr_15ee = SELF(OFF_str),
 
-    .ptr_15f2 = SELF(str_262),
+    .ptr_15f2 = SELF(On_str),
 
-    .str_262 = "ON ",
+    .On_str = "ON ",
 
     .OFF_str = "OFF",
 
@@ -4670,9 +4670,9 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .ptr_1622 = SELF(FALSE_str),
 
-    .ptr_1626 = SELF(str_275),
+    .ptr_1626 = SELF(True_str),
 
-    .str_275 = "TRUE ",
+    .True_str = "TRUE ",
 
     .FALSE_str = "FALSE",
 
@@ -4764,7 +4764,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_307 = "9",
 
-    .str_308 = ALIGNED_STRING("PAGE %d/%d"),
+    .Page_str = ALIGNED_STRING("PAGE %d/%d"),
 
     .PAGE_str = ALIGNED_STRING("PAGE"),
 
@@ -4802,11 +4802,11 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .w3_name = ALIGNED_STRING("Show"),
 
-    .str_319 = ALIGNED_STRING("PMEM:%2d-%d %16s"),
+    .Pmem_str = ALIGNED_STRING("PMEM:%2d-%d %16s"),
 
-    .str_320 = "PMEM:%2d-  %16s",
+    .Pmem_str_2 = "PMEM:%2d-  %16s",
 
-    .str_321 = "PMEM:%2d-                  ",
+    .Pmem_str_3 = "PMEM:%2d-                  ",
 
     .ptrs_15 = {
         SELF(RT1_str),
@@ -5257,11 +5257,11 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .MUTE_str = ALIGNED_STRING("MUTE"),
 
-    .str_356 = "Debug Time!",
+    .DebugTime_str = "Debug Time!",
 
-    .str_357 = ALIGNED_STRING("%02X%04X  "),
+    .XX_str = ALIGNED_STRING("%02X%04X  "),
 
-    .str_358 = "%02X %02X %02X %02X %02X %02X %02X %02X",
+    .XXXX_str = "%02X %02X %02X %02X %02X %02X %02X %02X",
 
     .pad_179 = { 0 },
 
@@ -5286,19 +5286,19 @@ const naka_disk_warning_t naka_disk_warning_data
     .pad_183 = { 0 },
 
     .ptrs_16 = {
-        SELF(str_362),
-        SELF(str_361),
-        SELF(str_360),
+        SELF(MemoryDump_str),
+        SELF(Memo_str),
+        SELF(Debug3_str),
         SELF(str_359),
     },
 
     .str_359 = ALIGNED_STRING(""),
 
-    .str_360 = ALIGNED_STRING("-DEBUG3-"),
+    .Debug3_str = ALIGNED_STRING("-DEBUG3-"),
 
-    .str_361 = ALIGNED_STRING("-MEMO-"),
+    .Memo_str = ALIGNED_STRING("-MEMO-"),
 
-    .str_362 = "-MEMORY DUMP-",
+    .MemoryDump_str = "-MEMORY DUMP-",
 
     .str_363 = "1",
 
@@ -5316,15 +5316,15 @@ const naka_disk_warning_t naka_disk_warning_data
         SELF(RT1_str_2),
         SELF(LFT_str),
         SELF(RT2_str_2),
-        SELF(str_380),
-        SELF(str_379),
+        SELF(P_str_9),
+        SELF(P_str_8),
         SELF(P10_str),
         SELF(P11_str),
         SELF(P12_str),
-        SELF(str_375),
-        SELF(str_374),
-        SELF(str_373),
-        SELF(str_372),
+        SELF(P_str_7),
+        SELF(P_str_6),
+        SELF(P_str_5),
+        SELF(P_str_4),
         SELF(DRM_str),
         SELF(CHD_str),
         SELF(APC_str),
@@ -5351,13 +5351,13 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .DRM_str = "DRM",
 
-    .str_372 = "P 4",
+    .P_str_4 = "P 4",
 
-    .str_373 = "P 7",
+    .P_str_5 = "P 7",
 
-    .str_374 = "P 6",
+    .P_str_6 = "P 6",
 
-    .str_375 = "P 5",
+    .P_str_7 = "P 5",
 
     .P12_str = "P12",
 
@@ -5365,9 +5365,9 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .P10_str = "P10",
 
-    .str_379 = "P 9",
+    .P_str_8 = "P 9",
 
-    .str_380 = "P 8",
+    .P_str_9 = "P 8",
 
     .RT2_str_2 = "RT2",
 
@@ -5810,15 +5810,15 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_444 = "&%s%d",
 
-    .str_445 = ".left",
+    .Left_str = ".left",
 
     .str_446 = "{",
 
-    .str_447 = ALIGNED_STRING(".top"),
+    .Top_str = ALIGNED_STRING(".top"),
 
-    .str_448 = ALIGNED_STRING(".width"),
+    .Width_str = ALIGNED_STRING(".width"),
 
-    .str_449 = ".height",
+    .Height_str = ".height",
 
     .str_450 = "}",
 
@@ -5848,51 +5848,51 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .idNONE_str = ALIGNED_STRING("idNONE"),
 
-    .str_464 = "idi%s",
+    .Idi_str = "idi%s",
 
-    .str_465 = "idi%s%d",
+    .Idi_str_2 = "idi%s%d",
 
-    .str_466 = "(sword)",
+    .Sword_str = "(sword)",
 
-    .str_467 = "idi%s",
+    .Idi_str_3 = "idi%s",
 
-    .str_468 = "idi%s%d",
+    .Idi_str_4 = "idi%s%d",
 
     .idNONE_str_2 = ALIGNED_STRING("idNONE"),
 
     .idNONE_str_3 = ALIGNED_STRING("idNONE"),
 
-    .str_471 = "idi%s",
+    .Idi_str_5 = "idi%s",
 
-    .str_472 = "idi%s%d",
+    .Idi_str_6 = "idi%s%d",
 
-    .str_473 = "idi%s",
+    .Idi_str_7 = "idi%s",
 
-    .str_474 = "idi%s%d",
+    .Idi_str_8 = "idi%s%d",
 
     .idNONE_str_4 = ALIGNED_STRING("idNONE"),
 
-    .str_476 = "idi%s",
+    .Idi_str_9 = "idi%s",
 
-    .str_477 = "idi%s%d",
+    .Idi_str_10 = "idi%s%d",
 
     .idNONE_str_5 = ALIGNED_STRING("idNONE"),
 
     .idNONE_str_6 = ALIGNED_STRING("idNONE"),
 
-    .str_480 = "idi%s",
+    .Idi_str_11 = "idi%s",
 
-    .str_481 = "idi%s%d",
+    .Idi_str_12 = "idi%s%d",
 
-    .str_482 = "idi%s",
+    .Idi_str_13 = "idi%s",
 
-    .str_483 = "idi%s%d",
+    .Idi_str_14 = "idi%s%d",
 
     .idNONE_str_7 = ALIGNED_STRING("idNONE"),
 
-    .str_485 = "idi%s",
+    .Idi_str_15 = "idi%s",
 
-    .str_486 = "idi%s%d",
+    .Idi_str_16 = "idi%s%d",
 
     .w8_code = ALIGNED_STRING("idNONE"),
 
@@ -5900,17 +5900,17 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_487 = ALIGNED_STRING("%d"),
 
-    .str_488 = ALIGNED_STRING("MAKEMODEID(%s)"),
+    .Makemodeid_str = ALIGNED_STRING("MAKEMODEID(%s)"),
 
     .w9_code = ALIGNED_STRING("Mode%d"),
 
     .w9_name = ALIGNED_STRING("Mode%d"),
 
-    .str_489 = "Title%d",
+    .Title_str = "Title%d",
 
     .str_490 = ALIGNED_STRING("%d"),
 
-    .str_491 = "MAKETITLEID(%s)",
+    .Maketitleid_str = "MAKETITLEID(%s)",
 
     .w10_code = "Title%d",
 
@@ -6541,7 +6541,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .field_21a3 = 0x48FF,
 
-    .str_506 = ALIGNED_STRING("KLCD%03d.BMP"),
+    .KlcdBmp_str = ALIGNED_STRING("KLCD%03d.BMP"),
 
     .wb_str = ALIGNED_STRING("wb"),
 
@@ -7515,40 +7515,40 @@ const naka_disk_warning_t naka_disk_warning_data
     .TrashIcon_str = "TrashIcon",
 
     .ptrs_26 = {
-        SELF(str_585),
-        SELF(str_584),
-        SELF(str_583),
-        SELF(str_582),
-        SELF(str_581),
-        SELF(str_580),
-        SELF(str_579),
-        SELF(str_578),
-        SELF(str_577),
-        SELF(str_576),
-        SELF(str_575),
-        SELF(str_574),
-        SELF(str_573),
-        SELF(str_572),
-        SELF(str_571),
-        SELF(str_570),
-        SELF(str_569),
-        SELF(str_568),
-        SELF(str_567),
-        SELF(str_566),
-        SELF(str_565),
-        SELF(str_564),
-        SELF(str_563),
-        SELF(str_562),
-        SELF(str_561),
-        SELF(str_560),
-        SELF(str_559),
-        SELF(str_558),
-        SELF(str_557),
-        SELF(str_556),
-        SELF(str_555),
-        SELF(str_554),
-        SELF(str_553),
-        SELF(str_552),
+        SELF(TrashBmp_str),
+        SELF(TechnicsBmp_str),
+        SELF(SlideBmp_str),
+        SELF(SlmoveBmp_str),
+        SELF(MixctrBmp_str),
+        SELF(MixpointBmp_str),
+        SELF(FwdBmp_str),
+        SELF(BwdBmp_str),
+        SELF(PauseBmp_str),
+        SELF(StartBmp_str),
+        SELF(BeforeBmp_str),
+        SELF(NextBmp_str),
+        SELF(BassBmp_str),
+        SELF(BrassBmp_str),
+        SELF(DrumBmp_str),
+        SELF(FluteBmp_str),
+        SELF(GuitarBmp_str),
+        SELF(WorldBmp_str),
+        SELF(MalletBmp_str),
+        SELF(MemaBmp_str),
+        SELF(MembBmp_str),
+        SELF(OrganBmp_str),
+        SELF(OrchBmp_str),
+        SELF(PianoBmp_str),
+        SELF(SaxBmp_str),
+        SELF(StringBmp_str),
+        SELF(SynthBmp_str),
+        SELF(DrawBmp_str),
+        SELF(AccodBmp_str),
+        SELF(LedswonBmp_str),
+        SELF(LedswoffBmp_str),
+        SELF(GmspBmp_str),
+        SELF(MetroBmp_str),
+        SELF(MicBmp_str),
         SELF(str_551),
         0x00000000,
         0x00000000,
@@ -7775,73 +7775,73 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_551 = ALIGNED_STRING(""),
 
-    .str_552 = "19mic.bmp",
+    .MicBmp_str = "19mic.bmp",
 
-    .str_553 = "18metro.bmp",
+    .MetroBmp_str = "18metro.bmp",
 
-    .str_554 = ALIGNED_STRING("14gmsp.bmp"),
+    .GmspBmp_str = ALIGNED_STRING("14gmsp.bmp"),
 
-    .str_555 = ALIGNED_STRING("ledswoff.bmp"),
+    .LedswoffBmp_str = ALIGNED_STRING("ledswoff.bmp"),
 
-    .str_556 = "ledswon.bmp",
+    .LedswonBmp_str = "ledswon.bmp",
 
-    .str_557 = "13accod.bmp",
+    .AccodBmp_str = "13accod.bmp",
 
-    .str_558 = ALIGNED_STRING("12draw.bmp"),
+    .DrawBmp_str = ALIGNED_STRING("12draw.bmp"),
 
-    .str_559 = "10synth.bmp",
+    .SynthBmp_str = "10synth.bmp",
 
-    .str_560 = ALIGNED_STRING("02string.bmp"),
+    .StringBmp_str = ALIGNED_STRING("02string.bmp"),
 
-    .str_561 = "05sax.bmp",
+    .SaxBmp_str = "05sax.bmp",
 
-    .str_562 = "00piano.bmp",
+    .PianoBmp_str = "00piano.bmp",
 
-    .str_563 = ALIGNED_STRING("09orch.bmp"),
+    .OrchBmp_str = ALIGNED_STRING("09orch.bmp"),
 
-    .str_564 = "08organ.bmp",
+    .OrganBmp_str = "08organ.bmp",
 
-    .str_565 = ALIGNED_STRING("17memb.bmp"),
+    .MembBmp_str = ALIGNED_STRING("17memb.bmp"),
 
-    .str_566 = ALIGNED_STRING("16mema.bmp"),
+    .MemaBmp_str = ALIGNED_STRING("16mema.bmp"),
 
-    .str_567 = ALIGNED_STRING("06mallet.bmp"),
+    .MalletBmp_str = ALIGNED_STRING("06mallet.bmp"),
 
-    .str_568 = "07world.bmp",
+    .WorldBmp_str = "07world.bmp",
 
-    .str_569 = ALIGNED_STRING("01guitar.bmp"),
+    .GuitarBmp_str = ALIGNED_STRING("01guitar.bmp"),
 
-    .str_570 = "04flute.bmp",
+    .FluteBmp_str = "04flute.bmp",
 
-    .str_571 = ALIGNED_STRING("15drum.bmp"),
+    .DrumBmp_str = ALIGNED_STRING("15drum.bmp"),
 
-    .str_572 = "03brass.bmp",
+    .BrassBmp_str = "03brass.bmp",
 
-    .str_573 = ALIGNED_STRING("11bass.bmp"),
+    .BassBmp_str = ALIGNED_STRING("11bass.bmp"),
 
-    .str_574 = ALIGNED_STRING("next.bmp"),
+    .NextBmp_str = ALIGNED_STRING("next.bmp"),
 
-    .str_575 = ALIGNED_STRING("before.bmp"),
+    .BeforeBmp_str = ALIGNED_STRING("before.bmp"),
 
-    .str_576 = "start.bmp",
+    .StartBmp_str = "start.bmp",
 
-    .str_577 = "pause.bmp",
+    .PauseBmp_str = "pause.bmp",
 
-    .str_578 = "bwd.bmp",
+    .BwdBmp_str = "bwd.bmp",
 
-    .str_579 = "fwd.bmp",
+    .FwdBmp_str = "fwd.bmp",
 
-    .str_580 = ALIGNED_STRING("mixpoint.bmp"),
+    .MixpointBmp_str = ALIGNED_STRING("mixpoint.bmp"),
 
-    .str_581 = ALIGNED_STRING("mixctr.bmp"),
+    .MixctrBmp_str = ALIGNED_STRING("mixctr.bmp"),
 
-    .str_582 = ALIGNED_STRING("slmove.bmp"),
+    .SlmoveBmp_str = ALIGNED_STRING("slmove.bmp"),
 
-    .str_583 = "slide.bmp",
+    .SlideBmp_str = "slide.bmp",
 
-    .str_584 = ALIGNED_STRING("technics.bmp"),
+    .TechnicsBmp_str = ALIGNED_STRING("technics.bmp"),
 
-    .str_585 = "trash.bmp",
+    .TrashBmp_str = "trash.bmp",
 
     .ptr_31e8 = SELF(str_586),
 

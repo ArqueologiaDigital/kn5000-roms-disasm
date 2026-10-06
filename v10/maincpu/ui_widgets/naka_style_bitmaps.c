@@ -957,7 +957,7 @@ typedef struct __attribute__((packed)) {
     char H_str[2];
     uint16_t field_0a06;
     uint8_t pad_176[2];  /* zero padding */
-    char str_64[18];
+    char NonPanelMemory_str[18];
     uint16_t field_0a1c;
     uint8_t pad_177[3];  /* zero padding */
     uint16_t field_0a21;
@@ -3474,26 +3474,26 @@ typedef struct __attribute__((packed)) {
     uint16_t field_18c12;
     uint16_t field_18c14;
     uint32_t ptrs_33[3];  /* 3 pointers */
-    char str_2523[10];
-    char str_2524[10];
-    char str_2525[10];
-    char str_2526[226];
+    char MemoryC_str[10];
+    char MemoryB_str[10];
+    char MemoryA_str[10];
+    char Right1Right2LeftPart4_str[226];
     uint32_t ptrs_34[16];  /* 16 pointers */
     char str_2527[4];
     char str_2528[4];
     char str_2529[4];
-    char str_2530[4];
-    char str_2531[6];
-    char str_2532[4];
-    char str_2533[6];
-    char str_2534[4];
-    char str_2535[6];
-    char str_2536[4];
-    char str_2537[4];
-    char str_2538[6];
-    char str_2539[4];
-    char str_2540[6];
-    char str_2541[4];
+    char B_str[4];
+    char BA0_str[6];
+    char A_str[4];
+    char AA0_str[6];
+    char G_str[4];
+    char F_str[6];
+    char F_str_2[4];
+    char E_str[4];
+    char EA0_str[6];
+    char D_str[4];
+    char DA0_str[6];
+    char C_str[4];
     char str_2542[4];
     uint32_t ptrs_35[39];  /* 39 pointers */
     uint16_t field_18e48;
@@ -5175,7 +5175,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .pad_176 = { 0 },
 
-    .str_64 = ALIGNED_STRING("Non Panel Memory"),
+    .NonPanelMemory_str = ALIGNED_STRING("Non Panel Memory"),
 
     .field_0a1c = 0x0016,
 
@@ -13769,33 +13769,33 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
     .field_18c14 = 0x0888,
 
     .ptrs_33 = {
-        SELF(str_2525),
-        SELF(str_2524),
-        SELF(str_2523),
+        SELF(MemoryA_str),
+        SELF(MemoryB_str),
+        SELF(MemoryC_str),
     },
 
-    .str_2523 = ALIGNED_STRING("MEMORY-C"),
+    .MemoryC_str = ALIGNED_STRING("MEMORY-C"),
 
-    .str_2524 = ALIGNED_STRING("MEMORY-B"),
+    .MemoryB_str = ALIGNED_STRING("MEMORY-B"),
 
-    .str_2525 = ALIGNED_STRING("MEMORY-A"),
+    .MemoryA_str = ALIGNED_STRING("MEMORY-A"),
 
-    .str_2526 = ALIGNED_STRING("RIGHT1 RIGHT2 LEFT   PART4  PART5  PART6  PART7  PART8  PART9  PART10 PART11 PART12 PART13 PART14 PART15 PART16 ACCOMP1ACCOMP2ACCOMP3BASS   DRUMS  CHORD  R.BASS MSP    MSP    CONTROLPART27 PART28 PART29 PART30 PART31 PART32 "),
+    .Right1Right2LeftPart4_str = ALIGNED_STRING("RIGHT1 RIGHT2 LEFT   PART4  PART5  PART6  PART7  PART8  PART9  PART10 PART11 PART12 PART13 PART14 PART15 PART16 ACCOMP1ACCOMP2ACCOMP3BASS   DRUMS  CHORD  R.BASS MSP    MSP    CONTROLPART27 PART28 PART29 PART30 PART31 PART32 "),
 
     .ptrs_34 = {
         SELF(str_2542),
-        SELF(str_2541),
-        SELF(str_2540),
-        SELF(str_2539),
-        SELF(str_2538),
-        SELF(str_2537),
-        SELF(str_2536),
-        SELF(str_2535),
-        SELF(str_2534),
-        SELF(str_2533),
-        SELF(str_2532),
-        SELF(str_2531),
-        SELF(str_2530),
+        SELF(C_str),
+        SELF(DA0_str),
+        SELF(D_str),
+        SELF(EA0_str),
+        SELF(E_str),
+        SELF(F_str_2),
+        SELF(F_str),
+        SELF(G_str),
+        SELF(AA0_str),
+        SELF(A_str),
+        SELF(BA0_str),
+        SELF(B_str),
         SELF(str_2529),
         SELF(str_2528),
         SELF(str_2527),
@@ -13807,29 +13807,29 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .str_2529 = ALIGNED_STRING("  "),
 
-    .str_2530 = ALIGNED_STRING("B "),
+    .B_str = ALIGNED_STRING("B "),
 
-    .str_2531 = ALIGNED_STRING("B~a0"),
+    .BA0_str = ALIGNED_STRING("B~a0"),
 
-    .str_2532 = ALIGNED_STRING("A "),
+    .A_str = ALIGNED_STRING("A "),
 
-    .str_2533 = ALIGNED_STRING("A~a0"),
+    .AA0_str = ALIGNED_STRING("A~a0"),
 
-    .str_2534 = ALIGNED_STRING("G "),
+    .G_str = ALIGNED_STRING("G "),
 
-    .str_2535 = ALIGNED_STRING("F~9e"),
+    .F_str = ALIGNED_STRING("F~9e"),
 
-    .str_2536 = ALIGNED_STRING("F "),
+    .F_str_2 = ALIGNED_STRING("F "),
 
-    .str_2537 = ALIGNED_STRING("E "),
+    .E_str = ALIGNED_STRING("E "),
 
-    .str_2538 = ALIGNED_STRING("E~a0"),
+    .EA0_str = ALIGNED_STRING("E~a0"),
 
-    .str_2539 = ALIGNED_STRING("D "),
+    .D_str = ALIGNED_STRING("D "),
 
-    .str_2540 = ALIGNED_STRING("D~a0"),
+    .DA0_str = ALIGNED_STRING("D~a0"),
 
-    .str_2541 = ALIGNED_STRING("C "),
+    .C_str = ALIGNED_STRING("C "),
 
     .str_2542 = ALIGNED_STRING("  "),
 
