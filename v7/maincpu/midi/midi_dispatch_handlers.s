@@ -1124,24 +1124,24 @@ PanelEvt_Dispatch3_TableAndHandlers_A:
 ; MidiChannel_ConfigureController with W = 7: CC function 7, sent as CC91.
 PanelEvt_D3ASlot1_SendCC91:
 	bit	7, (0x95b3:16)
-	jr	z, PanelEvt_Dispatch3Entry_A_Return
+	jr	z, PanelEvt_D3ASlot1_SendCC91_Return
 	ld	l, 25:opc
 	ld	xix, PanelEvt_Handler_7_ValueCheck_Data
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
 	cp	xix, 0xffffffff
-	jr	z, PanelEvt_Dispatch3Entry_A_Return
+	jr	z, PanelEvt_D3ASlot1_SendCC91_Return
 	bit	5, (0xfd58:16)
-	jr	z, PanelEvt_Dispatch3Entry_A_Return
+	jr	z, PanelEvt_D3ASlot1_SendCC91_Return
 	ld	e, 0:opc
 	bit	7, (0x95b2:16)
-	jr	z, PanelEvt_Dispatch3Entry_A_Skip
+	jr	z, PanelEvt_D3ASlot1_SendCC91_Skip
 	ld	e, 127:opc
-PanelEvt_Dispatch3Entry_A_Skip:
+PanelEvt_D3ASlot1_SendCC91_Skip:
 	ld	w, 7:opc
 	calr	MidiChannel_ConfigureController
-PanelEvt_Dispatch3Entry_A_Return:
+PanelEvt_D3ASlot1_SendCC91_Return:
 	ret
 PanelEvt_Dispatch3Entry_B:
 	ld	xiy, PanelEvt_Dispatch3_Table_B
@@ -5128,26 +5128,26 @@ FileData_ImportNNLivePanel:
 	ld	(xsp+10), xhl
 	ld	xwa, (xsp+10)
 	or	xwa, xwa
-	jr	nz, DataBuf_CopyBulkBitfields_Large_Skip
+	jr	nz, FileData_ImportNNLivePanel_Skip
 	ldw	hl, 0xff38
 	jrl	DataBuf_CopyBulkBitfields_Large_Epilogue
-DataBuf_CopyBulkBitfields_Large_Skip:
+FileData_ImportNNLivePanel_Skip:
 	ld	xwa, (xsp+10)
 	add	xwa, 32
 	ld	xbc, 1056
 	call	FileIO_ReadBlock
 	ld	iz, hl
 	cp	iz, 0:i3
-	jr	ge, DataBuf_CopyBulkBitfields_Large_Skip2
+	jr	ge, FileData_ImportNNLivePanel_Skip2
 	ld	xwa, (xsp+10)
 	push	xwa
 	call	Free
 	inc	4, xsp
 	ld	hl, iz
 	jrl	DataBuf_CopyBulkBitfields_Large_Epilogue
-DataBuf_CopyBulkBitfields_Large_Skip2:
+FileData_ImportNNLivePanel_Skip2:
 	ldw	(xsp+4), 0
-DataBuf_CopyBulkBitfields_Large_Loop2:
+FileData_ImportNNLivePanel_Loop2:
 	ld	wa, (xsp+4)
 	extz	xwa
 	ld	xbc, xwa
@@ -5166,9 +5166,9 @@ DataBuf_CopyBulkBitfields_Large_Loop2:
 	calr	VoiceParam_CopyBitfields_TypeA
 	incw	1, (xsp+4)
 	cpw	(xsp+4), 23
-	jr	c, DataBuf_CopyBulkBitfields_Large_Loop2
+	jr	c, FileData_ImportNNLivePanel_Loop2
 	ldw	(xsp+4), 0
-DataBuf_CopyBulkBitfields_Large_Loop3:
+FileData_ImportNNLivePanel_Loop3:
 	ld	bc, (xsp+4)
 	extz	xbc
 	ld	xwa, DataBuf_CopyBulkBitfields_Large_Data
@@ -5190,7 +5190,7 @@ DataBuf_CopyBulkBitfields_Large_Loop3:
 	calr	VoiceParam_CopyBitfields_LargeBlock
 	incw	1, (xsp+4)
 	cpw	(xsp+4), 24
-	jr	c, DataBuf_CopyBulkBitfields_Large_Loop3
+	jr	c, FileData_ImportNNLivePanel_Loop3
 	ld	xwa, (xsp+10)
 	lda	xwa, (xwa+308)
 	ld	xbc, (xsp+6)
@@ -5243,37 +5243,37 @@ FileData_ImportNNPanelMemories:
 	ldw	wa, 24
 	calr	FileData_ResetPanelMemoriesToDefault
 	ld	iz, 0:i3
-DataBuf_CopyBulkBitfields_Large_Loop4:
+FileData_ImportNNPanelMemories_Loop4:
 	ld	wa, iz
 	calr	SndParam_TableDispatch_Memset
 	inc	1, iz
 	cp	iz, 3:i3
-	jr	c, DataBuf_CopyBulkBitfields_Large_Loop4
+	jr	c, FileData_ImportNNPanelMemories_Loop4
 	pushw 336
 	call	Malloc
 	inc	2, xsp
 	ld	(xsp+8), xhl
 	ld	xwa, (xsp+8)
 	or	xwa, xwa
-	jr	nz, DataBuf_CopyBulkBitfields_Large_Skip3
+	jr	nz, FileData_ImportNNPanelMemories_Skip3
 	ldw	hl, 0xff38
-	jrl	DataBuf_CopyBulkBitfields_Large_Epilogue2
-DataBuf_CopyBulkBitfields_Large_Skip3:
+	jrl	FileData_ImportNNPanelMemories_Epilogue2
+FileData_ImportNNPanelMemories_Skip3:
 	ldw	(xsp+6), 0
-DataBuf_CopyBulkBitfields_Large_Loop5:
+FileData_ImportNNPanelMemories_Loop5:
 	ld	xwa, (xsp+8)
 	ld	xbc, 336
 	call	FileIO_ReadBlock
 	ld	iz, hl
 	cp	iz, 0:i3
-	jr	ge, DataBuf_CopyBulkBitfields_Large_Skip4
+	jr	ge, FileData_ImportNNPanelMemories_Skip4
 	ld	xwa, (xsp+8)
 	push	xwa
 	call	Free
 	inc	4, xsp
 	ld	hl, iz
-	jrl	DataBuf_CopyBulkBitfields_Large_Epilogue2
-DataBuf_CopyBulkBitfields_Large_Skip4:
+	jrl	FileData_ImportNNPanelMemories_Epilogue2
+FileData_ImportNNPanelMemories_Skip4:
 	ld	wa, (xsp+6)
 	extz	xwa
 	ld	xbc, xwa
@@ -5284,7 +5284,7 @@ DataBuf_CopyBulkBitfields_Large_Skip4:
 	add	xwa, xbc
 	ld	(xsp+2), xwa
 	ld	iz, 0:i3
-DataBuf_CopyBulkBitfields_Large_Loop6:
+FileData_ImportNNPanelMemories_Loop6:
 	ld	bc, iz
 	extz	xbc
 	ld	xwa, xbc
@@ -5304,7 +5304,7 @@ DataBuf_CopyBulkBitfields_Large_Loop6:
 	calr	VoiceParam_CopyBitfields_TypeA
 	inc	1, iz
 	cp	iz, 23
-	jr	c, DataBuf_CopyBulkBitfields_Large_Loop6
+	jr	c, FileData_ImportNNPanelMemories_Loop6
 	ld	xwa, (xsp+8)
 	lda	xwa, (xwa+276)
 	ld	xbc, (xsp+2)
@@ -5340,7 +5340,7 @@ DataBuf_CopyBulkBitfields_Large_Loop6:
 	calr	FileData_CopyLivePartFieldsToMemory
 	incw	1, (xsp+6)
 	cpw	(xsp+6), 24
-	jrl	c, DataBuf_CopyBulkBitfields_Large_Loop5
+	jrl	c, FileData_ImportNNPanelMemories_Loop5
 	ld	wa, 0:i3
 	call	PostPmLoad
 	ld	xwa, (xsp+8)
@@ -5348,7 +5348,7 @@ DataBuf_CopyBulkBitfields_Large_Loop6:
 	call	Free
 	inc	4, xsp
 	ld	hl, 0:i3
-DataBuf_CopyBulkBitfields_Large_Epilogue2:
+FileData_ImportNNPanelMemories_Epilogue2:
 	popw	iz
 	lda	xsp, (xsp+14)
 	ret
@@ -6158,9 +6158,9 @@ FileData_ConvertNNBlock1Fields:
 	or	(xix), a
 	ld	a, (xhl)
 	and	a, 7
-	jr	z, DSPCfg_VoiceSlotB_ExtractData_Skip
+	jr	z, FileData_ConvertNNBlock1Fields_Skip
 	setm	0, (xix)
-DSPCfg_VoiceSlotB_ExtractData_Skip:
+FileData_ConvertNNBlock1Fields_Skip:
 	ld	a, (xde+374)
 	and	a, 127
 	andmi8	(xbc+1050), 128
@@ -6405,7 +6405,7 @@ FileData_CopyLivePartFieldsToMemory:
 	ld	xwa, xde
 	lda	xbc, (xbc+32)
 	lda	xde, (xde+416)
-DataBuf_CopyBulkBitfields_Large_Helper2_Loop:
+FileData_CopyLivePartFieldsToMemory_Loop:
 	ld	l, (xwa-2)
 	and	l, 127
 	andmi8	(xbc-2), 128
@@ -6423,7 +6423,7 @@ DataBuf_CopyBulkBitfields_Large_Helper2_Loop:
 	lda	xbc, (xbc+26)
 	lda	xwa, (xwa+26)
 	cp	xwa, xde
-	jr	c, DataBuf_CopyBulkBitfields_Large_Helper2_Loop
+	jr	c, FileData_CopyLivePartFieldsToMemory_Loop
 	ret
 DataBuf_TransferSlotBitfields:
 	ld xde, xbc
@@ -6560,8 +6560,8 @@ FileData_ResetPanelMemoriesToDefault:
 	ld	(xsp+2), xwa
 	ld	iz, 0:i3
 	cpw	(xsp+6), 0
-	jr	ule, DataBuf_CopyBulkBitfields_Large_Helper3_Epilogue
-DataBuf_Data_FormatDispatch_Loop:
+	jr	ule, FileData_ResetPanelMemoriesToDefault_Epilogue
+FileData_ResetPanelMemoriesToDefault_Loop:
 	ld	wa, iz
 	extz	xwa
 	ld	xbc, xwa
@@ -6578,8 +6578,8 @@ DataBuf_Data_FormatDispatch_Loop:
 	lda	xsp, (xsp+10)
 	inc	1, iz
 	cp	iz, (xsp+6)
-	jr	c, DataBuf_Data_FormatDispatch_Loop
-DataBuf_CopyBulkBitfields_Large_Helper3_Epilogue:
+	jr	c, FileData_ResetPanelMemoriesToDefault_Loop
+FileData_ResetPanelMemoriesToDefault_Epilogue:
 	popw	iz
 	inc	6, xsp
 	ret
@@ -9283,17 +9283,17 @@ MidiPkt_SetXferTotal_All:
 	ld	wa, 1:i3
 	calr	AccWrap_ReturnZero
 	cp	hl, 0xffff
-	jr	z, MidiSeq_ClearSyncFlag_Helper_Skip3
+	jr	z, MidiPkt_SetXferTotal_All_Skip3
 	ld	xwa, 0x72aa
 	add	(xiz+8), xwa
-MidiSeq_ClearSyncFlag_Helper_Skip3:
+MidiPkt_SetXferTotal_All_Skip3:
 	ld	wa, 3:i3
 	calr	AccWrap_ReturnZero
 	cp	hl, 0xffff
-	jr	z, MidiSeq_ClearSyncFlag_Helper_Skip4
+	jr	z, MidiPkt_SetXferTotal_All_Skip4
 	calr	MidiPkt_GetUsedSize_StyleImage
 	add	(xiz+8), xhl
-MidiSeq_ClearSyncFlag_Helper_Skip4:
+MidiPkt_SetXferTotal_All_Skip4:
 	ld	xwa, (xiz+8)
 	add	xwa, (xiz)
 	ld	(xiz+4), xwa

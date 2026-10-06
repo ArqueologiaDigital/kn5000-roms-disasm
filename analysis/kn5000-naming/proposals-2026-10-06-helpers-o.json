@@ -1,0 +1,399 @@
+[
+ {
+  "old": "SLSrcBankList_FuncBody_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SingleLoadSrc_PanelMemDrawBankName",
+  "header": "PANEL MEMORY source list, row 1: writes cell 1 of the list buffer (0x8963) with the name of bank (0x89FC) / C (C = SingleLoadSrc_PanelMemBankSize, 8) read from the selected .PMT file (SLSrcBankList_FuncBody_Helper12: 16 bytes at file offset 16 + 16 * bank), pads it to 16 and posts EVT_PARA_DRAW of 0x8963 to the file-name box XWA. Basis: callers + body -- SingleLoadSrc_PanelMemListProc draws the four rows on EVT_PAINT with SLSrcBankList_FuncBody (row 0 'BANK:n'), Helper2, this and Helper3, and redraws it on parameter 40 after a bank change.",
+  "basis": "callers + body",
+  "evidence": [
+   "file_io/single_load.s:340 `calr SLSrcBankList_FuncBody_Helper` -- caller SingleLoadSrc_PanelMemListProc, EVT_PAINT (also 491, parameter 40)",
+   "file_io/single_load.s:309-313 SingleLoadSrc_PanelMemListProc header -- 'EVT_PAINT draws the bank/name rows (SLSrcBankList_FuncBody, _Helper2, _Helper, _Helper3)'",
+   "file_io/single_load.s:208-214 `ld (xwa+21), 1` / `lda xiz, (xwa+22)` / `div wa, c` / `call SLSrcBankList_FuncBody_Helper12` -- cell 1, bank = position / bank size",
+   "demo/file_demo_proc.s:6731-6743 `sll wa, 4` / `add wa, 16` / `ld xbc, 16` / `call FileIO_ReadBlock` -- Helper12 reads the 16-byte bank name, the same layout WP_GetConfigName reads from RAM 0x1ED350 + 16 + 16 * bank",
+   "file_io/single_load.s:219-222 `lda xde, (0x8963:16)` / `ld xbc, EVT_PARA_DRAW` / `call ApPostEvent`"
+  ]
+ },
+ {
+  "old": "SLSrcBankList_FuncBody_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SingleLoadSrc_PanelMemDrawMemoryNumber",
+  "header": "PANEL MEMORY source list, row 2 (and row 3 in ALL mode): writes cell 2 (0x8978) as StorageArea_UnitNames[mode] ('MEMORY') + ': ' + the memory number within its bank ((0x89FC) mod C + 1, omitted when ALL flag 0x89FA is set), posts it, and when 0x89FA is set writes cell 3 (0x898D) as 'ALL' and posts it. Basis: callers + body -- SingleLoadSrc_PanelMemListProc calls it on EVT_PAINT and after every cursor move (parameters 5 and 6), which change the memory number.",
+  "basis": "callers + body",
+  "evidence": [
+   "file_io/single_load.s:337 `calr SLSrcBankList_FuncBody_Helper2` -- caller SingleLoadSrc_PanelMemListProc, EVT_PAINT; 388 and 447 after the bank / memory steps",
+   "file_io/single_load.s:233-241 `ld (xwa+42), 2` / `lda xde, (StorageArea_UnitNames:24)` / `call FileIO_CopyString` -- cell 2 starts with the unit name",
+   "file_io/single_load.s:244-255 `cp (0x89fa:16), 0` / `div wa, (xsp+0x4)` / `ld a, w` / `inc 1, a` / `calr NumToAscii_FormatNumber` -- remainder + 1 = number within the bank",
+   "file_io/single_load.s:263-273 `cp (0x89fa:16), 0` / `ld (xwa+63), 3` / `ld xbc, SLSrcBankList_FuncBody_Str_ALL` -- ALL mode fills cell 3"
+  ]
+ },
+ {
+  "old": "SLSrcBankList_FuncBody_Helper3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SingleLoadSrc_PanelMemDrawMemoryName",
+  "header": "PANEL MEMORY source list, row 3: unless ALL mode (0x89FA set), writes cell 3 (0x898D) with the name of panel memory (0x89FC) read from the selected .PMT file (SLSrcBankList_FuncBody_Helper13: 16 bytes at 178 + index * entry size, the size being the file's word at offset 13), pads it and posts EVT_PARA_DRAW. Basis: callers + body -- SingleLoadSrc_PanelMemListProc calls it on EVT_PAINT and on parameter 40 when a memory change is pending (0x81CE).",
+  "basis": "callers + body",
+  "evidence": [
+   "file_io/single_load.s:343 `calr SLSrcBankList_FuncBody_Helper3` -- caller SingleLoadSrc_PanelMemListProc, EVT_PAINT; 498 on parameter 40",
+   "file_io/single_load.s:287-294 `cp (0x89fa:16), 0` / `ld (xwa+63), 3` / `ld a, (0x89fc:16)` / `call SLSrcBankList_FuncBody_Helper13`",
+   "demo/file_demo_proc.s:6774-6787 `ld xwa, 13` ... `call FileIO_ReadByte` x2 / `mul xiz, (xsp+0x1c)` / `add xwa, 178` / `ld xbc, 16` -- Helper13 reads the name at 178 + index * size, as WP_GetNameByOffset does in RAM",
+   "file_io/single_load.s:299-302 `lda xde, (0x898d:16)` / `ld xbc, EVT_PARA_DRAW` / `call ApPostEvent`"
+  ]
+ },
+ {
+  "old": "SLSrcBankList_FuncBody_Helper4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SingleLoadSrc_ComposerDrawBankName",
+  "header": "COMPOSER source list, rows 0-1: writes cell 0 (0x894E) as the bank caption SingleLoad_BankCaptionByMode[mode] ('BANK') + ':' and cell 1 (0x8963) as the memory-bank name of position (0x89FE) / C (WP_GetPresetName1 -> SingleLoad_MemoryBankNames: MEMORY-A/B/C; C = SLSrcComposer_RowsPerColumn, 10), and posts both with EVT_PARA_DRAW. Basis: callers + body -- SingleLoadSrc_ComposerListProc calls it on EVT_PAINT and after a +-10 move (parameter 5), the moves that change the bank.",
+  "basis": "callers + body",
+  "evidence": [
+   "file_io/single_load.s:741 `calr SLSrcBankList_FuncBody_Helper4` -- caller SingleLoadSrc_ComposerListProc, EVT_PAINT; 766 / 781 after parameter-5 moves",
+   "file_io/single_load.s:580-590 `lda xde, (SingleLoad_BankCaptionByMode:24)` / `call FileIO_CopyString` / `ld xbc, SLSrcBankList_FuncBody_Entry_Str_Colon_2`",
+   "file_io/single_load.s:594-600 `lda xwa, (0x8963:16)` / `ld c, (0x89fe:16)` / `div bc, (xsp+0x4)` / `ld de, 1:i3` / `calr WP_GetPresetName1` -- bank = position / 10",
+   "ui_widgets/technichord_string_data.s:5516-5520 SingleLoad_MemoryBankNames -- MEMORY-A/B/C, read by WP_GetPresetName1 for the COMPOSER lists",
+   "file_io/single_load.s:601-608 two `call ApPostEvent` (0x894E, 0x8963)"
+  ]
+ },
+ {
+  "old": "SLSrcBankList_FuncBody_Helper5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SingleLoadSrc_ComposerDrawPatternSlot",
+  "header": "COMPOSER source list, rows 2-3 for the slot: writes cell 2 (0x8978) as StorageArea_UnitNames[mode] ('PATTERN') + ': ' + PtrTbl_VariationNames[(0x89FE) mod C] (VARI 1-4; omitted in ALL mode 0x89FA) and posts it; then cell 3 (0x898D) is 'ALL' in ALL mode, or for slots 4-9 the fixed section name (WP_GetBankMemName -> WP_SectionNameTable: INTRO 1 .. ENDING 2); slots 0-3 leave cell 3 to SLSrcBankList_FuncBody_Helper6. Basis: callers + body -- SingleLoadSrc_ComposerListProc calls it on EVT_PAINT and after every cursor move (parameters 5 and 6).",
+  "basis": "callers + body",
+  "evidence": [
+   "file_io/single_load.s:738 `calr SLSrcBankList_FuncBody_Helper5` -- caller SingleLoadSrc_ComposerListProc, EVT_PAINT; 785 / 843 after moves",
+   "file_io/single_load.s:616-621 `ld a, (0x89fe:16)` / `div wa, (xsp+0x6)` / `ld a, w` / `ld (xsp+4), wa` -- slot = position mod 10",
+   "file_io/single_load.s:622-640 `ld (xwa+42), 2` / `lda xde, (StorageArea_UnitNames:24)` / `cp (0x89fa:16), 0` / `calr WP_GetPresetPtr` -- 'PATTERN: VARI n'",
+   "file_io/single_load.s:653-658 `cp (0x89fa:16), 0` / `ld (xwa), 3` / `ld xbc, SLSrcBankList_FuncBody_Entry_Str_ALL`",
+   "file_io/single_load.s:665-673 `cpw (xsp+0x4), 4` / `jr c` / `pushw 3` / `calr WP_GetBankMemName` -- slots >= 4 take the section name (ui_widgets/technichord_string_data.s:5581-5584 WP_SectionNameTable)"
+  ]
+ },
+ {
+  "old": "SLSrcBankList_FuncBody_Helper6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SingleLoadSrc_ComposerDrawPatternName",
+  "header": "COMPOSER source list, row 3 for user patterns: unless ALL mode (0x89FA) or slot (0x89FE) mod C >= 4, writes cell 3 (0x898D) with the 13-character name of pattern (bank, slot) read from the selected .CMP file (SLSrcBankList_FuncBody_Helper15: offset 160 + 96 * (4 * bank + slot), the layout of RAM 0x948A0), pads it and posts EVT_PARA_DRAW. Basis: callers + body -- SingleLoadSrc_ComposerListProc calls it on EVT_PAINT and on parameter 40 when a move left it pending (0x81D6).",
+  "basis": "callers + body",
+  "evidence": [
+   "file_io/single_load.s:744 `calr SLSrcBankList_FuncBody_Helper6` -- caller SingleLoadSrc_ComposerListProc, EVT_PAINT; 886 on parameter 40",
+   "file_io/single_load.s:687-695 `div wa, e` / `ld c, w` / `cp (0x89fa:16), 0` / `cp bc, 4:i3` / `jr nc` -- only slots 0-3 outside ALL mode",
+   "file_io/single_load.s:696-704 `ld (xwa+63), 3` / `div wa, e` / `call SLSrcBankList_FuncBody_Helper15` -- WA = bank, BC = slot",
+   "demo/file_demo_proc.s:6879-6887 `sll wa, 2` / `add wa, (xsp+0x1a)` / `mul wa, 96` / `add wa, 160` / `ld xbc, 13` -- Helper15 reads the pattern name",
+   "file_io/wallpaper.s:568-575 WP_GetBankMemName -- the same 96 * (4 * bank + slot) layout in RAM 0x948A0"
+  ]
+ },
+ {
+  "old": "SLSrcBankList_FuncBody_Helper7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SingleLoad_SyncSoundMemCursorGroup",
+  "header": "Keeps the SOUND MEMORY source cursor (XDE = 0x8A00) and destination cursor (stack arg = 0x8A08) in the same group, below or from 2 x C (C = 20: the 40 sounds vs. the entries from 40 up): when they differ, an XWA = 5/6 move (source list) copies the source index to the destination and redraws SingleLoadDstFunc (EVT_PARA_DRAW), a 7/8 move (destination list) copies the destination index to the source and repaints SingleLoadSrcFunc (EVT_PAINT); retd 4. Basis: callers + body -- SingleLoadSrc_SoundMemListProc (parameters 5/6) and SingleLoadDst_SoundMemListProc (parameters 7/8) call it after every move with XDE = 0x8A00, pushed 0x8A08 and XWA = the parameter.",
+  "basis": "callers + body",
+  "evidence": [
+   "file_io/single_load.s:1292-1311 `pushw 0x8a08` / `ld xwa, (xsp+8)` / `ld xde, 0x8a00` / `calr SLSrcBankList_FuncBody_Helper7` -- caller SingleLoadSrc_SoundMemListProc (also 1206)",
+   "file_io/single_load.s:2556-2560 `pushw 0x8a08` / `ld xde, 0x8a00` / `calr SLSrcBankList_FuncBody_Helper7` -- caller SingleLoadDst_SoundMemListProc (also 2669)",
+   "file_io/single_load.s:895-907 `ld l, c` / `add l, c` / `cp (xde), l` / `cp (xix), l` -- returns unless the two indices lie on different sides of 2 x C",
+   "file_io/single_load.s:916-922 `ld a, (xde)` / `ld (xix), a` / `ld xbc, EVT_PARA_DRAW` / `calr SingleLoadDstFunc` -- parameters 5/6",
+   "file_io/single_load.s:923-928 `ld a, (xix)` / `ld (xde), a` / `ld xbc, EVT_PAINT` / `calr SingleLoadSrcFunc` -- parameters 7/8",
+   "ui_widgets/technichord_string_data.s:5781-5784 SLDstSoundMem_RowsPerColumn -- columns 0-19, 20-39 and the item 40"
+  ]
+ },
+ {
+  "old": "SLSrcBankList_FuncBody_Helper14",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SingleLoadSrc_ReadSqtSongName",
+  "header": "Returns XHL = the 16-character name of song WA in the selected .SQT file: opens the file (type 2, 'rb'), reads 16 bytes at offset 256 + 2048 * WA into 0x25BFE and NUL-terminates them; returns FileIO_EmptyEntryName when no file is selected or it does not open. Basis: callers + body -- SingleLoadSrc_SequencerListProc puts its result for song 0 in cell 2 of the SEQUENCER source list, under the 'SONG:' row.",
+  "basis": "callers + body",
+  "evidence": [
+   "file_io/single_load.s:537-543 `lda xiz, (xwa+43)` / `ld wa, 0:i3` / `call SLSrcBankList_FuncBody_Helper14` / `call FileIO_CopyString` -- caller SingleLoadSrc_SequencerListProc, cell 2",
+   "file_io/single_load.s:505-508 SingleLoadSrc_SequencerListProc header -- 'row 1 SONG:, row 2 the file's entry 0 name'",
+   "demo/file_demo_proc.s:6821 `ld de, 2:i3` -- FileIO_ReadHeader type 2 = SQT (FileIO_TypeExtensions)",
+   "demo/file_demo_proc.s:6833-6843 `sll wa, 11` / `add wa, 256` / `ld xwa, 0x25bfe` / `ld xbc, 16` / `lda xhl, (0x25bfe:24)`",
+   "demo/file_demo_proc.s:6829 `ld xhl, FileIO_EmptyEntryName` -- failure result"
+  ]
+ },
+ {
+  "old": "SLDstBankList_FuncBody_Helper7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SingleLoad_LoadPanelMemBank",
+  "header": "Single-loads panel-memory bank WA of the selected .PMT file into bank BC: checks the file signature, reads the 16-byte bank name (file 16 + 16 * WA -> RAM 0x1ED350 + 16 + 16 * BC) and the bank's 8 memories (8 * entry size from file 176 + WA * 8 * size -> 0x1ED350 + 176 + BC * 8 * size) between PanelMemory_PreBankLoad and PanelMemory_PostBankLoad; returns HL = read result, 0xFF98 with no file selected, 0xFF9A on a wrong signature. Basis: callers + body -- SingleLoadDst_PanelMemListProc runs it for parameter 10 (the execute SingleLoadDstFunc sends) in ALL mode with WA = source bank (0x89FC / 8) and BC = destination bank (0x8A02 / 8); FileIO_ByteBlock_DemoProc1 is the one-memory load.",
+  "basis": "callers + body",
+  "evidence": [
+   "file_io/single_load.s:1854-1867 `cp xwa, 10` / `cp (0x89fa:16), 0` / `div wa, c` / `div de, c` / `call SLDstBankList_FuncBody_Helper7` -- caller SingleLoadDst_PanelMemListProc, ALL mode",
+   "file_io/single_load.s:1870-1875 `call FileIO_ByteBlock_DemoProc1` -- single-memory branch",
+   "file_io/single_load.s:2995-3018 `cp xwa, 0xa` / `call (xix)` / `ld (GLOBAL_ERROR_CODE:16), l` -- SingleLoadDstFunc's execute path calls the area list proc and keeps its result",
+   "demo/file_demo_proc.s:3213 `ld de, 1:i3` -- type 1 = PMT",
+   "demo/file_demo_proc.s:3230-3250 `sll xiz, 4` / `call PanelMemory_PreBankLoad` / `lda xwa, (0x1ed350:24)` / `ld xbc, 16` -- bank name",
+   "demo/file_demo_proc.s:3255-3282 `sll xwa, 3` / `call Math_MultiplyAccumulate` / `call FileIO_ReadBlock` / `call PanelMemory_PostBankLoad` -- 8 memories",
+   "demo/file_demo_proc.s:3199 `ldw hl, 0xff98` / 3285 `ldw iz, 0xff9a`"
+  ]
+ },
+ {
+  "old": "SLDstBankList_FuncBody_Helper8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SingleLoad_LoadSong",
+  "header": "Single-loads the song of the selected .SQT file into song slot WA: checks the file signature and header (FileIO_ReadHeaderAt4, else 0xFF96), checks the free song memory (SeqLoad_ProcessDataBlock vs UpdateFileEntry, else 0xFF97), reads the 2048-byte song header into SEQ_SONG_SLOTS + 2048 * WA and the event data to 0xB0000 + the offset FileIO_ByteBlock_DemoProc1_Helper returns, finishes with FileIO_ByteBlock_DemoProc1_Helper2 and SetSongSlotValue(WA, 0); returns HL = result (0xFF98 no file, 0xFF9A wrong signature). Basis: callers + body -- SingleLoadDst_SequencerListProc runs it for parameter 10 with WA = the destination song number 0x8A04.",
+  "basis": "callers + body",
+  "evidence": [
+   "file_io/single_load.s:2013-2017 `cp xde, 10` / `ld a, (0x8a04:16)` / `call SLDstBankList_FuncBody_Helper8` -- caller SingleLoadDst_SequencerListProc",
+   "file_io/single_load.s:1930-1934 SingleLoadDst_SequencerListProc header -- 'SONG: n'; 'parameter 10 returns SLDstBankList_FuncBody_Helper8(song)'",
+   "demo/file_demo_proc.s:3314 `ld de, 2:i3` -- type 2 = SQT",
+   "demo/file_demo_proc.s:3331-3372 `ldw iz, 0xff96` / `call SeqLoad_ProcessDataBlock` / `call UpdateFileEntry` / `ldw iz, 0xff97`",
+   "demo/file_demo_proc.s:3351-3357 `lda xwa, (SEQ_SONG_SLOTS:24)` / `ld xbc, 2048` / `call FileIO_ReadBlock` / `lda xwa, (0xb0000:24)` -- song header and data",
+   "demo/file_demo_proc.s:3369 `call SetSongSlotValue`"
+  ]
+ },
+ {
+  "old": "SLDstBankList_FuncBody_Helper9",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SingleLoad_LoadComposerPattern",
+  "header": "Single-loads from the selected .CMP file: opens it (type 3), validates the header (FileIO_ReadAndValidateHeader, else 0xFF9A) and hands source A = WA and destination C = BC to FileIO_ByteBlock_DemoProc1_Helper3, which copies one composer pattern, or a whole memory bank when both are 30 + bank; returns HL = result (0xFF98 with no file selected). Basis: callers + body -- SingleLoadDst_ComposerListProc runs it for parameter 10 with WA = source position 0x89FE and BC = destination 0x8A06, or in ALL mode with both = position / 10 + 30.",
+  "basis": "callers + body",
+  "evidence": [
+   "file_io/single_load.s:2285-2307 `cp xwa, 10` / `cp (0x89fa:16), 0` / `add a, 30` / `add e, 30` / `call SLDstBankList_FuncBody_Helper9` -- caller SingleLoadDst_ComposerListProc",
+   "file_io/single_load.s:2127-2130 SingleLoadDst_ComposerListProc header -- banks of 10 up to 30 over RAM 0x8A06",
+   "demo/file_demo_proc.s:3405 `ld de, 3:i3` -- type 3 = CMP",
+   "demo/file_demo_proc.s:3413-3426 `calr FileIO_ReadAndValidateHeader` / `call FileIO_ByteBlock_DemoProc1_Helper3` / `ldw iz, 0xff9a`",
+   "sequencer/accompaniment_engine.s:39015-39017 `cp (xsp+36), 29` / `cp (xsp+34), 29` -- the copier takes its bank path only when both indices are above 29"
+  ]
+ },
+ {
+  "old": "SLDstBankList_FuncBody_Helper10",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SingleLoad_LoadSoundMemEntry",
+  "header": "Single-loads SOUND MEMORY entry WA of the selected .TM file into entry BC: entries below 40 are 470-byte sounds (file 16 + 470 * WA -> RAM 0x1E0000 + 16 + 470 * BC, flash block BC / 20, BC mod 20), entries from 40 are the 80-byte records at 0x4AA7 + 80 * (index - 40) (flash block 64); the read is wrapped in TmFlashWrite_Block1 / TmFlashWrite_Block1_Entry; returns HL = result (0xFF98 no file, 0xFF9A wrong signature). Basis: callers + body -- SingleLoadDst_SoundMemListProc runs it for parameter 10 outside ALL mode with WA = source cursor 0x8A00 and BC = destination cursor 0x8A08.",
+  "basis": "callers + body",
+  "evidence": [
+   "file_io/single_load.s:2702-2722 `cp xwa, 10` / `cp (0x89fa:16), 0` / `ld a, (0x8a00:16)` / `ld c, (0x8a08:16)` / `call SLDstBankList_FuncBody_Helper10` -- caller SingleLoadDst_SoundMemListProc",
+   "demo/file_demo_proc.s:3456 `ld de, 4:i3` -- type 4 = TM",
+   "demo/file_demo_proc.s:3476-3487 `cp wa, 40` / `ldw (xsp+10), 470` / `ld xbc, 470` -- sound entries",
+   "demo/file_demo_proc.s:3512-3521 `ld xwa, 0x4aa7` -- entries 40 and up, 80 bytes",
+   "demo/file_demo_proc.s:3537-3550 `call TmFlashWrite_Block1` / `lda xwa, (0x1e0000:24)` / `call FileIO_ReadBlock` / `call TmFlashWrite_Block1_Entry`"
+  ]
+ },
+ {
+  "old": "SLDstBankList_FuncBody_Helper11",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SingleLoad_LoadSoundMemBank",
+  "header": "Single-loads SOUND MEMORY bank WA of the selected .TM file into bank BC: banks 0-1 are 20 sounds = 9400 bytes (file 16 + 9400 * WA -> RAM 0x1E0000 + 16 + 9400 * BC), bank 2 and up is the 0x2927-byte block at 0x4980 (the area of entries 40+); the read is wrapped in TmFlashWrite_Block1_Return / TmFlashWrite_ValidateParams; returns HL = result (0xFF98 no file, 0xFF9A wrong signature). Basis: callers + body -- SingleLoadDst_SoundMemListProc runs it for parameter 10 in ALL mode with WA = 0x8A00 / 20 and BC = 0x8A08 / 20.",
+  "basis": "callers + body",
+  "evidence": [
+   "file_io/single_load.s:2702-2714 `cp xwa, 10` / `cp (0x89fa:16), 0` / `div wa, e` / `div bc, e` / `call SLDstBankList_FuncBody_Helper11` -- caller SingleLoadDst_SoundMemListProc, ALL mode",
+   "demo/file_demo_proc.s:3580 `ld de, 4:i3` -- type 4 = TM",
+   "demo/file_demo_proc.s:3598-3609 `cpw (xsp+38), 2` / `ldw (xsp+8), 9400` / `ld xbc, 9400` -- two banks of 20 x 470",
+   "demo/file_demo_proc.s:3618-3620 `ldw (xsp+8), 0x2927` / `ld xiz, 0x4980` -- the block of entries 40+",
+   "demo/file_demo_proc.s:3632-3643 `call TmFlashWrite_Block1_Return` / `lda xwa, (0x1e0000:24)` / `call TmFlashWrite_ValidateParams`"
+  ]
+ },
+ {
+  "old": "PerfMode_EventTable_0_Target1_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PerfMode_LookupValueMapColumn5",
+  "header": "Register-preserving value-map lookup with selector 2: with A = value and W = map row, calls Scoop_CurveUpdate_NextSegment (DE = value, BC = row, WA = 2 -> SndParam_OffsetHandler, column 5 of the SndParam_ValueMapGrid row; unmapped rows return the value) and returns the result in A, all other registers kept. Basis: callers + body -- PerfMode_MapDisplayNoteToEvent calls it with A = the shown note and W = (0xFB3C) to map the note back before writing it; DisplayMode_Handler_3_Helper2 is the selector-1 twin PerfMode_MapEventNoteToDisplay uses.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:4966-4968 `ld w, (0xfb3c:16)` / `call PerfMode_EventTable_0_Target1_Helper` -- caller PerfMode_MapDisplayNoteToEvent",
+   "display/scoop_display.s:583-601 pushes XBC..XIZ / `ld c, a` / `ld a, w` / `call Scoop_CurveUpdate_NextSegment` / `ld a, l` / pops",
+   "display/scoop_display.s:18367-18374 `ld e, a` / `ld a, c` / `ld bc, de` / `ld de, wa` / `ld wa, 2:i3` / `jp Param_SignExtendReturn` -- selector 2",
+   "audio/note_voice_mapping.s:24959-24982 SndParam_OffsetHandler -- selector - 1 indexes SndParamOffs_SwitchOffsets, case 1 adds 0x14 (column 5) to the row's pointer block",
+   "ui_widgets/widget_dispatch.s:9211-9213 SndParamOffs_SwitchOffsets -- entry 1 is OffsetDispatch_SetWord (audio/note_voice_mapping.s:24989-24990 `ldw bc, 0x14`): pointer 5 of the 24-byte row",
+   "display/scoop_display.s:4944-4945 `ld w, (0xfb3c:16)` / `call DisplayMode_Handler_3_Helper2` -- the selector-1 twin in PerfMode_MapEventNoteToDisplay"
+  ]
+ },
+ {
+  "old": "UIDisp_DefaultInputHandler_Helper3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "UIDisp_StepMeasureForward",
+  "header": "Note-track display (modes 1-2): moves the song position forward to the next measure start -- refreshes measure/beat (AccPedal_CheckBitAndUpdate; returns if it fails with W = 255), sets the seek distance to the beats left in the measure (0x0DCD = (0x0D5D) - (0x0D5C), target clock 0x0DCE = 0) and seeks with DisplayMode_Handler_3_Sub (the body of SqStep_SeekForwardByStep), then clears 0x0D54 bit 2 and sets 0x0D55 = 255. Basis: callers + body -- UIDisp_StepMeasure calls it when W bit 7 is set, and the go-to-measure routine calls it repeatedly while the measure 0x371A is below the target (0x1105).",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:1297-1299 `bit 7, w` / `call UIDisp_DefaultInputHandler_Helper3` -- caller UIDisp_StepMeasure",
+   "display/scoop_display.s:12521-12538 `cp wa, (4357:16)` / `call UIDisp_DefaultInputHandler_Helper3` / `cp wa, (4357:16)` -- go-to-measure loop while below the target",
+   "display/scoop_display.s:4343-4345 `call AccPedal_CheckBitAndUpdate` / `cp w, 255`",
+   "display/scoop_display.s:4346-4353 `ld l, (3421:16)` / `sub l, (3420:16)` / `ld (3533:16), hl` / `ld (3534:16), 0` / `call DisplayMode_Handler_3_Sub`",
+   "display/scoop_display.s:4792-4798 SqStep_SeekForwardByStep header and `DisplayMode_Handler_3_Sub:` -- seeks forward 0x0DCD units to clock 0x0DCE",
+   "display/scoop_display.s:5806-5811 UIState_StepMeasureForward -- the mode-3 counterpart"
+  ]
+ },
+ {
+  "old": "UIDisp_DefaultInputHandler_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "UIDisp_StepMeasureBack",
+  "header": "Note-track display (modes 1-2): moves the song position back to a measure start -- refreshes measure/beat (AccPedal_CheckBitAndUpdate) and steps back (Timer_ParamCompareAlt) until clock (0x0D57) and beat (0x0D5C) are both 0, repeating while the unit counter 0x0D5A is non-zero and unchanged since the start; then clears 0x0D54 bit 2 and sets 0x0D55 = 255. Basis: callers + body -- UIDisp_StepMeasure calls it when W bit 7 is clear, and the go-to-measure routine calls it repeatedly while the measure 0x371A is above the target; UIState_StepMeasureBack is the mode-3 form with the same loop.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:1300-1302 `UIDisp_DefaultInputHandler_Skip:` / `call UIDisp_DefaultInputHandler_Helper2` -- caller UIDisp_StepMeasure",
+   "display/scoop_display.s:12549-12559 `call UIDisp_DefaultInputHandler_Helper2` / `cp wa, (4357:16)` -- go-to-measure loop while above the target",
+   "display/scoop_display.s:4321-4333 `ldw_d16 hl, (0x0d5a)` / `call AccPedal_CheckBitAndUpdate` / `call Timer_ParamCompareAlt` / `cp (3415:16), a` / `cp (3420:16), a`",
+   "display/scoop_display.s:4334-4337 `cpw (0x0d5a:16), 0` / `cp hl, (3418:16)` / `jrl z` -- repeat while the counter has not moved",
+   "display/scoop_display.s:5830-5843 UIState_StepMeasureBack -- the mode-3 routine with the same step-back loop"
+  ]
+ },
+ {
+  "old": "VoiceCtrl_ParamSetupBytecode_Tbl3_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqStep_ShowRhythmSectionEvent",
+  "header": "Unless the title is changing (SeqState_HasModeChanged), finds the lowest set bit of the section-switch value 0x0DF1 and, if any, sets the style section 0x3728 = VoiceCtrl_ParamSetupBytecode_Tbl4[bit (+8 when the record's offset byte 0x0D92 is 6)] and shows it with DisplayStr_ShowStyleSectionName (WA kept; BC and XHL change). Basis: callers + body -- SqStep_ProcessRhythmSectionEvent calls it last, after storing the value of a tag-0x48 offset-5/6 event in 0x0DF1; its header describes this step.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:6350 `call VoiceCtrl_ParamSetupBytecode_Tbl3_Helper2` -- caller SqStep_ProcessRhythmSectionEvent",
+   "display/scoop_display.s:6320-6326 SqStep_ProcessRhythmSectionEvent header -- 'shows the section of the lowest set bit (Tbl4[bit], +8 for offset 6 -> 0x3728)'",
+   "display/scoop_display.s:6355-6357 `call SeqState_HasModeChanged` / `cp hl, 0:i3`",
+   "display/scoop_display.s:6359-6372 `ld w, (3569:16)` / `xorcfb_erp 61` / `inc 1, c` / `cp c, 8` -- lowest set bit",
+   "display/scoop_display.s:6374-6379 `cp (0x0d92:16), 6` / `add a, 8` / `ld xhl, VoiceCtrl_ParamSetupBytecode_Tbl4` / `stb_d8 (0x3728), a`",
+   "display/scoop_display.s:6388 `call DisplayStr_ShowStyleSectionName`"
+  ]
+ },
+ {
+  "old": "VoiceCtrl_ParamSetupBytecode_Tbl3_Helper3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqStep_RecordSectionClearHalfBeatLater",
+  "header": "Writes a copy of the section-switch event in 0x0D8F with value 0, 48 clocks (half a beat) after the current position: saves the cursor (slot 1) and position (0x0D5A, 0x371A, 0x0D5C, 0x0D57), seeks forward with DisplayMode_Handler_3_Sub to clock + 48 (0x0DCD = carry unit, 0x0DCE = clock mod 96), sets the record's status to 0xB0 (| 2 when 0x0DC9 bit 1), clock byte = clock + 1, value byte +4 = 0, writes it (SystemInit_StepHandler_0_Helper2, W = 6) and restores position and cursor. Basis: callers + body -- SqStep_ProcessRhythmSectionEvent calls it when the value has any of bits 4-7 (FILL IN / ENDING) set; its header describes this.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:6343-6348 `and a, 240` / `call VoiceCtrl_ParamSetupBytecode_Tbl3_Helper3` -- caller SqStep_ProcessRhythmSectionEvent, bits 4-7",
+   "display/scoop_display.s:6400-6405 `call VoiceSlot_SaveState` / `pushdi_w (0x0d5a)` / `pushdi_w (0x371a)` / `pushdi_w (0x0d5c)` / `pushdi_w (0x0d57)`",
+   "display/scoop_display.s:6406-6414 `ld a, (3415:16)` / `add a, 48` / `cp a, 96` / `inc 1, (3533:16)` / `ld (3534:16), a`",
+   "display/scoop_display.s:6419 `call DisplayMode_Handler_3_Sub` -- seek",
+   "display/scoop_display.s:6424-6436 `ld (xiy), 176` / `ld (xiy+1), a` / `ormi8 (xiy), 2` / `ld (xiy+4), 0` / `ld w, 6:opc` / `call SystemInit_StepHandler_0_Helper2`",
+   "display/scoop_display.s:6438-6443 pops 0x0D57/0x0D5C/0x371A/0x0D5A / `call VoiceSlot_RestoreState`"
+  ]
+ },
+ {
+  "old": "VoiceState_DataBlock2_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqStep_CheckCursorTrackUsed",
+  "header": "Returns W = 0 when the cursor track (0x0EEE, 1-16) holds data -- bit 7 of its three-byte entry 0xF250[3 * (track - 1)] is set -- else W = 255; XHL kept. Basis: callers + body -- SqStep_RestoreOnLeave sets the track's bit in the track mask 0xF19E / 0xFFEC only when it returns 0, and the loops at 4255 / 12457 skip tracks for which it is non-zero; SqSngSel_CalcSongUsagePercent counts the same bit as 'used track'.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:7877-7887 `call VoiceState_DataBlock2_Helper` / `cp w, 0:i3` / `ld c, (3822:16)` / `stcfw_erp 0x3e` / 7889 `ld (0xf19e:16), de` -- caller SqStep_RestoreOnLeave",
+   "display/scoop_display.s:4255-4257 `call VoiceState_DataBlock2_Helper` / `cp w, 0:i3` / `jrl nz, ToneParam_Evt09_BytecodeHandler_Loop12` -- track loop skips empty tracks",
+   "display/scoop_display.s:11964-11976 `ld a, (3822:16)` / `dec 1, a` / `mul wa, w` (3) / `ld xde, 0xf250` / `bit 7, (xde+hl)` / `ld w, 0:opc`",
+   "ui/setwall_routines.s:2012-2032 SqSngSel_CalcSongUsagePercent -- 'sums the blocks of every used track (bit 7 set)' of the 0xF250 entries"
+  ]
+ },
+ {
+  "old": "VoiceSlot_TableSetup_Helper7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqStep_BuildAdjacentRowBitmap",
+  "header": "Builds the event bitmap of the grid row above (XIX = 0x372E) or below (XIX = 0x3736): reads events from the block read position into 0x0EB5 (VoiceBank_ProcessCommand), sets bit (clock 0x0EB6 / 12) of the current beat byte for each displayable event (VoiceSlot_StatusCheck W = 0), moves to the next byte on a 0x81 beat marker and stops after (0x0EC1) beats or on 0x84; on the 0x82 end marker in the lower row it records the end position (0x0F5B, 0x0F5A = 3). Basis: callers + body -- SqStep_SetupPrevGridRow and SqStep_SetupNextGridRow call it last with XIX = 0x372E / 0x3736 and 0x0EC1 = the row's beat count; SqStep_BuildCurrentRowBitmap does the same for the current row at 0x3732.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:5690-5694 `ld xix, 0x372e` / `ld (3777:16), a` / `call VoiceSlot_TableSetup_Helper7` -- caller SqStep_SetupPrevGridRow",
+   "display/scoop_display.s:5790-5793 `stb_d8 (0x0ec1), a` / `ld xix, 0x3736` / `call VoiceSlot_TableSetup_Helper7` -- caller SqStep_SetupNextGridRow",
+   "display/scoop_display.s:12351-12360 `call VoiceBank_ProcessCommand` / `ld a, (3765:16)` / `call VoiceSlot_StatusCheck` / `cp w, 0:i3`",
+   "display/scoop_display.s:12388-12398 `ld a, (3766:16)` / `ld l, 12:opc` / `div wa, l` / `stcf a, (xix)` -- bit = clock / 12",
+   "display/scoop_display.s:12403-12406 `inc 1, c` / `cp c, (3777:16)` / `inc 1, xix` -- 0x81 = next beat",
+   "display/scoop_display.s:12362-12382 `cp a, 130` / `cp xix, 0x3736` / `ld (3931:16), a` / `ld (3930:16), 3` -- end marker in the lower row",
+   "display/scoop_display.s:5578-5587 the same clock / 12 bit set in SqStep_BuildCurrentRowBitmap (0x0F5A = 2 there)"
+  ]
+ },
+ {
+  "old": "VoiceSlot_TableSetup_Helper8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqStep_GetRhythmTrackForMeasures",
+  "header": "Returns in W the track that supplies the measure lengths: when 0x0D54 bit 0 is set, the first track whose TRACK ASSIGN value 0xF1A0[t] is 16 (RHYTHM), as t + 1, with 0x287B bit 2 set; when 0x0D54 bit 0 is clear, W = 0 with 0x287B bit 2 cleared (no RHYTHM track found: W = 0, 0x287B unchanged). Basis: callers + body -- SqStep_SetupPrevGridRow / SqStep_SetupNextGridRow call it before SetWall_SlotResolve, which stores W in 0x288D, the track SetWall_DualPassScanner reads measure lengths from when 0x287B bit 2 is set; SqStep_SetupNextGridRow also resolves the measure on that track itself (`ld a, w`).",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:5626-5630 `ld (0x287f:16), wa` / `call VoiceSlot_TableSetup_Helper8` / `ld a, (3424:16)` / `call SetWall_SlotResolve` -- caller SqStep_SetupPrevGridRow (also 5648, 5676)",
+   "display/scoop_display.s:5738-5742 `call VoiceSlot_TableSetup_Helper8` / `cp w, 0:i3` / `ld a, w` / `call SetWall_SlotResolve` -- caller SqStep_SetupNextGridRow resolves on the returned track",
+   "display/scoop_display.s:13131-13153 `bit 0, (0x0d54:16)` / `ld xde, 0xf1a0` / `cp (xde+hl), 0x10` / `ld w, l` / `inc 1, w` / `or (0x287b:16), 4` / `and (0x287b:16), 251`",
+   "ui/setwall_routines.s:1281 `ld (0x288d:16), w` -- SetWall_SlotResolve keeps W",
+   "ui/setwall_routines.s:1545-1548 `bit 2, (0x287b:16)` / `ld a, (0x288d:16)` / `call SetWall_SingleSlotResolve` -- that track is resolved for the measure lengths",
+   "ui/ui_playback_modes.s:79-84 Seq_FindRhythmTrack header -- 0x0D54 bit 0 / 0x287B bit 2 make the measure lengths come from the RHYTHM track"
+  ]
+ },
+ {
+  "old": "VoiceSlot_TableSetup_Helper9",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqStep_SeekSecondGridRow",
+  "header": "Moves the block read position past four 0x81 beat markers -- from a measure's start to its second grid row (the grid shows at most 4 beats per row) -- stepping one byte at a time (VoiceBank_LoadLerpState / VoiceBank_UpdateLerpState) and stopping before a 0x82 or 0x84 end marker; returns C = the markers passed (4 when complete). Basis: callers + body -- SqStep_SetupNextGridRow calls it for row 2 of the current measure and draws the row only when C = 4; SqStep_SetupPrevGridRow calls it when the previous measure has more than 4 beats (its last row is row 2).",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:5768-5770 `sub a, 4` / `ld (3668:16), a` (beats - 4) / 5786-5787 `call VoiceSlot_TableSetup_Helper9` / `cp c, 4:i3` -- caller SqStep_SetupNextGridRow",
+   "display/scoop_display.s:5661-5665 `cp a, 5:i3` / `sub a, 4` / `call VoiceSlot_TableSetup_Helper9` -- caller SqStep_SetupPrevGridRow, measure longer than 4 beats",
+   "display/scoop_display.s:13157-13176 `xor bc, bc` / `call VoiceBank_LoadLerpState` / `cp a, 130` / `cp a, 132` / `cp a, 129` / `inc 1, c` / `cp c, 4:i3` / `call VoiceBank_UpdateLerpState`",
+   "display/scoop_display.s:5598-5602 SqStep_SetupPrevGridRow header -- rows of at most 4 beats; row 2 = beats - 4"
+  ]
+ },
+ {
+  "old": "Str_Control_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DisplayStr_WriteRhythmName",
+  "header": "Writes the rhythm name into the RHYTHM pop-up line: runs PartCtrl_WriteProgramChange for part 72 ((0x90F7) := 72) with L = program (0x3722) and H = bank (0x0EF5), then AccVoice_DispatchEntry on the HL it returns, which leaves a 13-character name at 0x34AB, and copies those 13 characters to 0x0ED6. Basis: callers + body -- DisplayStr_ShowRhythmLine calls it after writing 'RHYTHM' at 0x0ECF; DisplayStr_BytecodeBlock_D has the same sequence inline for the RHYTHM-track display.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:14467 `call Str_Control_Helper` -- caller DisplayStr_ShowRhythmLine (14459-14470: 'RHYTHM' at 3791, then this)",
+   "display/scoop_display.s:14442-14446 `ld l, (0x3722:16)` / `ld h, (3829:16)` / `ld (0x90f7:16), 72` / `call PartCtrl_WriteProgramChange` / `call AccVoice_DispatchEntry`",
+   "display/scoop_display.s:14448-14451 `ld xiy, 0x34ab` / `ld xix, 3798` / `ldw bc, 13` / `ldir85`",
+   "sequencer/accompaniment_engine.s:10589-10592 AccVoice_Dispatch epilogue `ld xiy, 0x34ab`; its copiers move a 13-byte record to 0x34AB",
+   "display/scoop_display.s:14682-14693 DisplayStr_BytecodeBlock_D -- the same program change + name copy (to 0x0ECF)"
+  ]
+ },
+ {
+  "old": "Str_Rhythm_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DisplayStr_WriteVariationNumber",
+  "header": "Writes 'VARI' and the variation number ((C & 0x30) >> 4) + 1 (1-4) at XIX: formats the number (ParamDigit_ExtractAndFormat), copies the 4 characters of Str_VarivariOff and puts the ones digit (0x1183) after them. Basis: callers + body -- DisplayStr_ShowRhythmVariationLine (XIX = 0x0ED9) and DisplayStr_ShowMeasureAndVariation (XIX = 0x0ED4) call it with C = the value byte of a tag-0x48 offset-7 event; their headers name this field.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:14497-14499 `popw bc` / `ld xix, 3801` / `call Str_Rhythm_Helper` -- caller DisplayStr_ShowRhythmVariationLine",
+   "display/scoop_display.s:14516-14518 `ld xix, 3796` / `call Str_Rhythm_Helper` -- caller DisplayStr_ShowMeasureAndVariation",
+   "display/scoop_display.s:14522-14528 `ld a, c` / `and a, 48` / `sra a, 4` / `inc 1, a` / `call ParamDigit_ExtractAndFormat`",
+   "display/scoop_display.s:14530-14534 `ld xiy, Str_VarivariOff` / `ld bc, 4:i3` / `ldir85` / `ld a, (4483:16)` / `ld (xix), a`"
+  ]
+ },
+ {
+  "old": "PerfMode_EventTable_0_Target1_Helper11",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DisplayStr_WriteTempoValue",
+  "header": "Writes the tempo (word 0x0EF2) as three digits at 0x0EDA, the value field of the TEMPO line; when (0xFC5A) = 7 and (0xFC5B) = 2 -- the case where the line shows the 0x93 note glyph instead of 0x15 -- it writes tempo * 2 / 3. Basis: callers + body -- DisplayStr_ShowTempoLine calls it after copying the 'TEMPO <glyph>=' template (choosing the template on the same (0xFC5A, 0xFC5B) test), as do VoiceSlot_StatusRet_Helper2/3; TempoRingBuf_OnTempoEvent stores the tempo in 0x0EF2.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:14586 `call PerfMode_EventTable_0_Target1_Helper11` -- caller DisplayStr_ShowTempoLine (also 14615, 15022, 4975, 4983)",
+   "display/scoop_display.s:14574-14581 `ld xiy, Str_TempoEq` / `cp (0xfc5a:16), 7` / `cp (0xfc5b:16), 2` / `ld xiy, DisplayStr_BytecodeBlock_C_Tbl` -- the 0x93 template on the same test",
+   "display/scoop_display.s:14991-15000 `ld wa, (3826:16)` / `cp (0xfc5a:16), 7` / `cp (0xfc5b:16), 2` / `sla wa, 1` / `ld l, 3:opc` / `div wa, l`",
+   "display/scoop_display.s:15002-15008 `call ParamDigit_ExtractAndFormat` / `ld xix, 3802` / three characters copied",
+   "display/scoop_display.s:6587-6591 TempoRingBuf_OnTempoEvent header -- the stored word 0x0EF2 is the tempo"
+  ]
+ },
+ {
+  "old": "Str_Rhythm_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqStep_FindMsaStateAtCursor",
+  "header": "Finds the M.S.A. state in force at the song-data cursor: saves the cursor (slot 5) and block pointer, clears 0x10F6, restarts at the cursor track's first block (MemConfig_VoiceSlotLookup) and steps forward until the saved position, and for each 0xBn event on the way Tbl_MsaStates_Helper sets 0x10F6 = value bit 0 when the event's tag is 0x98, offset 3 and flag byte +5 bit 0 is set; restores everything. Basis: callers + body -- DisplayStr_ShowRhythmVariationLine calls it and then writes 'M.S.A.' instead of ' RHYTHM' when 0x10F6 bit 0 is set.",
+  "basis": "callers + body",
+  "evidence": [
+   "display/scoop_display.s:14486-14492 `call Str_Rhythm_Helper2` / `bit 0, (0x10f6:16)` / `ld xiy, Str_MSA` -- caller DisplayStr_ShowRhythmVariationLine",
+   "display/scoop_display.s:16379-16383 `call VoiceSlot_SaveState` (5) / `call VoiceSlot_StepCursorBack` / `call MemConfig_VoiceSlotLookup` / `ld (4342:16), 0`",
+   "display/scoop_display.s:8243-8264 MemConfig_VoiceSlotLookup -- cursor := first block of the track (0xF250 entry word +1), offset 5",
+   "display/scoop_display.s:16387-16410 `call VoiceSlot_DispatchRet` / `ld xhl, 3583` / `add xhl, 40` / `cp ix, (xhl)` -- stops at the position saved in slot 5",
+   "display/scoop_display.s:16412-16417 `and a, 240` / `cp a, 176` / `call Tbl_MsaStates_Helper` -- 0xBn events",
+   "display/scoop_display.s:16461-16469 `cp a, 152` / `cp (0x0eb8:16), 3` / `bit 0, (0x0eba:16)` / `ld a, (3769:16)` / `and a, 1` / `ld (4342:16), a`"
+  ]
+ }
+]

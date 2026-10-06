@@ -571,7 +571,7 @@ Naka_MainFunctionTable_44B:	.incbin "includes/generated/naka_perf_style.bin", 0x
 ; [nakarest] xhl, (NAKA_InitDataBlock_PtrTable:24)`).
 NAKA_InitDataBlock_PtrTable:	.incbin "includes/generated/naka_perf_style.bin", 0x5EBA, 0x72	; 6 x 32-bit pointer
 ; FDemo_BassPortSpanishHeading_Texts -- 6 x u32: a heading text that only Spanish fills ("Altavoz con port\xF3n para bajos"); the other five are "", indexed by the language number (RAM 0x340E4)
-; The ApFunction after InitializeNaka_Skip (storage/flash_floppy_handlers.s) returns it for EVT_GET_LANGUAGE_PTR; AcLanguageTextProc (ui/ui_widget_defs.s) draws entry
+; The ApFunction after FtLangText01_Skip (storage/flash_floppy_handlers.s) returns it for EVT_GET_LANGUAGE_PTR; AcLanguageTextProc (ui/ui_widget_defs.s) draws entry
 ; [language] with EVT_PARA_DRAW.  Order 0 English, 1 German, 2 French, 3 Spanish, 4 Italian, 5 Indonesian
 ; (CheckLanguage_LangNames); the strings follow in reverse order.
 FDemo_BassPortSpanishHeading_Texts:	.incbin "includes/generated/naka_perf_style.bin", 0x5F2C, 0x18
@@ -596,19 +596,19 @@ FDemo_BassPortSpanishHeading_English:	.incbin "includes/generated/naka_perf_styl
 ; [nakarest] naka_perf_style+0x5f6c  +0x5f6c..+0x615e (0xe148e0, 498 B)
 ; [nakarest] A table of 6 pointers into this piece (498 B at 0xe148e0), then text; entry 0
 ; [nakarest] points at "The KN5000's Special Woofer & Bass Port produce "; no registered NAKA
-; [nakarest] table points into it; reached through source references InitializeNaka_Skip2
+; [nakarest] table points into it; reached through source references FtLangText01S_Skip2
 ; [nakarest] (storage/flash_floppy_handlers.s: `lda xhl, (NAKA_InitDataBlock_PtrTable_3:24)`).
 NAKA_InitDataBlock_PtrTable_3:	.incbin "includes/generated/naka_perf_style.bin", 0x5F6C, 0x1F2	; 6 x 32-bit pointer
 ; [nakarest] naka_perf_style+0x615e  +0x615e..+0x61d6 (0xe14ad2, 120 B)
 ; [nakarest] A table of 6 pointers into this piece (120 B at 0xe14ad2), then text; entry 0
 ; [nakarest] points at "Huge Styles"; no registered NAKA table points into it; reached through
-; [nakarest] source references InitializeNaka_Skip3 (storage/flash_floppy_handlers.s: `lda xhl,
+; [nakarest] source references FtLangText02_Skip3 (storage/flash_floppy_handlers.s: `lda xhl,
 ; [nakarest] (NAKA_InitDataBlock_PtrTable_4:24)`).
 NAKA_InitDataBlock_PtrTable_4:	.incbin "includes/generated/naka_perf_style.bin", 0x615E, 0x78	; 6 x 32-bit pointer
 ; [nakarest] naka_perf_style+0x61d6  +0x61d6..+0x6346 (0xe14b4a, 368 B)
 ; [nakarest] A table of 6 pointers into this piece (368 B at 0xe14b4a), then text; entry 0
 ; [nakarest] points at "Explore 1000 Musical Styles with the Music Styli"; no registered NAKA
-; [nakarest] table points into it; reached through source references InitializeNaka_Skip4
+; [nakarest] table points into it; reached through source references FtLangText03_Skip4
 ; [nakarest] (storage/flash_floppy_handlers.s: `lda xhl, (NAKA_InitDataBlock_PtrTable_5:24)`).
 NAKA_InitDataBlock_PtrTable_5:	.incbin "includes/generated/naka_perf_style.bin", 0x61D6, 0xE8	; 6 x 32-bit pointer
 NakaUI_ObjectTable_End:		.incbin "includes/generated/naka_perf_style.bin", 0x62BE, 0x54
@@ -616,37 +616,37 @@ LongStr_Explore_1000_Musical:	.incbin "includes/generated/naka_perf_style.bin", 
 ; [nakarest] naka_perf_style+0x6346  +0x6346..+0x64d8 (0xe14cba, 402 B)
 ; [nakarest] A table of 6 pointers into this piece (402 B at 0xe14cba), then text; entry 0
 ; [nakarest] points at "Add to your enjoyment with a wide range of Techn"; no registered NAKA
-; [nakarest] table points into it; reached through source references InitializeNaka_Skip5
+; [nakarest] table points into it; reached through source references FtLangText04_Skip5
 ; [nakarest] (storage/flash_floppy_handlers.s: `lda xhl, (NAKA_InitDataBlock_PtrTable_6:24)`).
 NAKA_InitDataBlock_PtrTable_6:	.incbin "includes/generated/naka_perf_style.bin", 0x6346, 0x192	; 6 x 32-bit pointer
 ; [nakarest] naka_perf_style+0x64d8  +0x64d8..+0x6664 (0xe14e4c, 396 B)
 ; [nakarest] A table of 6 pointers into this piece (396 B at 0xe14e4c), then text; entry 0
 ; [nakarest] points at "And convert software from almost any other manuf"; no registered NAKA
-; [nakarest] table points into it; reached through source references InitializeNaka_Skip6
+; [nakarest] table points into it; reached through source references FtLangText05_Skip6
 ; [nakarest] (storage/flash_floppy_handlers.s: `lda xhl, (NAKA_InitDataBlock_PtrTable_7:24)`).
 NAKA_InitDataBlock_PtrTable_7:	.incbin "includes/generated/naka_perf_style.bin", 0x64D8, 0x18C	; 6 x 32-bit pointer
 ; [nakarest] naka_perf_style+0x6664  +0x6664..+0x6848 (0xe14fd8, 484 B)
 ; [nakarest] A table of 6 pointers into this piece (484 B at 0xe14fd8), then text; entry 0
 ; [nakarest] points at "Store your favorite software patterns in the Cus"; no registered NAKA
-; [nakarest] table points into it; reached through source references InitializeNaka_Skip7
+; [nakarest] table points into it; reached through source references FtLangText06_Skip7
 ; [nakarest] (storage/flash_floppy_handlers.s: `lda xhl, (NAKA_InitDataBlock_PtrTable_8:24)`).
 NAKA_InitDataBlock_PtrTable_8:	.incbin "includes/generated/naka_perf_style.bin", 0x6664, 0x1E4	; 6 x 32-bit pointer
 ; [nakarest] naka_perf_style+0x6848  +0x6848..+0x68cc (0xe151bc, 132 B)
 ; [nakarest] A table of 6 pointers into this piece (132 B at 0xe151bc), then text; entry 0
 ; [nakarest] points at "Accordion Register"; no registered NAKA table points into it; reached
-; [nakarest] through source references InitializeNaka_Skip8 (storage/flash_floppy_handlers.s:
+; [nakarest] through source references FtLangText07_Skip8 (storage/flash_floppy_handlers.s:
 ; [nakarest] `lda xhl, (NAKA_InitDataBlock_PtrTable_9:24)`).
 NAKA_InitDataBlock_PtrTable_9:	.incbin "includes/generated/naka_perf_style.bin", 0x6848, 0x84	; 6 x 32-bit pointer
 ; [nakarest] naka_perf_style+0x68cc  +0x68cc..+0x6a6e (0xe15240, 418 B)
 ; [nakarest] A table of 6 pointers into this piece (418 B at 0xe15240), then text; entry 0
 ; [nakarest] points at "A World of Accordion Sounds at your fingertips w"; no registered NAKA
-; [nakarest] table points into it; reached through source references InitializeNaka_Skip9
+; [nakarest] table points into it; reached through source references FtLangText08_Skip9
 ; [nakarest] (storage/flash_floppy_handlers.s: `lda xhl, (NAKA_InitDataBlock_PtrTable_10:24)`).
 NAKA_InitDataBlock_PtrTable_10:	.incbin "includes/generated/naka_perf_style.bin", 0x68CC, 0x1A2	; 6 x 32-bit pointer
 ; [nakarest] naka_perf_style+0x6a6e  +0x6a6e..+0x6ade (0xe153e2, 112 B)
 ; [nakarest] A table of 6 pointers into this piece (112 B at 0xe153e2), then text; entry 0
 ; [nakarest] points at "Digital Drawbar"; no registered NAKA table points into it; reached
-; [nakarest] through source references InitializeNaka_Skip10 (storage/flash_floppy_handlers.s:
+; [nakarest] through source references FtLangText09_Skip10 (storage/flash_floppy_handlers.s:
 ; [nakarest] `lda xhl, (NAKA_InitDataBlock_PtrTable_11:24)`).
 NAKA_InitDataBlock_PtrTable_11:	.incbin "includes/generated/naka_perf_style.bin", 0x6A6E, 0x70	; 6 x 32-bit pointer
 ; FtLangText11_Texts -- 6 x u32: per-language text of feature-demo language text 11, by help language (RAM 0x340e4):
@@ -669,25 +669,25 @@ Str_FtLangText11_English:	.incbin "includes/generated/naka_perf_style.bin", 0x6C
 ; [nakarest] naka_perf_style+0x6c40  +0x6c40..+0x6cba (0xe155b4, 122 B)
 ; [nakarest] A table of 6 pointers into this piece (122 B at 0xe155b4), then text; entry 0
 ; [nakarest] points at "Acoustic Illusion"; no registered NAKA table points into it; reached
-; [nakarest] through source references InitializeNaka_Skip12 (storage/flash_floppy_handlers.s:
+; [nakarest] through source references FtLangText11_Skip12 (storage/flash_floppy_handlers.s:
 ; [nakarest] `lda xhl, (NAKA_InitDataBlock_PtrTable_13:24)`).
 NAKA_InitDataBlock_PtrTable_13:	.incbin "includes/generated/naka_perf_style.bin", 0x6C40, 0x7A	; 6 x 32-bit pointer
 ; [nakarest] naka_perf_style+0x6cba  +0x6cba..+0x6e1c (0xe1562e, 354 B)
 ; [nakarest] A table of 6 pointers into this piece (354 B at 0xe1562e), then text; entry 0
 ; [nakarest] points at "Acoustic Illusion broadens your music to 3-Dimen"; no registered NAKA
-; [nakarest] table points into it; reached through source references InitializeNaka_Skip13
+; [nakarest] table points into it; reached through source references FtLangText12_Skip13
 ; [nakarest] (storage/flash_floppy_handlers.s: `lda xhl, (NAKA_InitDataBlock_PtrTable_14:24)`).
 NAKA_InitDataBlock_PtrTable_14:	.incbin "includes/generated/naka_perf_style.bin", 0x6CBA, 0x162	; 6 x 32-bit pointer
 ; [nakarest] naka_perf_style+0x6e1c  +0x6e1c..+0x6f8c (0xe15790, 368 B)
 ; [nakarest] A table of 6 pointers into this piece (368 B at 0xe15790), then text; entry 0
 ; [nakarest] points at "A host of features to suit any style of performa"; no registered NAKA
-; [nakarest] table points into it; reached through source references InitializeNaka_Skip14
+; [nakarest] table points into it; reached through source references FtLangText13_Skip14
 ; [nakarest] (storage/flash_floppy_handlers.s: `lda xhl, (NAKA_InitDataBlock_PtrTable_15:24)`).
 NAKA_InitDataBlock_PtrTable_15:	.incbin "includes/generated/naka_perf_style.bin", 0x6E1C, 0x170	; 6 x 32-bit pointer
 ; [nakarest] naka_perf_style+0x6f8c  +0x6f8c..+0x6fec (0xe15900, 96 B)
 ; [nakarest] A table of 6 pointers into this piece (96 B at 0xe15900), then text; entry 0 points
 ; [nakarest] at "Huge Styles"; no registered NAKA table points into it; reached through source
-; [nakarest] references InitializeNaka_Skip15 (storage/flash_floppy_handlers.s: `lda xhl,
+; [nakarest] references FtLangText14_Skip15 (storage/flash_floppy_handlers.s: `lda xhl,
 ; [nakarest] (NAKA_InitDataBlock_PtrTable_16:24)`).
 NAKA_InitDataBlock_PtrTable_16:	.incbin "includes/generated/naka_perf_style.bin", 0x6F8C, 0x60	; 6 x 32-bit pointer
 ; FtLangText16_LangStrings -- 6 x uint32_t + strings: per-language text of the feature-demo ApFunction FtLangText16
@@ -698,7 +698,7 @@ NAKA_InitDataBlock_PtrTable_16:	.incbin "includes/generated/naka_perf_style.bin"
 FtLangText16_LangStrings:	.incbin "includes/generated/naka_perf_style.bin", 0x6FEC, 0x60
 ; FtLangText17_Texts -- 6 x pointer + their 6 strings: per-language text of feature-demo language text 17, by help language
 ; (RAM 0x340E4): 0 English "Huge Styles", 1 German "Huge Styles(G)", 2 French, 3 Spanish, 4 the placeholder "Italian", 5 Indonesian.
-; The handler of ApFunction FtLangText17 (unlabelled, just before InitializeNaka_Skip18) returns it for EVT_GET_LANGUAGE_PTR;
+; The handler of ApFunction FtLangText17 (unlabelled, just before FtLangText17_Skip18) returns it for EVT_GET_LANGUAGE_PTR;
 ; AcLanguageTextProc then draws entry [0x340E4].
 FtLangText17_Texts:	.incbin "includes/generated/naka_perf_style.bin", 0x704C, 0x60
 ; NoteEvent_DefaultPatternSlot -- 1 x {u8 flags, u16 prev_slot, u16 next_slot, u8 events[251]}: default 256-byte pattern slot

@@ -540,7 +540,7 @@ StyleName_FindOverride_Default:
 	ld ix, 0:i3
 	lda xhl, (StyleNameOverride_Default:24)
 
-StyleName_FindOverride_Default_Loop:
+StyleName_FindOverride_C2C5_Loop2:
 	ld bc, ix
 	extz xbc
 	ld xde, xbc
@@ -550,14 +550,14 @@ StyleName_FindOverride_Default_Loop:
 	ld xbc, xhl
 	add xbc, xde
 	cp wa, (xbc)
-	jr nz, StyleName_FindOverride_Default_Next
+	jr nz, StyleName_FindOverride_C2C5_Next2
 	lda xhl, (xbc + 2)
 	ret
 
-StyleName_FindOverride_Default_Next:
+StyleName_FindOverride_C2C5_Next2:
 	inc 1, ix
 	cp ix, 5:i3
-	jr c, StyleName_FindOverride_Default_Loop
+	jr c, StyleName_FindOverride_C2C5_Loop2
 	ld xhl, 0xffffffff
 	ret
 
@@ -6123,7 +6123,7 @@ MstGrid2_ScrollJumpTable:
 	ld	xbc, (xsp+62)
 	ld	(xsp+56), bc
 	cp	bc, 4:i3
-	jr	ge, BitmapFinpic_ByteData_Skip
+	jr	ge, MstGrid2_ScrollJumpTable_Skip
 	ld	xwa, (xhl+94)
 	cp	bc, (xwa)
 	jrl	gt, MstGrid2_Return
@@ -6138,8 +6138,8 @@ MstGrid2_ScrollJumpTable:
 	extz	xde
 	ld	xwa, NAKA_MAINFUNC_MainMssSetUp
 	ld	xbc, EVT_OTP_CNT_SET
-	jr	BitmapFinpic_ByteData_Join
-BitmapFinpic_ByteData_Skip:
+	jr	MstGrid2_ScrollJumpTable_Join
+MstGrid2_ScrollJumpTable_Skip:
 	ld	xwa, (xhl+98)
 	ld	wa, (xwa)
 	inc	5, wa
@@ -6157,7 +6157,7 @@ BitmapFinpic_ByteData_Skip:
 	extz	xde
 	ld	xwa, NAKA_MAINFUNC_MainMssSetUp
 	ld	xbc, EVT_OTP_CNT_SET
-BitmapFinpic_ByteData_Join:
+MstGrid2_ScrollJumpTable_Join:
 	call	MainFuncCall
 	jrl	MstGrid2_Return
 
@@ -6887,32 +6887,32 @@ TchSensGridCheck_OnIndexswDown:
 	ld	(xwa), bc
 	ld	(xwa+2), de
 	cpw	(xwa), 1
-	jr	nz, TchSensGrid_EventDispatch_Skip_Skip3
+	jr	nz, TchSensGridCheck_OnIndexswDown_Skip3
 	cp	de, 1:i3
-	jr	nz, TchSensGrid_EventDispatch_Skip_Skip3
+	jr	nz, TchSensGridCheck_OnIndexswDown_Skip3
 	ld	xwa, 256
 	ldw	bc, 65535
 	ld	de, 2:i3
 	jr	TchSensGrid_EventDispatch_Join
-TchSensGrid_EventDispatch_Skip_Skip3:
+TchSensGridCheck_OnIndexswDown_Skip3:
 	cpw	(xwa), 1
-	jr	nz, TchSensGrid_EventDispatch_Skip_Skip4
+	jr	nz, TchSensGridCheck_OnIndexswDown_Skip4
 	cp	de, 4:i3
-	jr	nz, TchSensGrid_EventDispatch_Skip_Skip4
+	jr	nz, TchSensGridCheck_OnIndexswDown_Skip4
 	ld	xwa, 260
 	ldw	bc, 65535
 	ld	de, 2:i3
 	jr	TchSensGrid_EventDispatch_Join
-TchSensGrid_EventDispatch_Skip_Skip4:
+TchSensGridCheck_OnIndexswDown_Skip4:
 	cpw	(xwa), 1
-	jr	nz, TchSensGrid_EventDispatch_Skip_Skip5
+	jr	nz, TchSensGridCheck_OnIndexswDown_Skip5
 	cp	de, 5:i3
-	jr	nz, TchSensGrid_EventDispatch_Skip_Skip5
+	jr	nz, TchSensGridCheck_OnIndexswDown_Skip5
 	ld	xwa, 258
 	ldw	bc, 65535
 	ld	de, 2:i3
 	jr	TchSensGrid_EventDispatch_Join
-TchSensGrid_EventDispatch_Skip_Skip5:
+TchSensGridCheck_OnIndexswDown_Skip5:
 	cpw	(xwa), 1
 	jrl	nz, TchSensGrid_ReturnZero
 	cp	de, 6:i3
@@ -6927,7 +6927,7 @@ TchSensGridCheck_OnLswData:
 	lda	xix, (xde+4)
 	ld	xwa, (xde)
 	cp	xwa, 256
-	jr	nz, TchSensGrid_EventDispatch_Skip2
+	jr	nz, TchSensGridCheck_OnLswData_Skip2
 	lda	xwa, (xsp+14)
 	ldw	(xwa), 1
 	ldw	(xwa+2), 1
@@ -6944,10 +6944,10 @@ TchSensGridCheck_OnLswData:
 	lda	xde, (xsp+14)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	TchSensGrid_SendEvent
-TchSensGrid_EventDispatch_Skip2:
+TchSensGridCheck_OnLswData_Skip2:
 	ld	xwa, (xde)
 	cp	xwa, 260
-	jr	nz, TchSensGrid_EventDispatch_Skip2_Skip2
+	jr	nz, TchSensGridCheck_OnLswData_Skip3
 	lda	xwa, (xsp+14)
 	ldw	(xwa), 1
 	ldw	(xwa+2), 4
@@ -6955,9 +6955,9 @@ TchSensGrid_EventDispatch_Skip2:
 	ld	(xwa+4), xbc
 	ld	xwa, TchSensGridCheck_OnLswData_Str_OFF
 	cpw	(xix), 0
-	jr	z, TchSensGrid_EventDispatch_Skip2_Skip
+	jr	z, TchSensGridCheck_OnLswData_Skip
 	ld	xwa, TchSensGridCheck_OnLswData_Str_ON
-TchSensGrid_EventDispatch_Skip2_Skip:
+TchSensGridCheck_OnLswData_Skip:
 	push	xwa
 	push	xbc
 	call	Strcpy
@@ -6967,14 +6967,14 @@ TchSensGrid_EventDispatch_Skip2_Skip:
 	lda	xde, (xsp+14)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	TchSensGrid_SendEvent
-TchSensGrid_EventDispatch_Skip2_Skip2:
+TchSensGridCheck_OnLswData_Skip3:
 	lda	xiy, (xsp+14)
 	lda	xiz, (xsp+4)
 	lda	xbc, (xiy+2)
 	lda	xhl, (xiy+4)
 	ld	xwa, (xde)
 	cp	xwa, 258
-	jr	nz, TchSensGrid_EventDispatch_Skip3
+	jr	nz, TchSensGridCheck_OnLswData_Skip4
 	ldw	(xiy), 1
 	ldw	(xbc), 5
 	ld	(xhl), xiz
@@ -6989,7 +6989,7 @@ TchSensGrid_EventDispatch_Skip2_Skip2:
 	lda	xde, (xsp+14)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	TchSensGrid_SendEvent
-TchSensGrid_EventDispatch_Skip3:
+TchSensGridCheck_OnLswData_Skip4:
 	ld	xwa, (xde)
 	cp	xwa, 259
 	jrl	nz, TchSensGrid_ReturnZero
@@ -7577,9 +7577,9 @@ FSWAssGridCheck_OnIndexswDown:
 	ld	(xwa), bc
 	ld	(xwa+2), de
 	cpw	(xwa), 1
-	jr	nz, FSWAssGrid_EventDispatch_Skip10
+	jr	nz, FSWAssGridCheck_OnIndexswDown_Skip10
 	cp	de, 2:i3
-	jr	nz, FSWAssGrid_EventDispatch_Skip10
+	jr	nz, FSWAssGridCheck_OnIndexswDown_Skip10
 	ld	xwa, 0x2886
 	call	SndParam_LookupReadOnly
 	extz	hl
@@ -7600,11 +7600,11 @@ FSWAssGridCheck_OnIndexswDown:
 	ld	xwa, 0x2886
 	ld	de, 2:i3
 	jrl	FSWAssGrid_EventDispatch_Join
-FSWAssGrid_EventDispatch_Skip10:
+FSWAssGridCheck_OnIndexswDown_Skip10:
 	cpw	(xwa), 1
-	jr	nz, FSWAssGrid_EventDispatch_Skip11
+	jr	nz, FSWAssGridCheck_OnIndexswDown_Skip11
 	cp	de, 3:i3
-	jr	nz, FSWAssGrid_EventDispatch_Skip11
+	jr	nz, FSWAssGridCheck_OnIndexswDown_Skip11
 	ld	xwa, 0x2888
 	call	SndParam_LookupReadOnly
 	extz	hl
@@ -7625,11 +7625,11 @@ FSWAssGrid_EventDispatch_Skip10:
 	ld	xwa, 0x2888
 	ld	de, 2:i3
 	jrl	FSWAssGrid_EventDispatch_Join
-FSWAssGrid_EventDispatch_Skip11:
+FSWAssGridCheck_OnIndexswDown_Skip11:
 	cpw	(xwa), 1
-	jr	nz, FSWAssGrid_EventDispatch_Skip12
+	jr	nz, FSWAssGridCheck_OnIndexswDown_Skip12
 	cp	de, 4:i3
-	jr	nz, FSWAssGrid_EventDispatch_Skip12
+	jr	nz, FSWAssGridCheck_OnIndexswDown_Skip12
 	ld	xwa, 0x288a
 	call	SndParam_LookupReadOnly
 	extz	hl
@@ -7650,11 +7650,11 @@ FSWAssGrid_EventDispatch_Skip11:
 	ld	xwa, 0x288a
 	ld	de, 2:i3
 	jrl	FSWAssGrid_EventDispatch_Join
-FSWAssGrid_EventDispatch_Skip12:
+FSWAssGridCheck_OnIndexswDown_Skip12:
 	cpw	(xwa), 1
-	jr	nz, FSWAssGrid_EventDispatch_Skip13
+	jr	nz, FSWAssGridCheck_OnIndexswDown_Skip13
 	cp	de, 5:i3
-	jr	nz, FSWAssGrid_EventDispatch_Skip13
+	jr	nz, FSWAssGridCheck_OnIndexswDown_Skip13
 	ld	xwa, 0x288c
 	call	SndParam_LookupReadOnly
 	extz	hl
@@ -7675,11 +7675,11 @@ FSWAssGrid_EventDispatch_Skip12:
 	ld	xwa, 0x288c
 	ld	de, 2:i3
 	jrl	FSWAssGrid_EventDispatch_Join
-FSWAssGrid_EventDispatch_Skip13:
+FSWAssGridCheck_OnIndexswDown_Skip13:
 	cpw	(xwa), 1
-	jr	nz, FSWAssGrid_EventDispatch_Skip14
+	jr	nz, FSWAssGridCheck_OnIndexswDown_Skip14
 	cp	de, 6:i3
-	jr	nz, FSWAssGrid_EventDispatch_Skip14
+	jr	nz, FSWAssGridCheck_OnIndexswDown_Skip14
 	ld	xwa, 0x288e
 	call	SndParam_LookupReadOnly
 	extz	hl
@@ -7700,11 +7700,11 @@ FSWAssGrid_EventDispatch_Skip13:
 	ld	xwa, 0x288e
 	ld	de, 2:i3
 	jrl	FSWAssGrid_EventDispatch_Join
-FSWAssGrid_EventDispatch_Skip14:
+FSWAssGridCheck_OnIndexswDown_Skip14:
 	cpw	(xwa), 1
-	jr	nz, FSWAssGrid_EventDispatch_Skip15
+	jr	nz, FSWAssGridCheck_OnIndexswDown_Skip15
 	cp	de, 7:i3
-	jr	nz, FSWAssGrid_EventDispatch_Skip15
+	jr	nz, FSWAssGridCheck_OnIndexswDown_Skip15
 	ld	xwa, 0x2890
 	call	SndParam_LookupReadOnly
 	extz	hl
@@ -7725,7 +7725,7 @@ FSWAssGrid_EventDispatch_Skip14:
 	ld	xwa, 0x2890
 	ld	de, 2:i3
 	jr	FSWAssGrid_EventDispatch_Join
-FSWAssGrid_EventDispatch_Skip15:
+FSWAssGridCheck_OnIndexswDown_Skip15:
 	cpw	(xwa), 1
 	jrl	nz, AudioTable_ReturnZero
 	cp	de, 8
@@ -8925,7 +8925,7 @@ PmExpFilter_EventDispatch:
 	sla	wa, 2
 	dec	8, wa
 	cp	c, 2:i3
-	jr	z, FSWAss_RefreshAllVoices_Skip
+	jr	z, PmExpFilter_EventDispatch_Skip
 	cp	c, 1:i3
 	jrl	nz, SeqLoad_StoreReturnZero
 	cp	de, 2:i3
@@ -8937,7 +8937,7 @@ PmExpFilter_EventDispatch:
 	ldw	bc, 0xffff
 	ld	de, 2:i3
 	jrl	FSWAss_RefreshAllVoices_Join
-FSWAss_RefreshAllVoices_Skip:
+PmExpFilter_EventDispatch_Skip:
 	cp	de, 2:i3
 	jrl	lt, SeqLoad_StoreReturnZero
 	cp	de, 10
@@ -8967,7 +8967,7 @@ PmExpFilterGridCheck_OnIndexswDown:
 	jrl	nz, SeqLoad_StoreReturnZero
 	ld	c, (0x340e2:24)
 	cp	c, 2:i3
-	jr	z, FSWAss_RefreshAllVoices_Skip2
+	jr	z, PmExpFilterGridCheck_OnIndexswDown_Skip2
 	cp	c, 1:i3
 	jrl	nz, SeqLoad_StoreReturnZero
 	cp	de, 2:i3
@@ -8979,7 +8979,7 @@ PmExpFilterGridCheck_OnIndexswDown:
 	ld	bc, 1:i3
 	ld	de, 2:i3
 	jr	FSWAss_RefreshAllVoices_Join
-FSWAss_RefreshAllVoices_Skip2:
+PmExpFilterGridCheck_OnIndexswDown_Skip2:
 	cp	de, 2:i3
 	jrl	lt, SeqLoad_StoreReturnZero
 	cp	de, 10
@@ -8994,18 +8994,18 @@ FSWAss_RefreshAllVoices_Join:
 PmExpFilterGridCheck_OnLswData:
 	ld	a, (0x340e2:24)
 	cp	a, 2:i3
-	jr	z, FSWAss_RefreshAllVoices_Skip11
+	jr	z, PmExpFilterGridCheck_OnLswData_Skip11
 	cp	a, 1:i3
 	jrl	nz, SeqLoad_StoreReturnZero
 	ld	l, 0:opc
 	lda	xix, (PmExpFilter_CellKeys:24)
 	ld	xwa, (xde)
-FSWAss_RefreshAllVoices_Loop:
+PmExpFilterGridCheck_OnLswData_Loop:
 	ld	c, l
 	extz	bc
 	sla	bc, 2
 	cp	xwa, (xix+bc)
-	jr	nz, FSWAss_RefreshAllVoices_Skip10
+	jr	nz, PmExpFilterGridCheck_OnLswData_Skip10
 	lda	xbc, (xsp+256)	; lda xbc, xsp+0x0100
 	ldw	(xbc), 1
 	inc	2, l
@@ -9015,9 +9015,9 @@ FSWAss_RefreshAllVoices_Loop:
 	ld	(xbc+4), xhl
 	ld	xwa, PmExpFilterGridCheck_OnLswData_Str_ON
 	cpw	(xde+4), 0
-	jr	z, FSWAss_RefreshAllVoices_Skip9
+	jr	z, PmExpFilterGridCheck_OnLswData_Skip9
 	ld	xwa, PmExpFilterGridCheck_OnLswData_Str_OFF
-FSWAss_RefreshAllVoices_Skip9:
+PmExpFilterGridCheck_OnLswData_Skip9:
 	push	xwa
 	push	xhl
 	call	Strcpy
@@ -9027,21 +9027,21 @@ FSWAss_RefreshAllVoices_Skip9:
 	lda	xde, (xsp+256)	; lda xde, xsp+0x0100
 	ld	xbc, EVT_GRID_DRAW
 	jrl	PmExpFilterCheck_DoSend
-FSWAss_RefreshAllVoices_Skip10:
+PmExpFilterGridCheck_OnLswData_Skip10:
 	inc	1, l
 	cp	l, 9
-	jr	c, FSWAss_RefreshAllVoices_Loop
+	jr	c, PmExpFilterGridCheck_OnLswData_Loop
 	jrl	SeqLoad_StoreReturnZero
-FSWAss_RefreshAllVoices_Skip11:
+PmExpFilterGridCheck_OnLswData_Skip11:
 	ld	l, 0:opc
 	lda	xix, (PmExpFilter_AltKeys:24)
 	ld	xwa, (xde)
-FSWAss_RefreshAllVoices_Loop2:
+PmExpFilterGridCheck_OnLswData_Loop2:
 	ld	c, l
 	extz	bc
 	sla	bc, 2
 	cp	xwa, (xix+bc)
-	jr	nz, FSWAss_RefreshAllVoices_Skip13
+	jr	nz, PmExpFilterGridCheck_OnLswData_Skip13
 	lda	xbc, (xsp+256)	; lda xbc, xsp+0x0100
 	ldw	(xbc), 1
 	inc	2, l
@@ -9051,9 +9051,9 @@ FSWAss_RefreshAllVoices_Loop2:
 	ld	(xbc+4), xhl
 	ld	xwa, PmExpFilterGridCheck_OnLswData_Str_ON_2
 	cpw	(xde+4), 0
-	jr	z, FSWAss_RefreshAllVoices_Skip12
+	jr	z, PmExpFilterGridCheck_OnLswData_Skip12
 	ld	xwa, PmExpFilterGridCheck_OnLswData_Str_OFF_2
-FSWAss_RefreshAllVoices_Skip12:
+PmExpFilterGridCheck_OnLswData_Skip12:
 	push	xwa
 	push	xhl
 	call	Strcpy
@@ -9063,10 +9063,10 @@ FSWAss_RefreshAllVoices_Skip12:
 	lda	xde, (xsp+256)	; lda xde, xsp+0x0100
 	ld	xbc, EVT_GRID_DRAW
 	jrl	PmExpFilterCheck_DoSend
-FSWAss_RefreshAllVoices_Skip13:
+PmExpFilterGridCheck_OnLswData_Skip13:
 	inc	1, l
 	cp	l, 9
-	jr	c, FSWAss_RefreshAllVoices_Loop2
+	jr	c, PmExpFilterGridCheck_OnLswData_Loop2
 	jrl	SeqLoad_StoreReturnZero
 
 PmExpFilterCheck_CellDecode:
@@ -9469,9 +9469,9 @@ DispTimeSet_EventDispatch:
 	ld	(xwa), bc
 	ld	(xwa+2), de
 	cpw	(xwa), 1
-	jr	nz, FSWAss_RefreshAllVoices_Skip3
+	jr	nz, DispTimeSet_EventDispatch_Skip3
 	cp	de, 2:i3
-	jr	nz, FSWAss_RefreshAllVoices_Skip3
+	jr	nz, DispTimeSet_EventDispatch_Skip3
 	lda	xwa, (xsp+8)
 	lda	xbc, (0x340e6:24)
 	ld	(xwa), xbc
@@ -9483,7 +9483,7 @@ DispTimeSet_EventDispatch:
 	ld	xbc, 0:i3
 	ld	(xwa+10), xbc
 	jrl	FSWAss_RefreshAllVoices_Join2
-FSWAss_RefreshAllVoices_Skip3:
+DispTimeSet_EventDispatch_Skip3:
 	cpw	(xwa), 1
 	jr	nz, FSWAss_RefreshAllVoices_Entry
 	cp	de, 3:i3
@@ -9578,9 +9578,9 @@ DispTimeSetGridCheck_OnIndexswDown:
 	ld	iz, de
 	ld	(xiy+2), iz
 	cpw	(xiy), 1
-	jr	nz, FSWAss_RefreshAllVoices_Skip17
+	jr	nz, DispTimeSetGridCheck_OnIndexswDown_Skip17
 	cp	iz, 2:i3
-	jr	nz, FSWAss_RefreshAllVoices_Skip17
+	jr	nz, DispTimeSetGridCheck_OnIndexswDown_Skip17
 	lda	xwa, (xsp+8)
 	lda	xbc, (0x0340e6:24)
 	ld	(xwa), xbc
@@ -9592,11 +9592,11 @@ DispTimeSetGridCheck_OnIndexswDown:
 	ld	xbc, 0:i3
 	ld	(xwa+10), xbc
 	jrl	FSWAss_RefreshAllVoices_Join2
-FSWAss_RefreshAllVoices_Skip17:
+DispTimeSetGridCheck_OnIndexswDown_Skip17:
 	cpw	(xiy), 1
-	jr	nz, FSWAss_RefreshAllVoices_Skip18
+	jr	nz, DispTimeSetGridCheck_OnIndexswDown_Skip18
 	cp	iz, 3:i3
-	jr	nz, FSWAss_RefreshAllVoices_Skip18
+	jr	nz, DispTimeSetGridCheck_OnIndexswDown_Skip18
 	lda	xwa, (xsp+8)
 	lda	xbc, (0x0340e8:24)
 	ld	(xwa), xbc
@@ -9608,11 +9608,11 @@ FSWAss_RefreshAllVoices_Skip17:
 	ld	xbc, 0:i3
 	ld	(xwa+10), xbc
 	jrl	FSWAss_RefreshAllVoices_Join2
-FSWAss_RefreshAllVoices_Skip18:
+DispTimeSetGridCheck_OnIndexswDown_Skip18:
 	cpw	(xiy), 1
-	jr	nz, FSWAss_RefreshAllVoices_Skip19
+	jr	nz, DispTimeSetGridCheck_OnIndexswDown_Skip19
 	cp	iz, 4:i3
-	jr	nz, FSWAss_RefreshAllVoices_Skip19
+	jr	nz, DispTimeSetGridCheck_OnIndexswDown_Skip19
 	lda	xwa, (xsp+8)
 	lda	xbc, (0x0340ea:24)
 	ld	(xwa), xbc
@@ -9624,11 +9624,11 @@ FSWAss_RefreshAllVoices_Skip18:
 	ld	xbc, 0:i3
 	ld	(xwa+10), xbc
 	jrl	FSWAss_RefreshAllVoices_Join2
-FSWAss_RefreshAllVoices_Skip19:
+DispTimeSetGridCheck_OnIndexswDown_Skip19:
 	cpw	(xiy), 1
-	jr	nz, FSWAss_RefreshAllVoices_Skip20
+	jr	nz, DispTimeSetGridCheck_OnIndexswDown_Skip20
 	cp	iz, 5:i3
-	jr	nz, FSWAss_RefreshAllVoices_Skip20
+	jr	nz, DispTimeSetGridCheck_OnIndexswDown_Skip20
 	lda	xwa, (xsp+8)
 	lda	xbc, (0x0340ec:24)
 	ld	(xwa), xbc
@@ -9640,16 +9640,16 @@ FSWAss_RefreshAllVoices_Skip19:
 	ld	xbc, 1:i3
 	ld	(xwa+10), xbc
 	jr	FSWAss_RefreshAllVoices_Join2
-FSWAss_RefreshAllVoices_Skip20:
+DispTimeSetGridCheck_OnIndexswDown_Skip20:
 	lda	xwa, (xsp+8)
 	lda	xbc, (xwa+4)
 	lda	xhl, (xwa+6)
 	lda	xde, (xwa+10)
 	lda	xix, (xwa+14)
 	cpw	(xiy), 1
-	jr	nz, FSWAss_RefreshAllVoices_Skip21
+	jr	nz, DispTimeSetGridCheck_OnIndexswDown_Skip21
 	cp	iz, 6:i3
-	jr	nz, FSWAss_RefreshAllVoices_Skip21
+	jr	nz, DispTimeSetGridCheck_OnIndexswDown_Skip21
 	lda	xiy, (0x0340ee:24)
 	ld	(xwa), xiy
 	ldw	(xbc), 1
@@ -9660,7 +9660,7 @@ FSWAss_RefreshAllVoices_Skip20:
 	ld	xbc, 1:i3
 	ld	(xde), xbc
 	jr	FSWAss_RefreshAllVoices_Join2
-FSWAss_RefreshAllVoices_Skip21:
+DispTimeSetGridCheck_OnIndexswDown_Skip21:
 	cpw	(xiy), 1
 	jrl	nz, DispTimeSet_ReturnZero
 	cp	iz, 7:i3
@@ -9681,7 +9681,7 @@ DispTimeSetGridCheck_OnLswData:
 	lda	xwa, (0x0340e6:24)
 	lda	xiy, (xde+14)
 	cp	xwa, (xde)	; FBC9C0 (cp xwa,(xde))
-	jr	nz, FSWAss_RefreshAllVoices_Skip4
+	jr	nz, DispTimeSetGridCheck_OnLswData_Skip4
 	lda	xwa, (xsp+40)
 	ldw	(xwa), 1
 	ldw (xwa+2), 2
@@ -9703,10 +9703,10 @@ DispTimeSetGridCheck_OnLswData:
 	lda	xde, (xsp+40)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	DispTimeSet_SendEventReturn
-FSWAss_RefreshAllVoices_Skip4:
+DispTimeSetGridCheck_OnLswData_Skip4:
 	lda	xwa, (0x340e8:24)
 	cp	xwa, (xde)
-	jr	nz, FSWAss_RefreshAllVoices_Skip5
+	jr	nz, DispTimeSetGridCheck_OnLswData_Skip5
 	lda	xwa, (xsp+40)
 	ldw	(xwa), 1
 	ldw (xwa+2), 3
@@ -9728,12 +9728,12 @@ FSWAss_RefreshAllVoices_Skip4:
 	lda	xde, (xsp+40)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	DispTimeSet_SendEventReturn
-FSWAss_RefreshAllVoices_Skip5:
+DispTimeSetGridCheck_OnLswData_Skip5:
 	lda	xbc, (0x340ea:24)
 	lda	xwa, (ParamStr_Table_03:24)
 	ld	(xsp+4), xwa
 	cp	xbc, (xde)
-	jr	nz, FSWAss_RefreshAllVoices_Skip6
+	jr	nz, DispTimeSetGridCheck_OnLswData_Skip6
 	lda	xwa, (xsp+40)
 	ldw	(xwa), 1
 	ldw	(xwa+2), 4
@@ -9755,10 +9755,10 @@ FSWAss_RefreshAllVoices_Skip5:
 	lda	xde, (xsp+40)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	DispTimeSet_SendEventReturn
-FSWAss_RefreshAllVoices_Skip6:
+DispTimeSetGridCheck_OnLswData_Skip6:
 	lda	xwa, (0x0340ec:24)
 	cp	xwa, (xde)
-	jr	nz, FSWAss_RefreshAllVoices_Skip7
+	jr	nz, DispTimeSetGridCheck_OnLswData_Skip7
 	lda	xwa, (xsp+40)
 	ldw	(xwa), 1
 	ldw (xwa+2), 5
@@ -9780,14 +9780,14 @@ FSWAss_RefreshAllVoices_Skip6:
 	lda	xde, (xsp+40)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	DispTimeSet_SendEventReturn
-FSWAss_RefreshAllVoices_Skip7:
+DispTimeSetGridCheck_OnLswData_Skip7:
 	lda	xiz, (0x340ee:24)
 	lda	xhl, (xsp+40)
 	lda	xix, (xsp+30)
 	lda	xwa, (xhl+2)
 	lda	xbc, (xhl+4)
 	cp	xiz, (xde)
-	jr	nz, FSWAss_RefreshAllVoices_Skip8
+	jr	nz, DispTimeSetGridCheck_OnLswData_Skip8
 	ldw	(xhl), 1
 	ldw	(xwa), 6
 	ld	(xbc), xix
@@ -9807,7 +9807,7 @@ FSWAss_RefreshAllVoices_Skip7:
 	lda	xde, (xsp+40)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	DispTimeSet_SendEventReturn
-FSWAss_RefreshAllVoices_Skip8:
+DispTimeSetGridCheck_OnLswData_Skip8:
 	lda	xiz, (0x0340f0:24)
 	cp	xiz, (xde)
 	jrl	nz, DispTimeSet_ReturnZero
@@ -10566,28 +10566,28 @@ MssName_EventDispatch:
 	lda	xbc, (xiz+14)
 	ld	xwa, (xbc)
 	or	xwa, xwa
-	jr	nz, NormScreenProc_Skip
+	jr	nz, MssName_EventDispatch_Skip
 	pushw	MssName_EventDispatch_Str_Memory_data@hi16
 	pushw	MssName_EventDispatch_Str_Memory_data@lo16
 	ld	xwa, (xiz+18)
 	push	xwa
 	call	Strcpy
 	inc	8, xsp
-	jrl	NormScreenProc_Join2
-NormScreenProc_Skip:
+	jrl	MssName_EventDispatch_Join2
+MssName_EventDispatch_Skip:
 	dec	1, xwa
 	cp	xwa, 800
-	jr	le, NormScreenProc_Skip2
+	jr	le, MssName_EventDispatch_Skip2
 	ld	xwa, 2:i3
 	ld	(xbc), xwa
-NormScreenProc_Skip2:
+MssName_EventDispatch_Skip2:
 	ld	xwa, (xbc)
 	dec	1, xwa
 	call	StyleName_FindOverride_Default
 	ld	xwa, (xiz+14)
 	dec	1, xwa
 	cp	xhl, 0xffffffff
-	jr	z, NormScreenProc_Skip3
+	jr	z, MssName_EventDispatch_Skip3
 	pushw	16
 	call	StyleName_FindOverride_Default
 	push	xhl
@@ -10602,8 +10602,8 @@ NormScreenProc_Skip2:
 	call	Sprintf_StrNSet
 	lda	xsp, (xsp+18)
 	ld	xwa, MssName_EventDispatch_Str_Blank2
-	jr	NormScreenProc_Join
-NormScreenProc_Skip3:
+	jr	MssName_EventDispatch_Join
+MssName_EventDispatch_Skip3:
 	sll	xwa, 2
 	add	xwa, 0x987000	; = table_data STYLEREC_PTRTABLE_DEFAULT (other UI states); cross-ROM -- table_data assembles separately, constant stays literal
 	ld	xbc, (xwa)
@@ -10617,14 +10617,14 @@ NormScreenProc_Skip3:
 	call	Strncpy
 	lda	xsp, (xsp+10)
 	ld	xwa, MssName_EventDispatch_Str_Blank2_2
-NormScreenProc_Join:
+MssName_EventDispatch_Join:
 	push	xwa
 	ld	xwa, (xiz+18)
 	push	xwa
 	call	TmFlash_CompareStrings
 	inc	8, xsp
 	ld	(xhl), 0
-NormScreenProc_Join2:
+MssName_EventDispatch_Join2:
 	ld	xhl, (xsp+4)
 	jr	NormScreenProc_Epilogue
 MssNameFunc_OnGetLargeStep:

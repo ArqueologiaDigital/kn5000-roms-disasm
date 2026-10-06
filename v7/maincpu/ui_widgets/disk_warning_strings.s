@@ -267,7 +267,7 @@ GetEditSwPoint_CaseTable:
 SetWallPaper_CaseTable:
 	.short	SetWallPaper_DispatchData - SetWallPaper_DispatchData
 	.short	SetWallPaper_CaseData - SetWallPaper_DispatchData
-	.short	SetWallPaper_Case2 - SetWallPaper_DispatchData
+	.short	SetWallPaper_MenuWallBorder - SetWallPaper_DispatchData
 	.short	SetWallPaper_Default - SetWallPaper_DispatchData
 	.short	SetWallPaper_Loop - SetWallPaper_DispatchData
 	.short	SetWallPaper_Loop - SetWallPaper_DispatchData
@@ -644,8 +644,8 @@ AcIndexEdit_SwitchDirCaseMap_Pad:	.incbin "includes/generated/naka_disk_warning.
 ; [nakarest] xix, AcIndexEdit_DispatchDSP_CaseTable`).
 AcIndexEdit_DispatchDSP_CaseTable:
 	.short	AcIndexEdit_DispatchDSP_InlineData - AcIndexEdit_DispatchDSP_InlineData
-	.short	AcIndexEdit_OK_AltView_Case1 - AcIndexEdit_DispatchDSP_InlineData
-	.short	AcIndexEdit_OK_AltView_Case2 - AcIndexEdit_DispatchDSP_InlineData
+	.short	AcIndexEditSwProc_OnUpStyle - AcIndexEdit_DispatchDSP_InlineData
+	.short	AcIndexEditSwProc_OnDownStyle - AcIndexEdit_DispatchDSP_InlineData
 PsPageBox_Confirm_DrawValue_Str_PAGE_Fmtd_Fmtd:	.incbin "includes/generated/naka_disk_warning.bin", 0x16A8, 0xC	; "PAGE %d/%d"
 IvPageControl_GetText_Str_PAGE:			.incbin "includes/generated/naka_disk_warning.bin", 0x16B4, 0x6	; "PAGE"
 IvMainEditSw_GetText_Str_MnSw:			.incbin "includes/generated/naka_disk_warning.bin", 0x16BA, 0x6	; "MnSw"

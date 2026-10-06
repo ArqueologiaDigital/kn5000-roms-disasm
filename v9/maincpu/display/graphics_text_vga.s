@@ -97,11 +97,11 @@ Display_FillPaletteBandFromEntry:
 	ld	iz, wa
 	calr	IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cp	hl, 0:i3
-	jr	z, GraphicsRender_ByteData_Skip
+	jr	z, Display_FillPaletteBandFromEntry_Skip
 	ld	wa, iz
 	calr	Display_FillPaletteBandFromEntry_Impl
-	jr	GraphicsRender_ByteData_Epilogue
-GraphicsRender_ByteData_Skip:
+	jr	Display_FillPaletteBandFromEntry_Epilogue
+Display_FillPaletteBandFromEntry_Skip:
 	ld	wa, 6:i3
 	calr	DrawQueue_Alloc
 	ld	xwa, xhl
@@ -109,7 +109,7 @@ GraphicsRender_ByteData_Skip:
 	ld	(xwa), xbc
 	ld	(xwa+4), iz
 	calr	DrawRing_Post
-GraphicsRender_ByteData_Epilogue:
+Display_FillPaletteBandFromEntry_Epilogue:
 	popw	iz
 	ret
 GraphicsRender_ByteData_Code:
@@ -122,13 +122,13 @@ Display_FillPaletteBandFromEntry_Impl:
 	call	Table_LookupDword
 	ld	(xsp+2), xhl
 	ldw	iz, 64
-GraphicsRender_ByteData_Loop:
+Display_FillPaletteBandFromEntry_Impl_Loop:
 	ld	wa, iz
 	ld	xbc, (xsp+2)
 	call	SetPaletteRGB
 	inc	1, iz
 	cp	iz, 192
-	jr	c, GraphicsRender_ByteData_Loop
+	jr	c, Display_FillPaletteBandFromEntry_Impl_Loop
 	ldw	(PALETTE_INDEX_CACHED:24), 4
 	ldw	(PALETTE_UPDATE_FLAG:24), 1
 	popw	iz
@@ -1241,9 +1241,9 @@ DrawText_ExtLayout_Variant1:
 	ld	a, (xsp+14)
 	ld	c, (xsp+6)
 	and	a, 15
-	jr	z, DrawText_ExtendedLayout_Skip2
+	jr	z, DrawText_ExtLayout_Variant1_Skip2
 	srla c	; srl A,C
-DrawText_ExtendedLayout_Skip2:
+DrawText_ExtLayout_Variant1_Skip2:
 	ld	(xsp+6), c
 	lda	xwa, (xsp+272)
 	ld	(xsp+12), xwa
@@ -1256,7 +1256,7 @@ DrawText_ExtendedLayout_Skip2:
 	ld	(xsp+4), wa
 	ld	hl, 0:i3
 	cpw	(xsp+4), 0
-	jr	ule, DrawText_ExtendedLayout_Skip
+	jr	ule, DrawText_ExtLayout_Variant1_Skip
 	ld	xbc, xde
 	lda	xwa, (xbc+7)
 	ld	(xsp+8), xwa
@@ -1266,7 +1266,7 @@ DrawText_ExtendedLayout_Skip2:
 	mul	xwa, (xsp+4)
 	ld	xbc, xwa
 	ld	xde, 0:i3
-DrawText_ExtendedLayout_Loop:
+DrawText_ExtLayout_Variant1_Loop:
 	ld	xwa, (xsp+8)
 	ld	xiy, (xwa)
 	ld	xiz, xix
@@ -1279,8 +1279,8 @@ DrawText_ExtendedLayout_Loop:
 	inc	1, xde
 	inc	1, xbc
 	cp	hl, (xsp+4)
-	jr	c, DrawText_ExtendedLayout_Loop
-DrawText_ExtendedLayout_Skip:
+	jr	c, DrawText_ExtLayout_Variant1_Loop
+DrawText_ExtLayout_Variant1_Skip:
 	extz	xhl
 	lda	xwa, (xsp+16)
 	ld	(xsp+8), xwa
@@ -1562,9 +1562,9 @@ SeGfx_BoundOp09_FormatNumber:
 	ld	e, a
 	ld	a, c
 	and	a, 15
-	jr	z, DrawFunc_Init_Skip14
+	jr	z, SeGfx_BoundOp09_FormatNumber_Skip14
 	srla e	; srl A,E
-DrawFunc_Init_Skip14:
+SeGfx_BoundOp09_FormatNumber_Skip14:
 	ld	l, (xiz+11)
 	lda	xbc, (xsp+260)
 	ld	wa, (xiz+7)
@@ -1575,17 +1575,17 @@ DrawFunc_Init_Skip14:
 	lda	xbc, (xsp+4)
 	pushw	de
 	cp	l, 2:i3
-	jr	z, DrawFunc_Init_Skip15
+	jr	z, SeGfx_BoundOp09_FormatNumber_Skip15
 	cp	l, 1:i3
-	jr	nz, DrawFunc_Init_Skip16
+	jr	nz, SeGfx_BoundOp09_FormatNumber_Skip16
 	ld	xwa, DrawFunc_Init_Entry3_Str_Fmt1d
-	jr	DrawFunc_Init_Join4
-DrawFunc_Init_Skip15:
+	jr	SeGfx_BoundOp09_FormatNumber_Join4
+SeGfx_BoundOp09_FormatNumber_Skip15:
 	ld	xwa, DrawFunc_Init_Entry3_Str_Fmt2d
-	jr	DrawFunc_Init_Join4
-DrawFunc_Init_Skip16:
+	jr	SeGfx_BoundOp09_FormatNumber_Join4
+SeGfx_BoundOp09_FormatNumber_Skip16:
 	ld	xwa, DrawFunc_Init_Entry3_Str_Fmt3d_2
-DrawFunc_Init_Join4:
+SeGfx_BoundOp09_FormatNumber_Join4:
 	push	xwa
 	push	xbc
 	call	Sprintf_Locked
@@ -1623,9 +1623,9 @@ SeGfx_BoundOp0B_FormatNumber:
 	ld	e, a
 	ld	a, c
 	and	a, 15
-	jr	z, DrawFunc_Init_Skip17
+	jr	z, SeGfx_BoundOp0B_FormatNumber_Skip17
 	srla e	; srl A,E
-DrawFunc_Init_Skip17:
+SeGfx_BoundOp0B_FormatNumber_Skip17:
 	ld	l, (xiz+11)
 	lda	xbc, (xsp+260)
 	ld	wa, (xiz+7)
@@ -1636,22 +1636,22 @@ DrawFunc_Init_Skip17:
 	cp	a, e
 	jr	z, DrawFunc_Init_Skip18
 	cp	a, 128
-	jr	nc, DrawFunc_Init_Skip7
+	jr	nc, SeGfx_BoundOp0B_FormatNumber_Skip7
 	cp	e, 128
-	jr	c, DrawFunc_Init_Skip7
+	jr	c, SeGfx_BoundOp0B_FormatNumber_Skip7
 	ld	a, 128:opc
 	sub	e, 128
-DrawFunc_Init_Skip7:
+SeGfx_BoundOp0B_FormatNumber_Skip7:
 	cp	e, a
-	jr	ule, DrawFunc_Init_Skip8
+	jr	ule, SeGfx_BoundOp0B_FormatNumber_Skip8
 	ld	(xsp+4), 43
 	sub	e, a
-	jr	DrawFunc_Init_Join5
-DrawFunc_Init_Skip8:
+	jr	SeGfx_BoundOp0B_FormatNumber_Join5
+SeGfx_BoundOp0B_FormatNumber_Skip8:
 	ld	(xsp+4), 45
 	sub	a, e
 	ld	e, a
-DrawFunc_Init_Join5:
+SeGfx_BoundOp0B_FormatNumber_Join5:
 	extz	de
 	lda	xbc, (xsp+5)
 	pushw	de
@@ -1724,25 +1724,25 @@ SeGfx_BoundOp0A_FormatNumber:
 	ld	(xbc+2), wa
 	lda	xbc, (xsp+4)
 	cp	l, 2:i3
-	jr	z, DrawFunc_Init_Skip19
+	jr	z, SeGfx_BoundOp0A_FormatNumber_Skip19
 	cp	l, 1:i3
 	jr	nz, DrawFunc_Init_Skip20
 	pushm	(xde)
 	ld	xwa, DrawFunc_Init_Entry5_Str_Fmt1d
-	jr	DrawFunc_Init_Join10
-DrawFunc_Init_Skip19:
+	jr	SeGfx_BoundOp0A_FormatNumber_Join10
+SeGfx_BoundOp0A_FormatNumber_Skip19:
 	pushm	(xde)
 	pushw	DrawFunc_Init_Entry5_Str_Fmt2d_2@hi16
 	pushw	DrawFunc_Init_Entry5_Str_Fmt2d_2@lo16
 	push	xbc
-	jr	DrawFunc_Init_Join7
+	jr	SeGfx_BoundOp0A_FormatNumber_Join7
 DrawFunc_Init_Skip20:
 	pushm	(xde)
 	ld	xwa, DrawFunc_Init_Entry5_Str_Fmt3d_2
-DrawFunc_Init_Join10:
+SeGfx_BoundOp0A_FormatNumber_Join10:
 	push	xwa
 	push	xbc
-DrawFunc_Init_Join7:
+SeGfx_BoundOp0A_FormatNumber_Join7:
 	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	ld	a, (xiz+6)
@@ -1861,9 +1861,9 @@ SeGfx_BoundOp08_ColorBlit:
 	ld	l, a
 	ld	a, e
 	and	a, 15
-	jr	z, ColorBlit_WithPaletteSave_Skip2
+	jr	z, SeGfx_BoundOp08_ColorBlit_Skip2
 	srla l	; srl A,L
-ColorBlit_WithPaletteSave_Skip2:
+SeGfx_BoundOp08_ColorBlit_Skip2:
 	sll	l, 2
 	extz	hl
 	add	hl, hl
@@ -2263,28 +2263,28 @@ FontGlyph_ByteData:
 Text_GlyphToCharCode:
 	ld	e, (xwa)
 	cp	e, 32
-	jr	z, FontGlyph_ByteData_Skip
+	jr	z, Text_GlyphToCharCode_Skip
 	cp	e, 0:i3
-	jr	nz, FontGlyph_ByteData_Skip2
-FontGlyph_ByteData_Skip:
+	jr	nz, Text_GlyphToCharCode_Skip2
+Text_GlyphToCharCode_Skip:
 	ld	a, (xwa)
 	ld	(xbc), a
 	ret
-FontGlyph_ByteData_Skip2:
+Text_GlyphToCharCode_Skip2:
 	ld	de, 0:i3
 	lda	xhl, (Text_CharGlyphMap:24)
 	ld	a, (xwa)
-FontGlyph_ByteData_Loop:
+Text_GlyphToCharCode_Loop:
 	cp	(xhl+de), a
-	jr	nz, FontGlyph_ByteData_Skip3
+	jr	nz, Text_GlyphToCharCode_Skip3
 	ld	a, e
 	ld	(xbc), a
-	jr	FontGlyph_ByteData_Join
-FontGlyph_ByteData_Skip3:
+	jr	Text_GlyphToCharCode_Join
+Text_GlyphToCharCode_Skip3:
 	inc	1, de
 	cp	de, 256
-	jr	lt, FontGlyph_ByteData_Loop
-FontGlyph_ByteData_Join:
+	jr	lt, Text_GlyphToCharCode_Loop
+Text_GlyphToCharCode_Join:
 	cp	de, 256
 	ret	nz
 	ld	(xbc), 32
@@ -4541,17 +4541,17 @@ WallMenuEdit_EventDispatch:
 	ld	xwa, (xde+14)
 	ld	xbc, (xde+18)
 	cp	xwa, 1
-	jr	z, ToneGen_WriteParamByIndex_Skip
+	jr	z, WallMenuEdit_EventDispatch_Skip
 	or	xwa, xwa
-	jr	nz, ToneGen_WriteParamByIndex_Skip2
+	jr	nz, WallMenuEdit_EventDispatch_Skip2
 	ld	xwa, WallMenuEdit_Text
-	jr	ToneGen_WriteParamByIndex_Join2
-ToneGen_WriteParamByIndex_Skip:
+	jr	WallMenuEdit_EventDispatch_Join2
+WallMenuEdit_EventDispatch_Skip:
 	ld	xwa, WallMenuEdit_EventDispatch_Str_USER
-	jr	ToneGen_WriteParamByIndex_Join2
-ToneGen_WriteParamByIndex_Skip2:
+	jr	WallMenuEdit_EventDispatch_Join2
+WallMenuEdit_EventDispatch_Skip2:
 	ld	xwa, WallMenuEdit_EventDispatch_Str_ERROR
-ToneGen_WriteParamByIndex_Join2:
+WallMenuEdit_EventDispatch_Join2:
 	push	xwa
 	push	xbc
 	call	Sprintf_Locked
@@ -4596,17 +4596,17 @@ WallOthEdit_EventDispatch:
 	ld	xwa, (xde+14)
 	ld	xbc, (xde+18)
 	cp	xwa, 1
-	jr	z, ToneGen_WriteParamByIndex_Skip3
+	jr	z, WallOthEdit_EventDispatch_Skip3
 	or	xwa, xwa
-	jr	nz, ToneGen_WriteParamByIndex_Skip4
+	jr	nz, WallOthEdit_EventDispatch_Skip4
 	ld	xwa, WallOthEdit_Text
-	jr	ToneGen_WriteParamByIndex_Join3
-ToneGen_WriteParamByIndex_Skip3:
+	jr	WallOthEdit_EventDispatch_Join3
+WallOthEdit_EventDispatch_Skip3:
 	ld	xwa, WallOthEdit_EventDispatch_Str_USER
-	jr	ToneGen_WriteParamByIndex_Join3
-ToneGen_WriteParamByIndex_Skip4:
+	jr	WallOthEdit_EventDispatch_Join3
+WallOthEdit_EventDispatch_Skip4:
 	ld	xwa, WallOthEdit_EventDispatch_Str_ERROR
-ToneGen_WriteParamByIndex_Join3:
+WallOthEdit_EventDispatch_Join3:
 	push	xwa
 	push	xbc
 	call	Sprintf_Locked

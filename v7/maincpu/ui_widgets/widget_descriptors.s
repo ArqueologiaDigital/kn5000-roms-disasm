@@ -1675,19 +1675,19 @@ NoteEdit_FormatChordType_Str:	.incbin "includes/generated/naka_widget_descriptor
 ; -----------------------------------------------------------------------------
 NoteEdit_GetParamValue_CaseTable:
 	.short	NoteEdit_GetParamValue_Cases - NoteEdit_GetParamValue_Cases
-	.short	NoteEdit_GetParamValue_Case2 - NoteEdit_GetParamValue_Cases
-	.short	NoteEdit_GetParamValue_Case3 - NoteEdit_GetParamValue_Cases
+	.short	NoteEdit_GetParamValue_PosField - NoteEdit_GetParamValue_Cases
+	.short	NoteEdit_GetParamValue_NoteField - NoteEdit_GetParamValue_Cases
 	.short	NoteEdit_GetTempoValue - NoteEdit_GetParamValue_Cases
 	.short	NoteEdit_GetTempoValue - NoteEdit_GetParamValue_Cases
-	.short	NoteEdit_GetParamValue_Case6 - NoteEdit_GetParamValue_Cases
+	.short	NoteEdit_GetParamValue_IncField - NoteEdit_GetParamValue_Cases
 	.short	NoteEdit_GetTempoValue - NoteEdit_GetParamValue_Cases
 	.short	NoteEdit_GetTempoValue - NoteEdit_GetParamValue_Cases
-	.short	NoteEdit_GetParamValue_Case6 - NoteEdit_GetParamValue_Cases
+	.short	NoteEdit_GetParamValue_IncField - NoteEdit_GetParamValue_Cases
 	.short	NoteEdit_GetTempoValue - NoteEdit_GetParamValue_Cases
-	.short	NoteEdit_GetParamValue_Case11 - NoteEdit_GetParamValue_Cases
+	.short	NoteEdit_GetParamValue_KeyNamesPart - NoteEdit_GetParamValue_Cases
 	.short	NoteEdit_GetTempoValue - NoteEdit_GetParamValue_Cases
 	.short	NoteEdit_GetTempoValue - NoteEdit_GetParamValue_Cases
-	.short	NoteEdit_GetParamValue_Case14 - NoteEdit_GetParamValue_Cases
+	.short	NoteEdit_GetParamValue_DrumRowNamesPart - NoteEdit_GetParamValue_Cases
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] NoteEditFunc_CaseTable
 ; NoteEditFunc_CaseTable -- jump table of a compiled `switch` in
@@ -1860,11 +1860,11 @@ SndParam_Dispatch_PtrTable:
 	.short	SndParam_Dispatch_Code_2 - SndParam_Dispatch_Code_2
 	.short	SndParam_Dispatch_Code_2 - SndParam_Dispatch_Code_2
 	.short	SndParam_Dispatch_Code_2 - SndParam_Dispatch_Code_2
-	.short	EntertainerGridCheck_Switch3_Case4 - SndParam_Dispatch_Code_2
-	.short	EntertainerGridCheck_Switch3_Case5 - SndParam_Dispatch_Code_2
-	.short	EntertainerGridCheck_Switch3_Case5 - SndParam_Dispatch_Code_2
-	.short	EntertainerGridCheck_Switch3_Case5 - SndParam_Dispatch_Code_2
-	.short	EntertainerGridCheck_Switch3_Case5 - SndParam_Dispatch_Code_2
+	.short	EntertainerGridCheck_TypeRowDown - SndParam_Dispatch_Code_2
+	.short	EntertainerGridCheck_EffParamRowDown - SndParam_Dispatch_Code_2
+	.short	EntertainerGridCheck_EffParamRowDown - SndParam_Dispatch_Code_2
+	.short	EntertainerGridCheck_EffParamRowDown - SndParam_Dispatch_Code_2
+	.short	EntertainerGridCheck_EffParamRowDown - SndParam_Dispatch_Code_2
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SndParam_Dispatch_PtrTable_2
 ; SndParam_Dispatch_PtrTable_2 -- 2 u32 ROM addresses (or 0), read by
@@ -1879,11 +1879,11 @@ SndParam_Dispatch_PtrTable_2:
 	.short	SndParam_Dispatch_Code - SndParam_Dispatch_Code
 	.short	SndParam_Dispatch_Code - SndParam_Dispatch_Code
 	.short	SndParam_Dispatch_Code - SndParam_Dispatch_Code
-	.short	EntertainerGridCheck_Switch2_Case4 - SndParam_Dispatch_Code
-	.short	EntertainerGridCheck_Switch2_Case5 - SndParam_Dispatch_Code
-	.short	EntertainerGridCheck_Switch2_Case5 - SndParam_Dispatch_Code
-	.short	EntertainerGridCheck_Switch2_Case5 - SndParam_Dispatch_Code
-	.short	EntertainerGridCheck_Switch2_Case5 - SndParam_Dispatch_Code
+	.short	EntertainerGridCheck_TypeRowUp - SndParam_Dispatch_Code
+	.short	EntertainerGridCheck_EffParamRowUp - SndParam_Dispatch_Code
+	.short	EntertainerGridCheck_EffParamRowUp - SndParam_Dispatch_Code
+	.short	EntertainerGridCheck_EffParamRowUp - SndParam_Dispatch_Code
+	.short	EntertainerGridCheck_EffParamRowUp - SndParam_Dispatch_Code
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] EntertainerGridCheck_CaseTable
 ; EntertainerGridCheck_CaseTable -- jump table of a compiled `switch` in
@@ -2309,7 +2309,7 @@ EffectBox_StateDispatch_CaseTable:
 LongStr_1_2_3:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3AE4, 0x5A
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Table
-; Sqedt_ParamDispatch_Table -- read by Sqedt_ParamDispatch (v10/v9
+; Sqedt_ParamDispatch_Table -- read by SqedtFunc_OnGetTrkString (v10/v9
 ; 0xf34a5c, v7 0xf34a32) (`ld xbc, Sqedt_ParamDispatch_Table`).
 ; 54 bytes to the next object; the layout beyond that access is not
 ; established.
@@ -2320,7 +2320,7 @@ LongStr_1_2_3:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3AE4,
 Sqedt_ParamDispatch_Table:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3B3E, 0x36
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Table_2
-; Sqedt_ParamDispatch_Table_2 -- read by Sqedt_ParamDispatch (v10/v9
+; Sqedt_ParamDispatch_Table_2 -- read by SqedtFunc_OnGetTrkString (v10/v9
 ; 0xf34a5c, v7 0xf34a32) (`ld xbc, Sqedt_ParamDispatch_Table_2`).
 ; 66 bytes to the next object; the layout beyond that access is not
 ; established.
@@ -2331,7 +2331,7 @@ Sqedt_ParamDispatch_Table:	.incbin "includes/generated/naka_widget_descriptors.b
 Sqedt_ParamDispatch_Table_2:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3B74, 0x42
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Table_3
-; Sqedt_ParamDispatch_Table_3 -- read by Sqedt_ParamDispatch (v10/v9
+; Sqedt_ParamDispatch_Table_3 -- read by SqedtFunc_OnGetTrkString (v10/v9
 ; 0xf34a5c, v7 0xf34a32) (`ld xbc, Sqedt_ParamDispatch_Table_3`).
 ; 28 bytes to the next object; the layout beyond that access is not
 ; established.
@@ -2342,7 +2342,7 @@ Sqedt_ParamDispatch_Table_2:	.incbin "includes/generated/naka_widget_descriptors
 Sqedt_ParamDispatch_Table_3:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3BB6, 0x1C
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Table_4
-; Sqedt_ParamDispatch_Table_4 -- read by Sqedt_ParamDispatch (v10/v9
+; Sqedt_ParamDispatch_Table_4 -- read by SqedtFunc_OnGetTrkString (v10/v9
 ; 0xf34a5c, v7 0xf34a32) (`ld xbc, Sqedt_ParamDispatch_Table_4`).
 ; 106 bytes to the next object; the layout beyond that access is not
 ; established.
@@ -2555,7 +2555,7 @@ SqplyFunc_FormatFillIn_Str:	.incbin "includes/generated/naka_widget_descriptors.
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqplyFunc_HandlePartQuery_CaseTable
 ; SqplyFunc_HandlePartQuery_CaseTable -- jump table of a compiled
-; `switch` in SqplyFunc_HandlePartQuery (v10/v9 0xf3498e, v7 0xf34964)
+; `switch` in SqplyFunc_OnChkCur (v10/v9 0xf3498e, v7 0xf34964)
 ; (`lda xix, (SqplyFunc_HandlePartQuery_CaseTable:24)`): 8 u16 case
 ; offsets from SqplyFunc_PartQueryDispatch.
 ;
@@ -2564,12 +2564,12 @@ SqplyFunc_FormatFillIn_Str:	.incbin "includes/generated/naka_widget_descriptors.
 ; -----------------------------------------------------------------------------
 SqplyFunc_HandlePartQuery_CaseTable:
 	.short	SqplyFunc_PartQueryDispatch - SqplyFunc_PartQueryDispatch
-	.short	SqplyFunc_HandlePartQuery_Case5 - SqplyFunc_PartQueryDispatch
-	.short	SqplyFunc_HandlePartQuery_Case6 - SqplyFunc_PartQueryDispatch
+	.short	SqplyFunc_OnChkCur_AtCursorPos2 - SqplyFunc_PartQueryDispatch
+	.short	SqplyFunc_OnChkCur_AtCursorPos3 - SqplyFunc_PartQueryDispatch
 	.short	SqplyFunc_ReturnZero - SqplyFunc_PartQueryDispatch
 	.short	SqplyFunc_PartQueryDispatch - SqplyFunc_PartQueryDispatch
-	.short	SqplyFunc_HandlePartQuery_Case5 - SqplyFunc_PartQueryDispatch
-	.short	SqplyFunc_HandlePartQuery_Case6 - SqplyFunc_PartQueryDispatch
+	.short	SqplyFunc_OnChkCur_AtCursorPos2 - SqplyFunc_PartQueryDispatch
+	.short	SqplyFunc_OnChkCur_AtCursorPos3 - SqplyFunc_PartQueryDispatch
 	.short	SqplyFunc_PartQueryDispatch - SqplyFunc_PartQueryDispatch
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqplyFunc_HandleGetValue_CaseTable
@@ -2617,7 +2617,7 @@ SqplyFunc_CaseTable:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str
 ; Sqedt_ParamDispatch_Str -- NUL-terminated string(s), 6 bytes, used by
-; Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str`).
 ;
 ; Typed in naka_widget_descriptors.c as char Sqedt_ParamDispatch_Str[6].
@@ -2626,7 +2626,7 @@ Sqedt_ParamDispatch_Str:	.incbin "includes/generated/naka_widget_descriptors.bin
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_2
 ; Sqedt_ParamDispatch_Str_2 -- NUL-terminated string(s), 6 bytes, used
-; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; by SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str_2`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2636,7 +2636,7 @@ Sqedt_ParamDispatch_Str_2:	.incbin "includes/generated/naka_widget_descriptors.b
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_3
 ; Sqedt_ParamDispatch_Str_3 -- NUL-terminated string(s), 18 bytes, used
-; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; by SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str_3`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2648,7 +2648,7 @@ Sqedt_ParamDispatch_Str_Fmt3d:	.incbin "includes/generated/naka_widget_descripto
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_4
 ; Sqedt_ParamDispatch_Str_4 -- NUL-terminated string(s), 6 bytes, used
-; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; by SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str_4`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2658,7 +2658,7 @@ Sqedt_ParamDispatch_Str_4:	.incbin "includes/generated/naka_widget_descriptors.b
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_5
 ; Sqedt_ParamDispatch_Str_5 -- NUL-terminated string(s), 6 bytes, used
-; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; by SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str_5`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2668,7 +2668,7 @@ Sqedt_ParamDispatch_Str_5:	.incbin "includes/generated/naka_widget_descriptors.b
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_6
 ; Sqedt_ParamDispatch_Str_6 -- NUL-terminated string(s), 6 bytes, used
-; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; by SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str_6`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2678,7 +2678,7 @@ Sqedt_ParamDispatch_Str_6:	.incbin "includes/generated/naka_widget_descriptors.b
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_7
 ; Sqedt_ParamDispatch_Str_7 -- NUL-terminated string(s), 6 bytes, used
-; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; by SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str_7`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2688,7 +2688,7 @@ Sqedt_ParamDispatch_Str_7:	.incbin "includes/generated/naka_widget_descriptors.b
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_8
 ; Sqedt_ParamDispatch_Str_8 -- NUL-terminated string(s), 6 bytes, used
-; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; by SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str_8`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2698,7 +2698,7 @@ Sqedt_ParamDispatch_Str_8:	.incbin "includes/generated/naka_widget_descriptors.b
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] NakaInst_3d
 ; NakaInst_3d -- NUL-terminated string(s), 6 bytes, used by
-; Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`.long
+; SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`.long
 ; NakaInst_3d`).
 ;
 ; Typed in naka_widget_descriptors.c as char NakaInst_3d[6].
@@ -2707,7 +2707,7 @@ NakaInst_3d:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D28, 0
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_9
 ; Sqedt_ParamDispatch_Str_9 -- NUL-terminated string(s), 6 bytes, used
-; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; by SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str_9`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2717,7 +2717,7 @@ Sqedt_ParamDispatch_Str_9:	.incbin "includes/generated/naka_widget_descriptors.b
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_10
 ; Sqedt_ParamDispatch_Str_10 -- NUL-terminated string(s), 6 bytes, used
-; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; by SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str_10`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2727,7 +2727,7 @@ Sqedt_ParamDispatch_Str_10:	.incbin "includes/generated/naka_widget_descriptors.
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_11
 ; Sqedt_ParamDispatch_Str_11 -- NUL-terminated string(s), 44 bytes, used
-; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; by SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str_11`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2742,7 +2742,7 @@ FmtStr_minuspct3d:			.incbin "includes/generated/naka_widget_descriptors.bin", 0
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_12
 ; Sqedt_ParamDispatch_Str_12 -- NUL-terminated string(s), 6 bytes, used
-; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; by SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str_12`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2752,7 +2752,7 @@ Sqedt_ParamDispatch_Str_12:	.incbin "includes/generated/naka_widget_descriptors.
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_13
 ; Sqedt_ParamDispatch_Str_13 -- NUL-terminated string(s), 8 bytes, used
-; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; by SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str_13`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2762,7 +2762,7 @@ Sqedt_ParamDispatch_Str_13:	.incbin "includes/generated/naka_widget_descriptors.
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_14
 ; Sqedt_ParamDispatch_Str_14 -- NUL-terminated string(s), 8 bytes, used
-; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; by SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str_14`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2772,7 +2772,7 @@ Sqedt_ParamDispatch_Str_14:	.incbin "includes/generated/naka_widget_descriptors.
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_15
 ; Sqedt_ParamDispatch_Str_15 -- NUL-terminated string(s), 6 bytes, used
-; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; by SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str_15`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2782,7 +2782,7 @@ Sqedt_ParamDispatch_Str_15:	.incbin "includes/generated/naka_widget_descriptors.
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_16
 ; Sqedt_ParamDispatch_Str_16 -- NUL-terminated string(s), 6 bytes, used
-; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; by SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str_16`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2792,7 +2792,7 @@ Sqedt_ParamDispatch_Str_16:	.incbin "includes/generated/naka_widget_descriptors.
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_17
 ; Sqedt_ParamDispatch_Str_17 -- NUL-terminated string(s), 8 bytes, used
-; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; by SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str_17`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2802,7 +2802,7 @@ Sqedt_ParamDispatch_Str_17:	.incbin "includes/generated/naka_widget_descriptors.
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_18
 ; Sqedt_ParamDispatch_Str_18 -- NUL-terminated string(s), 8 bytes, used
-; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; by SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str_18`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2812,7 +2812,7 @@ Sqedt_ParamDispatch_Str_18:	.incbin "includes/generated/naka_widget_descriptors.
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_19
 ; Sqedt_ParamDispatch_Str_19 -- NUL-terminated string(s), 6 bytes, used
-; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; by SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str_19`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2822,7 +2822,7 @@ Sqedt_ParamDispatch_Str_19:	.incbin "includes/generated/naka_widget_descriptors.
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_20
 ; Sqedt_ParamDispatch_Str_20 -- NUL-terminated string(s), 8 bytes, used
-; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; by SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str_20`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2832,7 +2832,7 @@ Sqedt_ParamDispatch_Str_20:	.incbin "includes/generated/naka_widget_descriptors.
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_21
 ; Sqedt_ParamDispatch_Str_21 -- NUL-terminated string(s), 8 bytes, used
-; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; by SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str_21`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2842,7 +2842,7 @@ Sqedt_ParamDispatch_Str_21:	.incbin "includes/generated/naka_widget_descriptors.
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_22
 ; Sqedt_ParamDispatch_Str_22 -- NUL-terminated string(s), 6 bytes, used
-; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; by SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str_22`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2852,7 +2852,7 @@ Sqedt_ParamDispatch_Str_22:	.incbin "includes/generated/naka_widget_descriptors.
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_23
 ; Sqedt_ParamDispatch_Str_23 -- NUL-terminated string(s), 6 bytes, used
-; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; by SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str_23`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2862,7 +2862,7 @@ Sqedt_ParamDispatch_Str_23:	.incbin "includes/generated/naka_widget_descriptors.
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_24
 ; Sqedt_ParamDispatch_Str_24 -- NUL-terminated string(s), 6 bytes, used
-; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; by SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str_24`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2872,7 +2872,7 @@ Sqedt_ParamDispatch_Str_24:	.incbin "includes/generated/naka_widget_descriptors.
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_25
 ; Sqedt_ParamDispatch_Str_25 -- NUL-terminated string(s), 6 bytes, used
-; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; by SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str_25`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2882,7 +2882,7 @@ Sqedt_ParamDispatch_Str_25:	.incbin "includes/generated/naka_widget_descriptors.
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_26
 ; Sqedt_ParamDispatch_Str_26 -- NUL-terminated string(s), 6 bytes, used
-; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; by SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str_26`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2892,7 +2892,7 @@ Sqedt_ParamDispatch_Str_26:	.incbin "includes/generated/naka_widget_descriptors.
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_27
 ; Sqedt_ParamDispatch_Str_27 -- NUL-terminated string(s), 6 bytes, used
-; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; by SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str_27`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2902,7 +2902,7 @@ Sqedt_ParamDispatch_Str_27:	.incbin "includes/generated/naka_widget_descriptors.
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_28
 ; Sqedt_ParamDispatch_Str_28 -- NUL-terminated string(s), 6 bytes, used
-; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; by SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str_28`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2912,7 +2912,7 @@ Sqedt_ParamDispatch_Str_28:	.incbin "includes/generated/naka_widget_descriptors.
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_29
 ; Sqedt_ParamDispatch_Str_29 -- NUL-terminated string(s), 6 bytes, used
-; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; by SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str_29`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2922,7 +2922,7 @@ Sqedt_ParamDispatch_Str_29:	.incbin "includes/generated/naka_widget_descriptors.
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_30
 ; Sqedt_ParamDispatch_Str_30 -- NUL-terminated string(s), 12 bytes, used
-; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; by SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str_30`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2933,7 +2933,7 @@ Sqedt_ParamDispatch_Entry2_Str_Fmt3d_2:	.incbin "includes/generated/naka_widget_
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_31
 ; Sqedt_ParamDispatch_Str_31 -- NUL-terminated string(s), 6 bytes, used
-; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; by SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str_31`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2943,7 +2943,7 @@ Sqedt_ParamDispatch_Str_31:	.incbin "includes/generated/naka_widget_descriptors.
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] NakaInst_2d
 ; NakaInst_2d -- NUL-terminated string(s), 6 bytes, used by
-; Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`.long
+; SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`.long
 ; NakaInst_2d`).
 ;
 ; Typed in naka_widget_descriptors.c as char NakaInst_2d[6].
@@ -2952,7 +2952,7 @@ NakaInst_2d:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3DF0, 0
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_32
 ; Sqedt_ParamDispatch_Str_32 -- NUL-terminated string(s), 12 bytes, used
-; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; by SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str_32`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2963,7 +2963,7 @@ Sqedt_ParamDispatch_Entry2_Str_Blank5:	.incbin "includes/generated/naka_widget_d
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_33
 ; Sqedt_ParamDispatch_Str_33 -- NUL-terminated string(s), 10 bytes, used
-; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; by SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str_33`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2974,7 +2974,7 @@ SqedtFunc_CheckMode_Str_N100:	.incbin "includes/generated/naka_widget_descriptor
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_34
 ; Sqedt_ParamDispatch_Str_34 -- NUL-terminated string(s), 4 bytes, used
-; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
+; by SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
 ; Sqedt_ParamDispatch_Str_34`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2984,7 +2984,7 @@ Sqedt_ParamDispatch_Str_34:	.incbin "includes/generated/naka_widget_descriptors.
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SeqFormat_DispatchA_CaseTable
 ; SeqFormat_DispatchA_CaseTable -- jump table of a compiled `switch` in
-; SeqFormat_DispatchA (v10/v9 0xf3513d, v7 0xf35113) (`lda xix,
+; SqedtFunc_OnChkCur_AtCursorPos0 (v10/v9 0xf3513d, v7 0xf35113) (`lda xix,
 ; (SeqFormat_DispatchA_CaseTable:24)`): 16 u16 case offsets from
 ; SeqFormat_DispatchA_Code.
 ;
@@ -2995,48 +2995,48 @@ SeqFormat_DispatchA_CaseTable:
 	.short	SeqFormat_DispatchA_Code - SeqFormat_DispatchA_Code
 	.short	SeqFormat_DispatchA_Code - SeqFormat_DispatchA_Code
 	.short	SeqFormat_DispatchA_Code - SeqFormat_DispatchA_Code
-	.short	SeqFormat_DispatchA_Case18 - SeqFormat_DispatchA_Code
-	.short	SeqFormat_DispatchA_Case18 - SeqFormat_DispatchA_Code
-	.short	SeqFormat_DispatchA_Case18 - SeqFormat_DispatchA_Code
-	.short	SeqFormat_DispatchA_Case21 - SeqFormat_DispatchA_Code
-	.short	SeqFormat_DispatchA_Case21 - SeqFormat_DispatchA_Code
-	.short	SeqFormat_DispatchA_Case21 - SeqFormat_DispatchA_Code
-	.short	SeqFormat_DispatchA_Case24 - SeqFormat_DispatchA_Code
-	.short	SeqFormat_DispatchA_Case24 - SeqFormat_DispatchA_Code
-	.short	SeqFormat_DispatchA_Case24 - SeqFormat_DispatchA_Code
-	.short	SeqFormat_DispatchA_Case27 - SeqFormat_DispatchA_Code
-	.short	SeqFormat_DispatchA_Case27 - SeqFormat_DispatchA_Code
-	.short	SeqFormat_DispatchA_Case29 - SeqFormat_DispatchA_Code
-	.short	SeqFormat_DispatchA_Case29 - SeqFormat_DispatchA_Code
+	.short	SqedtFunc_OnChkCur2_McpTrBFields - SeqFormat_DispatchA_Code
+	.short	SqedtFunc_OnChkCur2_McpTrBFields - SeqFormat_DispatchA_Code
+	.short	SqedtFunc_OnChkCur2_McpTrBFields - SeqFormat_DispatchA_Code
+	.short	SqedtFunc_OnChkCur2_MinsTrAFields - SeqFormat_DispatchA_Code
+	.short	SqedtFunc_OnChkCur2_MinsTrAFields - SeqFormat_DispatchA_Code
+	.short	SqedtFunc_OnChkCur2_MinsTrAFields - SeqFormat_DispatchA_Code
+	.short	SqedtFunc_OnChkCur2_MinsTrBFields - SeqFormat_DispatchA_Code
+	.short	SqedtFunc_OnChkCur2_MinsTrBFields - SeqFormat_DispatchA_Code
+	.short	SqedtFunc_OnChkCur2_MinsTrBFields - SeqFormat_DispatchA_Code
+	.short	SqedtFunc_OnChkCur2_ScpFromFields - SeqFormat_DispatchA_Code
+	.short	SqedtFunc_OnChkCur2_ScpFromFields - SeqFormat_DispatchA_Code
+	.short	SqedtFunc_OnChkCur2_ScpToFields - SeqFormat_DispatchA_Code
+	.short	SqedtFunc_OnChkCur2_ScpToFields - SeqFormat_DispatchA_Code
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqedtFunc_SignExtend_CaseTable
 ; SqedtFunc_SignExtend_CaseTable -- jump table of a compiled `switch` in
-; SqedtFunc_SignExtend (v10/v9 0xf35115, v7 0xf350eb) (`lda xix,
-; (SqedtFunc_SignExtend_CaseTable:24)`): 15 u16 case offsets from SeqFormat_DispatchA.
+; SqedtFunc_OnCurToParam_CursorPos6_OnTitleSqtrkmrg (v10/v9 0xf35115, v7 0xf350eb) (`lda xix,
+; (SqedtFunc_SignExtend_CaseTable:24)`): 15 u16 case offsets from SqedtFunc_OnChkCur_AtCursorPos0.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; SqedtFunc_SignExtend_CaseTable[15].
 ; -----------------------------------------------------------------------------
 SqedtFunc_SignExtend_CaseTable:
-	.short	SeqFormat_DispatchA - SeqFormat_DispatchA
-	.short	SqedtFunc_SignExtend_Case1 - SeqFormat_DispatchA
-	.short	SqedtFunc_SignExtend_Case2 - SeqFormat_DispatchA
-	.short	SqedtFunc_SignExtend_Case3 - SeqFormat_DispatchA
-	.short	SqedtFunc_SignExtend_Case3 - SeqFormat_DispatchA
-	.short	SqedtFunc_SignExtend_Case3 - SeqFormat_DispatchA
-	.short	SqedtFunc_SignExtend_Case3 - SeqFormat_DispatchA
-	.short	SqedtFunc_SignExtend_Case3 - SeqFormat_DispatchA
-	.short	SqedtFunc_SignExtend_Case8 - SeqFormat_DispatchA
-	.short	SqedtFunc_SignExtend_Case9 - SeqFormat_DispatchA
-	.short	SqedtFunc_SignExtend_Case8 - SeqFormat_DispatchA
-	.short	SqedtFunc_SignExtend_Case9 - SeqFormat_DispatchA
-	.short	SeqFormat_DispatchA - SeqFormat_DispatchA
-	.short	SqedtFunc_SignExtend_Case2 - SeqFormat_DispatchA
-	.short	SqedtFunc_SignExtend_Case9 - SeqFormat_DispatchA
+	.short	SqedtFunc_OnChkCur_AtCursorPos0 - SqedtFunc_OnChkCur_AtCursorPos0
+	.short	SqedtFunc_OnChkCur_AtCursorPos1 - SqedtFunc_OnChkCur_AtCursorPos0
+	.short	SqedtFunc_OnChkCur_AtCursorPos2 - SqedtFunc_OnChkCur_AtCursorPos0
+	.short	SqedtFunc_OnChkCur_AtCursorPos3 - SqedtFunc_OnChkCur_AtCursorPos0
+	.short	SqedtFunc_OnChkCur_AtCursorPos3 - SqedtFunc_OnChkCur_AtCursorPos0
+	.short	SqedtFunc_OnChkCur_AtCursorPos3 - SqedtFunc_OnChkCur_AtCursorPos0
+	.short	SqedtFunc_OnChkCur_AtCursorPos3 - SqedtFunc_OnChkCur_AtCursorPos0
+	.short	SqedtFunc_OnChkCur_AtCursorPos3 - SqedtFunc_OnChkCur_AtCursorPos0
+	.short	SqedtFunc_OnChkCur_AtCursorPos5 - SqedtFunc_OnChkCur_AtCursorPos0
+	.short	SqedtFunc_OnChkCur_AtCursorPos6 - SqedtFunc_OnChkCur_AtCursorPos0
+	.short	SqedtFunc_OnChkCur_AtCursorPos5 - SqedtFunc_OnChkCur_AtCursorPos0
+	.short	SqedtFunc_OnChkCur_AtCursorPos6 - SqedtFunc_OnChkCur_AtCursorPos0
+	.short	SqedtFunc_OnChkCur_AtCursorPos0 - SqedtFunc_OnChkCur_AtCursorPos0
+	.short	SqedtFunc_OnChkCur_AtCursorPos2 - SqedtFunc_OnChkCur_AtCursorPos0
+	.short	SqedtFunc_OnChkCur_AtCursorPos6 - SqedtFunc_OnChkCur_AtCursorPos0
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ValueDispatch_CaseTable
 ; Sqedt_ValueDispatch_CaseTable -- jump table of a compiled `switch` in
-; Sqedt_ValueDispatch (v10/v9 0xf3502c, v7 0xf35002) (`lda xix,
+; SqedtFunc_OnCurToParam_CursorPos0 (v10/v9 0xf3502c, v7 0xf35002) (`lda xix,
 ; (Sqedt_ValueDispatch_CaseTable:24)`): 9 u16 case offsets from
 ; Sqedt_ValueDispatch_Code3.
 ;
@@ -3044,7 +3044,7 @@ SqedtFunc_SignExtend_CaseTable:
 ; Sqedt_ValueDispatch_CaseTable[9].
 ; -----------------------------------------------------------------------------
 Sqedt_ValueDispatch_CaseTable:
-	.short	Sqedt_ValueDispatch_Case155 - Sqedt_ValueDispatch_Code3
+	.short	SqedtFunc_OnCurToParam_CursorPos2_OnTitleSqtrkmrg - Sqedt_ValueDispatch_Code3
 	.short	Sqedt_ValueDispatch_Code3 - Sqedt_ValueDispatch_Code3
 	.short	Sqedt_ValueDispatch_Code3 - Sqedt_ValueDispatch_Code3
 	.short	Sqedt_ValueDispatch_Code3 - Sqedt_ValueDispatch_Code3
@@ -3056,7 +3056,7 @@ Sqedt_ValueDispatch_CaseTable:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ValueDispatch_CaseTable_2
 ; Sqedt_ValueDispatch_CaseTable_2 -- jump table of a compiled `switch`
-; in Sqedt_ValueDispatch (v10/v9 0xf3502c, v7 0xf35002) (`lda xix,
+; in SqedtFunc_OnCurToParam_CursorPos0 (v10/v9 0xf3502c, v7 0xf35002) (`lda xix,
 ; (Sqedt_ValueDispatch_CaseTable_2:24)`): 8 u16 case offsets from
 ; Sqedt_ValueDispatch_Code2.
 ;
@@ -3075,7 +3075,7 @@ Sqedt_ValueDispatch_CaseTable_2:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ValueDispatch_CaseTable_3
 ; Sqedt_ValueDispatch_CaseTable_3 -- jump table of a compiled `switch`
-; in Sqedt_ValueDispatch (v10/v9 0xf3502c, v7 0xf35002) (`lda xix,
+; in SqedtFunc_OnCurToParam_CursorPos0 (v10/v9 0xf3502c, v7 0xf35002) (`lda xix,
 ; (Sqedt_ValueDispatch_CaseTable_3:24)`): 9 u16 case offsets from
 ; Sqedt_ValueDispatch_Code.
 ;
@@ -3083,7 +3083,7 @@ Sqedt_ValueDispatch_CaseTable_2:
 ; Sqedt_ValueDispatch_CaseTable_3[9].
 ; -----------------------------------------------------------------------------
 Sqedt_ValueDispatch_CaseTable_3:
-	.short	SqedtFunc_ModeD_Case155 - Sqedt_ValueDispatch_Code
+	.short	SqedtFunc_OnCurToParam_CursorPos0_OnTitleSqtrkmrg - Sqedt_ValueDispatch_Code
 	.short	Sqedt_ValueDispatch_Code - Sqedt_ValueDispatch_Code
 	.short	Sqedt_ValueDispatch_Code - Sqedt_ValueDispatch_Code
 	.short	Sqedt_ValueDispatch_Code - Sqedt_ValueDispatch_Code
@@ -3096,41 +3096,41 @@ Sqedt_ValueDispatch_CaseTable_3:
 ; [naka_s_headers] SeqFunc_ReturnZeroJmp_CaseTable
 ; SeqFunc_ReturnZeroJmp_CaseTable -- jump table of a compiled `switch`
 ; in SeqFunc_ReturnZeroJmp (v10/v9 0xf35005, v7 0xf34fdb) (`lda xix,
-; (SeqFunc_ReturnZeroJmp_CaseTable:24)`): 7 u16 case offsets from Sqedt_ValueDispatch.
+; (SeqFunc_ReturnZeroJmp_CaseTable:24)`): 7 u16 case offsets from SqedtFunc_OnCurToParam_CursorPos0.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; SeqFunc_ReturnZeroJmp_CaseTable[7].
 ; -----------------------------------------------------------------------------
 SeqFunc_ReturnZeroJmp_CaseTable:
-	.short	Sqedt_ValueDispatch - Sqedt_ValueDispatch
-	.short	SeqFunc_ReturnZeroJmp_Case1 - Sqedt_ValueDispatch
-	.short	SeqFunc_ReturnZeroJmp_Case2 - Sqedt_ValueDispatch
-	.short	SeqFunc_ReturnZeroJmp_Case3 - Sqedt_ValueDispatch
-	.short	SqedtFunc_ReturnNegOne - Sqedt_ValueDispatch
-	.short	SeqFunc_ReturnZeroJmp_Case5 - Sqedt_ValueDispatch
-	.short	SeqFunc_ReturnZeroJmp_Case6 - Sqedt_ValueDispatch
+	.short	SqedtFunc_OnCurToParam_CursorPos0 - SqedtFunc_OnCurToParam_CursorPos0
+	.short	SqedtFunc_OnCurToParam_CursorPos1 - SqedtFunc_OnCurToParam_CursorPos0
+	.short	SqedtFunc_OnCurToParam_CursorPos2 - SqedtFunc_OnCurToParam_CursorPos0
+	.short	SqedtFunc_OnCurToParam_CursorPos3 - SqedtFunc_OnCurToParam_CursorPos0
+	.short	SqedtFunc_ReturnNegOne - SqedtFunc_OnCurToParam_CursorPos0
+	.short	SqedtFunc_OnCurToParam_CursorPos5 - SqedtFunc_OnCurToParam_CursorPos0
+	.short	SqedtFunc_OnCurToParam_CursorPos6 - SqedtFunc_OnCurToParam_CursorPos0
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_CaseTable
 ; Sqedt_ParamDispatch_CaseTable -- jump table of a compiled `switch` in
-; Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`lda xix,
+; SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`lda xix,
 ; (Sqedt_ParamDispatch_CaseTable:24)`): 8 u16 case offsets from 15944534.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; Sqedt_ParamDispatch_CaseTable[8].
 ; -----------------------------------------------------------------------------
 Sqedt_ParamDispatch_CaseTable:
-	.short	Sqedt_ParamDispatch_Case156 - Sqedt_ParamDispatch_Code_3
-	.short	Sqedt_ParamDispatch_Case157 - Sqedt_ParamDispatch_Code_3
-	.short	Sqedt_ParamDispatch_Case158 - Sqedt_ParamDispatch_Code_3
+	.short	SqedtFunc_LmString_OnTitleSqqtz - Sqedt_ParamDispatch_Code_3
+	.short	SqedtFunc_LmString_OnTitleSqtrns - Sqedt_ParamDispatch_Code_3
+	.short	SqedtFunc_LmString_OnTitleSqvelocng - Sqedt_ParamDispatch_Code_3
 	.short	Sqedt_ParamDispatch_Code_3 - Sqedt_ParamDispatch_Code_3
 	.short	Sqedt_ParamDispatch_Entry2 - Sqedt_ParamDispatch_Code_3
-	.short	Sqedt_ParamDispatch_Case161 - Sqedt_ParamDispatch_Code_3
+	.short	SqedtFunc_LmString_OnTitleSqmers - Sqedt_ParamDispatch_Code_3
 	.short	Sqedt_ParamDispatch_Entry2 - Sqedt_ParamDispatch_Code_3
-	.short	Sqedt_ParamDispatch_Case163 - Sqedt_ParamDispatch_Code_3
+	.short	SqedtFunc_LmString_OnTitleSqmdel - Sqedt_ParamDispatch_Code_3
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_CaseTable_2
 ; Sqedt_ParamDispatch_CaseTable_2 -- jump table of a compiled `switch`
-; in Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`lda xix,
+; in SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`lda xix,
 ; (Sqedt_ParamDispatch_CaseTable_2:24)`): 8 u16 case offsets from 15944414.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -3148,7 +3148,7 @@ Sqedt_ParamDispatch_CaseTable_2:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_CaseTable_3
 ; Sqedt_ParamDispatch_CaseTable_3 -- jump table of a compiled `switch`
-; in Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`lda xix,
+; in SqedtFunc_OnGetTrkString (v10/v9 0xf34a5c, v7 0xf34a32) (`lda xix,
 ; (Sqedt_ParamDispatch_CaseTable_3:24)`): 8 u16 case offsets from 15944329.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -3159,60 +3159,60 @@ Sqedt_ParamDispatch_CaseTable_3:
 	.short	SqedtFunc_TrkString_OnTitleSqtrns - Sqedt_ParamDispatch_Code
 	.short	SqedtFunc_TrkString_OnTitleSqvelocng - Sqedt_ParamDispatch_Code
 	.short	Sqedt_ParamDispatch_Code - Sqedt_ParamDispatch_Code
-	.short	Sqedt_ParamDispatch_Skip - Sqedt_ParamDispatch_Code
+	.short	SqedtFunc_TrkString_OnTitleSqvelocng_Skip - Sqedt_ParamDispatch_Code
 	.short	SqedtFunc_TrkString_OnTitleSqmers - Sqedt_ParamDispatch_Code
-	.short	Sqedt_ParamDispatch_Skip - Sqedt_ParamDispatch_Code
+	.short	SqedtFunc_TrkString_OnTitleSqvelocng_Skip - Sqedt_ParamDispatch_Code
 	.short	SqedtFunc_TrkString_OnTitleSqmdel - Sqedt_ParamDispatch_Code
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqedtFunc_CaseTable
 ; SqedtFunc_CaseTable -- jump table of a compiled `switch` in SqedtFunc
 ; (v10/v9 0xf349d3, v7 0xf349a9) (`add xde, SqedtFunc_CaseTable`): 40 u16
-; case offsets from Sqedt_ParamDispatch.
+; case offsets from SqedtFunc_OnGetTrkString.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; SqedtFunc_CaseTable[40].
 ; -----------------------------------------------------------------------------
 SqedtFunc_CaseTable:
-	.short	Sqedt_ParamDispatch - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnGetFmString - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnGetLmString - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnGetAdlyString - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnGetTrnsString - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnGetVeloString - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnGetMersString - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnGetQtzValString - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnGetQtzStrString - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnGetQtzWinString - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnGetTnString - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnGetCnString - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnGetMrgTrAString - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnGetMrgTrBString - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnGetMrgTrCString - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnGetMcpTrAString - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnGetMcpFmString - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnGetMcpLmString - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnGetMcpTrBString - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnGetMcpSmString - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnGetMcpRepString - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnGetMinsTrAString - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnGetMinsFmString - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnGetMinsLmString - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnGetMinsTrBString - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnGetMinsSmString - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnGetMinsRepString - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnGetScpFsngString - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnGetScpFtrString - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnGetScpTsngString - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnGetScpTtrString - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnSetCurPos - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnGetCurPos - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnCurToParam - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnChkCur - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnChkCur2 - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnGetFromCur - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnSetFromCur - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnGetToCur - Sqedt_ParamDispatch
-	.short	SqedtFunc_OnSetToCur - Sqedt_ParamDispatch
+	.short	SqedtFunc_OnGetTrkString - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnGetFmString - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnGetLmString - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnGetAdlyString - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnGetTrnsString - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnGetVeloString - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnGetMersString - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnGetQtzValString - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnGetQtzStrString - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnGetQtzWinString - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnGetTnString - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnGetCnString - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnGetMrgTrAString - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnGetMrgTrBString - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnGetMrgTrCString - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnGetMcpTrAString - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnGetMcpFmString - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnGetMcpLmString - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnGetMcpTrBString - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnGetMcpSmString - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnGetMcpRepString - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnGetMinsTrAString - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnGetMinsFmString - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnGetMinsLmString - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnGetMinsTrBString - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnGetMinsSmString - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnGetMinsRepString - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnGetScpFsngString - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnGetScpFtrString - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnGetScpTsngString - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnGetScpTtrString - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnSetCurPos - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnGetCurPos - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnCurToParam - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnChkCur - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnChkCur2 - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnGetFromCur - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnSetFromCur - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnGetToCur - SqedtFunc_OnGetTrkString
+	.short	SqedtFunc_OnSetToCur - SqedtFunc_OnGetTrkString
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqedtFunc_StateChainB_CaseTable
 ; SqedtFunc_StateChainB_CaseTable -- jump table of a compiled `switch`
@@ -3296,7 +3296,7 @@ DspItem0CngFunc_CaseTable:
 	.short	DspItem0CngFunc_OnGetItemTop - DspItem0_DisplayEffectName
 	.short	EffectEdit_ReturnZero - DspItem0_DisplayEffectName
 	.short	EffectEdit_ReturnZero - DspItem0_DisplayEffectName
-	.short	DspItem0CngFunc_Case31981584 - DspItem0_DisplayEffectName
+	.short	DspItem0CngFunc_OnGetParaSize - DspItem0_DisplayEffectName
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Equalizer_ParamByIndex_Table
 ; Equalizer_ParamByIndex_Table -- read by Equalizer_ParamByIndex (v10/v9
@@ -4377,14 +4377,14 @@ SeqAccomp_ParamDelivery_CaseTable:
 	.short	AppEvent_ReturnZero - SeqAccomp_SubHandlerA
 	.short	AppEvent_ReturnZero - SeqAccomp_SubHandlerA
 	.short	AppEvent_ReturnZero - SeqAccomp_SubHandlerA
-	.short	SeqAccomp_ParamDelivery_Case4 - SeqAccomp_SubHandlerA
+	.short	SeqAccomp_ParamDelivery_IncCycleEnable - SeqAccomp_SubHandlerA
 	.short	SeqAccomp_ParamDelivery_Case5 - SeqAccomp_SubHandlerA
 	.short	SeqAccomp_ParamDelivery_Case6 - SeqAccomp_SubHandlerA
 	.short	AppEvent_ReturnZero - SeqAccomp_SubHandlerA
-	.short	SeqAccomp_ParamDelivery_Case8 - SeqAccomp_SubHandlerA
-	.short	SeqAccomp_ParamDelivery_Case8 - SeqAccomp_SubHandlerA
-	.short	SeqAccomp_ParamDelivery_Case8 - SeqAccomp_SubHandlerA
-	.short	SeqAccomp_ParamDelivery_Case11 - SeqAccomp_SubHandlerA
+	.short	SeqAccomp_ParamDelivery_IncPInPOutPCntIn - SeqAccomp_SubHandlerA
+	.short	SeqAccomp_ParamDelivery_IncPInPOutPCntIn - SeqAccomp_SubHandlerA
+	.short	SeqAccomp_ParamDelivery_IncPInPOutPCntIn - SeqAccomp_SubHandlerA
+	.short	SeqAccomp_ParamDelivery_IncSoloEnable - SeqAccomp_SubHandlerA
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ApPlaySyori_CaseTable
 ; ApPlaySyori_CaseTable -- jump table of a compiled `switch` in
@@ -4451,7 +4451,7 @@ NoteEditSy_HandleDownScroll_CaseTable:
 	.short	NoteEditSy_ReturnZero - NoteEditSy_DownScroll_Param0
 	.short	NoteEditSy_DownScroll_Param7 - NoteEditSy_DownScroll_Param0
 	.short	NoteEditSy_ReturnZero - NoteEditSy_DownScroll_Param0
-	.short	NoteEditSy_HandleDownScroll_Case11 - NoteEditSy_DownScroll_Param0
+	.short	NoteEditSy_HandleDownScroll_OnDrumSound - NoteEditSy_DownScroll_Param0
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] NoteEditSy_HandleUpScroll_CaseTable
 ; NoteEditSy_HandleUpScroll_CaseTable -- jump table of a compiled
@@ -5052,8 +5052,8 @@ FileIO_ReadFreeSpaceViaFAT_Str_A:	.incbin "includes/generated/naka_widget_descri
 GetDiskFreeSpace_CaseTable:
 	.short	GetDiskFreeSpace_JumpTable - GetDiskFreeSpace_JumpTable
 	.short	GetDiskFreeSpace_JumpTable - GetDiskFreeSpace_JumpTable
-	.short	GetDiskFreeSpace_Case2 - GetDiskFreeSpace_JumpTable
-	.short	GetDiskFreeSpace_Case3 - GetDiskFreeSpace_JumpTable
+	.short	GetDiskFreeSpace_On2DDDisk - GetDiskFreeSpace_JumpTable
+	.short	GetDiskFreeSpace_On2HDDisk - GetDiskFreeSpace_JumpTable
 	.short	GetDiskFreeSpace_Case4 - GetDiskFreeSpace_JumpTable
 	.short	GetDiskFreeSpace_JumpTable - GetDiskFreeSpace_JumpTable
 	.short	GetDiskFreeSpace_JumpTable - GetDiskFreeSpace_JumpTable
@@ -5543,7 +5543,7 @@ Tempo_RefreshDisplay5_Table:	.incbin "includes/generated/naka_widget_descriptors
 ; -----------------------------------------------------------------------------
 VoiceSlot_Dispatch_CaseTable:
 	.short	Voice_ClearSlotAndRet - Voice_ClearSlotAndRet
-	.short	RhythmParam_Dispatch_Case129 - Voice_ClearSlotAndRet
+	.short	RhythmParam_Dispatch_KeepBeatAdvance - Voice_ClearSlotAndRet
 	.short	VoiceSlot_DispatchByType - Voice_ClearSlotAndRet
 	.short	Voice_ClearSlotAndRet - Voice_ClearSlotAndRet
 	.short	VoiceSlot_DispatchByType - Voice_ClearSlotAndRet
@@ -5562,7 +5562,7 @@ VoiceSlot_Dispatch_CaseTable:
 ; -----------------------------------------------------------------------------
 RhythmParam_Dispatch_CaseTable:
 	.short	RhythmParam_CheckExit - RhythmParam_CheckExit
-	.short	RhythmParam_Dispatch_Case129 - RhythmParam_CheckExit
+	.short	RhythmParam_Dispatch_KeepBeatAdvance - RhythmParam_CheckExit
 	.short	RhythmParam_DispatchTableData - RhythmParam_CheckExit
 	.short	RhythmParam_CheckExit - RhythmParam_CheckExit
 	.short	RhythmParam_DispatchTableData - RhythmParam_CheckExit
@@ -5713,8 +5713,8 @@ CmpRealTtl_MajorDispatch_CaseTable:
 	.short	CmpRealTtl_MajorDispatch_Case8 - CmpRealTtl_RhythmVar0
 	.short	CmpBk_ReturnZero - CmpRealTtl_RhythmVar0
 	.short	CmpBk_ReturnZero - CmpRealTtl_RhythmVar0
-	.short	CmpRealTtl_MajorDispatch_Case11 - CmpRealTtl_RhythmVar0
-	.short	CmpRealTtl_MajorDispatch_Case12 - CmpRealTtl_RhythmVar0
+	.short	CmpRealTtl_MajorDispatch_OnRightRow4Mute - CmpRealTtl_RhythmVar0
+	.short	CmpRealTtl_MajorDispatch_OnRightRow5Solo - CmpRealTtl_RhythmVar0
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] CmpRealTtlFunc_CaseTable
 ; CmpRealTtlFunc_CaseTable -- jump table of a compiled `switch` in
@@ -5730,7 +5730,7 @@ CmpRealTtlFunc_CaseTable:
 	.short	CmpRealTtl_Dispatch - CmpRealTtl_Dispatch
 	.short	CmpBk_ReturnZero - CmpRealTtl_Dispatch
 	.short	CmpBk_ReturnZero - CmpRealTtl_Dispatch
-	.short	CmpRealTtlFunc_Case5 - CmpRealTtl_Dispatch
+	.short	CmpRealTtlFunc_OnTitleActivate - CmpRealTtl_Dispatch
 	.short	CmpBk_ReturnZero - CmpRealTtl_Dispatch
 	.short	CmpBk_ReturnZero - CmpRealTtl_Dispatch
 	.short	CmpBk_ReturnZero - CmpRealTtl_Dispatch
@@ -5749,7 +5749,7 @@ CmpBkslTtlFunc_CaseTable:
 	.short	CmpBkslTtl_Dispatch - CmpBkslTtl_Dispatch
 	.short	CmpBksl_ReturnZero - CmpBkslTtl_Dispatch
 	.short	CmpBksl_ReturnZero - CmpBkslTtl_Dispatch
-	.short	CmpBkslTtlFunc_Case5 - CmpBkslTtl_Dispatch
+	.short	CmpBkslTtlFunc_OnTitleActivate - CmpBkslTtl_Dispatch
 	.short	CmpBksl_ReturnZero - CmpBkslTtl_Dispatch
 	.short	CmpBksl_ReturnZero - CmpBkslTtl_Dispatch
 	.short	CmpBksl_ReturnZero - CmpBkslTtl_Dispatch
@@ -5792,7 +5792,7 @@ CmpBksl_STtlFunc_CaseTable:
 	.short	CmpBkslSTtl_Dispatch - CmpBkslSTtl_Dispatch
 	.short	CmpBksl_STtlFunc_Case3 - CmpBkslSTtl_Dispatch
 	.short	DisplayFunc_ReturnZero - CmpBkslSTtl_Dispatch
-	.short	CmpBksl_STtlFunc_Case5 - CmpBkslSTtl_Dispatch
+	.short	CmpBksl_STtlFunc_OnTitleActivate - CmpBkslSTtl_Dispatch
 	.short	DisplayFunc_ReturnZero - CmpBkslSTtl_Dispatch
 	.short	DisplayFunc_ReturnZero - CmpBkslSTtl_Dispatch
 	.short	DisplayFunc_ReturnZero - CmpBkslSTtl_Dispatch
@@ -5844,7 +5844,7 @@ CmpNcpTtlFunc_CaseTable:
 	.short	CmpNcpTtl_Dispatch - CmpNcpTtl_Dispatch
 	.short	CmpNcpTtlFunc_Case3 - CmpNcpTtl_Dispatch
 	.short	CmEsy_ReturnZero - CmpNcpTtl_Dispatch
-	.short	CmpNcpTtlFunc_Case5 - CmpNcpTtl_Dispatch
+	.short	CmpNcpTtlFunc_OnTitleActivate - CmpNcpTtl_Dispatch
 	.short	CmEsy_ReturnZero - CmpNcpTtl_Dispatch
 	.short	CmEsy_ReturnZero - CmpNcpTtl_Dispatch
 	.short	CmEsy_ReturnZero - CmpNcpTtl_Dispatch
@@ -5875,9 +5875,9 @@ CmpEsyTtl_Mode2_Table:	.incbin "includes/generated/naka_widget_descriptors.bin",
 CmpEsyTtl_Mode2_CaseTable:
 	.short	S2cTtl_ReturnZero - CmEsyTtl_Dispatch2
 	.short	CmEsyTtl_Dispatch2 - CmEsyTtl_Dispatch2
-	.short	CmpEsyTtl_Mode2_Case2 - CmEsyTtl_Dispatch2
-	.short	CmpEsyTtl_Mode2_Case3 - CmEsyTtl_Dispatch2
-	.short	CmpEsyTtl_Mode2_Case4 - CmEsyTtl_Dispatch2
+	.short	CmpEsyTtl_Mode2_OnEdit - CmEsyTtl_Dispatch2
+	.short	CmpEsyTtl_Mode2_OnMemoryNumberInc - CmEsyTtl_Dispatch2
+	.short	CmpEsyTtl_Mode2_OnMemoryNumberDec - CmEsyTtl_Dispatch2
 	.short	CmpEsyTtl_Mode2_Case5 - CmEsyTtl_Dispatch2
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] CmEsyTtlFunc_CaseTable

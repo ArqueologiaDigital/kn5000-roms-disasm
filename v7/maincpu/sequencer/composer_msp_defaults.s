@@ -172,11 +172,11 @@ MSP_Default_GroupOffsetB:
 MSP_Default_VarSize:
 	.short	NOTE_EVENT_DISPATCH_2 - NOTE_EVENT_DISPATCH_2
 	.short	NOTE_EVENT_DISPATCH_2b - NOTE_EVENT_DISPATCH_2
-	.short	NoteEventBuffer_Store_Case3 - NOTE_EVENT_DISPATCH_2
-	.short	NoteEventBuffer_Store_Case4 - NOTE_EVENT_DISPATCH_2
-	.short	NoteEventBuffer_Store_Case5 - NOTE_EVENT_DISPATCH_2
-	.short	NoteEventBuffer_Store_Case6 - NOTE_EVENT_DISPATCH_2
-	.short	NoteEventBuffer_Store_Case7 - NOTE_EVENT_DISPATCH_2
+	.short	NoteEventBuffer_Store_WriteSection2 - NOTE_EVENT_DISPATCH_2
+	.short	NoteEventBuffer_Store_WriteSection3 - NOTE_EVENT_DISPATCH_2
+	.short	NoteEventBuffer_Store_WriteSection4 - NOTE_EVENT_DISPATCH_2
+	.short	NoteEventBuffer_Store_WriteSection5 - NOTE_EVENT_DISPATCH_2
+	.short	NoteEventBuffer_Store_WriteSection6 - NOTE_EVENT_DISPATCH_2
 
 ; Part-to-bank mapping (14 entries)
 MSP_Default_PartBankMap:	.byte 0, 0		; part 0: bank 0.0

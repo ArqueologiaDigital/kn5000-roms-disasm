@@ -54,3 +54,24 @@ in the source state the right values; the remaining `_CaseN` labels of such swit
 - `SeqState_Case0..4` are ordinary branch labels, not switch cases;
 - TRACK ASSIGN values 12-16 are DRUMS / CHORD / APC / CONTROL / RHYTHM. This may reopen refusals that hinged on
   "track type 15/16".
+
+**Batches o-p and case batches c9-c10** (`proposals-2026-10-06-helpers-{o,p}.json`, `-cases-{c9,c10}.json`):
+52 helpers (every one with a named caller left after the earlier refusals) and 161 cases named, with 14 switch
+owners renamed in the same records (the case framer had used the nearest label above the dispatch, often a
+leftover such as `SendEpilogue_Data` -> `SndParam_ApplySystemParam`). Applied to v10, then:
+- `rename_orphan_locals.py --tree v10` (202 + 6) and the new `--misplaced` mode (1,460 locals whose prefix routine
+  still lives elsewhere but which sit inside, and are branched to only from, another named routine);
+- `name_se_screen_records.py` (16; `sdb_*` record macros no longer count as readers);
+- `harmonize_version_labels.py` to v9 / v7 until it settled. Its new `rename-by-proposal` rule renames a target
+  label that is not generic when a proposal here replaced exactly that old name with exactly this one (v9 11,
+  v7 9: the owner renames).
+Leads reported for later:
+- `SoundCtrl_SendCommand` opens an interrupting screen (0xEE message box, 0xA5 sequencer mixer, 0xD6
+  Entertainer); it sends nothing to the sound hardware.
+- `HdaeRom_DataHandler` / `HdaeRom_AltHandler` convert sound-RAM images of older models (KN2000, MKA, MKB,
+  KN3000, KN1500) to the KN5000 layout; nothing to do with the HD-AE5000.
+- `MspMenuTtl_Case2` and `SndArg_GridBnk_Case3` are duplicate labels at a function entry; MainCmpSet, VocalistP1OK,
+  SqAftSet, SndArg_GridBnk own no switch. The `TmFlash_*` cases' owners at 0xFF07C7 / 0xFF0870 have no label.
+- event 0x1E80010 (MT_GetParaSize) has no EVT_ constant; `MSP_Default_VarSize` / `MSP_Default_GroupOffsetB` are
+  NoteEventBuffer case tables.
+- panel record 0x92 is the scale-tune record (type, key/on-off, 12 user offsets).

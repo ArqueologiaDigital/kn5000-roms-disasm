@@ -741,7 +741,7 @@ GUI_DisplayStructData_0x1100:	.long SeMenu_BitShift_Stub
 	.long SeFilLfo1_OnSwitch15
 	.long SeMenu_BitShift_Stub
 	.long 0
-; data read by SeMenu_ApplyPartEdit_Join17+0x13 (0xF08A33)
+; data read by SeMenu_NoteToKeyboardX_Join17+0x13 (0xF08A33)
 ; evidence: `lda xde, (this)` then `ld E,(XDE+WA) / mul L,0x1c`
 GUI_DisplayStructData_0x1110:	.incbin "includes/generated/gui_display_struct_data.bin", 0x1110, 0xD
 ; data read by SeMenu_DrawPartRangeGraph+0x20 (0xF08CB8)
@@ -843,10 +843,10 @@ SePitLfo1TitleFunc_SwitchHandlers:
 	.long SePitLfo1_OnSwitch15
 	.long SeMenu_BitShift_Stub
 	.long 0
-; data read by SeMenu_RefreshPartDisplay_Epilogue4+0x171 (0xF09CF6)
+; data read by SePitLfo1TitleFunc_DispatchSwitch_Epilogue4+0x171 (0xF09CF6)
 ; evidence: `lda xde, (this)` then `ld A,(XDE+WA) / ld (XBC),A`
 GUI_DisplayStructData_0x1342:	.incbin "includes/generated/gui_display_struct_data.bin", 0x1342, 0x20
-; data read by SeMenu_RefreshPartDisplay_Epilogue4+0x1A9 (0xF09D2E)
+; data read by SePitLfo1TitleFunc_DispatchSwitch_Epilogue4+0x1A9 (0xF09D2E)
 ; evidence: `lda xbc, (this)` then `ld C,(XBC+WA) / ld (XSP+0x0e),C`
 GUI_DisplayStructData_0x1362:	.incbin "includes/generated/gui_display_struct_data.bin", 0x1362, 0xD
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
@@ -892,7 +892,7 @@ SeCtr3TitleFunc_SwitchHandlers:
 	.long SeCtr3_OnSwitch25
 	.long 0
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
-; evidence: SeMenu_CopyWriteUpdate_Skip5+0x16 (0xF0BFAC) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+; evidence: SeMenuTitleFunc_DispatchSwitch_Skip5+0x16 (0xF0BFAC) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 GUI_DisplayStructData_0x13FF:	.incbin "includes/generated/gui_display_struct_data.bin", 0x13FF, 0x2A
 ; the rest of the code-pointer table at GUI_DisplayStructData_0x13FF, from entry 10 byte 2 on;
 ; the table runs across this boundary (label of the next source)
@@ -1107,21 +1107,21 @@ SeCopyTitleFunc_SwitchHandlers:
 	.long SeCopy_OnSwitch15
 	.long SeMenu_BitShift_Stub
 	.long 0
-; data read by SeMenu_CopyWriteUpdate_Epilogue34+0x46 (0xF0DC77)
+; data read by SeDigEff_OnColumn2_Epilogue34+0x46 (0xF0DC77)
 ; evidence: `lda xix, (this)` then `ld WA,(XIX+WA) / lda XIX,0xf0dc8b`
 ToneGen_ParamTable_0x2EE:
 	.short	SeMenu_CopyWriteUpdate_Step3_Code - SeMenu_CopyWriteUpdate_Step3_Code
 	.short	SeMenu_CopyWriteUpdate_Step3_Code - SeMenu_CopyWriteUpdate_Step3_Code
 	.short	SeMenu_CopyWriteUpdate_Step3_Code - SeMenu_CopyWriteUpdate_Step3_Code
 	.short	SeMenu_CopyWriteUpdate_Step3_Code - SeMenu_CopyWriteUpdate_Step3_Code
-	.short	SeMenu_CopyWriteUpdate_Entry5_Case4 - SeMenu_CopyWriteUpdate_Step3_Code
-	.short	SeMenu_CopyWriteUpdate_Entry5_Case4 - SeMenu_CopyWriteUpdate_Step3_Code
-	.short	SeMenu_CopyWriteUpdate_Entry5_Case6 - SeMenu_CopyWriteUpdate_Step3_Code
-	.short	SeMenu_CopyWriteUpdate_Entry5_Case4 - SeMenu_CopyWriteUpdate_Step3_Code
-	.short	SeMenu_CopyWriteUpdate_Entry5_Case8 - SeMenu_CopyWriteUpdate_Step3_Code
-	.short	SeMenu_CopyWriteUpdate_Entry5_Case9 - SeMenu_CopyWriteUpdate_Step3_Code
-	.short	SeMenu_CopyWriteUpdate_Entry5_Case4 - SeMenu_CopyWriteUpdate_Step3_Code
-	.short	SeMenu_CopyWriteUpdate_Entry5_Case4 - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeDigEff_OnColumn3_Depth - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeDigEff_OnColumn3_Depth - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeDigEff_OnColumn3_TremoloWave - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeDigEff_OnColumn3_Depth - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeDigEff_OnColumn3_SingleDelayKey - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeDigEff_OnColumn3_RepeatDelaySustain - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeDigEff_OnColumn3_Depth - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeDigEff_OnColumn3_Depth - SeMenu_CopyWriteUpdate_Step3_Code
 ; data read by SeMenu_CopyWriteUpdate_Epilogue35+0x46 (0xF0DD22)
 ; evidence: `lda xix, (this)` then `ld WA,(XIX+WA) / lda XIX,0xf0dd36`
 ToneGen_ParamTable_0x306:
@@ -1131,10 +1131,10 @@ ToneGen_ParamTable_0x306:
 	.short	SeMenu_CopyWriteUpdate_Step3_Code_2 - SeMenu_CopyWriteUpdate_Step3_Code_2
 	.short	SeMenu_CopyWriteUpdate_Step3_Code_2 - SeMenu_CopyWriteUpdate_Step3_Code_2
 	.short	SeMenu_CopyWriteUpdate_Step3_Code_2 - SeMenu_CopyWriteUpdate_Step3_Code_2
-	.short	SeMenu_CopyWriteUpdate_Entry5_Switch2_Case6 - SeMenu_CopyWriteUpdate_Step3_Code_2
+	.short	SeDigEff_OnColumn4_Balance - SeMenu_CopyWriteUpdate_Step3_Code_2
 	.short	SeMenu_CopyWriteUpdate_Step3_Code_2 - SeMenu_CopyWriteUpdate_Step3_Code_2
-	.short	SeMenu_CopyWriteUpdate_Entry5_Switch2_Case6 - SeMenu_CopyWriteUpdate_Step3_Code_2
-	.short	SeMenu_CopyWriteUpdate_Entry5_Switch2_Case9 - SeMenu_CopyWriteUpdate_Step3_Code_2
+	.short	SeDigEff_OnColumn4_Balance - SeMenu_CopyWriteUpdate_Step3_Code_2
+	.short	SeDigEff_OnColumn4_RepeatDelayRelease - SeMenu_CopyWriteUpdate_Step3_Code_2
 ; data read by SeMenu_CopyWriteUpdate_Epilogue36+0x44 (0xF0DDB3)
 ; evidence: `lda xix, (this)` then `ld WA,(XIX+WA) / lda XIX,0xf0ddc7`
 ToneGen_ParamTable_0x31A:
@@ -1142,8 +1142,8 @@ ToneGen_ParamTable_0x31A:
 	.short	SeMenu_CopyWriteUpdate_Step3_Code_3 - SeMenu_CopyWriteUpdate_Step3_Code_3
 	.short	SeMenu_CopyWriteUpdate_Step3_Code_3 - SeMenu_CopyWriteUpdate_Step3_Code_3
 	.short	SeMenu_CopyWriteUpdate_Step3_Code_3 - SeMenu_CopyWriteUpdate_Step3_Code_3
-	.short	SeMenu_CopyWriteUpdate_Entry5_Switch3_Case4 - SeMenu_CopyWriteUpdate_Step3_Code_3
-	.short	SeMenu_CopyWriteUpdate_Entry5_Switch3_Case4 - SeMenu_CopyWriteUpdate_Step3_Code_3
+	.short	SeDigEff_OnColumn5_EnsembleDetune - SeMenu_CopyWriteUpdate_Step3_Code_3
+	.short	SeDigEff_OnColumn5_EnsembleDetune - SeMenu_CopyWriteUpdate_Step3_Code_3
 ; data read by SeMenu_PopupDialog_Close_Data+0x1D (0xF0EA0E)
 ; evidence: `lda xbc, (this)` then `ld XHL,(XBC+WA) / call T,XHL`
 ; data read by SeMenu_ListSelector_HandleInput+0x1A (0xF0EB4E)
@@ -2352,10 +2352,10 @@ Voice_FactoryPresetData:	.incbin "includes/generated/voice_factory_presets.bin"
 	add	xwa, xhl
 	add	xde, xwa
 	bitm	7, (xde)
-	jr	z, DrawDottedLineWithMode_Impl_Skip28
+	jr	z, Voice_FactoryPresetData_Skip28
 	resm	6, (xde)
 	jr	DrawDottedLineWithMode_Impl_Join7
-DrawDottedLineWithMode_Impl_Skip28:
+Voice_FactoryPresetData_Skip28:
 	setm	6, (xde)
 DrawDottedLineWithMode_Impl_Join7:
 	incm8	1, (xsp+24)
@@ -2399,14 +2399,14 @@ DrawDottedLineWithMode_Impl_Skip29:
 	ld	xwa, (xsp+4)
 	cp	xwa, 0
 	jrl	lt, DrawDottedLineWithMode_Impl_Join11
-DrawDottedLineWithMode_Impl_Loop2:
+Voice_FactoryPresetData_Loop2:
 	cp	(xsp+24), 3
-	jr	ule, DrawDottedLineWithMode_Impl_Skip30
+	jr	ule, Voice_FactoryPresetData_Skip30
 	ld	(xsp+24), 0
-	jrl	DrawDottedLineWithMode_Impl_Join10
-DrawDottedLineWithMode_Impl_Skip30:
+	jrl	Voice_FactoryPresetData_Join10
+Voice_FactoryPresetData_Skip30:
 	cp	(xsp+24), 1
-	jrl	ugt, DrawDottedLineWithMode_Impl_Join9
+	jrl	ugt, Voice_FactoryPresetData_Join9
 	ld	l, (COLORBLIT_MODE_ACTIVE:24)
 	ld	xwa, (xsp+34)
 	ld	wa, (xwa)
@@ -2416,11 +2416,11 @@ DrawDottedLineWithMode_Impl_Skip30:
 	add	xde, xwa
 	sll	xde, 6
 	cp	l, 2:i3
-	jrl	z, DrawDottedLineWithMode_Impl_Skip35
+	jrl	z, Voice_FactoryPresetData_Skip35
 	cp	l, 1:i3
-	jr	z, DrawDottedLineWithMode_Impl_Skip33
+	jr	z, Voice_FactoryPresetData_Skip33
 	cp	l, 0:i3
-	jrl	nz, DrawDottedLineWithMode_Impl_Join9
+	jrl	nz, Voice_FactoryPresetData_Join9
 	ld	xhl, xbc
 	ld	iy, (xsp+50)
 	ld	wa, (xbc)
@@ -2429,7 +2429,7 @@ DrawDottedLineWithMode_Impl_Skip30:
 	lda	xix, (OFFSCREEN_BUFFER_1:24)
 	add	xix, xwa
 	cpw	(xsp+50), 245
-	jr	z, DrawDottedLineWithMode_Impl_Skip31
+	jr	z, Voice_FactoryPresetData_Skip31
 	andmi8	(xix), 96
 	ld	wa, iy
 	and	wa, 159
@@ -2440,9 +2440,9 @@ DrawDottedLineWithMode_Impl_Skip30:
 	and	a, 128
 	extz	wa
 	cp	wa, de
-	jr	nz, DrawDottedLineWithMode_Impl_Skip32
-	jr	DrawDottedLineWithMode_Impl_Join9
-DrawDottedLineWithMode_Impl_Skip31:
+	jr	nz, Voice_FactoryPresetData_Skip32
+	jr	Voice_FactoryPresetData_Join9
+Voice_FactoryPresetData_Skip31:
 	ld	xiy, (197714:24)
 	ld	de, (xhl)
 	exts	xde
@@ -2463,38 +2463,38 @@ DrawDottedLineWithMode_Impl_Skip31:
 	ld	a, (xix)
 	and	a, 128
 	cp	a, e
-	jr	z, DrawDottedLineWithMode_Impl_Join9
-DrawDottedLineWithMode_Impl_Skip32:
+	jr	z, Voice_FactoryPresetData_Join9
+Voice_FactoryPresetData_Skip32:
 	xormi8	(xix), 96
-	jr	DrawDottedLineWithMode_Impl_Join9
-DrawDottedLineWithMode_Impl_Skip33:
+	jr	Voice_FactoryPresetData_Join9
+Voice_FactoryPresetData_Skip33:
 	ld	wa, (xbc)
 	exts	xwa
 	add	xwa, xde
 	lda	xde, (OFFSCREEN_BUFFER_1:24)
 	add	xde, xwa
 	bitm	7, (xde)
-	jr	z, DrawDottedLineWithMode_Impl_Skip34
+	jr	z, Voice_FactoryPresetData_Skip34
 	resm	5, (xde)
-	jr	DrawDottedLineWithMode_Impl_Join9
-DrawDottedLineWithMode_Impl_Skip34:
+	jr	Voice_FactoryPresetData_Join9
+Voice_FactoryPresetData_Skip34:
 	setm	5, (xde)
-	jr	DrawDottedLineWithMode_Impl_Join9
-DrawDottedLineWithMode_Impl_Skip35:
+	jr	Voice_FactoryPresetData_Join9
+Voice_FactoryPresetData_Skip35:
 	ld	wa, (xbc)
 	exts	xwa
 	add	xwa, xde
 	lda	xde, (OFFSCREEN_BUFFER_1:24)
 	add	xde, xwa
 	bitm	7, (xde)
-	jr	z, DrawDottedLineWithMode_Impl_Skip36
+	jr	z, Voice_FactoryPresetData_Skip36
 	resm	6, (xde)
-	jr	DrawDottedLineWithMode_Impl_Join9
-DrawDottedLineWithMode_Impl_Skip36:
+	jr	Voice_FactoryPresetData_Join9
+Voice_FactoryPresetData_Skip36:
 	setm	6, (xde)
-DrawDottedLineWithMode_Impl_Join9:
+Voice_FactoryPresetData_Join9:
 	incm8	1, (xsp+24)
-DrawDottedLineWithMode_Impl_Join10:
+Voice_FactoryPresetData_Join10:
 	ld	xwa, (xsp+16)
 	add	(xsp+8), xwa
 	ld	xde, (xsp+8)
@@ -2507,7 +2507,7 @@ DrawDottedLineWithMode_Impl_Join10:
 	add	(xsp+20), xwa
 	ld	xwa, (xsp+20)
 	cp	xwa, (xsp+4)
-	jrl	le, DrawDottedLineWithMode_Impl_Loop2
+	jrl	le, Voice_FactoryPresetData_Loop2
 DrawDottedLineWithMode_Impl_Join11:
 	lda	xwa, (xsp+38)
 	ld	xbc, (xsp+30)

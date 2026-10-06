@@ -2319,7 +2319,7 @@ SMF_AdvanceInPageChain:
 	ld	(4417:16), iy
 	incw	1, (4417:16)
 	cpw	(4417:16), 255
-	jr	ule, SMF_ConfigSlot_Epilogue
+	jr	ule, SMF_AdvanceInPageChain_Epilogue
 	ld	xhl, (10369:16)
 	ld	wa, (xhl+3)
 	ld	(4415:16), wa
@@ -2328,14 +2328,14 @@ SMF_AdvanceInPageChain:
 	calr	SMF_CalcPageAddress
 	ld	xhl, (4349:16)
 	bitm 7, (xhl)
-	jr	nz, SMF_ConfigSlot_Skip
+	jr	nz, SMF_AdvanceInPageChain_Skip
 	ld	(SEQ_ERROR_CODE:16), 2
-	jr	SMF_ConfigSlot_Epilogue
-SMF_ConfigSlot_Skip:
+	jr	SMF_AdvanceInPageChain_Epilogue
+SMF_AdvanceInPageChain_Skip:
 	ld	(10369:16), xhl
 	ldw	(4417:16), 5
 	ld	iy, 5:i3
-SMF_ConfigSlot_Epilogue:
+SMF_AdvanceInPageChain_Epilogue:
 	pop	xwa
 	pop	xhl
 	ret

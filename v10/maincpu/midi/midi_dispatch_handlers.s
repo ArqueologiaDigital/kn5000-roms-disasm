@@ -1052,18 +1052,18 @@ UIState_DisplayUpdate_BitmapHandler_Return:
 MidiRx_BuildChannelPartLists:
 	ld	xix, 0x94f4
 	cp	(0x966d:16), 128
-	jr	z, UIState_DisplayUpdate_BitmapHandler_Skip
+	jr	z, MidiRx_BuildChannelPartLists_Skip
 	ld	xix, 0x9594
-UIState_DisplayUpdate_BitmapHandler_Skip:
+MidiRx_BuildChannelPartLists_Skip:
 	ldw	wa, 0xffff
 	ldw	bc, 16
 	ld	(xix+), wa
 	djnz16	bc, -6
 	ld	xix, 0x9514
 	cp	(0x966d:16), 128
-	jr	z, UIState_DisplayUpdate_BitmapHandler_Skip2
+	jr	z, MidiRx_BuildChannelPartLists_Skip2
 	ld	xix, 0x95b4
-UIState_DisplayUpdate_BitmapHandler_Skip2:
+MidiRx_BuildChannelPartLists_Skip2:
 	xor	wa, wa
 	ldw	bc, 64
 	ld	(xix+), wa
@@ -1071,18 +1071,18 @@ UIState_DisplayUpdate_BitmapHandler_Skip2:
 	ld	xix, 0x94f4
 	ld	xiy, 0x9514
 	cp	(0x966d:16), 128
-	jr	z, UIState_DisplayUpdate_BitmapHandler_Skip3
+	jr	z, MidiRx_BuildChannelPartLists_Skip3
 	ld	xix, 0x9594
 	ld	xiy, 0x95b4
-UIState_DisplayUpdate_BitmapHandler_Skip3:
+MidiRx_BuildChannelPartLists_Skip3:
 	ld	(0x9664:16), xiy
 	ld	(0x966e:16), 0
 	ld	w, 0:opc
-UIState_DisplayUpdate_BitmapHandler_Loop:
+MidiRx_BuildChannelPartLists_Loop:
 	ld	xhl, 1:i3
 	ld	(0x966f:16), 0
 	ld	(0x9670:16), 0
-UIState_DisplayUpdate_BitmapHandler_Loop2:
+MidiRx_BuildChannelPartLists_Loop2:
 	ld	xiz, (0x90f2:16)
 	xor	d, d
 	ld	e, (0x9670:16)
@@ -1105,21 +1105,21 @@ UIState_DisplayUpdate_BitmapHandler_Loop2:
 UIState_DisplayUpdate_BitmapHandler_Code_Skip:
 	inc	1, (0x9670:16)
 	cp	(0x9670:16), 32
-	jr	nz, UIState_DisplayUpdate_BitmapHandler_Loop2
+	jr	nz, MidiRx_BuildChannelPartLists_Loop2
 	cp	(0x966f:16), 0
-	jr	z, UIState_DisplayUpdate_BitmapHandler_Skip4
+	jr	z, MidiRx_BuildChannelPartLists_Skip4
 	ld	e, (0x966f:16)
 	ld	(xiy), e
 	ld	xde, xiy
 	sub	xde, (0x9664:16)
 	ld	(xix), e
 	add	xiy, xhl
-UIState_DisplayUpdate_BitmapHandler_Skip4:
+MidiRx_BuildChannelPartLists_Skip4:
 	inc	1, xix
 	inc	1, w
 	inc	1, (0x966e:16)
 	cp	(0x966e:16), 32
-	jr	nz, UIState_DisplayUpdate_BitmapHandler_Loop
+	jr	nz, MidiRx_BuildChannelPartLists_Loop
 	ret
 MIDI_DispatchCC:
 	bit 0, (0xb7e7:16)
@@ -1559,24 +1559,24 @@ PanelEvt_Dispatch3_TableAndHandlers_A:
 ; MidiChannel_ConfigureController with W = 7: CC function 7, sent as CC91.
 PanelEvt_D3ASlot1_SendCC91:
 	bit	7, (0x964f:16)
-	jr	z, PanelEvt_Dispatch3Entry_A_Return
+	jr	z, PanelEvt_D3ASlot1_SendCC91_Return
 	ld	l, 25:opc
 	ld	xix, PanelEvt_Handler_7_ValueCheck_Data
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
 	cp	xix, 0xffffffff
-	jr	z, PanelEvt_Dispatch3Entry_A_Return
+	jr	z, PanelEvt_D3ASlot1_SendCC91_Return
 	bit	5, (0xfd58:16)
-	jr	z, PanelEvt_Dispatch3Entry_A_Return
+	jr	z, PanelEvt_D3ASlot1_SendCC91_Return
 	ld	e, 0:opc
 	bit	7, (0x964e:16)
-	jr	z, PanelEvt_Dispatch3Entry_A_Skip
+	jr	z, PanelEvt_D3ASlot1_SendCC91_Skip
 	ld	e, 127:opc
-PanelEvt_Dispatch3Entry_A_Skip:
+PanelEvt_D3ASlot1_SendCC91_Skip:
 	ld	w, 7:opc
 	calr	MidiChannel_ConfigureController
-PanelEvt_Dispatch3Entry_A_Return:
+PanelEvt_D3ASlot1_SendCC91_Return:
 	ret
 
 PanelEvt_Dispatch3Entry_B:
@@ -1862,104 +1862,104 @@ BitMask_Ctrl0_ConfigExit:
 MidiCC_ChannelDispatch_Func09:
 	ld	l, (0x964d:16)
 	cp	l, 31
-	jr	ugt, MidiCC_ChannelDispatch_Ctrl0_Return
+	jr	ugt, MidiCC_ChannelDispatch_Func09_Return
 	ld	xix, MidiCC_ChannelDispatch_Func09_Data
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
 	cp	xix, 0xffffffff
-	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return
+	jr	z, MidiCC_ChannelDispatch_Func09_Return
 	bit	1, (0xfd59:16)
-	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return
+	jr	z, MidiCC_ChannelDispatch_Func09_Return
 	ld	e, (0x964e:16)
 	ld	w, 9:opc
 	calr	MidiChannel_ConfigureController
-MidiCC_ChannelDispatch_Ctrl0_Return:
+MidiCC_ChannelDispatch_Func09_Return:
 	ret
 MidiCC_ChannelDispatch_Func08:
 	ld	l, (0x964d:16)
 	cp	l, 31
-	jr	ugt, MidiCC_ChannelDispatch_Ctrl0_Return2
+	jr	ugt, MidiCC_ChannelDispatch_Func08_Return2
 	ld	xix, MidiCC_ChannelDispatch_Func08_Data
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
 	cp	xix, 0xffffffff
-	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return2
+	jr	z, MidiCC_ChannelDispatch_Func08_Return2
 	bit	2, (0xfd59:16)
-	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return2
+	jr	z, MidiCC_ChannelDispatch_Func08_Return2
 	ld	e, (0x964e:16)
 	ld	w, 8:opc
 	calr	MidiChannel_ConfigureController
-MidiCC_ChannelDispatch_Ctrl0_Return2:
+MidiCC_ChannelDispatch_Func08_Return2:
 	ret
 MidiCC_ChannelDispatch_Func12:
 	ld	l, (0x964d:16)
 	cp	l, 31
-	jr	ugt, MidiCC_ChannelDispatch_Ctrl0_Return3
+	jr	ugt, MidiCC_ChannelDispatch_Func12_Return3
 	ld	xix, MidiCC_ChannelDispatch_Func12_Data
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
 	cp	xix, 0xffffffff
-	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return3
+	jr	z, MidiCC_ChannelDispatch_Func12_Return3
 	bit	3, (0xfd59:16)
-	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return3
+	jr	z, MidiCC_ChannelDispatch_Func12_Return3
 	ld	e, (0x964e:16)
 	ld	w, 12:opc
 	calr	MidiChannel_ConfigureController
-MidiCC_ChannelDispatch_Ctrl0_Return3:
+MidiCC_ChannelDispatch_Func12_Return3:
 	ret
 MidiCC_ChannelDispatch_Func13:
 	ld	l, (0x964d:16)
 	cp	l, 31
-	jr	ugt, MidiCC_ChannelDispatch_Ctrl0_Return4
+	jr	ugt, MidiCC_ChannelDispatch_Func13_Return4
 	ld	xix, MidiCC_ChannelDispatch_Func13_Data
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
 	cp	xix, 0xffffffff
-	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return4
+	jr	z, MidiCC_ChannelDispatch_Func13_Return4
 	bit	3, (0xfd59:16)
-	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return4
+	jr	z, MidiCC_ChannelDispatch_Func13_Return4
 	ld	e, (0x964e:16)
 	ld	w, 13:opc
 	calr	MidiChannel_ConfigureController
-MidiCC_ChannelDispatch_Ctrl0_Return4:
+MidiCC_ChannelDispatch_Func13_Return4:
 	ret
 MidiCC_ChannelDispatch_Func14:
 	ld	l, (0x964d:16)
 	cp	l, 31
-	jr	ugt, MidiCC_ChannelDispatch_Ctrl0_Return5
+	jr	ugt, MidiCC_ChannelDispatch_Func14_Return5
 	ld	xix, MidiCC_ChannelDispatch_Func14_Data
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
 	cp	xix, 0xffffffff
-	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return5
+	jr	z, MidiCC_ChannelDispatch_Func14_Return5
 	bit	4, (0xfd59:16)
-	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return5
+	jr	z, MidiCC_ChannelDispatch_Func14_Return5
 	ld	e, (0x964e:16)
 	ld	w, 14:opc
 	calr	MidiChannel_ConfigureController
-MidiCC_ChannelDispatch_Ctrl0_Return5:
+MidiCC_ChannelDispatch_Func14_Return5:
 	ret
 MidiCC_ChannelDispatch_Func15:
 	ld	l, (0x964d:16)
 	cp	l, 31
-	jr	ugt, MidiCC_ChannelDispatch_Ctrl0_Return6
+	jr	ugt, MidiCC_ChannelDispatch_Func15_Return6
 	ld	xix, MidiCC_ChannelDispatch_Func15_Data
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
 	cp	xix, 0xffffffff
-	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return6
+	jr	z, MidiCC_ChannelDispatch_Func15_Return6
 	bit	4, (0xfd59:16)
-	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return6
+	jr	z, MidiCC_ChannelDispatch_Func15_Return6
 	ld	e, (0x964e:16)
 	ld	w, 15:opc
 	calr	MidiChannel_ConfigureController
-MidiCC_ChannelDispatch_Ctrl0_Return6:
+MidiCC_ChannelDispatch_Func15_Return6:
 	ret
 	ret
 	ret
@@ -3366,13 +3366,13 @@ FileData_ImportM4M6PanelMemories_Loop2:
 	call	Free
 	inc	4, xsp
 	ld	hl, iz
-	jrl	FileData_RawDataBlock_Epilogue2
+	jrl	FileData_ImportM4M6PanelMemories_Epilogue2
 FileData_ImportM4M6PanelMemories_Skip2:
 	ldw (xsp+12), 24
 	jr	FileData_ImportM4M6PanelMemories_Join
 FileData_ImportM4M6PanelMemories_Skip3:
 	ldw	hl, 0xff38
-	jrl	FileData_RawDataBlock_Epilogue2
+	jrl	FileData_ImportM4M6PanelMemories_Epilogue2
 FileData_ImportM4M6PanelMemories_Skip4:
 	ld	wa, (xsp+10)
 	extz	xwa
@@ -3436,7 +3436,7 @@ FileData_ImportM4M6PanelMemories_Loop4:
 	lda	xbc, (xbc+716)
 	calr	DataBuf_CopySimpleBlock4
 	ldw (xsp+8), 0
-FileData_RawDataBlock_Loop:
+FileData_ImportM4M6PanelMemories_Loop5:
 	ld	wa, (xsp+8)
 	extz	xwa
 	ld	xbc, xwa
@@ -3453,7 +3453,7 @@ FileData_RawDataBlock_Loop:
 	calr	DataBuf_LoadAndDispatchFormat2
 	incw	1, (xsp+8)
 	cpw	(xsp+8), 2
-	jr	c, FileData_RawDataBlock_Loop
+	jr	c, FileData_ImportM4M6PanelMemories_Loop5
 	ld	xwa, (xsp+14)
 	lda	xwa, (xwa+709)
 	ld	xbc, (xsp+4)
@@ -3497,7 +3497,7 @@ FileData_ImportM4M6PanelMemories_Skip5:
 	call	Free
 	inc	4, xsp
 	ld	hl, 0:i3
-FileData_RawDataBlock_Epilogue2:
+FileData_ImportM4M6PanelMemories_Epilogue2:
 	pop	xiz
 	lda	xsp, (xsp+14)
 	ret
@@ -5677,26 +5677,26 @@ FileData_ImportNNLivePanel:
 	ld	(xsp+10), xhl
 	ld	xwa, (xsp+10)
 	or	xwa, xwa
-	jr	nz, DataBuf_CopyBulkBitfields_Large_Skip
+	jr	nz, FileData_ImportNNLivePanel_Skip
 	ldw	hl, 0xff38
-	jrl	DataBuf_CopyBulkBitfields_Large_Epilogue
-DataBuf_CopyBulkBitfields_Large_Skip:
+	jrl	FileData_ImportNNLivePanel_Epilogue
+FileData_ImportNNLivePanel_Skip:
 	ld	xwa, (xsp+10)
 	add	xwa, 32
 	ld	xbc, 1056
 	call	FileIO_ReadBlock
 	ld	iz, hl
 	cp	iz, 0:i3
-	jr	ge, DataBuf_CopyBulkBitfields_Large_Skip2
+	jr	ge, FileData_ImportNNLivePanel_Skip2
 	ld	xwa, (xsp+10)
 	push	xwa
 	call	Free
 	inc	4, xsp
 	ld	hl, iz
-	jrl	DataBuf_CopyBulkBitfields_Large_Epilogue
-DataBuf_CopyBulkBitfields_Large_Skip2:
+	jrl	FileData_ImportNNLivePanel_Epilogue
+FileData_ImportNNLivePanel_Skip2:
 	ldw	(xsp+4), 0
-DataBuf_CopyBulkBitfields_Large_Loop2:
+FileData_ImportNNLivePanel_Loop2:
 	ld	wa, (xsp+4)
 	extz	xwa
 	ld	xbc, xwa
@@ -5715,9 +5715,9 @@ DataBuf_CopyBulkBitfields_Large_Loop2:
 	calr	VoiceParam_CopyBitfields_TypeA
 	incw	1, (xsp+4)
 	cpw	(xsp+4), 23
-	jr	c, DataBuf_CopyBulkBitfields_Large_Loop2
+	jr	c, FileData_ImportNNLivePanel_Loop2
 	ldw	(xsp+4), 0
-DataBuf_CopyBulkBitfields_Large_Loop3:
+FileData_ImportNNLivePanel_Loop3:
 	ld	bc, (xsp+4)
 	extz	xbc
 	ld	xwa, DataBuf_CopyBulkBitfields_Large_Data
@@ -5739,7 +5739,7 @@ DataBuf_CopyBulkBitfields_Large_Loop3:
 	calr	VoiceParam_CopyBitfields_LargeBlock
 	incw	1, (xsp+4)
 	cpw	(xsp+4), 24
-	jr	c, DataBuf_CopyBulkBitfields_Large_Loop3
+	jr	c, FileData_ImportNNLivePanel_Loop3
 	ld	xwa, (xsp+10)
 	lda	xwa, (xwa+308)
 	ld	xbc, (xsp+6)
@@ -5781,7 +5781,7 @@ DataBuf_CopyBulkBitfields_Large_Loop3:
 	call	Free
 	inc	4, xsp
 	ld	hl, 0:i3
-DataBuf_CopyBulkBitfields_Large_Epilogue:
+FileData_ImportNNLivePanel_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+10)
 	ret
@@ -5796,37 +5796,37 @@ FileData_ImportNNPanelMemories:
 	ldw	wa, 24
 	calr	FileData_ResetPanelMemoriesToDefault
 	ld	iz, 0:i3
-DataBuf_CopyBulkBitfields_Large_Loop4:
+FileData_ImportNNPanelMemories_Loop4:
 	ld	wa, iz
 	calr	SndParam_TableDispatch_Memset
 	inc	1, iz
 	cp	iz, 3:i3
-	jr	c, DataBuf_CopyBulkBitfields_Large_Loop4
+	jr	c, FileData_ImportNNPanelMemories_Loop4
 	pushw 336
 	call	Malloc
 	inc	2, xsp
 	ld	(xsp+8), xhl
 	ld	xwa, (xsp+8)
 	or	xwa, xwa
-	jr	nz, DataBuf_CopyBulkBitfields_Large_Skip3
+	jr	nz, FileData_ImportNNPanelMemories_Skip3
 	ldw	hl, 0xff38
-	jrl	DataBuf_CopyBulkBitfields_Large_Epilogue2
-DataBuf_CopyBulkBitfields_Large_Skip3:
+	jrl	FileData_ImportNNPanelMemories_Epilogue2
+FileData_ImportNNPanelMemories_Skip3:
 	ldw	(xsp+6), 0
-DataBuf_CopyBulkBitfields_Large_Loop5:
+FileData_ImportNNPanelMemories_Loop5:
 	ld	xwa, (xsp+8)
 	ld	xbc, 336
 	call	FileIO_ReadBlock
 	ld	iz, hl
 	cp	iz, 0:i3
-	jr	ge, DataBuf_CopyBulkBitfields_Large_Skip4
+	jr	ge, FileData_ImportNNPanelMemories_Skip4
 	ld	xwa, (xsp+8)
 	push	xwa
 	call	Free
 	inc	4, xsp
 	ld	hl, iz
-	jrl	DataBuf_CopyBulkBitfields_Large_Epilogue2
-DataBuf_CopyBulkBitfields_Large_Skip4:
+	jrl	FileData_ImportNNPanelMemories_Epilogue2
+FileData_ImportNNPanelMemories_Skip4:
 	ld	wa, (xsp+6)
 	extz	xwa
 	ld	xbc, xwa
@@ -5837,7 +5837,7 @@ DataBuf_CopyBulkBitfields_Large_Skip4:
 	add	xwa, xbc
 	ld	(xsp+2), xwa
 	ld	iz, 0:i3
-DataBuf_CopyBulkBitfields_Large_Loop6:
+FileData_ImportNNPanelMemories_Loop6:
 	ld	bc, iz
 	extz	xbc
 	ld	xwa, xbc
@@ -5857,7 +5857,7 @@ DataBuf_CopyBulkBitfields_Large_Loop6:
 	calr	VoiceParam_CopyBitfields_TypeA
 	inc	1, iz
 	cp	iz, 23
-	jr	c, DataBuf_CopyBulkBitfields_Large_Loop6
+	jr	c, FileData_ImportNNPanelMemories_Loop6
 	ld	xwa, (xsp+8)
 	lda	xwa, (xwa+276)
 	ld	xbc, (xsp+2)
@@ -5893,7 +5893,7 @@ DataBuf_CopyBulkBitfields_Large_Loop6:
 	calr	FileData_CopyLivePartFieldsToMemory
 	incw	1, (xsp+6)
 	cpw	(xsp+6), 24
-	jrl	c, DataBuf_CopyBulkBitfields_Large_Loop5
+	jrl	c, FileData_ImportNNPanelMemories_Loop5
 	ld	wa, 0:i3
 	call	PostPmLoad
 	ld	xwa, (xsp+8)
@@ -5901,7 +5901,7 @@ DataBuf_CopyBulkBitfields_Large_Loop6:
 	call	Free
 	inc	4, xsp
 	ld	hl, 0:i3
-DataBuf_CopyBulkBitfields_Large_Epilogue2:
+FileData_ImportNNPanelMemories_Epilogue2:
 	popw	iz
 	lda	xsp, (xsp+14)
 	ret
@@ -6746,9 +6746,9 @@ FileData_ConvertNNBlock1Fields:
 	or	(xix), a
 	ld	a, (xhl)
 	and	a, 7
-	jr	z, DSPCfg_VoiceSlotB_ExtractData_Skip
+	jr	z, FileData_ConvertNNBlock1Fields_Skip
 	setm	0, (xix)
-DSPCfg_VoiceSlotB_ExtractData_Skip:
+FileData_ConvertNNBlock1Fields_Skip:
 	ld	a, (xde+374)
 	and	a, 127
 	andmi8	(xbc+1050), 128
@@ -6999,7 +6999,7 @@ FileData_CopyLivePartFieldsToMemory:
 	ld	xwa, xde
 	lda	xbc, (xbc+32)
 	lda	xde, (xde+416)
-DataBuf_CopyBulkBitfields_Large_Helper2_Loop:
+FileData_CopyLivePartFieldsToMemory_Loop:
 	ld	l, (xwa-2)
 	and	l, 127
 	andmi8	(xbc-2), 128
@@ -7017,7 +7017,7 @@ DataBuf_CopyBulkBitfields_Large_Helper2_Loop:
 	lda	xbc, (xbc+26)
 	lda	xwa, (xwa+26)
 	cp	xwa, xde
-	jr	c, DataBuf_CopyBulkBitfields_Large_Helper2_Loop
+	jr	c, FileData_CopyLivePartFieldsToMemory_Loop
 	ret
 
 DataBuf_TransferSlotBitfields:
@@ -7167,8 +7167,8 @@ FileData_ResetPanelMemoriesToDefault:
 	ld	(xsp+2), xwa
 	ld	iz, 0:i3
 	cpw	(xsp+6), 0
-	jr	ule, DataBuf_CopyBulkBitfields_Large_Helper3_Epilogue
-DataBuf_Data_FormatDispatch_Loop:
+	jr	ule, FileData_ResetPanelMemoriesToDefault_Epilogue
+FileData_ResetPanelMemoriesToDefault_Loop:
 	ld	wa, iz
 	extz	xwa
 	ld	xbc, xwa
@@ -7185,8 +7185,8 @@ DataBuf_Data_FormatDispatch_Loop:
 	lda	xsp, (xsp+10)
 	inc	1, iz
 	cp	iz, (xsp+6)
-	jr	c, DataBuf_Data_FormatDispatch_Loop
-DataBuf_CopyBulkBitfields_Large_Helper3_Epilogue:
+	jr	c, FileData_ResetPanelMemoriesToDefault_Loop
+FileData_ResetPanelMemoriesToDefault_Epilogue:
 	popw	iz
 	inc	6, xsp
 	ret
@@ -10115,17 +10115,17 @@ MidiPkt_SetXferTotal_All:
 	ld	wa, 1:i3
 	calr	AccWrap_ReturnZero
 	cp	hl, 0xffff
-	jr	z, MidiSeq_ClearSyncFlag_Helper_Skip3
+	jr	z, MidiPkt_SetXferTotal_All_Skip3
 	ld	xwa, 0x72aa
 	add	(xiz+8), xwa
-MidiSeq_ClearSyncFlag_Helper_Skip3:
+MidiPkt_SetXferTotal_All_Skip3:
 	ld	wa, 3:i3
 	calr	AccWrap_ReturnZero
 	cp	hl, 0xffff
-	jr	z, MidiSeq_ClearSyncFlag_Helper_Skip4
+	jr	z, MidiPkt_SetXferTotal_All_Skip4
 	calr	MidiPkt_GetUsedSize_StyleImage
 	add	(xiz+8), xhl
-MidiSeq_ClearSyncFlag_Helper_Skip4:
+MidiPkt_SetXferTotal_All_Skip4:
 	ld	xwa, (xiz+8)
 	add	xwa, (xiz)
 	ld	(xiz+4), xwa
@@ -10136,7 +10136,7 @@ MidiSeq_ClearSyncFlag_Helper_Skip4:
 ;   0x132F0 = 0x640 (live panel, 0xF980..0xFFBF) + 0x12CB0 (panel memories from 0x1ED350), +4 = start + length (a
 ;   running end, the second block is elsewhere). Basis: callers + body -- MidiPkt_ArpExtHandler_A (command 11) points
 ;   the total descriptor 0xBCDC with it before the block descriptor 0xBCEC (MidiPkt_SetXferBlock_LivePanel);
-;   SysEx_ResetAndReturn_Helper4 uses it for the send-side total 0xBCBC.
+;   SysEx_SendPanelMemoryData uses it for the send-side total 0xBCBC.
 MidiPkt_SetXferTotal_Panel:
 	lda	xde, (0xf980:16)
 	ld	(xwa), xde
@@ -10279,7 +10279,7 @@ MidiPkt_SetXferBlock_StyleImagePool_Epilogue3:
 ;   0xBD18 set, the length is 0x5800 + the used event size ((0xF1CE) * 16, MidiPkt_GetUsedSize_SeqEvents). +4
 ;   = start + length (the blocks are not contiguous). Basis: callers + body -- MidiPkt_ArpExtHandler_K (command 18)
 ;   points the total descriptor 0xBCDC with it before the block descriptor (MidiPkt_SetXferBlock_CurrentSong);
-;   SysEx_ResetAndReturn_Helper2 uses it for the send-side total 0xBCBC.
+;   SysEx_SendSequencerData uses it for the send-side total 0xBCBC.
 MidiPkt_SetXferTotal_SeqData:
 	push	xiz
 	ld	xiz, xwa
@@ -11091,21 +11091,45 @@ SysEx_ResetAndReturn_Helper:
 	ld	xwa, 0xbcbc
 	call	MidiSeq_ClearSyncFlag_Helper4
 	jrl	MidiPkt_ArpConfigChain_Data_Helper7
-SysEx_ResetAndReturn_Helper2:
+; SysEx_SendSequencerData: Code-2 (SEQUENCER) sender of SysEx_InitiateSend: points the send-side total descriptor
+;   0xBCBC at the whole sequencer transfer (MidiPkt_SetXferTotal_SeqData) and tail-jumps into the sequencer group of
+;   MidiPkt_ArpConfigChain_Data (MidiPkt_ArpConfigChain_Data_Join: current song, song slots, event memory, then F0 50
+;   27 7E F7). Basis: callers + body -- only SysEx_InitiateSend_SendSequencer (entry 2 of SysExSend_SwitchOffsets)
+;   calls it, then rejoins SysEx_InitiateSend_Join; same shape as case 0's SysEx_SendAllData.
+SysEx_SendSequencerData:
 	ld	xwa, 0xbcbc
 	call	MidiPkt_SetXferTotal_SeqData
 	jrl	MidiPkt_ArpConfigChain_Data_Join
-SysEx_ResetAndReturn_Helper3:
+; SysEx_SendSoundMemoryData: Code-3 (SOUND MEMORY) sender of SysEx_InitiateSend: points 0xBCBC at the 0x72AA-byte
+;   sound RAM area from 0x1E0000 (MidiSeq_ClearSyncFlag_Helper3) and tail-jumps into the sound-RAM group of
+;   MidiPkt_ArpConfigChain_Data (MidiPkt_ArpConfigChain_Data_Helper4: the 16-byte 'KN5000 SOUND RAM' id at 0x1E0000,
+;   the data from 0x1E0010, then the group end). Basis: callers + body -- only SysEx_InitiateSend_SendSoundMemory
+;   (switch entry 3) calls it; MidiSysEx_FinishSoundRamXfer describes the same two blocks on the receive side.
+SysEx_SendSoundMemoryData:
 	ld	xwa, 0xbcbc
 	call	MidiSeq_ClearSyncFlag_Helper3
 	jrl	MidiPkt_ArpConfigChain_Data_Helper4
-SysEx_ResetAndReturn_Helper4:
+; SysEx_SendPanelMemoryData: Code-4 (PANEL MEMORY) sender of SysEx_InitiateSend: points 0xBCBC at the whole panel
+;   transfer (MidiPkt_SetXferTotal_Panel: live panel 0xF980-0xFFBF plus the 80 panel memories at 0x1ED350) and tail-
+;   jumps into the panel group of MidiPkt_ArpConfigChain_Data (MidiPkt_ArpConfigChain_Data_Helper: those two blocks,
+;   then the group end). Basis: callers + body -- only SysEx_InitiateSend_SendPanelMemory (switch entry 4) calls it;
+;   MidiPkt_SetXferTotal_Panel's header already names this use.
+SysEx_SendPanelMemoryData:
 	ld	xwa, 0xbcbc
 	call	MidiPkt_SetXferTotal_Panel
 	jrl	MidiPkt_ArpConfigChain_Data_Helper
-SysEx_ResetAndReturn_Helper5:
+; SysEx_SendNothing: Code-5 sender of SysEx_InitiateSend: a bare `ret`, so code 5 queues no data group and only the
+;   closing SysEx_FinishBulkSend runs. Basis: callers + body -- only SysEx_InitiateSend_SendNoData (switch entry 5)
+;   calls it; that case's header notes that no EXCLUSIVE list row maps to code 5. The name says literally what the
+;   routine does.
+SysEx_SendNothing:
 	ret
-SysEx_ResetAndReturn_Helper6:
+; SysEx_SendMspUserData: Code-6 (MSP user) sender of SysEx_InitiateSend: points 0xBCBC at the accompaniment block area
+;   from 0x1E8800 (MidiSeq_ClearSyncFlag_Helper6: 0x3C00 bytes, or the used size from MidiPkt_GetUsedSize_AccompBlocks
+;   with bit 6 of 0xBD18 set) and tail-jumps into that group of MidiPkt_ArpConfigChain_Data
+;   (MidiPkt_ArpConfigChain_Data_Helper14: blocks 0x1E8800, 0x1E8820 and the 0x1E8B00 block pool, then the group end).
+;   Basis: callers + body -- only SysEx_InitiateSend_SendMspUser (switch entry 6) calls it.
+SysEx_SendMspUserData:
 	ld	xwa, 0xbcbc
 	call	MidiSeq_ClearSyncFlag_Helper6
 	jrl	MidiPkt_ArpConfigChain_Data_Helper14
@@ -11471,7 +11495,7 @@ SysEx_FinishBulkSend:
 	ld	bc, 4:i3
 	call	SeqData_ReadFieldByIndex
 	cp	l, 0:i3
-	jr	nz, MidiPkt_ArpConfigChain_Data_Skip
+	jr	nz, SysEx_FinishBulkSend_Skip
 	ld	xwa, SysEx_Msg_35A6
 	ld	bc, 5:i3
 	call	SeqBuf_FlushNoteOffs
@@ -11483,8 +11507,8 @@ SysEx_FinishBulkSend:
 	ret	nz
 	ld	xwa, SysEx_Msg_35AC
 	ld	bc, 5:i3
-	jr	MidiPkt_ArpConfigChain_Data_Join2
-MidiPkt_ArpConfigChain_Data_Skip:
+	jr	SysEx_FinishBulkSend_Join2
+SysEx_FinishBulkSend_Skip:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 4:i3
 	call	SeqData_ReadFieldByIndex
@@ -11492,7 +11516,7 @@ MidiPkt_ArpConfigChain_Data_Skip:
 	ret	nz
 	ld	xwa, SysEx_Msg_35AC
 	ld	bc, 5:i3
-MidiPkt_ArpConfigChain_Data_Join2:
+SysEx_FinishBulkSend_Join2:
 	call	SeqBuf_FlushNoteOffs
 	ret
 MidiPkt_ArpChordHandler:
@@ -12244,10 +12268,10 @@ MidiSysEx_FinishSoundRamXfer:
 	ld	bc, 3:i3
 	ldirw
 	bit	6, (0xbd1a:16)
-	jr	z, MidiSysEx_ProcessBlock_Epilogue
+	jr	z, MidiSysEx_FinishSoundRamXfer_Epilogue
 	calr	MidiSysEx_SendSoundRamEndCmd
 	res	6, (0xbd1a:16)
-MidiSysEx_ProcessBlock_Epilogue:
+MidiSysEx_FinishSoundRamXfer_Epilogue:
 	inc	6, xsp
 	ret
 ; MidiSysEx_FinishStyleImageXfer: End-of-transfer step for the style-image group: if bit 5 of 0xBD1A is set (blocks of
@@ -13628,21 +13652,21 @@ SysEx_DispatchCalls_Data:
 ; SysEx_InitiateSend_SendSequencer: Code 2 = SEQUENCER: size the whole sequencer transfer
 ;   (MidiPkt_SetXferTotal_SeqData) and send it.
 SysEx_InitiateSend_SendSequencer:
-	call	SysEx_ResetAndReturn_Helper2
+	call	SysEx_SendSequencerData
 	jr	SysEx_InitiateSend_Join
 SysEx_InitiateSend_SendSoundMemory:
-	call	SysEx_ResetAndReturn_Helper3
+	call	SysEx_SendSoundMemoryData
 	jr	SysEx_InitiateSend_Join
 SysEx_InitiateSend_SendPanelMemory:
-	call	SysEx_ResetAndReturn_Helper4
+	call	SysEx_SendPanelMemoryData
 	jr	SysEx_InitiateSend_Join
 ; SysEx_InitiateSend_SendNoData: Code 5: no EXCLUSIVE list row maps to it; its helper is a bare ret, so only the
 ;   closing SysEx_FinishBulkSend runs.
 SysEx_InitiateSend_SendNoData:
-	call	SysEx_ResetAndReturn_Helper5
+	call	SysEx_SendNothing
 	jr	SysEx_InitiateSend_Join
 SysEx_InitiateSend_SendMspUser:
-	call	SysEx_ResetAndReturn_Helper6
+	call	SysEx_SendMspUserData
 	jr	SysEx_InitiateSend_Join
 	ret
 

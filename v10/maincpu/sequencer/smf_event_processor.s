@@ -3321,20 +3321,20 @@ SeqStep_ByteBlockEF56:
 	ld	xbc, (xsp+14)
 	ld	xiz, (xsp+8)
 	or	xbc, xbc
-	jr	z, SeqStep_FileReadReturn_Skip
+	jr	z, SeqStep_ByteBlockEF56_Skip
 	cp	(xbc+4), 0
-	jr	nz, SeqStep_FileReadReturn_Skip2
-SeqStep_FileReadReturn_Skip:
+	jr	nz, SeqStep_ByteBlockEF56_Skip2
+SeqStep_ByteBlockEF56_Skip:
 	ldw	(0x1e53c:24), 17
 	ld	xhl, 0:i3
-	jr	SeqStep_FileReadReturn_Epilogue
-SeqStep_FileReadReturn_Skip2:
+	jr	SeqStep_ByteBlockEF56_Epilogue
+SeqStep_ByteBlockEF56_Skip2:
 	bitm	0, (xbc+4)
-	jr	nz, SeqStep_FileReadReturn_Skip3
+	jr	nz, SeqStep_ByteBlockEF56_Skip3
 	ldw	(124220:24), 13
 	ld	xhl, 0:i3
-	jr	SeqStep_FileReadReturn_Epilogue
-SeqStep_FileReadReturn_Skip3:
+	jr	SeqStep_ByteBlockEF56_Epilogue
+SeqStep_ByteBlockEF56_Skip3:
 	ld	wa, (xsp+12)
 	dec	1, wa
 	pushw	wa
@@ -3347,12 +3347,12 @@ SeqStep_FileReadReturn_Skip3:
 	lda	xsp, (xsp+10)
 	ld	(xiz+hl), 0x00
 	cp	hl, 0:i3
-	jr	z, SeqStep_FileReadReturn_Skip4
+	jr	z, SeqStep_ByteBlockEF56_Skip4
 	ld	xhl, xiz
-	jr	SeqStep_FileReadReturn_Epilogue
-SeqStep_FileReadReturn_Skip4:
+	jr	SeqStep_ByteBlockEF56_Epilogue
+SeqStep_ByteBlockEF56_Skip4:
 	ld	xhl, 0:i3
-SeqStep_FileReadReturn_Epilogue:
+SeqStep_ByteBlockEF56_Epilogue:
 	pop	xiz
 	ret
 
@@ -3404,29 +3404,29 @@ SeqStep_FileWriteReturn:
 SeqStep_ByteBlockF002:
 	ld	xbc, (xsp+8)
 	or	xbc, xbc
-	jr	z, SeqStep_FileWriteSetup_Skip
+	jr	z, SeqStep_ByteBlockF002_Skip
 	cp	(xbc+4), 0
-	jr	nz, SeqStep_FileWriteSetup_Skip2
-SeqStep_FileWriteSetup_Skip:
+	jr	nz, SeqStep_ByteBlockF002_Skip2
+SeqStep_ByteBlockF002_Skip:
 	ldw	(0x1e53c:24), 17
 	ldw	hl, 0xffff
 	ret
-SeqStep_FileWriteSetup_Skip2:
+SeqStep_ByteBlockF002_Skip2:
 	bitm	1, (xbc+4)
-	jr	nz, SeqStep_FileWriteSetup_Skip3
+	jr	nz, SeqStep_ByteBlockF002_Skip3
 	ldw	(124220:24), 13
 	ldw	hl, 0xffff
 	ret
-SeqStep_FileWriteSetup_Skip3:
+SeqStep_ByteBlockF002_Skip3:
 	ld	hl, 0:i3
 	ld	xwa, (xsp+4)
 	cp (xwa+), 0
-	jr	z, SeqStep_FileWriteSetup_Skip4
-SeqStep_FileWriteSetup_Loop:
+	jr	z, SeqStep_ByteBlockF002_Skip4
+SeqStep_ByteBlockF002_Loop:
 	inc	1, hl
 	cp (xwa+), 0
-	jr	nz, SeqStep_FileWriteSetup_Loop
-SeqStep_FileWriteSetup_Skip4:
+	jr	nz, SeqStep_ByteBlockF002_Loop
+SeqStep_ByteBlockF002_Skip4:
 	pushw	hl
 	ld	xwa, (xsp+6)
 	push	xwa
@@ -3536,9 +3536,9 @@ SeqStep_FileCloseExit:
 	ld	xbc, (xsp+12)
 	ld	iz, 0:i3
 	or	xbc, xbc
-	jr	z, SeqStep_FileCloseInner_Skip2
+	jr	z, SeqStep_FileCloseExit_Skip2
 	cp	(xbc+4), 0
-	jr	z, SeqStep_FileCloseInner_Skip
+	jr	z, SeqStep_FileCloseExit_Skip
 	ld	xwa, (xsp+4)
 	push	xwa
 	pushw	1
@@ -3548,28 +3548,28 @@ SeqStep_FileCloseExit:
 	ld	xwa, (xwa+36)
 	call	(xwa)
 	lda	xsp, (xsp+10)
-	jrl	SeqStep_FileCloseInner_Epilogue2
-SeqStep_FileCloseInner_Skip:
+	jrl	SeqStep_FileCloseExit_Epilogue2
+SeqStep_FileCloseExit_Skip:
 	ldw	(0x1e53c:24), 25
 	ldw	hl, 0xffff
-	jr	SeqStep_FileCloseInner_Epilogue2
-SeqStep_FileCloseInner_Skip2:
+	jr	SeqStep_FileCloseExit_Epilogue2
+SeqStep_FileCloseExit_Skip2:
 	ld qiz, 0
 	cpw qiz, 16
-	jr	ge, SeqStep_FileCloseInner_Epilogue
-SeqStep_FileCloseInner_Loop:
+	jr	ge, SeqStep_FileCloseExit_Epilogue
+SeqStep_FileCloseExit_Loop:
 	ld wa, qiz
 	sla wa, 2
 	lda	xbc, (0x210b4:24)
 	ld	xwa, (xbc+wa)
 	or xwa, xwa
-	jr	z, SeqStep_FileCloseInner_Skip3
+	jr	z, SeqStep_FileCloseExit_Skip3
 	ld wa, qiz
 	sla wa, 2
 	lda	xbc, (0x210b4:24)
 	ld	xwa, (xbc+wa)
 	cp xwa, 4294967295
-	jr	z, SeqStep_FileCloseInner_Skip3
+	jr	z, SeqStep_FileCloseExit_Skip3
 	ld	xwa, (xsp+4)
 	push	xwa
 	pushw	1
@@ -3587,23 +3587,23 @@ SeqStep_FileCloseInner_Loop:
 	call	(xwa)
 	lda	xsp, (xsp+10)
 	or	iz, hl
-SeqStep_FileCloseInner_Skip3:
+SeqStep_FileCloseExit_Skip3:
 	inc 1, qiz
 	cpw qiz, 16
-	jr	lt, SeqStep_FileCloseInner_Loop
-SeqStep_FileCloseInner_Epilogue:
+	jr	lt, SeqStep_FileCloseExit_Loop
+SeqStep_FileCloseExit_Epilogue:
 	ld	hl, iz
-SeqStep_FileCloseInner_Epilogue2:
+SeqStep_FileCloseExit_Epilogue2:
 	pop	xiz
 	inc	4, xsp
 	ret
 	ld	xbc, (xsp+4)
 	or	xbc, xbc
-	jr	nz, SeqStep_FileCloseInner_Skip4
+	jr	nz, SeqStep_FileCloseExit_Skip4
 	ldw	(0x1e53c:24), 17
 	ldw	hl, 0xffff
 	ret
-SeqStep_FileCloseInner_Skip4:
+SeqStep_FileCloseExit_Skip4:
 	lda	xwa, (xsp+8)
 	inc	2, xwa
 	push	xwa
@@ -3675,19 +3675,19 @@ SeqStep_ByteBlockF245:
 	inc	8, xsp
 	ld	xiz, xhl
 	or	xiz, xiz
-	jr	z, FileOpenDefault_Skip3
+	jr	z, SeqStep_ByteBlockF245_Skip3
 	push	xiz
 	call	FileClose
 	inc	4, xsp
 	ldw	(0x1e53c:24), 21
 	ldw	hl, 0xffff
-	jr	FileOpenDefault_Epilogue
-FileOpenDefault_Skip3:
+	jr	SeqStep_ByteBlockF245_Epilogue
+SeqStep_ByteBlockF245_Skip3:
 	cpw	(124220:24), 5
-	jr	z, FileOpenDefault_Skip4
+	jr	z, SeqStep_ByteBlockF245_Skip4
 	ldw	hl, 0xffff
-	jr	FileOpenDefault_Epilogue
-FileOpenDefault_Skip4:
+	jr	SeqStep_ByteBlockF245_Epilogue
+SeqStep_ByteBlockF245_Skip4:
 	ld	wa, (xsp+4)
 	exts	wa
 	ld	(0x1e53c:24), wa
@@ -3699,10 +3699,10 @@ FileOpenDefault_Skip4:
 	inc	8, xsp
 	ld	xiz, xhl
 	or	xiz, xiz
-	jr	nz, FileOpenDefault_Skip
+	jr	nz, SeqStep_ByteBlockF245_Skip
 	ldw	hl, 0xffff
-	jr	FileOpenDefault_Epilogue
-FileOpenDefault_Skip:
+	jr	SeqStep_ByteBlockF245_Epilogue
+SeqStep_ByteBlockF245_Skip:
 	ld	xwa, xiz
 	push	xwa
 	ld	xwa, (xiz+14)
@@ -3713,42 +3713,42 @@ FileOpenDefault_Skip:
 	call	FileClose
 	inc	8, xsp
 	ld	hl, (xsp+4)
-FileOpenDefault_Epilogue:
+SeqStep_ByteBlockF245_Epilogue:
 	pop	xiz
 	inc	2, xsp
 	ret
 	ld	xde, (xsp+4)
 	or	xde, xde
-	jr	z, FileOpenDefault_Skip5
+	jr	z, SeqStep_ByteBlockF245_Skip5
 	cp	(xde+4), 0
-	jr	nz, FileOpenDefault_Skip6
-FileOpenDefault_Skip5:
+	jr	nz, SeqStep_ByteBlockF245_Skip6
+SeqStep_ByteBlockF245_Skip5:
 	ldw	(0x1e53c:24), 17
 	ldw	hl, 17
 	ret
-FileOpenDefault_Skip6:
+SeqStep_ByteBlockF245_Skip6:
 	ld	xwa, (xde+18)
 	cp	(xwa), 1
-	jr	nz, FileOpenDefault_Skip7
+	jr	nz, SeqStep_ByteBlockF245_Skip7
 	ld	xbc, (xsp+8)
 	ld	xwa, (xde+22)
 	ld	(xbc), xwa
 	ld	hl, 0:i3
 	ret
-FileOpenDefault_Skip7:
+SeqStep_ByteBlockF245_Skip7:
 	ldw	(0x1e53c:24), 18
 	ldw	hl, 18
 	ret
 	ld	xbc, (xsp+4)
 	or	xbc, xbc
-	jr	z, FileOpenDefault_Skip8
+	jr	z, SeqStep_ByteBlockF245_Skip8
 	cp	(xbc+4), 0
-	jr	nz, FileOpenDefault_Skip2
-FileOpenDefault_Skip8:
+	jr	nz, SeqStep_ByteBlockF245_Skip2
+SeqStep_ByteBlockF245_Skip8:
 	ldw	(0x1e53c:24), 17
 	ldw	hl, 17
 	ret
-FileOpenDefault_Skip2:
+SeqStep_ByteBlockF245_Skip2:
 	ld	xwa, (xsp+8)
 	ld	xwa, (xwa)
 	push	xwa
@@ -4006,16 +4006,16 @@ SeqStep_FileTellFinal:
 	inc	8, xsp
 	ld	xiz, xhl
 	or	xiz, xiz
-	jr	nz, SeqStep_FileSeekCleanup_Skip
+	jr	nz, SeqStep_FileTellFinal_Skip
 	ldw	hl, 0xffff
 	jrl	SeqStep_FileSeekCleanup_Epilogue
-SeqStep_FileSeekCleanup_Skip:
+SeqStep_FileTellFinal_Skip:
 	ld	xwa, (xiz+26)
 	or	xwa, xwa
-	jr	nz, SeqStep_FileSeekCleanup_Skip2
+	jr	nz, SeqStep_FileTellFinal_Skip2
 	ldw	(0x1e53c:24), 13
 	jr	SeqStep_FileSeekCleanup_Loop
-SeqStep_FileSeekCleanup_Skip2:
+SeqStep_FileTellFinal_Skip2:
 	pushw	0
 	ld	xwa, 64
 	push	xwa
@@ -5087,40 +5087,40 @@ Fat_AllocateClusters_Loop:
 	ld	wa, (xsp+6)
 	inc	1, wa
 	cp	wa, 2:i3
-	jr	c, SeqStep_FileSectorPopReturn_Skip2
+	jr	c, Fat_AllocateClusters_Skip2
 	ld	bc, (xsp+6)
 	inc	1, bc
-SeqStep_FileSectorPopReturn_Skip2:
+Fat_AllocateClusters_Skip2:
 	ld	iz, bc
 	cp	iz, (xsp+4)
-	jr	ugt, SeqStep_FileSectorPopReturn_Skip3
-SeqStep_FileSectorPopReturn_Loop2:
+	jr	ugt, Fat_AllocateClusters_Skip3
+Fat_AllocateClusters_Loop2:
 	pushw	iz
 	ld	xwa, (xsp+22)
 	push	xwa
 	calr	Fat_ReadEntry
 	inc	6, xsp
 	cp	hl, 0:i3
-	jr	z, SeqStep_FileSectorPopReturn_Skip5
+	jr	z, Fat_AllocateClusters_Skip5
 	inc	1, iz
 	cp	iz, (xsp+4)
-	jr	ule, SeqStep_FileSectorPopReturn_Loop2
-SeqStep_FileSectorPopReturn_Skip3:
+	jr	ule, Fat_AllocateClusters_Loop2
+Fat_AllocateClusters_Skip3:
 	ld	iz, 2:i3
 	cp	iz, (xsp+6)
-	jr	nc, SeqStep_FileSectorPopReturn_Skip4
-SeqStep_FileSectorPopReturn_Loop3:
+	jr	nc, Fat_AllocateClusters_Skip4
+Fat_AllocateClusters_Loop3:
 	pushw	iz
 	ld	xwa, (xsp+22)
 	push	xwa
 	calr	Fat_ReadEntry
 	inc	6, xsp
 	cp	hl, 0:i3
-	jr	z, SeqStep_FileSectorPopReturn_Skip5
+	jr	z, Fat_AllocateClusters_Skip5
 	inc	1, iz
 	cp	iz, (xsp+6)
-	jr	c, SeqStep_FileSectorPopReturn_Loop3
-SeqStep_FileSectorPopReturn_Skip4:
+	jr	c, Fat_AllocateClusters_Loop3
+Fat_AllocateClusters_Skip4:
 	ld	xwa, (xsp+20)
 	push	xwa
 	calr	Fat_WriteDirEntry
@@ -5130,7 +5130,7 @@ SeqStep_FileSectorPopReturn_Skip4:
 	inc	8, xsp
 	ldw	hl, 15
 	jrl	SeqStep_FileSectorPopReturn_Epilogue2
-SeqStep_FileSectorPopReturn_Skip5:
+Fat_AllocateClusters_Skip5:
 	ld	xwa, (xsp+20)
 	ld	xwa, (xwa+30)
 	pushm	(xwa+36)
@@ -5144,7 +5144,7 @@ SeqStep_FileSectorPopReturn_Skip5:
 	jr	nz, Fat_AllocateClusters_Skip
 	ld	xwa, (xsp+20)
 	ld	(xwa+69), iz
-	jr	SeqStep_FileSectorPopReturn_Skip6
+	jr	Fat_AllocateClusters_Skip6
 Fat_AllocateClusters_Skip:
 	pushw	iz
 	pushm	(xsp+8)
@@ -5153,19 +5153,19 @@ Fat_AllocateClusters_Skip:
 	calr	SeqStep_FileSectorPopReturn
 	inc	8, xsp
 	cpw	(xsp+8), 0
-	jr	nz, SeqStep_FileSectorPopReturn_Skip6
+	jr	nz, Fat_AllocateClusters_Skip6
 	ld	xwa, (xsp+20)
 	incw	1, (xwa+46)
-SeqStep_FileSectorPopReturn_Skip6:
+Fat_AllocateClusters_Skip6:
 	ld	(xsp+6), iz
 	incw	1, (xsp+10)
 	ld	wa, (xsp+10)
 	cp	wa, iz
-	jr	nz, SeqStep_FileSectorPopReturn_Skip7
+	jr	nz, Fat_AllocateClusters_Skip7
 	ld	xwa, (xsp+20)
 	incw	1, (xwa+44)
 	jr	SeqStep_FileSectorPopReturn_Entry
-SeqStep_FileSectorPopReturn_Skip7:
+Fat_AllocateClusters_Skip7:
 	ldw (xsp+10), 0
 SeqStep_FileSectorPopReturn_Entry:
 	cpw	(xsp+8), 0
@@ -5781,7 +5781,7 @@ Fat_CreateDirEntry:
 	calr	FatPath_Next83Component
 	inc	8, xsp
 	cp	hl, 0:i3
-	jrl	nz, SeqByteBlock_PathNormalize_Helper4_Skip5
+	jrl	nz, Fat_CreateDirEntry_Skip5
 	lda	xwa, (xiz+26)
 	ld	(xsp+14), xwa
 	ld	xwa, (xsp+6)
@@ -5792,8 +5792,8 @@ Fat_CreateDirEntry:
 	ld	wa, (xwa+44)
 	ld	(xsp+4), wa
 	cpw	(xsp+4), 0
-	jrl	lt, SeqByteBlock_PathNormalize_Helper4_Skip4
-SeqByteBlock_PathNormalize_Helper4_Loop:
+	jrl	lt, Fat_CreateDirEntry_Skip4
+Fat_CreateDirEntry_Loop:
 	pushw	24
 	ld	xwa, 0:i3
 	push	xwa
@@ -5806,32 +5806,32 @@ SeqByteBlock_PathNormalize_Helper4_Loop:
 	ld	(xsp+18), xhl
 	ld	xwa, (xsp+18)
 	or	xwa, xwa
-	jr	nz, SeqByteBlock_PathNormalize_Helper4_Skip
+	jr	nz, Fat_CreateDirEntry_Skip
 	ld	hl, (xiz+6)
 	jrl	SeqByteBlock_PathNormalize_Epilogue2
-SeqByteBlock_PathNormalize_Helper4_Skip:
+Fat_CreateDirEntry_Skip:
 	ld	xwa, (xsp+18)
 	cpw	(xwa+20), 0
-	jr	z, SeqByteBlock_PathNormalize_Helper4_Skip2
+	jr	z, Fat_CreateDirEntry_Skip2
 	ld	xwa, (xsp+18)
 	ld	hl, (xwa+20)
 	jrl	SeqByteBlock_PathNormalize_Epilogue2
-SeqByteBlock_PathNormalize_Helper4_Skip2:
+Fat_CreateDirEntry_Skip2:
 	ld	xwa, (xsp+18)
 	lda	xwa, (xwa+26)
 	ld	(xsp+10), xwa
 	ld	hl, 0:i3
-	jr	SeqByteBlock_PathNormalize_Helper4_Join
+	jr	Fat_CreateDirEntry_Join
 SeqByteBlock_PathNormalize_Loop6:
 	ld	xwa, (xsp+10)
 	cp	(xwa), 229
-	jr	z, SeqByteBlock_PathNormalize_Helper4_Skip3
+	jr	z, Fat_CreateDirEntry_Skip3
 	ld	xwa, (xsp+10)
 	cp	(xwa), 0
 	jr	nz, SeqByteBlock_PathNormalize_Skip8
-SeqByteBlock_PathNormalize_Helper4_Skip3:
+Fat_CreateDirEntry_Skip3:
 	ld	(xiz+51), l
-SeqByteBlock_PathNormalize_Helper4_Loop2:
+Fat_CreateDirEntry_Loop2:
 	ldw (xiz+42), 0
 	ldw (xiz+46), 0
 	ld	(xiz+50), 0
@@ -5870,7 +5870,7 @@ SeqByteBlock_PathNormalize_Skip8:
 	inc	1, hl
 	ld	xwa, 32
 	add	(xsp+10), xwa
-SeqByteBlock_PathNormalize_Helper4_Join:
+Fat_CreateDirEntry_Join:
 	ldw	wa, 16
 	cpw	(xsp+4), 16
 	jr	gt, SeqByteBlock_PathNormalize_Skip9
@@ -5885,11 +5885,11 @@ SeqByteBlock_PathNormalize_Skip9:
 	ld	xbc, 1:i3
 	add	(xwa), xbc
 	cpw	(xsp+4), 0
-	jrl	ge, SeqByteBlock_PathNormalize_Helper4_Loop
-SeqByteBlock_PathNormalize_Helper4_Skip4:
+	jrl	ge, Fat_CreateDirEntry_Loop
+Fat_CreateDirEntry_Skip4:
 	ldw	hl, 16
 	jrl	SeqByteBlock_PathNormalize_Epilogue2
-SeqByteBlock_PathNormalize_Helper4_Skip5:
+Fat_CreateDirEntry_Skip5:
 	ld	wa, (xiz+69)
 	ld	(xiz+48), wa
 	lda	xwa, (xsp+42)
@@ -5923,7 +5923,7 @@ SeqByteBlock_PathNormalize_Loop8:
 	add	xwa, xhl
 	ld	(xiz+26), xwa
 	ldw	(xsp+4), 0
-	jr	SeqByteBlock_PathNormalize_Helper4_Join2
+	jr	Fat_CreateDirEntry_Join2
 SeqByteBlock_PathNormalize_Loop9:
 	pushw	24
 	ld	xwa, 0:i3
@@ -5936,42 +5936,42 @@ SeqByteBlock_PathNormalize_Loop9:
 	ld	(xsp+18), xhl
 	ld	xwa, (xsp+18)
 	or	xwa, xwa
-	jr	nz, SeqByteBlock_PathNormalize_Helper4_Skip6
+	jr	nz, Fat_CreateDirEntry_Skip6
 	ld	hl, (xiz+6)
 	jrl	SeqByteBlock_PathNormalize_Epilogue2
-SeqByteBlock_PathNormalize_Helper4_Skip6:
+Fat_CreateDirEntry_Skip6:
 	ld	xwa, (xsp+18)
 	cpw	(xwa+20), 0
-	jr	z, SeqByteBlock_PathNormalize_Helper4_Skip7
+	jr	z, Fat_CreateDirEntry_Skip7
 	ld	xwa, (xsp+18)
 	ld	hl, (xwa+20)
 	jrl	SeqByteBlock_PathNormalize_Epilogue2
-SeqByteBlock_PathNormalize_Helper4_Skip7:
+Fat_CreateDirEntry_Skip7:
 	ld	xwa, (xsp+18)
 	lda	xwa, (xwa+26)
 	ld	(xsp+10), xwa
 	ld	(xiz+51), 0
 	cp	(xiz+51), 16
-	jr	nc, SeqByteBlock_PathNormalize_Helper4_Skip8
-SeqByteBlock_PathNormalize_Helper4_Loop3:
+	jr	nc, Fat_CreateDirEntry_Skip8
+Fat_CreateDirEntry_Loop3:
 	ld	xwa, (xsp+10)
 	cp	(xwa), 229
-	jrl	z, SeqByteBlock_PathNormalize_Helper4_Loop2
+	jrl	z, Fat_CreateDirEntry_Loop2
 	ld	xwa, (xsp+10)
 	cp	(xwa), 0
-	jrl	z, SeqByteBlock_PathNormalize_Helper4_Loop2
+	jrl	z, Fat_CreateDirEntry_Loop2
 	incm8	1, (xiz+51)
 	ld	xwa, 32
 	add	(xsp+10), xwa
 	cp	(xiz+51), 16
-	jr	c, SeqByteBlock_PathNormalize_Helper4_Loop3
-SeqByteBlock_PathNormalize_Helper4_Skip8:
+	jr	c, Fat_CreateDirEntry_Loop3
+Fat_CreateDirEntry_Skip8:
 	ld	xwa, (xsp+18)
 	andmi8	(xwa+22), 231
 	ld	xwa, 1:i3
 	add	(xiz+26), xwa
 	incw	1, (xsp+4)
-SeqByteBlock_PathNormalize_Helper4_Join2:
+Fat_CreateDirEntry_Join2:
 	ld	xwa, (xsp+6)
 	ld	xwa, (xwa+32)
 	cp	(xsp+4), wa
@@ -6723,13 +6723,13 @@ SeqByteBlock_PathNormalize_Skip19:
 	ld	xwa, (xsp+16)
 	ld	wa, (xwa+46)
 	cp	wa, (xsp+4)
-	jr	nz, SeqByteBlock_PathNormalize_Helper7_Skip2
+	jr	nz, Fat_MapFilePosToSector_Skip2
 	ld	xwa, (xsp+16)
 	cpw	(xwa+42), 0
-	jr	nz, SeqByteBlock_PathNormalize_Helper7_Skip
+	jr	nz, Fat_MapFilePosToSector_Skip
 	ld	xwa, (xsp+16)
 	bitm	1, (xwa+3)
-	jr	z, SeqByteBlock_PathNormalize_Helper7_Skip
+	jr	z, Fat_MapFilePosToSector_Skip
 	pushm	(xsp+20)
 	pushw	0
 	ld	xwa, (xsp+20)
@@ -6738,29 +6738,29 @@ SeqByteBlock_PathNormalize_Skip19:
 	inc	8, xsp
 	ld	wa, hl
 	cp	wa, 0:i3
-	jrl	z, SeqByteBlock_PathNormalize_Helper7_Join
+	jrl	z, Fat_MapFilePosToSector_Join
 	jrl	SeqByteBlock_PathNormalize_Epilogue6
-SeqByteBlock_PathNormalize_Helper7_Skip:
+Fat_MapFilePosToSector_Skip:
 	ld	xwa, (xsp+16)
 	cpw	(xwa+44), 0
-	jrl	nz, SeqByteBlock_PathNormalize_Helper7_Join
+	jrl	nz, Fat_MapFilePosToSector_Join
 	ld	xwa, (xsp+16)
 	push	xwa
 	calr	Fat_CountContiguousClusters
 	inc	4, xsp
-	jrl	SeqByteBlock_PathNormalize_Helper7_Join
-SeqByteBlock_PathNormalize_Helper7_Skip2:
+	jrl	Fat_MapFilePosToSector_Join
+Fat_MapFilePosToSector_Skip2:
 	ld	xwa, (xsp+16)
 	ld	wa, (xwa+46)
 	cp	wa, (xsp+4)
-	jr	ule, SeqByteBlock_PathNormalize_Helper7_Skip3
+	jr	ule, Fat_MapFilePosToSector_Skip3
 	ld	xwa, (xsp+16)
 	ld	xbc, xwa
 	ld	wa, (xwa+69)
 	ld	(xbc+42), wa
 	ld	xwa, (xsp+16)
 	ldw (xwa+46), 0
-SeqByteBlock_PathNormalize_Helper7_Skip3:
+Fat_MapFilePosToSector_Skip3:
 	ld	xwa, (xsp+16)
 	ld	hl, (xwa+42)
 	ld	xwa, (xsp+16)
@@ -6777,18 +6777,18 @@ SeqByteBlock_PathNormalize_Loop12:
 	ld	wa, (xwa+36)
 	dec	8, wa
 	cp	wa, hl
-	jr	nz, SeqByteBlock_PathNormalize_Helper7_Skip4
+	jr	nz, Fat_MapFilePosToSector_Skip4
 	ldw	hl, 39
 	jrl	SeqByteBlock_PathNormalize_Epilogue6
-SeqByteBlock_PathNormalize_Helper7_Skip4:
+Fat_MapFilePosToSector_Skip4:
 	ld	xwa, (xsp+8)
 	ld	wa, (xwa+36)
 	dec	8, wa
 	cp	hl, wa
-	jr	ule, SeqByteBlock_PathNormalize_Helper7_Skip6
+	jr	ule, Fat_MapFilePosToSector_Skip6
 	ld	xwa, (xsp+16)
 	bitm	1, (xwa+3)
-	jr	z, SeqByteBlock_PathNormalize_Helper7_Skip5
+	jr	z, Fat_MapFilePosToSector_Skip5
 	pushm	(xsp+20)
 	pushw	0
 	ld	xwa, (xsp+20)
@@ -6797,12 +6797,12 @@ SeqByteBlock_PathNormalize_Helper7_Skip4:
 	inc	8, xsp
 	ld	wa, hl
 	cp	wa, 0:i3
-	jr	z, SeqByteBlock_PathNormalize_Helper7_Join
+	jr	z, Fat_MapFilePosToSector_Join
 	jr	SeqByteBlock_PathNormalize_Epilogue6
-SeqByteBlock_PathNormalize_Helper7_Skip5:
+Fat_MapFilePosToSector_Skip5:
 	ldw	hl, 8
 	jr	SeqByteBlock_PathNormalize_Epilogue6
-SeqByteBlock_PathNormalize_Helper7_Skip6:
+Fat_MapFilePosToSector_Skip6:
 	ld	xwa, (xsp+16)
 	ld	(xwa+42), hl
 	ld	xwa, (xsp+16)
@@ -6816,7 +6816,7 @@ SeqByteBlock_PathNormalize_Skip20:
 	push	xwa
 	calr	Fat_CountContiguousClusters
 	inc	4, xsp
-SeqByteBlock_PathNormalize_Helper7_Join:
+Fat_MapFilePosToSector_Join:
 	ld	xwa, 0:i3
 	ld	a, (xsp+6)
 	ld	xbc, xwa
@@ -8127,15 +8127,15 @@ Fat_HandleDiskIoError_Skip:
 	cp	wa, 6:i3
 	jr	z, SeqChan_ByteBlockD_Entry_Skip2
 	cp	wa, 51
-	jr	z, SeqChan_ByteBlockD_Skip
+	jr	z, Fat_HandleDiskIoError_Skip2
 	cp	wa, 53
-	jr	z, SeqChan_ByteBlockD_Skip
+	jr	z, Fat_HandleDiskIoError_Skip2
 	cp	wa, 47
 	jr	nz, SeqChan_ByteBlockD_Skip3
 	ldw (xbc), 31
 	ld	hl, 0:i3
 	jrl	SeqChan_ByteBlockD_Epilogue
-SeqChan_ByteBlockD_Skip:
+Fat_HandleDiskIoError_Skip2:
 	ld	xwa, (xiz)
 	resm	3, (xwa+2)
 	ldw	(xbc), 33
@@ -9422,11 +9422,11 @@ GetDiskFreeSpace:
 GetDiskFreeSpace_JumpTable:
 	ld	hl, 0:i3
 	jr	GetDiskFreeSpace_Epilogue
-GetDiskFreeSpace_Case2:
+GetDiskFreeSpace_On2DDDisk:
 	ld	xwa, 0xb2400
 	ld	(xiz), xwa
 	jr	FileIO_ReadFreeSpaceViaFAT
-GetDiskFreeSpace_Case3:
+GetDiskFreeSpace_On2HDDisk:
 	ld	xwa, 0x163e00
 	ld	(xiz), xwa
 	jr	FileIO_ReadFreeSpaceViaFAT

@@ -13507,7 +13507,9 @@ ProcessEventDispatch_LoadParam4:
 	ldw bc, 0xb
 	call SndParam_NotifyAndReturn
 	jrl RhythmBuf_EventDispatchLoop
-SeqPart_EmitNoteOn_Full_Case208:
+; SeqPart_EmitNoteOn_Full_ResetPartControllers: Status 0xD0: for the data pair (3, 0) resets modulation (0), pitch
+;   bend (0x2000), damper (0) and expression (127) of parts 0x10..0x13.
+SeqPart_EmitNoteOn_Full_ResetPartControllers:
 	call RhythmBuf_ReadAlternate
 	ldfr_werp HL, 0xfa
 	ldto_werp WA, 0xfa
@@ -13572,7 +13574,9 @@ ProcessEventDispatch_LoadIter:
 	cp iz, 0x14
 	jr lt, ProcessEventDispatch_LoadIter
 	jrl RhythmBuf_EventDispatchLoop
-SeqPart_EmitNoteOn_Full_Case212:	; cases 212, 213, 214, 215, 216
+; SeqPart_EmitNoteOn_Full_SetPartController: Status 0xD4..0xD8: channel 4..8 -> part 0x10..0x14 (Rhythm_EventMapA);
+;   data kind 1 modulation, 2 pitch bend, 3 damper, 4 pan, 5 expression, 0x10 Audio_InitDispatchReturn.
+SeqPart_EmitNoteOn_Full_SetPartController:	; cases 212, 213, 214, 215, 216
 	call RhythmBuf_ReadAlternate
 	ldfr_werp HL, 0xfa
 	ldto_werp WA, 0xfa
@@ -13884,11 +13888,11 @@ SeqPerformance_EventDispatch:
 SeqEvtBuf_NoteDispatch_PitchBend:
 	ld	wa, 0:i3
 	cp	iz, 64
-	jr	lt, ProcessEventDispatch_Prologue_Skip
+	jr	lt, SeqEvtBuf_NoteDispatch_PitchBend_Skip
 	ld	wa, iz
 	add	wa, wa
 	sub	wa, 128
-ProcessEventDispatch_Prologue_Skip:
+SeqEvtBuf_NoteDispatch_PitchBend_Skip:
 	ld	bc, iz
 	sla	bc, 7
 	or	bc, wa
@@ -17555,7 +17559,9 @@ HdaeRom_TableEntry1:
 	ret
 SwbtB2_Code6B_NopListener:
 	ret
-HdaeRom_TableEntry2:
+; PanelTag72_ApplyPartMix: SwbtWr listener of panel record 0x72: +3 is sent to parts 0x17 and 0x18 as CC 7 (volume; 0
+;   when bit 7 is set), +7 as CC 91 (reverb send). Basis: callers + body; nothing to do with the HDAE ROM.
+PanelTag72_ApplyPartMix:
 	dec	4, xsp
 	ld	(xsp+0:8), (SWBTWR_EVENT_TYPE)
 	ld	(xsp+0x1), (SWBTWR_PAYLOAD_1)
@@ -17564,9 +17570,9 @@ HdaeRom_TableEntry2:
 	ld	a, (xsp+0x1)
 	extz	wa
 	cp	wa, 0:i3
-	jrl	mi, HdaeRom_TableEntry2_Epilogue
+	jrl	mi, PanelTag72_ApplyPartMix_ReverbSend_Epilogue
 	cp	wa, 7:i3
-	jrl	gt, HdaeRom_TableEntry2_Epilogue
+	jrl	gt, PanelTag72_ApplyPartMix_ReverbSend_Epilogue
 	add	wa, wa
 	lda	xix, (HdaeRomEntry2_SwitchOffsets:24)
 	ld	wa, (xix+wa)
@@ -17575,14 +17581,14 @@ HdaeRom_TableEntry2:
 HdaeRom_TableEntry2_Code:
 	ld	a, (xsp+0x3)
 	and	a, 255
-	jr	z, HdaeRom_TableEntry2_Epilogue
+	jr	z, PanelTag72_ApplyPartMix_ReverbSend_Epilogue
 	lda	xbc, (xsp+0x2)
 	ld	a, 0:opc
 	bitm	7, (xsp+0x2)
-	jr	nz, HdaeRom_TableEntry2_Skip
+	jr	nz, HdaeRom_TableEntry2_Code_Skip
 	ld	a, (xsp+0x2)
 	res	7, a
-HdaeRom_TableEntry2_Skip:
+HdaeRom_TableEntry2_Code_Skip:
 	ld	(xbc), a
 	ld	a, (xsp+0x2)
 	extz	wa
@@ -17596,12 +17602,13 @@ HdaeRom_TableEntry2_Skip:
 	ldw	wa, 24
 	ld	bc, 7:i3
 	calr	MIDI_SendControlChange
-	jr	HdaeRom_TableEntry2_Epilogue
-HdaeRom_TableEntry2_Case7:
+	jr	PanelTag72_ApplyPartMix_ReverbSend_Epilogue
+; PanelTag72_ApplyPartMix_ReverbSend: Payload +7: sent to parts 0x17 and 0x18 as CC 91 (reverb send).
+PanelTag72_ApplyPartMix_ReverbSend:
 	ld	a, (xsp+0x3)
 	res	7, a
 	cp	a, 0:i3
-	jr	z, HdaeRom_TableEntry2_Epilogue
+	jr	z, PanelTag72_ApplyPartMix_ReverbSend_Epilogue
 	ld	a, (xsp+0x2)
 	res	7, a
 	extz	wa
@@ -17616,7 +17623,7 @@ HdaeRom_TableEntry2_Case7:
 	ldw	wa, 24
 	ldw	bc, 91
 	calr	MIDI_SendControlChange
-HdaeRom_TableEntry2_Epilogue:
+PanelTag72_ApplyPartMix_ReverbSend_Epilogue:
 	inc	4, xsp
 	ret
 	ret
@@ -17819,9 +17826,9 @@ SwbtB2_Code9A_Listener:
 	ld	(xsp+0x3), (SWBTWR_PAYLOAD_3)
 	ld	a, (xsp+0x1)
 	cp	a, 19
-	jr	ugt, HdaeRom_AltCheckResult_Epilogue2
+	jr	ugt, SwbtB2_Code9A_Listener_Epilogue2
 	cp	a, 4:i3
-	jr	c, HdaeRom_AltCheckResult_Epilogue2
+	jr	c, SwbtB2_Code9A_Listener_Epilogue2
 	ld	a, (xsp+0x1)
 	dec	4, a
 	extz	wa
@@ -17834,12 +17841,12 @@ SwbtB2_Code9A_Listener:
 	ld	e, (xbc+wa)
 	ld	a, e
 	cp	a, 1:i3
-	jr	z, HdaeRom_AltCheckResult_Skip
+	jr	z, SwbtB2_Code9A_Listener_Skip
 	cp	a, 2:i3
-	jr	z, HdaeRom_AltCheckResult_Skip
+	jr	z, SwbtB2_Code9A_Listener_Skip
 	cp	a, 0:i3
-	jr	nz, HdaeRom_AltCheckResult_Epilogue2
-HdaeRom_AltCheckResult_Skip:
+	jr	nz, SwbtB2_Code9A_Listener_Epilogue2
+SwbtB2_Code9A_Listener_Skip:
 	extz	de
 	ld	a, (xsp+0x3)
 	and	a, (xsp+0x2)
@@ -17849,7 +17856,7 @@ HdaeRom_AltCheckResult_Skip:
 	ld	de, bc
 	ldw	bc, 145
 	calr	MIDI_SendControlChange
-HdaeRom_AltCheckResult_Epilogue2:
+SwbtB2_Code9A_Listener_Epilogue2:
 	inc	4, xsp
 	ret
 HdaeRom_AltTableEntry0:
@@ -18050,7 +18057,7 @@ HdaeRom_AltTableEntry9_Epilogue:
 	ret
 ; SndParam_ApplyEventField: Applies the 4-byte event at XWA with its byte 3 temporarily set to C:
 ;   SndParam_ResolveWidget looks it up; if SndParam_DecodeMidiAddr decodes the result, SndPart_SetParam, else
-;   SendEpilogue_Data; byte 3 is restored. Basis: callers + body -- the UIState_ProcessKeyEvent cases copy the SwbtWr
+;   SndParam_ApplySystemParam; byte 3 is restored. Basis: callers + body -- the UIState_ProcessKeyEvent cases copy the SwbtWr
 ;   event to the stack and call this once per masked field of byte 3.
 SndParam_ApplyEventField:
 	lda	xsp, (xsp-12)
@@ -18066,7 +18073,7 @@ SndParam_ApplyEventField:
 	ld	xwa, xiz
 	call	SndParam_ResolveWidget
 	cp	hl, 0xffff
-	jr	z, HdaeRom_AltTableEntry9_Join
+	jr	z, SndParam_ApplyEventField_Join
 	lda	xwa, (xsp+12)
 	ld	xhl, xwa
 	lda	xwa, (xsp+8)
@@ -18076,17 +18083,17 @@ SndParam_ApplyEventField:
 	ld	xwa, xhl
 	call	SndParam_DecodeMidiAddr
 	cp	hl, 0xffff
-	jr	z, HdaeRom_AltTableEntry9_Skip
+	jr	z, SndParam_ApplyEventField_Skip
 	ld	wa, (xsp+8)
 	ld	bc, (xsp+6)
 	ld	de, (xsp+10)
 	calr	SndPart_SetParam
-	jr	HdaeRom_AltTableEntry9_Join
-HdaeRom_AltTableEntry9_Skip:
+	jr	SndParam_ApplyEventField_Join
+SndParam_ApplyEventField_Skip:
 	ld	xwa, (xsp+12)
 	ld	bc, (xsp+10)
-	calr	SendEpilogue_Data
-HdaeRom_AltTableEntry9_Join:
+	calr	SndParam_ApplySystemParam
+SndParam_ApplyEventField_Join:
 	ld	a, (xsp+4)
 	ld	(xiz+3), a
 	pop	xiz
@@ -18328,7 +18335,10 @@ MIDI_SendEpilogue:
 	inc 2, xsp
 	ret
 
-SendEpilogue_Data:
+; SndParam_ApplySystemParam: Applies a non-part panel parameter: XWA = id (high byte namespace, low byte field), BC =
+;   value. Ids 0x00xx, 0x4000-0x4006, 0x4080, 0x4140-0x4142 and 0x4280-0x428E are sent now; DSP-slot ids (0x49xx,
+;   0x4Bxx-0x4Exx) are queued for Song_SendPartDataBlocks. Basis: callers + body.
+SndParam_ApplySystemParam:
 	dec	4, xsp
 	push	xiz
 	ld	iz, bc
@@ -18340,32 +18350,32 @@ SendEpilogue_Data:
 	ld	de, bc
 	ld	bc, hl
 	cp	bc, 78
-	jrl	z, SendEpilogue_Data_Skip34
+	jrl	z, SndParam_ApplySystemParam_ScaleTuneUserNote11_Skip34
 	cp	bc, 77
-	jrl	z, SendEpilogue_Data_Skip33
+	jrl	z, SndParam_ApplySystemParam_ScaleTuneUserNote11_Skip33
 	cp	bc, 76
-	jrl	z, SendEpilogue_Data_Skip32
+	jrl	z, SndParam_ApplySystemParam_ScaleTuneUserNote11_Skip32
 	cp	bc, 75
-	jrl	z, SendEpilogue_Data_Skip31
+	jrl	z, SndParam_ApplySystemParam_ScaleTuneUserNote11_Skip31
 	cp	bc, 73
-	jrl	z, SendEpilogue_Data_Skip30
+	jrl	z, SndParam_ApplySystemParam_ScaleTuneUserNote11_Skip30
 	cp	bc, 66
-	jrl	z, SendEpilogue_Data_Skip14
+	jrl	z, SndParam_ApplySystemParam_SendEqualizerOnOff_Skip14
 	cp	bc, 65
-	jrl	z, SendEpilogue_Data_Skip9
+	jrl	z, SndParam_ApplySystemParam_SendEqualizerOnOff_Skip9
 	cp	bc, 64
-	jrl	z, SendEpilogue_Data_Skip7
+	jrl	z, SndParam_ApplySystemParam_Skip7
 	cp	bc, 0:i3
-	jrl	nz, SendEpilogue_Data_Join
+	jrl	nz, SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
 	ld	wa, de
 	cp	wa, 193
-	jrl	z, SendEpilogue_Data_Skip5
+	jrl	z, SndParam_ApplySystemParam_Skip5
 	cp	wa, 192
-	jr	z, SendEpilogue_Data_Skip3
+	jr	z, SndParam_ApplySystemParam_Skip3
 	cp	wa, 3:i3
-	jr	z, SendEpilogue_Data_Skip
+	jr	z, SndParam_ApplySystemParam_Skip
 	cp	wa, 0:i3
-	jrl	nz, SendEpilogue_Data_Join
+	jrl	nz, SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
 	add	iz, 64
 	ldto_berp a, 248
 	extz	wa
@@ -18373,8 +18383,8 @@ SendEpilogue_Data:
 	ldw	wa, 80
 	ldw	bc, 130
 	calr	SeqVoice_CheckAndRet_Prologue
-	jrl	SendEpilogue_Data_Join
-SendEpilogue_Data_Skip:
+	jrl	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+SndParam_ApplySystemParam_Skip:
 	dec	5, iz
 	ldto_berp a, 248
 	extz	wa
@@ -18384,18 +18394,18 @@ SendEpilogue_Data_Skip:
 	calr	SeqVoice_CheckAndRet_Prologue
 	ldto_berp a, 248
 	cp a, (59842:16)
-	jrl z, SendEpilogue_Data_Join
+	jrl z, SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
 	ld	wa, (0xc596:16)
 	and	wa, 128
 	cp	wa, 128
-	jr	nz, SendEpilogue_Data_Skip2
+	jr	nz, SndParam_ApplySystemParam_Skip2
 	ld	wa, (0xc596:16)
 	bit	8, wa
-	jr	nz, SendEpilogue_Data_Skip2
+	jr	nz, SndParam_ApplySystemParam_Skip2
 	ldw	wa, 255
 	ld	bc, 2:i3
 	call	MidiEvent_ConfigChannel
-SendEpilogue_Data_Skip2:
+SndParam_ApplySystemParam_Skip2:
 	ldw	wa, 255
 	ldw	bc, 21
 	call	MidiEvent_ConfigChannel
@@ -18404,13 +18414,13 @@ SendEpilogue_Data_Skip2:
 	call	MidiEvent_ConfigChannel
 	ldto_berp	a, 248
 	ld	(0xe9c2:16), a
-	jrl	SendEpilogue_Data_Join
-SendEpilogue_Data_Skip3:
+	jrl	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+SndParam_ApplySystemParam_Skip3:
 	ld	wa, 1:i3
 	cp	iz, 0:i3
-	jr	nz, SendEpilogue_Data_Skip4
+	jr	nz, SndParam_ApplySystemParam_Skip4
 	ld	wa, 2:i3
-SendEpilogue_Data_Skip4:
+SndParam_ApplySystemParam_Skip4:
 	ld	iz, wa
 	ldto_berp	a, 248
 	extz	wa
@@ -18418,13 +18428,13 @@ SendEpilogue_Data_Skip4:
 	ldw	wa, 127
 	ldw	bc, 9
 	calr	SeqVoice_CheckAndRet_Prologue
-	jrl	SendEpilogue_Data_Join
-SendEpilogue_Data_Skip5:
+	jrl	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+SndParam_ApplySystemParam_Skip5:
 	ldw	wa, 127
 	cp	iz, 0:i3
-	jr	nz, SendEpilogue_Data_Skip6
+	jr	nz, SndParam_ApplySystemParam_Skip6
 	ld	wa, 0:i3
-SendEpilogue_Data_Skip6:
+SndParam_ApplySystemParam_Skip6:
 	ld	iz, wa
 	ldto_berp	a, 248
 	extz	wa
@@ -18432,17 +18442,17 @@ SendEpilogue_Data_Skip6:
 	ldw	wa, 80
 	ldw	bc, 153
 	calr	SeqVoice_CheckAndRet_Prologue
-	jrl	SendEpilogue_Data_Join
-SendEpilogue_Data_Skip7:
+	jrl	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+SndParam_ApplySystemParam_Skip7:
 	ld	wa, de
 	cp	wa, 130
-	jrl	z, SendEpilogue_Data_Join
+	jrl	z, SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
 	cp	wa, 129
-	jrl	z, SendEpilogue_Data_Join
+	jrl	z, SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
 	cp	wa, 128
-	jr	z, SendEpilogue_Data_Skip8
+	jr	z, SndParam_ApplySystemParam_SendEqualizerOnOff_Skip8
 	cp	wa, 6:i3
-	jrl	ugt, SendEpilogue_Data_Join
+	jrl	ugt, SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
 	add	wa, wa
 	lda	xix, (SendEpilogueB_SwitchOffsets:24)
 	ld	wa, (xix+wa)
@@ -18452,82 +18462,90 @@ MIDI_SendEpilogue_Code:
 	ldto_berp a, 248
 	extz	wa
 	call	SendPartDataBlock_Block
-	jrl	SendEpilogue_Data_Join
+	jrl	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
 SendEpilogue_Data_Case1:
 	ldto_berp a, 248
 	extz	wa
 	call	SendPartDataBlock_Block2
-	jrl	SendEpilogue_Data_Join
-SendEpilogue_Data_Case2:
+	jrl	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+; SndParam_ApplySystemParam_QueueReverbOnOff: Id 0x4002 (tag 0x60 +1 bit 7, reverb on/off): kept in 0xCFCA until
+;   Song_SendPartDataBlocks sends COMM packet 0x21.
+SndParam_ApplySystemParam_QueueReverbOnOff:
 	ld	(0xcfca:16), iz
-	jrl	SendEpilogue_Data_Join
-SendEpilogue_Data_Case3:
+	jrl	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+; SndParam_ApplySystemParam_QueueDigitalEffectSwitch: Id 0x4003 (tag 0x70 digital-effect record +0 bit 2, a 0/1
+;   switch): kept in 0xCFC8 until Song_SendPartDataBlocks sends COMM packet 0x23.
+SndParam_ApplySystemParam_QueueDigitalEffectSwitch:
 	ld	(0xcfc8:16), iz
-	jrl	SendEpilogue_Data_Join
-SendEpilogue_Data_Case4:
+	jrl	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+; SndParam_ApplySystemParam_QueueAcousticIllusionOnOff: Id 0x4004 (tag 0x60 +1 bit 6, acoustic-illusion on/off): kept
+;   in 0xCFCC until Song_SendPartDataBlocks sends COMM packet 0x22.
+SndParam_ApplySystemParam_QueueAcousticIllusionOnOff:
 	ld	(0xcfcc:16), iz
-	jrl	SendEpilogue_Data_Join
+	jrl	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
 SendEpilogue_Data_Case5:
 	ldto_berp	a, 248
 	extz	wa
 	call	SendPartDataBlock_Block3
-	jrl	SendEpilogue_Data_Join
-SendEpilogue_Data_Case6:
+	jrl	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+; SndParam_ApplySystemParam_SendEqualizerOnOff: Id 0x4006 (tag 0x60 +1 bit 5, equalizer on/off): sent at once as COMM
+;   packet 0x25.
+SndParam_ApplySystemParam_SendEqualizerOnOff:
 	ldto_berp	a, 248
 	extz	wa
 	call	SendPartDataBlock_Block9
-	jrl	SendEpilogue_Data_Join
-SendEpilogue_Data_Skip8:
+	jrl	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+SndParam_ApplySystemParam_SendEqualizerOnOff_Skip8:
 	ldto_berp	a, 248
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
 	ldw	bc, 133
 	calr	SeqVoice_CheckAndRet_Prologue
-	jrl	SendEpilogue_Data_Join
-SendEpilogue_Data_Skip9:
+	jrl	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+SndParam_ApplySystemParam_SendEqualizerOnOff_Skip9:
 	ld	wa, de
 	cp	wa, 66
-	jr	z, SendEpilogue_Data_Skip12
+	jr	z, SndParam_ApplySystemParam_SendEqualizerOnOff_Skip12
 	cp	wa, 65
-	jr	z, SendEpilogue_Data_Skip10
+	jr	z, SndParam_ApplySystemParam_SendEqualizerOnOff_Skip10
 	cp	wa, 64
-	jrl	nz, SendEpilogue_Data_Join
+	jrl	nz, SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
 	ld	(0xcfce:16), iz
-	jrl	SendEpilogue_Data_Join
-SendEpilogue_Data_Skip10:
+	jrl	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+SndParam_ApplySystemParam_SendEqualizerOnOff_Skip10:
 	ld	xwa, 0x4142
 	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
-	jr	nz, SendEpilogue_Data_Skip11
+	jr	nz, SndParam_ApplySystemParam_SendEqualizerOnOff_Skip11
 	ld	iz, 0:i3
-SendEpilogue_Data_Skip11:
+SndParam_ApplySystemParam_SendEqualizerOnOff_Skip11:
 	ldto_berp a, 248
 	extz	wa
 	call	SendPartDataBlock_Block4
-	jrl	SendEpilogue_Data_Join
-SendEpilogue_Data_Skip12:
+	jrl	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+SndParam_ApplySystemParam_SendEqualizerOnOff_Skip12:
 	ld	xwa, 0x4142
 	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
-	jr	nz, SendEpilogue_Data_Skip13
+	jr	nz, SndParam_ApplySystemParam_SendEqualizerOnOff_Skip13
 	ld	wa, 0:i3
 	call	SendPartDataBlock_Block4
-	jrl	SendEpilogue_Data_Join
-SendEpilogue_Data_Skip13:
+	jrl	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+SndParam_ApplySystemParam_SendEqualizerOnOff_Skip13:
 	ld	xwa, 0x4141
 	call	SndParam_LookupReadOnly
 	ld	a, l
 	extz	wa
 	call	SendPartDataBlock_Block4
-	jrl	SendEpilogue_Data_Join
-SendEpilogue_Data_Skip14:
+	jrl	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+SndParam_ApplySystemParam_SendEqualizerOnOff_Skip14:
 	ld	wa, de
 	sub	wa, 128
 	cp	wa, 0:i3
-	jrl	c, SendEpilogue_Data_Join
+	jrl	c, SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
 	cp	wa, 14
-	jrl	ugt, SendEpilogue_Data_Join
+	jrl	ugt, SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
 	add	wa, wa
 	lda	xix, (SendEpilogueA_SwitchOffsets:24)
 	ld	wa, (xix+wa)
@@ -18536,9 +18554,9 @@ SendEpilogue_Data_Skip14:
 MIDI_SendEpilogue_Code_2:
 	ldw	wa, 127
 	cp	iz, 0:i3
-	jr	nz, SendEpilogue_Data_Skip15
+	jr	nz, MIDI_SendEpilogue_Code_2_Skip15
 	ld	wa, 0:i3
-SendEpilogue_Data_Skip15:
+MIDI_SendEpilogue_Code_2_Skip15:
 	ld	iz, wa
 	ldto_berp	a, 248
 	extz	wa
@@ -18546,11 +18564,13 @@ SendEpilogue_Data_Skip15:
 	ldw	wa, 80
 	ldw	bc, 177
 	calr	SeqVoice_CheckAndRet_Prologue
-	jrl	SendEpilogue_Data_Join
-SendEpilogue_Data_Switch2_Case129:
+	jrl	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+; SndParam_ApplySystemParam_ScaleTuneType: Id 0x4281 (record 0x92 +0, scale-tune type): sends F0 50 86 <mode> and,
+;   unless the mode's high byte is set (types 64-66), the type's 12 offsets rotated by the key to F0 50 A4..AF.
+SndParam_ApplySystemParam_ScaleTuneType:
 	ldto_berp	a, 248
 	extz	wa
-	calr	SendEpilogue_Data_Helper
+	calr	ScaleTune_TypeToModeCode
 	ld qiz, hl
 	ld de, qiz
 	ld	d, 0:opc
@@ -18559,15 +18579,15 @@ SendEpilogue_Data_Switch2_Case129:
 	calr	SeqVoice_CheckAndRet_Prologue
 	ld wa, qiz
 	and wa, 65280
-	jrl	nz, SendEpilogue_Data_Join
+	jrl	nz, SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
 	ldto_berp	a, 248
 	extz	wa
-	calr	SeqVoice_CheckAndRet_Data
+	calr	ScaleTune_TypeToOffsetTable
 	ld	(xsp+4), xhl
 	ld	iz, 0:i3
 	cp	iz, 12
-	jrl	ge, SendEpilogue_Data_Join
-SendEpilogue_Data_Loop:
+	jrl	ge, SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+SndParam_ApplySystemParam_ScaleTuneType_Loop:
 	ld	a, (0xfd1d:16)
 	and	a, 15
 	ld	c, a
@@ -18575,9 +18595,9 @@ SendEpilogue_Data_Loop:
 	add	bc, iz
 	ld	wa, bc
 	cp	wa, 12
-	jr	lt, SendEpilogue_Data_Skip16
+	jr	lt, SndParam_ApplySystemParam_ScaleTuneType_Skip16
 	sub	bc, 12
-SendEpilogue_Data_Skip16:
+SndParam_ApplySystemParam_ScaleTuneType_Skip16:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
@@ -18589,28 +18609,30 @@ SendEpilogue_Data_Skip16:
 	calr	SeqVoice_CheckAndRet_Prologue
 	inc	1, iz
 	cp	iz, 12
-	jr	lt, SendEpilogue_Data_Loop
-	jrl	SendEpilogue_Data_Join
-SendEpilogue_Data_Switch2_Case130:
+	jr	lt, SndParam_ApplySystemParam_ScaleTuneType_Loop
+	jrl	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+; SndParam_ApplySystemParam_ScaleTuneKey: Id 0x4282 (record 0x92 +1 low nibble, scale key): re-sends the current
+;   type's 12 offsets rotated to the new key.
+SndParam_ApplySystemParam_ScaleTuneKey:
 	ld	xwa, 0x4281
 	call	SndParam_LookupReadOnly
 	ld	a, l
 	extz	wa
-	calr	SendEpilogue_Data_Helper
+	calr	ScaleTune_TypeToModeCode
 	ld qiz, hl
 	ld wa, qiz
 	and wa, 65280
-	jrl	nz, SendEpilogue_Data_Join
+	jrl	nz, SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
 	ld	xwa, 0x4281
 	call	SndParam_LookupReadOnly
 	ld	a, l
 	extz	wa
-	calr	SeqVoice_CheckAndRet_Data
+	calr	ScaleTune_TypeToOffsetTable
 	ld	(xsp+4), xhl
 	ld	iz, 0:i3
 	cp	iz, 12
-	jrl	ge, SendEpilogue_Data_Join
-SendEpilogue_Data_Loop2:
+	jrl	ge, SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+SndParam_ApplySystemParam_ScaleTuneKey_Loop2:
 	ld	a, (0xfd1d:16)
 	and	a, 15
 	ld	c, a
@@ -18618,9 +18640,9 @@ SendEpilogue_Data_Loop2:
 	add	bc, iz
 	ld	wa, bc
 	cp	wa, 12
-	jr	lt, SendEpilogue_Data_Skip17
+	jr	lt, SndParam_ApplySystemParam_ScaleTuneKey_Skip17
 	sub	bc, 12
-SendEpilogue_Data_Skip17:
+SndParam_ApplySystemParam_ScaleTuneKey_Skip17:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
@@ -18632,22 +18654,24 @@ SendEpilogue_Data_Skip17:
 	calr	SeqVoice_CheckAndRet_Prologue
 	inc	1, iz
 	cp	iz, 12
-	jr	lt, SendEpilogue_Data_Loop2
-	jrl	SendEpilogue_Data_Join
-SendEpilogue_Data_Switch2_Case131:
+	jr	lt, SndParam_ApplySystemParam_ScaleTuneKey_Loop2
+	jrl	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+; SndParam_ApplySystemParam_ScaleTuneUserNote0: Id 0x4283 (record 0x92 +2, RAM 0xFD1E): user scale-tune offset of the
+;   note 0 semitones above the key; sent only when the type is 128 (user).
+SndParam_ApplySystemParam_ScaleTuneUserNote0:
 	ld	xwa, 0x4281
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
-	jrl	nz, SendEpilogue_Data_Join
+	jrl	nz, SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
 	ld	a, (0xfd1d:16)
 	and	a, 15
 	ld	c, a
 	extz	bc
 	ld	wa, bc
 	cp	wa, 12
-	jr	lt, SendEpilogue_Data_Skip18
+	jr	lt, SndParam_ApplySystemParam_ScaleTuneUserNote0_Skip18
 	sub	bc, 12
-SendEpilogue_Data_Skip18:
+SndParam_ApplySystemParam_ScaleTuneUserNote0_Skip18:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
@@ -18656,12 +18680,14 @@ SendEpilogue_Data_Skip18:
 	ld	de, wa
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
-	jrl	SendEpilogue_Data_Join
-SendEpilogue_Data_Switch2_Case132:
+	jrl	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+; SndParam_ApplySystemParam_ScaleTuneUserNote1: Id 0x4284 (record 0x92 +3, RAM 0xFD1F): user scale-tune offset of the
+;   note 1 semitone above the key; sent only when the type is 128 (user).
+SndParam_ApplySystemParam_ScaleTuneUserNote1:
 	ld	xwa, 0x4281
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
-	jrl	nz, SendEpilogue_Data_Join
+	jrl	nz, SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
 	ld	a, (0xfd1d:16)
 	and	a, 15
 	inc	1, a
@@ -18669,9 +18695,9 @@ SendEpilogue_Data_Switch2_Case132:
 	extz	bc
 	ld	wa, bc
 	cp	wa, 12
-	jr	lt, SendEpilogue_Data_Skip19
+	jr	lt, SndParam_ApplySystemParam_ScaleTuneUserNote1_Skip19
 	sub	bc, 12
-SendEpilogue_Data_Skip19:
+SndParam_ApplySystemParam_ScaleTuneUserNote1_Skip19:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
@@ -18680,12 +18706,14 @@ SendEpilogue_Data_Skip19:
 	ld	de, wa
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
-	jrl	SendEpilogue_Data_Join
-SendEpilogue_Data_Switch2_Case133:
+	jrl	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+; SndParam_ApplySystemParam_ScaleTuneUserNote2: Id 0x4285 (record 0x92 +4, RAM 0xFD20): user scale-tune offset of the
+;   note 2 semitones above the key; sent only when the type is 128 (user).
+SndParam_ApplySystemParam_ScaleTuneUserNote2:
 	ld	xwa, 0x4281
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
-	jrl	nz, SendEpilogue_Data_Join
+	jrl	nz, SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
 	ld	a, (0xfd1d:16)
 	and	a, 15
 	inc	2, a
@@ -18693,9 +18721,9 @@ SendEpilogue_Data_Switch2_Case133:
 	extz	bc
 	ld	wa, bc
 	cp	wa, 12
-	jr	lt, SendEpilogue_Data_Skip20
+	jr	lt, SndParam_ApplySystemParam_ScaleTuneUserNote2_Skip20
 	sub	bc, 12
-SendEpilogue_Data_Skip20:
+SndParam_ApplySystemParam_ScaleTuneUserNote2_Skip20:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
@@ -18704,12 +18732,14 @@ SendEpilogue_Data_Skip20:
 	ld	de, wa
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
-	jrl	SendEpilogue_Data_Join
-SendEpilogue_Data_Switch2_Case134:
+	jrl	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+; SndParam_ApplySystemParam_ScaleTuneUserNote3: Id 0x4286 (record 0x92 +5, RAM 0xFD21): user scale-tune offset of the
+;   note 3 semitones above the key; sent only when the type is 128 (user).
+SndParam_ApplySystemParam_ScaleTuneUserNote3:
 	ld	xwa, 0x4281
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
-	jrl	nz, SendEpilogue_Data_Join
+	jrl	nz, SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
 	ld	a, (0xfd1d:16)
 	and	a, 15
 	inc	3, a
@@ -18717,9 +18747,9 @@ SendEpilogue_Data_Switch2_Case134:
 	extz	bc
 	ld	wa, bc
 	cp	wa, 12
-	jr	lt, SendEpilogue_Data_Skip21
+	jr	lt, SndParam_ApplySystemParam_ScaleTuneUserNote3_Skip21
 	sub	bc, 12
-SendEpilogue_Data_Skip21:
+SndParam_ApplySystemParam_ScaleTuneUserNote3_Skip21:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
@@ -18728,12 +18758,14 @@ SendEpilogue_Data_Skip21:
 	ld	de, wa
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
-	jrl	SendEpilogue_Data_Join
-SendEpilogue_Data_Switch2_Case135:
+	jrl	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+; SndParam_ApplySystemParam_ScaleTuneUserNote4: Id 0x4287 (record 0x92 +6, RAM 0xFD22): user scale-tune offset of the
+;   note 4 semitones above the key; sent only when the type is 128 (user).
+SndParam_ApplySystemParam_ScaleTuneUserNote4:
 	ld	xwa, 0x4281
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
-	jrl	nz, SendEpilogue_Data_Join
+	jrl	nz, SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
 	ld	a, (0xfd1d:16)
 	and	a, 15
 	inc	4, a
@@ -18741,9 +18773,9 @@ SendEpilogue_Data_Switch2_Case135:
 	extz	bc
 	ld	wa, bc
 	cp	wa, 12
-	jr	lt, SendEpilogue_Data_Skip22
+	jr	lt, SndParam_ApplySystemParam_ScaleTuneUserNote4_Skip22
 	sub	bc, 12
-SendEpilogue_Data_Skip22:
+SndParam_ApplySystemParam_ScaleTuneUserNote4_Skip22:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
@@ -18752,12 +18784,14 @@ SendEpilogue_Data_Skip22:
 	ld	de, wa
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
-	jrl	SendEpilogue_Data_Join
-SendEpilogue_Data_Switch2_Case136:
+	jrl	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+; SndParam_ApplySystemParam_ScaleTuneUserNote5: Id 0x4288 (record 0x92 +7, RAM 0xFD23): user scale-tune offset of the
+;   note 5 semitones above the key; sent only when the type is 128 (user).
+SndParam_ApplySystemParam_ScaleTuneUserNote5:
 	ld	xwa, 0x4281
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
-	jrl	nz, SendEpilogue_Data_Join
+	jrl	nz, SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
 	ld	a, (0xfd1d:16)
 	and	a, 15
 	inc	5, a
@@ -18765,9 +18799,9 @@ SendEpilogue_Data_Switch2_Case136:
 	extz	bc
 	ld	wa, bc
 	cp	wa, 12
-	jr	lt, SendEpilogue_Data_Skip23
+	jr	lt, SndParam_ApplySystemParam_ScaleTuneUserNote5_Skip23
 	sub	bc, 12
-SendEpilogue_Data_Skip23:
+SndParam_ApplySystemParam_ScaleTuneUserNote5_Skip23:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
@@ -18776,12 +18810,14 @@ SendEpilogue_Data_Skip23:
 	ld	de, wa
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
-	jrl	SendEpilogue_Data_Join
-SendEpilogue_Data_Switch2_Case137:
+	jrl	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+; SndParam_ApplySystemParam_ScaleTuneUserNote6: Id 0x4289 (record 0x92 +8, RAM 0xFD24): user scale-tune offset of the
+;   note 6 semitones above the key; sent only when the type is 128 (user).
+SndParam_ApplySystemParam_ScaleTuneUserNote6:
 	ld	xwa, 0x4281
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
-	jrl	nz, SendEpilogue_Data_Join
+	jrl	nz, SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
 	ld	a, (0xfd1d:16)
 	and	a, 15
 	inc	6, a
@@ -18789,9 +18825,9 @@ SendEpilogue_Data_Switch2_Case137:
 	extz	bc
 	ld	wa, bc
 	cp	wa, 12
-	jr	lt, SendEpilogue_Data_Skip24
+	jr	lt, SndParam_ApplySystemParam_ScaleTuneUserNote6_Skip24
 	sub	bc, 12
-SendEpilogue_Data_Skip24:
+SndParam_ApplySystemParam_ScaleTuneUserNote6_Skip24:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
@@ -18800,12 +18836,14 @@ SendEpilogue_Data_Skip24:
 	ld	de, wa
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
-	jrl	SendEpilogue_Data_Join
-SendEpilogue_Data_Switch2_Case138:
+	jrl	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+; SndParam_ApplySystemParam_ScaleTuneUserNote7: Id 0x428A (record 0x92 +9, RAM 0xFD25): user scale-tune offset of the
+;   note 7 semitones above the key; sent only when the type is 128 (user).
+SndParam_ApplySystemParam_ScaleTuneUserNote7:
 	ld	xwa, 0x4281
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
-	jrl	nz, SendEpilogue_Data_Join
+	jrl	nz, SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
 	ld	a, (0xfd1d:16)
 	and	a, 15
 	inc	7, a
@@ -18813,9 +18851,9 @@ SendEpilogue_Data_Switch2_Case138:
 	extz	bc
 	ld	wa, bc
 	cp	wa, 12
-	jr	lt, SendEpilogue_Data_Skip25
+	jr	lt, SndParam_ApplySystemParam_ScaleTuneUserNote7_Skip25
 	sub	bc, 12
-SendEpilogue_Data_Skip25:
+SndParam_ApplySystemParam_ScaleTuneUserNote7_Skip25:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
@@ -18824,12 +18862,14 @@ SendEpilogue_Data_Skip25:
 	ld	de, wa
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
-	jrl	SendEpilogue_Data_Join
-SendEpilogue_Data_Switch2_Case139:
+	jrl	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+; SndParam_ApplySystemParam_ScaleTuneUserNote8: Id 0x428B (record 0x92 +10, RAM 0xFD26): user scale-tune offset of the
+;   note 8 semitones above the key; sent only when the type is 128 (user).
+SndParam_ApplySystemParam_ScaleTuneUserNote8:
 	ld	xwa, 0x4281
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
-	jrl	nz, SendEpilogue_Data_Join
+	jrl	nz, SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
 	ld	a, (0xfd1d:16)
 	and	a, 15
 	inc	8, a
@@ -18837,9 +18877,9 @@ SendEpilogue_Data_Switch2_Case139:
 	extz	bc
 	ld	wa, bc
 	cp	wa, 12
-	jr	lt, SendEpilogue_Data_Skip26
+	jr	lt, SndParam_ApplySystemParam_ScaleTuneUserNote8_Skip26
 	sub	bc, 12
-SendEpilogue_Data_Skip26:
+SndParam_ApplySystemParam_ScaleTuneUserNote8_Skip26:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
@@ -18848,12 +18888,14 @@ SendEpilogue_Data_Skip26:
 	ld	de, wa
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
-	jrl	SendEpilogue_Data_Join
-SendEpilogue_Data_Switch2_Case140:
+	jrl	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+; SndParam_ApplySystemParam_ScaleTuneUserNote9: Id 0x428C (record 0x92 +11, RAM 0xFD27): user scale-tune offset of the
+;   note 9 semitones above the key; sent only when the type is 128 (user).
+SndParam_ApplySystemParam_ScaleTuneUserNote9:
 	ld	xwa, 0x4281
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
-	jrl	nz, SendEpilogue_Data_Join
+	jrl	nz, SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
 	ld	a, (0xfd1d:16)
 	and	a, 15
 	add	a, 9
@@ -18861,9 +18903,9 @@ SendEpilogue_Data_Switch2_Case140:
 	extz	bc
 	ld	wa, bc
 	cp	wa, 12
-	jr	lt, SendEpilogue_Data_Skip27
+	jr	lt, SndParam_ApplySystemParam_ScaleTuneUserNote9_Skip27
 	sub	bc, 12
-SendEpilogue_Data_Skip27:
+SndParam_ApplySystemParam_ScaleTuneUserNote9_Skip27:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
@@ -18872,12 +18914,14 @@ SendEpilogue_Data_Skip27:
 	ld	de, wa
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
-	jrl	SendEpilogue_Data_Join
-SendEpilogue_Data_Switch2_Case141:
+	jrl	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+; SndParam_ApplySystemParam_ScaleTuneUserNote10: Id 0x428D (record 0x92 +12, RAM 0xFD28): user scale-tune offset of
+;   the note 10 semitones above the key; sent only when the type is 128 (user).
+SndParam_ApplySystemParam_ScaleTuneUserNote10:
 	ld	xwa, 0x4281
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
-	jrl	nz, SendEpilogue_Data_Join
+	jrl	nz, SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
 	ld	a, (0xfd1d:16)
 	and	a, 15
 	add	a, 10
@@ -18885,9 +18929,9 @@ SendEpilogue_Data_Switch2_Case141:
 	extz	bc
 	ld	wa, bc
 	cp	wa, 12
-	jr	lt, SendEpilogue_Data_Skip28
+	jr	lt, SndParam_ApplySystemParam_ScaleTuneUserNote10_Skip28
 	sub	bc, 12
-SendEpilogue_Data_Skip28:
+SndParam_ApplySystemParam_ScaleTuneUserNote10_Skip28:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
@@ -18896,12 +18940,14 @@ SendEpilogue_Data_Skip28:
 	ld	de, wa
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
-	jr	SendEpilogue_Data_Join
-SendEpilogue_Data_Switch2_Case142:
+	jr	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+; SndParam_ApplySystemParam_ScaleTuneUserNote11: Id 0x428E (record 0x92 +13, RAM 0xFD29): user scale-tune offset of
+;   the note 11 semitones above the key; sent only when the type is 128 (user).
+SndParam_ApplySystemParam_ScaleTuneUserNote11:
 	ld	xwa, 0x4281
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
-	jr	nz, SendEpilogue_Data_Join
+	jr	nz, SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
 	ld	a, (0xfd1d:16)
 	and	a, 15
 	add	a, 11
@@ -18909,9 +18955,9 @@ SendEpilogue_Data_Switch2_Case142:
 	extz	bc
 	ld	wa, bc
 	cp	wa, 12
-	jr	lt, SendEpilogue_Data_Skip29
+	jr	lt, SndParam_ApplySystemParam_ScaleTuneUserNote11_Skip29
 	sub	bc, 12
-SendEpilogue_Data_Skip29:
+SndParam_ApplySystemParam_ScaleTuneUserNote11_Skip29:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
@@ -18920,22 +18966,22 @@ SendEpilogue_Data_Skip29:
 	ld	de, wa
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
-	jr	SendEpilogue_Data_Join
-SendEpilogue_Data_Skip30:
+	jr	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+SndParam_ApplySystemParam_ScaleTuneUserNote11_Skip30:
 	ld	(0xcfb4:16), xwa
-	jr	SendEpilogue_Data_Join
-SendEpilogue_Data_Skip31:
+	jr	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+SndParam_ApplySystemParam_ScaleTuneUserNote11_Skip31:
 	ld	(0xcfb8:16), xwa
-	jr	SendEpilogue_Data_Join
-SendEpilogue_Data_Skip32:
+	jr	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+SndParam_ApplySystemParam_ScaleTuneUserNote11_Skip32:
 	ld	(0xcfbc:16), xwa
-	jr	SendEpilogue_Data_Join
-SendEpilogue_Data_Skip33:
+	jr	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+SndParam_ApplySystemParam_ScaleTuneUserNote11_Skip33:
 	ld	(0xcfc0:16), xwa
-	jr	SendEpilogue_Data_Join
-SendEpilogue_Data_Skip34:
+	jr	SndParam_ApplySystemParam_ScaleTuneUserNote11_Join
+SndParam_ApplySystemParam_ScaleTuneUserNote11_Skip34:
 	ld	(0xcfc4:16), xwa
-SendEpilogue_Data_Join:
+SndParam_ApplySystemParam_ScaleTuneUserNote11_Join:
 	call	MIDI_PostSendStub
 	pop	xiz
 	inc	4, xsp
@@ -19275,159 +19321,164 @@ SeqVoice_CheckAndRet_Prologue:
 	inc 6, xsp
 	ret
 
-SeqVoice_CheckAndRet_Data:
+; ScaleTune_TypeToOffsetTable: Returns in XHL the 12-entry per-pitch-class offset table (0x80 = none) of scale-tune
+;   type A: SemitoneBias_TableA..N for the preset types, the user table in record 0x92 (RAM 0xFD1E) for 128. Basis:
+;   callers + body.
+ScaleTune_TypeToOffsetTable:
 	cp	a, 128
-	jrl	z, SeqVoice_CheckAndRet_Data_Skip8
+	jrl	z, SeqVoice_CheckAndRet_Data_Case22_Skip8
 	cp	a, 5:i3
-	jr	z, SeqVoice_CheckAndRet_Data_Skip7
+	jr	z, ScaleTune_TypeToOffsetTable_Skip7
 	cp	a, 4:i3
-	jr	z, SeqVoice_CheckAndRet_Data_Skip6
+	jr	z, ScaleTune_TypeToOffsetTable_Skip6
 	cp	a, 3:i3
-	jr	z, SeqVoice_CheckAndRet_Data_Skip5
+	jr	z, ScaleTune_TypeToOffsetTable_Skip5
 	cp	a, 66
-	jr	z, SeqVoice_CheckAndRet_Data_Skip4
+	jr	z, ScaleTune_TypeToOffsetTable_Skip4
 	cp	a, 65
-	jr	z, SeqVoice_CheckAndRet_Data_Skip3
+	jr	z, ScaleTune_TypeToOffsetTable_Skip3
 	cp	a, 64
-	jr	z, SeqVoice_CheckAndRet_Data_Skip2
+	jr	z, ScaleTune_TypeToOffsetTable_Skip2
 	cp	a, 0:i3
-	jr	z, SeqVoice_CheckAndRet_Data_Skip
+	jr	z, ScaleTune_TypeToOffsetTable_Skip
 	extz	wa
 	sub	wa, 16
 	cp	wa, 0:i3
-	jrl	lt, SeqVoice_CheckAndRet_Data_Skip9
+	jrl	lt, SeqVoice_CheckAndRet_Data_Case22_Skip9
 	cp	wa, 6:i3
-	jr	gt, SeqVoice_CheckAndRet_Data_Skip9
+	jr	gt, SeqVoice_CheckAndRet_Data_Case22_Skip9
 	add	wa, wa
 	lda	xix, (SeqVoiceSel_SwitchOffsets:24)
 	ld	wa, (xix+wa)
-	lda	xix, (SeqVoice_CheckAndRet_Data_Skip:24)
+	lda	xix, (ScaleTune_TypeToOffsetTable_Skip:24)
 	jp	t, (xix+wa)
-SeqVoice_CheckAndRet_Data_Skip:
+ScaleTune_TypeToOffsetTable_Skip:
 	lda	xhl, (SemitoneBias_TableA:24)
-	jr	SeqVoice_CheckAndRet_Data_Return
-SeqVoice_CheckAndRet_Data_Skip2:
+	jr	SeqVoice_CheckAndRet_Data_Case22_Return
+ScaleTune_TypeToOffsetTable_Skip2:
 	lda	xhl, (SemitoneBias_TableB:24)
-	jr	SeqVoice_CheckAndRet_Data_Return
-SeqVoice_CheckAndRet_Data_Skip3:
+	jr	SeqVoice_CheckAndRet_Data_Case22_Return
+ScaleTune_TypeToOffsetTable_Skip3:
 	lda	xhl, (SemitoneBias_TableC:24)
-	jr	SeqVoice_CheckAndRet_Data_Return
-SeqVoice_CheckAndRet_Data_Skip4:
+	jr	SeqVoice_CheckAndRet_Data_Case22_Return
+ScaleTune_TypeToOffsetTable_Skip4:
 	lda	xhl, (SemitoneBias_TableD:24)
-	jr	SeqVoice_CheckAndRet_Data_Return
-SeqVoice_CheckAndRet_Data_Skip5:
+	jr	SeqVoice_CheckAndRet_Data_Case22_Return
+ScaleTune_TypeToOffsetTable_Skip5:
 	lda	xhl, (SemitoneBias_TableE:24)
-	jr	SeqVoice_CheckAndRet_Data_Return
-SeqVoice_CheckAndRet_Data_Skip6:
+	jr	SeqVoice_CheckAndRet_Data_Case22_Return
+ScaleTune_TypeToOffsetTable_Skip6:
 	lda	xhl, (SemitoneBias_TableF:24)
-	jr	SeqVoice_CheckAndRet_Data_Return
-SeqVoice_CheckAndRet_Data_Skip7:
+	jr	SeqVoice_CheckAndRet_Data_Case22_Return
+ScaleTune_TypeToOffsetTable_Skip7:
 	lda	xhl, (SemitoneBias_TableG:24)
-	jr	SeqVoice_CheckAndRet_Data_Return
+	jr	SeqVoice_CheckAndRet_Data_Case22_Return
 SeqVoice_CheckAndRet_Data_Case16:
 	lda	xhl, (SemitoneBias_TableH:24)
-	jr	SeqVoice_CheckAndRet_Data_Return
+	jr	SeqVoice_CheckAndRet_Data_Case22_Return
 SeqVoice_CheckAndRet_Data_Case17:
 	lda	xhl, (SemitoneBias_TableI:24)
-	jr	SeqVoice_CheckAndRet_Data_Return
+	jr	SeqVoice_CheckAndRet_Data_Case22_Return
 SeqVoice_CheckAndRet_Data_Case18:
 	lda	xhl, (SemitoneBias_TableJ:24)
-	jr	SeqVoice_CheckAndRet_Data_Return
+	jr	SeqVoice_CheckAndRet_Data_Case22_Return
 SeqVoice_CheckAndRet_Data_Case19:
 	lda	xhl, (SemitoneBias_TableK:24)
-	jr	SeqVoice_CheckAndRet_Data_Return
+	jr	SeqVoice_CheckAndRet_Data_Case22_Return
 SeqVoice_CheckAndRet_Data_Case20:
 	lda	xhl, (SemitoneBias_TableL:24)
-	jr	SeqVoice_CheckAndRet_Data_Return
+	jr	SeqVoice_CheckAndRet_Data_Case22_Return
 SeqVoice_CheckAndRet_Data_Case21:
 	lda	xhl, (SemitoneBias_TableM:24)
-	jr	SeqVoice_CheckAndRet_Data_Return
+	jr	SeqVoice_CheckAndRet_Data_Case22_Return
 SeqVoice_CheckAndRet_Data_Case22:
 	lda	xhl, (SemitoneBias_TableN:24)
-	jr	SeqVoice_CheckAndRet_Data_Return
-SeqVoice_CheckAndRet_Data_Skip8:
+	jr	SeqVoice_CheckAndRet_Data_Case22_Return
+SeqVoice_CheckAndRet_Data_Case22_Skip8:
 	lda	xhl, (0xfd1e:16)
-	jr	SeqVoice_CheckAndRet_Data_Return
-SeqVoice_CheckAndRet_Data_Skip9:
+	jr	SeqVoice_CheckAndRet_Data_Case22_Return
+SeqVoice_CheckAndRet_Data_Case22_Skip9:
 	lda	xhl, (SemitoneBias_TableA:24)
-SeqVoice_CheckAndRet_Data_Return:
+SeqVoice_CheckAndRet_Data_Case22_Return:
 	ret
-SendEpilogue_Data_Helper:
+; ScaleTune_TypeToModeCode: Maps scale-tune type A to the mode word sent with F0 50 86: 0, 3-5, 16-22 and 128 to
+;   themselves, 64-66 to 0xFF40-0xFF42 (high byte set: no 12-note table is sent), others to 0. Basis: callers + body.
+ScaleTune_TypeToModeCode:
 	cp	a, 128
-	jrl	z, SeqVoice_CheckAndRet_Data_Skip11
+	jrl	z, SendEpilogue_Data_Helper_Case22_Skip11
 	cp	a, 5:i3
-	jr	z, SendEpilogue_Data_Helper_Skip6
+	jr	z, ScaleTune_TypeToModeCode_Skip6
 	cp	a, 4:i3
-	jr	z, SendEpilogue_Data_Helper_Skip5
+	jr	z, ScaleTune_TypeToModeCode_Skip5
 	cp	a, 3:i3
-	jr	z, SendEpilogue_Data_Helper_Skip4
+	jr	z, ScaleTune_TypeToModeCode_Skip4
 	cp	a, 66
-	jr	z, SendEpilogue_Data_Helper_Skip3
+	jr	z, ScaleTune_TypeToModeCode_Skip3
 	cp	a, 65
-	jr	z, SendEpilogue_Data_Helper_Skip2
+	jr	z, ScaleTune_TypeToModeCode_Skip2
 	cp	a, 64
-	jr	z, SendEpilogue_Data_Helper_Skip
+	jr	z, ScaleTune_TypeToModeCode_Skip
 	cp	a, 0:i3
-	jr	z, SeqVoice_CheckAndRet_Data_Skip10
+	jr	z, ScaleTune_TypeToModeCode_Skip10
 	extz	wa
 	sub	wa, 16
 	cp	wa, 0:i3
-	jr	lt, SeqVoice_CheckAndRet_Data_Skip12
+	jr	lt, SendEpilogue_Data_Helper_Case22_Skip12
 	cp	wa, 6:i3
-	jr	gt, SeqVoice_CheckAndRet_Data_Skip12
+	jr	gt, SendEpilogue_Data_Helper_Case22_Skip12
 	add	wa, wa
 	lda	xix, (SendEpilogueC_SwitchOffsets:24)
 	ld	wa, (xix+wa)
-	lda	xix, (SeqVoice_CheckAndRet_Data_Skip10:24)
+	lda	xix, (ScaleTune_TypeToModeCode_Skip10:24)
 	jp	t, (xix+wa)
-SeqVoice_CheckAndRet_Data_Skip10:
+ScaleTune_TypeToModeCode_Skip10:
 	ld	hl, 0:i3
-	jr	SeqVoice_CheckAndRet_Data_Return2
-SendEpilogue_Data_Helper_Skip:
+	jr	SendEpilogue_Data_Helper_Case22_Return2
+ScaleTune_TypeToModeCode_Skip:
 	ldw	hl, 65344
-	jr	SeqVoice_CheckAndRet_Data_Return2
-SendEpilogue_Data_Helper_Skip2:
+	jr	SendEpilogue_Data_Helper_Case22_Return2
+ScaleTune_TypeToModeCode_Skip2:
 	ldw	hl, 65345
-	jr	SeqVoice_CheckAndRet_Data_Return2
-SendEpilogue_Data_Helper_Skip3:
+	jr	SendEpilogue_Data_Helper_Case22_Return2
+ScaleTune_TypeToModeCode_Skip3:
 	ldw	hl, 65346
-	jr	SeqVoice_CheckAndRet_Data_Return2
-SendEpilogue_Data_Helper_Skip4:
+	jr	SendEpilogue_Data_Helper_Case22_Return2
+ScaleTune_TypeToModeCode_Skip4:
 	ld	hl, 3:i3
-	jr	SeqVoice_CheckAndRet_Data_Return2
-SendEpilogue_Data_Helper_Skip5:
+	jr	SendEpilogue_Data_Helper_Case22_Return2
+ScaleTune_TypeToModeCode_Skip5:
 	ld	hl, 4:i3
-	jr	SeqVoice_CheckAndRet_Data_Return2
-SendEpilogue_Data_Helper_Skip6:
+	jr	SendEpilogue_Data_Helper_Case22_Return2
+ScaleTune_TypeToModeCode_Skip6:
 	ld	hl, 5:i3
-	jr	SeqVoice_CheckAndRet_Data_Return2
+	jr	SendEpilogue_Data_Helper_Case22_Return2
 SendEpilogue_Data_Helper_Case16:
 	ldw	hl, 16
-	jr	SeqVoice_CheckAndRet_Data_Return2
+	jr	SendEpilogue_Data_Helper_Case22_Return2
 SendEpilogue_Data_Helper_Case17:
 	ldw	hl, 17
-	jr	SeqVoice_CheckAndRet_Data_Return2
+	jr	SendEpilogue_Data_Helper_Case22_Return2
 SendEpilogue_Data_Helper_Case18:
 	ldw	hl, 18
-	jr	SeqVoice_CheckAndRet_Data_Return2
+	jr	SendEpilogue_Data_Helper_Case22_Return2
 SendEpilogue_Data_Helper_Case19:
 	ldw	hl, 19
-	jr	SeqVoice_CheckAndRet_Data_Return2
+	jr	SendEpilogue_Data_Helper_Case22_Return2
 SendEpilogue_Data_Helper_Case20:
 	ldw	hl, 20
-	jr	SeqVoice_CheckAndRet_Data_Return2
+	jr	SendEpilogue_Data_Helper_Case22_Return2
 SendEpilogue_Data_Helper_Case21:
 	ldw	hl, 21
-	jr	SeqVoice_CheckAndRet_Data_Return2
+	jr	SendEpilogue_Data_Helper_Case22_Return2
 SendEpilogue_Data_Helper_Case22:
 	ldw	hl, 22
-	jr	SeqVoice_CheckAndRet_Data_Return2
-SeqVoice_CheckAndRet_Data_Skip11:
+	jr	SendEpilogue_Data_Helper_Case22_Return2
+SendEpilogue_Data_Helper_Case22_Skip11:
 	ldw	hl, 128
-	jr	SeqVoice_CheckAndRet_Data_Return2
-SeqVoice_CheckAndRet_Data_Skip12:
+	jr	SendEpilogue_Data_Helper_Case22_Return2
+SendEpilogue_Data_Helper_Case22_Skip12:
 	ld	hl, 0:i3
-SeqVoice_CheckAndRet_Data_Return2:
+SendEpilogue_Data_Helper_Case22_Return2:
 	ret
 
 MIDI_SendSysExCmd:
@@ -22357,10 +22408,10 @@ MidiSysMsg_Dispatch:
 	calr	FileIO_ReadNextRecord
 	ld	wa, hl
 	cp	wa, 0:i3
-	jr	ge, MidiSysMsg_Handler_Skip
+	jr	ge, MidiSysMsg_Dispatch_Skip
 	ldw	hl, 0xffff
 	jrl	Dispatch_Epilogue
-MidiSysMsg_Handler_Skip:
+MidiSysMsg_Dispatch_Skip:
 	cp	l, 247
 	jr	nz, MidiSysMsg_Dispatch
 	jrl	Dispatch_InitVal2
@@ -22619,15 +22670,15 @@ MidiSysMsg_SetScaledTempo:
 	ld	xiz, xhl
 	ld	xwa, 40
 	cp	xiz, 40
-	jr	ule, Dispatch_Data_Skip3
+	jr	ule, MidiSysMsg_SetScaledTempo_Skip3
 	ld	xwa, xiz
-Dispatch_Data_Skip3:
+MidiSysMsg_SetScaledTempo_Skip3:
 	ld	xiz, xwa
 	ld	xwa, 300
 	cp	xiz, 300
-	jr	nc, Dispatch_Data_Skip4
+	jr	nc, MidiSysMsg_SetScaledTempo_Skip4
 	ld	xwa, xiz
-Dispatch_Data_Skip4:
+MidiSysMsg_SetScaledTempo_Skip4:
 	ld	xiz, xwa
 	cp	xiz, 0x100
 	jr	nc, Dispatch_Data_Entry
@@ -24022,12 +24073,12 @@ StoreAndAdvance_Prologue3:
 	call	TaskBuf_ReadNextByte
 	ld	iz, hl
 	cp	iz, 0:i3
-	jr	ge, StoreAndAdvance_Prologue2_Epilogue
+	jr	ge, StoreAndAdvance_Prologue3_Epilogue
 	nop
-	jr	StoreAndAdvance_Prologue2_Epilogue2
-StoreAndAdvance_Prologue2_Epilogue:
+	jr	StoreAndAdvance_Prologue3_Epilogue2
+StoreAndAdvance_Prologue3_Epilogue:
 	nop
-StoreAndAdvance_Prologue2_Epilogue2:
+StoreAndAdvance_Prologue3_Epilogue2:
 	ld	hl, iz
 	popw	iz
 	ret
@@ -27380,7 +27431,7 @@ HdaeRom_DataDispatch:
 	cp	(xsp+440), 255
 	jrl	nz, HdaeRom_DataHandler_Skip
 	ldw	(xsp+4), 40
-HdaeRom_DataHandler_Loop2:
+HdaeRom_DataDispatch_Loop2:
 	lda	xwa, (xsp+14)
 	ld	(xsp+10), xwa
 	ld	wa, (xsp+4)
@@ -27406,9 +27457,11 @@ HdaeRom_DataHandler_Loop2:
 	ld	xbc, (xsp+10)
 	calr	SendPartDataBlock_Data
 	subw	(xsp+4), 1
-	jr	nz, HdaeRom_DataHandler_Loop2
+	jr	nz, HdaeRom_DataDispatch_Loop2
 	jrl	HdaeRom_DataHandler_Skip
-HdaeRom_DataHandler_Case1:	; cases 1, 2, 3
+; HdaeRom_DataHandler_ConvertKn2000MkaMkb: Image ids 1-3 (KN2000, MKA, MKB): converts the image's 144-byte records
+;   (base +80) to 470-byte KN5000 records (base +16).
+HdaeRom_DataHandler_ConvertKn2000MkaMkb:	; cases 1, 2, 3
 	ld	(xsp+6), xbc
 	cp	(xsp+442), 255
 	jr	nz, HdaeRom_DataHandler_Skip2
@@ -27563,7 +27616,8 @@ HdaeRom_AltHandler:
 HdaeRom_AltDispatch:
 	ld	xwa, 0x1e0000
 	calr	HdaeRom_DataDispatch_Block3
-HdaeRom_AltHandler_Case6:
+; HdaeRom_AltHandler_Kn5000Image: Image id 6 (KN5000 SOUND RAM): nothing to convert, result 0.
+HdaeRom_AltHandler_Kn5000Image:
 	ld	iz, 0:i3
 	jr	HdaeRom_AltHandler_Join
 

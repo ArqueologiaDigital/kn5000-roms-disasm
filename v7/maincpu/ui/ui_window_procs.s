@@ -607,23 +607,23 @@ WndEvt_DispatchByEventCode_NextChar:
 	ld	wa, (0x0274d8:24)
 	extz	xwa
 	cp	c, 83
-	jr	nz, WndEvt_EventCodeDispatch_Skip6
+	jr	nz, WndEvt_DispatchByEventCode_NextChar_Skip6
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	cp	(xde+1), 80
-	jr	nz, WndEvt_EventCodeDispatch_Skip6
+	jr	nz, WndEvt_DispatchByEventCode_NextChar_Skip6
 	ld	xbc, 160944
 	add	xbc, xwa
 	ld	xwa, (160996:24)
 	ld	a, (xwa)
 	ld	(xbc), a
-	jr	WndEvt_EventCodeDispatch_Join2
-WndEvt_EventCodeDispatch_Skip6:
+	jr	WndEvt_DispatchByEventCode_NextChar_Join2
+WndEvt_DispatchByEventCode_NextChar_Skip6:
 	ld	xde, 160944
 	add	xde, xwa
 	ld	(xde), c
-WndEvt_EventCodeDispatch_Join2:
+WndEvt_DispatchByEventCode_NextChar_Join2:
 	ld	xwa, 22
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 160944
@@ -643,13 +643,13 @@ WndEvt_DispatchByEventCode_InsertBlank:
 	ld	iz, (160982:24)
 	dec	1, iz
 	cp	iz, (160984:24)
-	jr	ule, WndEvt_EventCodeDispatch_Skip7
+	jr	ule, WndEvt_DispatchByEventCode_InsertBlank_Skip7
 	lda	xde, (160944:24)
 	ld	bc, iz
 	extz	xbc
 	ld	xwa, 4294967295
 	add	xbc, xwa
-WndEvt_EventCodeDispatch_Loop:
+WndEvt_DispatchByEventCode_InsertBlank_Loop:
 	ld	xhl, xbc
 	ld	xwa, 1:i3
 	add	xhl, xwa
@@ -663,8 +663,8 @@ WndEvt_EventCodeDispatch_Loop:
 	dec	1, iz
 	dec	1, xbc
 	cp	iz, (160984:24)
-	jr	ugt, WndEvt_EventCodeDispatch_Loop
-WndEvt_EventCodeDispatch_Skip7:
+	jr	ugt, WndEvt_DispatchByEventCode_InsertBlank_Loop
+WndEvt_DispatchByEventCode_InsertBlank_Skip7:
 	ld	wa, (160984:24)
 	extz	xwa
 	lda	xde, (160944:24)
@@ -684,13 +684,13 @@ WndEvt_EventCodeDispatch_Skip7:
 WndEvt_DispatchByEventCode_DeleteChar:
 	ld	iz, (160984:24)
 	cp	iz, (160982:24)
-	jr	nc, WndEvt_EventCodeDispatch_Skip8
+	jr	nc, WndEvt_DispatchByEventCode_DeleteChar_Skip8
 	lda	xde, (160944:24)
 	ld	bc, iz
 	extz	xbc
 	ld	xwa, 1:i3
 	add	xbc, xwa
-WndEvt_EventCodeDispatch_Loop2:
+WndEvt_DispatchByEventCode_DeleteChar_Loop2:
 	ld	xhl, xbc
 	ld	xwa, 4294967295
 	add	xhl, xwa
@@ -704,8 +704,8 @@ WndEvt_EventCodeDispatch_Loop2:
 	inc	1, iz
 	inc	1, xbc
 	cp	iz, (160982:24)
-	jr	c, WndEvt_EventCodeDispatch_Loop2
-WndEvt_EventCodeDispatch_Skip8:
+	jr	c, WndEvt_DispatchByEventCode_DeleteChar_Loop2
+WndEvt_DispatchByEventCode_DeleteChar_Skip8:
 	ld	wa, (160982:24)
 	dec	1, wa
 	extz	xwa
@@ -728,10 +728,10 @@ WndEvt_DispatchByEventCode_CenterName:
 	ld	iz, 0:i3
 	ld	de, (160982:24)
 	cp	de, 0:i3
-	jr	ule, WndEvt_EventCodeDispatch_Skip9
+	jr	ule, WndEvt_DispatchByEventCode_CenterName_Skip9
 	lda	xhl, (160944:24)
 	ld	a, (xbc)
-WndEvt_EventCodeDispatch_Skip8_Loop:
+WndEvt_DispatchByEventCode_CenterName_Loop:
 	ld	bc, iz
 	extz	xbc
 	ld	xix, xhl
@@ -739,12 +739,12 @@ WndEvt_EventCodeDispatch_Skip8_Loop:
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	cp	a, (xix)
-	jr	nz, WndEvt_EventCodeDispatch_Skip9
+	jr	nz, WndEvt_DispatchByEventCode_CenterName_Skip9
 	inc	1, qiz
 	inc	1, iz
 	cp	iz, de
-	jr	c, WndEvt_EventCodeDispatch_Skip8_Loop
-WndEvt_EventCodeDispatch_Skip9:
+	jr	c, WndEvt_DispatchByEventCode_CenterName_Loop
+WndEvt_DispatchByEventCode_CenterName_Skip9:
 	ld	wa, qiz
 	cp	wa, de
 	jrl	z, UIDialog_ReturnZeroJmp
@@ -753,11 +753,11 @@ WndEvt_EventCodeDispatch_Skip9:
 	ldw	(xsp+4), 0
 	ld	iz, 0:i3
 	cp	de, 0:i3
-	jr	ule, WndEvt_EventCodeDispatch_Skip10
+	jr	ule, WndEvt_DispatchByEventCode_CenterName_Skip10
 	lda	xbc, (0x0274b0:24)
 	ld	xwa, (0x0274e4:24)
 	ld	a, (xwa)
-WndEvt_EventCodeDispatch_Loop3:
+WndEvt_DispatchByEventCode_CenterName_Loop3:
 	ld	hl, de
 	sub	hl, iz
 	dec	1, hl
@@ -767,12 +767,12 @@ WndEvt_EventCodeDispatch_Loop3:
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	cp	a, (xix)
-	jr	nz, WndEvt_EventCodeDispatch_Skip10
+	jr	nz, WndEvt_DispatchByEventCode_CenterName_Skip10
 	incw	1, (xsp+4)
 	inc	1, iz
 	cp	iz, de
-	jr	c, WndEvt_EventCodeDispatch_Loop3
-WndEvt_EventCodeDispatch_Skip10:
+	jr	c, WndEvt_DispatchByEventCode_CenterName_Loop3
+WndEvt_DispatchByEventCode_CenterName_Skip10:
 	ld	wa, qiz
 	ld	(xsp+6), wa
 	ld	wa, (xsp+4)
@@ -818,11 +818,11 @@ WndEvt_EventCodeDispatch_Skip10:
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	cpw	(xsp+6), 0
-	jr	ule, WndEvt_EventCodeDispatch_Skip10_Skip
+	jr	ule, WndEvt_DispatchByEventCode_CenterName_Skip
 	lda	xde, (0x0274b0:24)
 	ld	xhl, (0x0274e4:24)
 	ld	xbc, 0:i3
-WndEvt_EventCodeDispatch_Skip10_Loop:
+WndEvt_DispatchByEventCode_CenterName_Loop2:
 	ld	xwa, xbc
 	ld	xix, xde
 	add	xix, xwa
@@ -834,10 +834,10 @@ WndEvt_EventCodeDispatch_Skip10_Loop:
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	cp	iz, (xsp+6)
-	jr	c, WndEvt_EventCodeDispatch_Skip10_Loop
+	jr	c, WndEvt_DispatchByEventCode_CenterName_Loop2
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
-WndEvt_EventCodeDispatch_Skip10_Skip:
+WndEvt_DispatchByEventCode_CenterName_Skip:
 	ld	bc, qiz
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
@@ -851,12 +851,12 @@ WndEvt_EventCodeDispatch_Skip10_Skip:
 	ld	iz, wa
 	sub	iz, bc
 	cp	iz, wa
-	jr	nc, WndEvt_EventCodeDispatch_Skip10_Skip2
+	jr	nc, WndEvt_DispatchByEventCode_CenterName_Skip2
 	lda	xde, (160944:24)
 	ld	xhl, (160996:24)
 	ld	bc, iz
 	extz	xbc
-WndEvt_EventCodeDispatch_Loop4:
+WndEvt_DispatchByEventCode_CenterName_Loop4:
 	ld	xwa, xbc
 	ld	xix, xde
 	add	xix, xwa
@@ -865,8 +865,8 @@ WndEvt_EventCodeDispatch_Loop4:
 	inc	1, iz
 	inc	1, xbc
 	cp	iz, (160982:24)
-	jr	c, WndEvt_EventCodeDispatch_Loop4
-WndEvt_EventCodeDispatch_Skip10_Skip2:
+	jr	c, WndEvt_DispatchByEventCode_CenterName_Loop4
+WndEvt_DispatchByEventCode_CenterName_Skip2:
 	ld	xwa, 22
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 160944
@@ -881,11 +881,11 @@ WndEvt_DispatchByEventCode_ClearName:
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	cpw	(0x0274d6:24), 0
-	jr	ule, WndEvt_EventCodeDispatch_Loop4_Skip
+	jr	ule, WndEvt_DispatchByEventCode_ClearName_Skip
 	lda	xde, (160944:24)
 	ld	xhl, xbc
 	ld	xbc, 0:i3
-WndEvt_EventCodeDispatch_Loop5:
+WndEvt_DispatchByEventCode_ClearName_Loop5:
 	ld	xwa, xbc
 	ld	xix, xde
 	add	xix, xwa
@@ -894,8 +894,8 @@ WndEvt_EventCodeDispatch_Loop5:
 	inc	1, iz
 	inc	1, xbc
 	cp	iz, (160982:24)
-	jr	c, WndEvt_EventCodeDispatch_Loop5
-WndEvt_EventCodeDispatch_Loop4_Skip:
+	jr	c, WndEvt_DispatchByEventCode_ClearName_Loop5
+WndEvt_DispatchByEventCode_ClearName_Skip:
 	ld	xwa, 22
 	ld	xbc, EVT_SET_CURSOR
 	ld	xde, 0:i3
@@ -4129,9 +4129,9 @@ DrawDottedLine_Impl:
 	ld	bc, (xwa)
 	ld	xwa, (xsp+52)
 	cp	bc, (xwa)
-	jr	le, ClampColorToRange_Skip2
+	jr	le, DrawDottedLine_Impl_Skip2
 	ld	xde, 1:i3
-ClampColorToRange_Skip2:
+DrawDottedLine_Impl_Skip2:
 	ld	(xsp+12), xde
 	ld	xde, 4294967295
 	ld	xwa, (xsp+48)
@@ -4145,44 +4145,44 @@ ClampColorToRange_Skip2:
 	ld	xwa, (xsp+26)
 	ld	hl, (xwa)
 	cp	bc, hl
-	jr	le, ClampColorToRange_Skip3
+	jr	le, DrawDottedLine_Impl_Skip3
 	ld	xde, 1:i3
-ClampColorToRange_Skip3:
+DrawDottedLine_Impl_Skip3:
 	ld	(xsp+16), xde
 	ld	xwa, (xsp+12)
 	cp	xwa, 1
-	jr	nz, ClampColorToRange_Skip4
+	jr	nz, DrawDottedLine_Impl_Skip4
 	ld	xwa, (xsp+48)
 	ld	de, (xwa)
 	ld	xwa, (xsp+52)
 	sub	de, (xwa)
-	jr	ClampColorToRange_Join
-ClampColorToRange_Skip4:
+	jr	DrawDottedLine_Impl_Join
+DrawDottedLine_Impl_Skip4:
 	ld	xwa, (xsp+52)
 	ld	de, (xwa)
 	ld	xwa, (xsp+48)
 	sub	de, (xwa)
-ClampColorToRange_Join:
+DrawDottedLine_Impl_Join:
 	exts	xde
 	ld	(xsp+4), xde
 	ld	xwa, (xsp+16)
 	cp	xwa, 1
-	jr	nz, ClampColorToRange_Skip5
+	jr	nz, DrawDottedLine_Impl_Skip5
 	sub	bc, hl
 	ld	hl, bc
-	jr	ClampColorToRange_Join2
-ClampColorToRange_Skip5:
+	jr	DrawDottedLine_Impl_Join2
+DrawDottedLine_Impl_Skip5:
 	sub	hl, bc
-ClampColorToRange_Join2:
+DrawDottedLine_Impl_Join2:
 	exts	xhl
 	ld	(xsp+8), xhl
 	ld	xwa, (xsp+4)
 	or	xwa, xwa
-	jr	nz, ClampColorToRange_Skip6
+	jr	nz, DrawDottedLine_Impl_Skip6
 	ld	xwa, (xsp+8)
 	or	xwa, xwa
-	jrl	z, ClampColorToRange_Epilogue2
-ClampColorToRange_Skip6:
+	jrl	z, DrawDottedLine_Impl_Epilogue2
+DrawDottedLine_Impl_Skip6:
 	ld	xwa, (xsp+52)
 	ld	xiy, xwa
 	lda	xix, (xsp+42)
@@ -4190,19 +4190,19 @@ ClampColorToRange_Skip6:
 	ldiw
 	ld	xwa, (xsp+4)
 	or	xwa, xwa
-	jr	nz, ClampColorToRange_Skip9
+	jr	nz, DrawDottedLine_Impl_Skip9
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+8)
 	cp	xwa, 0
-	jrl	lt, ClampColorToRange_Join7
-ClampColorToRange_Loop:
+	jrl	lt, DrawDottedLine_Impl_Join7
+DrawDottedLine_Impl_Loop:
 	cp	(xsp+20), 3
-	jr	ule, ClampColorToRange_Skip7
+	jr	ule, DrawDottedLine_Impl_Skip7
 	ld	(xsp+20), 0
-	jr	ClampColorToRange_Join3
-ClampColorToRange_Skip7:
+	jr	DrawDottedLine_Impl_Join3
+DrawDottedLine_Impl_Skip7:
 	cp	(xsp+20), 1
-	jr	ugt, ClampColorToRange_Skip8
+	jr	ugt, DrawDottedLine_Impl_Skip8
 	lda	xwa, (xsp+42)
 	ld	de, (xwa+2)
 	exts	xde
@@ -4217,31 +4217,31 @@ ClampColorToRange_Skip7:
 	add	xde, xwa
 	ld	wa, (xsp+46)
 	ld	(xde), a
-ClampColorToRange_Skip8:
+DrawDottedLine_Impl_Skip8:
 	inc	1, (xsp+20)
-ClampColorToRange_Join3:
+DrawDottedLine_Impl_Join3:
 	ld	xwa, (xsp+16)
 	add	(xsp+44), wa
 	inc	1, xbc
 	cp	xbc, (xsp+8)
-	jr	le, ClampColorToRange_Loop
-	jrl	ClampColorToRange_Join7
-ClampColorToRange_Skip9:
+	jr	le, DrawDottedLine_Impl_Loop
+	jrl	DrawDottedLine_Impl_Join7
+DrawDottedLine_Impl_Skip9:
 	ld	xwa, (xsp+8)
 	or	xwa, xwa
-	jr	nz, ClampColorToRange_Skip12
+	jr	nz, DrawDottedLine_Impl_Skip12
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+4)
 	cp	xwa, 0
-	jrl	lt, ClampColorToRange_Join7
-ClampColorToRange_Loop2:
+	jrl	lt, DrawDottedLine_Impl_Join7
+DrawDottedLine_Impl_Loop2:
 	cp	(xsp+20), 3
-	jr	ule, ClampColorToRange_Skip10
+	jr	ule, DrawDottedLine_Impl_Skip10
 	ld	(xsp+20), 0
-	jr	ClampColorToRange_Join4
-ClampColorToRange_Skip10:
+	jr	DrawDottedLine_Impl_Join4
+DrawDottedLine_Impl_Skip10:
 	cp	(xsp+20), 1
-	jr	ugt, ClampColorToRange_Skip11
+	jr	ugt, DrawDottedLine_Impl_Skip11
 	lda	xwa, (xsp+42)
 	ld	de, (xwa+2)
 	exts	xde
@@ -4256,16 +4256,16 @@ ClampColorToRange_Skip10:
 	add	xde, xwa
 	ld	wa, (xsp+46)
 	ld	(xde), a
-ClampColorToRange_Skip11:
+DrawDottedLine_Impl_Skip11:
 	inc	1, (xsp+20)
-ClampColorToRange_Join4:
+DrawDottedLine_Impl_Join4:
 	ld	xwa, (xsp+12)
 	add	(xsp+42), wa
 	inc	1, xbc
 	cp	xbc, (xsp+4)
-	jr	le, ClampColorToRange_Loop2
-	jrl	ClampColorToRange_Join7
-ClampColorToRange_Skip12:
+	jr	le, DrawDottedLine_Impl_Loop2
+	jrl	DrawDottedLine_Impl_Join7
+DrawDottedLine_Impl_Skip12:
 	lda	xwa, (xsp+42)
 	ld	(xsp+30), xwa
 	ld	xwa, (xsp+8)
@@ -4292,15 +4292,15 @@ ClampColorToRange_Skip12:
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+8)
 	cp	xwa, 0
-	jrl	lt, ClampColorToRange_Join7
-ClampColorToRange_Loop3:
+	jrl	lt, DrawDottedLine_Impl_Join7
+DrawDottedLine_Impl_Loop3:
 	cp	(xsp+20), 3
-	jr	ule, ClampColorToRange_Skip13
+	jr	ule, DrawDottedLine_Impl_Skip13
 	ld	(xsp+20), 0
-	jr	ClampColorToRange_Join5
-ClampColorToRange_Skip13:
+	jr	DrawDottedLine_Impl_Join5
+DrawDottedLine_Impl_Skip13:
 	cp	(xsp+20), 1
-	jr	ugt, ClampColorToRange_Skip14
+	jr	ugt, DrawDottedLine_Impl_Skip14
 	ld	wa, (xde+2)
 	exts	xwa
 	ld	xhl, xwa
@@ -4314,9 +4314,9 @@ ClampColorToRange_Skip13:
 	add	xhl, xwa
 	ld	wa, (xsp+46)
 	ld	(xhl), a
-ClampColorToRange_Skip14:
+DrawDottedLine_Impl_Skip14:
 	inc	1, (xsp+20)
-ClampColorToRange_Join5:
+DrawDottedLine_Impl_Join5:
 	ld	xwa, (xsp+12)
 	add	(xsp+4), xwa
 	ld	xwa, (xsp+4)
@@ -4326,8 +4326,8 @@ ClampColorToRange_Join5:
 	add	(xde+2), wa
 	inc	1, xbc
 	cp	xbc, (xsp+8)
-	jr	le, ClampColorToRange_Loop3
-	jrl	ClampColorToRange_Join7
+	jr	le, DrawDottedLine_Impl_Loop3
+	jrl	DrawDottedLine_Impl_Join7
 ClampColorToRange_Skip15:
 	ld	xwa, (xsp+8)
 	sla	xwa, 16
@@ -4351,15 +4351,15 @@ ClampColorToRange_Skip15:
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+4)
 	cp	xwa, 0
-	jr	lt, ClampColorToRange_Join7
-ClampColorToRange_Loop4:
+	jr	lt, DrawDottedLine_Impl_Join7
+DrawDottedLine_Impl_Loop4:
 	cp	(xsp+20), 3
-	jr	ule, ClampColorToRange_Skip16
+	jr	ule, DrawDottedLine_Impl_Skip16
 	ld	(xsp+20), 0
-	jr	ClampColorToRange_Join6
-ClampColorToRange_Skip16:
+	jr	DrawDottedLine_Impl_Join6
+DrawDottedLine_Impl_Skip16:
 	cp	(xsp+20), 1
-	jr	ugt, ClampColorToRange_Skip17
+	jr	ugt, DrawDottedLine_Impl_Skip17
 	ld	wa, (xhl)
 	exts	xwa
 	ld	xix, xwa
@@ -4373,9 +4373,9 @@ ClampColorToRange_Skip16:
 	add	xix, xwa
 	ld	wa, (xsp+46)
 	ld	(xix), a
-ClampColorToRange_Skip17:
+DrawDottedLine_Impl_Skip17:
 	inc	1, (xsp+20)
-ClampColorToRange_Join6:
+DrawDottedLine_Impl_Join6:
 	ld	xwa, (xsp+16)
 	add	(xsp+8), xwa
 	ld	xwa, (xsp+8)
@@ -4385,8 +4385,8 @@ ClampColorToRange_Join6:
 	add	(xde), wa
 	inc	1, xbc
 	cp	xbc, (xsp+4)
-	jr	le, ClampColorToRange_Loop4
-ClampColorToRange_Join7:
+	jr	le, DrawDottedLine_Impl_Loop4
+DrawDottedLine_Impl_Join7:
 	lda	xwa, (xsp+34)
 	ld	xbc, (xsp+26)
 	ld	bc, (xbc)
@@ -4401,7 +4401,7 @@ ClampColorToRange_Join7:
 	ld	bc, (xbc)
 	ld	(xwa+6), bc
 	calr	SetChangeRect
-ClampColorToRange_Epilogue2:
+DrawDottedLine_Impl_Epilogue2:
 	pop	xiz
 	lda	xsp, (xsp+52)
 	ret
@@ -6197,8 +6197,8 @@ Gfx_ImageDecodeByteData:
 	ld	xbc, (0x030452:24)
 	ld	(xsp+4), xbc
 	ld	ix, (xwa+2)
-	jr	DrawDesignBox_Impl_Join2
-DrawDesignBox_Impl_Loop:
+	jr	Gfx_ImageDecodeByteData_Join2
+Gfx_ImageDecodeByteData_Loop:
 	ld	bc, ix
 	extz	xbc
 	ld	xde, xbc
@@ -6212,8 +6212,8 @@ DrawDesignBox_Impl_Loop:
 	ld	xiz, xde
 	add	xiz, xbc
 	ld	iy, (xwa)
-	jr	DrawDesignBox_Impl_Join
-DrawDesignBox_Impl_Loop2:
+	jr	Gfx_ImageDecodeByteData_Join
+Gfx_ImageDecodeByteData_Loop2:
 	ld	xhl, xiz
 	ld	xbc, xiz
 	sub	xbc, xde
@@ -6222,15 +6222,15 @@ DrawDesignBox_Impl_Loop2:
 	ld	c, (xbc)
 	ld	(xhl), c
 	inc	1, iy
-DrawDesignBox_Impl_Join:
+Gfx_ImageDecodeByteData_Join:
 	ld	bc, (xwa+4)
 	cp	iy, bc
-	jr	ule, DrawDesignBox_Impl_Loop2
+	jr	ule, Gfx_ImageDecodeByteData_Loop2
 	inc	1, ix
-DrawDesignBox_Impl_Join2:
+Gfx_ImageDecodeByteData_Join2:
 	ld	bc, (xwa+6)
 	cp	ix, bc
-	jr	ule, DrawDesignBox_Impl_Loop
+	jr	ule, Gfx_ImageDecodeByteData_Loop
 	calr	SetChangeRect
 	pop	xiz
 	inc	4, xsp

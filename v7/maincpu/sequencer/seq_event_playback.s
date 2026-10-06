@@ -1507,12 +1507,12 @@ AccPlay_SyncVoiceParams:
 	ld	xiy, 63926
 	ld	xix, 64866
 	ld	c, 30:opc
-AccPlay_SetupSoundParams_Loop:
+AccPlay_SyncVoiceParams_Loop:
 	ld	a, (xiy)
 	ld	w, (xix)
 	ld	(xix), a
 	cp	a, w
-	jr	z, AccPlay_SetupSoundParams_Skip
+	jr	z, AccPlay_SyncVoiceParams_Skip
 	push	xiy
 	push	xix
 	push	xbc
@@ -1524,12 +1524,12 @@ AccPlay_SetupSoundParams_Loop:
 	pop	xbc
 	pop	xix
 	pop	xiy
-AccPlay_SetupSoundParams_Skip:
+AccPlay_SyncVoiceParams_Skip:
 	inc	1, iy
 	inc	1, ix
 	dec	1, c
 	cp	c, 0:i3
-	jr	nz, AccPlay_SetupSoundParams_Loop
+	jr	nz, AccPlay_SyncVoiceParams_Loop
 AccPlay_SyncParamsRet:
 	ret
 
@@ -3633,10 +3633,10 @@ VocalistGrid_DispatchData:
 	ld	bc, de
 	ld	(xhl+2), bc
 	cpw	(xhl), 1
-	jr	z, VocalistGridCheck_Skip
+	jr	z, VocalistGrid_DispatchData_Skip
 	cpw	(xhl), 2
 	jrl	nz, AcVocalist_ReturnZero
-VocalistGridCheck_Skip:
+VocalistGrid_DispatchData_Skip:
 	ld	wa, (xhl)
 	sla	wa, 2
 	dec	4, wa
@@ -4252,7 +4252,7 @@ AcVocalist_ListDispatch:
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 0:i3
 	jr	VocalistGridCheck_Join16
-AcVocalist_ListSetup_Case1:	; cases 1, 3, 5
+AcVocalist_ListSetup_HarmonyLocalOn:	; cases 1, 3, 5
 	ld	xwa, 0xd7000c
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 1:i3

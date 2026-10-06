@@ -2577,7 +2577,7 @@ EntertainerGridCheck_GridDrawRecInit:	.incbin "includes/generated/naka_effects_s
 ; [nakarest] Text (1152 B at 0xe30946), first string
 ; [nakarest] "~43~2d~32~44~a0~bc~44~2d~32~45~a0~bc~45~2d~32~46"; no registered NAKA table points
 ; [nakarest] into it; reached through source references
-; [nakarest] Sqedt_ParamDispatch_Join6 (sequencer/sequencer_ui.s: `lda xde,
+; [nakarest] SqedtFunc_OnGetQtzWinString_Join6 (sequencer/sequencer_ui.s: `lda xde,
 ; [nakarest] (NoteEdit_FormatTempoString_Data:24)`).
 NoteEdit_FormatTempoString_Data:	.incbin "includes/generated/naka_effects_seq.bin", 0x89A2, 0x1E4
 Str_20469e32473220:			.incbin "includes/generated/naka_effects_seq.bin", 0x8B86, 0x27

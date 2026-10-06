@@ -120,7 +120,7 @@ SeScreenData_0x4DAD:
 	.byte	0x00, 0x0a, 0x62, 0x06, 0xff, 0x00, 0x20, 0x64, 0x0d, 0x02
 ; [v10] F159C7 flags=0x02 len=15
 	.byte	0x02, 0x0f, 0x63, 0x06, 0x0f, 0x00, 0x20
-	.long	SeScreenData_0x2920 + 0x10
+	.long	SeMenu_DrawLfoPartSwitches_Records + 0x10
 	.byte	0x03, 0x00, 0xbb, 0x0f
 ; [v10] F159D6 flags=0x00 len=10
 	.byte	0x00, 0x0a, 0x64, 0x06, 0xff, 0x00, 0x20, 0x13, 0x12, 0x03
@@ -1099,146 +1099,146 @@ NAKA_InitDataBlock:
 	ret
 FtLangText01:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
-	jr	nz, InitializeNaka_Skip
+	jr	nz, FtLangText01_Skip
 	lda	xhl, (NAKA_InitDataBlock_PtrTable:24)
 	ret
-InitializeNaka_Skip:
+FtLangText01_Skip:
 	ld	xhl, 0:i3
 	ret
 FtLangText01S:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
-	jr	nz, InitializeNaka_Skip2
+	jr	nz, FtLangText01S_Skip2
 	lda	xhl, (FDemo_BassPortSpanishHeading_Texts:24)
 	ret
-InitializeNaka_Skip2:
+FtLangText01S_Skip2:
 	ld	xhl, 0:i3
 	ret
 FtLangText02:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
-	jr	nz, InitializeNaka_Skip3
+	jr	nz, FtLangText02_Skip3
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_3:24)
 	ret
-InitializeNaka_Skip3:
+FtLangText02_Skip3:
 	ld	xhl, 0:i3
 	ret
 FtLangText03:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
-	jr	nz, InitializeNaka_Skip4
+	jr	nz, FtLangText03_Skip4
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_4:24)
 	ret
-InitializeNaka_Skip4:
+FtLangText03_Skip4:
 	ld	xhl, 0:i3
 	ret
 FtLangText04:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
-	jr	nz, InitializeNaka_Skip5
+	jr	nz, FtLangText04_Skip5
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_5:24)
 	ret
-InitializeNaka_Skip5:
+FtLangText04_Skip5:
 	ld	xhl, 0:i3
 	ret
 FtLangText05:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
-	jr	nz, InitializeNaka_Skip6
+	jr	nz, FtLangText05_Skip6
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_6:24)
 	ret
-InitializeNaka_Skip6:
+FtLangText05_Skip6:
 	ld	xhl, 0:i3
 	ret
 FtLangText06:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
-	jr	nz, InitializeNaka_Skip7
+	jr	nz, FtLangText06_Skip7
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_7:24)
 	ret
-InitializeNaka_Skip7:
+FtLangText06_Skip7:
 	ld	xhl, 0:i3
 	ret
 FtLangText07:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
-	jr	nz, InitializeNaka_Skip8
+	jr	nz, FtLangText07_Skip8
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_8:24)
 	ret
-InitializeNaka_Skip8:
+FtLangText07_Skip8:
 	ld	xhl, 0:i3
 	ret
 FtLangText08:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
-	jr	nz, InitializeNaka_Skip9
+	jr	nz, FtLangText08_Skip9
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_9:24)
 	ret
-InitializeNaka_Skip9:
+FtLangText08_Skip9:
 	ld	xhl, 0:i3
 	ret
 FtLangText09:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
-	jr	nz, InitializeNaka_Skip10
+	jr	nz, FtLangText09_Skip10
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_10:24)
 	ret
-InitializeNaka_Skip10:
+FtLangText09_Skip10:
 	ld	xhl, 0:i3
 	ret
 FtLangText10:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
-	jr	nz, InitializeNaka_Skip11
+	jr	nz, FtLangText10_Skip11
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_11:24)
 	ret
-InitializeNaka_Skip11:
+FtLangText10_Skip11:
 	ld	xhl, 0:i3
 	ret
 FtLangText11:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
-	jr	nz, InitializeNaka_Skip12
+	jr	nz, FtLangText11_Skip12
 	lda	xhl, (FtLangText11_Texts:24)
 	ret
-InitializeNaka_Skip12:
+FtLangText11_Skip12:
 	ld	xhl, 0:i3
 	ret
 FtLangText12:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
-	jr	nz, InitializeNaka_Skip13
+	jr	nz, FtLangText12_Skip13
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_13:24)
 	ret
-InitializeNaka_Skip13:
+FtLangText12_Skip13:
 	ld	xhl, 0:i3
 	ret
 FtLangText13:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
-	jr	nz, InitializeNaka_Skip14
+	jr	nz, FtLangText13_Skip14
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_14:24)
 	ret
-InitializeNaka_Skip14:
+FtLangText13_Skip14:
 	ld	xhl, 0:i3
 	ret
 FtLangText14:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
-	jr	nz, InitializeNaka_Skip15
+	jr	nz, FtLangText14_Skip15
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_15:24)
 	ret
-InitializeNaka_Skip15:
+FtLangText14_Skip15:
 	ld	xhl, 0:i3
 	ret
 FtLangText15:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
-	jr	nz, InitializeNaka_Skip16
+	jr	nz, FtLangText15_Skip16
 	lda	xhl, (NAKA_InitDataBlock_PtrTable_16:24)
 	ret
-InitializeNaka_Skip16:
+FtLangText15_Skip16:
 	ld	xhl, 0:i3
 	ret
 FtLangText16:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
-	jr	nz, InitializeNaka_Skip17
+	jr	nz, FtLangText16_Skip17
 	lda	xhl, (FtLangText16_LangStrings:24)
 	ret
-InitializeNaka_Skip17:
+FtLangText16_Skip17:
 	ld	xhl, 0:i3
 	ret
 FtLangText17:
 	cp	xbc, EVT_GET_LANGUAGE_PTR
-	jr	nz, InitializeNaka_Skip18
+	jr	nz, FtLangText17_Skip18
 	lda	xhl, (FtLangText17_Texts:24)
 	ret
-InitializeNaka_Skip18:
+FtLangText17_Skip18:
 	ld	xhl, 0:i3
 	ret
 InitializeNaka_Join:
@@ -2145,23 +2145,23 @@ Flash_CopyMirrorLoop:
 	sub xde, 0x9800
 	ld wa, 1:i3
 	jr Flash_EraseAndWriteFinal
-NoteEventBuffer_Store_Case3:
+NoteEventBuffer_Store_WriteSection2:
 	ld xwa, (FLASH_SECTION_PTR_2:16)
 	ld (xsp + 4), xwa
 	jr Flash_WriteSectorWithMirrorCopy
-NoteEventBuffer_Store_Case4:
+NoteEventBuffer_Store_WriteSection3:
 	ld xwa, (FLASH_SECTION_PTR_3:16)
 	ld (xsp + 4), xwa
 	jr Flash_SectorWriteExecute
-NoteEventBuffer_Store_Case5:
+NoteEventBuffer_Store_WriteSection4:
 	ld xwa, (FLASH_SECTION_PTR_4:16)
 	ld (xsp + 4), xwa
 	jr Flash_WriteSectorWithMirrorCopy
-NoteEventBuffer_Store_Case6:
+NoteEventBuffer_Store_WriteSection5:
 	ld xwa, (FLASH_SECTION_PTR_5:16)
 	ld (xsp + 4), xwa
 	jr Flash_SectorWriteExecute
-NoteEventBuffer_Store_Case7:
+NoteEventBuffer_Store_WriteSection6:
 	ld xwa, (FLASH_SECTION_PTR_6:16)
 	ld (xsp + 4), xwa
 	jr Flash_WriteSectorWithMirrorCopy
@@ -2215,12 +2215,12 @@ Flash_ExtendedOpsBlock:
 	lda	xhl, (xix+de)
 	ld	e, 0:opc
 	cp	a, 10
-	jr	nc, Flash_StoreBaseAndInitAccPatch_Skip
+	jr	nc, Flash_ExtendedOpsBlock_Skip
 	ld	c, (xhl)
 	extz	wa
 	ld	l, (xix+wa)
 	ld	ix, 0:i3
-Flash_StoreBaseAndInitAccPatch_Loop:
+Flash_ExtendedOpsBlock_Loop:
 	ld	a, c
 	exts	wa
 	muls	wa, 96
@@ -2240,14 +2240,14 @@ Flash_StoreBaseAndInitAccPatch_Loop:
 	inc	1, e
 	inc	1, ix
 	cp	e, 16
-	jr	c, Flash_StoreBaseAndInitAccPatch_Loop
-	jr	Flash_StoreBaseAndInitAccPatch_Epilogue
-Flash_StoreBaseAndInitAccPatch_Skip:
+	jr	c, Flash_ExtendedOpsBlock_Loop
+	jr	Flash_ExtendedOpsBlock_Epilogue
+Flash_ExtendedOpsBlock_Skip:
 	extz	bc
 	ld	c, (xix+bc)
 	ld	l, (xhl)
 	ld	ix, 0:i3
-Flash_StoreBaseAndInitAccPatch_Loop2:
+Flash_ExtendedOpsBlock_Loop2:
 	ld	a, c
 	exts	wa
 	muls	wa, 96
@@ -2267,8 +2267,8 @@ Flash_StoreBaseAndInitAccPatch_Loop2:
 	inc	1, e
 	inc	1, ix
 	cp	e, 16
-	jr	c, Flash_StoreBaseAndInitAccPatch_Loop2
-Flash_StoreBaseAndInitAccPatch_Epilogue:
+	jr	c, Flash_ExtendedOpsBlock_Loop2
+Flash_ExtendedOpsBlock_Epilogue:
 	pop	xiz
 	ret
 	ld	xbc, (RHYTHM_PATTERN_BUF_PTR:16)
@@ -2279,11 +2279,11 @@ Flash_StoreBaseAndInitAccPatch_Epilogue:
 	ld	xbc, (3186:16)
 	lda	xbc, (xbc+de)
 	cp	a, 10
-	jr	nc, Flash_StoreBaseAndInitAccPatch_Skip2
+	jr	nc, Flash_ExtendedOpsBlock_Skip2
 	ld	a, (xhl)
 	ld	(xbc), a
 	ret
-Flash_StoreBaseAndInitAccPatch_Skip2:
+Flash_ExtendedOpsBlock_Skip2:
 	ld	a, (xbc)
 	ld	(xhl), a
 	ret
@@ -2373,6 +2373,7 @@ Flash_AssignSlotsToBlocks_Skip4:
 	cp L,0x28
 	jr c, .Lc_f173c6
 .Lc_f17415:
+Flash_AssignSlotsToBlocks_Join2:
 	incb_erp 0xea, 1
 	cp_erpb 0xea, 0x32
 	jr c, .Lc_f173ad
@@ -2645,7 +2646,7 @@ Flash_WriteSlotOwnerMap:
 	lda	xhl, (1952:16)
 	ld	bc, (xhl+2)
 	cp	bc, 0xffff
-	jr	z, Flash_StoreBaseAndInitAccPatch_Skip7
+	jr	z, Flash_WriteSlotOwnerMap_Skip7
 	and	bc, 127
 	ld	w, c
 	ld	e, w
@@ -2654,53 +2655,53 @@ Flash_WriteSlotOwnerMap:
 	ld	xbc, (3222:16)
 	ld	(xbc+de), a
 	cp	w, 3:i3
-	jr	z, Flash_StoreBaseAndInitAccPatch_Join3
+	jr	z, Flash_WriteSlotOwnerMap_Join3
 	inc	1, w
 	cp	w, 3:i3
-	jr	ugt, Flash_StoreBaseAndInitAccPatch_Join3
+	jr	ugt, Flash_WriteSlotOwnerMap_Join3
 	ld	e, w
 	extz	de
-Flash_StoreBaseAndInitAccPatch_Loop6:
+Flash_WriteSlotOwnerMap_Loop6:
 	ld	ix, de
 	add	ix, 80
 	ld	xbc, (3222:16)
 	lda	xbc, (xbc+ix)
 	cp	(xbc), a
-	jr	nz, Flash_StoreBaseAndInitAccPatch_Skip6
+	jr	nz, Flash_WriteSlotOwnerMap_Skip6
 	ld	(xbc), 0
-Flash_StoreBaseAndInitAccPatch_Skip6:
+Flash_WriteSlotOwnerMap_Skip6:
 	inc	1, w
 	inc	1, de
 	cp	w, 3:i3
-	jr	ule, Flash_StoreBaseAndInitAccPatch_Loop6
-	jr	Flash_StoreBaseAndInitAccPatch_Join3
-Flash_StoreBaseAndInitAccPatch_Skip7:
+	jr	ule, Flash_WriteSlotOwnerMap_Loop6
+	jr	Flash_WriteSlotOwnerMap_Join3
+Flash_WriteSlotOwnerMap_Skip7:
 	ld	w, 0:opc
 	ld	de, 0:i3
-Flash_StoreBaseAndInitAccPatch_Loop7:
+Flash_WriteSlotOwnerMap_Loop7:
 	ld	ix, de
 	add	ix, 80
 	ld	xbc, (3222:16)
 	lda	xbc, (xbc+ix)
 	cp	(xbc), a
-	jr	nz, Flash_StoreBaseAndInitAccPatch_Skip8
+	jr	nz, Flash_WriteSlotOwnerMap_Skip8
 	ld	(xbc), 0
-Flash_StoreBaseAndInitAccPatch_Skip8:
+Flash_WriteSlotOwnerMap_Skip8:
 	inc	1, w
 	inc	1, de
 	cp	w, 4:i3
-	jr	c, Flash_StoreBaseAndInitAccPatch_Loop7
-Flash_StoreBaseAndInitAccPatch_Join3:
+	jr	c, Flash_WriteSlotOwnerMap_Loop7
+Flash_WriteSlotOwnerMap_Join3:
 	ld	w, 0:opc
 	ldib_erp	226, 0
-Flash_StoreBaseAndInitAccPatch_Loop8:
+Flash_WriteSlotOwnerMap_Loop8:
 	ldto_berp	c, 226
 	extz	bc
 	sla	bc, 2
 	inc	6, bc
 	ld	bc, (xhl+bc)
 	cp	bc, 65535
-	jr	z, Flash_StoreBaseAndInitAccPatch_Skip9
+	jr	z, Flash_WriteSlotOwnerMap_Skip9
 	and	bc, 127
 	ld	w, c
 	ld	e, w
@@ -2711,27 +2712,27 @@ Flash_StoreBaseAndInitAccPatch_Loop8:
 	inc	1, w
 	inc1b_erp	226
 	cp_erpb	226, 50
-	jr	c, Flash_StoreBaseAndInitAccPatch_Loop8
-Flash_StoreBaseAndInitAccPatch_Skip9:
+	jr	c, Flash_WriteSlotOwnerMap_Loop8
+Flash_WriteSlotOwnerMap_Skip9:
 	cp	w, 40
 	jr	z, Flash_StoreBaseAndInitAccPatch_Skip11
 	cp	w, 39
 	jr	ugt, Flash_StoreBaseAndInitAccPatch_Skip11
 	ld	e, w
 	extz	de
-Flash_StoreBaseAndInitAccPatch_Loop9:
+Flash_WriteSlotOwnerMap_Loop9:
 	ld	hl, de
 	add	hl, 16
 	ld	xbc, (3222:16)
 	lda	xbc, (xbc+hl)
 	cp	(xbc), a
-	jr	nz, Flash_StoreBaseAndInitAccPatch_Skip10
+	jr	nz, Flash_WriteSlotOwnerMap_Skip10
 	ld	(xbc), 0
-Flash_StoreBaseAndInitAccPatch_Skip10:
+Flash_WriteSlotOwnerMap_Skip10:
 	inc	1, w
 	inc	1, de
 	cp	w, 39
-	jr	ule, Flash_StoreBaseAndInitAccPatch_Loop9
+	jr	ule, Flash_WriteSlotOwnerMap_Loop9
 Flash_StoreBaseAndInitAccPatch_Skip11:
 	ld	xbc, (3222:16)
 	ld	xde, (FLASH_SECTION_PTR_7:16)
@@ -2746,7 +2747,7 @@ Flash_CopyBlocksToSlots:
 	ldirw
 	lda_d16	xwa, (0x7a0)
 	cpw	(xwa), 0xffff
-	jr	z, Flash_StoreBaseAndInitAccPatch_Skip12
+	jr	z, Flash_CopyBlocksToSlots_Skip12
 	ld	hl, (xwa)
 	ld	h, 0:opc
 	ld	wa, (xwa+2)
@@ -2763,7 +2764,7 @@ Flash_CopyBlocksToSlots:
 	ld	wa, (xsp+10)
 	ld	(xsp+8), wa
 	cp	hl, 0:i3
-	jr	nz, Flash_StoreBaseAndInitAccPatch_Skip12
+	jr	nz, Flash_CopyBlocksToSlots_Skip12
 	ld	c, (xsp+4)
 	extz	bc
 	lda	xde, (xsp+12)
@@ -2774,10 +2775,10 @@ Flash_CopyBlocksToSlots:
 	ld	xix, (xsp+12)
 	sub	xix, 0x346800
 	cp	hl, 0:i3
-	jr	nz, Flash_StoreBaseAndInitAccPatch_Skip12
+	jr	nz, Flash_CopyBlocksToSlots_Skip12
 	ld	hl, 0:i3
 	cpw	(xsp+0x8), 0
-	jr	ule, Flash_StoreBaseAndInitAccPatch_Skip12
+	jr	ule, Flash_CopyBlocksToSlots_Skip12
 	ld	xbc, 0:i3
 Flash_CopyBlocksToSlots_Loop:
 	ld	xde, xbc
@@ -2790,7 +2791,7 @@ Flash_CopyBlocksToSlots_Loop:
 	inc	1, xbc
 	cp	hl, (xsp+0x8)
 	jr	c, Flash_CopyBlocksToSlots_Loop
-Flash_StoreBaseAndInitAccPatch_Skip12:
+Flash_CopyBlocksToSlots_Skip12:
 	ld	(xsp+6), 0
 Flash_CopyBlocksToSlots_Loop2:
 	ld	c, (xsp+6)
@@ -3526,6 +3527,7 @@ Flash_CountFreeOrOwnedSlots:
 	jr nz, .Lc_f17f68
 	ld wa, 0:i3
 .Lc_f17f48:
+Flash_CountFreeOrOwnedSlots_Loop2:
 	ld IX,WA
 	add IX,0x0010
 	ld	h, (xde+ix)
@@ -3534,16 +3536,20 @@ Flash_CountFreeOrOwnedSlots:
 	cp H,C
 	jr nz, .Lc_f17f5d
 .Lc_f17f5b:
+Flash_CountFreeOrOwnedSlots_Skip2:
 	inc 1,L
 .Lc_f17f5d:
+Flash_CountFreeOrOwnedSlots_Skip3:
 	inc 1,B
 	inc 1,WA
 	cp B,0x28
 	jr c, .Lc_f17f48
 	jr t, .Lc_f17f87
 .Lc_f17f68:
+Flash_CountFreeOrOwnedSlots_Skip4:
 	ld wa, 0:i3
 .Lc_f17f6a:
+Flash_CountFreeOrOwnedSlots_Loop3:
 	ld IX,WA
 	add IX,0x0050
 	ld	h, (xde+ix)
@@ -3552,13 +3558,16 @@ Flash_CountFreeOrOwnedSlots:
 	cp H,C
 	jr nz, .Lc_f17f7f
 .Lc_f17f7d:
+Flash_CountFreeOrOwnedSlots_Skip5:
 	inc 1,L
 .Lc_f17f7f:
+Flash_CountFreeOrOwnedSlots_Skip6:
 	inc 1,B
 	inc 1,WA
 	cp b, 4:i3
 	jr c, .Lc_f17f6a
 .Lc_f17f87:
+Flash_CountFreeOrOwnedSlots_Return:
 	ret
 VoiceParam_ComputeOffset:
 	ld e, a
@@ -4371,11 +4380,14 @@ FileIO_LoadRcmToFlash:
 	call Flash_EraseSectorAndWrite
 	call TmFlash_CopyToExtMem
 .Lc_f187bb:
+FileIO_LoadRcmToFlash_Skip5:
 	ld HL,IZ
 	jr t, .Lc_f187c2
 .Lc_f187bf:
+FileIO_LoadRcmToFlash_Skip6:
 	ldw HL, 0xff9a
 .Lc_f187c2:
+FileIO_LoadRcmToFlash_Epilogue:
 	popw iz
 	lda xsp, (xsp + 0x0400)
 	ret
@@ -4493,16 +4505,16 @@ FileIO_SaveRcmFromFlash:
 	ld	xiz, xwa
 	call	FileIO_GetDiskFreeSpace
 	cp	xhl, xiz
-	jr	ge, Flash_SlotUpdateOpsBlock_Code_Skip
+	jr	ge, FileIO_SaveRcmFromFlash_Skip7
 	ldw	hl, 65435
-	jrl	Flash_SlotUpdateOpsBlock_Code_Epilogue
-Flash_SlotUpdateOpsBlock_Code_Skip:
+	jrl	FileIO_SaveRcmFromFlash_Join
+FileIO_SaveRcmFromFlash_Skip7:
 	lda	xwa, (xsp+16)
 	ld	xbc, 1024
 	call	FileIO_WriteByte_Impl
 	call	FileIO_ReturnError
 	cp	hl, 0:i3
-	jrl	lt, Flash_SlotUpdateOpsBlock_Code_Skip2
+	jrl	lt, FileIO_SaveRcmFromFlash_Skip8
 	ld	wa, 1:i3
 	calr	NoteEventBuffer_CopyToSlot
 	ld	xwa, (3186:16)
@@ -4516,7 +4528,7 @@ Flash_SlotUpdateOpsBlock_Code_Skip:
 	call	FileIO_WriteByte_Impl
 	call	FileIO_ReturnError
 	cp	hl, 0:i3
-	jrl	lt, Flash_SlotUpdateOpsBlock_Code_Skip2
+	jrl	lt, FileIO_SaveRcmFromFlash_Skip8
 	ld	wa, 2:i3
 	calr	NoteEventBuffer_CopyToSlot
 	ld	xwa, (3186:16)
@@ -4530,7 +4542,7 @@ Flash_SlotUpdateOpsBlock_Code_Skip:
 	call	FileIO_WriteByte_Impl
 	call	FileIO_ReturnError
 	cp	hl, 0:i3
-	jrl	lt, Flash_SlotUpdateOpsBlock_Code_Skip2
+	jrl	lt, FileIO_SaveRcmFromFlash_Skip8
 	ld	wa, 3:i3
 	calr	NoteEventBuffer_CopyToSlot
 	ld	xwa, (3186:16)
@@ -4544,7 +4556,7 @@ Flash_SlotUpdateOpsBlock_Code_Skip:
 	call	FileIO_WriteByte_Impl
 	call	FileIO_ReturnError
 	cp	hl, 0:i3
-	jrl	lt, Flash_SlotUpdateOpsBlock_Code_Skip2
+	jrl	lt, FileIO_SaveRcmFromFlash_Skip8
 	ld	wa, 4:i3
 	calr	NoteEventBuffer_CopyToSlot
 	ld	xwa, (3186:16)
@@ -4558,7 +4570,7 @@ Flash_SlotUpdateOpsBlock_Code_Skip:
 	call	FileIO_WriteByte_Impl
 	call	FileIO_ReturnError
 	cp	hl, 0:i3
-	jrl	lt, Flash_SlotUpdateOpsBlock_Code_Skip2
+	jrl	lt, FileIO_SaveRcmFromFlash_Skip8
 	ld	wa, 5:i3
 	calr	NoteEventBuffer_CopyToSlot
 	ld	xhl, (3186:16)
@@ -4573,7 +4585,7 @@ Flash_SlotUpdateOpsBlock_Code_Skip:
 	call	FileIO_WriteByte_Impl
 	call	FileIO_ReturnError
 	cp	hl, 0:i3
-	jr	lt, Flash_SlotUpdateOpsBlock_Code_Skip2
+	jr	lt, FileIO_SaveRcmFromFlash_Skip8
 	ld	wa, 6:i3
 	calr	NoteEventBuffer_CopyToSlot
 	ld	xhl, (3186:16)
@@ -4588,7 +4600,7 @@ Flash_SlotUpdateOpsBlock_Code_Skip:
 	call	FileIO_WriteByte_Impl
 	call	FileIO_ReturnError
 	cp	hl, 0:i3
-	jr	lt, Flash_SlotUpdateOpsBlock_Code_Skip2
+	jr	lt, FileIO_SaveRcmFromFlash_Skip8
 	ld	wa, 7:i3
 	calr	NoteEventBuffer_CopyToSlot
 	ld	xhl, (3186:16)
@@ -4603,13 +4615,13 @@ Flash_SlotUpdateOpsBlock_Code_Skip:
 	call	FileIO_WriteByte_Impl
 	call	FileIO_ReturnError
 	cp	hl, 0:i3
-	jr	lt, Flash_SlotUpdateOpsBlock_Code_Skip2
+	jr	lt, FileIO_SaveRcmFromFlash_Skip8
 	ld	xwa, (FLASH_SECTION_PTR_7:16)
 	ld	xbc, 62464
 	call	FileIO_WriteByte_Impl
-Flash_SlotUpdateOpsBlock_Code_Skip2:
+FileIO_SaveRcmFromFlash_Skip8:
 	call	FileIO_ReturnError
-Flash_SlotUpdateOpsBlock_Code_Epilogue:
+FileIO_SaveRcmFromFlash_Join:
 	pop	xiz
 	lda	xsp, (xsp+1036)
 	ret
@@ -5045,74 +5057,74 @@ AccPatch_ConvertLegacyStyleImage:
 	lda	xbc, (xde+2)
 	ld	l, (xbc)
 	cp_erpb	238, 71
-	jr	nz, ToneParam_ExtendedOpsBlock_Skip3
+	jr	nz, AccPatch_ConvertLegacyStyleImage_Skip3
 	cp	h, 0:i3
-	jr	nz, ToneParam_ExtendedOpsBlock_Skip3
+	jr	nz, AccPatch_ConvertLegacyStyleImage_Skip3
 	cp	l, 75
-	jr	z, ToneParam_ExtendedOpsBlock_Skip4
-ToneParam_ExtendedOpsBlock_Skip3:
+	jr	z, AccPatch_ConvertLegacyStyleImage_Skip4
+AccPatch_ConvertLegacyStyleImage_Skip3:
 	cp_erpb	238, 76
-	jr	nz, ToneParam_ExtendedOpsBlock_Skip5
+	jr	nz, AccPatch_ConvertLegacyStyleImage_Skip5
 	cp	h, 75
-	jr	nz, ToneParam_ExtendedOpsBlock_Skip5
+	jr	nz, AccPatch_ConvertLegacyStyleImage_Skip5
 	cp	l, 69
-	jr	nz, ToneParam_ExtendedOpsBlock_Skip5
-ToneParam_ExtendedOpsBlock_Skip4:
+	jr	nz, AccPatch_ConvertLegacyStyleImage_Skip5
+AccPatch_ConvertLegacyStyleImage_Skip4:
 	ld	(xde), 72
 	ld	(xwa), 0
 	ld	(xbc), 75
 	cp	(xde+0x10), 0
-	jr	nz, ToneParam_ExtendedOpsBlock_Skip11
+	jr	nz, AccPatch_ConvertLegacyStyleImage_Skip11
 	ld	wa, 0:i3
-	jr	ToneParam_ExtendedOpsBlock_Join
-ToneParam_ExtendedOpsBlock_Skip5:
+	jr	AccPatch_ConvertLegacyStyleImage_Join
+AccPatch_ConvertLegacyStyleImage_Skip5:
 	cp_erpb	238, 70
-	jr	nz, ToneParam_ExtendedOpsBlock_Skip6
+	jr	nz, AccPatch_ConvertLegacyStyleImage_Skip6
 	cp	h, 0:i3
-	jr	nz, ToneParam_ExtendedOpsBlock_Skip6
+	jr	nz, AccPatch_ConvertLegacyStyleImage_Skip6
 	cp	l, 75
-	jr	z, ToneParam_ExtendedOpsBlock_Skip9
-ToneParam_ExtendedOpsBlock_Skip6:
+	jr	z, AccPatch_ConvertLegacyStyleImage_Skip9
+AccPatch_ConvertLegacyStyleImage_Skip6:
 	cp_erpb	238, 70
-	jr	nz, ToneParam_ExtendedOpsBlock_Skip7
+	jr	nz, AccPatch_ConvertLegacyStyleImage_Skip7
 	cp	h, 32
-	jr	nz, ToneParam_ExtendedOpsBlock_Skip7
+	jr	nz, AccPatch_ConvertLegacyStyleImage_Skip7
 	cp	l, 75
-	jr	z, ToneParam_ExtendedOpsBlock_Skip9
-ToneParam_ExtendedOpsBlock_Skip7:
+	jr	z, AccPatch_ConvertLegacyStyleImage_Skip9
+AccPatch_ConvertLegacyStyleImage_Skip7:
 	cp_erpb	238, 76
-	jr	nz, ToneParam_ExtendedOpsBlock_Skip8
+	jr	nz, AccPatch_ConvertLegacyStyleImage_Skip8
 	cp	h, 75
-	jr	nz, ToneParam_ExtendedOpsBlock_Skip8
+	jr	nz, AccPatch_ConvertLegacyStyleImage_Skip8
 	cp	l, 65
-	jr	z, ToneParam_ExtendedOpsBlock_Skip9
-ToneParam_ExtendedOpsBlock_Skip8:
+	jr	z, AccPatch_ConvertLegacyStyleImage_Skip9
+AccPatch_ConvertLegacyStyleImage_Skip8:
 	cp_erpb	238, 76
-	jr	nz, ToneParam_ExtendedOpsBlock_Skip10
+	jr	nz, AccPatch_ConvertLegacyStyleImage_Skip10
 	cp	h, 75
-	jr	nz, ToneParam_ExtendedOpsBlock_Skip10
+	jr	nz, AccPatch_ConvertLegacyStyleImage_Skip10
 	cp	l, 66
-	jr	nz, ToneParam_ExtendedOpsBlock_Skip10
-ToneParam_ExtendedOpsBlock_Skip9:
-	calr	ToneParam_ExtendedOpsBlock_Helper2
+	jr	nz, AccPatch_ConvertLegacyStyleImage_Skip10
+AccPatch_ConvertLegacyStyleImage_Skip9:
+	calr	AccPatch_ConvertLegacySectionLayout
 	ld	iz, hl
 	ld	xwa, (3186:16)
 	cp	(xwa+0x10), 0
-	jr	nz, ToneParam_ExtendedOpsBlock_Skip11
+	jr	nz, AccPatch_ConvertLegacyStyleImage_Skip11
 	ld	wa, iz
-ToneParam_ExtendedOpsBlock_Join:
+AccPatch_ConvertLegacyStyleImage_Join:
 	calr	ToneParam_ExtendedOpsBlock_Helper_Helper2
 	ld	iz, hl
-	jr	ToneParam_ExtendedOpsBlock_Skip11
-ToneParam_ExtendedOpsBlock_Skip10:
+	jr	AccPatch_ConvertLegacyStyleImage_Skip11
+AccPatch_ConvertLegacyStyleImage_Skip10:
 	call	AccDemo_InitDone
 	ldw	iz, 0xff9a
-ToneParam_ExtendedOpsBlock_Skip11:
-	calr	ToneParam_ExtendedOpsBlock_Helper_Helper
+AccPatch_ConvertLegacyStyleImage_Skip11:
+	calr	AccPatch_ResetSectionPartByte2Defaults
 	ld	hl, iz
 	popw	iz
 	ret
-ToneParam_ExtendedOpsBlock_Helper2:
+AccPatch_ConvertLegacySectionLayout:
 	dec	6, xsp
 	ldw	(xsp+0x4), 0
 	ld	xhl, (RHYTHM_PATTERN_BUF_PTR:16)
@@ -5142,9 +5154,9 @@ ToneParam_ExtendedOpsBlock_Loop:
 	ld	(0x3911:16), a
 	calr	ToneParam_ExtendedOpsBlock_Helper2_Helper
 	cp	hl, 0:i3
-	jr	z, ToneParam_ExtendedOpsBlock_Skip12
+	jr	z, AccPatch_ConvertLegacySectionLayout_Skip12
 	ld	(xsp+4), hl
-ToneParam_ExtendedOpsBlock_Skip12:
+AccPatch_ConvertLegacySectionLayout_Skip12:
 	ld	xwa, 1:i3
 	add	(xsp), xwa
 	ld	xwa, (xsp)
@@ -5300,11 +5312,11 @@ ToneParam_ExtendedOpsBlock_Epilogue:
 	ld HL,IZ
 	popw iz
 	ret
-ToneParam_ExtendedOpsBlock_Helper_Helper:
+AccPatch_ResetSectionPartByte2Defaults:
 	ld L, 0x00:opc
 	ld de, 0:i3
 .Lc_f1919c:
-ToneParam_ExtendedOpsBlock_Helper3_Loop:
+AccPatch_ResetSectionPartByte2Defaults_Loop:
 	ld WA,DE
 	add WA,0x0060
 	ld xbc, (RHYTHM_PATTERN_BUF_PTR:16)
@@ -6730,7 +6742,7 @@ AcCmpSetGridBoxProc:
 	ld xiz, xwa
 	ld xbc, (xsp + 16)
 	cp xbc, EVT_REQUEST_GRID_DRAW
-	jrl z, CmpSetP1_GridCheck_Case3
+	jrl z, AcCmpSetGridBoxProc_ForwardToApFunc
 	ld xwa, (xsp + 16)
 	cp xwa, EVT_GET_FIXED_ROW_STR
 	jrl z, AcCmpSetGridBoxProc_OnGetFixedRowStr
@@ -6740,9 +6752,9 @@ AcCmpSetGridBoxProc:
 	jr z, CmpSetP1_DialGrid
 	sub xbc, EVT_INDEXSW_UP
 	cp xbc, 0x0
-	jrl lt, CmpSetP1_GridCheck_Case4
+	jrl lt, AcCmpSetGridBoxProc_DefaultInherited
 	cp xbc, 0x6
-	jrl gt, CmpSetP1_GridCheck_Case4
+	jrl gt, AcCmpSetGridBoxProc_DefaultInherited
 	add xbc, xbc
 	add xbc, AcCmpSetGridBoxProc_CaseTable
 	ld bc, (xbc)
@@ -6931,7 +6943,7 @@ CmpSetP1_GridCheck_Case2:
 	call	Strcpy
 	inc	8, xsp
 	jr	CmpSetP1_ReturnZeroJmp
-CmpSetP1_GridCheck_Case3:
+AcCmpSetGridBoxProc_ForwardToApFunc:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 70)
@@ -6944,7 +6956,7 @@ CmpSetP1_ReturnZeroJmp:
 	jr CmpSetP1_GridCheck_Case5
 
 ; CmpSetP1 grid check case 4
-CmpSetP1_GridCheck_Case4:
+AcCmpSetGridBoxProc_DefaultInherited:
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
 	ld xde, (xsp + 12)
@@ -7872,20 +7884,20 @@ S2cGridBoxProc:
 	ld (xsp + 16), xwa
 	ld xwa, xiz
 	cp xiz, EVT_CLR_GRID_HANTEN
-	jrl z, FdcFormat_GridCheck_Case3
+	jrl z, S2cGridBoxProc_OnClrGridHanten
 	cp xiz, EVT_REQUEST_GRID_DRAW
-	jrl z, FdcFormat_GridCheck_Case2
+	jrl z, S2cGridBoxProc_ForwardToApFunc
 	cp xiz, EVT_GET_FIXED_ROW_STR
-	jrl z, FdcFormat_GridCheck_Case1
+	jrl z, S2cGridBoxProc_OnGetFixedRowStr
 	cp xiz, EVT_GET_FIXED_COL_STR
-	jrl z, FdcFormat_GridCheck
+	jrl z, S2cGridBoxProc_OnGetFixedColStr
 	cp xiz, EVT_SHOW
 	jr z, FdcFormat_DialGrid
 	sub xwa, EVT_INDEXSW_UP
 	cp xwa, 0x0
-	jrl lt, FdcFormat_GridCheck_Case4
+	jrl lt, S2cGridBoxProc_DefaultInherited
 	cp xwa, 0x6
-	jrl gt, FdcFormat_GridCheck_Case4
+	jrl gt, S2cGridBoxProc_DefaultInherited
 	add xwa, xwa
 	add xwa, S2cGridBoxProc_CaseTable
 	ld wa, (xwa)
@@ -8044,13 +8056,13 @@ S2cGrid_SetDialEnable:
 	jr FdcFormat_ReturnZeroJmp
 
 ; FdcFormat grid check dispatch
-FdcFormat_GridCheck:
+S2cGridBoxProc_OnGetFixedColStr:
 	ld xwa, (xsp + 16)
 	ld xiz, 0x3e
 	jr S2cGrid_GetViewAndCopy
 
 ; FdcFormat grid check case 1
-FdcFormat_GridCheck_Case1:
+S2cGridBoxProc_OnGetFixedRowStr:
 	ld xwa, (xsp + 16)
 	ld xiz, 0x42
 
@@ -8064,7 +8076,7 @@ S2cGrid_GetViewAndCopy:
 	call	Strcpy
 	inc	8, xsp
 	jr	FdcFormat_ReturnZeroJmp
-FdcFormat_GridCheck_Case2:
+S2cGridBoxProc_ForwardToApFunc:
 	ld xwa, (xsp + 16)
 	call GetViewInstance
 	ld xwa, (xhl + 70)
@@ -8074,7 +8086,7 @@ FdcFormat_GridCheck_Case2:
 	jr FdcFormat_ReturnZeroJmp
 
 ; FdcFormat grid check case 3
-FdcFormat_GridCheck_Case3:
+S2cGridBoxProc_OnClrGridHanten:
 	call GetFocusObject
 	ld xwa, xhl
 	ld xbc, EVT_GET_SELECTED_CEL
@@ -8091,7 +8103,7 @@ FdcFormat_ReturnZeroJmp:
 	jr FdcFormat_GridCheck_Case5
 
 ; FdcFormat grid check case 4
-FdcFormat_GridCheck_Case4:
+S2cGridBoxProc_DefaultInherited:
 	ld xwa, (xsp + 16)
 	ld xbc, xiz
 	ld xde, (xsp + 12)

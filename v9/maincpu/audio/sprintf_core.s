@@ -2924,7 +2924,7 @@ Sprintf_DecExp_CheckRemainder:
 
 Sprintf_DecExp_ApplySign:
 	cpw (xsp + 16), 0x0
-	jr ge, Sprintf_DecExp_Positive_Return
+	jr ge, Sprintf_DecExp_ApplySign_Return
 	ld xwa, xiz
 	cpl wa
 	cplw_erp 0xe2
@@ -2932,7 +2932,7 @@ Sprintf_DecExp_ApplySign:
 	ld xhl, xwa
 	jr Sprintf_DecExp_Return
 
-Sprintf_DecExp_Positive_Return:
+Sprintf_DecExp_ApplySign_Return:
 	ld xhl, xiz
 
 Sprintf_DecExp_Return:

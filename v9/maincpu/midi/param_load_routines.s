@@ -643,11 +643,11 @@ ParaLoadOpt_GridDispatch:
 	cpw	(xwa), 1
 	jrl	nz, ParaLoadOpt_ReturnZero
 	cp	hl, 8
-	jr	z, ParaLoadOpt_PostDualEvent_Skip3
+	jr	z, ParaLoadOpt_GridDispatch_Skip3
 	cp	hl, 7:i3
-	jr	z, ParaLoadOpt_PostDualEvent_Skip2
+	jr	z, ParaLoadOpt_GridDispatch_Skip2
 	cp	hl, 3:i3
-	jr	z, ParaLoadOpt_PostDualEvent_Skip
+	jr	z, ParaLoadOpt_GridDispatch_Skip
 	cp	hl, 2:i3
 	jrl	nz, ParaLoadOpt_ReturnZero
 	ld	xiy, UserMemory_ConfirmData
@@ -660,7 +660,7 @@ ParaLoadOpt_GridDispatch:
 	ld	xbc, 1:i3
 	ld	(xwa+6), xbc
 	jrl	ParaLoadOpt_PostDualEvent_Join
-ParaLoadOpt_PostDualEvent_Skip:
+ParaLoadOpt_GridDispatch_Skip:
 	ld	xiy, UserMemory_ConfirmData
 	lda	xix, (xsp+44)
 	ldw	bc, 11
@@ -671,7 +671,7 @@ ParaLoadOpt_PostDualEvent_Skip:
 	ld	xbc, 1:i3
 	ld	(xwa+6), xbc
 	jrl	ParaLoadOpt_PostDualEvent_Join
-ParaLoadOpt_PostDualEvent_Skip2:
+ParaLoadOpt_GridDispatch_Skip2:
 	ld	xiy, UserMemory_ConfirmData
 	lda	xix, (xsp+44)
 	ldw	bc, 11
@@ -682,7 +682,7 @@ ParaLoadOpt_PostDualEvent_Skip2:
 	ld	xbc, 3:i3
 	ld	(xwa+6), xbc
 	jrl	ParaLoadOpt_PostDualEvent_Join
-ParaLoadOpt_PostDualEvent_Skip3:
+ParaLoadOpt_GridDispatch_Skip3:
 	ld	xiy, UserMemory_ConfirmData
 	lda	xix, (xsp+44)
 	ldw	bc, 11
@@ -708,11 +708,11 @@ ParaLoadOptGridCheck_OnIndexswDown:	; cases 29360152, 29360154
 	cpw	(xwa), 1
 	jrl	nz, ParaLoadOpt_ReturnZero
 	cp	hl, 8
-	jrl	z, ParaLoadOpt_PostDualEvent_Skip9
+	jrl	z, ParaLoadOptGridCheck_OnIndexswDown_Skip9
 	cp	hl, 7:i3
-	jr	z, ParaLoadOpt_PostDualEvent_Skip8
+	jr	z, ParaLoadOptGridCheck_OnIndexswDown_Skip8
 	cp	hl, 3:i3
-	jr	z, ParaLoadOpt_PostDualEvent_Skip4
+	jr	z, ParaLoadOptGridCheck_OnIndexswDown_Skip4
 	cp	hl, 2:i3
 	jrl	nz, ParaLoadOpt_ReturnZero
 	ld	xiy, UserMemory_ConfirmData
@@ -727,7 +727,7 @@ ParaLoadOptGridCheck_OnIndexswDown:	; cases 29360152, 29360154
 	ld	xbc, 0xffffffff
 	ld	(xwa+14), xbc
 	jr	ParaLoadOpt_PostDualEvent_Join
-ParaLoadOpt_PostDualEvent_Skip4:
+ParaLoadOptGridCheck_OnIndexswDown_Skip4:
 	ld	xiy, UserMemory_ConfirmData
 	lda	xix, (xsp+44)
 	ldw	bc, 11
@@ -740,7 +740,7 @@ ParaLoadOpt_PostDualEvent_Skip4:
 	ld	xbc, 0xffffffff
 	ld	(xwa+14), xbc
 	jr	ParaLoadOpt_PostDualEvent_Join
-ParaLoadOpt_PostDualEvent_Skip8:
+ParaLoadOptGridCheck_OnIndexswDown_Skip8:
 	ld	xiy, UserMemory_ConfirmData
 	lda	xix, (xsp+44)
 	ldw	bc, 11
@@ -753,7 +753,7 @@ ParaLoadOpt_PostDualEvent_Skip8:
 	ld	xbc, 0xffffffff
 	ld	(xwa+14), xbc
 	jr	ParaLoadOpt_PostDualEvent_Join
-ParaLoadOpt_PostDualEvent_Skip9:
+ParaLoadOptGridCheck_OnIndexswDown_Skip9:
 	ld	xiy, UserMemory_ConfirmData
 	lda	xix, (xsp+44)
 	ldw	bc, 11
@@ -777,7 +777,7 @@ ParaLoadOptGridCheck_OnRamData:
 	ld	xbc, xiz
 	lda	xde, (xhl+14)
 	cp	xiz, (xhl)
-	jr	nz, ParaLoadOpt_PostDualEvent_Skip5
+	jr	nz, ParaLoadOptGridCheck_OnRamData_Skip5
 	ldw	(xwa), 2
 	ld	xwa, (xde)
 	sll	xwa, 2
@@ -794,10 +794,10 @@ ParaLoadOptGridCheck_OnRamData:
 	lda	xde, (xsp+20)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	ParaLoadOptSendEvtReturn
-ParaLoadOpt_PostDualEvent_Skip5:
+ParaLoadOptGridCheck_OnRamData_Skip5:
 	lda	xhl, (xbc+1)
 	cp	xhl, (xix)
-	jr	nz, ParaLoadOpt_PostDualEvent_Skip6
+	jr	nz, ParaLoadOptGridCheck_OnRamData_Skip6
 	ldw	(xwa), 3
 	ld	xwa, (xde)
 	sll	xwa, 2
@@ -814,10 +814,10 @@ ParaLoadOpt_PostDualEvent_Skip5:
 	lda	xde, (xsp+20)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	ParaLoadOptSendEvtReturn
-ParaLoadOpt_PostDualEvent_Skip6:
+ParaLoadOptGridCheck_OnRamData_Skip6:
 	lda	xhl, (xbc+2)
 	cp	xhl, (xix)
-	jr	nz, ParaLoadOpt_PostDualEvent_Skip7
+	jr	nz, ParaLoadOptGridCheck_OnRamData_Skip7
 	ldw	(xwa), 7
 	ld	xwa, (xde)
 	sll	xwa, 2
@@ -834,7 +834,7 @@ ParaLoadOpt_PostDualEvent_Skip6:
 	lda	xde, (xsp+20)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	ParaLoadOptSendEvtReturn
-ParaLoadOpt_PostDualEvent_Skip7:
+ParaLoadOptGridCheck_OnRamData_Skip7:
 	inc	3, xbc
 	cp	xbc, (xix)
 	jrl	nz, ParaLoadOpt_ReturnZero

@@ -3452,9 +3452,10 @@ PanelMemory_PostBankLoad:
 	call VoiceData_ExtendedParamSetup
 	jr t, .Lc_fb5b39
 .Lc_fb5b1a:
+PanelMemory_PostBankLoad_Skip2:
 	lds_erpb 0xfb, 0
 .Lc_fb5b1d:
-BitMapOut_UpdateWidget_Finalize_Loop:
+PanelMemory_PostBankLoad_Loop:
 	ld_erpb_rr c, 0xfb
 	extz BC
 	ld A,(XSP+0x02)
@@ -3466,6 +3467,7 @@ BitMapOut_UpdateWidget_Finalize_Loop:
 	cp_erpb 0xfb, 0x08
 	jr c, .Lc_fb5b1d
 .Lc_fb5b39:
+PanelMemory_PostBankLoad_Epilogue:
 	pop QIZ
 	inc 2,XSP
 	ret

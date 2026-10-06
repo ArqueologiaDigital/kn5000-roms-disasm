@@ -23,7 +23,9 @@ QUESTION THIS ANSWERS / JOB IT DOES
       (reported) or several v10 names share the address (the first, by the same pick order
       as the symbolizers).  A v7 name that says something is never replaced: when v10's is
       structural it is reported as "target-name-better" (v10 should take v7's name), when
-      both say something different, as "both-named-differently" -- a human's call;
+      both say something different, as "both-named-differently" -- a human's call, except when a reviewed
+      proposal in analysis/kn5000-naming/ renamed exactly that old name to exactly this one in v10
+      ("rename-by-proposal");
     * v7 has no label there -> the v10 label is inserted in front of the source line that
       emits that address (symbolize_numeric_branches.build_map: the census marker mirror,
       refused unless it reproduces the dump), when that line starts exactly there.
@@ -147,6 +149,11 @@ def main():
             n = STRUCT.sub("", n)
         return n
     taken = set(sT) | col0T          # col0T too: the ELF can be older than the source
+    proposed = {}
+    for f in glob.glob(os.path.join(REPO, "analysis", "kn5000-naming", "proposals-*.json")):
+        for r in json.load(open(f)):
+            if isinstance(r, dict) and r.get("verdict", "name") == "name" and r.get("old") and r.get("new"):
+                proposed[r["old"]] = r["new"]
     for A, names in sorted(aF.items()):
         k = bisect.bisect_right(keys, A) - 1
         if k < 0 or k + 1 >= len(anch) or anch[k][1] != anch[k + 1][1]:
@@ -176,16 +183,20 @@ def main():
             old = sorted(tn, key=lambda n: (bool(STRUCT.search(n)), len(n), n))[0]
             if old in renames:
                 continue
-            if not STRUCT.search(old):
-                # the target's name says something: never trade it for another name here
+            if not STRUCT.search(old) and proposed.get(old) != nf:
+                # the target's name says something: never trade it for another name here -- unless a reviewed
+                # proposal (analysis/kn5000-naming/proposals-*.json) replaced exactly that old name with exactly
+                # this one in v10: then the old name was shown wrong for this code (2026-10-06, owner renames
+                # like EasyCmp_GridCheck -> AcEasyCmpGridBoxProc_OnGetFixedColStr)
                 kind = "target-name-better" if STRUCT.search(nf) else "both-named-differently"
                 stats[kind] += 1
                 rows.append({"addr": hex(A), "from": nf, "old": old, "result": kind})
                 continue
             renames[old] = nf
             taken.add(nf)
-            stats["rename"] += 1
-            rows.append({"addr": hex(A), "from": nf, "old": old, "result": "rename"})
+            kind = "rename" if STRUCT.search(old) else "rename-by-proposal"
+            stats[kind] += 1
+            rows.append({"addr": hex(A), "from": nf, "old": old, "result": kind})
         else:
             inserts[B] = nf
             taken.add(nf)

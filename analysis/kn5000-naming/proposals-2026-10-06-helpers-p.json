@@ -1,0 +1,428 @@
+[
+ {
+  "old": "SLSrcBankList_FuncBody_Helper8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SingleLoadSrc_DrawSoundMemBankRows",
+  "header": "Draws rows 0-1 of the single-load SOUND MEMORY source list (21-byte cells at RAM 0x894E / 0x8963): row 0 = the mode's bank caption (\"BANK\") + \": \"; row 1, only while the position 0x8A00 is one of the 2 x C sounds, = the bank name WP_GetPresetName3(pos / C) (\"MEMORY A\" / \"MEMORY B\"); C = entries per bank (20); posts EVT_PARA_DRAW. Basis: callers + body -- SingleLoadSrc_SoundMemListProc calls it first on EVT_PAINT and on bank paging (parameter 5) with C = SingleLoadSrc_SoundMemPageSize; for the USER KIT positions row 1 comes from SLSrcBankList_FuncBody_Helper9.",
+  "basis": "callers + body",
+  "evidence": [
+   "file_io/single_load.s:1119 `ld e, (SingleLoadSrc_SoundMemPageSize:24)` / 1127-1128 `ld c, e` / `calr SLSrcBankList_FuncBody_Helper8` -- caller SingleLoadSrc_SoundMemListProc, EVT_PAINT, C = page size",
+   "file_io/single_load.s:1167 / 1196 `calr SLSrcBankList_FuncBody_Helper8` -- caller, after paging 0x8A00 by +-20 (parameter 5)",
+   "file_io/single_load.s:936-952 `ld (xwa+), 0` / `lda xde, (SingleLoad_BankCaptionByMode:24)` / `ld xde, 0x894e` + ApPostEvent -- row 0 = caption + \": \"",
+   "file_io/single_load.s:955-959 `ld c, (0x8a00:16)` / `cp c, a` (A = 2C) -- row 1 only for positions below 2 x C",
+   "file_io/single_load.s:963-966 `div bc, (xsp)` / `ld de, 1:i3` / `calr WP_GetPresetName3` -- bank = pos / C into row 1 (0x8963)",
+   "ui_widgets/technichord_string_data.s:5630 `WP_GetPresetName3_PtrTable:` -- its three pointers name \"    MEMORY A    \", \"    MEMORY B    \", \"    USER KIT    \" (bytes 0x1A98C.. of naka_technichord_strings.bin)",
+   "ui_widgets/technichord_string_data.s:5283 `SingleLoad_BankCaptionByMode:` -- mode 3 SOUND MEMORY caption \"BANK\""
+  ]
+ },
+ {
+  "old": "SLSrcBankList_FuncBody_Helper9",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SingleLoadSrc_DrawUserKitName",
+  "header": "For a USER KIT position of the SOUND MEMORY source list (0x8A00 >= 2 x C, past the 40 sounds) fills row 1 (cell 1, RAM 0x8963) with the kit name read from the selected sound-memory file (SLSrcBankList_FuncBody_Helper17: 16 bytes at file offset 0x4980), pads it and posts EVT_PARA_DRAW; sound positions are left to SLSrcBankList_FuncBody_Helper8. Basis: callers + body -- SingleLoadSrc_SoundMemListProc calls it on EVT_PAINT and on parameter 40 (pending row-1 redraw, flag 0x81DE); 0x4980 = 16 + 40 x 470 follows the 40 sound records, the sound-RAM copy of the same name is WP_GetUserName2's 0x1E4980, and bank 2 of WP_GetPresetName3_PtrTable is \"USER KIT\".",
+  "basis": "callers + body",
+  "evidence": [
+   "file_io/single_load.s:1134 `calr SLSrcBankList_FuncBody_Helper9` -- caller SingleLoadSrc_SoundMemListProc on EVT_PAINT",
+   "file_io/single_load.s:1352-1356 `cp (0x81de:16), 0` / `calr SLSrcBankList_FuncBody_Helper9` / `ld (0x81de:16), 0` -- caller, parameter 40 redraw",
+   "file_io/single_load.s:978-981 `ld a, c` / `add a, c` / `cp (0x8a00:16), a` / `jr c, SLSrcBankList_FuncBody_Epilogue2` -- only for positions >= 2C",
+   "file_io/single_load.s:982-985 `ld (xwa+21), 1` / `lda xiz, (xwa+22)` / `call SLSrcBankList_FuncBody_Helper17` -- row 1 text",
+   "demo/file_demo_proc.s:6942-6975 `SLSrcBankList_FuncBody_Helper17:` ... `ld xwa, 0x4980` / `call FileIO_SeekAndReadBlock` / `ld xbc, 16` -- the 16-byte name at file offset 0x4980",
+   "demo/file_demo_proc.s:3612-3620 `ldw (xsp+8), 0x2927` / `ld xiz, 0x4980` -- the SLDst loader treats 0x4980.. (0x2927 bytes) as the third sound-memory block",
+   "file_io/wallpaper.s:636-642 `WP_GetUserName2:` / `lda xbc, (0x1e4980:24)` -- same 16-byte name in sound RAM",
+   "ui_widgets/technichord_string_data.s:5630 `WP_GetPresetName3_PtrTable:` -- bank 2 name \"    USER KIT    \""
+  ]
+ },
+ {
+  "old": "SLSrcBankList_FuncBody_Helper10",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SingleLoadSrc_DrawSoundMemItemNumber",
+  "header": "Fills row 2 of the SOUND MEMORY source list (RAM 0x8978) with StorageArea_UnitNames[mode] (\"MEMORY\") + \": \" and, unless the ALL flag 0x89FA is set, the 1-based item number -- (0x8A00 - 2C) + 1 for a USER KIT entry, (0x8A00 mod C) + 1 for a sound; with 0x89FA set it also writes \"ALL\" into row 3 (RAM 0x898D); posts EVT_PARA_DRAW per row. Basis: callers + body -- SingleLoadSrc_SoundMemListProc calls it on EVT_PAINT, bank paging (parameter 5) and item stepping (parameter 6), always with C = SingleLoadSrc_SoundMemPageSize (20).",
+  "basis": "callers + body",
+  "evidence": [
+   "file_io/single_load.s:1131 `calr SLSrcBankList_FuncBody_Helper10` -- caller SingleLoadSrc_SoundMemListProc, EVT_PAINT",
+   "file_io/single_load.s:1250 / 1262 / 1290 / 1304 `calr SLSrcBankList_FuncBody_Helper10` -- caller, after stepping 0x8A00 by +-1 (parameter 6)",
+   "file_io/single_load.s:1006-1016 `ld (xwa+42), 2` / `lda xde, (StorageArea_UnitNames:24)` / `call FileIO_BuildFilePath` -- row 2 = unit name + \": \"",
+   "file_io/single_load.s:1018-1031 `cp (0x89fa:16), 0` / `cp c, e` / `sub c, e` / `inc 1, c` -- kit entry number = pos - 2C + 1",
+   "file_io/single_load.s:1036-1041 `div bc, (xsp+0x4)` / `ld a, b` / `inc 1, a` -- sound number = (pos mod C) + 1",
+   "file_io/single_load.s:1058-1062 `cp (0x89fa:16), 0` / `ld (xwa+63), 3` / `ld xbc, Str_AllOption_EA0980` -- row 3 \"ALL\" when 0x89FA is set"
+  ]
+ },
+ {
+  "old": "SLSrcBankList_FuncBody_Helper11",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SingleLoadSrc_DrawSoundMemItemName",
+  "header": "Unless the ALL flag 0x89FA is set, fills row 3 of the SOUND MEMORY source list (RAM 0x898D) with the name of the item at position 0x8A00 read from the selected file: a sound's name (SLSrcBankList_FuncBody_Helper16: 16 bytes at 16 + 470 x pos) or, past the 2 x C sounds, a USER KIT entry's name (SLSrcBankList_FuncBody_Helper18: ' ' + 13 bytes at 0x4AA7 + 80 x (pos - 2C)); posts EVT_PARA_DRAW. Basis: callers + body -- SingleLoadSrc_SoundMemListProc calls it on EVT_PAINT and on parameter 40 (pending row-3 redraw, flag 0x81DC); SLSrcBankList_FuncBody_Helper10 draws the matching number row, and the sound-RAM loader sizes the same two record kinds (470 and 80 bytes).",
+  "basis": "callers + body",
+  "evidence": [
+   "file_io/single_load.s:1137 `calr SLSrcBankList_FuncBody_Helper11` -- caller SingleLoadSrc_SoundMemListProc, EVT_PAINT",
+   "file_io/single_load.s:1358-1363 `cp (0x81dc:16), 0` / `calr SLSrcBankList_FuncBody_Helper11` / `ld (0x81dc:16), 0` -- caller, parameter 40 redraw",
+   "file_io/single_load.s:1076-1077 `cp (0x89fa:16), 0` / `jr nz, SLSrcBankList_FuncBody_Helper11_Epilogue` -- skipped in ALL mode",
+   "file_io/single_load.s:1081-1088 `ld a, (0x8a00:16)` / `cp a, e` / `sub a, e` / `call SLSrcBankList_FuncBody_Helper18` -- kit entry pos - 2C",
+   "file_io/single_load.s:1092-1094 `call SLSrcBankList_FuncBody_Helper16` -- sound pos",
+   "demo/file_demo_proc.s:6926-6928 `mul wa, 470` / `add wa, 16` -- Helper16 reads the sound name at 16 + 470 x n",
+   "demo/file_demo_proc.s:7013-7022 `ld (0x25c56:24), 32` / `mul wa, 80` / `add wa, 0x4aa7` / `ld xbc, 13` -- Helper18 reads ' ' + 13-byte kit entry name",
+   "demo/file_demo_proc.s:3476-3487 / 3507-3512 `ld xbc, 470` / `ldw (xsp+10), 80` / `ld xwa, 0x4aa7` -- the destination loader copies one 470-byte sound or one 80-byte kit entry",
+   "audio/note_voice_mapping.s:27769-27773 `cp iz, 128` / `lda xwa, (0x1e4aa7:24)` / `ldw bc, 0x2800` -- the kit area in sound RAM is 128 x 80 bytes"
+  ]
+ },
+ {
+  "old": "SLDstBankList_FuncBody_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SingleLoadDst_DrawPanelMemItemRows",
+  "header": "Fills rows 2-3 of the single-load PANEL MEMORY destination list (RAM 0x89CC / 0x89E1): row 2 = StorageArea_UnitNames[mode] (\"MEMORY\") + \": \" + ((0x8A02 mod C) + 1), row 3 = that panel memory's name from RAM (WP_GetNameByOffset(0x8A02, marker 3): 0x1ED350 + entry size x n + 178); with the ALL flag 0x89FA set row 2 is the unit name + \":\" only and row 3 \"ALL\"; posts EVT_PARA_DRAW for both. Basis: callers + body -- SingleLoadDst_PanelMemListProc calls it after SLDstBankList_FuncBody (rows 0-1: bank caption + number, WP_GetConfigName) on EVT_PAINT and bank paging (parameter 7), and alone on stepping (parameter 8), with C = SingleLoadDst_PanelMemBankSize (8); 0x1ED350 holds the 80 panel memories (MidiPkt_ArpPopReturn_Helper2).",
+  "basis": "callers + body",
+  "evidence": [
+   "file_io/single_load.s:1715-1717 `calr SLDstBankList_FuncBody` / `ld c, (SingleLoadDst_PanelMemBankSize:24)` / `calr SLDstBankList_FuncBody_Helper` -- caller SingleLoadDst_PanelMemListProc, EVT_PAINT",
+   "file_io/single_load.s:1821 `calr SLDstBankList_FuncBody_Helper` -- caller, parameter 8 step of 0x8A02",
+   "file_io/single_load.s:1633-1645 `ld (xde+42), 2` / `ld (xde+63), 3` / `lda xhl, (StorageArea_UnitNames:24)` / `cp (0x89fa:16), 0` -- rows 2/3, ALL test",
+   "file_io/single_load.s:1650-1656 `call FileIO_BuildFilePath` / `.long Str_AllOption_EA09B2` -- ALL: row 3 = \"ALL\"",
+   "file_io/single_load.s:1664-1669 `div wa, (xsp+0x4)` / `ld a, w` / `inc 1, a` -- number = (pos mod C) + 1",
+   "file_io/single_load.s:1677-1682 `ld c, (0x8a02:16)` / `ld de, 3:i3` / `calr WP_GetNameByOffset` -- row 3 = panel memory name",
+   "file_io/wallpaper.s:506-514 `WP_GetNameByOffset:` / `lda xwa, (0x1ed350:24)` / `lda xbc, (xix+178:16)` -- name field of entry n",
+   "midi/midi_dispatch_handlers.s:10147-10150 MidiPkt_SetXferBlock_LivePanel header -- \"block 2 is the 80 panel memories at 0x1ED350\""
+  ]
+ },
+ {
+  "old": "SLDstBankList_FuncBody_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SingleLoadDst_DrawSongRows",
+  "header": "Fills rows 1-2 of the single-load SEQUENCER destination list: row 1 (RAM 0x89B7) = StorageArea_UnitNames[mode] (\"SONG\") + \": \" + (song 0x8A04 + 1), row 2 (RAM 0x89CC) = that song slot's name (BuildSlotLabel(song, cell 2, no number): 16 bytes at SEQ_SONG_SLOTS + 0x800 x song + 0x100); posts EVT_PARA_DRAW for both. Basis: callers + body -- SingleLoadDst_SequencerListProc calls it after blanking rows 0/3 on EVT_PAINT and after stepping 0x8A04 with parameter 8; its header calls these rows \"'SONG: n' + slot label\".",
+  "basis": "callers + body",
+  "evidence": [
+   "file_io/single_load.s:1982 `calr SLDstBankList_FuncBody_Helper2` -- caller SingleLoadDst_SequencerListProc (EVT_PAINT falls in via SLDstBankList_FuncBody_Join5, and parameter 8 after `ld (0x8a04:16), c` at 1979)",
+   "file_io/single_load.s:1886-1895 `ld (xwa+21), 1` / `lda xde, (StorageArea_UnitNames:24)` / `ld xbc, SLDstMemLabel_ColonSep` -- row 1 = unit name + \": \"",
+   "file_io/single_load.s:1899-1904 `ld a, (0x8a04:16)` / `inc 1, a` / `calr NumToAscii_FormatNumber` -- song number + 1",
+   "file_io/single_load.s:1909-1917 `lda xiz, (0x89cc:16)` / `ld bc, 2:i3` / `ld de, 0:i3` / `calr BuildSlotLabel` / `call FileIO_CopyString` -- row 2 = slot label",
+   "file_io/single_load.s:3808-3818 `BuildSlotLabel:` / `lda xbc, (SEQ_SONG_SLOTS:24)` / `sll xwa, 11` / `lda xbc, (xbc+256)` -- the label is the song slot's 16-byte name",
+   "ui_widgets/technichord_string_data.s:5320-5324 StorageArea_UnitNames header -- area 1 unit \" SONG  \""
+  ]
+ },
+ {
+  "old": "SLDstBankList_FuncBody_Helper3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SingleLoadDst_DrawComposerBankRows",
+  "header": "Fills rows 0-1 of the single-load COMPOSER destination list: row 0 (RAM 0x89A2) = the mode's bank caption (\"BANK\") + \": \", row 1 (RAM 0x89B7) = the memory bank name of position 0x8A06 (WP_GetPresetName1(0x8A06 / C): \"MEMORY-A\" / \"-B\" / \"-C\"); posts EVT_PARA_DRAW for both. Basis: callers + body -- SingleLoadDst_ComposerListProc calls it on EVT_PAINT and on bank paging (parameter 7) with C = SingleLoadDst_ComposerBankSize (10 per bank, 30 in all); SingleLoad_MemoryBankNames, the table WP_GetPresetName1 reads, already documents this caller.",
+  "basis": "callers + body",
+  "evidence": [
+   "file_io/single_load.s:2145 `calr SLDstBankList_FuncBody_Helper3` -- caller SingleLoadDst_ComposerListProc, EVT_PAINT",
+   "file_io/single_load.s:2170 / 2185 `calr SLDstBankList_FuncBody_Helper3` -- caller, after paging 0x8A06 by +-10 (parameter 7)",
+   "file_io/single_load.s:2027-2040 `ld (xwa+), 0` / `lda xde, (SingleLoad_BankCaptionByMode:24)` / `ld xbc, SLDstBankList_FuncBody_Str_Colon_5` -- row 0",
+   "file_io/single_load.s:2043-2048 `ld c, (0x8a06:16)` / `div bc, (xsp+0x4)` / `ld de, 1:i3` / `calr WP_GetPresetName1` -- row 1 = bank name",
+   "ui_widgets/technichord_string_data.s:5516-5520 `SingleLoad_MemoryBankNames:` -- {\"MEMORY-A\", \"MEMORY-B\", \"MEMORY-C\"}, bank = position / 10"
+  ]
+ },
+ {
+  "old": "SLDstBankList_FuncBody_Helper4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SingleLoadDst_DrawComposerItemRows",
+  "header": "Fills rows 2-3 of the COMPOSER destination list: row 2 (RAM 0x89CC) = StorageArea_UnitNames[mode] (\"PATTERN\") + \": \" + PtrTbl_VariationNames[0x8A06 mod C] (\"VARI 1\"-\"VARI 4\", empty for sections 4-9), row 3 (RAM 0x89E1) = the section's name (WP_GetBankMemName(bank, section, 3): the RAM record at 0x948A0 for VARI 1-4, else \"INTRO 1\" .. \"ENDING 2\"); with the ALL flag 0x89FA set row 2 gets no section and row 3 is \"ALL\"; posts EVT_PARA_DRAW for both. Basis: callers + body -- SingleLoadDst_ComposerListProc calls it after SLDstBankList_FuncBody_Helper3 on EVT_PAINT and paging, and alone on stepping (parameter 8), with C = SingleLoadDst_ComposerBankSize (10).",
+  "basis": "callers + body",
+  "evidence": [
+   "file_io/single_load.s:2148 `calr SLDstBankList_FuncBody_Helper4` -- caller SingleLoadDst_ComposerListProc, EVT_PAINT",
+   "file_io/single_load.s:2252 `calr SLDstBankList_FuncBody_Helper4` -- caller, parameter 8 step",
+   "file_io/single_load.s:2066-2076 `ld (xwa+42), 2` / `lda xde, (StorageArea_UnitNames:24)` / `ld xbc, SLDstBankList_FuncBody_Str_Colon_6` -- row 2 = unit + \": \"",
+   "file_io/single_load.s:2078-2087 `cp (0x89fa:16), 0` / `div wa, (xsp+0x4)` / `ld a, w` / `calr WP_GetPresetPtr` / `call FileIO_BuildFilePath` -- variation name of section pos mod 10",
+   "file_io/single_load.s:2097-2100 `cp (0x89fa:16), 0` / `ld (xwa), 3` / `ld xbc, SLDstBankList_FuncBody_Str_ALL` -- ALL",
+   "file_io/single_load.s:2104-2114 `div bc, (xsp+0x4)` / `ld e, d` / `pushw 3` / `calr WP_GetBankMemName` -- row 3 = section name (bank, section)",
+   "ui_widgets/technichord_string_data.s:5581-5584 `WP_SectionNameTable:` -- sections 4-9 INTRO 1 .. ENDING 2; 0-3 read from RAM 0x948A0 + 96 x (4 x bank + section)",
+   "ui_widgets/technichord_string_data.s:5540-5543 `PtrTbl_VariationNames:` -- entry = item mod items-per-bank (\"VARI 1\"..\"VARI 4\", then empty strings)"
+  ]
+ },
+ {
+  "old": "SLDstBankList_FuncBody_Helper5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SingleLoadDst_DrawSoundMemBankRows",
+  "header": "Fills rows 0-1 of the single-load SOUND MEMORY destination list: row 0 (RAM 0x89A2) = bank caption (\"BANK\") + \": \", row 1 (RAM 0x89B7) = \"MEMORY A\" / \"MEMORY B\" (WP_GetPresetName3(0x8A08 / C)) for the 2 x C sound positions, else the USER KIT name in sound RAM (WP_GetUserName2: 16 bytes at 0x1E4980); posts EVT_PARA_DRAW for both. Basis: callers + body -- SingleLoadDst_SoundMemListProc calls it with SLDstBankList_FuncBody_Helper6 on EVT_PAINT and on column moves (parameter 7), C = SLDstSoundMem_RowsPerColumn (20); it is the RAM-side twin of the source list's SLSrcBankList_FuncBody_Helper8/_Helper9, which read the file.",
+  "basis": "callers + body",
+  "evidence": [
+   "file_io/single_load.s:2488 `calr SLDstBankList_FuncBody_Helper5` -- caller SingleLoadDst_SoundMemListProc, EVT_PAINT",
+   "file_io/single_load.s:2519 / 2550 `calr SLDstBankList_FuncBody_Helper5` -- caller, after a +-20 column move",
+   "file_io/single_load.s:2317-2330 `ld (xwa+), 0` / `lda xde, (SingleLoad_BankCaptionByMode:24)` / `ld xbc, Data_SaveLoadMenuTable` (\": \") -- row 0",
+   "file_io/single_load.s:2331-2342 `ld c, (0x8a08:16)` / `cp c, e` / `div bc, (xsp)` / `calr WP_GetPresetName3` -- MEMORY A/B for pos < 2C",
+   "file_io/single_load.s:2344-2346 `ld bc, 1:i3` / `calr WP_GetUserName2` -- USER KIT name otherwise",
+   "file_io/wallpaper.s:636-642 `WP_GetUserName2:` / `lda xbc, (0x1e4980:24)` -- 16-byte name at 0x1E4980"
+  ]
+ },
+ {
+  "old": "SLDstBankList_FuncBody_Helper6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SingleLoadDst_DrawSoundMemItemRows",
+  "header": "Fills rows 2-3 of the SOUND MEMORY destination list (RAM 0x89CC / 0x89E1): with the ALL flag 0x89FA set, unit name + \":\" and \"ALL\"; otherwise \"MEMORY: n\" and the item's name from sound RAM -- for a position 0x8A08 >= 2C the USER KIT entry n = pos - 2C + 1 (WP_GetUserName3: ' ' + 13 bytes at 0x1E4AA7 + 80 x (n - 1)), else the sound n = (pos mod C) + 1 (WP_GetUserName1: 0x1E0010 + 470 x pos); posts EVT_PARA_DRAW for both. Basis: callers + body -- SingleLoadDst_SoundMemListProc calls it on EVT_PAINT, column moves and item steps with C = SLDstSoundMem_RowsPerColumn (20); RAM-side twin of SLSrcBankList_FuncBody_Helper10/_Helper11.",
+  "basis": "callers + body",
+  "evidence": [
+   "file_io/single_load.s:2491 `calr SLDstBankList_FuncBody_Helper6` -- caller SingleLoadDst_SoundMemListProc, EVT_PAINT",
+   "file_io/single_load.s:2608 / 2620 / 2648 / 2662 `calr SLDstBankList_FuncBody_Helper6` -- caller, item steps",
+   "file_io/single_load.s:2363-2384 `lda xde, (StorageArea_UnitNames:24)` / `cp (0x89fa:16), 0` / `ld (xwa+63), 3` / `ld xbc, SLDstBankList_FuncBody_Str_ALL_2` -- ALL case",
+   "file_io/single_load.s:2387-2393 `ld l, (xsp+4)` / `add l, (xsp+0x4)` / `cp (0x8a08:16), l` -- pos >= 2C selects the kit branch",
+   "file_io/single_load.s:2408-2426 `sub a, c` / `inc 1, a` / `calr NumToAscii_FormatNumber` / `sub c, e` / `ld de, 3:i3` / `calr WP_GetUserName3` -- kit entry number and name",
+   "file_io/single_load.s:2441-2457 `div wa, (xsp+0x4)` / `ld a, w` / `inc 1, a` / `calr WP_GetUserName1` -- sound number and name",
+   "file_io/wallpaper.s:618-631 / 654-664 `WP_GetUserName1:` (0x1E0000 + 16 + 0x1D6 x n) / `WP_GetUserName3:` (0x1E4AA7 + 0x50 x n, ' ' + 13 bytes)"
+  ]
+ },
+ {
+  "old": "SysEx_ResetAndReturn_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SysEx_SendSequencerData",
+  "header": "Code-2 (SEQUENCER) sender of SysEx_InitiateSend: points the send-side total descriptor 0xBCBC at the whole sequencer transfer (MidiPkt_SetXferTotal_SeqData) and tail-jumps into the sequencer group of MidiPkt_ArpConfigChain_Data (MidiPkt_ArpConfigChain_Data_Join: current song, song slots, event memory, then F0 50 27 7E F7). Basis: callers + body -- only SysEx_InitiateSend_SendSequencer (entry 2 of SysExSend_SwitchOffsets) calls it, then rejoins SysEx_InitiateSend_Join; same shape as case 0's SysEx_SendAllData.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:13630-13632 `SysEx_InitiateSend_SendSequencer:` / `call SysEx_ResetAndReturn_Helper2` / `jr SysEx_InitiateSend_Join` -- caller",
+   "ui_widgets/widget_dispatch.s:1430 `.short SysEx_InitiateSend_SendSequencer - SysEx_SendDispatch` -- switch entry 2",
+   "midi/midi_dispatch_handlers.s:11094-11097 `ld xwa, 0xbcbc` / `call MidiPkt_SetXferTotal_SeqData` / `jrl MidiPkt_ArpConfigChain_Data_Join` -- body",
+   "midi/midi_dispatch_handlers.s:10277-10282 MidiPkt_SetXferTotal_SeqData header -- whole sequencer transfer, \"SysEx_ResetAndReturn_Helper2 uses it for the send-side total 0xBCBC\"",
+   "midi/midi_dispatch_handlers.s:11328-11336 `MidiPkt_ArpConfigChain_Data_Join:` / `calr MidiPkt_ArpConfigChain_Data_Helper11` / `calr MidiPkt_ArpConfigChain_Data_Helper12` / `calr MidiPkt_ArpConfigChain_Data_Helper13` / `calr MidiPkt_ArpConfigChain_Data_Helper18` -- current song, song slots, event memory, group end",
+   "midi/midi_dispatch_handlers.s:11075-11087 SysEx_SendAllData -- case 0 does total + MidiPkt_ArpConfigChain_Data for all groups"
+  ]
+ },
+ {
+  "old": "SysEx_ResetAndReturn_Helper3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SysEx_SendSoundMemoryData",
+  "header": "Code-3 (SOUND MEMORY) sender of SysEx_InitiateSend: points 0xBCBC at the 0x72AA-byte sound RAM area from 0x1E0000 (MidiSeq_ClearSyncFlag_Helper3) and tail-jumps into the sound-RAM group of MidiPkt_ArpConfigChain_Data (MidiPkt_ArpConfigChain_Data_Helper4: the 16-byte 'KN5000 SOUND RAM' id at 0x1E0000, the data from 0x1E0010, then the group end). Basis: callers + body -- only SysEx_InitiateSend_SendSoundMemory (switch entry 3) calls it; MidiSysEx_FinishSoundRamXfer describes the same two blocks on the receive side.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:13633-13635 `SysEx_InitiateSend_SendSoundMemory:` / `call SysEx_ResetAndReturn_Helper3` -- caller",
+   "ui_widgets/widget_dispatch.s:1431 `.short SysEx_InitiateSend_SendSoundMemory - SysEx_SendDispatch` -- switch entry 3",
+   "midi/midi_dispatch_handlers.s:11098-11101 `ld xwa, 0xbcbc` / `call MidiSeq_ClearSyncFlag_Helper3` / `jrl MidiPkt_ArpConfigChain_Data_Helper4` -- body",
+   "midi/midi_dispatch_handlers.s:10178-10185 `MidiSeq_ClearSyncFlag_Helper3:` / `lda xbc, (0x1e0000:24)` / `ld xbc, 0x72aa` -- total = 0x1E0000 area",
+   "midi/midi_dispatch_handlers.s:11223-11231 `MidiPkt_ArpConfigChain_Data_Helper4:` / `calr MidiPkt_ArpConfigChain_Data_Helper5` / `calr MidiPkt_ArpConfigChain_Data_Helper6` / `calr MidiPkt_ArpConfigChain_Data_Helper18` -- blocks 0x1E0000 (16 B) and 0x1E0010 (0x729A B)",
+   "midi/midi_dispatch_handlers.s:12233-12235 MidiSysEx_FinishSoundRamXfer header -- \"the 16-byte 'KN5000 SOUND RAM' id at 0x1E0000 and the data from 0x1E0010\""
+  ]
+ },
+ {
+  "old": "SysEx_ResetAndReturn_Helper4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SysEx_SendPanelMemoryData",
+  "header": "Code-4 (PANEL MEMORY) sender of SysEx_InitiateSend: points 0xBCBC at the whole panel transfer (MidiPkt_SetXferTotal_Panel: live panel 0xF980-0xFFBF plus the 80 panel memories at 0x1ED350) and tail-jumps into the panel group of MidiPkt_ArpConfigChain_Data (MidiPkt_ArpConfigChain_Data_Helper: those two blocks, then the group end). Basis: callers + body -- only SysEx_InitiateSend_SendPanelMemory (switch entry 4) calls it; MidiPkt_SetXferTotal_Panel's header already names this use.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:13636-13638 `SysEx_InitiateSend_SendPanelMemory:` / `call SysEx_ResetAndReturn_Helper4` -- caller",
+   "ui_widgets/widget_dispatch.s:1432 `.short SysEx_InitiateSend_SendPanelMemory - SysEx_SendDispatch` -- switch entry 4",
+   "midi/midi_dispatch_handlers.s:11102-11105 `ld xwa, 0xbcbc` / `call MidiPkt_SetXferTotal_Panel` / `jrl MidiPkt_ArpConfigChain_Data_Helper` -- body",
+   "midi/midi_dispatch_handlers.s:10134-10139 MidiPkt_SetXferTotal_Panel header -- \"SysEx_ResetAndReturn_Helper4 uses it for the send-side total 0xBCBC\"",
+   "midi/midi_dispatch_handlers.s:11185-11188 `MidiPkt_ArpConfigChain_Data_Helper:` / `calr MidiPkt_ArpConfigChain_Data_Helper2` (MidiPkt_SetXferBlock_LivePanel) / `calr MidiPkt_ArpConfigChain_Data_Helper3` (0x1ED350, 0x12CB0) / `jrl MidiPkt_ArpConfigChain_Data_Helper18`"
+  ]
+ },
+ {
+  "old": "SysEx_ResetAndReturn_Helper5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SysEx_SendNothing",
+  "header": "Code-5 sender of SysEx_InitiateSend: a bare `ret`, so code 5 queues no data group and only the closing SysEx_FinishBulkSend runs. Basis: callers + body -- only SysEx_InitiateSend_SendNoData (switch entry 5) calls it; that case's header notes that no EXCLUSIVE list row maps to code 5. The name says literally what the routine does.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:13639-13643 `SysEx_InitiateSend_SendNoData:` / `call SysEx_ResetAndReturn_Helper5` / `jr SysEx_InitiateSend_Join` -- caller and its header",
+   "ui_widgets/widget_dispatch.s:1433 `.short SysEx_InitiateSend_SendNoData - SysEx_SendDispatch` -- switch entry 5",
+   "midi/midi_dispatch_handlers.s:11106-11107 `SysEx_ResetAndReturn_Helper5:` / `ret` -- body: nothing else",
+   "midi/midi_dispatch_handlers.s:13618-13619 `SysEx_InitiateSend_Join:` / `call SysEx_FinishBulkSend` -- what still runs for code 5"
+  ]
+ },
+ {
+  "old": "SysEx_ResetAndReturn_Helper6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SysEx_SendMspUserData",
+  "header": "Code-6 (MSP user) sender of SysEx_InitiateSend: points 0xBCBC at the accompaniment block area from 0x1E8800 (MidiSeq_ClearSyncFlag_Helper6: 0x3C00 bytes, or the used size from MidiPkt_GetUsedSize_AccompBlocks with bit 6 of 0xBD18 set) and tail-jumps into that group of MidiPkt_ArpConfigChain_Data (MidiPkt_ArpConfigChain_Data_Helper14: blocks 0x1E8800, 0x1E8820 and the 0x1E8B00 block pool, then the group end). Basis: callers + body -- only SysEx_InitiateSend_SendMspUser (switch entry 6) calls it.",
+  "basis": "callers + body",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:13644-13646 `SysEx_InitiateSend_SendMspUser:` / `call SysEx_ResetAndReturn_Helper6` -- caller",
+   "ui_widgets/widget_dispatch.s:1434 `.short SysEx_InitiateSend_SendMspUser - SysEx_SendDispatch` -- switch entry 6",
+   "midi/midi_dispatch_handlers.s:11108-11111 `ld xwa, 0xbcbc` / `call MidiSeq_ClearSyncFlag_Helper6` / `jrl MidiPkt_ArpConfigChain_Data_Helper14` -- body",
+   "midi/midi_dispatch_handlers.s:10351-10366 `MidiSeq_ClearSyncFlag_Helper6:` / `lda xwa, (0x1e8800:24)` / `ld xwa, 0x3c00` / `calr MidiPkt_GetUsedSize_AccompBlocks` -- total of the 0x1E8800 area",
+   "midi/midi_dispatch_handlers.s:11393-11397 `MidiPkt_ArpConfigChain_Data_Helper14:` / `calr MidiPkt_ArpConfigChain_Data_Helper15` / `calr MidiPkt_ArpConfigChain_Data_Helper16` / `calr MidiPkt_ArpConfigChain_Data_Helper17` / `jrl MidiPkt_ArpConfigChain_Data_Helper18` -- blocks 0x1E8800, 0x1E8820, MidiPkt_SetXferBlock_AccompBlockPool",
+   "midi/midi_dispatch_handlers.s:10463-10467 MidiPkt_GetUsedSize_AccompBlocks header -- names MidiSeq_ClearSyncFlag_Helper6 as the area total"
+  ]
+ },
+ {
+  "old": "DrumVoice_Handler7_Data_3_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpNcp_StepItemAValue",
+  "header": "Steps the value of the Composer NCP FROM item selected by 0x39A7 (0..2): calls CmpNcp_CallItemHandler with HL = CmpNcp_ItemA_HandlerIndex[(0x39A7)] (handlers 0-2), passing the direction through in W (bit 7 set = down). Basis: callers + body -- its only caller is the XIZ wrapper CmpNcp_StepItemAValue_Wrap, which CmpNcpTtl_TableDispatch_OnFromValueUp (W = 0) and _OnFromValueDown (W = 128) call; same wrapper/body pairing as CmpNcp_StepItemA_Wrap / CmpNcp_StepItemA.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:25727-25731 `CmpNcp_StepItemAValue_Wrap:` / `push xiz` / `call DrumVoice_Handler7_Data_3_Helper2` -- caller (header 25723-25726)",
+   "sequencer/accompaniment_engine.s:31548 / 31555-31556 `CmpNcpTtl_TableDispatch_OnFromValueUp:` / `ld w, 0:opc` / `call CmpNcp_StepItemAValue_Wrap`",
+   "sequencer/accompaniment_engine.s:31616 / 31623-31624 `CmpNcpTtl_TableDispatch_OnFromValueDown:` / `ld w, 128:opc` / `call CmpNcp_StepItemAValue_Wrap`",
+   "sequencer/accompaniment_engine.s:25732-25737 `ld a, (0x39a7:16)` / `sll a, 1` / `ld xix, CmpNcp_ItemA_HandlerIndex` / `ld hl, (xix+a)` / `call CmpNcp_CallItemHandler` -- body",
+   "sequencer/accompaniment_engine.s:25739-25743 `CmpNcp_ItemA_HandlerIndex:` / `.short 0, 1, 2`",
+   "sequencer/accompaniment_engine.s:25694-25713 CmpNcp_StepItemA_Wrap / CmpNcp_StepItemA -- the selector step for the same item"
+  ]
+ },
+ {
+  "old": "DrumVoice_Handler7_Data_3_Helper4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpNcp_StepItemBValue",
+  "header": "Steps the value of the Composer NCP TO item selected by 0x39A8 (0..1): calls CmpNcp_CallItemHandler with HL = CmpNcp_ItemB_HandlerIndex[(0x39A8)] (handlers 3, 4), passing the direction through in W (bit 7 set = down). Basis: callers + body -- its only caller is the XIZ wrapper CmpNcp_StepItemBValue_Wrap, which CmpNcpTtl_TableDispatch_OnToValueUp (W = 0) and _OnToValueDown (W = 128) call; TO counterpart of CmpNcp_StepItemAValue (DrumVoice_Handler7_Data_3_Helper2).",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:25769-25773 `CmpNcp_StepItemBValue_Wrap:` / `call DrumVoice_Handler7_Data_3_Helper4` -- caller (header 25765-25768)",
+   "sequencer/accompaniment_engine.s:31766 / 31773-31774 `CmpNcpTtl_TableDispatch_OnToValueUp:` / `ld w, 0:opc` / `call CmpNcp_StepItemBValue_Wrap`",
+   "sequencer/accompaniment_engine.s:31827 / 31834-31835 `CmpNcpTtl_TableDispatch_OnToValueDown:` / `ld w, 128:opc` / `call CmpNcp_StepItemBValue_Wrap`",
+   "sequencer/accompaniment_engine.s:25774-25779 `ld a, (0x39a8:16)` / `sll a, 1` / `ld xix, CmpNcp_ItemB_HandlerIndex` / `ld hl, (xix+a)` / `call CmpNcp_CallItemHandler` -- body",
+   "sequencer/accompaniment_engine.s:25781-25785 `CmpNcp_ItemB_HandlerIndex:` / `.short 3, 4`"
+  ]
+ },
+ {
+  "old": "SeqAccomp_SubHandlerB_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqPlay_DecPunchInMeasure",
+  "header": "Parameter 8 down on the sequencer play screen: decrements the punch-in measure 0xF238 (the \"P\" in-measure of MT_GetPInMeasString), not below 1, recomputes the playback start from it (SeqPlay_DataBlock_BBE_Helper2, the step-down counterpart of SeqPlay_UpdateStartFromPunchIn) and tail-jumps to SeqAcc_SetupRepeatCount. Basis: callers + body -- SeqAccomp_SubChain_DecPunchParam (\"Parameters 8/9/10 (punch in, punch out, count-in) down: one helper each\") calls it for parameter 8; the parameter-8 increment is SeqPlay_DataBlock_BBE (cap 998).",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:23306-23318 `SeqAccomp_SubChain_DecPunchParam:` / `cp xwa, 8` / `call SeqAccomp_SubHandlerB_Helper` -- caller, parameter 8",
+   "sequencer/sequencer_engine.s:375-383 `ld wa, (0xf238:16)` / `cp wa, 1:i3` / `jr ule` / `dec 1, wa` / `ld (0xf238:16), wa` / `calr SeqPlay_DataBlock_BBE_Helper2` / `jrl SeqAcc_SetupRepeatCount` -- body",
+   "sequencer/sequencer_engine.s:360-374 SeqPlay_DataBlock_BBE `inc 1, wa` / `cp wa, 998` / `calr SeqPlay_UpdateStartFromPunchIn` -- the increment twin (called by SeqAccomp_ParamDelivery_IncPInPOutPCntIn at 23130)",
+   "sequencer/sequencer_engine.s:424-450 `SeqPlay_DataBlock_BBE_Helper2:` -- start = punch-in - 0xF23F into 0x2668/0x26EC",
+   "shared/event_codes.s:690 `EVT_GET_P_IN_MEAS_STRING` -- \"P\" in-measure = RAM word 0xF238"
+  ]
+ },
+ {
+  "old": "SeqAccomp_SubHandlerA_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqPlay_IncPunchOutMeasure",
+  "header": "Parameter 9 up on the sequencer play screen: increments the punch-out measure 0xF23A (MT_GetPOutMeasString), capped at 999; if the punch-in measure 0xF238 is not below it, pulls punch-in to punch-out - 1, recomputes the start (SeqPlay_UpdateStartFromPunchIn) and runs SeqAcc_SetupRepeatCount. Basis: callers + body -- SeqAccomp_ParamDelivery_IncPInPOutPCntIn calls it for parameter 9 (\"P out-measure 0xF23A\"); SeqPlay_UpdateStartFromPunchIn's header already cites it as \"case 9, punch-out up\".",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:23118-23133 `SeqAccomp_ParamDelivery_IncPInPOutPCntIn:` / `cp xwa, 9` / `call SeqAccomp_SubHandlerA_Helper` -- caller, parameter 9",
+   "sequencer/sequencer_engine.s:451-461 `ld wa, (0xf23a:16)` / `cp wa, 999` / `ldw (0xf23a:16), 999` / `inc 1, wa` / `ld (0xf23a:16), wa` -- punch-out up, cap 999",
+   "sequencer/sequencer_engine.s:462-469 `cp (62008:16), wa` / `ret c` / `dec 1, wa` / `ld (0xf238:16), wa` / `calr SeqPlay_UpdateStartFromPunchIn` / `calr SeqAcc_SetupRepeatCount` -- keep punch-in below punch-out",
+   "sequencer/sequencer_engine.s:384-390 SeqPlay_UpdateStartFromPunchIn header -- \"SeqAccomp_SubHandlerA_Helper (case 9, punch-out up)\"",
+   "shared/event_codes.s:691 `EVT_GET_P_OUT_MEAS_STRING` -- \"P\" out-measure = RAM word 0xF23A"
+  ]
+ },
+ {
+  "old": "SeqAccomp_SubHandlerB_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqPlay_DecPunchOutMeasure",
+  "header": "Parameter 9 down on the sequencer play screen: decrements the punch-out measure 0xF23A, not below 2; if the punch-in measure 0xF238 is not below it, sets punch-in to punch-out - 1, recomputes the start (SeqPlay_DataBlock_BBE_Helper2) and runs SeqAcc_SetupRepeatCount. Basis: callers + body -- SeqAccomp_SubChain_DecPunchParam calls it for parameter 9 (punch out); mirror of SeqAccomp_SubHandlerA_Helper (parameter 9 up).",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:23306-23321 `SeqAccomp_SubChain_DecPunchParam:` / `cp xwa, 9` / `call SeqAccomp_SubHandlerB_Helper2` -- caller, parameter 9",
+   "sequencer/sequencer_engine.s:470-480 `ld wa, (0xf23a:16)` / `cp wa, 2:i3` / `ldw (0xf23a:16), 2` / `dec 1, wa` / `ld (0xf23a:16), wa` -- punch-out down, floor 2",
+   "sequencer/sequencer_engine.s:481-488 `cp (62008:16), wa` / `ret c` / `dec 1, wa` / `ld (0xf238:16), wa` / `calr SeqPlay_DataBlock_BBE_Helper2` / `calr SeqAcc_SetupRepeatCount`"
+  ]
+ },
+ {
+  "old": "SeqAccomp_SubHandlerA_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqPlay_IncPunchCountIn",
+  "header": "Parameter 10 up on the sequencer play screen: increments the punch count-in 0xF23F (MT_GetPCntInString), capped at 997, clamps it to punch-in - 1 (0x28C3, SeqAcc_UpdateEndPosition), sets the playback start words 0x2668 / 0x26EC = punch-in - count-in and tail-jumps to SeqAcc_SetupRepeatCount; with bit 0 of 0x28B2 set and punch-in <= 2 it does nothing. Basis: callers + body -- SeqAccomp_ParamDelivery_IncPInPOutPCntIn calls it for parameter 10 (\"P count-in 0xF23F\").",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:23118-23136 `SeqAccomp_ParamDelivery_IncPInPOutPCntIn:` / `cp xwa, 10` / `call SeqAccomp_SubHandlerA_Helper2` -- caller, parameter 10",
+   "sequencer/sequencer_engine.s:490-493 `bit 0, (10418:16)` / `cpw (62008:16), 2` / `ret ule` -- no change at punch-in <= 2 in that mode",
+   "sequencer/sequencer_engine.s:495-502 `ld wa, (0xf23f:16)` / `cp wa, 997` / `inc 1, wa` / `ld (0xf23f:16), wa` -- count-in up, cap 997",
+   "sequencer/sequencer_engine.s:504-512 `ld (0x28c3:16), wa` / `calr SeqAcc_UpdateEndPosition` / `sub wa, (62015:16)` / `ld (9832:16), wa` / `ld (9964:16), wa` / `jrl SeqAcc_SetupRepeatCount`",
+   "sequencer/sequencer_engine.s:159-164 `SeqAcc_UpdateEndPosition:` -- clamps 0xF23F to (0x28C3)",
+   "shared/event_codes.s:692 `EVT_GET_P_CNT_IN_STRING` -- \"P\" count-in = RAM word 0xF23F"
+  ]
+ },
+ {
+  "old": "SeqAccomp_SubHandlerB_Helper3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqPlay_DecPunchCountIn",
+  "header": "Parameter 10 down on the sequencer play screen: decrements the punch count-in 0xF23F, not below 0, then clamps it to punch-in - 1 (SeqAcc_UpdateEndPosition), sets the start words 0x2668 / 0x26EC = punch-in - count-in and tail-jumps to SeqAcc_SetupRepeatCount; with bit 0 of 0x28B2 set and punch-in <= 2 it does nothing. Basis: callers + body -- SeqAccomp_SubChain_DecPunchParam calls it for parameter 10 (count-in); mirror of SeqAccomp_SubHandlerA_Helper2.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:23306-23324 `SeqAccomp_SubChain_DecPunchParam:` / `cp xwa, 10` / `call SeqAccomp_SubHandlerB_Helper3` -- caller, parameter 10",
+   "sequencer/sequencer_engine.s:514-517 `bit 0, (10418:16)` / `cpw (62008:16), 2` / `ret ule`",
+   "sequencer/sequencer_engine.s:519-523 `ld wa, (0xf23f:16)` / `cp wa, 0:i3` / `dec 1, wa` / `ld (0xf23f:16), wa` -- count-in down, floor 0",
+   "sequencer/sequencer_engine.s:525-533 `calr SeqAcc_UpdateEndPosition` / `sub wa, (62015:16)` / `ld (9832:16), wa` / `ld (9964:16), wa` / `jrl SeqAcc_SetupRepeatCount`"
+  ]
+ },
+ {
+  "old": "CstmCpTtl_Dispatch2_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CstmCpTtl_ResolvePendingCopy",
+  "header": "Settles the custom-rhythm copy (FROM 0x39B6 -> TO 0x39B7) that Flash_InitBytecodeBlock left pending with result 2 -- it saved FROM, TO and the group in 0x0C68 / 0x0C6A / 0x0C6C and the caller opened the memory-full / function-select window: re-runs Flash_InitExtMemAddrs, then with A = 0 (EXECUTE) completes the copy (Flash_InitBytecodeBlock_Helper8 for FROM < 10, Flash_InitBytecodeBlock_Helper9 otherwise, the same split Flash_InitBytecodeBlock makes) and with any other A (ABORT passes 2) copies nothing; returns L = 0. Basis: callers + body -- CstmCpTtl_RecMode2_OnWindowExecute calls it with WA = 0 (\"carries out the pending copy\"), CstmCpTtl_RecMode2_OnCopyOrWindowAbort with WA = 2 while a window is open; both then hide the window and post message 35.",
+  "basis": "callers + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:32649-32657 `CstmCpTtl_RecMode2_OnWindowExecute:` / `ld wa, 0:i3` / `call CstmCpTtl_Dispatch2_Helper` -- caller, EXECUTE",
+   "sequencer/accompaniment_engine.s:32673-32676 / 32722-32724 `cp a, 2:i3` (0x3a7e) / `ld wa, 2:i3` / `call CstmCpTtl_Dispatch2_Helper` -- caller, ABORT with a window open",
+   "sequencer/accompaniment_engine.s:32687-32691 / 32705-32715 `call Flash_InitBytecodeBlock` (FROM 0x39b6, TO 0x39b7) / `cp l, 2:i3` / `ld (0x3a7e:16), 1|2` -- result 2 opens the window",
+   "storage/flash_floppy_handlers.s:1527-1532 / 1544-1548 `cp (xsp+0x2), 2` / `ld (0xc68), (xsp+0xc)` / `ld (0xc6a), (xsp+0xa)` / `ld (0xc6c), (xsp+0x6)` -- Flash_InitBytecodeBlock saves FROM / TO / group on result 2",
+   "storage/flash_floppy_handlers.s:1550-1556 `ld (xsp), a` / `calr Flash_InitExtMemAddrs` / `ld l, (3176:16)` / `ld c, (3178:16)` / `ld e, (3180:16)` -- reloads them",
+   "storage/flash_floppy_handlers.s:1557-1570 `cp (xsp), 2` / `cp (xsp), 0` / `cp l, 10` / `calr Flash_InitBytecodeBlock_Helper8` / `calr Flash_InitBytecodeBlock_Helper9` -- only A = 0 copies, split on FROM < 10",
+   "storage/flash_floppy_handlers.s:1326 `cp (xsp+0xc), 10` -- Flash_InitBytecodeBlock makes the same FROM < 10 split",
+   "storage/flash_floppy_handlers.s:3981-3999 `Flash_InitBytecodeBlock_Helper8:` ... `calr Flash_WriteSlotOwnerMap` / `calr Flash_CopyBlocksToSlots` / `call TmFlash_CopyToExtMem` -- the same completion steps as the direct copy path (1431-1436)",
+   "storage/flash_floppy_handlers.s:1571-1574 `ld l, 0:opc` / `ret` -- always returns 0"
+  ]
+ },
+ {
+  "old": "ToneParam_ExtendedOpsBlock_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AccPatch_ConvertLegacySectionLayout",
+  "header": "Converts a style image in the older 20-section layout to the current 30-section one: copies the image as read (RHYTHM_PATTERN_BUF_PTR) into the work buffer (word 0x0C72 = 0x69800) -- header byte +16, the 20 section records at +0x60, the pattern data moved from +0x800 to +0x1400 -- then copies each old section into its new place(s) in the live image (ToneParam_ExtendedOpsBlock_Helper3, 0x39AC old -> 0x39AD new): variations 0-11 one to one, old 12-15 (intro, fill-in 1/2, ending) into both the A (12-17) and B (18-23) sets, old 16-19 into the C set (24-29), intros and endings into both 1 and 2; HL = 0xFF95 if a copy failed (that section is re-initialised), else 0. Basis: callers + body -- AccPatch_ConvertLegacyStyleImage calls it for the headers 'F',0,'K' / 'F',' ','K' / 'L','K','A' / 'L','K','B' (\"converted into the current layout\"); the targets follow the 30 section names.",
+  "basis": "callers + body",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:4965-4969 AccPatch_ConvertLegacyStyleImage header -- these four headers are \"converted into the current layout (ToneParam_ExtendedOpsBlock_Helper2)\"",
+   "storage/flash_floppy_handlers.s:5033-5035 `ToneParam_ExtendedOpsBlock_Skip9:` / `calr ToneParam_ExtendedOpsBlock_Helper2` / `ld iz, hl` -- caller",
+   "storage/flash_floppy_handlers.s:5055-5066 `ld xhl, (RHYTHM_PATTERN_BUF_PTR:16)` / `ld xde, (3186:16)` / `ld (xde+16), a` / `ldw bc, 975` / `lda xiy, (xhl+0x800)` / `lda xix, (xde+0x1400)` / `ldw bc, 0x77ff` -- relocation into the work buffer",
+   "storage/flash_floppy_handlers.s:1311-1312 `lda xwa, (0x069800:24)` / `ld (3186:16), xwa` -- Flash_InitExtMemAddrs sets the work buffer",
+   "storage/flash_floppy_handlers.s:5070-5073 `ld (0x39ae:16), xwa` (work buffer) / `ld (0x39b2:16), xwa` (RHYTHM_PATTERN_BUF_PTR)",
+   "storage/flash_floppy_handlers.s:5076-5086 loop `ld (0x39ac:16), a` / `ld (0x39ad:16), a` / `calr ToneParam_ExtendedOpsBlock_Helper3` / `cp xwa, 11` -- variations 0-11",
+   "storage/flash_floppy_handlers.s:5090-5211 `ld (0x39ac:16), 12` / `ld (0x39ad:16), 12` ... (16, 24) ... (12, 18) ... (15, 23) -- old 12-19 -> new 12-29",
+   "storage/flash_floppy_handlers.s:5219-5235 `ToneParam_ExtendedOpsBlock_Helper3:` / `call DualVoice_ParamLoadDone` / `call AccPatch_InitFromSlotIndex` / `ldw iz, 0xff95` -- copy, re-init on failure",
+   "sequencer/accompaniment_engine.s:22335-22367 AccPatch_LoadDualVoiceParams: 0x355C = section (0x39AC) of image (0x39AE), 0x3560 = section (0x39AD) of image (0x39B2), `ld xiy, (0x355c:16)` / `ld xix, (0x3560:16)` / `ldir85` -- copies 0x39AE[0x39AC] into 0x39B2[0x39AD] (dest XIX, as AccPatch_CopyDefaultsToSlot 14512-14519 shows)",
+   "sequencer/accompaniment_engine.s:11825-11854 the 30 section names: 0-11 a/b/c-variation1-4, 12-17 a-intro 1/2, a-fill in 1/2, a-ending 1/2, then b and c"
+  ]
+ },
+ {
+  "old": "ToneParam_ExtendedOpsBlock_Helper_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AccPatch_ResetSectionPartByte2Defaults",
+  "header": "Writes byte 2 of the four 8-byte accompaniment-part entries (+32/+40/+48/+56) of all 30 section records of the style image at (RHYTHM_PATTERN_BUF_PTR) to 64, 12, 116, 64 -- the values the 'clear' section template AccPatch_DefaultSlotData holds there; what byte 2 means is not established. Basis: callers + body -- AccPatch_ConvertLegacyStyleImage runs it last on every path (relabelled, converted or rebuilt default image) when an older-format style image is loaded; the composer single-load path (FileIO_ByteBlock_DemoProc1_Helper3) writes the same four values into sections taken from a file whose header is not 'H',0,'K'.",
+  "basis": "callers + body",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:5047-5048 `ToneParam_ExtendedOpsBlock_Skip11:` / `calr ToneParam_ExtendedOpsBlock_Helper_Helper` -- caller AccPatch_ConvertLegacyStyleImage, reached by every path",
+   "storage/flash_floppy_handlers.s:5239-5262 `ld de, 0:i3` / `add wa, 96` / `ld (xbc+34), 64` / `ld (xwa+42), 12` / `ld (xwa+50), 116` / `ld (xwa+58), 64` / `add de, 96` / `cp l, 30` -- body: 30 records of 96 bytes from +0x60",
+   "sequencer/accompaniment_engine.s:14689-14699 `AccPatch_DefaultSlotData:` -- copied to slot +12: entries at +32/+40/+48/+56 have byte 2 = 0x40, 0x0c, 0x74, 0x40",
+   "sequencer/accompaniment_engine.s:1746-1786 AccPart_SelectSource `add xiy, 0x20|0x28|0x30|0x38` / `ld xix, 0x324d|0x3254|0x325b|0x3262` / `ld bc, 7:i3` -- these 8-byte entries are the per-part records of accompaniment parts",
+   "sequencer/accompaniment_engine.s:39031-39036 / 39056-39080 `cp_erpb 249, 72` / `cpib_erp 250, 0` / `cp_erpb 251, 75` / `ld (xwa+34), 64` ... `ld (xwa+58), 64` -- same fix-up for a non-'H',0,'K' file in FileIO_ByteBlock_DemoProc1_Helper3",
+   "sequencer/accompaniment_engine.s:39128-39170 the same four stores after the second header test"
+  ]
+ },
+ {
+  "old": "ToneParam_ExtendedOpsBlock_Helper_Helper2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AccPatch_LoadIntroFillEndingFromRhythm",
+  "header": "Rebuilds the intro 1/2, fill-in 1/2 and ending 1/2 sections of the A, B and C groups (12-17, 18-23, 24-29) from the rhythm recorded in word +16 of the group's variation-1 section (sections 0, 4, 8: image bytes +0x70, +0x1F0, +0x370 into 0x34ED/0x34EE): for each it sets 0x34EF = part (4/5 intro, 10/11 fill-in, 6/7 ending) and 0x34D6 = target section and calls ToneParam_ExtendedOpsBlock_Helper4 (AccPat_DispatchNoteChange: a ROM rhythm below 0x80 via RhythmROM_PatternDispatcher, 0x80-0x9F a copy of that section); saves and restores 0x34ED-0x34EF; returns the incoming status in HL, or 0xFF95 once a section fails. Basis: callers + body -- AccPatch_ConvertLegacyStyleImage calls it after relabelling or converting an older-format image whose header byte +16 is 0; the part/section pairs match the section-name order (12 a-intro 1, 14 a-fill in 1, 16 a-ending 1).",
+  "basis": "callers + body",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:5001-5004 `cp (xde+0x10), 0` / `ld wa, 0:i3` / `jr ToneParam_ExtendedOpsBlock_Join` -- caller, relabelled image with byte +16 = 0",
+   "storage/flash_floppy_handlers.s:5037-5041 `cp (xwa+0x10), 0` / `ld wa, iz` / `calr ToneParam_ExtendedOpsBlock_Helper_Helper2` -- caller, converted image",
+   "storage/flash_floppy_handlers.s:5265-5273 `ldfr_berp c, 251|250|249` (save 0x34ED-0x34EF) / `ld (0x34ed), (xbc+0x70)` / `ld (0x34ee), (xbc+0x71)` -- rhythm of section 0 (a-variation1)",
+   "storage/flash_floppy_handlers.s:5276-5297 `ld (0x34ef:16), 4` / `ld (0x34d6:16), 12` ... (5, 13) (6, 16) (7, 17) (10, 14) (11, 15) / `calr ToneParam_ExtendedOpsBlock_Helper4` -- group A",
+   "storage/flash_floppy_handlers.s:5301 / 5329 `ld (0x34ed), (xbc+0x1f0)` / `ld (0x34ed), (xbc+0x370)` -- groups B (sections 18-23) and C (24-29)",
+   "storage/flash_floppy_handlers.s:5356-5361 `ldto_berp c, 251|250|249` -- restore",
+   "storage/flash_floppy_handlers.s:5364-5376 `ToneParam_ExtendedOpsBlock_Helper4:` / `set 0, (0x34d1:16)` / `call AccPat_IndexToAddress_Sub` / `ldw iz, 0xff95` -- one section, failure status",
+   "sequencer/accompaniment_engine.s:22231-22295 AccPat_IndexToAddress_Sub -> AccPat_DispatchNoteChange: `cp a, 0x80` / `jr c, AccPat_Dispatch_LowRange` ... `calr RhythmROM_PatternDispatcher`; 0x80-0x9F `and a, 0x7f` / `calr AccPatch_LoadDualVoiceParams`",
+   "sequencer/accompaniment_engine.s:22604-22615 `RhythmROM_PatternDispatcher:` / `ld l, (0x34ed:16)` / `ld h, (0x34ee:16)` / `ld xiy, RhythmROM_BankProgramLocators` -- 0x34ED/0x34EE select the ROM rhythm, 0x34D6 the target section",
+   "sequencer/accompaniment_engine.s:11837-11842 `\" a-intro 1      \"` (12) .. `\" a-ending 2     \"` (17) -- section names"
+  ]
+ }
+]

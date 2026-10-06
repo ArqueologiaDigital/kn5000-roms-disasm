@@ -125,12 +125,12 @@ IvTimer_HandleEvent3A_Str_N1shot:	.incbin "includes/generated/naka_disk_warning.
 IvIndexSwCtrlProc_Str_ISC:		.incbin "includes/generated/naka_disk_warning.bin", 0xBEE, 0x4	; "ISC"
 IvIndexSwDelayProc_Str_ISD:		.incbin "includes/generated/naka_disk_warning.bin", 0xBF2, 0x4	; "ISD"
 IvWaitWinCtlProc_Str_WWC:		.incbin "includes/generated/naka_disk_warning.bin", 0xBF6, 0x4	; "WWC"
-; FDC_WaitReady_CaseTable -- 6 x int16: the case offsets of FDC_WaitReady_Skip10's compiled switch, relative to FDC_CONFIG_VERIFY_Code
+; FDC_WaitReady_CaseTable -- 6 x int16: the case offsets of FDC_CONFIG_VERIFY_Skip10's compiled switch, relative to FDC_CONFIG_VERIFY_Code
 FDC_WaitReady_CaseTable:
 	.short	FDC_CONFIG_VERIFY_Code - FDC_CONFIG_VERIFY_Code
 	.short	FDC_CONFIG_VERIFY_Case1 - FDC_CONFIG_VERIFY_Code
-	.short	FDC_CONFIG_VERIFY_Case2 - FDC_CONFIG_VERIFY_Code
-	.short	FDC_CONFIG_VERIFY_Case3 - FDC_CONFIG_VERIFY_Code
+	.short	FDC_CONFIG_VERIFY_On1024ByteSectorMedia - FDC_CONFIG_VERIFY_Code
+	.short	FDC_CONFIG_VERIFY_On1440KMedia - FDC_CONFIG_VERIFY_Code
 	.short	FDC_CONFIG_VERIFY_Case4 - FDC_CONFIG_VERIFY_Code
 	.short	FDC_CONFIG_VERIFY_Case5 - FDC_CONFIG_VERIFY_Code
 ; FDC_COMMAND_DISPATCHER_CaseTable -- 12 x int16: the case offsets of FDC_COMMAND_DISPATCHER's compiled switch, relative to FDC_CMD_HANDLER_BASE
@@ -272,7 +272,7 @@ GetEditSwPoint_CaseTable:
 SetWallPaper_CaseTable:
 	.short	SetWallPaper_DispatchData - SetWallPaper_DispatchData
 	.short	SetWallPaper_CaseData - SetWallPaper_DispatchData
-	.short	SetWallPaper_Case2 - SetWallPaper_DispatchData
+	.short	SetWallPaper_MenuWallBorder - SetWallPaper_DispatchData
 	.short	SetWallPaper_Default - SetWallPaper_DispatchData
 	.short	SetWallPaper_Loop - SetWallPaper_DispatchData
 	.short	SetWallPaper_Loop - SetWallPaper_DispatchData
@@ -300,18 +300,18 @@ IvDirmdScreenProc_Str_K:
 DirmdTitle_EmulatorMethods:	.incbin "includes/generated/naka_disk_warning.bin", 0xEB4, 0x10
 ; [nakarest] naka_disk_warning+0xec4  +0xec4..+0xed6 (0xea9b70, 18 B)
 ; [nakarest] Text (18 B at 0xea9b70), first string "DirmdTitleNew();"; no registered NAKA table
-; [nakarest] points into it; reached through source references PostTitle_Function_Skip
+; [nakarest] points into it; reached through source references DirmdTitle_New_Skip
 ; [nakarest] (audio/presentation_sound_nav.s: `ld xwa, DirmdTitleFunc_Str_DirmdTitleNew`).
 DirmdTitleFunc_Str_DirmdTitleNew:	.incbin "includes/generated/naka_disk_warning.bin", 0xEC4, 0x12	; "DirmdTitleNew();"
 ; [nakarest] naka_disk_warning+0xed6  +0xed6..+0xf00 (0xea9b82, 42 B)
 ; [nakarest] Text (42 B at 0xea9b82), first string "DirmdTitleOld();"; no registered NAKA table
-; [nakarest] points into it; reached through source references PostTitle_Function_Skip
+; [nakarest] points into it; reached through source references DirmdTitle_New_Skip
 ; [nakarest] (audio/presentation_sound_nav.s: `ld xwa, DirmdTitleFunc_Str_DirmdTitleOld`).
 DirmdTitleFunc_Str_DirmdTitleOld:		.incbin "includes/generated/naka_disk_warning.bin", 0xED6, 0x12	; "DirmdTitleOld();"
 DirmdTitleFunc_Str_DirmdTitleESw_Fmtd_Fmtd:	.incbin "includes/generated/naka_disk_warning.bin", 0xEE8, 0x18	; "DirmdTitleESw(%d, %d);"
 ; [nakarest] naka_disk_warning+0xf00  +0xf00..+0xf12 (0xea9bac, 18 B)
 ; [nakarest] Text (18 B at 0xea9bac), first string "DirmdTitleCur();"; no registered NAKA table
-; [nakarest] points into it; reached through source references PostTitle_Function_Skip
+; [nakarest] points into it; reached through source references DirmdTitle_New_Skip
 ; [nakarest] (audio/presentation_sound_nav.s: `ld xwa, DirmdTitleFunc_Str_DirmdTitleCur`).
 DirmdTitleFunc_Str_DirmdTitleCur:	.incbin "includes/generated/naka_disk_warning.bin", 0xF00, 0x12	; "DirmdTitleCur();"
 ; DirmdEmulator's case table: one 16-bit offset from DirmdEmulator_Dispatch per event EVT_NONE .. EVT_NONE+15
@@ -730,8 +730,8 @@ AcIndexEdit_SwitchDirCaseMap_Pad:	.incbin "includes/generated/naka_disk_warning.
 ; [nakarest] xix, AcIndexEdit_DispatchDSP_CaseTable`).
 AcIndexEdit_DispatchDSP_CaseTable:
 	.short	AcIndexEdit_DispatchDSP_InlineData - AcIndexEdit_DispatchDSP_InlineData
-	.short	AcIndexEdit_OK_AltView_Case1 - AcIndexEdit_DispatchDSP_InlineData
-	.short	AcIndexEdit_OK_AltView_Case2 - AcIndexEdit_DispatchDSP_InlineData
+	.short	AcIndexEditSwProc_OnUpStyle - AcIndexEdit_DispatchDSP_InlineData
+	.short	AcIndexEditSwProc_OnDownStyle - AcIndexEdit_DispatchDSP_InlineData
 PsPageBox_Confirm_DrawValue_Str_PAGE_Fmtd_Fmtd:	.incbin "includes/generated/naka_disk_warning.bin", 0x16A8, 0xC	; "PAGE %d/%d"
 IvPageControl_GetText_Str_PAGE:			.incbin "includes/generated/naka_disk_warning.bin", 0x16B4, 0x6	; "PAGE"
 IvMainEditSw_GetText_Str_MnSw:			.incbin "includes/generated/naka_disk_warning.bin", 0x16BA, 0x6	; "MnSw"
@@ -1421,7 +1421,7 @@ DrawFunc_Init_Entry3_Str_Fmt3d_2:	.incbin "includes/generated/naka_disk_warning.
 SeGfx_BoundOp0B_ClipRect:	.incbin "includes/generated/naka_disk_warning.bin", 0x24D4, 0x8
 ; [nakarest] naka_disk_warning+0x24dc  +0x24dc..+0x24e0 (0xeab188, 4 B)
 ; [nakarest] Text (4 B at 0xeab188), first string "%1d"; no registered NAKA table points into
-; [nakarest] it; reached through source references DrawFunc_Init_Join5
+; [nakarest] it; reached through source references SeGfx_BoundOp0B_FormatNumber_Join5
 ; [nakarest] (display/graphics_text_vga.s: `ld xwa, DrawFunc_Init_Entry3_Str_Fmt1d_2`).
 DrawFunc_Init_Entry3_Str_Fmt1d_2:	.incbin "includes/generated/naka_disk_warning.bin", 0x24DC, 0x4	; "%1d"
 ; [nakarest] naka_disk_warning+0x24e0  +0x24e0..+0x24e4 (0xeab18c, 4 B)

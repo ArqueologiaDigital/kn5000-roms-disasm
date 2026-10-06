@@ -25,14 +25,14 @@ SetSepaOutMode_Data_3:	.incbin "includes/generated/sepaout_config.bin", 0xC, 0x4
 SetSepaOutMode_Data_4:	.incbin "includes/generated/sepaout_config.bin", 0x10, 0x4
 SqSngSelTtlFunc_CaseTable:
 	.short	SqTrAs_CondCheck - SqTrAs_CondCheck
-	.short	SqSngSelTtlFunc_Case3 - SqTrAs_CondCheck
+	.short	SqSngSelTtlFunc_OnTitleOld - SqTrAs_CondCheck
 	.short	SqSngName_ReturnZero - SqTrAs_CondCheck
 	.short	SqSngName_ReturnZero - SqTrAs_CondCheck
 	.short	SqSngName_ReturnZero - SqTrAs_CondCheck
 	.short	SqSngName_ReturnZero - SqTrAs_CondCheck
 SqSngNameTtlFunc_CaseTable:
 	.short	SQTR_DISPATCH_TABLE_1 - SQTR_DISPATCH_TABLE_1
-	.short	SqSngNameTtlFunc_Case3 - SQTR_DISPATCH_TABLE_1
+	.short	SqSngNameTtlFunc_OnTitleOld - SQTR_DISPATCH_TABLE_1
 	.short	SqTrAs_ReturnZero - SQTR_DISPATCH_TABLE_1
 	.short	SqTrAs_ReturnZero - SQTR_DISPATCH_TABLE_1
 	.short	SqTrAs_ReturnZero - SQTR_DISPATCH_TABLE_1
@@ -46,25 +46,25 @@ SqTrAsTtlFunc_CaseTable:
 	.short	CDlikeSwTtl_ReturnZero2 - SQTR_DISPATCH_TABLE_2
 SqTrAsPsTtlFunc_CaseTable:
 	.short	SqTrAsPsTtl_Dispatch - SqTrAsPsTtl_Dispatch
-	.short	SqTrAsPsTtlFunc_Case3 - SqTrAsPsTtl_Dispatch
+	.short	SqTrAsPsTtlFunc_OnTitleOld - SqTrAsPsTtl_Dispatch
 	.short	SqTrAsPsTtl_ReturnZero - SqTrAsPsTtl_Dispatch
 	.short	SqTrAsPsTtl_ReturnZero - SqTrAsPsTtl_Dispatch
 	.short	SqTrAsPsTtl_ReturnZero - SqTrAsPsTtl_Dispatch
 	.short	SqTrAsPsTtl_ReturnZero - SqTrAsPsTtl_Dispatch
 SetWall_ReturnZero_Data:			.incbin "includes/generated/sepaout_config.bin", 0x44, 0xE
 SqTrAsPsTtl_CaseF_CaseTable:
-	.short	SqTrAsPsTtl_CaseF_Case0 - SqTrAsPsTtl_CaseF_Skip
+	.short	CDlike_ExitModeUnlessKeepTitle_OnKeepTitle - SqTrAsPsTtl_CaseF_Skip
 	.short	SqTrAsPsTtl_CaseF_Skip - SqTrAsPsTtl_CaseF_Skip
 SqMdlyPlyTtlFunc_CaseTable:
 	.short	SqMdlyPlyTtl_Dispatch - SqMdlyPlyTtl_Dispatch
-	.short	SqMdlyPlyTtlFunc_Case3 - SqMdlyPlyTtl_Dispatch
+	.short	SqMdlyPlyTtlFunc_OnTitleOld - SqMdlyPlyTtl_Dispatch
 	.short	SqMdlyPly_ReturnZero - SqMdlyPlyTtl_Dispatch
 	.short	SqMdlyPly_ReturnZero - SqMdlyPlyTtl_Dispatch
 	.short	SqMdlyPly_ReturnZero - SqMdlyPlyTtl_Dispatch
 	.short	SqMdlyPly_ReturnZero - SqMdlyPlyTtl_Dispatch
 DkMdlyPlyTtlFunc_CaseTable:
 	.short	DkMdlyPlyTtl_Dispatch - DkMdlyPlyTtl_Dispatch
-	.short	DkMdlyPlyTtlFunc_Case3 - DkMdlyPlyTtl_Dispatch
+	.short	DkMdlyPlyTtlFunc_OnTitleOld - DkMdlyPlyTtl_Dispatch
 	.short	DkMdlyPly_ReturnZero - DkMdlyPlyTtl_Dispatch
 	.short	DkMdlyPly_ReturnZero - DkMdlyPlyTtl_Dispatch
 	.short	DkMdlyPly_ReturnZero - DkMdlyPlyTtl_Dispatch
@@ -81,30 +81,30 @@ DisplayMode_DispatchEvents_CaseTable:
 	.short	DisplayMode_DispatchEvents_OnTitleDpmdlypd - DisplayMode_BatchEventSend
 DpMdlyDocTtlFunc_CaseTable:
 	.short	DpMdlyDocTtl_Dispatch - DpMdlyDocTtl_Dispatch
-	.short	DpMdlyDocTtlFunc_Case3 - DpMdlyDocTtl_Dispatch
+	.short	DpMdlyDocTtlFunc_OnTitleOld - DpMdlyDocTtl_Dispatch
 	.short	DpMdlyDoc_ReturnZero - DpMdlyDocTtl_Dispatch
 	.short	DpMdlyDoc_ReturnZero - DpMdlyDocTtl_Dispatch
 	.short	DpMdlyDoc_ReturnZero - DpMdlyDocTtl_Dispatch
 	.short	DpMdlyDoc_ReturnZero - DpMdlyDocTtl_Dispatch
 DpMdlyPdTtlFunc_CaseTable:
 	.short	DpMdlyPdTtl_Dispatch - DpMdlyPdTtl_Dispatch
-	.short	DpMdlyPdTtlFunc_Case3 - DpMdlyPdTtl_Dispatch
+	.short	DpMdlyPdTtlFunc_OnTitleOld - DpMdlyPdTtl_Dispatch
 	.short	DpMdlyPd_ReturnZero - DpMdlyPdTtl_Dispatch
 	.short	DpMdlyPd_ReturnZero - DpMdlyPdTtl_Dispatch
 	.short	DpMdlyPd_ReturnZero - DpMdlyPdTtl_Dispatch
 	.short	DpMdlyPd_ReturnZero - DpMdlyPdTtl_Dispatch
 DpMdlySmfTtlFunc_CaseTable:
 	.short	DpMdlySmfTtl_Dispatch - DpMdlySmfTtl_Dispatch
-	.short	DpMdlySmfTtlFunc_Case3 - DpMdlySmfTtl_Dispatch
+	.short	DpMdlySmfTtlFunc_OnTitleOld - DpMdlySmfTtl_Dispatch
 	.short	DpMdlySmf_ReturnZero - DpMdlySmfTtl_Dispatch
 	.short	DpMdlySmf_ReturnZero - DpMdlySmfTtl_Dispatch
 	.short	DpMdlySmf_ReturnZero - DpMdlySmfTtl_Dispatch
 	.short	DpMdlySmf_ReturnZero - DpMdlySmfTtl_Dispatch
 DpMdlySmfLyrTtlFunc_CaseTable:
 	.short	DpMdlySmfLyrTtl_Dispatch - DpMdlySmfLyrTtl_Dispatch
-	.short	DpMdlySmfLyrTtlFunc_Case3 - DpMdlySmfLyrTtl_Dispatch
+	.short	DpMdlySmfLyrTtlFunc_OnTitleOld - DpMdlySmfLyrTtl_Dispatch
 	.short	DpMdlySmfLyr_ReturnZero - DpMdlySmfLyrTtl_Dispatch
-	.short	DpMdlySmfLyrTtlFunc_Case5 - DpMdlySmfLyrTtl_Dispatch
+	.short	DpMdlySmfLyrTtlFunc_OnTitleActivate - DpMdlySmfLyrTtl_Dispatch
 	.short	DpMdlySmfLyr_ReturnZero - DpMdlySmfLyrTtl_Dispatch
 	.short	DpMdlySmfLyr_ReturnZero - DpMdlySmfLyrTtl_Dispatch
 NameGetFuncCall_Dispatch_Str_Fmt2d_Fmts:	.incbin "includes/generated/sepaout_config.bin", 0x10C, 0xA
@@ -136,11 +136,11 @@ DpDoc_CaseA_CaseTable:
 	.short	DpDocTtl_ReturnZero - DpDoc_CaseB
 	.short	DpDocTtl_ReturnZero - DpDoc_CaseB
 	.short	DpDocTtl_ReturnZero - DpDoc_CaseB
-	.short	DpDocTtlFunc_Switch2_Case137 - DpDoc_CaseB
-	.short	DpDocTtlFunc_Switch2_Case138 - DpDoc_CaseB
+	.short	DpDocTtlFunc_OnMic - DpDoc_CaseB
+	.short	DpDocTtlFunc_OnMixer - DpDoc_CaseB
 DpDocTtlFunc_CaseTable:
 	.short	DpDocTtl_Dispatch - DpDocTtl_Dispatch
-	.short	DpDocTtlFunc_Case3 - DpDocTtl_Dispatch
+	.short	DpDocTtlFunc_OnTitleOld - DpDocTtl_Dispatch
 	.short	DpDocTtl_ReturnZero - DpDocTtl_Dispatch
 	.short	DpDocTtl_ReturnZero - DpDocTtl_Dispatch
 	.short	DpDocTtl_ReturnZero - DpDocTtl_Dispatch
@@ -154,11 +154,11 @@ DpPd_CaseA_CaseTable:
 	.short	DpPdTtl_ReturnZero - DpPd_CaseB
 	.short	DpPdTtl_ReturnZero - DpPd_CaseB
 	.short	DpPdTtl_ReturnZero - DpPd_CaseB
-	.short	DpPdTtlFunc_Switch2_Case137 - DpPd_CaseB
-	.short	DpPdTtlFunc_Switch2_Case138 - DpPd_CaseB
+	.short	DpPdTtlFunc_OnMic - DpPd_CaseB
+	.short	DpPdTtlFunc_OnMixer - DpPd_CaseB
 DpPdTtlFunc_CaseTable:
 	.short	DpPdTtl_Dispatch - DpPdTtl_Dispatch
-	.short	DpPdTtlFunc_Case3 - DpPdTtl_Dispatch
+	.short	DpPdTtlFunc_OnTitleOld - DpPdTtl_Dispatch
 	.short	DpPdTtl_ReturnZero - DpPdTtl_Dispatch
 	.short	DpPdTtl_ReturnZero - DpPdTtl_Dispatch
 	.short	DpPdTtl_ReturnZero - DpPdTtl_Dispatch
@@ -172,8 +172,8 @@ DpSmf_CaseA_CaseTable:
 	.short	DpSmfTtl_ReturnZero - DpSmf_CaseB
 	.short	DpSmfTtl_ReturnZero - DpSmf_CaseB
 	.short	DpSmfTtl_ReturnZero - DpSmf_CaseB
-	.short	DpSmfTtlFunc_Switch2_Case137 - DpSmf_CaseB
-	.short	DpSmfTtlFunc_Switch2_Case138 - DpSmf_CaseB
+	.short	DpSmfTtlFunc_OnMic - DpSmf_CaseB
+	.short	DpSmfTtlFunc_OnMixer - DpSmf_CaseB
 DpSmfTtlFunc_CaseTable:
 	.short	DpSmfTtl_Dispatch - DpSmfTtl_Dispatch
 	.short	DpSmfTtlFunc_Case3 - DpSmfTtl_Dispatch
@@ -183,14 +183,14 @@ DpSmfTtlFunc_CaseTable:
 	.short	DpSmfTtl_ReturnZero - DpSmfTtl_Dispatch
 DpSmfLyrTtlFunc_CaseTable:
 	.short	DpSmfLyrTtl_Dispatch - DpSmfLyrTtl_Dispatch
-	.short	DpSmfLyrTtlFunc_Case3 - DpSmfLyrTtl_Dispatch
+	.short	DpSmfLyrTtlFunc_OnTitleOld - DpSmfLyrTtl_Dispatch
 	.short	SeqStep_ReturnZero - DpSmfLyrTtl_Dispatch
-	.short	DpSmfLyrTtlFunc_Case5 - DpSmfLyrTtl_Dispatch
+	.short	DpSmfLyrTtlFunc_OnTitleActivate - DpSmfLyrTtl_Dispatch
 	.short	SeqStep_ReturnZero - DpSmfLyrTtl_Dispatch
 	.short	SeqStep_ReturnZero - DpSmfLyrTtl_Dispatch
 SqTrSelTtlFunc_CaseTable:
 	.short	SqTrSelTtl_Dispatch - SqTrSelTtl_Dispatch
-	.short	SqTrSelTtlFunc_Case3 - SqTrSelTtl_Dispatch
+	.short	SqTrSelTtlFunc_OnTitleOld - SqTrSelTtl_Dispatch
 	.short	SqTrSelTtl_ReturnZero - SqTrSelTtl_Dispatch
 	.short	SqTrSelTtl_ReturnZero - SqTrSelTtl_Dispatch
 	.short	SqTrSelTtl_ReturnZero - SqTrSelTtl_Dispatch

@@ -3272,9 +3272,9 @@ PsEditSwBox_CalcEdgeSwitchRect_Epilogue:
 	ld	(xsp+10), xde
 	ld	iz, bc
 	cp	wa, iz
-	jr	c, PsEditSwBoxProc_Skip4
+	jr	c, PsEditSwBox_CalcEdgeSwitchRect_Skip4
 	ex16	iz, wa
-PsEditSwBoxProc_Skip4:
+PsEditSwBox_CalcEdgeSwitchRect_Skip4:
 	lda	xbc, (xsp+6)
 	calr	GetEditSwPoint
 	lda	xbc, (xsp+2)
@@ -3282,7 +3282,7 @@ PsEditSwBoxProc_Skip4:
 	calr	GetEditSwPoint
 	lda	xbc, (xsp+6)
 	cpw	(xbc+2), 239
-	jr	nz, PsEditSwBoxProc_Epilogue2
+	jr	nz, PsEditSwBox_CalcEdgeSwitchRect_Epilogue2
 	ld	xwa, (xsp+10)
 	ldw	(xwa+2), 216
 	ldw	(xwa+6), 238
@@ -3292,7 +3292,7 @@ PsEditSwBoxProc_Skip4:
 	ld	bc, (xsp+2)
 	add	bc, 15
 	ld	(xwa+4), bc
-PsEditSwBoxProc_Epilogue2:
+PsEditSwBox_CalcEdgeSwitchRect_Epilogue2:
 	popw	iz
 	lda	xsp, (xsp+12)
 	ret
@@ -3744,21 +3744,25 @@ AcIndexEdit_DispatchDSP_InlineData:
 	exts	xde
 	ld	xwa, (xsp+6)
 	bit	7, wa
-	jr	z, ButtonState_PaintProc_Skip
+	jr	z, AcIndexEdit_DispatchDSP_InlineData_Skip
 	ld	xwa, 0xffffffff
 	ld	xbc, EVT_INDEXSW_DOWN
 	jrl	AcIndexEdit_SendAndReturn
-ButtonState_PaintProc_Skip:
+AcIndexEdit_DispatchDSP_InlineData_Skip:
 	ld	xwa, 0xffffffff
 	ld	xbc, EVT_INDEXSW_UP
 	jrl	AcIndexEdit_SendAndReturn
-AcIndexEdit_OK_AltView_Case1:
+; AcIndexEditSwProc_OnUpStyle: Up-type styles (SS_Up, SS_On, SS_Right, SS_Yes, SS_Up2, SS_Right2): always
+;   EVT_INDEXSW_UP with the box index.
+AcIndexEditSwProc_OnUpStyle:
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, 0xffffffff
 	ld	xbc, EVT_INDEXSW_UP
 	jrl	AcIndexEdit_SendAndReturn
-AcIndexEdit_OK_AltView_Case2:
+; AcIndexEditSwProc_OnDownStyle: Down-type styles (SS_Down, SS_Off, SS_Left, SS_No, SS_Down2, SS_Left2): always
+;   EVT_INDEXSW_DOWN with the box index.
+AcIndexEditSwProc_OnDownStyle:
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, 0xffffffff
@@ -8941,7 +8945,7 @@ InputDialog_Confirm:
 	ld xhl, (xsp + 8)
 	sll xhl, 16
 	add xhl, (xsp + 12)
-	jr UnRegisterObject_Epilogue
+	jr InputDialog_Confirm_Epilogue
 
 InputDialog_Return:
 	inc 1, iy
@@ -8950,7 +8954,7 @@ InputDialog_Return:
 	ld xhl, 0xffffffff
 
 ; UnRegisterObject epilogue handler
-UnRegisterObject_Epilogue:
+InputDialog_Confirm_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 20)
 	ret
@@ -19412,12 +19416,12 @@ DrawFunc_StackHandler:
 	ld	xiz, xwa
 	ld	xwa, (xiz+4)
 	or	xwa, xwa
-	jr	z, DrawFunc_Return_Epilogue
+	jr	z, DrawFunc_StackHandler_Epilogue
 	push	xiz
 	ld	xhl, (xiz+4)
 	call	(xhl)
 	pop	xiz
-DrawFunc_Return_Epilogue:
+DrawFunc_StackHandler_Epilogue:
 	pop	xiz
 	ret
 	ret
@@ -19456,12 +19460,12 @@ DrawFunc_XspCheck:
 	ld	xiz, xwa
 	ld	xwa, (xiz+4)
 	or	xwa, xwa
-	jr	z, DrawFunc_StackEntry_Epilogue
+	jr	z, DrawFunc_XspCheck_Epilogue
 	push	xiz
 	ld	xhl, (xiz+4)
 	call	(xhl)
 	pop	xiz
-DrawFunc_StackEntry_Epilogue:
+DrawFunc_XspCheck_Epilogue:
 	pop	xiz
 	ret
 	ld	xwa, (xsp+4)
@@ -19471,12 +19475,12 @@ DrawFunc_StackEntry_Epilogue:
 IS_XSP_INSIDE_4K_REGION_AT_1C032:
 	xor xhl, xhl
 	cp xsp, 0x1c032
-	jr lt, DrawFunc_XspCheck_Loop
+	jr lt, IS_XSP_INSIDE_4K_REGION_AT_1C032_Loop
 	cp xsp, 0x1d032
-	jr gt, DrawFunc_XspCheck_Loop
+	jr gt, IS_XSP_INSIDE_4K_REGION_AT_1C032_Loop
 	inc 1, xhl
 
-DrawFunc_XspCheck_Loop:
+IS_XSP_INSIDE_4K_REGION_AT_1C032_Loop:
 	ret
 
 InitializeGraphics:
@@ -19544,11 +19548,11 @@ LcdOff:
 	ld wa, 4:i3
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda xbc, (LcdOn_Done:24)
+	lda xbc, (LcdOff_Done2:24)
 	ld (xwa), xbc
 	jrl DrawRing_Post
 
-LcdOn_Done:
+LcdOff_Done2:
 	jr LcdOn_Return
 
 LcdOn_Return:
@@ -19797,7 +19801,7 @@ ReadPixel:
 	ld xwa, xiz
 	calr IsPointOnScreen
 	cp hl, 0:i3
-	jr z, SetChangeRect_Done
+	jr z, ReadPixel_Done
 	ld wa, (xiz + 2)
 	exts xwa
 	ld xbc, xwa
@@ -19811,12 +19815,12 @@ ReadPixel:
 	add xbc, xwa
 	ld l, (xbc)
 	extz hl
-	jr SetChangeRect_Return
+	jr ReadPixel_Return
 
-SetChangeRect_Done:
+ReadPixel_Done:
 	ld hl, 0:i3
 
-SetChangeRect_Return:
+ReadPixel_Return:
 	pop xiz
 	ret
 

@@ -1180,15 +1180,15 @@ PanelDisplay_DispatchData:
 	ld	xde, 0x3d3400
 	lda	xhl, (0x0340e4:24)
 	ld	bc, 0:i3
-PanelDisplay_DispatchByMode_Loop:
+PanelDisplay_DispatchData_Loop:
 	ld	a, (xhl+)
 	cp	a, (xde+)
 	jr	nz, PanelDisplay_DispatchByMode_Skip
 	inc	1, bc
 	cp	bc, 2:i3
-	jr	c, PanelDisplay_DispatchByMode_Loop
+	jr	c, PanelDisplay_DispatchData_Loop
 	jr	DSPCfg_Param_Default
-PanelDisplay_DispatchByMode_Case5:
+PanelDisplay_DispatchByMode_CmpDisplayTime:
 	ld	xde, 0x3d3410
 	lda	xhl, (0x0340e6:24)
 	ld	bc, 0:i3
@@ -1200,7 +1200,7 @@ PanelDisplay_DispatchByMode_Loop2:
 	cp	bc, 12
 	jr	c, PanelDisplay_DispatchByMode_Loop2
 	jr	DSPCfg_Param_Default
-PanelDisplay_DispatchByMode_Case6:
+PanelDisplay_DispatchByMode_CmpDiskSetup:
 	ld	xde, 0x3d3420
 	lda	xhl, (0x0340f2:24)
 	ld	bc, 0:i3
@@ -1212,7 +1212,7 @@ PanelDisplay_DispatchByMode_Loop3:
 	cp	bc, 4:i3
 	jr	c, PanelDisplay_DispatchByMode_Loop3
 	jr	DSPCfg_Param_Default
-PanelDisplay_DispatchByMode_Case7:
+PanelDisplay_DispatchByMode_CmpParamLoadOptions:
 	ld	xde, 0x3d3430
 	lda	xhl, (0x0340f6:24)
 	ld	bc, 0:i3
@@ -1224,7 +1224,7 @@ PanelDisplay_DispatchByMode_Loop4:
 	cp	bc, 4:i3
 	jr	c, PanelDisplay_DispatchByMode_Loop4
 	jr	t, DSPCfg_Param_Default
-PanelDisplay_DispatchByMode_Case8:
+PanelDisplay_DispatchByMode_CmpWallpaper:
 	ld	xde, 0x3d3440	; was .asciz "B@4="
 	lda	xhl, (0x0340fa:24)
 	ld	bc, 0:i3

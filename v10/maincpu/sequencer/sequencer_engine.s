@@ -372,13 +372,19 @@ SeqPlay_DataBlock_BBE_Skip:
 	ld	(0xf23a:16), wa
 SeqPlay_DataBlock_BBE_Skip2:
 	jrl	SeqAcc_SetupRepeatCount
-SeqAccomp_SubHandlerB_Helper:
+; SeqPlay_DecPunchInMeasure: Parameter 8 down on the sequencer play screen: decrements the punch-in measure 0xF238
+;   (the "P" in-measure of MT_GetPInMeasString), not below 1, recomputes the playback start from it
+;   (SeqPlay_DataBlock_BBE_Helper2, the step-down counterpart of SeqPlay_UpdateStartFromPunchIn) and tail-jumps to
+;   SeqAcc_SetupRepeatCount. Basis: callers + body -- SeqAccomp_SubChain_DecPunchParam ("Parameters 8/9/10 (punch in,
+;   punch out, count-in) down: one helper each") calls it for parameter 8; the parameter-8 increment is
+;   SeqPlay_DataBlock_BBE (cap 998).
+SeqPlay_DecPunchInMeasure:
 	ld	wa, (0xf238:16)
 	cp	wa, 1:i3
-	jr	ule, SeqPlay_DataBlock_BBE_Skip3
+	jr	ule, SeqPlay_DecPunchInMeasure_Skip3
 	dec	1, wa
 	ld	(0xf238:16), wa
-SeqPlay_DataBlock_BBE_Skip3:
+SeqPlay_DecPunchInMeasure_Skip3:
 	calr	SeqPlay_DataBlock_BBE_Helper2
 	jrl	SeqAcc_SetupRepeatCount
 ; SeqPlay_UpdateStartFromPunchIn: After the punch-in measure (0xF238, the "P" in-measure of MT_GetPInMeasString) has
@@ -386,29 +392,29 @@ SeqPlay_DataBlock_BBE_Skip3:
 ;   first clamping 0xF23F to punch-in - 1 (0x28C3, SeqAcc_UpdateEndPosition); with bit 0 of 0x28B2 set, punch-in 2
 ;   instead gives start 0x8002 and 0xF23F = 3, punch-in 3 gives start 1 and 0xF23F = 2, and punch-in 1 leaves both
 ;   alone. Basis: callers + body -- SeqPlay_DataBlock_BBE (play-screen case 8) calls it after incrementing 0xF238,
-;   SeqAccomp_SubHandlerA_Helper (case 9, punch-out up) after pulling 0xF238 below 0xF23A;
+;   SeqPlay_IncPunchOutMeasure (case 9, punch-out up) after pulling 0xF238 below 0xF23A;
 ;   SeqAcc_StartPlaybackFromPosition does the same subtraction when playback starts.
 SeqPlay_UpdateStartFromPunchIn:
 	bit	0, (10418:16)
-	jr	z, SeqPlay_DataBlock_BBE_Helper_Skip2
+	jr	z, SeqPlay_UpdateStartFromPunchIn_Skip2
 	ldw_d16	wa, (62008)
 	cp	wa, 2:i3
-	jr	nz, SeqPlay_DataBlock_BBE_Helper_Skip
+	jr	nz, SeqPlay_UpdateStartFromPunchIn_Skip
 	ldw	(9832:16), 0x8002
 	ldw	(9964:16), 0x8002
 	ldw	(0xf23f:16), 3
 	ret
-SeqPlay_DataBlock_BBE_Helper_Skip:
+SeqPlay_UpdateStartFromPunchIn_Skip:
 	cp	wa, 3:i3
-	jr	nz, SeqPlay_DataBlock_BBE_Skip4
+	jr	nz, SeqPlay_UpdateStartFromPunchIn_Skip4
 	ldw	(9832:16), 1
 	ldw	(9964:16), 1
 	ldw	(0xf23f:16), 2
 	ret
-SeqPlay_DataBlock_BBE_Skip4:
+SeqPlay_UpdateStartFromPunchIn_Skip4:
 	cp	wa, 3:i3
 	ret	c
-SeqPlay_DataBlock_BBE_Helper_Skip2:
+SeqPlay_UpdateStartFromPunchIn_Skip2:
 	ld	wa, (0xf238:16)
 	dec	1, wa
 	ld	(0x28c3:16), wa
@@ -448,18 +454,23 @@ SeqPlay_DataBlock_BBE_Helper2_Skip2:
 	ld	(9832:16), wa
 	ld	(9964:16), wa
 	ret
-SeqAccomp_SubHandlerA_Helper:
+; SeqPlay_IncPunchOutMeasure: Parameter 9 up on the sequencer play screen: increments the punch-out measure 0xF23A
+;   (MT_GetPOutMeasString), capped at 999; if the punch-in measure 0xF238 is not below it, pulls punch-in to punch-out
+;   - 1, recomputes the start (SeqPlay_UpdateStartFromPunchIn) and runs SeqAcc_SetupRepeatCount. Basis: callers + body
+;   -- SeqAccomp_ParamDelivery_IncPInPOutPCntIn calls it for parameter 9 ("P out-measure 0xF23A");
+;   SeqPlay_UpdateStartFromPunchIn's header already cites it as "case 9, punch-out up".
+SeqPlay_IncPunchOutMeasure:
 	ld	wa, (0xf23a:16)
 	cp	wa, 999
-	jr	c, SeqPlay_DataBlock_BBE_Skip6
+	jr	c, SeqPlay_IncPunchOutMeasure_Skip6
 	ldw	(0xf23a:16), 999
 	ldw	wa, 999
-	jr	SeqPlay_DataBlock_BBE_Join
-SeqPlay_DataBlock_BBE_Skip6:
+	jr	SeqPlay_IncPunchOutMeasure_Join
+SeqPlay_IncPunchOutMeasure_Skip6:
 	inc	1, wa
 	ld	(0xf23a:16), wa
 	ld	wa, (0xf23a:16)
-SeqPlay_DataBlock_BBE_Join:
+SeqPlay_IncPunchOutMeasure_Join:
 	cp (62008:16), wa
 	ret	c
 	dec	1, wa
@@ -467,18 +478,23 @@ SeqPlay_DataBlock_BBE_Join:
 	calr	SeqPlay_UpdateStartFromPunchIn
 	calr	SeqAcc_SetupRepeatCount
 	ret
-SeqAccomp_SubHandlerB_Helper2:
+; SeqPlay_DecPunchOutMeasure: Parameter 9 down on the sequencer play screen: decrements the punch-out measure 0xF23A,
+;   not below 2; if the punch-in measure 0xF238 is not below it, sets punch-in to punch-out - 1, recomputes the start
+;   (SeqPlay_DataBlock_BBE_Helper2) and runs SeqAcc_SetupRepeatCount. Basis: callers + body --
+;   SeqAccomp_SubChain_DecPunchParam calls it for parameter 9 (punch out); mirror of SeqPlay_IncPunchOutMeasure
+;   (parameter 9 up).
+SeqPlay_DecPunchOutMeasure:
 	ld	wa, (0xf23a:16)
 	cp	wa, 2:i3
-	jr	ugt, SeqPlay_DataBlock_BBE_Skip7
+	jr	ugt, SeqPlay_DecPunchOutMeasure_Skip7
 	ldw	(0xf23a:16), 2
 	ld	wa, 2:i3
-	jr	SeqPlay_DataBlock_BBE_Join2
-SeqPlay_DataBlock_BBE_Skip7:
+	jr	SeqPlay_DecPunchOutMeasure_Join2
+SeqPlay_DecPunchOutMeasure_Skip7:
 	dec	1, wa
 	ld	(0xf23a:16), wa
 	ld	wa, (0xf23a:16)
-SeqPlay_DataBlock_BBE_Join2:
+SeqPlay_DecPunchOutMeasure_Join2:
 	cp (62008:16), wa
 	ret	c
 	dec	1, wa
@@ -486,21 +502,26 @@ SeqPlay_DataBlock_BBE_Join2:
 	calr	SeqPlay_DataBlock_BBE_Helper2
 	calr	SeqAcc_SetupRepeatCount
 	ret
-SeqAccomp_SubHandlerA_Helper2:
+; SeqPlay_IncPunchCountIn: Parameter 10 up on the sequencer play screen: increments the punch count-in 0xF23F
+;   (MT_GetPCntInString), capped at 997, clamps it to punch-in - 1 (0x28C3, SeqAcc_UpdateEndPosition), sets the
+;   playback start words 0x2668 / 0x26EC = punch-in - count-in and tail-jumps to SeqAcc_SetupRepeatCount; with bit 0
+;   of 0x28B2 set and punch-in <= 2 it does nothing. Basis: callers + body -- SeqAccomp_ParamDelivery_IncPInPOutPCntIn
+;   calls it for parameter 10 ("P count-in 0xF23F").
+SeqPlay_IncPunchCountIn:
 	bit	0, (10418:16)
-	jr	z, SeqPlay_DataBlock_BBE_Helper2_Skip3
+	jr	z, SeqPlay_IncPunchCountIn_Skip3
 	cpw	(62008:16), 2
 	ret	ule
-SeqPlay_DataBlock_BBE_Helper2_Skip3:
+SeqPlay_IncPunchCountIn_Skip3:
 	ld	wa, (0xf23f:16)
 	cp	wa, 997
-	jr	c, SeqPlay_DataBlock_BBE_Skip8
+	jr	c, SeqPlay_IncPunchCountIn_Skip8
 	ldw	(0xf23f:16), 997
-	jr	SeqPlay_DataBlock_BBE_Join3
-SeqPlay_DataBlock_BBE_Skip8:
+	jr	SeqPlay_IncPunchCountIn_Join3
+SeqPlay_IncPunchCountIn_Skip8:
 	inc	1, wa
 	ld	(0xf23f:16), wa
-SeqPlay_DataBlock_BBE_Join3:
+SeqPlay_IncPunchCountIn_Join3:
 	ld	wa, (0xf238:16)
 	dec	1, wa
 	ld	(0x28c3:16), wa
@@ -510,18 +531,23 @@ SeqPlay_DataBlock_BBE_Join3:
 	ld	(9832:16), wa
 	ld	(9964:16), wa
 	jrl	SeqAcc_SetupRepeatCount
-SeqAccomp_SubHandlerB_Helper3:
+; SeqPlay_DecPunchCountIn: Parameter 10 down on the sequencer play screen: decrements the punch count-in 0xF23F, not
+;   below 0, then clamps it to punch-in - 1 (SeqAcc_UpdateEndPosition), sets the start words 0x2668 / 0x26EC = punch-
+;   in - count-in and tail-jumps to SeqAcc_SetupRepeatCount; with bit 0 of 0x28B2 set and punch-in <= 2 it does
+;   nothing. Basis: callers + body -- SeqAccomp_SubChain_DecPunchParam calls it for parameter 10 (count-in); mirror of
+;   SeqPlay_IncPunchCountIn.
+SeqPlay_DecPunchCountIn:
 	bit	0, (10418:16)
-	jr	z, SeqPlay_DataBlock_BBE_Helper2_Skip4
+	jr	z, SeqPlay_DecPunchCountIn_Skip4
 	cpw	(62008:16), 2
 	ret	ule
-SeqPlay_DataBlock_BBE_Helper2_Skip4:
+SeqPlay_DecPunchCountIn_Skip4:
 	ld	wa, (0xf23f:16)
 	cp	wa, 0:i3
-	jr	z, SeqPlay_DataBlock_BBE_Skip9
+	jr	z, SeqPlay_DecPunchCountIn_Skip9
 	dec	1, wa
 	ld	(0xf23f:16), wa
-SeqPlay_DataBlock_BBE_Skip9:
+SeqPlay_DecPunchCountIn_Skip9:
 	ld	wa, (0xf238:16)
 	dec	1, wa
 	ld	(0x28c3:16), wa
@@ -12812,27 +12838,27 @@ SeqPart_DecisionReturn:
 SeqTrack_LookupChannelData:
 	ld	a, (0x2877:16)
 	cp	a, 127
-	jr	z, Part_ValidateVoiceAndSetupSeq_Skip
+	jr	z, SeqTrack_LookupChannelData_Skip
 	extz	wa
 	calr	Seq_ValidatePartNumber
 	cp	hl, 0:i3
-	jr	nz, Part_ValidateVoiceAndSetupSeq_Skip2
-Part_ValidateVoiceAndSetupSeq_Skip:
+	jr	nz, SeqTrack_LookupChannelData_Skip2
+SeqTrack_LookupChannelData_Skip:
 	ld	wa, (9778:16)
 	calr	Seq_ValidateTempoValue
 	cp	hl, 0:i3
-	jr	nz, Part_ValidateVoiceAndSetupSeq_Skip2
+	jr	nz, SeqTrack_LookupChannelData_Skip2
 	ld	wa, (9694:16)
 	calr	Seq_ValidateTempoValue
 	cp	hl, 0:i3
-	jr	nz, Part_ValidateVoiceAndSetupSeq_Skip2
+	jr	nz, SeqTrack_LookupChannelData_Skip2
 	ld	a, (9812:16)
 	cp	a, 128
-	jr	nz, Part_ValidateVoiceAndSetupSeq_Skip3
-Part_ValidateVoiceAndSetupSeq_Skip2:
+	jr	nz, SeqTrack_LookupChannelData_Skip3
+SeqTrack_LookupChannelData_Skip2:
 	ldw	hl, 0xffff
 	ret
-Part_ValidateVoiceAndSetupSeq_Skip3:
+SeqTrack_LookupChannelData_Skip3:
 	ld	hl, 0:i3
 	ret
 
@@ -15726,10 +15752,10 @@ PartSubBlk48_WriteAndCheck:
 	jp Audio_CheckSubsystemReady
 Part_VoiceSearchBlock:
 	cp	a, 0:i3
-	jr	nz, Part_WriteSubBlock48_Skip
+	jr	nz, Part_VoiceSearchBlock_Skip
 	lda	xde, (0xf1b0:16)
-	jr	Part_WriteSubBlock48_Join
-Part_WriteSubBlock48_Skip:
+	jr	Part_VoiceSearchBlock_Join
+Part_VoiceSearchBlock_Skip:
 	dec	1, a
 	ld	w, 0:opc
 	extz	xwa
@@ -15737,7 +15763,7 @@ Part_WriteSubBlock48_Skip:
 	lda	xwa, (xwa+48)
 	lda	xde, (SEQ_SONG_SLOTS:24)
 	add	xde, xwa
-Part_WriteSubBlock48_Join:
+Part_VoiceSearchBlock_Join:
 	extz	bc
 	lda	xwa, (xde+bc)
 	ld	l, (xwa-1)
@@ -16953,35 +16979,35 @@ SeqPlay_StopReturn:
 	calr	Part_ReadVoiceWord
 	ld	(0x28af:16), hl
 	cp	hl, 0xffff
-	jr	nz, SeqPos_AdvanceWithWrap_Skip
+	jr	nz, SeqPlay_StopReturn_Skip
 	ldw	hl, 0xffff
-	jr	SeqPos_AdvanceWithWrap_Epilogue
-SeqPos_AdvanceWithWrap_Skip:
+	jr	SeqPlay_StopReturn_Epilogue
+SeqPlay_StopReturn_Skip:
 	ldw	(9830:16), 5
 	cp	iz, 0:i3
-	jr	ule, SeqPos_AdvanceWithWrap_Skip3
-SeqPos_AdvanceWithWrap_Loop:
+	jr	ule, SeqPlay_StopReturn_Skip3
+SeqPlay_StopReturn_Loop:
 	calr	SeqData_ReadNextByte
 	cp	l, 129
-	jr	nz, SeqPos_AdvanceWithWrap_Skip2
+	jr	nz, SeqPlay_StopReturn_Skip2
 	inc1b_erp 251
 	calr PartCtrl_RefreshWordPeriodic
-	jr	SeqPos_AdvanceWithWrap_Join
-SeqPos_AdvanceWithWrap_Skip2:
+	jr	SeqPlay_StopReturn_Join
+SeqPlay_StopReturn_Skip2:
 	cp	l, 130
-	jr	z, SeqPos_AdvanceWithWrap_Skip3
+	jr	z, SeqPlay_StopReturn_Skip3
 	extz	hl
 	ld	wa, hl
 	calr	MIDI_GetEventSize
 	extz	hl
 	ld	wa, hl
 	calr	SeqPos_AdvanceWithWrap
-SeqPos_AdvanceWithWrap_Join:
+SeqPlay_StopReturn_Join:
 	ldto_berp a, 251
 	extz	wa
 	cp	wa, iz
-	jr	c, SeqPos_AdvanceWithWrap_Loop
-SeqPos_AdvanceWithWrap_Skip3:
+	jr	c, SeqPlay_StopReturn_Loop
+SeqPlay_StopReturn_Skip3:
 	ld	xde, (xsp+4)
 	ldw	(xde), (10415)
 	ld	wa, (9830:16)
@@ -16989,7 +17015,7 @@ SeqPos_AdvanceWithWrap_Skip3:
 	extz	bc
 	ld	(xde+2), bc
 	ld	hl, 0:i3
-SeqPos_AdvanceWithWrap_Epilogue:
+SeqPlay_StopReturn_Epilogue:
 	pop	xiz
 	inc	4, xsp
 	ret
@@ -17671,26 +17697,26 @@ Rhythm_NoteAllocBlock:
 	ld	a, (xsp+10)
 	extz	wa
 	cp_erpb	251, 13
-	jr	z, Rhythm_ComputeNoteAllocation_Skip
+	jr	z, Rhythm_NoteAllocBlock_Skip
 	cp_erpb	251, 16
-	jr	nz, Rhythm_ComputeNoteAllocation_Join
+	jr	nz, Rhythm_NoteAllocBlock_Join
 	calr	SeqEvt_ProcessBlock
 	ld	iz, hl
 	cp	iz, 0:i3
-	jr	nz, Rhythm_ComputeNoteAllocation_Skip2
-	jr	Rhythm_ComputeNoteAllocation_Join
-Rhythm_ComputeNoteAllocation_Skip:
+	jr	nz, Rhythm_NoteAllocBlock_Skip2
+	jr	Rhythm_NoteAllocBlock_Join
+Rhythm_NoteAllocBlock_Skip:
 	calr	SeqEvt_ProcessBlock
 	ld	iz, hl
 	cp	iz, 0:i3
-	jr	z, Rhythm_ComputeNoteAllocation_Join
+	jr	z, Rhythm_NoteAllocBlock_Join
 	cp	(xsp+4), iz
-	jr	c, Rhythm_ComputeNoteAllocation_Join
+	jr	c, Rhythm_NoteAllocBlock_Join
 	ld	a, (xsp+10)
 	extz	wa
 	calr	Rhythm_ComputeNoteAllocation_Helper
 	cp	hl, 0:i3
-	jr	z, Rhythm_ComputeNoteAllocation_Skip2
+	jr	z, Rhythm_NoteAllocBlock_Skip2
 	ld	bc, iz
 	sub	bc, hl
 	ld	wa, (xsp+4)
@@ -17700,14 +17726,14 @@ Rhythm_ComputeNoteAllocation_Skip:
 	ld	wa, qwa
 	add	wa, hl
 	ld	(xsp+4), wa
-	jr	Rhythm_ComputeNoteAllocation_Join
-Rhythm_ComputeNoteAllocation_Skip2:
+	jr	Rhythm_NoteAllocBlock_Join
+Rhythm_NoteAllocBlock_Skip2:
 	ld	wa, (xsp+4)
 	extz	xwa
 	div	xwa, iz
 	ld	wa, qwa
 	ld	(xsp+4), wa
-Rhythm_ComputeNoteAllocation_Join:
+Rhythm_NoteAllocBlock_Join:
 	ld	hl, (xsp+4)
 	pop	xiz
 	inc	8, xsp
@@ -19521,23 +19547,23 @@ SeqPlay_BufferUpdateBlock:
 	ret	ugt
 	ld	wa, (9832:16)
 	cp	(CURRENT_TITLE:16), 133
-	jr	z, SeqPlay_StopAndClearSequence_Skip4
+	jr	z, SeqPlay_BufferUpdateBlock_Skip4
 	cp	(ACTIVE_TITLE:16), 134
-	jr	nz, SeqPlay_StopAndClearSequence_Skip5
-SeqPlay_StopAndClearSequence_Skip4:
+	jr	nz, SeqPlay_BufferUpdateBlock_Skip5
+SeqPlay_BufferUpdateBlock_Skip4:
 	cp wa, (9506:16)
-	jr	c, SeqPlay_StopAndClearSequence_Skip6
+	jr	c, SeqPlay_BufferUpdateBlock_Skip6
 	ld	wa, (9504:16)
-	jr	SeqPlay_StopAndClearSequence_Join2
-SeqPlay_StopAndClearSequence_Skip5:
+	jr	SeqPlay_BufferUpdateBlock_Join2
+SeqPlay_BufferUpdateBlock_Skip5:
 	cp wa, (9502:16)
-	jr	nc, SeqPlay_StopAndClearSequence_Skip7
-SeqPlay_StopAndClearSequence_Skip6:
+	jr	nc, SeqPlay_BufferUpdateBlock_Skip7
+SeqPlay_BufferUpdateBlock_Skip6:
 	inc	1, wa
-	jr	SeqPlay_StopAndClearSequence_Join2
-SeqPlay_StopAndClearSequence_Skip7:
+	jr	SeqPlay_BufferUpdateBlock_Join2
+SeqPlay_BufferUpdateBlock_Skip7:
 	ld	wa, (9500:16)
-SeqPlay_StopAndClearSequence_Join2:
+SeqPlay_BufferUpdateBlock_Join2:
 	ld	(9832:16), wa
 	call	NoteEditSy_SendModeScrollReset
 	ldmm16	9008, SEQ_BEAT_COUNT
@@ -19597,24 +19623,24 @@ SeqPlay_CountInEnd:
 	call	Audio_CheckSubsystemReady
 	ld	a, (8956:16)
 	cp	a, 20
-	jr	z, SeqPlay_StopAndClearSequence_Skip3
+	jr	z, SeqPlay_CountInEnd_Skip3
 	cp	a, 16
-	jr	z, SeqPlay_StopAndClearSequence_Skip2
+	jr	z, SeqPlay_CountInEnd_Skip2
 	cp	a, 12
-	jr	z, SeqPlay_StopAndClearSequence_Skip
+	jr	z, SeqPlay_CountInEnd_Skip
 	cp	a, 8
-	jr	nz, SeqPlay_StopAndClearSequence_Join
+	jr	nz, SeqPlay_CountInEnd_Join
 	ld	a, 9:opc
-	jr	SeqPlay_StopAndClearSequence_Join
-SeqPlay_StopAndClearSequence_Skip:
+	jr	SeqPlay_CountInEnd_Join
+SeqPlay_CountInEnd_Skip:
 	ld	a, 13:opc
-	jr	SeqPlay_StopAndClearSequence_Join
-SeqPlay_StopAndClearSequence_Skip2:
+	jr	SeqPlay_CountInEnd_Join
+SeqPlay_CountInEnd_Skip2:
 	ld	a, 17:opc
-	jr	SeqPlay_StopAndClearSequence_Join
-SeqPlay_StopAndClearSequence_Skip3:
+	jr	SeqPlay_CountInEnd_Join
+SeqPlay_CountInEnd_Skip3:
 	ld	a, 21:opc
-SeqPlay_StopAndClearSequence_Join:
+SeqPlay_CountInEnd_Join:
 	ld	(8956:16), a
 	ret
 
@@ -20991,12 +21017,12 @@ AppEvent_SubDispatch:
 	extz	wa
 	sub	wa, 156
 	cp	wa, 0:i3
-	jr	lt, AppEvent_InlineHandler_Skip15
+	jr	lt, AppEvent_SubDispatch_Skip15
 	cp	wa, 7:i3
-	jr	le, AppEvent_InlineHandler_Skip16
-AppEvent_InlineHandler_Skip15:
+	jr	le, AppEvent_SubDispatch_Skip16
+AppEvent_SubDispatch_Skip15:
 	ldw	wa, 8
-AppEvent_InlineHandler_Skip16:
+AppEvent_SubDispatch_Skip16:
 	sll	wa, 2
 	lda	xix, (AppEvent_SubDispatch_RamPtrs:24)
 	ld	xwa, (xix+wa)
@@ -21437,10 +21463,10 @@ AppEvent_SubDispatch_DecMinsFromMeasure:
 AppEvent_SubDispatch_DecMinsLastMeasure:
 	ld	wa, (9774:16)
 	cp	wa, 1:i3
-	jr	ule, AppEvent_InlineHandler_Skip11
+	jr	ule, AppEvent_SubDispatch_DecMinsLastMeasure_Skip11
 	dec	1, wa
 	ld	(9774:16), wa
-AppEvent_InlineHandler_Skip11:
+AppEvent_SubDispatch_DecMinsLastMeasure_Skip11:
 	ld	wa, (9774:16)
 	cp (61922:16), wa
 	jr	ule, AppEvent_InlineHandler_Join6
@@ -23025,16 +23051,16 @@ SeqAccomp_ParamDelivery_IncCycleEnable:
 	jrl	nz, AppEvent_ReturnZero
 	ldto_berp	a, 239
 	cp_erpb	239, 130
-	jr	nz, ApPlaySyori_Skip13
+	jr	nz, SeqAccomp_ParamDelivery_IncCycleEnable_Skip13
 	ld	a, (0x28b1:16)
 	bit	0, a
 	jrl	nz, AppEvent_ReturnZero
 	set	0, a
 	stb_d8	(10417), a
-	jr	ApPlaySyori_Join9
-ApPlaySyori_Skip13:
+	jr	SeqAccomp_ParamDelivery_IncCycleEnable_Join9
+SeqAccomp_ParamDelivery_IncCycleEnable_Skip13:
 	cp	a, 134
-	jr	nz, ApPlaySyori_Join9
+	jr	nz, SeqAccomp_ParamDelivery_IncCycleEnable_Join9
 	bit	2, (10418:16)
 	jrl	nz, AppEvent_ReturnZero
 	bit	1, (10417:16)
@@ -23046,7 +23072,7 @@ ApPlaySyori_Skip13:
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 3:i3
 	call	ApDeliveryEvent
-ApPlaySyori_Join9:
+SeqAccomp_ParamDelivery_IncCycleEnable_Join9:
 	ld	xwa, (10610:16)
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 4:i3
@@ -23055,7 +23081,7 @@ SeqAccomp_ParamDelivery_IncCycleStartMeasure:
 	bit	2, (SEQ_TRANSPORT_STATE:16)
 	jrl	nz, AppEvent_ReturnZero
 	cp	(CURRENT_TITLE:16), 134
-	jr	nz, ApPlaySyori_Skip2
+	jr	nz, SeqAccomp_ParamDelivery_IncCycleStartMeasure_Skip2
 	ld	wa, iy
 	cp	iy, 999
 	jrl	nc, AppEvent_ReturnZero
@@ -23063,13 +23089,13 @@ SeqAccomp_ParamDelivery_IncCycleStartMeasure:
 	ld	(9504:16), wa
 	ld	(9832:16), wa
 	cp wa, (9506:16)
-	jr	ule, ApPlaySyori_Skip
+	jr	ule, SeqAccomp_ParamDelivery_IncCycleStartMeasure_Skip
 	ldmm16	9506, 9504
 	ld	xwa, (10610:16)
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 6:i3
-	jr	ApPlaySyori_Join
-ApPlaySyori_Skip2:
+	jr	SeqAccomp_ParamDelivery_IncCycleStartMeasure_Join
+SeqAccomp_ParamDelivery_IncCycleStartMeasure_Skip2:
 	ld wa, qde
 	cpw	qde, 999
 	jrl	nc, AppEvent_ReturnZero
@@ -23077,14 +23103,14 @@ ApPlaySyori_Skip2:
 	ld	(9500:16), wa
 	ld	(9832:16), wa
 	cp wa, (9502:16)
-	jr	ule, ApPlaySyori_Skip
+	jr	ule, SeqAccomp_ParamDelivery_IncCycleStartMeasure_Skip
 	ldmm16	9502, 9500
 	ld	xwa, (10610:16)
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 6:i3
-ApPlaySyori_Join:
+SeqAccomp_ParamDelivery_IncCycleStartMeasure_Join:
 	call	ApDeliveryEvent
-ApPlaySyori_Skip:
+SeqAccomp_ParamDelivery_IncCycleStartMeasure_Skip:
 	calr	NoteEditSy_SendModeScrollReset
 	ld	xwa, (10610:16)
 	ld	xbc, EVT_PARA_DRAW
@@ -23094,22 +23120,22 @@ SeqAccomp_ParamDelivery_IncCycleEndMeasure:
 	bit	2, (SEQ_TRANSPORT_STATE:16)
 	jrl	nz, AppEvent_ReturnZero
 	cp	(CURRENT_TITLE:16), 134
-	jr	nz, ApPlaySyori_Skip3
+	jr	nz, SeqAccomp_ParamDelivery_IncCycleEndMeasure_Skip3
 	ld	wa, hl
 	cp	hl, 999
 	jrl	nc, AppEvent_ReturnZero
 	inc	1, wa
 	ld	(9506:16), wa
 	ldmm16	9832, 9504
-	jr	ApPlaySyori_Join2
-ApPlaySyori_Skip3:
+	jr	SeqAccomp_ParamDelivery_IncCycleEndMeasure_Join2
+SeqAccomp_ParamDelivery_IncCycleEndMeasure_Skip3:
 	ld	wa, iz
 	cp	iz, 999
 	jrl	nc, AppEvent_ReturnZero
 	inc	1, wa
 	ld	(9502:16), wa
 	ldmm16	9832, 9500
-ApPlaySyori_Join2:
+SeqAccomp_ParamDelivery_IncCycleEndMeasure_Join2:
 	calr	NoteEditSy_SendModeScrollReset
 	ld	xwa, (0x2972:16)
 	ld	xbc, EVT_PARA_DRAW
@@ -23122,19 +23148,19 @@ SeqAccomp_ParamDelivery_IncPInPOutPCntIn:	; cases 8, 9, 10
 	jrl	nz, AppEvent_ReturnZero
 	ld	xwa, (xsp+2)
 	cp	xwa, 10
-	jr	z, ApPlaySyori_Skip5
+	jr	z, SeqAccomp_ParamDelivery_IncPInPOutPCntIn_Skip5
 	cp	xwa, 9
-	jr	z, ApPlaySyori_Skip4
+	jr	z, SeqAccomp_ParamDelivery_IncPInPOutPCntIn_Skip4
 	cp	xwa, 8
-	jr	nz, ApPlaySyori_Join3
+	jr	nz, SeqAccomp_ParamDelivery_IncPInPOutPCntIn_Join3
 	call	SeqPlay_DataBlock_BBE
-	jr	ApPlaySyori_Join3
-ApPlaySyori_Skip4:
-	call	SeqAccomp_SubHandlerA_Helper
-	jr	ApPlaySyori_Join3
-ApPlaySyori_Skip5:
-	call	SeqAccomp_SubHandlerA_Helper2
-ApPlaySyori_Join3:
+	jr	SeqAccomp_ParamDelivery_IncPInPOutPCntIn_Join3
+SeqAccomp_ParamDelivery_IncPInPOutPCntIn_Skip4:
+	call	SeqPlay_IncPunchOutMeasure
+	jr	SeqAccomp_ParamDelivery_IncPInPOutPCntIn_Join3
+SeqAccomp_ParamDelivery_IncPInPOutPCntIn_Skip5:
+	call	SeqPlay_IncPunchCountIn
+SeqAccomp_ParamDelivery_IncPInPOutPCntIn_Join3:
 	ld	xwa, (0x2972:16)
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 7:i3
@@ -23196,21 +23222,21 @@ SeqAccomp_SubChain_DecCycleEnable:
 	ldto_berp c, 239
 	ld	a, (0x28b1:16)
 	cp_erpb 239, 130
-	jr nz, ApPlaySyori_Skip7
+	jr nz, SeqAccomp_SubChain_DecCycleEnable_Skip7
 	ld c, a
 	bit	0, a
 	jrl	z, AppEvent_ReturnZero
 	bit	2, (SEQ_TRANSPORT_STATE:16)
-	jr	z, ApPlaySyori_Skip6
+	jr	z, SeqAccomp_SubChain_DecCycleEnable_Skip6
 	calr	SeqAccomp_ReassignVoiceState
-	jr	ApPlaySyori_Join5
-ApPlaySyori_Skip6:
+	jr	SeqAccomp_SubChain_DecCycleEnable_Join5
+SeqAccomp_SubChain_DecCycleEnable_Skip6:
 	res	0, c
 	ld	(0x28b1:16), c
-	jr	ApPlaySyori_Join4
-ApPlaySyori_Skip7:
+	jr	SeqAccomp_SubChain_DecCycleEnable_Join4
+SeqAccomp_SubChain_DecCycleEnable_Skip7:
 	cp	c, 134
-	jr	nz, ApPlaySyori_Join5
+	jr	nz, SeqAccomp_SubChain_DecCycleEnable_Join5
 	bit	2, (SEQ_TRANSPORT_STATE:16)
 	jrl	nz, AppEvent_ReturnZero
 	bit	2, (10418:16)
@@ -23228,9 +23254,9 @@ ApPlaySyori_Skip7:
 	and	bc, wa
 	ld	(0xf19e:16), bc
 	call	Audio_CheckSubsystemReady
-ApPlaySyori_Join4:
+SeqAccomp_SubChain_DecCycleEnable_Join4:
 	call	SeqPlay_InitStartState
-ApPlaySyori_Join5:
+SeqAccomp_SubChain_DecCycleEnable_Join5:
 	ld	xwa, (0x2972:16)
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 4:i3
@@ -23239,22 +23265,22 @@ SeqAccomp_SubChain_DecCycleStartMeasure:
 	bit	2, (SEQ_TRANSPORT_STATE:16)
 	jrl	nz, AppEvent_ReturnZero
 	cp	(CURRENT_TITLE:16), 134
-	jr	nz, ApPlaySyori_Skip8
+	jr	nz, SeqAccomp_SubChain_DecCycleStartMeasure_Skip8
 	ld	wa, iy
 	cp	iy, 1:i3
 	jrl	ule, AppEvent_ReturnZero
 	dec	1, wa
 	ld	(9504:16), wa
 	ld	(9832:16), wa
-	jr	ApPlaySyori_Join6
-ApPlaySyori_Skip8:
+	jr	SeqAccomp_SubChain_DecCycleStartMeasure_Join6
+SeqAccomp_SubChain_DecCycleStartMeasure_Skip8:
 	ld	wa, qde
 	cp	qde, 1
 	jrl	ule, AppEvent_ReturnZero
 	dec	1, wa
 	ld	(9500:16), wa
 	ld	(9832:16), wa
-ApPlaySyori_Join6:
+SeqAccomp_SubChain_DecCycleStartMeasure_Join6:
 	calr	NoteEditSy_SendModeScrollReset
 	ld	xwa, (10610:16)
 	ld	xbc, EVT_PARA_DRAW
@@ -23310,19 +23336,19 @@ SeqAccomp_SubChain_DecPunchParam:	; cases 8, 9, 10
 	jrl	nz, AppEvent_ReturnZero
 	ld	xwa, (xsp+2)
 	cp	xwa, 10
-	jr	z, ApPlaySyori_Skip11
+	jr	z, SeqAccomp_SubChain_DecPunchParam_Skip11
 	cp	xwa, 9
-	jr	z, ApPlaySyori_Skip10
+	jr	z, SeqAccomp_SubChain_DecPunchParam_Skip10
 	cp	xwa, 8
-	jr	nz, ApPlaySyori_Join8
-	call	SeqAccomp_SubHandlerB_Helper
-	jr	ApPlaySyori_Join8
-ApPlaySyori_Skip10:
-	call	SeqAccomp_SubHandlerB_Helper2
-	jr	ApPlaySyori_Join8
-ApPlaySyori_Skip11:
-	call	SeqAccomp_SubHandlerB_Helper3
-ApPlaySyori_Join8:
+	jr	nz, SeqAccomp_SubChain_DecPunchParam_Join8
+	call	SeqPlay_DecPunchInMeasure
+	jr	SeqAccomp_SubChain_DecPunchParam_Join8
+SeqAccomp_SubChain_DecPunchParam_Skip10:
+	call	SeqPlay_DecPunchOutMeasure
+	jr	SeqAccomp_SubChain_DecPunchParam_Join8
+SeqAccomp_SubChain_DecPunchParam_Skip11:
+	call	SeqPlay_DecPunchCountIn
+SeqAccomp_SubChain_DecPunchParam_Join8:
 	ld	xwa, (10610:16)
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 7:i3
@@ -24008,7 +24034,7 @@ NoteEditSy_DownScroll_Param6:
 NoteEditSy_DownScroll_Param7:
 	call BmDrEdit_ChordScrollDown_Check
 	jr NoteEditSy_ReturnZero
-NoteEditSy_HandleDownScroll_Case11:
+NoteEditSy_HandleDownScroll_OnDrumSound:
 	call BmDrEdit_DrumVoiceUp_Check
 
 NoteEditSy_ReturnZero:
@@ -25365,12 +25391,12 @@ MainExe_ReturnZero:
 MainExe_InlineByteData:
 	ld	a, (0xf1d6:16)
 	cp	a, 17
-	jr	nz, EtmenuTitleFunc_Skip
+	jr	nz, MainExe_InlineByteData_Skip
 	ld	(0x2877:16), 127
-	jr	EtmenuTitleFunc_Join
-EtmenuTitleFunc_Skip:
+	jr	MainExe_InlineByteData_Join
+MainExe_InlineByteData_Skip:
 	ld	(0x2877:16), a
-EtmenuTitleFunc_Join:
+MainExe_InlineByteData_Join:
 	ld	wa, (0xf1d7:16)
 	ld	(9778:16), wa
 	ld	wa, (9772:16)
@@ -25397,21 +25423,21 @@ MainExeCall_OnTitleSqmins:
 	ldmm8	9858, 61926
 	ld	a, (0xf1e1:16)
 	cp	a, 17
-	jr	nz, EtmenuTitleFunc_Skip2
+	jr	nz, MainExeCall_OnTitleSqmins_Skip2
 	ld	(0x2877:16), 127
-	jr	EtmenuTitleFunc_Join2
-EtmenuTitleFunc_Skip2:
+	jr	MainExeCall_OnTitleSqmins_Join2
+MainExeCall_OnTitleSqmins_Skip2:
 	ld	(0x2877:16), a
-EtmenuTitleFunc_Join2:
+MainExeCall_OnTitleSqmins_Join2:
 	ld	(GLOBAL_ERROR_CODE:16), 255
 	ld	(SEQ_ERROR_CODE:16), 0
 	call	SeqPart_ByteBlockA95A
 	ld	a, (GLOBAL_ERROR_CODE:16)
 	cp	a, 255
-	jr	nz, EtmenuTitleFunc_Skip3
+	jr	nz, MainExeCall_OnTitleSqmins_Skip3
 	ldw	wa, 164
 	jr	MainExe_CallModeSwitch
-EtmenuTitleFunc_Skip3:
+MainExeCall_OnTitleSqmins_Skip3:
 	cp	a, 35
 	jr	nz, EtmenuTitleFunc_Skip4
 	call	SeqPart_LoadDualPartData
@@ -26590,10 +26616,10 @@ SeqLoad_ReadPartDataBlock:
 	add	wa, wa
 	lda	xde, (0x29ce:16)
 	cpw	(xde+wa), 0x0000
-	jr	nz, FileIO_SeekAndRead16BitValue_Skip2
+	jr	nz, SeqLoad_ReadPartDataBlock_Skip2
 	ld	xhl, 0:i3
-	jrl	FileIO_SeekAndRead16BitValue_Epilogue
-FileIO_SeekAndRead16BitValue_Skip2:
+	jrl	SeqLoad_ReadPartDataBlock_Epilogue
+SeqLoad_ReadPartDataBlock_Skip2:
 	ld	xwa, 2048
 	ld	(xsp+4), xwa
 	ldw (xsp+10), 0
@@ -26601,8 +26627,8 @@ FileIO_SeekAndRead16BitValue_Skip2:
 	ld	c, (xsp+12)
 	extz	bc
 	cp	bc, 0:i3
-	jr	ule, FileIO_SeekAndRead16BitValue_Skip3
-FileIO_SeekAndRead16BitValue_Loop:
+	jr	ule, SeqLoad_ReadPartDataBlock_Skip3
+SeqLoad_ReadPartDataBlock_Loop:
 	ld	wa, (xsp+8)
 	add	wa, wa
 	extz	xwa
@@ -26615,21 +26641,21 @@ FileIO_SeekAndRead16BitValue_Loop:
 	add	(xsp+10), wa
 	incw	1, (xsp+8)
 	cp	(xsp+8), bc
-	jr	c, FileIO_SeekAndRead16BitValue_Loop
-FileIO_SeekAndRead16BitValue_Skip3:
+	jr	c, SeqLoad_ReadPartDataBlock_Loop
+SeqLoad_ReadPartDataBlock_Skip3:
 	ld	xwa, 1:i3
 	add	(xsp+4), xwa
 	ldw	(xsp+8), 1
-	jr	FileIO_SeekAndRead16BitValue_Join
-FileIO_SeekAndRead16BitValue_Loop2:
+	jr	SeqLoad_ReadPartDataBlock_Join
+SeqLoad_ReadPartDataBlock_Loop2:
 	ld	xwa, (xsp+4)
 	calr	FileIO_SeekAndRead16BitValue
 	ld	xiz, xhl
 	or	xiz, xiz
-	jr	z, FileIO_SeekAndRead16BitValue_Skip4
+	jr	z, SeqLoad_ReadPartDataBlock_Skip4
 	ldw	wa, 200
-	jr	FileIO_SeekAndRead16BitValue_Join2
-FileIO_SeekAndRead16BitValue_Skip4:
+	jr	SeqLoad_ReadPartDataBlock_Join2
+SeqLoad_ReadPartDataBlock_Skip4:
 	ld	xwa, (xsp+4)
 	inc	2, xwa
 	ld	bc, (xsp+10)
@@ -26638,14 +26664,14 @@ FileIO_SeekAndRead16BitValue_Skip4:
 	calr	FileIO_SeekAndRead16BitValue
 	ld	xiz, xhl
 	or	xiz, xiz
-	jr	z, FileIO_SeekAndRead16BitValue_Skip5
+	jr	z, SeqLoad_ReadPartDataBlock_Skip5
 	ldw	wa, 201
-	jr	FileIO_SeekAndRead16BitValue_Join2
-FileIO_SeekAndRead16BitValue_Skip5:
+	jr	SeqLoad_ReadPartDataBlock_Join2
+SeqLoad_ReadPartDataBlock_Skip5:
 	ld	xwa, 256
 	add	(xsp+4), xwa
 	incw	1, (xsp+8)
-FileIO_SeekAndRead16BitValue_Join:
+SeqLoad_ReadPartDataBlock_Join:
 	ld	l, (xsp+12)
 	extz	hl
 	add	hl, hl
@@ -26655,28 +26681,28 @@ FileIO_SeekAndRead16BitValue_Join:
 	dec	1, bc
 	ld	wa, (xsp+8)
 	cp	wa, (xde+hl)
-	jr	c, FileIO_SeekAndRead16BitValue_Loop2
+	jr	c, SeqLoad_ReadPartDataBlock_Loop2
 	ld	xwa, (xsp+4)
 	calr	FileIO_SeekAndRead16BitValue
 	ld	xiz, xhl
 	or	xiz, xiz
-	jr	z, FileIO_SeekAndRead16BitValue_Skip6
+	jr	z, SeqLoad_ReadPartDataBlock_Skip6
 	ldw	wa, 202
-	jr	FileIO_SeekAndRead16BitValue_Join2
-FileIO_SeekAndRead16BitValue_Skip6:
+	jr	SeqLoad_ReadPartDataBlock_Join2
+SeqLoad_ReadPartDataBlock_Skip6:
 	ld	xwa, (xsp+4)
 	inc	2, xwa
 	ldw	bc, 0xffff
 	calr	FileIO_SeekAndRead16BitValue
 	ld	xiz, xhl
 	or	xiz, xiz
-	jr	z, FileIO_SeekAndRead16BitValue_Skip
+	jr	z, SeqLoad_ReadPartDataBlock_Skip
 	ldw	wa, 203
-FileIO_SeekAndRead16BitValue_Join2:
+SeqLoad_ReadPartDataBlock_Join2:
 	call	SeqData_SetErrorCode
-FileIO_SeekAndRead16BitValue_Skip:
+SeqLoad_ReadPartDataBlock_Skip:
 	ld	xhl, xiz
-FileIO_SeekAndRead16BitValue_Epilogue:
+SeqLoad_ReadPartDataBlock_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+10)
 	ret

@@ -1982,7 +1982,7 @@ SqSngSel_CalcSongUsageOnEnter:
 	pushw	bc
 	ld	xix, 4421
 	ld	bc, 0:i3
-SetWall_ForwardSkip_Loop2:
+SqSngSel_CalcSongUsageOnEnter_Loop2:
 	ld	(0x286b:16), c
 	push	xix
 	call	SqSngSel_CalcSongUsagePercent
@@ -1993,7 +1993,7 @@ SetWall_ForwardSkip_Loop2:
 	ld	(xix+bc), a
 	inc 1, bc
 	cp bc, 10
-	jr lt, SetWall_ForwardSkip_Loop2
+	jr lt, SqSngSel_CalcSongUsageOnEnter_Loop2
 	popw	bc
 	pop	xix
 	ret
@@ -2038,17 +2038,17 @@ SqSngName_ApplyNameAndExit:
 	ldw	bc, 16
 	ldir85
 	cp	(CURRENT_TITLE:16), 143
-	jr	z, SetWall_MiscDataAndCode_Skip
+	jr	z, SqSngName_ApplyNameAndExit_Skip
 	cp	(CURRENT_TITLE:16), 167
-	jr	z, SetWall_MiscDataAndCode_Skip2
-SetWall_MiscDataAndCode_Skip:
+	jr	z, SqSngName_ApplyNameAndExit_Skip2
+SqSngName_ApplyNameAndExit_Skip:
 	ld	a, 142:opc
 	call	UI_PostModeChangeEvent
-	jp	SetWall_MiscDataAndCode_Return
-SetWall_MiscDataAndCode_Skip2:
+	jp	SqSngName_ApplyNameAndExit_Return
+SqSngName_ApplyNameAndExit_Skip2:
 	ld	a, 131:opc
 	call	UI_PostModeChangeEvent
-SetWall_MiscDataAndCode_Return:
+SqSngName_ApplyNameAndExit_Return:
 	ret
 SqSngSel_CalcSongUsagePercent:
 	ld	xwa, (4349:16)
@@ -2056,21 +2056,21 @@ SqSngSel_CalcSongUsagePercent:
 	xor	xwa, xwa
 	ld	a, (10347:16)
 	cp a, (65507:24)
-	jr	nz, SetWall_MiscDataAndCode_Skip3
+	jr	nz, SqSngSel_CalcSongUsagePercent_Skip3
 	ld	xix, 62032
-	jr	SetWall_MiscDataAndCode_Join
-SetWall_MiscDataAndCode_Skip3:
+	jr	SqSngSel_CalcSongUsagePercent_Join
+SqSngSel_CalcSongUsagePercent_Skip3:
 	ld	xix, SEQ_SONG_SLOTS
 	sla	xwa, 11
 	add	xix, xwa
 	add	xix, 208
-SetWall_MiscDataAndCode_Join:
+SqSngSel_CalcSongUsagePercent_Join:
 	xor	xbc, xbc
 	xor	de, de
-SetWall_MiscDataAndCode_Loop:
+SqSngSel_CalcSongUsagePercent_Loop:
 	ld	a, (xix+de)
 	bit	7, a
-	jr	z, SetWall_MiscDataAndCode_Skip4
+	jr	z, SqSngSel_CalcSongUsagePercent_Skip
 	push	xbc
 	push	xde
 	push	xix
@@ -2079,10 +2079,10 @@ SetWall_MiscDataAndCode_Loop:
 	pop	xde
 	pop	xbc
 	.byte 0xe7, 0x34, 0x81
-SetWall_MiscDataAndCode_Skip4:
+SqSngSel_CalcSongUsagePercent_Skip:
 	add	de, 3
 	cp	de, 48
-	jr	c, SetWall_MiscDataAndCode_Loop
+	jr	c, SqSngSel_CalcSongUsagePercent_Loop
 	ld	xde, xbc
 	cp	xbc, 0
 	jr	z, SetWall_MiscDataAndCode_Entry

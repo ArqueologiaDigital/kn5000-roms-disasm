@@ -1339,9 +1339,9 @@ AcCmpSetGridBoxProc_CaseTable:
 	.short	AcCmpSetGridBoxProc_OnIndexswDown - CmpSetP1_DialGrid
 	.short	AcCmpSetGridBoxProc_OnIndexswUp - CmpSetP1_DialGrid
 	.short	AcCmpSetGridBoxProc_OnIndexswDown - CmpSetP1_DialGrid
-	.short	CmpSetP1_GridCheck_Case4 - CmpSetP1_DialGrid
-	.short	CmpSetP1_GridCheck_Case3 - CmpSetP1_DialGrid
-	.short	CmpSetP1_GridCheck_Case3 - CmpSetP1_DialGrid
+	.short	AcCmpSetGridBoxProc_DefaultInherited - CmpSetP1_DialGrid
+	.short	AcCmpSetGridBoxProc_ForwardToApFunc - CmpSetP1_DialGrid
+	.short	AcCmpSetGridBoxProc_ForwardToApFunc - CmpSetP1_DialGrid
 NoteDataB_Natural:
 	aligned_string "B "
 NoteDataB_Flat:
@@ -1779,9 +1779,9 @@ S2cGridBoxProc_CaseTable:
 	.short	S2cGridBoxProc_OnIndexswDown - FdcFormat_DialGrid
 	.short	S2cGridBoxProc_OnIndexswUp - FdcFormat_DialGrid
 	.short	S2cGridBoxProc_OnIndexswDown - FdcFormat_DialGrid
-	.short	FdcFormat_GridCheck_Case4 - FdcFormat_DialGrid
-	.short	FdcFormat_GridCheck_Case2 - FdcFormat_DialGrid
-	.short	FdcFormat_GridCheck_Case2 - FdcFormat_DialGrid
+	.short	S2cGridBoxProc_DefaultInherited - FdcFormat_DialGrid
+	.short	S2cGridBoxProc_ForwardToApFunc - FdcFormat_DialGrid
+	.short	S2cGridBoxProc_ForwardToApFunc - FdcFormat_DialGrid
 S2c_GridCheck_Dispatch_Data:	.byte	0x91, 0x39
 	.byte 0x00, 0x00, 0x92, 0x39, 0x00, 0x00, 0x93, 0x39
 	.byte 0x00, 0x00, 0x94, 0x39, 0x00, 0x00, 0x95, 0x39
@@ -2150,9 +2150,9 @@ AcEasyCmpGridBoxProc_CaseTable:
 	.short	AcEasyCmpGridBoxProc_OnIndexswDown - EasyCmp_DialGrid
 	.short	AcEasyCmpGridBoxProc_OnIndexswUp - EasyCmp_DialGrid
 	.short	AcEasyCmpGridBoxProc_OnIndexswDown - EasyCmp_DialGrid
-	.short	EasyCmp_GridCheck_Case4 - EasyCmp_DialGrid
-	.short	EasyCmp_GridCheck_Case3 - EasyCmp_DialGrid
-	.short	EasyCmp_GridCheck_Case3 - EasyCmp_DialGrid
+	.short	AcEasyCmpGridBoxProc_CallInherited - EasyCmp_DialGrid
+	.short	AcEasyCmpGridBoxProc_PassToApFunc - EasyCmp_DialGrid
+	.short	AcEasyCmpGridBoxProc_PassToApFunc - EasyCmp_DialGrid
 StrGenre_Waltz:		aligned_string "     Waltz      "
 StrGenre_RockBallad:	aligned_string "  Rock Ballad   "
 StrGenre_Country:	aligned_string "    Country     "
@@ -2280,9 +2280,9 @@ MspRGrpSetGridCheck_CaseTable:
 	.short	MspRGrpSetGridCheck_OnIndexswDown - MspRGrpSetGridCheck_DataBlock
 	.short	MspRGrpSetGridCheck_DataBlock - MspRGrpSetGridCheck_DataBlock
 	.short	MspRGrpSetGridCheck_OnIndexswDown - MspRGrpSetGridCheck_DataBlock
-	.short	RgpSetBnk_GridCheck_Return - MspRGrpSetGridCheck_DataBlock
-	.short	RgpSetBnk_GridCheck_Return - MspRGrpSetGridCheck_DataBlock
-	.short	RgpSetBnk_GridCheck_Return - MspRGrpSetGridCheck_DataBlock
+	.short	AudioEvt_GetFocusRetZero_Return - MspRGrpSetGridCheck_DataBlock
+	.short	AudioEvt_GetFocusRetZero_Return - MspRGrpSetGridCheck_DataBlock
+	.short	AudioEvt_GetFocusRetZero_Return - MspRGrpSetGridCheck_DataBlock
 RgpSetBnkBox_HandleEvtBC_Data:
 	.long StrCompileBank1
 	.long StrCompileBank2

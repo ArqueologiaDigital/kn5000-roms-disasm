@@ -1431,11 +1431,11 @@ VocalistGridCheck_CaseTable:
 ; -----------------------------------------------------------------------------
 AcVocalist_ListSetup_CaseTable:
 	.short	AcVocalist_ListDispatch - AcVocalist_ListDispatch
-	.short	AcVocalist_ListSetup_Case1 - AcVocalist_ListDispatch
+	.short	AcVocalist_ListSetup_HarmonyLocalOn - AcVocalist_ListDispatch
 	.short	AcVocalist_ListDispatch - AcVocalist_ListDispatch
-	.short	AcVocalist_ListSetup_Case1 - AcVocalist_ListDispatch
+	.short	AcVocalist_ListSetup_HarmonyLocalOn - AcVocalist_ListDispatch
 	.short	AcVocalist_ListDispatch - AcVocalist_ListDispatch
-	.short	AcVocalist_ListSetup_Case1 - AcVocalist_ListDispatch
+	.short	AcVocalist_ListSetup_HarmonyLocalOn - AcVocalist_ListDispatch
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] PsHarm_DrawActiveBox_PtrTable
 ; PsHarm_DrawActiveBox_PtrTable -- 1 u32 addresses, read by

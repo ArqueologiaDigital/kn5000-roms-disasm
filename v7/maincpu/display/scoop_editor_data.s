@@ -41,7 +41,7 @@ SeWrtSndTitleFunc_OnHide:
 SeWrtSndTitleFunc_OnSwitchIn:
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	call	Scoop_SoundEditorData_Helper
+	call	SeWrtSndTitleFunc_DispatchSwitch
 SeWrtSndTitleFunc_OnSwitchIn_Join:
 	ld	wa, 1:i3
 	call	AudioLock_GetCount

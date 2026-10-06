@@ -3290,23 +3290,23 @@ DSPCfg_Data_ParamDispatch_Code:
 	ld	xiz, 0x4900
 	ld	wa, 0:i3
 	jr	DSPCfg_Data_ParamDispatch_Join3
-EffEdit_DSPConfigBlock_Helper_Case98:
+DSPCfg_RecordFieldToParamId_Tag62ReverbSlot:
 	ld	xiz, 0x4a00
 	jr	DSPCfg_Data_ParamDispatch_Join2
-EffEdit_DSPConfigBlock_Helper_Case99:
+DSPCfg_RecordFieldToParamId_DigitalReverbRecord:
 	ld	xiz, 0x4b00
 DSPCfg_Data_ParamDispatch_Join2:
 	ld	wa, 1:i3
 	jr	DSPCfg_Data_ParamDispatch_Join3
-EffEdit_DSPConfigBlock_Helper_Case100:
+DSPCfg_RecordFieldToParamId_EqualizerRecord:
 	ld	xiz, 0x4c00
 	ld	wa, 4:i3
 	jr	DSPCfg_Data_ParamDispatch_Join3
-EffEdit_DSPConfigBlock_Helper_Case101:
+DSPCfg_RecordFieldToParamId_AcousticIllusionRecord:
 	ld	xiz, 0x4d00
 	ld	wa, 2:i3
 	jr	DSPCfg_Data_ParamDispatch_Join3
-EffEdit_DSPConfigBlock_Helper_Case102:
+DSPCfg_RecordFieldToParamId_Slot3RoomKaraokeRecord:
 	ld	xiz, 0x4e00
 	ld	wa, 3:i3
 	jr	DSPCfg_Data_ParamDispatch_Join3
@@ -3314,9 +3314,9 @@ DSPCfg_Data_ParamDispatch_Skip6:
 	ldw	(xsp+0x4), 0xffff
 DSPCfg_Data_ParamDispatch_Join3:
 	cp	(xsp+12), 1
-	jr	c, DSPCfg_Data_ParamDispatch_Join4
+	jr	c, DSPCfg_RecordFieldToParamId_Slot3RoomKaraokeRecord_Join4
 	cp	(xsp+12), 17
-	jr	nc, DSPCfg_Data_ParamDispatch_Join4
+	jr	nc, DSPCfg_RecordFieldToParamId_Slot3RoomKaraokeRecord_Join4
 	calr	DSPCfg_LookupMidiMap
 	ld	(xsp+6), xhl
 	ld	xwa, (xsp+6)
@@ -3336,14 +3336,14 @@ DSPCfg_Data_ParamDispatch_Join3:
 	ld	xwa, (xsp+10)
 	calr	DSPCfg_Data_ParamDispatch_Helper
 	cp	hl, 0xffff
-	jr	nz, DSPCfg_Data_ParamDispatch_Skip7
+	jr	nz, DSPCfg_RecordFieldToParamId_Slot3RoomKaraokeRecord_Skip7
 	ldw	(xsp+4), 65535
-	jr	DSPCfg_Data_ParamDispatch_Join4
-DSPCfg_Data_ParamDispatch_Skip7:
+	jr	DSPCfg_RecordFieldToParamId_Slot3RoomKaraokeRecord_Join4
+DSPCfg_RecordFieldToParamId_Slot3RoomKaraokeRecord_Skip7:
 	add	hl, 16
 	exts	xhl
 	add	xiz, xhl
-DSPCfg_Data_ParamDispatch_Join4:
+DSPCfg_RecordFieldToParamId_Slot3RoomKaraokeRecord_Join4:
 	ld	xwa, (xsp+18)
 	ld	(xwa), xiz
 	ld	hl, (xsp+4)

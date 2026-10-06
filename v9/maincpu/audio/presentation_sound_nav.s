@@ -868,7 +868,7 @@ SetWallPaper_CaseData:
 SetWallPaper_Loop:
 	ld	wa, 1:i3
 	jr	SetWallPaper_Join
-SetWallPaper_Case2:
+SetWallPaper_MenuWallBorder:
 	cpw	(0x0340fc:24), 0
 	jr	z, SetWallPaper_Loop
 SetWallPaper_Skip:
@@ -1298,7 +1298,7 @@ DirmdTitleFunc:
 DirmdTitle_New:
 	ld	a, (ACTIVE_TITLE:16)
 	cp	a, (ACTIVE_TITLE_PREVIOUS:16)
-	jr	z, PostTitle_Function_Skip
+	jr	z, DirmdTitle_New_Skip
 	ldw	wa, 255
 	call	GraphicsRender_ByteData
 	ldw	wa, 245
@@ -1306,7 +1306,7 @@ DirmdTitle_New:
 	call	Display_LoadFixedPaletteBands
 	ldw	wa, 255
 	call	Display_FillPaletteBandFromEntry
-PostTitle_Function_Skip:
+DirmdTitle_New_Skip:
 	ld	xwa, DirmdTitleFunc_Str_DirmdTitleNew
 	call	DbMemo_PostString
 	jp	PsMixer_CtlTypeProc8_Return

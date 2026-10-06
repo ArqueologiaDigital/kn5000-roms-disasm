@@ -68,7 +68,7 @@ Kubo_MixerMenuView:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x
 Kubo_DiskLoadMenuView:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x5D2, 0x36
 ; SqedtFunc_CursorState -- 1 x struct (3 x uint8_t (each + pad)): the from-cursor and to-cursor of the sequencer edit
 ; value list (EVT_GET/SET_FROM_CUR, EVT_GET/SET_TO_CUR) and a 0/1 byte saying which of them SqedtVal2
-; is editing (1 = to-cursor); SeqFormat_DispatchA compares the list index against the active one.
+; is editing (1 = to-cursor); SqedtFunc_OnChkCur_AtCursorPos0 compares the list index against the active one.
 SqedtFunc_CursorState:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x608, 0x6
 ; FileOpen_SlotByte1Init -- 1 x struct (1 x uint8_t (+ pad), power-on 1): FileOpen_PopulateStruct copies it to byte +1
 ; of each new open-file slot (beside +0 = device index, +2 = 0x0D); SeqChan_ValidateAndDispatch

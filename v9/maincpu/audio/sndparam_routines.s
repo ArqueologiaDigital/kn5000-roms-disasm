@@ -3035,8 +3035,8 @@ SndParam_BinarySearch:
 	ld	iy, 0:i3
 	ld	ix, de
 	sub	ix, 1
-	jr	c, SndParam_WidgetNotifyType1_Skip3
-SndParam_WidgetNotifyType1_Loop:
+	jr	c, SndParam_BinarySearch_Skip3
+SndParam_BinarySearch_Loop:
 	ld	hl, iy
 	add	hl, ix
 	srl	hl, 1
@@ -3045,22 +3045,22 @@ SndParam_WidgetNotifyType1_Loop:
 	add	xde, xbc
 	ld	e, (xde)
 	cp	a, e
-	jr	nz, SndParam_WidgetNotifyType1_Skip
+	jr	nz, SndParam_BinarySearch_Skip
 	ld	hl, 0:i3
 	ret
-SndParam_WidgetNotifyType1_Skip:
+SndParam_BinarySearch_Skip:
 	cp	a, e
-	jr	ule, SndParam_WidgetNotifyType1_Skip2
+	jr	ule, SndParam_BinarySearch_Skip2
 	ld	iy, hl
 	inc	1, iy
-	jr	SndParam_WidgetNotifyType1_Join
-SndParam_WidgetNotifyType1_Skip2:
+	jr	SndParam_BinarySearch_Join
+SndParam_BinarySearch_Skip2:
 	ld	ix, hl
 	dec	1, ix
-SndParam_WidgetNotifyType1_Join:
+SndParam_BinarySearch_Join:
 	cp	iy, ix
-	jr	ule, SndParam_WidgetNotifyType1_Loop
-SndParam_WidgetNotifyType1_Skip3:
+	jr	ule, SndParam_BinarySearch_Loop
+SndParam_BinarySearch_Skip3:
 	ldw	hl, 0xffff
 	ret
 

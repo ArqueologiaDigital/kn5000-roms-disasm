@@ -3342,13 +3342,13 @@ ExtData_ToneParam_DispatchHandler_CaseTable:
 	; +0x8AE: 9 jump offsets, ExtData_ToneParam_AltDispatch (0xFC7F9F), from 0xFC8793.
 ExtData_ToneParam_AltDispatch_CaseTable:
 	.short	ExtData_ToneParam_AltDispatch_Code - ExtData_ToneParam_AltDispatch_Code
-	.short	ExtData_ToneParam_AltDispatch_Case1 - ExtData_ToneParam_AltDispatch_Code
-	.short	ExtData_ToneParam_AltDispatch_Case1 - ExtData_ToneParam_AltDispatch_Code
-	.short	ExtData_ToneParam_AltDispatch_Case3 - ExtData_ToneParam_AltDispatch_Code
-	.short	ExtData_ToneParam_AltDispatch_Case3 - ExtData_ToneParam_AltDispatch_Code
-	.short	ExtData_ToneParam_AltDispatch_Case3 - ExtData_ToneParam_AltDispatch_Code
-	.short	ExtData_ToneParam_AltDispatch_Case3 - ExtData_ToneParam_AltDispatch_Code
-	.short	ExtData_ToneParam_AltDispatch_Case7 - ExtData_ToneParam_AltDispatch_Code
+	.short	ExtData_ToneParam_AltDispatch_DrawbarNibbleFields - ExtData_ToneParam_AltDispatch_Code
+	.short	ExtData_ToneParam_AltDispatch_DrawbarNibbleFields - ExtData_ToneParam_AltDispatch_Code
+	.short	ExtData_ToneParam_AltDispatch_DrawbarFootages - ExtData_ToneParam_AltDispatch_Code
+	.short	ExtData_ToneParam_AltDispatch_DrawbarFootages - ExtData_ToneParam_AltDispatch_Code
+	.short	ExtData_ToneParam_AltDispatch_DrawbarFootages - ExtData_ToneParam_AltDispatch_Code
+	.short	ExtData_ToneParam_AltDispatch_DrawbarFootages - ExtData_ToneParam_AltDispatch_Code
+	.short	ExtData_ToneParam_AltDispatch_Drawbar1FootAndSwitches - ExtData_ToneParam_AltDispatch_Code
 	.short	ExtData_ToneParam_AltDispatch_Code - ExtData_ToneParam_AltDispatch_Code
 	; +0x8C0: 9 jump offsets, ExtData_ToneParam_AltBody (0xFC8009), from 0xFC87FD.
 ExtData_ToneParam_AltBody_CaseTable:

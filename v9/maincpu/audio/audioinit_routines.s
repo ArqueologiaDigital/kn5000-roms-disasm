@@ -1255,6 +1255,7 @@ AudioInit_VoiceRoutingTable:
 	.byte 0x7f, 0xc1, 0xd3, 0xc2, 0x3c, 0x01, 0xc1, 0xd4
 	.byte 0xc2, 0x3e, 0xfe, 0xc1, 0xd5, 0xc2, 0x3c, 0x01
 	.byte 0xda, 0xa8, 0xda, 0xcf, 0x20, 0x00, 0xb0, 0xff
+AudioInit_VoiceRoutingTable_Loop:
 	.byte 0xda, 0x88, 0xd8, 0x80, 0xf1, 0xe2, 0xc2, 0x31
 	.byte 0xe8, 0x12, 0xe9, 0x80, 0xb0, 0xb7, 0xda, 0x88
 	.byte 0xd8, 0x80, 0xf1, 0xe2, 0xc2, 0x31, 0xe8, 0x12
@@ -2489,8 +2490,8 @@ AudioInit_Volume_Return:
 AudioInit_InitPartSendLevels:
 	ld	de, 0:i3
 	cp	de, 161
-	jr	nc, AudioInit_PartConfig_CheckCarry_Skip
-AudioInit_PartConfig_CheckCarry_Loop:
+	jr	nc, AudioInit_InitPartSendLevels_Skip
+AudioInit_InitPartSendLevels_Loop:
 	ld	wa, de
 	add	wa, wa
 	lda	xbc, (0xc62a:16)
@@ -2505,8 +2506,8 @@ AudioInit_PartConfig_CheckCarry_Loop:
 	ld	(xwa), 0
 	inc	1, de
 	cp	de, 161
-	jr	c, AudioInit_PartConfig_CheckCarry_Loop
-AudioInit_PartConfig_CheckCarry_Skip:
+	jr	c, AudioInit_InitPartSendLevels_Loop
+AudioInit_InitPartSendLevels_Skip:
 	ld	(0xca6a:16), 8
 	ld	(0xca6b:16), 0
 	ld	(0xca6c:16), 8

@@ -1507,12 +1507,12 @@ AccPlay_SyncVoiceParams:
 	ld	xiy, 0xf9b6
 	ld	xix, 0xfd62
 	ld	c, 30:opc
-AccPlay_SetupSoundParams_Loop:
+AccPlay_SyncVoiceParams_Loop:
 	ld	a, (xiy)
 	ld	w, (xix)
 	ld	(xix), a
 	cp	a, w
-	jr	z, AccPlay_SetupSoundParams_Skip
+	jr	z, AccPlay_SyncVoiceParams_Skip
 	push	xiy
 	push	xix
 	push	xbc
@@ -1524,12 +1524,12 @@ AccPlay_SetupSoundParams_Loop:
 	pop	xbc
 	pop	xix
 	pop	xiy
-AccPlay_SetupSoundParams_Skip:
+AccPlay_SyncVoiceParams_Skip:
 	inc	1, iy
 	inc	1, ix
 	dec	1, c
 	cp	c, 0:i3
-	jr	nz, AccPlay_SetupSoundParams_Loop
+	jr	nz, AccPlay_SyncVoiceParams_Loop
 
 AccPlay_SyncParamsRet:
 	ret
@@ -3071,10 +3071,10 @@ VocalistGrid_DispatchData:
 	ld	bc, de
 	ld	(xhl+2), bc
 	cpw	(xhl), 1
-	jr	z, VocalistGridCheck_Skip
+	jr	z, VocalistGrid_DispatchData_Skip
 	cpw	(xhl), 2
 	jrl	nz, AcVocalist_ReturnZero
-VocalistGridCheck_Skip:
+VocalistGrid_DispatchData_Skip:
 	ld	wa, (xhl)
 	sla	wa, 2
 	dec	4, wa
@@ -3422,21 +3422,21 @@ VocalistGrid_CheckDispData:
 	ld	xwa, 0x2d00
 	call	SndParam_LookupReadOnly
 	cp	hl, 16
-	jr	z, VocalistGridCheck_Skip9
+	jr	z, VocalistGrid_CheckDispData_Skip9
 	cp	hl, 17
-	jr	nz, VocalistGridCheck_Skip10
+	jr	nz, VocalistGrid_CheckDispData_Skip10
 	ld	xwa, VocalistGrid_DispatchData_Str_10
-	jr	VocalistGridCheck_Join7
-VocalistGridCheck_Skip9:
+	jr	VocalistGrid_CheckDispData_Join7
+VocalistGrid_CheckDispData_Skip9:
 	ld	xwa, VocalistGrid_DispatchData_Str_11
-VocalistGridCheck_Join7:
+VocalistGrid_CheckDispData_Join7:
 	push	xwa
 	lda	xwa, (xsp+24)
 	push	xwa
 	call	Strcpy
 	inc	8, xsp
-	jr	VocalistGridCheck_Join8
-VocalistGridCheck_Skip10:
+	jr	VocalistGrid_CheckDispData_Join8
+VocalistGrid_CheckDispData_Skip10:
 	ld	xwa, 0x2d00
 	call	SndParam_LookupReadOnly
 	inc	1, hl
@@ -3447,7 +3447,7 @@ VocalistGridCheck_Skip10:
 	push	xwa
 	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
-VocalistGridCheck_Join8:
+VocalistGrid_CheckDispData_Join8:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
@@ -3513,17 +3513,17 @@ VocalistGrid_DispatchData_DrawPcngOption:
 	cp	hl, 3:i3
 	jr	z, VocalistGridCheck_Entry
 	cp	hl, 2:i3
-	jr	z, VocalistGridCheck_Skip12
+	jr	z, VocalistGrid_DispatchData_DrawPcngOption_Skip12
 	cp	hl, 1:i3
-	jr	z, VocalistGridCheck_Skip11
+	jr	z, VocalistGrid_DispatchData_DrawPcngOption_Skip11
 	cp	hl, 0:i3
 	jr	nz, VocalistGridCheck_Skip13
 	ld	xwa, VocalistGrid_DispatchData_Str_12
 	jr	VocalistGridCheck_Join9
-VocalistGridCheck_Skip11:
+VocalistGrid_DispatchData_DrawPcngOption_Skip11:
 	ld	xwa, VocalistGrid_DispatchData_Str_13
 	jr	VocalistGridCheck_Join9
-VocalistGridCheck_Skip12:
+VocalistGrid_DispatchData_DrawPcngOption_Skip12:
 	ld	xwa, VocalistGrid_DispatchData_Str_14
 	jr	VocalistGridCheck_Join9
 VocalistGridCheck_Entry:
@@ -3712,7 +3712,9 @@ AcVocalist_ListDispatch:
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 0:i3
 	jr	VocalistGridCheck_Join13
-AcVocalist_ListSetup_Case1:	; cases 1, 3, 5
+; AcVocalist_ListSetup_HarmonyLocalOn: Vocalist presets 1, 3, 5 (RIGHT1 -> CHORDAL, RIGHT1 -> VOCODER, SMF HARMONY
+;   CHANNEL -> VOCODER) set HARMONY PART LOCAL to ON; presets 0, 2, 4 set it OFF.
+AcVocalist_ListSetup_HarmonyLocalOn:	; cases 1, 3, 5
 	ld	xwa, 0xd7000c
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 1:i3
@@ -3956,16 +3958,16 @@ VocalistPage1OK_Dispatch:
 	srl	xwa, 16
 	ld	qwa, 0
 	cp	wa, 0:i3
-	jr	z, VocalistPage2OKFunc_Skip
+	jr	z, VocalistPage1OK_Dispatch_Skip
 	ld	xwa, 0x01d400
 	ld	bc, 1:i3
 	ld	de, 2:i3
-	jr	VocalistPage2OKFunc_Join4
-VocalistPage2OKFunc_Skip:
+	jr	VocalistPage1OK_Dispatch_Join4
+VocalistPage1OK_Dispatch_Skip:
 	ld	xwa, 0x01d400
 	ld	bc, 0:i3
 	ld	de, 2:i3
-VocalistPage2OKFunc_Join4:
+VocalistPage1OK_Dispatch_Join4:
 	call	SoundParam_NotifyChange
 	ld	(GLOBAL_ERROR_CODE:16), 35
 	ld	xwa, 0xffffffff
@@ -3992,23 +3994,23 @@ VocalistPage1_DispatchData:
 	srl	xwa, 16
 	ld	qwa, 0
 	cp	wa, 0:i3
-	jr	z, VocalistPage2OKFunc_Skip3
+	jr	z, VocalistPage1_DispatchData_Skip3
 	ld	xwa, 0x018000
 	ld	bc, 1:i3
 	ld	de, 2:i3
-	jr	VocalistPage2OKFunc_Join2
-VocalistPage2OKFunc_Skip3:
+	jr	VocalistPage1_DispatchData_Join2
+VocalistPage1_DispatchData_Skip3:
 	ld	xwa, 0x018000
 	ld	bc, 0:i3
 	ld	de, 2:i3
-VocalistPage2OKFunc_Join2:
+VocalistPage1_DispatchData_Join2:
 	call	SoundParam_NotifyChange
 	ld	(GLOBAL_ERROR_CODE:16), 35
 	ld	xwa, 0xffffffff
 	ld	xbc, EVT_INTERRUPT_TITLE
 	ld	xde, TITLE_MESAGE
 	jr	VocalistPage2OKFunc_Join
-MainVocalistPage1OKFunc_Case4:
+MainVocalistPage1OKFunc_OnTechniChordPreset:
 	ld	wa, bc
 	call	MidiSysEx_CopyParamToBuffer
 	call	MidiSysEx_SendAllPartChannels
@@ -4022,23 +4024,23 @@ MainVocalistPage1OKFunc_Case4:
 	srl	xwa, 16
 	ld	qwa, 0
 	cp	wa, 0:i3
-	jr	z, VocalistPage2OKFunc_Skip2
+	jr	z, MainVocalistPage1OKFunc_OnTechniChordPreset_Skip2
 	ld	xwa, 0x018c00
 	ld	bc, 1:i3
 	ld	de, 2:i3
-	jr	VocalistPage2OKFunc_Join3
-VocalistPage2OKFunc_Skip2:
+	jr	MainVocalistPage1OKFunc_OnTechniChordPreset_Join3
+MainVocalistPage1OKFunc_OnTechniChordPreset_Skip2:
 	ld	xwa, 0x018c00
 	ld	bc, 0:i3
 	ld	de, 2:i3
-VocalistPage2OKFunc_Join3:
+MainVocalistPage1OKFunc_OnTechniChordPreset_Join3:
 	call	SoundParam_NotifyChange
 	ld	(GLOBAL_ERROR_CODE:16), 35
 	ld	xwa, 0xffffffff
 	ld	xbc, EVT_INTERRUPT_TITLE
 	ld	xde, TITLE_MESAGE
 	jrl	VocalistPage2OKFunc_Join
-MainVocalistPage1OKFunc_Case5:
+MainVocalistPage1OKFunc_OnSmfHarmonyPreset:
 	ld	wa, bc
 	call	MidiSysEx_CopyParamToBuffer
 	call	MidiSysEx_SendAllPartChannels

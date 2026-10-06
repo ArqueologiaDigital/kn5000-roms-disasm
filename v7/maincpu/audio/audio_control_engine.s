@@ -4993,11 +4993,11 @@ ExtData_ToneParam_AltDispatch:
 	jp	t, (xix+wa)
 ExtData_ToneParam_AltDispatch_Code:
 	jr	ExtData_ToneParam_AltDispatch_Join
-ExtData_ToneParam_AltDispatch_Case1:	; cases 1, 2
+ExtData_ToneParam_AltDispatch_DrawbarNibbleFields:	; cases 1, 2
 	jr	ExtData_ToneParam_AltDispatch_Join2
-ExtData_ToneParam_AltDispatch_Case3:	; cases 3, 4, 5, 6
+ExtData_ToneParam_AltDispatch_DrawbarFootages:	; cases 3, 4, 5, 6
 	jr	ExtData_ToneParam_AltDispatch_Join3
-ExtData_ToneParam_AltDispatch_Case7:
+ExtData_ToneParam_AltDispatch_Drawbar1FootAndSwitches:
 	calr	ExtData_ToneParam_AltDispatch_Helper
 	ret
 ExtData_ToneParam_AltDispatch_Join:
@@ -5656,13 +5656,13 @@ MidiCh_ConfigVoiceAndParts:
 	ld	l, e
 	res	7, l
 	cp	l, c
-	jr	ule, MidiChannel_ResetAndConfigure_Skip
+	jr	ule, MidiCh_ConfigVoiceAndParts_Skip
 	sub	l, c
 	ld	c, l
-	jr	MidiChannel_ResetAndConfigure_Join
-MidiChannel_ResetAndConfigure_Skip:
+	jr	MidiCh_ConfigVoiceAndParts_Join
+MidiCh_ConfigVoiceAndParts_Skip:
 	sub	c, l
-MidiChannel_ResetAndConfigure_Join:
+MidiCh_ConfigVoiceAndParts_Join:
 	cp	c, 16
 	jr	c, MidiChannel_ResetAndConfigure_Skip2
 	res	7, e
@@ -7577,57 +7577,57 @@ CombinedPreset_SendEQLoop:
 	ret
 MIDI_MapCCToIndex:
 	cp	a, 102
-	jr	z, CombinedPreset_Load_Skip5
+	jr	z, MIDI_MapCCToIndex_Skip5
 	cp	a, 101
-	jr	z, CombinedPreset_Load_Skip4
+	jr	z, MIDI_MapCCToIndex_Skip4
 	cp	a, 100
-	jr	z, CombinedPreset_Load_Skip3
+	jr	z, MIDI_MapCCToIndex_Skip3
 	cp	a, 99
-	jr	z, CombinedPreset_Load_Skip2
+	jr	z, MIDI_MapCCToIndex_Skip2
 	cp	a, 97
-	jr	z, CombinedPreset_Load_Skip
+	jr	z, MIDI_MapCCToIndex_Skip
 	ldw	hl, 0xffff
 	ret
-CombinedPreset_Load_Skip:
+MIDI_MapCCToIndex_Skip:
 	ld	hl, 0:i3
 	ret
-CombinedPreset_Load_Skip2:
+MIDI_MapCCToIndex_Skip2:
 	ld	hl, 1:i3
 	ret
-CombinedPreset_Load_Skip3:
+MIDI_MapCCToIndex_Skip3:
 	ld	hl, 4:i3
 	ret
-CombinedPreset_Load_Skip4:
+MIDI_MapCCToIndex_Skip4:
 	ld	hl, 2:i3
 	ret
-CombinedPreset_Load_Skip5:
+MIDI_MapCCToIndex_Skip5:
 	ld	hl, 3:i3
 	ret
 	cp	a, 4:i3
-	jr	z, CombinedPreset_Load_Skip10
+	jr	z, MIDI_MapCCToIndex_Skip10
 	cp	a, 3:i3
-	jr	z, CombinedPreset_Load_Skip9
+	jr	z, MIDI_MapCCToIndex_Skip9
 	cp	a, 2:i3
-	jr	z, CombinedPreset_Load_Skip8
+	jr	z, MIDI_MapCCToIndex_Skip8
 	cp	a, 1:i3
-	jr	z, CombinedPreset_Load_Skip7
+	jr	z, MIDI_MapCCToIndex_Skip7
 	cp	a, 0:i3
-	jr	z, CombinedPreset_Load_Skip6
+	jr	z, MIDI_MapCCToIndex_Skip6
 	ldw	hl, 0xffff
 	ret
-CombinedPreset_Load_Skip6:
+MIDI_MapCCToIndex_Skip6:
 	ldw	hl, 97
 	ret
-CombinedPreset_Load_Skip7:
+MIDI_MapCCToIndex_Skip7:
 	ldw	hl, 99
 	ret
-CombinedPreset_Load_Skip8:
+MIDI_MapCCToIndex_Skip8:
 	ldw	hl, 101
 	ret
-CombinedPreset_Load_Skip9:
+MIDI_MapCCToIndex_Skip9:
 	ldw	hl, 102
 	ret
-CombinedPreset_Load_Skip10:
+MIDI_MapCCToIndex_Skip10:
 	ldw	hl, 100
 	ret
 SwbtWr_WriteVoiceParam_PreserveRegs:
@@ -10471,16 +10471,16 @@ MidiCC_SetPendingPartVolume:
 	cp	bc, 176
 	jr	z, MidiStream_ApplyPendingParams_Skip
 	cp	c, 31
-	jr	ugt, MidiStream_ApplyPendingParams_Return
+	jr	ugt, MidiCC_SetPendingPartVolume_Return
 	set	7, e
 	ld	xix, 0x9416
 	ld	(xix+c), e
-	jr	MidiStream_ApplyPendingParams_Return
+	jr	MidiCC_SetPendingPartVolume_Return
 MidiStream_ApplyPendingParams_Skip:
 	ld	(0x905c:16), 255
 	ld	(MIDI_CC_EXPRESSION_PENDING:16), e
 	call	Audio_WriteBankSelectParams
-MidiStream_ApplyPendingParams_Return:
+MidiCC_SetPendingPartVolume_Return:
 	ret
 	calr	MidiStream_ExtendedDispatch
 	ret
@@ -11077,24 +11077,24 @@ MidiStream_ExtDispatch_Mode0:
 	jr	z, MidiStream_ExtendedDispatch_Return
 	ld	a, 17:opc
 	cp	c, 72
-	jr	nz, MidiStream_ExtendedDispatch_Skip
+	jr	nz, MidiStream_ExtDispatch_Mode0_Skip
 	ld	a, 15:opc
-MidiStream_ExtendedDispatch_Skip:
+MidiStream_ExtDispatch_Mode0_Skip:
 	cp	e, a
 	jr	ugt, MidiStream_ExtendedDispatch_Return
 	cp	c, 72
-	jr	nz, MidiStream_ExtendedDispatch_Skip2
+	jr	nz, MidiStream_ExtDispatch_Mode0_Skip2
 	ld	l, e
 	call	AccVoice_GetChannelCount_Direct
 	ld	a, l
-	jr	MidiStream_ExtendedDispatch_Join
-MidiStream_ExtendedDispatch_Skip2:
+	jr	MidiStream_ExtDispatch_Mode0_Join
+MidiStream_ExtDispatch_Mode0_Skip2:
 	ld	a, e
 	pushw	bc
 	ld	b, c
 	call	MidiStream_GetCategoryLastSlot
 	popw	bc
-MidiStream_ExtendedDispatch_Join:
+MidiStream_ExtDispatch_Mode0_Join:
 	extz	hl
 	ld	l, c
 	cp	c, 72
@@ -11308,13 +11308,13 @@ MidiStream_ExtendedDispatch_Helper_Skip5:
 	jr	z, MidiCC_ApplyBankSelect_Skip6
 	res	7, e
 	ld	(xix+hl), e
-	jr	MidiStream_ExtendedDispatch_Join2
+	jr	MidiCC_ApplyBankSelect_Join2
 MidiCC_ApplyBankSelect_Skip6:
 	res	7, d
 	inc	1, xix
 	ld	(xix+hl), d
 	dec	1, xix
-MidiStream_ExtendedDispatch_Join2:
+MidiCC_ApplyBankSelect_Join2:
 	ld	wa, (xix+hl)
 	and	wa, 0x7f7f
 	ld	(xix+hl), wa

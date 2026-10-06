@@ -1828,9 +1828,9 @@ Data_InOutGridDispatch_VelocityOffsetOrFix:
 	ld	xwa, 20480
 	call	SndParam_LookupReadOnly
 	cp	hl, 2:i3
-	jr	z, InOutGridCheck_Skip17	; -> 0xF75D01
+	jr	z, Data_InOutGridDispatch_VelocityOffsetOrFix_Skip17	; -> 0xF75D01
 	cp	hl, 1:i3
-	jr	z, InOutGridCheck_Skip16	; -> 0xF75CD3
+	jr	z, Data_InOutGridDispatch_VelocityOffsetOrFix_Skip16	; -> 0xF75CD3
 	cp	hl, 0:i3
 	jrl	nz, MdPreset_ReturnZero2	; -> 0xF75DF4
 	pushw	Data_ParaLoadOptDispatch_Str_Blank5_2@hi16
@@ -1844,7 +1844,7 @@ Data_InOutGridDispatch_VelocityOffsetOrFix:
 	lda	xde, (xsp+4)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	InOutGridCheck_Join4	; -> 0xF75DF0
-InOutGridCheck_Skip16:
+Data_InOutGridDispatch_VelocityOffsetOrFix_Skip16:
 	ld	xwa, 20481
 	call	SndParam_LookupReadOnly
 	exts	hl
@@ -1860,7 +1860,7 @@ InOutGridCheck_Skip16:
 	lda	xde, (xsp+4)
 	ld	xbc, EVT_GRID_DRAW
 	jrl	InOutGridCheck_Join4	; -> 0xF75DF0
-InOutGridCheck_Skip17:
+Data_InOutGridDispatch_VelocityOffsetOrFix_Skip17:
 	ld	xwa, 20482
 	call	SndParam_LookupReadOnly
 	pushw	hl

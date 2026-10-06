@@ -200,7 +200,7 @@ SLSrcBankList_FuncBody:
 	pop	xiz
 	inc	6, xsp
 	ret
-SLSrcBankList_FuncBody_Helper:
+SingleLoadSrc_PanelMemDrawBankName:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp+4), xwa
@@ -225,7 +225,7 @@ SLSrcBankList_FuncBody_Helper:
 	pop	xiz
 	inc	4, xsp
 	ret
-SLSrcBankList_FuncBody_Helper2:
+SingleLoadSrc_PanelMemDrawMemoryNumber:
 	dec	6, xsp
 	push	xiz
 	ld	(xsp+4), c
@@ -244,7 +244,7 @@ SLSrcBankList_FuncBody_Helper2:
 	ld	xbc, SLSrcBankList_FuncBody_Str_Colon_2
 	call	FileIO_BuildFilePath
 	cp	(0x89fa:16), 0
-	jr	nz, SLSrcBankList_FuncBody_Helper2_Skip
+	jr	nz, SingleLoadSrc_PanelMemDrawMemoryNumber_Skip
 	lda	xiz, (0x8979:16)
 	ld	a, (0x89fc:16)
 	extz	wa
@@ -257,7 +257,7 @@ SLSrcBankList_FuncBody_Helper2:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_BuildFilePath
-SLSrcBankList_FuncBody_Helper2_Skip:
+SingleLoadSrc_PanelMemDrawMemoryNumber_Skip:
 	lda	xwa, (0x8979:16)
 	ldw	bc, 16
 	calr	TrimAndPadSmfFilename
@@ -266,7 +266,7 @@ SLSrcBankList_FuncBody_Helper2_Skip:
 	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
 	cp	(0x89fa:16), 0
-	jr	z, SLSrcBankList_FuncBody_Helper2_Epilogue
+	jr	z, SingleLoadSrc_PanelMemDrawMemoryNumber_Epilogue
 	lda	xwa, (0x894e:16)
 	ld	(xwa+63), 3
 	lda	xwa, (xwa+64)
@@ -276,16 +276,16 @@ SLSrcBankList_FuncBody_Helper2_Skip:
 	ld	xwa, (xsp+6)
 	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
-SLSrcBankList_FuncBody_Helper2_Epilogue:
+SingleLoadSrc_PanelMemDrawMemoryNumber_Epilogue:
 	pop	xiz
 	inc	6, xsp
 	ret
-SLSrcBankList_FuncBody_Helper3:
+SingleLoadSrc_PanelMemDrawMemoryName:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp+4), xwa
 	cp	(0x89fa:16), 0
-	jr	nz, SLSrcBankList_FuncBody_Helper3_Epilogue
+	jr	nz, SingleLoadSrc_PanelMemDrawMemoryName_Epilogue
 	lda	xwa, (0x894e:16)
 	ld	(xwa+63), 3
 	lda	xiz, (xwa+64)
@@ -302,7 +302,7 @@ SLSrcBankList_FuncBody_Helper3:
 	ld	xwa, (xsp+4)
 	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
-SLSrcBankList_FuncBody_Helper3_Epilogue:
+SingleLoadSrc_PanelMemDrawMemoryName_Epilogue:
 	pop	xiz
 	inc	4, xsp
 	ret
@@ -312,51 +312,51 @@ SingleLoadSrc_PanelMemListProc:
 	ld	(xsp+4), xde
 	ld	xiz, xwa
 	cp	xbc, EVT_INDEXSW_DOWN
-	jr	z, SLSrcBankList_FuncBody_Skip2
+	jr	z, SingleLoadSrc_PanelMemListProc_Skip2
 	cp	xbc, EVT_INDEXSW_UP
-	jr	z, SLSrcBankList_FuncBody_Skip2
+	jr	z, SingleLoadSrc_PanelMemListProc_Skip2
 	cp	xbc, EVT_PAINT
 	jrl	nz, SLSrcBankList_FuncBody_Join4
 	cp	(0x8a0a:16), 0
-	jr	z, SLSrcBankList_FuncBody_Skip
+	jr	z, SingleLoadSrc_PanelMemListProc_Skip
 	ld	a, (0x89fc:16)
 	extz	wa
 	div	wa, (SingleLoadSrc_PanelMemBankSize:24)
 	ld	(0x89fc:16), w
-SLSrcBankList_FuncBody_Skip:
+SingleLoadSrc_PanelMemListProc_Skip:
 	ld	c, (SingleLoadSrc_PanelMemBankSize:24)
 	ld	xwa, xiz
 	calr	SLSrcBankList_FuncBody
 	ld	c, (SingleLoadSrc_PanelMemBankSize:24)
 	ld	xwa, xiz
-	calr	SLSrcBankList_FuncBody_Helper2
+	calr	SingleLoadSrc_PanelMemDrawMemoryNumber
 	ld	c, (SingleLoadSrc_PanelMemBankSize:24)
 	ld	xwa, xiz
-	calr	SLSrcBankList_FuncBody_Helper
+	calr	SingleLoadSrc_PanelMemDrawBankName
 	ld	c, (SingleLoadSrc_PanelMemBankSize:24)
 	ld	xwa, xiz
-	calr	SLSrcBankList_FuncBody_Helper3
+	calr	SingleLoadSrc_PanelMemDrawMemoryName
 	ld	xwa, 0:i3
 	ld	(0x81ca:16), xwa
 	ld	(0x81ce:16), 0
 	ld	(0x81d0:16), 0
 	jrl	SLSrcBankList_FuncBody_Join4
-SLSrcBankList_FuncBody_Skip2:
+SingleLoadSrc_PanelMemListProc_Skip2:
 	ld	e, (0x89fc:16)
 	ld	xwa, (xsp+4)
 	cp	xwa, 5
-	jrl	nz, SLSrcBankList_FuncBody_Skip5
+	jrl	nz, SingleLoadSrc_PanelMemListProc_Skip5
 	cp	(0x8a0a:16), 0
-	jr	nz, SLSrcBankList_FuncBody_Skip4
+	jr	nz, SingleLoadSrc_PanelMemListProc_Skip4
 	ld	xix, xbc
 	cp	xbc, EVT_INDEXSW_UP
-	jr	nz, SLSrcBankList_FuncBody_Skip3
+	jr	nz, SingleLoadSrc_PanelMemListProc_Skip3
 	ld	l, (SingleLoadSrc_PanelMemBankSize:24)
 	ld	a, l
 	ld	c, e
 	add	a, e
 	cp a, (SLSrcBankList_FuncBody_Data_2:24)
-	jr	nc, SLSrcBankList_FuncBody_Skip3
+	jr	nc, SingleLoadSrc_PanelMemListProc_Skip3
 	add	c, l
 	ld	(0x89fc:16), c
 	ld	c, (SingleLoadSrc_PanelMemBankSize:24)
@@ -364,14 +364,14 @@ SLSrcBankList_FuncBody_Skip2:
 	calr	SLSrcBankList_FuncBody
 	ld	c, (SingleLoadSrc_PanelMemBankSize:24)
 	ld	xwa, xiz
-	jr	SLSrcBankList_FuncBody_Join
-SLSrcBankList_FuncBody_Skip3:
+	jr	SingleLoadSrc_PanelMemListProc_Join
+SingleLoadSrc_PanelMemListProc_Skip3:
 	cp	xix, EVT_INDEXSW_DOWN
-	jr	nz, SLSrcBankList_FuncBody_Skip4
+	jr	nz, SingleLoadSrc_PanelMemListProc_Skip4
 	ld	a, e
 	ld	c, (SingleLoadSrc_PanelMemBankSize:24)
 	cp	e, c
-	jr	c, SLSrcBankList_FuncBody_Skip4
+	jr	c, SingleLoadSrc_PanelMemListProc_Skip4
 	sub	a, c
 	ld	(0x89fc:16), a
 	ld	c, (SingleLoadSrc_PanelMemBankSize:24)
@@ -379,11 +379,11 @@ SLSrcBankList_FuncBody_Skip3:
 	calr	SLSrcBankList_FuncBody
 	ld	c, (SingleLoadSrc_PanelMemBankSize:24)
 	ld	xwa, xiz
-SLSrcBankList_FuncBody_Join:
-	calr	SLSrcBankList_FuncBody_Helper2
+SingleLoadSrc_PanelMemListProc_Join:
+	calr	SingleLoadSrc_PanelMemDrawMemoryNumber
 	ld	(0x81d0:16), 1
 	ld	(0x81ce:16), 1
-SLSrcBankList_FuncBody_Skip4:
+SingleLoadSrc_PanelMemListProc_Skip4:
 	ld	xwa, (0x81ca:16)
 	cp	xwa, (xsp+0x4)
 	jrl	z, SLSrcBankList_FuncBody_Join4
@@ -394,19 +394,19 @@ SLSrcBankList_FuncBody_Skip4:
 	lda	xde, (0x898d:16)
 	ld	xwa, xiz
 	ld	xbc, EVT_PARA_DRAW
-	jrl	SLSrcBankList_FuncBody_Join3
-SLSrcBankList_FuncBody_Skip5:
+	jrl	SingleLoadSrc_PanelMemListProc_Join3
+SingleLoadSrc_PanelMemListProc_Skip5:
 	ld	xwa, (xsp+4)
 	cp	xwa, 6
-	jrl	nz, SLSrcBankList_FuncBody_Skip8
+	jrl	nz, SingleLoadSrc_PanelMemListProc_Skip8
 	ld	xhl, xbc
 	cp	xbc, EVT_INDEXSW_UP
-	jr	nz, SLSrcBankList_FuncBody_Skip6
+	jr	nz, SingleLoadSrc_PanelMemListProc_Skip6
 	ld	c, e
 	ld	a, e
 	inc	1, a
 	cp a, (SLSrcBankList_FuncBody_Data_2:24)
-	jr	nc, SLSrcBankList_FuncBody_Skip6
+	jr	nc, SingleLoadSrc_PanelMemListProc_Skip6
 	ld	e, (SingleLoadSrc_PanelMemBankSize:24)
 	ld	l, e
 	ld	a, c
@@ -415,33 +415,33 @@ SLSrcBankList_FuncBody_Skip5:
 	ld	a, w
 	inc	1, a
 	cp	a, e
-	jr	nc, SLSrcBankList_FuncBody_Skip7
+	jr	nc, SingleLoadSrc_PanelMemListProc_Skip7
 	inc	1, c
 	ld	(0x89fc:16), c
 	ld	c, (SingleLoadSrc_PanelMemBankSize:24)
 	ld	xwa, xiz
-	jr	SLSrcBankList_FuncBody_Join2
-SLSrcBankList_FuncBody_Skip6:
+	jr	SingleLoadSrc_PanelMemListProc_Join2
+SingleLoadSrc_PanelMemListProc_Skip6:
 	cp	xhl, EVT_INDEXSW_DOWN
-	jr	nz, SLSrcBankList_FuncBody_Skip7
+	jr	nz, SingleLoadSrc_PanelMemListProc_Skip7
 	ld	c, e
 	cp	e, 0:i3
-	jr	z, SLSrcBankList_FuncBody_Skip7
+	jr	z, SingleLoadSrc_PanelMemListProc_Skip7
 	ld	e, (SingleLoadSrc_PanelMemBankSize:24)
 	ld	a, c
 	extz	wa
 	div	wa, e
 	ld	a, w
 	cp	a, 0:i3
-	jr	z, SLSrcBankList_FuncBody_Skip7
+	jr	z, SingleLoadSrc_PanelMemListProc_Skip7
 	dec	1, c
 	ld	(0x89fc:16), c
 	ld	c, (SingleLoadSrc_PanelMemBankSize:24)
 	ld	xwa, xiz
-SLSrcBankList_FuncBody_Join2:
-	calr	SLSrcBankList_FuncBody_Helper2
+SingleLoadSrc_PanelMemListProc_Join2:
+	calr	SingleLoadSrc_PanelMemDrawMemoryNumber
 	ld	(0x81ce:16), 1
-SLSrcBankList_FuncBody_Skip7:
+SingleLoadSrc_PanelMemListProc_Skip7:
 	ld	xwa, (0x81ca:16)
 	cp	xwa, (xsp+0x4)
 	jrl	z, SLSrcBankList_FuncBody_Join4
@@ -452,14 +452,14 @@ SLSrcBankList_FuncBody_Skip7:
 	lda	xde, (0x898d:16)
 	ld	xwa, xiz
 	ld	xbc, EVT_PARA_DRAW
-	jr	SLSrcBankList_FuncBody_Join3
-SLSrcBankList_FuncBody_Skip8:
+	jr	SingleLoadSrc_PanelMemListProc_Join3
+SingleLoadSrc_PanelMemListProc_Skip8:
 	ld	xwa, (xsp+4)
 	cp	xwa, 7
-	jr	z, SLSrcBankList_FuncBody_Skip9
+	jr	z, SingleLoadSrc_PanelMemListProc_Skip9
 	cp	xwa, 8
-	jr	nz, SLSrcBankList_FuncBody_Skip10
-SLSrcBankList_FuncBody_Skip9:
+	jr	nz, SingleLoadSrc_PanelMemListProc_Skip10
+SingleLoadSrc_PanelMemListProc_Skip9:
 	ld	xwa, (0x81ca:16)
 	cp	xwa, (xsp+0x4)
 	jr	z, SLSrcBankList_FuncBody_Join4
@@ -470,12 +470,12 @@ SLSrcBankList_FuncBody_Skip9:
 	lda	xde, (0x898d:16)
 	ld	xwa, xiz
 	ld	xbc, EVT_PARA_DRAW
-SLSrcBankList_FuncBody_Join3:
+SingleLoadSrc_PanelMemListProc_Join3:
 	call	ApPostEvent
 	ld	xwa, (xsp+4)
 	ld	(0x81ca:16), xwa
 	jr	SLSrcBankList_FuncBody_Join4
-SLSrcBankList_FuncBody_Skip10:
+SingleLoadSrc_PanelMemListProc_Skip10:
 	ld	xwa, (xsp+4)
 	cp	xwa, 40
 	jr	nz, SLSrcBankList_FuncBody_Join4
@@ -483,14 +483,14 @@ SLSrcBankList_FuncBody_Skip10:
 	jr	z, SLSrcBankList_FuncBody_Entry
 	ld	c, (SingleLoadSrc_PanelMemBankSize:24)
 	ld	xwa, xiz
-	calr	SLSrcBankList_FuncBody_Helper
+	calr	SingleLoadSrc_PanelMemDrawBankName
 	ld	(0x81d0:16), 0
 SLSrcBankList_FuncBody_Entry:
 	cp	(0x81ce:16), 0
 	jr	z, SLSrcBankList_FuncBody_Join4
 	ld	c, (SingleLoadSrc_PanelMemBankSize:24)
 	ld	xwa, xiz
-	calr	SLSrcBankList_FuncBody_Helper3
+	calr	SingleLoadSrc_PanelMemDrawMemoryName
 	ld	(0x81ce:16), 0
 SLSrcBankList_FuncBody_Join4:
 	ld	xhl, 0:i3
@@ -502,7 +502,7 @@ SingleLoadSrc_SequencerListProc:
 	push	xiz
 	ld	(xsp+4), xwa
 	cp	xbc, EVT_PAINT
-	jrl	nz, SLSrcBankList_FuncBody_Skip11
+	jrl	nz, SingleLoadSrc_SequencerListProc_Skip11
 	lda	xwa, (0x894e:16)
 	ld (xwa+), 0
 	ld	(xwa), 0
@@ -528,7 +528,7 @@ SingleLoadSrc_SequencerListProc:
 	ld	(xwa+42), 2
 	lda	xiz, (xwa+43)
 	ld	wa, 0:i3
-	call	SLSrcBankList_FuncBody_Helper14
+	call	SingleLoadSrc_ReadSqtSongName
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_CopyString
@@ -557,12 +557,12 @@ SingleLoadSrc_SequencerListProc:
 	ld	xwa, (xsp+4)
 	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
-SLSrcBankList_FuncBody_Skip11:
+SingleLoadSrc_SequencerListProc_Skip11:
 	ld	xhl, 0:i3
 	pop	xiz
 	inc	4, xsp
 	ret
-SLSrcBankList_FuncBody_Helper4:
+SingleLoadSrc_ComposerDrawBankName:
 	dec	2, xsp
 	push	xiz
 	ld	(xsp+4), c
@@ -600,7 +600,7 @@ SLSrcBankList_FuncBody_Helper4:
 	pop	xiz
 	inc	2, xsp
 	ret
-SLSrcBankList_FuncBody_Helper5:
+SingleLoadSrc_ComposerDrawPatternSlot:
 	dec	8, xsp
 	push	xiz
 	ld	(xsp+6), c
@@ -625,14 +625,14 @@ SLSrcBankList_FuncBody_Helper5:
 	ld	xbc, SLSrcBankList_FuncBody_Entry_Str_Colon_3
 	call	FileIO_BuildFilePath
 	cp	(0x89fa:16), 0
-	jr	nz, SLSrcBankList_FuncBody_Helper5_Skip
+	jr	nz, SingleLoadSrc_ComposerDrawPatternSlot_Skip
 	lda	xiz, (0x8979:16)
 	ld	wa, (xsp+4)
 	calr	WP_GetPresetPtr
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_BuildFilePath
-SLSrcBankList_FuncBody_Helper5_Skip:
+SingleLoadSrc_ComposerDrawPatternSlot_Skip:
 	lda	xwa, (0x8979:16)
 	ldw	bc, 16
 	calr	TrimAndPadSmfFilename
@@ -643,7 +643,7 @@ SLSrcBankList_FuncBody_Helper5_Skip:
 	lda	xbc, (0x894e:16)
 	lda	xwa, (xbc+63)
 	cp	(0x89fa:16), 0
-	jr	z, SLSrcBankList_FuncBody_Helper5_Skip2
+	jr	z, SingleLoadSrc_ComposerDrawPatternSlot_Skip2
 	ld	(xwa), 3
 	lda	xwa, (xbc+64)
 	ld	xbc, SLSrcBankList_FuncBody_Entry_Str_ALL
@@ -651,10 +651,10 @@ SLSrcBankList_FuncBody_Helper5_Skip:
 	lda	xde, (0x898d:16)
 	ld	xwa, (xsp+8)
 	ld	xbc, EVT_PARA_DRAW
-	jr	SLSrcBankList_FuncBody_Helper5_Join
-SLSrcBankList_FuncBody_Helper5_Skip2:
+	jr	SingleLoadSrc_ComposerDrawPatternSlot_Join
+SingleLoadSrc_ComposerDrawPatternSlot_Skip2:
 	cpw	(xsp+0x4), 4
-	jr	c, SLSrcBankList_FuncBody_Helper5_Epilogue
+	jr	c, SingleLoadSrc_ComposerDrawPatternSlot_Epilogue
 	ld	c, (0x89fe:16)
 	extz	bc
 	div	bc, (xsp+0x6)
@@ -665,13 +665,13 @@ SLSrcBankList_FuncBody_Helper5_Skip2:
 	lda	xde, (0x898d:16)
 	ld	xwa, (xsp+8)
 	ld	xbc, EVT_PARA_DRAW
-SLSrcBankList_FuncBody_Helper5_Join:
+SingleLoadSrc_ComposerDrawPatternSlot_Join:
 	call	ApPostEvent
-SLSrcBankList_FuncBody_Helper5_Epilogue:
+SingleLoadSrc_ComposerDrawPatternSlot_Epilogue:
 	pop	xiz
 	inc	8, xsp
 	ret
-SLSrcBankList_FuncBody_Helper6:
+SingleLoadSrc_ComposerDrawPatternName:
 	dec	4, xsp
 	push	xiz
 	ld	e, c
@@ -682,9 +682,9 @@ SLSrcBankList_FuncBody_Helper6:
 	ld	c, w
 	extz	bc
 	cp	(0x89fa:16), 0
-	jr	nz, SLSrcBankList_FuncBody_Helper6_Epilogue
+	jr	nz, SingleLoadSrc_ComposerDrawPatternName_Epilogue
 	cp	bc, 4:i3
-	jr	nc, SLSrcBankList_FuncBody_Helper6_Epilogue
+	jr	nc, SingleLoadSrc_ComposerDrawPatternName_Epilogue
 	lda	xwa, (0x894e:16)
 	ld	(xwa+63), 3
 	lda	xiz, (xwa+64)
@@ -703,7 +703,7 @@ SLSrcBankList_FuncBody_Helper6:
 	ld	xwa, (xsp+4)
 	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
-SLSrcBankList_FuncBody_Helper6_Epilogue:
+SingleLoadSrc_ComposerDrawPatternName_Epilogue:
 	pop	xiz
 	inc	4, xsp
 	ret
@@ -715,65 +715,65 @@ SingleLoadSrc_ComposerListProc:
 	ld	xiz, xwa
 	ld	c, (SLSrcComposer_RowsPerColumn:24)
 	cp	xde, EVT_INDEXSW_DOWN
-	jr	z, SLSrcBankList_FuncBody_Skip12
+	jr	z, SingleLoadSrc_ComposerListProc_Skip12
 	cp	xde, EVT_INDEXSW_UP
-	jr	z, SLSrcBankList_FuncBody_Skip12
+	jr	z, SingleLoadSrc_ComposerListProc_Skip12
 	cp	xde, EVT_PAINT
-	jrl	nz, SLSrcBankList_FuncBody_Join9
+	jrl	nz, SingleLoadSrc_ComposerListProc_Join9
 	ld	xwa, xiz
-	calr	SLSrcBankList_FuncBody_Helper5
+	calr	SingleLoadSrc_ComposerDrawPatternSlot
 	ld	c, (SLSrcComposer_RowsPerColumn:24)
 	ld	xwa, xiz
-	calr	SLSrcBankList_FuncBody_Helper4
+	calr	SingleLoadSrc_ComposerDrawBankName
 	ld	c, (SLSrcComposer_RowsPerColumn:24)
 	ld	xwa, xiz
-	calr	SLSrcBankList_FuncBody_Helper6
+	calr	SingleLoadSrc_ComposerDrawPatternName
 	ld	xwa, 0:i3
 	ld	(0x81d2:16), xwa
-	jrl	SLSrcBankList_FuncBody_Join8
-SLSrcBankList_FuncBody_Skip12:
+	jrl	SingleLoadSrc_ComposerListProc_Join8
+SingleLoadSrc_ComposerListProc_Skip12:
 	ld	l, (0x89fe:16)
 	ld	xwa, (xsp+4)
 	cp	xwa, 5
-	jrl	nz, SLSrcBankList_FuncBody_Skip15
+	jrl	nz, SingleLoadSrc_ComposerListProc_Skip15
 	ld	xix, xde
 	cp	xde, EVT_INDEXSW_UP
-	jr	nz, SLSrcBankList_FuncBody_Skip13
+	jr	nz, SingleLoadSrc_ComposerListProc_Skip13
 	ld	e, (SLSrcComposer_RowsPerColumn:24)
 	ld	a, e
 	ld	c, l
 	add	a, l
 	cp a, (SLSrcBankList_FuncBody_Data_3:24)
-	jr	nc, SLSrcBankList_FuncBody_Skip13
+	jr	nc, SingleLoadSrc_ComposerListProc_Skip13
 	add	c, e
 	ld	(0x89fe:16), c
 	ld	c, (SLSrcComposer_RowsPerColumn:24)
 	ld	xwa, xiz
-	calr	SLSrcBankList_FuncBody_Helper4
+	calr	SingleLoadSrc_ComposerDrawBankName
 	ld	c, (SLSrcComposer_RowsPerColumn:24)
 	ld	xwa, xiz
-	jr	SLSrcBankList_FuncBody_Join5
-SLSrcBankList_FuncBody_Skip13:
+	jr	SingleLoadSrc_ComposerListProc_Join5
+SingleLoadSrc_ComposerListProc_Skip13:
 	cp	xix, EVT_INDEXSW_DOWN
-	jr	nz, SLSrcBankList_FuncBody_Skip14
+	jr	nz, SingleLoadSrc_ComposerListProc_Skip14
 	ld	a, l
 	ld	c, (SLSrcComposer_RowsPerColumn:24)
 	cp	l, c
-	jr	c, SLSrcBankList_FuncBody_Skip14
+	jr	c, SingleLoadSrc_ComposerListProc_Skip14
 	sub	a, c
 	ld	(0x89fe:16), a
 	ld	c, (SLSrcComposer_RowsPerColumn:24)
 	ld	xwa, xiz
-	calr	SLSrcBankList_FuncBody_Helper4
+	calr	SingleLoadSrc_ComposerDrawBankName
 	ld	c, (SLSrcComposer_RowsPerColumn:24)
 	ld	xwa, xiz
-SLSrcBankList_FuncBody_Join5:
-	calr	SLSrcBankList_FuncBody_Helper5
+SingleLoadSrc_ComposerListProc_Join5:
+	calr	SingleLoadSrc_ComposerDrawPatternSlot
 	ld	(0x81d6:16), 1
-SLSrcBankList_FuncBody_Skip14:
+SingleLoadSrc_ComposerListProc_Skip14:
 	ld	xwa, (0x81d2:16)
 	cp	xwa, (xsp+0x4)
-	jrl	z, SLSrcBankList_FuncBody_Join9
+	jrl	z, SingleLoadSrc_ComposerListProc_Join9
 	lda	xde, (0x8963:16)
 	ld	xwa, xiz
 	ld	xbc, EVT_PARA_DRAW
@@ -781,19 +781,19 @@ SLSrcBankList_FuncBody_Skip14:
 	lda	xde, (0x898d:16)
 	ld	xwa, xiz
 	ld	xbc, EVT_PARA_DRAW
-	jrl	SLSrcBankList_FuncBody_Join7
-SLSrcBankList_FuncBody_Skip15:
+	jrl	SingleLoadSrc_ComposerListProc_Join7
+SingleLoadSrc_ComposerListProc_Skip15:
 	ld	xwa, (xsp+4)
 	cp	xwa, 6
-	jrl	nz, SLSrcBankList_FuncBody_Skip18
+	jrl	nz, SingleLoadSrc_ComposerListProc_Skip18
 	ld	xix, xde
 	cp	xde, EVT_INDEXSW_UP
-	jr	nz, SLSrcBankList_FuncBody_Skip16
+	jr	nz, SingleLoadSrc_ComposerListProc_Skip16
 	ld	c, l
 	ld	a, l
 	inc	1, a
 	cp a, (SLSrcBankList_FuncBody_Data_3:24)
-	jr	nc, SLSrcBankList_FuncBody_Skip16
+	jr	nc, SingleLoadSrc_ComposerListProc_Skip16
 	ld	e, (SLSrcComposer_RowsPerColumn:24)
 	ld	l, e
 	ld	a, c
@@ -802,36 +802,36 @@ SLSrcBankList_FuncBody_Skip15:
 	ld	a, w
 	inc	1, a
 	cp	a, e
-	jr	nc, SLSrcBankList_FuncBody_Skip17
+	jr	nc, SingleLoadSrc_ComposerListProc_Skip17
 	inc	1, c
 	ld	(0x89fe:16), c
 	ld	c, (SLSrcComposer_RowsPerColumn:24)
 	ld	xwa, xiz
-	jr	SLSrcBankList_FuncBody_Join6
-SLSrcBankList_FuncBody_Skip16:
+	jr	SingleLoadSrc_ComposerListProc_Join6
+SingleLoadSrc_ComposerListProc_Skip16:
 	cp	xix, EVT_INDEXSW_DOWN
-	jr	nz, SLSrcBankList_FuncBody_Skip17
+	jr	nz, SingleLoadSrc_ComposerListProc_Skip17
 	ld	c, l
 	cp	l, 0:i3
-	jr	z, SLSrcBankList_FuncBody_Skip17
+	jr	z, SingleLoadSrc_ComposerListProc_Skip17
 	ld	e, (SLSrcComposer_RowsPerColumn:24)
 	ld	a, c
 	extz	wa
 	div	wa, e
 	ld	a, w
 	cp	a, 0:i3
-	jr	z, SLSrcBankList_FuncBody_Skip17
+	jr	z, SingleLoadSrc_ComposerListProc_Skip17
 	dec	1, c
 	ld	(0x89fe:16), c
 	ld	c, (SLSrcComposer_RowsPerColumn:24)
 	ld	xwa, xiz
-SLSrcBankList_FuncBody_Join6:
-	calr	SLSrcBankList_FuncBody_Helper5
+SingleLoadSrc_ComposerListProc_Join6:
+	calr	SingleLoadSrc_ComposerDrawPatternSlot
 	ld	(0x81d6:16), 1
-SLSrcBankList_FuncBody_Skip17:
+SingleLoadSrc_ComposerListProc_Skip17:
 	ld	xwa, (0x81d2:16)
 	cp	xwa, (xsp+0x4)
-	jr	z, SLSrcBankList_FuncBody_Join9
+	jr	z, SingleLoadSrc_ComposerListProc_Join9
 	lda	xde, (0x8963:16)
 	ld	xwa, xiz
 	ld	xbc, EVT_PARA_DRAW
@@ -839,17 +839,17 @@ SLSrcBankList_FuncBody_Skip17:
 	lda	xde, (0x898d:16)
 	ld	xwa, xiz
 	ld	xbc, EVT_PARA_DRAW
-	jr	SLSrcBankList_FuncBody_Join7
-SLSrcBankList_FuncBody_Skip18:
+	jr	SingleLoadSrc_ComposerListProc_Join7
+SingleLoadSrc_ComposerListProc_Skip18:
 	ld	xwa, (xsp+4)
 	cp	xwa, 7
-	jr	z, SLSrcBankList_FuncBody_Skip19
+	jr	z, SingleLoadSrc_ComposerListProc_Skip19
 	cp	xwa, 8
-	jr	nz, SLSrcBankList_FuncBody_Skip20
-SLSrcBankList_FuncBody_Skip19:
+	jr	nz, SingleLoadSrc_ComposerListProc_Skip20
+SingleLoadSrc_ComposerListProc_Skip19:
 	ld	xwa, (0x81d2:16)
 	cp	xwa, (xsp+0x4)
-	jr	z, SLSrcBankList_FuncBody_Join9
+	jr	z, SingleLoadSrc_ComposerListProc_Join9
 	lda	xde, (0x8963:16)
 	ld	xwa, xiz
 	ld	xbc, EVT_PARA_DRAW
@@ -857,66 +857,66 @@ SLSrcBankList_FuncBody_Skip19:
 	lda	xde, (0x898d:16)
 	ld	xwa, xiz
 	ld	xbc, EVT_PARA_DRAW
-SLSrcBankList_FuncBody_Join7:
+SingleLoadSrc_ComposerListProc_Join7:
 	call	ApPostEvent
 	ld	xwa, (xsp+4)
 	ld	(0x81d2:16), xwa
-	jr	SLSrcBankList_FuncBody_Join9
-SLSrcBankList_FuncBody_Skip20:
+	jr	SingleLoadSrc_ComposerListProc_Join9
+SingleLoadSrc_ComposerListProc_Skip20:
 	ld	xwa, (xsp+4)
 	cp	xwa, 40
-	jr	nz, SLSrcBankList_FuncBody_Join9
+	jr	nz, SingleLoadSrc_ComposerListProc_Join9
 	cp	(0x81d6:16), 0
-	jr	z, SLSrcBankList_FuncBody_Join9
+	jr	z, SingleLoadSrc_ComposerListProc_Join9
 	ld	xwa, xiz
-	calr	SLSrcBankList_FuncBody_Helper6
-SLSrcBankList_FuncBody_Join8:
+	calr	SingleLoadSrc_ComposerDrawPatternName
+SingleLoadSrc_ComposerListProc_Join8:
 	ld	(0x81d6:16), 0
-SLSrcBankList_FuncBody_Join9:
+SingleLoadSrc_ComposerListProc_Join9:
 	ld	xhl, 0:i3
 	pop	xiz
 	inc	4, xsp
 	ret
-SLSrcBankList_FuncBody_Helper7:
+SingleLoad_SyncSoundMemCursorGroup:
 	ld	xix, (xsp+4)
 	ld	l, c
 	add	l, c
 	cp	(xde), l
-	jr	nc, SLSrcBankList_FuncBody_Skip21
+	jr	nc, SingleLoad_SyncSoundMemCursorGroup_Skip21
 	cp	(xix), l
-	jr	c, SLSrcBankList_FuncBody_Return
-SLSrcBankList_FuncBody_Skip21:
+	jr	c, SingleLoad_SyncSoundMemCursorGroup_Return
+SingleLoad_SyncSoundMemCursorGroup_Skip21:
 	cp	(xde), l
-	jr	c, SLSrcBankList_FuncBody_Skip22
+	jr	c, SingleLoad_SyncSoundMemCursorGroup_Skip22
 	cp	(xix), l
-	jr	nc, SLSrcBankList_FuncBody_Return
-SLSrcBankList_FuncBody_Skip22:
+	jr	nc, SingleLoad_SyncSoundMemCursorGroup_Return
+SingleLoad_SyncSoundMemCursorGroup_Skip22:
 	cp	xwa, 8
-	jr	z, SLSrcBankList_FuncBody_Skip24
+	jr	z, SingleLoad_SyncSoundMemCursorGroup_Skip24
 	cp	xwa, 7
-	jr	z, SLSrcBankList_FuncBody_Skip24
+	jr	z, SingleLoad_SyncSoundMemCursorGroup_Skip24
 	cp	xwa, 6
-	jr	z, SLSrcBankList_FuncBody_Skip23
+	jr	z, SingleLoad_SyncSoundMemCursorGroup_Skip23
 	cp	xwa, 5
-	jr	nz, SLSrcBankList_FuncBody_Return
-SLSrcBankList_FuncBody_Skip23:
+	jr	nz, SingleLoad_SyncSoundMemCursorGroup_Return
+SingleLoad_SyncSoundMemCursorGroup_Skip23:
 	ld	a, (xde)
 	ld	(xix), a
 	ld	xwa, 0:i3
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 0:i3
 	calr	SingleLoadDstFunc
-	jr	SLSrcBankList_FuncBody_Return
-SLSrcBankList_FuncBody_Skip24:
+	jr	SingleLoad_SyncSoundMemCursorGroup_Return
+SingleLoad_SyncSoundMemCursorGroup_Skip24:
 	ld	a, (xix)
 	ld	(xde), a
 	ld	xwa, 0:i3
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	calr	SingleLoadSrcFunc
-SLSrcBankList_FuncBody_Return:
+SingleLoad_SyncSoundMemCursorGroup_Return:
 	retd	4
-SLSrcBankList_FuncBody_Helper8:
+SingleLoadSrc_DrawSoundMemBankRows:
 	dec	6, xsp
 	ld	(xsp), c
 	ld	(xsp+2), xwa
@@ -943,7 +943,7 @@ SLSrcBankList_FuncBody_Helper8:
 	add	a, (xsp)
 	ld	c, (0x8a00:16)
 	cp	c, a
-	jr	nc, SLSrcBankList_FuncBody_Epilogue
+	jr	nc, SingleLoadSrc_DrawSoundMemBankRows_Epilogue
 	lda	xwa, (0x8963:16)
 	extz	bc
 	div	bc, (xsp)
@@ -954,17 +954,17 @@ SLSrcBankList_FuncBody_Helper8:
 	ld	xwa, (xsp+2)
 	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
-SLSrcBankList_FuncBody_Epilogue:
+SingleLoadSrc_DrawSoundMemBankRows_Epilogue:
 	inc	6, xsp
 	ret
-SLSrcBankList_FuncBody_Helper9:
+SingleLoadSrc_DrawUserKitName:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp+4), xwa
 	ld	a, c
 	add	a, c
 	cp	(0x8a00:16), a
-	jr	c, SLSrcBankList_FuncBody_Epilogue2
+	jr	c, SingleLoadSrc_DrawUserKitName_Epilogue2
 	lda	xwa, (0x894e:16)
 	ld	(xwa+21), 1
 	lda	xiz, (xwa+22)
@@ -979,11 +979,11 @@ SLSrcBankList_FuncBody_Helper9:
 	ld	xwa, (xsp+4)
 	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
-SLSrcBankList_FuncBody_Epilogue2:
+SingleLoadSrc_DrawUserKitName_Epilogue2:
 	pop	xiz
 	inc	4, xsp
 	ret
-SLSrcBankList_FuncBody_Helper10:
+SingleLoadSrc_DrawSoundMemItemNumber:
 	dec	6, xsp
 	push	xiz
 	ld	(xsp+4), c
@@ -1002,13 +1002,13 @@ SLSrcBankList_FuncBody_Helper10:
 	ld	xbc, SLSrcBankList_FuncBody_Entry_Str_Colon_5
 	call	FileIO_BuildFilePath
 	cp	(0x89fa:16), 0
-	jr	nz, SLSrcBankList_FuncBody_Helper10_Skip2
+	jr	nz, SingleLoadSrc_DrawSoundMemItemNumber_Skip2
 	ld	e, (xsp+4)
 	add	e, (xsp+0x4)
 	ld	c, (0x8a00:16)
 	lda	xwa, (0x8979:16)
 	cp	c, e
-	jr	c, SLSrcBankList_FuncBody_Helper10_Skip
+	jr	c, SingleLoadSrc_DrawSoundMemItemNumber_Skip
 	ld	xiz, xwa
 	sub	c, e
 	inc	1, c
@@ -1018,8 +1018,8 @@ SLSrcBankList_FuncBody_Helper10:
 	calr	NumToAscii_FormatNumber
 	ld	xbc, xhl
 	ld	xwa, xiz
-	jr	SLSrcBankList_FuncBody_Join10
-SLSrcBankList_FuncBody_Helper10_Skip:
+	jr	SingleLoadSrc_DrawSoundMemItemNumber_Join10
+SingleLoadSrc_DrawSoundMemItemNumber_Skip:
 	ld	xiz, xwa
 	extz	bc
 	div	bc, (xsp+0x4)
@@ -1030,9 +1030,9 @@ SLSrcBankList_FuncBody_Helper10_Skip:
 	calr	NumToAscii_FormatNumber
 	ld	xbc, xhl
 	ld	xwa, xiz
-SLSrcBankList_FuncBody_Join10:
+SingleLoadSrc_DrawSoundMemItemNumber_Join10:
 	call	FileIO_BuildFilePath
-SLSrcBankList_FuncBody_Helper10_Skip2:
+SingleLoadSrc_DrawSoundMemItemNumber_Skip2:
 	lda	xwa, (0x8979:16)
 	ldw	bc, 16
 	calr	TrimAndPadSmfFilename
@@ -1041,7 +1041,7 @@ SLSrcBankList_FuncBody_Helper10_Skip2:
 	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
 	cp	(0x89fa:16), 0
-	jr	z, SLSrcBankList_FuncBody_Helper10_Epilogue
+	jr	z, SingleLoadSrc_DrawSoundMemItemNumber_Epilogue
 	lda	xwa, (0x894e:16)
 	ld	(xwa+63), 3
 	lda	xwa, (xwa+64)
@@ -1051,16 +1051,16 @@ SLSrcBankList_FuncBody_Helper10_Skip2:
 	ld	xwa, (xsp+6)
 	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
-SLSrcBankList_FuncBody_Helper10_Epilogue:
+SingleLoadSrc_DrawSoundMemItemNumber_Epilogue:
 	pop	xiz
 	inc	6, xsp
 	ret
-SLSrcBankList_FuncBody_Helper11:
+SingleLoadSrc_DrawSoundMemItemName:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp+4), xwa
 	cp	(0x89fa:16), 0
-	jr	nz, SLSrcBankList_FuncBody_Helper11_Epilogue
+	jr	nz, SingleLoadSrc_DrawSoundMemItemName_Epilogue
 	lda	xwa, (0x894e:16)
 	ld	(xwa+63), 3
 	ld	e, c
@@ -1068,19 +1068,19 @@ SLSrcBankList_FuncBody_Helper11:
 	lda	xiz, (xwa+64)
 	ld	a, (0x8a00:16)
 	cp	a, e
-	jr	c, SLSrcBankList_FuncBody_Helper11_Skip
+	jr	c, SingleLoadSrc_DrawSoundMemItemName_Skip
 	sub	a, e
 	extz	wa
 	call	SLSrcBankList_FuncBody_Helper18
 	ld	xbc, xhl
 	ld	xwa, xiz
-	jr	SLSrcBankList_FuncBody_Join11
-SLSrcBankList_FuncBody_Helper11_Skip:
+	jr	SingleLoadSrc_DrawSoundMemItemName_Join11
+SingleLoadSrc_DrawSoundMemItemName_Skip:
 	extz	wa
 	call	SLSrcBankList_FuncBody_Helper16
 	ld	xbc, xhl
 	ld	xwa, xiz
-SLSrcBankList_FuncBody_Join11:
+SingleLoadSrc_DrawSoundMemItemName_Join11:
 	call	FileIO_CopyString
 	lda	xwa, (0x898e:16)
 	ldw	bc, 16
@@ -1089,7 +1089,7 @@ SLSrcBankList_FuncBody_Join11:
 	ld	xwa, (xsp+4)
 	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
-SLSrcBankList_FuncBody_Helper11_Epilogue:
+SingleLoadSrc_DrawSoundMemItemName_Epilogue:
 	pop	xiz
 	inc	4, xsp
 	ret
@@ -1100,95 +1100,95 @@ SingleLoadSrc_SoundMemListProc:
 	ld	xiz, xwa
 	ld	e, (SingleLoadSrc_SoundMemPageSize:24)
 	cp	xbc, EVT_INDEXSW_DOWN
-	jr	z, SLSrcBankList_FuncBody_Skip25
+	jr	z, SingleLoadSrc_SoundMemListProc_Skip25
 	cp	xbc, EVT_INDEXSW_UP
-	jr	z, SLSrcBankList_FuncBody_Skip25
+	jr	z, SingleLoadSrc_SoundMemListProc_Skip25
 	cp	xbc, EVT_PAINT
 	jrl	nz, SLSrcBankList_FuncBody_Join17
 	ld	xwa, xiz
 	ld	c, e
-	calr	SLSrcBankList_FuncBody_Helper8
+	calr	SingleLoadSrc_DrawSoundMemBankRows
 	ld	c, (SingleLoadSrc_SoundMemPageSize:24)
 	ld	xwa, xiz
-	calr	SLSrcBankList_FuncBody_Helper10
+	calr	SingleLoadSrc_DrawSoundMemItemNumber
 	ld	c, (SingleLoadSrc_SoundMemPageSize:24)
 	ld	xwa, xiz
-	calr	SLSrcBankList_FuncBody_Helper9
+	calr	SingleLoadSrc_DrawUserKitName
 	ld	c, (SingleLoadSrc_SoundMemPageSize:24)
 	ld	xwa, xiz
-	calr	SLSrcBankList_FuncBody_Helper11
+	calr	SingleLoadSrc_DrawSoundMemItemName
 	ld	xwa, 0:i3
 	ld	(0x81d8:16), xwa
 	ld	(0x81dc:16), 0
 	ld	(0x81de:16), 0
 	jrl	SLSrcBankList_FuncBody_Join17
-SLSrcBankList_FuncBody_Skip25:
+SingleLoadSrc_SoundMemListProc_Skip25:
 	ld	l, (0x8a00:16)
 	ld	xwa, (xsp+4)
 	cp	xwa, 5
-	jrl	nz, SLSrcBankList_FuncBody_Skip30
+	jrl	nz, SingleLoadSrc_SoundMemListProc_Skip30
 	ld	xde, xbc
 	cp	xbc, EVT_INDEXSW_UP
-	jr	nz, SLSrcBankList_FuncBody_Skip27
+	jr	nz, SingleLoadSrc_SoundMemListProc_Skip27
 	ld	c, (SingleLoadSrc_SoundMemPageSize:24)
 	ld	w, c
 	add	w, c
 	ld	a, l
 	cp	l, w
-	jr	nc, SLSrcBankList_FuncBody_Skip27
+	jr	nc, SingleLoadSrc_SoundMemListProc_Skip27
 	cp	a, c
-	jr	nc, SLSrcBankList_FuncBody_Skip26
+	jr	nc, SingleLoadSrc_SoundMemListProc_Skip26
 	add	a, c
 	ld	(0x8a00:16), a
-	jr	SLSrcBankList_FuncBody_Join12
-SLSrcBankList_FuncBody_Skip26:
+	jr	SingleLoadSrc_SoundMemListProc_Join12
+SingleLoadSrc_SoundMemListProc_Skip26:
 	ld	(0x8a00:16), w
-SLSrcBankList_FuncBody_Join12:
+SingleLoadSrc_SoundMemListProc_Join12:
 	ld	c, (SingleLoadSrc_SoundMemPageSize:24)
 	ld	xwa, xiz
-	calr	SLSrcBankList_FuncBody_Helper8
+	calr	SingleLoadSrc_DrawSoundMemBankRows
 	ld	c, (SingleLoadSrc_SoundMemPageSize:24)
 	ld	xwa, xiz
-	calr	SLSrcBankList_FuncBody_Helper10
+	calr	SingleLoadSrc_DrawSoundMemItemNumber
 	ld	c, (SingleLoadSrc_SoundMemPageSize:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
 	ld	xde, 0x8a00
-	jr	SLSrcBankList_FuncBody_Join14
-SLSrcBankList_FuncBody_Skip27:
+	jr	SingleLoadSrc_SoundMemListProc_Join14
+SingleLoadSrc_SoundMemListProc_Skip27:
 	cp	xde, EVT_INDEXSW_DOWN
-	jr	nz, SLSrcBankList_FuncBody_Skip29
+	jr	nz, SingleLoadSrc_SoundMemListProc_Skip29
 	ld	c, l
 	ld	e, (SingleLoadSrc_SoundMemPageSize:24)
 	cp	l, e
-	jr	c, SLSrcBankList_FuncBody_Skip29
+	jr	c, SingleLoadSrc_SoundMemListProc_Skip29
 	ld	a, e
 	add	a, e
 	cp	c, a
-	jr	nc, SLSrcBankList_FuncBody_Skip28
+	jr	nc, SingleLoadSrc_SoundMemListProc_Skip28
 	sub	c, e
 	ld	(0x8a00:16), c
-	jr	SLSrcBankList_FuncBody_Join13
-SLSrcBankList_FuncBody_Skip28:
+	jr	SingleLoadSrc_SoundMemListProc_Join13
+SingleLoadSrc_SoundMemListProc_Skip28:
 	ld	(0x8a00:16), e
-SLSrcBankList_FuncBody_Join13:
+SingleLoadSrc_SoundMemListProc_Join13:
 	ld	c, (SingleLoadSrc_SoundMemPageSize:24)
 	ld	xwa, xiz
-	calr	SLSrcBankList_FuncBody_Helper8
+	calr	SingleLoadSrc_DrawSoundMemBankRows
 	ld	c, (SingleLoadSrc_SoundMemPageSize:24)
 	ld	xwa, xiz
-	calr	SLSrcBankList_FuncBody_Helper10
+	calr	SingleLoadSrc_DrawSoundMemItemNumber
 	ld	c, (SingleLoadSrc_SoundMemPageSize:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
 	ld	xde, 0x8a00
-SLSrcBankList_FuncBody_Join14:
-	calr	SLSrcBankList_FuncBody_Helper7
+SingleLoadSrc_SoundMemListProc_Join14:
+	calr	SingleLoad_SyncSoundMemCursorGroup
 	ld	(0x81de:16), 1
 	ld	(0x81dc:16), 1
-SLSrcBankList_FuncBody_Skip29:
+SingleLoadSrc_SoundMemListProc_Skip29:
 	ld	xwa, (0x81d8:16)
 	cp	xwa, (xsp+0x4)
 	jrl	z, SLSrcBankList_FuncBody_Join17
@@ -1199,24 +1199,24 @@ SLSrcBankList_FuncBody_Skip29:
 	lda	xde, (0x898d:16)
 	ld	xwa, xiz
 	ld	xbc, EVT_PARA_DRAW
-	jrl	SLSrcBankList_FuncBody_Join16
-SLSrcBankList_FuncBody_Skip30:
+	jrl	SingleLoadSrc_SoundMemListProc_Join16
+SingleLoadSrc_SoundMemListProc_Skip30:
 	ld	xwa, (xsp+4)
 	cp	xwa, 6
-	jrl	nz, SLSrcBankList_FuncBody_Skip35
+	jrl	nz, SingleLoadSrc_SoundMemListProc_Skip35
 	ld	xde, xbc
 	cp	xbc, EVT_INDEXSW_UP
-	jr	nz, SLSrcBankList_FuncBody_Skip32
+	jr	nz, SingleLoadSrc_SoundMemListProc_Skip32
 	ld	c, l
 	ld	a, l
 	inc	1, a
 	cp a, (SLSrcBankList_FuncBody_Data_4:24)
-	jr	nc, SLSrcBankList_FuncBody_Skip32
+	jr	nc, SingleLoadSrc_SoundMemListProc_Skip32
 	ld	e, (SingleLoadSrc_SoundMemPageSize:24)
 	ld	a, e
 	add	a, e
 	cp	c, a
-	jr	nc, SLSrcBankList_FuncBody_Skip31
+	jr	nc, SingleLoadSrc_SoundMemListProc_Skip31
 	ld	l, e
 	ld	a, c
 	extz	wa
@@ -1224,75 +1224,75 @@ SLSrcBankList_FuncBody_Skip30:
 	ld	a, w
 	inc	1, a
 	cp	a, e
-	jrl	nc, SLSrcBankList_FuncBody_Skip34
+	jrl	nc, SingleLoadSrc_SoundMemListProc_Skip34
 	inc	1, c
 	ld	(0x8a00:16), c
 	ld	c, (SingleLoadSrc_SoundMemPageSize:24)
 	ld	xwa, xiz
-	calr	SLSrcBankList_FuncBody_Helper10
+	calr	SingleLoadSrc_DrawSoundMemItemNumber
 	ld	c, (SingleLoadSrc_SoundMemPageSize:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
 	ld	xde, 0x8a00
-	jrl	SLSrcBankList_FuncBody_Join15
-SLSrcBankList_FuncBody_Skip31:
+	jrl	SingleLoadSrc_SoundMemListProc_Join15
+SingleLoadSrc_SoundMemListProc_Skip31:
 	inc	1, c
 	ld	(0x8a00:16), c
 	ld	c, (SingleLoadSrc_SoundMemPageSize:24)
 	ld	xwa, xiz
-	calr	SLSrcBankList_FuncBody_Helper10
+	calr	SingleLoadSrc_DrawSoundMemItemNumber
 	ld	c, (SingleLoadSrc_SoundMemPageSize:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
 	ld	xde, 0x8a00
-	jr	SLSrcBankList_FuncBody_Join15
-SLSrcBankList_FuncBody_Skip32:
+	jr	SingleLoadSrc_SoundMemListProc_Join15
+SingleLoadSrc_SoundMemListProc_Skip32:
 	cp	xde, EVT_INDEXSW_DOWN
-	jr	nz, SLSrcBankList_FuncBody_Skip34
+	jr	nz, SingleLoadSrc_SoundMemListProc_Skip34
 	ld	c, l
 	cp	l, 0:i3
-	jr	z, SLSrcBankList_FuncBody_Skip34
+	jr	z, SingleLoadSrc_SoundMemListProc_Skip34
 	ld	e, (SingleLoadSrc_SoundMemPageSize:24)
 	ld	a, e
 	add	a, e
 	cp	c, a
-	jr	nc, SLSrcBankList_FuncBody_Skip33
+	jr	nc, SingleLoadSrc_SoundMemListProc_Skip33
 	ld	a, c
 	extz	wa
 	div	wa, e
 	ld	a, w
 	cp	a, 0:i3
-	jr	z, SLSrcBankList_FuncBody_Skip34
+	jr	z, SingleLoadSrc_SoundMemListProc_Skip34
 	dec	1, c
 	ld	(0x8a00:16), c
 	ld	c, (SingleLoadSrc_SoundMemPageSize:24)
 	ld	xwa, xiz
-	calr	SLSrcBankList_FuncBody_Helper10
+	calr	SingleLoadSrc_DrawSoundMemItemNumber
 	ld	c, (SingleLoadSrc_SoundMemPageSize:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
 	ld	xde, 0x8a00
-	jr	SLSrcBankList_FuncBody_Join15
-SLSrcBankList_FuncBody_Skip33:
+	jr	SingleLoadSrc_SoundMemListProc_Join15
+SingleLoadSrc_SoundMemListProc_Skip33:
 	cp	c, a
-	jr	ule, SLSrcBankList_FuncBody_Skip34
+	jr	ule, SingleLoadSrc_SoundMemListProc_Skip34
 	dec	1, c
 	ld	(0x8a00:16), c
 	ld	c, (SingleLoadSrc_SoundMemPageSize:24)
 	ld	xwa, xiz
-	calr	SLSrcBankList_FuncBody_Helper10
+	calr	SingleLoadSrc_DrawSoundMemItemNumber
 	ld	c, (SingleLoadSrc_SoundMemPageSize:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
 	ld	xde, 0x8a00
-SLSrcBankList_FuncBody_Join15:
-	calr	SLSrcBankList_FuncBody_Helper7
+SingleLoadSrc_SoundMemListProc_Join15:
+	calr	SingleLoad_SyncSoundMemCursorGroup
 	ld	(0x81dc:16), 1
-SLSrcBankList_FuncBody_Skip34:
+SingleLoadSrc_SoundMemListProc_Skip34:
 	ld	xwa, (0x81d8:16)
 	cp	xwa, (xsp+0x4)
 	jrl	z, SLSrcBankList_FuncBody_Join17
@@ -1303,14 +1303,14 @@ SLSrcBankList_FuncBody_Skip34:
 	lda	xde, (0x898d:16)
 	ld	xwa, xiz
 	ld	xbc, EVT_PARA_DRAW
-	jr	SLSrcBankList_FuncBody_Join16
-SLSrcBankList_FuncBody_Skip35:
+	jr	SingleLoadSrc_SoundMemListProc_Join16
+SingleLoadSrc_SoundMemListProc_Skip35:
 	ld	xwa, (xsp+4)
 	cp	xwa, 7
-	jr	z, SLSrcBankList_FuncBody_Skip36
+	jr	z, SingleLoadSrc_SoundMemListProc_Skip36
 	cp	xwa, 8
-	jr	nz, SLSrcBankList_FuncBody_Skip37
-SLSrcBankList_FuncBody_Skip36:
+	jr	nz, SingleLoadSrc_SoundMemListProc_Skip37
+SingleLoadSrc_SoundMemListProc_Skip36:
 	ld	xwa, (0x81d8:16)
 	cp	xwa, (xsp+0x4)
 	jr	z, SLSrcBankList_FuncBody_Join17
@@ -1321,12 +1321,12 @@ SLSrcBankList_FuncBody_Skip36:
 	lda	xde, (0x898d:16)
 	ld	xwa, xiz
 	ld	xbc, EVT_PARA_DRAW
-SLSrcBankList_FuncBody_Join16:
+SingleLoadSrc_SoundMemListProc_Join16:
 	call	ApPostEvent
 	ld	xwa, (xsp+4)
 	ld	(0x81d8:16), xwa
 	jr	SLSrcBankList_FuncBody_Join17
-SLSrcBankList_FuncBody_Skip37:
+SingleLoadSrc_SoundMemListProc_Skip37:
 	ld	xwa, (xsp+4)
 	cp	xwa, 40
 	jr	nz, SLSrcBankList_FuncBody_Join17
@@ -1334,14 +1334,14 @@ SLSrcBankList_FuncBody_Skip37:
 	jr	z, SLSrcBankList_FuncBody_Entry2
 	ld	xwa, xiz
 	ld	c, e
-	calr	SLSrcBankList_FuncBody_Helper9
+	calr	SingleLoadSrc_DrawUserKitName
 	ld	(0x81de:16), 0
 SLSrcBankList_FuncBody_Entry2:
 	cp	(0x81dc:16), 0
 	jr	z, SLSrcBankList_FuncBody_Join17
 	ld	c, (SingleLoadSrc_SoundMemPageSize:24)
 	ld	xwa, xiz
-	calr	SLSrcBankList_FuncBody_Helper11
+	calr	SingleLoadSrc_DrawSoundMemItemName
 	ld	(0x81dc:16), 0
 SLSrcBankList_FuncBody_Join17:
 	ld	xhl, 0:i3
@@ -1353,9 +1353,9 @@ SingleLoadSrc_BlankListProc:
 	pushw	iz
 	ld	(xsp+2), xwa
 	cp	xbc, EVT_PAINT
-	jr	nz, SLSrcBankList_FuncBody_Skip38
+	jr	nz, SingleLoadSrc_BlankListProc_Skip38
 	ld	iz, 0:i3
-SLSrcBankList_FuncBody_Loop:
+SingleLoadSrc_BlankListProc_Loop:
 	ld	de, iz
 	mul	de, 21
 	lda	xbc, (0x894e:16)
@@ -1381,8 +1381,8 @@ SLSrcBankList_FuncBody_Loop:
 	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 4:i3
-	jr	c, SLSrcBankList_FuncBody_Loop
-SLSrcBankList_FuncBody_Skip38:
+	jr	c, SingleLoadSrc_BlankListProc_Loop
+SingleLoadSrc_BlankListProc_Skip38:
 	ld	xhl, 0:i3
 	popw	iz
 	inc	4, xsp
@@ -1603,7 +1603,7 @@ SLDstBankList_FuncBody:
 	pop	xiz
 	inc	6, xsp
 	ret
-SLDstBankList_FuncBody_Helper:
+SingleLoadDst_DrawPanelMemItemRows:
 	dec	6, xsp
 	push	xiz
 	ld	(xsp+4), c
@@ -1620,7 +1620,7 @@ SLDstBankList_FuncBody_Helper:
 	ld	xbc, (xhl+bc)
 	inc	1, xbc
 	cp	(0x89fa:16), 0
-	jr	z, SLDstBankList_FuncBody_Helper_Skip
+	jr	z, SingleLoadDst_DrawPanelMemItemRows_Skip
 	call	FileIO_CopyString
 	lda	xwa, (0x89cd:16)
 	ld	xbc, SLDstBankList_FuncBody_Str_Colon_2
@@ -1632,8 +1632,8 @@ SLDstBankList_FuncBody_Helper:
 	.byte 0x41
 	.long Str_AllOption_EA09B2
 	call	FileIO_CopyString
-	jr	SLDstBankList_FuncBody_Join
-SLDstBankList_FuncBody_Helper_Skip:
+	jr	SingleLoadDst_DrawPanelMemItemRows_Join
+SingleLoadDst_DrawPanelMemItemRows_Skip:
 	call	FileIO_CopyString
 	lda	xwa, (0x89cd:16)
 	ld	xbc, SLDstBankList_FuncBody_Str_Colon_3
@@ -1658,7 +1658,7 @@ SLDstBankList_FuncBody_Helper_Skip:
 	extz	bc
 	ld	de, 3:i3
 	calr	WP_GetNameByOffset
-SLDstBankList_FuncBody_Join:
+SingleLoadDst_DrawPanelMemItemRows_Join:
 	lda	xde, (0x89cc:16)
 	ld	xwa, (xsp+6)
 	ld	xbc, EVT_PARA_DRAW
@@ -1678,33 +1678,33 @@ SingleLoadDst_PanelMemListProc:
 	ld	xiz, xwa
 	ld	c, (SingleLoadDst_PanelMemBankSize:24)
 	cp	xde, EVT_INDEXSW_DOWN
-	jr	z, SLDstBankList_FuncBody_Skip
+	jr	z, SingleLoadDst_PanelMemListProc_Skip
 	cp	xde, EVT_INDEXSW_UP
-	jr	z, SLDstBankList_FuncBody_Skip
+	jr	z, SingleLoadDst_PanelMemListProc_Skip
 	cp	xde, EVT_PAINT
-	jrl	nz, SLDstBankList_FuncBody_Loop
+	jrl	nz, SingleLoadDst_PanelMemListProc_Loop
 	ld	xwa, xiz
 	calr	SLDstBankList_FuncBody
 	ld	c, (SingleLoadDst_PanelMemBankSize:24)
 	ld	xwa, xiz
-	calr	SLDstBankList_FuncBody_Helper
+	calr	SingleLoadDst_DrawPanelMemItemRows
 	ld	xwa, 0:i3
 	ld	(0x81e4:16), xwa
-	jrl	SLDstBankList_FuncBody_Loop
-SLDstBankList_FuncBody_Skip:
+	jrl	SingleLoadDst_PanelMemListProc_Loop
+SingleLoadDst_PanelMemListProc_Skip:
 	ld	l, (0x8a02:16)
 	ld	xwa, (xsp+4)
 	cp	xwa, 7
-	jrl	nz, SLDstBankList_FuncBody_Skip4
+	jrl	nz, SingleLoadDst_PanelMemListProc_Skip5
 	ld	xix, xde
 	cp	xde, EVT_INDEXSW_UP
-	jr	nz, SLDstBankList_FuncBody_Skip2
+	jr	nz, SingleLoadDst_PanelMemListProc_Skip3
 	ld	e, (SingleLoadDst_PanelMemBankSize:24)
 	ld	a, e
 	ld	c, l
 	add	a, l
 	cp a, (SLDstBankList_FuncBody_Data_5:24)
-	jr	nc, SLDstBankList_FuncBody_Skip2
+	jr	nc, SingleLoadDst_PanelMemListProc_Skip3
 	add	c, e
 	ld	(0x8a02:16), c
 	ld	c, (SingleLoadDst_PanelMemBankSize:24)
@@ -1712,14 +1712,14 @@ SLDstBankList_FuncBody_Skip:
 	calr	SLDstBankList_FuncBody
 	ld	c, (SingleLoadDst_PanelMemBankSize:24)
 	ld	xwa, xiz
-	jr	SLDstBankList_FuncBody_Join2
-SLDstBankList_FuncBody_Skip2:
+	jr	SingleLoadDst_PanelMemListProc_Join2
+SingleLoadDst_PanelMemListProc_Skip3:
 	cp	xix, EVT_INDEXSW_DOWN
-	jr	nz, SLDstBankList_FuncBody_Skip3
+	jr	nz, SingleLoadDst_PanelMemListProc_Skip4
 	ld	a, l
 	ld	c, (SingleLoadDst_PanelMemBankSize:24)
 	cp	l, c
-	jr	c, SLDstBankList_FuncBody_Skip3
+	jr	c, SingleLoadDst_PanelMemListProc_Skip4
 	sub	a, c
 	ld	(0x8a02:16), a
 	ld	c, (SingleLoadDst_PanelMemBankSize:24)
@@ -1727,12 +1727,12 @@ SLDstBankList_FuncBody_Skip2:
 	calr	SLDstBankList_FuncBody
 	ld	c, (SingleLoadDst_PanelMemBankSize:24)
 	ld	xwa, xiz
-SLDstBankList_FuncBody_Join2:
-	calr	SLDstBankList_FuncBody_Helper
-SLDstBankList_FuncBody_Skip3:
+SingleLoadDst_PanelMemListProc_Join2:
+	calr	SingleLoadDst_DrawPanelMemItemRows
+SingleLoadDst_PanelMemListProc_Skip4:
 	ld	xwa, (0x81e4:16)
 	cp	xwa, (xsp+0x4)
-	jr	z, SLDstBankList_FuncBody_Loop
+	jr	z, SingleLoadDst_PanelMemListProc_Loop
 	lda	xde, (0x89b7:16)
 	ld	xwa, xiz
 	ld	xbc, EVT_PARA_DRAW
@@ -1740,25 +1740,25 @@ SLDstBankList_FuncBody_Skip3:
 	lda	xde, (0x89e1:16)
 	ld	xwa, xiz
 	ld	xbc, EVT_PARA_DRAW
-SLDstBankList_FuncBody_Join3:
+SingleLoadDst_PanelMemListProc_Join3:
 	call	ApPostEvent
 	ld	xwa, (xsp+4)
 	ld	(0x81e4:16), xwa
-SLDstBankList_FuncBody_Loop:
+SingleLoadDst_PanelMemListProc_Loop:
 	ld	xhl, 0:i3
-	jrl	SLDstBankList_FuncBody_Epilogue
-SLDstBankList_FuncBody_Skip4:
+	jrl	SingleLoadDst_PanelMemListProc_Epilogue
+SingleLoadDst_PanelMemListProc_Skip5:
 	ld	xwa, (xsp+4)
 	cp	xwa, 8
-	jrl	nz, SLDstBankList_FuncBody_Skip7
+	jrl	nz, SingleLoadDst_PanelMemListProc_Skip8
 	ld	xix, xde
 	cp	xde, EVT_INDEXSW_UP
-	jr	nz, SLDstBankList_FuncBody_Skip5
+	jr	nz, SingleLoadDst_PanelMemListProc_Skip6
 	ld	c, l
 	ld	a, l
 	inc	1, a
 	cp a, (SLDstBankList_FuncBody_Data_5:24)
-	jr	nc, SLDstBankList_FuncBody_Skip5
+	jr	nc, SingleLoadDst_PanelMemListProc_Skip6
 	ld	e, (SingleLoadDst_PanelMemBankSize:24)
 	ld	l, e
 	ld	a, c
@@ -1767,35 +1767,35 @@ SLDstBankList_FuncBody_Skip4:
 	ld	a, w
 	inc	1, a
 	cp	a, e
-	jr	nc, SLDstBankList_FuncBody_Skip6
+	jr	nc, SingleLoadDst_PanelMemListProc_Skip7
 	inc	1, c
 	ld	(0x8a02:16), c
 	ld	c, (SingleLoadDst_PanelMemBankSize:24)
 	ld	xwa, xiz
-	jr	SLDstBankList_FuncBody_Join4
-SLDstBankList_FuncBody_Skip5:
+	jr	SingleLoadDst_PanelMemListProc_Join4
+SingleLoadDst_PanelMemListProc_Skip6:
 	cp	xix, EVT_INDEXSW_DOWN
-	jr	nz, SLDstBankList_FuncBody_Skip6
+	jr	nz, SingleLoadDst_PanelMemListProc_Skip7
 	ld	c, l
 	cp	l, 0:i3
-	jr	z, SLDstBankList_FuncBody_Skip6
+	jr	z, SingleLoadDst_PanelMemListProc_Skip7
 	ld	e, (SingleLoadDst_PanelMemBankSize:24)
 	ld	a, c
 	extz	wa
 	div	wa, e
 	ld	a, w
 	cp	a, 0:i3
-	jr	z, SLDstBankList_FuncBody_Skip6
+	jr	z, SingleLoadDst_PanelMemListProc_Skip7
 	dec	1, c
 	ld	(0x8a02:16), c
 	ld	c, (SingleLoadDst_PanelMemBankSize:24)
 	ld	xwa, xiz
-SLDstBankList_FuncBody_Join4:
-	calr	SLDstBankList_FuncBody_Helper
-SLDstBankList_FuncBody_Skip6:
+SingleLoadDst_PanelMemListProc_Join4:
+	calr	SingleLoadDst_DrawPanelMemItemRows
+SingleLoadDst_PanelMemListProc_Skip7:
 	ld	xwa, (0x81e4:16)
 	cp	xwa, (xsp+0x4)
-	jrl	z, SLDstBankList_FuncBody_Loop
+	jrl	z, SingleLoadDst_PanelMemListProc_Loop
 	lda	xde, (0x89b7:16)
 	ld	xwa, xiz
 	ld	xbc, EVT_PARA_DRAW
@@ -1803,17 +1803,17 @@ SLDstBankList_FuncBody_Skip6:
 	lda	xde, (0x89e1:16)
 	ld	xwa, xiz
 	ld	xbc, EVT_PARA_DRAW
-	jrl	SLDstBankList_FuncBody_Join3
-SLDstBankList_FuncBody_Skip7:
+	jrl	SingleLoadDst_PanelMemListProc_Join3
+SingleLoadDst_PanelMemListProc_Skip8:
 	ld	xwa, (xsp+4)
 	cp	xwa, 5
-	jr	z, SLDstBankList_FuncBody_Skip8
+	jr	z, SingleLoadDst_PanelMemListProc_Skip9
 	cp	xwa, 6
-	jr	nz, SLDstBankList_FuncBody_Skip9
-SLDstBankList_FuncBody_Skip8:
+	jr	nz, SingleLoadDst_PanelMemListProc_Skip10
+SingleLoadDst_PanelMemListProc_Skip9:
 	ld	xwa, (0x81e4:16)
 	cp	xwa, (xsp+0x4)
-	jrl	z, SLDstBankList_FuncBody_Loop
+	jrl	z, SingleLoadDst_PanelMemListProc_Loop
 	lda	xde, (0x89b7:16)
 	ld	xwa, xiz
 	ld	xbc, EVT_PARA_DRAW
@@ -1821,13 +1821,13 @@ SLDstBankList_FuncBody_Skip8:
 	lda	xde, (0x89e1:16)
 	ld	xwa, xiz
 	ld	xbc, EVT_PARA_DRAW
-	jrl	SLDstBankList_FuncBody_Join3
-SLDstBankList_FuncBody_Skip9:
+	jrl	SingleLoadDst_PanelMemListProc_Join3
+SingleLoadDst_PanelMemListProc_Skip10:
 	ld	xwa, (xsp+4)
 	cp	xwa, 10
-	jrl	nz, SLDstBankList_FuncBody_Loop
+	jrl	nz, SingleLoadDst_PanelMemListProc_Loop
 	cp	(0x89fa:16), 0
-	jr	z, SLDstBankList_FuncBody_Helper_Skip2
+	jr	z, SingleLoadDst_PanelMemListProc_Skip2
 	ld	a, (0x89fc:16)
 	extz	wa
 	div	wa, c
@@ -1837,21 +1837,21 @@ SLDstBankList_FuncBody_Skip9:
 	div	de, c
 	extz	de
 	ld	bc, de
-	call	SLDstBankList_FuncBody_Helper7
+	call	SingleLoad_LoadPanelMemBank
 	exts	xhl
-	jr	SLDstBankList_FuncBody_Epilogue
-SLDstBankList_FuncBody_Helper_Skip2:
+	jr	SingleLoadDst_PanelMemListProc_Epilogue
+SingleLoadDst_PanelMemListProc_Skip2:
 	ld	a, (0x89fc:16)
 	extz	wa
 	ld	c, (0x8a02:16)
 	extz	bc
 	call	FileIO_ByteBlock_DemoProc1
 	exts	xhl
-SLDstBankList_FuncBody_Epilogue:
+SingleLoadDst_PanelMemListProc_Epilogue:
 	pop	xiz
 	inc	4, xsp
 	ret
-SLDstBankList_FuncBody_Helper2:
+SingleLoadDst_DrawSongRows:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp+4), xwa
@@ -1904,11 +1904,11 @@ SingleLoadDst_SequencerListProc:
 	push	xiz
 	ld	xiz, xwa
 	cp	xbc, EVT_INDEXSW_DOWN
-	jr	z, SLDstBankList_FuncBody_Skip10
+	jr	z, SingleLoadDst_SequencerListProc_Skip10
 	cp	xbc, EVT_INDEXSW_UP
-	jr	z, SLDstBankList_FuncBody_Skip10
+	jr	z, SingleLoadDst_SequencerListProc_Skip10
 	cp	xbc, EVT_PAINT
-	jr	nz, SLDstBankList_FuncBody_Loop2
+	jr	nz, SingleLoadDst_SequencerListProc_Loop2
 	lda	xwa, (0x89a2:16)
 	ld (xwa+), 0
 	ld	(xwa), 0
@@ -1929,65 +1929,65 @@ SingleLoadDst_SequencerListProc:
 	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
 	ld	xwa, xiz
-	jr	SLDstBankList_FuncBody_Join5
-SLDstBankList_FuncBody_Skip10:
+	jr	SingleLoadDst_SequencerListProc_Join5
+SingleLoadDst_SequencerListProc_Skip10:
 	ld	w, (0x8a04:16)
 	lda	xhl, (0x89cc:16)
 	cp	xde, 8
-	jr	nz, SLDstBankList_FuncBody_Skip13
+	jr	nz, SingleLoadDst_SequencerListProc_Skip13
 	ld	xde, xbc
 	cp	xde, EVT_INDEXSW_UP
-	jr	nz, SLDstBankList_FuncBody_Skip11
+	jr	nz, SingleLoadDst_SequencerListProc_Skip11
 	ld	c, w
 	ld	a, w
 	inc	1, a
 	cp a, (SLDstBankList_FuncBody_Data_6:24)
-	jr	nc, SLDstBankList_FuncBody_Skip11
+	jr	nc, SingleLoadDst_SequencerListProc_Skip11
 	inc	1, c
 	ld	(0x8a04:16), c
 	ld	xwa, xiz
-SLDstBankList_FuncBody_Join5:
-	calr	SLDstBankList_FuncBody_Helper2
-SLDstBankList_FuncBody_Loop2:
+SingleLoadDst_SequencerListProc_Join5:
+	calr	SingleLoadDst_DrawSongRows
+SingleLoadDst_SequencerListProc_Loop2:
 	ld	xhl, 0:i3
-	jr	SLDstBankList_FuncBody_Epilogue2
-SLDstBankList_FuncBody_Skip11:
+	jr	SingleLoadDst_SequencerListProc_Epilogue2
+SingleLoadDst_SequencerListProc_Skip11:
 	cp	xde, EVT_INDEXSW_DOWN
-	jr	nz, SLDstBankList_FuncBody_Skip12
+	jr	nz, SingleLoadDst_SequencerListProc_Skip12
 	ld	a, w
 	cp	w, 0:i3
-	jr	z, SLDstBankList_FuncBody_Skip12
+	jr	z, SingleLoadDst_SequencerListProc_Skip12
 	dec	1, a
 	ld	(0x8a04:16), a
 	ld	xwa, xiz
-	jr	SLDstBankList_FuncBody_Join5
-SLDstBankList_FuncBody_Skip12:
+	jr	SingleLoadDst_SequencerListProc_Join5
+SingleLoadDst_SequencerListProc_Skip12:
 	ld	xwa, xiz
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, xhl
-	jr	SLDstBankList_FuncBody_Join6
-SLDstBankList_FuncBody_Skip13:
+	jr	SingleLoadDst_SequencerListProc_Join6
+SingleLoadDst_SequencerListProc_Skip13:
 	cp	xde, 5
-	jr	c, SLDstBankList_FuncBody_Skip14
+	jr	c, SingleLoadDst_SequencerListProc_Skip14
 	cp	xde, 7
-	jr	ugt, SLDstBankList_FuncBody_Skip14
+	jr	ugt, SingleLoadDst_SequencerListProc_Skip14
 	ld	xwa, xiz
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, xhl
-SLDstBankList_FuncBody_Join6:
+SingleLoadDst_SequencerListProc_Join6:
 	call	ApPostEvent
-	jr	SLDstBankList_FuncBody_Loop2
-SLDstBankList_FuncBody_Skip14:
+	jr	SingleLoadDst_SequencerListProc_Loop2
+SingleLoadDst_SequencerListProc_Skip14:
 	cp	xde, 10
-	jr	nz, SLDstBankList_FuncBody_Loop2
+	jr	nz, SingleLoadDst_SequencerListProc_Loop2
 	ld	a, (0x8a04:16)
 	extz	wa
-	call	SLDstBankList_FuncBody_Helper8
+	call	SingleLoad_LoadSong
 	exts	xhl
-SLDstBankList_FuncBody_Epilogue2:
+SingleLoadDst_SequencerListProc_Epilogue2:
 	pop	xiz
 	ret
-SLDstBankList_FuncBody_Helper3:
+SingleLoadDst_DrawComposerBankRows:
 	dec	2, xsp
 	push	xiz
 	ld	(xsp+4), c
@@ -2025,7 +2025,7 @@ SLDstBankList_FuncBody_Helper3:
 	pop	xiz
 	inc	2, xsp
 	ret
-SLDstBankList_FuncBody_Helper4:
+SingleLoadDst_DrawComposerItemRows:
 	dec	6, xsp
 	push	xiz
 	ld	(xsp+4), c
@@ -2044,7 +2044,7 @@ SLDstBankList_FuncBody_Helper4:
 	ld	xbc, SLDstBankList_FuncBody_Str_Colon_6
 	call	FileIO_BuildFilePath
 	cp	(0x89fa:16), 0
-	jr	nz, SLDstBankList_FuncBody_Helper4_Skip
+	jr	nz, SingleLoadDst_DrawComposerItemRows_Skip
 	lda	xiz, (0x89cd:16)
 	ld	a, (0x8a06:16)
 	extz	wa
@@ -2055,20 +2055,20 @@ SLDstBankList_FuncBody_Helper4:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_BuildFilePath
-SLDstBankList_FuncBody_Helper4_Skip:
+SingleLoadDst_DrawComposerItemRows_Skip:
 	lda	xwa, (0x89cd:16)
 	ldw	bc, 16
 	calr	TrimAndPadSmfFilename
 	lda	xbc, (0x89a2:16)
 	lda	xwa, (xbc+63)
 	cp	(0x89fa:16), 0
-	jr	z, SLDstBankList_FuncBody_Helper4_Skip2
+	jr	z, SingleLoadDst_DrawComposerItemRows_Skip2
 	ld	(xwa), 3
 	lda	xwa, (xbc+64)
 	ld	xbc, SLDstBankList_FuncBody_Str_ALL
 	call	FileIO_CopyString
-	jr	SLDstBankList_FuncBody_Helper4_Join
-SLDstBankList_FuncBody_Helper4_Skip2:
+	jr	SingleLoadDst_DrawComposerItemRows_Join
+SingleLoadDst_DrawComposerItemRows_Skip2:
 	ld	e, (0x8a06:16)
 	ld	c, e
 	extz	bc
@@ -2080,7 +2080,7 @@ SLDstBankList_FuncBody_Helper4_Skip2:
 	extz	de
 	pushw	3
 	calr	WP_GetBankMemName
-SLDstBankList_FuncBody_Helper4_Join:
+SingleLoadDst_DrawComposerItemRows_Join:
 	lda	xde, (0x89cc:16)
 	ld	xwa, (xsp+6)
 	ld	xbc, EVT_PARA_DRAW
@@ -2100,61 +2100,61 @@ SingleLoadDst_ComposerListProc:
 	ld	xiz, xwa
 	ld	c, (SingleLoadDst_ComposerBankSize:24)
 	cp	xde, EVT_INDEXSW_DOWN
-	jr	z, SLDstBankList_FuncBody_Skip15
+	jr	z, SingleLoadDst_ComposerListProc_Skip15
 	cp	xde, EVT_INDEXSW_UP
-	jr	z, SLDstBankList_FuncBody_Skip15
+	jr	z, SingleLoadDst_ComposerListProc_Skip15
 	cp	xde, EVT_PAINT
-	jrl	nz, SLDstBankList_FuncBody_Loop3
+	jrl	nz, SingleLoadDst_ComposerListProc_Loop3
 	ld	xwa, xiz
-	calr	SLDstBankList_FuncBody_Helper3
+	calr	SingleLoadDst_DrawComposerBankRows
 	ld	c, (SingleLoadDst_ComposerBankSize:24)
 	ld	xwa, xiz
-	calr	SLDstBankList_FuncBody_Helper4
+	calr	SingleLoadDst_DrawComposerItemRows
 	ld	xwa, 0:i3
 	ld	(0x81e8:16), xwa
-	jrl	SLDstBankList_FuncBody_Loop3
-SLDstBankList_FuncBody_Skip15:
+	jrl	SingleLoadDst_ComposerListProc_Loop3
+SingleLoadDst_ComposerListProc_Skip15:
 	ld	l, (0x8a06:16)
 	ld	xwa, (xsp+4)
 	cp	xwa, 7
-	jrl	nz, SLDstBankList_FuncBody_Skip18
+	jrl	nz, SingleLoadDst_ComposerListProc_Skip18
 	ld	xix, xde
 	cp	xde, EVT_INDEXSW_UP
-	jr	nz, SLDstBankList_FuncBody_Skip16
+	jr	nz, SingleLoadDst_ComposerListProc_Skip16
 	ld	e, (SingleLoadDst_ComposerBankSize:24)
 	ld	a, e
 	ld	c, l
 	add	a, l
 	cp a, (SLDstBankList_FuncBody_Data_7:24)
-	jr	nc, SLDstBankList_FuncBody_Skip16
+	jr	nc, SingleLoadDst_ComposerListProc_Skip16
 	add	c, e
 	ld	(0x8a06:16), c
 	ld	c, (SingleLoadDst_ComposerBankSize:24)
 	ld	xwa, xiz
-	calr	SLDstBankList_FuncBody_Helper3
+	calr	SingleLoadDst_DrawComposerBankRows
 	ld	c, (SingleLoadDst_ComposerBankSize:24)
 	ld	xwa, xiz
-	jr	SLDstBankList_FuncBody_Join7
-SLDstBankList_FuncBody_Skip16:
+	jr	SingleLoadDst_ComposerListProc_Join7
+SingleLoadDst_ComposerListProc_Skip16:
 	cp	xix, EVT_INDEXSW_DOWN
-	jr	nz, SLDstBankList_FuncBody_Skip17
+	jr	nz, SingleLoadDst_ComposerListProc_Skip17
 	ld	a, l
 	ld	c, (SingleLoadDst_ComposerBankSize:24)
 	cp	l, c
-	jr	c, SLDstBankList_FuncBody_Skip17
+	jr	c, SingleLoadDst_ComposerListProc_Skip17
 	sub	a, c
 	ld	(0x8a06:16), a
 	ld	c, (SingleLoadDst_ComposerBankSize:24)
 	ld	xwa, xiz
-	calr	SLDstBankList_FuncBody_Helper3
+	calr	SingleLoadDst_DrawComposerBankRows
 	ld	c, (SingleLoadDst_ComposerBankSize:24)
 	ld	xwa, xiz
-SLDstBankList_FuncBody_Join7:
-	calr	SLDstBankList_FuncBody_Helper4
-SLDstBankList_FuncBody_Skip17:
+SingleLoadDst_ComposerListProc_Join7:
+	calr	SingleLoadDst_DrawComposerItemRows
+SingleLoadDst_ComposerListProc_Skip17:
 	ld	xwa, (0x81e8:16)
 	cp	xwa, (xsp+0x4)
-	jr	z, SLDstBankList_FuncBody_Loop3
+	jr	z, SingleLoadDst_ComposerListProc_Loop3
 	lda	xde, (0x89b7:16)
 	ld	xwa, xiz
 	ld	xbc, EVT_PARA_DRAW
@@ -2162,25 +2162,25 @@ SLDstBankList_FuncBody_Skip17:
 	lda	xde, (0x89e1:16)
 	ld	xwa, xiz
 	ld	xbc, EVT_PARA_DRAW
-SLDstBankList_FuncBody_Join8:
+SingleLoadDst_ComposerListProc_Join8:
 	call	ApPostEvent
 	ld	xwa, (xsp+4)
 	ld	(0x81e8:16), xwa
-SLDstBankList_FuncBody_Loop3:
+SingleLoadDst_ComposerListProc_Loop3:
 	ld	xhl, 0:i3
-	jrl	SLDstBankList_FuncBody_Epilogue3
-SLDstBankList_FuncBody_Skip18:
+	jrl	SingleLoadDst_ComposerListProc_Epilogue3
+SingleLoadDst_ComposerListProc_Skip18:
 	ld	xwa, (xsp+4)
 	cp	xwa, 8
-	jrl	nz, SLDstBankList_FuncBody_Skip21
+	jrl	nz, SingleLoadDst_ComposerListProc_Skip21
 	ld	xix, xde
 	cp	xde, EVT_INDEXSW_UP
-	jr	nz, SLDstBankList_FuncBody_Skip19
+	jr	nz, SingleLoadDst_ComposerListProc_Skip19
 	ld	c, l
 	ld	a, l
 	inc	1, a
 	cp a, (SLDstBankList_FuncBody_Data_7:24)
-	jr	nc, SLDstBankList_FuncBody_Skip19
+	jr	nc, SingleLoadDst_ComposerListProc_Skip19
 	ld	e, (SingleLoadDst_ComposerBankSize:24)
 	ld	l, e
 	ld	a, c
@@ -2189,35 +2189,35 @@ SLDstBankList_FuncBody_Skip18:
 	ld	a, w
 	inc	1, a
 	cp	a, e
-	jr	nc, SLDstBankList_FuncBody_Skip20
+	jr	nc, SingleLoadDst_ComposerListProc_Skip20
 	inc	1, c
 	ld	(0x8a06:16), c
 	ld	c, (SingleLoadDst_ComposerBankSize:24)
 	ld	xwa, xiz
-	jr	SLDstBankList_FuncBody_Join9
-SLDstBankList_FuncBody_Skip19:
+	jr	SingleLoadDst_ComposerListProc_Join9
+SingleLoadDst_ComposerListProc_Skip19:
 	cp	xix, EVT_INDEXSW_DOWN
-	jr	nz, SLDstBankList_FuncBody_Skip20
+	jr	nz, SingleLoadDst_ComposerListProc_Skip20
 	ld	c, l
 	cp	l, 0:i3
-	jr	z, SLDstBankList_FuncBody_Skip20
+	jr	z, SingleLoadDst_ComposerListProc_Skip20
 	ld	e, (SingleLoadDst_ComposerBankSize:24)
 	ld	a, c
 	extz	wa
 	div	wa, e
 	ld	a, w
 	cp	a, 0:i3
-	jr	z, SLDstBankList_FuncBody_Skip20
+	jr	z, SingleLoadDst_ComposerListProc_Skip20
 	dec	1, c
 	ld	(0x8a06:16), c
 	ld	c, (SingleLoadDst_ComposerBankSize:24)
 	ld	xwa, xiz
-SLDstBankList_FuncBody_Join9:
-	calr	SLDstBankList_FuncBody_Helper4
-SLDstBankList_FuncBody_Skip20:
+SingleLoadDst_ComposerListProc_Join9:
+	calr	SingleLoadDst_DrawComposerItemRows
+SingleLoadDst_ComposerListProc_Skip20:
 	ld	xwa, (0x81e8:16)
 	cp	xwa, (xsp+0x4)
-	jrl	z, SLDstBankList_FuncBody_Loop3
+	jrl	z, SingleLoadDst_ComposerListProc_Loop3
 	lda	xde, (0x89b7:16)
 	ld	xwa, xiz
 	ld	xbc, EVT_PARA_DRAW
@@ -2225,17 +2225,17 @@ SLDstBankList_FuncBody_Skip20:
 	lda	xde, (0x89e1:16)
 	ld	xwa, xiz
 	ld	xbc, EVT_PARA_DRAW
-	jrl	SLDstBankList_FuncBody_Join8
-SLDstBankList_FuncBody_Skip21:
+	jrl	SingleLoadDst_ComposerListProc_Join8
+SingleLoadDst_ComposerListProc_Skip21:
 	ld	xwa, (xsp+4)
 	cp	xwa, 5
-	jr	z, SLDstBankList_FuncBody_Skip22
+	jr	z, SingleLoadDst_ComposerListProc_Skip22
 	cp	xwa, 6
-	jr	nz, SLDstBankList_FuncBody_Skip23
-SLDstBankList_FuncBody_Skip22:
+	jr	nz, SingleLoadDst_ComposerListProc_Skip23
+SingleLoadDst_ComposerListProc_Skip22:
 	ld	xwa, (0x81e8:16)
 	cp	xwa, (xsp+0x4)
-	jrl	z, SLDstBankList_FuncBody_Loop3
+	jrl	z, SingleLoadDst_ComposerListProc_Loop3
 	lda	xde, (0x89b7:16)
 	ld	xwa, xiz
 	ld	xbc, EVT_PARA_DRAW
@@ -2243,13 +2243,13 @@ SLDstBankList_FuncBody_Skip22:
 	lda	xde, (0x89e1:16)
 	ld	xwa, xiz
 	ld	xbc, EVT_PARA_DRAW
-	jrl	SLDstBankList_FuncBody_Join8
-SLDstBankList_FuncBody_Skip23:
+	jrl	SingleLoadDst_ComposerListProc_Join8
+SingleLoadDst_ComposerListProc_Skip23:
 	ld	xwa, (xsp+4)
 	cp	xwa, 10
-	jrl	nz, SLDstBankList_FuncBody_Loop3
+	jrl	nz, SingleLoadDst_ComposerListProc_Loop3
 	cp	(0x89fa:16), 0
-	jr	z, SLDstBankList_FuncBody_Helper4_Skip3
+	jr	z, SingleLoadDst_ComposerListProc_Skip3
 	ld	a, (0x89fe:16)
 	extz	wa
 	div	wa, c
@@ -2261,20 +2261,20 @@ SLDstBankList_FuncBody_Skip23:
 	add	e, 30
 	extz	de
 	ld	bc, de
-	jr	SLDstBankList_FuncBody_Join10
-SLDstBankList_FuncBody_Helper4_Skip3:
+	jr	SingleLoadDst_ComposerListProc_Join10
+SingleLoadDst_ComposerListProc_Skip3:
 	ld	a, (0x89fe:16)
 	extz	wa
 	ld	c, (0x8a06:16)
 	extz	bc
-SLDstBankList_FuncBody_Join10:
-	call	SLDstBankList_FuncBody_Helper9
+SingleLoadDst_ComposerListProc_Join10:
+	call	SingleLoad_LoadComposerPattern
 	exts	xhl
-SLDstBankList_FuncBody_Epilogue3:
+SingleLoadDst_ComposerListProc_Epilogue3:
 	pop	xiz
 	inc	4, xsp
 	ret
-SLDstBankList_FuncBody_Helper5:
+SingleLoadDst_DrawSoundMemBankRows:
 	dec	6, xsp
 	ld	(xsp), c
 	ld	(xsp+2), xwa
@@ -2298,17 +2298,17 @@ SLDstBankList_FuncBody_Helper5:
 	ld	c, (0x8a08:16)
 	lda	xwa, (0x89b7:16)
 	cp	c, e
-	jr	nc, SLDstBankList_FuncBody_Helper5_Skip
+	jr	nc, SingleLoadDst_DrawSoundMemBankRows_Skip
 	extz	bc
 	div	bc, (xsp)
 	extz	bc
 	ld	de, 1:i3
 	calr	WP_GetPresetName3
-	jr	SLDstBankList_FuncBody_Join11
-SLDstBankList_FuncBody_Helper5_Skip:
+	jr	SingleLoadDst_DrawSoundMemBankRows_Join11
+SingleLoadDst_DrawSoundMemBankRows_Skip:
 	ld	bc, 1:i3
 	calr	WP_GetUserName2
-SLDstBankList_FuncBody_Join11:
+SingleLoadDst_DrawSoundMemBankRows_Join11:
 	ld	xwa, (xsp+2)
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 0x89a2
@@ -2319,14 +2319,14 @@ SLDstBankList_FuncBody_Join11:
 	call	ApPostEvent
 	inc	6, xsp
 	ret
-SLDstBankList_FuncBody_Helper6:
+SingleLoadDst_DrawSoundMemItemRows:
 	dec	6, xsp
 	push	xiz
 	ld	(xsp+4), c
 	ld	(xsp+6), xwa
 	lda	xde, (StorageArea_UnitNames:24)
 	cp	(0x89fa:16), 0
-	jr	z, SLDstBankList_FuncBody_Helper6_Skip
+	jr	z, SingleLoadDst_DrawSoundMemItemRows_Skip
 	lda	xwa, (0x89a2:16)
 	ld	(xwa+42), 2
 	lda	xwa, (xwa+43)
@@ -2347,15 +2347,15 @@ SLDstBankList_FuncBody_Helper6:
 	lda	xwa, (xwa+64)
 	ld	xbc, SLDstBankList_FuncBody_Str_ALL_2
 	call	FileIO_CopyString
-	jrl	SLDstBankList_FuncBody_Helper6_Join
-SLDstBankList_FuncBody_Helper6_Skip:
+	jrl	SingleLoadDst_DrawSoundMemItemRows_Join
+SingleLoadDst_DrawSoundMemItemRows_Skip:
 	ld	l, (xsp+4)
 	add	l, (xsp+0x4)
 	lda	xbc, (0x89a2:16)
 	lda	xwa, (xbc+43)
 	ld	(xbc+42), 2
 	cp	(0x8a08:16), l
-	jr	c, SLDstBankList_FuncBody_Helper6_Skip2
+	jr	c, SingleLoadDst_DrawSoundMemItemRows_Skip2
 	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
@@ -2388,8 +2388,8 @@ SLDstBankList_FuncBody_Helper6_Skip:
 	extz	bc
 	ld	de, 3:i3
 	calr	WP_GetUserName3
-	jr	SLDstBankList_FuncBody_Helper6_Join
-SLDstBankList_FuncBody_Helper6_Skip2:
+	jr	SingleLoadDst_DrawSoundMemItemRows_Join
+SingleLoadDst_DrawSoundMemItemRows_Skip2:
 	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
@@ -2419,7 +2419,7 @@ SLDstBankList_FuncBody_Helper6_Skip2:
 	extz	bc
 	ld	de, 3:i3
 	calr	WP_GetUserName1
-SLDstBankList_FuncBody_Helper6_Join:
+SingleLoadDst_DrawSoundMemItemRows_Join:
 	lda	xde, (0x89cc:16)
 	ld	xwa, (xsp+6)
 	ld	xbc, EVT_PARA_DRAW
@@ -2438,90 +2438,90 @@ SingleLoadDst_SoundMemListProc:
 	ld	xiz, xwa
 	ld	e, (SLDstSoundMem_RowsPerColumn:24)
 	cp	xbc, EVT_INDEXSW_DOWN
-	jr	z, SLDstBankList_FuncBody_Skip24
+	jr	z, SingleLoadDst_SoundMemListProc_Skip24
 	cp	xbc, EVT_INDEXSW_UP
-	jr	z, SLDstBankList_FuncBody_Skip24
+	jr	z, SingleLoadDst_SoundMemListProc_Skip24
 	cp	xbc, EVT_PAINT
-	jrl	nz, SLDstBankList_FuncBody_Loop4
+	jrl	nz, SingleLoadDst_SoundMemListProc_Loop4
 	ld	xwa, xiz
 	ld	c, e
-	calr	SLDstBankList_FuncBody_Helper5
+	calr	SingleLoadDst_DrawSoundMemBankRows
 	ld	c, (SLDstSoundMem_RowsPerColumn:24)
 	ld	xwa, xiz
-	calr	SLDstBankList_FuncBody_Helper6
+	calr	SingleLoadDst_DrawSoundMemItemRows
 	ld	xwa, 0:i3
 	ld	(0x81ec:16), xwa
-	jrl	SLDstBankList_FuncBody_Loop4
-SLDstBankList_FuncBody_Skip24:
+	jrl	SingleLoadDst_SoundMemListProc_Loop4
+SingleLoadDst_SoundMemListProc_Skip24:
 	ld	l, (0x8a08:16)
 	ld	xwa, (xsp+4)
 	cp	xwa, 7
-	jrl	nz, SLDstBankList_FuncBody_Skip29
+	jrl	nz, SingleLoadDst_SoundMemListProc_Skip29
 	ld	xde, xbc
 	cp	xbc, EVT_INDEXSW_UP
-	jr	nz, SLDstBankList_FuncBody_Skip26
+	jr	nz, SingleLoadDst_SoundMemListProc_Skip26
 	ld	c, (SLDstSoundMem_RowsPerColumn:24)
 	ld	w, c
 	add	w, c
 	ld	a, l
 	cp	l, w
-	jr	nc, SLDstBankList_FuncBody_Skip26
+	jr	nc, SingleLoadDst_SoundMemListProc_Skip26
 	cp	a, c
-	jr	nc, SLDstBankList_FuncBody_Skip25
+	jr	nc, SingleLoadDst_SoundMemListProc_Skip25
 	add	a, c
 	ld	(0x8a08:16), a
-	jr	SLDstBankList_FuncBody_Join12
-SLDstBankList_FuncBody_Skip25:
+	jr	SingleLoadDst_SoundMemListProc_Join12
+SingleLoadDst_SoundMemListProc_Skip25:
 	ld	(0x8a08:16), w
-SLDstBankList_FuncBody_Join12:
+SingleLoadDst_SoundMemListProc_Join12:
 	ld	c, (SLDstSoundMem_RowsPerColumn:24)
 	ld	xwa, xiz
-	calr	SLDstBankList_FuncBody_Helper5
+	calr	SingleLoadDst_DrawSoundMemBankRows
 	ld	c, (SLDstSoundMem_RowsPerColumn:24)
 	ld	xwa, xiz
-	calr	SLDstBankList_FuncBody_Helper6
+	calr	SingleLoadDst_DrawSoundMemItemRows
 	ld	c, (SLDstSoundMem_RowsPerColumn:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
 	ld	xde, 0x8a00
-	jr	SLDstBankList_FuncBody_Join14
-SLDstBankList_FuncBody_Skip26:
+	jr	SingleLoadDst_SoundMemListProc_Join14
+SingleLoadDst_SoundMemListProc_Skip26:
 	cp	xde, EVT_INDEXSW_DOWN
-	jr	nz, SLDstBankList_FuncBody_Skip28
+	jr	nz, SingleLoadDst_SoundMemListProc_Skip28
 	ld	c, l
 	ld	e, (SLDstSoundMem_RowsPerColumn:24)
 	cp	l, e
-	jr	c, SLDstBankList_FuncBody_Skip28
+	jr	c, SingleLoadDst_SoundMemListProc_Skip28
 	ld	a, e
 	add	a, e
 	cp	c, a
-	jr	nc, SLDstBankList_FuncBody_Skip27
+	jr	nc, SingleLoadDst_SoundMemListProc_Skip27
 	sub	c, e
 	ld	(0x8a08:16), c
-	jr	SLDstBankList_FuncBody_Join13
-SLDstBankList_FuncBody_Skip27:
+	jr	SingleLoadDst_SoundMemListProc_Join13
+SingleLoadDst_SoundMemListProc_Skip27:
 	cp	c, a
-	jr	c, SLDstBankList_FuncBody_Join13
+	jr	c, SingleLoadDst_SoundMemListProc_Join13
 	ld	(0x8a08:16), e
-SLDstBankList_FuncBody_Join13:
+SingleLoadDst_SoundMemListProc_Join13:
 	ld	c, (SLDstSoundMem_RowsPerColumn:24)
 	ld	xwa, xiz
-	calr	SLDstBankList_FuncBody_Helper5
+	calr	SingleLoadDst_DrawSoundMemBankRows
 	ld	c, (SLDstSoundMem_RowsPerColumn:24)
 	ld	xwa, xiz
-	calr	SLDstBankList_FuncBody_Helper6
+	calr	SingleLoadDst_DrawSoundMemItemRows
 	ld	c, (SLDstSoundMem_RowsPerColumn:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
 	ld	xde, 0x8a00
-SLDstBankList_FuncBody_Join14:
-	calr	SLSrcBankList_FuncBody_Helper7
-SLDstBankList_FuncBody_Skip28:
+SingleLoadDst_SoundMemListProc_Join14:
+	calr	SingleLoad_SyncSoundMemCursorGroup
+SingleLoadDst_SoundMemListProc_Skip28:
 	ld	xwa, (0x81ec:16)
 	cp	xwa, (xsp+0x4)
-	jr	z, SLDstBankList_FuncBody_Loop4
+	jr	z, SingleLoadDst_SoundMemListProc_Loop4
 	lda	xde, (0x89b7:16)
 	ld	xwa, xiz
 	ld	xbc, EVT_PARA_DRAW
@@ -2529,30 +2529,30 @@ SLDstBankList_FuncBody_Skip28:
 	lda	xde, (0x89e1:16)
 	ld	xwa, xiz
 	ld	xbc, EVT_PARA_DRAW
-SLDstBankList_FuncBody_Join15:
+SingleLoadDst_SoundMemListProc_Join15:
 	call	ApPostEvent
 	ld	xwa, (xsp+4)
 	ld	(0x81ec:16), xwa
-SLDstBankList_FuncBody_Loop4:
+SingleLoadDst_SoundMemListProc_Loop4:
 	ld	xhl, 0:i3
-	jrl	SLDstBankList_FuncBody_Epilogue4
-SLDstBankList_FuncBody_Skip29:
+	jrl	SingleLoadDst_SoundMemListProc_Epilogue4
+SingleLoadDst_SoundMemListProc_Skip29:
 	ld	xwa, (xsp+4)
 	cp	xwa, 8
-	jrl	nz, SLDstBankList_FuncBody_Skip34
+	jrl	nz, SingleLoadDst_SoundMemListProc_Skip34
 	ld	xde, xbc
 	cp	xbc, EVT_INDEXSW_UP
-	jr	nz, SLDstBankList_FuncBody_Skip31
+	jr	nz, SingleLoadDst_SoundMemListProc_Skip31
 	ld	c, l
 	ld	a, l
 	inc	1, a
 	cp	a, (SLDstBankList_FuncBody_Data_8:24)
-	jr	nc, SLDstBankList_FuncBody_Skip31
+	jr	nc, SingleLoadDst_SoundMemListProc_Skip31
 	ld	e, (SLDstSoundMem_RowsPerColumn:24)
 	ld	a, e
 	add	a, e
 	cp	c, a
-	jr	nc, SLDstBankList_FuncBody_Skip30
+	jr	nc, SingleLoadDst_SoundMemListProc_Skip30
 	ld	l, e
 	ld	a, c
 	extz	wa
@@ -2560,77 +2560,77 @@ SLDstBankList_FuncBody_Skip29:
 	ld	a, w
 	inc	1, a
 	cp	a, e
-	jrl	nc, SLDstBankList_FuncBody_Skip33
+	jrl	nc, SingleLoadDst_SoundMemListProc_Skip33
 	inc	1, c
 	ld	(0x8a08:16), c
 	ld	c, (SLDstSoundMem_RowsPerColumn:24)
 	ld	xwa, xiz
-	calr	SLDstBankList_FuncBody_Helper6
+	calr	SingleLoadDst_DrawSoundMemItemRows
 	ld	c, (SLDstSoundMem_RowsPerColumn:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
 	ld	xde, 0x8a00
-	jrl	SLDstBankList_FuncBody_Join16
-SLDstBankList_FuncBody_Skip30:
+	jrl	SingleLoadDst_SoundMemListProc_Join16
+SingleLoadDst_SoundMemListProc_Skip30:
 	inc	1, c
 	ld	(0x8a08:16), c
 	ld	c, (SLDstSoundMem_RowsPerColumn:24)
 	ld	xwa, xiz
-	calr	SLDstBankList_FuncBody_Helper6
+	calr	SingleLoadDst_DrawSoundMemItemRows
 	ld	c, (SLDstSoundMem_RowsPerColumn:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
 	ld	xde, 0x8a00
-	jr	SLDstBankList_FuncBody_Join16
-SLDstBankList_FuncBody_Skip31:
+	jr	SingleLoadDst_SoundMemListProc_Join16
+SingleLoadDst_SoundMemListProc_Skip31:
 	cp	xde, EVT_INDEXSW_DOWN
-	jr	nz, SLDstBankList_FuncBody_Skip33
+	jr	nz, SingleLoadDst_SoundMemListProc_Skip33
 	ld	c, l
 	cp	l, 0:i3
-	jr	z, SLDstBankList_FuncBody_Skip33
+	jr	z, SingleLoadDst_SoundMemListProc_Skip33
 	ld	e, (SLDstSoundMem_RowsPerColumn:24)
 	ld	a, e
 	add	a, e
 	cp	c, a
-	jr	nc, SLDstBankList_FuncBody_Skip32
+	jr	nc, SingleLoadDst_SoundMemListProc_Skip32
 	ld	a, c
 	extz	wa
 	div	wa, e
 	ld	a, w
 	cp	a, 0:i3
-	jr	z, SLDstBankList_FuncBody_Skip33
+	jr	z, SingleLoadDst_SoundMemListProc_Skip33
 	dec	1, c
 	ld	(0x8a08:16), c
 	ld	c, (SLDstSoundMem_RowsPerColumn:24)
 	ld	xwa, xiz
-	calr	SLDstBankList_FuncBody_Helper6
+	calr	SingleLoadDst_DrawSoundMemItemRows
 	ld	c, (SLDstSoundMem_RowsPerColumn:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
 	ld	xde, 0x8a00
-	jr	SLDstBankList_FuncBody_Join16
-SLDstBankList_FuncBody_Skip32:
+	jr	SingleLoadDst_SoundMemListProc_Join16
+SingleLoadDst_SoundMemListProc_Skip32:
 	cp	c, a
-	jr	ule, SLDstBankList_FuncBody_Skip33
+	jr	ule, SingleLoadDst_SoundMemListProc_Skip33
 	dec	1, c
 	ld	(0x8a08:16), c
 	ld	c, (SLDstSoundMem_RowsPerColumn:24)
 	ld	xwa, xiz
-	calr	SLDstBankList_FuncBody_Helper6
+	calr	SingleLoadDst_DrawSoundMemItemRows
 	ld	c, (SLDstSoundMem_RowsPerColumn:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
 	ld	xde, 0x8a00
-SLDstBankList_FuncBody_Join16:
-	calr	SLSrcBankList_FuncBody_Helper7
-SLDstBankList_FuncBody_Skip33:
+SingleLoadDst_SoundMemListProc_Join16:
+	calr	SingleLoad_SyncSoundMemCursorGroup
+SingleLoadDst_SoundMemListProc_Skip33:
 	ld	xwa, (0x81ec:16)
 	cp	xwa, (xsp+0x4)
-	jrl	z, SLDstBankList_FuncBody_Loop4
+	jrl	z, SingleLoadDst_SoundMemListProc_Loop4
 	lda	xde, (0x89b7:16)
 	ld	xwa, xiz
 	ld	xbc, EVT_PARA_DRAW
@@ -2638,17 +2638,17 @@ SLDstBankList_FuncBody_Skip33:
 	lda	xde, (0x89e1:16)
 	ld	xwa, xiz
 	ld	xbc, EVT_PARA_DRAW
-	jrl	SLDstBankList_FuncBody_Join15
-SLDstBankList_FuncBody_Skip34:
+	jrl	SingleLoadDst_SoundMemListProc_Join15
+SingleLoadDst_SoundMemListProc_Skip34:
 	ld	xwa, (xsp+4)
 	cp	xwa, 5
-	jr	z, SLDstBankList_FuncBody_Skip35
+	jr	z, SingleLoadDst_SoundMemListProc_Skip35
 	cp	xwa, 6
-	jr	nz, SLDstBankList_FuncBody_Skip36
-SLDstBankList_FuncBody_Skip35:
+	jr	nz, SingleLoadDst_SoundMemListProc_Skip36
+SingleLoadDst_SoundMemListProc_Skip35:
 	ld	xwa, (0x81ec:16)
 	cp	xwa, (xsp+0x4)
-	jrl	z, SLDstBankList_FuncBody_Loop4
+	jrl	z, SingleLoadDst_SoundMemListProc_Loop4
 	lda	xde, (0x89b7:16)
 	ld	xwa, xiz
 	ld	xbc, EVT_PARA_DRAW
@@ -2656,13 +2656,13 @@ SLDstBankList_FuncBody_Skip35:
 	lda	xde, (0x89e1:16)
 	ld	xwa, xiz
 	ld	xbc, EVT_PARA_DRAW
-	jrl	SLDstBankList_FuncBody_Join15
-SLDstBankList_FuncBody_Skip36:
+	jrl	SingleLoadDst_SoundMemListProc_Join15
+SingleLoadDst_SoundMemListProc_Skip36:
 	ld	xwa, (xsp+4)
 	cp	xwa, 10
-	jrl	nz, SLDstBankList_FuncBody_Loop4
+	jrl	nz, SingleLoadDst_SoundMemListProc_Loop4
 	cp	(0x89fa:16), 0
-	jr	z, SLDstBankList_FuncBody_Helper6_Skip3
+	jr	z, SingleLoadDst_SoundMemListProc_Skip3
 	ld	a, (0x8a00:16)
 	extz	wa
 	div	wa, e
@@ -2671,17 +2671,17 @@ SLDstBankList_FuncBody_Skip36:
 	extz	bc
 	div	bc, e
 	extz	bc
-	call	SLDstBankList_FuncBody_Helper11
+	call	SingleLoad_LoadSoundMemBank
 	exts	xhl
-	jr	SLDstBankList_FuncBody_Epilogue4
-SLDstBankList_FuncBody_Helper6_Skip3:
+	jr	SingleLoadDst_SoundMemListProc_Epilogue4
+SingleLoadDst_SoundMemListProc_Skip3:
 	ld	a, (0x8a00:16)
 	extz	wa
 	ld	c, (0x8a08:16)
 	extz	bc
-	call	SLDstBankList_FuncBody_Helper10
+	call	SingleLoad_LoadSoundMemEntry
 	exts	xhl
-SLDstBankList_FuncBody_Epilogue4:
+SingleLoadDst_SoundMemListProc_Epilogue4:
 	pop	xiz
 	inc	4, xsp
 	ret
@@ -2690,9 +2690,9 @@ SingleLoadDst_BlankListProc:
 	pushw	iz
 	ld	(xsp+2), xwa
 	cp	xbc, EVT_PAINT
-	jr	nz, SLDstBankList_FuncBody_Skip37
+	jr	nz, SingleLoadDst_BlankListProc_Skip37
 	ld	iz, 0:i3
-SLDstBankList_FuncBody_Loop5:
+SingleLoadDst_BlankListProc_Loop5:
 	ld	de, iz
 	mul	de, 21
 	lda	xbc, (0x89a2:16)
@@ -2718,8 +2718,8 @@ SLDstBankList_FuncBody_Loop5:
 	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 4:i3
-	jr	c, SLDstBankList_FuncBody_Loop5
-SLDstBankList_FuncBody_Skip37:
+	jr	c, SingleLoadDst_BlankListProc_Loop5
+SingleLoadDst_BlankListProc_Skip37:
 	ld	xhl, 0:i3
 	popw	iz
 	inc	4, xsp

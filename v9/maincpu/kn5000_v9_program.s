@@ -741,7 +741,7 @@ GUI_DisplayStructData_0x1100:	.long SeMenu_BitShift_Stub
 	.long SeFilLfo1_OnSwitch15
 	.long SeMenu_BitShift_Stub
 	.long 0
-; data read by SeMenu_ApplyPartEdit_Join17+0x13 (0xF08A33)
+; data read by SeMenu_NoteToKeyboardX_Join17+0x13 (0xF08A33)
 ; evidence: `lda xde, (this)` then `ld E,(XDE+WA) / mul L,0x1c`
 GUI_DisplayStructData_0x1110:	.incbin "includes/generated/gui_display_struct_data.bin", 0x1110, 0xD
 ; data read by SeMenu_DrawPartRangeGraph+0x20 (0xF08CB8)
@@ -843,10 +843,10 @@ SePitLfo1TitleFunc_SwitchHandlers:
 	.long SePitLfo1_OnSwitch15
 	.long SeMenu_BitShift_Stub
 	.long 0
-; data read by SeMenu_RefreshPartDisplay_Epilogue4+0x171 (0xF09CF6)
+; data read by SePitLfo1TitleFunc_DispatchSwitch_Epilogue4+0x171 (0xF09CF6)
 ; evidence: `lda xde, (this)` then `ld A,(XDE+WA) / ld (XBC),A`
 GUI_DisplayStructData_0x1342:	.incbin "includes/generated/gui_display_struct_data.bin", 0x1342, 0x20
-; data read by SeMenu_RefreshPartDisplay_Epilogue4+0x1A9 (0xF09D2E)
+; data read by SePitLfo1TitleFunc_DispatchSwitch_Epilogue4+0x1A9 (0xF09D2E)
 ; evidence: `lda xbc, (this)` then `ld C,(XBC+WA) / ld (XSP+0x0e),C`
 GUI_DisplayStructData_0x1362:	.incbin "includes/generated/gui_display_struct_data.bin", 0x1362, 0xD
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
@@ -892,7 +892,7 @@ SeCtr3TitleFunc_SwitchHandlers:
 	.long SeCtr3_OnSwitch25
 	.long 0
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
-; evidence: SeMenu_CopyWriteUpdate_Skip5+0x16 (0xF0BFAC) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+; evidence: SeMenuTitleFunc_DispatchSwitch_Skip5+0x16 (0xF0BFAC) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 GUI_DisplayStructData_0x13FF:	.incbin "includes/generated/gui_display_struct_data.bin", 0x13FF, 0x2A
 ; the rest of the code-pointer table at GUI_DisplayStructData_0x13FF, from entry 10 byte 2 on;
 ; the table runs across this boundary (label of the next source)
@@ -1107,21 +1107,21 @@ SeCopyTitleFunc_SwitchHandlers:
 	.long SeCopy_OnSwitch15
 	.long SeMenu_BitShift_Stub
 	.long 0
-; data read by SeMenu_CopyWriteUpdate_Epilogue34+0x46 (0xF0DC77)
+; data read by SeDigEff_OnColumn2_Epilogue34+0x46 (0xF0DC77)
 ; evidence: `lda xix, (this)` then `ld WA,(XIX+WA) / lda XIX,0xf0dc8b`
 ToneGen_ParamTable_0x2EE:
 	.short	SeMenu_CopyWriteUpdate_Step3_Code - SeMenu_CopyWriteUpdate_Step3_Code
 	.short	SeMenu_CopyWriteUpdate_Step3_Code - SeMenu_CopyWriteUpdate_Step3_Code
 	.short	SeMenu_CopyWriteUpdate_Step3_Code - SeMenu_CopyWriteUpdate_Step3_Code
 	.short	SeMenu_CopyWriteUpdate_Step3_Code - SeMenu_CopyWriteUpdate_Step3_Code
-	.short	SeMenu_CopyWriteUpdate_Entry5_Case4 - SeMenu_CopyWriteUpdate_Step3_Code
-	.short	SeMenu_CopyWriteUpdate_Entry5_Case4 - SeMenu_CopyWriteUpdate_Step3_Code
-	.short	SeMenu_CopyWriteUpdate_Entry5_Case6 - SeMenu_CopyWriteUpdate_Step3_Code
-	.short	SeMenu_CopyWriteUpdate_Entry5_Case4 - SeMenu_CopyWriteUpdate_Step3_Code
-	.short	SeMenu_CopyWriteUpdate_Entry5_Case8 - SeMenu_CopyWriteUpdate_Step3_Code
-	.short	SeMenu_CopyWriteUpdate_Entry5_Case9 - SeMenu_CopyWriteUpdate_Step3_Code
-	.short	SeMenu_CopyWriteUpdate_Entry5_Case4 - SeMenu_CopyWriteUpdate_Step3_Code
-	.short	SeMenu_CopyWriteUpdate_Entry5_Case4 - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeDigEff_OnColumn3_Depth - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeDigEff_OnColumn3_Depth - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeDigEff_OnColumn3_TremoloWave - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeDigEff_OnColumn3_Depth - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeDigEff_OnColumn3_SingleDelayKey - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeDigEff_OnColumn3_RepeatDelaySustain - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeDigEff_OnColumn3_Depth - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeDigEff_OnColumn3_Depth - SeMenu_CopyWriteUpdate_Step3_Code
 ; data read by SeMenu_CopyWriteUpdate_Epilogue35+0x46 (0xF0DD22)
 ; evidence: `lda xix, (this)` then `ld WA,(XIX+WA) / lda XIX,0xf0dd36`
 ToneGen_ParamTable_0x306:
@@ -1131,10 +1131,10 @@ ToneGen_ParamTable_0x306:
 	.short	SeMenu_CopyWriteUpdate_Step3_Code_2 - SeMenu_CopyWriteUpdate_Step3_Code_2
 	.short	SeMenu_CopyWriteUpdate_Step3_Code_2 - SeMenu_CopyWriteUpdate_Step3_Code_2
 	.short	SeMenu_CopyWriteUpdate_Step3_Code_2 - SeMenu_CopyWriteUpdate_Step3_Code_2
-	.short	SeMenu_CopyWriteUpdate_Entry5_Switch2_Case6 - SeMenu_CopyWriteUpdate_Step3_Code_2
+	.short	SeDigEff_OnColumn4_Balance - SeMenu_CopyWriteUpdate_Step3_Code_2
 	.short	SeMenu_CopyWriteUpdate_Step3_Code_2 - SeMenu_CopyWriteUpdate_Step3_Code_2
-	.short	SeMenu_CopyWriteUpdate_Entry5_Switch2_Case6 - SeMenu_CopyWriteUpdate_Step3_Code_2
-	.short	SeMenu_CopyWriteUpdate_Entry5_Switch2_Case9 - SeMenu_CopyWriteUpdate_Step3_Code_2
+	.short	SeDigEff_OnColumn4_Balance - SeMenu_CopyWriteUpdate_Step3_Code_2
+	.short	SeDigEff_OnColumn4_RepeatDelayRelease - SeMenu_CopyWriteUpdate_Step3_Code_2
 ; data read by SeMenu_CopyWriteUpdate_Epilogue36+0x44 (0xF0DDB3)
 ; evidence: `lda xix, (this)` then `ld WA,(XIX+WA) / lda XIX,0xf0ddc7`
 ToneGen_ParamTable_0x31A:
@@ -1142,8 +1142,8 @@ ToneGen_ParamTable_0x31A:
 	.short	SeMenu_CopyWriteUpdate_Step3_Code_3 - SeMenu_CopyWriteUpdate_Step3_Code_3
 	.short	SeMenu_CopyWriteUpdate_Step3_Code_3 - SeMenu_CopyWriteUpdate_Step3_Code_3
 	.short	SeMenu_CopyWriteUpdate_Step3_Code_3 - SeMenu_CopyWriteUpdate_Step3_Code_3
-	.short	SeMenu_CopyWriteUpdate_Entry5_Switch3_Case4 - SeMenu_CopyWriteUpdate_Step3_Code_3
-	.short	SeMenu_CopyWriteUpdate_Entry5_Switch3_Case4 - SeMenu_CopyWriteUpdate_Step3_Code_3
+	.short	SeDigEff_OnColumn5_EnsembleDetune - SeMenu_CopyWriteUpdate_Step3_Code_3
+	.short	SeDigEff_OnColumn5_EnsembleDetune - SeMenu_CopyWriteUpdate_Step3_Code_3
 ; data read by SeMenu_PopupDialog_Close_Data+0x1D (0xF0EA0E)
 ; evidence: `lda xbc, (this)` then `ld XHL,(XBC+WA) / call T,XHL`
 ; data read by SeMenu_ListSelector_HandleInput+0x1A (0xF0EB4E)

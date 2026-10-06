@@ -118,10 +118,10 @@ AccompSeq_IncrementTickCounter:
 	ld	a, (1130:16)
 	inc	1, a
 	cp	a, 96
-	jr	nz, AccompSeq_CheckChannelActive_Skip
+	jr	nz, AccompSeq_IncrementTickCounter_Skip
 	xor	a, a
 	inc	1, hl
-AccompSeq_CheckChannelActive_Skip:
+AccompSeq_IncrementTickCounter_Skip:
 	ld	(1128:16), hl
 	ld	(1130:16), a
 	inc	1, (1132:16)
@@ -1076,15 +1076,15 @@ AccompSeq_ProcessAfterNote_Skip2:
 	cp	l, 18
 	jr	z, AccompSeq_ProcessAfterNote_Return
 	cp	l, 15
-	jr	z, AccompSeq_ProcessAfterNote_Skip3
+	jr	z, AccompSeq_LargeCodeBlock2_Skip3
 	cp	l, 16
 	jr	nz, AccompSeq_ProcessAfterNote_Skip5
-AccompSeq_ProcessAfterNote_Skip3:
+AccompSeq_LargeCodeBlock2_Skip3:
 	ld	xix, 2001408
 	cp	l, 16
-	jr	nz, AccompSeq_ProcessAfterNote_Skip4
+	jr	nz, AccompSeq_LargeCodeBlock2_Skip4
 	add	xix, 16
-AccompSeq_ProcessAfterNote_Skip4:
+AccompSeq_LargeCodeBlock2_Skip4:
 	sll	h, 1
 	ld	l, (xix+h)
 	inc	1, h
@@ -1098,10 +1098,10 @@ AccompSeq_ProcessAfterNote_Skip5:
 	cp	(32367:16), 0
 	jr	nz, AccompSeq_ProcessAfterNote_Return
 	bit	0, (0x7dde:16)
-	jr	z, AccompSeq_ProcessAfterNote_Skip6
+	jr	z, AccompSeq_LargeCodeBlock2_Skip6
 	calr	AccompSeq_HandleSpecialMode
 	jr	AccompSeq_ProcessAfterNote_Return
-AccompSeq_ProcessAfterNote_Skip6:
+AccompSeq_LargeCodeBlock2_Skip6:
 	calr	AccompSeq_OutputEvent
 	call	AccompSeq_ProcessChordChange
 AccompSeq_ProcessAfterNote_Return:

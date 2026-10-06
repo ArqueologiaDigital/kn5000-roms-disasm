@@ -980,10 +980,10 @@ PanelDisplay_DispatchByMode_CaseTable:
 	.short	DSPCfg_Param_Default - PanelDisplay_DispatchData
 	.short	DSPCfg_Param_Default - PanelDisplay_DispatchData
 	.short	PanelDisplay_DispatchData - PanelDisplay_DispatchData
-	.short	PanelDisplay_DispatchByMode_Case5 - PanelDisplay_DispatchData
-	.short	PanelDisplay_DispatchByMode_Case6 - PanelDisplay_DispatchData
-	.short	PanelDisplay_DispatchByMode_Case7 - PanelDisplay_DispatchData
-	.short	PanelDisplay_DispatchByMode_Case8 - PanelDisplay_DispatchData
+	.short	PanelDisplay_DispatchByMode_CmpDisplayTime - PanelDisplay_DispatchData
+	.short	PanelDisplay_DispatchByMode_CmpDiskSetup - PanelDisplay_DispatchData
+	.short	PanelDisplay_DispatchByMode_CmpParamLoadOptions - PanelDisplay_DispatchData
+	.short	PanelDisplay_DispatchByMode_CmpWallpaper - PanelDisplay_DispatchData
 ; PanelButton_ActionListPool -- the 53 control-panel action lists: 8-byte actions {event_id, event_arg,
 ; shift, mask, u32 handler}, each list ended by event_id 0xFF.  PanelButton_ActionLists and
 ; PanelButton_HelpModeActionLists point into it, one list per panel event index; PanelButton_DispatchChange

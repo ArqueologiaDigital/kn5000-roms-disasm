@@ -7,7 +7,9 @@ QUESTION IT ANSWERS
   GraphicsRender_ProcessEntries draws: a routine does `ld xiy, SeScreenData_0x0685` (or lda / ld x.., ...) and
   hands it on.  The WSA1 display lists were named the same way after the routine that draws them
   (wsa1/notes/wsa1_display_list_drawer_names.py).  For every such label this script collects the CODE references
-  to it.  An instruction that names it counts; a `.long` / data line does not.  Each reference resolves to its
+  to it.  An instruction that names it counts; a `.long` / data line does not, nor an sdb_* record macro (a record
+  that points at a sub-list is data; 2026-10-06 it had produced SeMenu_DrawPartSelector_Records3_Records).  Each
+  reference resolves to its
   enclosing routine: the nearest label above that is not a local continuation (_Skip/_Join/...).  The label is
   renamed only when:
     - all references come from ONE routine;
@@ -21,6 +23,7 @@ RUN (repository root)
   then: make all; harmonize_version_labels.py --to v9 --apply / --to v7 --apply; make gate-all; l2 --regen/--check
 """
 import collections
+import datetime
 import glob
 import os
 import re
@@ -45,14 +48,14 @@ def main():
         routine = None
         for x in L:
             m = DEF.match(x)
-            if m and not CONT.search(m.group(1)):
+            if m and not CONT.search(m.group(1)) and not re.search(r'_Records\d*$', m.group(1)):
                 routine = m.group(1)
             code = x.split(";")[0]
             if m:
                 code = code[m.end():]
             s = code.strip()
-            if not s or s.startswith("."):
-                continue
+            if not s or s.startswith(".") or s.startswith("sdb_"):
+                continue                          # data: directives and the sdb_* screen-record macros
             for t in TARGET.findall(s):
                 readers[t].append(routine)
     targets = sorted(d for d in defs if TARGET.fullmatch(d))
@@ -94,8 +97,12 @@ def main():
             with open(p + ".tmp", "wb") as fh:
                 fh.write(data)
             os.replace(p + ".tmp", p)
-    with open(os.path.join(ROOT, "scripts/renaming/rename_se_screen_records_v10.sed"), "w") as fh:
-        fh.write("# written by scripts/renaming/name_se_screen_records.py\n")
+    sedp = os.path.join(ROOT, "scripts/renaming/rename_se_screen_records_v10.sed")
+    fresh = not os.path.exists(sedp)
+    with open(sedp, "a") as fh:            # appended per run: the record keeps every run
+        if fresh:
+            fh.write("# written by scripts/renaming/name_se_screen_records.py\n")
+        fh.write("# run %s\n" % datetime.date.today().isoformat())
         fh.writelines("s/\\b%s\\b/%s/g\n" % (o, n) for o, n in plan.items())
 
 

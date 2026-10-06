@@ -1,0 +1,1767 @@
+[
+ {
+  "old": "ExtData_ToneParam_AltDispatch_Case1",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ExtData_ToneParam_AltDispatch_DrawbarNibbleFields",
+  "header": "Payload +1/+2 of a drawbar record (cases 1, 2): merges the byte as two 4-bit fields (ExtData_SetTlvField 0x0F, 0xF0).",
+  "basis": "switch value meaning (payload byte offset (0x912F) of the drawbar records 0x44/0x45/0x46) + body",
+  "evidence": [
+   "extensions/extension_data.s:3033 `.long ExtData_ToneParam_AltDispatch` -- SoundProgram_DispatchTable entries 0x44, 0x45 and 0x46 (lines 3033-3035; entry 0 is line 2965) all point to the owner",
+   "extensions/extension_data.s:2951 `byte 1 to 0x9128/0x912F` -- the command record's byte 1, the payload offset, is stored at 0x912F",
+   "audio/audio_control_engine.s:5210 `ld a, (0x912f:16)` -- the switched value is that payload offset, 0..8 (`cp wa, 8` at 5214)",
+   "../../docs/kn-disk-file-formats.md:541 `0x44/0x45/0x46` -- tags 0x44/0x45/0x46 are the DRAWBAR registrations of RIGHT 1 / RIGHT 2 / LEFT",
+   "../../analysis/disk-format-probes/lsw_drawbar_records.py:26 `+1       0x0F  82CC / 86CC / 8ACC           15` -- payload +1/+2 carry four 4-bit fields (ids _2CC/_2CB/_293/_294, max 15; not named)",
+   "extensions/extension_data.s:3332 `.short ExtData_ToneParam_AltDispatch_Case1 - ExtData_ToneParam_AltDispatch_Code` -- entries 1 and 2 (lines 3332-3333)",
+   "audio/audio_control_engine.s:5224 `jr ExtData_ToneParam_AltDispatch_Join2` -- Join2 merges the field 0x0F (5235 `ldw wa, 15`) and 0xF0 (5237 `ldw wa, 240`) with ExtData_SetTlvField"
+  ]
+ },
+ {
+  "old": "ExtData_ToneParam_AltDispatch_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ExtData_ToneParam_AltDispatch_DrawbarFootages",
+  "header": "Payload +3..+6 (cases 3-6): two drawbar footages per byte (16'/8', 5 1/3'/4', 2 2/3'/2', 1 3/5'/1 1/3'), merged as low and high nibble.",
+  "basis": "switch value meaning (payload byte offset (0x912F) of the drawbar records 0x44/0x45/0x46) + body",
+  "evidence": [
+   "extensions/extension_data.s:3334 `.short ExtData_ToneParam_AltDispatch_Case3 - ExtData_ToneParam_AltDispatch_Code` -- entries 3..6 (lines 3334-3337)",
+   "audio/audio_control_engine.s:5226 `jr ExtData_ToneParam_AltDispatch_Join3` -- Join3 merges 0x0F (5241 `ldw wa, 15`) and 0xF0 (5243 `ldw wa, 240`)",
+   "../../analysis/disk-format-probes/lsw_drawbar_records.py:30 `+3       0x0F  8280 / 8680 / 8A80            8   DRAWBAR  16'` -- +3..+6 hold the footages 16'/8', 5 1/3'/4', 2 2/3'/2', 1 3/5'/1 1/3' as low/high nibbles (lines 30-37)"
+  ]
+ },
+ {
+  "old": "ExtData_ToneParam_AltDispatch_Case7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ExtData_ToneParam_AltDispatch_Drawbar1FootAndSwitches",
+  "header": "Payload +7: the 1' drawbar (low nibble, ExtData_SetTlvField 0x0F) and the two switch bits 0x10/0x20 (ExtData_ToggleTlvBits 0x30).",
+  "basis": "switch value meaning (payload byte offset (0x912F) of the drawbar records 0x44/0x45/0x46) + body",
+  "evidence": [
+   "extensions/extension_data.s:3338 `.short ExtData_ToneParam_AltDispatch_Case7 - ExtData_ToneParam_AltDispatch_Code` -- entry 7",
+   "audio/audio_control_engine.s:5228 `calr ExtData_ToneParam_AltDispatch_Helper` -- the helper merges field 0x0F (5247 `ldw wa, 15`) and toggles bits 0x30 (5249 `ldw wa, 48`, 5250 `calr ExtData_ToggleTlvBits`)",
+   "../../analysis/disk-format-probes/lsw_drawbar_records.py:38 `+7       0x0F  8288 / 8688 / 8A88            8   DRAWBAR  1'` -- +7 low nibble is the 1' drawbar, 0x10/0x20 two switches (lines 39-40)"
+  ]
+ },
+ {
+  "old": "EffEdit_DSPConfigBlock_Helper_Case98",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSPCfg_RecordFieldToParamId_Tag62ReverbSlot",
+  "header": "Tag 0x62: id base 0x4A00 in DSP slot 1 (the DIGITAL REVERB slot); 0x62 has no panel record of its own.",
+  "basis": "switch value meaning (DSP-slot record tag 0x61..0x66, biased by 'a' = 97) + body; real owner DSPCfg_RecordFieldToParamId (the framer's prefix EffEdit_DSPConfigBlock_Helper is not a label)",
+  "evidence": [
+   "audio/dsp_config_sysex.s:4053 `DSPCfg_RecordFieldToParamId:` -- the routine that holds the switch; header 4046-4052: A = object code 0x61..0x66, result = DSP parameter id base",
+   "audio/dsp_config_sysex.s:4060 `sub wa, 97` -- switch value = tag - 0x61, 0..5 (`cp wa, 5:i3` at 4063) through DspCfg_OpLetter_JumpOffsets (4066)",
+   "ui_widgets/widget_dispatch.s:4387 `.short EffEdit_DSPConfigBlock_Helper_Case98 - DSPCfg_Data_ParamDispatch_Code` -- entry 1 = tag 0x62",
+   "audio/dsp_config_sysex.s:4075 `ld xiz, 0x4a00` -- id base 0x4A00; slot 1 via Join2 (4080 `ld wa, 1:i3`)",
+   "../../analysis/disk-format-probes/README-lsw-leftover-records.md:34 `has no panel record and shares slot 1` -- 0x62 has no record of its own and maps to the reverb slot"
+  ]
+ },
+ {
+  "old": "EffEdit_DSPConfigBlock_Helper_Case99",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSPCfg_RecordFieldToParamId_DigitalReverbRecord",
+  "header": "",
+  "basis": "switch value meaning (DSP-slot record tag 0x61..0x66, biased by 'a' = 97) + body; real owner DSPCfg_RecordFieldToParamId (the framer's prefix EffEdit_DSPConfigBlock_Helper is not a label)",
+  "evidence": [
+   "audio/dsp_config_sysex.s:4078 `ld xiz, 0x4b00` -- tag 0x63: id base 0x4B00, then slot 1 (4080 `ld wa, 1:i3`)",
+   "../../analysis/disk-format-probes/README-lsw-leftover-records.md:26 `| 1 | ` -- slot 1, tag 0x63, namespace 0x4B00 = DIGITAL REVERB"
+  ]
+ },
+ {
+  "old": "EffEdit_DSPConfigBlock_Helper_Case100",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSPCfg_RecordFieldToParamId_EqualizerRecord",
+  "header": "",
+  "basis": "switch value meaning (DSP-slot record tag 0x61..0x66, biased by 'a' = 97) + body; real owner DSPCfg_RecordFieldToParamId (the framer's prefix EffEdit_DSPConfigBlock_Helper is not a label)",
+  "evidence": [
+   "audio/dsp_config_sysex.s:4083 `ld xiz, 0x4c00` -- tag 0x64: id base 0x4C00, slot 4 (4084 `ld wa, 4:i3`)",
+   "../../analysis/disk-format-probes/README-lsw-leftover-records.md:29 `| 4 | ` -- slot 4, tag 0x64, namespace 0x4C00 = EQUALIZER"
+  ]
+ },
+ {
+  "old": "EffEdit_DSPConfigBlock_Helper_Case101",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSPCfg_RecordFieldToParamId_AcousticIllusionRecord",
+  "header": "",
+  "basis": "switch value meaning (DSP-slot record tag 0x61..0x66, biased by 'a' = 97) + body; real owner DSPCfg_RecordFieldToParamId (the framer's prefix EffEdit_DSPConfigBlock_Helper is not a label)",
+  "evidence": [
+   "audio/dsp_config_sysex.s:4087 `ld xiz, 0x4d00` -- tag 0x65: id base 0x4D00, slot 2 (4088 `ld wa, 2:i3`)",
+   "../../analysis/disk-format-probes/README-lsw-leftover-records.md:27 `| 2 | ` -- slot 2, tag 0x65, namespace 0x4D00 = ACOUSTIC ILLUSION"
+  ]
+ },
+ {
+  "old": "EffEdit_DSPConfigBlock_Helper_Case102",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSPCfg_RecordFieldToParamId_Slot3RoomKaraokeRecord",
+  "header": "",
+  "basis": "switch value meaning (DSP-slot record tag 0x61..0x66, biased by 'a' = 97) + body; real owner DSPCfg_RecordFieldToParamId (the framer's prefix EffEdit_DSPConfigBlock_Helper is not a label)",
+  "evidence": [
+   "audio/dsp_config_sysex.s:4091 `ld xiz, 0x4e00` -- tag 0x66: id base 0x4E00, slot 3 (4092 `ld wa, 3:i3`)",
+   "../../analysis/disk-format-probes/README-lsw-leftover-records.md:28 `| 3 | ` -- slot 3, tag 0x66, namespace 0x4E00: algorithms ROOM / KARAOKE / BATH ROOM / STAGE"
+  ]
+ },
+ {
+  "old": "UIStateEvt_ParamEdit_Data_Case4",
+  "verdict": "refuse",
+  "why_refused": "The switched value is established -- the changed payload offset (SWBTWR_PAYLOAD_1) of panel record 0x48 (style/tempo record; this routine is in SwbtB2_Code48_Listeners), cases +4/+5/+6 -- but the fields at 0xFC5E/0xFC5F/0xFC60 are not identified anywhere (one parameter id for tag 0x48; README-lsw-nonpart-records only calls +5/+6 'accompaniment pedal/run flag bytes'), and the bits they are mirrored into (0xC596 bits 0-4/10/11, 0xC59A, 0xC594 bit 2) are unnamed; a name would only say 'byte 4'. The owner label is a generic leftover too; it can be renamed once 0xC596 is understood.",
+  "new": null,
+  "header": "",
+  "basis": "switch value = changed payload offset of panel record 0x48; field meanings not established",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:6396 `.long UIStateEvt_ParamEdit_Data` -- listener of panel code 0x48 (SwbtB2_Code48_Listeners, 6393)",
+   "audio/dsp_config_sysex.s:5802 `ldb_d8 a, (SWBTWR_PAYLOAD_1)` -- switched value = changed payload offset, 0..6 (`cp wa, 6:i3` 5806)",
+   "ui_widgets/widget_dispatch.s:7219 `.short UIStateEvt_ParamEdit_Data_Case4 - UIStateEvt_TransposeUpdate_Apply_Code` -- entry 4",
+   "audio/dsp_config_sysex.s:5890 `bit 6, (SWBTWR_PAYLOAD_3:16)` -- bit 6 -> 0xC596 bit 10 (5894 `orw (0xc596:16), 0x400`), bit 4 -> 0xC596 bit 11, bits 0-2 rebuild 0xC596 bits 0-4",
+   "../../analysis/disk-format-probes/README-lsw-nonpart-records.md:123 `style/rhythm selection + tempo` -- +3/+4 not described, +5/+6 only as flag bytes"
+  ]
+ },
+ {
+  "old": "UIStateEvt_ParamEdit_Data_Case5",
+  "verdict": "refuse",
+  "why_refused": "The switched value is established -- the changed payload offset (SWBTWR_PAYLOAD_1) of panel record 0x48 (style/tempo record; this routine is in SwbtB2_Code48_Listeners), cases +4/+5/+6 -- but the fields at 0xFC5E/0xFC5F/0xFC60 are not identified anywhere (one parameter id for tag 0x48; README-lsw-nonpart-records only calls +5/+6 'accompaniment pedal/run flag bytes'), and the bits they are mirrored into (0xC596 bits 0-4/10/11, 0xC59A, 0xC594 bit 2) are unnamed; a name would only say 'byte 4'. The owner label is a generic leftover too; it can be renamed once 0xC596 is understood.",
+  "new": null,
+  "header": "",
+  "basis": "switch value = changed payload offset of panel record 0x48; field meanings not established",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:7220 `.short UIStateEvt_ParamEdit_Data_Case5 - UIStateEvt_TransposeUpdate_Apply_Code` -- entry 5",
+   "audio/dsp_config_sysex.s:5965 `ldb_d8 a, (SWBTWR_PAYLOAD_3)` -- tests changed bits 2-7 and bit 1 of 0xFC5F, may refresh the tone bank (5985 `call z, (AudioInit_RefreshToneBank:24)`)"
+  ]
+ },
+ {
+  "old": "UIStateEvt_ParamEdit_Data_Case6",
+  "verdict": "refuse",
+  "why_refused": "The switched value is established -- the changed payload offset (SWBTWR_PAYLOAD_1) of panel record 0x48 (style/tempo record; this routine is in SwbtB2_Code48_Listeners), cases +4/+5/+6 -- but the fields at 0xFC5E/0xFC5F/0xFC60 are not identified anywhere (one parameter id for tag 0x48; README-lsw-nonpart-records only calls +5/+6 'accompaniment pedal/run flag bytes'), and the bits they are mirrored into (0xC596 bits 0-4/10/11, 0xC59A, 0xC594 bit 2) are unnamed; a name would only say 'byte 4'. The owner label is a generic leftover too; it can be renamed once 0xC596 is understood.",
+  "new": null,
+  "header": "",
+  "basis": "switch value = changed payload offset of panel record 0x48; field meanings not established",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:7221 `.short UIStateEvt_ParamEdit_Data_Case6 - UIStateEvt_TransposeUpdate_Apply_Code` -- entry 6",
+   "audio/dsp_config_sysex.s:5990 `ldb_d8 a, (SWBTWR_PAYLOAD_3)` -- changed bits 2-7: only sets 0xC594 bit 2 (6002 `orw (0xc594:16), 4`)"
+  ]
+ },
+ {
+  "old": "UIStateEvt_VolumeMixer_Data_Case1",
+  "verdict": "refuse",
+  "why_refused": "The switched value is established -- the changed payload offset (SWBTWR_PAYLOAD_1) of panel record 0x90 (this routine is in SwbtB2_Code90_Listeners) -- but record 0x90's fields are not identified (README-lsw-nonpart-records: 'small bit-field record'), and the cases only mirror bits into unnamed state (0xC1FE, 0xC596 bits 3/5/7, a per-part table at (0xC1FF)+228 for +4); a name would only say 'byte N'. The owner label 'VolumeMixer' is itself unsupported by the body.",
+  "new": null,
+  "header": "",
+  "basis": "switch value = changed payload offset of panel record 0x90; field meanings not established",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:6501 `.long UIStateEvt_VolumeMixer_Data` -- listener of panel code 0x90 (SwbtB2_Code90_Listeners, 6499)",
+   "audio/dsp_config_sysex.s:6007 `ldb_d8 a, (SWBTWR_PAYLOAD_1)` -- switched value = changed payload offset, 0..5 (`cp wa, 5:i3` 6011)",
+   "audio/dsp_config_sysex.s:6038 `bit 1, (SWBTWR_PAYLOAD_2:16)` -- +1 bit 1 -> 0xC596 bit 5 and 0xC1FE bit 2",
+   "../../analysis/disk-format-probes/README-lsw-nonpart-records.md:132 `small bit-field record` -- record 0x90's fields are not named"
+  ]
+ },
+ {
+  "old": "UIStateEvt_VolumeMixer_Data_Case2",
+  "verdict": "refuse",
+  "why_refused": "The switched value is established -- the changed payload offset (SWBTWR_PAYLOAD_1) of panel record 0x90 (this routine is in SwbtB2_Code90_Listeners) -- but record 0x90's fields are not identified (README-lsw-nonpart-records: 'small bit-field record'), and the cases only mirror bits into unnamed state (0xC1FE, 0xC596 bits 3/5/7, a per-part table at (0xC1FF)+228 for +4); a name would only say 'byte N'. The owner label 'VolumeMixer' is itself unsupported by the body.",
+  "new": null,
+  "header": "",
+  "basis": "switch value = changed payload offset of panel record 0x90; field meanings not established",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:7227 `.short UIStateEvt_VolumeMixer_Data_Case2 - UIStateEvt_TransposeUpdate_Apply_Code_2` -- entry 2",
+   "audio/dsp_config_sysex.s:6133 `ret` -- payload +2 is ignored"
+  ]
+ },
+ {
+  "old": "UIStateEvt_VolumeMixer_Data_Case3",
+  "verdict": "refuse",
+  "why_refused": "The switched value is established -- the changed payload offset (SWBTWR_PAYLOAD_1) of panel record 0x90 (this routine is in SwbtB2_Code90_Listeners) -- but record 0x90's fields are not identified (README-lsw-nonpart-records: 'small bit-field record'), and the cases only mirror bits into unnamed state (0xC1FE, 0xC596 bits 3/5/7, a per-part table at (0xC1FF)+228 for +4); a name would only say 'byte N'. The owner label 'VolumeMixer' is itself unsupported by the body.",
+  "new": null,
+  "header": "",
+  "basis": "switch value = changed payload offset of panel record 0x90; field meanings not established",
+  "evidence": [
+   "audio/dsp_config_sysex.s:6063 `bit 0, (SWBTWR_PAYLOAD_3:16)` -- +3 bit 0 -> 0xC596 bit 7, bit 1 -> 0xC596 bit 3"
+  ]
+ },
+ {
+  "old": "UIStateEvt_VolumeMixer_Data_Case4",
+  "verdict": "refuse",
+  "why_refused": "The switched value is established -- the changed payload offset (SWBTWR_PAYLOAD_1) of panel record 0x90 (this routine is in SwbtB2_Code90_Listeners) -- but record 0x90's fields are not identified (README-lsw-nonpart-records: 'small bit-field record'), and the cases only mirror bits into unnamed state (0xC1FE, 0xC596 bits 3/5/7, a per-part table at (0xC1FF)+228 for +4); a name would only say 'byte N'. The owner label 'VolumeMixer' is itself unsupported by the body.",
+  "new": null,
+  "header": "",
+  "basis": "switch value = changed payload offset of panel record 0x90; field meanings not established",
+  "evidence": [
+   "audio/dsp_config_sysex.s:6095 `lda xbc, (PartRecord_RamPtrTable:24)` -- +4: for the 26 parts with record +0x16 bit 0 set, stores value-64 at (0xC1FF)+228+2*part (6108 `sub a, 64`)"
+  ]
+ },
+ {
+  "old": "UIStateEvt_VolumeMixer_Data_Case5",
+  "verdict": "refuse",
+  "why_refused": "The switched value is established -- the changed payload offset (SWBTWR_PAYLOAD_1) of panel record 0x90 (this routine is in SwbtB2_Code90_Listeners) -- but record 0x90's fields are not identified (README-lsw-nonpart-records: 'small bit-field record'), and the cases only mirror bits into unnamed state (0xC1FE, 0xC596 bits 3/5/7, a per-part table at (0xC1FF)+228 for +4); a name would only say 'byte N'. The owner label 'VolumeMixer' is itself unsupported by the body.",
+  "new": null,
+  "header": "",
+  "basis": "switch value = changed payload offset of panel record 0x90; field meanings not established",
+  "evidence": [
+   "audio/dsp_config_sysex.s:6130 `orw (0xc594:16), 4` -- +5: any change only sets 0xC594 bit 2"
+  ]
+ },
+ {
+  "old": "SeqPart_EmitNoteOn_Full_Case208",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqPart_EmitNoteOn_Full_ResetPartControllers",
+  "header": "Status 0xD0: for the data pair (3, 0) resets modulation (0), pitch bend (0x2000), damper (0) and expression (127) of parts 0x10..0x13.",
+  "basis": "switch value meaning (status byte 0xD0..0xD8 of the rhythm event ring buffer; low nibble = channel) + body",
+  "evidence": [
+   "boot/system_handlers.s:1467 `call SeqPart_EmitNoteOn_Full` -- RhythmBuf_DispatchEvent calls the owner for the non-note-on events of the rhythm ring buffer (0x1EF5D)",
+   "audio/note_voice_mapping.s:13343 `call RhythmBuf_ReadAlternate` -- reads the next word of that buffer",
+   "audio/note_voice_mapping.s:13359 `sub wa, 0xd0` -- switch value = status 0xD0..0xD8 (`cp wa, 0x8` 13362); 0xC4..0xC8 are handled before (13349-13358)",
+   "ui_widgets/widget_dispatch.s:7380 `.short SeqPart_EmitNoteOn_Full_Case208 - Rhythm_ProcessEventDispatch` -- entry 0 = status 0xD0",
+   "audio/note_voice_mapping.s:13521 `cpiw_erp 0xfa, 3` -- acts only when the first data word (kind) is 3 ...",
+   "audio/note_voice_mapping.s:13523 `cp iz, 0:i3` -- ... and the second (value) is 0",
+   "audio/note_voice_mapping.s:13525 `ldw iz, 0x10` -- loops parts 0x10..0x13 (`cp iz, 0x14` at 13572)",
+   "audio/note_voice_mapping.s:13541 `ldw de, 0x2000` -- code 0x1B0 (SndPart_SetRPN -> MIDI_SendPitchBend, 18117) set to centre; codes 1 (13531), 0x40 (13549) to 0 and 0xB to 0x7F (13564)",
+   "audio/note_voice_mapping.s:18132 `cp bc, 0x40` -- SndPart_SetParam codes are controller numbers: 0x40 damper, 0xB expression, 1 modulation (18134, 18140)"
+  ]
+ },
+ {
+  "old": "SeqPart_EmitNoteOn_Full_Case212",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeqPart_EmitNoteOn_Full_SetPartController",
+  "header": "Status 0xD4..0xD8: channel 4..8 -> part 0x10..0x14 (Rhythm_EventMapA); data kind 1 modulation, 2 pitch bend, 3 damper, 4 pan, 5 expression, 0x10 Audio_InitDispatchReturn.",
+  "basis": "switch value meaning (status byte 0xD0..0xD8 of the rhythm event ring buffer; low nibble = channel) + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:7384 `.short SeqPart_EmitNoteOn_Full_Case212 - Rhythm_ProcessEventDispatch` -- entries 4..8 = status 0xD4..0xD8",
+   "audio/note_voice_mapping.s:13588 `lda xbc, (Rhythm_EventMapA:24)` -- channel nibble 4..8 -> part 0x10..0x14 (ui_widgets/widget_dispatch.s:7370 `.byte 0xff, 0xff, 0xff, 0xff, 0x10, 0x11, 0x12, 0x13`)",
+   "audio/note_voice_mapping.s:13607 `ld bc, 1:i3` -- kind 1 = modulation; kind 2 pitch bend (13631 `ldw bc, 0x1b0`), 3 damper (13644 `ldw bc, 0x40`), 4 pan (13661 `ldw bc, 0xa`), 5 expression (13678 `ldw bc, 0xb`), 0x10 Audio_InitDispatchReturn (13690)"
+  ]
+ },
+ {
+  "old": "HdaeRom_TableEntry2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PanelTag72_ApplyPartMix",
+  "header": "SwbtWr listener of panel record 0x72: +3 is sent to parts 0x17 and 0x18 as CC 7 (volume; 0 when bit 7 is set), +7 as CC 91 (reverb send). Basis: callers + body; nothing to do with the HDAE ROM.",
+  "basis": "callers (SwbtB2_Code72_Listeners) + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:6484 `.long HdaeRom_TableEntry2` -- the routine's only reference: listener of panel code 0x72 (SwbtB2_Code72_Listeners, 6483)",
+   "audio/note_voice_mapping.s:17561 `ld (xsp+0x1), (SWBTWR_PAYLOAD_1)` -- switches on the changed payload offset 0..7 (17564-17568)",
+   "ui_widgets/widget_dispatch.s:8429 `.short HdaeRom_TableEntry2_Code - HdaeRom_TableEntry2_Code` -- only offsets 3 (this) and 7 (8433) do anything",
+   "audio/note_voice_mapping.s:17591 `ld bc, 7:i3` -- +3 goes out as CC 7 (volume) to parts 23 = 0x17 (17590) and 24 = 0x18 (17596), 0 when the value's bit 7 is set",
+   "audio/note_voice_mapping.s:19144 `; Input:  A = MIDI channel, C = controller number, E = value` -- MIDI_SendControlChange's arguments"
+  ]
+ },
+ {
+  "old": "HdaeRom_TableEntry2_Case7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PanelTag72_ApplyPartMix_ReverbSend",
+  "header": "Payload +7: sent to parts 0x17 and 0x18 as CC 91 (reverb send).",
+  "basis": "switch value meaning (changed payload offset of panel record 0x72) + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:8433 `.short HdaeRom_TableEntry2_Case7 - HdaeRom_TableEntry2_Code` -- entry 7 = payload offset 7",
+   "audio/note_voice_mapping.s:17610 `ldw bc, 91` -- sends +7 (bit 7 cleared) as CC 91 to part 23 = 0x17 (17609) and part 24 = 0x18 (17616-17617)",
+   "audio/note_voice_mapping.s:18232 `ldw bc, 0x5b` -- CC 0x5B is the reverb send (SndPart_SetReverbSend)"
+  ]
+ },
+ {
+  "old": "SendEpilogue_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SndParam_ApplySystemParam",
+  "header": "Applies a non-part panel parameter: XWA = id (high byte namespace, low byte field), BC = value. Ids 0x00xx, 0x4000-0x4006, 0x4080, 0x4140-0x4142 and 0x4280-0x428E are sent now; DSP-slot ids (0x49xx, 0x4Bxx-0x4Exx) are queued for Song_SendPartDataBlocks. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/note_voice_mapping.s:18053 `SendEpilogue_Data; byte 3 is restored` -- SndParam_ApplyEventField's header: the only caller uses it when the id is not a part MIDI address",
+   "audio/note_voice_mapping.s:18077 `call SndParam_DecodeMidiAddr` -- part ids go to SndPart_SetParam (18083), the rest here (18088 `calr SendEpilogue_Data` with XWA = id, BC = value)",
+   "audio/note_voice_mapping.s:18336 `srl xbc, 8` -- the id's high byte selects the namespace (0x00, 0x40, 0x41, 0x42, 0x49, 0x4B..0x4E: 18342-18358), the low byte (18339 `and xbc, 255`) the field",
+   "audio/note_voice_mapping.s:18925 `ld (0xcfb4:16), xwa` -- DSP-slot ids are queued in 0xCFB4..0xCFC7 and flushed by Song_SendPartDataBlocks (18946 `ld xwa, (0xcfb4:16)`)"
+  ]
+ },
+ {
+  "old": "SendEpilogue_Data_Case1",
+  "verdict": "refuse",
+  "why_refused": "The switched value is established -- parameter id 0x4001 = tag 0xB0 payload +1 (mask 0x7F, descriptor in audio/sndparam_records/run_edc2a4.c) -- but tag 0xB0 is not a documented panel record and its fields are not identified; the case only forwards the value as COMM packet type 2 (SendPartDataBlock_Block2), so a name would only say 'id 0x4001'.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning (parameter id 0x4000+N: low byte of an id in namespace 0x40, from the sound-parameter descriptors) + body",
+  "evidence": [
+   "audio/note_voice_mapping.s:18356 `cp bc, 64` -- namespace 0x40",
+   "audio/note_voice_mapping.s:18444 `cp wa, 6:i3` -- switch on the field 0..6 (ids 0x4000-0x4006; 128-130 handled before, 18437-18443)",
+   "ui_widgets/widget_dispatch.s:8456 `.short SendEpilogue_Data_Case1 - MIDI_SendEpilogue_Code` -- entry 1 = id 0x4001",
+   "audio/sndparam_records/run_edc2a4.c:110 `{ .key = 0x00004001, .bank_index = 0xB0, .bank_offset = 0x01,` -- id 0x4001 = tag 0xB0 +1",
+   "audio/note_voice_mapping.s:18459 `call SendPartDataBlock_Block2` -- forwards the value (COMM packet type 2, SendPartDataBlock_Block2 26182)"
+  ]
+ },
+ {
+  "old": "SendEpilogue_Data_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SndParam_ApplySystemParam_QueueReverbOnOff",
+  "header": "Id 0x4002 (tag 0x60 +1 bit 7, reverb on/off): kept in 0xCFCA until Song_SendPartDataBlocks sends COMM packet 0x21.",
+  "basis": "switch value meaning (parameter id 0x4000+N: low byte of an id in namespace 0x40, from the sound-parameter descriptors) + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:8457 `.short SendEpilogue_Data_Case2 - MIDI_SendEpilogue_Code` -- entry 2 = id 0x4002",
+   "../../analysis/disk-format-probes/README-lsw-leftover-records.md:57 `0x4002 = tag 0x60 payload+1 bit 7   -> slot 1  REVERB` -- the DIGITAL REVERB slot's on/off",
+   "audio/note_voice_mapping.s:18462 `ld (0xcfca:16), iz` -- kept until Song_SendPartDataBlocks sends it (18990-18992 -> SendPartDataBlock_ClearByte, COMM packet 0x21 at 26217)"
+  ]
+ },
+ {
+  "old": "SendEpilogue_Data_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SndParam_ApplySystemParam_QueueDigitalEffectSwitch",
+  "header": "Id 0x4003 (tag 0x70 digital-effect record +0 bit 2, a 0/1 switch): kept in 0xCFC8 until Song_SendPartDataBlocks sends COMM packet 0x23.",
+  "basis": "switch value meaning (parameter id 0x4000+N: low byte of an id in namespace 0x40, from the sound-parameter descriptors) + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:8458 `.short SendEpilogue_Data_Case3 - MIDI_SendEpilogue_Code` -- entry 3 = id 0x4003",
+   "audio/sndparam_records/run_edc2a4.c:130 `{ .key = 0x00004003, .bank_index = 0x70, .bank_offset = 0x00,` -- id 0x4003 = tag 0x70 +0, mask 0x04, max 1 (a switch)",
+   "../../analysis/disk-format-probes/README-lsw-nonpart-records.md:128 `digital-effect selection` -- tag 0x70 is the digital-effect selection record",
+   "audio/note_voice_mapping.s:18465 `ld (0xcfc8:16), iz` -- kept until Song_SendPartDataBlocks sends it as on/off (18983-18985 -> SendPartDataBlock_Block7, COMM packet 0x23 at 26249), next to the slot on/off packets 0x21/0x22/0x24/0x25"
+  ]
+ },
+ {
+  "old": "SendEpilogue_Data_Case4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SndParam_ApplySystemParam_QueueAcousticIllusionOnOff",
+  "header": "Id 0x4004 (tag 0x60 +1 bit 6, acoustic-illusion on/off): kept in 0xCFCC until Song_SendPartDataBlocks sends COMM packet 0x22.",
+  "basis": "switch value meaning (parameter id 0x4000+N: low byte of an id in namespace 0x40, from the sound-parameter descriptors) + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:8459 `.short SendEpilogue_Data_Case4 - MIDI_SendEpilogue_Code` -- entry 4 = id 0x4004",
+   "../../analysis/disk-format-probes/README-lsw-leftover-records.md:58 `0x4004 = tag 0x60 payload+1 bit 6   -> slot 2  ACOUSTIC ILLUSION` -- the ACOUSTIC ILLUSION slot's on/off",
+   "audio/note_voice_mapping.s:18468 `ld (0xcfcc:16), iz` -- kept until Song_SendPartDataBlocks sends it (18997-18999 -> SendPartDataBlock_ClearByte2, COMM packet 0x22 at 26233)"
+  ]
+ },
+ {
+  "old": "SendEpilogue_Data_Case5",
+  "verdict": "refuse",
+  "why_refused": "The switched value is established -- parameter id 0x4005 = tag 0xB0 payload +3 (mask 0x7F, descriptor in audio/sndparam_records/run_edc2a4.c) -- but tag 0xB0 is not a documented panel record and its fields are not identified; the case only forwards the value as COMM packet type 6 (SendPartDataBlock_Block3), so a name would only say 'id 0x4005'.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning (parameter id 0x4000+N: low byte of an id in namespace 0x40, from the sound-parameter descriptors) + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:8460 `.short SendEpilogue_Data_Case5 - MIDI_SendEpilogue_Code` -- entry 5 = id 0x4005",
+   "audio/sndparam_records/run_edc2a4.c:150 `{ .key = 0x00004005, .bank_index = 0xB0, .bank_offset = 0x03,` -- id 0x4005 = tag 0xB0 +3",
+   "audio/note_voice_mapping.s:18473 `call SendPartDataBlock_Block3` -- forwards the value (COMM packet type 6, 26191)"
+  ]
+ },
+ {
+  "old": "SendEpilogue_Data_Case6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SndParam_ApplySystemParam_SendEqualizerOnOff",
+  "header": "Id 0x4006 (tag 0x60 +1 bit 5, equalizer on/off): sent at once as COMM packet 0x25.",
+  "basis": "switch value meaning (parameter id 0x4000+N: low byte of an id in namespace 0x40, from the sound-parameter descriptors) + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:8461 `.short SendEpilogue_Data_Case6 - MIDI_SendEpilogue_Code` -- entry 6 = id 0x4006",
+   "../../analysis/disk-format-probes/README-lsw-leftover-records.md:59 `0x4006 = tag 0x60 payload+1 bit 5   -> slot 4  EQUALIZER` -- the EQUALIZER slot's on/off",
+   "audio/note_voice_mapping.s:18478 `call SendPartDataBlock_Block9` -- sent at once as a 0/1 COMM packet 0x25 (26280 `ldw bc, 37`)"
+  ]
+ },
+ {
+  "old": "SendEpilogue_Data_Switch2_Case129",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SndParam_ApplySystemParam_ScaleTuneType",
+  "header": "Id 0x4281 (record 0x92 +0, scale-tune type): sends F0 50 86 <mode> and, unless the mode's high byte is set (types 64-66), the type's 12 offsets rotated by the key to F0 50 A4..AF.",
+  "basis": "switch value meaning (parameter id 0x4280+N-128 = a field of panel record 0x92, the scale-tune record) + body",
+  "evidence": [
+   "audio/note_voice_mapping.s:18352 `cp bc, 66` -- namespace 0x42",
+   "audio/note_voice_mapping.s:18526 `sub wa, 128` -- switch on the field 0x80..0x8E, i.e. ids 0x4280..0x428E (`cp wa, 14` 18529)",
+   "../../analysis/disk-format-probes/README-lsw-param-namespace-map.md:130 `0x4281 -> +0x00 mask FF          0x4283..0x428E -> +0x02..+0x0D mask FF` -- record 0x92: +0 one byte, +2..+13 twelve bytes (0x4280 = +1 bit 7, 0x4282 = +1 low nibble, line 131)",
+   "ui_widgets/widget_dispatch.s:8438 `.short SendEpilogue_Data_Switch2_Case129 - MIDI_SendEpilogue_Code_2` -- entry 1 = id 0x4281",
+   "audio/note_voice_mapping.s:18558 `ldw bc, 134` -- sends F0 50 86 <mode> (SeqVoice_CheckAndRet_Prologue builds [F0, 0x50, C, E], 19268-19271); mode from SendEpilogue_Data_Helper (18553)",
+   "../../v142/subcpu/kn5000_subprogram_v142.s:22453 `index 6 (0x86)         offset 0x002C -> 0x02A828 ScaleTune_Set_Global_Mode` -- the Sub CPU's handler for F0 50 86",
+   "audio/note_voice_mapping.s:18582 `add wa, 164` -- unless the mode's high byte is set, the type's 12 offsets (SeqVoice_CheckAndRet_Data, 18565) go out as F0 50 0xA4+((key+i) mod 12), key = 0xFD1D low nibble (18571-18572)",
+   "../../v142/subcpu/kn5000_subprogram_v142.s:22518 `jrl ScaleTune_Set_User_Offset` -- F0 50 A4..AF set the Sub CPU's 12 per-pitch-class offsets (A4 = index 0, 22513-22518)"
+  ]
+ },
+ {
+  "old": "SendEpilogue_Data_Switch2_Case130",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SndParam_ApplySystemParam_ScaleTuneKey",
+  "header": "Id 0x4282 (record 0x92 +1 low nibble, scale key): re-sends the current type's 12 offsets rotated to the new key.",
+  "basis": "switch value meaning (parameter id 0x4280+N-128 = a field of panel record 0x92, the scale-tune record) + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:8439 `.short SendEpilogue_Data_Switch2_Case130 - MIDI_SendEpilogue_Code_2` -- entry 2 = id 0x4282 (record 0x92 +1 low nibble)",
+   "audio/note_voice_mapping.s:18595 `ld xwa, 0x4281` -- reads the current type, gets its 12-offset table (18608) ...",
+   "audio/note_voice_mapping.s:18614 `ld a, (0xfd1d:16)` -- ... and re-sends it rotated by the key (+1 low nibble) to F0 50 0xA4+((key+i) mod 12) (18625 `add wa, 164`)"
+  ]
+ },
+ {
+  "old": "SendEpilogue_Data_Switch2_Case131",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SndParam_ApplySystemParam_ScaleTuneUserNote0",
+  "header": "Id 0x4283 (record 0x92 +2, RAM 0xFD1E): user scale-tune offset of the note 0 semitones above the key; sent only when the type is 128 (user).",
+  "basis": "switch value meaning (parameter id 0x4280+N-128 = a field of panel record 0x92, the scale-tune record) + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:8440 `.short SendEpilogue_Data_Switch2_Case131 - MIDI_SendEpilogue_Code_2` -- entry 3 = id 0x4283 (record 0x92 +2)",
+   "audio/note_voice_mapping.s:18638 `ld xwa, 0x4281` -- reads the scale-tune type; only type 128 (user) is sent (18640 `cp hl, 128`)",
+   "audio/note_voice_mapping.s:18643 `and a, 15` -- pitch class = key + 0 (0xFD1D low nibble), sent to F0 50 0xA4+pitch class",
+   "audio/note_voice_mapping.s:18654 `ld a, (0xfd1e:16)` -- the user offset byte (record 0x92 +2)"
+  ]
+ },
+ {
+  "old": "SendEpilogue_Data_Switch2_Case132",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SndParam_ApplySystemParam_ScaleTuneUserNote1",
+  "header": "Id 0x4284 (record 0x92 +3, RAM 0xFD1F): user scale-tune offset of the note 1 semitone above the key; sent only when the type is 128 (user).",
+  "basis": "switch value meaning (parameter id 0x4280+N-128 = a field of panel record 0x92, the scale-tune record) + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:8441 `.short SendEpilogue_Data_Switch2_Case132 - MIDI_SendEpilogue_Code_2` -- entry 4 = id 0x4284 (record 0x92 +3)",
+   "audio/note_voice_mapping.s:18661 `ld xwa, 0x4281` -- reads the scale-tune type; only type 128 (user) is sent (18663 `cp hl, 128`)",
+   "audio/note_voice_mapping.s:18667 `inc 1, a` -- pitch class = (key + 1) mod 12, sent to F0 50 0xA4+pitch class",
+   "audio/note_voice_mapping.s:18678 `ld a, (0xfd1f:16)` -- the user offset byte (record 0x92 +3)"
+  ]
+ },
+ {
+  "old": "SendEpilogue_Data_Switch2_Case133",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SndParam_ApplySystemParam_ScaleTuneUserNote2",
+  "header": "Id 0x4285 (record 0x92 +4, RAM 0xFD20): user scale-tune offset of the note 2 semitones above the key; sent only when the type is 128 (user).",
+  "basis": "switch value meaning (parameter id 0x4280+N-128 = a field of panel record 0x92, the scale-tune record) + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:8442 `.short SendEpilogue_Data_Switch2_Case133 - MIDI_SendEpilogue_Code_2` -- entry 5 = id 0x4285 (record 0x92 +4)",
+   "audio/note_voice_mapping.s:18685 `ld xwa, 0x4281` -- reads the scale-tune type; only type 128 (user) is sent (18687 `cp hl, 128`)",
+   "audio/note_voice_mapping.s:18691 `inc 2, a` -- pitch class = (key + 2) mod 12, sent to F0 50 0xA4+pitch class",
+   "audio/note_voice_mapping.s:18702 `ld a, (0xfd20:16)` -- the user offset byte (record 0x92 +4)"
+  ]
+ },
+ {
+  "old": "SendEpilogue_Data_Switch2_Case134",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SndParam_ApplySystemParam_ScaleTuneUserNote3",
+  "header": "Id 0x4286 (record 0x92 +5, RAM 0xFD21): user scale-tune offset of the note 3 semitones above the key; sent only when the type is 128 (user).",
+  "basis": "switch value meaning (parameter id 0x4280+N-128 = a field of panel record 0x92, the scale-tune record) + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:8443 `.short SendEpilogue_Data_Switch2_Case134 - MIDI_SendEpilogue_Code_2` -- entry 6 = id 0x4286 (record 0x92 +5)",
+   "audio/note_voice_mapping.s:18709 `ld xwa, 0x4281` -- reads the scale-tune type; only type 128 (user) is sent (18711 `cp hl, 128`)",
+   "audio/note_voice_mapping.s:18715 `inc 3, a` -- pitch class = (key + 3) mod 12, sent to F0 50 0xA4+pitch class",
+   "audio/note_voice_mapping.s:18726 `ld a, (0xfd21:16)` -- the user offset byte (record 0x92 +5)"
+  ]
+ },
+ {
+  "old": "SendEpilogue_Data_Switch2_Case135",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SndParam_ApplySystemParam_ScaleTuneUserNote4",
+  "header": "Id 0x4287 (record 0x92 +6, RAM 0xFD22): user scale-tune offset of the note 4 semitones above the key; sent only when the type is 128 (user).",
+  "basis": "switch value meaning (parameter id 0x4280+N-128 = a field of panel record 0x92, the scale-tune record) + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:8444 `.short SendEpilogue_Data_Switch2_Case135 - MIDI_SendEpilogue_Code_2` -- entry 7 = id 0x4287 (record 0x92 +6)",
+   "audio/note_voice_mapping.s:18733 `ld xwa, 0x4281` -- reads the scale-tune type; only type 128 (user) is sent (18735 `cp hl, 128`)",
+   "audio/note_voice_mapping.s:18739 `inc 4, a` -- pitch class = (key + 4) mod 12, sent to F0 50 0xA4+pitch class",
+   "audio/note_voice_mapping.s:18750 `ld a, (0xfd22:16)` -- the user offset byte (record 0x92 +6)"
+  ]
+ },
+ {
+  "old": "SendEpilogue_Data_Switch2_Case136",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SndParam_ApplySystemParam_ScaleTuneUserNote5",
+  "header": "Id 0x4288 (record 0x92 +7, RAM 0xFD23): user scale-tune offset of the note 5 semitones above the key; sent only when the type is 128 (user).",
+  "basis": "switch value meaning (parameter id 0x4280+N-128 = a field of panel record 0x92, the scale-tune record) + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:8445 `.short SendEpilogue_Data_Switch2_Case136 - MIDI_SendEpilogue_Code_2` -- entry 8 = id 0x4288 (record 0x92 +7)",
+   "audio/note_voice_mapping.s:18757 `ld xwa, 0x4281` -- reads the scale-tune type; only type 128 (user) is sent (18759 `cp hl, 128`)",
+   "audio/note_voice_mapping.s:18763 `inc 5, a` -- pitch class = (key + 5) mod 12, sent to F0 50 0xA4+pitch class",
+   "audio/note_voice_mapping.s:18774 `ld a, (0xfd23:16)` -- the user offset byte (record 0x92 +7)"
+  ]
+ },
+ {
+  "old": "SendEpilogue_Data_Switch2_Case137",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SndParam_ApplySystemParam_ScaleTuneUserNote6",
+  "header": "Id 0x4289 (record 0x92 +8, RAM 0xFD24): user scale-tune offset of the note 6 semitones above the key; sent only when the type is 128 (user).",
+  "basis": "switch value meaning (parameter id 0x4280+N-128 = a field of panel record 0x92, the scale-tune record) + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:8446 `.short SendEpilogue_Data_Switch2_Case137 - MIDI_SendEpilogue_Code_2` -- entry 9 = id 0x4289 (record 0x92 +8)",
+   "audio/note_voice_mapping.s:18781 `ld xwa, 0x4281` -- reads the scale-tune type; only type 128 (user) is sent (18783 `cp hl, 128`)",
+   "audio/note_voice_mapping.s:18787 `inc 6, a` -- pitch class = (key + 6) mod 12, sent to F0 50 0xA4+pitch class",
+   "audio/note_voice_mapping.s:18798 `ld a, (0xfd24:16)` -- the user offset byte (record 0x92 +8)"
+  ]
+ },
+ {
+  "old": "SendEpilogue_Data_Switch2_Case138",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SndParam_ApplySystemParam_ScaleTuneUserNote7",
+  "header": "Id 0x428A (record 0x92 +9, RAM 0xFD25): user scale-tune offset of the note 7 semitones above the key; sent only when the type is 128 (user).",
+  "basis": "switch value meaning (parameter id 0x4280+N-128 = a field of panel record 0x92, the scale-tune record) + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:8447 `.short SendEpilogue_Data_Switch2_Case138 - MIDI_SendEpilogue_Code_2` -- entry 10 = id 0x428A (record 0x92 +9)",
+   "audio/note_voice_mapping.s:18805 `ld xwa, 0x4281` -- reads the scale-tune type; only type 128 (user) is sent (18807 `cp hl, 128`)",
+   "audio/note_voice_mapping.s:18811 `inc 7, a` -- pitch class = (key + 7) mod 12, sent to F0 50 0xA4+pitch class",
+   "audio/note_voice_mapping.s:18822 `ld a, (0xfd25:16)` -- the user offset byte (record 0x92 +9)"
+  ]
+ },
+ {
+  "old": "SendEpilogue_Data_Switch2_Case139",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SndParam_ApplySystemParam_ScaleTuneUserNote8",
+  "header": "Id 0x428B (record 0x92 +10, RAM 0xFD26): user scale-tune offset of the note 8 semitones above the key; sent only when the type is 128 (user).",
+  "basis": "switch value meaning (parameter id 0x4280+N-128 = a field of panel record 0x92, the scale-tune record) + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:8448 `.short SendEpilogue_Data_Switch2_Case139 - MIDI_SendEpilogue_Code_2` -- entry 11 = id 0x428B (record 0x92 +10)",
+   "audio/note_voice_mapping.s:18829 `ld xwa, 0x4281` -- reads the scale-tune type; only type 128 (user) is sent (18831 `cp hl, 128`)",
+   "audio/note_voice_mapping.s:18835 `inc 8, a` -- pitch class = (key + 8) mod 12, sent to F0 50 0xA4+pitch class",
+   "audio/note_voice_mapping.s:18846 `ld a, (0xfd26:16)` -- the user offset byte (record 0x92 +10)"
+  ]
+ },
+ {
+  "old": "SendEpilogue_Data_Switch2_Case140",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SndParam_ApplySystemParam_ScaleTuneUserNote9",
+  "header": "Id 0x428C (record 0x92 +11, RAM 0xFD27): user scale-tune offset of the note 9 semitones above the key; sent only when the type is 128 (user).",
+  "basis": "switch value meaning (parameter id 0x4280+N-128 = a field of panel record 0x92, the scale-tune record) + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:8449 `.short SendEpilogue_Data_Switch2_Case140 - MIDI_SendEpilogue_Code_2` -- entry 12 = id 0x428C (record 0x92 +11)",
+   "audio/note_voice_mapping.s:18853 `ld xwa, 0x4281` -- reads the scale-tune type; only type 128 (user) is sent (18855 `cp hl, 128`)",
+   "audio/note_voice_mapping.s:18859 `add a, 9` -- pitch class = (key + 9) mod 12, sent to F0 50 0xA4+pitch class",
+   "audio/note_voice_mapping.s:18870 `ld a, (0xfd27:16)` -- the user offset byte (record 0x92 +11)"
+  ]
+ },
+ {
+  "old": "SendEpilogue_Data_Switch2_Case141",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SndParam_ApplySystemParam_ScaleTuneUserNote10",
+  "header": "Id 0x428D (record 0x92 +12, RAM 0xFD28): user scale-tune offset of the note 10 semitones above the key; sent only when the type is 128 (user).",
+  "basis": "switch value meaning (parameter id 0x4280+N-128 = a field of panel record 0x92, the scale-tune record) + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:8450 `.short SendEpilogue_Data_Switch2_Case141 - MIDI_SendEpilogue_Code_2` -- entry 13 = id 0x428D (record 0x92 +12)",
+   "audio/note_voice_mapping.s:18877 `ld xwa, 0x4281` -- reads the scale-tune type; only type 128 (user) is sent (18879 `cp hl, 128`)",
+   "audio/note_voice_mapping.s:18883 `add a, 10` -- pitch class = (key + 10) mod 12, sent to F0 50 0xA4+pitch class",
+   "audio/note_voice_mapping.s:18894 `ld a, (0xfd28:16)` -- the user offset byte (record 0x92 +12)"
+  ]
+ },
+ {
+  "old": "SendEpilogue_Data_Switch2_Case142",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SndParam_ApplySystemParam_ScaleTuneUserNote11",
+  "header": "Id 0x428E (record 0x92 +13, RAM 0xFD29): user scale-tune offset of the note 11 semitones above the key; sent only when the type is 128 (user).",
+  "basis": "switch value meaning (parameter id 0x4280+N-128 = a field of panel record 0x92, the scale-tune record) + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:8451 `.short SendEpilogue_Data_Switch2_Case142 - MIDI_SendEpilogue_Code_2` -- entry 14 = id 0x428E (record 0x92 +13)",
+   "audio/note_voice_mapping.s:18901 `ld xwa, 0x4281` -- reads the scale-tune type; only type 128 (user) is sent (18903 `cp hl, 128`)",
+   "audio/note_voice_mapping.s:18907 `add a, 11` -- pitch class = (key + 11) mod 12, sent to F0 50 0xA4+pitch class",
+   "audio/note_voice_mapping.s:18918 `ld a, (0xfd29:16)` -- the user offset byte (record 0x92 +13)"
+  ]
+ },
+ {
+  "old": "SeqVoice_CheckAndRet_Data",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ScaleTune_TypeToOffsetTable",
+  "header": "Returns in XHL the 12-entry per-pitch-class offset table (0x80 = none) of scale-tune type A: SemitoneBias_TableA..N for the preset types, the user table in record 0x92 (RAM 0xFD1E) for 128. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/note_voice_mapping.s:18565 `calr SeqVoice_CheckAndRet_Data` -- called by the id-0x4281/0x4282 cases of SendEpilogue_Data with A = scale-tune type; the 12 bytes it points to are sent as the per-pitch-class offsets (18585 `ld a, (xwa+iz)`)",
+   "audio/note_voice_mapping.s:19349 `lda xhl, (0xfd1e:16)` -- type 128 returns the user table, record 0x92 +2..+13",
+   "audio/note_voice_mapping.s:19307 `lda xhl, (SemitoneBias_TableA:24)` -- types 0, 64-66, 3-5, 16-22 return ROM tables SemitoneBias_TableA..N (19309-19347); anything else TableA (19352)",
+   "ui_widgets/widget_dispatch.s:8468 `.byte 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80` -- 0x80 = no offset (TableA, equal temperament)"
+  ]
+ },
+ {
+  "old": "SeqVoice_CheckAndRet_Data_Case16",
+  "verdict": "refuse",
+  "why_refused": "The switched value is established -- scale-tune type 16..22 (record 0x92 +0, biased by 16) -- and each case returns one preset offset table (SemitoneBias_TableH..N), but neither the ROM nor any doc names these presets; the tables lower particular degrees by 0x40 (H: degrees 4 and 11; I: 4 and 9 ...), which suggests quarter-tone (e.g. Arabic) scales, but that is inference. A name would only restate the type number.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning (scale-tune type 16..22) established; the presets' identities are not",
+  "evidence": [
+   "audio/note_voice_mapping.s:19296 `sub wa, 16` -- switch on type - 16, 0..6 (`cp wa, 6:i3` 19299) through SeqVoiceSel_SwitchOffsets (19302)",
+   "audio/note_voice_mapping.s:18565 `calr SeqVoice_CheckAndRet_Data` -- A = the scale-tune type of record 0x92 (id 0x4281)",
+   "audio/note_voice_mapping.s:19328 `lda xhl, (SemitoneBias_TableH:24)` -- type 16 returns SemitoneBias_TableH",
+   "ui_widgets/widget_dispatch.s:8466 `[INFERENCE] scale-tuning presets.` -- the tables' own header leaves them unnamed"
+  ]
+ },
+ {
+  "old": "SeqVoice_CheckAndRet_Data_Case17",
+  "verdict": "refuse",
+  "why_refused": "The switched value is established -- scale-tune type 16..22 (record 0x92 +0, biased by 16) -- and each case returns one preset offset table (SemitoneBias_TableH..N), but neither the ROM nor any doc names these presets; the tables lower particular degrees by 0x40 (H: degrees 4 and 11; I: 4 and 9 ...), which suggests quarter-tone (e.g. Arabic) scales, but that is inference. A name would only restate the type number.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning (scale-tune type 16..22) established; the presets' identities are not",
+  "evidence": [
+   "audio/note_voice_mapping.s:19331 `lda xhl, (SemitoneBias_TableI:24)` -- type 17 returns SemitoneBias_TableI"
+  ]
+ },
+ {
+  "old": "SeqVoice_CheckAndRet_Data_Case18",
+  "verdict": "refuse",
+  "why_refused": "The switched value is established -- scale-tune type 16..22 (record 0x92 +0, biased by 16) -- and each case returns one preset offset table (SemitoneBias_TableH..N), but neither the ROM nor any doc names these presets; the tables lower particular degrees by 0x40 (H: degrees 4 and 11; I: 4 and 9 ...), which suggests quarter-tone (e.g. Arabic) scales, but that is inference. A name would only restate the type number.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning (scale-tune type 16..22) established; the presets' identities are not",
+  "evidence": [
+   "audio/note_voice_mapping.s:19334 `lda xhl, (SemitoneBias_TableJ:24)` -- type 18 returns SemitoneBias_TableJ"
+  ]
+ },
+ {
+  "old": "SeqVoice_CheckAndRet_Data_Case19",
+  "verdict": "refuse",
+  "why_refused": "The switched value is established -- scale-tune type 16..22 (record 0x92 +0, biased by 16) -- and each case returns one preset offset table (SemitoneBias_TableH..N), but neither the ROM nor any doc names these presets; the tables lower particular degrees by 0x40 (H: degrees 4 and 11; I: 4 and 9 ...), which suggests quarter-tone (e.g. Arabic) scales, but that is inference. A name would only restate the type number.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning (scale-tune type 16..22) established; the presets' identities are not",
+  "evidence": [
+   "audio/note_voice_mapping.s:19337 `lda xhl, (SemitoneBias_TableK:24)` -- type 19 returns SemitoneBias_TableK"
+  ]
+ },
+ {
+  "old": "SeqVoice_CheckAndRet_Data_Case20",
+  "verdict": "refuse",
+  "why_refused": "The switched value is established -- scale-tune type 16..22 (record 0x92 +0, biased by 16) -- and each case returns one preset offset table (SemitoneBias_TableH..N), but neither the ROM nor any doc names these presets; the tables lower particular degrees by 0x40 (H: degrees 4 and 11; I: 4 and 9 ...), which suggests quarter-tone (e.g. Arabic) scales, but that is inference. A name would only restate the type number.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning (scale-tune type 16..22) established; the presets' identities are not",
+  "evidence": [
+   "audio/note_voice_mapping.s:19340 `lda xhl, (SemitoneBias_TableL:24)` -- type 20 returns SemitoneBias_TableL"
+  ]
+ },
+ {
+  "old": "SeqVoice_CheckAndRet_Data_Case21",
+  "verdict": "refuse",
+  "why_refused": "The switched value is established -- scale-tune type 16..22 (record 0x92 +0, biased by 16) -- and each case returns one preset offset table (SemitoneBias_TableH..N), but neither the ROM nor any doc names these presets; the tables lower particular degrees by 0x40 (H: degrees 4 and 11; I: 4 and 9 ...), which suggests quarter-tone (e.g. Arabic) scales, but that is inference. A name would only restate the type number.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning (scale-tune type 16..22) established; the presets' identities are not",
+  "evidence": [
+   "audio/note_voice_mapping.s:19343 `lda xhl, (SemitoneBias_TableM:24)` -- type 21 returns SemitoneBias_TableM"
+  ]
+ },
+ {
+  "old": "SeqVoice_CheckAndRet_Data_Case22",
+  "verdict": "refuse",
+  "why_refused": "The switched value is established -- scale-tune type 16..22 (record 0x92 +0, biased by 16) -- and each case returns one preset offset table (SemitoneBias_TableH..N), but neither the ROM nor any doc names these presets; the tables lower particular degrees by 0x40 (H: degrees 4 and 11; I: 4 and 9 ...), which suggests quarter-tone (e.g. Arabic) scales, but that is inference. A name would only restate the type number.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning (scale-tune type 16..22) established; the presets' identities are not",
+  "evidence": [
+   "audio/note_voice_mapping.s:19346 `lda xhl, (SemitoneBias_TableN:24)` -- type 22 returns SemitoneBias_TableN"
+  ]
+ },
+ {
+  "old": "SendEpilogue_Data_Helper",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ScaleTune_TypeToModeCode",
+  "header": "Maps scale-tune type A to the mode word sent with F0 50 86: 0, 3-5, 16-22 and 128 to themselves, 64-66 to 0xFF40-0xFF42 (high byte set: no 12-note table is sent), others to 0. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "audio/note_voice_mapping.s:18553 `calr SendEpilogue_Data_Helper` -- called with A = scale-tune type (id 0x4281); the low byte of the result is sent as F0 50 86 (18556-18559)",
+   "audio/note_voice_mapping.s:18561 `and wa, 65280` -- a result with a high byte skips sending the 12-note table",
+   "audio/note_voice_mapping.s:19387 `ldw hl, 65344` -- types 64/65/66 -> 0xFF40/0xFF41/0xFF42 (19387-19393); 0, 3-5, 16-22, 128 -> themselves (19384, 19396-19426); other values -> 0 (19429)"
+  ]
+ },
+ {
+  "old": "SendEpilogue_Data_Helper_Case16",
+  "verdict": "refuse",
+  "why_refused": "The switched value is established -- scale-tune type 16..22 (biased by 16) -- but each case only returns the type number itself as the F0 50 86 mode byte; the presets are not named anywhere, so a name would only restate the number.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning (scale-tune type 16..22) established; presets unnamed",
+  "evidence": [
+   "audio/note_voice_mapping.s:19373 `sub wa, 16` -- switch on type - 16, 0..6 (`cp wa, 6:i3` 19376) through SendEpilogueC_SwitchOffsets (19379)",
+   "audio/note_voice_mapping.s:19405 `ldw hl, 16` -- type 16 returns 16"
+  ]
+ },
+ {
+  "old": "SendEpilogue_Data_Helper_Case17",
+  "verdict": "refuse",
+  "why_refused": "The switched value is established -- scale-tune type 16..22 (biased by 16) -- but each case only returns the type number itself as the F0 50 86 mode byte; the presets are not named anywhere, so a name would only restate the number.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning (scale-tune type 16..22) established; presets unnamed",
+  "evidence": [
+   "audio/note_voice_mapping.s:19408 `ldw hl, 17` -- type 17 returns 17"
+  ]
+ },
+ {
+  "old": "SendEpilogue_Data_Helper_Case18",
+  "verdict": "refuse",
+  "why_refused": "The switched value is established -- scale-tune type 16..22 (biased by 16) -- but each case only returns the type number itself as the F0 50 86 mode byte; the presets are not named anywhere, so a name would only restate the number.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning (scale-tune type 16..22) established; presets unnamed",
+  "evidence": [
+   "audio/note_voice_mapping.s:19411 `ldw hl, 18` -- type 18 returns 18"
+  ]
+ },
+ {
+  "old": "SendEpilogue_Data_Helper_Case19",
+  "verdict": "refuse",
+  "why_refused": "The switched value is established -- scale-tune type 16..22 (biased by 16) -- but each case only returns the type number itself as the F0 50 86 mode byte; the presets are not named anywhere, so a name would only restate the number.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning (scale-tune type 16..22) established; presets unnamed",
+  "evidence": [
+   "audio/note_voice_mapping.s:19414 `ldw hl, 19` -- type 19 returns 19"
+  ]
+ },
+ {
+  "old": "SendEpilogue_Data_Helper_Case20",
+  "verdict": "refuse",
+  "why_refused": "The switched value is established -- scale-tune type 16..22 (biased by 16) -- but each case only returns the type number itself as the F0 50 86 mode byte; the presets are not named anywhere, so a name would only restate the number.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning (scale-tune type 16..22) established; presets unnamed",
+  "evidence": [
+   "audio/note_voice_mapping.s:19417 `ldw hl, 20` -- type 20 returns 20"
+  ]
+ },
+ {
+  "old": "SendEpilogue_Data_Helper_Case21",
+  "verdict": "refuse",
+  "why_refused": "The switched value is established -- scale-tune type 16..22 (biased by 16) -- but each case only returns the type number itself as the F0 50 86 mode byte; the presets are not named anywhere, so a name would only restate the number.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning (scale-tune type 16..22) established; presets unnamed",
+  "evidence": [
+   "audio/note_voice_mapping.s:19420 `ldw hl, 21` -- type 21 returns 21"
+  ]
+ },
+ {
+  "old": "SendEpilogue_Data_Helper_Case22",
+  "verdict": "refuse",
+  "why_refused": "The switched value is established -- scale-tune type 16..22 (biased by 16) -- but each case only returns the type number itself as the F0 50 86 mode byte; the presets are not named anywhere, so a name would only restate the number.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning (scale-tune type 16..22) established; presets unnamed",
+  "evidence": [
+   "audio/note_voice_mapping.s:19423 `ldw hl, 22` -- type 22 returns 22"
+  ]
+ },
+ {
+  "old": "MIDI_WriteChannelData_Block_Case21",
+  "verdict": "refuse",
+  "why_refused": "The switched value is a part tag (SWBTWR_EVENT_TYPE, biased by 16): the routine returns L = 1 for 0x10..0x14, 0x17 and 0x18 and L = 0 for 0x15/0x16 (this case) and any other tag; UIState_ProcessKeyEvent skips SndParam_ApplyEventField when L != 0. Parts 0x15/0x16 are not identified (README-lsw-panel-schema: drum-kit range, [INFERENCE]) and why exactly these parts are excluded is not established, so neither the case nor the generic owner can be named beyond 'tags 0x15/0x16'.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning (part tag) established; the predicate's purpose and parts 0x15/0x16 are not",
+  "evidence": [
+   "audio/note_voice_mapping.s:17160 `ld (xsp+0:8), (SWBTWR_EVENT_TYPE)` -- the caller passes the event's record tag (17179-17181)",
+   "audio/note_voice_mapping.s:19614 `sub wa, 16` -- switch on tag - 0x10, 0..8 (`cp wa, 8` 19617)",
+   "ui_widgets/widget_dispatch.s:8569 `.short MIDI_WriteChannelData_Block_Case21 - SendAllSoundOff_Flush_Code` -- entries 5 and 6 = tags 0x15, 0x16; the others go to `ld l, 1:opc` (19625)",
+   "audio/note_voice_mapping.s:19627 `ret` -- returns L = 0",
+   "audio/note_voice_mapping.s:17183 `jrl nz, SndParam_ProcessEntry_Epilogue` -- L != 0 skips applying the event",
+   "../../analysis/disk-format-probes/README-lsw-panel-schema.md:160 `[INFERENCE: drum-kit numbers]` -- tags 0x15 0x16 0x19 0x17 0x18 are only guessed (line 159-160)"
+  ]
+ },
+ {
+  "old": "Param_SignExtendReturn_Helper3_Switch2_Case1",
+  "verdict": "refuse",
+  "why_refused": "The switched values are range classes of a received SysEx parameter address (address < 16, 16..101 via ParamSx_CaseMapA, 102.. modulo 81 via ParamSx_CaseMapB, 426.. modulo 11; Switch5/Switch6 likewise via ParamSx_CaseMapE/D). The parameter address space is not identified, Switch5 and Switch6 belong to a second, unlabelled routine (entry `dec 6, xsp` at note_voice_mapping.s:25258), and the shared exit Param_SignExtendReturn_Helper2 (`ld hl, wa / cpl bc / and hl, bc / retd 4`) does not use the pushed limits, so even what the cases do is unclear. The owner label is generic and its routine unidentified, so the cases are refused.",
+  "new": null,
+  "header": "",
+  "basis": "switch value = range class of an unidentified SysEx parameter address",
+  "evidence": [
+   "audio/note_voice_mapping.s:25493 `calr Param_SignExtendReturn_Helper3` -- caller: per received data byte of a SysEx block (nibble pairs, 25484-25491), C = the byte, XWA = the address",
+   "audio/note_voice_mapping.s:25116 `ld xbc, 81` -- addresses 102.. are taken modulo 81 and mapped through ParamSx_CaseMapB (25120) to the case number",
+   "audio/note_voice_mapping.s:25082 `ld hl, wa` -- the common exit returns WA & ~BC (25083-25085), discarding the two pushed words",
+   "audio/note_voice_mapping.s:25139 `pushw 128` -- the case's first pushed limit"
+  ]
+ },
+ {
+  "old": "Param_SignExtendReturn_Helper3_Switch2_Case2",
+  "verdict": "refuse",
+  "why_refused": "The switched values are range classes of a received SysEx parameter address (address < 16, 16..101 via ParamSx_CaseMapA, 102.. modulo 81 via ParamSx_CaseMapB, 426.. modulo 11; Switch5/Switch6 likewise via ParamSx_CaseMapE/D). The parameter address space is not identified, Switch5 and Switch6 belong to a second, unlabelled routine (entry `dec 6, xsp` at note_voice_mapping.s:25258), and the shared exit Param_SignExtendReturn_Helper2 (`ld hl, wa / cpl bc / and hl, bc / retd 4`) does not use the pushed limits, so even what the cases do is unclear. The owner label is generic and its routine unidentified, so the cases are refused.",
+  "new": null,
+  "header": "",
+  "basis": "switch value = range class of an unidentified SysEx parameter address",
+  "evidence": [
+   "audio/note_voice_mapping.s:25147 `pushw 127` -- the case's first pushed limit"
+  ]
+ },
+ {
+  "old": "Param_SignExtendReturn_Helper3_Switch2_Case4",
+  "verdict": "refuse",
+  "why_refused": "The switched values are range classes of a received SysEx parameter address (address < 16, 16..101 via ParamSx_CaseMapA, 102.. modulo 81 via ParamSx_CaseMapB, 426.. modulo 11; Switch5/Switch6 likewise via ParamSx_CaseMapE/D). The parameter address space is not identified, Switch5 and Switch6 belong to a second, unlabelled routine (entry `dec 6, xsp` at note_voice_mapping.s:25258), and the shared exit Param_SignExtendReturn_Helper2 (`ld hl, wa / cpl bc / and hl, bc / retd 4`) does not use the pushed limits, so even what the cases do is unclear. The owner label is generic and its routine unidentified, so the cases are refused.",
+  "new": null,
+  "header": "",
+  "basis": "switch value = range class of an unidentified SysEx parameter address",
+  "evidence": [
+   "audio/note_voice_mapping.s:25155 `pushw 24` -- the case's first pushed limit"
+  ]
+ },
+ {
+  "old": "Param_SignExtendReturn_Helper3_Switch2_Case5",
+  "verdict": "refuse",
+  "why_refused": "The switched values are range classes of a received SysEx parameter address (address < 16, 16..101 via ParamSx_CaseMapA, 102.. modulo 81 via ParamSx_CaseMapB, 426.. modulo 11; Switch5/Switch6 likewise via ParamSx_CaseMapE/D). The parameter address space is not identified, Switch5 and Switch6 belong to a second, unlabelled routine (entry `dec 6, xsp` at note_voice_mapping.s:25258), and the shared exit Param_SignExtendReturn_Helper2 (`ld hl, wa / cpl bc / and hl, bc / retd 4`) does not use the pushed limits, so even what the cases do is unclear. The owner label is generic and its routine unidentified, so the cases are refused.",
+  "new": null,
+  "header": "",
+  "basis": "switch value = range class of an unidentified SysEx parameter address",
+  "evidence": [
+   "audio/note_voice_mapping.s:25163 `pushw 50` -- the case's first pushed limit"
+  ]
+ },
+ {
+  "old": "Param_SignExtendReturn_Helper3_Switch2_Case6",
+  "verdict": "refuse",
+  "why_refused": "The switched values are range classes of a received SysEx parameter address (address < 16, 16..101 via ParamSx_CaseMapA, 102.. modulo 81 via ParamSx_CaseMapB, 426.. modulo 11; Switch5/Switch6 likewise via ParamSx_CaseMapE/D). The parameter address space is not identified, Switch5 and Switch6 belong to a second, unlabelled routine (entry `dec 6, xsp` at note_voice_mapping.s:25258), and the shared exit Param_SignExtendReturn_Helper2 (`ld hl, wa / cpl bc / and hl, bc / retd 4`) does not use the pushed limits, so even what the cases do is unclear. The owner label is generic and its routine unidentified, so the cases are refused.",
+  "new": null,
+  "header": "",
+  "basis": "switch value = range class of an unidentified SysEx parameter address",
+  "evidence": [
+   "audio/note_voice_mapping.s:25171 `pushw 100` -- the case's first pushed limit"
+  ]
+ },
+ {
+  "old": "Param_SignExtendReturn_Helper3_Switch3_Case1",
+  "verdict": "refuse",
+  "why_refused": "The switched values are range classes of a received SysEx parameter address (address < 16, 16..101 via ParamSx_CaseMapA, 102.. modulo 81 via ParamSx_CaseMapB, 426.. modulo 11; Switch5/Switch6 likewise via ParamSx_CaseMapE/D). The parameter address space is not identified, Switch5 and Switch6 belong to a second, unlabelled routine (entry `dec 6, xsp` at note_voice_mapping.s:25258), and the shared exit Param_SignExtendReturn_Helper2 (`ld hl, wa / cpl bc / and hl, bc / retd 4`) does not use the pushed limits, so even what the cases do is unclear. The owner label is generic and its routine unidentified, so the cases are refused.",
+  "new": null,
+  "header": "",
+  "basis": "switch value = range class of an unidentified SysEx parameter address",
+  "evidence": [
+   "audio/note_voice_mapping.s:25188 `add xbc, ParamSx_CaseMapA` -- addresses 16..92 (25183-25187) mapped through ParamSx_CaseMapA",
+   "audio/note_voice_mapping.s:25207 `pushw 66` -- the case's first pushed limit"
+  ]
+ },
+ {
+  "old": "Param_SignExtendReturn_Helper3_Switch3_Case2",
+  "verdict": "refuse",
+  "why_refused": "The switched values are range classes of a received SysEx parameter address (address < 16, 16..101 via ParamSx_CaseMapA, 102.. modulo 81 via ParamSx_CaseMapB, 426.. modulo 11; Switch5/Switch6 likewise via ParamSx_CaseMapE/D). The parameter address space is not identified, Switch5 and Switch6 belong to a second, unlabelled routine (entry `dec 6, xsp` at note_voice_mapping.s:25258), and the shared exit Param_SignExtendReturn_Helper2 (`ld hl, wa / cpl bc / and hl, bc / retd 4`) does not use the pushed limits, so even what the cases do is unclear. The owner label is generic and its routine unidentified, so the cases are refused.",
+  "new": null,
+  "header": "",
+  "basis": "switch value = range class of an unidentified SysEx parameter address",
+  "evidence": [
+   "audio/note_voice_mapping.s:25215 `pushw 49` -- the case's first pushed limit"
+  ]
+ },
+ {
+  "old": "Param_SignExtendReturn_Helper3_Switch3_Case3",
+  "verdict": "refuse",
+  "why_refused": "The switched values are range classes of a received SysEx parameter address (address < 16, 16..101 via ParamSx_CaseMapA, 102.. modulo 81 via ParamSx_CaseMapB, 426.. modulo 11; Switch5/Switch6 likewise via ParamSx_CaseMapE/D). The parameter address space is not identified, Switch5 and Switch6 belong to a second, unlabelled routine (entry `dec 6, xsp` at note_voice_mapping.s:25258), and the shared exit Param_SignExtendReturn_Helper2 (`ld hl, wa / cpl bc / and hl, bc / retd 4`) does not use the pushed limits, so even what the cases do is unclear. The owner label is generic and its routine unidentified, so the cases are refused.",
+  "new": null,
+  "header": "",
+  "basis": "switch value = range class of an unidentified SysEx parameter address",
+  "evidence": [
+   "audio/note_voice_mapping.s:25223 `pushw 127` -- the case's first pushed limit"
+  ]
+ },
+ {
+  "old": "Param_SignExtendReturn_Helper3_Switch3_Case4",
+  "verdict": "refuse",
+  "why_refused": "The switched values are range classes of a received SysEx parameter address (address < 16, 16..101 via ParamSx_CaseMapA, 102.. modulo 81 via ParamSx_CaseMapB, 426.. modulo 11; Switch5/Switch6 likewise via ParamSx_CaseMapE/D). The parameter address space is not identified, Switch5 and Switch6 belong to a second, unlabelled routine (entry `dec 6, xsp` at note_voice_mapping.s:25258), and the shared exit Param_SignExtendReturn_Helper2 (`ld hl, wa / cpl bc / and hl, bc / retd 4`) does not use the pushed limits, so even what the cases do is unclear. The owner label is generic and its routine unidentified, so the cases are refused.",
+  "new": null,
+  "header": "",
+  "basis": "switch value = range class of an unidentified SysEx parameter address",
+  "evidence": [
+   "audio/note_voice_mapping.s:25231 `pushw 10` -- the case's first pushed limit"
+  ]
+ },
+ {
+  "old": "Param_SignExtendReturn_Helper3_Switch3_Case5",
+  "verdict": "refuse",
+  "why_refused": "The switched values are range classes of a received SysEx parameter address (address < 16, 16..101 via ParamSx_CaseMapA, 102.. modulo 81 via ParamSx_CaseMapB, 426.. modulo 11; Switch5/Switch6 likewise via ParamSx_CaseMapE/D). The parameter address space is not identified, Switch5 and Switch6 belong to a second, unlabelled routine (entry `dec 6, xsp` at note_voice_mapping.s:25258), and the shared exit Param_SignExtendReturn_Helper2 (`ld hl, wa / cpl bc / and hl, bc / retd 4`) does not use the pushed limits, so even what the cases do is unclear. The owner label is generic and its routine unidentified, so the cases are refused.",
+  "new": null,
+  "header": "",
+  "basis": "switch value = range class of an unidentified SysEx parameter address",
+  "evidence": [
+   "audio/note_voice_mapping.s:25239 `pushw 50` -- the case's first pushed limit"
+  ]
+ },
+ {
+  "old": "Param_SignExtendReturn_Helper3_Switch3_Case6",
+  "verdict": "refuse",
+  "why_refused": "The switched values are range classes of a received SysEx parameter address (address < 16, 16..101 via ParamSx_CaseMapA, 102.. modulo 81 via ParamSx_CaseMapB, 426.. modulo 11; Switch5/Switch6 likewise via ParamSx_CaseMapE/D). The parameter address space is not identified, Switch5 and Switch6 belong to a second, unlabelled routine (entry `dec 6, xsp` at note_voice_mapping.s:25258), and the shared exit Param_SignExtendReturn_Helper2 (`ld hl, wa / cpl bc / and hl, bc / retd 4`) does not use the pushed limits, so even what the cases do is unclear. The owner label is generic and its routine unidentified, so the cases are refused.",
+  "new": null,
+  "header": "",
+  "basis": "switch value = range class of an unidentified SysEx parameter address",
+  "evidence": [
+   "audio/note_voice_mapping.s:25247 `pushw 30` -- the case's first pushed limit"
+  ]
+ },
+ {
+  "old": "Param_SignExtendReturn_Helper3_Switch5_Case1",
+  "verdict": "refuse",
+  "why_refused": "The switched values are range classes of a received SysEx parameter address (address < 16, 16..101 via ParamSx_CaseMapA, 102.. modulo 81 via ParamSx_CaseMapB, 426.. modulo 11; Switch5/Switch6 likewise via ParamSx_CaseMapE/D). The parameter address space is not identified, Switch5 and Switch6 belong to a second, unlabelled routine (entry `dec 6, xsp` at note_voice_mapping.s:25258), and the shared exit Param_SignExtendReturn_Helper2 (`ld hl, wa / cpl bc / and hl, bc / retd 4`) does not use the pushed limits, so even what the cases do is unclear. The owner label is generic and its routine unidentified, so the cases are refused.",
+  "new": null,
+  "header": "",
+  "basis": "switch value = range class of an unidentified SysEx parameter address",
+  "evidence": [
+   "audio/note_voice_mapping.s:25258 `dec 6, xsp` -- a second routine with no label begins here (after the `ret` at 25257)",
+   "audio/note_voice_mapping.s:25317 `add xwa, ParamSx_CaseMapE` -- its own address classes",
+   "audio/note_voice_mapping.s:25333 `pushw 127` -- the case's first pushed limit"
+  ]
+ },
+ {
+  "old": "Param_SignExtendReturn_Helper3_Switch5_Case6",
+  "verdict": "refuse",
+  "why_refused": "The switched values are range classes of a received SysEx parameter address (address < 16, 16..101 via ParamSx_CaseMapA, 102.. modulo 81 via ParamSx_CaseMapB, 426.. modulo 11; Switch5/Switch6 likewise via ParamSx_CaseMapE/D). The parameter address space is not identified, Switch5 and Switch6 belong to a second, unlabelled routine (entry `dec 6, xsp` at note_voice_mapping.s:25258), and the shared exit Param_SignExtendReturn_Helper2 (`ld hl, wa / cpl bc / and hl, bc / retd 4`) does not use the pushed limits, so even what the cases do is unclear. The owner label is generic and its routine unidentified, so the cases are refused.",
+  "new": null,
+  "header": "",
+  "basis": "switch value = range class of an unidentified SysEx parameter address",
+  "evidence": [
+   "audio/note_voice_mapping.s:25340 `pushw 50` -- the case's first pushed limit"
+  ]
+ },
+ {
+  "old": "Param_SignExtendReturn_Helper3_Switch5_Case2",
+  "verdict": "refuse",
+  "why_refused": "The switched values are range classes of a received SysEx parameter address (address < 16, 16..101 via ParamSx_CaseMapA, 102.. modulo 81 via ParamSx_CaseMapB, 426.. modulo 11; Switch5/Switch6 likewise via ParamSx_CaseMapE/D). The parameter address space is not identified, Switch5 and Switch6 belong to a second, unlabelled routine (entry `dec 6, xsp` at note_voice_mapping.s:25258), and the shared exit Param_SignExtendReturn_Helper2 (`ld hl, wa / cpl bc / and hl, bc / retd 4`) does not use the pushed limits, so even what the cases do is unclear. The owner label is generic and its routine unidentified, so the cases are refused.",
+  "new": null,
+  "header": "",
+  "basis": "switch value = range class of an unidentified SysEx parameter address",
+  "evidence": [
+   "audio/note_voice_mapping.s:25347 `pushw 128` -- the case's first pushed limit"
+  ]
+ },
+ {
+  "old": "Param_SignExtendReturn_Helper3_Switch5_Case3",
+  "verdict": "refuse",
+  "why_refused": "The switched values are range classes of a received SysEx parameter address (address < 16, 16..101 via ParamSx_CaseMapA, 102.. modulo 81 via ParamSx_CaseMapB, 426.. modulo 11; Switch5/Switch6 likewise via ParamSx_CaseMapE/D). The parameter address space is not identified, Switch5 and Switch6 belong to a second, unlabelled routine (entry `dec 6, xsp` at note_voice_mapping.s:25258), and the shared exit Param_SignExtendReturn_Helper2 (`ld hl, wa / cpl bc / and hl, bc / retd 4`) does not use the pushed limits, so even what the cases do is unclear. The owner label is generic and its routine unidentified, so the cases are refused.",
+  "new": null,
+  "header": "",
+  "basis": "switch value = range class of an unidentified SysEx parameter address",
+  "evidence": [
+   "audio/note_voice_mapping.s:25354 `pushw 127` -- the case's first pushed limit"
+  ]
+ },
+ {
+  "old": "Param_SignExtendReturn_Helper3_Switch5_Case4",
+  "verdict": "refuse",
+  "why_refused": "The switched values are range classes of a received SysEx parameter address (address < 16, 16..101 via ParamSx_CaseMapA, 102.. modulo 81 via ParamSx_CaseMapB, 426.. modulo 11; Switch5/Switch6 likewise via ParamSx_CaseMapE/D). The parameter address space is not identified, Switch5 and Switch6 belong to a second, unlabelled routine (entry `dec 6, xsp` at note_voice_mapping.s:25258), and the shared exit Param_SignExtendReturn_Helper2 (`ld hl, wa / cpl bc / and hl, bc / retd 4`) does not use the pushed limits, so even what the cases do is unclear. The owner label is generic and its routine unidentified, so the cases are refused.",
+  "new": null,
+  "header": "",
+  "basis": "switch value = range class of an unidentified SysEx parameter address",
+  "evidence": [
+   "audio/note_voice_mapping.s:25361 `pushw 50` -- the case's first pushed limit"
+  ]
+ },
+ {
+  "old": "Param_SignExtendReturn_Helper3_Switch5_Case5",
+  "verdict": "refuse",
+  "why_refused": "The switched values are range classes of a received SysEx parameter address (address < 16, 16..101 via ParamSx_CaseMapA, 102.. modulo 81 via ParamSx_CaseMapB, 426.. modulo 11; Switch5/Switch6 likewise via ParamSx_CaseMapE/D). The parameter address space is not identified, Switch5 and Switch6 belong to a second, unlabelled routine (entry `dec 6, xsp` at note_voice_mapping.s:25258), and the shared exit Param_SignExtendReturn_Helper2 (`ld hl, wa / cpl bc / and hl, bc / retd 4`) does not use the pushed limits, so even what the cases do is unclear. The owner label is generic and its routine unidentified, so the cases are refused.",
+  "new": null,
+  "header": "",
+  "basis": "switch value = range class of an unidentified SysEx parameter address",
+  "evidence": [
+   "audio/note_voice_mapping.s:25368 `pushw 100` -- the case's first pushed limit"
+  ]
+ },
+ {
+  "old": "Param_SignExtendReturn_Helper3_Switch6_Case1",
+  "verdict": "refuse",
+  "why_refused": "The switched values are range classes of a received SysEx parameter address (address < 16, 16..101 via ParamSx_CaseMapA, 102.. modulo 81 via ParamSx_CaseMapB, 426.. modulo 11; Switch5/Switch6 likewise via ParamSx_CaseMapE/D). The parameter address space is not identified, Switch5 and Switch6 belong to a second, unlabelled routine (entry `dec 6, xsp` at note_voice_mapping.s:25258), and the shared exit Param_SignExtendReturn_Helper2 (`ld hl, wa / cpl bc / and hl, bc / retd 4`) does not use the pushed limits, so even what the cases do is unclear. The owner label is generic and its routine unidentified, so the cases are refused.",
+  "new": null,
+  "header": "",
+  "basis": "switch value = range class of an unidentified SysEx parameter address",
+  "evidence": [
+   "audio/note_voice_mapping.s:25386 `add xbc, ParamSx_CaseMapD` -- address classes of the same unlabelled routine",
+   "audio/note_voice_mapping.s:25402 `pushw 49` -- the case's first pushed limit"
+  ]
+ },
+ {
+  "old": "Param_SignExtendReturn_Helper3_Switch6_Case2",
+  "verdict": "refuse",
+  "why_refused": "The switched values are range classes of a received SysEx parameter address (address < 16, 16..101 via ParamSx_CaseMapA, 102.. modulo 81 via ParamSx_CaseMapB, 426.. modulo 11; Switch5/Switch6 likewise via ParamSx_CaseMapE/D). The parameter address space is not identified, Switch5 and Switch6 belong to a second, unlabelled routine (entry `dec 6, xsp` at note_voice_mapping.s:25258), and the shared exit Param_SignExtendReturn_Helper2 (`ld hl, wa / cpl bc / and hl, bc / retd 4`) does not use the pushed limits, so even what the cases do is unclear. The owner label is generic and its routine unidentified, so the cases are refused.",
+  "new": null,
+  "header": "",
+  "basis": "switch value = range class of an unidentified SysEx parameter address",
+  "evidence": [
+   "audio/note_voice_mapping.s:25409 `pushw 127` -- the case's first pushed limit"
+  ]
+ },
+ {
+  "old": "HdaeRom_DataHandler_Case1",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "HdaeRom_DataHandler_ConvertKn2000MkaMkb",
+  "header": "Image ids 1-3 (KN2000, MKA, MKB): converts the image's 144-byte records (base +80) to 470-byte KN5000 records (base +16).",
+  "basis": "switch value meaning (sound-RAM image model id from SendPartDataBlock_InitVal4: 1 KN2000, 2 MKA, 3 MKB, 4 KN3000, 5 KN1500, 6 KN5000) + body",
+  "evidence": [
+   "audio/note_voice_mapping.s:27362 `calr SendPartDataBlock_InitVal4` -- identifies the image at 0x1E0000 by its ID string",
+   "audio/note_voice_mapping.s:27206 `ld l, 0x6:opc` -- 'KN5000 SOUND RAM' (27187) = 6; KN1500 = 5 (27230), KN3000 = 4 (27254), KN2000 = 1 (27281), MKA = 2 (27308), MKB = 3 (27335)",
+   "audio/note_voice_mapping.s:27365 `dec 1, hl` -- table index = id - 1 (`cp hl, 5:i3` 27368)",
+   "ui_widgets/widget_dispatch.s:9413 `.short HdaeRom_DataHandler_Case1 - HdaeRom_DataDispatch` -- entries 0..2 (ids 1-3); id 5 (KN1500) = HdaeRom_DataDispatch (9417), ids 4 and 6 skip (9416, 9418)",
+   "audio/note_voice_mapping.s:27417 `ldw (xsp+4), 36` -- 36 records: source base+80+144*n (27425-27428, 72 words copied at 27432) -> 470-byte record at base+16 (27434-27440, HdaeRom_DataHandler_Helper2)"
+  ]
+ },
+ {
+  "old": "HdaeRom_AltHandler_Case6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "HdaeRom_AltHandler_Kn5000Image",
+  "header": "Image id 6 (KN5000 SOUND RAM): nothing to convert, result 0.",
+  "basis": "switch value meaning (sound-RAM image model id from SendPartDataBlock_InitVal4: 1 KN2000, 2 MKA, 3 MKB, 4 KN3000, 5 KN1500, 6 KN5000) + body",
+  "evidence": [
+   "audio/note_voice_mapping.s:27550 `calr SendPartDataBlock_InitVal4` -- switch value = the image's model id (index id - 1, 27552 `dec 1, hl`)",
+   "ui_widgets/widget_dispatch.s:9427 `.short HdaeRom_AltHandler_Case6 - HdaeRom_AltDispatch` -- entry 5 = id 6 (KN5000); id 4 (KN3000) = HdaeRom_AltDispatch (9425), ids 1-3 and 5 -> 0xFF9A (27571)",
+   "audio/note_voice_mapping.s:27567 `ld iz, 0:i3` -- result 0, nothing converted; the ID string is then (re)written and the checksum redone (27573-27583)"
+  ]
+ },
+ {
+  "old": "TmFlash_BulkTransferToSubCPU_Case5",
+  "verdict": "refuse",
+  "why_refused": "The switched value is established -- the sound-RAM image's model id (SendPartDataBlock_InitVal4, index id - 1): this case = id 5 (KN1500, 289-byte records) -- but the switch is not in TmFlash_BulkTransferToSubCPU: it is in an unlabelled routine (the code after the `ret` at note_voice_mapping.s:27912, entry `dec 4, xsp` at 27913 = 0xFF07C7) that returns the address of record BC in the image at XWA, and no pointer in the v10/HDAE5000/custom-data ROMs names it. A case name needs that owner labelled first (suggested owner SoundRamImage_RecordAddress, cases _Kn1500Record / _Kn2000MkaMkbRecord).",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning (sound-RAM image model id) established; owner routine unlabelled",
+  "evidence": [
+   "audio/note_voice_mapping.s:27918 `calr SendPartDataBlock_InitVal4` -- switch value = model id - 1 (27922 `dec 1, hl`)",
+   "ui_widgets/widget_dispatch.s:9435 `.short TmFlash_BulkTransferToSubCPU_Case5 - VoiceParam_DispatchTable1` -- entry 4 = id 5 (KN1500)",
+   "audio/note_voice_mapping.s:27936 `ld xbc, 289` -- record size 289",
+   "audio/note_voice_mapping.s:27913 `dec 4, xsp` -- the owning routine's entry, with no label"
+  ]
+ },
+ {
+  "old": "TmFlash_BulkTransferToSubCPU_Case1",
+  "verdict": "refuse",
+  "why_refused": "The switched value is established -- the sound-RAM image's model id (SendPartDataBlock_InitVal4, index id - 1): this case = ids 1-3 (KN2000/MKA/MKB, 144-byte records at +80) -- but the switch is not in TmFlash_BulkTransferToSubCPU: it is in an unlabelled routine (the code after the `ret` at note_voice_mapping.s:27912, entry `dec 4, xsp` at 27913 = 0xFF07C7) that returns the address of record BC in the image at XWA, and no pointer in the v10/HDAE5000/custom-data ROMs names it. A case name needs that owner labelled first (suggested owner SoundRamImage_RecordAddress, cases _Kn1500Record / _Kn2000MkaMkbRecord).",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning (sound-RAM image model id) established; owner routine unlabelled",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:9431 `.short TmFlash_BulkTransferToSubCPU_Case1 - VoiceParam_DispatchTable1` -- entries 0..2 = ids 1-3",
+   "audio/note_voice_mapping.s:27947 `add xbc, 80` -- 144*BC + 80 (27943-27947)"
+  ]
+ },
+ {
+  "old": "TmFlash_BulkTransferToSubCPU_Switch2_Case5",
+  "verdict": "refuse",
+  "why_refused": "The switched value is established -- the sound-RAM image's model id (index id - 1): this case = id 5 (KN1500, 289-byte records) -- but the switch is in a second unlabelled routine (entry `dec 8, xsp` at note_voice_mapping.s:27980 = 0xFF0870, after the `ret` at 27979) that returns the offset and size of record BC, not in TmFlash_BulkTransferToSubCPU; no pointer names it. A case name needs that owner labelled first (suggested owner SoundRamImage_RecordOffsetAndSize, cases _Kn1500Record / _Kn2000MkaMkbRecord).",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning (sound-RAM image model id) established; owner routine unlabelled",
+  "evidence": [
+   "audio/note_voice_mapping.s:27986 `calr SendPartDataBlock_InitVal4` -- switch value = model id - 1 (27990 `dec 1, hl`)",
+   "ui_widgets/widget_dispatch.s:9444 `.short TmFlash_BulkTransferToSubCPU_Switch2_Case5 - VoiceParam_DispatchTable1_Code` -- entry 4 = id 5 (KN1500)",
+   "audio/note_voice_mapping.s:28013 `ld xbc, 0x121` -- record size 289 (0x121, 28020)",
+   "audio/note_voice_mapping.s:27980 `dec 8, xsp` -- the owning routine's entry, with no label"
+  ]
+ },
+ {
+  "old": "TmFlash_BulkTransferToSubCPU_Switch2_Case1",
+  "verdict": "refuse",
+  "why_refused": "The switched value is established -- the sound-RAM image's model id (index id - 1): this case = ids 1-3 (KN2000/MKA/MKB, 144-byte records at +80) -- but the switch is in a second unlabelled routine (entry `dec 8, xsp` at note_voice_mapping.s:27980 = 0xFF0870, after the `ret` at 27979) that returns the offset and size of record BC, not in TmFlash_BulkTransferToSubCPU; no pointer names it. A case name needs that owner labelled first (suggested owner SoundRamImage_RecordOffsetAndSize, cases _Kn1500Record / _Kn2000MkaMkbRecord).",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning (sound-RAM image model id) established; owner routine unlabelled",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:9440 `.short TmFlash_BulkTransferToSubCPU_Switch2_Case1 - VoiceParam_DispatchTable1_Code` -- entries 0..2 = ids 1-3",
+   "audio/note_voice_mapping.s:28033 `ldw wa, 144` -- record size 144, offset 144*BC + 80 (28024-28027)"
+  ]
+ },
+ {
+  "old": "SetWallPaper_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SetWallPaper_MenuWallBorder",
+  "header": "Border type 2: wallpaper 2 when the WallMenu setting (0x340FC) is set, else wallpaper 1.",
+  "basis": "switch value meaning (the screen's box border type, the MT_GetBoxBorder answer) + body (reads WallMenuEditCheck's RAM word)",
+  "evidence": [
+   "audio/presentation_sound_nav.s:582 `ld xbc, EVT_GET_BOX_BORDER` -- the caller passes the screen's border/wallpaper type (586 `calr SetWallPaper`)",
+   "audio/presentation_sound_nav.s:851 `cp wa, 5:i3` -- switch on that type, 0..5",
+   "ui_widgets/disk_warning_strings.s:275 `.short SetWallPaper_Case2 - SetWallPaper_DispatchData` -- entry 2",
+   "audio/presentation_sound_nav.s:874 `cpw (0x0340fc:24), 0` -- wallpaper 1 when 0x340FC is 0, else 2 (875-877), passed to ChangeWall",
+   "display/graphics_text_vga.s:4597 `lda xhl, (0x0340fc:24)` -- 0x340FC is WallMenuEditCheck's RAM word (firmware name, NAKA_APFUNC_WallMenuEditCheck); types 0 and 1 use WallOth 0x340FE and WallHome 0x340FA (audio/presentation_sound_nav.s:860 and :868)"
+  ]
+ },
+ {
+  "old": "SeMenu_CopyWriteUpdate_Entry5_Case4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeDigEff_OnColumn3_Depth",
+  "header": "Types 4/5 ENSEMBLE and 7 ORGAN TREMOLO (DEPTH2), 10/11 SOLO EFFECT (DEPTH): column limits 50 and 0.",
+  "basis": "switch value meaning (sound-editor digital-effect type = (0x660) & 15, names from the bound effect-name table) + body (the column's limits)",
+  "evidence": [
+   "audio/sound_editor_ui.s:6080 `andmi8 (xsp+12), 15` -- switch value = part parameter 0 (SeMenu_LoadPartParam reads (0x660)+index, semenu_routines.s:1189) & 15",
+   "audio/sound_editor_ui.s:15248 `sdb_str 0x0660, 0x0f, 0, 0x20, SeScreenData_0x4EFB, 13, 51*40+17` -- the DIGITAL EFFECT page shows (0x660) & 0x0F as a name from SeScreenData_0x4EFB",
+   "storage/flash_floppy_handlers.s:234 `.ascii \"CELESTE 1    \"` -- types 0..11: CELESTE 1/2, CHORUS 1/2, ENSEMBLE 1/2, TREMOLO, ORGAN TREMOLO, SINGLE DELAY, REPEAT DELAY, SOLO EFFECT 1/2 (234-245)",
+   "audio/sound_editor_ui.s:9628 `ld (1648:16), a` -- the same type selects the screen variant whose column labels the page draws (Records7, 15233-15244)",
+   "audio/sound_editor_ui.s:6074 `SeDigEff_OnColumn3:` -- the real owner (column-3 button handler, SeDigEffTitleFunc_SwitchHandlers entry 2); the switch reads the type at 6091-6098",
+   "kn5000_v10_program.s:1117 `.short SeMenu_CopyWriteUpdate_Entry5_Case4 - SeMenu_CopyWriteUpdate_Step3_Code` -- types 4, 5, 7, 10, 11 (1117-1118, 1120, 1123-1124)",
+   "audio/sound_editor_ui.s:15154 `sd_ptext 0x17, 12, 82, 209, \"DEPTH2\"` -- column 3 is DEPTH2 for ENSEMBLE (also 15186, ORGAN TREMOLO) and DEPTH for SOLO EFFECT (15229)",
+   "audio/sound_editor_ui.s:6122 `ld (xwa+8), 50` -- limits 50 / 0 (6137 `ld (xwa+9), 0`)"
+  ]
+ },
+ {
+  "old": "SeMenu_CopyWriteUpdate_Entry5_Case6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeDigEff_OnColumn3_TremoloWave",
+  "header": "Type 6 TREMOLO: column 3 is WAVE, limits 3 and 0.",
+  "basis": "switch value meaning (sound-editor digital-effect type = (0x660) & 15, names from the bound effect-name table) + body (the column's limits)",
+  "evidence": [
+   "kn5000_v10_program.s:1119 `.short SeMenu_CopyWriteUpdate_Entry5_Case6 - SeMenu_CopyWriteUpdate_Step3_Code` -- type 6 = TREMOLO",
+   "audio/sound_editor_ui.s:15171 `sd_ptext 0x17, 10, 88, 209, \"WAVE\"` -- the tremolo screen's third column is WAVE",
+   "audio/sound_editor_ui.s:6126 `ld (xwa+8), 3` -- limits 3 / 0"
+  ]
+ },
+ {
+  "old": "SeMenu_CopyWriteUpdate_Entry5_Case8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeDigEff_OnColumn3_SingleDelayKey",
+  "header": "Type 8 SINGLE DELAY: column 3 is KEY, limits +24 and -24.",
+  "basis": "switch value meaning (sound-editor digital-effect type = (0x660) & 15, names from the bound effect-name table) + body (the column's limits)",
+  "evidence": [
+   "kn5000_v10_program.s:1121 `.short SeMenu_CopyWriteUpdate_Entry5_Case8 - SeMenu_CopyWriteUpdate_Step3_Code` -- type 8 = SINGLE DELAY",
+   "audio/sound_editor_ui.s:15201 `sd_ptext 0x17, 9, 91, 209, \"KEY\"` -- the single-delay screen's third column is KEY",
+   "audio/sound_editor_ui.s:6130 `ld (xwa+8), 24` -- limits 24 / -24 (6131 `ld (xwa+9), 232`)"
+  ]
+ },
+ {
+  "old": "SeMenu_CopyWriteUpdate_Entry5_Case9",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeDigEff_OnColumn3_RepeatDelaySustain",
+  "header": "Type 9 REPEAT DELAY: column 3 is SUSTAIN, limits 30 and 0.",
+  "basis": "switch value meaning (sound-editor digital-effect type = (0x660) & 15, names from the bound effect-name table) + body (the column's limits)",
+  "evidence": [
+   "kn5000_v10_program.s:1122 `.short SeMenu_CopyWriteUpdate_Entry5_Case9 - SeMenu_CopyWriteUpdate_Step3_Code` -- type 9 = REPEAT DELAY",
+   "audio/sound_editor_ui.s:15216 `sd_ptext 0x17, 13, 80, 209, \"SUSTAIN\"` -- the repeat-delay screen's third column is SUSTAIN",
+   "audio/sound_editor_ui.s:6135 `ld (xwa+8), 30` -- limits 30 / 0"
+  ]
+ },
+ {
+  "old": "SeMenu_CopyWriteUpdate_Entry5_Switch2_Case6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeDigEff_OnColumn4_Balance",
+  "header": "Types 6 TREMOLO and 8 SINGLE DELAY: column 4 is BALANCE, limits 100 and 0.",
+  "basis": "switch value meaning (sound-editor digital-effect type = (0x660) & 15, names from the bound effect-name table) + body (the column's limits)",
+  "evidence": [
+   "audio/sound_editor_ui.s:6142 `SeDigEff_OnColumn4:` -- the real owner; the switch reads the type at 6159-6166 (`cp wa, 9`)",
+   "kn5000_v10_program.s:1134 `.short SeMenu_CopyWriteUpdate_Entry5_Switch2_Case6 - SeMenu_CopyWriteUpdate_Step3_Code_2` -- types 6 and 8 (1134, 1136)",
+   "audio/sound_editor_ui.s:15172 `sd_ptext 0x17, 13, 119, 209, \"BALANCE\"` -- column 4 is BALANCE for TREMOLO and for SINGLE DELAY (15202)",
+   "audio/sound_editor_ui.s:6190 `ld (xwa+8), 100` -- limits 100 / 0"
+  ]
+ },
+ {
+  "old": "SeMenu_CopyWriteUpdate_Entry5_Switch2_Case9",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeDigEff_OnColumn4_RepeatDelayRelease",
+  "header": "Type 9 REPEAT DELAY: column 4 is RELEASE, limits 30 and 0.",
+  "basis": "switch value meaning (sound-editor digital-effect type = (0x660) & 15, names from the bound effect-name table) + body (the column's limits)",
+  "evidence": [
+   "kn5000_v10_program.s:1137 `.short SeMenu_CopyWriteUpdate_Entry5_Switch2_Case9 - SeMenu_CopyWriteUpdate_Step3_Code_2` -- type 9 = REPEAT DELAY",
+   "audio/sound_editor_ui.s:15217 `sd_ptext 0x17, 13, 128, 209, \"RELEASE\"` -- the repeat-delay screen's fourth column is RELEASE",
+   "audio/sound_editor_ui.s:6194 `ld (xwa+8), 30` -- limits 30 / 0"
+  ]
+ },
+ {
+  "old": "SeMenu_CopyWriteUpdate_Entry5_Switch3_Case4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SeDigEff_OnColumn5_EnsembleDetune",
+  "header": "Types 4/5 ENSEMBLE: column 5 is DETUNE, limits +50 and -50.",
+  "basis": "switch value meaning (sound-editor digital-effect type = (0x660) & 15, names from the bound effect-name table) + body (the column's limits)",
+  "evidence": [
+   "audio/sound_editor_ui.s:6199 `SeDigEff_OnColumn5:` -- the real owner; the switch reads the type at 6216-6223 (`cp wa, 5:i3`)",
+   "kn5000_v10_program.s:1145 `.short SeMenu_CopyWriteUpdate_Entry5_Switch3_Case4 - SeMenu_CopyWriteUpdate_Step3_Code_3` -- types 4 and 5 = ENSEMBLE 1/2",
+   "audio/sound_editor_ui.s:15156 `sd_ptext 0x17, 12, 162, 209, \"DETUNE\"` -- the ensemble screen's fifth column is DETUNE",
+   "audio/sound_editor_ui.s:6247 `ld (xwa+8), 50` -- limits 50 / -50 (6248 `ld (xwa+9), 206`)"
+  ]
+ },
+ {
+  "old": "EasyCmp_GridCheck",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AcEasyCmpGridBoxProc_OnGetFixedColStr",
+  "header": "AcEasyCmpGridBoxProc's MT_GetFixedColStr arm: copies the column-header string (view +0x3E) into the caller's buffer. Basis: event code + body.",
+  "basis": "event code + body",
+  "evidence": [
+   "audio/sound_editor_ui.s:16636 `cp xwa, EVT_GET_FIXED_COL_STR` -- AcEasyCmpGridBoxProc (firmware name, NAKA_APFUNC_AcEasyCmpGridBoxProc) jumps here for MT_GetFixedColStr (16637)",
+   "audio/sound_editor_ui.s:16806 `ld xiz, 0x3e` -- copies the column-header string at view+0x3E; the sibling AcEasyCmpGridBoxProc_OnGetFixedRowStr uses +0x42 (16812)"
+  ]
+ },
+ {
+  "old": "EasyCmp_GridCheck_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AcEasyCmpGridBoxProc_CopyFixedHeaderStr",
+  "header": "Copies the header string at view +0x3E (column) or +0x42 (row) into the caller's buffer.",
+  "basis": "event dispatch of AcEasyCmpGridBoxProc (EVT_* codes) + body; the labels sit inside AcEasyCmpGridBoxProc, the batch's owner EasyCmp_GridCheck is its EVT_GET_FIXED_COL_STR arm",
+  "evidence": [
+   "audio/sound_editor_ui.s:16807 `jr EasyCmp_GridCheck_Case2` -- reached from the MT_GetFixedColStr arm (xiz = 0x3E) and, by fall-through, the MT_GetFixedRowStr arm (16812 xiz = 0x42)",
+   "audio/sound_editor_ui.s:16822 `call Strcpy` -- copies the string pointed to by view+xiz to the caller's buffer, returns 0"
+  ]
+ },
+ {
+  "old": "EasyCmp_GridCheck_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AcEasyCmpGridBoxProc_PassToApFunc",
+  "header": "MT_RequestGridDraw, EV_LSWDATA and EV_RAMDATA: passes the event to the box's application function (view +70), returns 0.",
+  "basis": "event dispatch of AcEasyCmpGridBoxProc (EVT_* codes) + body; the labels sit inside AcEasyCmpGridBoxProc, the batch's owner EasyCmp_GridCheck is its EVT_GET_FIXED_COL_STR arm",
+  "evidence": [
+   "audio/sound_editor_ui.s:16632 `jrl z, EasyCmp_GridCheck_Case3` -- taken for EVT_REQUEST_GRID_DRAW (16631)",
+   "ui_widgets/naka_screen_dispatch.s:2154 `.short EasyCmp_GridCheck_Case3 - EasyCmp_DialGrid` -- entries 5 and 6 of the switch on event - EVT_INDEXSW_UP (16640): EVT_LSW_DATA, EVT_RAM_DATA",
+   "audio/sound_editor_ui.s:16833 `call ApFuncCall` -- passes the event to the box's application function (view+70, 16830), returns 0"
+  ]
+ },
+ {
+  "old": "EasyCmp_GridCheck_Case4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AcEasyCmpGridBoxProc_CallInherited",
+  "header": "",
+  "basis": "event dispatch of AcEasyCmpGridBoxProc (EVT_* codes) + body; the labels sit inside AcEasyCmpGridBoxProc, the batch's owner EasyCmp_GridCheck is its EVT_GET_FIXED_COL_STR arm",
+  "evidence": [
+   "ui_widgets/naka_screen_dispatch.s:2153 `.short EasyCmp_GridCheck_Case4 - EasyCmp_DialGrid` -- entry 4 = EVT_INDEX_SELECT; also every event outside the switch (16642, 16644)",
+   "audio/sound_editor_ui.s:16844 `call InheritedProc` -- default handling"
+  ]
+ },
+ {
+  "old": "EasyCmp_GridCheck_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AcEasyCmpGridBoxProc_Epilogue",
+  "header": "",
+  "basis": "common exit of AcEasyCmpGridBoxProc",
+  "evidence": [
+   "audio/sound_editor_ui.s:16837 `jr EasyCmp_GridCheck_Case5` -- reached after `ld xhl, 0:i3` and by fall-through from the default case",
+   "audio/sound_editor_ui.s:16849 `lda xsp, (xsp + 16)` -- releases AcEasyCmpGridBoxProc's frame (16625) and returns"
+  ]
+ },
+ {
+  "old": "EasyCmp_GridEvtEnc_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "EasyCmpGridCheck_DrawVariationCell",
+  "header": "Grid column 2 (variation): prints the row's byte at 0x37B2 with %3d, or OFF when it is 0.",
+  "basis": "grid column of MT_RequestGridDraw ((col<<16)|row) + body; real owner EasyCmpGridCheck (firmware name)",
+  "evidence": [
+   "audio/sound_editor_ui.s:16855 `cp xbc, EVT_REQUEST_GRID_DRAW` -- EasyCmpGridCheck (NAKA_APFUNC_EasyCmpGridCheck) handles the cell redraw request at 16924",
+   "audio/sound_editor_ui.s:16927 `srl xwa, 16` -- column = parameter >> 16, row = low word (16929-16931)",
+   "audio/sound_editor_ui.s:16938 `cp bc, 2:i3` -- column 2 -> this label; column 1 prints a name from the table at 0x3DC92 (16940-16951)",
+   "audio/sound_editor_ui.s:16892 `ld xbc, EVT_ES_CMP_VARI_UP` -- in the dial handler column 2 is the variation (MT_EsCmpVariUp), column 1 the style (16888 `ld xbc, EVT_ES_CMP_STYL_UP`)",
+   "audio/sound_editor_ui.s:16954 `lda xbc, (0x37b2:16)` -- prints the row's byte at 0x37B2+row-2 as \"%3d\", or \"OFF\" when 0 (16958-16977)"
+  ]
+ },
+ {
+  "old": "MspBnk_SendEvt56_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MspBnkShow_SelectPage2",
+  "header": "MSP bank >= 10: switches object 0xC80001 to page 2 unless it already shows it.",
+  "basis": "branch condition (MSP bank number >= 10) + body; real owner MspBnkShow (firmware name); not a jump-table case",
+  "evidence": [
+   "audio/sound_editor_ui.s:17547 `ld xwa, 0x28800` -- MspBnkShow (NAKA_APFUNC_MspBnkShow) reads parameter 0x28800 on EVT_SHOW",
+   "audio/sndparam_records/run_ee0010.c:20 `{ .key = 0x00028800, .bank_index = 0x72, .bank_offset = 0x06,` -- 0x28800 = panel record 0x72 +6, the MSP bank number the MspBnk boxes compare against (17247-17257)",
+   "audio/sound_editor_ui.s:17549 `cp hl, 0xa` -- banks 10 and up branch here",
+   "audio/sound_editor_ui.s:17567 `cp xhl, 0x2` -- unless object 0xC80001 already shows page 2, sends it EVT_SET_PAGE 2 (17569-17574)"
+  ]
+ },
+ {
+  "old": "MspBnkNameBox_EvtD_Case1",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PsMspBnkNameBoxProc_RequestUser2Name",
+  "header": "Box kind 1: asks MainMspBnkNameFunc for the user bank 2 name (EVT_MSP_USR2_NM_GET).",
+  "basis": "box kind byte (view +36) -> MainMspBnkNameFunc name request (EVT_MSP_*_NM_GET); real owner PsMspBnkNameBoxProc (firmware name)",
+  "evidence": [
+   "audio/sound_editor_ui.s:17731 `cp xbc, EVT_DRAW` -- PsMspBnkNameBoxProc's EVT_DRAW arm (17749) ...",
+   "audio/sound_editor_ui.s:17755 `ld a, (xhl + 36)` -- ... picks the request by the box's kind byte: 0 USER1 (17765), 1 this, 2 RGP1, 3 RGP2 (17756-17761)",
+   "audio/sound_editor_ui.s:17771 `ld xbc, EVT_MSP_USR2_NM_GET` -- MT_MspUsr2NmGet: request the user bank 2 name from MainMspBnkNameFunc"
+  ]
+ },
+ {
+  "old": "MspBnkNameBox_EvtD_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PsMspBnkNameBoxProc_RequestRgp1Name",
+  "header": "Box kind 2: asks MainMspBnkNameFunc for the rhythm-group bank 1 name (EVT_MSP_RGP1_NM_GET).",
+  "basis": "box kind byte (view +36) -> MainMspBnkNameFunc name request (EVT_MSP_*_NM_GET); real owner PsMspBnkNameBoxProc (firmware name)",
+  "evidence": [
+   "audio/sound_editor_ui.s:17777 `ld xbc, EVT_MSP_RGP1_NM_GET` -- box kind 2: MT_MspRgp1NmGet, the rhythm-group bank 1 name"
+  ]
+ },
+ {
+  "old": "MspBnkNameBox_EvtD_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PsMspBnkNameBoxProc_RequestRgp2Name",
+  "header": "Box kind 3: asks MainMspBnkNameFunc for the rhythm-group bank 2 name (EVT_MSP_RGP2_NM_GET).",
+  "basis": "box kind byte (view +36) -> MainMspBnkNameFunc name request (EVT_MSP_*_NM_GET); real owner PsMspBnkNameBoxProc (firmware name)",
+  "evidence": [
+   "audio/sound_editor_ui.s:17783 `ld xbc, EVT_MSP_RGP2_NM_GET` -- box kind 3: MT_MspRgp2NmGet, the rhythm-group bank 2 name"
+  ]
+ },
+ {
+  "old": "RgpSetBnk_GridCheck",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PsMspBnkNameBoxProc_OnMspRgp2NmDisp",
+  "header": "PsMspBnkNameBoxProc's MT_MspRgp2NmDisp arm: formats the rhythm-group bank 2 name and redraws the box (EVT_PARA_DRAW). Basis: event code + body.",
+  "basis": "event code + body",
+  "evidence": [
+   "audio/sound_editor_ui.s:17723 `cp xbc, EVT_MSP_RGP2_NM_DISP` -- PsMspBnkNameBoxProc jumps here for MT_MspRgp2NmDisp (17724); the label is an arm of that routine, not a separate RgpSetBnk routine",
+   "audio/sound_editor_ui.s:17840 `call Sprintf_Locked` -- formats the delivered name and sends EVT_PARA_DRAW to the box (17844), like the siblings PsMspBnkNameBoxProc_OnMspUsr1NmDisp / _OnMspUsr2NmDisp / _OnMspRgp1NmDisp"
+  ]
+ },
+ {
+  "old": "RgpSetBnk_GridCheck_Case1",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PsMspBnkNameBoxProc_ReturnZero",
+  "header": "",
+  "basis": "common exits of PsMspBnkNameBoxProc (the labels sit inside it)",
+  "evidence": [
+   "audio/sound_editor_ui.s:17851 `ld xhl, 0:i3` -- the handled-event exit, reached from EVT_SHOW/EVT_HIDE (17747), EVT_DRAW (17763, 17788) and the NM_DISP arms (17847)"
+  ]
+ },
+ {
+  "old": "RgpSetBnk_GridCheck_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PsMspBnkNameBoxProc_CallInherited",
+  "header": "",
+  "basis": "common exits of PsMspBnkNameBoxProc (the labels sit inside it)",
+  "evidence": [
+   "audio/sound_editor_ui.s:17736 `jrl nz, RgpSetBnk_GridCheck_Case2` -- every event PsMspBnkNameBoxProc does not handle",
+   "audio/sound_editor_ui.s:17858 `call InheritedProc` -- default handling"
+  ]
+ },
+ {
+  "old": "RgpSetBnk_GridCheck_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PsMspBnkNameBoxProc_Epilogue",
+  "header": "",
+  "basis": "common exits of PsMspBnkNameBoxProc (the labels sit inside it)",
+  "evidence": [
+   "audio/sound_editor_ui.s:17863 `lda xsp, (xsp+260)` -- releases PsMspBnkNameBoxProc's 260-byte frame (17719) and returns"
+  ]
+ },
+ {
+  "old": "PanelDisplay_DispatchByMode_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PanelDisplay_DispatchByMode_CmpDisplayTime",
+  "header": "",
+  "basis": "switch value meaning (option-block section 4..8, shared with CtrlPanel_IndicatorJumpTable / Audio_DispatchCommand) + body",
+  "evidence": [
+   "audio/tonegen_fileio_handlers.s:1230 `cp wa, 0x8` -- switch on WA = option section 0..8; sections 4..8 compare (ui_widgets/extension_device_screens.s:977-986)",
+   "audio/tonegen_fileio_handlers.s:1295 `ld hl, 1:i3` -- returns 1 when the RAM copy differs from the flash copy, else 0",
+   "ui_widgets/extension_device_screens.s:983 `.short PanelDisplay_DispatchByMode_Case5 - PanelDisplay_DispatchData` -- entry 5",
+   "audio/tonegen_fileio_handlers.s:1251 `ld xde, 0x3d3410` -- compares the 12-byte display-time block 0x340E6 (1252 `lda xhl, (0x0340e6:24)`) with its flash copy",
+   "ui_widgets/extension_device_screens.s:961 `.short CtrlPanel_IndicatorJumpTable_SaveDisplayTime - DSPCfg_Param_CaseC` -- the same section number saves it in the sibling switch"
+  ]
+ },
+ {
+  "old": "PanelDisplay_DispatchByMode_Case6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PanelDisplay_DispatchByMode_CmpDiskSetup",
+  "header": "",
+  "basis": "switch value meaning (option-block section 4..8, shared with CtrlPanel_IndicatorJumpTable / Audio_DispatchCommand) + body",
+  "evidence": [
+   "ui_widgets/extension_device_screens.s:984 `.short PanelDisplay_DispatchByMode_Case6 - PanelDisplay_DispatchData` -- entry 6",
+   "audio/tonegen_fileio_handlers.s:1263 `ld xde, 0x3d3420` -- compares the 4-byte disk-setup block 0x340F2 (1264 `lda xhl, (0x0340f2:24)`) with its flash copy",
+   "ui_widgets/extension_device_screens.s:962 `.short CtrlPanel_IndicatorJumpTable_SaveDiskSetup - DSPCfg_Param_CaseC` -- the same section number saves it in the sibling switch"
+  ]
+ },
+ {
+  "old": "PanelDisplay_DispatchByMode_Case7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PanelDisplay_DispatchByMode_CmpParamLoadOptions",
+  "header": "",
+  "basis": "switch value meaning (option-block section 4..8, shared with CtrlPanel_IndicatorJumpTable / Audio_DispatchCommand) + body",
+  "evidence": [
+   "ui_widgets/extension_device_screens.s:985 `.short PanelDisplay_DispatchByMode_Case7 - PanelDisplay_DispatchData` -- entry 7",
+   "audio/tonegen_fileio_handlers.s:1275 `ld xde, 0x3d3430` -- compares the 4-byte parameter-load options 0x340F6 (1276 `lda xhl, (0x0340f6:24)`) with its flash copy",
+   "ui_widgets/extension_device_screens.s:963 `.short CtrlPanel_IndicatorJumpTable_SaveParamLoadOptions - DSPCfg_Param_CaseC` -- the same section number saves it in the sibling switch"
+  ]
+ },
+ {
+  "old": "PanelDisplay_DispatchByMode_Case8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "PanelDisplay_DispatchByMode_CmpWallpaper",
+  "header": "",
+  "basis": "switch value meaning (option-block section 4..8, shared with CtrlPanel_IndicatorJumpTable / Audio_DispatchCommand) + body",
+  "evidence": [
+   "ui_widgets/extension_device_screens.s:986 `.short PanelDisplay_DispatchByMode_Case8 - PanelDisplay_DispatchData` -- entry 8",
+   "audio/tonegen_fileio_handlers.s:1287 `ld xde, 0x3d3440` -- compares the 6-byte wallpaper settings 0x340FA (1288 `lda xhl, (0x0340fa:24)`) with its flash copy",
+   "ui_widgets/extension_device_screens.s:964 `.short CtrlPanel_IndicatorJumpTable_SaveWallpaper - DSPCfg_Param_CaseC` -- the same section number saves it in the sibling switch"
+  ]
+ },
+ {
+  "old": "FDemoText_ByteData_VoiceProbeC_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FDemoText_ByteData_VoiceProbeC_FootagesChanged",
+  "header": "Payload +3..+6 (drawbar footages): sets the part's full-send bit in 0x247EC.",
+  "basis": "switch value meaning (changed payload offset of the drawbar records 0x44-0x46; part = tag - 0x44) + body",
+  "evidence": [
+   "ui_widgets/widget_dispatch.s:6376 `.long FDemoText_ByteData_VoiceProbeC` -- listener of panel codes 0x44, 0x45, 0x46 (6374-6386), the drawbar records",
+   "demo/fdemotext_routines.s:65 `sub e, 68` -- E = tag - 0x44 = part 0..2 (RIGHT 1 / RIGHT 2 / LEFT)",
+   "demo/fdemotext_routines.s:66 `ld a, (SWBTWR_PAYLOAD_1:16)` -- switch value = changed payload offset 1..7 (`dec 1, wa`, `cp wa, 6:i3` 68-71)",
+   "ui_widgets/technichord_string_data.s:4296 `.short FDemoText_ByteData_VoiceProbeC_Case3 - FDemoText_ByteData_VoiceProbeC_Code` -- offsets 3..6 (4296-4299)",
+   "../../analysis/disk-format-probes/lsw_drawbar_records.py:30 `+3       0x0F  8280 / 8680 / 8A80            8   DRAWBAR  16'` -- +3..+6 are the footage nibble pairs",
+   "demo/fdemotext_routines.s:82 `ld xwa, FDemoText_FullSendBitByPart` -- ORs the part's full-send bit into 0x247EC (98-101)"
+  ]
+ },
+ {
+  "old": "FDemoText_ByteData_VoiceProbeC_Case7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FDemoText_ByteData_VoiceProbeC_Footage1OrSwitchesChanged",
+  "header": "Payload +7: the 1' drawbar nibble sets the part's full-send bit, switch bits 0x10/0x20 its partial-resend bit (0x247EC).",
+  "basis": "switch value meaning (changed payload offset of the drawbar records 0x44-0x46; part = tag - 0x44) + body",
+  "evidence": [
+   "ui_widgets/technichord_string_data.s:4300 `.short FDemoText_ByteData_VoiceProbeC_Case7 - FDemoText_ByteData_VoiceProbeC_Code` -- offset 7",
+   "demo/fdemotext_routines.s:86 `and a, 15` -- a change of the 1' drawbar nibble sets the full-send bit (88-92) ...",
+   "demo/fdemotext_routines.s:95 `and a, 48` -- ... a change of switch bits 0x10/0x20 the part's partial-resend bit (97 `ld xwa, FDemoText_PartialResendBit`)"
+  ]
+ },
+ {
+  "old": "VoiceParam_Case03",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "VoiceParam_MultiDispatch_StepVolume",
+  "header": "Selector 3 (volume): steps the value within 0..127, writes it to the part and shows the VOLUME pop-up.",
+  "basis": "compare chain on the pop-up parameter selector (0x10F2) + body (which ParamPopup_Part* it shows); real owner VoiceParam_MultiDispatch",
+  "evidence": [
+   "display/scoop_display.s:1884 `.long VoiceParam_MultiDispatch` -- PerfMode_EventTable_10 entries 4 and 21 (also 1901)",
+   "display/scoop_display.s:1916 `ld a, (4338:16)` -- compares (0x10F2) with 3, 8, 0x0A, 0x0B; anything else is key shift (1925-1934)",
+   "display/scoop_display.s:1939 `ld h, 0x7f:opc` -- steps the value (0x10F3) within 0..127 (PerfMode_StepValueInRange), writes the part parameter",
+   "display/scoop_display.s:1944 `call ParamPopup_PartVolume` -- shows '<part> VOLUME=nnn'"
+  ]
+ },
+ {
+  "old": "VoiceParam_Case08",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "VoiceParam_MultiDispatch_StepPanpot",
+  "header": "Selector 8 (panpot): steps the value within 0..127, writes it to the part and shows the PANPOT pop-up.",
+  "basis": "compare chain on the pop-up parameter selector (0x10F2) + body (which ParamPopup_Part* it shows); real owner VoiceParam_MultiDispatch",
+  "evidence": [
+   "display/scoop_display.s:1919 `cp a, 0x08` -- selector 8",
+   "display/scoop_display.s:1950 `ld h, 0x7f:opc` -- steps the value within 0..127",
+   "display/scoop_display.s:1955 `call ParamPopup_PartPanpot` -- shows '<part> PANPOT=nnn'"
+  ]
+ },
+ {
+  "old": "SeqData_FormatOutput_Data_Helper_Case2",
+  "verdict": "refuse",
+  "why_refused": "The switched value is field 1 of the active MIDI-sequence buffer (MIDISEQ_ACTIVE_BUF_PTR, SeqData_ReadFieldByIndex), biased by 1; each case picks a MidiCtl_SelectTable* of MidiCtl_Rec_* records (or a SysEx_ApplyToSlot* routine) indexed by field 2, but neither the buffer's field 1 nor those records are identified (the records are unnamed 20-byte blobs), so the value's meaning is not established. The owner label is a generic leftover and its routine is not identified either.",
+  "new": null,
+  "header": "",
+  "basis": "switch value (field 1 of the MIDI-sequence buffer) not established",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:13881 `ld xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)` -- reads field 1 of the active buffer (13882-13883)",
+   "midi/midi_dispatch_handlers.s:13885 `dec 1, hl` -- switch on field 1 - 1, 0..6 (13888)",
+   "ui_widgets/widget_dispatch.s:3298 `.byte 0x0a, 0x00, 0x00, 0x00, 0x00, 0x01, 0xb0, 0x01, 0x7f, 0x00, 0x7f, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x01, 0xff` -- the MidiCtl records are unnamed byte blobs",
+   "midi/midi_dispatch_handlers.s:13898 `jr SeqData_FormatOutput_Data_Helper_Join2` -- Join2 uses MidiCtl_SelectTable2 (13954), one MidiCtl_NullRecord"
+  ]
+ },
+ {
+  "old": "SeqData_FormatOutput_Data_Helper_Case3",
+  "verdict": "refuse",
+  "why_refused": "The switched value is field 1 of the active MIDI-sequence buffer (MIDISEQ_ACTIVE_BUF_PTR, SeqData_ReadFieldByIndex), biased by 1; each case picks a MidiCtl_SelectTable* of MidiCtl_Rec_* records (or a SysEx_ApplyToSlot* routine) indexed by field 2, but neither the buffer's field 1 nor those records are identified (the records are unnamed 20-byte blobs), so the value's meaning is not established. The owner label is a generic leftover and its routine is not identified either.",
+  "new": null,
+  "header": "",
+  "basis": "switch value (field 1 of the MIDI-sequence buffer) not established",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:13900 `jrl SeqData_FormatOutput_Data_Helper_Join3` -- Join3 uses MidiCtl_SelectTable4 (13987), 12 records"
+  ]
+ },
+ {
+  "old": "SeqData_FormatOutput_Data_Helper_Case4",
+  "verdict": "refuse",
+  "why_refused": "The switched value is field 1 of the active MIDI-sequence buffer (MIDISEQ_ACTIVE_BUF_PTR, SeqData_ReadFieldByIndex), biased by 1; each case picks a MidiCtl_SelectTable* of MidiCtl_Rec_* records (or a SysEx_ApplyToSlot* routine) indexed by field 2, but neither the buffer's field 1 nor those records are identified (the records are unnamed 20-byte blobs), so the value's meaning is not established. The owner label is a generic leftover and its routine is not identified either.",
+  "new": null,
+  "header": "",
+  "basis": "switch value (field 1 of the MIDI-sequence buffer) not established",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:13902 `jrl SeqData_FormatOutput_Data_Helper_Return` -- value 4 is ignored"
+  ]
+ },
+ {
+  "old": "SeqData_FormatOutput_Data_Helper_Case5",
+  "verdict": "refuse",
+  "why_refused": "The switched value is field 1 of the active MIDI-sequence buffer (MIDISEQ_ACTIVE_BUF_PTR, SeqData_ReadFieldByIndex), biased by 1; each case picks a MidiCtl_SelectTable* of MidiCtl_Rec_* records (or a SysEx_ApplyToSlot* routine) indexed by field 2, but neither the buffer's field 1 nor those records are identified (the records are unnamed 20-byte blobs), so the value's meaning is not established. The owner label is a generic leftover and its routine is not identified either.",
+  "new": null,
+  "header": "",
+  "basis": "switch value (field 1 of the MIDI-sequence buffer) not established",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:13904 `jrl SeqData_FormatOutput_Data_Helper_Join4` -- Join4 uses MidiCtl_SelectTable6 (14022)"
+  ]
+ },
+ {
+  "old": "SeqData_FormatOutput_Data_Helper_Case6",
+  "verdict": "refuse",
+  "why_refused": "The switched value is field 1 of the active MIDI-sequence buffer (MIDISEQ_ACTIVE_BUF_PTR, SeqData_ReadFieldByIndex), biased by 1; each case picks a MidiCtl_SelectTable* of MidiCtl_Rec_* records (or a SysEx_ApplyToSlot* routine) indexed by field 2, but neither the buffer's field 1 nor those records are identified (the records are unnamed 20-byte blobs), so the value's meaning is not established. The owner label is a generic leftover and its routine is not identified either.",
+  "new": null,
+  "header": "",
+  "basis": "switch value (field 1 of the MIDI-sequence buffer) not established",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:13906 `jrl SeqData_FormatOutput_Data_Helper_Join5` -- Join5 uses MidiCtl_SelectTable8 (14055)"
+  ]
+ },
+ {
+  "old": "SeqData_FormatOutput_Data_Helper_Case7",
+  "verdict": "refuse",
+  "why_refused": "The switched value is field 1 of the active MIDI-sequence buffer (MIDISEQ_ACTIVE_BUF_PTR, SeqData_ReadFieldByIndex), biased by 1; each case picks a MidiCtl_SelectTable* of MidiCtl_Rec_* records (or a SysEx_ApplyToSlot* routine) indexed by field 2, but neither the buffer's field 1 nor those records are identified (the records are unnamed 20-byte blobs), so the value's meaning is not established. The owner label is a generic leftover and its routine is not identified either.",
+  "new": null,
+  "header": "",
+  "basis": "switch value (field 1 of the MIDI-sequence buffer) not established",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:13908 `calr SeqData_FormatOutput_Data_Helper_Helper` -- uses MidiCtl_SelectTable10 (14088), 14 records"
+  ]
+ },
+ {
+  "old": "VoiceParam_AssSwb_MultiBlock_Data_Case2",
+  "verdict": "refuse",
+  "why_refused": "The switched value is field 1 of the active MIDI-sequence buffer (MIDISEQ_ACTIVE_BUF_PTR, SeqData_ReadFieldByIndex), biased by 1; each case picks a MidiCtl_SelectTable* of MidiCtl_Rec_* records (or a SysEx_ApplyToSlot* routine) indexed by field 2, but neither the buffer's field 1 nor those records are identified (the records are unnamed 20-byte blobs), so the value's meaning is not established. The owner label is a generic leftover and its routine is not identified either.",
+  "new": null,
+  "header": "",
+  "basis": "switch value (field 1 of the MIDI-sequence buffer) not established",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:15026 `ld xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)` -- field 1 of the active buffer (15027-15028)",
+   "midi/midi_dispatch_handlers.s:15030 `dec 1, hl` -- switch on field 1 - 1, 0..6",
+   "midi/midi_dispatch_handlers.s:15066 `lda xwa, (MidiCtl_SelectTable1:24)` -- each case selects a MidiCtl_SelectTable* indexed by field 2 (15057-15059)",
+   "midi/midi_dispatch_handlers.s:15043 `jr VoiceParam_AssSwb_MultiBlock_Data_Join2` -- same scheme with the odd MidiCtl_SelectTable*"
+  ]
+ },
+ {
+  "old": "VoiceParam_AssSwb_MultiBlock_Data_Case3",
+  "verdict": "refuse",
+  "why_refused": "The switched value is field 1 of the active MIDI-sequence buffer (MIDISEQ_ACTIVE_BUF_PTR, SeqData_ReadFieldByIndex), biased by 1; each case picks a MidiCtl_SelectTable* of MidiCtl_Rec_* records (or a SysEx_ApplyToSlot* routine) indexed by field 2, but neither the buffer's field 1 nor those records are identified (the records are unnamed 20-byte blobs), so the value's meaning is not established. The owner label is a generic leftover and its routine is not identified either.",
+  "new": null,
+  "header": "",
+  "basis": "switch value (field 1 of the MIDI-sequence buffer) not established",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:15045 `jrl VoiceParam_AssSwb_MultiBlock_Data_Join3` -- value 3"
+  ]
+ },
+ {
+  "old": "VoiceParam_AssSwb_MultiBlock_Data_Case4",
+  "verdict": "refuse",
+  "why_refused": "The switched value is field 1 of the active MIDI-sequence buffer (MIDISEQ_ACTIVE_BUF_PTR, SeqData_ReadFieldByIndex), biased by 1; each case picks a MidiCtl_SelectTable* of MidiCtl_Rec_* records (or a SysEx_ApplyToSlot* routine) indexed by field 2, but neither the buffer's field 1 nor those records are identified (the records are unnamed 20-byte blobs), so the value's meaning is not established. The owner label is a generic leftover and its routine is not identified either.",
+  "new": null,
+  "header": "",
+  "basis": "switch value (field 1 of the MIDI-sequence buffer) not established",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:15047 `jrl VoiceParam_AssSwb_MultiBlock_Data_Return` -- value 4 ignored"
+  ]
+ },
+ {
+  "old": "VoiceParam_AssSwb_MultiBlock_Data_Case5",
+  "verdict": "refuse",
+  "why_refused": "The switched value is field 1 of the active MIDI-sequence buffer (MIDISEQ_ACTIVE_BUF_PTR, SeqData_ReadFieldByIndex), biased by 1; each case picks a MidiCtl_SelectTable* of MidiCtl_Rec_* records (or a SysEx_ApplyToSlot* routine) indexed by field 2, but neither the buffer's field 1 nor those records are identified (the records are unnamed 20-byte blobs), so the value's meaning is not established. The owner label is a generic leftover and its routine is not identified either.",
+  "new": null,
+  "header": "",
+  "basis": "switch value (field 1 of the MIDI-sequence buffer) not established",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:15049 `jrl VoiceParam_AssSwb_MultiBlock_Data_Join4` -- value 5"
+  ]
+ },
+ {
+  "old": "VoiceParam_AssSwb_MultiBlock_Data_Case6",
+  "verdict": "refuse",
+  "why_refused": "The switched value is field 1 of the active MIDI-sequence buffer (MIDISEQ_ACTIVE_BUF_PTR, SeqData_ReadFieldByIndex), biased by 1; each case picks a MidiCtl_SelectTable* of MidiCtl_Rec_* records (or a SysEx_ApplyToSlot* routine) indexed by field 2, but neither the buffer's field 1 nor those records are identified (the records are unnamed 20-byte blobs), so the value's meaning is not established. The owner label is a generic leftover and its routine is not identified either.",
+  "new": null,
+  "header": "",
+  "basis": "switch value (field 1 of the MIDI-sequence buffer) not established",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:15051 `jrl VoiceParam_AssSwb_MultiBlock_Data_Join5` -- value 6"
+  ]
+ },
+ {
+  "old": "VoiceParam_AssSwb_MultiBlock_Data_Case7",
+  "verdict": "refuse",
+  "why_refused": "The switched value is field 1 of the active MIDI-sequence buffer (MIDISEQ_ACTIVE_BUF_PTR, SeqData_ReadFieldByIndex), biased by 1; each case picks a MidiCtl_SelectTable* of MidiCtl_Rec_* records (or a SysEx_ApplyToSlot* routine) indexed by field 2, but neither the buffer's field 1 nor those records are identified (the records are unnamed 20-byte blobs), so the value's meaning is not established. The owner label is a generic leftover and its routine is not identified either.",
+  "new": null,
+  "header": "",
+  "basis": "switch value (field 1 of the MIDI-sequence buffer) not established",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:15053 `calr VoiceParam_AssSwb_MultiBlock_Data_Helper` -- value 7"
+  ]
+ },
+ {
+  "old": "MidiPkt_SysExBulkTransfer_Data_Case2",
+  "verdict": "refuse",
+  "why_refused": "The switched value is field 1 of the active MIDI-sequence buffer (MIDISEQ_ACTIVE_BUF_PTR, SeqData_ReadFieldByIndex), biased by 1; each case picks a MidiCtl_SelectTable* of MidiCtl_Rec_* records (or a SysEx_ApplyToSlot* routine) indexed by field 2, but neither the buffer's field 1 nor those records are identified (the records are unnamed 20-byte blobs), so the value's meaning is not established. The owner label is a generic leftover and its routine is not identified either.",
+  "new": null,
+  "header": "",
+  "basis": "switch value (field 1 of the MIDI-sequence buffer) not established",
+  "evidence": [
+   "midi/midipkt_routines.s:1327 `ld xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)` -- field 1 of the active buffer (1328-1329)",
+   "midi/midipkt_routines.s:1331 `dec 1, hl` -- switch on field 1 - 1, 0..5 (1334)",
+   "midi/midipkt_routines.s:1344 `jrl MidiPkt_SysExBulkTransfer_Data_Join3` -- value 2"
+  ]
+ },
+ {
+  "old": "MidiPkt_SysExBulkTransfer_Data_Case3",
+  "verdict": "refuse",
+  "why_refused": "The switched value is field 1 of the active MIDI-sequence buffer (MIDISEQ_ACTIVE_BUF_PTR, SeqData_ReadFieldByIndex), biased by 1; each case picks a MidiCtl_SelectTable* of MidiCtl_Rec_* records (or a SysEx_ApplyToSlot* routine) indexed by field 2, but neither the buffer's field 1 nor those records are identified (the records are unnamed 20-byte blobs), so the value's meaning is not established. The owner label is a generic leftover and its routine is not identified either.",
+  "new": null,
+  "header": "",
+  "basis": "switch value (field 1 of the MIDI-sequence buffer) not established",
+  "evidence": [
+   "midi/midipkt_routines.s:1346 `jrl MidiPkt_SysExBulkTransfer_Data_Join4` -- value 3"
+  ]
+ },
+ {
+  "old": "MidiPkt_SysExBulkTransfer_Data_Case4",
+  "verdict": "refuse",
+  "why_refused": "The switched value is field 1 of the active MIDI-sequence buffer (MIDISEQ_ACTIVE_BUF_PTR, SeqData_ReadFieldByIndex), biased by 1; each case picks a MidiCtl_SelectTable* of MidiCtl_Rec_* records (or a SysEx_ApplyToSlot* routine) indexed by field 2, but neither the buffer's field 1 nor those records are identified (the records are unnamed 20-byte blobs), so the value's meaning is not established. The owner label is a generic leftover and its routine is not identified either.",
+  "new": null,
+  "header": "",
+  "basis": "switch value (field 1 of the MIDI-sequence buffer) not established",
+  "evidence": [
+   "midi/midipkt_routines.s:1348 `jrl SysEx_ApplyToSlot4B_Data` -- applies to DSP namespace 0x4B (reverb slot), but what field-1 value 4 denotes is unknown"
+  ]
+ },
+ {
+  "old": "MidiPkt_SysExBulkTransfer_Data_Case5",
+  "verdict": "refuse",
+  "why_refused": "The switched value is field 1 of the active MIDI-sequence buffer (MIDISEQ_ACTIVE_BUF_PTR, SeqData_ReadFieldByIndex), biased by 1; each case picks a MidiCtl_SelectTable* of MidiCtl_Rec_* records (or a SysEx_ApplyToSlot* routine) indexed by field 2, but neither the buffer's field 1 nor those records are identified (the records are unnamed 20-byte blobs), so the value's meaning is not established. The owner label is a generic leftover and its routine is not identified either.",
+  "new": null,
+  "header": "",
+  "basis": "switch value (field 1 of the MIDI-sequence buffer) not established",
+  "evidence": [
+   "midi/midipkt_routines.s:1350 `jrl SysEx_ApplyToSlot49_Data` -- namespace 0x49 (DSP effect slot)"
+  ]
+ },
+ {
+  "old": "MidiPkt_SysExBulkTransfer_Data_Case6",
+  "verdict": "refuse",
+  "why_refused": "The switched value is field 1 of the active MIDI-sequence buffer (MIDISEQ_ACTIVE_BUF_PTR, SeqData_ReadFieldByIndex), biased by 1; each case picks a MidiCtl_SelectTable* of MidiCtl_Rec_* records (or a SysEx_ApplyToSlot* routine) indexed by field 2, but neither the buffer's field 1 nor those records are identified (the records are unnamed 20-byte blobs), so the value's meaning is not established. The owner label is a generic leftover and its routine is not identified either.",
+  "new": null,
+  "header": "",
+  "basis": "switch value (field 1 of the MIDI-sequence buffer) not established",
+  "evidence": [
+   "midi/midipkt_routines.s:1352 `calr SysEx_ApplyToSlot49_Format_Data` -- value 6"
+  ]
+ },
+ {
+  "old": "VoiceParam_MultiMode_Case1",
+  "verdict": "refuse",
+  "why_refused": "The compared value is L from MIDI_PackNibbleParam of the active MIDI block, range-checked against the record's +9/+10 limits; values 0/1/2 set 0x3489 to 5/6 and a shifted value into 0x347C before MidiStream_ReplaySavedExpr, but neither the record, the value nor 0x3489/0x347C are identified, so the cases cannot be named beyond '1'/'2'. The real owner is VoiceParam_MultiModeDispatch (the batch's 'VoiceParam_MultiMode' is not a label).",
+  "new": null,
+  "header": "",
+  "basis": "compare-chain value (MIDI_PackNibbleParam result) not established",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:14967 `call MIDI_PackNibbleParam` -- the compared value",
+   "midi/midi_dispatch_handlers.s:14977 `jr z, VoiceParam_MultiMode_Case1` -- value 1",
+   "midi/midi_dispatch_handlers.s:14990 `ld (0x3489:16), 5` -- unnamed state"
+  ]
+ },
+ {
+  "old": "VoiceParam_MultiMode_Case2",
+  "verdict": "refuse",
+  "why_refused": "The compared value is L from MIDI_PackNibbleParam of the active MIDI block, range-checked against the record's +9/+10 limits; values 0/1/2 set 0x3489 to 5/6 and a shifted value into 0x347C before MidiStream_ReplaySavedExpr, but neither the record, the value nor 0x3489/0x347C are identified, so the cases cannot be named beyond '1'/'2'. The real owner is VoiceParam_MultiModeDispatch (the batch's 'VoiceParam_MultiMode' is not a label).",
+  "new": null,
+  "header": "",
+  "basis": "compare-chain value (MIDI_PackNibbleParam result) not established",
+  "evidence": [
+   "midi/midi_dispatch_handlers.s:14975 `jr z, VoiceParam_MultiMode_Case2` -- value 2",
+   "midi/midi_dispatch_handlers.s:15001 `ld (0x3489:16), 6` -- unnamed state"
+  ]
+ },
+ {
+  "old": "RhythmParam_Dispatch_Case129",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "RhythmParam_Dispatch_KeepBeatAdvance",
+  "header": "Status 0x81 (advance one beat): kept unchanged; 0x82/0x84 become 0x83 (end of track) and the rest are cleared.",
+  "basis": "switch value meaning (style event status 0x80..0x86, biased by 0x80) + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:28387 `sub bc, 0x80` -- switch on status - 0x80, 0..6 (28390); VoiceSlot_Dispatch does the same on DE (28575)",
+   "ui_widgets/widget_descriptors.s:5584 `.short RhythmParam_Dispatch_Case129 - RhythmParam_CheckExit` -- entry 1 = status 0x81 (also VoiceSlot_Dispatch_CaseTable, 5565)",
+   "../../docs/accompaniment-style-reader.md:98 `accepts` -- AccompStyle_ReaderDispatch's opcodes: 0x81 advance one beat, 0x83 end of track",
+   "sequencer/accompaniment_engine.s:28589 `ret` -- 0x81 is left as it is; 0x82/0x84 become 0x83 (28403 `ld (xde), 131`), the rest is cleared to 0 (28399)"
+  ]
+ },
+ {
+  "old": "CmpSetTtlFunc_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpSetTtlFunc_OnTitleOld",
+  "header": "Phase 3 (title old): unless the next title is 180, calls RhythmConfig_InlineCode2.",
+  "basis": "switch value meaning (EVT_ACTIVATE_STATE phase, biased by 2: 2 title new, 3 title old, 4 inactivate, 5 activate, 6 interrupt, 7 interrupt return) + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:30474 `cp xbc, EVT_ACTIVATE_STATE` -- CmpSetTtlFunc's activation handler",
+   "sequencer/accompaniment_engine.s:30476 `dec 2, xde` -- switch on phase - 2, 0..6 (30479)",
+   "ui_widgets/widget_descriptors.s:5705 `.short CmpSetTtlFunc_Case3 - CmpSetTtl_Dispatch` -- entry 1 = phase 3 (title old)",
+   "factory_test/fd_test_data.s:383 `.short TitleFunc_ActionDispatch - TitleFunc_ActionDispatch` -- TestTitleFunc's table for the same switch prints 'Title new', 'Title old', 'Title Inactivate', 'Title Activate', ... for phases 2..7 (383-388, strings 339-356)",
+   "sequencer/accompaniment_engine.s:30497 `cp (CURRENT_TITLE:16), 180` -- unless the new title is 180, calls RhythmConfig_InlineCode2 (30499)"
+  ]
+ },
+ {
+  "old": "CmpRealTtlFunc_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpRealTtlFunc_OnTitleActivate",
+  "header": "Phase 5 (title activate): calls RhythmFillIn_PatternTable_Sub (its pop/jrl tail is still spelled .ascii).",
+  "basis": "switch value meaning (EVT_ACTIVATE_STATE phase, biased by 2: 2 title new, 3 title old, 4 inactivate, 5 activate, 6 interrupt, 7 interrupt return) + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:30683 `dec 2, xde` -- CmpRealTtlFunc's EVT_ACTIVATE_STATE switch on phase - 2 (30681-30686)",
+   "ui_widgets/widget_descriptors.s:5752 `.short CmpRealTtlFunc_Case5 - CmpRealTtl_Dispatch` -- entry 3 = phase 5 (title activate)",
+   "factory_test/fd_test_data.s:383 `.short TitleFunc_ActionDispatch - TitleFunc_ActionDispatch` -- TestTitleFunc's table for the same switch prints 'Title new', 'Title old', 'Title Inactivate', 'Title Activate', ... for phases 2..7 (383-388, strings 339-356)",
+   "sequencer/accompaniment_engine.s:30711 `call RhythmFillIn_PatternTable_Sub` -- re-runs the set-up of phase 2 (30699) without the tempo send; the tail bytes after it are spelled `.ascii`/`push sr` (30712-30713: pop xiz/xix/xhl/xde and a jrl)"
+  ]
+ },
+ {
+  "old": "CmpBkslTtlFunc_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpBkslTtlFunc_OnTitleActivate",
+  "header": "",
+  "basis": "switch value meaning (EVT_ACTIVATE_STATE phase, biased by 2: 2 title new, 3 title old, 4 inactivate, 5 activate, 6 interrupt, 7 interrupt return) + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:30960 `dec 2, xde` -- CmpBkslTtlFunc's EVT_ACTIVATE_STATE switch on phase - 2 (30958-30963)",
+   "ui_widgets/widget_descriptors.s:5771 `.short CmpBkslTtlFunc_Case5 - CmpBkslTtl_Dispatch` -- entry 3 = phase 5 (title activate)",
+   "factory_test/fd_test_data.s:383 `.short TitleFunc_ActionDispatch - TitleFunc_ActionDispatch` -- TestTitleFunc's table for the same switch prints 'Title new', 'Title old', 'Title Inactivate', 'Title Activate', ... for phases 2..7 (383-388, strings 339-356)",
+   "sequencer/accompaniment_engine.s:30987 `call CmpBkslTtl_Dispatch_Helper` -- re-runs the phase-2 set-up (30976)"
+  ]
+ },
+ {
+  "old": "CmpRealTtl_MajorDispatch_Case8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpRealTtl_MajorDispatch_OnRightRow1Switch",
+  "header": "Switch 8 (right side row 1): sets request bit 1 of 0x34CF.",
+  "basis": "switch value meaning (EVT_SW_IN switch number: 0-7 LCD columns, 8-12 right side rows 1-5) + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:30680 `jr z, CmpRealTtl_MajorDispatch` -- CmpRealTtlFunc's EVT_SW_IN handler, XDE = switch number",
+   "sequencer/accompaniment_engine.s:30728 `cp xwa, 0xc` -- after 0x80..0x84 (columns 1-5, bank 2), switch on the number 0..12",
+   "ui_widgets/widget_descriptors.s:5732 `.short CmpRealTtl_MajorDispatch_Case8 - CmpRealTtl_RhythmVar0` -- entry 8",
+   "../../../technics-docs/ui-framework.md:447 `side rows 1–5: RIGHT is the plain number, LEFT adds bit 7` -- switch numbers 8-12",
+   "sequencer/accompaniment_engine.s:30901 `set 1, (0x34cf:16)` -- sets request bit 1 of 0x34CF (consumed at 14285)"
+  ]
+ },
+ {
+  "old": "CmpRealTtl_MajorDispatch_Case11",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpRealTtl_MajorDispatch_OnRightRow4Mute",
+  "header": "Switch 11 (right side row 4): RhythmMute_Wrapper, then repaints 0xB5001D.",
+  "basis": "switch value meaning (EVT_SW_IN switch number: 0-7 LCD columns, 8-12 right side rows 1-5) + body",
+  "evidence": [
+   "ui_widgets/widget_descriptors.s:5735 `.short CmpRealTtl_MajorDispatch_Case11 - CmpRealTtl_RhythmVar0` -- entry 11 = right side row 4 (cf. CmpNcpTtl_TableDispatch_OnRightRow4Switch, switch 11)",
+   "sequencer/accompaniment_engine.s:30908 `call RhythmMute_Wrapper` -- then repaints object 0xB5001D (30913-30916)"
+  ]
+ },
+ {
+  "old": "CmpRealTtl_MajorDispatch_Case12",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpRealTtl_MajorDispatch_OnRightRow5Solo",
+  "header": "Switch 12 (right side row 5): RhythmSolo_Wrapper, then repaints 0xB50018..0xB5001C.",
+  "basis": "switch value meaning (EVT_SW_IN switch number: 0-7 LCD columns, 8-12 right side rows 1-5) + body",
+  "evidence": [
+   "ui_widgets/widget_descriptors.s:5736 `.short CmpRealTtl_MajorDispatch_Case12 - CmpRealTtl_RhythmVar0` -- entry 12 = right side row 5",
+   "sequencer/accompaniment_engine.s:30922 `call RhythmSolo_Wrapper` -- then repaints 0xB50018..0xB5001C (30927-30948)"
+  ]
+ }
+]

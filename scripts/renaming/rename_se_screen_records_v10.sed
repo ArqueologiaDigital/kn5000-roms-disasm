@@ -85,3 +85,20 @@ s/\bSeScreenData_0x5887\b/SeMenu_DrawEnvKeyOffFields_Records3/g
 s/\bSeScreenData_0x5900\b/SeMenu_NameEdit_CheckBit7_Records/g
 s/\bSeScreenData_0x5999\b/SeMenu_NameEdit_SetupPath_Records/g
 s/\bSeScreenData_0x59A3\b/SeMenu_NameEdit_SetupPath_Records2/g
+# run 2026-10-06 (sdb_* record macros no longer count as readers)
+s/\bSeScreenData_0x06B1\b/SeMenu_DrawOriginalEditedBadge_Records/g
+s/\bSeScreenData_0x0D14\b/SeMenu_DrawTwoPartRadioButtons_Records/g
+s/\bSeScreenData_0x0D4E\b/SeMenu_DrawTwoPartRadioButtons_Records2/g
+s/\bSeScreenData_0x1F4D\b/SeMenu_PatchEdit_SetupPath_Records2/g
+s/\bSeScreenData_0x2105\b/SeMenu_BankEdit_SetupPath_Records2/g
+s/\bSeScreenData_0x259F\b/SeMenu_Utility_FillBlock_Records3/g
+s/\bSeScreenData_0x2920\b/SeMenu_DrawLfoPartSwitches_Records/g
+s/\bSeScreenData_0x2978\b/SeMenu_DrawLfoPartSwitches_Records2/g
+s/\bSeScreenData_0x29A0\b/SeMenu_DrawLfoPartSwitches_Records3/g
+s/\bSeScreenData_0x29B4\b/SeMenu_DrawLfoSelectedPartLine_Records/g
+s/\bSeScreenData_0x29C8\b/SeMenu_DrawLfoPartSwitches_Records4/g
+s/\bSeScreenData_0x29D2\b/SeMenu_DrawLfoPartSwitches_Records5/g
+s/\bSeScreenData_0x2A22\b/SeMenu_DrawLfoSelectedPartLine_Records2/g
+s/\bSeScreenData_0x2AD6\b/SeMenu_DrawLfoPartSwitches_Records6/g
+s/\bSeScreenData_0x2B02\b/SeMenu_DrawLfoPartSwitches_Records7/g
+s/\bSeScreenData_0x2EC0\b/SeMenu_DataBlock_14_Records3/g

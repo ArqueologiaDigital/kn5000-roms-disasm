@@ -92,31 +92,31 @@ FDC_WaitParamByteReady:
 	cpw QIZ, 0x0080
 	jr nz, .Lc_f967a6
 .Lc_f96780:
-FDC_WaitReady_Loop2:
+FDC_WaitParamByteReady_Loop2:
 	calr FDC_Read_Status
 	and L,0x90
 	cp L,0x90
 	jr nz, .Lc_f9678e
 	ld QIZ,0
 .Lc_f9678e:
-FDC_WaitReady_Skip4:
+FDC_WaitParamByteReady_Skip4:
 	ld wa, (SYSTEM_TIMESTAMP:16)
 	sub WA,IZ
 	cp WA,0x01f4
 	jr ule, .Lc_f9679f
 	ldw QIZ, 0xffff
 .Lc_f9679f:
-FDC_WaitReady_Skip5:
+FDC_WaitParamByteReady_Skip5:
 	cpw QIZ, 0x0080
 	jr z, .Lc_f96780
 .Lc_f967a6:
-FDC_WaitReady_Skip6:
+FDC_WaitParamByteReady_Skip6:
 	cp QIZ,0
 	jr z, .Lc_f967b0
 	ld wa, 1:i3
 	calr FDC_Set_Status
 .Lc_f967b0:
-FDC_WaitReady_Epilogue2:
+FDC_WaitParamByteReady_Epilogue2:
 	pop XIZ
 	ret
 FDC_INIT:
@@ -153,44 +153,44 @@ FDC_CONFIG_VERIFY_Skip:
 	calr	FDC_ClearStatus_InitTimer
 	calr	FDC_CMD_DISPATCH_SUB
 	cp	(FDC_ERROR_CODE:16), 0
-	jr	z, FDC_WaitReady_Loop3
+	jr	z, FDC_CONFIG_VERIFY_Loop3
 	ld	(0x8984:16), 0
 	jrl	FDC_WaitReady_Epilogue3
-FDC_WaitReady_Loop3:
+FDC_CONFIG_VERIFY_Loop3:
 	calr	FDC_Read_Status
 	bit	7, l
-	jr	z, FDC_WaitReady_Loop3
+	jr	z, FDC_CONFIG_VERIFY_Loop3
 	calr	FDC_Read_Status
 	bit	6, l
 	jr	nz, FDC_WaitReady_Skip8
 	ld	l, 0:opc
 	cp	l, 128
 	jr	z, FDC_WaitReady_Skip7
-FDC_WaitReady_Loop4:
+FDC_CONFIG_VERIFY_Loop4:
 	calr	FDC_Read_Status
 	and	l, 240
 	cp	l, 128
-	jr	nz, FDC_WaitReady_Loop4
+	jr	nz, FDC_CONFIG_VERIFY_Loop4
 FDC_WaitReady_Skip7:
 	ldw	wa, 8
 	calr	FDC_Write_Data
 FDC_WaitReady_Skip8:
 	lda	xiz, (0x89c4:16)
 	inc	1, xiz
-FDC_WaitReady_Loop5:
+FDC_CONFIG_VERIFY_Loop5:
 	calr	FDC_Wait_Ready_Timeout
 	calr	FDC_Read_Data
 	ld	(xiz+), l
-FDC_WaitReady_Loop6:
+FDC_CONFIG_VERIFY_Loop6:
 	calr	FDC_Read_Status
 	bit	7, l
-	jr	z, FDC_WaitReady_Loop6
+	jr	z, FDC_CONFIG_VERIFY_Loop6
 	calr	FDC_Read_Status
 	bit	6, l
-	jr	nz, FDC_WaitReady_Loop5
+	jr	nz, FDC_CONFIG_VERIFY_Loop5
 	calr	FDC_Exception_Status_Decoder
 	cp	(0x89c5:16), 128
-	jr	nz, FDC_WaitReady_Loop3
+	jr	nz, FDC_CONFIG_VERIFY_Loop3
 FDC_CONFIG_VERIFY_Skip2:
 	ld	wa, 3:i3
 	calr	FDC_CMD_SEND
@@ -963,44 +963,44 @@ FDC_CMD_SEND:
 	jrl	nz, FDC_HardwareSetup_Epilogue
 	ld	a, (xsp)
 	cp	a, 51
-	jr	z, FDC_HardwareSetup_Skip2
+	jr	z, FDC_CMD_SEND_Skip2
 	cp	a, 52
-	jr	z, FDC_HardwareSetup_Skip2
+	jr	z, FDC_CMD_SEND_Skip2
 	cp	a, 54
-	jr	z, FDC_HardwareSetup_Skip
+	jr	z, FDC_CMD_SEND_Skip
 	cp	a, 53
-	jr	z, FDC_HardwareSetup_Skip
+	jr	z, FDC_CMD_SEND_Skip
 	cp	a, 71
-	jr	nz, FDC_HardwareSetup_Skip3
-FDC_HardwareSetup_Skip:
+	jr	nz, FDC_CMD_SEND_Skip3
+FDC_CMD_SEND_Skip:
 	ld	a, (xsp)
 	extz	wa
 	calr	FDC_HardwareSetup_Helper3
 	jrl	FDC_HardwareSetup_Epilogue
-FDC_HardwareSetup_Skip2:
+FDC_CMD_SEND_Skip2:
 	ld	a, (xsp)
 	extz	wa
 	calr	FDC_HardwareSetup_Helper4
 	jrl	FDC_HardwareSetup_Epilogue
-FDC_HardwareSetup_Skip3:
+FDC_CMD_SEND_Skip3:
 	ld	a, (xsp)
 	res	4, a
 	cp	a, 79
-	jr	nz, FDC_HardwareSetup_Skip4
+	jr	nz, FDC_CMD_SEND_Skip4
 	ld	a, (xsp)
 	extz	wa
 	calr	FDC_HardwareSetup_Helper4
 	jrl	FDC_HardwareSetup_Epilogue
-FDC_HardwareSetup_Skip4:
+FDC_CMD_SEND_Skip4:
 	ld	a, (xsp)
 	and	a, 15
 	cp	a, 14
-	jr	z, FDC_HardwareSetup_Skip5
+	jr	z, FDC_CMD_SEND_Skip5
 	ld	a, (xsp)
 	and	a, 15
 	cp	a, 11
 	jr	nz, FDC_HardwareSetup_Skip6
-FDC_HardwareSetup_Skip5:
+FDC_CMD_SEND_Skip5:
 	ld	a, (xsp)
 	extz	wa
 	calr	FDC_HardwareSetup_Helper4
@@ -1033,21 +1033,21 @@ FDC_HardwareSetup_Skip7:
 	calr	FDC_SendParameterByte
 	ld	a, (xsp)
 	cp	a, 15
-	jr	z, FDC_HardwareSetup_Skip10
+	jr	z, FDC_CMD_SEND_Skip10
 	cp	a, 77
-	jr	z, FDC_HardwareSetup_Skip9
+	jr	z, FDC_CMD_SEND_Skip9
 	cp	a, 7:i3
-	jr	z, FDC_HardwareSetup_Skip8
+	jr	z, FDC_CMD_SEND_Skip8
 	cp	a, 4:i3
-	jr	z, FDC_HardwareSetup_Skip8
+	jr	z, FDC_CMD_SEND_Skip8
 	cp	a, 74
 	jr	nz, FDC_HardwareSetup_Skip11
-FDC_HardwareSetup_Skip8:
+FDC_CMD_SEND_Skip8:
 	jr	FDC_HardwareSetup_Epilogue
-FDC_HardwareSetup_Skip9:
+FDC_CMD_SEND_Skip9:
 	calr	FDC_HardwareSetup_Helper7
 	jr	FDC_HardwareSetup_Epilogue
-FDC_HardwareSetup_Skip10:
+FDC_CMD_SEND_Skip10:
 	calr	FDC_HardwareSetup_Helper8
 	jr	FDC_HardwareSetup_Epilogue
 FDC_HardwareSetup_Skip11:

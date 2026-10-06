@@ -1431,11 +1431,11 @@ VocalistGridCheck_CaseTable:
 ; -----------------------------------------------------------------------------
 AcVocalist_ListSetup_CaseTable:
 	.short	AcVocalist_ListDispatch - AcVocalist_ListDispatch
-	.short	AcVocalist_ListSetup_Case1 - AcVocalist_ListDispatch
+	.short	AcVocalist_ListSetup_HarmonyLocalOn - AcVocalist_ListDispatch
 	.short	AcVocalist_ListDispatch - AcVocalist_ListDispatch
-	.short	AcVocalist_ListSetup_Case1 - AcVocalist_ListDispatch
+	.short	AcVocalist_ListSetup_HarmonyLocalOn - AcVocalist_ListDispatch
 	.short	AcVocalist_ListDispatch - AcVocalist_ListDispatch
-	.short	AcVocalist_ListSetup_Case1 - AcVocalist_ListDispatch
+	.short	AcVocalist_ListSetup_HarmonyLocalOn - AcVocalist_ListDispatch
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] PsHarm_DrawActiveBox_PtrTable
 ; PsHarm_DrawActiveBox_PtrTable -- 1 u32 addresses, read by
@@ -1490,8 +1490,8 @@ MainVocalistPage1OKFunc_CaseTable:
 	.short	VocalistPage1_DispatchData - VocalistPage1OK_Dispatch
 	.short	VocalistPage1OK_Dispatch - VocalistPage1OK_Dispatch
 	.short	VocalistPage1_DispatchData - VocalistPage1OK_Dispatch
-	.short	MainVocalistPage1OKFunc_Case4 - VocalistPage1OK_Dispatch
-	.short	MainVocalistPage1OKFunc_Case5 - VocalistPage1OK_Dispatch
+	.short	MainVocalistPage1OKFunc_OnTechniChordPreset - VocalistPage1OK_Dispatch
+	.short	MainVocalistPage1OKFunc_OnSmfHarmonyPreset - VocalistPage1OK_Dispatch
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] RevSel_HandleConfirm_Str
 ; RevSel_HandleConfirm_Str -- NUL-terminated string(s), 6 bytes, used by

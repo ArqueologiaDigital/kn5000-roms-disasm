@@ -854,7 +854,7 @@ SetWallPaper_CaseData:
 SetWallPaper_Loop:
 	ld	wa, 1:i3
 	jr	SetWallPaper_Join
-SetWallPaper_Case2:
+SetWallPaper_MenuWallBorder:
 	cpw	(0x0340fc:24), 0
 	jr	z, SetWallPaper_Loop
 SetWallPaper_Skip:

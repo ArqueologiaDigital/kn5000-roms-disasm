@@ -1279,18 +1279,18 @@ FDemoText_GetInstanceID:
 	inc	8, xsp
 	ld	xwa, 255
 	ld	(xsp+4), xwa
-FDemoText_ByteData_DisplayRefresh_Loop:
+FDemoText_GetInstanceID_Loop2:
 	ld	xbc, (xsp+4)
 	ld	wa, bc
 	call	CountObject
 	extz	xhl
 	ld	(xsp+8), xhl
 	or	xhl, xhl
-	jr	z, FDemoText_ByteData_DisplayRefresh_Skip4
+	jr	z, FDemoText_GetInstanceID_Skip4
 	ld	xiz, 0:i3
 	ld	xwa, (xsp+8)
 	cp	xwa, 0
-	jr	ule, FDemoText_ByteData_DisplayRefresh_Skip4
+	jr	ule, FDemoText_GetInstanceID_Skip4
 FDemoText_ByteData_DisplayRefresh_Loop2:
 	ld	xbc, xiz
 	ld	xwa, (xsp+4)
@@ -1298,7 +1298,7 @@ FDemoText_ByteData_DisplayRefresh_Loop2:
 	add	xwa, xbc
 	call	CheckViewObject
 	cp	hl, 0:i3
-	jr	z, FDemoText_ByteData_DisplayRefresh_Skip3
+	jr	z, FDemoText_GetInstanceID_Skip3
 	ld	xbc, xiz
 	ld	xwa, (xsp+4)
 	sll	xwa, 16
@@ -1310,28 +1310,28 @@ FDemoText_ByteData_DisplayRefresh_Loop2:
 	call	Strcmp
 	inc	8, xsp
 	cp	hl, 0:i3
-	jr	nz, FDemoText_ByteData_DisplayRefresh_Skip3
+	jr	nz, FDemoText_GetInstanceID_Skip3
 	ld	xbc, xiz
 	ld	xwa, (xsp+4)
 	sll	xwa, 16
 	add	xwa, xbc
 	ld	xhl, xwa
-	jr	FDemoText_ByteData_DisplayRefresh_Epilogue2
-FDemoText_ByteData_DisplayRefresh_Skip3:
+	jr	FDemoText_GetInstanceID_Epilogue2
+FDemoText_GetInstanceID_Skip3:
 	inc	1, xiz
 	ld	xwa, xiz
 	cp	xwa, (xsp+0x8)
 	jr	c, FDemoText_ByteData_DisplayRefresh_Loop2
-FDemoText_ByteData_DisplayRefresh_Skip4:
+FDemoText_GetInstanceID_Skip4:
 	ld	xwa, 1:i3
 	sub	(xsp+4), xwa
 	ld	xwa, (xsp+4)
 	cp	xwa, 0
-	jr	ge, FDemoText_ByteData_DisplayRefresh_Loop
+	jr	ge, FDemoText_GetInstanceID_Loop2
 	ld	xwa, ErrStr_GetInstanceID
 	call	DbMemo_PostString
 	ld	xhl, 4294967295
-FDemoText_ByteData_DisplayRefresh_Epilogue2:
+FDemoText_GetInstanceID_Epilogue2:
 	pop	xiz
 	lda	xsp, (xsp+136)
 	ret
@@ -1358,15 +1358,18 @@ FDemoText_ReadTaggedBlock_Loop3:
 	cpw (XSP+0x02), 0x0000
 	jr z, .Lc_f84f3f
 .Lc_f84f37:
+FDemoText_ReadTaggedBlock_Join2:
 	call FileIO_ReadByte
 	cp hl, 0:i3
 	jr ge, .Lc_f84f20
 .Lc_f84f3f:
+FDemoText_ReadTaggedBlock_Skip5:
 	cpw (XSP+0x02), 0x0000
 	jr z, .Lc_f84f69
 	ldw HL, 0xfffd
 	jrl t, .Lc_f85012
 .Lc_f84f4c:
+FDemoText_ReadTaggedBlock_Skip6:
 	ld XBC,(XSP+0x0c)
 	ld	a, (xbc+iz)
 	extz WA
@@ -1381,10 +1384,12 @@ FDemoText_ReadTaggedBlock_Skip:
 	ld xwa, 0:i3
 	ld (XSP+0x04),XWA
 .Lc_f84f6e:
+FDemoText_ReadTaggedBlock_Loop6:
 	call FileIO_ReadByte
 	cp hl, 0:i3
 	jr ge, .Lc_f84f84
 .Lc_f84f76:
+FDemoText_ReadTaggedBlock_Loop7:
 	cpw (XSP+0x02), 0x0001
 	jrl z, .Lc_f85010
 	ldw HL, 0xfffc
@@ -1409,6 +1414,7 @@ FDemoText_ReadTaggedBlock_Skip2:
 	cp XWA,(XSP+0x10)
 	jr nc, .Lc_f84fe3
 .Lc_f84fb3:
+FDemoText_ReadTaggedBlock_Skip7:
 	cp HL,0x003c
 	jr nz, .Lc_f84f6e
 	ld iz, 1:i3
@@ -1423,6 +1429,7 @@ FDemoText_ReadTaggedBlock_Loop5:
 	jr z, .Lc_f84f76
 	jr t, .Lc_f84f6e
 .Lc_f84fcc:
+FDemoText_ReadTaggedBlock_Skip8:
 	ld XBC,(XSP+0x14)
 	add XBC,(XSP+0x04)
 	ld A,L
@@ -1433,6 +1440,7 @@ FDemoText_ReadTaggedBlock_Loop5:
 	cp XWA,(XSP+0x10)
 	jr c, .Lc_f84fe8
 .Lc_f84fe3:
+FDemoText_ReadTaggedBlock_Skip9:
 	ldw HL, 0xfffb
 	jr t, .Lc_f85012
 .Lc_f84fe8:
@@ -1454,6 +1462,7 @@ FDemoText_ReadTaggedBlock_Skip3:
 FDemoText_ReadTaggedBlock_Skip4:
 	ld hl, 0:i3
 .Lc_f85012:
+FDemoText_ReadTaggedBlock_Epilogue3:
 	popw iz
 	lda xsp, (xsp + 0x16)
 	retd 0x0004
@@ -2442,16 +2451,16 @@ FDemoText_ResetLayoutState:
 	lda	xbc, (0x0251da:24)
 	ld	xwa, xbc
 	lda	xbc, (xbc+2400)
-FDemoText_TextDispatch_Loop:
+FDemoText_ResetLayoutState_Loop:
 	ld	xde, xwa
 	lda	xhl, (xwa+40)
-FDemoText_TextDispatch_Loop2:
+FDemoText_ResetLayoutState_Loop2:
 	ld	(xde+), 84
 	cp	xde, xhl
-	jr	c, FDemoText_TextDispatch_Loop2
+	jr	c, FDemoText_ResetLayoutState_Loop2
 	lda	xwa, (xwa+40)
 	cp	xwa, xbc
-	jr	c, FDemoText_TextDispatch_Loop
+	jr	c, FDemoText_ResetLayoutState_Loop
 	lda	xwa, (0x025b3a:24)
 	ldw	(xwa), 0
 	ldw	(xwa+2), 0
@@ -2463,13 +2472,13 @@ FDemoText_TextDispatch_Loop2:
 	lda	xwa, (0x025b74:24)
 	ld	xbc, xwa
 	lda	xix, (xwa+8)
-FDemoText_TextDispatch_Loop3:
+FDemoText_ResetLayoutState_Loop3:
 	ld	xwa, 5:i3
 	ld	(xhl+), xwa
 	ldw	(xde+), 0x00ff
 	ld	(xbc+), 1
 	cp	xbc, xix
-	jr	c, FDemoText_TextDispatch_Loop3
+	jr	c, FDemoText_ResetLayoutState_Loop3
 	ret
 FDemoText_ScaleDownCoords:
 	ld de, (xwa)

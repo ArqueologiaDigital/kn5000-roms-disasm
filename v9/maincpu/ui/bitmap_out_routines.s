@@ -3811,16 +3811,16 @@ BitMapOut_UpdateWidget_Finalize:
 BitMapOut_UpdateWidget_Done:
 	call	GetTitleNow
 	cp	xhl, TITLE_PMBKSEL
-	jr	z, BitMapOut_UpdateWidget_Done_Skip
+	jr	z, BitMapOut_UpdateWidget_Finalize_Skip
 	call	GetTitleNow
 	cp	xhl, TITLE_PMVIEW
-	jr	z, BitMapOut_UpdateWidget_Done_Skip
+	jr	z, BitMapOut_UpdateWidget_Finalize_Skip
 	call	GetTitleNow
 	cp	xhl, TITLE_PMBKNAME
-	jr	z, BitMapOut_UpdateWidget_Done_Skip
+	jr	z, BitMapOut_UpdateWidget_Finalize_Skip
 	call	GetTitleNow
 	cp	xhl, TITLE_PMNAME
-	jr	z, BitMapOut_UpdateWidget_Done_Skip
+	jr	z, BitMapOut_UpdateWidget_Finalize_Skip
 	cp (SWBTWR_PAYLOAD_1:16), 5
 	ret	nz
 	ld	a, (SWBTWR_PAYLOAD_2:16)
@@ -3834,8 +3834,8 @@ BitMapOut_UpdateWidget_Done:
 	ld	xwa, 0xffffffff
 	ld	xbc, EVT_SET_HOLD
 	ld	xde, 1:i3
-	jr	BitMapOut_UpdateWidget_Done_Join
-BitMapOut_UpdateWidget_Done_Skip:
+	jr	BitMapOut_UpdateWidget_Finalize_Join
+BitMapOut_UpdateWidget_Finalize_Skip:
 	cp (SWBTWR_PAYLOAD_1:16), 5
 	ret	nz
 	ld	a, (SWBTWR_PAYLOAD_2:16)
@@ -3845,7 +3845,7 @@ BitMapOut_UpdateWidget_Done_Skip:
 	ld	xwa, 0xffffffff
 	ld	xbc, EVT_SET_HOLD
 	ld	xde, 0:i3
-BitMapOut_UpdateWidget_Done_Join:
+BitMapOut_UpdateWidget_Finalize_Join:
 	call	ApPostEvent
 	ret
 PanelMemory_PreSlotLoad:
@@ -3862,14 +3862,14 @@ PanelMemory_PostBankLoad:
 	push qiz
 	ld	(xsp+2), a
 	cp	bc, 0:i3
-	jr	ge, BitMapOut_UpdateWidget_Done_Skip2
+	jr	ge, PanelMemory_PostBankLoad_Skip2
 	ld	a, (xsp+2)
 	extz	wa
 	call	VoiceData_ExtendedParamSetup
-	jr	BitMapOut_UpdateWidget_Done_Epilogue
-BitMapOut_UpdateWidget_Done_Skip2:
+	jr	PanelMemory_PostBankLoad_Epilogue
+PanelMemory_PostBankLoad_Skip2:
 	ldib_erp 251, 0
-BitMapOut_UpdateWidget_Finalize_Loop:
+PanelMemory_PostBankLoad_Loop:
 	ldto_berp c, 251
 	extz	bc
 	ld	a, (xsp+2)
@@ -3879,8 +3879,8 @@ BitMapOut_UpdateWidget_Finalize_Loop:
 	call	PanelTlv_ValidatePanelMemory
 	inc1b_erp 251
 	cp_erpb 251, 8
-	jr c, BitMapOut_UpdateWidget_Finalize_Loop
-BitMapOut_UpdateWidget_Done_Epilogue:
+	jr c, PanelMemory_PostBankLoad_Loop
+PanelMemory_PostBankLoad_Epilogue:
 	pop qiz
 	inc	2, xsp
 	ret

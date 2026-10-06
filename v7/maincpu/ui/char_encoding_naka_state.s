@@ -88,8 +88,8 @@ WorkRam2_CallbackIndex:
 ; AudioInit_Pan_Reverb_CopyFromMain copies it to RAM 0xC2BC.
 WorkRam2_EffectSelectByte:
 	.byte 0x00, 0xff	; RAM 0xE8FA
-; {u8 value, 0xFF}; 0 at power-on.  SendEpilogue_Data_Skip2 stores it,
-; SendEpilogue_Data_Skip compares a register with it (`cp ...,(0xE8FC)`).
+; {u8 value, 0xFF}; 0 at power-on.  SndParam_ApplySystemParam_Skip2 stores it,
+; SndParam_ApplySystemParam_Skip compares a register with it (`cp ...,(0xE8FC)`).
 WorkRam2_SendEpilogueByte:
 	.byte 0x00, 0xff	; RAM 0xE8FC
 ; Variables of the SeqFile_/SeqPlay_/SongFile_ routines (the song-file player),

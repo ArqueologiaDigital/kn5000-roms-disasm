@@ -4438,11 +4438,11 @@ DspCfg_ResolveFallback_WordTable:	.short 0, 2, 4, 5, 3
 ; numeric: 0xFDCCD3, 0xFDCCDC, 0xFDCCE3, 0xFDCCEC, 0xFDCCF5, 0xFDCCFE (v10).
 DspCfg_OpLetter_JumpOffsets:
 	.short	DSPCfg_Data_ParamDispatch_Code - DSPCfg_Data_ParamDispatch_Code
-	.short	EffEdit_DSPConfigBlock_Helper_Case98 - DSPCfg_Data_ParamDispatch_Code
-	.short	EffEdit_DSPConfigBlock_Helper_Case99 - DSPCfg_Data_ParamDispatch_Code
-	.short	EffEdit_DSPConfigBlock_Helper_Case100 - DSPCfg_Data_ParamDispatch_Code
-	.short	EffEdit_DSPConfigBlock_Helper_Case101 - DSPCfg_Data_ParamDispatch_Code
-	.short	EffEdit_DSPConfigBlock_Helper_Case102 - DSPCfg_Data_ParamDispatch_Code
+	.short	DSPCfg_RecordFieldToParamId_Tag62ReverbSlot - DSPCfg_Data_ParamDispatch_Code
+	.short	DSPCfg_RecordFieldToParamId_DigitalReverbRecord - DSPCfg_Data_ParamDispatch_Code
+	.short	DSPCfg_RecordFieldToParamId_EqualizerRecord - DSPCfg_Data_ParamDispatch_Code
+	.short	DSPCfg_RecordFieldToParamId_AcousticIllusionRecord - DSPCfg_Data_ParamDispatch_Code
+	.short	DSPCfg_RecordFieldToParamId_Slot3RoomKaraokeRecord - DSPCfg_Data_ParamDispatch_Code
 ; switch table: u16 offset from AssSwb_SwapEntriesAndDispatch, 21 entries,
 ; used by DspConfig_EventDispatch (0xFDD29D: index = type-1 for 0..8, or
 ; type-1-0x12 for 9..20; `add bc,bc`, `ld r, (xrr+rr)`, `jp t, (xrr+rr)`).  Offset 0 is the
@@ -6535,7 +6535,7 @@ SwbtB2_Code71_Listeners:
 	.long 0xffffffff
 ; code 0x72: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code72_Listeners:
-	.long HdaeRom_TableEntry2
+	.long PanelTag72_ApplyPartMix
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 SwbtB2_Code78_Listeners:	.long 0xffffffff
@@ -7431,15 +7431,15 @@ Rhythm_EventMapB:
 ; 9 x u16 switch offsets.  RhythmBuf_EventDispatchLoop (0xFE83DD): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFE8633); jp_rr` -- targets 0xFE8633 + offset (no labels yet).
 RhythmBuf_SwitchOffsets:
-	.short	SeqPart_EmitNoteOn_Full_Case208 - Rhythm_ProcessEventDispatch
+	.short	SeqPart_EmitNoteOn_Full_ResetPartControllers - Rhythm_ProcessEventDispatch
 	.short	RhythmBuf_EventDispatchLoop - Rhythm_ProcessEventDispatch
 	.short	RhythmBuf_EventDispatchLoop - Rhythm_ProcessEventDispatch
 	.short	RhythmBuf_EventDispatchLoop - Rhythm_ProcessEventDispatch
-	.short	SeqPart_EmitNoteOn_Full_Case212 - Rhythm_ProcessEventDispatch
-	.short	SeqPart_EmitNoteOn_Full_Case212 - Rhythm_ProcessEventDispatch
-	.short	SeqPart_EmitNoteOn_Full_Case212 - Rhythm_ProcessEventDispatch
-	.short	SeqPart_EmitNoteOn_Full_Case212 - Rhythm_ProcessEventDispatch
-	.short	SeqPart_EmitNoteOn_Full_Case212 - Rhythm_ProcessEventDispatch
+	.short	SeqPart_EmitNoteOn_Full_SetPartController - Rhythm_ProcessEventDispatch
+	.short	SeqPart_EmitNoteOn_Full_SetPartController - Rhythm_ProcessEventDispatch
+	.short	SeqPart_EmitNoteOn_Full_SetPartController - Rhythm_ProcessEventDispatch
+	.short	SeqPart_EmitNoteOn_Full_SetPartController - Rhythm_ProcessEventDispatch
+	.short	SeqPart_EmitNoteOn_Full_SetPartController - Rhythm_ProcessEventDispatch
 ; 7 x u16 switch offsets.  SeqEvtBuf_NoteDispatch (0xFE894D): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFE8BA8); jp_rr` -- targets 0xFE8BA8 + offset (no labels yet).
 SeqEvtBuf_SwitchOffsets:
@@ -8474,47 +8474,47 @@ KeyEvent_SwitchOffsets:
 	.short	UIState_ProcessKeyEvent_Case10 - UIState_ProcessKeyEvent_Code
 	.short	UIState_ProcessKeyEvent_Case11 - UIState_ProcessKeyEvent_Code
 	.short	UIState_ProcessKeyEvent_Case12 - UIState_ProcessKeyEvent_Code
-; 8 x s16 switch offsets.  HdaeRom_TableEntry2 (0xFEABD9): `ld_rrw wa,xix,wa;
+; 8 x s16 switch offsets.  PanelTag72_ApplyPartMix (0xFEABD9): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFEAC14); jp_rr 8,xix,wa` -- targets 0xFEAC14 + offset (no labels yet).
 HdaeRomEntry2_SwitchOffsets:
-	.short	HdaeRom_TableEntry2_Epilogue - HdaeRom_TableEntry2_Code
-	.short	HdaeRom_TableEntry2_Epilogue - HdaeRom_TableEntry2_Code
-	.short	HdaeRom_TableEntry2_Epilogue - HdaeRom_TableEntry2_Code
+	.short	PanelTag72_ApplyPartMix_ReverbSend_Epilogue - HdaeRom_TableEntry2_Code
+	.short	PanelTag72_ApplyPartMix_ReverbSend_Epilogue - HdaeRom_TableEntry2_Code
+	.short	PanelTag72_ApplyPartMix_ReverbSend_Epilogue - HdaeRom_TableEntry2_Code
 	.short	HdaeRom_TableEntry2_Code - HdaeRom_TableEntry2_Code
-	.short	HdaeRom_TableEntry2_Epilogue - HdaeRom_TableEntry2_Code
-	.short	HdaeRom_TableEntry2_Epilogue - HdaeRom_TableEntry2_Code
-	.short	HdaeRom_TableEntry2_Epilogue - HdaeRom_TableEntry2_Code
-	.short	HdaeRom_TableEntry2_Case7 - HdaeRom_TableEntry2_Code
-; 15 x s16 switch offsets.  SendEpilogue_Data_Skip14 (0xFEB4C6): `ld_rrw wa,xix,wa;
+	.short	PanelTag72_ApplyPartMix_ReverbSend_Epilogue - HdaeRom_TableEntry2_Code
+	.short	PanelTag72_ApplyPartMix_ReverbSend_Epilogue - HdaeRom_TableEntry2_Code
+	.short	PanelTag72_ApplyPartMix_ReverbSend_Epilogue - HdaeRom_TableEntry2_Code
+	.short	PanelTag72_ApplyPartMix_ReverbSend - HdaeRom_TableEntry2_Code
+; 15 x s16 switch offsets.  SndParam_ApplySystemParam_SendEqualizerOnOff_Skip14 (0xFEB4C6): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFEB4EE); jp_rr 8,xix,wa` -- targets 0xFEB4EE + offset (no labels yet).
 SendEpilogueA_SwitchOffsets:
 	.short	MIDI_SendEpilogue_Code_2 - MIDI_SendEpilogue_Code_2
-	.short	SendEpilogue_Data_Switch2_Case129 - MIDI_SendEpilogue_Code_2
-	.short	SendEpilogue_Data_Switch2_Case130 - MIDI_SendEpilogue_Code_2
-	.short	SendEpilogue_Data_Switch2_Case131 - MIDI_SendEpilogue_Code_2
-	.short	SendEpilogue_Data_Switch2_Case132 - MIDI_SendEpilogue_Code_2
-	.short	SendEpilogue_Data_Switch2_Case133 - MIDI_SendEpilogue_Code_2
-	.short	SendEpilogue_Data_Switch2_Case134 - MIDI_SendEpilogue_Code_2
-	.short	SendEpilogue_Data_Switch2_Case135 - MIDI_SendEpilogue_Code_2
-	.short	SendEpilogue_Data_Switch2_Case136 - MIDI_SendEpilogue_Code_2
-	.short	SendEpilogue_Data_Switch2_Case137 - MIDI_SendEpilogue_Code_2
-	.short	SendEpilogue_Data_Switch2_Case138 - MIDI_SendEpilogue_Code_2
-	.short	SendEpilogue_Data_Switch2_Case139 - MIDI_SendEpilogue_Code_2
-	.short	SendEpilogue_Data_Switch2_Case140 - MIDI_SendEpilogue_Code_2
-	.short	SendEpilogue_Data_Switch2_Case141 - MIDI_SendEpilogue_Code_2
-	.short	SendEpilogue_Data_Switch2_Case142 - MIDI_SendEpilogue_Code_2
-; 7 x s16 switch offsets.  SendEpilogue_Data_Skip7 (0xFEB3DC): `ld_rrw wa,xix,wa;
+	.short	SndParam_ApplySystemParam_ScaleTuneType - MIDI_SendEpilogue_Code_2
+	.short	SndParam_ApplySystemParam_ScaleTuneKey - MIDI_SendEpilogue_Code_2
+	.short	SndParam_ApplySystemParam_ScaleTuneUserNote0 - MIDI_SendEpilogue_Code_2
+	.short	SndParam_ApplySystemParam_ScaleTuneUserNote1 - MIDI_SendEpilogue_Code_2
+	.short	SndParam_ApplySystemParam_ScaleTuneUserNote2 - MIDI_SendEpilogue_Code_2
+	.short	SndParam_ApplySystemParam_ScaleTuneUserNote3 - MIDI_SendEpilogue_Code_2
+	.short	SndParam_ApplySystemParam_ScaleTuneUserNote4 - MIDI_SendEpilogue_Code_2
+	.short	SndParam_ApplySystemParam_ScaleTuneUserNote5 - MIDI_SendEpilogue_Code_2
+	.short	SndParam_ApplySystemParam_ScaleTuneUserNote6 - MIDI_SendEpilogue_Code_2
+	.short	SndParam_ApplySystemParam_ScaleTuneUserNote7 - MIDI_SendEpilogue_Code_2
+	.short	SndParam_ApplySystemParam_ScaleTuneUserNote8 - MIDI_SendEpilogue_Code_2
+	.short	SndParam_ApplySystemParam_ScaleTuneUserNote9 - MIDI_SendEpilogue_Code_2
+	.short	SndParam_ApplySystemParam_ScaleTuneUserNote10 - MIDI_SendEpilogue_Code_2
+	.short	SndParam_ApplySystemParam_ScaleTuneUserNote11 - MIDI_SendEpilogue_Code_2
+; 7 x s16 switch offsets.  SndParam_ApplySystemParam_Skip7 (0xFEB3DC): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFEB40D); jp_rr 8,xix,wa` -- targets 0xFEB40D + offset (no labels yet).
 SendEpilogueB_SwitchOffsets:
 	.short	MIDI_SendEpilogue_Code - MIDI_SendEpilogue_Code
 	.short	SendEpilogue_Data_Case1 - MIDI_SendEpilogue_Code
-	.short	SendEpilogue_Data_Case2 - MIDI_SendEpilogue_Code
-	.short	SendEpilogue_Data_Case3 - MIDI_SendEpilogue_Code
-	.short	SendEpilogue_Data_Case4 - MIDI_SendEpilogue_Code
+	.short	SndParam_ApplySystemParam_QueueReverbOnOff - MIDI_SendEpilogue_Code
+	.short	SndParam_ApplySystemParam_QueueDigitalEffectSwitch - MIDI_SendEpilogue_Code
+	.short	SndParam_ApplySystemParam_QueueAcousticIllusionOnOff - MIDI_SendEpilogue_Code
 	.short	SendEpilogue_Data_Case5 - MIDI_SendEpilogue_Code
-	.short	SendEpilogue_Data_Case6 - MIDI_SendEpilogue_Code
+	.short	SndParam_ApplySystemParam_SendEqualizerOnOff - MIDI_SendEpilogue_Code
 ; 12-byte per-semitone tables (one byte per pitch class C..B; 0x80 = centre).
-; SeqVoice_CheckAndRet_Data (0xFEBC56) maps its selector byte (0x80, 5, 4, 3,
+; ScaleTune_TypeToOffsetTable (0xFEBC56) maps its selector byte (0x80, 5, 4, 3,
 ; 0x40-0x42, 0, 0x10-0x16 through SeqVoiceSel_SwitchOffsets) to one of them
 ; and returns its address in xhl (`lda_24 xhl,(table)` at 14 case labels;
 ; the 15th returns RAM 0xFD1E).  [INFERENCE] scale-tuning presets.
@@ -8522,17 +8522,17 @@ SemitoneBias_TableA:
 	.byte 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80
 	.byte 0x80, 0x80, 0x80, 0x80
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
-; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
+; ScaleTune_TypeToOffsetTable (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableB:
 	.byte 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80
 	.byte 0x80, 0x80, 0x80, 0x80
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
-; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
+; ScaleTune_TypeToOffsetTable (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableC:
 	.byte 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80
 	.byte 0x80, 0x80, 0x80, 0x80
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
-; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
+; ScaleTune_TypeToOffsetTable (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableD:
 	.byte 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80
 	.byte 0x80, 0x80, 0x80, 0x80
@@ -8543,75 +8543,75 @@ NoRef_SemitoneBias_EEC0CA:
 	.byte 0x93, 0x70, 0x98, 0xa8, 0x83, 0x92, 0x6f, 0x96, 0xf4, 0x80, 0x2a, 0x84
 	.byte 0x93, 0xbf, 0x98, 0xa8, 0x83, 0x92, 0xbb, 0x96, 0xa5, 0x80, 0xaa, 0x84
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
-; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
+; ScaleTune_TypeToOffsetTable (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableE:
 	.byte 0x78, 0x8a, 0x7d, 0x71, 0x83, 0x76, 0x88, 0x7b
 	.byte 0x8d, 0x80, 0x74, 0x71
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
-; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
+; ScaleTune_TypeToOffsetTable (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableF:
 	.byte 0x8f, 0x83, 0x85, 0x88, 0x83, 0x8d, 0x80, 0x8a
 	.byte 0x85, 0x80, 0x8a, 0x7d
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
-; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
+; ScaleTune_TypeToOffsetTable (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableG:
 	.byte 0x8d, 0x80, 0x84, 0x85, 0x83, 0x8a, 0x80, 0x89
 	.byte 0x83, 0x80, 0x88, 0x85
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
-; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
+; ScaleTune_TypeToOffsetTable (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableH:
 	.byte 0x80, 0x80, 0x80, 0x80, 0x40, 0x80, 0x80, 0x80
 	.byte 0x80, 0x80, 0x80, 0x40
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
-; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
+; ScaleTune_TypeToOffsetTable (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableI:
 	.byte 0x80, 0x80, 0x80, 0x80, 0x40, 0x80, 0x80, 0x80
 	.byte 0x80, 0x40, 0x80, 0x80
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
-; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
+; ScaleTune_TypeToOffsetTable (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableJ:
 	.byte 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x40, 0x80
 	.byte 0x80, 0x80, 0x80, 0x40
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
-; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
+; ScaleTune_TypeToOffsetTable (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableK:
 	.byte 0x80, 0x80, 0x40, 0x80, 0x80, 0x80, 0x80, 0x80
 	.byte 0x80, 0x40, 0x80, 0x80
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
-; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
+; ScaleTune_TypeToOffsetTable (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableL:
 	.byte 0x80, 0x40, 0x80, 0x80, 0x80, 0x80, 0x40, 0x80
 	.byte 0x80, 0x80, 0x80, 0x80
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
-; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
+; ScaleTune_TypeToOffsetTable (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableM:
 	.byte 0x80, 0x80, 0xd1, 0x80, 0x80, 0x6f, 0x80, 0xb2
 	.byte 0x80, 0xe0, 0x80, 0x80
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
-; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
+; ScaleTune_TypeToOffsetTable (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableN:
 	.byte 0x80, 0x80, 0x56, 0x80, 0x8f, 0xaf, 0x80, 0x6b
 	.byte 0x80, 0xad, 0x80, 0x80
-; 7 x s16 switch offsets.  SeqVoice_CheckAndRet_Data (0xFEBC56): `ld_rrw wa,xix,wa;
+; 7 x s16 switch offsets.  ScaleTune_TypeToOffsetTable (0xFEBC56): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFEBCA0); jp_rr 8,xix,wa` -- targets 0xFEBCA0 + offset (no labels yet).
 SeqVoiceSel_SwitchOffsets:
-	.short	SeqVoice_CheckAndRet_Data_Case16 - SeqVoice_CheckAndRet_Data_Skip
-	.short	SeqVoice_CheckAndRet_Data_Case17 - SeqVoice_CheckAndRet_Data_Skip
-	.short	SeqVoice_CheckAndRet_Data_Case18 - SeqVoice_CheckAndRet_Data_Skip
-	.short	SeqVoice_CheckAndRet_Data_Case19 - SeqVoice_CheckAndRet_Data_Skip
-	.short	SeqVoice_CheckAndRet_Data_Case20 - SeqVoice_CheckAndRet_Data_Skip
-	.short	SeqVoice_CheckAndRet_Data_Case21 - SeqVoice_CheckAndRet_Data_Skip
-	.short	SeqVoice_CheckAndRet_Data_Case22 - SeqVoice_CheckAndRet_Data_Skip
-; 7 x s16 switch offsets.  SendEpilogue_Data_Helper (0xFEBD0E): `ld_rrw wa,xix,wa;
+	.short	SeqVoice_CheckAndRet_Data_Case16 - ScaleTune_TypeToOffsetTable_Skip
+	.short	SeqVoice_CheckAndRet_Data_Case17 - ScaleTune_TypeToOffsetTable_Skip
+	.short	SeqVoice_CheckAndRet_Data_Case18 - ScaleTune_TypeToOffsetTable_Skip
+	.short	SeqVoice_CheckAndRet_Data_Case19 - ScaleTune_TypeToOffsetTable_Skip
+	.short	SeqVoice_CheckAndRet_Data_Case20 - ScaleTune_TypeToOffsetTable_Skip
+	.short	SeqVoice_CheckAndRet_Data_Case21 - ScaleTune_TypeToOffsetTable_Skip
+	.short	SeqVoice_CheckAndRet_Data_Case22 - ScaleTune_TypeToOffsetTable_Skip
+; 7 x s16 switch offsets.  ScaleTune_TypeToModeCode (0xFEBD0E): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFEBD57); jp_rr 8,xix,wa` -- targets 0xFEBD57 + offset (no labels yet).
 SendEpilogueC_SwitchOffsets:
-	.short	SendEpilogue_Data_Helper_Case16 - SeqVoice_CheckAndRet_Data_Skip10
-	.short	SendEpilogue_Data_Helper_Case17 - SeqVoice_CheckAndRet_Data_Skip10
-	.short	SendEpilogue_Data_Helper_Case18 - SeqVoice_CheckAndRet_Data_Skip10
-	.short	SendEpilogue_Data_Helper_Case19 - SeqVoice_CheckAndRet_Data_Skip10
-	.short	SendEpilogue_Data_Helper_Case20 - SeqVoice_CheckAndRet_Data_Skip10
-	.short	SendEpilogue_Data_Helper_Case21 - SeqVoice_CheckAndRet_Data_Skip10
-	.short	SendEpilogue_Data_Helper_Case22 - SeqVoice_CheckAndRet_Data_Skip10
+	.short	SendEpilogue_Data_Helper_Case16 - ScaleTune_TypeToModeCode_Skip10
+	.short	SendEpilogue_Data_Helper_Case17 - ScaleTune_TypeToModeCode_Skip10
+	.short	SendEpilogue_Data_Helper_Case18 - ScaleTune_TypeToModeCode_Skip10
+	.short	SendEpilogue_Data_Helper_Case19 - ScaleTune_TypeToModeCode_Skip10
+	.short	SendEpilogue_Data_Helper_Case20 - ScaleTune_TypeToModeCode_Skip10
+	.short	SendEpilogue_Data_Helper_Case21 - ScaleTune_TypeToModeCode_Skip10
+	.short	SendEpilogue_Data_Helper_Case22 - ScaleTune_TypeToModeCode_Skip10
 ; 9 x s16 switch offsets.  MIDI_WriteChannelData_Block (0xFEBF1D): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFEBF45); jp_rr 8,xix,wa` -- targets 0xFEBF45 + offset (no labels yet).
 ChannelData_SwitchOffsets:
@@ -9464,9 +9464,9 @@ SoundRam_DefaultRecord:
 ; 6 x s16 switch offsets.  HdaeRom_DataHandler (0xFF0243): `ld_rrw ..,xix,..; lda xix,(0xFF028F);
 ; jp_rr 8,xix,..` -- targets 0xFF028F + offset (no labels yet).
 HdaeRomData_SwitchOffsets:
-	.short	HdaeRom_DataHandler_Case1 - HdaeRom_DataDispatch
-	.short	HdaeRom_DataHandler_Case1 - HdaeRom_DataDispatch
-	.short	HdaeRom_DataHandler_Case1 - HdaeRom_DataDispatch
+	.short	HdaeRom_DataHandler_ConvertKn2000MkaMkb - HdaeRom_DataDispatch
+	.short	HdaeRom_DataHandler_ConvertKn2000MkaMkb - HdaeRom_DataDispatch
+	.short	HdaeRom_DataHandler_ConvertKn2000MkaMkb - HdaeRom_DataDispatch
 	.short	HdaeRom_DataHandler_Skip - HdaeRom_DataDispatch
 	.short	HdaeRom_DataDispatch - HdaeRom_DataDispatch
 	.short	HdaeRom_DataHandler_Skip - HdaeRom_DataDispatch
@@ -9478,7 +9478,7 @@ HdaeRomAlt_SwitchOffsets:
 	.short	HdaeRom_AltDispatch_SetWord - HdaeRom_AltDispatch
 	.short	HdaeRom_AltDispatch - HdaeRom_AltDispatch
 	.short	HdaeRom_AltDispatch_SetWord - HdaeRom_AltDispatch
-	.short	HdaeRom_AltHandler_Case6 - HdaeRom_AltDispatch
+	.short	HdaeRom_AltHandler_Kn5000Image - HdaeRom_AltDispatch
 ; 6 x s16 switch offsets.  TmFlash_BulkTransferToSubCPU_Skip2 (0xFF079A): `ld_rrw ..,xix,..; lda xix,(0xFF07FB);
 ; jp_rr 8,xix,..` -- targets 0xFF07FB + offset (no labels yet).
 TmFlashBulkA_SwitchOffsets:

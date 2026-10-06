@@ -605,15 +605,15 @@ MidiPkt_SendCtlValueSysEx:
 	ld	xwa, (xiz+4)
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
-	jrl	z, MidiPkt_EnqueueControl_3364_Epilogue
+	jrl	z, MidiPkt_SendCtlValueSysEx_Epilogue
 	lda	xbc, (MidiCtl_NullRecord:24)
 	ld	xwa, (xiz+4)
 	cp	xbc, xwa
-	jr	z, MidiPkt_EnqueueControl_3364_Epilogue
+	jr	z, MidiPkt_SendCtlValueSysEx_Epilogue
 	ld	xbc, (xiz)
 	ld	a, (xwa+8)
 	and	a, (xbc+3)
-	jr	z, MidiPkt_EnqueueControl_3364_Epilogue
+	jr	z, MidiPkt_SendCtlValueSysEx_Epilogue
 	ld	xwa, SysEx_Msg_35DC
 	ld	bc, 6:i3
 	call	ArpQueue_Enqueue
@@ -654,7 +654,7 @@ MidiPkt_SendCtlValueSysEx_Skip:
 	ld	xwa, (0xbbc0:16)
 	call	SeqOut_FlushTimedBuffer
 	call	ArpQueue_SwapBuffers
-MidiPkt_EnqueueControl_3364_Epilogue:
+MidiPkt_SendCtlValueSysEx_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+10)
 	ret

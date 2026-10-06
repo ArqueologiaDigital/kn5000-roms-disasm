@@ -1,0 +1,1792 @@
+[
+ {
+  "old": "CmpBksl_STtlFunc_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpBksl_STtlFunc_OnTitleOld",
+  "header": "",
+  "basis": "switch value meaning (EVT_ACTIVATE_STATE phase: 2 = title new, 3 = title old, 5 = title activate after an interrupt; firmware debug strings in TestTitleFunc) + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:31167 `cp xbc, EVT_ACTIVATE_STATE` -- the switch serves EVT_ACTIVATE_STATE; XDE is the phase",
+   "sequencer/accompaniment_engine.s:31169 `dec 2, xde` -- switch on phase - 2, so CaseN is phase N (table ui_widgets/widget_descriptors.s:5810 CmpBksl_STtlFunc_CaseTable)",
+   "storage/flash_floppy_handlers.s:5730 `RegTitle 0x4, InitializeSuna_Str_TT_CMBKSL_S, 0xb2, NAKA_MAINFUNC_CmpBksl_STtlFunc, 0xb20000` -- the MainFunction of TT_CMBKSL_S (CmpBkslSScreen \"RECORDING\")",
+   "ui/ui_control_panel.s:3539 `ld xde, 3:i3` -- title change: the title being left (GetTitleOld, 3536) gets EVT_ACTIVATE_STATE phase 3, the new title (GetTitleNow, 3551) phase 2 (3554)",
+   "ui/ui_control_panel.s:3870 `ld xde, 5:i3` -- interrupt return: the resumed title (GetTitleNow, 3867) gets phase 5, after the interrupting title got 7 and 3 (3860/3865)",
+   "factory_test/fd_test_data.s:344 `.asciz \"Title old\"` -- TestTitleFunc prints \"Title old\" for phase 3 and \"Title Activate\" (347) for phase 5 (factory_test/test_init.s:138 `dec 2, xwa`; fd_test_data.s:382 TestTitleFunc_CaseTable)",
+   "sequencer/accompaniment_engine.s:31193 `ld (0x350c:16), 0` -- leaving the title clears 0x350C, the CLEAR-PATTERN confirm-window flag set by CmpBkslSTtl_DirectMode switch 0x88 (31328)"
+  ]
+ },
+ {
+  "old": "CmpBksl_STtlFunc_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpBksl_STtlFunc_OnTitleActivate",
+  "header": "",
+  "basis": "switch value meaning (EVT_ACTIVATE_STATE phase: 2 = title new, 3 = title old, 5 = title activate after an interrupt; firmware debug strings in TestTitleFunc) + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:31200 `call RhythmPatInit_Wrapper` -- phase 5 (resumed after an interrupting title) re-runs the pattern init that phase 2 (CmpBkslSTtl_Dispatch, 31185) runs"
+  ]
+ },
+ {
+  "old": "CmpBkslSTtl_DirectMode_Case136",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpBkslSTtl_DirectMode_OnClearPattern",
+  "header": "Switch 0x88 CLEAR THE ENTIRE PATTERN: with byte 0x340EA = 0 requests the clear at once (bit 2 of 0x34CD, message 35), else opens the CmpClrSure confirm window (0x350C = 1).",
+  "basis": "switch value meaning (EVT_SW_IN panel switch number on TT_CMBKSL_S, CmpBkslSScreen; switch = 0x80 + table index) + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:31166 `jr z, CmpBkslSTtl_DirectMode` -- EVT_SW_IN (31165) lands here with the switch number in XDE",
+   "sequencer/accompaniment_engine.s:31220 `sub xwa, 0x80` / 31223 `cp xwa, 0xa` -- switches 0x80..0x8A index CmpBkslSTtl_DirectMode_CaseTable (switches 0..4 are compared directly, 31210-31219), so Case136 = switch 0x88",
+   "ui_widgets/naka_composer_style.c:3341 `.editsw = 0x0088` -- ClearTheEntirePattern_VwMenuBox, \"CLEAR THE ENTIRE PATTERN\" (3347); 0x89 = CmpNameMenu \"VARIATION NAMING\" (3319/3325), 0x8A = \"RECORD SETTING\" (3113/3119)",
+   "sequencer/accompaniment_engine.s:31318 `cp (0x0340ea:24), 0x00` -- byte 0x340EA = 0: requests the clear at once (31320 `set 2, (0x34cd:16)`, message 35 via SoundCtrl_SendCommand(0xEE) = TT_MESAGE); else 31328-31332 sets 0x350C = 1 and EVT_SHOWs element 0x12 (CmpClrSure, ui_widgets/naka_composer_style.c:1254)",
+   "sequencer/accompaniment_engine.s:32972 `set 2, (0x34cd:16)` -- MiddleCmpClrFunc's EVT_CMP_CLR_YES (the confirm window's YES) does the same clear request"
+  ]
+ },
+ {
+  "old": "CmpBkslSTtl_DirectMode_Case137",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpBkslSTtl_DirectMode_OnVariationNaming",
+  "header": "",
+  "basis": "switch value meaning (EVT_SW_IN panel switch number on TT_CMBKSL_S, CmpBkslSScreen; switch = 0x80 + table index) + body",
+  "evidence": [
+   "ui_widgets/naka_composer_style.c:3319 `.editsw = 0x0089` -- CmpNameMenu, \"VARIATION NAMING\" (3325)",
+   "sequencer/accompaniment_engine.s:31337 `cp (0x34d6:16), 12` / 31339 `ldw wa, 0xb3` -- for pattern index 0x34D6 below 12, UI_PostModeChangeEvent to title 0xB3 (TT_CMNAME, CmpNamingScreen; storage/flash_floppy_handlers.s:5731)"
+  ]
+ },
+ {
+  "old": "CmpBkslSTtl_DirectMode_Case138",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpBkslSTtl_DirectMode_OnRecordSetting",
+  "header": "",
+  "basis": "switch value meaning (EVT_SW_IN panel switch number on TT_CMBKSL_S, CmpBkslSScreen; switch = 0x80 + table index) + body",
+  "evidence": [
+   "ui_widgets/naka_composer_style.c:3113 `.editsw = 0x008A` -- RecordSetting_VwMenuBox, \"RECORD SETTING\" (3119)",
+   "sequencer/accompaniment_engine.s:31344 `ldw wa, 0xb4` -- UI_PostModeChangeEvent to title 0xB4 (TT_CMSET, CmpSetScreen; storage/flash_floppy_handlers.s:5732)"
+  ]
+ },
+ {
+  "old": "CmpNcpTtlFunc_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpNcpTtlFunc_OnTitleOld",
+  "header": "",
+  "basis": "switch value meaning (EVT_ACTIVATE_STATE phase: 2 = title new, 3 = title old, 5 = title activate after an interrupt; firmware debug strings in TestTitleFunc) + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:31357 `cp xbc, EVT_ACTIVATE_STATE` -- the switch serves EVT_ACTIVATE_STATE; XDE is the phase",
+   "sequencer/accompaniment_engine.s:31359 `dec 2, xde` -- switch on phase - 2, so CaseN is phase N (table ui_widgets/widget_descriptors.s:5862 CmpNcpTtlFunc_CaseTable)",
+   "storage/flash_floppy_handlers.s:5736 `RegTitle 0x4, InitializeSuna_Str_TT_CMPNCP, 0xb8, NAKA_MAINFUNC_CmpNcpTtlFunc, 0xb80000` -- MainFunction of TT_CMPNCP",
+   "ui/ui_control_panel.s:3539 `ld xde, 3:i3` -- title change: the title being left (GetTitleOld, 3536) gets EVT_ACTIVATE_STATE phase 3, the new title (GetTitleNow, 3551) phase 2 (3554)",
+   "ui/ui_control_panel.s:3870 `ld xde, 5:i3` -- interrupt return: the resumed title (GetTitleNow, 3867) gets phase 5, after the interrupting title got 7 and 3 (3860/3865)",
+   "factory_test/fd_test_data.s:344 `.asciz \"Title old\"` -- TestTitleFunc prints \"Title old\" for phase 3 and \"Title Activate\" (347) for phase 5 (factory_test/test_init.s:138 `dec 2, xwa`; fd_test_data.s:382 TestTitleFunc_CaseTable)",
+   "sequencer/accompaniment_engine.s:31400 `call UI_PostDialEnable` -- with WA = 0 (31399): leaving the title turns the dial off, then DrumVoice_Handler7_Data_2_Sub (31405)"
+  ]
+ },
+ {
+  "old": "CmpNcpTtlFunc_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpNcpTtlFunc_OnTitleActivate",
+  "header": "",
+  "basis": "switch value meaning (EVT_ACTIVATE_STATE phase: 2 = title new, 3 = title old, 5 = title activate after an interrupt; firmware debug strings in TestTitleFunc) + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:31416 `call CmpNcpTtl_Dispatch_Helper` -- phase 5, then 31421 `ld a, (0x3a80:16)` re-arms the dial (UI_PostDialEnable / UI_PostDialValueEvent) for the current window state"
+  ]
+ },
+ {
+  "old": "CmEsyTtlFunc_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmEsyTtlFunc_OnTitleOld",
+  "header": "Leaving EASY COMPOSER without SET: unless 0x37B9 = 0xFF, restores the edit rows 0x37AB/0x37B2 from 0x37B9/0x37C0 and pattern index 0x34D6 from 0x37C7 (the reverse of CmpEsyTtl_Mode2's SET).",
+  "basis": "switch value meaning (EVT_ACTIVATE_STATE phase: 2 = title new, 3 = title old, 5 = title activate after an interrupt; firmware debug strings in TestTitleFunc) + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:31903 `cp xbc, EVT_ACTIVATE_STATE` -- the switch serves EVT_ACTIVATE_STATE; XDE is the phase",
+   "sequencer/accompaniment_engine.s:31905 `dec 2, xde` -- switch on phase - 2, so CaseN is phase N (table ui_widgets/widget_descriptors.s:5912 CmEsyTtlFunc_CaseTable)",
+   "storage/flash_floppy_handlers.s:5738 `RegTitle 0x4, InitializeSuna_Str_TT_CMEASY, 0xba, NAKA_MAINFUNC_CmEsyTtlFunc, 0xba0000` -- MainFunction of TT_CMEASY (\"EASY COMPOSER\", ui_widgets/naka_composer_style.c:5374)",
+   "ui/ui_control_panel.s:3539 `ld xde, 3:i3` -- title change: the title being left (GetTitleOld, 3536) gets EVT_ACTIVATE_STATE phase 3, the new title (GetTitleNow, 3551) phase 2 (3554)",
+   "ui/ui_control_panel.s:3870 `ld xde, 5:i3` -- interrupt return: the resumed title (GetTitleNow, 3867) gets phase 5, after the interrupting title got 7 and 3 (3860/3865)",
+   "factory_test/fd_test_data.s:344 `.asciz \"Title old\"` -- TestTitleFunc prints \"Title old\" for phase 3 and \"Title Activate\" (347) for phase 5 (factory_test/test_init.s:138 `dec 2, xwa`; fd_test_data.s:382 TestTitleFunc_CaseTable)",
+   "sequencer/accompaniment_engine.s:31945 `cp (0x37b9:16), 255` -- unless 0x37B9 = 0xFF, copies 0x37B9 -> 0x37AB and 0x37C0 -> 0x37B2 (7 bytes each, 31947-31959) and 31960 `ldmm8 13526, 14279` (= ld (0x34D6), (0x37C7)) -- the reverse of the SET switch's copy (32052-32066 `ldmm8 14279, 13526`)"
+  ]
+ },
+ {
+  "old": "CmpEsyTtl_Mode2_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpEsyTtl_Mode2_OnEdit",
+  "header": "",
+  "basis": "switch value meaning (EVT_SW_IN panel switch number on TT_CMEASY; byte map CmpEsyTtl_Mode2_Table turns the switch into the case index, so N is the case index, not the switch) + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:31902 `jrl z, CmpEsyTtl_Mode1` -- EVT_SW_IN (31901); 31965 `cp xde, 0xb` keeps switches 0..11, 31967 `sub xde, 0x74` maps 0x80..0x87 to bytes 12..19",
+   "sequencer/accompaniment_engine.s:31975 `add xde, CmpEsyTtl_Mode2_Table` -- byte map (ui_widgets/naka_widget_descriptors.c:13837) 00 00 01 00 00 01 00 01 02 03 04 05 | 00 00 01 00 00 01 00 01: switch 8 -> case 2, 9 -> 3, 10 -> 4, 11 -> 5 (2/5/7 and 0x82/0x85/0x87 -> case 1)",
+   "ui_widgets/naka_composer_style.c:5400 `.editsw = 0x0008` -- EDIT_VwMenuBox, \"EDIT\" (5406)",
+   "sequencer/accompaniment_engine.s:31993 `call CmEsyTtl_Dispatch2_Helper2` / 31999 `ldw wa, 0x00b5` -- then UI_PostModeChangeEvent to title 0xB5 (TT_CMREAL, the composer real-time page)"
+  ]
+ },
+ {
+  "old": "CmpEsyTtl_Mode2_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpEsyTtl_Mode2_OnMemoryNumberInc",
+  "header": "",
+  "basis": "switch value meaning (EVT_SW_IN panel switch number on TT_CMEASY; byte map CmpEsyTtl_Mode2_Table turns the switch into the case index, so N is the case index, not the switch) + body",
+  "evidence": [
+   "ui_widgets/naka_composer_style.c:5422 `.editsw = 0x0009` / 5423 `.style = 0x0001` -- switch 9 is an SS_Up box (EditSwStyleID 1, ui_widgets/debug_naming_panel_sim.s:686) beside COMPOSER MEMORY",
+   "sequencer/accompaniment_engine.s:32009 `ld a, 0x00:opc` / 32010 `call VoiceSlot_Dispatch_Return` -- CmpEsy_StepVariPattern (28687) with A bit 7 clear steps pattern index 0x34D6 up (max 11); 32015 `ld xwa, 0x00ba0009` repaints element 9 (EsCmpMemNo, ui_widgets/naka_composer_style.c:1590)"
+  ]
+ },
+ {
+  "old": "CmpEsyTtl_Mode2_Case4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpEsyTtl_Mode2_OnMemoryNumberDec",
+  "header": "",
+  "basis": "switch value meaning (EVT_SW_IN panel switch number on TT_CMEASY; byte map CmpEsyTtl_Mode2_Table turns the switch into the case index, so N is the case index, not the switch) + body",
+  "evidence": [
+   "ui_widgets/naka_composer_style.c:5443 `.editsw = 0x000A` / 5444 `.style = 0x0002` -- switch 10 is the SS_Down box",
+   "sequencer/accompaniment_engine.s:32026 `ld a, 0x80:opc` / 32027 `call VoiceSlot_Dispatch_Return` -- A bit 7 set: CmpEsy_StepVariPattern steps 0x34D6 down (min 0), then repaints EsCmpMemNo (32032)"
+  ]
+ },
+ {
+  "old": "CmpEsyTtl_Mode2_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CmpEsyTtl_Mode2_OnSet",
+  "header": "Switch 11 SET: when the difference mask 0x37C8 is nonzero applies the edit (CmpEsy_DeliverEventAndCheck_Helper) and on success saves rows 0x37AB/0x37B2 to 0x37B9/0x37C0 and 0x34D6 to 0x37C7.",
+  "basis": "switch value meaning (EVT_SW_IN panel switch number on TT_CMEASY; byte map CmpEsyTtl_Mode2_Table turns the switch into the case index, so N is the case index, not the switch) + body",
+  "evidence": [
+   "ui_widgets/naka_composer_style.c:5464 `.editsw = 0x000B` -- SET_VwEditSwBox, \"SET\" (5469)",
+   "sequencer/accompaniment_engine.s:32039 `cp (0x37c8:16), 0` -- with a nonzero difference mask 0x37C8 runs CmpEsy_DeliverEventAndCheck_Helper (32045) and, without error, copies 0x37AB -> 0x37B9 and 0x37B2 -> 0x37C0 (7 bytes each) and 32066 `ldmm8 14279, 13526` saves 0x34D6 in 0x37C7; then the dial is turned off"
+  ]
+ },
+ {
+  "old": "S2cTtlFunc_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "S2cTtlFunc_OnTitleActivate",
+  "header": "",
+  "basis": "switch value meaning (EVT_ACTIVATE_STATE phase: 2 = title new, 3 = title old, 5 = title activate after an interrupt; firmware debug strings in TestTitleFunc) + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:32095 `cp xbc, EVT_ACTIVATE_STATE` -- the switch serves EVT_ACTIVATE_STATE; XDE is the phase",
+   "sequencer/accompaniment_engine.s:32097 `dec 2, xde` -- switch on phase - 2, so CaseN is phase N (table ui_widgets/widget_descriptors.s:5956 S2cTtlFunc_CaseTable)",
+   "storage/flash_floppy_handlers.s:5737 `RegTitle 0x4, InitializeSuna_Str_TT_CMSEQCP, 0xb9, NAKA_MAINFUNC_S2cTtlFunc, 0xb90000` -- MainFunction of TT_CMSEQCP (SEQ TO COMPOSER COPY)",
+   "ui/ui_control_panel.s:3539 `ld xde, 3:i3` -- title change: the title being left (GetTitleOld, 3536) gets EVT_ACTIVATE_STATE phase 3, the new title (GetTitleNow, 3551) phase 2 (3554)",
+   "ui/ui_control_panel.s:3870 `ld xde, 5:i3` -- interrupt return: the resumed title (GetTitleNow, 3867) gets phase 5, after the interrupting title got 7 and 3 (3860/3865)",
+   "factory_test/fd_test_data.s:344 `.asciz \"Title old\"` -- TestTitleFunc prints \"Title old\" for phase 3 and \"Title Activate\" (347) for phase 5 (factory_test/test_init.s:138 `dec 2, xwa`; fd_test_data.s:382 TestTitleFunc_CaseTable)",
+   "sequencer/accompaniment_engine.s:32119 `ld a, (0x3a77:16)` -- phase 5 re-arms the dial (UI_PostDialEnable, UI_PostDialValueEvent 0/1/2) for state 0x3A77 = 0, 1 or 2"
+  ]
+ },
+ {
+  "old": "CstmCpTtlFunc_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CstmCpTtlFunc_OnTitleActivate",
+  "header": "",
+  "basis": "switch value meaning (EVT_ACTIVATE_STATE phase: 2 = title new, 3 = title old, 5 = title activate after an interrupt; firmware debug strings in TestTitleFunc) + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:32442 `cp xbc, EVT_ACTIVATE_STATE` -- the switch serves EVT_ACTIVATE_STATE; XDE is the phase",
+   "sequencer/accompaniment_engine.s:32444 `dec 2, xde` -- switch on phase - 2, so CaseN is phase N (table ui_widgets/widget_descriptors.s:6008 CstmCpTtlFunc_CaseTable)",
+   "storage/flash_floppy_handlers.s:5741 `RegTitle 0x4, InitializeSuna_Str_TT_CMCSTMCP, 0xbe, NAKA_MAINFUNC_CstmCpTtlFunc, 0xbe0000` -- MainFunction of TT_CMCSTMCP (CUSTOM COPY)",
+   "ui/ui_control_panel.s:3539 `ld xde, 3:i3` -- title change: the title being left (GetTitleOld, 3536) gets EVT_ACTIVATE_STATE phase 3, the new title (GetTitleNow, 3551) phase 2 (3554)",
+   "ui/ui_control_panel.s:3870 `ld xde, 5:i3` -- interrupt return: the resumed title (GetTitleNow, 3867) gets phase 5, after the interrupting title got 7 and 3 (3860/3865)",
+   "factory_test/fd_test_data.s:344 `.asciz \"Title old\"` -- TestTitleFunc prints \"Title old\" for phase 3 and \"Title Activate\" (347) for phase 5 (factory_test/test_init.s:138 `dec 2, xwa`; fd_test_data.s:382 TestTitleFunc_CaseTable)",
+   "sequencer/accompaniment_engine.s:32481 `ld a, (0x3a7e:16)` -- with a window open (0x3A7E = 1 or 2) phase 5 re-shows it: element 0x11 (32489) when FROM slot 0x39B6 < 3, else element 0x19 (32494), EVT_SHOW 5"
+  ]
+ },
+ {
+  "old": "MspRecTtlFunc_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MspRecTtlFunc_OnTitleOld",
+  "header": "",
+  "basis": "switch value meaning (EVT_ACTIVATE_STATE phase: 2 = title new, 3 = title old, 5 = title activate after an interrupt; firmware debug strings in TestTitleFunc) + body",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:33708 `cp xbc, EVT_ACTIVATE_STATE` -- the switch serves EVT_ACTIVATE_STATE; XDE is the phase",
+   "sequencer/accompaniment_engine.s:33710 `dec 2, xde` -- switch on phase - 2, so CaseN is phase N (table ui_widgets/widget_descriptors.s:6138 MspRecTtlFunc_CaseTable)",
+   "storage/flash_floppy_handlers.s:5743 `RegTitle 0x4, InitializeSuna_Str_TT_MSPREC, 0xc9, NAKA_MAINFUNC_MspRecTtlFunc, 0xc90000` -- MainFunction of TT_MSPREC (title 0xC9 = 201)",
+   "ui/ui_control_panel.s:3539 `ld xde, 3:i3` -- title change: the title being left (GetTitleOld, 3536) gets EVT_ACTIVATE_STATE phase 3, the new title (GetTitleNow, 3551) phase 2 (3554)",
+   "ui/ui_control_panel.s:3870 `ld xde, 5:i3` -- interrupt return: the resumed title (GetTitleNow, 3867) gets phase 5, after the interrupting title got 7 and 3 (3860/3865)",
+   "factory_test/fd_test_data.s:344 `.asciz \"Title old\"` -- TestTitleFunc prints \"Title old\" for phase 3 and \"Title Activate\" (347) for phase 5 (factory_test/test_init.s:138 `dec 2, xwa`; fd_test_data.s:382 TestTitleFunc_CaseTable)",
+   "sequencer/accompaniment_engine.s:33749 `cp (CURRENT_TITLE:16), 201` -- unless the new title is TT_MSPREC itself, clears 0x7F0B when set (33751-33753)"
+  ]
+ },
+ {
+  "old": "MainCmpSet_Case1",
+  "verdict": "refuse",
+  "why_refused": "Not a compiled switch: MainCmpSet_Case1..4 are the shared tails of MainCmpCpFunc (sequencer/accompaniment_engine.s:32998, EVT_RHY_VARI_NM_GET / EVT_RHY_GRP_NM_GET), reached only by jr/jrl (33009, 33040, 33110, 33115) and fall-through; no offset table names them, and the 'MainCmpSet' prefix belongs to the next function (MainCmpSetFunc, 33142). Body: `call ApDeliveryEvent` -- delivers the EVT_AP_RHY_VARI_NM name buffer to 0xB8001F / 0xDC0002 (33107-33118). Suggested for a branch-label batch: MainCmpCpFunc_DeliverName / _AutoFreeName / _PostEvent / _ReturnZero.",
+  "new": null,
+  "header": "",
+  "basis": "not a switch (branch labels)",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:33122 `call ApDeliveryEvent` -- delivers the EVT_AP_RHY_VARI_NM name buffer to 0xB8001F / 0xDC0002 (33107-33118)",
+   "sequencer/accompaniment_engine.s:33009 `jrl nz, MainCmpSet_Case4` -- reached by plain branches inside MainCmpCpFunc"
+  ]
+ },
+ {
+  "old": "MainCmpSet_Case2",
+  "verdict": "refuse",
+  "why_refused": "Not a compiled switch: MainCmpSet_Case1..4 are the shared tails of MainCmpCpFunc (sequencer/accompaniment_engine.s:32998, EVT_RHY_VARI_NM_GET / EVT_RHY_GRP_NM_GET), reached only by jr/jrl (33009, 33040, 33110, 33115) and fall-through; no offset table names them, and the 'MainCmpSet' prefix belongs to the next function (MainCmpSetFunc, 33142). Body: `ld xwa, 0xffffffff` / 33127 `ld xbc, EVT_AUTO_FREE` -- queues EVT_AUTO_FREE of the name buffer XIZ. Suggested for a branch-label batch: MainCmpCpFunc_DeliverName / _AutoFreeName / _PostEvent / _ReturnZero.",
+  "new": null,
+  "header": "",
+  "basis": "not a switch (branch labels)",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:33126 `ld xwa, 0xffffffff` / 33127 `ld xbc, EVT_AUTO_FREE` -- queues EVT_AUTO_FREE of the name buffer XIZ",
+   "sequencer/accompaniment_engine.s:33009 `jrl nz, MainCmpSet_Case4` -- reached by plain branches inside MainCmpCpFunc"
+  ]
+ },
+ {
+  "old": "MainCmpSet_Case3",
+  "verdict": "refuse",
+  "why_refused": "Not a compiled switch: MainCmpSet_Case1..4 are the shared tails of MainCmpCpFunc (sequencer/accompaniment_engine.s:32998, EVT_RHY_VARI_NM_GET / EVT_RHY_GRP_NM_GET), reached only by jr/jrl (33009, 33040, 33110, 33115) and fall-through; no offset table names them, and the 'MainCmpSet' prefix belongs to the next function (MainCmpSetFunc, 33142). Body: `call ApPostEvent` -- posts the prepared event (EVT_AUTO_FREE from 33037-33040 or the fall-through). Suggested for a branch-label batch: MainCmpCpFunc_DeliverName / _AutoFreeName / _PostEvent / _ReturnZero.",
+  "new": null,
+  "header": "",
+  "basis": "not a switch (branch labels)",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:33132 `call ApPostEvent` -- posts the prepared event (EVT_AUTO_FREE from 33037-33040 or the fall-through)",
+   "sequencer/accompaniment_engine.s:33009 `jrl nz, MainCmpSet_Case4` -- reached by plain branches inside MainCmpCpFunc"
+  ]
+ },
+ {
+  "old": "MainCmpSet_Case4",
+  "verdict": "refuse",
+  "why_refused": "Not a compiled switch: MainCmpSet_Case1..4 are the shared tails of MainCmpCpFunc (sequencer/accompaniment_engine.s:32998, EVT_RHY_VARI_NM_GET / EVT_RHY_GRP_NM_GET), reached only by jr/jrl (33009, 33040, 33110, 33115) and fall-through; no offset table names them, and the 'MainCmpSet' prefix belongs to the next function (MainCmpSetFunc, 33142). Body: `ld xhl, 0:i3` / 33139 `ret` -- MainCmpCpFunc's return-0 epilogue (also its not-handled exit, 33009). Suggested for a branch-label batch: MainCmpCpFunc_DeliverName / _AutoFreeName / _PostEvent / _ReturnZero.",
+  "new": null,
+  "header": "",
+  "basis": "not a switch (branch labels)",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:33136 `ld xhl, 0:i3` / 33139 `ret` -- MainCmpCpFunc's return-0 epilogue (also its not-handled exit, 33009)",
+   "sequencer/accompaniment_engine.s:33009 `jrl nz, MainCmpSet_Case4` -- reached by plain branches inside MainCmpCpFunc"
+  ]
+ },
+ {
+  "old": "MspMenuTtl_Case2",
+  "verdict": "refuse",
+  "why_refused": "Not a switch case: MspMenuTtl_Case2 is a second label at the address of MspMenuTtlFunc (sequencer/accompaniment_engine.s:33595/33596), with no reference anywhere; MspMenuTtlFunc's own phase switch uses MspMenuTtlFunc_CaseTable with base MspMenuTtl_Dispatch. It is a stale alias to delete (Canonical Label Names), not a case to rename.",
+  "new": null,
+  "header": "",
+  "basis": "not a switch (alias of the function entry)",
+  "evidence": [
+   "sequencer/accompaniment_engine.s:33595 `MspMenuTtl_Case2:` -- directly followed by 33596 `MspMenuTtlFunc:`",
+   "sequencer/accompaniment_engine.s:33605 `add xde, MspMenuTtlFunc_CaseTable` -- the real switch, whose cases are not this label"
+  ]
+ },
+ {
+  "old": "AcVocalist_ListSetup_Case1",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AcVocalist_ListSetup_HarmonyLocalOn",
+  "header": "Vocalist presets 1, 3, 5 (RIGHT1 -> CHORDAL, RIGHT1 -> VOCODER, SMF HARMONY CHANNEL -> VOCODER) set HARMONY PART LOCAL to ON; presets 0, 2, 4 set it OFF.",
+  "basis": "switch value meaning (selected row of VocalistListBox, the 6 Vocalist presets) + body",
+  "evidence": [
+   "sequencer/seq_event_playback.s:3688 `cp xbc, EVT_SELE_DRAW` -- AcVocalistListBoxProc: on a selection redraw asks itself EVT_GET_SELECTED (3699) and switches on the row, 0..5 (3702 `cp xhl, 0x5`)",
+   "ui_widgets/naka_midi_reverb.c:6603 `.VocalistListBox_list = \" CHORD  ~95 CHORDAL PROGRAM | RIGHT1 ~95 CHORDAL PROGRAM | CHORD  ~95 VOCODER PROGRAM | RIGHT1 ~95 VOCODER PROGRAM | TECHNI-CHORD(PART4) ~95 VOCODER | SMF HARMONY CHANNEL ~95 VOCODER \"` -- rows 1, 3, 5 are the RIGHT1 and SMF-channel presets",
+   "ui_widgets/naka_widget_tables_2.s:1432 AcVocalist_ListSetup_CaseTable -- rows 1, 3, 5 -> this case, rows 0, 2, 4 -> AcVocalist_ListDispatch (EVT_PARA_DRAW 0)",
+   "sequencer/seq_event_playback.s:3716 `ld xwa, 0xd7000c` / 3718 `ld xde, 1:i3` -- EVT_PARA_DRAW 1 to element 12 of slot 0xD7, HarmOnOffBox (ui_widgets/naka_midi_reverb.c:1665, \"HARMONY PART LOCAL: ON\"/\"OFF\", 6640/6642)",
+   "sequencer/seq_event_playback.s:3785 `ld (xbc), wa` -- PsHarm_DrawHandler stores the EVT_PARA_DRAW value as the box's on/off word before drawing ON/OFF"
+  ]
+ },
+ {
+  "old": "VocalistP1OK_Case0",
+  "verdict": "refuse",
+  "why_refused": "Not a compiled switch: VocalistP1OK_Case0 is the return-0 epilogue of VocalistPage1OKFunc (sequencer/seq_event_playback.s:3891), reached by `jr nz` when the event is not EVT_SW_IN (3895) and by fall-through after the EVT_VST_PST_OK MainFuncCall. Suggested for a branch-label batch: VocalistPage1OKFunc_ReturnZero.",
+  "new": null,
+  "header": "",
+  "basis": "not a switch (epilogue)",
+  "evidence": [
+   "sequencer/seq_event_playback.s:3895 `jr nz, VocalistP1OK_Case0` -- plain branch on EVT_SW_IN",
+   "sequencer/seq_event_playback.s:3916 `ld xhl, 0:i3` -- return 0, pop xiz, ret"
+  ]
+ },
+ {
+  "old": "VocalistP1OK_Case1",
+  "verdict": "refuse",
+  "why_refused": "Not a compiled switch: VocalistP1OK_Case1 is the return-0 epilogue of VocalistPage2OKFunc (sequencer/seq_event_playback.s:3920), reached by `jr nz` when the event is not EVT_SW_IN (3922) and by fall-through after the EVT_VST_SEND_OK MainFuncCall. Suggested for a branch-label batch: VocalistPage2OKFunc_ReturnZero.",
+  "new": null,
+  "header": "",
+  "basis": "not a switch (epilogue)",
+  "evidence": [
+   "sequencer/seq_event_playback.s:3922 `jr nz, VocalistP1OK_Case1` -- plain branch on EVT_SW_IN",
+   "sequencer/seq_event_playback.s:3930 `ld xhl, 0:i3` -- return 0, ret"
+  ]
+ },
+ {
+  "old": "MainVocalistPage1OKFunc_Case4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MainVocalistPage1OKFunc_OnTechniChordPreset",
+  "header": "",
+  "basis": "switch value meaning (selected Vocalist preset row 0..5 packed in the EVT_VST_PST_OK parameter) + body",
+  "evidence": [
+   "sequencer/seq_event_playback.s:3896 `ld xwa, 0xd7000a` -- VocalistPage1OKFunc (the page-1 OK switch): EVT_GET_SELECTED of element 10 = VocalistListBox (ui_widgets/naka_midi_reverb.c:1660) in the low word, HarmOnOffBox's param in the high word, posted as EVT_VST_PST_OK (3910)",
+   "sequencer/seq_event_playback.s:3936 `cp xbc, EVT_VST_PST_OK` / 3939 `ld de, wa` / 3942 `cp de, 5:i3` -- switch on the preset row 0..5 through MainVocalistPage1OKFunc_CaseTable (ui_widgets/naka_widget_tables_2.s:1488): 0/2 -> VocalistPage1OK_Dispatch, 1/3 -> VocalistPage1_DispatchData",
+   "ui_widgets/naka_midi_reverb.c:6603 -- row 4 = \"TECHNI-CHORD(PART4) ~95 VOCODER\"",
+   "sequencer/seq_event_playback.s:4015 `ld (0xb7ec:16), 24` -- after the SysEx parameter copy/send, 0xB7EC = 24 (rows 0/2: 11, 3953; rows 1/3: 2, 3989), SoundParam_NotifyChange(0x4201, 3) and SoundParam_NotifyChange(0x18C00) with the HARMONY PART LOCAL state from the high word (4021-4033), then message 35"
+  ]
+ },
+ {
+  "old": "MainVocalistPage1OKFunc_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "MainVocalistPage1OKFunc_OnSmfHarmonyPreset",
+  "header": "",
+  "basis": "switch value meaning (selected Vocalist preset row 0..5 packed in the EVT_VST_PST_OK parameter) + body",
+  "evidence": [
+   "ui_widgets/naka_midi_reverb.c:6603 -- row 5 = \"SMF HARMONY CHANNEL ~95 VOCODER\"",
+   "sequencer/seq_event_playback.s:4045 `ld (0xb7ec:16), 1` / 4048 `call SmfMedley_RawData` -- 0xB7EC = 1 and SmfMedley_RawData(1) instead of a harmony-local NotifyChange (PsHarm_CheckMode, 3760, also ignores the ON/OFF switch for row 5), then message 35"
+  ]
+ },
+ {
+  "old": "SeqStep_NoteReadEvent_Case132",
+  "verdict": "refuse",
+  "why_refused": "The switched value is the internal sequencer event status byte (SeqData_ReadNextByte; 0x80..0x86 through the table, 0xD0-0xD3 compared first), but what statuses 0x82/0x84/0x85/0x86 ARE is not established: technics-docs/sequencer.md lists 0x85/0x86 only as \"compact short internal event\" and has no 0x84, SeqEvent_GetParamLength (sequencer/sequencer_engine.s:9897) has no 0x84 entry, and SeqData_ReadNextByte's comment calls 0x81/0x82/0x84 \"end marks\" while these step routines keep scanning after 0x84. The cases only set an ERP bank byte (0xF9 or 0xFA) to 0 / 1, apparently the status's data-byte count (it matches SeqEvent_GetParamLength - 1 for 0x80/0xD0-0xD3/0x85/0x86 and 5 for 6-byte events), so a name would say only 'count 0/1'. Refused until the internal event set is decoded.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning not established (internal sequencer status byte)",
+  "evidence": [
+   "sequencer/seq_step_routines.s:37 `sub wa, 0x80` -- switch on status - 0x80, 0..6 (SeqStep_NoteReadEvent); Case132 = status 0x84",
+   "sequencer/seq_step_routines.s:75 `ldib_erp\t249, 0` -- the case's body"
+  ]
+ },
+ {
+  "old": "SeqStep_NoteReadEvent_Case133",
+  "verdict": "refuse",
+  "why_refused": "The switched value is the internal sequencer event status byte (SeqData_ReadNextByte; 0x80..0x86 through the table, 0xD0-0xD3 compared first), but what statuses 0x82/0x84/0x85/0x86 ARE is not established: technics-docs/sequencer.md lists 0x85/0x86 only as \"compact short internal event\" and has no 0x84, SeqEvent_GetParamLength (sequencer/sequencer_engine.s:9897) has no 0x84 entry, and SeqData_ReadNextByte's comment calls 0x81/0x82/0x84 \"end marks\" while these step routines keep scanning after 0x84. The cases only set an ERP bank byte (0xF9 or 0xFA) to 0 / 1, apparently the status's data-byte count (it matches SeqEvent_GetParamLength - 1 for 0x80/0xD0-0xD3/0x85/0x86 and 5 for 6-byte events), so a name would say only 'count 0/1'. Refused until the internal event set is decoded.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning not established (internal sequencer status byte)",
+  "evidence": [
+   "sequencer/seq_step_routines.s:37 `sub wa, 0x80` -- switch on status - 0x80, 0..6 (SeqStep_NoteReadEvent); Case133 = status 0x85",
+   "sequencer/seq_step_routines.s:78 `ldib_erp\t249, 1` -- the case's body"
+  ]
+ },
+ {
+  "old": "SeqStep_EventPosConsumeAdvance_Case132",
+  "verdict": "refuse",
+  "why_refused": "The switched value is the internal sequencer event status byte (SeqData_ReadNextByte; 0x80..0x86 through the table, 0xD0-0xD3 compared first), but what statuses 0x82/0x84/0x85/0x86 ARE is not established: technics-docs/sequencer.md lists 0x85/0x86 only as \"compact short internal event\" and has no 0x84, SeqEvent_GetParamLength (sequencer/sequencer_engine.s:9897) has no 0x84 entry, and SeqData_ReadNextByte's comment calls 0x81/0x82/0x84 \"end marks\" while these step routines keep scanning after 0x84. The cases only set an ERP bank byte (0xF9 or 0xFA) to 0 / 1, apparently the status's data-byte count (it matches SeqEvent_GetParamLength - 1 for 0x80/0xD0-0xD3/0x85/0x86 and 5 for 6-byte events), so a name would say only 'count 0/1'. Refused until the internal event set is decoded.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning not established (internal sequencer status byte)",
+  "evidence": [
+   "sequencer/seq_step_routines.s:308 `sub wa, 0x80` -- switch on status - 0x80, 0..6 (SeqStep_EventPosConsumeAdvance); Case132 = status 0x84",
+   "sequencer/seq_step_routines.s:260 `ldib_erp 0xfa, 0` -- the case's body"
+  ]
+ },
+ {
+  "old": "SeqStep_EventPosConsumeAdvance_Case133",
+  "verdict": "refuse",
+  "why_refused": "The switched value is the internal sequencer event status byte (SeqData_ReadNextByte; 0x80..0x86 through the table, 0xD0-0xD3 compared first), but what statuses 0x82/0x84/0x85/0x86 ARE is not established: technics-docs/sequencer.md lists 0x85/0x86 only as \"compact short internal event\" and has no 0x84, SeqEvent_GetParamLength (sequencer/sequencer_engine.s:9897) has no 0x84 entry, and SeqData_ReadNextByte's comment calls 0x81/0x82/0x84 \"end marks\" while these step routines keep scanning after 0x84. The cases only set an ERP bank byte (0xF9 or 0xFA) to 0 / 1, apparently the status's data-byte count (it matches SeqEvent_GetParamLength - 1 for 0x80/0xD0-0xD3/0x85/0x86 and 5 for 6-byte events), so a name would say only 'count 0/1'. Refused until the internal event set is decoded.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning not established (internal sequencer status byte)",
+  "evidence": [
+   "sequencer/seq_step_routines.s:308 `sub wa, 0x80` -- switch on status - 0x80, 0..6 (SeqStep_EventPosConsumeAdvance); Case133 = status 0x85",
+   "sequencer/seq_step_routines.s:263 `ldib_erp 0xfa, 1` -- the case's body"
+  ]
+ },
+ {
+  "old": "SeqStep_DeleteDone_Case130",
+  "verdict": "refuse",
+  "why_refused": "The switched value is the internal sequencer event status byte (SeqData_ReadNextByte; 0x80..0x86 through the table, 0xD0-0xD3 compared first), but what statuses 0x82/0x84/0x85/0x86 ARE is not established: technics-docs/sequencer.md lists 0x85/0x86 only as \"compact short internal event\" and has no 0x84, SeqEvent_GetParamLength (sequencer/sequencer_engine.s:9897) has no 0x84 entry, and SeqData_ReadNextByte's comment calls 0x81/0x82/0x84 \"end marks\" while these step routines keep scanning after 0x84. The cases only set an ERP bank byte (0xF9 or 0xFA) to 0 / 1, apparently the status's data-byte count (it matches SeqEvent_GetParamLength - 1 for 0x80/0xD0-0xD3/0x85/0x86 and 5 for 6-byte events), so a name would say only 'count 0/1'. Refused until the internal event set is decoded.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning not established (internal sequencer status byte)",
+  "evidence": [
+   "sequencer/seq_step_routines.s:554 `sub wa, 0x80` -- switch on status - 0x80, 0..6 (SeqStep_DeleteDone); Case130 = status 0x82",
+   "sequencer/seq_step_routines.s:450 `calr SeqStep_InsertEvent` -- the case's body"
+  ]
+ },
+ {
+  "old": "SeqStep_DeleteDone_Case132",
+  "verdict": "refuse",
+  "why_refused": "The switched value is the internal sequencer event status byte (SeqData_ReadNextByte; 0x80..0x86 through the table, 0xD0-0xD3 compared first), but what statuses 0x82/0x84/0x85/0x86 ARE is not established: technics-docs/sequencer.md lists 0x85/0x86 only as \"compact short internal event\" and has no 0x84, SeqEvent_GetParamLength (sequencer/sequencer_engine.s:9897) has no 0x84 entry, and SeqData_ReadNextByte's comment calls 0x81/0x82/0x84 \"end marks\" while these step routines keep scanning after 0x84. The cases only set an ERP bank byte (0xF9 or 0xFA) to 0 / 1, apparently the status's data-byte count (it matches SeqEvent_GetParamLength - 1 for 0x80/0xD0-0xD3/0x85/0x86 and 5 for 6-byte events), so a name would say only 'count 0/1'. Refused until the internal event set is decoded.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning not established (internal sequencer status byte)",
+  "evidence": [
+   "sequencer/seq_step_routines.s:554 `sub wa, 0x80` -- switch on status - 0x80, 0..6 (SeqStep_DeleteDone); Case132 = status 0x84",
+   "sequencer/seq_step_routines.s:453 `ldib_erp 0xfa, 0` -- the case's body"
+  ]
+ },
+ {
+  "old": "SeqStep_DeleteDone_Case133",
+  "verdict": "refuse",
+  "why_refused": "The switched value is the internal sequencer event status byte (SeqData_ReadNextByte; 0x80..0x86 through the table, 0xD0-0xD3 compared first), but what statuses 0x82/0x84/0x85/0x86 ARE is not established: technics-docs/sequencer.md lists 0x85/0x86 only as \"compact short internal event\" and has no 0x84, SeqEvent_GetParamLength (sequencer/sequencer_engine.s:9897) has no 0x84 entry, and SeqData_ReadNextByte's comment calls 0x81/0x82/0x84 \"end marks\" while these step routines keep scanning after 0x84. The cases only set an ERP bank byte (0xF9 or 0xFA) to 0 / 1, apparently the status's data-byte count (it matches SeqEvent_GetParamLength - 1 for 0x80/0xD0-0xD3/0x85/0x86 and 5 for 6-byte events), so a name would say only 'count 0/1'. Refused until the internal event set is decoded.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning not established (internal sequencer status byte)",
+  "evidence": [
+   "sequencer/seq_step_routines.s:554 `sub wa, 0x80` -- switch on status - 0x80, 0..6 (SeqStep_DeleteDone); Case133 = status 0x85",
+   "sequencer/seq_step_routines.s:456 `ldib_erp 0xfa, 1` -- the case's body"
+  ]
+ },
+ {
+  "old": "NoteEditSy_HandleDownScroll_Case11",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "NoteEditSy_HandleDownScroll_OnDrumSound",
+  "header": "",
+  "basis": "switch value meaning (EVT_INDEXSW_DOWN parameter = the AcIndexEditSw .index of the pressed box) + body",
+  "evidence": [
+   "sequencer/sequencer_engine.s:23883 `jrl z, NoteEditSy_HandleDownScroll` -- NoteEditSyori: EVT_INDEXSW_DOWN (23882); 23972 `cp xde, 0xb` switches on XDE 0..11",
+   "sequencer/sequencer_ui.s:6618 `ld xwa, NAKA_MAINFUNC_NoteEditSyori` -- NoteEdit_FormatDispatch forwards the NoteEditBox's EVT_INDEXSW_UP/DOWN with XDE = its parameter (xsp+90) (6626) to NoteEditSyori",
+   "ui/ui_widget_defs.s:3703 `ld xbc, EVT_GET_INDEX` -- AcIndexEditSwProc sends EVT_INDEXSW_UP/DOWN with XDE = the box's index (3743, 3749/3753)",
+   "ui_widgets/naka_effects_seq.c:9089 `.index = 0x000B` -- DrumEdit_AcIndexEditSw_6 (slot 0x98 element 6), editsw 7 at (284,216), under the \"SOUND\" label (9194-9200); no NoteEdit (0x95) box has index 11",
+   "sequencer/sequencer_engine.s:24012 `call BmDrEdit_DrumVoiceUp_Check` -- moves the drum-row cursor 0x27A0 / scroll 0x279E one sound on; the up-table entry 11 (ui_widgets/widget_descriptors.s:4481) calls BmDrEdit_DrumVoiceDown_Check (23956)"
+  ]
+ },
+ {
+  "old": "SqAftSet_Case2",
+  "verdict": "refuse",
+  "why_refused": "Not a table case: SqAftSet_Case2 is SqAftSetFunc's return-0 tail, reached by `jr z` on EVT_GET_DIRECTION (sequencer/sequencer_ui.s:3681-3682) and `jr nz` for every event other than EVT_GET_BIT_STRING (3688); no offset table names it. Suggested for a branch-label batch: SqAftSetFunc_ReturnZero.",
+  "new": null,
+  "header": "",
+  "basis": "not a switch (compare-chain default / return tail)",
+  "evidence": [
+   "sequencer/sequencer_ui.s:3682 `jr z, SqAftSet_Case2` -- EVT_GET_DIRECTION",
+   "sequencer/sequencer_ui.s:3713 `ld xhl, 0:i3` -- returns 0"
+  ]
+ },
+ {
+  "old": "NoteEdit_GetParamValue_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "NoteEdit_GetParamValue_PosField",
+  "header": "",
+  "basis": "switch value meaning (NoteEditBox field number: EVT_PARA_DRAW fields 1-10, EVT_GRAPH_DRAW parts 11 and 14, passed on as the EVT_GET_RAM_ADDRESS parameter) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:6679 `cp xbc, EVT_GET_RAM_ADDRESS` / 6680 `jrl z, NoteEdit_GetParamValue` -- NoteEditFunc (NAKA_APFUNC_NoteEditFunc, the NoteEditBox's func); 6881 `dec 1, xde` / 6884 `cp xde, 0xd`: switch on field 1..14, so CaseN is field N",
+   "sequencer/sequencer_ui.s:5746 `cp xiz, EVT_PARA_DRAW` -- NoteEditBoxProc: EVT_PARA_DRAW field XDE requests EVT_GET_RAM_ADDRESS with that field (5828/5829) and draws it by the field switch at 5846-5852",
+   "ui_widgets/widget_descriptors.s:1508 `.short\tNoteEditBox_SetupGrid_DrawPosString - NoteEditBox_EventDispatch1` -- field 2 = POS string, 1509 field 3 = NOTE, 1510 4 = VEL, 1511 5 = LEN, 1512 6 = INC, 1515 9 = INC (EVT_GET_*_STRING per field)",
+   "sequencer/sequencer_ui.s:5744 `cp xiz, EVT_GRAPH_DRAW` -- graph parts: 5924 `dec 3, xwa`; ui_widgets/widget_descriptors.s:1492 part 11 = DrawKeyNames, 1495 part 14 = DrawDrumRowNames; only these two parts request EVT_GET_RAM_ADDRESS (6359/6406, 6432)",
+   "sequencer/sequencer_ui.s:6899 `ld hl, (0x2784:16)` -- field 2 (POS) value: word 0x2784"
+  ]
+ },
+ {
+  "old": "NoteEdit_GetParamValue_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "NoteEdit_GetParamValue_NoteField",
+  "header": "",
+  "basis": "switch value meaning (NoteEditBox field number: EVT_PARA_DRAW fields 1-10, EVT_GRAPH_DRAW parts 11 and 14, passed on as the EVT_GET_RAM_ADDRESS parameter) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:6904 `ld l, (0x2786:16)` -- field 3 (NOTE, NoteEditBox_SetupGrid_DrawNoteString) value: byte 0x2786"
+  ]
+ },
+ {
+  "old": "NoteEdit_GetParamValue_Case6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "NoteEdit_GetParamValue_IncField",
+  "header": "",
+  "basis": "switch value meaning (NoteEditBox field number: EVT_PARA_DRAW fields 1-10, EVT_GRAPH_DRAW parts 11 and 14, passed on as the EVT_GET_RAM_ADDRESS parameter) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:6907 `ld hl, (0x2792:16)` -- fields 6 and 9 (both INC, NoteEditBox_SetupGrid_DrawIncString) value: word 0x2792"
+  ]
+ },
+ {
+  "old": "NoteEdit_GetParamValue_Case11",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "NoteEdit_GetParamValue_KeyNamesPart",
+  "header": "",
+  "basis": "switch value meaning (NoteEditBox field number: EVT_PARA_DRAW fields 1-10, EVT_GRAPH_DRAW parts 11 and 14, passed on as the EVT_GET_RAM_ADDRESS parameter) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:6912 `ld l, (0x2798:16)` -- graph part 11 (NoteEditBox_GridDispatch2_DrawKeyNames, 6329, which formats EVT_GET_KB1/KB2_STR from it): byte 0x2798"
+  ]
+ },
+ {
+  "old": "NoteEdit_GetParamValue_Case14",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "NoteEdit_GetParamValue_DrumRowNamesPart",
+  "header": "",
+  "basis": "switch value meaning (NoteEditBox field number: EVT_PARA_DRAW fields 1-10, EVT_GRAPH_DRAW parts 11 and 14, passed on as the EVT_GET_RAM_ADDRESS parameter) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:6916 `ld l, (0x279e:16)` -- graph part 14 (NoteEditBox_GridDispatch2_DrawDrumRowNames, 6429): byte 0x279E, the drum-row scroll that BmDrEdit_DrumVoiceUp/Down step (sequencer/bmdredit_routines.s:3002)"
+  ]
+ },
+ {
+  "old": "EntertainerGridCheck_Switch2_Case4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "EntertainerGridCheck_TypeRowUp",
+  "header": "",
+  "basis": "switch value meaning (row of the selected cell in the ENTERTAINER grid, value column only) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:7612 `sub xwa, EVT_INDEXSW_UP` -- EntertainerGridCheck (NAKA_APFUNC_EntertainerGridCheck, func of ui_widgets/naka_effects_seq.c:12921 EnterTainerScr_AcEntertainerGridBox): EVT_INDEXSW_UP/_AIC -> SndParam_Dispatch (Switch2), EVT_INDEXSW_DOWN/_AIC -> EntertainerGridCheck_OnIndexswDown (Switch3) (ui_widgets/widget_descriptors.s:1899)",
+   "sequencer/sequencer_ui.s:7627 `ld xbc, EVT_GET_SELECTED_CEL` / 7638 `cpw (xbc), 1` / 7643 `cp wa, 8` -- only column 1 (the value column); switch on the row 0..8 (Switch3: 7683/7694/7699)",
+   "ui_widgets/naka_effects_seq.c:12924 `.vD6_e1_fixedrow = \"MIC BALANCE :|-|| ON/OFF :| TYPE :| REVERB TIME:| EXCITER FC :| EXCITER G :| VOLUME :|\"` -- row 4 = TYPE, rows 5-8 = REVERB TIME, EXCITER FC, EXCITER G, VOLUME",
+   "sequencer/sequencer_ui.s:7670 `ld xbc, EVT_CNG_EFF_TYPE` -- with XDE = 1 (7671), MainPostEvent to EffEditMain: next effect type"
+  ]
+ },
+ {
+  "old": "EntertainerGridCheck_Switch2_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "EntertainerGridCheck_EffParamRowUp",
+  "header": "Rows 5-8 (REVERB TIME, EXCITER FC, EXCITER G, VOLUME): EVT_CNG_EFF_PARA to EffEditMain with 0x100 + (row - 5), one step up.",
+  "basis": "switch value meaning (row of the selected cell in the ENTERTAINER grid, value column only) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:7674 `dec 5, de` / 7676 `add xde, 256` / 7678 `ld xbc, EVT_CNG_EFF_PARA` -- rows 5-8: effect parameter row-5, step +1 (0x100 + index)"
+  ]
+ },
+ {
+  "old": "EntertainerGridCheck_Switch3_Case4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "EntertainerGridCheck_TypeRowDown",
+  "header": "",
+  "basis": "switch value meaning (row of the selected cell in the ENTERTAINER grid, value column only) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:7724 `ld xbc, EVT_CNG_EFF_TYPE` -- with XDE = -1 (7725): previous effect type"
+  ]
+ },
+ {
+  "old": "EntertainerGridCheck_Switch3_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "EntertainerGridCheck_EffParamRowDown",
+  "header": "",
+  "basis": "switch value meaning (row of the selected cell in the ENTERTAINER grid, value column only) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:7728 `dec 5, hl` / 7730 `add xhl, 0xffffff00` / 7732 `ld xbc, EVT_CNG_EFF_PARA` -- rows 5-8: effect parameter row-5, step -1"
+  ]
+ },
+ {
+  "old": "SqplyFunc_HandlePartQuery",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqplyFunc_OnChkCur",
+  "header": "SqplyFunc's EVT_CHK_CUR (MT_ChkCur) handler: 1 when the value-list cursor (0x2109C) is on the position of parameter XDE.\nBasis: SqplyFunc compare chain + body; the old name (part query) does not match the event.",
+  "basis": "event code (compare chain) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:13559 `cp xbc, EVT_CHK_CUR` / 13560 `jrl z, SqplyFunc_HandlePartQuery` -- SqplyFunc's EVT_CHK_CUR (MT_ChkCur) handler",
+   "sequencer/sequencer_ui.s:13945 `ld a, (0x02109c:24)` -- returns whether the value-list cursor 0x2109C (EVT_GET_CUR_POS, cf. SqedtFunc_OnGetCurPos 14600) equals the parameter's cursor position"
+  ]
+ },
+ {
+  "old": "SqplyFunc_HandlePartQuery_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqplyFunc_OnChkCur_AtCursorPos2",
+  "header": "Parameters 5 (cycle start measure) and 9 (P out-measure): true when the cursor 0x2109C is at position 2.",
+  "basis": "switch value meaning (sequencer-play value-list parameter number, the XDE of EVT_CHK_CUR from SqplyVal) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:8491 `ld xbc, EVT_CHK_CUR` / 8492 `ld xde, (xsp+60)` -- SqplyVal asks with the parameter it is drawing",
+   "sequencer/sequencer_ui.s:13931 `dec 4, wa` / 13934 `cp wa, 7:i3` -- switch on parameter - 4, 0..7 (parameters 4..11), so labels CaseN are parameter N",
+   "sequencer/sequencer_ui.s:8504 `SqplyVal_HandleExtraParams_DrawCycleStartMeasure:` -- parameter 5 = cycle start measure, 8516 parameter 9 = P out-measure (same SqplyVal switch, base 4)",
+   "sequencer/sequencer_ui.s:13951 `ld l, 2:opc` -- parameters 5 and 9 sit at cursor position 2"
+  ]
+ },
+ {
+  "old": "SqplyFunc_HandlePartQuery_Case6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqplyFunc_OnChkCur_AtCursorPos3",
+  "header": "Parameters 6 (cycle end measure) and 10 (P count-in): true when the cursor 0x2109C is at position 3.",
+  "basis": "switch value meaning (sequencer-play value-list parameter number, the XDE of EVT_CHK_CUR from SqplyVal) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:8508 `SqplyVal_HandleExtraParams_DrawCycleEndMeasure:` -- parameter 6 = cycle end measure, 8520 parameter 10 = P count-in",
+   "sequencer/sequencer_ui.s:13954 `ld l, 3:opc` -- parameters 6 and 10 sit at cursor position 3"
+  ]
+ },
+ {
+  "old": "Sqedt_ParamDispatch",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_OnGetTrkString",
+  "header": "SqedtFunc's EVT_GET_TRK_STRING (MT_GetTrkString) case: the track field of the current sequencer-edit title (0x9C..0xA3).\nBasis: SqedtFunc event case table entry 0 + body.",
+  "basis": "event code table + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:13991 `sub xde, EVT_GET_TRK_STRING` -- SqedtFunc's 40-way event switch; entry 0 (EVT_GET_TRK_STRING, MT_GetTrkString) is this label (ui_widgets/widget_descriptors.s:3178), siblings SqedtFunc_OnGetFmString / _OnGetLmString (3179/3180)",
+   "sequencer/sequencer_ui.s:14007 `sub\thl, 156` -- formats the track field per title (Sqedt_ParamDispatch_CaseTable_3, cases SqedtFunc_TrkString_OnTitle*)"
+  ]
+ },
+ {
+  "old": "Sqedt_ParamDispatch_Case156",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_LmString_OnTitleSqqtz",
+  "header": "",
+  "basis": "switch value meaning (current title id, GetTitleNow, inside SqedtFunc's EVT_GET_LM_STRING case) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14113 `pushm (0x25fc:16)` -- the title's own last-measure word, formatted into the field string"
+  ]
+ },
+ {
+  "old": "Sqedt_ParamDispatch_Case157",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_LmString_OnTitleSqtrns",
+  "header": "",
+  "basis": "switch value meaning (current title id, GetTitleNow, inside SqedtFunc's EVT_GET_LM_STRING case) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:13972 `call GetTitleNow` -- SqedtFunc keeps the title id in HL",
+   "ui_widgets/widget_descriptors.s:3180 `.short SqedtFunc_OnGetLmString - Sqedt_ParamDispatch` -- EVT_GET_LM_STRING (MT_GetLMString, the last-measure field, shared/event_codes.s:636)",
+   "sequencer/sequencer_ui.s:14082 `SqedtFunc_OnGetLmString:` / 14086 `sub\thl, 156` -- switch on title - 0x9C, 0..7; Case156..163 are title ids 0x9C..0xA3 (same mapping as the sibling SqedtFunc_TrkString_/FmString_OnTitle* cases, ui_widgets/widget_descriptors.s:3141-3167)",
+   "shared/event_codes.s:1974 `.equ TITLE_SQTRKMRG, 0x1a0009b` -- titles 0x9B..0xA3 = SQTRKMRG, SQQTZ, SQTRNS, SQVELOCNG, SQNOTECNG, SQADVDLY, SQMERS, SQMCP, SQMDEL (1974-1982)",
+   "sequencer/sequencer_ui.s:14101 `pushm (0x2620:16)` -- the title's own last-measure word, formatted into the field string"
+  ]
+ },
+ {
+  "old": "Sqedt_ParamDispatch_Case158",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_LmString_OnTitleSqvelocng",
+  "header": "",
+  "basis": "switch value meaning (current title id, GetTitleNow, inside SqedtFunc's EVT_GET_LM_STRING case) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14117 `pushm (0x25fa:16)` -- the title's own last-measure word, formatted into the field string"
+  ]
+ },
+ {
+  "old": "Sqedt_ParamDispatch_Case161",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_LmString_OnTitleSqmers",
+  "header": "",
+  "basis": "switch value meaning (current title id, GetTitleNow, inside SqedtFunc's EVT_GET_LM_STRING case) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14109 `pushm (0x2626:16)` -- the title's own last-measure word, formatted into the field string"
+  ]
+ },
+ {
+  "old": "Sqedt_ParamDispatch_Case163",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_LmString_OnTitleSqmdel",
+  "header": "",
+  "basis": "switch value meaning (current title id, GetTitleNow, inside SqedtFunc's EVT_GET_LM_STRING case) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14105 `pushm (0x262c:16)` -- the title's own last-measure word, formatted into the field string"
+  ]
+ },
+ {
+  "old": "SeqFunc_ReturnZeroJmp_Case1",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_OnCurToParam_CursorPos1",
+  "header": "Cursor position 1: parameter 1 (FromMeasure) on titles 0x9C..0xA3 except SQMCP, else -1.",
+  "basis": "switch value meaning (sequencer-edit cursor position, the XDE of EVT_CUR_TO_PARAM) + body",
+  "evidence": [
+   "ui_widgets/widget_descriptors.s:3211 `.short SqedtFunc_OnCurToParam - Sqedt_ParamDispatch` -- EVT_CUR_TO_PARAM (MT_CurToParam: cursor position -> parameter, shared/event_codes.s:667)",
+   "sequencer/sequencer_ui.s:14611 `extz wa` / 14614 `cp wa, 6:i3` -- switch on the cursor position 0..6 (SeqFunc_ReturnZeroJmp_CaseTable: 0 -> Sqedt_ValueDispatch, 4 -> -1), so CaseN is position N",
+   "sequencer/sequencer_ui.s:8928 `ld\txbc, EVT_GET_TRK_STRING` -- the parameter numbers returned are SqedtVal's field numbers: 0 Trk, 1 FromMeasure, 2 LastMeasure, 3 Adly, 4 Transpose, 5 Velocity, 6 Mers, 7-9 Quantize value/strength/window, 10 Tn, 11 Cn, 12-14 MergeTrackA/B/C (ui_widgets/widget_descriptors.s:1949-1963)",
+   "sequencer/sequencer_ui.s:14643 `sub\thl, 156` -- position 1 maps titles 0x9C..0xA3 to parameter 1 (FromMeasure) (14654), 0xA2 SQMCP and other titles to -1"
+  ]
+ },
+ {
+  "old": "SeqFunc_ReturnZeroJmp_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_OnCurToParam_CursorPos2",
+  "header": "Cursor position 2: parameter 13 (MergeTrackB) on SQTRKMRG, -1 on SQMCP, else parameter 2 (LastMeasure).",
+  "basis": "switch value meaning (sequencer-edit cursor position, the XDE of EVT_CUR_TO_PARAM) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14658 `sub\thl, 155` -- position 2: title 0x9B SQTRKMRG -> 13 (Sqedt_ValueDispatch_Case155, 14672), 0xA2 -> -1, other titles -> parameter 2 (LastMeasure, 14669)"
+  ]
+ },
+ {
+  "old": "SeqFunc_ReturnZeroJmp_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_OnCurToParam_CursorPos3",
+  "header": "Cursor position 3: the title's value field (SQQTZ 7, SQMERS 6, SQVELOCNG 5, SQTRNS 4, SQADVDLY 3), else -1.",
+  "basis": "switch value meaning (sequencer-edit cursor position, the XDE of EVT_CUR_TO_PARAM) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14675 `cp\tl, 156` -- position 3: SQQTZ -> 7, SQMERS (161) -> 6, SQVELOCNG (158) -> 5, SQTRNS (157) -> 4, SQADVDLY (160) -> 3 (14684-14698): each title's own value field"
+  ]
+ },
+ {
+  "old": "SeqFunc_ReturnZeroJmp_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_OnCurToParam_CursorPos5",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit cursor position, the XDE of EVT_CUR_TO_PARAM) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14700 `cp\tl, 159` -- position 5: SQNOTECNG -> 10 (Tn, 14707), SQQTZ -> 8 (quantize strength, 14704), else -1"
+  ]
+ },
+ {
+  "old": "SeqFunc_ReturnZeroJmp_Case6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_OnCurToParam_CursorPos6",
+  "header": "",
+  "basis": "switch value meaning (sequencer-edit cursor position, the XDE of EVT_CUR_TO_PARAM) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14718 `cp l, 0x9b` -- position 6: SQTRKMRG -> 14 (MergeTrackC, SqedtFunc_SignExtend 14734), SQNOTECNG -> 11 (Cn, 14729), SQQTZ -> 9 (quantize window, 14724), else -1"
+  ]
+ },
+ {
+  "old": "Sqedt_ValueDispatch",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_OnCurToParam_CursorPos0",
+  "header": "Cursor position 0: parameter 12 (MergeTrackA) on SQTRKMRG, -1 on SQMCP, else parameter 0 (Trk).\nBasis: offset-0 case of SqedtFunc_OnCurToParam's cursor switch + body.",
+  "basis": "switch value meaning (sequencer-edit cursor position, the XDE of EVT_CUR_TO_PARAM) + body",
+  "evidence": [
+   "ui_widgets/widget_descriptors.s SeqFunc_ReturnZeroJmp_CaseTable entry 0 -- Sqedt_ValueDispatch is position 0 of SqedtFunc_OnCurToParam's switch (offset-0 case, sequencer/sequencer_ui.s:14619-14620)",
+   "sequencer/sequencer_ui.s:14625 `sub\thl, 155` -- position 0: SQTRKMRG -> 12 (MergeTrackA), SQMCP -> -1, other titles -> parameter 0 (Trk, 14636)"
+  ]
+ },
+ {
+  "old": "SqedtFunc_ModeD_Case155",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_OnCurToParam_CursorPos0_OnTitleSqtrkmrg",
+  "header": "",
+  "basis": "switch value meaning (current title id inside one cursor position of EVT_CUR_TO_PARAM) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14625 `sub\thl, 155` -- Sqedt_ValueDispatch (cursor position 0) switches on title - 0x9B; entry 0 = title 0x9B TT_SQTRKMRG (shared/event_codes.s:1974)",
+   "sequencer/sequencer_ui.s:14639 `ld\tl, 12:opc` -- parameter 12 = MergeTrackA (SqedtVal_ClearDrawBuffer_MergeTrackAField, ui_widgets/widget_descriptors.s:1961)"
+  ]
+ },
+ {
+  "old": "Sqedt_ValueDispatch_Case155",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_OnCurToParam_CursorPos2_OnTitleSqtrkmrg",
+  "header": "",
+  "basis": "switch value meaning (current title id inside one cursor position of EVT_CUR_TO_PARAM) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14658 `sub\thl, 155` -- cursor position 2 switches on title - 0x9B; entry 0 = TT_SQTRKMRG",
+   "sequencer/sequencer_ui.s:14672 `ld\tl, 13:opc` -- parameter 13 = MergeTrackB (ui_widgets/widget_descriptors.s:1962)"
+  ]
+ },
+ {
+  "old": "SqedtFunc_SignExtend",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_OnCurToParam_CursorPos6_OnTitleSqtrkmrg",
+  "header": "Cursor position 6 on SQTRKMRG: parameter 14 (MergeTrackC).\nBasis: compare chain of SqedtFunc_OnCurToParam position 6 + body (not a sign-extend helper).",
+  "basis": "switch value meaning (current title id inside one cursor position of EVT_CUR_TO_PARAM) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14718 `cp l, 0x9b` / 14719 `jr z, SqedtFunc_SignExtend` -- cursor position 6 on TT_SQTRKMRG",
+   "sequencer/sequencer_ui.s:14734 `ld l, 0xe:opc` -- parameter 14 = MergeTrackC (ui_widgets/widget_descriptors.s:1963)"
+  ]
+ },
+ {
+  "old": "SqedtFunc_ModeD",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_OnGetRamAddress",
+  "header": "SqedtFunc's EVT_GET_RAM_ADDRESS (MT_GetRamAddress) case: answered by SqedtFunc_StateChainB for the current title.\nBasis: SqedtFunc compare chain + body.",
+  "basis": "event code (compare chain) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:13976 `cp xiz, EVT_GET_RAM_ADDRESS` / 13977 `jrl z, SqedtFunc_ModeD` -- SqedtFunc's EVT_GET_RAM_ADDRESS case",
+   "sequencer/sequencer_ui.s:14598 `calr SqedtFunc_StateChainB` -- returns its per-title result"
+  ]
+ },
+ {
+  "old": "SeqFormat_DispatchA",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_OnChkCur_AtCursorPos0",
+  "header": "Fields 0 (Trk) and 12 (MergeTrackA): true when the cursor 0x2109C is at position 0.\nBasis: offset-0 case of SqedtFunc_OnChkCur's field switch + body.",
+  "basis": "switch value meaning (SqedtVal field number, the XDE of EVT_CHK_CUR) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:8933 `ld\txbc, EVT_CHK_CUR` / 8934 `ld\txde, (xsp+66)` -- SqedtVal asks with the field it draws (fields per ui_widgets/widget_descriptors.s:1949-1963: 0 Trk, 1 FromMeasure, 2 LastMeasure, 3 Adly, 4 Transpose, 5 Velocity, 6 Mers, 7 QuantizeValue, 8 QuantizeStrength, 9 QuantizeWindow, 10 Tn, 11 Cn, 12-14 MergeTrackA/B/C)",
+   "sequencer/sequencer_ui.s:14737 `extz wa` / 14740 `cp wa, 0xe` -- SqedtFunc_OnChkCur switches on the field 0..14 (SqedtFunc_SignExtend_CaseTable), so CaseN is field N",
+   "sequencer/sequencer_ui.s:14752 `ld\ta, (0x02109c:24)` / 14753 `cp\ta, l` -- returns whether the cursor 0x2109C is at the position the case loads into L",
+   "sequencer/sequencer_ui.s:14750 `ld\tl, 0:opc` -- offset-0 case: fields 0 (Trk) and 12 (MergeTrackA) are at position 0"
+  ]
+ },
+ {
+  "old": "SqedtFunc_SignExtend_Case1",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_OnChkCur_AtCursorPos1",
+  "header": "Fields 1 (FromMeasure): true when the cursor 0x2109C is at position 1.",
+  "basis": "switch value meaning (SqedtVal field number, the XDE of EVT_CHK_CUR) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14758 `ld\tl, 1:opc` -- fields 1 (FromMeasure) are at cursor position 1 (the same positions EVT_CUR_TO_PARAM maps back)"
+  ]
+ },
+ {
+  "old": "SqedtFunc_SignExtend_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_OnChkCur_AtCursorPos2",
+  "header": "Fields 2 (LastMeasure) and 13 (MergeTrackB): true when the cursor 0x2109C is at position 2.",
+  "basis": "switch value meaning (SqedtVal field number, the XDE of EVT_CHK_CUR) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14761 `ld\tl, 2:opc` -- fields 2 (LastMeasure) and 13 (MergeTrackB) are at cursor position 2 (the same positions EVT_CUR_TO_PARAM maps back)"
+  ]
+ },
+ {
+  "old": "SqedtFunc_SignExtend_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_OnChkCur_AtCursorPos3",
+  "header": "Fields 3-7 (Adly, Transpose, Velocity, Mers, QuantizeValue): true when the cursor 0x2109C is at position 3.",
+  "basis": "switch value meaning (SqedtVal field number, the XDE of EVT_CHK_CUR) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14764 `ld\tl, 3:opc` -- fields 3-7 (Adly, Transpose, Velocity, Mers, QuantizeValue) are at cursor position 3 (the same positions EVT_CUR_TO_PARAM maps back)"
+  ]
+ },
+ {
+  "old": "SqedtFunc_SignExtend_Case8",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_OnChkCur_AtCursorPos5",
+  "header": "Fields 8 (QuantizeStrength) and 10 (Tn): true when the cursor 0x2109C is at position 5.",
+  "basis": "switch value meaning (SqedtVal field number, the XDE of EVT_CHK_CUR) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14767 `ld\tl, 5:opc` -- fields 8 (QuantizeStrength) and 10 (Tn) are at cursor position 5 (the same positions EVT_CUR_TO_PARAM maps back)"
+  ]
+ },
+ {
+  "old": "SqedtFunc_SignExtend_Case9",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_OnChkCur_AtCursorPos6",
+  "header": "Fields 9 (QuantizeWindow), 11 (Cn) and 14 (MergeTrackC): true when the cursor 0x2109C is at position 6.",
+  "basis": "switch value meaning (SqedtVal field number, the XDE of EVT_CHK_CUR) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14770 `ld\tl, 6:opc` -- fields 9 (QuantizeWindow), 11 (Cn) and 14 (MergeTrackC) are at cursor position 6 (the same positions EVT_CUR_TO_PARAM maps back)"
+  ]
+ },
+ {
+  "old": "SeqFormat_DispatchA_Case18",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_OnChkCur2_McpTrBFields",
+  "header": "Fields 18-20 (measure-copy TrB, SM, Rep): true when side 0x3E2E0 = 1 and the to-cursor (0x3E2DE) = field - 18.",
+  "basis": "switch value meaning (second-list field number 15..30, the XDE of EVT_CHK_CUR2) + body",
+  "evidence": [
+   "ui_widgets/widget_descriptors.s:3213 -- EVT_CHK_CUR2 (MT_ChkCur2) -> SqedtFunc_OnChkCur2; sequencer/sequencer_ui.s:14788 `sub\twa, 15` / 14791 `cp\twa, 15`: switch on field - 15, so CaseN is field N",
+   "shared/event_codes.s:649 `.equ EVT_GET_MCP_TR_A_STRING, 0x1e80025` -- field k is EVT_GET_TRK_STRING + k: 15-20 measure-copy TrA/FM/LM/TrB/SM/Rep (649-654), 21-26 measure-insert TrA/FM/LM/TrB/SM/Rep (655-660), 27-30 song-copy from-song/from-track/to-song/to-track (661-664)",
+   "sequencer/sequencer_ui.s:14822 `SeqFormat_DispatchA_Join2:` -- (field - group base) compared with the from-cursor 0x3E2DC (14826); Join3 (14835) with the to-cursor 0x3E2DE; each case first checks the active side 0x3E2E0 (0 = from, 1 = to)",
+   "sequencer/sequencer_ui.s:14804 `cp\t(0x03e2e0:24), 1` -- fields 18-20 (measure-copy TrB, SM, Rep): needs side 1, then compares field - 18 with the to-cursor"
+  ]
+ },
+ {
+  "old": "SeqFormat_DispatchA_Case21",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_OnChkCur2_MinsTrAFields",
+  "header": "Fields 21-23 (measure-insert TrA, FM, LM): true when side 0x3E2E0 = 0 and the from-cursor (0x3E2DC) = field - 21.",
+  "basis": "switch value meaning (second-list field number 15..30, the XDE of EVT_CHK_CUR2) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14809 `cp\t(0x03e2e0:24), 0` -- fields 21-23 (measure-insert TrA, FM, LM): needs side 0, then compares field - 21 with the from-cursor"
+  ]
+ },
+ {
+  "old": "SeqFormat_DispatchA_Case24",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_OnChkCur2_MinsTrBFields",
+  "header": "Fields 24-26 (measure-insert TrB, SM, Rep): true when side 0x3E2E0 = 1 and the to-cursor (0x3E2DE) = field - 24.",
+  "basis": "switch value meaning (second-list field number 15..30, the XDE of EVT_CHK_CUR2) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14814 `cp\t(0x03e2e0:24), 1` -- fields 24-26 (measure-insert TrB, SM, Rep): needs side 1, then compares field - 24 with the to-cursor"
+  ]
+ },
+ {
+  "old": "SeqFormat_DispatchA_Case27",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_OnChkCur2_ScpFromFields",
+  "header": "Fields 27-28 (song-copy from-song, from-track): true when side 0x3E2E0 = 0 and the from-cursor (0x3E2DC) = field - 27.",
+  "basis": "switch value meaning (second-list field number 15..30, the XDE of EVT_CHK_CUR2) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14819 `cp\t(0x03e2e0:24), 0` -- fields 27-28 (song-copy from-song, from-track): needs side 0, then compares field - 27 with the from-cursor"
+  ]
+ },
+ {
+  "old": "SeqFormat_DispatchA_Case29",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqedtFunc_OnChkCur2_ScpToFields",
+  "header": "Fields 29-30 (song-copy to-song, to-track): true when side 0x3E2E0 = 1 and the to-cursor (0x3E2DE) = field - 29.",
+  "basis": "switch value meaning (second-list field number 15..30, the XDE of EVT_CHK_CUR2) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:14832 `cp\t(0x03e2e0:24), 1` -- fields 29-30 (song-copy to-song, to-track): needs side 1, then compares field - 29 with the to-cursor"
+  ]
+ },
+ {
+  "old": "DspItem0CngFunc_Case31981584",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DspItem0CngFunc_OnGetParaSize",
+  "header": "",
+  "basis": "event code table (Kubo method slot 0x1E8 entry 16, firmware name MT_GetParaSize) + body",
+  "evidence": [
+   "sequencer/sequencer_ui.s:15255 `sub xiy, EVT_GET_EFF_FIX_STRING` / 15258 `cp xiy, 0x10` -- switch on event - 0x1E80000, 0..16; Case31981584 = event 0x1E80010 (ui_widgets/widget_descriptors.s:3301 entry 16)",
+   "ui_widgets/naka_effects_eq_dispatch.s:65 `.long MT_GetParaSize_Name` -- entry 16 of MT_FuncName_PtrTable (entry 0 at line 49 = MT_GetEffFixString = 0x1E80000): event 0x1E80010 is MT_GetParaSize; shared/event_codes.s has no EVT_ constant for it (gap between EVT_RET_EFF_PARA 628 and EVT_CNG_EFF_TYPE 629)",
+   "sequencer/sequencer_ui.s:15517 `ld l, (0x29aa:16)` -- returns the item-count byte 0x29AA (the same count EVT_GET_ITEM_EXIST compares with, shared/event_codes.s:622)"
+  ]
+ },
+ {
+  "old": "GetDiskFreeSpace_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetDiskFreeSpace_On2DDDisk",
+  "header": "",
+  "basis": "switch value meaning (floppy disk type from GetMediaType, RAM 0x3E3E4) + body",
+  "evidence": [
+   "sequencer/smf_event_processor.s:9409 `calr FDC_ReadDiskType` -- 8487 `ld l, (0x03e3e4:24)`: the disk type stored by GetMediaType (FDC_StoreDiskType, 8469); switch 0..6 through GetDiskFreeSpace_CaseTable (ui_widgets/widget_descriptors.s:5054)",
+   "sequencer/smf_event_processor.s:9378 `ldib_erp 0xfb, 2` -- type 2: a DD read (FDC_Format2DD_Start_FdcCmd, 9346) finds media byte 0xF9 (9376); 9325/9338 type 3: an HD read (FDC_Format2HD_Start_FdcCmd, 9300) finds 0xF0 or 0xF9; format_FD (8492-8496) formats type 3 as 2HD and type 2 as 2DD",
+   "sequencer/smf_event_processor.s:9426 `ld\txwa, 0xb2400` -- total 730,112 bytes (1426 x 512, the 720 KB 2DD data area) into *XBC, then free space from the FAT"
+  ]
+ },
+ {
+  "old": "GetDiskFreeSpace_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "GetDiskFreeSpace_On2HDDisk",
+  "header": "",
+  "basis": "switch value meaning (floppy disk type from GetMediaType, RAM 0x3E3E4) + body",
+  "evidence": [
+   "sequencer/smf_event_processor.s:9430 `ld\txwa, 0x163e00` -- total 1,457,664 bytes (2847 x 512, the 1.44 MB 2HD data area)"
+  ]
+ },
+ {
+  "old": "GetDiskFreeSpace_Case4",
+  "verdict": "refuse",
+  "why_refused": "Disk type 4 is never produced: GetMediaType stores only 0, 1, 2, 3, 5 and 6 (sequencer/smf_event_processor.s:9263-9385) and FDC_StoreDiskType has no other caller, so what type 4 stands for is not established. The body stores 737,280 (1440 x 512, a 720 KB disk counted whole) as the total.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning not established for this value",
+  "evidence": [
+   "sequencer/smf_event_processor.s:9434 `ld\txwa, 737280` -- the case's only work",
+   "sequencer/smf_event_processor.s:9267 `calr FDC_StoreDiskType` -- one of the two stores, both inside GetMediaType (9395)"
+  ]
+ },
+ {
+  "old": "FDC_CONFIG_VERIFY_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FDC_CONFIG_VERIFY_On1024ByteSectorMedia",
+  "header": "",
+  "basis": "switch value meaning (FDC media-type code, low nibble of 0x8A6E) + body",
+  "evidence": [
+   "storage/fdc_routines.s:205 `ld\ta, (0x8a6e:16)` / 206 `and\ta, 15` / 210 `cp\twa, 5:i3` -- FDC_CONFIG_VERIFY (125) switches on the media-type nibble 0..5 (FDC_WaitReady_CaseTable, ui_widgets/disk_warning_strings.s:129); FDC_SetupFormatParams stores the code (442)",
+   "technics-docs/fdc-subsystem.md:656 -- the boot twin (FDC_DiskTypeStanza_Offsets / FDC_MediaStanza_Type0..5) switches on the same nibble; geometry table: 0/4/5 = 9 x 512 B 720 KB, 2 = 8 x 1024 B 77 tracks, 3 = 18 x 512 B 1.44 MB",
+   "storage/fdc_routines.s:1720 `cp\ta, 2:i3` -- FDC_MODE_CONFIG formats type 2 with sector-size code 3 (1024 B) and gap 116 (1739-1740), type 3 with code 2 and gap 108 (1735-1736), 0/4/5 with code 2 and gap 80",
+   "storage/fdc_routines.s:232 `ld\t(0x8a6c:16), 2` -- stores type 2, mode bits 0x40 (234), FDC_WaitReady_Helper(0) (236)"
+  ]
+ },
+ {
+  "old": "FDC_CONFIG_VERIFY_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FDC_CONFIG_VERIFY_On1440KMedia",
+  "header": "",
+  "basis": "switch value meaning (FDC media-type code, low nibble of 0x8A6E) + body",
+  "evidence": [
+   "storage/fdc_routines.s:239 `ld\t(0x8a6c:16), 3` -- stores type 3, mode bits 0x40 (241), FDC_WaitReady_Helper(0) (243)"
+  ]
+ },
+ {
+  "old": "FDC_CONFIG_VERIFY_Case1",
+  "verdict": "refuse",
+  "why_refused": "Media type 1 is not identified: the geometry table (technics-docs/fdc-subsystem.md, FDC_SetGeometryForDiskType) has no type 1 and gives types 0, 4 and 5 the same 720 KB geometry, and FDC_MODE_CONFIG (storage/fdc_routines.s:1720-1732) treats 0/4/5 alike, so nothing distinguishes this value. Body: stores 0 in 0x8A6C with mode bits 0xC0 (227).",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning not established for this value",
+  "evidence": [
+   "storage/fdc_routines.s:225 `ld\t(0x8a6c:16), 0` -- stores 0 in 0x8A6C with mode bits 0xC0 (227)"
+  ]
+ },
+ {
+  "old": "FDC_CONFIG_VERIFY_Case4",
+  "verdict": "refuse",
+  "why_refused": "Media type 4 is not identified: the geometry table (technics-docs/fdc-subsystem.md, FDC_SetGeometryForDiskType) has no type 1 and gives types 0, 4 and 5 the same 720 KB geometry, and FDC_MODE_CONFIG (storage/fdc_routines.s:1720-1732) treats 0/4/5 alike, so nothing distinguishes this value. Body: stores 4, mode bits 0 (248).",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning not established for this value",
+  "evidence": [
+   "storage/fdc_routines.s:246 `ld\t(0x8a6c:16), 4` -- stores 4, mode bits 0 (248)"
+  ]
+ },
+ {
+  "old": "FDC_CONFIG_VERIFY_Case5",
+  "verdict": "refuse",
+  "why_refused": "Media type 5 is not identified: the geometry table (technics-docs/fdc-subsystem.md, FDC_SetGeometryForDiskType) has no type 1 and gives types 0, 4 and 5 the same 720 KB geometry, and FDC_MODE_CONFIG (storage/fdc_routines.s:1720-1732) treats 0/4/5 alike, so nothing distinguishes this value. Body: stores 5, mode bits 0 (255).",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning not established for this value",
+  "evidence": [
+   "storage/fdc_routines.s:253 `ld\t(0x8a6c:16), 5` -- stores 5, mode bits 0 (255)"
+  ]
+ },
+ {
+  "old": "NoteEventBuffer_Store_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "NoteEventBuffer_Store_WriteSection2",
+  "header": "",
+  "basis": "switch value meaning (Custom Data Flash section number + 1, the WA argument) + body",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:2008 `dec 1, wa` / 2011 `cp wa, 6:i3` -- NoteEventBuffer_Store(value) switches on value - 1, 0..6 (table at sequencer/composer_msp_defaults.s:172, mislabelled MSP_Default_VarSize), so CaseN is value N",
+   "storage/flash_floppy_handlers.s:2004 `ld xwa, (3186:16)` -- the source is the RAM work buffer; Flash_EraseSectorAndWrite (2087) writes it to the section pointer",
+   "storage/flash_floppy_handlers.s:1150 `calr NoteEventBuffer_Store` -- callers pass 1..6 in turn (1149-1165); the load twin names value N 'section N-1' (1969-1971 NoteEventBuffer_CopyToSlot_LoadSection1)",
+   "storage/flash_floppy_handlers.s:2058 `ld xwa, (FLASH_SECTION_PTR_2:16)` -- value 3 writes section 2 (shared/ram_variables.s:68, custom accompaniment styles)"
+  ]
+ },
+ {
+  "old": "NoteEventBuffer_Store_Case4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "NoteEventBuffer_Store_WriteSection3",
+  "header": "",
+  "basis": "switch value meaning (Custom Data Flash section number + 1, the WA argument) + body",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:2062 `ld xwa, (FLASH_SECTION_PTR_3:16)` -- value 4 writes section 3 (shared/ram_variables.s:69, custom accompaniment styles)"
+  ]
+ },
+ {
+  "old": "NoteEventBuffer_Store_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "NoteEventBuffer_Store_WriteSection4",
+  "header": "",
+  "basis": "switch value meaning (Custom Data Flash section number + 1, the WA argument) + body",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:2066 `ld xwa, (FLASH_SECTION_PTR_4:16)` -- value 5 writes section 4 (shared/ram_variables.s:70, custom accompaniment styles)"
+  ]
+ },
+ {
+  "old": "NoteEventBuffer_Store_Case6",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "NoteEventBuffer_Store_WriteSection5",
+  "header": "",
+  "basis": "switch value meaning (Custom Data Flash section number + 1, the WA argument) + body",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:2070 `ld xwa, (FLASH_SECTION_PTR_5:16)` -- value 6 writes section 5 (shared/ram_variables.s:71, custom accompaniment styles)"
+  ]
+ },
+ {
+  "old": "NoteEventBuffer_Store_Case7",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "NoteEventBuffer_Store_WriteSection6",
+  "header": "",
+  "basis": "switch value meaning (Custom Data Flash section number + 1, the WA argument) + body",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:2074 `ld xwa, (FLASH_SECTION_PTR_6:16)` -- value 7 writes section 6 (shared/ram_variables.s:72, custom accompaniment styles)"
+  ]
+ },
+ {
+  "old": "CmpSetP1_GridCheck_Case2",
+  "verdict": "refuse",
+  "why_refused": "Not a switch case: the shared tail of AcCmpSetGridBoxProc's EVT_GET_FIXED_ROW_STR (offset 0x42, AcCmpSetGridBoxProc_OnGetFixedRowStr falls in) and EVT_GET_FIXED_COL_STR (offset 0x3E, storage/flash_floppy_handlers.s:6085) handlers that Strcpy's the fixed-row/column string; reached only by jr/fall-through. Suggested for a branch-label batch: AcCmpSetGridBoxProc_CopyFixedStr.",
+  "new": null,
+  "header": "",
+  "basis": "not a switch (join)",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:6085 `jr CmpSetP1_GridCheck_Case2` -- from CmpSetP1_GridCheckDispatch with XIZ = 0x3E",
+   "storage/flash_floppy_handlers.s:6100 `call Strcpy` -- copies the string pointer read at instance + XIZ"
+  ]
+ },
+ {
+  "old": "CmpSetP1_GridCheck_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AcCmpSetGridBoxProc_ForwardToApFunc",
+  "header": "EVT_REQUEST_GRID_DRAW, EVT_LSW_DATA and EVT_RAM_DATA are passed on to the grid's ApFunction (instance +70).",
+  "basis": "switch value meaning (event code: compare chain for the sparse events, AcCmpSetGridBoxProc_CaseTable for EVT_INDEXSW_UP..EVT_RAM_DATA) + body",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:5901 `cp xbc, EVT_REQUEST_GRID_DRAW` / 5902 `jrl z, CmpSetP1_GridCheck_Case3` -- AcCmpSetGridBoxProc (5894) sends EVT_REQUEST_GRID_DRAW here",
+   "storage/flash_floppy_handlers.s:5910 `sub xbc, EVT_INDEXSW_UP` -- table AcCmpSetGridBoxProc_CaseTable (ui_widgets/naka_screen_dispatch.s:1337): 5/6 = EVT_LSW_DATA / EVT_RAM_DATA (0x1C0001C/D, shared/event_codes.s:169-170) -> this case",
+   "storage/flash_floppy_handlers.s:6108 `ld xwa, (xhl + 70)` / 6111 `call ApFuncCall` -- passes the event and parameter on to the grid's ApFunction (instance +70)"
+  ]
+ },
+ {
+  "old": "CmpSetP1_GridCheck_Case4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AcCmpSetGridBoxProc_DefaultInherited",
+  "header": "",
+  "basis": "switch value meaning (event code: compare chain for the sparse events, AcCmpSetGridBoxProc_CaseTable for EVT_INDEXSW_UP..EVT_RAM_DATA) + body",
+  "evidence": [
+   "ui_widgets/naka_screen_dispatch.s:1342 -- table entry 4 = EVT_INDEX_SELECT (0x1C0001B, shared/event_codes.s:168); storage/flash_floppy_handlers.s:5912/5914 send everything outside EVT_INDEXSW_UP..EVT_RAM_DATA here too",
+   "storage/flash_floppy_handlers.s:6122 `call InheritedProc` -- the default: hand the event to the base class"
+  ]
+ },
+ {
+  "old": "CmpSetP1_GridCheck_Case5",
+  "verdict": "refuse",
+  "why_refused": "Not a switch case: AcCmpSetGridBoxProc's epilogue (pop xiz, release the frame, ret), reached by jr from its return paths (storage/flash_floppy_handlers.s:6115) and fall-through from the inherited call. Suggested for a branch-label batch: AcCmpSetGridBoxProc_Epilogue.",
+  "new": null,
+  "header": "",
+  "basis": "not a switch (epilogue)",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:6127 `lda xsp, (xsp + 16)` -- frame release before ret"
+  ]
+ },
+ {
+  "old": "SndArg_GridBnk_Case0",
+  "verdict": "refuse",
+  "why_refused": "Not a compiled switch: SndArg_GridBnk_Case0..2 are if/else and epilogue labels of PsS2cTransBoxProc (storage/flash_floppy_handlers.s:6982), reached by plain jr; no offset table names them.",
+  "new": null,
+  "header": "",
+  "basis": "not a switch (branch labels)",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:7020 `ldw (xbc), 0xff` -- else-branch of `cp (0x3a77:16), 2` (7012-7013) choosing the transpose box colours"
+  ]
+ },
+ {
+  "old": "SndArg_GridBnk_Case1",
+  "verdict": "refuse",
+  "why_refused": "Not a compiled switch: SndArg_GridBnk_Case0..2 are if/else and epilogue labels of PsS2cTransBoxProc (storage/flash_floppy_handlers.s:6982), reached by plain jr; no offset table names them.",
+  "new": null,
+  "header": "",
+  "basis": "not a switch (branch labels)",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:7025 `ld XWA, (xsp + 0x0104)` -- join: EVT_DRAW then EVT_PARA_DRAW of the transpose string"
+  ]
+ },
+ {
+  "old": "SndArg_GridBnk_Case2",
+  "verdict": "refuse",
+  "why_refused": "Not a compiled switch: SndArg_GridBnk_Case0..2 are if/else and epilogue labels of PsS2cTransBoxProc (storage/flash_floppy_handlers.s:6982), reached by plain jr; no offset table names them.",
+  "new": null,
+  "header": "",
+  "basis": "not a switch (branch labels)",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:7037 `pop xiz` -- PsS2cTransBoxProc's epilogue (also the non-paint exit, 6992)"
+  ]
+ },
+ {
+  "old": "SndArg_GridBnk_Case3",
+  "verdict": "refuse",
+  "why_refused": "Not a switch case: a second label at the address of S2cGridBoxProc (storage/flash_floppy_handlers.s:7041/7042) with no reference anywhere; a stale alias to delete (Canonical Label Names), not a case to rename.",
+  "new": null,
+  "header": "",
+  "basis": "not a switch (alias of the function entry)",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:7041 `SndArg_GridBnk_Case3:` -- directly followed by 7042 `S2cGridBoxProc:`"
+  ]
+ },
+ {
+  "old": "FdcFormat_GridCheck",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "S2cGridBoxProc_OnGetFixedColStr",
+  "header": "S2cGridBoxProc's EVT_GET_FIXED_COL_STR case: Strcpy's the fixed-column string (instance +0x3E).\nBasis: S2cGridBoxProc compare chain + body; it is not an FDC format routine.",
+  "basis": "event code (compare chain) + body",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:7055 `cp xiz, EVT_GET_FIXED_COL_STR` / 7056 `jrl z, FdcFormat_GridCheck` -- S2cGridBoxProc's EVT_GET_FIXED_COL_STR case",
+   "storage/flash_floppy_handlers.s:7227 `ld xiz, 0x3e` -- copies the fixed-column string (instance +0x3E) via S2cGrid_GetViewAndCopy"
+  ]
+ },
+ {
+  "old": "FdcFormat_GridCheck_Case1",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "S2cGridBoxProc_OnGetFixedRowStr",
+  "header": "",
+  "basis": "switch value meaning (event code: compare chain for the sparse events, S2cGridBoxProc_CaseTable for EVT_INDEXSW_UP..EVT_RAM_DATA) + body",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:7053 `cp xiz, EVT_GET_FIXED_ROW_STR` / 7054 `jrl z, FdcFormat_GridCheck_Case1` -- S2cGridBoxProc (7042) compare chain",
+   "storage/flash_floppy_handlers.s:7233 `ld xiz, 0x42` -- the fixed-row string pointer at instance +0x42, Strcpy'd by S2cGrid_GetViewAndCopy"
+  ]
+ },
+ {
+  "old": "FdcFormat_GridCheck_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "S2cGridBoxProc_ForwardToApFunc",
+  "header": "EVT_REQUEST_GRID_DRAW, EVT_LSW_DATA and EVT_RAM_DATA are passed on to the grid's ApFunction (instance +70).",
+  "basis": "switch value meaning (event code: compare chain for the sparse events, S2cGridBoxProc_CaseTable for EVT_INDEXSW_UP..EVT_RAM_DATA) + body",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:7051 `cp xiz, EVT_REQUEST_GRID_DRAW` / 7052 `jrl z, FdcFormat_GridCheck_Case2`; table ui_widgets/naka_screen_dispatch.s:1777 entries 5/6 = EVT_LSW_DATA / EVT_RAM_DATA",
+   "storage/flash_floppy_handlers.s:7250 `ld xwa, (xhl + 70)` / 7253 `call ApFuncCall` -- passes the event on to the grid's ApFunction (instance +70)"
+  ]
+ },
+ {
+  "old": "FdcFormat_GridCheck_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "S2cGridBoxProc_OnClrGridHanten",
+  "header": "",
+  "basis": "switch value meaning (event code: compare chain for the sparse events, S2cGridBoxProc_CaseTable for EVT_INDEXSW_UP..EVT_RAM_DATA) + body",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:7049 `cp xiz, EVT_CLR_GRID_HANTEN` / 7050 `jrl z, FdcFormat_GridCheck_Case3`",
+   "storage/flash_floppy_handlers.s:7260 `ld xbc, EVT_GET_SELECTED_CEL` / 7265 `ld xbc, EVT_REQUEST_GRID_DRAW` -- redraws the focus object's selected cell"
+  ]
+ },
+ {
+  "old": "FdcFormat_GridCheck_Case4",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "S2cGridBoxProc_DefaultInherited",
+  "header": "",
+  "basis": "switch value meaning (event code: compare chain for the sparse events, S2cGridBoxProc_CaseTable for EVT_INDEXSW_UP..EVT_RAM_DATA) + body",
+  "evidence": [
+   "ui_widgets/naka_screen_dispatch.s:1782 -- table entry 4 = EVT_INDEX_SELECT; out-of-range events also come here (storage/flash_floppy_handlers.s:7061/7063)",
+   "storage/flash_floppy_handlers.s:7278 `call InheritedProc` -- the default"
+  ]
+ },
+ {
+  "old": "FdcFormat_GridCheck_Case5",
+  "verdict": "refuse",
+  "why_refused": "Not a switch case: S2cGridBoxProc's epilogue (pop xiz, release the frame, ret), reached by jr from its return paths (storage/flash_floppy_handlers.s:7271). Suggested for a branch-label batch: S2cGridBoxProc_Epilogue.",
+  "new": null,
+  "header": "",
+  "basis": "not a switch (epilogue)",
+  "evidence": [
+   "storage/flash_floppy_handlers.s:7283 `lda xsp, (xsp + 16)` -- frame release before ret"
+  ]
+ },
+ {
+  "old": "DemoMenu_WorkspaceFunc_Case10",
+  "verdict": "refuse",
+  "why_refused": "The switched value is the MemDraw item index 9..14 (DemoMenu_BuildItemWorkspace's argument, which indexes MemDraw_LswIdTable), i.e. LSW ids 0x82C1, 0x82C0, 0x82CC, 0x82CB, 0x8293, 0x8294 (ui_widgets/naka_technichord_strings.c:9560), but what those drawbar settings are is not decoded anywhere in the tree (no widget or LSW name carries them; IvDrawbar_Match_CheckUpper/Lower are guesses), so a case name would only restate 'item N' / 'word 0x247Ex'. Note the owners are misnamed: these are the drawbar-memory item store (items 9-14 -> words 0x247E0..0x247EA) and its getter, not a demo menu.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning not established (undecoded LSW ids)",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:17768 `sub wa, 0x9` -- switch on item - 9, 0..5; Case10 = item 10",
+   "ui/drawbar_panel_ui.s:17784 `ld\t(0x247e2:24), iz` -- stores the item's value"
+  ]
+ },
+ {
+  "old": "DemoMenu_WorkspaceFunc_Case11",
+  "verdict": "refuse",
+  "why_refused": "The switched value is the MemDraw item index 9..14 (DemoMenu_BuildItemWorkspace's argument, which indexes MemDraw_LswIdTable), i.e. LSW ids 0x82C1, 0x82C0, 0x82CC, 0x82CB, 0x8293, 0x8294 (ui_widgets/naka_technichord_strings.c:9560), but what those drawbar settings are is not decoded anywhere in the tree (no widget or LSW name carries them; IvDrawbar_Match_CheckUpper/Lower are guesses), so a case name would only restate 'item N' / 'word 0x247Ex'. Note the owners are misnamed: these are the drawbar-memory item store (items 9-14 -> words 0x247E0..0x247EA) and its getter, not a demo menu.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning not established (undecoded LSW ids)",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:17768 `sub wa, 0x9` -- switch on item - 9, 0..5; Case11 = item 11",
+   "ui/drawbar_panel_ui.s:17787 `ld\t(0x247e4:24), iz` -- stores the item's value"
+  ]
+ },
+ {
+  "old": "DemoMenu_WorkspaceFunc_Case12",
+  "verdict": "refuse",
+  "why_refused": "The switched value is the MemDraw item index 9..14 (DemoMenu_BuildItemWorkspace's argument, which indexes MemDraw_LswIdTable), i.e. LSW ids 0x82C1, 0x82C0, 0x82CC, 0x82CB, 0x8293, 0x8294 (ui_widgets/naka_technichord_strings.c:9560), but what those drawbar settings are is not decoded anywhere in the tree (no widget or LSW name carries them; IvDrawbar_Match_CheckUpper/Lower are guesses), so a case name would only restate 'item N' / 'word 0x247Ex'. Note the owners are misnamed: these are the drawbar-memory item store (items 9-14 -> words 0x247E0..0x247EA) and its getter, not a demo menu.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning not established (undecoded LSW ids)",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:17768 `sub wa, 0x9` -- switch on item - 9, 0..5; Case12 = item 12",
+   "ui/drawbar_panel_ui.s:17790 `ld\t(0x247e6:24), iz` -- stores the item's value"
+  ]
+ },
+ {
+  "old": "DemoMenu_WorkspaceFunc_Case13",
+  "verdict": "refuse",
+  "why_refused": "The switched value is the MemDraw item index 9..14 (DemoMenu_BuildItemWorkspace's argument, which indexes MemDraw_LswIdTable), i.e. LSW ids 0x82C1, 0x82C0, 0x82CC, 0x82CB, 0x8293, 0x8294 (ui_widgets/naka_technichord_strings.c:9560), but what those drawbar settings are is not decoded anywhere in the tree (no widget or LSW name carries them; IvDrawbar_Match_CheckUpper/Lower are guesses), so a case name would only restate 'item N' / 'word 0x247Ex'. Note the owners are misnamed: these are the drawbar-memory item store (items 9-14 -> words 0x247E0..0x247EA) and its getter, not a demo menu.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning not established (undecoded LSW ids)",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:17768 `sub wa, 0x9` -- switch on item - 9, 0..5; Case13 = item 13",
+   "ui/drawbar_panel_ui.s:17793 `ld\t(0x247e8:24), iz` -- stores the item's value"
+  ]
+ },
+ {
+  "old": "DemoMenu_WorkspaceFunc_Case14",
+  "verdict": "refuse",
+  "why_refused": "The switched value is the MemDraw item index 9..14 (DemoMenu_BuildItemWorkspace's argument, which indexes MemDraw_LswIdTable), i.e. LSW ids 0x82C1, 0x82C0, 0x82CC, 0x82CB, 0x8293, 0x8294 (ui_widgets/naka_technichord_strings.c:9560), but what those drawbar settings are is not decoded anywhere in the tree (no widget or LSW name carries them; IvDrawbar_Match_CheckUpper/Lower are guesses), so a case name would only restate 'item N' / 'word 0x247Ex'. Note the owners are misnamed: these are the drawbar-memory item store (items 9-14 -> words 0x247E0..0x247EA) and its getter, not a demo menu.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning not established (undecoded LSW ids)",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:17768 `sub wa, 0x9` -- switch on item - 9, 0..5; Case14 = item 14",
+   "ui/drawbar_panel_ui.s:17796 `ld\t(0x247ea:24), iz` -- stores the item's value"
+  ]
+ },
+ {
+  "old": "DemoMenu_DescriptorFunc_Case10",
+  "verdict": "refuse",
+  "why_refused": "The switched value is the MemDraw item index 9..14 (DemoMenu_BuildItemWorkspace's argument, which indexes MemDraw_LswIdTable), i.e. LSW ids 0x82C1, 0x82C0, 0x82CC, 0x82CB, 0x8293, 0x8294 (ui_widgets/naka_technichord_strings.c:9560), but what those drawbar settings are is not decoded anywhere in the tree (no widget or LSW name carries them; IvDrawbar_Match_CheckUpper/Lower are guesses), so a case name would only restate 'item N' / 'word 0x247Ex'. Note the owners are misnamed: these are the drawbar-memory item store (items 9-14 -> words 0x247E0..0x247EA) and its getter, not a demo menu.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning not established (undecoded LSW ids)",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:17831 `sub wa, 0x9` -- switch on item - 9, 0..5; Case10 = item 10",
+   "ui/drawbar_panel_ui.s:17846 `ld\thl, (0x247e2:24)` -- returns the item's stored value"
+  ]
+ },
+ {
+  "old": "DemoMenu_DescriptorFunc_Case11",
+  "verdict": "refuse",
+  "why_refused": "The switched value is the MemDraw item index 9..14 (DemoMenu_BuildItemWorkspace's argument, which indexes MemDraw_LswIdTable), i.e. LSW ids 0x82C1, 0x82C0, 0x82CC, 0x82CB, 0x8293, 0x8294 (ui_widgets/naka_technichord_strings.c:9560), but what those drawbar settings are is not decoded anywhere in the tree (no widget or LSW name carries them; IvDrawbar_Match_CheckUpper/Lower are guesses), so a case name would only restate 'item N' / 'word 0x247Ex'. Note the owners are misnamed: these are the drawbar-memory item store (items 9-14 -> words 0x247E0..0x247EA) and its getter, not a demo menu.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning not established (undecoded LSW ids)",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:17831 `sub wa, 0x9` -- switch on item - 9, 0..5; Case11 = item 11",
+   "ui/drawbar_panel_ui.s:17849 `ld\thl, (0x247e4:24)` -- returns the item's stored value"
+  ]
+ },
+ {
+  "old": "DemoMenu_DescriptorFunc_Case12",
+  "verdict": "refuse",
+  "why_refused": "The switched value is the MemDraw item index 9..14 (DemoMenu_BuildItemWorkspace's argument, which indexes MemDraw_LswIdTable), i.e. LSW ids 0x82C1, 0x82C0, 0x82CC, 0x82CB, 0x8293, 0x8294 (ui_widgets/naka_technichord_strings.c:9560), but what those drawbar settings are is not decoded anywhere in the tree (no widget or LSW name carries them; IvDrawbar_Match_CheckUpper/Lower are guesses), so a case name would only restate 'item N' / 'word 0x247Ex'. Note the owners are misnamed: these are the drawbar-memory item store (items 9-14 -> words 0x247E0..0x247EA) and its getter, not a demo menu.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning not established (undecoded LSW ids)",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:17831 `sub wa, 0x9` -- switch on item - 9, 0..5; Case12 = item 12",
+   "ui/drawbar_panel_ui.s:17852 `ld\thl, (0x247e6:24)` -- returns the item's stored value"
+  ]
+ },
+ {
+  "old": "DemoMenu_DescriptorFunc_Case13",
+  "verdict": "refuse",
+  "why_refused": "The switched value is the MemDraw item index 9..14 (DemoMenu_BuildItemWorkspace's argument, which indexes MemDraw_LswIdTable), i.e. LSW ids 0x82C1, 0x82C0, 0x82CC, 0x82CB, 0x8293, 0x8294 (ui_widgets/naka_technichord_strings.c:9560), but what those drawbar settings are is not decoded anywhere in the tree (no widget or LSW name carries them; IvDrawbar_Match_CheckUpper/Lower are guesses), so a case name would only restate 'item N' / 'word 0x247Ex'. Note the owners are misnamed: these are the drawbar-memory item store (items 9-14 -> words 0x247E0..0x247EA) and its getter, not a demo menu.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning not established (undecoded LSW ids)",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:17831 `sub wa, 0x9` -- switch on item - 9, 0..5; Case13 = item 13",
+   "ui/drawbar_panel_ui.s:17855 `ld\thl, (0x247e8:24)` -- returns the item's stored value"
+  ]
+ },
+ {
+  "old": "DemoMenu_DescriptorFunc_Case14",
+  "verdict": "refuse",
+  "why_refused": "The switched value is the MemDraw item index 9..14 (DemoMenu_BuildItemWorkspace's argument, which indexes MemDraw_LswIdTable), i.e. LSW ids 0x82C1, 0x82C0, 0x82CC, 0x82CB, 0x8293, 0x8294 (ui_widgets/naka_technichord_strings.c:9560), but what those drawbar settings are is not decoded anywhere in the tree (no widget or LSW name carries them; IvDrawbar_Match_CheckUpper/Lower are guesses), so a case name would only restate 'item N' / 'word 0x247Ex'. Note the owners are misnamed: these are the drawbar-memory item store (items 9-14 -> words 0x247E0..0x247EA) and its getter, not a demo menu.",
+  "new": null,
+  "header": "",
+  "basis": "switch value meaning not established (undecoded LSW ids)",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:17831 `sub wa, 0x9` -- switch on item - 9, 0..5; Case14 = item 14",
+   "ui/drawbar_panel_ui.s:17858 `ld\thl, (0x247ea:24)` -- returns the item's stored value"
+  ]
+ },
+ {
+  "old": "AcPresCtrl_Case0",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AcPresentationBoxProc_OnCheckSelected",
+  "header": "",
+  "basis": "switch value meaning (event code, AcPresentationBoxProc compare chain) + body",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:18328 `cp xiz, EVT_CHECK_SELECTED` / 18329 `jrl z, AcPresCtrl_Case0` -- AcPresentationBoxProc (18322)",
+   "ui/drawbar_panel_ui.s:18520 `cp xwa, (xsp + 8)` / 18523 `cpw (xwa), 0x1` -- returns 1 when the box's index (instance +26) equals the parameter and its selected word (*instance+42, cleared on EVT_SHOW, 18351) is 1"
+  ]
+ },
+ {
+  "old": "AcPresCtrl_Case1",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AcPresentationBoxProc_DefaultInherited",
+  "header": "",
+  "basis": "switch value meaning (event code, AcPresentationBoxProc compare chain) + body",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:18346 `cp xiz, EVT_SHOW` / 18347 `jrl nz, AcPresCtrl_Case1` -- every event the chain does not handle",
+   "ui/drawbar_panel_ui.s:18530 `ld xwa, (xsp + 12)` -- reloads the original view/event/parameter and falls into InheritedProc (18536)"
+  ]
+ },
+ {
+  "old": "AcPresCtrl_Case2",
+  "verdict": "refuse",
+  "why_refused": "Not a switch case: the shared `call InheritedProc` join of AcPresentationBoxProc (fall-through from the default and `jrl` from PresBox_OKForward, ui/drawbar_panel_ui.s:18435). Suggested for a branch-label batch: AcPresentationBoxProc_CallInherited.",
+  "new": null,
+  "header": "",
+  "basis": "not a switch (join)",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:18536 `call InheritedProc`"
+  ]
+ },
+ {
+  "old": "AcPresCtrl_Case3",
+  "verdict": "refuse",
+  "why_refused": "Not a switch case: AcPresentationBoxProc's epilogue (pop xiz, release the frame, ret), reached by jrl from its return paths (ui/drawbar_panel_ui.s:18359, 18526). Suggested for a branch-label batch: AcPresentationBoxProc_Epilogue.",
+  "new": null,
+  "header": "",
+  "basis": "not a switch (epilogue)",
+  "evidence": [
+   "ui/drawbar_panel_ui.s:18541 `lda xsp, (xsp + 12)` -- frame release before ret"
+  ]
+ },
+ {
+  "old": "SqSngSelTtlFunc_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqSngSelTtlFunc_OnTitleOld",
+  "header": "",
+  "basis": "switch value meaning (EVT_ACTIVATE_STATE phase: 2 = title new, 3 = title old, 5 = title activate after an interrupt; firmware debug strings in TestTitleFunc) + body",
+  "evidence": [
+   "ui/ui_playback_modes.s:1121 `cp xbc, EVT_ACTIVATE_STATE` -- the switch serves EVT_ACTIVATE_STATE; XDE is the phase",
+   "ui/ui_playback_modes.s:1123 `dec 2, xde` -- switch on phase - 2, so CaseN is phase N (table ui/sepaout_config.s:25 SqSngSelTtlFunc_CaseTable)",
+   "sequencer/sequencer_ui.s:85 `RegTitle 0x7, InitializeYoko_Str_TT_SQSNGSEL, 0x8e, NAKA_MAINFUNC_SqSngSelTtlFunc, 0x8e0000` -- MainFunction of TT_SQSNGSEL",
+   "ui/ui_control_panel.s:3539 `ld xde, 3:i3` -- title change: the title being left (GetTitleOld, 3536) gets EVT_ACTIVATE_STATE phase 3, the new title (GetTitleNow, 3551) phase 2 (3554)",
+   "ui/ui_control_panel.s:3870 `ld xde, 5:i3` -- interrupt return: the resumed title (GetTitleNow, 3867) gets phase 5, after the interrupting title got 7 and 3 (3860/3865)",
+   "factory_test/fd_test_data.s:344 `.asciz \"Title old\"` -- TestTitleFunc prints \"Title old\" for phase 3 and \"Title Activate\" (347) for phase 5 (factory_test/test_init.s:138 `dec 2, xwa`; fd_test_data.s:382 TestTitleFunc_CaseTable)",
+   "ui/ui_playback_modes.s:1151 `call\tSqTrAs_CondCheck_Helper2` -- the phase-3 work"
+  ]
+ },
+ {
+  "old": "SqSngNameTtlFunc_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqSngNameTtlFunc_OnTitleOld",
+  "header": "",
+  "basis": "switch value meaning (EVT_ACTIVATE_STATE phase: 2 = title new, 3 = title old, 5 = title activate after an interrupt; firmware debug strings in TestTitleFunc) + body",
+  "evidence": [
+   "ui/ui_playback_modes.s:1162 `cp xbc, EVT_ACTIVATE_STATE` -- the switch serves EVT_ACTIVATE_STATE; XDE is the phase",
+   "ui/ui_playback_modes.s:1164 `dec 2, xde` -- switch on phase - 2, so CaseN is phase N (table ui/sepaout_config.s:32 SqSngNameTtlFunc_CaseTable)",
+   "sequencer/sequencer_ui.s:86 `RegTitle 0x7, InitializeYoko_Str_TT_SQSNGNAME, 0x8f, NAKA_MAINFUNC_SqSngNameTtlFunc, 0x8f0000` -- MainFunction of TT_SQSNGNAME",
+   "ui/ui_control_panel.s:3539 `ld xde, 3:i3` -- title change: the title being left (GetTitleOld, 3536) gets EVT_ACTIVATE_STATE phase 3, the new title (GetTitleNow, 3551) phase 2 (3554)",
+   "ui/ui_control_panel.s:3870 `ld xde, 5:i3` -- interrupt return: the resumed title (GetTitleNow, 3867) gets phase 5, after the interrupting title got 7 and 3 (3860/3865)",
+   "factory_test/fd_test_data.s:344 `.asciz \"Title old\"` -- TestTitleFunc prints \"Title old\" for phase 3 and \"Title Activate\" (347) for phase 5 (factory_test/test_init.s:138 `dec 2, xwa`; fd_test_data.s:382 TestTitleFunc_CaseTable)",
+   "ui/ui_playback_modes.s:1192 `call SetWall_MiscDataAndCode` -- the phase-3 work"
+  ]
+ },
+ {
+  "old": "SqTrAsPsTtlFunc_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqTrAsPsTtlFunc_OnTitleOld",
+  "header": "",
+  "basis": "switch value meaning (EVT_ACTIVATE_STATE phase: 2 = title new, 3 = title old, 5 = title activate after an interrupt; firmware debug strings in TestTitleFunc) + body",
+  "evidence": [
+   "ui/ui_playback_modes.s:1352 `cp xbc, EVT_ACTIVATE_STATE` -- the switch serves EVT_ACTIVATE_STATE; XDE is the phase",
+   "ui/ui_playback_modes.s:1354 `dec 2, xde` -- switch on phase - 2, so CaseN is phase N (table ui/sepaout_config.s:46 SqTrAsPsTtlFunc_CaseTable)",
+   "sequencer/sequencer_ui.s:84 `RegTitle 0x7, InitializeYoko_Str_TT_SQTRASPS, 0x8c, NAKA_MAINFUNC_SqTrAsPsTtlFunc, 0x8c0000` -- MainFunction of TT_SQTRASPS",
+   "ui/ui_control_panel.s:3539 `ld xde, 3:i3` -- title change: the title being left (GetTitleOld, 3536) gets EVT_ACTIVATE_STATE phase 3, the new title (GetTitleNow, 3551) phase 2 (3554)",
+   "ui/ui_control_panel.s:3870 `ld xde, 5:i3` -- interrupt return: the resumed title (GetTitleNow, 3867) gets phase 5, after the interrupting title got 7 and 3 (3860/3865)",
+   "factory_test/fd_test_data.s:344 `.asciz \"Title old\"` -- TestTitleFunc prints \"Title old\" for phase 3 and \"Title Activate\" (347) for phase 5 (factory_test/test_init.s:138 `dec 2, xwa`; fd_test_data.s:382 TestTitleFunc_CaseTable)",
+   "ui/ui_playback_modes.s:1392 `call\tSqTrAsPsTtl_Dispatch_Helper` -- the phase-3 work"
+  ]
+ },
+ {
+  "old": "SqMdlyPlyTtlFunc_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqMdlyPlyTtlFunc_OnTitleOld",
+  "header": "",
+  "basis": "switch value meaning (EVT_ACTIVATE_STATE phase: 2 = title new, 3 = title old, 5 = title activate after an interrupt; firmware debug strings in TestTitleFunc) + body",
+  "evidence": [
+   "ui/ui_playback_modes.s:1484 `cp xbc, EVT_ACTIVATE_STATE` -- the switch serves EVT_ACTIVATE_STATE; XDE is the phase",
+   "ui/ui_playback_modes.s:1486 `dec 2, xde` -- switch on phase - 2, so CaseN is phase N (table ui/sepaout_config.s:57 SqMdlyPlyTtlFunc_CaseTable)",
+   "sequencer/sequencer_ui.s:80 `RegTitle 0x7, InitializeYoko_Str_TT_SQMDLYPLY, 0x7a, NAKA_MAINFUNC_SqMdlyPlyTtlFunc, 0x7a0000` -- MainFunction of TT_SQMDLYPLY",
+   "ui/ui_control_panel.s:3539 `ld xde, 3:i3` -- title change: the title being left (GetTitleOld, 3536) gets EVT_ACTIVATE_STATE phase 3, the new title (GetTitleNow, 3551) phase 2 (3554)",
+   "ui/ui_control_panel.s:3870 `ld xde, 5:i3` -- interrupt return: the resumed title (GetTitleNow, 3867) gets phase 5, after the interrupting title got 7 and 3 (3860/3865)",
+   "factory_test/fd_test_data.s:344 `.asciz \"Title old\"` -- TestTitleFunc prints \"Title old\" for phase 3 and \"Title Activate\" (347) for phase 5 (factory_test/test_init.s:138 `dec 2, xwa`; fd_test_data.s:382 TestTitleFunc_CaseTable)",
+   "ui/ui_playback_modes.s:1512 `call\tPlayMode_ClearModeFlag` then `calr SqTrAsPsTtl_CaseF` (1517) -- the phase-3 work"
+  ]
+ },
+ {
+  "old": "DkMdlyPlyTtlFunc_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DkMdlyPlyTtlFunc_OnTitleOld",
+  "header": "",
+  "basis": "switch value meaning (EVT_ACTIVATE_STATE phase: 2 = title new, 3 = title old, 5 = title activate after an interrupt; firmware debug strings in TestTitleFunc) + body",
+  "evidence": [
+   "ui/ui_playback_modes.s:1564 `cp xbc, EVT_ACTIVATE_STATE` -- the switch serves EVT_ACTIVATE_STATE; XDE is the phase",
+   "ui/ui_playback_modes.s:1566 `dec 2, xde` -- switch on phase - 2, so CaseN is phase N (table ui/sepaout_config.s:64 DkMdlyPlyTtlFunc_CaseTable)",
+   "sequencer/sequencer_ui.s:79 `RegTitle 0x7, InitializeYoko_Str_TT_DKMDLYPLY, 0x78, NAKA_MAINFUNC_DkMdlyPlyTtlFunc, 0x780000` -- MainFunction of TT_DKMDLYPLY",
+   "ui/ui_control_panel.s:3539 `ld xde, 3:i3` -- title change: the title being left (GetTitleOld, 3536) gets EVT_ACTIVATE_STATE phase 3, the new title (GetTitleNow, 3551) phase 2 (3554)",
+   "ui/ui_control_panel.s:3870 `ld xde, 5:i3` -- interrupt return: the resumed title (GetTitleNow, 3867) gets phase 5, after the interrupting title got 7 and 3 (3860/3865)",
+   "factory_test/fd_test_data.s:344 `.asciz \"Title old\"` -- TestTitleFunc prints \"Title old\" for phase 3 and \"Title Activate\" (347) for phase 5 (factory_test/test_init.s:138 `dec 2, xwa`; fd_test_data.s:382 TestTitleFunc_CaseTable)",
+   "ui/ui_playback_modes.s:1592 `call\tPlayMode_ClearModeFlag` then `calr SqTrAsPsTtl_CaseF` (1597) -- the phase-3 work"
+  ]
+ },
+ {
+  "old": "DpMdlyDocTtlFunc_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DpMdlyDocTtlFunc_OnTitleOld",
+  "header": "",
+  "basis": "switch value meaning (EVT_ACTIVATE_STATE phase: 2 = title new, 3 = title old, 5 = title activate after an interrupt; firmware debug strings in TestTitleFunc) + body",
+  "evidence": [
+   "ui/ui_playback_modes.s:1798 `cp xbc, EVT_ACTIVATE_STATE` -- the switch serves EVT_ACTIVATE_STATE; XDE is the phase",
+   "ui/ui_playback_modes.s:1800 `dec 2, xde` -- switch on phase - 2, so CaseN is phase N (table ui/sepaout_config.s:81 DpMdlyDocTtlFunc_CaseTable)",
+   "sequencer/sequencer_ui.s:76 `RegTitle 0x7, InitializeYoko_Str_TT_DPMDLYDOC, 0x74, NAKA_MAINFUNC_DpMdlyDocTtlFunc, 0x740001` -- MainFunction of TT_DPMDLYDOC",
+   "ui/ui_control_panel.s:3539 `ld xde, 3:i3` -- title change: the title being left (GetTitleOld, 3536) gets EVT_ACTIVATE_STATE phase 3, the new title (GetTitleNow, 3551) phase 2 (3554)",
+   "ui/ui_control_panel.s:3870 `ld xde, 5:i3` -- interrupt return: the resumed title (GetTitleNow, 3867) gets phase 5, after the interrupting title got 7 and 3 (3860/3865)",
+   "factory_test/fd_test_data.s:344 `.asciz \"Title old\"` -- TestTitleFunc prints \"Title old\" for phase 3 and \"Title Activate\" (347) for phase 5 (factory_test/test_init.s:138 `dec 2, xwa`; fd_test_data.s:382 TestTitleFunc_CaseTable)",
+   "ui/ui_playback_modes.s:1830 `call\tDpMdlyDocTtl_Dispatch_Helper2` then `calr SqTrAsPsTtl_CaseF` (1835) -- the phase-3 work"
+  ]
+ },
+ {
+  "old": "DpMdlyPdTtlFunc_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DpMdlyPdTtlFunc_OnTitleOld",
+  "header": "",
+  "basis": "switch value meaning (EVT_ACTIVATE_STATE phase: 2 = title new, 3 = title old, 5 = title activate after an interrupt; firmware debug strings in TestTitleFunc) + body",
+  "evidence": [
+   "ui/ui_playback_modes.s:1892 `cp xbc, EVT_ACTIVATE_STATE` -- the switch serves EVT_ACTIVATE_STATE; XDE is the phase",
+   "ui/ui_playback_modes.s:1894 `dec 2, xde` -- switch on phase - 2, so CaseN is phase N (table ui/sepaout_config.s:88 DpMdlyPdTtlFunc_CaseTable)",
+   "sequencer/sequencer_ui.s:77 `RegTitle 0x7, InitializeYoko_Str_TT_DPMDLYPD, 0x75, NAKA_MAINFUNC_DpMdlyPdTtlFunc, 0x750000` -- MainFunction of TT_DPMDLYPD",
+   "ui/ui_control_panel.s:3539 `ld xde, 3:i3` -- title change: the title being left (GetTitleOld, 3536) gets EVT_ACTIVATE_STATE phase 3, the new title (GetTitleNow, 3551) phase 2 (3554)",
+   "ui/ui_control_panel.s:3870 `ld xde, 5:i3` -- interrupt return: the resumed title (GetTitleNow, 3867) gets phase 5, after the interrupting title got 7 and 3 (3860/3865)",
+   "factory_test/fd_test_data.s:344 `.asciz \"Title old\"` -- TestTitleFunc prints \"Title old\" for phase 3 and \"Title Activate\" (347) for phase 5 (factory_test/test_init.s:138 `dec 2, xwa`; fd_test_data.s:382 TestTitleFunc_CaseTable)",
+   "ui/ui_playback_modes.s:1924 `call\tDpMdlyPdTtl_Dispatch_Helper2` then `calr SqTrAsPsTtl_CaseF` (1929) -- the phase-3 work"
+  ]
+ },
+ {
+  "old": "DpMdlySmfTtlFunc_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DpMdlySmfTtlFunc_OnTitleOld",
+  "header": "",
+  "basis": "switch value meaning (EVT_ACTIVATE_STATE phase: 2 = title new, 3 = title old, 5 = title activate after an interrupt; firmware debug strings in TestTitleFunc) + body",
+  "evidence": [
+   "ui/ui_playback_modes.s:1986 `cp xbc, EVT_ACTIVATE_STATE` -- the switch serves EVT_ACTIVATE_STATE; XDE is the phase",
+   "ui/ui_playback_modes.s:1988 `dec 2, xde` -- switch on phase - 2, so CaseN is phase N (table ui/sepaout_config.s:95 DpMdlySmfTtlFunc_CaseTable)",
+   "sequencer/sequencer_ui.s:75 `RegTitle 0x7, InitializeYoko_Str_TT_DPMDLYSMF, 0x73, NAKA_MAINFUNC_DpMdlySmfTtlFunc, 0x730000` -- MainFunction of TT_DPMDLYSMF",
+   "ui/ui_control_panel.s:3539 `ld xde, 3:i3` -- title change: the title being left (GetTitleOld, 3536) gets EVT_ACTIVATE_STATE phase 3, the new title (GetTitleNow, 3551) phase 2 (3554)",
+   "ui/ui_control_panel.s:3870 `ld xde, 5:i3` -- interrupt return: the resumed title (GetTitleNow, 3867) gets phase 5, after the interrupting title got 7 and 3 (3860/3865)",
+   "factory_test/fd_test_data.s:344 `.asciz \"Title old\"` -- TestTitleFunc prints \"Title old\" for phase 3 and \"Title Activate\" (347) for phase 5 (factory_test/test_init.s:138 `dec 2, xwa`; fd_test_data.s:382 TestTitleFunc_CaseTable)",
+   "ui/ui_playback_modes.s:2022 `call\tDpMdlySmfTtl_Dispatch_Helper2` then `calr SqTrAsPsTtl_CaseF` (2027) -- the phase-3 work"
+  ]
+ },
+ {
+  "old": "DpMdlySmfLyrTtlFunc_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DpMdlySmfLyrTtlFunc_OnTitleOld",
+  "header": "",
+  "basis": "switch value meaning (EVT_ACTIVATE_STATE phase: 2 = title new, 3 = title old, 5 = title activate after an interrupt; firmware debug strings in TestTitleFunc) + body",
+  "evidence": [
+   "ui/ui_playback_modes.s:2084 `cp xbc, EVT_ACTIVATE_STATE` -- the switch serves EVT_ACTIVATE_STATE; XDE is the phase",
+   "ui/ui_playback_modes.s:2086 `dec 2, xde` -- switch on phase - 2, so CaseN is phase N (table ui/sepaout_config.s:102 DpMdlySmfLyrTtlFunc_CaseTable)",
+   "sequencer/sequencer_ui.s:78 `RegTitle 0x7, InitializeYoko_Str_TT_DPMDLYSMFLYR, 0x76, NAKA_MAINFUNC_DpMdlySmfLyrTtlFunc, 0x760000` -- MainFunction of TT_DPMDLYSMFLYR",
+   "ui/ui_control_panel.s:3539 `ld xde, 3:i3` -- title change: the title being left (GetTitleOld, 3536) gets EVT_ACTIVATE_STATE phase 3, the new title (GetTitleNow, 3551) phase 2 (3554)",
+   "ui/ui_control_panel.s:3870 `ld xde, 5:i3` -- interrupt return: the resumed title (GetTitleNow, 3867) gets phase 5, after the interrupting title got 7 and 3 (3860/3865)",
+   "factory_test/fd_test_data.s:344 `.asciz \"Title old\"` -- TestTitleFunc prints \"Title old\" for phase 3 and \"Title Activate\" (347) for phase 5 (factory_test/test_init.s:138 `dec 2, xwa`; fd_test_data.s:382 TestTitleFunc_CaseTable)",
+   "ui/ui_playback_modes.s:2138 `call\tDpMdlySmfLyrTtl_Dispatch_Helper2` then `calr SqTrAsPsTtl_CaseF` (2143) -- the phase-3 work"
+  ]
+ },
+ {
+  "old": "DpDocTtlFunc_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DpDocTtlFunc_OnTitleOld",
+  "header": "",
+  "basis": "switch value meaning (EVT_ACTIVATE_STATE phase: 2 = title new, 3 = title old, 5 = title activate after an interrupt; firmware debug strings in TestTitleFunc) + body",
+  "evidence": [
+   "ui/ui_playback_modes.s:2904 `cp xbc, EVT_ACTIVATE_STATE` -- the switch serves EVT_ACTIVATE_STATE; XDE is the phase",
+   "ui/ui_playback_modes.s:2906 `dec 2, xde` -- switch on phase - 2, so CaseN is phase N (table ui/sepaout_config.s:140 DpDocTtlFunc_CaseTable)",
+   "sequencer/sequencer_ui.s:72 `RegTitle 0x7, InitializeYoko_Str_TT_DPDOC, 0x70, NAKA_MAINFUNC_DpDocTtlFunc, 0x700000` -- MainFunction of TT_DPDOC",
+   "ui/ui_control_panel.s:3539 `ld xde, 3:i3` -- title change: the title being left (GetTitleOld, 3536) gets EVT_ACTIVATE_STATE phase 3, the new title (GetTitleNow, 3551) phase 2 (3554)",
+   "ui/ui_control_panel.s:3870 `ld xde, 5:i3` -- interrupt return: the resumed title (GetTitleNow, 3867) gets phase 5, after the interrupting title got 7 and 3 (3860/3865)",
+   "factory_test/fd_test_data.s:344 `.asciz \"Title old\"` -- TestTitleFunc prints \"Title old\" for phase 3 and \"Title Activate\" (347) for phase 5 (factory_test/test_init.s:138 `dec 2, xwa`; fd_test_data.s:382 TestTitleFunc_CaseTable)",
+   "ui/ui_playback_modes.s:2924 `call\tSeqState_GetFlags` -- stops a running song (SeqRecPlay_DisableBoth, Song_AbortPlayback, 2927-2928), then `calr SqTrAsPsTtl_CaseF` (2930) -- the phase-3 work"
+  ]
+ },
+ {
+  "old": "DpPdTtlFunc_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DpPdTtlFunc_OnTitleOld",
+  "header": "",
+  "basis": "switch value meaning (EVT_ACTIVATE_STATE phase: 2 = title new, 3 = title old, 5 = title activate after an interrupt; firmware debug strings in TestTitleFunc) + body",
+  "evidence": [
+   "ui/ui_playback_modes.s:3034 `cp xbc, EVT_ACTIVATE_STATE` -- the switch serves EVT_ACTIVATE_STATE; XDE is the phase",
+   "ui/ui_playback_modes.s:3036 `dec 2, xde` -- switch on phase - 2, so CaseN is phase N (table ui/sepaout_config.s:158 DpPdTtlFunc_CaseTable)",
+   "sequencer/sequencer_ui.s:73 `RegTitle 0x7, InitializeYoko_Str_TT_DPPD, 0x71, NAKA_MAINFUNC_DpPdTtlFunc, 0x710000` -- MainFunction of TT_DPPD",
+   "ui/ui_control_panel.s:3539 `ld xde, 3:i3` -- title change: the title being left (GetTitleOld, 3536) gets EVT_ACTIVATE_STATE phase 3, the new title (GetTitleNow, 3551) phase 2 (3554)",
+   "ui/ui_control_panel.s:3870 `ld xde, 5:i3` -- interrupt return: the resumed title (GetTitleNow, 3867) gets phase 5, after the interrupting title got 7 and 3 (3860/3865)",
+   "factory_test/fd_test_data.s:344 `.asciz \"Title old\"` -- TestTitleFunc prints \"Title old\" for phase 3 and \"Title Activate\" (347) for phase 5 (factory_test/test_init.s:138 `dec 2, xwa`; fd_test_data.s:382 TestTitleFunc_CaseTable)",
+   "ui/ui_playback_modes.s:3054 `call\tSeqState_GetFlags` -- stops a running song (3057-3058), then `calr SqTrAsPsTtl_CaseF` (3060) -- the phase-3 work"
+  ]
+ },
+ {
+  "old": "DpSmfTtlFunc_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DpSmfTtlFunc_OnTitleOld",
+  "header": "",
+  "basis": "switch value meaning (EVT_ACTIVATE_STATE phase: 2 = title new, 3 = title old, 5 = title activate after an interrupt; firmware debug strings in TestTitleFunc) + body",
+  "evidence": [
+   "ui/ui_playback_modes.s:3164 `cp xbc, EVT_ACTIVATE_STATE` -- the switch serves EVT_ACTIVATE_STATE; XDE is the phase",
+   "ui/ui_playback_modes.s:3166 `dec 2, xde` -- switch on phase - 2, so CaseN is phase N (table ui/sepaout_config.s:176 DpSmfTtlFunc_CaseTable)",
+   "sequencer/sequencer_ui.s:71 `RegTitle 0x7, InitializeYoko_Str_TT_DPSMF, 0x6f, NAKA_MAINFUNC_DpSmfTtlFunc, 0x6f0000` -- MainFunction of TT_DPSMF",
+   "ui/ui_control_panel.s:3539 `ld xde, 3:i3` -- title change: the title being left (GetTitleOld, 3536) gets EVT_ACTIVATE_STATE phase 3, the new title (GetTitleNow, 3551) phase 2 (3554)",
+   "ui/ui_control_panel.s:3870 `ld xde, 5:i3` -- interrupt return: the resumed title (GetTitleNow, 3867) gets phase 5, after the interrupting title got 7 and 3 (3860/3865)",
+   "factory_test/fd_test_data.s:344 `.asciz \"Title old\"` -- TestTitleFunc prints \"Title old\" for phase 3 and \"Title Activate\" (347) for phase 5 (factory_test/test_init.s:138 `dec 2, xwa`; fd_test_data.s:382 TestTitleFunc_CaseTable)",
+   "ui/ui_playback_modes.s:3187 `cp\t(CURRENT_TITLE:16), 114` -- unless the new title is TT_DPSMFLYR (0x72) stops a running song and clears the lyrics (EVT_LYRICS_ALL_CLEAR, 3195), then `calr SqTrAsPsTtl_CaseF` (3199) -- the phase-3 work"
+  ]
+ },
+ {
+  "old": "DpSmfLyrTtlFunc_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DpSmfLyrTtlFunc_OnTitleOld",
+  "header": "",
+  "basis": "switch value meaning (EVT_ACTIVATE_STATE phase: 2 = title new, 3 = title old, 5 = title activate after an interrupt; firmware debug strings in TestTitleFunc) + body",
+  "evidence": [
+   "ui/ui_playback_modes.s:3303 `cp xbc, EVT_ACTIVATE_STATE` -- the switch serves EVT_ACTIVATE_STATE; XDE is the phase",
+   "ui/ui_playback_modes.s:3305 `dec 2, xde` -- switch on phase - 2, so CaseN is phase N (table ui/sepaout_config.s:183 DpSmfLyrTtlFunc_CaseTable)",
+   "sequencer/sequencer_ui.s:74 `RegTitle 0x7, InitializeYoko_Str_TT_DPSMFLYR, 0x72, NAKA_MAINFUNC_DpSmfLyrTtlFunc, 0x720000` -- MainFunction of TT_DPSMFLYR",
+   "ui/ui_control_panel.s:3539 `ld xde, 3:i3` -- title change: the title being left (GetTitleOld, 3536) gets EVT_ACTIVATE_STATE phase 3, the new title (GetTitleNow, 3551) phase 2 (3554)",
+   "ui/ui_control_panel.s:3870 `ld xde, 5:i3` -- interrupt return: the resumed title (GetTitleNow, 3867) gets phase 5, after the interrupting title got 7 and 3 (3860/3865)",
+   "factory_test/fd_test_data.s:344 `.asciz \"Title old\"` -- TestTitleFunc prints \"Title old\" for phase 3 and \"Title Activate\" (347) for phase 5 (factory_test/test_init.s:138 `dec 2, xwa`; fd_test_data.s:382 TestTitleFunc_CaseTable)",
+   "ui/ui_playback_modes.s:3322 `calr\tSqTrAsPsTtl_CaseF` -- the phase-3 work"
+  ]
+ },
+ {
+  "old": "SqTrSelTtlFunc_Case3",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "SqTrSelTtlFunc_OnTitleOld",
+  "header": "",
+  "basis": "switch value meaning (EVT_ACTIVATE_STATE phase: 2 = title new, 3 = title old, 5 = title activate after an interrupt; firmware debug strings in TestTitleFunc) + body",
+  "evidence": [
+   "ui/ui_playback_modes.s:3449 `cp xbc, EVT_ACTIVATE_STATE` -- the switch serves EVT_ACTIVATE_STATE; XDE is the phase",
+   "ui/ui_playback_modes.s:3451 `dec 2, xde` -- switch on phase - 2, so CaseN is phase N (table ui/sepaout_config.s:190 SqTrSelTtlFunc_CaseTable)",
+   "sequencer/sequencer_ui.s:81 `RegTitle 0x7, InitializeYoko_Str_TT_SQTRSEL, 0x89, NAKA_MAINFUNC_SqTrSelTtlFunc, 0x890000` -- MainFunction of TT_SQTRSEL",
+   "ui/ui_control_panel.s:3539 `ld xde, 3:i3` -- title change: the title being left (GetTitleOld, 3536) gets EVT_ACTIVATE_STATE phase 3, the new title (GetTitleNow, 3551) phase 2 (3554)",
+   "ui/ui_control_panel.s:3870 `ld xde, 5:i3` -- interrupt return: the resumed title (GetTitleNow, 3867) gets phase 5, after the interrupting title got 7 and 3 (3860/3865)",
+   "factory_test/fd_test_data.s:344 `.asciz \"Title old\"` -- TestTitleFunc prints \"Title old\" for phase 3 and \"Title Activate\" (347) for phase 5 (factory_test/test_init.s:138 `dec 2, xwa`; fd_test_data.s:382 TestTitleFunc_CaseTable)",
+   "ui/ui_playback_modes.s:3477 `call\tPlayMode_TeardownAndRestore` -- the phase-3 work"
+  ]
+ },
+ {
+  "old": "DpMdlySmfLyrTtlFunc_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DpMdlySmfLyrTtlFunc_OnTitleActivate",
+  "header": "",
+  "basis": "switch value meaning (EVT_ACTIVATE_STATE phase: 2 = title new, 3 = title old, 5 = title activate after an interrupt; firmware debug strings in TestTitleFunc) + body",
+  "evidence": [
+   "ui/ui_playback_modes.s:2146 `ld xwa, 7274534` / 2147 `ld\txbc, EVT_LYRICS_ALL_DRAW` -- phase 5 redraws all lyrics (element 0x26 = 38 of slot 0x6F, the \"Lyrics\" window)"
+  ]
+ },
+ {
+  "old": "DpSmfLyrTtlFunc_Case5",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DpSmfLyrTtlFunc_OnTitleActivate",
+  "header": "",
+  "basis": "switch value meaning (EVT_ACTIVATE_STATE phase: 2 = title new, 3 = title old, 5 = title activate after an interrupt; firmware debug strings in TestTitleFunc) + body",
+  "evidence": [
+   "ui/ui_playback_modes.s:3325 `ld\txwa, 0x6f0026` / 3326 `ld\txbc, EVT_LYRICS_ALL_DRAW` -- phase 5 redraws all lyrics"
+  ]
+ },
+ {
+  "old": "DpDocTtlFunc_Switch2_Case138",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DpDocTtlFunc_OnMixer",
+  "header": "",
+  "basis": "switch value meaning (EVT_SW_IN panel switch number on the direct-play title; switch = 0x81 + table index) + body",
+  "evidence": [
+   "ui/ui_playback_modes.s:2944 `sub xwa, 0x81` -- DpDocTtlFunc's EVT_SW_IN path: switches 0x81..0x8A index DpDoc_CaseA_CaseTable, so Switch2_Case137 = switch 0x89, Case138 = 0x8A",
+   "ui_widgets/naka_direct_play.c:2832 `.editsw = 0x008A` -- the screen's MIXER VwMenuBox; 2854 `.editsw = 0x0089` -- its MIC VwMenuBox",
+   "ui/ui_control_panel.s:2939 `add xde, TITLE_PS` -- SoundCtrl_SendCommand(A) posts EVT_INTERRUPT_TITLE for title A (2941): it opens an interrupting title, not a sound command",
+   "ui/ui_playback_modes.s:2990 `ldw wa, 0xa5` -- interrupts with title 0xA5 TT_SQMIXER (shared/event_codes.s:74, the track mixer)"
+  ]
+ },
+ {
+  "old": "DpDocTtlFunc_Switch2_Case137",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DpDocTtlFunc_OnMic",
+  "header": "",
+  "basis": "switch value meaning (EVT_SW_IN panel switch number on the direct-play title; switch = 0x81 + table index) + body",
+  "evidence": [
+   "ui/ui_playback_modes.s:2993 `ldw wa, 0xd6` -- interrupts with title 0xD6 TT_ETMENU (shared/event_codes.s:85; EnterTainerScr with VOCAL REVERB / VOCALIST WORKSTATION, ui_widgets/naka_effects_seq.c:12941-12943)"
+  ]
+ },
+ {
+  "old": "DpPdTtlFunc_Switch2_Case138",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DpPdTtlFunc_OnMixer",
+  "header": "",
+  "basis": "switch value meaning (EVT_SW_IN panel switch number on the direct-play title; switch = 0x81 + table index) + body",
+  "evidence": [
+   "ui/ui_playback_modes.s:3074 `sub xwa, 0x81` -- DpPdTtlFunc's EVT_SW_IN path: switches 0x81..0x8A index DpPd_CaseA_CaseTable, so Switch2_Case137 = switch 0x89, Case138 = 0x8A",
+   "ui_widgets/naka_direct_play.c:3016 `.editsw = 0x008A` -- the screen's MIXER VwMenuBox; 3038 `.editsw = 0x0089` -- its MIC VwMenuBox",
+   "ui/ui_control_panel.s:2939 `add xde, TITLE_PS` -- SoundCtrl_SendCommand(A) posts EVT_INTERRUPT_TITLE for title A (2941): it opens an interrupting title, not a sound command",
+   "ui/ui_playback_modes.s:3120 `ldw wa, 0xa5` -- interrupts with title 0xA5 TT_SQMIXER (shared/event_codes.s:74, the track mixer)"
+  ]
+ },
+ {
+  "old": "DpPdTtlFunc_Switch2_Case137",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DpPdTtlFunc_OnMic",
+  "header": "",
+  "basis": "switch value meaning (EVT_SW_IN panel switch number on the direct-play title; switch = 0x81 + table index) + body",
+  "evidence": [
+   "ui/ui_playback_modes.s:3123 `ldw wa, 0xd6` -- interrupts with title 0xD6 TT_ETMENU (shared/event_codes.s:85; EnterTainerScr with VOCAL REVERB / VOCALIST WORKSTATION, ui_widgets/naka_effects_seq.c:12941-12943)"
+  ]
+ },
+ {
+  "old": "DpSmfTtlFunc_Switch2_Case138",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DpSmfTtlFunc_OnMixer",
+  "header": "",
+  "basis": "switch value meaning (EVT_SW_IN panel switch number on the direct-play title; switch = 0x81 + table index) + body",
+  "evidence": [
+   "ui/ui_playback_modes.s:3213 `sub xwa, 0x81` -- DpSmfTtlFunc's EVT_SW_IN path: switches 0x81..0x8A index DpSmf_CaseA_CaseTable, so Switch2_Case137 = switch 0x89, Case138 = 0x8A",
+   "ui_widgets/naka_direct_play.c:2127 `.editsw = 0x008A` -- the screen's MIXER VwMenuBox; 2149 `.editsw = 0x0089` -- its MIC VwMenuBox",
+   "ui/ui_control_panel.s:2939 `add xde, TITLE_PS` -- SoundCtrl_SendCommand(A) posts EVT_INTERRUPT_TITLE for title A (2941): it opens an interrupting title, not a sound command",
+   "ui/ui_playback_modes.s:3259 `ldw wa, 0xa5` -- interrupts with title 0xA5 TT_SQMIXER (shared/event_codes.s:74, the track mixer)"
+  ]
+ },
+ {
+  "old": "DpSmfTtlFunc_Switch2_Case137",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DpSmfTtlFunc_OnMic",
+  "header": "",
+  "basis": "switch value meaning (EVT_SW_IN panel switch number on the direct-play title; switch = 0x81 + table index) + body",
+  "evidence": [
+   "ui/ui_playback_modes.s:3262 `ldw wa, 0xd6` -- interrupts with title 0xD6 TT_ETMENU (shared/event_codes.s:85; EnterTainerScr with VOCAL REVERB / VOCALIST WORKSTATION, ui_widgets/naka_effects_seq.c:12941-12943)"
+  ]
+ },
+ {
+  "old": "SqTrAsPsTtl_CaseF",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CDlike_ExitModeUnlessKeepTitle",
+  "header": "On leaving a play title: keeps the CD-like play mode when the new title is DKDPSMF/DKDPDOC/DKDPPD, DPSMF, DPSMFLYR, DPMDLYSMF, DPMDLYSMFLYR, DKMDLY or SQMDLY, else CDlike_ExitModeAndRestore.\nBasis: its ten callers (phase-3 cases) + the CURRENT_TITLE byte map.",
+  "basis": "callers + body (title byte map)",
+  "evidence": [
+   "ui/ui_playback_modes.s:1517 `calr\tSqTrAsPsTtl_CaseF` -- called only from the phase-3 (title old) cases of the ten play titles (1517, 1597, 1835, 1929, 2027, 2143, 2930, 3060, 3199, 3322)",
+   "ui/ui_playback_modes.s:1453 `ld\ta, (CURRENT_TITLE:16)` / 1455 `sub\twa, 108` / 1458 `cp\twa, 13` -- switch on the NEW title 0x6C..0x79 through byte map SetWall_ReturnZero_Data (ui/sepaout_config.s:53 = includes/generated/sepaout_config.bin 0x44: 00 00 00 00 01 01 00 00 01 01 00 00 01 00)",
+   "ui/ui_playback_modes.s:1473 `call\tCDlike_ExitModeAndRestore` -- map value 1 (DPDOC, DPPD, DPMDLYDOC, DPMDLYPD, DKMDLYPLY) and titles outside 0x6C..0x79 leave the CD-like play mode; value 0 returns"
+  ]
+ },
+ {
+  "old": "SqTrAsPsTtl_CaseF_Case0",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "CDlike_ExitModeUnlessKeepTitle_OnKeepTitle",
+  "header": "",
+  "basis": "switch value meaning (byte-map class of the new title: 0 = keep the CD-like mode) + body",
+  "evidence": [
+   "ui/sepaout_config.s:55 `.short SqTrAsPsTtl_CaseF_Case0 - SqTrAsPsTtl_CaseF_Skip` -- map class 0 -> this case, class 1 -> SqTrAsPsTtl_CaseF_Skip (CDlike_ExitModeAndRestore)",
+   "shared/event_codes.s:1944 `.equ TITLE_DKDPSMF, 0x1a0006c` -- class-0 titles: 0x6C-0x6F, 0x72, 0x73, 0x76, 0x77, 0x79 (DKDPSMF, DKDPDOC, DKDPPD, DPSMF, DPSMFLYR, DPMDLYSMF, DPMDLYSMFLYR, DKMDLY, SQMDLY)",
+   "ui/ui_playback_modes.s:1479 `ret` -- returns without leaving the mode"
+  ]
+ },
+ {
+  "old": "AcIndexEdit_OK_AltView_Case1",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AcIndexEditSwProc_OnUpStyle",
+  "header": "Up-type styles (SS_Up, SS_On, SS_Right, SS_Yes, SS_Up2, SS_Right2): always EVT_INDEXSW_UP with the box index.",
+  "basis": "switch value meaning (EditSwStyleID of the pressed AcIndexEditSw / PsWideESBox, mapped by AcIndexEdit_SwitchDirCaseMap) + body",
+  "evidence": [
+   "ui/ui_widget_defs.s:3703 `ld xbc, EVT_GET_INDEX` / 3706 `ld (xsp + 4), hl` -- AcIndexEditSwProc, EVT_SW_IN for its own switch: keeps the box index",
+   "ui/ui_widget_defs.s:3716 `ld xiz, 0x28` / 3721 `ld xiz, 0x26` -- the style byte at instance +40 (PsWideESBox) or +38; 3733 `lda xix, (AcIndexEdit_SwitchDirCaseMap:24)` maps style 0..16 to case 0/1/2",
+   "ui_widgets/naka_disk_warning.c:2288 -- map 00 01 02 00 01 02 00 02 01 01 02 00 01 02 00 02 01: case 1 = styles 1, 4, 8, 9, 12, 16 = SS_Up, SS_On, SS_Right, SS_Yes, SS_Up2, SS_Right2 (EditSwStyleID names, ui_widgets/debug_naming_panel_sim.s:686-705)",
+   "ui/ui_widget_defs.s:3759 `ld\txbc, EVT_INDEXSW_UP` -- always EVT_INDEXSW_UP with XDE = the index (3756); case 0 (pair styles) picks UP/DOWN from bit 7 of the switch (3746)"
+  ]
+ },
+ {
+  "old": "AcIndexEdit_OK_AltView_Case2",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AcIndexEditSwProc_OnDownStyle",
+  "header": "Down-type styles (SS_Down, SS_Off, SS_Left, SS_No, SS_Down2, SS_Left2): always EVT_INDEXSW_DOWN with the box index.",
+  "basis": "switch value meaning (EditSwStyleID of the pressed AcIndexEditSw / PsWideESBox, mapped by AcIndexEdit_SwitchDirCaseMap) + body",
+  "evidence": [
+   "ui_widgets/naka_disk_warning.c:2288 -- case 2 = styles 2, 5, 7, 10, 13, 15 = SS_Down, SS_Off, SS_Left, SS_No, SS_Down2, SS_Left2",
+   "ui/ui_widget_defs.s:3765 `ld\txbc, EVT_INDEXSW_DOWN` -- always EVT_INDEXSW_DOWN with XDE = the index (3762)"
+  ]
+ }
+]

@@ -1628,11 +1628,11 @@ TempoRingBuf_Consume_Done:
 
 TempoRingBuf_BytecodeSnippet:
 	bit	0, (0x459:16)
-	jr	nz, TempoRingBuf_Consume_Skip
+	jr	nz, TempoRingBuf_BytecodeSnippet_Skip
 	ld	e, 129:opc
 	calr	TempoRingBuf_DequeueOne
 	ret
-TempoRingBuf_Consume_Skip:
+TempoRingBuf_BytecodeSnippet_Skip:
 	push	xix
 	lda	xix, (1143:16)
 	ld	hl, (1141:16)
@@ -3384,9 +3384,9 @@ SeqBuf_InlineBytecode:
 	ld	hl, (0x1e545:24)
 	cp	hl, (0x1e541:24)
 	ld	hl, 0:i3
-	jr	z, SeqBuf_WriteBytes_Return
+	jr	z, SeqBuf_InlineBytecode_Return
 	ldw	hl, 0xffff
-SeqBuf_WriteBytes_Return:
+SeqBuf_InlineBytecode_Return:
 	ret
 
 SeqBuf_GetWritePos:
@@ -3676,9 +3676,9 @@ AltEvtBuf_InlineBytecode:
 	ld	hl, (0x1f163:24)
 	cp	hl, (0x1f15f:24)
 	ld	hl, 0:i3
-	jr	z, RhythmBuf_Init_Return
+	jr	z, AltEvtBuf_InlineBytecode_Return
 	ldw	hl, 0xffff
-RhythmBuf_Init_Return:
+AltEvtBuf_InlineBytecode_Return:
 	ret
 	ld	hl, (0x1f165:24)
 	ret
@@ -3762,9 +3762,9 @@ SeqEvtBuf_InlineBytecode:
 	ld	hl, (0x1f26d:24)
 	cp	hl, (0x1f269:24)
 	ld	hl, 0:i3
-	jr	z, SeqEvtBuf_WriteByte_Return
+	jr	z, SeqEvtBuf_InlineBytecode_Return
 	ldw	hl, 0xffff
-SeqEvtBuf_WriteByte_Return:
+SeqEvtBuf_InlineBytecode_Return:
 	ret
 	ld	hl, (0x1f26f:24)
 	ret
@@ -4067,9 +4067,9 @@ SeqBuf2_InlineBytecode:
 	ld	hl, (0x1f88b:24)
 	cp	hl, (0x1f887:24)
 	ld	hl, 0:i3
-	jr	z, SeqBuf2_WriteByte_Return
+	jr	z, SeqBuf2_InlineBytecode_Return
 	ldw	hl, 0xffff
-SeqBuf2_WriteByte_Return:
+SeqBuf2_InlineBytecode_Return:
 	ret
 	ld	hl, (0x1f88d:24)
 	ret
@@ -4169,9 +4169,9 @@ SeqBuf3_InlineBytecode:
 	ld	hl, (0x1fa95:24)
 	cp	hl, (0x1fa91:24)
 	ld	hl, 0:i3
-	jr	z, SeqBuf3_ReadByte_Return
+	jr	z, SeqBuf3_InlineBytecode_Return
 	ldw	hl, 0xffff
-SeqBuf3_ReadByte_Return:
+SeqBuf3_InlineBytecode_Return:
 	ret
 
 SeqBuf3_GetTimingValue:
@@ -4441,9 +4441,9 @@ SeqBuf_TimerEvent_BytecodeBlock2:
 	ld	hl, (0x20133:24)
 	cp	hl, (0x2012f:24)
 	ld	hl, 0:i3
-	jr	z, Seq_TimerEventLoop_Return
+	jr	z, SeqBuf_TimerEvent_BytecodeBlock2_Return
 	ldw	hl, 0xffff
-Seq_TimerEventLoop_Return:
+SeqBuf_TimerEvent_BytecodeBlock2_Return:
 	ret
 	ld	hl, (0x20135:24)
 	ret
@@ -6046,19 +6046,19 @@ E1DMA_ISR_BytecodeBlock:
 INTTC0_HANDLER_Skip3:
 	ei	0
 	bit	1, (PZ:8)
-	jr	nz, INTTC0_HANDLER_Skip2
+	jr	nz, E1DMA_ISR_BytecodeBlock_Skip2
 ; v10 does not spell this byte either
 	ldc_16_cr	wa, 0x40	; WA := control register 0x40 (which register 0x40 is, is not established)
 	cp	(0xe2c6:16), wa
-	jr	nz, INTTC0_HANDLER_Skip
+	jr	nz, E1DMA_ISR_BytecodeBlock_Skip
 	incw	1, (58052:16)
-	jr	INTTC0_HANDLER_Join
-INTTC0_HANDLER_Skip:
+	jr	E1DMA_ISR_BytecodeBlock_Join
+E1DMA_ISR_BytecodeBlock_Skip:
 	ldw	(58052:16), 0
-INTTC0_HANDLER_Join:
+E1DMA_ISR_BytecodeBlock_Join:
 	ld	(58054:16), wa
 	jr	INTTC0_HANDLER_Join2
-INTTC0_HANDLER_Skip2:
+E1DMA_ISR_BytecodeBlock_Skip2:
 	ldw	(58052:16), 0
 INTTC0_HANDLER_Join2:
 	ld	wa, (58052:16)

@@ -1045,7 +1045,7 @@ SeWrtMemTitleFunc_SwitchHandlers:
 	.long SeMenu_BitShift_Stub
 	.long 0
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
-; evidence: Scoop_SoundEditorData_Helper+0x1E (0xF0D78E) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+; evidence: SeWrtSndTitleFunc_DispatchSwitch+0x1E (0xF0D78E) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 SeWrtSndTitleFunc_SwitchHandlers:
 	.long SeWrtSnd_OnColumn1
 	.long SeWrtSnd_OnColumn2
@@ -1114,14 +1114,14 @@ ToneGen_ParamTable_0x2EE:
 	.short	SeMenu_CopyWriteUpdate_Step3_Code - SeMenu_CopyWriteUpdate_Step3_Code
 	.short	SeMenu_CopyWriteUpdate_Step3_Code - SeMenu_CopyWriteUpdate_Step3_Code
 	.short	SeMenu_CopyWriteUpdate_Step3_Code - SeMenu_CopyWriteUpdate_Step3_Code
-	.short	SeDigEffTitleFunc_DispatchSwitch_Case4 - SeMenu_CopyWriteUpdate_Step3_Code
-	.short	SeDigEffTitleFunc_DispatchSwitch_Case4 - SeMenu_CopyWriteUpdate_Step3_Code
-	.short	SeDigEffTitleFunc_DispatchSwitch_Case6 - SeMenu_CopyWriteUpdate_Step3_Code
-	.short	SeDigEffTitleFunc_DispatchSwitch_Case4 - SeMenu_CopyWriteUpdate_Step3_Code
-	.short	SeDigEffTitleFunc_DispatchSwitch_Case8 - SeMenu_CopyWriteUpdate_Step3_Code
-	.short	SeDigEffTitleFunc_DispatchSwitch_Case9 - SeMenu_CopyWriteUpdate_Step3_Code
-	.short	SeDigEffTitleFunc_DispatchSwitch_Case4 - SeMenu_CopyWriteUpdate_Step3_Code
-	.short	SeDigEffTitleFunc_DispatchSwitch_Case4 - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeDigEff_OnColumn3_Depth - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeDigEff_OnColumn3_Depth - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeDigEff_OnColumn3_TremoloWave - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeDigEff_OnColumn3_Depth - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeDigEff_OnColumn3_SingleDelayKey - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeDigEff_OnColumn3_RepeatDelaySustain - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeDigEff_OnColumn3_Depth - SeMenu_CopyWriteUpdate_Step3_Code
+	.short	SeDigEff_OnColumn3_Depth - SeMenu_CopyWriteUpdate_Step3_Code
 ; data read by SeDigEffTitleFunc_DispatchSwitch+0x55A (0xF0DCF8)
 ; evidence: `lda xix, (this)` then `ld WA,(XIX+WA) / lda XIX,0xf0dd0c`
 ToneGen_ParamTable_0x306:
@@ -1131,10 +1131,10 @@ ToneGen_ParamTable_0x306:
 	.short	SeMenu_CopyWriteUpdate_Step3_Code_2 - SeMenu_CopyWriteUpdate_Step3_Code_2
 	.short	SeMenu_CopyWriteUpdate_Step3_Code_2 - SeMenu_CopyWriteUpdate_Step3_Code_2
 	.short	SeMenu_CopyWriteUpdate_Step3_Code_2 - SeMenu_CopyWriteUpdate_Step3_Code_2
-	.short	SeDigEffTitleFunc_DispatchSwitch_Switch2_Case6 - SeMenu_CopyWriteUpdate_Step3_Code_2
+	.short	SeDigEff_OnColumn4_Balance - SeMenu_CopyWriteUpdate_Step3_Code_2
 	.short	SeMenu_CopyWriteUpdate_Step3_Code_2 - SeMenu_CopyWriteUpdate_Step3_Code_2
-	.short	SeDigEffTitleFunc_DispatchSwitch_Switch2_Case6 - SeMenu_CopyWriteUpdate_Step3_Code_2
-	.short	SeDigEffTitleFunc_DispatchSwitch_Switch2_Case9 - SeMenu_CopyWriteUpdate_Step3_Code_2
+	.short	SeDigEff_OnColumn4_Balance - SeMenu_CopyWriteUpdate_Step3_Code_2
+	.short	SeDigEff_OnColumn4_RepeatDelayRelease - SeMenu_CopyWriteUpdate_Step3_Code_2
 ; data read by SeDigEffTitleFunc_DispatchSwitch+0x5EB (0xF0DD89)
 ; evidence: `lda xix, (this)` then `ld WA,(XIX+WA) / lda XIX,0xf0dd9d`
 ToneGen_ParamTable_0x31A:
@@ -1142,8 +1142,8 @@ ToneGen_ParamTable_0x31A:
 	.short	SeMenu_CopyWriteUpdate_Step3_Code_3 - SeMenu_CopyWriteUpdate_Step3_Code_3
 	.short	SeMenu_CopyWriteUpdate_Step3_Code_3 - SeMenu_CopyWriteUpdate_Step3_Code_3
 	.short	SeMenu_CopyWriteUpdate_Step3_Code_3 - SeMenu_CopyWriteUpdate_Step3_Code_3
-	.short	SeDigEffTitleFunc_DispatchSwitch_Switch3_Case4 - SeMenu_CopyWriteUpdate_Step3_Code_3
-	.short	SeDigEffTitleFunc_DispatchSwitch_Switch3_Case4 - SeMenu_CopyWriteUpdate_Step3_Code_3
+	.short	SeDigEff_OnColumn5_EnsembleDetune - SeMenu_CopyWriteUpdate_Step3_Code_3
+	.short	SeDigEff_OnColumn5_EnsembleDetune - SeMenu_CopyWriteUpdate_Step3_Code_3
 ; data read by SeMenu_PopupDialog_Close_Data+0x1D (0xF0E9E4)
 ; evidence: `lda xbc, (this)` then `ld XHL,(XBC+WA) / call T,XHL`
 ; data read by SeMenu_ListSelector_HandleInput+0x1A (0xF0EB24)
