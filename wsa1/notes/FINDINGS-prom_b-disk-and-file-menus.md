@@ -162,7 +162,7 @@ at `0xF58649-0xF58655` are a blank row plus that constant, not one object.
 
 **Also established, and it is a RAM record, not a disk record:** the caller
 `Disk_DrawDirEntry` reads its content code from offset `+6` of the record `XIY` points
-at (`inc 6,XIY`, then `sub_FF4936`, then `and L,0x0F`), and draws six characters
+at (`inc 6,XIY`, then `DiskEntry_GetContentType`, then `and L,0x0F`), and draws six characters
 from offset `+0`. So *some* six-character name with a type nibble six bytes after
 it exists in memory. **What that record IS, and whether it is ever written to a
 disk in that shape, is NOT established here.**

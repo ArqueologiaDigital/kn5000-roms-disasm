@@ -1237,7 +1237,7 @@
 	.set T_F407A0,                                                                      0x00F407A0
 	.set T_F407A4,                                                                      0x00F407A4
 	.set T_F407AC,                                                                      0x00F407AC
-	.set T_F407B0,                                                                      0x00F407B0
+	.set T_ParamImage_PostAllAsChangeEvents,                                                                      0x00F407B0
 	.set T_Queue2C00_PublishStagedIfPending,                                            0x00F407B4
 	.set T_Queue2C00_PublishStagedDrainPassB,                                           0x00F407B8
 	.set T_ParamChange_NotifyClearSource,                                               0x00F407CC
@@ -1246,9 +1246,9 @@
 	.set T_ParamRecord_WriteFieldAndStage_Copy,                                         0x00F407D8
 	.set T_F407E8,                                                                      0x00F407E8
 	.set T_F407EC,                                                                      0x00F407EC
-	.set T_F407F4,                                                                      0x00F407F4
+	.set T_SoundSel_ClampToProgramAndBank,                                                                      0x00F407F4
 	.set T_F407FC,                                                                      0x00F407FC
-	.set T_F40804,                                                                      0x00F40804
+	.set T_CombiSel_ClampToNumberAndBank,                                                                      0x00F40804
 	.set T_F40808,                                                                      0x00F40808
 	.set T_MidiIn_ControlRecord_Dispatch,                                               0x00F4080C
 	.set T_ParamMsg_RefreshMasksOnCtrlFieldChange,                                      0x00F40810
@@ -1774,7 +1774,7 @@
 	.set T_F42580,                                                                      0x00F42580
 	.set T_MidiFilePlay_OnSongSelect,                                                                      0x00F42584
 	.set T_Disk_PortA3_Release_Call_Call,                                               0x00F42590
-	.set T_F42594,                                                                      0x00F42594
+	.set T_Playback_StopAllAndIgnoreMidiStart,                                                                      0x00F42594
 	.set T_DiskApi_ReadFileToWindow_Entry,                                                                      0x00F425A8
 	.set T_DiskApi_WriteFileFromWindow_Entry,                                                                      0x00F425AC
 	.set T_DiskApi_DeleteFile_Call,                                                                      0x00F425B0
@@ -1794,7 +1794,7 @@
 	.set T_DiskSaveFile_SaveOrConfirmOverwrite_Call,                                                                      0x00F42608
 	.set T_DiskSaveFile_CheckPasswordThenSave_Call,                                                                      0x00F4260C
 	.set T_F42610,                                                                      0x00F42610
-	.set T_F42614,                                                                      0x00F42614
+	.set T_Disk_MountAndScanMidiFilesResetRings,                                                                      0x00F42614
 	.set T_MidiFileStream_Open,                                                                      0x00F42618
 	.set T_MidiFileStream_GetByte,                                                                      0x00F4261C
 	.set T_MidiFileStream_Close,                                                                      0x00F42620
@@ -33689,13 +33689,13 @@ Draw_C0mbinati0nM0dePage22Sound:   ; entry: named by 1 `ld` operand, first at 0x
 .LF91724:
 	ret                                                  ; F91724  0e
 ; Paint_C0mbinati0nM0dePage2Fields -- redraw COMBINATION MODE page 2's dirty fields
-; Evidence: (0x2679) != 0 -> sub_F918E5 first; then FieldRedraw_CallPerSetBit with
+; Evidence: (0x2679) != 0 -> C0mbinati0nM0de_ShowSelectedPartSoundName first; then FieldRedraw_CallPerSetBit with
 ;   FieldRedrawPtrs_F91865/_F91885/_F918A5/_F918C5 and masks (0x2679)/(0x267A)/(0x267B)/(0x267C) ((0x2540) layer
 ;   0,1,0,0); clears the four masks; swi 7 fn 0x0C. Posted by InstallPainter_C0mbinati0nM0deFields when (0x2687) != 0.
 Paint_C0mbinati0nM0dePage2Fields:   ; entry: named by 1 `ld` operand, first at 0xF91697
 	m_cp_mi8 MB16, CombinationMode_DirtySound, 0x00                          ; F91725  c1 79 26 3f 00
 	jr z, .LF9172F                                       ; F9172A  66 03
-	calr sub_F918E5                                          ; F9172C  1e b6 01
+	calr C0mbinati0nM0de_ShowSelectedPartSoundName                                          ; F9172C  1e b6 01
 .LF9172F:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F9172F  f1 40 25 00 00
 	ld XIY,FieldRedrawPtrs_F91865                        ; F91734  45 65 18 f9 00
@@ -33941,7 +33941,11 @@ FieldRedrawPtrs_F918C5:
 	.long C0mbinati0nM0de_DrawPart6Vol                                 ; F918D9  [  5]
 	.long C0mbinati0nM0de_DrawPart7Vol                                 ; F918DD  [  6]
 	.long C0mbinati0nM0de_DrawPart8Vol                                 ; F918E1  [  7]
-sub_F918E5:
+; C0mbinati0nM0de_ShowSelectedPartSoundName: COMBINATION MODE page 2: draws the selected part's sound name (part
+;   record 0xF2AB50[UI_PartIndex], T_SoundName_Lookup) at (0x9B, 0x1B), then C0mbinati0nM0de_ShowSelectedPart. Posted
+;   by the page-2 soft keys after they pick a part; run by Paint_C0mbinati0nM0dePage2Fields. Basis: callers + body.
+;   (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_a.json)
+C0mbinati0nM0de_ShowSelectedPartSoundName:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F918E5  f1 40 25 00 00
 	ld XIZ,0x00f2ab50                                    ; F918EA  46 50 ab f2 00
 	ld l, (UI_PartIndex:16)                                   ; F918EF  c1 50 22 27
@@ -34548,7 +34552,7 @@ SoftKeyCol1_C0mbinati0nM0de_Page2_Join:
 	ld w, 0xff:opc                                          ; F91E7C  20 ff
 	call T_Queue2E00_AppendRegs                          ; F91E7E  1d 3c 0f f4
 	call T_NoteRouting_Rebuild                                        ; F91E82  1d bc 11 f4
-	ld XWA,sub_F918E5                                    ; F91E86  40 e5 18 f9 00
+	ld XWA,C0mbinati0nM0de_ShowSelectedPartSoundName                                    ; F91E86  40 e5 18 f9 00
 	push XWA                                             ; F91E8B  38
 	call T_CallbackQueue_Post                            ; F91E8C  1d 84 2e f4
 	inc 4,XSP                                            ; F91E90  ef 64
@@ -34585,7 +34589,7 @@ SoftKeyCol2_C0mbinati0nM0de_Page2_Join:
 	ld w, 0xff:opc                                          ; F91EDA  20 ff
 	call T_Queue2E00_AppendRegs                          ; F91EDC  1d 3c 0f f4
 	call T_NoteRouting_Rebuild                                        ; F91EE0  1d bc 11 f4
-	ld XWA,sub_F918E5                                    ; F91EE4  40 e5 18 f9 00
+	ld XWA,C0mbinati0nM0de_ShowSelectedPartSoundName                                    ; F91EE4  40 e5 18 f9 00
 	push XWA                                             ; F91EE9  38
 	call T_CallbackQueue_Post                            ; F91EEA  1d 84 2e f4
 	inc 4,XSP                                            ; F91EEE  ef 64
@@ -34622,7 +34626,7 @@ SoftKeyCol3_C0mbinati0nM0de_Page2_Join:
 	ld w, 0xff:opc                                          ; F91F38  20 ff
 	call T_Queue2E00_AppendRegs                          ; F91F3A  1d 3c 0f f4
 	call T_NoteRouting_Rebuild                                        ; F91F3E  1d bc 11 f4
-	ld XWA,sub_F918E5                                    ; F91F42  40 e5 18 f9 00
+	ld XWA,C0mbinati0nM0de_ShowSelectedPartSoundName                                    ; F91F42  40 e5 18 f9 00
 	push XWA                                             ; F91F47  38
 	call T_CallbackQueue_Post                            ; F91F48  1d 84 2e f4
 	inc 4,XSP                                            ; F91F4C  ef 64
@@ -34659,7 +34663,7 @@ SoftKeyCol4_C0mbinati0nM0de_Page2_Join:
 	ld w, 0xff:opc                                          ; F91F97  20 ff
 	call T_Queue2E00_AppendRegs                          ; F91F99  1d 3c 0f f4
 	call T_NoteRouting_Rebuild                                        ; F91F9D  1d bc 11 f4
-	ld XWA,sub_F918E5                                    ; F91FA1  40 e5 18 f9 00
+	ld XWA,C0mbinati0nM0de_ShowSelectedPartSoundName                                    ; F91FA1  40 e5 18 f9 00
 	push XWA                                             ; F91FA6  38
 	call T_CallbackQueue_Post                            ; F91FA7  1d 84 2e f4
 	inc 4,XSP                                            ; F91FAB  ef 64
@@ -34696,7 +34700,7 @@ SoftKeyCol5_C0mbinati0nM0de_Page2_Join:
 	ld w, 0xff:opc                                          ; F91FF6  20 ff
 	call T_Queue2E00_AppendRegs                          ; F91FF8  1d 3c 0f f4
 	call T_NoteRouting_Rebuild                                        ; F91FFC  1d bc 11 f4
-	ld XWA,sub_F918E5                                    ; F92000  40 e5 18 f9 00
+	ld XWA,C0mbinati0nM0de_ShowSelectedPartSoundName                                    ; F92000  40 e5 18 f9 00
 	push XWA                                             ; F92005  38
 	call T_CallbackQueue_Post                            ; F92006  1d 84 2e f4
 	inc 4,XSP                                            ; F9200A  ef 64
@@ -34733,7 +34737,7 @@ SoftKeyCol6_C0mbinati0nM0de_Page2_Join:
 	ld w, 0xff:opc                                          ; F92055  20 ff
 	call T_Queue2E00_AppendRegs                          ; F92057  1d 3c 0f f4
 	call T_NoteRouting_Rebuild                                        ; F9205B  1d bc 11 f4
-	ld XWA,sub_F918E5                                    ; F9205F  40 e5 18 f9 00
+	ld XWA,C0mbinati0nM0de_ShowSelectedPartSoundName                                    ; F9205F  40 e5 18 f9 00
 	push XWA                                             ; F92064  38
 	call T_CallbackQueue_Post                            ; F92065  1d 84 2e f4
 	inc 4,XSP                                            ; F92069  ef 64
@@ -34770,7 +34774,7 @@ SoftKeyCol7_C0mbinati0nM0de_Page2_Join:
 	ld w, 0xff:opc                                          ; F920B4  20 ff
 	call T_Queue2E00_AppendRegs                          ; F920B6  1d 3c 0f f4
 	call T_NoteRouting_Rebuild                                        ; F920BA  1d bc 11 f4
-	ld XWA,sub_F918E5                                    ; F920BE  40 e5 18 f9 00
+	ld XWA,C0mbinati0nM0de_ShowSelectedPartSoundName                                    ; F920BE  40 e5 18 f9 00
 	push XWA                                             ; F920C3  38
 	call T_CallbackQueue_Post                            ; F920C4  1d 84 2e f4
 	inc 4,XSP                                            ; F920C8  ef 64
@@ -34809,7 +34813,7 @@ SoftKeyCol8_C0mbinati0nM0de_Join:
 	ld w, 0xff:opc                                          ; F9211A  20 ff
 	call T_Queue2E00_AppendRegs                          ; F9211C  1d 3c 0f f4
 	call T_NoteRouting_Rebuild                                        ; F92120  1d bc 11 f4
-	ld XWA,sub_F918E5                                    ; F92124  40 e5 18 f9 00
+	ld XWA,C0mbinati0nM0de_ShowSelectedPartSoundName                                    ; F92124  40 e5 18 f9 00
 	push XWA                                             ; F92129  38
 	call T_CallbackQueue_Post                            ; F9212A  1d 84 2e f4
 	inc 4,XSP                                            ; F9212E  ef 64
@@ -35394,7 +35398,7 @@ ValueList_F92623:
 ; C0mbinati0nM0de_ShowSelectedPart -- COMBINATION MODE page 2: draws "PART<n>" for the selected part and moves the highlight box to its PTn label
 ; Evidence: skipped when (0x2250) == (0x267E). Layer 0: record 0xF296D6 (T_DLB_Handler_StringTable2) draws entry (0x2250) & 7 of DLTable_F296E7 ("PART1".."PART8") at (0x4D,0x1B).
 ; Layer 1: record 0xF2970F ((0x267E) & 7, swi 0x1B EraseRect) and record 0xF2971A ((0x2250) & 7, swi 0x05 FillRect), both indexing DLTable_F29725 -- boxes at y 0xE2-0xEC under the PT1..PT8 labels (y 0xE4); then (0x267E) = (0x2250).
-; Called by sub_F916AA (the page-2 painter) and sub_F918E5 (posted after a part is selected).
+; Called by sub_F916AA (the page-2 painter) and C0mbinati0nM0de_ShowSelectedPartSoundName (posted after a part is selected).
 C0mbinati0nM0de_ShowSelectedPart:
 	ld a, (UI_PartIndex:16)                                   ; F9262D  c1 50 22 21
 	m_cp_rm MB16, CombinationMode_ShownPart, r1                             ; F92631  c1 7e 26 f1
@@ -40358,7 +40362,7 @@ TestMode_SelectFromPowerOnKeys:
 	ret                                                  ; F9530A  0e
 ; TestMode_SelectFromPowerOnKeys_Variant1 -- variant 1: read 8 bytes from CPU 2 and map a two-bit chord to screen 0xD9..0xDC
 ; Evidence: T_Link_SendCommandE2 (remote 0x0000FFF0, 8 bytes, into a stack buffer) + T_Link_WaitBlockDone; BitMask_PopCountByte over the 8 bytes must total 2;
-; byte3 bit2 + byte4 bit6 -> 0xD9, byte3 bit4 + byte5 bit0 -> 0xDA (+ T_F407AC, T_F407B0), byte3 bit5 + byte5 bit1 -> 0xDB, byte3 bit7 + byte5 bit3 -> 0xDC,
+; byte3 bit2 + byte4 bit6 -> 0xD9, byte3 bit4 + byte5 bit0 -> 0xDA (+ T_F407AC, T_ParamImage_PostAllAsChangeEvents), byte3 bit5 + byte5 bit1 -> 0xDB, byte3 bit7 + byte5 bit3 -> 0xDC,
 ; byte3 bit0 + byte4 bit4 -> nothing; (0x2070) = id, (0x2071) = 0x80.  What those bits are on CPU 2 is not established.
 TestMode_SelectFromPowerOnKeys_Variant1:
 	link XIZ,0xfff8                                      ; F9530B  ee 0c f8 ff
@@ -40415,7 +40419,7 @@ TestMode_SelectFromPowerOnKeys_Variant1:
 	ld (UI_Request:16), 0xda                                 ; F95383  f1 70 20 00 da
 	ld (UI_Request_Hi:16), 0x80                                 ; F95388  f1 71 20 00 80
 	call T_F407AC                                        ; F9538D  1d ac 07 f4
-	call T_F407B0                                        ; F95391  1d b0 07 f4
+	call T_ParamImage_PostAllAsChangeEvents                                        ; F95391  1d b0 07 f4
 	jr .LF953C8                                              ; F95395  68 31
 .LF95397:
 	ld C,(XIX+0x03)                                      ; F95397  8c 03 23
@@ -40443,7 +40447,7 @@ TestMode_SelectFromPowerOnKeys_Variant1:
 	ret                                                  ; F953CC  0e
 ; TestMode_SelectFromPowerOnKeys_Variant2 -- variant 2 (SX-WSA1R): number-pad key 2/3/4/5 held at power-on -> test screen 0xD9/0xDA/0xDB/0xDC
 ; Evidence: C = (0x2B31), the segment-1 change shadow; exactly 0x04 -> (0x2070) = 0xD9 (Paint_PanelCpuCheck's screen), 0x08 -> 0xDA (SineWaveCheckMode, plus
-; T_F407AC/T_F407B0), 0x10 -> 0xDB (PanelSwLedCheck), 0x20 -> 0xDC; 0x02 -> nothing; (0x2071) = 0x80.  Segment-1 bit b is the number-pad key printed b
+; T_F407AC/T_ParamImage_PostAllAsChangeEvents), 0x10 -> 0xDB (PanelSwLedCheck), 0x20 -> 0xDC; 0x02 -> nothing; (0x2071) = 0x80.  Segment-1 bit b is the number-pad key printed b
 ; on variant 2 (PanelKeypad_OrdinalToKey_V2: ordinal b+1 -> digit b).  Was flagged in FINDINGS-prom_a-ui-screen-blocks.md 5 as a gap-O datum.
 TestMode_SelectFromPowerOnKeys_Variant2:
 	push XIX                                             ; F953CD  3c
@@ -40468,7 +40472,7 @@ TestMode_SelectFromPowerOnKeys_Variant2:
 	ld (XIX),0xda                                        ; F953F9  b4 00 da
 	ld (UI_Request_Hi:16), 0x80                                 ; F953FC  f1 71 20 00 80
 	call T_F407AC                                        ; F95401  1d ac 07 f4
-	call T_F407B0                                        ; F95405  1d b0 07 f4
+	call T_ParamImage_PostAllAsChangeEvents                                        ; F95405  1d b0 07 f4
 	jr .LF95418                                              ; F95409  68 0d
 .LF9540B:
 	ld (XIX),0xdb                                        ; F9540B  b4 00 db
@@ -47615,7 +47619,7 @@ Paint_GeneralMidiMode:
 	ld a, (UI_ScreenLatch:16)                                   ; F99D10  c1 7a 20 21
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r1                             ; F99D14  c1 7b 20 f1
 	jr z, .LF99D30                                       ; F99D18  66 16
-	call T_F42594                                        ; F99D1A  1d 94 25 f4
+	call T_Playback_StopAllAndIgnoreMidiStart                                        ; F99D1A  1d 94 25 f4
 	ld (0x2740:16), 0x00                                 ; F99D1E  f1 40 27 00 00
 	ld (0x274c:16), 0x00                                 ; F99D23  f1 4c 27 00 00
 	ld a, (0x7f4d:16)                                   ; F99D28  c1 4d 7f 21
@@ -47669,7 +47673,7 @@ Paint_GeneralMidiMode:
 ; ScreenLeave_GeneralMidiMode -- the GeneralMidiMode LEAVE body: call T_F425DC (prom_a 0xFE1CA7) unless
 ; (0x207A) == (0x207B)
 ; Evidence: only caller ScreenLeave_GeneralMidiMode_Entry (0xF99848, the object's +4 slot);
-; Paint_GeneralMidiMode makes the paired call T_F42594 under the same test (0xF99D1A).
+; Paint_GeneralMidiMode makes the paired call T_Playback_StopAllAndIgnoreMidiStart under the same test (0xF99D1A).
 ScreenLeave_GeneralMidiMode:
 	ld a, (UI_ScreenLatch:16)                                   ; F99DC6  c1 7a 20 21
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r1                             ; F99DCA  c1 7b 20 f1
@@ -52308,8 +52312,8 @@ ReMapEdit_DrawCombiReMapCursor:
 	pop XIX                                              ; F9C8EE  5c
 	ret                                                  ; F9C8EF  0e
 ; ReMapEdit_AssignSourceToReMap -- the RE-MAP EDIT 'OK' action: stores the code of the selected source sound (or combination) into the selected RE-MAP slot
-; Evidence: SOUND: slot = ByteTable12_FA16FA[(0x26FA)] (0x5340/0x5550/0x5760) + 2*((0x26FB)<<3 + (0x26FC)); the code comes from T_F407F4 (sub_FAB658) given (0x26F5),(0x26F6), ByteTable8_FA16EC[(0x26F4)], read back from (0x60F164)/(0x60F165) into slot+0/+1.
-; Evidence: COMBI: ByteTable12_FA1706 (0x5990/0x5BA0/0x5DB0) with (0x26FD),(0x26FE),(0x26FF); code via T_F40804 (sub_FAB779, (0x60F17F)=0x98) from (0x60F185)/(0x60F186).
+; Evidence: SOUND: slot = ByteTable12_FA16FA[(0x26FA)] (0x5340/0x5550/0x5760) + 2*((0x26FB)<<3 + (0x26FC)); the code comes from T_SoundSel_ClampToProgramAndBank (SoundSel_ClampToProgramAndBank) given (0x26F5),(0x26F6), ByteTable8_FA16EC[(0x26F4)], read back from (0x60F164)/(0x60F165) into slot+0/+1.
+; Evidence: COMBI: ByteTable12_FA1706 (0x5990/0x5BA0/0x5DB0) with (0x26FD),(0x26FE),(0x26FF); code via T_CombiSel_ClampToNumberAndBank (CombiSel_ClampToNumberAndBank, (0x60F17F)=0x98) from (0x60F185)/(0x60F186).
 ; Called from the HandlerTable23_ReMapEdit slot-8 handler at 0xF9C4D1 on pair position 0 -- the left LCD-row key under 'OK' (DisplayList_FA30A6, pos 0x057A); pair position 1 toggles (0x26F3) instead.
 ReMapEdit_AssignSourceToReMap:
 	link XIZ,0xfff8                                      ; F9C8F0  ee 0c f8 ff
@@ -52349,7 +52353,7 @@ ReMapEdit_AssignSourceToReMap:
 	add XBC,ByteTable8_FA16EC                            ; F9C958  e9 c8 ec 16 fa 00
 	ld A,(XBC)                                           ; F9C95E  81 21
 	ld (0x60f162:24), a                                 ; F9C960  f2 62 f1 60 41
-	call T_F407F4                                        ; F9C965  1d f4 07 f4
+	call T_SoundSel_ClampToProgramAndBank                                        ; F9C965  1d f4 07 f4
 	ld c, (0x60f164:24)                                 ; F9C969  c2 64 f1 60 23
 	ld H,C                                               ; F9C96E  cb 8e
 	ld xbc, (xiz-8)                                      ; F9C970  ae f8 21
@@ -52384,7 +52388,7 @@ ReMapEdit_AssignSourceToReMap:
 	add XBC,ByteTable3_FA16F4                            ; F9C9C7  e9 c8 f4 16 fa 00
 	ld A,(XBC)                                           ; F9C9CD  81 21
 	ld (XIX+0x02),A                                      ; F9C9CF  bc 02 41
-	call T_F40804                                        ; F9C9D2  1d 04 08 f4
+	call T_CombiSel_ClampToNumberAndBank                                        ; F9C9D2  1d 04 08 f4
 	ld c, (0x60f185:24)                                 ; F9C9D6  c2 85 f1 60 23
 	ld H,C                                               ; F9C9DB  cb 8e
 	ld xbc, (xiz-8)                                      ; F9C9DD  ae f8 21
@@ -57995,7 +57999,7 @@ DrumsMap_DrawRowCursor:
 	inc 8,XSP                                            ; F9F5E5  ef 60
 	ret                                                  ; F9F5E7  0e
 ; SoundName_CopyToBuffer -- copies the 16-character name of sound (group, member) of a bank into a caller's buffer
-; Evidence: (0x60F160..162) = args, (0x60F01C) = (0x2250); T_F407F4 (sub_FAB658) resolves the sound code into (0x60F164)/(0x60F165); T_SoundName_Lookup (SoundName_Lookup, fallback Msg0716_Str_SoundName 'Sound Name *****') returns XIY; four longwords copied to (XIZ+0x0E).
+; Evidence: (0x60F160..162) = args, (0x60F01C) = (0x2250); T_SoundSel_ClampToProgramAndBank (SoundSel_ClampToProgramAndBank) resolves the sound code into (0x60F164)/(0x60F165); T_SoundName_Lookup (SoundName_Lookup, fallback Msg0716_Str_SoundName 'Sound Name *****') returns XIY; four longwords copied to (XIZ+0x0E).
 ; In: (XIZ+8) group, (XIZ+0x0A) member, (XIZ+0x0C) bank code, (XIZ+0x0E) destination.
 SoundName_CopyToBuffer:
 	link XIZ,0xfffc                                      ; F9F5E8  ee 0c fc ff
@@ -58009,7 +58013,7 @@ SoundName_CopyToBuffer:
 	ld (0x60f162:24), c                                 ; F9F601  f2 62 f1 60 43
 	ld c, (UI_PartIndex:16)                                   ; F9F606  c1 50 22 23
 	ld (0x60f01c:24), c                                 ; F9F60A  f2 1c f0 60 43
-	call T_F407F4                                        ; F9F60F  1d f4 07 f4
+	call T_SoundSel_ClampToProgramAndBank                                        ; F9F60F  1d f4 07 f4
 	push XDE                                             ; F9F613  3a
 	push XHL                                             ; F9F614  3b
 	push XIX                                             ; F9F615  3c
@@ -58116,7 +58120,7 @@ SoundGroup_MaxMemberIndex_ByStack:
 	unlk XIZ                                             ; F9F6E9  ee 0d
 	ret                                                  ; F9F6EB  0e
 ; CombiName_CopyToBuffer -- copies the 16-character name of combination (group, member) of a bank into a caller's buffer
-; Evidence: (0x60F181..183) = args, (0x60F17F) = 0x98; T_F40804 (sub_FAB779) resolves the code into (0x60F185)/(0x60F186); T_CombiName_Lookup (CombiName_Lookup, fallback Msg0716_Str_CombiName 'Combi Name *****') returns XIY; four longwords copied to (XIZ+0x0E).
+; Evidence: (0x60F181..183) = args, (0x60F17F) = 0x98; T_CombiSel_ClampToNumberAndBank (CombiSel_ClampToNumberAndBank) resolves the code into (0x60F185)/(0x60F186); T_CombiName_Lookup (CombiName_Lookup, fallback Msg0716_Str_CombiName 'Combi Name *****') returns XIY; four longwords copied to (XIZ+0x0E).
 CombiName_CopyToBuffer:
 	link XIZ,0xfffc                                      ; F9F6EC  ee 0c fc ff
 	pushw hl                                             ; F9F6F0  2b
@@ -58128,7 +58132,7 @@ CombiName_CopyToBuffer:
 	ld C,(XIZ+0x0c)                                      ; F9F702  8e 0c 23
 	ld (0x60f183:24), c                                 ; F9F705  f2 83 f1 60 43
 	ld (0x60f17f:24), 0x98                             ; F9F70A  f2 7f f1 60 00 98
-	call T_F40804                                        ; F9F710  1d 04 08 f4
+	call T_CombiSel_ClampToNumberAndBank                                        ; F9F710  1d 04 08 f4
 	push XDE                                             ; F9F714  3a
 	push XHL                                             ; F9F715  3b
 	push XIX                                             ; F9F716  3c
@@ -58610,7 +58614,7 @@ PanelFlags_PairBitAsWord:
 .LF9FB17:
 	ret                                                  ; F9FB17  0e
 ; SoundCopy_RequestSingleSound -- asks CPU 2 for the data of the selected source sound (SINGLE mode, ROM/EXT source) and marks a request outstanding
-; Evidence: SoundCopy_InitRequestHeader, then the code from T_F407F4 for group (0x269C), member (0x269D), bank ByteTable5_FA188B[(0x269B)] into bytes +3/+1 of the record at 0x2915; T_F40ED4 (Link_SendBlockIn32ByteChunks) with 6 bytes; (0x2806)=1.
+; Evidence: SoundCopy_InitRequestHeader, then the code from T_SoundSel_ClampToProgramAndBank for group (0x269C), member (0x269D), bank ByteTable5_FA188B[(0x269B)] into bytes +3/+1 of the record at 0x2915; T_F40ED4 (Link_SendBlockIn32ByteChunks) with 6 bytes; (0x2806)=1.
 ; Called from SoundCopy_Execute 0xF9DEE6.
 SoundCopy_RequestSingleSound:
 	push XIX                                             ; F9FB18  3c
@@ -58628,7 +58632,7 @@ SoundCopy_RequestSingleSound:
 	add XBC,ByteTable5_FA188B                            ; F9FB43  e9 c8 8b 18 fa 00
 	ld A,(XBC)                                           ; F9FB49  81 21
 	ld (0x60f162:24), a                                 ; F9FB4B  f2 62 f1 60 41
-	call T_F407F4                                        ; F9FB50  1d f4 07 f4
+	call T_SoundSel_ClampToProgramAndBank                                        ; F9FB50  1d f4 07 f4
 	ld c, (0x60f164:24)                                 ; F9FB54  c2 64 f1 60 23
 	extz XIX                                             ; F9FB59  ec 12
 	ld (XIX+0x03),C                                      ; F9FB5B  bc 03 43
@@ -58643,7 +58647,7 @@ SoundCopy_RequestSingleSound:
 	pop XIX                                              ; F9FB78  5c
 	ret                                                  ; F9FB79  0e
 ; SoundCopy_RequestGroupSounds -- starts a GROUP copy from a ROM/EXT source: resets the received count (0x2901) and asks CPU 2 for member 7 of the source group
-; Evidence: SoundCopy_InitRequestHeader; (0x2901)=0; code of (group (0x269C), member 7, bank) via T_F407F4 into the 0x2915 record; T_F40ED4 sends 6 bytes; (0x2806)=1. SoundCopy_HandleReceivedSound then requests 7-(0x2901) for each arrival.
+; Evidence: SoundCopy_InitRequestHeader; (0x2901)=0; code of (group (0x269C), member 7, bank) via T_SoundSel_ClampToProgramAndBank into the 0x2915 record; T_F40ED4 sends 6 bytes; (0x2806)=1. SoundCopy_HandleReceivedSound then requests 7-(0x2901) for each arrival.
 ; Called from SoundCopy_Execute 0xF9DDCA.
 SoundCopy_RequestGroupSounds:
 	push XIX                                             ; F9FB7A  3c
@@ -58661,7 +58665,7 @@ SoundCopy_RequestGroupSounds:
 	add XBC,ByteTable5_FA188B                            ; F9FBA7  e9 c8 8b 18 fa 00
 	ld A,(XBC)                                           ; F9FBAD  81 21
 	ld (0x60f162:24), a                                 ; F9FBAF  f2 62 f1 60 41
-	call T_F407F4                                        ; F9FBB4  1d f4 07 f4
+	call T_SoundSel_ClampToProgramAndBank                                        ; F9FBB4  1d f4 07 f4
 	ld c, (0x60f164:24)                                 ; F9FBB8  c2 64 f1 60 23
 	extz XIX                                             ; F9FBBD  ec 12
 	ld (XIX+0x03),C                                      ; F9FBBF  bc 03 43
@@ -58731,7 +58735,7 @@ SoundCopy_HandleReceivedSound:
 	add XBC,ByteTable5_FA188B                            ; F9FC6D  e9 c8 8b 18 fa 00
 	ld A,(XBC)                                           ; F9FC73  81 21
 	ld (0x60f162:24), a                                 ; F9FC75  f2 62 f1 60 41
-	call T_F407F4                                        ; F9FC7A  1d f4 07 f4
+	call T_SoundSel_ClampToProgramAndBank                                        ; F9FC7A  1d f4 07 f4
 	ld c, (0x60f164:24)                                 ; F9FC7E  c2 64 f1 60 23
 	ld (0x2918:16), c                                   ; F9FC83  f1 18 29 43
 	ld c, (0x60f165:24)                                 ; F9FC87  c2 65 f1 60 23
@@ -58880,7 +58884,7 @@ SoundCopy_ReadExtGroupDrumFlag:
 	unlk XIZ                                             ; F9FE00  ee 0d
 	ret                                                  ; F9FE02  0e
 ; SoundCopy_RefreshPartsUsingSound -- after a sound was overwritten, re-sends the sound selection of every part that uses it
-; Evidence: loop H = 0..0x1F (the 32 part records, ParamNumber_RecordPtrs entries 0-0x1F) with (0x60F01C)=H; T_F407F4 resolves (bank, group, member); if record +0 == (0x60F164) and (+1 & 0x7F) == (0x60F165): T_Queue2E00_Append4(H,1,hi,0x7F) and (H,0,lo,0xFF).
+; Evidence: loop H = 0..0x1F (the 32 part records, ParamNumber_RecordPtrs entries 0-0x1F) with (0x60F01C)=H; T_SoundSel_ClampToProgramAndBank resolves (bank, group, member); if record +0 == (0x60F164) and (+1 & 0x7F) == (0x60F165): T_Queue2E00_Append4(H,1,hi,0x7F) and (H,0,lo,0xFF).
 ; In: (XIZ+8) bank code, (XIZ+0x0A) group, (XIZ+0x0C) member. Called from SoundCopy_Execute and SoundCopy_HandleReceivedSound.
 SoundCopy_RefreshPartsUsingSound:
 	link XIZ,0x0000                                      ; F9FE03  ee 0c 00 00
@@ -58896,7 +58900,7 @@ SoundCopy_RefreshPartsUsingSound:
 	ld h, 0x00:opc                                          ; F9FE22  26 00
 .LF9FE24:
 	ld (0x60f01c:24), h                                 ; F9FE24  f2 1c f0 60 46
-	call T_F407F4                                        ; F9FE29  1d f4 07 f4
+	call T_SoundSel_ClampToProgramAndBank                                        ; F9FE29  1d f4 07 f4
 	push 0x00                                            ; F9FE2D  09 00
 	push H                                               ; F9FE2F  ce 04
 	call T_IndexedTable_GetPtr                           ; F9FE31  1d 8c 2c f4
@@ -58937,7 +58941,7 @@ SoundCopy_RefreshPartsUsingSound:
 	unlk XIZ                                             ; F9FE85  ee 0d
 	ret                                                  ; F9FE87  0e
 ; CombinationCopy_RefreshIfCurrentCombi -- after a combination was overwritten, re-triggers T_Queue2E00_PostParam98Fields if the copied slot is the combination currently selected
-; Evidence: (0x60F181..183) = group, member, bank; (0x60F17F)=0x98; T_F40804 (sub_FAB779) returns the code in (0x60F185)/(0x60F186); compared with (0x7F03)/(0x7F04); equal -> `call T_Queue2E00_PostParam98Fields` (prom_a Queue2E00_PostParam98Fields).
+; Evidence: (0x60F181..183) = group, member, bank; (0x60F17F)=0x98; T_CombiSel_ClampToNumberAndBank (CombiSel_ClampToNumberAndBank) returns the code in (0x60F185)/(0x60F186); compared with (0x7F03)/(0x7F04); equal -> `call T_Queue2E00_PostParam98Fields` (prom_a Queue2E00_PostParam98Fields).
 ; In: (XIZ+8) bank code, (XIZ+0x0A) group, (XIZ+0x0C) member. Called from CombinationCopy_Execute.
 CombinationCopy_RefreshIfCurrentCombi:
 	link XIZ,0x0000                                      ; F9FE88  ee 0c 00 00
@@ -58951,7 +58955,7 @@ CombinationCopy_RefreshIfCurrentCombi:
 	ld C,(XIZ+0x08)                                      ; F9FE9E  8e 08 23
 	ld (XIX+0x02),C                                      ; F9FEA1  bc 02 43
 	ld (0x60f17f:24), 0x98                             ; F9FEA4  f2 7f f1 60 00 98
-	call T_F40804                                        ; F9FEAA  1d 04 08 f4
+	call T_CombiSel_ClampToNumberAndBank                                        ; F9FEAA  1d 04 08 f4
 	ld h, (0x7f03:16)                                   ; F9FEAE  c1 03 7f 26
 	ld c, (0x60f185:24)                                 ; F9FEB2  c2 85 f1 60 23
 	cp H,C                                               ; F9FEB7  cb f6
@@ -61360,7 +61364,7 @@ ExitKey_Initial:
 	ld (PanelDial_DownButton:16), 0x0b                                 ; FA1378  f1 9b 20 00 0b
 	ld (PanelDial_UpButton:16), 0x0c                                 ; FA137D  f1 9c 20 00 0c
 	call T_Transport_StopAllRunning                                        ; FA1382  1d ac 09 f4
-	call T_F42594                                        ; FA1386  1d 94 25 f4
+	call T_Playback_StopAllAndIgnoreMidiStart                                        ; FA1386  1d 94 25 f4
 	lda xbc, (.LFA139E:24)                               ; FA138A  f2 9e 13 fa 31
 	push XBC                                             ; FA138F  39
 	call T_CallbackQueue_Post                            ; FA1390  1d 84 2e f4
@@ -77969,8 +77973,8 @@ ParamModule_PhaseVector_StaleCopy:
 	push XIX                                             ; FAA026  3c
 	push XIY                                             ; FAA027  3d
 	push XIZ                                             ; FAA028  3e
-; stale: the live twin at +0x400 calls sub_FAB658
-	call	sub_FAB658 - 0x896                              ; FAA029  1d c2 ad fa
+; stale: the live twin at +0x400 calls SoundSel_ClampToProgramAndBank
+	call	SoundSel_ClampToProgramAndBank - 0x896                              ; FAA029  1d c2 ad fa
 	pop XIZ                                              ; FAA02D  5e
 	pop XIY                                              ; FAA02E  5d
 	pop XIX                                              ; FAA02F  5c
@@ -78010,8 +78014,8 @@ sub_FAA03A:
 	push XIX                                             ; FAA06A  3c
 	push XIY                                             ; FAA06B  3d
 	push XIZ                                             ; FAA06C  3e
-; stale: the live twin calls sub_FAB779
-	call	sub_FAB779 - 0x896                              ; FAA06D  1d e3 ae fa
+; stale: the live twin calls CombiSel_ClampToNumberAndBank
+	call	CombiSel_ClampToNumberAndBank - 0x896                              ; FAA06D  1d e3 ae fa
 	pop XIZ                                              ; FAA071  5e
 	pop XIY                                              ; FAA072  5d
 	pop XIX                                              ; FAA073  5c
@@ -78475,7 +78479,7 @@ sub_FAA418:
 	push XIX                                             ; FAA426  3c
 	push XIY                                             ; FAA427  3d
 	push XIZ                                             ; FAA428  3e
-	call sub_FAB658                                      ; FAA429  1d 58 b6 fa
+	call SoundSel_ClampToProgramAndBank                                      ; FAA429  1d 58 b6 fa
 	pop XIZ                                              ; FAA42D  5e
 	pop XIY                                              ; FAA42E  5d
 	pop XIX                                              ; FAA42F  5c
@@ -78515,7 +78519,7 @@ sub_FAA45C:
 	push XIX                                             ; FAA46A  3c
 	push XIY                                             ; FAA46B  3d
 	push XIZ                                             ; FAA46C  3e
-	call sub_FAB779                                      ; FAA46D  1d 79 b7 fa
+	call CombiSel_ClampToNumberAndBank                                      ; FAA46D  1d 79 b7 fa
 	pop XIZ                                              ; FAA471  5e
 	pop XIY                                              ; FAA472  5d
 	pop XIX                                              ; FAA473  5c
@@ -79143,7 +79147,7 @@ ParamModule_BootPhase2_MemoryLost:
 	pop XIX                                              ; FAA8A9  5c
 	pop XHL                                              ; FAA8AA  5b
 	pop XDE                                              ; FAA8AB  5a
-	calr sub_FAAAB5                                      ; FAA8AC  1e 06 02
+	calr ParamImage_PostAllAsChangeEvents                                      ; FAA8AC  1e 06 02
 	call Tempo_ApplyBpm                                      ; FAA8AF  1d 42 a7 fa
 	ld h, 0x00:opc                                          ; FAA8B3  26 00
 .LFAA8B5:
@@ -79195,7 +79199,7 @@ ParamModule_BootPhase1_MemoryIntact:
 	pop XIX                                              ; FAA906  5c
 	pop XHL                                              ; FAA907  5b
 	pop XDE                                              ; FAA908  5a
-	calr sub_FAAAB5                                      ; FAA909  1e a9 01
+	calr ParamImage_PostAllAsChangeEvents                                      ; FAA909  1e a9 01
 	call Tempo_ApplyBpm                                      ; FAA90C  1d 42 a7 fa
 	m_set 5, MD24, 0x60f021                              ; FAA910  f2 21 f0 60 bd
 	ld h, 0x00:opc                                          ; FAA915  26 00
@@ -79385,13 +79389,18 @@ sub_FAAA8F:
 	pop XIX                                              ; FAAAA6  5c
 	pop XHL                                              ; FAAAA7  5b
 	pop XDE                                              ; FAAAA8  5a
-	calr sub_FAAAB5                                      ; FAAAA9  1e 09 00
+	calr ParamImage_PostAllAsChangeEvents                                      ; FAAAA9  1e 09 00
 	call Tempo_ApplyBpm                                      ; FAAAAC  1d 42 a7 fa
 	ret                                                  ; FAAAB0  0e
-sub_FAAAB1:
-	calr sub_FAAAB5                                      ; FAAAB1  1e 01 00
+; ParamImage_PostAllAsChangeEvents_Call: calls ParamImage_PostAllAsChangeEvents and returns (notes/prom_ab_wrapper_names.py; DERIVATIVE)
+ParamImage_PostAllAsChangeEvents_Call:
+	calr ParamImage_PostAllAsChangeEvents                                      ; FAAAB1  1e 01 00
 	ret                                                  ; FAAAB4  0e
-sub_FAAAB5:
+; ParamImage_PostAllAsChangeEvents: Posts {0x91, 3, (0x7F4D), 0xFF}, then every byte of the parameter image
+;   0x7620..0x7F7E as change events {record, byte, value, 0xFF} into the 0x2C00 queue, draining it. Run by both
+;   ParamModule boot phases after the ParamImage_* steps and by the test-mode selector. Basis: callers + body.
+;   (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_a.json)
+ParamImage_PostAllAsChangeEvents:
 	link XIZ,0xfffc                                      ; FAAAB5  ee 0c fc ff
 	pushw hl                                             ; FAAAB9  2b
 	push XIX                                             ; FAAABA  3c
@@ -79411,7 +79420,7 @@ sub_FAAAB5:
 	ld XWA,XIX                                           ; FAAAE1  ec 88
 	cp XWA,XBC                                           ; FAAAE3  e9 f0
 	jr nc, .LFAAB0E                                      ; FAAAE5  6f 27
-; (sub_FAAAE7 removed 2026-10-04: no code names it and the line above falls through into it -- part of sub_FAAAB5;
+; (sub_FAAAE7 removed 2026-10-04: no code names it and the line above falls through into it -- part of ParamImage_PostAllAsChangeEvents;
 ;  notes/prom_a_stray_label_removal.py)
 	ld H,(XIX)                                           ; FAAAE7  84 26
 	cp H,0xff                                            ; FAAAE9  ce cf ff
@@ -80676,7 +80685,11 @@ ProgramChangeMode_OnEvent:
 	ret                                                  ; FAB656  0e
 T_F407C4_Nop:
 	ret                                                  ; FAB657  0e
-sub_FAB658:
+; SoundSel_ClampToProgramAndBank: T_SoundSel_ClampToProgramAndBank entry: clamps the request at 0x60F160 (group <= 15, member <= the group
+;   maximum) and converts it with T_SoundSel_ToProgramAndBank into (0x60F164)/(0x60F165). SoundName_CopyToBuffer and
+;   the SOUND COPY / RE-MAP requests call it first. Basis: callers + body. (wsa1/notes/naming-
+;   pilot-2026-10-06/proposals_prom_a.json)
+SoundSel_ClampToProgramAndBank:
 	pushw hl                                             ; FAB658  2b
 	push XIX                                             ; FAB659  3c
 	lda xix, (0x60f160:24)                               ; FAB65A  f2 60 f1 60 34
@@ -80781,7 +80794,11 @@ sub_FAB728:
 .LFAB777:
 	pop XIX                                              ; FAB777  5c
 	ret                                                  ; FAB778  0e
-sub_FAB779:
+; CombiSel_ClampToNumberAndBank: T_CombiSel_ClampToNumberAndBank entry, the combination twin: when (0x60F17F) = 0x98, clamps 0x60F181/182 and
+;   converts with T_CombiSel_ToNumberAndBank into (0x60F185)/(0x60F186). CombiName_CopyToBuffer,
+;   CombinationCopy_RefreshIfCurrentCombi and ReMapEdit call it. Basis: callers + body. (wsa1/notes/naming-
+;   pilot-2026-10-06/proposals_prom_a.json)
+CombiSel_ClampToNumberAndBank:
 	push XIX                                             ; FAB779  3c
 	lda xix, (0x60f181:24)                               ; FAB77A  f2 81 f1 60 34
 	m_cp_mi8 MB24, 0x60f17f, 0x98                        ; FAB77F  c2 7f f1 60 3f 98
@@ -81040,7 +81057,7 @@ sub_FAB915:
 	ld (0x60f161:24), c                                 ; FAB955  f2 61 f1 60 43
 	ld c, (0x60f0d0:24)                                 ; FAB95A  c2 d0 f0 60 23
 	ld (0x60f162:24), c                                 ; FAB95F  f2 62 f1 60 43
-	calr sub_FAB658                                          ; FAB964  1e f1 fc
+	calr SoundSel_ClampToProgramAndBank                                          ; FAB964  1e f1 fc
 	push 0x00                                            ; FAB967  09 00
 	m_push MB24, 0x60f080                                ; FAB969  c2 80 f0 60 04
 	calr ParamNumber_GetRecordPtr                                          ; FAB96E  1e 39 0f
@@ -81356,7 +81373,7 @@ List2030_Param98_Dispatch:   ; entry: named by 1 `.long` operand, first at 0xFAC
 .LFABBEA:
 	ret                                                  ; FABBEA  0e
 ; List2030_Param98_ApplyProgram -- the parameter-0x98 twin of the part program-change handler sub_FAB915: stash the first value, then on the second pass write record 0x7F02's program fields and queue them to 0x2C00
-; Evidence: same two-pass gate as sub_FAB915 (bit 4 of (0x60F021) at 0xFABBF1: pass 1 saves (0x60F089) to (0x60F0D0) and sets it, pass 2 clears it); then sub_FAB779 (sub_FAB658 in the part twin), ParamNumber_GetRecordPtr compared with 0x7F02 (0xFABC49-0xFABC51), and stores (XIX+1)&0x80|(0x60F185), (XIX+2)&0xC0|(0x60F186), (XIX+6..8) = value/mask/(0x60F0D0).
+; Evidence: same two-pass gate as sub_FAB915 (bit 4 of (0x60F021) at 0xFABBF1: pass 1 saves (0x60F089) to (0x60F0D0) and sets it, pass 2 clears it); then CombiSel_ClampToNumberAndBank (SoundSel_ClampToProgramAndBank in the part twin), ParamNumber_GetRecordPtr compared with 0x7F02 (0xFABC49-0xFABC51), and stores (XIX+1)&0x80|(0x60F185), (XIX+2)&0xC0|(0x60F186), (XIX+6..8) = value/mask/(0x60F0D0).
 ; Queues {0x98,2,(0x60F186),0x3F} and {0x98,1,(0x60F185),0x7F} (0xFABC9E-0xFABCCD).  Program reading: sub_FAB915 is JumpTable_FAB8B4[0], class 0, whose outbound twin is MidiOut_ParamClassTable[0] = MidiOut_ProgramChange; and the Evt2030 handler of 0x98 class 1 runs only when SINGLE CH PROG CHANGE is COMBI (bit 3 of (0x7F32)).
 List2030_Param98_ApplyProgram:
 	link XIZ,0xfff8                                      ; FABBEB  ee 0c f8 ff
@@ -81379,7 +81396,7 @@ List2030_Param98_ApplyProgram:
 	ld (0x60f182:24), c                                 ; FABC2B  f2 82 f1 60 43
 	ld c, (0x60f0d0:24)                                 ; FABC30  c2 d0 f0 60 23
 	ld (0x60f183:24), c                                 ; FABC35  f2 83 f1 60 43
-	calr sub_FAB779                                          ; FABC3A  1e 3c fb
+	calr CombiSel_ClampToNumberAndBank                                          ; FABC3A  1e 3c fb
 	push 0x00                                            ; FABC3D  09 00
 	m_push MB24, 0x60f080                                ; FABC3F  c2 80 f0 60 04
 	calr ParamNumber_GetRecordPtr                                          ; FABC44  1e 63 0c
@@ -86178,7 +86195,11 @@ sub_FAE829_Nop5:   ; entry: pointer-table entry
 	ret
 T_F41F38_Nop:
 	ret
-sub_FAE84D:
+; SeqBuf_RecordQueuedEvents: T_F41F14 entry: from queue index 0, picks the recording part mask (0x60F318) by PanelMode
+;   / screen, and SeqBuf_EncodeQueue2C00 appends the queued events to the sequencer ring. The MIDI-in routers call it
+;   after pumping a port into the queue; also SysExCmd_ParamWrite and step record. Basis: callers + body.
+;   (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_a.json)
+SeqBuf_RecordQueuedEvents:
 	ldw (0x60f002:24), 0x00
 	calr T_F41F2C_Nop
 	calr T_F41F3C_Nop
@@ -86258,7 +86279,7 @@ sub_FAE872:
 	ret
 ; SeqBuf_EncodeQueue2C00 -- the 0x2C00-queue encoder its event-type arms (SeqBuf_Put*Event) name: walk the queue's
 ;          records from 0x2C00 + (0x60F002) up to the 0xFF end mark and append each as a sequencer event to ring
-;          0x600A14.  prom_b directory slot T_F41F34; also reached from sub_FAE84D.
+;          0x600A14.  prom_b directory slot T_F41F34; also reached from SeqBuf_RecordQueuedEvents.
 SeqBuf_EncodeQueue2C00:
 	xor XWA,XWA
 	cp (0x60f318:24), xwa
@@ -90231,7 +90252,7 @@ SysExSession_Run:
 	res 4,(XIX)                                          ; FB2873  b4 b4
 	pop XIX                                              ; FB2875  5c
 	ret                                                  ; FB2876  0e
-; SysExSession_DispatchCommand: status 0 and command < 0x22: PtrTable_F4F916[command]; then SysExSession_AnswerByStatus, sub_FB7BB9, PanelLed_ToggleActivityLed_SaveRegs2.
+; SysExSession_DispatchCommand: status 0 and command < 0x22: PtrTable_F4F916[command]; then SysExSession_AnswerByStatus, SysExSession_RefreshProgressScreen, PanelLed_ToggleActivityLed_SaveRegs2.
 SysExSession_DispatchCommand:
 	pushw hl                                             ; FB2877  2b
 	pushw 0x04                                           ; FB2878  0b 04 00
@@ -90256,7 +90277,7 @@ SysExSession_DispatchCommand:
 	jp (xwa)                                             ; FB28AF  b0 d8
 .LFB28B1:
 	calr SysExSession_AnswerByStatus                                      ; FB28B1  1e 0a 00
-	call sub_FB7BB9                                      ; FB28B4  1d b9 7b fb
+	call SysExSession_RefreshProgressScreen                                      ; FB28B4  1d b9 7b fb
 	call PanelLed_ToggleActivityLed_SaveRegs2                                      ; FB28B8  1d fe 7a fb
 .LFB28BC:
 	popw hl                                              ; FB28BC  4b
@@ -94316,7 +94337,7 @@ SysExTx_EmitStagedParams:
 SysExTx_StagedParam_Ignore:
 	ret                                                  ; FB4BDD  0e
 ; SysExTx_StagedParam_Record48: staged parameter record 0x48: look the record up in the list at prom_b 0xF51E14
-;   (sub_FB4D20) and call the descriptor's +0x10 method.
+;   (SysExParamDesc_FindForEvent) and call the descriptor's +0x10 method.
 SysExTx_StagedParam_Record48:
 	link XIZ,0xfff8                                      ; FB4BDE  ee 0c f8 ff
 	push XIX                                             ; FB4BE2  3c
@@ -94325,7 +94346,7 @@ SysExTx_StagedParam_Record48:
 	push XBC                                             ; FB4BEB  39
 	ld XWA,(XIZ+0x08)                                    ; FB4BEC  ae 08 20
 	push XWA                                             ; FB4BEF  38
-	calr sub_FB4D20                                      ; FB4BF0  1e 2d 01
+	calr SysExParamDesc_FindForEvent                                      ; FB4BF0  1e 2d 01
 	ld (XIX+0x04),XIY                                    ; FB4BF3  bc 04 65
 	ld XBC,(XIZ+0x08)                                    ; FB4BF6  ae 08 21
 	ld (XIX),XBC                                         ; FB4BF9  b4 61
@@ -94349,7 +94370,7 @@ SysExTx_StagedParam_Record60:
 	push XBC                                             ; FB4C1F  39
 	ld XWA,(XIZ+0x08)                                    ; FB4C20  ae 08 20
 	push XWA                                             ; FB4C23  38
-	calr sub_FB4D20                                      ; FB4C24  1e f9 00
+	calr SysExParamDesc_FindForEvent                                      ; FB4C24  1e f9 00
 	ld (XIX+0x04),XIY                                    ; FB4C27  bc 04 65
 	ld XBC,(XIZ+0x08)                                    ; FB4C2A  ae 08 21
 	ld (XIX),XBC                                         ; FB4C2D  b4 61
@@ -94375,7 +94396,7 @@ SysExTx_StagedParam_Record70:
 	push XBC                                             ; FB4C53  39
 	ld XWA,(XIZ+0x08)                                    ; FB4C54  ae 08 20
 	push XWA                                             ; FB4C57  38
-	calr sub_FB4D20                                      ; FB4C58  1e c5 00
+	calr SysExParamDesc_FindForEvent                                      ; FB4C58  1e c5 00
 	ld (XIX+0x04),XIY                                    ; FB4C5B  bc 04 65
 	ld XBC,(XIZ+0x08)                                    ; FB4C5E  ae 08 21
 	ld (XIX),XBC                                         ; FB4C61  b4 61
@@ -94399,7 +94420,7 @@ SysExTx_StagedParam_Record98:
 	push XBC                                             ; FB4C87  39
 	ld XWA,(XIZ+0x08)                                    ; FB4C88  ae 08 20
 	push XWA                                             ; FB4C8B  38
-	calr sub_FB4D20                                      ; FB4C8C  1e 91 00
+	calr SysExParamDesc_FindForEvent                                      ; FB4C8C  1e 91 00
 	ld (XIX+0x04),XIY                                    ; FB4C8F  bc 04 65
 	ld XBC,(XIZ+0x08)                                    ; FB4C92  ae 08 21
 	ld (XIX),XBC                                         ; FB4C95  b4 61
@@ -94450,7 +94471,7 @@ SysExTx_GmSystemOnOff:
 	push XBC                                             ; FB4CF8  39
 	ld XWA,(XIZ+0x08)                                    ; FB4CF9  ae 08 20
 	push XWA                                             ; FB4CFC  38
-	calr sub_FB4D20                                      ; FB4CFD  1e 20 00
+	calr SysExParamDesc_FindForEvent                                      ; FB4CFD  1e 20 00
 	ld (XIX+0x04),XIY                                    ; FB4D00  bc 04 65
 	ld XBC,(XIZ+0x08)                                    ; FB4D03  ae 08 21
 	ld (XIX),XBC                                         ; FB4D06  b4 61
@@ -94468,7 +94489,11 @@ SysExTx_GmSystemOnOff:
 	popw hl                                              ; FB4D1C  4b
 	unlk XIZ                                             ; FB4D1D  ee 0d
 	ret                                                  ; FB4D1F  0e
-sub_FB4D20:
+; SysExParamDesc_FindForEvent: Walks a descriptor-pointer list and returns (XIY) the first descriptor whose offset
+;   (+7) = the event's byte index and whose mask (+8) meets its changed bits; else SysExParamDesc_Placeholder. The
+;   SysExTx_StagedParam_* handlers then call that descriptor's +0x10 transmit method. Basis: callers + body +
+;   descriptor layout. (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_a.json)
+SysExParamDesc_FindForEvent:
 	link XIZ,0xfff8                                      ; FB4D20  ee 0c f8 ff
 	pushw hl                                             ; FB4D24  2b
 	push XIX                                             ; FB4D25  3c
@@ -94880,7 +94905,7 @@ sub_FB50EE:
 	push XBC                                             ; FB50FB  39
 	ld XWA,(XIZ+0x08)                                    ; FB50FC  ae 08 20
 	push XWA                                             ; FB50FF  38
-	calr sub_FB4D20                                      ; FB5100  1e 1d fc
+	calr SysExParamDesc_FindForEvent                                      ; FB5100  1e 1d fc
 	ld (XIX+0x04),XIY                                    ; FB5103  bc 04 65
 	ld XBC,(XIZ+0x08)                                    ; FB5106  ae 08 21
 	ld (XIX),XBC                                         ; FB5109  b4 61
@@ -98338,7 +98363,7 @@ SysExTx_AppendAndSendOnF7:
 	ld xbc, (0x60fc88:24)                               ; FB6ED2  e2 88 fc 60 21
 	push XBC                                             ; FB6ED7  39
 	calr SysExTx_SendFrameMidi1                                      ; FB6ED8  1e 8a 02
-	call sub_FB7BB9                                      ; FB6EDB  1d b9 7b fb
+	call SysExSession_RefreshProgressScreen                                      ; FB6EDB  1d b9 7b fb
 	call SysExTx_SwapBuffers                                      ; FB6EDF  1d 81 80 fb
 	pop XIY                                              ; FB6EE3  5d
 .LFB6EE4:
@@ -98419,7 +98444,7 @@ SysExDump_SendFrames:
 	ld xbc, (0x60fc88:24)                               ; FB6F93  e2 88 fc 60 21
 	push XBC                                             ; FB6F98  39
 	calr SysExTx_SendFrameMidi1                                      ; FB6F99  1e c9 01
-	call sub_FB7BB9                                      ; FB6F9C  1d b9 7b fb
+	call SysExSession_RefreshProgressScreen                                      ; FB6F9C  1d b9 7b fb
 	call SysExTx_SwapBuffers                                      ; FB6FA0  1d 81 80 fb
 	calr SysExDump_AwaitFrameAck                                          ; FB6FA4  1e 7f f0
 	ld xbc, (0x60fd00:24)                               ; FB6FA7  e2 00 fd 60 21
@@ -98453,7 +98478,7 @@ SysExDump_SendFramesStreamed:
 	ld xbc, (0x60fc88:24)                               ; FB6FE4  e2 88 fc 60 21
 	push XBC                                             ; FB6FE9  39
 	calr SysExTx_SendFrameMidi1                                      ; FB6FEA  1e 78 01
-	call sub_FB7BB9                                      ; FB6FED  1d b9 7b fb
+	call SysExSession_RefreshProgressScreen                                      ; FB6FED  1d b9 7b fb
 	call SysExTx_SwapBuffers                                      ; FB6FF1  1d 81 80 fb
 	calr SysExDump_AwaitFrameAck                                          ; FB6FF5  1e 2e f0
 	pop XIY                                              ; FB6FF8  5d
@@ -99784,7 +99809,11 @@ sub_FB7BA3:
 	ld (0x60f80a:24), 0x80                             ; FB7BB2  f2 0a f8 60 00 80
 .LFB7BB8:
 	ret                                                  ; FB7BB8  0e
-sub_FB7BB9:
+; SysExSession_RefreshProgressScreen: While the session status (field 4 of (0x60FCD8)) is 0, recomputes the progress
+;   pairs 0x60F804..0x60F80F and, if one changed, repaints the Sending / Please Wait screen. Called after every SysEx
+;   frame sent (SysExDump_SendFrames*, SysExTx_AppendAndSendOnF7) and every command handled. Basis: callers + body.
+;   (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_a.json)
+SysExSession_RefreshProgressScreen:
 	pushw 0x04                                           ; FB7BB9  0b 04 00
 	ld xbc, (0x60fcd8:24)                               ; FB7BBC  e2 d8 fc 60 21
 	push XBC                                             ; FB7BC1  39
@@ -105923,7 +105952,7 @@ sub_FBCB31:
 ; ScreenEnter_CombiEditPartMenu: screen 0xB0's +0 ENTER.  Its painter runs DL_InternalSound_F18A1D .. DL_CopyFromSoundPlay:
 ;   "PART", "INTERNAL SOUND", "CONFIGURE", "MIDI OUTPUT" / "FILTER", "MIXER", "DSP EFFECT" -- the per-part menu.
 ScreenEnter_CombiEditPartMenu:
-	calr sub_FBCCB1                                      ; FBCB40  1e 6e 01
+	calr CombiEdit_TakePartIndex                                      ; FBCB40  1e 6e 01
 	ld c, (UI_ScreenFlags:16)                                   ; FBCB43  c1 95 20 23
 	and C,0x10                                           ; FBCB47  cb cc 10
 	jr nz, .LFBCB6D                                      ; FBCB4A  6e 21
@@ -106098,7 +106127,10 @@ ExitKey_CombiEditPartMenu:
 	ld (UI_Request:16), 0x01                                 ; FBCCAB  f1 70 20 00 01
 .LFBCCB0:
 	ret                                                  ; FBCCB0  0e
-sub_FBCCB1:
+; CombiEdit_TakePartIndex: CombiEdit_Part := UI_PartIndex (written only when they differ). The COMBINATION EDIT menu /
+;   part menu / internal sound / configure screens run it first on entry. Basis: callers + body. (wsa1/notes/naming-
+;   pilot-2026-10-06/proposals_prom_a.json)
+CombiEdit_TakePartIndex:
 	pushw hl                                             ; FBCCB1  2b
 	ld h, (UI_PartIndex:16)                                   ; FBCCB2  c1 50 22 26
 	m_cp_rm MB16, CombiEdit_Part, r6                             ; FBCCB6  c1 65 27 f6
@@ -106263,7 +106295,7 @@ ScreenEnter_CombiEditInternalSound:
 	ld (PanelDial_UpButton:16), 0x04                                 ; FBCE37  f1 9c 20 00 04
 .LFBCE3C:
 	m_set 0, MD16, UI_RequestBits                                ; FBCE3C  f1 75 20 b8
-	calr sub_FBCCB1                                      ; FBCE40  1e 6e fe
+	calr CombiEdit_TakePartIndex                                      ; FBCE40  1e 6e fe
 	calr sub_FBD0EE                                      ; FBCE43  1e a8 02
 	ld c, (UI_ScreenFlags:16)                                   ; FBCE46  c1 95 20 23
 	and C,0x10                                           ; FBCE4A  cb cc 10
@@ -110632,7 +110664,7 @@ ScreenEnterBody_CombiEditConfigure:
 	ld (UI_PartIndex:16), c                                   ; FBF2FD  f1 50 22 43
 	call T_PartIndex_PostChangeEvent                                        ; FBF301  1d 9c 2c f4
 .LFBF305:
-	calr sub_FBCCB1                                          ; FBF305  1e a9 d9
+	calr CombiEdit_TakePartIndex                                          ; FBF305  1e a9 d9
 	ld c, (UI_ScreenLatch:16)                                   ; FBF308  c1 7a 20 23
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FBF30C  c1 7b 20 f3
 	jr z, .LFBF350                                       ; FBF310  66 3e
@@ -111449,7 +111481,7 @@ CombiEditConfigure_DrawVelocityLayers:
 ; ScreenEnter_CombiEditMenu: screen 0x34's +0 ENTER.  Its painter runs DL_CopyFromSoundPlay .. DL_Part_F18BBA: "C0MBINATI0N EDIT",
 ;   "INTERNAL", "CONFIGURE", "MIDI", "MIXER", "DSP EFFECT", "SOUND WRITE", "COPY FROM SOUND PLAY" -- the COMBINATION EDIT menu.
 ScreenEnter_CombiEditMenu:
-	calr sub_FBCCB1                                          ; FBFAB0  1e fe d1
+	calr CombiEdit_TakePartIndex                                          ; FBFAB0  1e fe d1
 	ld c, (UI_ScreenFlags:16)                                   ; FBFAB3  c1 95 20 23
 	and C,0x10                                           ; FBFAB7  cb cc 10
 	jr nz, .LFBFADD                                      ; FBFABA  6e 21
@@ -115527,7 +115559,7 @@ sub_FC1B6C:
 ; Called from: prom_b T_SoundName_Lookup (`jp`)
 ;          prom_a sub_F90989 (`call` through T_SoundName_Lookup) at 0xF90A56
 ;          prom_a InstallPainter_SoundMode (`call` through T_SoundName_Lookup) at 0xF90E62
-;          prom_a sub_F918E5 (`call` through T_SoundName_Lookup) at 0xF9190A
+;          prom_a C0mbinati0nM0de_ShowSelectedPartSoundName (`call` through T_SoundName_Lookup) at 0xF9190A
 ;          ... and 2 more
 ;
 ;     0xFC1BAE loads 0xFC1C49, where the ROM reads:
@@ -115656,7 +115688,7 @@ Msg0716_Str_SoundName:
 ; CombiName_Lookup -- loads a pointer straight at ROM TEXT.  NOT NAMED.
 ;
 ; Called from: prom_b T_CombiName_Lookup (`jp`)
-;          prom_a sub_F918E5 (`call` through T_CombiName_Lookup) at 0xF91D01
+;          prom_a C0mbinati0nM0de_ShowSelectedPartSoundName (`call` through T_CombiName_Lookup) at 0xF91D01
 ;          prom_a GroupCombiDisplayHold_DrawMemberNames (`call` through T_CombiName_Lookup) at 0xF93F35
 ;          prom_a CombiName_CopyToBuffer (`call` through T_CombiName_Lookup) at 0xF9F727
 ;          ... and 1 more
@@ -129217,7 +129249,7 @@ SoftKeyCol2_SoundEditMenu:
 	extz WA                                              ; FCFEC8  d8 12
 	pushw wa                                             ; FCFECA  28
 	pushw 0x03                                           ; FCFECB  0b 03 00
-	call sub_FDA05E                                      ; FCFECE  1d 5e a0 fd
+	call ModelingPage_GetItemGroup                                      ; FCFECE  1d 5e a0 fd
 	lda xbc, (xiz-8)                                     ; FCFED2  be f8 31
 	push XBC                                             ; FCFED5  39
 	call Var27F4_Get                                      ; FCFED6  1d 5c 9d fd
@@ -129247,7 +129279,7 @@ SoftKeyCol2_SoundEditMenu:
 	extz WA                                              ; FCFF11  d8 12
 	pushw wa                                             ; FCFF13  28
 	pushw 0x03                                           ; FCFF14  0b 03 00
-	call sub_FDA002                                      ; FCFF17  1d 02 a0 fd
+	call ModelingPage_GroupStartIndex                                      ; FCFF17  1d 02 a0 fd
 	m_push MWD+r6, 0xf6                                  ; FCFF1B  9e f6 04
 	ld bc, (xiz-4)                                       ; FCFF1E  9e fc 21
 	extz BC                                              ; FCFF21  d9 12
@@ -129286,7 +129318,7 @@ SoftKeyCol3_SoundEditMenu:
 	ld wa, (xiz-4)                                       ; FCFF69  9e fc 20
 	extz WA                                              ; FCFF6C  d8 12
 	pushw wa                                             ; FCFF6E  28
-	call sub_FD9D16                                      ; FCFF6F  1d 16 9d fd
+	call ModelingPage_GetItemIndex                                      ; FCFF6F  1d 16 9d fd
 	lda xbc, (xiz-8)                                     ; FCFF73  be f8 31
 	push XBC                                             ; FCFF76  39
 	call Var27F2_GetW                                      ; FCFF77  1d 3e 9d fd
@@ -130087,7 +130119,7 @@ SoftKeyCol5_SoundEditControllerPage1:
 	extz BC                                              ; FD0644  d9 12
 	pushw bc                                             ; FD0646  29
 	pushw 0x01                                           ; FD0647  0b 01 00
-	call sub_FD8993                                      ; FD064A  1d 93 89 fd
+	call SoundEditController_SoftKeyCols5to8                                      ; FD064A  1d 93 89 fd
 	pop XBC                                              ; FD064E  59
 	unlk XIZ                                             ; FD064F  ee 0d
 	ret                                                  ; FD0651  0e
@@ -130101,7 +130133,7 @@ SoftKeyCol6_SoundEditControllerPage1:
 	extz BC                                              ; FD0659  d9 12
 	pushw bc                                             ; FD065B  29
 	pushw 0x02                                           ; FD065C  0b 02 00
-	call sub_FD8993                                      ; FD065F  1d 93 89 fd
+	call SoundEditController_SoftKeyCols5to8                                      ; FD065F  1d 93 89 fd
 	pop XBC                                              ; FD0663  59
 	unlk XIZ                                             ; FD0664  ee 0d
 	ret                                                  ; FD0666  0e
@@ -130121,7 +130153,7 @@ SoftKeyCol7_SoundEditControllerPage1:
 	extz BC                                              ; FD067D  d9 12
 	pushw bc                                             ; FD067F  29
 	pushw 0x03                                           ; FD0680  0b 03 00
-	call sub_FD8993                                      ; FD0683  1d 93 89 fd
+	call SoundEditController_SoftKeyCols5to8                                      ; FD0683  1d 93 89 fd
 	pop XIY                                              ; FD0687  5d
 .LFD0688:
 	unlk XIZ                                             ; FD0688  ee 0d
@@ -130142,7 +130174,7 @@ SoftKeyCol8_SoundEditControllerPage1:
 	extz BC                                              ; FD06A1  d9 12
 	pushw bc                                             ; FD06A3  29
 	pushw 0x04                                           ; FD06A4  0b 04 00
-	call sub_FD8993                                      ; FD06A7  1d 93 89 fd
+	call SoundEditController_SoftKeyCols5to8                                      ; FD06A7  1d 93 89 fd
 	pop XIY                                              ; FD06AB  5d
 .LFD06AC:
 	unlk XIZ                                             ; FD06AC  ee 0d
@@ -130176,7 +130208,7 @@ LcdKeyRow2_SoundEditControllerPage1:
 	extz BC                                              ; FD06DF  d9 12
 	pushw bc                                             ; FD06E1  29
 	pushw 0x01                                           ; FD06E2  0b 01 00
-	call sub_FD7159                                      ; FD06E5  1d 59 71 fd
+	call SoundEditController_SaveField0                                      ; FD06E5  1d 59 71 fd
 	ld C,H                                               ; FD06E9  ce 8b
 	extz BC                                              ; FD06EB  d9 12
 	pushw bc                                             ; FD06ED  29
@@ -130221,7 +130253,7 @@ LcdKeyRow3_SoundEditControllerPage1:
 	extz BC                                              ; FD073B  d9 12
 	pushw bc                                             ; FD073D  29
 	pushw 0x01                                           ; FD073E  0b 01 00
-	call sub_FD7159                                      ; FD0741  1d 59 71 fd
+	call SoundEditController_SaveField0                                      ; FD0741  1d 59 71 fd
 	ld C,H                                               ; FD0745  ce 8b
 	extz BC                                              ; FD0747  d9 12
 	pushw bc                                             ; FD0749  29
@@ -130274,7 +130306,7 @@ LcdKeyRow4_SoundEditControllerPage1:
 	extz BC                                              ; FD07A0  d9 12
 	pushw bc                                             ; FD07A2  29
 	pushw 0x01                                           ; FD07A3  0b 01 00
-	call sub_FD7159                                      ; FD07A6  1d 59 71 fd
+	call SoundEditController_SaveField0                                      ; FD07A6  1d 59 71 fd
 	ld C,H                                               ; FD07AA  ce 8b
 	extz BC                                              ; FD07AC  d9 12
 	pushw bc                                             ; FD07AE  29
@@ -130423,7 +130455,7 @@ SoftKeyCol5_SoundEditControllerPage2:
 	extz BC                                              ; FD08BC  d9 12
 	pushw bc                                             ; FD08BE  29
 	pushw 0x01                                           ; FD08BF  0b 01 00
-	call sub_FD8993                                      ; FD08C2  1d 93 89 fd
+	call SoundEditController_SoftKeyCols5to8                                      ; FD08C2  1d 93 89 fd
 	pop XBC                                              ; FD08C6  59
 	unlk XIZ                                             ; FD08C7  ee 0d
 	ret                                                  ; FD08C9  0e
@@ -130437,7 +130469,7 @@ SoftKeyCol6_SoundEditControllerPage2:
 	extz BC                                              ; FD08D1  d9 12
 	pushw bc                                             ; FD08D3  29
 	pushw 0x02                                           ; FD08D4  0b 02 00
-	call sub_FD8993                                      ; FD08D7  1d 93 89 fd
+	call SoundEditController_SoftKeyCols5to8                                      ; FD08D7  1d 93 89 fd
 	pop XBC                                              ; FD08DB  59
 	unlk XIZ                                             ; FD08DC  ee 0d
 	ret                                                  ; FD08DE  0e
@@ -130457,7 +130489,7 @@ SoftKeyCol7_SoundEditControllerPage2:
 	extz BC                                              ; FD08F5  d9 12
 	pushw bc                                             ; FD08F7  29
 	pushw 0x03                                           ; FD08F8  0b 03 00
-	call sub_FD8993                                      ; FD08FB  1d 93 89 fd
+	call SoundEditController_SoftKeyCols5to8                                      ; FD08FB  1d 93 89 fd
 	pop XIY                                              ; FD08FF  5d
 .LFD0900:
 	unlk XIZ                                             ; FD0900  ee 0d
@@ -130478,7 +130510,7 @@ SoftKeyCol8_SoundEditControllerPage2:
 	extz BC                                              ; FD0919  d9 12
 	pushw bc                                             ; FD091B  29
 	pushw 0x04                                           ; FD091C  0b 04 00
-	call sub_FD8993                                      ; FD091F  1d 93 89 fd
+	call SoundEditController_SoftKeyCols5to8                                      ; FD091F  1d 93 89 fd
 	pop XIY                                              ; FD0923  5d
 .LFD0924:
 	unlk XIZ                                             ; FD0924  ee 0d
@@ -130500,7 +130532,7 @@ LcdKeyRow1_SoundEditControllerPage2:
 	jr z, .LFD095A                                       ; FD0942  66 16
 	pushw 0x01                                           ; FD0944  0b 01 00
 	pushw 0x02                                           ; FD0947  0b 02 00
-	call sub_FD7159                                      ; FD094A  1d 59 71 fd
+	call SoundEditController_SaveField0                                      ; FD094A  1d 59 71 fd
 	pushw 0x01                                           ; FD094E  0b 01 00
 	pushw 0x9b                                           ; FD0951  0b 9b 00
 	call PanelScreen_PostRequest                                      ; FD0954  1d 8b 60 fd
@@ -130531,7 +130563,7 @@ LcdKeyRow2_SoundEditControllerPage2:
 	pushw 0x02                                           ; FD0985  0b 02 00
 .LFD0988:
 	pushw 0x02                                           ; FD0988  0b 02 00
-	call sub_FD7159                                      ; FD098B  1d 59 71 fd
+	call SoundEditController_SaveField0                                      ; FD098B  1d 59 71 fd
 	pushw 0x01                                           ; FD098F  0b 01 00
 	pushw 0x9b                                           ; FD0992  0b 9b 00
 	call PanelScreen_PostRequest                                      ; FD0995  1d 8b 60 fd
@@ -130562,7 +130594,7 @@ LcdKeyRow3_SoundEditControllerPage2:
 	pushw 0x04                                           ; FD09C6  0b 04 00
 .LFD09C9:
 	pushw 0x02                                           ; FD09C9  0b 02 00
-	call sub_FD7159                                      ; FD09CC  1d 59 71 fd
+	call SoundEditController_SaveField0                                      ; FD09CC  1d 59 71 fd
 	pushw 0x01                                           ; FD09D0  0b 01 00
 	pushw 0x9b                                           ; FD09D3  0b 9b 00
 	call PanelScreen_PostRequest                                      ; FD09D6  1d 8b 60 fd
@@ -130593,7 +130625,7 @@ LcdKeyRow4_SoundEditControllerPage2:
 	pushw 0x08                                           ; FD0A07  0b 08 00
 .LFD0A0A:
 	pushw 0x02                                           ; FD0A0A  0b 02 00
-	call sub_FD7159                                      ; FD0A0D  1d 59 71 fd
+	call SoundEditController_SaveField0                                      ; FD0A0D  1d 59 71 fd
 	pushw 0x01                                           ; FD0A11  0b 01 00
 	pushw 0x9b                                           ; FD0A14  0b 9b 00
 	call PanelScreen_PostRequest                                      ; FD0A17  1d 8b 60 fd
@@ -130624,7 +130656,7 @@ LcdKeyRow5_SoundEditControllerPage2:
 	pushw 0x06                                           ; FD0A48  0b 06 00
 .LFD0A4B:
 	pushw 0x02                                           ; FD0A4B  0b 02 00
-	call sub_FD7159                                      ; FD0A4E  1d 59 71 fd
+	call SoundEditController_SaveField0                                      ; FD0A4E  1d 59 71 fd
 	pushw 0x01                                           ; FD0A52  0b 01 00
 	pushw 0x9b                                           ; FD0A55  0b 9b 00
 	call PanelScreen_PostRequest                                      ; FD0A58  1d 8b 60 fd
@@ -130872,7 +130904,7 @@ SoftKeyCol2_SoundEditModelingToneTemplate:
 	extz WA                                              ; FD0C6F  d8 12
 	pushw wa                                             ; FD0C71  28
 	pushw 0x00                                           ; FD0C72  0b 00 00
-	call sub_FDA05E                                      ; FD0C75  1d 5e a0 fd
+	call ModelingPage_GetItemGroup                                      ; FD0C75  1d 5e a0 fd
 	lda xbc, (xiz-6)                                     ; FD0C79  be fa 31
 	push XBC                                             ; FD0C7C  39
 	call Var27F4_Get                                      ; FD0C7D  1d 5c 9d fd
@@ -130902,7 +130934,7 @@ SoftKeyCol2_SoundEditModelingToneTemplate:
 	extz WA                                              ; FD0CB8  d8 12
 	pushw wa                                             ; FD0CBA  28
 	pushw 0x00                                           ; FD0CBB  0b 00 00
-	call sub_FDA002                                      ; FD0CBE  1d 02 a0 fd
+	call ModelingPage_GroupStartIndex                                      ; FD0CBE  1d 02 a0 fd
 	m_push MWD+r6, 0xf8                                  ; FD0CC2  9e f8 04
 	ld bc, (xiz-2)                                       ; FD0CC5  9e fe 21
 	extz BC                                              ; FD0CC8  d9 12
@@ -130935,7 +130967,7 @@ SoftKeyCol3_SoundEditModelingToneTemplate:
 	ld wa, (xiz-2)                                       ; FD0D00  9e fe 20
 	extz WA                                              ; FD0D03  d8 12
 	pushw wa                                             ; FD0D05  28
-	call sub_FD9D16                                      ; FD0D06  1d 16 9d fd
+	call ModelingPage_GetItemIndex                                      ; FD0D06  1d 16 9d fd
 	lda xbc, (xiz-6)                                     ; FD0D0A  be fa 31
 	push XBC                                             ; FD0D0D  39
 	call Var27F2_GetW                                      ; FD0D0E  1d 3e 9d fd
@@ -132573,7 +132605,7 @@ SoftKeyCol2_SoundEditModelingDriverWaveform:
 	extz WA                                              ; FD1ABB  d8 12
 	pushw wa                                             ; FD1ABD  28
 	pushw 0x01                                           ; FD1ABE  0b 01 00
-	call sub_FDA05E                                      ; FD1AC1  1d 5e a0 fd
+	call ModelingPage_GetItemGroup                                      ; FD1AC1  1d 5e a0 fd
 	lda xbc, (xiz-8)                                     ; FD1AC5  be f8 31
 	push XBC                                             ; FD1AC8  39
 	call Var27F4_Get                                      ; FD1AC9  1d 5c 9d fd
@@ -132603,7 +132635,7 @@ SoftKeyCol2_SoundEditModelingDriverWaveform:
 	extz WA                                              ; FD1B04  d8 12
 	pushw wa                                             ; FD1B06  28
 	pushw 0x01                                           ; FD1B07  0b 01 00
-	call sub_FDA002                                      ; FD1B0A  1d 02 a0 fd
+	call ModelingPage_GroupStartIndex                                      ; FD1B0A  1d 02 a0 fd
 	m_push MWD+r6, 0xf6                                  ; FD1B0E  9e f6 04
 	ld bc, (xiz-2)                                       ; FD1B11  9e fe 21
 	extz BC                                              ; FD1B14  d9 12
@@ -132611,7 +132643,7 @@ SoftKeyCol2_SoundEditModelingDriverWaveform:
 	ld bc, (xiz-4)                                       ; FD1B17  9e fc 21
 	extz BC                                              ; FD1B1A  d9 12
 	pushw bc                                             ; FD1B1C  29
-	call sub_FD65D3                                      ; FD1B1D  1d d3 65 fd
+	call ToneMsg88_Id16                                      ; FD1B1D  1d d3 65 fd
 	pushw 0x10                                           ; FD1B21  0b 10 00
 	ld bc, (xiz-2)                                       ; FD1B24  9e fe 21
 	extz BC                                              ; FD1B27  d9 12
@@ -132645,7 +132677,7 @@ SoftKeyCol3_SoundEditModelingDriverWaveform:
 	ld wa, (xiz-2)                                       ; FD1B60  9e fe 20
 	extz WA                                              ; FD1B63  d8 12
 	pushw wa                                             ; FD1B65  28
-	call sub_FD9D16                                      ; FD1B66  1d 16 9d fd
+	call ModelingPage_GetItemIndex                                      ; FD1B66  1d 16 9d fd
 	lda xbc, (xiz-8)                                     ; FD1B6A  be f8 31
 	push XBC                                             ; FD1B6D  39
 	call Var27F2_GetW                                      ; FD1B6E  1d 3e 9d fd
@@ -132672,7 +132704,7 @@ SoftKeyCol3_SoundEditModelingDriverWaveform:
 	ld bc, (xiz-4)                                       ; FD1BA4  9e fc 21
 	extz BC                                              ; FD1BA7  d9 12
 	pushw bc                                             ; FD1BA9  29
-	call sub_FD65D3                                      ; FD1BAA  1d d3 65 fd
+	call ToneMsg88_Id16                                      ; FD1BAA  1d d3 65 fd
 	pushw 0x10                                           ; FD1BAE  0b 10 00
 	ld bc, (xiz-2)                                       ; FD1BB1  9e fe 21
 	extz BC                                              ; FD1BB4  d9 12
@@ -133797,7 +133829,7 @@ sub_FD25AC:
 	lda xbc, (xiz-36)                                    ; FD25BB  be dc 31
 	push XBC                                             ; FD25BE  39
 	pushw 0x01                                           ; FD25BF  0b 01 00
-	call sub_FD77B3                                      ; FD25C2  1d b3 77 fd
+	call SoundEditText_SetSlot                                      ; FD25C2  1d b3 77 fd
 	pushw 0x05                                           ; FD25C6  0b 05 00
 	pushw 0x9d                                           ; FD25C9  0b 9d 00
 	call T_Dispatch_Code80                               ; FD25CC  1d d4 1e f4
@@ -136937,7 +136969,7 @@ ToneEditPage_A0_Op1:
 	extz WA                                              ; FD4050  d8 12
 	pushw wa                                             ; FD4052  28
 	pushw 0x01                                           ; FD4053  0b 01 00
-	call sub_FDA05E                                      ; FD4056  1d 5e a0 fd
+	call ModelingPage_GetItemGroup                                      ; FD4056  1d 5e a0 fd
 	lda xbc, (xiz-6)                                     ; FD405A  be fa 31
 	push XBC                                             ; FD405D  39
 	call Var27F4_Get                                      ; FD405E  1d 5c 9d fd
@@ -136967,13 +136999,13 @@ ToneEditPage_A0_Op1:
 	extz WA                                              ; FD4099  d8 12
 	pushw wa                                             ; FD409B  28
 	pushw 0x01                                           ; FD409C  0b 01 00
-	call sub_FDA002                                      ; FD409F  1d 02 a0 fd
+	call ModelingPage_GroupStartIndex                                      ; FD409F  1d 02 a0 fd
 	m_push MWD+r6, 0xf8                                  ; FD40A3  9e f8 04
 	pushw 0x01                                           ; FD40A6  0b 01 00
 	ld bc, (xiz-2)                                       ; FD40A9  9e fe 21
 	extz BC                                              ; FD40AC  d9 12
 	pushw bc                                             ; FD40AE  29
-	call sub_FD65D3                                      ; FD40AF  1d d3 65 fd
+	call ToneMsg88_Id16                                      ; FD40AF  1d d3 65 fd
 	pushw 0x10                                           ; FD40B3  0b 10 00
 	pushw 0x01                                           ; FD40B6  0b 01 00
 	ld bc, (xiz-2)                                       ; FD40B9  9e fe 21
@@ -136999,7 +137031,7 @@ ToneEditPage_A0_Op2:
 	ld wa, (xiz-2)                                       ; FD40E7  9e fe 20
 	extz WA                                              ; FD40EA  d8 12
 	pushw wa                                             ; FD40EC  28
-	call sub_FD9D16                                      ; FD40ED  1d 16 9d fd
+	call ModelingPage_GetItemIndex                                      ; FD40ED  1d 16 9d fd
 	lda xbc, (xiz-6)                                     ; FD40F1  be fa 31
 	push XBC                                             ; FD40F4  39
 	call Var27F2_GetW                                      ; FD40F5  1d 3e 9d fd
@@ -137025,7 +137057,7 @@ ToneEditPage_A0_Op2:
 	ld bc, (xiz-2)                                       ; FD4126  9e fe 21
 	extz BC                                              ; FD4129  d9 12
 	pushw bc                                             ; FD412B  29
-	call sub_FD65D3                                      ; FD412C  1d d3 65 fd
+	call ToneMsg88_Id16                                      ; FD412C  1d d3 65 fd
 	pushw 0x10                                           ; FD4130  0b 10 00
 	pushw 0x01                                           ; FD4133  0b 01 00
 	ld bc, (xiz-2)                                       ; FD4136  9e fe 21
@@ -141834,11 +141866,14 @@ ToneMsg88_Id15:
 	popw hl                                              ; FD65CF  4b
 	unlk XIZ                                             ; FD65D0  ee 0d
 	ret                                                  ; FD65D2  0e
-sub_FD65D3:
+; ToneMsg88_Id16: builds a tone message for ToneMsg_Send.  Stores read from its code: [0]=0x88 [1]=UI_PartIndex [2]=0x16 [3]=(computed) [4]=(computed) [5]=arg1.
+; ToneMsg88_Id16: Sends tone message [0x88, part, 0x16 (0x0A when Var27F5 = 0), index hi, index lo, 16 * (arg2 - 1) +
+;   arg1 - 1]: ToneMsg88_Id15 with a second selector. DRIVER WAVEFORM keys 2/3 and ToneEditPage_A0_Op1/Op2 call it;
+;   the existing label ToneMsg88_Id16 is 5 bytes inside, unreferenced -- move it here. Basis: body + callers.
+;   (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_a.json)
+ToneMsg88_Id16:
 	link XIZ,0xffee                                      ; FD65D3  ee 0c ee ff
 	pushw hl                                             ; FD65D7  2b
-; ToneMsg88_Id16: builds a tone message for ToneMsg_Send.  Stores read from its code: [0]=0x88 [1]=UI_PartIndex [2]=0x16 [3]=(computed) [4]=(computed) [5]=arg1.
-ToneMsg88_Id16:
 	push XIX                                             ; FD65D8  3c
 	lda xix, (xiz-18)                                    ; FD65D9  be ee 34
 	lda xbc, (xiz-2)                                     ; FD65DC  be fe 31
@@ -143045,7 +143080,10 @@ SoundEditFilter_LcdKeyRow4:
 	pop XIX                                              ; FD6F1E  5c
 	unlk XIZ                                             ; FD6F1F  ee 0d
 	ret                                                  ; FD6F21  0e
-sub_FD6F22:
+; SoundEditLfo_GetLfoFieldBase: SoundEditLfo_GetLfoFieldBase(page, n, &base): base = 0x63 / 0x53 / 0x73 + 4n for
+;   AMPLITUDE / PITCH / FILTER; 0xFFFF if n is not 1..4. Soft keys 3-8 commit base + 0..3 (ToneEdit_CommitField), the
+;   selected LFO's four fields. Basis: callers + body. (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_a.json)
+SoundEditLfo_GetLfoFieldBase:
 	link XIZ,0xfffc                                      ; FD6F22  ee 0c fc ff
 	pushw hl                                             ; FD6F26  2b
 	push XIX                                             ; FD6F27  3c
@@ -143131,7 +143169,11 @@ sub_FD6F96:
 	popw hl                                              ; FD6FC5  4b
 	unlk XIZ                                             ; FD6FC6  ee 0d
 	ret                                                  ; FD6FC8  0e
-sub_FD6FC9:
+; SoundEditLfo_GetSelectedLfo: SoundEditLfo_GetSelectedLfo(page, &n): the LFO number 1..4 kept per page -- AMPLITUDE
+;   (0) (0x27CF), PITCH (1) (0x27D0), FILTER (2) (0x27D1); out of range -> 1. SoundEditLfo_SoftKeyCol2 steps those
+;   cells; soft keys 3-8, OnEnter and CycleLfoState read it. Basis: callers + body. (wsa1/notes/naming-
+;   pilot-2026-10-06/proposals_prom_a.json)
+SoundEditLfo_GetSelectedLfo:
 	link XIZ,0x0000                                      ; FD6FC9  ee 0c 00 00
 	pushw hl                                             ; FD6FCD  2b
 	push XIX                                             ; FD6FCE  3c
@@ -143344,7 +143386,11 @@ JumpTable_FD710A_Code_Skip2:
 	pop XIX                                              ; FD7155  5c
 	unlk XIZ                                             ; FD7156  ee 0d
 	ret                                                  ; FD7158  0e
-sub_FD7159:
+; SoundEditController_SaveField0: SoundEditController_SaveField0(page, value): page 1 -> (0x27DC), page 2 -> (0x27DD),
+;   else (0x27DE); sub_FD7181 reads it back clamped to 1..4 / 1..9. The CONTROLLER pages' LCD-row keys store their
+;   pick before re-posting; ScreenEnter page 1 restores it into ModelingPage_Fields[0]. Basis: callers + body.
+;   (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_a.json)
+SoundEditController_SaveField0:
 	link XIZ,0x0000                                      ; FD7159  ee 0c 00 00
 	pushw hl                                             ; FD715D  2b
 	ld H,(XIZ+0x0a)                                      ; FD715E  8e 0a 26
@@ -143826,7 +143872,7 @@ SoundEditLfo_CycleLfoState:
 	ld WA,(XIZ+0x08)                                     ; FD751E  9e 08 20
 	extz WA                                              ; FD7521  d8 12
 	pushw wa                                             ; FD7523  28
-	calr sub_FD6FC9                                          ; FD7524  1e a2 fa
+	calr SoundEditLfo_GetSelectedLfo                                          ; FD7524  1e a2 fa
 	and (XIX),0x3f                                       ; FD7527  84 3c 3f
 	ld H,(XIX)                                           ; FD752A  84 26
 	ld bc, (xiz-2)                                       ; FD752C  9e fe 21
@@ -144216,7 +144262,11 @@ sub_FD7782:
 	popw hl                                              ; FD77AF  4b
 	unlk XIZ                                             ; FD77B0  ee 0d
 	ret                                                  ; FD77B2  0e
-sub_FD77B3:
+; SoundEditText_SetSlot: SoundEditText_SetSlot(slot, src, len): copies into text slot 1..4 = 0x22F0 / 0x2300 / 0x2310
+;   / 0x2320, the buffers prom_b's display lists draw as 13-character strings. NAMING and MEMORY WRITE put a name in
+;   slot 1; sub_FD9EB7 & co. put a CPU-2 reply's name in slot n. Basis: callers + body + display-list records.
+;   (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_a.json)
+SoundEditText_SetSlot:
 	link XIZ,0x0000                                      ; FD77B3  ee 0c 00 00
 	pushw hl                                             ; FD77B7  2b
 	pushw de                                             ; FD77B8  2a
@@ -145134,14 +145184,14 @@ SoundEditLfo_SoftKeyCol3:
 	ld HL,(XIZ+0x0a)                                     ; FD7E73  9e 0a 23
 	extz HL                                              ; FD7E76  db 12
 	pushw hl                                             ; FD7E78  2b
-	calr sub_FD6FC9                                          ; FD7E79  1e 4d f1
+	calr SoundEditLfo_GetSelectedLfo                                          ; FD7E79  1e 4d f1
 	lda xbc, (xiz-4)                                     ; FD7E7C  be fc 31
 	push XBC                                             ; FD7E7F  39
 	ld wa, (xiz-2)                                       ; FD7E80  9e fe 20
 	extz WA                                              ; FD7E83  d8 12
 	pushw wa                                             ; FD7E85  28
 	pushw hl                                             ; FD7E86  2b
-	calr sub_FD6F22                                          ; FD7E87  1e 98 f0
+	calr SoundEditLfo_GetLfoFieldBase                                          ; FD7E87  1e 98 f0
 	push XIX                                             ; FD7E8A  3c
 	pushw 0x04                                           ; FD7E8B  0b 04 00
 	calr Arr27A6_Get                                          ; FD7E8E  1e ea ed
@@ -145183,14 +145233,14 @@ SoundEditLfo_SoftKeyCol4:
 	ld HL,(XIZ+0x0a)                                     ; FD7EE6  9e 0a 23
 	extz HL                                              ; FD7EE9  db 12
 	pushw hl                                             ; FD7EEB  2b
-	calr sub_FD6FC9                                          ; FD7EEC  1e da f0
+	calr SoundEditLfo_GetSelectedLfo                                          ; FD7EEC  1e da f0
 	lda xbc, (xiz-4)                                     ; FD7EEF  be fc 31
 	push XBC                                             ; FD7EF2  39
 	ld wa, (xiz-2)                                       ; FD7EF3  9e fe 20
 	extz WA                                              ; FD7EF6  d8 12
 	pushw wa                                             ; FD7EF8  28
 	pushw hl                                             ; FD7EF9  2b
-	calr sub_FD6F22                                          ; FD7EFA  1e 25 f0
+	calr SoundEditLfo_GetLfoFieldBase                                          ; FD7EFA  1e 25 f0
 	push XIX                                             ; FD7EFD  3c
 	pushw 0x04                                           ; FD7EFE  0b 04 00
 	calr Arr27A6_Get                                          ; FD7F01  1e 77 ed
@@ -145232,14 +145282,14 @@ SoundEditLfo_SoftKeyCol5:
 	ld HL,(XIZ+0x0a)                                     ; FD7F59  9e 0a 23
 	extz HL                                              ; FD7F5C  db 12
 	pushw hl                                             ; FD7F5E  2b
-	calr sub_FD6FC9                                          ; FD7F5F  1e 67 f0
+	calr SoundEditLfo_GetSelectedLfo                                          ; FD7F5F  1e 67 f0
 	lda xbc, (xiz-4)                                     ; FD7F62  be fc 31
 	push XBC                                             ; FD7F65  39
 	ld wa, (xiz-2)                                       ; FD7F66  9e fe 20
 	extz WA                                              ; FD7F69  d8 12
 	pushw wa                                             ; FD7F6B  28
 	pushw hl                                             ; FD7F6C  2b
-	calr sub_FD6F22                                          ; FD7F6D  1e b2 ef
+	calr SoundEditLfo_GetLfoFieldBase                                          ; FD7F6D  1e b2 ef
 	push XIX                                             ; FD7F70  3c
 	pushw 0x02                                           ; FD7F71  0b 02 00
 	calr Arr27A6_Get                                          ; FD7F74  1e 04 ed
@@ -145281,14 +145331,14 @@ SoundEditLfo_SoftKeyCol6:
 	ld HL,(XIZ+0x0a)                                     ; FD7FCC  9e 0a 23
 	extz HL                                              ; FD7FCF  db 12
 	pushw hl                                             ; FD7FD1  2b
-	calr sub_FD6FC9                                          ; FD7FD2  1e f4 ef
+	calr SoundEditLfo_GetSelectedLfo                                          ; FD7FD2  1e f4 ef
 	lda xbc, (xiz-4)                                     ; FD7FD5  be fc 31
 	push XBC                                             ; FD7FD8  39
 	ld wa, (xiz-2)                                       ; FD7FD9  9e fe 20
 	extz WA                                              ; FD7FDC  d8 12
 	pushw wa                                             ; FD7FDE  28
 	pushw hl                                             ; FD7FDF  2b
-	calr sub_FD6F22                                          ; FD7FE0  1e 3f ef
+	calr SoundEditLfo_GetLfoFieldBase                                          ; FD7FE0  1e 3f ef
 	push XIX                                             ; FD7FE3  3c
 	pushw 0x01                                           ; FD7FE4  0b 01 00
 	calr Arr27A6_Get                                          ; FD7FE7  1e 91 ec
@@ -145329,14 +145379,14 @@ SoundEditLfo_SoftKeyCol7:
 	ld HL,(XIZ+0x0a)                                     ; FD803D  9e 0a 23
 	extz HL                                              ; FD8040  db 12
 	pushw hl                                             ; FD8042  2b
-	calr sub_FD6FC9                                          ; FD8043  1e 83 ef
+	calr SoundEditLfo_GetSelectedLfo                                          ; FD8043  1e 83 ef
 	lda xbc, (xiz-4)                                     ; FD8046  be fc 31
 	push XBC                                             ; FD8049  39
 	ld wa, (xiz-2)                                       ; FD804A  9e fe 20
 	extz WA                                              ; FD804D  d8 12
 	pushw wa                                             ; FD804F  28
 	pushw hl                                             ; FD8050  2b
-	calr sub_FD6F22                                          ; FD8051  1e ce ee
+	calr SoundEditLfo_GetLfoFieldBase                                          ; FD8051  1e ce ee
 	push XIX                                             ; FD8054  3c
 	pushw 0x03                                           ; FD8055  0b 03 00
 	calr Arr27A6_Get                                          ; FD8058  1e 20 ec
@@ -145378,14 +145428,14 @@ SoundEditLfo_SoftKeyCol8:
 	ld HL,(XIZ+0x0a)                                     ; FD80B0  9e 0a 23
 	extz HL                                              ; FD80B3  db 12
 	pushw hl                                             ; FD80B5  2b
-	calr sub_FD6FC9                                          ; FD80B6  1e 10 ef
+	calr SoundEditLfo_GetSelectedLfo                                          ; FD80B6  1e 10 ef
 	lda xbc, (xiz-4)                                     ; FD80B9  be fc 31
 	push XBC                                             ; FD80BC  39
 	ld wa, (xiz-2)                                       ; FD80BD  9e fe 20
 	extz WA                                              ; FD80C0  d8 12
 	pushw wa                                             ; FD80C2  28
 	pushw hl                                             ; FD80C3  2b
-	calr sub_FD6F22                                          ; FD80C4  1e 5b ee
+	calr SoundEditLfo_GetLfoFieldBase                                          ; FD80C4  1e 5b ee
 	push XIX                                             ; FD80C7  3c
 	pushw 0x03                                           ; FD80C8  0b 03 00
 	calr Arr27A6_Get                                          ; FD80CB  1e ad eb
@@ -145416,7 +145466,11 @@ SoundEditLfo_SoftKeyCol8:
 	popw hl                                              ; FD8112  4b
 	unlk XIZ                                             ; FD8113  ee 0d
 	ret                                                  ; FD8115  0e
-sub_FD8116:
+; SoundEditEnvelope1_SetField0AndRedraw: If ModelingPage_Fields[0] != v (0 / 1), stores v and runs selector 0x88
+;   (Draw_StartPitchStopPitchTotal) through T_Dispatch_Code80. The left key of LCD rows 4 (v = 0) and 5 (v = 1) on
+;   FILTER / PITCH ENVELOPE page 1 calls it. Basis: callers + body. (wsa1/notes/naming-
+;   pilot-2026-10-06/proposals_prom_a.json)
+SoundEditEnvelope1_SetField0AndRedraw:
 	link XIZ,0xfffe                                      ; FD8116  ee 0c fe ff
 	lda xbc, (xiz-2)                                     ; FD811A  be fe 31
 	push XBC                                             ; FD811D  39
@@ -145482,7 +145536,7 @@ SoundEditEnvelope1_SoftKeyCol1:
 	pushw 0x03                                           ; FD81AC  0b 03 00
 	pushw 0x97                                           ; FD81AF  0b 97 00
 	calr ToneEdit_CommitField                                      ; FD81B2  1e 80 f2
-	calr sub_FD8DAF                                      ; FD81B5  1e f7 0b
+	calr SoundEditEnvelope1_DrawGraph                                      ; FD81B5  1e f7 0b
 	pushw 0x01                                           ; FD81B8  0b 01 00
 	calr PanelDial_ActAsButton                                      ; FD81BB  1e 43 fa
 	add XSP,0x0000001e                                   ; FD81BE  ef c8 1e 00 00 00
@@ -145529,7 +145583,7 @@ SoundEditEnvelope1_SoftKeyCol2:
 	pushw 0x04                                           ; FD821F  0b 04 00
 	pushw 0x97                                           ; FD8222  0b 97 00
 	calr ToneEdit_CommitField                                      ; FD8225  1e 0d f2
-	calr sub_FD8DAF                                      ; FD8228  1e 84 0b
+	calr SoundEditEnvelope1_DrawGraph                                      ; FD8228  1e 84 0b
 	pushw 0x02                                           ; FD822B  0b 02 00
 	calr PanelDial_ActAsButton                                      ; FD822E  1e d0 f9
 	add XSP,0x0000001e                                   ; FD8231  ef c8 1e 00 00 00
@@ -145595,7 +145649,7 @@ SoundEditEnvelope1_SoftKeyCol3:
 	pushw bc                                             ; FD82BD  29
 	pushw 0x97                                           ; FD82BE  0b 97 00
 	calr ToneEdit_CommitField                                      ; FD82C1  1e 71 f1
-	calr sub_FD8DAF                                      ; FD82C4  1e e8 0a
+	calr SoundEditEnvelope1_DrawGraph                                      ; FD82C4  1e e8 0a
 	pushw 0x03                                           ; FD82C7  0b 03 00
 	calr PanelDial_ActAsButton                                      ; FD82CA  1e 34 f9
 	add XSP,0x00000014                                   ; FD82CD  ef c8 14 00 00 00
@@ -145642,7 +145696,7 @@ SoundEditEnvelope1_SoftKeyCol4:
 	pushw 0x06                                           ; FD832F  0b 06 00
 	pushw 0x97                                           ; FD8332  0b 97 00
 	calr ToneEdit_CommitField                                      ; FD8335  1e fd f0
-	calr sub_FD8DAF                                      ; FD8338  1e 74 0a
+	calr SoundEditEnvelope1_DrawGraph                                      ; FD8338  1e 74 0a
 	pushw 0x04                                           ; FD833B  0b 04 00
 	calr PanelDial_ActAsButton                                      ; FD833E  1e c0 f8
 	add XSP,0x0000001e                                   ; FD8341  ef c8 1e 00 00 00
@@ -145708,7 +145762,7 @@ SoundEditEnvelope1_SoftKeyCol5:
 	pushw bc                                             ; FD83CD  29
 	pushw 0x97                                           ; FD83CE  0b 97 00
 	calr ToneEdit_CommitField                                      ; FD83D1  1e 61 f0
-	calr sub_FD8DAF                                      ; FD83D4  1e d8 09
+	calr SoundEditEnvelope1_DrawGraph                                      ; FD83D4  1e d8 09
 	pushw 0x05                                           ; FD83D7  0b 05 00
 	calr PanelDial_ActAsButton                                      ; FD83DA  1e 24 f8
 	add XSP,0x00000014                                   ; FD83DD  ef c8 14 00 00 00
@@ -145757,7 +145811,7 @@ SoundEditEnvelope1_SoftKeyCol6:
 	pushw 0x08                                           ; FD843F  0b 08 00
 	pushw 0x97                                           ; FD8442  0b 97 00
 	calr ToneEdit_CommitField                                      ; FD8445  1e ed ef
-	calr sub_FD8DAF                                      ; FD8448  1e 64 09
+	calr SoundEditEnvelope1_DrawGraph                                      ; FD8448  1e 64 09
 	pushw 0x06                                           ; FD844B  0b 06 00
 	calr PanelDial_ActAsButton                                      ; FD844E  1e b0 f7
 	add XSP,0x0000001e                                   ; FD8451  ef c8 1e 00 00 00
@@ -145825,7 +145879,7 @@ SoundEditEnvelope1_SoftKeyCol7:
 	pushw bc                                             ; FD84DD  29
 	pushw 0x97                                           ; FD84DE  0b 97 00
 	calr ToneEdit_CommitField                                      ; FD84E1  1e 51 ef
-	calr sub_FD8DAF                                      ; FD84E4  1e c8 08
+	calr SoundEditEnvelope1_DrawGraph                                      ; FD84E4  1e c8 08
 	pushw 0x07                                           ; FD84E7  0b 07 00
 	calr PanelDial_ActAsButton                                      ; FD84EA  1e 14 f7
 	add XSP,0x00000014                                   ; FD84ED  ef c8 14 00 00 00
@@ -146343,7 +146397,11 @@ SoundEditController_SoftKeyCol4:
 	add XSP,0x00000012                                   ; FD898A  ef c8 12 00 00 00
 	unlk XIZ                                             ; FD8990  ee 0d
 	ret                                                  ; FD8992  0e
-sub_FD8993:
+; SoundEditController_SoftKeyCols5to8: Soft keys 5-8 (k = 1..4) of CONTROLLER pages 1/2: unless
+;   IndexMap_FCF185[Fields[Fields[0]] & 0x3F] is 0x13..0x17, sub_FD759A steps 2-bit value k of Fields[12]. Then
+;   PanelDial_ActAsButton(k + 4). Basis: callers + body (the tree's SoftKeyColsNtoM naming). (wsa1/notes/naming-
+;   pilot-2026-10-06/proposals_prom_a.json)
+SoundEditController_SoftKeyCols5to8:
 	link XIZ,0xfffc                                      ; FD8993  ee 0c fc ff
 	pushw hl                                             ; FD8997  2b
 	pushw de                                             ; FD8998  2a
@@ -146805,7 +146863,11 @@ sub_FD8D21_Join:
 	popw hl                                              ; FD8DAB  4b
 	unlk XIZ                                             ; FD8DAC  ee 0d
 	ret                                                  ; FD8DAE  0e
-sub_FD8DAF:
+; SoundEditEnvelope1_DrawGraph: Erases the graph box SoundEditAmpEnvelope_DrawGraph uses and draws the envelope from
+;   ModelingPage_Fields 2..9 (levels clamped to 100, x 87/100) with the same sub_FD8D21. Called by the seven
+;   SoundEditEnvelope1 soft keys (FILTER / PITCH ENVELOPE page 1) and ScreenEnter_SoundEditPitchEnvelope1. Basis:
+;   callers + body. (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_a.json)
+SoundEditEnvelope1_DrawGraph:
 	link XIZ,0xffd6                                      ; FD8DAF  ee 0c d6 ff
 	pushw hl                                             ; FD8DB3  2b
 	pushw de                                             ; FD8DB4  2a
@@ -148225,7 +148287,11 @@ FilterPage_DrawGraph:
 	popw hl                                              ; FD9A76  4b
 	unlk XIZ                                             ; FD9A77  ee 0d
 	ret                                                  ; FD9A79  0e
-sub_FD9A7A:
+; FilterPage_DrawEqualizerGraph: Second graph of the 12 dB FILTER pages: x from ModelingPage_Fields[4], height 2 *
+;   (Fields[5] & 0x7F), direction Fields[5] bit 7; FilterPage_DrawGraph draws the cutoff one. Run by the LPF12/HPF12
+;   Enter and LPF12 keys 6-8; 'Equalizer' rests on the page text (EQUALIZER FREQ), not a field table. Basis: callers +
+;   body + page text. (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_a.json)
+FilterPage_DrawEqualizerGraph:
 	link XIZ,0xfff8                                      ; FD9A7A  ee 0c f8 ff
 	pushw hl                                             ; FD9A7E  2b
 	pushw de                                             ; FD9A7F  2a
@@ -148504,7 +148570,11 @@ SoundEditFilterBpf_DrawGraph:
 	ld (XBC+0x27ea),WA                                   ; FD9D0E  f3 e5 ea 27 50
 	unlk XIZ                                             ; FD9D13  ee 0d
 	ret                                                  ; FD9D15  0e
-sub_FD9D16:
+; ModelingPage_GetItemIndex: ModelingPage_GetItemIndex(n, &i): i = word (0x27EA)[n - 1], the item number sub_FD9EB7 /
+;   sub_FD9F9D store from reply bytes +0x0E/+0x0F. The item keys (SoftKeyCol3) step it within Var27F2 and send it with
+;   ToneMsg88_Id15 / sub_FD65D3. Basis: callers + body + the writers. (wsa1/notes/naming-
+;   pilot-2026-10-06/proposals_prom_a.json)
+ModelingPage_GetItemIndex:
 	link XIZ,0x0000                                      ; FD9D16  ee 0c 00 00
 	ld c, 0x02:opc                                          ; FD9D1A  23 02
 	m_mul MBD+r6, 0x08, 3                                ; FD9D1C  8e 08 43
@@ -148746,7 +148816,7 @@ sub_FD9EB7:
 	inc 1,BC                                             ; FD9F02  d9 61
 	pushw bc                                             ; FD9F04  29
 .LFD9F05:
-	calr sub_FD77B3                                      ; FD9F05  1e ab d8
+	calr SoundEditText_SetSlot                                      ; FD9F05  1e ab d8
 	ld C,(XIX+0x0f)                                      ; FD9F08  8c 0f 23
 	extz BC                                              ; FD9F0B  d9 12
 	ld HL,BC                                             ; FD9F0D  d9 8b
@@ -148782,7 +148852,7 @@ sub_FD9F42:
 	pushw 0x0d                                           ; FD9F50  0b 0d 00
 	push XIX                                             ; FD9F53  3c
 	pushw 0x01                                           ; FD9F54  0b 01 00
-	calr sub_FD77B3                                      ; FD9F57  1e 59 d8
+	calr SoundEditText_SetSlot                                      ; FD9F57  1e 59 d8
 	lda xbc, (xiz-2)                                     ; FD9F5A  be fe 31
 	push XBC                                             ; FD9F5D  39
 	calr Var207C_Get                                          ; FD9F5E  1e 68 c1
@@ -148826,7 +148896,7 @@ sub_FD9F9D:
 	ld HL,(XIZ+0x08)                                     ; FD9FAF  9e 08 23
 	extz HL                                              ; FD9FB2  db 12
 	pushw hl                                             ; FD9FB4  2b
-	calr sub_FD77B3                                      ; FD9FB5  1e fb d7
+	calr SoundEditText_SetSlot                                      ; FD9FB5  1e fb d7
 	ld C,(XIX+0x0d)                                      ; FD9FB8  8c 0d 23
 	extz BC                                              ; FD9FBB  d9 12
 	pushw bc                                             ; FD9FBD  29
@@ -148859,7 +148929,11 @@ sub_FD9F9D:
 	popw hl                                              ; FD9FFE  4b
 	unlk XIZ                                             ; FD9FFF  ee 0d
 	ret                                                  ; FDA001  0e
-sub_FDA002:
+; ModelingPage_GroupStartIndex: ModelingPage_GroupStartIndex(kind, g, &i): i = sum of g ModelingPage_Fields bytes from
+;   a per-kind base (0x0C / 0x02 / 0x11 / 0x12) -- where group g starts. The group keys (bounded by Var27F4) send it
+;   with ToneMsg88_Id15 / sub_FD65D3; the item keys send an item number directly. Basis: callers + body.
+;   (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_a.json)
+ModelingPage_GroupStartIndex:
 	link XIZ,0xfffe                                      ; FDA002  ee 0c fe ff
 	pushw hl                                             ; FDA006  2b
 	pushw de                                             ; FDA007  2a
@@ -148908,7 +148982,11 @@ sub_FDA002:
 	popw hl                                              ; FDA05A  4b
 	unlk XIZ                                             ; FDA05B  ee 0d
 	ret                                                  ; FDA05D  0e
-sub_FDA05E:
+; ModelingPage_GetItemGroup: ModelingPage_GetItemGroup(kind, n, &g): g = ModelingPage_Fields[n + 0x0E / n + 7 / 1 / n
+;   + 0x0D] by kind -- where reply byte +0x0D of selector n is stored. The group keys of the MODELING / SOUND EDIT
+;   pages start from it. Basis: callers + body + the writers (sub_FD9EB7 / sub_FD9F42 / sub_FD9F9D).
+;   (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_a.json)
+ModelingPage_GetItemGroup:
 	link XIZ,0xfffe                                      ; FDA05E  ee 0c fe ff
 	pushw hl                                             ; FDA062  2b
 	ld L,(XIZ+0x08)                                      ; FDA063  8e 08 27
@@ -151174,7 +151252,7 @@ sub_FDAF07:
 	pushw 0x10                                           ; FDAFB2  0b 10 00
 	push XIX                                             ; FDAFB5  3c
 	pushw 0x04                                           ; FDAFB6  0b 04 00
-	call sub_FD77B3                                      ; FDAFB9  1d b3 77 fd
+	call SoundEditText_SetSlot                                      ; FDAFB9  1d b3 77 fd
 	pushw 0x80                                           ; FDAFBD  0b 80 00
 	pushw 0x01                                           ; FDAFC0  0b 01 00
 	pushw 0x0d                                           ; FDAFC3  0b 0d 00
@@ -151621,7 +151699,7 @@ ScreenEnter_SoundEditPitchEnvelope1:
 	jr ule, .LFDB447                                     ; FDB41F  63 26
 	pushw 0x88                                           ; FDB421  0b 88 00
 	call T_Dispatch_Code80_Bracketed                     ; FDB424  1d d0 1e f4
-	call sub_FD8DAF                                      ; FDB428  1d af 8d fd
+	call SoundEditEnvelope1_DrawGraph                                      ; FDB428  1d af 8d fd
 	pushw 0x01                                           ; FDB42C  0b 01 00
 	call ToneMsg_SendP23FromArr2800                                      ; FDB42F  1d e0 69 fd
 	pushw 0x00                                           ; FDB433  0b 00 00
@@ -151770,14 +151848,14 @@ SoundEditLfo_OnEnter:
 	extz WA                                              ; FDB57D  d8 12
 	ld IX,WA                                             ; FDB57F  d8 8c
 	pushw wa                                             ; FDB581  28
-	call sub_FD6FC9                                      ; FDB582  1d c9 6f fd
+	call SoundEditLfo_GetSelectedLfo                                      ; FDB582  1d c9 6f fd
 	lda xbc, (xiz-6)                                     ; FDB586  be fa 31
 	push XBC                                             ; FDB589  39
 	ld wa, (xiz-4)                                       ; FDB58A  9e fc 20
 	extz WA                                              ; FDB58D  d8 12
 	pushw wa                                             ; FDB58F  28
 	pushw ix                                             ; FDB590  2c
-	call sub_FD6F22                                      ; FDB591  1d 22 6f fd
+	call SoundEditLfo_GetLfoFieldBase                                      ; FDB591  1d 22 6f fd
 	ld h, 0x00:opc                                          ; FDB595  26 00
 	inc 8,XSP                                            ; FDB597  ef 60
 	inc 8,XSP                                            ; FDB599  ef 60
@@ -152520,7 +152598,7 @@ ScreenEnter_SoundEditControllerPage1:
 	extz BC                                              ; FDBC5C  d9 12
 	pushw bc                                             ; FDBC5E  29
 	pushw 0x01                                           ; FDBC5F  0b 01 00
-	call sub_FD7159                                      ; FDBC62  1d 59 71 fd
+	call SoundEditController_SaveField0                                      ; FDBC62  1d 59 71 fd
 	ld bc, (xiz-6)                                       ; FDBC66  9e fa 21
 	extz BC                                              ; FDBC69  d9 12
 	pushw bc                                             ; FDBC6B  29
@@ -153087,7 +153165,7 @@ sub_FDC0FD:
 	pushw 0x00                                           ; FDC1AC  0b 00 00
 	pushw 0x00                                           ; FDC1AF  0b 00 00
 	call FilterPage_DrawGraph                                      ; FDC1B2  1d bd 98 fd
-	call sub_FD9A7A                                      ; FDC1B6  1d 7a 9a fd
+	call FilterPage_DrawEqualizerGraph                                      ; FDC1B6  1d 7a 9a fd
 	pushw 0x01                                           ; FDC1BA  0b 01 00
 	call ToneMsg_SendP23FromArr2800                                      ; FDC1BD  1d e0 69 fd
 	pushw 0x10                                           ; FDC1C1  0b 10 00
@@ -153194,7 +153272,7 @@ ScreenEnter_SoundEditFilterHpf12:
 	pushw 0x00                                           ; FDC286  0b 00 00
 	pushw 0x01                                           ; FDC289  0b 01 00
 	call FilterPage_DrawGraph                                      ; FDC28C  1d bd 98 fd
-	call sub_FD9A7A                                      ; FDC290  1d 7a 9a fd
+	call FilterPage_DrawEqualizerGraph                                      ; FDC290  1d 7a 9a fd
 	pushw 0x01                                           ; FDC294  0b 01 00
 	call ToneMsg_SendP23FromArr2800                                      ; FDC297  1d e0 69 fd
 	pushw 0x10                                           ; FDC29B  0b 10 00
@@ -153405,7 +153483,7 @@ sub_FDC438:
 	jr ule, .LFDC4C0                                     ; FDC498  63 26
 	pushw 0x97                                           ; FDC49A  0b 97 00
 	call T_Dispatch_Code80_Bracketed                     ; FDC49D  1d d0 1e f4
-	call sub_FD8DAF                                      ; FDC4A1  1d af 8d fd
+	call SoundEditEnvelope1_DrawGraph                                      ; FDC4A1  1d af 8d fd
 	pushw 0x01                                           ; FDC4A5  0b 01 00
 	call ToneMsg_SendP23FromArr2800                                      ; FDC4A8  1d e0 69 fd
 	pushw 0x00                                           ; FDC4AC  0b 00 00
@@ -154534,7 +154612,7 @@ ScreenEnter_SoundEditMemoryWrite_Skip:
 ; (sub_FDCF17 removed 2026-10-04: no code names it and the line above falls through into it -- part of ScreenEnter_SoundEditMemoryWrite_Skip;
 ;  notes/prom_a_stray_label_removal.py)
 	pushw 0x01                                           ; FDCF17  0b 01 00
-	call sub_FD77B3                                      ; FDCF1A  1d b3 77 fd
+	call SoundEditText_SetSlot                                      ; FDCF1A  1d b3 77 fd
 	lda xbc, (xiz-8)                                     ; FDCF1E  be f8 31
 	push XBC                                             ; FDCF21  39
 	call sub_FD7A24                                      ; FDCF22  1d 24 7a fd
@@ -157921,7 +157999,7 @@ SoftKeyCol6_SoundEditFilterLpf12:
 	inc 4,XSP                                     ; FDEABB  ef 64
 	cp a, 0x01:i3                                   ; FDEABD  c9 d9
 	jr nz, .LFDEAC5                               ; FDEABF  6e 04
-	call sub_FD9A7A                                 ; FDEAC1  1d 7a 9a fd
+	call FilterPage_DrawEqualizerGraph                                 ; FDEAC1  1d 7a 9a fd
 .LFDEAC5:
 	pushw 0x06                                    ; FDEAC5  0b 06 00
 	call PanelDial_ActAsButton                                 ; FDEAC8  1d 01 7c fd
@@ -157988,7 +158066,7 @@ SoftKeyCol7_SoundEditFilterLpf12:
 	inc 4,XSP                                     ; FDEB56  ef 64
 	cp a, 0x01:i3                                   ; FDEB58  c9 d9
 	jr nz, .LFDEB60                               ; FDEB5A  6e 04
-	call sub_FD9A7A                                 ; FDEB5C  1d 7a 9a fd
+	call FilterPage_DrawEqualizerGraph                                 ; FDEB5C  1d 7a 9a fd
 .LFDEB60:
 	pushw 0x07                                    ; FDEB60  0b 07 00
 	call PanelDial_ActAsButton                                 ; FDEB63  1d 01 7c fd
@@ -158055,7 +158133,7 @@ SoftKeyCol8_SoundEditFilterLpf12:
 	inc 4,XSP                                     ; FDEBF1  ef 64
 	cp a, 0x01:i3                                   ; FDEBF3  c9 d9
 	jr nz, .LFDEBFB                               ; FDEBF5  6e 04
-	call sub_FD9A7A                                 ; FDEBF7  1d 7a 9a fd
+	call FilterPage_DrawEqualizerGraph                                 ; FDEBF7  1d 7a 9a fd
 .LFDEBFB:
 	pushw 0x08                                    ; FDEBFB  0b 08 00
 	call PanelDial_ActAsButton                                 ; FDEBFE  1d 01 7c fd
@@ -160152,7 +160230,7 @@ LcdKeyRow4_SoundEditFilterEnvelope1:
 	cp (XIZ+0x08),0x00                            ; FDFBAE  8e 08 3f 00
 	jr nz, .LFDFBBE                               ; FDFBB2  6e 0a
 	pushw 0x00                                    ; FDFBB4  0b 00 00
-	call sub_FD8116                                 ; FDFBB7  1d 16 81 fd
+	call SoundEditEnvelope1_SetField0AndRedraw                                 ; FDFBB7  1d 16 81 fd
 	popw bc                                       ; FDFBBB  49
 	jr .LFDFBD5                                   ; FDFBBC  68 17
 .LFDFBBE:
@@ -160177,7 +160255,7 @@ LcdKeyRow5_SoundEditFilterEnvelope1:
 	cp (XIZ+0x08),0x00                            ; FDFBDC  8e 08 3f 00
 	jr nz, .LFDFBEC                               ; FDFBE0  6e 0a
 	pushw 0x01                                    ; FDFBE2  0b 01 00
-	call sub_FD8116                                 ; FDFBE5  1d 16 81 fd
+	call SoundEditEnvelope1_SetField0AndRedraw                                 ; FDFBE5  1d 16 81 fd
 	popw bc                                       ; FDFBE9  49
 	jr .LFDFC03                                   ; FDFBEA  68 17
 .LFDFBEC:
@@ -162788,7 +162866,7 @@ Disk_ScanDirectory:
 	m_cp_mi16 MW24, 0x00170f, 0x0014                     ; FE0DFE  d2 0f 17 00 3f 14 00
 	jr lt, .LFE0D9B                                          ; FE0E05  61 94
 	ldw (0x222b:16), 0x05c0                              ; FE0E07  f1 2b 22 02 c0 05
-	calr sub_FE2F86                                          ; FE0E0D  1e 76 21
+	calr DiskProgress_PrintDot                                          ; FE0E0D  1e 76 21
 	ldw (0x170f:24), 0x00                               ; FE0E10  f2 0f 17 00 02 00 00
 .LFE0E17:
 	ld bc, (0x170f:24)                                  ; FE0E17  d2 0f 17 00 21
@@ -163057,7 +163135,7 @@ sub_FE10AA:
 	jr z, .LFE10F6                                           ; FE10EF  66 05
 	ld (0x2218:16), 0x00                                 ; FE10F1  f1 18 22 00 00
 .LFE10F6:
-	calr sub_FE2F86                                          ; FE10F6  1e 8d 1e
+	calr DiskProgress_PrintDot                                          ; FE10F6  1e 8d 1e
 	ld (0x2218:16), 0xff                                 ; FE10F9  f1 18 22 00 ff
 	pop XIX                                              ; FE10FE  5c
 	popw hl                                              ; FE10FF  4b
@@ -163262,7 +163340,7 @@ Disk_ScanMidiFiles:
 	incw 0x08, (0x1743:24)                            ; FE1314  d2 43 17 00 60
 	m_cp_mi8 MB16, 0x2218, 0x00                          ; FE1319  c1 18 22 3f 00
 	jr nz, .LFE1323                                          ; FE131E  6e 03
-	calr sub_FE2F86                                          ; FE1320  1e 63 1c
+	calr DiskProgress_PrintDot                                          ; FE1320  1e 63 1c
 .LFE1323:
 	m_xor_mi8 MB16, 0x2218, 0xff                         ; FE1323  c1 18 22 3d ff
 .LFE1328:
@@ -164299,7 +164377,10 @@ Disk_SaveSeqFile_Entry:
 	calr Disk_SaveSeqFile                                          ; FE1C03  1e 5e 10
 	ld (Disk_LastError:16), a                                   ; FE1C06  f1 43 22 41
 	ret                                                  ; FE1C0A  0e
-sub_FE1C0B:
+; Disk_MountAndScanMidiFilesResetRings: T_Disk_MountAndScanMidiFilesResetRings entry: Disk_MountAndScanMidiFiles, then Ring_InitTenOfFourteen. The
+;   MIDI FILE screens (L0AD, DIRECT PLAY, SAVE page 0) and Medley_StartMidiFile call it to read the disk's MIDI file
+;   list. Basis: callers + body. (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_a.json)
+Disk_MountAndScanMidiFilesResetRings:
 	calr Disk_MountAndScanMidiFiles                                          ; FE1C0B  1e cb f5
 	calr Ring_InitTenOfFourteen                                          ; FE1C0E  1e 18 01
 	ret                                                  ; FE1C11  0e
@@ -164319,7 +164400,11 @@ T_F4258C_Nop:
 Disk_PortA3_Release_Call_Call:
 	calr Disk_PortA3_Release_Call                                          ; FE1C1F  1e 3d ed
 	ret                                                  ; FE1C22  0e
-sub_FE1C23:
+; Playback_StopAllAndIgnoreMidiStart: T_Playback_StopAllAndIgnoreMidiStart entry: sub_FE16F3 -- silences notes/rings (sub_FE2E96), sets (0x34BB)
+;   bit 2 so external MIDI 0xFA/0xFB are ignored, Transport_StopAllRunning. Called on entry to the disk / MIDI-file /
+;   load screens, GENERAL MIDI and Initial. Basis: callers + body. (wsa1/notes/naming-
+;   pilot-2026-10-06/proposals_prom_a.json)
+Playback_StopAllAndIgnoreMidiStart:
 	calr sub_FE16F3                                          ; FE1C23  1e cd fa
 	ret                                                  ; FE1C26  0e
 ; Disk_MountAndScanDirectory_Call: calls Disk_MountAndScanDirectory and returns -- `calr Disk_MountAndScanDirectory / ret`.
@@ -164459,7 +164544,10 @@ DiskSave_IsSelectedFileNew_Call:
 Var2216_SetW145C_Call:
 	calr Var2216_SetW145C                                          ; FE1CD4  1e e2 12
 	ret                                                  ; FE1CD7  0e
-sub_FE1CD8:
+; DiskProgress_PrintDotForSmf: T_DiskProgress_PrintDotForSmf entry: `calr sub_FE2F93` -- DiskProgress_PrintDot's dot printer without the
+;   (0x21E8)-bit-7 gate. Smf_ReadFile / Smf_WriteFile and their stream helpers call it every 4th 1,024-byte window.
+;   Basis: callers + body. (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_a.json)
+DiskProgress_PrintDotForSmf:
 	calr sub_FE2F93                                          ; FE1CD8  1e b8 12
 	ret                                                  ; FE1CDB  0e
 ; DiskSaveFile_SaveOrConfirmOverwrite_Call: calls DiskSaveFile_SaveOrConfirmOverwrite and returns (notes/prom_ab_wrapper_names.py; DERIVATIVE)
@@ -164660,11 +164748,11 @@ DiskLoad_ByContentType:
 	pop XIX                                              ; FE1E26  5c
 	popw hl                                              ; FE1E27  4b
 	ret                                                  ; FE1E28  0e
-; DiskLoad_ReadFileIntoWindow: sub_FE2F86, Disk_Flags |= 0x20 and bit 1 cleared, DiskApi_ReadFileToWindow.
+; DiskLoad_ReadFileIntoWindow: DiskProgress_PrintDot, Disk_Flags |= 0x20 and bit 1 cleared, DiskApi_ReadFileToWindow.
 DiskLoad_ReadFileIntoWindow:
 	push XIX                                             ; FE1E29  3c
 	lda xix, (Disk_Flags:16)                                ; FE1E2A  f1 e7 21 34
-	calr sub_FE2F86                                          ; FE1E2E  1e 55 11
+	calr DiskProgress_PrintDot                                          ; FE1E2E  1e 55 11
 	m_or_mi8 MBI+r4, 0, 0x20                             ; FE1E31  84 3e 20
 	and (XIX),0xfd                                       ; FE1E34  84 3c fd
 	calr DiskApi_ReadFileToWindow                                          ; FE1E37  1e 09 ed
@@ -165232,7 +165320,7 @@ DiskLoad_ReadKilobyteToWindowSlot:
 Disk_LoadSeqToHeap:
 	push XIX                                             ; FE233A  3c
 	lda xix, (Disk_FileName:16)                                ; FE233B  f1 c8 21 34
-	calr sub_FE2F86                                          ; FE233F  1e 44 0c
+	calr DiskProgress_PrintDot                                          ; FE233F  1e 44 0c
 	extz XIX                                             ; FE2342  ec 12
 	ld (XIX+0x08),0x53                                   ; FE2344  bc 08 00 53
 	ld (XIX+0x09),0x45                                   ; FE2348  bc 09 00 45
@@ -165263,7 +165351,7 @@ Disk_LoadSqfToWorkspace:
 	pushw hl                                             ; FE237B  2b
 	push XIX                                             ; FE237C  3c
 	lda xix, (Disk_FileName:16)                                ; FE237D  f1 c8 21 34
-	calr sub_FE2F86                                          ; FE2381  1e 02 0c
+	calr DiskProgress_PrintDot                                          ; FE2381  1e 02 0c
 	extz XIX                                             ; FE2384  ec 12
 	ld (XIX+0x08),0x53                                   ; FE2386  bc 08 00 53
 	ld (XIX+0x09),0x51                                   ; FE238A  bc 09 00 51
@@ -165358,7 +165446,7 @@ DiskLoad_PanelSlsFile:
 	ld (XIX+0x08),0x53                                   ; FE243C  bc 08 00 53
 	ld (XIX+0x09),0x4c                                   ; FE2440  bc 09 00 4c
 	ld (XIX+0x0a),0x53                                   ; FE2444  bc 0a 00 53
-	calr sub_FE2F86                                          ; FE2448  1e 3b 0b
+	calr DiskProgress_PrintDot                                          ; FE2448  1e 3b 0b
 	lda xbc, (0x60a700:24)                               ; FE244B  f2 00 a7 60 31
 	ld (xiz-4), xbc                                      ; FE2450  be fc 61
 	ld (Disk_WindowStart:16), xbc                                 ; FE2453  f1 d3 21 61
@@ -165386,7 +165474,7 @@ DiskLoad_PanelSlsFile:
 DiskLoad_ReadRemapFile:
 	pushw hl                                             ; FE2484  2b
 	push XIX                                             ; FE2485  3c
-	calr sub_FE2F86                                          ; FE2486  1e fd 0a
+	calr DiskProgress_PrintDot                                          ; FE2486  1e fd 0a
 	ld (Disk_FileName+9:16), 0x52                                 ; FE2489  f1 d1 21 00 52
 	ld (Disk_FileName+10:16), 0x4d                                 ; FE248E  f1 d2 21 00 4d
 	lda xbc, (0x60a700:24)                               ; FE2493  f2 00 a7 60 31
@@ -165945,11 +166033,11 @@ DiskSave_CopyWordsToBuffer:
 	popw hl                                              ; FE297C  4b
 	unlk XIZ                                             ; FE297D  ee 0d
 	ret                                                  ; FE297F  0e
-; DiskSave_WriteWindowToFile: sub_FE2F86, Disk_Flags bits 5 and 1 cleared, DiskApi_WriteFileFromWindow.
+; DiskSave_WriteWindowToFile: DiskProgress_PrintDot, Disk_Flags bits 5 and 1 cleared, DiskApi_WriteFileFromWindow.
 DiskSave_WriteWindowToFile:
 	push XIX                                             ; FE2980  3c
 	lda xix, (Disk_Flags:16)                                ; FE2981  f1 e7 21 34
-	calr sub_FE2F86                                          ; FE2985  1e fe 05
+	calr DiskProgress_PrintDot                                          ; FE2985  1e fe 05
 	and (XIX),0xdf                                       ; FE2988  84 3c df
 	and (XIX),0xfd                                       ; FE298B  84 3c fd
 	calr DiskApi_WriteFileFromWindow                                          ; FE298E  1e 08 e1
@@ -165970,7 +166058,7 @@ DiskSave_Sound:
 	jr z, .LFE29B7                                           ; FE29B2  66 03
 	jrl .LFE2A1E                                             ; FE29B4  78 67 00
 .LFE29B7:
-	calr sub_FE2F86                                          ; FE29B7  1e cc 05
+	calr DiskProgress_PrintDot                                          ; FE29B7  1e cc 05
 	ld (Disk_FileName+8:16), 0x54                                 ; FE29BA  f1 d0 21 00 54
 	ld (Disk_FileName+9:16), 0x4d                                 ; FE29BF  f1 d1 21 00 4d
 	ld (Disk_FileName+10:16), 0x20                                 ; FE29C4  f1 d2 21 00 20
@@ -166026,7 +166114,7 @@ DiskSave_Combination:
 	jr z, .LFE2A3F                                           ; FE2A3A  66 03
 	jrl .LFE2AA6                                             ; FE2A3C  78 67 00
 .LFE2A3F:
-	calr sub_FE2F86                                          ; FE2A3F  1e 44 05
+	calr DiskProgress_PrintDot                                          ; FE2A3F  1e 44 05
 	ld (Disk_FileName+8:16), 0x43                                 ; FE2A42  f1 d0 21 00 43
 	ld (Disk_FileName+9:16), 0x4d                                 ; FE2A47  f1 d1 21 00 4d
 	ld (Disk_FileName+10:16), 0x42                                 ; FE2A4C  f1 d2 21 00 42
@@ -166262,7 +166350,7 @@ Disk_SaveSeqFile:
 	jr .LFE2CBB                                              ; FE2C94  68 25
 .LFE2C96:
 	lda xix, (Disk_Flags:16)                                ; FE2C96  f1 e7 21 34
-	calr sub_FE2F86                                          ; FE2C9A  1e e9 02
+	calr DiskProgress_PrintDot                                          ; FE2C9A  1e e9 02
 	ld (Disk_FileName+8:16), 0x53                                 ; FE2C9D  f1 d0 21 00 53
 	ld (Disk_FileName+9:16), 0x45                                 ; FE2CA2  f1 d1 21 00 45
 	ld (Disk_FileName+10:16), 0x51                                 ; FE2CA7  f1 d2 21 00 51
@@ -166288,7 +166376,7 @@ Disk_SaveSqfFromStaging:
 	lda xix, (Disk_Flags:16)                                ; FE2CC8  f1 e7 21 34
 	calr sub_FE2CC7_Nop                                          ; FE2CCC  1e 1b 03
 	calr SysPartMidi_ResetBlock1Default                                          ; FE2CCF  1e dd 01
-	calr sub_FE2F86                                          ; FE2CD2  1e b1 02
+	calr DiskProgress_PrintDot                                          ; FE2CD2  1e b1 02
 	ld (Disk_FileName+8:16), 0x53                                 ; FE2CD5  f1 d0 21 00 53
 	ld (Disk_FileName+9:16), 0x51                                 ; FE2CDA  f1 d1 21 00 51
 	ld (Disk_FileName+10:16), 0x46                                 ; FE2CDF  f1 d2 21 00 46
@@ -166616,7 +166704,11 @@ sub_FE2F6A:
 	popw hl                                              ; FE2F82  4b
 	unlk XIZ                                             ; FE2F83  ee 0d
 	ret                                                  ; FE2F85  0e
-sub_FE2F86:
+; DiskProgress_PrintDot: Unless an SMF transfer runs ((0x21E8) bit 7), prints '.' (byte 0x2E at 0xFE706E) at LCD
+;   position (0x2216) and advances it, capped at 0x146E. The disk load/save routines call it once per file;
+;   Var2216_SetW145A/_145C reset the position. Basis: callers + body. (wsa1/notes/naming-
+;   pilot-2026-10-06/proposals_prom_a.json)
+DiskProgress_PrintDot:
 	ld c, (0x21e8:16)                                   ; FE2F86  c1 e8 21 23
 	and C,0x80                                           ; FE2F8A  cb cc 80
 	jr nz, .LFE2F92                                          ; FE2F8D  6e 03
@@ -176074,12 +176166,12 @@ Medley_Tick:
 	ld (Medley_Countdown:16), w                                   ; FE79B2  f1 d0 22 40
 .LFE79B6:
 	ret                                                  ; FE79B6  0e
-; Medley_StartMidiFile: (0x34D0) |= 4, T_F42614 (mount and list the MIDI files); from Medley_PlayingSong, the first listing entry
+; Medley_StartMidiFile: (0x34D0) |= 4, T_Disk_MountAndScanMidiFilesResetRings (mount and list the MIDI files); from Medley_PlayingSong, the first listing entry
 ;   (0x60A480 + 8 n) that is not blank: its name to Disk_FileName and to 0x0E38, T_F42E90.  None: Medley_StopMidiFile,
 ;   status 3.
 Medley_StartMidiFile:
 	m_or_mi8 MB16, 0x34d0, 0x04                          ; FE79B7  c1 d0 34 3e 04
-	call T_F42614                                        ; FE79BC  1d 14 26 f4
+	call T_Disk_MountAndScanMidiFilesResetRings                                        ; FE79BC  1d 14 26 f4
 .LFE79C0:
 	ld a, (Medley_PlayingSong:16)                                   ; FE79C0  c1 0a 22 21
 	mul A,0x08                                           ; FE79C4  c9 08 08
@@ -177684,7 +177776,7 @@ EditScreen_EnterNoteEdit:
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE8A4D  c1 4a 0d 3f 00
 	jr z, .LFE8A58                                       ; FE8A52  66 04
 .LFE8A54:
-	calr sub_FE8BD4                                      ; FE8A54  1e 7d 01
+	calr EditScreen_FlagMemoryFull                                      ; FE8A54  1e 7d 01
 	ret                                                  ; FE8A57  0e
 .LFE8A58:
 	ldw (EditCursor_TickInMeasure:24), 0x00                             ; FE8A58  f2 54 1f 60 02 00 00
@@ -177845,7 +177937,11 @@ EditScreen_SaveTrackCursor:
 	ld XIX,0x00003482                                    ; FE8BC9  44 82 34 00 00
 	mx_st_mr8 MXD, ra_IX, ra_HL, r1                      ; FE8BCE  f3 07 f0 ec 41
 	ret                                                  ; FE8BD3  0e
-sub_FE8BD4:
+; EditScreen_FlagMemoryFull: Clears (0x20A9) bit 0, sets (0x34D1) bits 5+4: prom_b sub_F45FCA then shows status 0x0F /
+;   request 0x40AB, the song-memory-full pair (prom_b twin sub_F45812). Every edit-screen caller reaches it only on a
+;   BStore error, zero free blocks or a failed chain extension. Basis: callers + body + prom_b twin.
+;   (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_a.json)
+EditScreen_FlagMemoryFull:
 	m_and_mi8 MB16, 0x20a9, 0xfe                         ; FE8BD4  c1 a9 20 3c fe
 	call T_Var34D1_SetBits20                                        ; FE8BD9  1d 08 0a f4
 	m_or_mi8 MB16, 0x34d1, 0x10                          ; FE8BDD  c1 d1 34 3e 10
@@ -178368,7 +178464,7 @@ NoteEdit_TakeKeyboardInput:
 	jrl .LFE9027                                         ; FE90AB  78 79 ff
 .LFE90AE:
 	m_and_mi8 MB24, EditScreen_CursorFlags, 0xfe                       ; FE90AE  c2 5b 1f 60 3c fe
-	calr sub_FE8BD4                                          ; FE90B4  1e 1d fb
+	calr EditScreen_FlagMemoryFull                                          ; FE90B4  1e 1d fb
 	ret                                                  ; FE90B7  0e
 ; NoteEdit_HoldKey: the first free slot of 0x601F1C (8 x {flag 0x80, note, velocity}; 1 slot in DRUM EDIT) takes (0x601F34) /
 ;   (0x601F35).
@@ -178447,7 +178543,7 @@ NoteEdit_ClearHeldKeyNotes:
 	djnz8 c, .LFE9151                                    ; FE9159  cb 1c f5
 	ret                                                  ; FE915C  0e
 ; NoteEdit_EnterHeldNotes: DRUM EDIT: one note, EditCursor_Note with slot 0's velocity (NoteEdit_InsertNoteAndSync); NOTE EDIT: every slot with a note
-;   through NoteEdit_InsertNoteEvent then EditCursor_SyncBeatAndTick, stopping on a BStore error (sub_FE8BD4).
+;   through NoteEdit_InsertNoteEvent then EditCursor_SyncBeatAndTick, stopping on a BStore error (EditScreen_FlagMemoryFull).
 NoteEdit_EnterHeldNotes:
 	m_bit 0, MD24, EditScreen_Mode                              ; FE915D  f2 70 1f 60 c8
 	jr z, .LFE917E                                       ; FE9162  66 1a
@@ -178486,9 +178582,9 @@ NoteEdit_EnterHeldNotes:
 	djnz8 c, .LFE9185                                    ; FE91B8  cb 1c ca
 	ret                                                  ; FE91BB  0e
 .LFE91BC:
-	calr sub_FE8BD4                                          ; FE91BC  1e 15 fa
+	calr EditScreen_FlagMemoryFull                                          ; FE91BC  1e 15 fa
 	ret                                                  ; FE91BF  0e
-; NoteEdit_InsertNoteAndSync: NoteEdit_InsertNoteEvent then EditCursor_SyncBeatAndTick, or sub_FE8BD4 on a BStore error.  Called by
+; NoteEdit_InsertNoteAndSync: NoteEdit_InsertNoteEvent then EditCursor_SyncBeatAndTick, or EditScreen_FlagMemoryFull on a BStore error.  Called by
 ;   DrumEdit_SoftKeyCol8 and NoteEdit_EnterHeldNotes.
 NoteEdit_InsertNoteAndSync:
 	calr NoteEdit_InsertNoteEvent                                      ; FE91C0  1e 0f 00
@@ -178497,7 +178593,7 @@ NoteEdit_InsertNoteAndSync:
 	calr EditCursor_SyncBeatAndTick                                      ; FE91CA  1e a9 00
 	ret                                                  ; FE91CD  0e
 .LFE91CE:
-	calr sub_FE8BD4                                          ; FE91CE  1e 03 fa
+	calr EditScreen_FlagMemoryFull                                          ; FE91CE  1e 03 fa
 	ret                                                  ; FE91D1  0e
 ; NoteEdit_InsertNoteEvent: NoteEdit_SeekInsertPoint, then the 6-byte event at 0x601F16 -- 0x90, EditCursor_TickInMeasure mod 0x60,
 ;   NoteEdit_InputNote, NoteEdit_InputVelocity, (0x601F49) mod 0x60, (0x601F49) / 0x60 -- inserted into chain
@@ -178571,7 +178667,7 @@ EditCursor_SyncBeatAndTick:
 	ld (EditPos_Beat:24), wa                                ; FE928A  f2 05 1f 60 50
 	ret                                                  ; FE928F  0e
 ; EditScreen_StepCursorAfterEntry: EditCursor_AdvanceToNextIncStep and EditScreen_ExtendChainToCursorBeat; inside the measure the fields are
-;   redrawn, past its end EditScreen_WrapAndShowCursorMeasure; EditScreen_CursorFlags bit 2 (extension failed) -> sub_FE8BD4.
+;   redrawn, past its end EditScreen_WrapAndShowCursorMeasure; EditScreen_CursorFlags bit 2 (extension failed) -> EditScreen_FlagMemoryFull.
 EditScreen_StepCursorAfterEntry:
 	calr EditCursor_AdvanceToNextIncStep                                          ; FE9290  1e 76 14
 	calr EditScreen_ExtendChainToCursorBeat                                          ; FE9293  1e b7 13
@@ -178590,7 +178686,7 @@ EditScreen_StepCursorAfterEntry:
 	calr EditScreen_WrapAndShowCursorMeasure                                          ; FE92B9  1e a1 02
 	ret                                                  ; FE92BC  0e
 .LFE92BD:
-	calr sub_FE8BD4                                          ; FE92BD  1e 14 f9
+	calr EditScreen_FlagMemoryFull                                          ; FE92BD  1e 14 f9
 	ret                                                  ; FE92C0  0e
 ; EditScreen_CountDownAction: (0x601F58) - 1 while bit 7 is set and it is above 0x80.
 EditScreen_CountDownAction:
@@ -178666,20 +178762,20 @@ EditScreen_RunDueAction2:
 	calr EditScreen_EndAudition_Call                                      ; FE933B  1e fa 03
 	ret                                                  ; FE933E  0e
 ; EditScreen_ReloadMeasureView: EditScreen_DeferredActions[0] and [6]: EditScreen_EndAudition, the measure reopened (EditScreen_OpenCursorMeasure, moving on through
-;   sub_FE93CA), its beat table rebuilt (EditScreen_BuildBeatTable), sub_FE938E, the event at the cursor selected
+;   EditScreen_ExtendChainToCursorMeasure), its beat table rebuilt (EditScreen_BuildBeatTable), sub_FE938E, the event at the cursor selected
 ;   (EditScreen_SelectEventAtCursor), and every part of the screen redrawn.
 EditScreen_ReloadMeasureView:   ; entry: named by 2 `.long` operands, first at 0xFE9311
 	calr EditScreen_EndAudition                                          ; FE933F  1e 0d 12
 	calr EditScreen_OpenCursorMeasure                                          ; FE9342  1e 64 fb
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE9345  c1 4a 0d 3f 00
 	jr z, .LFE935F                                       ; FE934A  66 13
-	calr sub_FE93CA                                      ; FE934C  1e 7b 00
+	calr EditScreen_ExtendChainToCursorMeasure                                      ; FE934C  1e 7b 00
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE934F  c1 4a 0d 3f 00
 	jr nz, .LFE935B                                      ; FE9354  6e 05
 	calr EditScreen_OpenCursorMeasure                                          ; FE9356  1e 50 fb
 	jr .LFE935F                                          ; FE9359  68 04
 .LFE935B:
-	calr sub_FE8BD4                                          ; FE935B  1e 76 f8
+	calr EditScreen_FlagMemoryFull                                          ; FE935B  1e 76 f8
 	ret                                                  ; FE935E  0e
 .LFE935F:
 	calr EditScreen_BuildBeatTable                                          ; FE935F  1e 87 f7
@@ -178719,7 +178815,11 @@ sub_FE938E:
 .LFE93C6:
 	calr BStore_CursorSlot_Restore                                          ; FE93C6  1e 4c f9
 	ret                                                  ; FE93C9  0e
-sub_FE93CA:
+; EditScreen_ExtendChainToCursorMeasure: Appends 0x81 beat markers to EditScreen_Part's chain until it reaches
+;   EditCursor_Measure (sub_FE9430), then EditCursor_Beat + 2 more; EditScreen_FlagMemoryFull on a BStore error. The
+;   edit screens call it when the cursor's measure or beat was not found, then retry. Basis: callers + body.
+;   (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_a.json)
+EditScreen_ExtendChainToCursorMeasure:
 	xor XWA,XWA                                          ; FE93CA  e8 d0
 	ld a, (EditScreen_Part:24)                                 ; FE93CC  c2 00 1f 60 21
 	mul A,0x03                                           ; FE93D1  c9 08 03
@@ -178751,7 +178851,7 @@ sub_FE93CA:
 .LFE942A:
 	ret                                                  ; FE942A  0e
 .LFE942B:
-	calr sub_FE8BD4                                          ; FE942B  1e a6 f7
+	calr EditScreen_FlagMemoryFull                                          ; FE942B  1e a6 f7
 	jr .LFE942A                                          ; FE942E  68 fa
 sub_FE9430:
 	ld wa, (EditScreen_BeatCounter:24)                                ; FE9430  d2 6c 1f 60 20
@@ -178815,27 +178915,27 @@ EditCursor_WrapAndRecompute:
 	ld wa, (0x601f7d:24)                                ; FE94F1  d2 7d 1f 60 20
 	ld (BStore_CursorOffset:16), wa                                  ; FE94F6  f1 5e 34 50
 	ret                                                  ; FE94FA  0e
-; EditScreen_ShowCursorMeasure: the view rebuilt to start at the cursor's measure: EditScreen_OpenCursorMeasure (moving on through sub_FE93CA
+; EditScreen_ShowCursorMeasure: the view rebuilt to start at the cursor's measure: EditScreen_OpenCursorMeasure (moving on through EditScreen_ExtendChainToCursorMeasure
 ;   when it is missing), EditScreen_SeekCursorBeat, EditScreen_BuildBeatTable, EditCursor_SeekToTick,
 ;   EditScreen_SelectEventAtCursor, everything redrawn; with a selection, EditScreen_AuditionEvent.
 EditScreen_ShowCursorMeasure:
 	calr EditScreen_OpenCursorMeasure                                          ; FE94FB  1e ab f9
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE94FE  c1 4a 0d 3f 00
 	jr z, .LFE9518                                       ; FE9503  66 13
-	calr sub_FE93CA                                      ; FE9505  1e c2 fe
+	calr EditScreen_ExtendChainToCursorMeasure                                      ; FE9505  1e c2 fe
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE9508  c1 4a 0d 3f 00
 	jr nz, .LFE9514                                      ; FE950D  6e 05
 	calr EditScreen_OpenCursorMeasure                                          ; FE950F  1e 97 f9
 	jr z, .LFE9518                                       ; FE9512  66 04
 .LFE9514:
-	calr sub_FE8BD4                                          ; FE9514  1e bd f6
+	calr EditScreen_FlagMemoryFull                                          ; FE9514  1e bd f6
 	ret                                                  ; FE9517  0e
 .LFE9518:
 	calr BStore_CursorSlot_RestoreMark                                          ; FE9518  1e dd f6
 	calr EditScreen_SeekCursorBeat                                      ; FE951B  1e ed 00
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE951E  c1 4a 0d 3f 00
 	jr z, .LFE9531                                       ; FE9523  66 0c
-	calr sub_FE93CA                                      ; FE9525  1e a2 fe
+	calr EditScreen_ExtendChainToCursorMeasure                                      ; FE9525  1e a2 fe
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE9528  c1 4a 0d 3f 00
 	jr z, .LFE9531                                       ; FE952D  66 02
 	jr .LFE9514                                          ; FE952F  68 e3
@@ -178863,20 +178963,20 @@ EditScreen_WrapAndShowCursorMeasure:
 	calr EditScreen_OpenCursorMeasure                                          ; FE9560  1e 46 f9
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE9563  c1 4a 0d 3f 00
 	jr z, .LFE957D                                       ; FE9568  66 13
-	calr sub_FE93CA                                      ; FE956A  1e 5d fe
+	calr EditScreen_ExtendChainToCursorMeasure                                      ; FE956A  1e 5d fe
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE956D  c1 4a 0d 3f 00
 	jr nz, .LFE9579                                      ; FE9572  6e 05
 	calr EditScreen_OpenCursorMeasure                                          ; FE9574  1e 32 f9
 	jr z, .LFE957D                                       ; FE9577  66 04
 .LFE9579:
-	calr sub_FE8BD4                                          ; FE9579  1e 58 f6
+	calr EditScreen_FlagMemoryFull                                          ; FE9579  1e 58 f6
 	ret                                                  ; FE957C  0e
 .LFE957D:
 	calr BStore_CursorSlot_RestoreMark                                          ; FE957D  1e 78 f6
 	calr EditScreen_SeekCursorBeat                                      ; FE9580  1e 88 00
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE9583  c1 4a 0d 3f 00
 	jr z, .LFE9596                                       ; FE9588  66 0c
-	calr sub_FE93CA                                      ; FE958A  1e 3d fe
+	calr EditScreen_ExtendChainToCursorMeasure                                      ; FE958A  1e 3d fe
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE958D  c1 4a 0d 3f 00
 	jr z, .LFE9596                                       ; FE9592  66 02
 	jr .LFE9579                                          ; FE9594  68 e3
@@ -179046,7 +179146,7 @@ EditScreen_EndAudition_Call:
 	calr EditScreen_EndAudition                                          ; FE9738  1e 14 0e
 	ret                                                  ; FE973B  0e
 ; EditScreen_DeferredRedrawAndExtend: EditScreen_DeferredActions[3]: redraw; with an event selected, EditScreen_AppendMissingBeatMarkers first
-;   (sub_FE8BD4 on a BStore error).
+;   (EditScreen_FlagMemoryFull on a BStore error).
 EditScreen_DeferredRedrawAndExtend:   ; entry: named by 1 `.long` operand, first at 0xFE931D
 	calr EditScreen_EraseEditArea_Layer0                                          ; FE973C  1e 93 60
 	calr EditScreen_DrawVisibleNotes                                          ; FE973F  1e 7d 67
@@ -179059,7 +179159,7 @@ EditScreen_DeferredRedrawAndExtend:   ; entry: named by 1 `.long` operand, first
 	calr EditScreen_RedrawCursorLayer                                          ; FE9753  1e 34 66
 	ret                                                  ; FE9756  0e
 .LFE9757:
-	calr sub_FE8BD4                                          ; FE9757  1e 7a f4
+	calr EditScreen_FlagMemoryFull                                          ; FE9757  1e 7a f4
 	ret                                                  ; FE975A  0e
 ; EditScreen_DeferredRedraw: EditScreen_DeferredActions[4] (queued by the ruler scroll): EditScreen_DrawVisibleNotes,
 ;   EditScreen_RedrawCursorLayer.
@@ -179105,7 +179205,7 @@ EditScreen_InsertSelectedEventAtCursor:
 	jr nz, .LFE97DB                                      ; FE97D8  6e 01
 	ret                                                  ; FE97DA  0e
 .LFE97DB:
-	calr sub_FE8BD4                                          ; FE97DB  1e f6 f3
+	calr EditScreen_FlagMemoryFull                                          ; FE97DB  1e f6 f3
 	ret                                                  ; FE97DE  0e
 ; EditScreen_AppendMissingBeatMarkers: appends 0x81 beat markers (EditScreen_AppendBeatMarker) while the target (0x601F6C) exceeds the count
 ;   sub_FE9830 returns; BStore_ErrorCode = 0xFF when an append fails; the cursor is restored.
@@ -179149,7 +179249,7 @@ sub_FE9830:
 	call BStoreCursor_ReadByte                                        ; FE9844  1d 32 22 ff
 	xor W,W                                              ; FE9848  c8 d0
 	ret                                                  ; FE984A  0e
-; EditCursor_SeekPastTick: opens the edited measure (EditScreen_SeekCursorMeasure, moving on through sub_FE93CA while BStore_ErrorCode is set), counts 0x81
+; EditCursor_SeekPastTick: opens the edited measure (EditScreen_SeekCursorMeasure, moving on through EditScreen_ExtendChainToCursorMeasure while BStore_ErrorCode is set), counts 0x81
 ;   markers up to EditCursor_Beat, then steps over every event whose tick is <= EditCursor_Tick (`jr ule`) and
 ;   backs onto the tag; 0x601F05 += the beat, 0x601F07 = the tick.  Called by EditCursor_NextBeat.
 EditCursor_SeekPastTick:
@@ -179157,7 +179257,7 @@ EditCursor_SeekPastTick:
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE984E  c1 4a 0d 3f 00
 	jr z, .LFE9863                                       ; FE9853  66 0e
 .LFE9855:
-	calr sub_FE93CA                                      ; FE9855  1e 72 fb
+	calr EditScreen_ExtendChainToCursorMeasure                                      ; FE9855  1e 72 fb
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE9858  c1 4a 0d 3f 00
 	jrl nz, .LFE98E6                                     ; FE985D  7e 86 00
 	calr EditScreen_SeekCursorMeasure                                          ; FE9860  1e 90 f6
@@ -179212,7 +179312,7 @@ EditCursor_SeekToTick:
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE98EA  c1 4a 0d 3f 00
 	jr z, .LFE98FF                                       ; FE98EF  66 0e
 .LFE98F1:
-	calr sub_FE93CA                                      ; FE98F1  1e d6 fa
+	calr EditScreen_ExtendChainToCursorMeasure                                      ; FE98F1  1e d6 fa
 	m_cp_mi8 MB16, BStore_ErrorCode, 0x00                          ; FE98F4  c1 4a 0d 3f 00
 	jrl nz, .LFE9982                                     ; FE98F9  7e 86 00
 	calr EditScreen_SeekCursorMeasure                                          ; FE98FC  1e f4 f5
@@ -179844,7 +179944,7 @@ EditCursor_NextBeat:
 	calr EditScreen_QueueRelocateAfterMove                                      ; FE9E81  1e fe 01
 	ret                                                  ; FE9E84  0e
 .LFE9E85:
-	calr sub_FE8BD4                                          ; FE9E85  1e 4c ed
+	calr EditScreen_FlagMemoryFull                                          ; FE9E85  1e 4c ed
 	ret                                                  ; FE9E88  0e
 .LFE9E89:
 	ldw (EditCursor_Beat:24), 0x00                             ; FE9E89  f2 41 1f 60 02 00 00
@@ -180416,7 +180516,7 @@ EditScreen_CursorRight:
 	calr EditScreen_ExtendChainToCursorBeat                                      ; FEA3E2  1e 68 02
 	m_bit 2, MD24, EditScreen_CursorFlags                              ; FEA3E5  f2 5b 1f 60 ca
 	jr z, .LFEA404                                       ; FEA3EA  66 18
-	calr sub_FE8BD4                                          ; FEA3EC  1e e5 e7
+	calr EditScreen_FlagMemoryFull                                          ; FEA3EC  1e e5 e7
 	ret                                                  ; FEA3EF  0e
 .LFEA3F0:
 	calr EditScreen_PositionAndMeasureStartTicks                                      ; FEA3F0  1e 35 02
@@ -181523,7 +181623,7 @@ EditCursor_NextBeatStart:
 	calr EditScreen_RedrawCursorLayer                                          ; FEAE4C  1e 3b 4f
 	ret                                                  ; FEAE4F  0e
 .LFEAE50:
-	calr sub_FE8BD4                                          ; FEAE50  1e 81 dd
+	calr EditScreen_FlagMemoryFull                                          ; FEAE50  1e 81 dd
 	ret                                                  ; FEAE53  0e
 .LFEAE54:
 	calr EditScreen_WrapAndShowCursorMeasure                                          ; FEAE54  1e 06 e7
@@ -190005,7 +190105,7 @@ Paint_MidiFileDirectPlay:
 	m_res 4, MD16, UI_ScreenFlags                                ; FF4427  f1 95 20 b4
 	call T_MidiFileDirectPlay_InitOnEntry                                        ; FF442B  1d 58 09 f4
 	call T_Transport_StopAllRunning                                        ; FF442F  1d ac 09 f4
-	call T_F42614                                        ; FF4433  1d 14 26 f4
+	call T_Disk_MountAndScanMidiFilesResetRings                                        ; FF4433  1d 14 26 f4
 	calr UI_StatusCode_Is0or2or4                                      ; FF4437  1e 62 31
 	cp wa, 0x00:i3                                         ; FF443A  d8 d8
 	jr z, .LFF444B                                       ; FF443C  66 0d
@@ -190071,7 +190171,7 @@ Paint_MidiFileDirectPlay:
 	calr sub_FF50E8                                      ; FF44E3  1e 02 0c
 	pushw 0x05                                           ; FF44E6  0b 05 00
 	pushw 0x0a                                           ; FF44E9  0b 0a 00
-	calr sub_FF5118                                      ; FF44EC  1e 29 0c
+	calr MidiFile_DrawFileList                                      ; FF44EC  1e 29 0c
 	lda xbc, (DL_F59567:24)                              ; FF44EF  f2 67 95 f5 31
 	push XBC                                             ; FF44F4  39
 	call DLB_Array8_SaveRegs                                      ; FF44F5  1d 3f 76 ff
@@ -190584,7 +190684,7 @@ Paint_DiskL0adFile:
 	ld c, (UI_ScreenLatch:16)                                   ; FF47BF  c1 7a 20 23
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FF47C3  c1 7b 20 f3
 	jr z, .LFF47EB                                       ; FF47C7  66 22
-	call T_F42594                                        ; FF47C9  1d 94 25 f4
+	call T_Playback_StopAllAndIgnoreMidiStart                                        ; FF47C9  1d 94 25 f4
 	call T_F425B4                                        ; FF47CD  1d b4 25 f4
 	calr UI_StatusCode_Is0or2or4                                      ; FF47D1  1e c8 2d
 	cp wa, 0x00:i3                                         ; FF47D4  d8 d8
@@ -190695,7 +190795,7 @@ sub_FF48F0:
 	calr sub_FF490F                                      ; FF48F7  1e 15 00
 	inc 8,XIY                                            ; FF48FA  ed 60
 	push XIY                                             ; FF48FC  3d
-	calr sub_FF4936                                      ; FF48FD  1e 36 00
+	calr DiskEntry_GetContentType                                      ; FF48FD  1e 36 00
 	ld H,A                                               ; FF4900  c9 8e
 	inc 6,XSP                                            ; FF4902  ef 66
 	cp A,0x09                                            ; FF4904  c9 cf 09
@@ -190721,7 +190821,11 @@ sub_FF490F:
 	popw hl                                              ; FF4932  4b
 	unlk XIZ                                             ; FF4933  ee 0d
 	ret                                                  ; FF4935  0e
-sub_FF4936:
+; DiskEntry_GetContentType: Returns the content type of a directory entry from its 8 per-type bytes at +6 (0x80 =
+;   absent): none -> 9, one at index i -> i + 1, several -> 0 (ALL). The codes are Disk_ContentType's and index
+;   '.ALL.SEQ.CMB...DRM'; Disk_DrawDirEntry and DISK L0AD skip type 9. Basis: callers + body + extension table.
+;   (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_a.json)
+DiskEntry_GetContentType:
 	link XIZ,0x0000                                      ; FF4936  ee 0c 00 00
 	pushw hl                                             ; FF493A  2b
 	pushw de                                             ; FF493B  2a
@@ -190876,7 +190980,7 @@ LcdKeyRow1_DiskL0adFile:
 	calr sub_FF490F                                      ; FF49DA  1e 32 ff
 	inc 8,XIY                                            ; FF49DD  ed 60
 	push XIY                                             ; FF49DF  3d
-	calr sub_FF4936                                      ; FF49E0  1e 53 ff
+	calr DiskEntry_GetContentType                                      ; FF49E0  1e 53 ff
 	inc 6,XSP                                            ; FF49E3  ef 66
 	cp A,0x09                                            ; FF49E5  c9 cf 09
 	jrl z, .LFF4A7F                                      ; FF49E8  76 94 00
@@ -191237,7 +191341,7 @@ LcdKeyRow4_DiskL0adFile:
 	calr sub_FF490F                                      ; FF4C46  1e c6 fc
 	inc 8,XIY                                            ; FF4C49  ed 60
 	push XIY                                             ; FF4C4B  3d
-	calr sub_FF4936                                      ; FF4C4C  1e e7 fc
+	calr DiskEntry_GetContentType                                      ; FF4C4C  1e e7 fc
 	ld H,A                                               ; FF4C4F  c9 8e
 	inc 8,XSP                                            ; FF4C51  ef 60
 	inc 8,XSP                                            ; FF4C53  ef 60
@@ -191327,7 +191431,7 @@ LcdKeyRow4_DiskL0adFile:
 	calr sub_FF490F                                      ; FF4D22  1e ea fb
 	inc 8,XIY                                            ; FF4D25  ed 60
 	push XIY                                             ; FF4D27  3d
-	calr sub_FF4936                                      ; FF4D28  1e 0b fc
+	calr DiskEntry_GetContentType                                      ; FF4D28  1e 0b fc
 	inc 6,XSP                                            ; FF4D2B  ef 66
 	cp a, 0x00:i3                                          ; FF4D2D  c9 d8
 	jr z, .LFF4D54                                       ; FF4D2F  66 23
@@ -191572,7 +191676,7 @@ LcdKeyRow5_DiskL0adFile:
 	calr sub_FF490F                                      ; FF4EE2  1e 2a fa
 	inc 8,XIY                                            ; FF4EE5  ed 60
 	push XIY                                             ; FF4EE7  3d
-	calr sub_FF4936                                      ; FF4EE8  1e 4b fa
+	calr DiskEntry_GetContentType                                      ; FF4EE8  1e 4b fa
 	ld H,A                                               ; FF4EEB  c9 8e
 	inc 8,XSP                                            ; FF4EED  ef 60
 	inc 8,XSP                                            ; FF4EEF  ef 60
@@ -191653,7 +191757,7 @@ LcdKeyRow5_DiskL0adFile:
 	calr sub_FF490F                                      ; FF4FAC  1e 60 f9
 	inc 8,XIY                                            ; FF4FAF  ed 60
 	push XIY                                             ; FF4FB1  3d
-	calr sub_FF4936                                      ; FF4FB2  1e 81 f9
+	calr DiskEntry_GetContentType                                      ; FF4FB2  1e 81 f9
 	inc 6,XSP                                            ; FF4FB5  ef 66
 	cp a, 0x00:i3                                          ; FF4FB7  c9 d8
 	jr nz, .LFF4FD6                                      ; FF4FB9  6e 1b
@@ -191745,9 +191849,9 @@ Paint_MidiFileL0ad:
 	jr z, .LFF5043                                       ; FF5010  66 31
 	ld (Disk_SelectedEntry:16), 0x00                                 ; FF5012  f1 24 27 00 00
 	ld (0x2732:16), 0xff                                 ; FF5017  f1 32 27 00 ff
-	call T_F42594                                        ; FF501C  1d 94 25 f4
+	call T_Playback_StopAllAndIgnoreMidiStart                                        ; FF501C  1d 94 25 f4
 	ld (XIX),0x00                                        ; FF5020  b4 00 00
-	call T_F42614                                        ; FF5023  1d 14 26 f4
+	call T_Disk_MountAndScanMidiFilesResetRings                                        ; FF5023  1d 14 26 f4
 	ld (0x2730:16), 0x00                                 ; FF5027  f1 30 27 00 00
 	calr UI_StatusCode_Is0or2or4                                      ; FF502C  1e 6d 25
 	cp wa, 0x00:i3                                         ; FF502F  d8 d8
@@ -191785,7 +191889,7 @@ Paint_MidiFileL0ad:
 	call DisplayList_RunOnLayer_SaveRegs                                      ; FF508B  1d d3 75 ff
 	pushw 0x00                                           ; FF508F  0b 00 00
 	pushw 0x0a                                           ; FF5092  0b 0a 00
-	calr sub_FF5118                                      ; FF5095  1e 80 00
+	calr MidiFile_DrawFileList                                      ; FF5095  1e 80 00
 	lda xbc, (DL_F5953B:24)                              ; FF5098  f2 3b 95 f5 31
 	push XBC                                             ; FF509D  39
 	call DLB_Array8_SaveRegs                                      ; FF509E  1d 3f 76 ff
@@ -191839,7 +191943,11 @@ sub_FF50E8:
 	pop XIX                                              ; FF5115  5c
 	popw hl                                              ; FF5116  4b
 	ret                                                  ; FF5117  0e
-sub_FF5118:
+; MidiFile_DrawFileList: MidiFile_DrawFileList(rows, rowOffset): per row, the ' NN:' tag and the 8-character name of
+;   entry (0x272E) + row from 0x60A480, plus the 'MID' / blank tag. Paint_MidiFileL0ad / _DirectPlay / MidiFileSave
+;   page 1 call it with (10, 0); MidiFile_LcdKeyRow4/5 after scrolling. Basis: callers + body. (wsa1/notes/naming-
+;   pilot-2026-10-06/proposals_prom_a.json)
+MidiFile_DrawFileList:
 	link XIZ,0xfff6                                      ; FF5118  ee 0c f6 ff
 	pushw hl                                             ; FF511C  2b
 	pushw de                                             ; FF511D  2a
@@ -192057,7 +192165,7 @@ LcdKeyRow1_MidiFileL0ad:
 	cp C,0x20                                            ; FF5292  cb cf 20
 	jr z, .LFF52DD                                       ; FF5295  66 46
 	call T_MidiFileL0ad_LcdKeyRow1                                        ; FF5297  1d 80 33 f4
-	call sub_FF7959                                      ; FF529B  1d 59 79 ff
+	call SC1_CmdEFAndClearHeldButtons                                      ; FF529B  1d 59 79 ff
 	m_cp_mi8 MB16, UI_StatusCode, 0x23                          ; FF529F  c1 80 28 3f 23
 	jr z, .LFF52B0                                       ; FF52A4  66 0a
 	ld (XIX),0xab                                        ; FF52A6  b4 00 ab
@@ -192418,7 +192526,7 @@ ScreenEnter_DiskSaveFile_Page0:   ; entry: named by 1 `.long` operand, first at 
 	ld c, (UI_ScreenLatch:16)                                   ; FF54AF  c1 7a 20 23
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FF54B3  c1 7b 20 f3
 	jr z, .LFF54E4                                       ; FF54B7  66 2b
-	call T_F42594                                        ; FF54B9  1d 94 25 f4
+	call T_Playback_StopAllAndIgnoreMidiStart                                        ; FF54B9  1d 94 25 f4
 	m_set 6, MD16, 0x2094                                ; FF54BD  f1 94 20 be
 	call T_F42610                                        ; FF54C1  1d 10 26 f4
 	ldw hl, 0x00                                         ; FF54C5  33 00 00
@@ -192543,7 +192651,7 @@ ScreenEnter_DiskSaveFile_Page2:   ; entry: named by 1 `.long` operand, first at 
 	push XIX                                             ; FF55BE  3c
 	lda xix, (DisplayList_RunOnLayer_SaveRegs:24)                             ; FF55BF  f2 d3 75 ff 34
 	call T_CallbackQueue_ResetAndRestartTask2            ; FF55C4  1d 80 2e f4
-	call T_F42594                                        ; FF55C8  1d 94 25 f4
+	call T_Playback_StopAllAndIgnoreMidiStart                                        ; FF55C8  1d 94 25 f4
 	call LCD_BlankAndSetPanel3Layer_SaveRegs                                      ; FF55CC  1d 04 76 ff
 	pushw 0x00                                           ; FF55D0  0b 00 00
 	lda xbc, (DL_AttentionAFileAlreadyExistsAtThe:24)    ; FF55D3  f2 86 9b f5 31
@@ -192923,7 +193031,7 @@ LcdKeyRow1_DiskSaveFile_Page0:
 	ld (UI_ScreenPage:16), 0x01                                 ; FF592A  f1 29 22 00 01
 	ld (UI_Request_Hi:16), 0x10                                 ; FF592F  f1 71 20 00 10
 	m_res 0, MD16, 0x2726                                ; FF5934  f1 26 27 b0
-	call T_F42594                                        ; FF5938  1d 94 25 f4
+	call T_Playback_StopAllAndIgnoreMidiStart                                        ; FF5938  1d 94 25 f4
 	call T_F425B8                                        ; FF593C  1d b8 25 f4
 	calr UI_StatusCode_Is0or2or4                                      ; FF5940  1e 59 1c
 	cp wa, 0x00:i3                                         ; FF5943  d8 d8
@@ -192965,7 +193073,7 @@ LcdKeyRow4_DiskSaveFile_Page0:
 	m_set 0, MD16, 0x2726                                ; FF5961  f1 26 27 b8
 	ld (UI_ScreenPage:16), 0x01                                 ; FF5965  f1 29 22 00 01
 	ld (UI_Request_Hi:16), 0x10                                 ; FF596A  f1 71 20 00 10
-	call T_F42594                                        ; FF596F  1d 94 25 f4
+	call T_Playback_StopAllAndIgnoreMidiStart                                        ; FF596F  1d 94 25 f4
 	call T_F425B8                                        ; FF5973  1d b8 25 f4
 	calr UI_StatusCode_Is0or2or4                                      ; FF5977  1e 22 1c
 	cp wa, 0x00:i3                                         ; FF597A  d8 d8
@@ -193076,7 +193184,7 @@ LcdKeyRow1_DiskSaveFile_Page1:
 	and C,0x01                                           ; FF5A0B  cb cc 01
 	jr nz, .LFF5A1A                                      ; FF5A0E  6e 0a
 	call T_DiskSaveFile_Execute_Entry                                        ; FF5A10  1d cc 25 f4
-	call sub_FF7959                                      ; FF5A14  1d 59 79 ff
+	call SC1_CmdEFAndClearHeldButtons                                      ; FF5A14  1d 59 79 ff
 	jr .LFF5A2A                                          ; FF5A18  68 10
 .LFF5A1A:
 	calr DiskSaveFile_Page1_LcdKeyRow1                                      ; FF5A1A  1e 10 00
@@ -193328,7 +193436,7 @@ LcdKeyRow3_DiskSaveFile_Page2:
 	and BC,0x0080                                        ; FF5AF3  d9 cc 80 00
 	jr nz, .LFF5B01                                      ; FF5AF7  6e 08
 	call T_DiskSaveFile_Execute_Entry                                        ; FF5AF9  1d cc 25 f4
-	call sub_FF7959                                      ; FF5AFD  1d 59 79 ff
+	call SC1_CmdEFAndClearHeldButtons                                      ; FF5AFD  1d 59 79 ff
 .LFF5B01:
 	unlk XIZ                                             ; FF5B01  ee 0d
 	ret                                                  ; FF5B03  0e
@@ -193572,7 +193680,7 @@ LcdKeyRow3_DiskSaveFile_Page5:
 	lda xwa, (Disk_FileName:16)                                ; FF5BE1  f1 c8 21 30
 	push XWA                                             ; FF5BE5  38
 	call MemCpy_C                                      ; FF5BE6  1d b5 78 ff
-	call sub_FF7959                                      ; FF5BEA  1d 59 79 ff
+	call SC1_CmdEFAndClearHeldButtons                                      ; FF5BEA  1d 59 79 ff
 	m_res 0, MD16, 0x2726                                ; FF5BEE  f1 26 27 b0
 	ld (UI_ScreenPage:16), 0x00                                 ; FF5BF2  f1 29 22 00 00
 	ld (UI_Request:16), 0x40                                 ; FF5BF7  f1 70 20 00 40
@@ -193692,7 +193800,7 @@ ScreenEnter_MidiFileSave_Page0:   ; entry: named by 1 `.long` operand, first at 
 	ld c, (UI_ScreenLatch:16)                                   ; FF5C68  c1 7a 20 23
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FF5C6C  c1 7b 20 f3
 	jr z, .LFF5CBE                                       ; FF5C70  66 4c
-	call T_F42594                                        ; FF5C72  1d 94 25 f4
+	call T_Playback_StopAllAndIgnoreMidiStart                                        ; FF5C72  1d 94 25 f4
 	ld (0x2730:16), 0x00                                 ; FF5C76  f1 30 27 00 00
 	m_set 6, MD16, 0x2094                                ; FF5C7B  f1 94 20 be
 	m_and_mi8 MB16, 0x133e, 0xfc                         ; FF5C7F  c1 3e 13 3c fc
@@ -193799,7 +193907,7 @@ ScreenEnter_MidiFileSave_Page1:   ; entry: named by 1 `.long` operand, first at 
 	calr PanelDial_SetButtonPair                                      ; FF5D9A  1e 8d 13
 	pushw 0x00                                           ; FF5D9D  0b 00 00
 	pushw 0x08                                           ; FF5DA0  0b 08 00
-	calr sub_FF5118                                      ; FF5DA3  1e 72 f3
+	calr MidiFile_DrawFileList                                      ; FF5DA3  1e 72 f3
 	lda xbc, (DL_F5953B:24)                              ; FF5DA6  f2 3b 95 f5 31
 	push XBC                                             ; FF5DAB  39
 	call DLB_Array8_SaveRegs                                      ; FF5DAC  1d 3f 76 ff
@@ -193826,7 +193934,7 @@ ScreenEnter_MidiFileSave_Page2:   ; entry: named by 1 `.long` operand, first at 
 	push XIX                                             ; FF5DE8  3c
 	lda xix, (DisplayList_RunOnLayer_SaveRegs:24)                             ; FF5DE9  f2 d3 75 ff 34
 	call T_CallbackQueue_ResetAndRestartTask2            ; FF5DEE  1d 80 2e f4
-	call T_F42594                                        ; FF5DF2  1d 94 25 f4
+	call T_Playback_StopAllAndIgnoreMidiStart                                        ; FF5DF2  1d 94 25 f4
 	call LCD_BlankAndSetPanel3Layer_SaveRegs                                      ; FF5DF6  1d 04 76 ff
 	pushw 0x00                                           ; FF5DFA  0b 00 00
 	lda xbc, (DL_MidiFileSaveFileDelete:24)              ; FF5DFD  f2 b7 8a f5 31
@@ -193865,7 +193973,7 @@ ScreenEnter_MidiFileSave_Page3:   ; entry: named by 1 `.long` operand, first at 
 	push XIX                                             ; FF5E4B  3c
 	lda xix, (DisplayList_RunOnLayer_SaveRegs:24)                             ; FF5E4C  f2 d3 75 ff 34
 	call T_CallbackQueue_ResetAndRestartTask2            ; FF5E51  1d 80 2e f4
-	call T_F42594                                        ; FF5E55  1d 94 25 f4
+	call T_Playback_StopAllAndIgnoreMidiStart                                        ; FF5E55  1d 94 25 f4
 	call LCD_BlankAndSetPanel3Layer_SaveRegs                                      ; FF5E59  1d 04 76 ff
 	pushw 0x00                                           ; FF5E5D  0b 00 00
 	lda xbc, (DL_LoadSingleSoundDiskGr0upSingleFileBankS0undGr0up:24) ; FF5E60  f2 d7 8a f5 31
@@ -194148,8 +194256,8 @@ LcdKeyRow1_MidiFileSave_Page0:
 	ld (UI_ScreenPage:16), 0x01                                 ; FF607F  f1 29 22 00 01
 	ld (UI_Request_Hi:16), 0x10                                 ; FF6084  f1 71 20 00 10
 	m_res 0, MD16, 0x2726                                ; FF6089  f1 26 27 b0
-	call T_F42594                                        ; FF608D  1d 94 25 f4
-	call T_F42614                                        ; FF6091  1d 14 26 f4
+	call T_Playback_StopAllAndIgnoreMidiStart                                        ; FF608D  1d 94 25 f4
+	call T_Disk_MountAndScanMidiFilesResetRings                                        ; FF6091  1d 14 26 f4
 	calr UI_StatusCode_Is0or2or4                                      ; FF6095  1e 04 15
 	cp wa, 0x00:i3                                         ; FF6098  d8 d8
 	jr z, .LFF60A6                                       ; FF609A  66 0a
@@ -194190,8 +194298,8 @@ LcdKeyRow4_MidiFileSave_Page0:
 	m_set 0, MD16, 0x2726                                ; FF60B6  f1 26 27 b8
 	ld (UI_ScreenPage:16), 0x01                                 ; FF60BA  f1 29 22 00 01
 	ld (UI_Request_Hi:16), 0x10                                 ; FF60BF  f1 71 20 00 10
-	call T_F42594                                        ; FF60C4  1d 94 25 f4
-	call T_F42614                                        ; FF60C8  1d 14 26 f4
+	call T_Playback_StopAllAndIgnoreMidiStart                                        ; FF60C4  1d 94 25 f4
+	call T_Disk_MountAndScanMidiFilesResetRings                                        ; FF60C8  1d 14 26 f4
 	calr UI_StatusCode_Is0or2or4                                      ; FF60CC  1e cd 14
 	cp wa, 0x00:i3                                         ; FF60CF  d8 d8
 	jr z, .LFF60DD                                       ; FF60D1  66 0a
@@ -194639,7 +194747,7 @@ MidiFile_LcdKeyRow4:
 	decm8 0x01, (xix)                                    ; FF63A8  84 69
 	m_push MWD+r6, 0x0a                                  ; FF63AA  9e 0a 04
 	m_push MWD+r6, 0x08                                  ; FF63AD  9e 08 04
-	calr sub_FF5118                                      ; FF63B0  1e 65 ed
+	calr MidiFile_DrawFileList                                      ; FF63B0  1e 65 ed
 	pop XIY                                              ; FF63B3  5d
 	jr .LFF63BA                                          ; FF63B4  68 04
 .LFF63B6:
@@ -194703,7 +194811,7 @@ MidiFile_LcdKeyRow5:
 	inc 0x01, (0x272e:16)                                ; FF6432  c1 2e 27 61
 	m_push MWD+r6, 0x0a                                  ; FF6436  9e 0a 04
 	pushw de                                             ; FF6439  2a
-	calr sub_FF5118                                      ; FF643A  1e db ec
+	calr MidiFile_DrawFileList                                      ; FF643A  1e db ec
 	pop XIY                                              ; FF643D  5d
 	jr .LFF6442                                          ; FF643E  68 02
 .LFF6440:
@@ -195454,7 +195562,7 @@ ScreenEnter_L0adSingleS0und_Page0:   ; entry: named by 1 `.long` operand, first 
 	ld c, (UI_ScreenLatch:16)                                   ; FF6759  c1 7a 20 23
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FF675D  c1 7b 20 f3
 	jr z, .LFF6781                                       ; FF6761  66 1e
-	call T_F42594                                        ; FF6763  1d 94 25 f4
+	call T_Playback_StopAllAndIgnoreMidiStart                                        ; FF6763  1d 94 25 f4
 	ld (UI_ScreenItem:16), 0x00                                 ; FF6767  f1 20 27 00 00
 	call T_F425B4                                        ; FF676C  1d b4 25 f4
 	calr UI_StatusCode_Is0or2or4                                      ; FF6770  1e 29 0e
@@ -196302,7 +196410,7 @@ ScreenEnter_L0adSingleC0mbination_Page0:   ; entry: named by 1 `.long` operand, 
 	ld c, (UI_ScreenLatch:16)                                   ; FF6DE2  c1 7a 20 23
 	m_cp_rm MB16, UI_ScreenLatch_Previous, r3                             ; FF6DE6  c1 7b 20 f3
 	jr z, .LFF6E0A                                       ; FF6DEA  66 1e
-	call T_F42594                                        ; FF6DEC  1d 94 25 f4
+	call T_Playback_StopAllAndIgnoreMidiStart                                        ; FF6DEC  1d 94 25 f4
 	ld (UI_ScreenItem:16), 0x00                                 ; FF6DF0  f1 20 27 00 00
 	call T_F425B4                                        ; FF6DF5  1d b4 25 f4
 	calr UI_StatusCode_Is0or2or4                                      ; FF6DF9  1e a0 07
@@ -197289,7 +197397,7 @@ DiskL0adFile_LcdKeyRow1:
 	ld h, (Disk_ContentType:16)                                   ; FF7569  c1 25 27 26
 	calr sub_FF7084                                      ; FF756D  1e 14 fb
 	call T_F425C8                                        ; FF7570  1d c8 25 f4
-	call sub_FF7959                                      ; FF7574  1d 59 79 ff
+	call SC1_CmdEFAndClearHeldButtons                                      ; FF7574  1d 59 79 ff
 	ld xbc, (0x60341e:24)                               ; FF7578  e2 1e 34 60 21
 	or XBC,XBC                                           ; FF757D  e9 e1
 	jr z, .LFF7590                                       ; FF757F  66 0f
@@ -197580,7 +197688,7 @@ Disk_DrawDirEntry:
 	push XIY                                             ; FF76B7  3d
 	inc 6,XIY                                            ; FF76B8  ed 66
 	push XIY                                             ; FF76BA  3d
-	call sub_FF4936                                      ; FF76BB  1d 36 49 ff
+	call DiskEntry_GetContentType                                      ; FF76BB  1d 36 49 ff
 	ld L,A                                               ; FF76BF  c9 8f
 	inc 4,XSP                                            ; FF76C1  ef 64
 	pop XIY                                              ; FF76C3  5d
@@ -197947,7 +198055,11 @@ sub_FF794C:
 	pop XIX                                              ; FF7956  5c
 	pop XIZ                                              ; FF7957  5e
 	ret                                                  ; FF7958  0e
-sub_FF7959:
+; SC1_CmdEFAndClearHeldButtons: T_F40F1C (SC1_Cmd_EF: empties SC1's receive ring, sends 0xEF then 0xE3 0x10) and
+;   PanelButton_HeldMask := 0; what 0xEF asks of the SC1 peer is not established. The DISK / MIDI FILE L0AD and DISK
+;   SAVE FILE execute keys call it right after the transfer. Basis: callers + body. (wsa1/notes/naming-
+;   pilot-2026-10-06/proposals_prom_a.json)
+SC1_CmdEFAndClearHeldButtons:
 	push XIZ                                             ; FF7959  3e
 	push XIX                                             ; FF795A  3c
 	push XHL                                             ; FF795B  3b

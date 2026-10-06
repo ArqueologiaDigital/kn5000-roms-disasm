@@ -960,8 +960,8 @@
 	.set	T_F407A4_Nop, 0xFAA7AB
 	.set	MidiSettings_ResetToDefault, 0xFAA967
 	.set	sub_FAAA8F, 0xFAAA8F
-	.set	sub_FAAAB1, 0xFAAAB1
-	.set	sub_FAAAB5, 0xFAAAB5
+	.set	ParamImage_PostAllAsChangeEvents_Call, 0xFAAAB1
+	.set	ParamImage_PostAllAsChangeEvents, 0xFAAAB5
 	.set	sub_FAAB28, 0xFAAB28
 	.set	sub_FAABB3, 0xFAABB3
 	.set	PartSettings_ResetToDefault, 0xFAAE2A
@@ -970,10 +970,10 @@
 	.set	T_F407A0_Nop, 0xFAB5EA
 	.set	ProgramChangeMode_OnEvent, 0xFAB643
 	.set	T_F407C4_Nop, 0xFAB657
-	.set	sub_FAB658, 0xFAB658
+	.set	SoundSel_ClampToProgramAndBank, 0xFAB658
 	.set	sub_FAB6D7, 0xFAB6D7
 	.set	sub_FAB728, 0xFAB728
-	.set	sub_FAB779, 0xFAB779
+	.set	CombiSel_ClampToNumberAndBank, 0xFAB779
 	.set	sub_FAB7E6, 0xFAB7E6
 	.set	T_F407F0_Nop, 0xFABBD6
 	.set	sub_FABD33, 0xFABD33
@@ -1006,7 +1006,7 @@
 	.set	T_F41F2C_Nop, 0xFAE800
 	.set	T_F41F3C_Nop, 0xFAE829
 	.set	T_F41F38_Nop, 0xFAE84C
-	.set	sub_FAE84D, 0xFAE84D
+	.set	SeqBuf_RecordQueuedEvents, 0xFAE84D
 	.set	sub_FAE872, 0xFAE872
 	.set	SeqBuf_EncodeQueue2C00, 0xFAE921
 	.set	T_F41F24_Nop, 0xFAEBAA
@@ -1667,7 +1667,7 @@
 	.set	ToneEdit_CommitField, 0xFD7435
 	.set	Var27A3_ChangeSlot, 0xFD74AE
 	.set	SoundEditLfo_CycleLfoState, 0xFD74E0
-	.set	sub_FD77B3, 0xFD77B3
+	.set	SoundEditText_SetSlot, 0xFD77B3
 	.set	sub_FD785C, 0xFD785C
 	.set	PanelEvent_ToFieldIndex, 0xFD7905
 	.set	Mem_CopyBytes, 0xFD79DC
@@ -1690,7 +1690,7 @@
 	.set	SoundEditLfo_SoftKeyCol6, 0xFD7FBF
 	.set	SoundEditLfo_SoftKeyCol7, 0xFD8030
 	.set	SoundEditLfo_SoftKeyCol8, 0xFD80A3
-	.set	sub_FD8116, 0xFD8116
+	.set	SoundEditEnvelope1_SetField0AndRedraw, 0xFD8116
 	.set	SoundEditEnvelope1_SoftKeyCol1, 0xFD8155
 	.set	SoundEditEnvelope1_SoftKeyCol2, 0xFD81C8
 	.set	SoundEditEnvelope1_SoftKeyCol3, 0xFD823B
@@ -1706,8 +1706,8 @@
 	.set	SoundEditEnvelope2_SoftKeyCol8, 0xFD87A5
 	.set	Var27A3_SelectSlot, 0xFD9863
 	.set	Var27F4_Get, 0xFD9D5C
-	.set	sub_FDA002, 0xFDA002
-	.set	sub_FDA05E, 0xFDA05E
+	.set	ModelingPage_GroupStartIndex, 0xFDA002
+	.set	ModelingPage_GetItemGroup, 0xFDA05E
 	.set	Var27F6_Set, 0xFDA0AC
 	.set	Var27F6_Get, 0xFDA0BA
 	.set	Var27F5_Get, 0xFDA0CA
@@ -1897,12 +1897,12 @@
 	.set	Disk_LoadSeqToHeap_Entry, 0xFE1BF3
 	.set	Disk_SaveSqfFromStaging_Entry, 0xFE1BFB
 	.set	Disk_SaveSeqFile_Entry, 0xFE1C03
-	.set	sub_FE1C0B, 0xFE1C0B
+	.set	Disk_MountAndScanMidiFilesResetRings, 0xFE1C0B
 	.set	T_F42580_Nop, 0xFE1C16
 	.set	sub_FE1C17, 0xFE1C17
 	.set	T_F4258C_Nop, 0xFE1C1E
 	.set	Disk_PortA3_Release_Call_Call, 0xFE1C1F
-	.set	sub_FE1C23, 0xFE1C23
+	.set	Playback_StopAllAndIgnoreMidiStart, 0xFE1C23
 	.set	Disk_MountAndScanDirectory_Call, 0xFE1C27
 	.set	Disk_MountAndScanDirectory_LeaveOnError_Call, 0xFE1C2B
 	.set	sub_FE1C2F, 0xFE1C2F
@@ -1930,7 +1930,7 @@
 	.set	NameEdit_SyncCharIndex_Call, 0xFE1CCC
 	.set	DiskSave_IsSelectedFileNew_Call, 0xFE1CD0
 	.set	Var2216_SetW145C_Call, 0xFE1CD4
-	.set	sub_FE1CD8, 0xFE1CD8
+	.set	DiskProgress_PrintDotForSmf, 0xFE1CD8
 	.set	DiskSaveFile_SaveOrConfirmOverwrite_Call, 0xFE1CDC
 	.set	DiskSaveFile_CheckPasswordThenSave_Call, 0xFE1CE0
 	.set	sub_FE1CE4, 0xFE1CE4
@@ -19438,7 +19438,7 @@ LcdKeyRow4_SoundEditPitchEnvelope1:
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A5DA  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A5D6_Skip	; F0A5DE  jr NZ,0xf0a5ea
 	pushw	0	; F0A5E0  push 0x0000
-	call	sub_FD8116	; F0A5E3  call 0xfd8116
+	call	SoundEditEnvelope1_SetField0AndRedraw	; F0A5E3  call 0xfd8116
 	popw	bc	; F0A5E7  pop BC
 	jr	sub_F0A5D6_Join	; F0A5E8  jr T,0xf0a601
 sub_F0A5D6_Skip:
@@ -19474,7 +19474,7 @@ LcdKeyRow5_SoundEditPitchEnvelope1:
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0A608  cp (XIZ+0x08),0x00
 	jr	nz, sub_F0A604_Skip	; F0A60C  jr NZ,0xf0a618
 	pushw	1	; F0A60E  push 0x0001
-	call	sub_FD8116	; F0A611  call 0xfd8116
+	call	SoundEditEnvelope1_SetField0AndRedraw	; F0A611  call 0xfd8116
 	popw	bc	; F0A615  pop BC
 	jr	sub_F0A604_Join	; F0A616  jr T,0xf0a62f
 sub_F0A604_Skip:
@@ -20699,7 +20699,7 @@ SoftKeyCol3_SoundEditDrumMenu:
 	push	xbc	; F0ABD1  push XBC
 	pushw	0	; F0ABD2  push 0x0000
 	pushw	2	; F0ABD5  push 0x0002
-	call	sub_FDA05E	; F0ABD8  call 0xfda05e
+	call	ModelingPage_GetItemGroup	; F0ABD8  call 0xfda05e
 	lda	xbc, (xiz-6)	; F0ABDC  lda XBC,XIZ+0xfa
 	push	xbc	; F0ABDF  push XBC
 	call	Var27F4_Get	; F0ABE0  call 0xfd9d5c
@@ -20730,7 +20730,7 @@ sub_F0ABB9_Join:
 	extz	wa	; F0AC19  extz WA
 	pushw	wa	; F0AC1B  push WA
 	pushw	2	; F0AC1C  push 0x0002
-	call	sub_FDA002	; F0AC1F  call 0xfda002
+	call	ModelingPage_GroupStartIndex	; F0AC1F  call 0xfda002
 	m_push MWD+r6, 0xf8	; F0AC23  pushw (XIZ+0xf8)
 	call	ToneMsg88_Id14	; F0AC26  call 0xfd66a6
 	pushw	1	; F0AC2A  push 0x0001
@@ -23266,7 +23266,7 @@ sub_F0BAA8_Skip:
 	lda	xbc, (xiz-24)	; F0BB63  lda XBC,XIZ+0xe8
 	push	xbc	; F0BB66  push XBC
 	pushw	1	; F0BB67  push 0x0001
-	call	sub_FD77B3	; F0BB6A  call 0xfd77b3
+	call	SoundEditText_SetSlot	; F0BB6A  call 0xfd77b3
 	lda	xbc, (xiz-6)	; F0BB6E  lda XBC,XIZ+0xfa
 	push	xbc	; F0BB71  push XBC
 	ld	wa, (xiz-4)	; F0BB72  ld WA,(XIZ+0xfc)
@@ -23379,7 +23379,7 @@ sub_F0BBB4_Skip:
 	lda	xbc, (xiz-24)	; F0BC47  lda XBC,XIZ+0xe8
 	push	xbc	; F0BC4A  push XBC
 	pushw	1	; F0BC4B  push 0x0001
-	call	sub_FD77B3	; F0BC4E  call 0xfd77b3
+	call	SoundEditText_SetSlot	; F0BC4E  call 0xfd77b3
 	lda	xbc, (xiz-6)	; F0BC52  lda XBC,XIZ+0xfa
 	push	xbc	; F0BC55  push XBC
 	ld	wa, (xiz-4)	; F0BC56  ld WA,(XIZ+0xfc)
@@ -23901,7 +23901,7 @@ sub_F0BF04_Skip3:
 	lda	xbc, (xiz-44)	; F0C06A  lda XBC,XIZ+0xd4
 	push	xbc	; F0C06D  push XBC
 	pushw	1	; F0C06E  push 0x0001
-	call	sub_FD77B3	; F0C071  call 0xfd77b3
+	call	SoundEditText_SetSlot	; F0C071  call 0xfd77b3
 	lda	xbc, (xiz-8)	; F0C075  lda XBC,XIZ+0xf8
 	push	xbc	; F0C078  push XBC
 	ld	wa, (xiz-4)	; F0C079  ld WA,(XIZ+0xfc)
@@ -89451,7 +89451,7 @@ T_F4075C:	jp sub_FA7DA3  ; -> prom_a 0x27DA3   x1
 T_F40760:	jp sub_FA7E0C  ; -> prom_a 0x27E0C   x1
 	.fill 0xC, 1, 0x0E  ; 0xF40764: 12 x ret
 T_ParamModule_PhaseVector:	.long ParamModule_PhaseVector	; ptr -> 0xFAA400 (prom_a 0x2A400)
-T_F40774:	jp sub_FAAAB1  ; -> prom_a 0x2AAB1   x2
+T_F40774:	jp ParamImage_PostAllAsChangeEvents_Call  ; -> prom_a 0x2AAB1   x2
 T_F40778:	jp sub_FAAA8F  ; -> prom_a 0x2AA8F
 T_MidiSettings_ResetToDefault:	jp MidiSettings_ResetToDefault  ; -> prom_a 0x2A967   x2
 T_F40780:	jp sub_FAB7E6  ; -> prom_a 0x2B7E6   x1
@@ -89471,7 +89471,9 @@ T_F407A0:	jp T_F407A0_Nop  ; -> prom_a 0x2B5EA   x4
 T_F407A4:	jp T_F407A4_Nop  ; -> prom_a 0x2A7AB   x6
 T_F407A8:	jp T_F407A8_Nop  ; -> prom_a 0x2B5E9
 T_F407AC:	jp sub_FAAB28  ; -> prom_a 0x2AB28   x2
-T_F407B0:	jp sub_FAAAB5  ; -> prom_a 0x2AAB5   x2
+; Evidence: slot 0xF407B0 is `jp 0xFAAAB5`; prom_a 0xFAAAB5 carries the label
+;           ParamImage_PostAllAsChangeEvents (graded CONTENT).  DERIVATIVE name.
+T_ParamImage_PostAllAsChangeEvents:	jp ParamImage_PostAllAsChangeEvents  ; F407B0 (was T_F407B0) -> prom_a 0x2AAB5   x2
 ; Evidence: slot 0xF407B4 is `jp 0xFAA4A0`; prom_a 0xFAA4A0 carries the label
 ;           Queue2C00_PublishStagedIfPending, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_Queue2C00_PublishStagedIfPending:	jp Queue2C00_PublishStagedIfPending  ; F407B4 (was T_F407B4) -> prom_a 0x2A4A0   x31
@@ -89500,11 +89502,15 @@ T_F407E4:	jp T_F407E4_Nop  ; -> prom_a 0x2A71E
 T_F407E8:	jp T_F407E8_Nop  ; -> prom_a 0x2A71D   x1
 T_F407EC:	jp sub_FAA71F  ; -> prom_a 0x2A71F   x3
 T_F407F0:	jp T_F407F0_Nop  ; -> prom_a 0x2BBD6
-T_F407F4:	jp sub_FAB658  ; -> prom_a 0x2B658   x6
+; Evidence: slot 0xF407F4 is `jp 0xFAB658`; prom_a 0xFAB658 carries the label
+;           SoundSel_ClampToProgramAndBank (graded CONTENT).  DERIVATIVE name.
+T_SoundSel_ClampToProgramAndBank:	jp SoundSel_ClampToProgramAndBank  ; F407F4 (was T_F407F4) -> prom_a 0x2B658   x6
 T_F407F8:	jp sub_FAB6D7  ; -> prom_a 0x2B6D7
 T_F407FC:	jp sub_FAA45C  ; -> prom_a 0x2A45C   x1
 T_F40800:	jp sub_FAA47E  ; -> prom_a 0x2A47E
-T_F40804:	jp sub_FAB779  ; -> prom_a 0x2B779   x3
+; Evidence: slot 0xF40804 is `jp 0xFAB779`; prom_a 0xFAB779 carries the label
+;           CombiSel_ClampToNumberAndBank (graded CONTENT).  DERIVATIVE name.
+T_CombiSel_ClampToNumberAndBank:	jp CombiSel_ClampToNumberAndBank  ; F40804 (was T_F40804) -> prom_a 0x2B779   x3
 T_F40808:	jp sub_FAB728  ; -> prom_a 0x2B728   x3
 T_MidiIn_ControlRecord_Dispatch:	jp MidiIn_ControlRecord_Dispatch  ; -> prom_a 0x2BEFB   x21
 T_ParamMsg_RefreshMasksOnCtrlFieldChange:	jp ParamMsg_RefreshMasksOnCtrlFieldChange  ; -> prom_a 0x2C786
@@ -91088,7 +91094,7 @@ T_BStore_GetDiskBankPassword:	jp BStore_GetDiskBankPassword  ; F41F00 (was T_F41
 T_BStore_GetAnyBankPassword:	jp BStore_GetAnyBankPassword  ; F41F04 (was T_F41F04) -> prom_a 0x3B3DC   x1
 	.fill 0x8, 1, 0x0E  ; 0xF41F08: 8 x ret
 T_F41F10:	jp sub_FAED76  ; -> prom_a 0x2ED76   x1
-T_F41F14:	jp sub_FAE84D  ; -> prom_a 0x2E84D   x5
+T_F41F14:	jp SeqBuf_RecordQueuedEvents  ; -> prom_a 0x2E84D   x5
 T_F41F18:	jp SeqEvt_ResetPlayingSlotControllers  ; -> prom_a 0x2EC8A   x9
 T_F41F1C:	jp T_F41F1C_Nop  ; -> prom_a 0x2EC78
 T_F41F20:	jp T_F41F20_Nop  ; -> prom_a 0x2F48F
@@ -91436,7 +91442,9 @@ T_MidiFilePlay_OnSongSelect:	jp MidiFilePlay_OnSongSelect  ; F42584 (was T_F4258
 T_F42588:	jp sub_FE1C17  ; -> prom_a 0x61C17
 T_F4258C:	jp T_F4258C_Nop  ; -> prom_a 0x61C1E
 T_Disk_PortA3_Release_Call_Call:	jp Disk_PortA3_Release_Call_Call  ; -> prom_a 0x61C1F   x4
-T_F42594:	jp sub_FE1C23  ; -> prom_a 0x61C23   x15
+; Evidence: slot 0xF42594 is `jp 0xFE1C23`; prom_a 0xFE1C23 carries the label
+;           Playback_StopAllAndIgnoreMidiStart (graded CONTENT).  DERIVATIVE name.
+T_Playback_StopAllAndIgnoreMidiStart:	jp Playback_StopAllAndIgnoreMidiStart  ; F42594 (was T_F42594) -> prom_a 0x61C23   x15
 ; Evidence: slot 0xF42598 is `jp 0xFE1C27`; prom_a 0xFE1C27 carries the label
 ;           Disk_MountAndScanDirectory_Call (graded CONTENT).  DERIVATIVE name.
 T_Disk_MountAndScanDirectory_Call:	jp Disk_MountAndScanDirectory_Call  ; F42598 (was T_F42598) -> prom_a 0x61C27
@@ -91484,7 +91492,9 @@ T_NameEdit_SyncCharIndex_Call:	jp NameEdit_SyncCharIndex_Call  ; F425F8 (was T_F
 ;           DiskSave_IsSelectedFileNew_Call (graded CONTENT).  DERIVATIVE name.
 T_DiskSave_IsSelectedFileNew_Call:	jp DiskSave_IsSelectedFileNew_Call  ; F425FC (was T_F425FC) -> prom_a 0x61CD0
 T_Var2216_SetW145C_Call:	jp Var2216_SetW145C_Call  ; -> prom_a 0x61CD4   x2
-T_F42604:	jp sub_FE1CD8  ; -> prom_a 0x61CD8   x8
+; Evidence: slot 0xF42604 is `jp 0xFE1CD8`; prom_a 0xFE1CD8 carries the label
+;           DiskProgress_PrintDotForSmf (graded CONTENT).  DERIVATIVE name.
+T_DiskProgress_PrintDotForSmf:	jp DiskProgress_PrintDotForSmf  ; F42604 (was T_F42604) -> prom_a 0x61CD8   x8
 ; Evidence: slot 0xF42608 is `jp 0xFE1CDC`; prom_a 0xFE1CDC carries the label
 ;           DiskSaveFile_SaveOrConfirmOverwrite_Call (graded CONTENT).  DERIVATIVE name.
 T_DiskSaveFile_SaveOrConfirmOverwrite_Call:	jp DiskSaveFile_SaveOrConfirmOverwrite_Call  ; F42608 (was T_F42608) -> prom_a 0x61CDC   x1
@@ -91492,7 +91502,9 @@ T_DiskSaveFile_SaveOrConfirmOverwrite_Call:	jp DiskSaveFile_SaveOrConfirmOverwri
 ;           DiskSaveFile_CheckPasswordThenSave_Call (graded CONTENT).  DERIVATIVE name.
 T_DiskSaveFile_CheckPasswordThenSave_Call:	jp DiskSaveFile_CheckPasswordThenSave_Call  ; F4260C (was T_F4260C) -> prom_a 0x61CE0   x1
 T_F42610:	jp sub_FE1CE4  ; -> prom_a 0x61CE4   x1
-T_F42614:	jp sub_FE1C0B  ; -> prom_a 0x61C0B   x5
+; Evidence: slot 0xF42614 is `jp 0xFE1C0B`; prom_a 0xFE1C0B carries the label
+;           Disk_MountAndScanMidiFilesResetRings (graded CONTENT).  DERIVATIVE name.
+T_Disk_MountAndScanMidiFilesResetRings:	jp Disk_MountAndScanMidiFilesResetRings  ; F42614 (was T_F42614) -> prom_a 0x61C0B   x5
 ; Evidence: slot 0xF42618 is `jp 0xFE04BE`; prom_a 0xFE04BE carries the label
 ;           MidiFileStream_Open (graded CONTENT).  DERIVATIVE name.
 T_MidiFileStream_Open:	jp MidiFileStream_Open  ; F42618 (was T_F42618) -> prom_a 0x604BE   x2
@@ -110497,7 +110509,7 @@ ZeroBlock16_F4FEA4:
 ;   shape `pushw n / lda XBC,<string> / push XBC / call SysExTx_AppendAndSendOnF7`;
 ;   SysExTx_AppendAndSendOnF7 appends n bytes to the output buffer whose descriptor is at
 ;   (0x60FC88) (+0x0A = write pointer), writes a 0xFF after them, and when the
-;   last byte is 0xF7 hands the message on (SysExTx_SendFrameMidi1, sub_FB7BB9,
+;   last byte is 0xF7 hands the message on (SysExTx_SendFrameMidi1, SysExSession_RefreshProgressScreen,
 ;   SysExTx_SwapBuffers).  `2C 04 00 11` alone is named by nine sites: the header of a
 ;   parameter change whose address and data the caller appends.  So these are
 ;   the messages this machine SENDS, and the decode tree accepts the same
@@ -167386,7 +167398,7 @@ Smf_ReadFile:
 	call	T_MessageScreen_Paint	; F6F57D  call 0xf41600
 	ldw	(4680:16), 1	; F6F581  ld (0x1248),0x0001
 	call	T_Var2216_SetW145C_Call	; F6F587  call 0xf42600
-	call	T_F42604	; F6F58B  call 0xf42604
+	call	T_DiskProgress_PrintDotForSmf	; F6F58B  call 0xf42604
 	ld	xwa, 6334208	; F6F58F  ld XWA,0x0060a700
 	ld	(InputStream_Cursor:16), xwa	; F6F594  ld (0x1088),XWA
 Smf_ReadFile_Join:
@@ -168430,7 +168442,7 @@ sub_F6FD7A_Return:
 ; Smf_SkipBytes
 ; Called from: in-module: 0xF6FB90 0xF6FBA6 0xF6FBBB 0xF6FC0C 0xF71693
 ; Touches: (0x1088) (0x1198) (0x1238) (0x1248) (0x124A)  |  0x60AAFF
-; Calls:   InputStream_Refill T_F42604
+; Calls:   InputStream_Refill T_DiskProgress_PrintDotForSmf
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF6FD91 is an instruction boundary of this
@@ -168463,7 +168475,7 @@ Smf_SkipBytes:
 	cp	de, 0:i3	; F6FDC3  cp DE,0
 	jr	nz, sub_F6FD91_Skip	; F6FDC5  jr NZ,0xf6fdcd
 	push	xix	; F6FDC7  push XIX
-	call	T_F42604	; F6FDC8  call 0xf42604
+	call	T_DiskProgress_PrintDotForSmf	; F6FDC8  call 0xf42604
 	pop	xix	; F6FDCC  pop XIX
 sub_F6FD91_Skip:
 	popw	de	; F6FDCD  pop DE
@@ -171742,7 +171754,7 @@ sub_F71369_Return:
 ; Called from: in-module: 0xF6F5A2 0xF6F5D7 0xF6F5E2 0xF6F5E9 0xF6F5F0
 ;              0xF6F5F7 0xF6F604 0xF6F65F +33 more
 ; Touches: (0x1088) (0x1248) (0x124A)  |  0x60A700 0x60AAFF
-; Calls:   InputStream_Refill T_F42604
+; Calls:   InputStream_Refill T_DiskProgress_PrintDotForSmf
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF7138F is an instruction boundary of this
@@ -171792,7 +171804,7 @@ InputStream_GetByte:
 	cp	de, 0:i3	; F713C9  cp DE,0
 	jr	nz, InputStream_GetByte_Skip	; F713CB  jr NZ,0xf713d3
 	push	xix	; F713CD  push XIX
-	call	T_F42604	; F713CE  call 0xf42604
+	call	T_DiskProgress_PrintDotForSmf	; F713CE  call 0xf42604
 	pop	xix	; F713D2  pop XIX
 InputStream_GetByte_Skip:
 	popw	de	; F713D3  pop DE
@@ -176933,7 +176945,7 @@ Data_F73844:
 ; Touches: (0x0C70) (0x107E) (0x1080) (0x1082) (0x1084) (0x1086) (0x1088)
 ;          (0x10C4) (0x10C6) (0x1193) +39 more  |  0x603422 0x603500
 ;          0x6036A0 0x60A480 0x60A700
-; Calls:   sub_F748AD sub_F74885 T_MessageScreen_Paint T_Var2216_SetW145C_Call T_F42604 SmfWrite_SaveFileName
+; Calls:   sub_F748AD sub_F74885 T_MessageScreen_Paint T_Var2216_SetW145C_Call T_DiskProgress_PrintDotForSmf SmfWrite_SaveFileName
 ;          T_DiskSaveFile_Execute_Entry SmfWrite_RestoreFileName T_DiskApi_DeleteFile_Call sub_F735F7 sub_F72918 SmfWrite_ClearPendingNoteOffs +20
 ;          more
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
@@ -177024,7 +177036,7 @@ Smf_WriteFile_Join:
 	call	T_MessageScreen_Paint	; F738FF  call 0xf41600
 	ldw	(4680:16), 1	; F73903  ld (0x1248),0x0001
 	call	T_Var2216_SetW145C_Call	; F73909  call 0xf42600
-	call	T_F42604	; F7390D  call 0xf42604
+	call	T_DiskProgress_PrintDotForSmf	; F7390D  call 0xf42604
 	push	xix	; F73911  push XIX
 	push	xiy	; F73912  push XIY
 	push	xbc	; F73913  push XBC
@@ -177078,11 +177090,11 @@ Smf_WriteFile_Skip6:
 	jr	nz, Smf_WriteFile_Skip7	; F739B4  jr NZ,0xf739bb
 	ld	(4665:16), 0	; F739B6  ld (0x1239),0x00
 Smf_WriteFile_Skip7:
-	call	T_F42604	; F739BB  call 0xf42604
+	call	T_DiskProgress_PrintDotForSmf	; F739BB  call 0xf42604
 	call	sub_F735F7	; F739BF  call 0xf735f7
 	call	sub_F72918	; F739C3  call 0xf72918
 	calr	SmfWrite_ClearPendingNoteOffs	; F739C7  calr 0xf74eae
-	call	T_F42604	; F739CA  call 0xf42604
+	call	T_DiskProgress_PrintDotForSmf	; F739CA  call 0xf42604
 	calr	SmfSize_Pass	; F739CE  calr 0xf75685
 	calr	SmfWrite_ClearPendingNoteOffs	; F739D1  calr 0xf74eae
 	xor	wa, wa	; F739D4  xor WA,WA
@@ -178950,7 +178962,7 @@ sub_F74AC5_Join:
 ;              0xF74A2D 0xF74A42 0xF74A57 +5 more
 ; Touches: (0x1088) (0x1238) (0x1248) (0x126C) (0x21D0) (0x21D1) (0x21D2)
 ;          (0x2724)  |  0x60A480 0x60A700 0x60AAFF
-; Calls:   sub_F765E6 T_F42604 sub_F76661 SmfWrite_SaveFileName T_DiskApi_DeleteFile_Call SmfWrite_RestoreFileName
+; Calls:   sub_F765E6 T_DiskProgress_PrintDotForSmf sub_F76661 SmfWrite_SaveFileName T_DiskApi_DeleteFile_Call SmfWrite_RestoreFileName
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF74B3A is an instruction boundary of this
@@ -178996,7 +179008,7 @@ sub_F74B3A_Skip2:
 	cp	de, 0:i3	; F74B86  cp DE,0
 	jr	nz, sub_F74B3A_Skip3	; F74B88  jr NZ,0xf74b90
 	push	xix	; F74B8A  push XIX
-	call	T_F42604	; F74B8B  call 0xf42604
+	call	T_DiskProgress_PrintDotForSmf	; F74B8B  call 0xf42604
 	pop	xix	; F74B8F  pop XIX
 sub_F74B3A_Skip3:
 	popw	de	; F74B90  pop DE
@@ -182475,7 +182487,7 @@ sub_F76ADF_Skip:
 	cp	de, 0:i3	; F76B2B  cp DE,0
 	jr	nz, sub_F76ADF_Skip2	; F76B2D  jr NZ,0xf76b35
 	push	xix	; F76B2F  push XIX
-	call	T_F42604	; F76B30  call 0xf42604
+	call	T_DiskProgress_PrintDotForSmf	; F76B30  call 0xf42604
 	pop	xix	; F76B34  pop XIX
 sub_F76ADF_Skip2:
 	popw	de	; F76B35  pop DE

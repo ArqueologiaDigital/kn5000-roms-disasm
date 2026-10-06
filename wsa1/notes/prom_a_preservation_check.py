@@ -3388,7 +3388,7 @@ RENAMES = {
     "sub_F9ED44": "Screen_MemoryProtect_Enter",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FA0E51": "Screen_ControllerAssign_Leave",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FA1404": "Screen_Initial_Button",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
-    "sub_FAAAE7": "sub_FAAAB5",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
+    "sub_FAAAE7": "ParamImage_PostAllAsChangeEvents",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FAABC7": "sub_FAABB3",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FAABD9": "sub_FAABB3",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
     "sub_FAB64E": "ProgramChangeMode_OnEvent",   # 2026-10-04: a stray mid-routine label, removed (notes/prom_a_stray_label_removal.py)
@@ -4989,6 +4989,42 @@ RENAMES = {
     "T_F42E18": "T_UiPaint_PageLabelBackdrop",
     "T_F42E6C": "T_Drawbar_WaitReloadMark",
     "T_F42F80": "T_NameEntry_Begin",
+    "sub_FE1C23": "Playback_StopAllAndIgnoreMidiStart",
+    "sub_FE8BD4": "EditScreen_FlagMemoryFull",
+    "sub_FE2F86": "DiskProgress_PrintDot",
+    "sub_FE1CD8": "DiskProgress_PrintDotForSmf",
+    "sub_F918E5": "C0mbinati0nM0de_ShowSelectedPartSoundName",
+    "sub_FD7159": "SoundEditController_SaveField0",
+    "sub_FD6FC9": "SoundEditLfo_GetSelectedLfo",
+    "sub_FD6F22": "SoundEditLfo_GetLfoFieldBase",
+    "sub_FD8993": "SoundEditController_SoftKeyCols5to8",
+    "sub_FD8DAF": "SoundEditEnvelope1_DrawGraph",
+    "sub_FAB658": "SoundSel_ClampToProgramAndBank",
+    "sub_FAB779": "CombiSel_ClampToNumberAndBank",
+    "sub_FB4D20": "SysExParamDesc_FindForEvent",
+    "sub_FDA002": "ModelingPage_GroupStartIndex",
+    "sub_FDA05E": "ModelingPage_GetItemGroup",
+    "sub_FD9D16": "ModelingPage_GetItemIndex",
+    "sub_FE1C0B": "Disk_MountAndScanMidiFilesResetRings",
+    "sub_FE93CA": "EditScreen_ExtendChainToCursorMeasure",
+    "sub_FF5118": "MidiFile_DrawFileList",
+    "sub_FF7959": "SC1_CmdEFAndClearHeldButtons",
+    "sub_FAAAB5": "ParamImage_PostAllAsChangeEvents",
+    "sub_FAE84D": "SeqBuf_RecordQueuedEvents",
+    "sub_FB7BB9": "SysExSession_RefreshProgressScreen",
+    "sub_FBCCB1": "CombiEdit_TakePartIndex",
+    "sub_FD65D3": "ToneMsg88_Id16",
+    "sub_FD77B3": "SoundEditText_SetSlot",
+    "sub_FD8116": "SoundEditEnvelope1_SetField0AndRedraw",
+    "sub_FD9A7A": "FilterPage_DrawEqualizerGraph",
+    "sub_FF4936": "DiskEntry_GetContentType",
+    "T_F407B0": "T_ParamImage_PostAllAsChangeEvents",
+    "T_F407F4": "T_SoundSel_ClampToProgramAndBank",
+    "T_F40804": "T_CombiSel_ClampToNumberAndBank",
+    "T_F42594": "T_Playback_StopAllAndIgnoreMidiStart",
+    "T_F42604": "T_DiskProgress_PrintDotForSmf",
+    "T_F42614": "T_Disk_MountAndScanMidiFilesResetRings",
+    "sub_FAAAB1": "ParamImage_PostAllAsChangeEvents_Call",
 }
 
 

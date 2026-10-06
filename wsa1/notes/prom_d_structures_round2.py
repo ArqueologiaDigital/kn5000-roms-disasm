@@ -490,7 +490,7 @@ ADJUDICATED = {
     ("c", 0x48A34): "prom_c 0xFC8A32 `or DE,0x0180`, same bit-banger, same straddle",
     ("b", 0x40AC5): "prom_b thunk table: LE24 0xF44AEE is a prom_b CODE address that "
                     "happens to equal 0xF00000 + 0x44AEE",
-    ("a", 0x583D6): "straddles prom_a 0xFD83D4 `calr sub_FD8DAF` and 0xFD83D7 "
+    ("a", 0x583D6): "straddles prom_a 0xFD83D4 `calr SoundEditEnvelope1_DrawGraph` and 0xFD83D7 "
                     "`pushw 0x05`; not an operand",
 }
 check("EVERY candidate is a false positive, each adjudicated by name",

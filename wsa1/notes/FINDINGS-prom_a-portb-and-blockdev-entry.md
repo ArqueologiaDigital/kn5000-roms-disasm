@@ -83,7 +83,7 @@ are the UI's way in:
 | `T_F425E8` | 0xFE1CB3 | 3 |
 | `T_Disk_PortA3_Release_Entry` | 0xFE1CC4 | 1: 0xF66159 |
 | `T_Var2216_SetW145C_Call` | 0xFE1CD4 | 2 |
-| `T_F42604` | 0xFE1CD8 | 8 |
+| `T_DiskProgress_PrintDotForSmf` | 0xFE1CD8 | 8 |
 | `T_Medley_AdvanceInternalSong` | 0xFE7927 | 1: 0xF44AA3 |
 | `T_Medley_Start` | 0xFE7800 | 1: 0xF661BF |
 | `T_Medley_Stop` | 0xFE782C | 1: 0xF6622A |

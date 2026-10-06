@@ -477,9 +477,9 @@ ROWS = [
     ("FE28B3", "DiskSave_DrumMap", "content type 8: extension 'D', then DiskSave_WriteRemapFile."),
     ("FE2916", "DiskSave_WriteRemapFile", "extension bytes 9-10 = 'RM', then the write."),
     ("FE1E29", "DiskLoad_ReadFileIntoWindow",
-     "sub_FE2F86, Disk_Flags |= 0x20 and bit 1 cleared, DiskApi_ReadFileToWindow."),
+     "DiskProgress_PrintDot, Disk_Flags |= 0x20 and bit 1 cleared, DiskApi_ReadFileToWindow."),
     ("FE2980", "DiskSave_WriteWindowToFile",
-     "sub_FE2F86, Disk_Flags bits 5 and 1 cleared, DiskApi_WriteFileFromWindow."),
+     "DiskProgress_PrintDot, Disk_Flags bits 5 and 1 cleared, DiskApi_WriteFileFromWindow."),
     ("FE1FFF", "DiskLoad_ApplyPanelImage",
      "Disk_Flags |= 0x18 around: ParamImage_WriteRecordHeaders, ParamImage_SanitizeAllAndHook, ParamImage_QueueDiffAll,\n"
      "Queue2C00_DrainPassB, MidiIn_ServiceDeferred, UiEventList_Publish; returns 1.  Called after the LSW file is read."),
@@ -1411,7 +1411,7 @@ ROWS = [
      "T_CombiEdit_RunPendingRepaint's body: when (0x277D) is 1 and the screen is one of COMBINATION EDIT's (0x33-0x3A, 0xB0-0xB7), posts\n"
      "that page's repaint routine to the callback queue and signals semaphore 1; (0x277D) = 0."),
     ("FE984B", "EditCursor_SeekPastTick",
-     "opens the edited measure (EditScreen_SeekCursorMeasure, moving on through sub_FE93CA while BStore_ErrorCode is set), counts 0x81\n"
+     "opens the edited measure (EditScreen_SeekCursorMeasure, moving on through EditScreen_ExtendChainToCursorMeasure while BStore_ErrorCode is set), counts 0x81\n"
      "markers up to EditCursor_Beat, then steps over every event whose tick is <= EditCursor_Tick (`jr ule`) and\n"
      "backs onto the tag; 0x601F05 += the beat, 0x601F07 = the tick.  Called by EditCursor_NextBeat."),
     ("FE98E7", "EditCursor_SeekToTick",
@@ -1499,7 +1499,7 @@ ROWS = [
     ("FE912B", "NoteEdit_AnyKeyHeld", "A = 0xFF when any of the 8 slots at 0x601F1C is flagged, else 0."),
     ("FE915D", "NoteEdit_EnterHeldNotes",
      "DRUM EDIT: one note, EditCursor_Note with slot 0's velocity (NoteEdit_InsertNoteAndSync); NOTE EDIT: every slot with a note\n"
-     "through NoteEdit_InsertNoteEvent then EditCursor_SyncBeatAndTick, stopping on a BStore error (sub_FE8BD4)."),
+     "through NoteEdit_InsertNoteEvent then EditCursor_SyncBeatAndTick, stopping on a BStore error (EditScreen_FlagMemoryFull)."),
     ("FE97DF", "EditScreen_AppendMissingBeatMarkers",
      "appends 0x81 beat markers (EditScreen_AppendBeatMarker) while the target (0x601F6C) exceeds the count\n"
      "sub_FE9830 returns; BStore_ErrorCode = 0xFF when an append fails; the cursor is restored."),
@@ -1515,11 +1515,11 @@ ROWS = [
     ("FE9276", "EditCursor_SyncBeatAndTick",
      "(0x601F07) = EditCursor_TickInMeasure mod 0x60, (0x601F05) = its beat + (0x601F0F), the measure's first beat."),
     ("FE91C0", "NoteEdit_InsertNoteAndSync",
-     "NoteEdit_InsertNoteEvent then EditCursor_SyncBeatAndTick, or sub_FE8BD4 on a BStore error.  Called by\n"
+     "NoteEdit_InsertNoteEvent then EditCursor_SyncBeatAndTick, or EditScreen_FlagMemoryFull on a BStore error.  Called by\n"
      "DrumEdit_SoftKeyCol8 and NoteEdit_EnterHeldNotes."),
     ("FE9290", "EditScreen_StepCursorAfterEntry",
      "EditCursor_AdvanceToNextIncStep and EditScreen_ExtendChainToCursorBeat; inside the measure the fields are\n"
-     "redrawn, past its end EditScreen_WrapAndShowCursorMeasure; EditScreen_CursorFlags bit 2 (extension failed) -> sub_FE8BD4."),
+     "redrawn, past its end EditScreen_WrapAndShowCursorMeasure; EditScreen_CursorFlags bit 2 (extension failed) -> EditScreen_FlagMemoryFull."),
     ("FEA64D", "EditScreen_ExtendChainToCursorBeat",
      "appends beat markers (EditScreen_AppendBeatMarker) until the chain holds the cursor's beat; CursorFlags bit 2\n"
      "is set when an append fails; the block-store cursor is restored."),
@@ -1535,7 +1535,7 @@ ROWS = [
     ("FE932D", "EditScreen_RunDueAction2", "when (0x601F5A) has reached 0x80: cleared, EditScreen_EndAudition_Call (EditScreen_EndAudition)."),
     ("FE933F", "EditScreen_ReloadMeasureView",
      "EditScreen_DeferredActions[0] and [6]: EditScreen_EndAudition, the measure reopened (EditScreen_OpenCursorMeasure, moving on through\n"
-     "sub_FE93CA), its beat table rebuilt (EditScreen_BuildBeatTable), sub_FE938E, the event at the cursor selected\n"
+     "EditScreen_ExtendChainToCursorMeasure), its beat table rebuilt (EditScreen_BuildBeatTable), sub_FE938E, the event at the cursor selected\n"
      "(EditScreen_SelectEventAtCursor), and every part of the screen redrawn."),
     # NOTE / DRUM EDIT: audition, note-grid drawing, the deferred redraws
     ("FEA566", "EditScreen_AuditionEventNote",
@@ -1581,7 +1581,7 @@ ROWS = [
      "EditScreen_RedrawCursorLayer."),
     ("FE973C", "EditScreen_DeferredRedrawAndExtend",
      "EditScreen_DeferredActions[3]: redraw; with an event selected, EditScreen_AppendMissingBeatMarkers first\n"
-     "(sub_FE8BD4 on a BStore error)."),
+     "(EditScreen_FlagMemoryFull on a BStore error)."),
     # NOTE / DRUM EDIT: walking the part's chain (positions in beats and ticks)
     ("FE96E3", "EditScreen_SeekPartSavedCursor",
      "BStore_CursorBlock = word 0x60347E[EditScreen_Part], BStore_CursorOffset = byte 0x6034A0[EditScreen_Part]: the\n"
@@ -1676,7 +1676,7 @@ ROWS = [
      "EditScreen_ShowPreviousMeasure with EditCursor_SeekToTick before the re-selection.  Called by\n"
      "EditCursor_PrevBeat."),
     ("FE94FB", "EditScreen_ShowCursorMeasure",
-     "the view rebuilt to start at the cursor's measure: EditScreen_OpenCursorMeasure (moving on through sub_FE93CA\n"
+     "the view rebuilt to start at the cursor's measure: EditScreen_OpenCursorMeasure (moving on through EditScreen_ExtendChainToCursorMeasure\n"
      "when it is missing), EditScreen_SeekCursorBeat, EditScreen_BuildBeatTable, EditCursor_SeekToTick,\n"
      "EditScreen_SelectEventAtCursor, everything redrawn; with a selection, EditScreen_AuditionEvent."),
     ("FE955D", "EditScreen_WrapAndShowCursorMeasure",
@@ -1910,7 +1910,7 @@ ROWS = [
      "T_Medley_Tick: counts (0x22D0) down; at 5 for INT: playback flags cleared and T_F409CC; at 0: INT -> T_Transport_ResetAndStartBC (the\n"
      "transports from zero), FD + MIDI FILE -> the next song (wrapping) and Medley_StartMidiFile."),
     ("FE79B7", "Medley_StartMidiFile",
-     "(0x34D0) |= 4, T_F42614 (mount and list the MIDI files); from Medley_PlayingSong, the first listing entry\n"
+     "(0x34D0) |= 4, T_Disk_MountAndScanMidiFilesResetRings (mount and list the MIDI files); from Medley_PlayingSong, the first listing entry\n"
      "(0x60A480 + 8 n) that is not blank: its name to Disk_FileName and to 0x0E38, T_F42E90.  None: Medley_StopMidiFile,\n"
      "status 3."),
     ("FE7A30", "Medley_StopMidiFile",
