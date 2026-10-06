@@ -372,7 +372,7 @@ BitMapOut_ByteData_PresetCopy:
 	extz wa
 	cp hl, 0:i3
 	jr nz, BitMapOut_ByteData_PresetCopy_Skip
-	calr BitMapOut_SnapshotFromROM
+	calr PanelMemory_Recall
 	jr BitMapOut_ByteData_PresetCopy_Join
 BitMapOut_ByteData_PresetCopy_Skip:
 	ld xbc, 63904
@@ -406,7 +406,7 @@ BitMapOut_CopyPreset9_Execute:
 	ld (xsp + 56), xbc
 	extz wa
 	sla wa, 2
-	lda xbc, (BitMapOut_CopyPreset9_Execute_Data:24)
+	lda xbc, (PanelMemory_SlotAddresses:24)
 	lda	xbc, (xbc+wa)
 	ld xwa, (xbc)
 	ld xix, (xsp + 56)
@@ -588,56 +588,61 @@ BitMapOut_CopyPreset9_Done:
 	lda xsp, (xsp + 82)
 	ret
 
-BitMapOut_SnapshotFromROM:
+; a = panel-memory slot (0..79; 0x80 = 80, the Music Stylist mirror; above 80: no slot -- set RAM 0x8D52 bit 4,
+; clear bits 1-2).  Back the live panel up (PanelMemory_BackupLivePanel) and, when the slot opens with a name
+; record (tag 0x78) of the live panel's length, recall it: RAM 0x8D52 bit 2 -> PanelMemory_RecallRecords,
+; bit 1 -> PanelMemory_RecallKeepStyle, else panel parameter 0x302 = 1 -> PanelMemory_RecallKeepAccompaniment,
+; else PanelMemory_RecallRecords; then ToneGen_DispatchByMode and BitMapOut_DetectChanges.
+PanelMemory_Recall:
 	dec 2, xsp
 	ld (xsp), a
-	calr BitMapOut_SaveDisplayToROM
+	calr PanelMemory_BackupLivePanel
 	cp (xsp), 0x80
-	jr nz, BitMapOut_Snapshot_Clamp50
+	jr nz, PanelMemory_Recall_CheckSlot
 	ld (xsp), 0x50
-	jr BitMapOut_Snapshot_Execute
+	jr PanelMemory_Recall_Slot
 
-BitMapOut_Snapshot_Clamp50:
+PanelMemory_Recall_CheckSlot:
 	cp (xsp), 0x50
 
-	jrl ugt, BitMapOut_Snapshot_SetFlags
+	jrl ugt, PanelMemory_Recall_NoSlot
 
 
 
-BitMapOut_Snapshot_Execute:
+PanelMemory_Recall_Slot:
 	ld	a, (xsp)
 	extz	wa
 	ld	bc, wa
 	sla	bc, 2
-	lda	xde, (BitMapOut_CopyPreset9_Execute_Data:24)
+	lda	xde, (PanelMemory_SlotAddresses:24)
 	ld	xde, (xde+bc)
 	cp	(xde), 0x78
-	jr	nz, BitMapOut_Snapshot_PostProcess
+	jr	nz, PanelMemory_Recall_Finish
 	lda	xhl, (0xf9b4:16)
 	sub	xhl, 0xf9a2
 	ld	xbc, 0:i3
 	ld	c, (xde + 1)
 	cp	xbc, xhl
-	jr	nz, BitMapOut_Snapshot_PostProcess
+	jr	nz, PanelMemory_Recall_Finish
 	ld	c, (0x8cb6:16)
 	bit	2, c
-	jr	nz, BitMapOut_Snapshot_RestoreFull
+	jr	nz, PanelMemory_Recall_Records
 	bit	1, c
-	jr	nz, BitMapOut_Snapshot_RestorePartial
+	jr	nz, PanelMemory_Recall_KeepStyle
 	ld	xwa, 0x302
 	call	AcApcToggleProc_Helper
 	ld	a, (xsp)
 	extz	wa
 	cp	hl, 1:i3
-	jr	nz, BitMapOut_Snapshot_RestoreFull
-	calr	BitMapOut_RestoreVoiceFields
-	jr	BitMapOut_Snapshot_PostProcess
-BitMapOut_Snapshot_RestorePartial:
-	calr	BitMapOut_PartialRestore
-	jr	BitMapOut_Snapshot_PostProcess
-BitMapOut_Snapshot_RestoreFull:
-	calr	BitMapOut_RestoreFullVoice
-BitMapOut_Snapshot_PostProcess:
+	jr	nz, PanelMemory_Recall_Records
+	calr	PanelMemory_RecallKeepAccompaniment
+	jr	PanelMemory_Recall_Finish
+PanelMemory_Recall_KeepStyle:
+	calr	PanelMemory_RecallKeepStyle
+	jr	PanelMemory_Recall_Finish
+PanelMemory_Recall_Records:
+	calr	PanelMemory_RecallRecords
+PanelMemory_Recall_Finish:
 	push	xde
 	push	xhl
 	push	xix
@@ -649,31 +654,33 @@ BitMapOut_Snapshot_PostProcess:
 	pop	xde
 	calr	BitMapOut_DetectChanges
 	bit	4, (0xfd50:16)
-	jr	nz, BitMapOut_Snapshot_CheckActive
+	jr	nz, PanelMemory_Recall_CheckActive
 	bit	1, (0xfd2c:16)
 	call	nz, (BitMapOut_DispatchIOChanges:24)
-BitMapOut_Snapshot_CheckActive:
+PanelMemory_Recall_CheckActive:
 	ld	xwa, 0x302
 	call	AcApcToggleProc_Helper
 	cp	hl, 1:i3
-	jr	nz, BitMapOut_Snapshot_SetFlags
+	jr	nz, PanelMemory_Recall_NoSlot
 	bit	6, (0xfd9e:16)
 	call	z, (MidiSysEx_SendAllParams:24)
-BitMapOut_Snapshot_SetFlags:
+PanelMemory_Recall_NoSlot:
 	ld	a, (0x8cb6:16)
 	set	4, a
 	and	a, 0xf9
 	ld	(0x8cb6:16), a
 	inc	2, xsp
 	ret
-; v7's version of BitMapOut_RestoreVoiceFields: called from the same place in BitMapOut_Snapshot_Execute,
-; same start (extz wa / calr BitMapOut_CopyROMToWorkspace), compiled with a smaller frame than v10's.
-BitMapOut_RestoreVoiceFields:
+; v7's version of PanelMemory_RecallKeepAccompaniment: called from the same place in PanelMemory_Recall_Slot,
+; same start (extz wa / calr PanelMemory_CopySlotToLivePanel), compiled with a smaller frame than v10's.
+; a = slot: copy it over the live panel, then put back from the backup the part records 0x10-0x14 (ACC1-3,
+; RHYTHM, BASS per technics-docs music-stylist-database.md) and fields of tags 0x48 and 0x72.
+PanelMemory_RecallKeepAccompaniment:
 	dec	2, xsp
 	ld	(xsp), a
 	ld	a, (xsp)
 	extz	wa
-	calr	BitMapOut_CopyROMToWorkspace
+	calr	PanelMemory_CopySlotToLivePanel
 	lda	xhl, (0xfc5e:16)
 	ld	c, (xhl)
 	and	c, 248
@@ -692,7 +699,7 @@ BitMapOut_RestoreVoiceFields:
 	resm	7, (xwa + 1)
 	resm	7, (xwa + 2)
 	bit	3, (0x8cb6:16)
-	jr	z, BitMapOut_RestoreVoiceFields_CheckNot80
+	jr	z, PanelMemory_RecallKeepAccompaniment_CheckNot80
 	ld	c, (xhl)
 	res	4, c
 	ld	(xhl), c
@@ -700,7 +707,7 @@ BitMapOut_RestoreVoiceFields:
 	and	a, 0x10
 	or	c, a
 	ld	(xhl), c
-BitMapOut_RestoreVoiceFields_CheckNot80:
+PanelMemory_RecallKeepAccompaniment_CheckNot80:
 	cp	(xsp), 80
 	call	nz, (BitMapOut_SelectiveFieldRestore:24)
 	push	xde
@@ -714,12 +721,14 @@ BitMapOut_RestoreVoiceFields_CheckNot80:
 	pop	xde
 	inc	2, xsp
 	ret
-BitMapOut_RestoreFullVoice:
+; wa = slot: copy its records into the live panel one by one, keeping each part record's payload byte 13 and
+; the low 3 bits of byte 12 -- the bits SndParam_ApplyBaseBlock sets (a 24-byte record = a part record).
+PanelMemory_RecallRecords:
 	lda	xsp, (xsp-16)
 	push	xiz
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (BitMapOut_CopyPreset9_Execute_Data:24)
+	lda	xbc, (PanelMemory_SlotAddresses:24)
 	exts	xwa
 	add	xwa, xbc
 	ld	(xsp + 0x10), xwa
@@ -730,9 +739,9 @@ BitMapOut_RestoreFullVoice:
 	ld	(xsp + 0x4), xwa
 	ld	xiy, xwa
 	ld	ix, 0:i3
-	jr	BitMapOut_RestoreFull_CheckEnd
+	jr	PanelMemory_RecallRecords_CheckEnd
 ; === end v7 block ===
-BitMapOut_RestoreFull_FieldLoop:
+PanelMemory_RecallRecords_FieldLoop:
 	inc 1, xiy
 	ld A, (xiy+)
 	ldfr_berp A, 0xe6
@@ -742,56 +751,56 @@ BitMapOut_RestoreFull_FieldLoop:
 	ldto_berp E, 0xe6
 	extz de
 	cp de, 0:i3
-	jr ule, BitMapOut_RestoreFull_FieldDone
+	jr ule, PanelMemory_RecallRecords_NextRecord
 
-BitMapOut_RestoreFull_CopyField:
+PanelMemory_RecallRecords_CopyField:
 	ldto_berp A, 0xe6
 	ld xiz, 0:i3
 	ldfr_berp A, 0xf8
 	lda xwa, (0xf9ce:16)
 	sub xwa, 0xf9b6
 	cp bc, 0xc
-	jr nz, BitMapOut_RestoreFull_CheckType0D
+	jr nz, PanelMemory_RecallRecords_CheckByte13
 	cp xiz, xwa
-	jr nz, BitMapOut_RestoreFull_CheckType0D
+	jr nz, PanelMemory_RecallRecords_CheckByte13
 	andmi8 (xiy), 0x7
 	ld a, (xhl)
 	and a, 0xf8
 	or (xiy), a
-	jr BitMapOut_RestoreFull_SkipField
+	jr PanelMemory_RecallRecords_KeepByte
 
-BitMapOut_RestoreFull_CheckType0D:
+PanelMemory_RecallRecords_CheckByte13:
 	cp bc, 0xd
-	jr nz, BitMapOut_RestoreFull_DefaultCopy
+	jr nz, PanelMemory_RecallRecords_CopyByte
 	cp xiz, xwa
-	jr nz, BitMapOut_RestoreFull_DefaultCopy
+	jr nz, PanelMemory_RecallRecords_CopyByte
 
-BitMapOut_RestoreFull_SkipField:
+PanelMemory_RecallRecords_KeepByte:
 	inc 1, xiy
 	inc 1, xhl
-	jr BitMapOut_RestoreFull_NextField
+	jr PanelMemory_RecallRecords_NextByte
 
-BitMapOut_RestoreFull_DefaultCopy:
+PanelMemory_RecallRecords_CopyByte:
 	ld A, (xhl+)
 	ld (xiy+), a
 
-BitMapOut_RestoreFull_NextField:
+PanelMemory_RecallRecords_NextByte:
 	inc 1, bc
 	cp bc, de
-	jr c, BitMapOut_RestoreFull_CopyField
+	jr c, PanelMemory_RecallRecords_CopyField
 
-BitMapOut_RestoreFull_FieldDone:
+PanelMemory_RecallRecords_NextRecord:
 	add ix, bc
 	inc 1, ix
 	inc 1, ix
 
-BitMapOut_RestoreFull_CheckEnd:
+PanelMemory_RecallRecords_CheckEnd:
 	lda_d16 xwa, (64584)
 	sub xwa, (xsp+4)
 	ld bc, ix
 	extz xbc
 	cp xbc, xwa
-	jr lt, BitMapOut_RestoreFull_FieldLoop
+	jr lt, PanelMemory_RecallRecords_FieldLoop
 	lda_d16 xde, (64606)
 	ld c, (xde)
 	and c, 7
@@ -932,14 +941,18 @@ BitMapOut_CopyExtTable_Loop:
 
 BitMapOut_CopyExtTable_Check:
 	.incbin "includes/romslices/v7_block_bitmapout_copyexttable_check.bin", 0, 0xb5
-BitMapOut_PartialRestore:
+; wa = slot: copy it over the live panel, then put back from the backup (RAM 0x3C8E4) tag 0x48 payload bytes
+; 0, 1 (style number) and 7, the low 3 bits of byte 4, and tag 0x72 payload bytes 8-10 -- the current style
+; survives the recall.
+PanelMemory_RecallKeepStyle:
 	.incbin "includes/romslices/v7_block_bitmapout_copyexttable_check.bin", 0xb5, 134
 ; === end v7 block ===
-BitMapOut_CopyROMToWorkspace:
+; wa = slot: Mem_Copy PanelMemory_SlotAddresses[wa] (960 bytes) over the live panel at RAM 0xF9A0.
+PanelMemory_CopySlotToLivePanel:
 	pushw	960
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (BitMapOut_CopyPreset9_Execute_Data:24)
+	lda	xbc, (PanelMemory_SlotAddresses:24)
 	ld	xwa, (xbc+wa)
 	push	xwa
 	pushw	0
@@ -1857,7 +1870,8 @@ BitMapOut_RestoreExtra_Done:
 	lda xsp, (xsp + 14)
 	ret
 
-BitMapOut_SaveDisplayToROM:
+; Mem_Copy the live panel block 0 (RAM 0xF9A0, 960 bytes) to the recall backup at RAM 0x3C8E4.
+PanelMemory_BackupLivePanel:
 	pushw	960
 	pushw	0
 	pushw	63904
@@ -3317,7 +3331,7 @@ BitMapOut_UpdateWidget_CheckType:
 	dec 1, a
 	extz wa
 	sla wa, 2
-	lda xbc, (BitMapOut_CopyPreset9_Execute_Data:24)
+	lda xbc, (PanelMemory_SlotAddresses:24)
 	ld	xbc, (xbc+wa)
 	pushw 0x10
 	lda xwa, (0xf9a2:16)
@@ -3339,7 +3353,7 @@ BitMapOut_UpdateWidget_TypeB:
 	dec 1,A
 	extz WA
 	sla wa, 2
-	lda xde, (BitMapOut_CopyPreset9_Execute_Data:24)
+	lda xde, (PanelMemory_SlotAddresses:24)
 	ld	xde, (xde+wa)
 	pushw 0x0010
 	push XBC

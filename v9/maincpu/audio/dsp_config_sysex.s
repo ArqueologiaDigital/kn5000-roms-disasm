@@ -1186,7 +1186,7 @@ BitMapOut_RenderDisplay:
 	push xiz
 	ld wa, 2:i3
 	call BitMapOut_GetRenderMode_CheckBit3
-	call BitMapOut_SaveDisplayToROM
+	call PanelMemory_BackupLivePanel
 	lda xbc, (0xfc5a:16)
 	ld a, (xbc + 8)
 	ldfr_berp A, 0xf9

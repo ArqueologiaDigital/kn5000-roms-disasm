@@ -885,7 +885,7 @@ EffectMode_ReinitSoundOutput:
 	ld xbc, 0x3c2c4
 	call BitMapOut_CopyVoicePreset9
 	ldw wa, 0x80
-	call BitMapOut_SnapshotFromROM
+	call PanelMemory_Recall
 	calr EffectMode_DisplayPresetName
 	res 4, (0x8d52:16)
 	cp (0x8d50:16), 1

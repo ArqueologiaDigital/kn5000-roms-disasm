@@ -282,16 +282,12 @@ NakaInst_WindowID_Cont:
 ; [nakarest] (boot/screen_group_dispatch.s: `ld xbc, SystemConfig_PointerTable`).
 WidgetStyleDataTable:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x774, 0x10
-; [nakarest] naka_style_bitmaps+0x784  +0x784..+0x8c8 (0xeb7942, 324 B)
-; [nakarest] purpose not established: layout of 324 B at 0xeb7942 not derived; readers below
-; [nakarest] Readers: source references BitMapOut_CopyPreset9_Execute (ui/bitmap_out_routines.s:
-; [nakarest] `lda xbc, (BitMapOut_CopyPreset9_Execute_Data:24)`), BitMapOut_CopyROMToWorkspace
-; [nakarest] (ui/bitmap_out_routines.s: `lda xbc, (BitMapOut_CopyPreset9_Execute_Data:24)`),
-; [nakarest] BitMapOut_RestoreFullVoice (ui/bitmap_out_routines.s: `lda xbc,
-; [nakarest] (BitMapOut_CopyPreset9_Execute_Data:24)`), BitMapOut_Snapshot_Execute
-; [nakarest] (ui/bitmap_out_routines.s: `lda xde, (BitMapOut_CopyPreset9_Execute_Data:24)`), 2 more.
-BitMapOut_CopyPreset9_Execute_Data:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x784, 0x144
+; PanelMemory_SlotAddresses -- 81 u32 RAM addresses, one per panel-memory slot: 0..79 = the 80 panel
+; memories at 0x1ED400 + 960*n, 80 = RAM 0x3C2C4, the Music Stylist record's mirror of the panel stream (slot
+; code 0x80 is read as 80).  Indexed by slot by PanelMemory_Recall_Slot, PanelMemory_CopySlotToLivePanel,
+; PanelMemory_RecallRecords and the other panel-memory readers in ui/bitmap_out_routines.s; typed in
+; ui_widgets/naka_style_bitmaps.c (scripts/converters/panel_memory_slot_table_retype.py).
+PanelMemory_SlotAddresses:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x784, 0x144
 ; [nakarest] naka_style_bitmaps+0x8c8  +0x8c8..+0x8d2 (0xeb7a86, 10 B)
 ; [nakarest] purpose not established: layout of 10 B at 0xeb7a86 not derived; readers below
 ; [nakarest] Readers: source references BitMapOut_DeltaEncode_Type90Final

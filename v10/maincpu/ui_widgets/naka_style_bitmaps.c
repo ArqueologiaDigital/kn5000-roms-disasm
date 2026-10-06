@@ -635,168 +635,8 @@ typedef struct __attribute__((packed)) {
     uint32_t ptrs_3[4];  /* 4 pointers */
     uint16_t field_0772;
     uint32_t ptrs_4[4];  /* 4 pointers */
-    uint16_t field_0784;
-    uint16_t field_0786;
-    uint16_t field_0788;
-    uint16_t field_078a;
-    uint16_t field_078c;
-    uint16_t field_078e;
-    uint16_t field_0790;
-    uint16_t field_0792;
-    uint16_t field_0794;
-    uint16_t field_0796;
-    uint16_t field_0798;
-    uint16_t field_079a;
-    uint16_t field_079c;
-    uint16_t field_079e;
-    uint16_t field_07a0;
-    uint16_t field_07a2;
-    uint16_t field_07a4;
-    uint16_t field_07a6;
-    uint16_t field_07a8;
-    uint16_t field_07aa;
-    uint16_t field_07ac;
-    uint16_t field_07ae;
-    uint16_t field_07b0;
-    uint16_t field_07b2;
-    uint16_t field_07b4;
-    uint16_t field_07b6;
-    uint16_t field_07b8;
-    uint16_t field_07ba;
-    uint16_t field_07bc;
-    uint16_t field_07be;
-    uint16_t field_07c0;
-    uint16_t field_07c2;
-    uint16_t field_07c4;
-    uint16_t field_07c6;
-    uint16_t field_07c8;
-    uint16_t field_07ca;
-    uint16_t field_07cc;
-    uint16_t field_07ce;
-    uint16_t field_07d0;
-    uint16_t field_07d2;
-    uint16_t field_07d4;
-    uint16_t field_07d6;
-    uint16_t field_07d8;
-    uint16_t field_07da;
-    uint16_t field_07dc;
-    uint16_t field_07de;
-    uint16_t field_07e0;
-    uint16_t field_07e2;
-    uint16_t field_07e4;
-    uint16_t field_07e6;
-    uint16_t field_07e8;
-    uint16_t field_07ea;
-    uint16_t field_07ec;
-    uint16_t field_07ee;
-    uint16_t field_07f0;
-    uint16_t field_07f2;
-    uint16_t field_07f4;
-    uint16_t field_07f6;
-    uint16_t field_07f8;
-    uint16_t field_07fa;
-    uint16_t field_07fc;
-    uint16_t field_07fe;
-    uint16_t field_0800;
-    uint16_t field_0802;
-    uint16_t field_0804;
-    uint16_t field_0806;
-    uint16_t field_0808;
-    uint16_t field_080a;
-    uint16_t field_080c;
-    uint16_t field_080e;
-    uint16_t field_0810;
-    uint16_t field_0812;
-    uint16_t field_0814;
-    uint16_t field_0816;
-    uint16_t field_0818;
-    uint16_t field_081a;
-    uint16_t field_081c;
-    uint16_t field_081e;
-    uint16_t field_0820;
-    uint16_t field_0822;
-    uint16_t field_0824;
-    uint16_t field_0826;
-    uint16_t field_0828;
-    uint16_t field_082a;
-    uint16_t field_082c;
-    uint16_t field_082e;
-    uint16_t field_0830;
-    uint16_t field_0832;
-    uint16_t field_0834;
-    uint16_t field_0836;
-    uint16_t field_0838;
-    uint16_t field_083a;
-    uint16_t field_083c;
-    uint16_t field_083e;
-    uint16_t field_0840;
-    uint16_t field_0842;
-    uint16_t field_0844;
-    uint16_t field_0846;
-    uint16_t field_0848;
-    uint16_t field_084a;
-    uint16_t field_084c;
-    uint16_t field_084e;
-    uint16_t field_0850;
-    uint16_t field_0852;
-    uint16_t field_0854;
-    uint16_t field_0856;
-    uint16_t field_0858;
-    uint16_t field_085a;
-    uint16_t field_085c;
-    uint16_t field_085e;
-    uint16_t field_0860;
-    uint16_t field_0862;
-    uint16_t field_0864;
-    uint16_t field_0866;
-    uint16_t field_0868;
-    uint16_t field_086a;
-    uint16_t field_086c;
-    uint16_t field_086e;
-    uint16_t field_0870;
-    uint16_t field_0872;
-    uint16_t field_0874;
-    uint16_t field_0876;
-    uint16_t field_0878;
-    uint16_t field_087a;
-    uint16_t field_087c;
-    uint16_t field_087e;
-    uint16_t field_0880;
-    uint16_t field_0882;
-    uint16_t field_0884;
-    uint16_t field_0886;
-    uint16_t field_0888;
-    uint16_t field_088a;
-    uint16_t field_088c;
-    uint16_t field_088e;
-    uint16_t field_0890;
-    uint16_t field_0892;
-    uint16_t field_0894;
-    uint16_t field_0896;
-    uint16_t field_0898;
-    uint16_t field_089a;
-    uint16_t field_089c;
-    uint16_t field_089e;
-    uint16_t field_08a0;
-    uint16_t field_08a2;
-    uint16_t field_08a4;
-    uint16_t field_08a6;
-    uint16_t field_08a8;
-    uint16_t field_08aa;
-    uint16_t field_08ac;
-    uint16_t field_08ae;
-    uint16_t field_08b0;
-    uint16_t field_08b2;
-    uint16_t field_08b4;
-    uint16_t field_08b6;
-    uint16_t field_08b8;
-    uint16_t field_08ba;
-    uint16_t field_08bc;
-    uint16_t field_08be;
-    uint16_t field_08c0;
-    uint16_t field_08c2;
-    uint16_t field_08c4;
-    uint16_t field_08c6;
+    /* PanelMemory_SlotAddresses: the RAM address of each panel-memory slot, 0x1ED400 + 960*n for n < 80; [80] = the Music Stylist record's mirror (read by PanelMemory_Recall and the other panel-memory routines in ui/bitmap_out_routines.s) */
+    uint32_t PanelMemory_SlotAddresses[81];
     uint16_t field_08c8;
     uint8_t pad_108[2];  /* zero padding */
     uint16_t field_08cc;
@@ -4531,329 +4371,89 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
         NAKA_ADDR(VGA_Stub_3),
     },
 
-    .field_0784 = 0xd400,
-
-    .field_0786 = 0x001e,
-
-    .field_0788 = 0xd7c0,
-
-    .field_078a = 0x001e,
-
-    .field_078c = 0xdb80,
-
-    .field_078e = 0x001e,
-
-    .field_0790 = 0xdf40,
-
-    .field_0792 = 0x001e,
-
-    .field_0794 = 0xe300,
-
-    .field_0796 = 0x001e,
-
-    .field_0798 = 0xe6c0,
-
-    .field_079a = 0x001e,
-
-    .field_079c = 0xea80,
-
-    .field_079e = 0x001e,
-
-    .field_07a0 = 0xee40,
-
-    .field_07a2 = 0x001e,
-
-    .field_07a4 = 0xf200,
-
-    .field_07a6 = 0x001e,
-
-    .field_07a8 = 0xf5c0,
-
-    .field_07aa = 0x001e,
-
-    .field_07ac = 0xf980,
-
-    .field_07ae = 0x001e,
-
-    .field_07b0 = 0xfd40,
-
-    .field_07b2 = 0x001e,
-
-    .field_07b4 = 0x0100,
-
-    .field_07b6 = 0x001f,
-
-    .field_07b8 = 0x04c0,
-
-    .field_07ba = 0x001f,
-
-    .field_07bc = 0x0880,
-
-    .field_07be = 0x001f,
-
-    .field_07c0 = 0x0c40,
-
-    .field_07c2 = 0x001f,
-
-    .field_07c4 = 0x1000,
-
-    .field_07c6 = 0x001f,
-
-    .field_07c8 = 0x13c0,
-
-    .field_07ca = 0x001f,
-
-    .field_07cc = 0x1780,
-
-    .field_07ce = 0x001f,
-
-    .field_07d0 = 0x1b40,
-
-    .field_07d2 = 0x001f,
-
-    .field_07d4 = 0x1f00,
-
-    .field_07d6 = 0x001f,
-
-    .field_07d8 = 0x22c0,
-
-    .field_07da = 0x001f,
-
-    .field_07dc = 0x2680,
-
-    .field_07de = 0x001f,
-
-    .field_07e0 = 0x2a40,
-
-    .field_07e2 = 0x001f,
-
-    .field_07e4 = 0x2e00,
-
-    .field_07e6 = 0x001f,
-
-    .field_07e8 = 0x31c0,
-
-    .field_07ea = 0x001f,
-
-    .field_07ec = 0x3580,
-
-    .field_07ee = 0x001f,
-
-    .field_07f0 = 0x3940,
-
-    .field_07f2 = 0x001f,
-
-    .field_07f4 = 0x3d00,
-
-    .field_07f6 = 0x001f,
-
-    .field_07f8 = 0x40c0,
-
-    .field_07fa = 0x001f,
-
-    .field_07fc = 0x4480,
-
-    .field_07fe = 0x001f,
-
-    .field_0800 = 0x4840,
-
-    .field_0802 = 0x001f,
-
-    .field_0804 = 0x4c00,
-
-    .field_0806 = 0x001f,
-
-    .field_0808 = 0x4fc0,
-
-    .field_080a = 0x001f,
-
-    .field_080c = 0x5380,
-
-    .field_080e = 0x001f,
-
-    .field_0810 = 0x5740,
-
-    .field_0812 = 0x001f,
-
-    .field_0814 = 0x5b00,
-
-    .field_0816 = 0x001f,
-
-    .field_0818 = 0x5ec0,
-
-    .field_081a = 0x001f,
-
-    .field_081c = 0x6280,
-
-    .field_081e = 0x001f,
-
-    .field_0820 = 0x6640,
-
-    .field_0822 = 0x001f,
-
-    .field_0824 = 0x6a00,
-
-    .field_0826 = 0x001f,
-
-    .field_0828 = 0x6dc0,
-
-    .field_082a = 0x001f,
-
-    .field_082c = 0x7180,
-
-    .field_082e = 0x001f,
-
-    .field_0830 = 0x7540,
-
-    .field_0832 = 0x001f,
-
-    .field_0834 = 0x7900,
-
-    .field_0836 = 0x001f,
-
-    .field_0838 = 0x7cc0,
-
-    .field_083a = 0x001f,
-
-    .field_083c = 0x8080,
-
-    .field_083e = 0x001f,
-
-    .field_0840 = 0x8440,
-
-    .field_0842 = 0x001f,
-
-    .field_0844 = 0x8800,
-
-    .field_0846 = 0x001f,
-
-    .field_0848 = 0x8bc0,
-
-    .field_084a = 0x001f,
-
-    .field_084c = 0x8f80,
-
-    .field_084e = 0x001f,
-
-    .field_0850 = 0x9340,
-
-    .field_0852 = 0x001f,
-
-    .field_0854 = 0x9700,
-
-    .field_0856 = 0x001f,
-
-    .field_0858 = 0x9ac0,
-
-    .field_085a = 0x001f,
-
-    .field_085c = 0x9e80,
-
-    .field_085e = 0x001f,
-
-    .field_0860 = 0xa240,
-
-    .field_0862 = 0x001f,
-
-    .field_0864 = 0xa600,
-
-    .field_0866 = 0x001f,
-
-    .field_0868 = 0xa9c0,
-
-    .field_086a = 0x001f,
-
-    .field_086c = 0xad80,
-
-    .field_086e = 0x001f,
-
-    .field_0870 = 0xb140,
-
-    .field_0872 = 0x001f,
-
-    .field_0874 = 0xb500,
-
-    .field_0876 = 0x001f,
-
-    .field_0878 = 0xb8c0,
-
-    .field_087a = 0x001f,
-
-    .field_087c = 0xbc80,
-
-    .field_087e = 0x001f,
-
-    .field_0880 = 0xc040,
-
-    .field_0882 = 0x001f,
-
-    .field_0884 = 0xc400,
-
-    .field_0886 = 0x001f,
-
-    .field_0888 = 0xc7c0,
-
-    .field_088a = 0x001f,
-
-    .field_088c = 0xcb80,
-
-    .field_088e = 0x001f,
-
-    .field_0890 = 0xcf40,
-
-    .field_0892 = 0x001f,
-
-    .field_0894 = 0xd300,
-
-    .field_0896 = 0x001f,
-
-    .field_0898 = 0xd6c0,
-
-    .field_089a = 0x001f,
-
-    .field_089c = 0xda80,
-
-    .field_089e = 0x001f,
-
-    .field_08a0 = 0xde40,
-
-    .field_08a2 = 0x001f,
-
-    .field_08a4 = 0xe200,
-
-    .field_08a6 = 0x001f,
-
-    .field_08a8 = 0xe5c0,
-
-    .field_08aa = 0x001f,
-
-    .field_08ac = 0xe980,
-
-    .field_08ae = 0x001f,
-
-    .field_08b0 = 0xed40,
-
-    .field_08b2 = 0x001f,
-
-    .field_08b4 = 0xf100,
-
-    .field_08b6 = 0x001f,
-
-    .field_08b8 = 0xf4c0,
-
-    .field_08ba = 0x001f,
-
-    .field_08bc = 0xf880,
-
-    .field_08be = 0x001f,
-
-    .field_08c0 = 0xfc40,
-
-    .field_08c2 = 0x001f,
-
-    .field_08c4 = 0xc2c4,
-
-    .field_08c6 = 0x0003,
+    .PanelMemory_SlotAddresses = {
+        0x1ED400,  /* slot 0 */
+        0x1ED7C0,  /* slot 1 */
+        0x1EDB80,  /* slot 2 */
+        0x1EDF40,  /* slot 3 */
+        0x1EE300,  /* slot 4 */
+        0x1EE6C0,  /* slot 5 */
+        0x1EEA80,  /* slot 6 */
+        0x1EEE40,  /* slot 7 */
+        0x1EF200,  /* slot 8 */
+        0x1EF5C0,  /* slot 9 */
+        0x1EF980,  /* slot 10 */
+        0x1EFD40,  /* slot 11 */
+        0x1F0100,  /* slot 12 */
+        0x1F04C0,  /* slot 13 */
+        0x1F0880,  /* slot 14 */
+        0x1F0C40,  /* slot 15 */
+        0x1F1000,  /* slot 16 */
+        0x1F13C0,  /* slot 17 */
+        0x1F1780,  /* slot 18 */
+        0x1F1B40,  /* slot 19 */
+        0x1F1F00,  /* slot 20 */
+        0x1F22C0,  /* slot 21 */
+        0x1F2680,  /* slot 22 */
+        0x1F2A40,  /* slot 23 */
+        0x1F2E00,  /* slot 24 */
+        0x1F31C0,  /* slot 25 */
+        0x1F3580,  /* slot 26 */
+        0x1F3940,  /* slot 27 */
+        0x1F3D00,  /* slot 28 */
+        0x1F40C0,  /* slot 29 */
+        0x1F4480,  /* slot 30 */
+        0x1F4840,  /* slot 31 */
+        0x1F4C00,  /* slot 32 */
+        0x1F4FC0,  /* slot 33 */
+        0x1F5380,  /* slot 34 */
+        0x1F5740,  /* slot 35 */
+        0x1F5B00,  /* slot 36 */
+        0x1F5EC0,  /* slot 37 */
+        0x1F6280,  /* slot 38 */
+        0x1F6640,  /* slot 39 */
+        0x1F6A00,  /* slot 40 */
+        0x1F6DC0,  /* slot 41 */
+        0x1F7180,  /* slot 42 */
+        0x1F7540,  /* slot 43 */
+        0x1F7900,  /* slot 44 */
+        0x1F7CC0,  /* slot 45 */
+        0x1F8080,  /* slot 46 */
+        0x1F8440,  /* slot 47 */
+        0x1F8800,  /* slot 48 */
+        0x1F8BC0,  /* slot 49 */
+        0x1F8F80,  /* slot 50 */
+        0x1F9340,  /* slot 51 */
+        0x1F9700,  /* slot 52 */
+        0x1F9AC0,  /* slot 53 */
+        0x1F9E80,  /* slot 54 */
+        0x1FA240,  /* slot 55 */
+        0x1FA600,  /* slot 56 */
+        0x1FA9C0,  /* slot 57 */
+        0x1FAD80,  /* slot 58 */
+        0x1FB140,  /* slot 59 */
+        0x1FB500,  /* slot 60 */
+        0x1FB8C0,  /* slot 61 */
+        0x1FBC80,  /* slot 62 */
+        0x1FC040,  /* slot 63 */
+        0x1FC400,  /* slot 64 */
+        0x1FC7C0,  /* slot 65 */
+        0x1FCB80,  /* slot 66 */
+        0x1FCF40,  /* slot 67 */
+        0x1FD300,  /* slot 68 */
+        0x1FD6C0,  /* slot 69 */
+        0x1FDA80,  /* slot 70 */
+        0x1FDE40,  /* slot 71 */
+        0x1FE200,  /* slot 72 */
+        0x1FE5C0,  /* slot 73 */
+        0x1FE980,  /* slot 74 */
+        0x1FED40,  /* slot 75 */
+        0x1FF100,  /* slot 76 */
+        0x1FF4C0,  /* slot 77 */
+        0x1FF880,  /* slot 78 */
+        0x1FFC40,  /* slot 79 */
+        0x03C2C4,  /* the Music Stylist mirror */
+    },
 
     .field_08c8 = 0xf9b6,
 
