@@ -1,30 +1,30 @@
 {
  "date": "2026-10-06",
- "head": "8bc71d7c",
+ "head": "7936b0a2",
  "dirty": false,
  "rules": 2,
- "entry_snapshot": "docs/coverage/dispatch-census-2026-10-06-30.json",
- "entry_snapshot_head": "5432ffdd",
+ "entry_snapshot": "docs/coverage/dispatch-census-2026-10-06-31.json",
+ "entry_snapshot_head": "8e4b5437",
  "score": {
-  "kn5000": 95.72,
-  "wsa1": 92.41,
-  "all": 95.34
+  "kn5000": 95.93,
+  "wsa1": 92.62,
+  "all": 95.54
  },
  "components": {
   "kn5000": {
    "bytes": {
-    "num": 9936790,
+    "num": 9945787,
     "den": 10289152,
-    "pct": 96.58
+    "pct": 96.66
    },
    "names": {
-    "num": 137254,
-    "den": 147480,
-    "pct": 93.07
+    "num": 138333,
+    "den": 147487,
+    "pct": 93.79
    },
    "entry": {
-    "num": 2258,
-    "den": 2258,
+    "num": 2259,
+    "den": 2259,
     "pct": 100.0
    },
    "fields": {
@@ -35,14 +35,14 @@
   },
   "wsa1": {
    "bytes": {
-    "num": 1986800,
+    "num": 1987024,
     "den": 2097152,
-    "pct": 94.74
+    "pct": 94.75
    },
    "names": {
-    "num": 15662,
-    "den": 18987,
-    "pct": 82.49
+    "num": 15783,
+    "den": 18991,
+    "pct": 83.11
    },
    "entry": {
     "num": 762,
@@ -57,18 +57,18 @@
   },
   "all": {
    "bytes": {
-    "num": 11923590,
+    "num": 11932811,
     "den": 12386304,
-    "pct": 96.26
+    "pct": 96.34
    },
    "names": {
-    "num": 152916,
-    "den": 166467,
-    "pct": 91.86
+    "num": 154116,
+    "den": 166478,
+    "pct": 92.57
    },
    "entry": {
-    "num": 3020,
-    "den": 3020,
+    "num": 3021,
+    "den": 3021,
     "pct": 100.0
    },
    "fields": {
@@ -81,13 +81,13 @@
  "images": {
   "v10": {
    "names": {
-    "semantic": 41777,
+    "semantic": 42161,
     "continuation": 8684,
-    "generic": 2647,
+    "generic": 2263,
     "positional": 638
    },
    "bytes": [
-    1993431,
+    2002410,
     2097152
    ],
    "entry": [
@@ -97,9 +97,9 @@
   },
   "v9": {
    "names": {
-    "semantic": 41775,
+    "semantic": 42159,
     "continuation": 8679,
-    "generic": 2644,
+    "generic": 2260,
     "positional": 639
    },
    "bytes": [
@@ -113,10 +113,10 @@
   },
   "v7": {
    "names": {
-    "semantic": 41402,
-    "continuation": 8496,
-    "generic": 2933,
-    "positional": 698
+    "semantic": 41704,
+    "continuation": 8501,
+    "generic": 2641,
+    "positional": 686
    },
    "bytes": [
     1986295,
@@ -139,8 +139,8 @@
     196608
    ],
    "entry": [
-    43,
-    43
+    44,
+    44
    ]
   },
   "subboot": {
@@ -187,12 +187,12 @@
   },
   "hdae5000": {
    "names": {
-    "semantic": 3939,
+    "semantic": 3948,
     "continuation": 150,
     "generic": 1
    },
    "bytes": [
-    514579,
+    514597,
     524288
    ],
    "entry": [
@@ -202,13 +202,13 @@
   },
   "prom_a": {
    "names": {
-    "positional": 668,
-    "semantic": 5472,
-    "continuation": 868,
+    "positional": 625,
+    "semantic": 5516,
+    "continuation": 867,
     "generic": 105
    },
    "bytes": [
-    499756,
+    499788,
     524288
    ],
    "entry": [
@@ -218,13 +218,13 @@
   },
   "prom_b": {
    "names": {
-    "semantic": 5218,
-    "continuation": 6246,
+    "semantic": 5295,
+    "continuation": 6243,
     "generic": 81,
-    "positional": 1970
+    "positional": 1896
    },
    "bytes": [
-    449973,
+    450165,
     524288
    ],
    "entry": [
