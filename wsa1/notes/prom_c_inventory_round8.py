@@ -340,7 +340,9 @@ BASE = 0xF80000
 
 LABEL = re.compile(r'^([A-Za-z_][A-Za-z0-9_]*):')
 UNNAMED = re.compile(r'^sub_[0-9A-Fa-f]{6}$')
-INTERNAL = re.compile(r'^[A-Za-z_][A-Za-z0-9_]*__[0-9A-Fa-f]{4,6}$')
+# a `<Routine>_JumpTable_<addr>` label (a4c46b4b5 made jump-table operands symbolic) sits INSIDE its routine,
+# like the `__<addr>` branch labels; counting it as a routine start split ToneQuery_Dispatch in two (2026-10-06)
+INTERNAL = re.compile(r'^[A-Za-z_][A-Za-z0-9_]*__[0-9A-Fa-f]{4,6}$|^[A-Za-z_]\w*_JumpTable_[0-9A-Fa-f]{6}$')
 FRAMED = re.compile(r'^[A-Za-z_][A-Za-z0-9_]*_'
                     r'(?:[0-9A-Fa-f]{2}x[0-9A-Fa-f]{2}_)?'
                     r'(?:[0-9A-Fa-f]{4,6}|[0-9]{1,4})$')
