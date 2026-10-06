@@ -904,6 +904,12 @@ that we can have strong evidence whenever we reach true full code-coverage"*.
    one of the 7, for its 18 stale slots) and prom_c 1 / 5. With that, all eleven images show NOT = newT = newT(x)
    = spellT = U-NOT = U-newT = D-unres = 0. The census half of the criterion holds for both models, with those
    stale tables named. The spec's other L1/L2 measurements are still unshown.
+   **Corrected (`dispatch-census-2026-10-06-29`).** Two compiled-C switch-handler tables were found by hand: the
+   WRITE SOUND / DIGITAL EFFECT titles' (framed in -28). They showed that U could not see a code-pointer array
+   whose targets are mostly unlabelled. The new C-SLICE rule (README) takes a whole compiled-C slice of
+   instruction-start words as the frame. It found 7 more tables per maincpu tree, with 31 unlabelled targets, so
+   KN5000 v10/v9/v7 show U-NOT 7 again. The census half does not hold for KN5000 until those targets are
+   labelled.
 
 ### Semantic Score Badges
 

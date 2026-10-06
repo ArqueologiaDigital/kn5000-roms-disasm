@@ -699,7 +699,7 @@ def c_link_addrs(key, incpath):
     return _LD[ck]
 
 
-def detect_U(key, shift=0, minrun=3, mindistinct=3, stride=4, skip=None):
+def detect_U(key, shift=0, minrun=3, mindistinct=3, stride=4, skip=None, cslice=False):
     """UNFRAMED runs of code pointers in bytes that are not a `.long` line.
 
     ANCHOR: >= minrun consecutive LE32 words (stride 4, any byte offset) each equal
@@ -710,7 +710,13 @@ def detect_U(key, shift=0, minrun=3, mindistinct=3, stride=4, skip=None):
     NULL CONTROL: shift=1 runs the anchor test against "labelled start + 1".
     STRIDE 8 (added 2026-10-06): the same rule with the words 8 bytes apart finds one code pointer per
     8-byte record -- the KN5000 control-panel action lists (PanelButton_ActionListPool) were invisible
-    at stride 4.  `skip` = byte ranges the stride-4 pass already reported, so no table counts twice."""
+    at stride 4.  `skip` = byte ranges the stride-4 pass already reported, so no table counts twice.
+    C-SLICE (cslice=True, added 2026-10-06): a compiled-C object held as ONE `.incbin` slice of a generated bin
+    whose every 32-bit word is 0 or an instruction start, with >= 2 distinct non-zero words.  The slice is the
+    frame, so no labelled anchor is needed: the anchor above missed code-pointer arrays whose targets were mostly
+    unlabelled (ToneGen_ParamTable_0x3A7, SingleLoadSrc_ListProcByMode, DirmdTitle_EmulatorMethods ..., found by
+    hand).  Null control: shift=2 (instruction starts +2).  shift=1 is no control for this ISA: one-byte
+    instructions make start+1 another start, so it passes 19 of v10's 34 real slices."""
     m = load(key)
     rows = m["rows"]
     lab, anys = set(), set()
@@ -738,6 +744,19 @@ def detect_U(key, shift=0, minrun=3, mindistinct=3, stride=4, skip=None):
     for a0, b0 in (skip or ()):
         if b0 > a0:
             covered[max(a0 - base, 0):max(b0 - base, 0)] = b"\x01" * (max(b0 - base, 0) - max(a0 - base, 0))
+    if cslice:
+        S = {x + shift for x in anys} if shift else anys
+        for r in rows:
+            if r[5] != ".incbin" or "generated/" not in (r[6] or "") or not r[7]:
+                continue
+            a0, b0 = r[0], r[1]
+            if b0 - a0 < 8 or (b0 - a0) % 4 or not (base <= a0 and b0 <= base + n) or covered[a0 - base]:
+                continue
+            ws = [w(a0 - base + 4 * q) for q in range((b0 - a0) // 4)]
+            nz = [v for v in ws if v]
+            if len(nz) >= 2 and len(set(nz)) >= 2 and all(v in S for v in nz):
+                hits.append((a0, len(ws)))
+        o = n                                   # no anchor scan in this mode
     while o + 4 <= n:
         if covered[o]:
             o += 1
@@ -839,7 +858,10 @@ def main():
         un = detect_U(key)
         spans = [(t["addr"], t["addr"] + 4 * t["nwords"]) for t in un]
         un += detect_U(key, stride=8, skip=spans)
-        null = detect_U(key, shift=1) + detect_U(key, shift=1, stride=8, skip=spans)
+        allspans = [(t["addr"], t["addr"] + t["stride"] * t["nwords"]) for t in un]
+        un += detect_U(key, cslice=True, skip=allspans)
+        null = detect_U(key, shift=1) + detect_U(key, shift=1, stride=8, skip=spans) + \
+            detect_U(key, shift=2, cslice=True, skip=allspans)
         res[key] = dict(tables=tabs, unframed=un, null=len(null), d_unresolved=UNRESOLVED.get(key, 0))
     if "--json" in args:
         json.dump(res, open(args[args.index("--json") + 1], "w"), indent=0, default=str)

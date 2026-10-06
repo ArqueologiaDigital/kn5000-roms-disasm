@@ -32,6 +32,16 @@ Known limits. These are stated so that a zero is never over-read:
   stride 4. Its first run found them, `SeqStep_TimerDispatch_ProcTables` in v10/v9/v7 and v7's
   `TimeSig_ProcTable`, and nothing in the stride-8 null control. Records with other strides (6, 10, 12,
   ...) are still not searched;
+- C-SLICE (2026-10-06): the anchor needs three consecutive pointers to LABELLED instruction starts, so a
+  code-pointer array whose targets are mostly unlabelled was invisible. That held even when the array was a whole
+  typed object of a compiled-C blob. The helper-naming triage found two by hand: the WRITE SOUND and DIGITAL
+  EFFECT switch-handler tables. U now also takes every `.incbin` slice of a generated bin (one C object, so the
+  slice is the frame) whose words are all 0 or instruction starts, with at least 2 distinct non-zero words. Its
+  null control uses start+2. start+1 is no control on this instruction set, because one-byte instructions make
+  start+1 another start: it passed 19 of v10's 34 real slices, while start+2 passed none in any image. Its first
+  run (dispatch-census-2026-10-06-29) found 7 more tables per maincpu tree, with 31 unlabelled targets:
+  ToneGen_ParamTable_0x3A7 (an ApFunction RegObjTabl table, 18 procedures), the four SingleLoad / CmpSingleLoad
+  mode and area procedure tables, DirmdTitle_EmulatorMethods, and GUI_DisplayStructData_0x1100;
 - the code-table test leaves out record tables whose pointers are mostly data.
 - STALE (2026-10-06). A dead table cannot be made used, and labelling its targets would plant entry points
   inside instructions. Examples: an older build's table left in the image, or linker thunks whose targets
