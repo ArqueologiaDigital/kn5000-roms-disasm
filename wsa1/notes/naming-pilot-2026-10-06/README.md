@@ -38,3 +38,10 @@ caller. Result: 105 named, 15 refused, and one reviewer-authored record. Reviewe
   MEASURE DELETE / COPY, TRACK MERGE) is named `SongEdit_ClearTrack` in the reviewer record.
 Three existing headers got correction notes (CycleRecord_RestartPass, StepRecord_BuildCurrentMeasureRow,
 BStore_AppendBytes); the original text stays.
+
+**Wave 6** (`proposals_wave6_{s,t,u,v}.json`): the next 120 routines with a named (non-OldCopy, non-positional)
+caller, leaving out every earlier refusal: 115 named, 5 refused. Most are the step-record, block-store,
+cycle-record, TRACK MERGE and SMF import/export routines whose callers wave 5 named. Batch v reports one wrong old
+label, to fix separately: `OldCopy_BStore_Workspace_SaveToBank` (0xF6F476) is called by this build's MIDI FILE load
+and save, so it is not older-build code. `notes/wsa1_exact_copy_names.py` treats all of 0xF6F000-0xF6FFFF as the
+older build, but the banner limits that to 0xF6F000-0xF6F3FF.

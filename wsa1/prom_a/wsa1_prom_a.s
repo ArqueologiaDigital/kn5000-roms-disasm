@@ -1282,7 +1282,7 @@
 	.set T_MidiFileDirectPlay_LcdKeyRow1,                                                                      0x00F40954
 	.set T_MidiFileDirectPlay_InitOnEntry,                                                                      0x00F40958
 	.set T_MidiFileDirectPlay_RestoreOnLeave,                                                                      0x00F4095C
-	.set T_F409A0,                                                                      0x00F409A0
+	.set T_wsa1_prom_b_Join2,                                                                      0x00F409A0
 	.set T_Transport_StartCAndB,                                                                      0x00F409A4
 	.set T_Transport_StopAllRunning,                                                                      0x00F409AC
 	.set T_F409C0,                                                                      0x00F409C0
@@ -1369,7 +1369,7 @@
 	.set T_CombiName_Lookup,                                                                      0x00F4102C
 	.set T_CombiGroupName_Lookup,                                                                      0x00F41030
 	.set T_SoundGroup_MaxMemberIndex_GetToneCopy,                                       0x00F41034
-	.set T_F41038,                                                                      0x00F41038
+	.set T_CreatorSelect_ReadSlotLabelIds,                                                                      0x00F41038
 	.set T_F4103C,                                                                      0x00F4103C
 	.set T_F41040,                                                                      0x00F41040
 	.set T_F41044,                                                                      0x00F41044
@@ -1943,8 +1943,8 @@
 	.set T_Medley_ToggleMidiFileStream,                                                                      0x00F42E90
 	.set T_StepRecord_OnEnter,                                                                      0x00F42EC0
 	.set T_StepRecord_OnLeave,                                                                      0x00F42EC4
-	.set T_F42ED0,                                                                      0x00F42ED0
-	.set T_F42EDC,                                                                      0x00F42EDC
+	.set T_StepRecord_MainLoopService,                                                                      0x00F42ED0
+	.set T_StepRecord_Tick,                                                                      0x00F42EDC
 	.set T_F42F00,                                                                      0x00F42F00
 	.set T_F42F04,                                                                      0x00F42F04
 	.set T_ScreenEnterBody_DspEffect,                                                                      0x00F42F4C
@@ -6254,7 +6254,7 @@ MainTask_Loop:
 .LF8214B:
 	tset	4, (0x88:8)                                  ; F8214B  f0 88 ac
 	jr nz, .LF82160                                      ; F8214E  6e 10
-	call T_F42EDC                                        ; F82150  1d dc 2e f4
+	call T_StepRecord_Tick                                        ; F82150  1d dc 2e f4
 	call T_PanelLed_ProcessRequests                                        ; F82154  1d 64 06 f4
 	call T_SC1_TxFlush                                   ; F82158  1d 08 0f f4
 	call T_TestMode_Tick                                        ; F8215C  1d 4c 01 f4
@@ -6293,7 +6293,7 @@ MainTask_Loop:
 	xor A,A                                              ; F821B4  c9 d1
 	ld	(0xc1:8), a                                      ; F821B6  f0 c1 41
 	call T_Seq_MainLoopService                                        ; F821B9  1d c8 09 f4
-	call T_F42ED0                                        ; F821BD  1d d0 2e f4
+	call T_StepRecord_MainLoopService                                        ; F821BD  1d d0 2e f4
 	call T_MidiFilePlay_Tick                                        ; F821C1  1d 50 09 f4
 	jrl MainTask_Loop                                       ; F821C5  78 60 fe
 ; MainTask_RearmTickCountdown -- (0xC1)=0, call T_F409C4, then reload the tick countdown (0xC2) with 10
@@ -17020,7 +17020,7 @@ UiListB_ClassA8:
 	.long T_UiEvent_SyncSoundSelection                              ; F88C2E  [1]   -> 0xF415A8
 	.long T_PanelLed_OnClassA8Event                              ; F88C32  [2]   -> 0xF4068C
 	.long T_NoteRouting_SetMidiOutPorts                              ; F88C36  [3]   -> 0xF411E0
-	.long T_F409A0                              ; F88C3A  [4]   -> 0xF409A0
+	.long T_wsa1_prom_b_Join2                              ; F88C3A  [4]   -> 0xF409A0
 	.long T_Seq_RequestRewindOnEvent                              ; F88C3E  [5]   -> 0xF40CBC
 	.long T_CreatorSelectController_OpenOnEvent                              ; F88C42  [6]   -> 0xF434F0
 	.long T_F415B0                              ; F88C46  [7]   -> 0xF415B0
@@ -32853,7 +32853,7 @@ ModeScreen_PaintDirtyFields2:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F9100E  f1 40 25 00 00
 	ld w, (UI_PartIndex:16)                                   ; F91013  c1 50 22 20
 	ld A,(XIY+0x19)                                      ; F91017  8d 19 21
-	call T_F41038                                        ; F9101A  1d 38 10 f4
+	call T_CreatorSelect_ReadSlotLabelIds                                        ; F9101A  1d 38 10 f4
 	push XIY                                             ; F9101E  3d
 	ld A,(XIY)                                           ; F9101F  85 21
 	call T_UiText_CopyLabel13_To_22F0                                        ; F91021  1d 30 33 f4
@@ -32892,7 +32892,7 @@ ModeScreen_PaintDirtyFields2:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F9108F  f1 40 25 00 00
 	ld w, (UI_PartIndex:16)                                   ; F91094  c1 50 22 20
 	ld A,(XIY+0x1a)                                      ; F91098  8d 1a 21
-	call T_F41038                                        ; F9109B  1d 38 10 f4
+	call T_CreatorSelect_ReadSlotLabelIds                                        ; F9109B  1d 38 10 f4
 	push XIY                                             ; F9109F  3d
 	ld A,(XIY)                                           ; F910A0  85 21
 	call T_UiText_CopyLabel13_To_22F0                                        ; F910A2  1d 30 33 f4
@@ -32927,7 +32927,7 @@ ModeScreen_PaintDirtyFields2:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F91103  f1 40 25 00 00
 	ld w, (UI_PartIndex:16)                                   ; F91108  c1 50 22 20
 	ld A,(XIY+0x1a)                                      ; F9110C  8d 1a 21
-	call T_F41038                                        ; F9110F  1d 38 10 f4
+	call T_CreatorSelect_ReadSlotLabelIds                                        ; F9110F  1d 38 10 f4
 	push XIY                                             ; F91113  3d
 	ld A,(XIY)                                           ; F91114  85 21
 	call T_UiText_CopyLabel13_To_22F0                                        ; F91116  1d 30 33 f4
@@ -79002,7 +79002,7 @@ T_F407E4_Nop:
 	ret                                                  ; FAA71E  0e
 ; ParamB0_PublishField0IfPending: When (0x24F1) bit 7 (pending) is set: clears it and publishes {0xB0, 0, (0x24F1),
 ;   0x7F} -- parameter 0xB0, field 0 -- through Queue2C00_PublishStagedIfPending. ParamShadow_SetField3's 0xB0 arm
-;   stores (0x24F1) and calls it (T_ParamB0_PublishField0IfPending); sub_FAB5EB is the two-field version. Caveat: FlushAll /
+;   stores (0x24F1) and calls it (T_ParamB0_PublishField0IfPending); ParamB0_PublishPendingFields is the two-field version. Caveat: FlushAll /
 ;   SeqEvt_ShadowExpression write (0x24F0) before calling. Basis: callers + body + twin. (notes/naming-
 ;   pilot-2026-10-06/proposals_wave2_c.json)
 ParamB0_PublishField0IfPending:
@@ -80701,7 +80701,12 @@ T_F407A8_Nop:
 	ret                                                  ; FAB5E9  0e
 T_F407A0_Nop:
 	ret                                                  ; FAB5EA  0e
-sub_FAB5EB:
+; ParamB0_PublishPendingFields: The two-field ParamB0_PublishField0IfPending: for field 0 ((0x24F1)) and field 1
+;   ((0x24F0)) whose bit 7 (pending) is set, clears the bit and queues {0xB0, field, value, 0x7F} through
+;   Queue2C00_AppendStagedIfPending. List2030_ParamB0_Apply runs it after marking (0x24F1) pending;
+;   Seq_PublishPendingParamB0 at rewind / stop. Basis: callers + body + twin. (notes/naming-
+;   pilot-2026-10-06/proposals_wave6_s.json)
+ParamB0_PublishPendingFields:
 	push XIX                                             ; FAB5EB  3c
 	lda xix, (0x24f0:16)                                ; FAB5EC  f1 f0 24 34
 	ld c, (0x24f1:16)                                   ; FAB5F0  c1 f1 24 23
@@ -81533,12 +81538,12 @@ List2030_ParamB0_Dispatch:   ; entry: named by 1 `.long` operand, first at 0xFAC
 .LFABCFF:
 	ret                                                  ; FABCFF  0e
 ; List2030_ParamB0_Apply -- set (0x24F1) to the cooked control value (0x24F3) with bit 7 as pending flag, queue the pending 0xB0 bytes, then stage {0xB0,0,value,mask} at (0x60F177) and hand it to ParamChange_Notify
-; Evidence: `ld C,(0x24f3) / set 7,C / ld (0x24f1),C` at 0xFABD00-0xFABD07; calr sub_FAB5EB (queues {0xB0,0,(0x24F1),0x7F} and {0xB0,1,(0x24F0),0x7F} for whichever has bit 7); stores to 0x60F177..0x60F17A and `call sub_FAA7C4` (BC/DE from 0x60F177 -> ParamChange_Notify) at 0xFABD2E.  (0x24F3) is cooked slot 3.3 of Ctrl_Normalise's RAM bank.
+; Evidence: `ld C,(0x24f3) / set 7,C / ld (0x24f1),C` at 0xFABD00-0xFABD07; calr ParamB0_PublishPendingFields (queues {0xB0,0,(0x24F1),0x7F} and {0xB0,1,(0x24F0),0x7F} for whichever has bit 7); stores to 0x60F177..0x60F17A and `call sub_FAA7C4` (BC/DE from 0x60F177 -> ParamChange_Notify) at 0xFABD2E.  (0x24F3) is cooked slot 3.3 of Ctrl_Normalise's RAM bank.
 List2030_ParamB0_Apply:
 	ld c, (0x24f3:16)                                   ; FABD00  c1 f3 24 23
 	set 0x07,C                                           ; FABD04  cb 31 07
 	ld (0x24f1:16), c                                   ; FABD07  f1 f1 24 43
-	calr sub_FAB5EB                                          ; FABD0B  1e dd f8
+	calr ParamB0_PublishPendingFields                                          ; FABD0B  1e dd f8
 	ld (0x60f177:24), 0xb0                             ; FABD0E  f2 77 f1 60 00 b0
 	ld (0x60f178:24), 0x00                             ; FABD14  f2 78 f1 60 00 00
 	ld c, (0x60f089:24)                                 ; FABD1A  c2 89 f0 60 23
@@ -81547,14 +81552,14 @@ List2030_ParamB0_Apply:
 	ld (0x60f17a:24), a                                 ; FABD29  f2 7a f1 60 41
 	call sub_FAA7C4                                      ; FABD2E  1d c4 a7 fa
 	ret                                                  ; FABD32  0e
-; Seq_PublishPendingParamB0: Clears (0x34D8) bit 7 and runs sub_FAB5EB, the two-field ParamB0_PublishField0IfPending:
+; Seq_PublishPendingParamB0: Clears (0x34D8) bit 7 and runs ParamB0_PublishPendingFields, the two-field ParamB0_PublishField0IfPending:
 ;   each of parameter 0xB0's fields 0 ((0x24F1)) and 1 ((0x24F0)) whose bit-7 pending flag is set is cleared and
 ;   published as {0xB0, field, value, 0x7F}. The last call (prom_b slot T_Seq_PublishPendingParamB0) of Seq_RewindOnRequest's rewind and
 ;   of Seq_StopWhenTracksEnded's stop, each of which clears (0x34D8) bit 7 just before. Basis: callers + body + twin
 ;   header. (notes/naming-pilot-2026-10-06/proposals_wave5_o.json)
 Seq_PublishPendingParamB0:
 	m_res 7, MD16, 0x34d8                                ; FABD33  f1 d8 34 b7
-	calr sub_FAB5EB                                          ; FABD37  1e b1 f8
+	calr ParamB0_PublishPendingFields                                          ; FABD37  1e b1 f8
 	ret                                                  ; FABD3A  0e
 ; ---------------------------------------------------------------------
 ; ParamMsg_B1_PitchBend .. ParamMsg_B3_CC0B_Expression -- the eleven MIDI
@@ -116094,7 +116099,12 @@ sub_FC1D92:
 	jrl sub_FC1D92                                       ; FC1E64  78 2b ff
 .LFC1E67:
 	ret                                                  ; FC1E67  0e
-sub_FC1E68:
+; CreatorSelect_ReadSlotLabelIds: (W = part, A = creator-select bits), under kernel semaphore 4: reads from CPU 2 the
+;   two label ids of the lowest set bit k -- part record bytes 0x32+6k / 0x35+6k, or tone record 0x2F+6k / 0x32+6k
+;   when sub_FC1119 sets bit 5 -- & 0x3F; XIY -> the pair at 0x810 (-> two zeros on no bit / timeout).
+;   CreatorSelectController_CopyNameLabels and ModeScreen_PaintDirtyFields2 hand (XIY), (XIY+1) to
+;   T_UiText_CopyLabel13_To_22F0. Basis: callers + body. (notes/naming-pilot-2026-10-06/proposals_wave6_s.json)
+CreatorSelect_ReadSlotLabelIds:
 	push XIX                                             ; FC1E68  3c
 	push W                                               ; FC1E69  c8 04
 	push XBC                                             ; FC1E6B  39
@@ -178193,7 +178203,7 @@ EditScreen_SaveTrackCursor:
 	mx_st_mr8 MXD, ra_IX, ra_HL, r1                      ; FE8BCE  f3 07 f0 ec 41
 	ret                                                  ; FE8BD3  0e
 ; EditScreen_FlagMemoryFull: Clears (0x20A9) bit 0, sets (0x34D1) bits 5+4: prom_b Seq_ShowMemoryFullOnRequest then shows status 0x0F /
-;   request 0x40AB, the song-memory-full pair (prom_b twin sub_F45812). Every edit-screen caller reaches it only on a
+;   request 0x40AB, the song-memory-full pair (prom_b twin SeqRecord_AllocTakeChains). Every edit-screen caller reaches it only on a
 ;   BStore error, zero free blocks or a failed chain extension. Basis: callers + body + prom_b twin.
 ;   (wsa1/notes/naming-pilot-2026-10-06/proposals_prom_a.json)
 EditScreen_FlagMemoryFull:

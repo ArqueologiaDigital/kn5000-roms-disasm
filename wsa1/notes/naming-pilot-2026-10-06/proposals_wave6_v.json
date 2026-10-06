@@ -1,0 +1,484 @@
+[
+ {
+  "old": "sub_F6B905",
+  "verdict": "name",
+  "new": "BStore_ReadByteAtSongPositionPlusN",
+  "header": "A = the byte (0x0EFE) bytes past directory entry IZ's song position (block word 0x3460[IZ], offset byte 0x3482[IZ]); W = 0. When offset + N passes 0xFF it reads offset 5 of the +3 next block (right only when it lands exactly on 0x100), W = 0xFF at the chain end.\nBStore_ReadByteAtSongPositionPlus1 calls it with (0x0EFE) = 1, the unlabelled 0xF6B8FB with 2. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:159744 `ldw (3838:16), 1` -- BStore_ReadByteAtSongPositionPlus1 sets the offset N = 1 ...",
+   "prom_b/wsa1_prom_b.s:159745 `calr sub_F6B905` -- ... and calls it (caller site)",
+   "prom_b/wsa1_prom_b.s:159760 `ldw (3838:16), 2` -- the other caller (0xF6B8FB) sets N = 2",
+   "prom_b/wsa1_prom_b.s:159791 `m_add_rm MW16, 0x0efe, 5` -- offset byte 0x3482[IZ] + (0x0EFE)",
+   "prom_b/wsa1_prom_b.s:159792 `cp iy, 255` -- inside the block?",
+   "prom_b/wsa1_prom_b.s:159794 `mx_ld_rm MXB, ra_HL, ra_IY, 1` -- A = byte at block + offset + N",
+   "prom_b/wsa1_prom_b.s:159797 `ld iy, (xhl+3)` -- else follow the +3 next-block link",
+   "prom_b/wsa1_prom_b.s:159803 `mx_ld_rm MXB, ra_HL, ra_IY, 1` -- A = byte at offset 5 of the next block (IY = 5)",
+   "prom_b/wsa1_prom_b.s:159806 `ld w, 255:opc` -- W = 0xFF when the link is 0xFFFF"
+  ]
+ },
+ {
+  "old": "sub_F6BAFA",
+  "verdict": "name",
+  "new": "BStore_FreeChain_C",
+  "header": "Third copy of BStore_FreeChain (after BStore_FreeChain_B): (0x0C88) := WA (block limit), BStore_FreeHead := IY, walks the chain from block IY clearing bit 7 and writing 0x82 at +5, splices the old head after the last block and adds the count to BStore_FreeCount; seeks through BStore_SetCursorBlockAddrFromIY instead of BStore_SeekBlock_Alloc.\nBStore_TruncateAfterSongPosition frees the blocks after the new end with WA = BStore_BlockCount; 0xF6B73C frees one (WA = 1). Basis: body compared with BStore_FreeChain (67 = 67 instructions, only seek-call order and push width differ) + callers.",
+  "basis": "twin + body + callers",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:158664 `calr sub_F6BAFA` -- BStore_TruncateAfterSongPosition: free everything after the truncation block (caller)",
+   "prom_b/wsa1_prom_b.s:158663 `ld wa, (BStore_BlockCount:16)` -- limit = the whole heap",
+   "prom_b/wsa1_prom_b.s:159447 `calr sub_F6BAFA` -- second caller (unnamed 0xF6B657 path) with WA = 1",
+   "prom_b/wsa1_prom_b.s:160082 `ld bc, (BStore_FreeHead:24)` -- old free-list head saved ...",
+   "prom_b/wsa1_prom_b.s:160083 `ld (BStore_FreeHead:24), iy` -- ... and the chain becomes the new head",
+   "prom_b/wsa1_prom_b.s:160106 `ld (xhl+5), 130` -- freed block gets 0x82 at +5, as in BStore_FreeChain 0xF7A58F",
+   "prom_b/wsa1_prom_b.s:160136 `add (BStore_FreeCount:24), wa` -- count added to the free count",
+   "prom_b/wsa1_prom_b.s:188724 `BStore_FreeChain:` -- the twin; instruction-by-instruction compare (cmpbody.py in agent_v scratch) differs only at the seek calls and push IY vs push XIY"
+  ]
+ },
+ {
+  "old": "sub_F6C30A",
+  "verdict": "name",
+  "new": "StepRecord_RestoreSongPositionFromSlot",
+  "header": "A = slot 0..7: XHL := the 8-byte record 0x0F11 + 8*slot; restores the current entry's song position from it (block word 0x3460[n] := rec+0, offset byte 0x3482[n] := rec+2) and leaves XHL on the record.\nFirst half of StepRecord_RestoreCursorFromSlot (and of the unlabelled 0xF6C2F4 variant, which then reads rec+3 into (0x0E53)); StepRecord_SaveCursorToSlot writes the same fields. Basis: callers + body.",
+  "basis": "callers + body + save twin",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:161065 `calr sub_F6C30A` -- StepRecord_RestoreCursorFromSlot (caller)",
+   "prom_b/wsa1_prom_b.s:161076 `calr sub_F6C30A` -- the 0xF6C2F4 variant ...",
+   "prom_b/wsa1_prom_b.s:161077 `ld a, (xhl+3)` -- ... reads rec+3 through the XHL it leaves",
+   "prom_b/wsa1_prom_b.s:161102 `add xwa, 3857` -- record base 0x0F11 + 8*(A&7)",
+   "prom_b/wsa1_prom_b.s:161107 `mx_st_mr16 MXD, ra_IY, ra_IZ, 0` -- 0x3460[n] := rec+0 (block word)",
+   "prom_b/wsa1_prom_b.s:161112 `ld (xiy+34), a` -- 0x3482[n] := rec+2 (offset byte, 0x3460+0x22)"
+  ]
+ },
+ {
+  "old": "sub_F6C340",
+  "verdict": "name",
+  "new": "StepRecord_RestoreBeatPositionsFromSlot",
+  "header": "(0x0E54) := rec+4, (0x0E56) := rec+6 of the slot record XHL that StepRecord_RestoreSongPositionFromSlot just selected -- the two beat-position words StepRecord_LoadMeasureBeat chooses between by track kind.\nSecond half of StepRecord_RestoreCursorFromSlot and of the 0xF6C2F4 variant; StepRecord_SaveCursorToSlot stores them at +4/+6. Basis: callers + body.",
+  "basis": "callers + body + save twin",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:161066 `calr sub_F6C340` -- StepRecord_RestoreCursorFromSlot, right after the song-position half (caller)",
+   "prom_b/wsa1_prom_b.s:161129 `ld (3668:16), wa` -- (0x0E54) := rec+4",
+   "prom_b/wsa1_prom_b.s:161131 `ld (3670:16), wa` -- (0x0E56) := rec+6",
+   "prom_b/wsa1_prom_b.s:161035 `ld (xhl+4), wa` -- StepRecord_SaveCursorToSlot stores (0x0E54) at +4 ...",
+   "prom_b/wsa1_prom_b.s:161037 `ld (xhl+6), wa` -- ... and (0x0E56) at +6"
+  ]
+ },
+ {
+  "old": "sub_F6C52A",
+  "verdict": "refuse",
+  "why_refused": "It acts only when the track kind (0x0E63) is 3, which the one writer of (0x0E63) never stores (Map_0E63_F6ACA7 gives 1 or 2), and what it then tests (sub_F6C5BA: a 0xB0 event with bytes 0x48/0x0A and bit 4; sub_F6922B) is not established.",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:153733 `calr sub_F6C52A` -- StepRecordSub00_LcdKeyRow4 (the ERS key body) calls it (caller)",
+   "prom_b/wsa1_prom_b.s:161485 `m_cp_mi8 MB16, 0x0e63, 0x03` -- only kind 3 does anything; else W = 0",
+   "prom_b/wsa1_prom_b.s:161492 `calr sub_F6C5BA` -- unnamed event test",
+   "prom_b/wsa1_prom_b.s:161495 `calr sub_F6922B` -- unnamed test of (0x0E56)/(0x0E53)",
+   "prom_b/wsa1_prom_b.s:150275 `; The one writer of (0x0E63), prom_b 0xF6ACA2, stores 1 or 2` -- kind 3 is not seen set"
+  ]
+ },
+ {
+  "old": "sub_F6D40C",
+  "verdict": "name",
+  "new": "StepRecord_RepaintThenMsgLineControl",
+  "header": "call T_F431B0 (StubBlock_F7D000 -> Paint_StepRecord: repaint STEP RECORD), then falls through into MsgLine_Control_Cleared. The target of StepRecord_RepaintThenMsgLineControl_Veneer, whose name and header already describe it. Basis: caller (veneer) + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:149604 `jp sub_F6D40C` -- StepRecord_RepaintThenMsgLineControl_Veneer (caller)",
+   "prom_b/wsa1_prom_b.s:163721 `call T_F431B0` -- the whole body: the STEP RECORD painter slot ...",
+   "prom_b/wsa1_prom_b.s:195347 `jrl Paint_StepRecord - 0xF7D003` -- ... which StubBlock_F7D000 sends to Paint_StepRecord",
+   "prom_b/wsa1_prom_b.s:163756 `MsgLine_Control_Cleared:` -- the next label: no ret, so it falls into the CONTROL message line"
+  ]
+ },
+ {
+  "old": "sub_F6D5BA",
+  "verdict": "name",
+  "new": "MsgLine_PutMeasureDigits",
+  "header": "MsgLine_Text+0..+2 := the step cursor's measure (0x12B2) as three right-justified digits (MsgLine_SetTextDashes when >= 1000); no repaint. MsgLine_MeasureNumber's first half, without its (0x12B4) cell and T_F431B4.\nStepRecordSub16_SoftKeyCol1 calls it after stepping to a measure start; five other message-line composers too. Basis: callers + body + sibling.",
+  "basis": "callers + body + sibling",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:156297 `call sub_F6D5BA` -- StepRecordSub16_SoftKeyCol1, after the cursor reaches beat 0 / tick 0 (caller)",
+   "prom_b/wsa1_prom_b.s:164340 `ld wa, (4786:16)` -- (0x12B2), the measure StepRecord_LoadMeasureBeat stores",
+   "prom_b/wsa1_prom_b.s:164341 `cp wa, 1000` -- four digits -> dashes",
+   "prom_b/wsa1_prom_b.s:164346 `call T_Value_ToAsciiDigits3_RightJustified` -- three right-justified digits",
+   "prom_b/wsa1_prom_b.s:164350 `ld (xix), wa` -- into MsgLine_Text+0",
+   "prom_b/wsa1_prom_b.s:164622 `ld wa, (4786:16)` -- MsgLine_MeasureNumber does the same, then adds (0x12B4) and repaints (T_F431B4)"
+  ]
+ },
+ {
+  "old": "sub_F6D6D6",
+  "verdict": "name",
+  "new": "StepRecord_PaintPositionMarker_Call",
+  "header": "call T_F431CC -> Veneer_F81E7E -> prom_a 0xF81E7E (unnamed): on screen 0x0E (STEP RECORD) only, clears a strip of layer 1 (DL_F3DA6F, op 0E) and fills an 8x12 block at x = 8*n, y 0x6F-0x7B, n = (0x12A7) for track kinds 1/2 (nothing when 0), (0x1009) / (0x106C) for the others.\nsub_F6C736 sets (0x12A7) = 1 + 8*beat (0x0E58) + tick (0x0E53)/12 before calling it; StepRecord_OnLeave zeroes (0x12A7) and calls it. Basis: callers + target body (prom_a).",
+  "basis": "callers + target body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:158218 `ld (4775:16), 0` -- StepRecord_OnLeave clears the column (0x12A7) ...",
+   "prom_b/wsa1_prom_b.s:158219 `call sub_F6D6D6` -- ... and calls it (named caller)",
+   "prom_b/wsa1_prom_b.s:161783 `sla a, 3` -- sub_F6C736: beat (0x0E58) * 8 ...",
+   "prom_b/wsa1_prom_b.s:161788 `div wa, l` -- ... + tick (0x0E53) / 12, +1, wrapped at 32 ...",
+   "prom_b/wsa1_prom_b.s:161795 `ld (4775:16), h` -- ... into (0x12A7), then the same call",
+   "prom_b/wsa1_prom_b.s:164593 `call T_F431CC` -- the whole body",
+   "prom_b/wsa1_prom_b.s:195375 `jrl sub_F81E7E - 0xF7D018` -- the slot's veneer goes to prom_a 0xF81E7E",
+   "prom_a/wsa1_prom_a.s:6018 `m_cp_mi8 MB16, UI_ScreenId, 0x0e` -- prom_a target: STEP RECORD screen only",
+   "prom_a/wsa1_prom_a.s:6022 `ld XIY,DL_F3DA6F` -- op-0E record: LCD_Svc_0E_ClearColumns on layer 1",
+   "prom_a/wsa1_prom_a.s:6041 `ld a, (0x12a7:16)` -- the column for kinds 1/2 ...",
+   "prom_a/wsa1_prom_a.s:6043 `ld XIY,Data_F3DAED` -- ... indexes DLTable_F3DAF8 (x = 8*n, y 0x6F..0x7B), swi 7 service 5 (LCD_Svc_05_FillRect)"
+  ]
+ },
+ {
+  "old": "sub_F6D963",
+  "verdict": "name",
+  "new": "MsgLine_PutPitchBendValue",
+  "header": "MsgLine_Text+21..+25 := the 14-bit value ((0x12EB)&0x7F)<<7 | ((0x12B9)&0x7F) in five digits: value/1000 through T_Value_ToAsciiDigits3_RightJustified (last two cells), value%1000 through T_Value_ToAsciiDigits3 (three).\nMsgLine_ControlTypeAndValue calls it for control type 1, the 'P.BEND=' caption. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:164911 `call sub_F6D963` -- MsgLine_ControlTypeAndValue, only when (0x12B8) == 1 = 'P.BEND=' (caller)",
+   "prom_b/wsa1_prom_b.s:164997 `ld a, (4793:16)` -- LSB 7 bits from (0x12B9)",
+   "prom_b/wsa1_prom_b.s:164998 `ld w, (4843:16)` -- MSB 7 bits from (0x12EB)",
+   "prom_b/wsa1_prom_b.s:165001 `rrc w` -- MSB bit 0 -> bit 7 of the low byte: (MSB<<7)|LSB",
+   "prom_b/wsa1_prom_b.s:165007 `div xwa, de` -- / 1000: quotient WA, remainder QWA",
+   "prom_b/wsa1_prom_b.s:165014 `ldir85` -- 2 cells of the quotient to MsgLine_Text+21",
+   "prom_b/wsa1_prom_b.s:165017 `call T_Value_ToAsciiDigits3` -- 3 cells of the remainder after them"
+  ]
+ },
+ {
+  "old": "sub_F6E9BB",
+  "verdict": "name",
+  "new": "StepRecord_ReadScanEvent",
+  "header": "Copies the event at the step-record scan position (block (0x0FD4), offset (0x0FD6)) into the buffer at 0x0FC7: a 0x81 beat mark or 0x82 end alone, otherwise the lead byte and the data bytes up to the next byte with bit 7, advancing past each (next block via +3, offset 5).\nThe target of StepRecord_ReadScanEvent_Veneer, whose header describes it. Basis: caller (veneer) + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:149728 `jp sub_F6E9BB` -- StepRecord_ReadScanEvent_Veneer (caller)",
+   "prom_b/wsa1_prom_b.s:168103 `ld xix, 4039` -- buffer 0x0FC7",
+   "prom_b/wsa1_prom_b.s:168106 `cp a, 129` -- 0x81 ...",
+   "prom_b/wsa1_prom_b.s:168108 `cp a, 130` -- ... or 0x82: one byte only",
+   "prom_b/wsa1_prom_b.s:168116 `bit 7, a` -- stop at the next lead byte",
+   "prom_b/wsa1_prom_b.s:168143 `ld hl, (4052:16)` -- sub_F6E9E6 reads at block (0x0FD4) ...",
+   "prom_b/wsa1_prom_b.s:168146 `ld ix, (4054:16)` -- ... offset (0x0FD6)",
+   "prom_b/wsa1_prom_b.s:168184 `ldw wa, 5` -- sub_F6EA15 advances; past 0xFF -> next block offset 5"
+  ]
+ },
+ {
+  "old": "sub_F6F408",
+  "verdict": "name",
+  "new": "MidiFileL0ad_SelectSeqBankAndReadSmf",
+  "header": "Saves the workspace to the current bank (OldCopy_BStore_Workspace_SaveToBank); unless Disk_SeqBank is already BStore_CurrentBank, makes it current, loads it (sub_F6F4A3) and applies its beats per bar; then Smf_ReadFile (via Smf_ReadFile_Entry), re-inits the playback rings and clears (0x360B) bit 0.\nThe target of MidiFileL0ad_LcdKeyRow1 (`jp`); load-side twin of MidiFileSave_WriteSeqBankSmf's body. Basis: caller + body + twin.",
+  "basis": "caller + body + twin",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:169036 `jp sub_F6F408` -- MidiFileL0ad_LcdKeyRow1 (caller)",
+   "prom_b/wsa1_prom_b.s:169080 `call OldCopy_BStore_Workspace_SaveToBank` -- workspace -> current bank (a live call: see note in summary)",
+   "prom_b/wsa1_prom_b.s:169082 `m_cp_rm MB16, BStore_CurrentBank, 1` -- Disk_SeqBank already current?",
+   "prom_b/wsa1_prom_b.s:169086 `call sub_F6F4A3` -- load the new bank's 0xC00 bytes",
+   "prom_b/wsa1_prom_b.s:169089 `call Smf_ReadFile_Entry` -- read the Standard MIDI File",
+   "prom_b/wsa1_prom_b.s:169092 `m_and_mi8 MB16, 0x360b, 0xfe` -- (0x360B) bit 0 cleared"
+  ]
+ },
+ {
+  "old": "sub_F6F440",
+  "verdict": "name",
+  "new": "MidiFileSave_SelectSeqBankAndWriteSmf",
+  "header": "Unless Disk_SeqBank is already BStore_CurrentBank: saves the workspace to the current bank, makes Disk_SeqBank current, loads it (sub_F6F4A3), rewinds/re-posts its GM mode (sub_F6F4F2) and applies its beats per bar; then Smf_WriteFile (via Smf_WriteFile_Veneer) and re-inits the playback rings.\nThe body behind MidiFileSave_WriteSeqBankSmf (`jp`), whose header describes it; save-side twin of MidiFileL0ad_SelectSeqBankAndReadSmf. Basis: caller + body.",
+  "basis": "caller + body + twin",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:169059 `jp sub_F6F440` -- MidiFileSave_WriteSeqBankSmf (caller)",
+   "prom_b/wsa1_prom_b.s:169120 `m_cp_rm MB16, BStore_CurrentBank, 1` -- Disk_SeqBank already current?",
+   "prom_b/wsa1_prom_b.s:169122 `call OldCopy_BStore_Workspace_SaveToBank` -- save the current bank first",
+   "prom_b/wsa1_prom_b.s:169125 `call sub_F6F4A3` -- load Disk_SeqBank",
+   "prom_b/wsa1_prom_b.s:169129 `call Smf_WriteFile_Veneer` -- write the SMF"
+  ]
+ },
+ {
+  "old": "sub_F6F8A5",
+  "verdict": "name",
+  "new": "BStore_SetGmFlagInCurrentBankCopy",
+  "header": "Byte +0xC6 of the current bank's 0xC00-byte copy (0x610000 + BStore_CurrentBank*0xC00) := C -- the bank-copy twin of the song's GM flag 0x6034C6.\nSmf_ReadFile calls it right after setting (0x6034C6) and GM mode (0x7F4D) bit 2 to the same 0 / 0xFF. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:169564 `ld (6304966:24), 0` -- Smf_ReadFile: GM flag 0x6034C6 := 0 with C = 0 ...",
+   "prom_b/wsa1_prom_b.s:169570 `ld (6304966:24), 255` -- ... or 0xFF with C = 0xFF",
+   "prom_b/wsa1_prom_b.s:169572 `calr sub_F6F8A5` -- then calls it (caller)",
+   "prom_b/wsa1_prom_b.s:169639 `add xix, 198` -- bank copy + 0xC6",
+   "prom_b/wsa1_prom_b.s:169640 `ld (xix), c` -- the store",
+   "prom_b/wsa1_prom_b.s:142808 `stores it as the song's GM flag (0x6034C6) = 0xFF / 0` -- an existing header: the established meaning of workspace +0xC6"
+  ]
+ },
+ {
+  "old": "sub_F6F8C7",
+  "verdict": "name",
+  "new": "SmfPart_ResetFineTuneAndBendRange",
+  "header": "In all 16 channels' 64-byte part records at 0x6036A0 (records 0-7 and 9-16, record 8 skipped as in SmfPart_RecordOffsets): +0x0D := 2 and +0x0C := 0x80 -- the fields the SMF writer exports as RPN 0 (pitch-bend sensitivity, CC 6) and RPN 1 (fine tuning, CC 6/38 = +0x0C>>1, bit 0<<6).\nSmf_ReadFile runs it on its success path after the import. Basis: caller + body + the writer's reads of the same fields.",
+  "basis": "caller + body + field readers",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:169609 `calr sub_F6F8C7` -- Smf_ReadFile, success path (caller)",
+   "prom_b/wsa1_prom_b.s:169659 `ld (xix+13), a` -- +0x0D := 2 ...",
+   "prom_b/wsa1_prom_b.s:169661 `cp bc, 9` -- ... skipping record 8 after the 8th",
+   "prom_b/wsa1_prom_b.s:169669 `ld (xix+12), a` -- +0x0C := 0x80",
+   "prom_b/wsa1_prom_b.s:179422 `ld l, 1:opc` -- Smf_WriteFile: RPN LSB 1 (fine tuning) ...",
+   "prom_b/wsa1_prom_b.s:179439 `ld l, (xiy+12)` -- ... data entry from +0x0C",
+   "prom_b/wsa1_prom_b.s:179509 `ld l, 0:opc` -- RPN 0 (pitch-bend sensitivity) ...",
+   "prom_b/wsa1_prom_b.s:179526 `ld l, (xiy+13)` -- ... data entry from +0x0D"
+  ]
+ },
+ {
+  "old": "sub_F6F90C",
+  "verdict": "name",
+  "new": "Smf_ResetRpnState",
+  "header": "Selected-RPN bytes 0x11D8[16] := 0xFF (none) and the 84 bytes from 0x11E8 := 0: the per-channel RPN value arrays 0x11E8 / 0x11F8 / 0x1208, the fine-tune MSB/LSB cells 0x1218 / 0x1228, and 0x1238..0x123B.\nSmf_ReadFile's first call, before any event is read. Basis: caller + body + the arrays' readers (SmfCC_UpdateSelectedRpn, SmfCC_PutSelectedRpnValueEvent, SmfCC_CombineFineTuneDataEntry).",
+  "basis": "caller + body + array users",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:169324 `calr sub_F6F90C` -- Smf_ReadFile, start of the import (caller)",
+   "prom_b/wsa1_prom_b.s:169692 `ld xix, 4568` -- 0x11D8: the selected-RPN array ...",
+   "prom_b/wsa1_prom_b.s:169694 `ld (xix+), wa` -- ... 8 words of 0xFFFF",
+   "prom_b/wsa1_prom_b.s:169697 `ldw bc, 42` -- then 42 zero words from 0x11E8",
+   "prom_b/wsa1_prom_b.s:172430 `ld xix, 4568` -- SmfCC_PutSelectedRpnValueEvent reads 0x11D8[ch], 0xFF = none",
+   "prom_b/wsa1_prom_b.s:172439 `ld xix, Data_F70AD7` -- whose pointer table names 0x1208 / 0x11E8 / 0x11F8"
+  ]
+ },
+ {
+  "old": "sub_F6F9DE",
+  "verdict": "name",
+  "new": "Smf_AllocFirstBlockForAllTracks",
+  "header": "For directory entries 0..16 ((0x349F) counting), while at least 17 blocks are free: allocates a block (T_BStore_AllocBlock_Veneer), marks it used with no links (+1 := 0, +3 := 0xFFFF), sets the entry's in-use bit and head, and points the entry's song position (0x3460 / 0x3482) at its offset 5.\nSmf_ReadFile runs it after clearing the bank, before reading events; sub_F73566 is a copy (Smf_ReadMultiTrack's split pass). Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:169438 `calr sub_F6F9DE` -- Smf_ReadFile, after T_SongClear_ClearCurrentBank (caller)",
+   "prom_b/wsa1_prom_b.s:169862 `m_cp_mi16 MW24, BStore_FreeCount, 0x0011` -- stop when fewer than 17 blocks are free",
+   "prom_b/wsa1_prom_b.s:169866 `call T_BStore_AllocBlock_Veneer` -- one block per entry",
+   "prom_b/wsa1_prom_b.s:169879 `m_or_mi8 MBI+r3, 0, 0x80` -- block marked used",
+   "prom_b/wsa1_prom_b.s:169884 `mx_or_mi8 MXB, ra_HL, ra_IY, 0x80` -- directory entry 0x603500[3n] in use, head := block",
+   "prom_b/wsa1_prom_b.s:169891 `mx_st_mr16 MXD, ra_HL, ra_IX, 0` -- song position block 0x3460[n] ...",
+   "prom_b/wsa1_prom_b.s:169897 `mx_ld_mi16 MXD, ra_HL, ra_IY, 0x0005` -- ... offset 0x3482[n] := 5",
+   "prom_b/wsa1_prom_b.s:169901 `inc 1, (13471:16)` -- 17 entries"
+  ]
+ },
+ {
+  "old": "sub_F6FA70",
+  "verdict": "name",
+  "new": "Smf_PutDefaultTimeSigOnMasterTrack",
+  "header": "At master track 17's cursor (index 16) writes the tag-0x87 time-signature record {0x87, 0x00, 0x03} (Data_F6FAB4: beats per bar = 3+1 = 4, as BStore_TimeSigFirstMeasure reads it), marks the master track used ((0x360E) bit 0) and saves the cursor; stops if a byte store fails ((0x1238)).\nCalled by Smf_ReadFile and by sub_F72F5C (the multi-track split) before any event is stored. Basis: callers + body + the tag-0x87 reader.",
+  "basis": "callers + body + record reader",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:169439 `calr sub_F6FA70` -- Smf_ReadFile (caller)",
+   "prom_b/wsa1_prom_b.s:177655 `call sub_F6FA70` -- the multi-track split pass (second caller)",
+   "prom_b/wsa1_prom_b.s:169931 `ldw iy, 16` -- track index 16 = Track 17, the master track",
+   "prom_b/wsa1_prom_b.s:169936 `ld xix, Data_F6FAB4` -- the three bytes ...",
+   "prom_b/wsa1_prom_b.s:169976 `.byte 0x87, 0x00, 0x03` -- ... 0x87, 0x00, 0x03",
+   "prom_b/wsa1_prom_b.s:169948 `m_or_mi8 MB16, 0x360e, 0x01` -- track-17 used bit",
+   "prom_b/wsa1_prom_b.s:144012 `cp w, 135` -- BStore_TimeSigFirstMeasure takes tag 0x87 records ...",
+   "prom_b/wsa1_prom_b.s:144056 `inc 1, a` -- ... third byte + 1 = beats per bar"
+  ]
+ },
+ {
+  "old": "sub_F6FAB7",
+  "verdict": "name",
+  "new": "Smf_TerminateUsedTracks",
+  "header": "For each of the 17 directory entries in use (0x603500[3n] bit 7): loads track n's cursor, writes the 0x82 end tag there and saves that position as the track's end cursor (0x6034A0[n] / 0x60347E[n], via sub_F6FB16).\nSmf_ReadFile runs it at the file's End of Track ((0x10CB) = 0xFF, set by SmfEvent_Meta on meta 0x2F). Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:169477 `m_cp_mi8 MB16, 0x10cb, 0xff` -- Smf_ReadFile: End of Track seen ...",
+   "prom_b/wsa1_prom_b.s:169483 `calr sub_F6FAB7` -- ... then this (caller)",
+   "prom_b/wsa1_prom_b.s:170001 `mx_bit 7, MXD, ra_DE, ra_IY` -- entry in use?",
+   "prom_b/wsa1_prom_b.s:170006 `calr TrackCursor_Load` -- track n's cursor",
+   "prom_b/wsa1_prom_b.s:170007 `ld a, 130:opc` -- 0x82 ...",
+   "prom_b/wsa1_prom_b.s:170008 `calr BStore_PutByteAtCursor` -- ... written there",
+   "prom_b/wsa1_prom_b.s:170069 `ld xix, 6304928` -- sub_F6FB16: end cursor offset 0x6034A0[n] and block 0x60347E[n]"
+  ]
+ },
+ {
+  "old": "sub_F6FAE8",
+  "verdict": "name",
+  "new": "Smf_ClearUnusedTracks",
+  "header": "For tracks 1..17 whose bit in the used mask ((0x360C) bit t, (0x360E) bit 0 for track 17) is still clear, BStore_ClearTrack through T_F40A04 with (0x0C70) = t -- frees the block Smf_AllocFirstBlockForAllTracks gave every track.\nSmf_ReadFile runs it at End of Track, after Smf_TerminateUsedTracks. Basis: caller + body + T_F40A04's target.",
+  "basis": "caller + body + callee",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:169484 `calr sub_F6FAE8` -- Smf_ReadFile, End of Track (caller)",
+   "prom_b/wsa1_prom_b.s:170033 `ld de, (13836:16)` -- used mask (0x360C), the bits SmfEvent_MarkChannelUsed sets ...",
+   "prom_b/wsa1_prom_b.s:170037 `ld de, (13838:16)` -- ... (0x360E) for track 17",
+   "prom_b/wsa1_prom_b.s:170041 `m_rd_xorcf_a RW+r2` -- CF = NOT bit: only clear bits reach the call",
+   "prom_b/wsa1_prom_b.s:170043 `ld (3184:16), c` -- (0x0C70) := t (then +1)",
+   "prom_b/wsa1_prom_b.s:170046 `call T_F40A04` -- T_F40A04 -> T_F40C74 -> range check 1..17 ...",
+   "prom_b/wsa1_prom_b.s:108211 `calr BStore_ClearTrack` -- ... -> BStore_ClearTrack"
+  ]
+ },
+ {
+  "old": "sub_F7083B",
+  "verdict": "name",
+  "new": "SmfCC_PutSustainParamEvent",
+  "header": "SmfCC_PutParamEventWithNumber with the number fixed at 0xB5: unless (0x11AE) = 0xFF, stores {0xB4, tick (Smf_TicksToPpq96), 0x35, (0x11AE), (0x11AF)&0x7F, (0x11B0)} in the event channel's track (multi-track: slot Smf_ClampTrackToSlot((0x11B2))), marks the channel and saves the cursor.\nOnly SmfCC_Sustain (CC 64) calls it, with (0x11AE) = ByteMap_F7091E[ch], (0x11AF) = the pedal value, (0x11B0) = 0x7F. Basis: caller + body + sibling.",
+  "basis": "caller + body + sibling",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:171940 `ld (4527:16), a` -- SmfCC_Sustain: (0x11AF) := the CC value ...",
+   "prom_b/wsa1_prom_b.s:171941 `ld (4528:16), 127` -- ... (0x11B0) := 0x7F ...",
+   "prom_b/wsa1_prom_b.s:171942 `calr sub_F7083B` -- ... then this (caller)",
+   "prom_b/wsa1_prom_b.s:171994 `or a, 4` -- lead 0xB0|4 = what SmfCC_PutParamEventWithNumber writes when its number has bit 7",
+   "prom_b/wsa1_prom_b.s:172016 `ld a, 181:opc` -- number 0xB5 & 0x7F = 0x35",
+   "prom_b/wsa1_prom_b.s:172025 `ld a, (4526:16)` -- then (0x11AE), (0x11AF), (0x11B0)",
+   "prom_b/wsa1_prom_b.s:172044 `call SmfEvent_MarkChannelUsed` -- channel marked",
+   "prom_b/wsa1_prom_b.s:174507 `ld (4993:16), 184` -- the sibling's callers set 0xB8..0xBD the same way"
+  ]
+ },
+ {
+  "old": "sub_F70B22",
+  "verdict": "name",
+  "new": "SmfCC_PutRpnParamEvent",
+  "header": "C = the selected RPN (0/1/2): stores {0xB0 (|2, |1 if (0x11AF) b7, for RPN 1 only), tick (Smf_TicksToPpq96), the channel's part (ByteMap_F70298; raw channel for multi-track), class Data_F70C3C[C] = 0x0B / 0x0A / 0x09, (0x11AF)&0x7F, 0x7F} in the channel's track, marks the channel and saves the cursor.\nOnly SmfCC_PutSelectedRpnValueEvent calls it, after loading the RPN's value into (0x11AF). Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:172434 `cp l, 255` -- SmfCC_PutSelectedRpnValueEvent: an RPN is selected ...",
+   "prom_b/wsa1_prom_b.s:172444 `calr sub_F70B22` -- ... then this (caller)",
+   "prom_b/wsa1_prom_b.s:172477 `cp c, 1:i3` -- flag bits only for RPN 1",
+   "prom_b/wsa1_prom_b.s:172534 `ld xde, Data_F70C3C` -- class byte by RPN ...",
+   "prom_b/wsa1_prom_b.s:172593 `.byte 0x0B, 0x0A, 0x09` -- ... 0x0B / 0x0A / 0x09",
+   "prom_b/wsa1_prom_b.s:172542 `ld a, (4527:16)` -- the value",
+   "prom_b/wsa1_prom_b.s:172549 `ld a, 127:opc` -- last byte 0x7F"
+  ]
+ },
+ {
+  "old": "sub_F71203",
+  "verdict": "name",
+  "new": "Smf_PutBeatMarks",
+  "header": "Writes (0x1086) 0x81 beat marks at track IY's cursor (TrackCursor_Load .. TrackCursor_Save), stopping if a byte store fails ((0x1238)); then (0x11B1) |= 1 and (0x1238) := 0.\nSmf_ApplyDeltaTime calls it (4 sites) with (0x1086) = the whole quarter notes the event's delta crossed. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:173358 `calr sub_F71203` -- Smf_ApplyDeltaTime (caller; also 173382, 173405, 173426)",
+   "prom_b/wsa1_prom_b.s:173458 `ld bc, (4230:16)` -- count (0x1086)",
+   "prom_b/wsa1_prom_b.s:173460 `ld a, 129:opc` -- 0x81 ...",
+   "prom_b/wsa1_prom_b.s:173463 `calr BStore_PutByteAndAdvance` -- ... appended",
+   "prom_b/wsa1_prom_b.s:173468 `djnz16 bc, -19` -- (0x1086) times",
+   "prom_b/wsa1_prom_b.s:173469 `calr TrackCursor_Save` -- cursor saved",
+   "prom_b/wsa1_prom_b.s:173470 `m_or_mi8 MB16, 0x11b1, 0x01` -- (0x11B1) bit 0"
+  ]
+ },
+ {
+  "old": "sub_F72822",
+  "verdict": "name",
+  "new": "Smf_AllocFirstBlockForTrackSlot",
+  "header": "Multi-track import: for slot Smf_TrackToSlot((0x11B2)), while at least 17 blocks are free, allocates a block (T_BStore_AllocBlock_Veneer), marks it used with no links, sets the directory entry's in-use bit and head, and points the slot's song position (0x3460 / 0x3482) at offset 5.\nSmf_ReadMultiTrack calls it before each MTrk chunk; the per-slot form of Smf_AllocFirstBlockForAllTracks. Basis: caller + body + sibling.",
+  "basis": "caller + body + sibling",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:174813 `calr sub_F72822` -- Smf_ReadMultiTrack, top of the per-track loop (caller)",
+   "prom_b/wsa1_prom_b.s:176587 `calr Smf_TrackToSlot` -- slot = min(track, 1)",
+   "prom_b/wsa1_prom_b.s:176589 `m_cp_mi16 MW24, BStore_FreeCount, 0x0011` -- needs 17 free blocks",
+   "prom_b/wsa1_prom_b.s:176593 `call T_BStore_AllocBlock_Veneer` -- allocate",
+   "prom_b/wsa1_prom_b.s:176614 `mx_or_mi8 MXB, ra_HL, ra_IY, 0x80` -- directory entry in use, head := block",
+   "prom_b/wsa1_prom_b.s:176621 `mx_st_mr16 MXD, ra_HL, ra_IX, 0` -- song position block ...",
+   "prom_b/wsa1_prom_b.s:176625 `mx_ld_mi16 MXD, ra_HL, ra_IY, 0x0005` -- ... offset 5"
+  ]
+ },
+ {
+  "old": "sub_F728A3",
+  "verdict": "name",
+  "new": "Smf_TerminateTrackSlot",
+  "header": "Multi-track import: if slot Smf_TrackToSlot((0x11B2))'s directory entry is in use, writes the 0x82 end tag at its cursor (BStore_LoadTrackCursor) and saves that position as the slot's end cursor 0x6034A0 / 0x60347E (sub_F728D5).\nSmf_ReadTrackChunk runs it at the chunk's End of Track ((0x10CB) = 0xFF); the per-slot form of Smf_TerminateUsedTracks. Basis: caller + body + sibling.",
+  "basis": "caller + body + sibling",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:174959 `m_cp_mi8 MB16, 0x10cb, 0xff` -- Smf_ReadTrackChunk: End of Track ...",
+   "prom_b/wsa1_prom_b.s:174966 `calr sub_F728A3` -- ... then this (caller)",
+   "prom_b/wsa1_prom_b.s:176651 `mx_bit 7, MXD, ra_DE, ra_IY` -- entry in use?",
+   "prom_b/wsa1_prom_b.s:176657 `calr BStore_LoadTrackCursor` -- slot cursor",
+   "prom_b/wsa1_prom_b.s:176658 `ld a, 130:opc` -- 0x82 written",
+   "prom_b/wsa1_prom_b.s:176689 `mx_st_mr16 MXD, ra_IX, ra_HL, 0` -- sub_F728D5: end cursor block 0x60347E[slot]"
+  ]
+ },
+ {
+  "old": "sub_F72918",
+  "verdict": "name",
+  "new": "SmfExport_MergeUsedTracksIntoFirst",
+  "header": "Counts the used tracks (bit in (0x360C)/(0x360E) and directory entry in use); with two or more, merges every later track whose mask bit is set into the first used one: (0x0C70) = first, (0x0C71) = t, (0x0C72) = first, Smf_MergeTracks -- one track for the format-0 file.\nSmf_WriteFile runs it before the sizing pass (SmfSize_Pass). Basis: caller + body + callee.",
+  "basis": "caller + body + callee",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:179086 `call sub_F72918` -- Smf_WriteFile, before SmfSize_Pass (caller)",
+   "prom_b/wsa1_prom_b.s:176767 `cp l, 2:i3` -- fewer than two used tracks: nothing to do",
+   "prom_b/wsa1_prom_b.s:176798 `ld (3184:16), l` -- source 1 = the first used track",
+   "prom_b/wsa1_prom_b.s:176813 `ld (3185:16), c` -- source 2 = a later used track",
+   "prom_b/wsa1_prom_b.s:176816 `ld (3186:16), a` -- destination = the first",
+   "prom_b/wsa1_prom_b.s:176819 `calr sub_F72A2B` -- the merge (Smf_MergeTracks)"
+  ]
+ },
+ {
+  "old": "sub_F72A2B",
+  "verdict": "name",
+  "new": "Smf_MergeTracks",
+  "header": "Merges source tracks (0x0C70) and (0x0C71) into destination (0x0C72): each 1..(0x0CA2) and the sources distinct (else BStore_ErrorCode 3); opens both chains, clears the destination (BStore_ClearTrack via T_F40A04) unless it is a source, gives it a new block and merges the two streams into it.\nThe SMF module's copy of TrackMerge_Execute without its part checks (error 9) and part assignment; called by Smf_MergeTrack2IntoTrack1, SmfExport_MergeUsedTracksIntoFirst and an unreferenced loop at 0xF729FE. Basis: callers + body + twin.",
+  "basis": "callers + body + twin",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:176858 `calr sub_F72A2B` -- Smf_MergeTrack2IntoTrack1, whose header calls it the two-source / one-destination merge (caller)",
+   "prom_b/wsa1_prom_b.s:176903 `m_cp_rm MB16, 0x0ca2, 1` -- range checks ...",
+   "prom_b/wsa1_prom_b.s:176918 `ld (BStore_ErrorCode:16), 3` -- ... error 3, as TrackMerge_Execute",
+   "prom_b/wsa1_prom_b.s:176925 `call T_BStore_OpenChain_Call` -- source 1 chain",
+   "prom_b/wsa1_prom_b.s:176933 `call T_BStore_OpenChain_Call` -- source 2 chain",
+   "prom_b/wsa1_prom_b.s:176947 `call T_F40A04` -- clear the destination (TrackMerge_Execute uses SongEdit_ClearTrack, 138889)",
+   "prom_b/wsa1_prom_b.s:176973 `call T_BStore_AllocBlock_Veneer` -- new destination chain",
+   "prom_b/wsa1_prom_b.s:176992 `calr sub_F72CBC` -- merge loop follows",
+   "prom_b/wsa1_prom_b.s:138855 `call T_F4280C` -- TrackMerge_Execute's part step this copy lacks"
+  ]
+ },
+ {
+  "old": "sub_F72F5C",
+  "verdict": "name",
+  "new": "Smf_SplitTrack1ByChannel",
+  "header": "Multi-track import, after every MTrk was merged into track 1: needs 17 free blocks (else (0x1238) := 0xFF); copies track 1's blocks through the 0x60A000 window, resets all 17 entries (sub_F7330A), gives each a fresh block (sub_F73566), writes the master track's default time signature, then appends each event to track = its MIDI channel, re-tagged (0xDn->0xD1, 0xEn->0xD2, 0xFn->0xD3 ...), beat marks and the end tag to all 17.\nSmf_ReadMultiTrack runs it before Smf_ResetTrackAssignToIdentity. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:174831 `calr sub_F72F5C` -- Smf_ReadMultiTrack, after the per-chunk merges (caller)",
+   "prom_b/wsa1_prom_b.s:177632 `m_cp_mi16 MW24, BStore_FreeCount, 0x0011` -- 17 free blocks needed",
+   "prom_b/wsa1_prom_b.s:177637 `ld de, (6305025:24)` -- track 1's head block (entry 0 +1)",
+   "prom_b/wsa1_prom_b.s:178220 `ldir85` -- sub_F7335A: 256 bytes of it into the 0x60A000 window",
+   "prom_b/wsa1_prom_b.s:177645 `calr sub_F7330A` -- entries 1..17 reset",
+   "prom_b/wsa1_prom_b.s:177651 `calr sub_F73566` -- fresh block per track (a copy of Smf_AllocFirstBlockForAllTracks)",
+   "prom_b/wsa1_prom_b.s:177655 `call sub_F6FA70` -- default time signature on the master track",
+   "prom_b/wsa1_prom_b.s:177657 `calr sub_F7339C` -- next event from the window",
+   "prom_b/wsa1_prom_b.s:177702 `ld iy, (Smf_VlqValue:16)` -- note: track = status & 15 ...",
+   "prom_b/wsa1_prom_b.s:177706 `calr sub_F73440` -- ... load that track's cursor ...",
+   "prom_b/wsa1_prom_b.s:177708 `calr sub_F73261` -- ... append BC event bytes ...",
+   "prom_b/wsa1_prom_b.s:177710 `calr sub_F73236` -- ... set its used bit ...",
+   "prom_b/wsa1_prom_b.s:177822 `ld (Smf_VlqValue:16), 209` -- channel pressure re-tagged 0xD1 (pitch bend 0xD2 at 177834, 0xFn 0xD3 at 177846)",
+   "prom_b/wsa1_prom_b.s:177681 `calr sub_F7328F` -- 0x81 / 0x82 to all 17 tracks"
+  ]
+ },
+ {
+  "old": "sub_F735F7",
+  "verdict": "refuse",
+  "why_refused": "Its used-track arm runs sub_F73664, which rewrites each used track's lead bytes in place (0x84->0x82, 0xD0..0xD3/0x80 -> MIDI statuses | (0x10CA), controller and program data patched) for a purpose not established beyond that; only the clear-unused-track arm is clear.",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:179085 `call sub_F735F7` -- Smf_WriteFile, before SmfExport_MergeUsedTracksIntoFirst (caller)",
+   "prom_b/wsa1_prom_b.s:178609 `jr c, sub_F735F7_Skip2` -- mask bit clear ...",
+   "prom_b/wsa1_prom_b.s:178633 `call T_F40A04` -- ... -> BStore_ClearTrack",
+   "prom_b/wsa1_prom_b.s:178624 `calr sub_F73664` -- used track -> the in-place rewrite",
+   "prom_b/wsa1_prom_b.s:178705 `calr BStore_WriteCursorByteNoSave` -- sub_F73664 writes into the song store",
+   "prom_b/wsa1_prom_b.s:178725 `or a, (4298:16)` -- status | (0x10CA), the track index (7 for track 17)"
+  ]
+ },
+ {
+  "old": "sub_F74885",
+  "verdict": "name",
+  "new": "MidiFileList_CheckSelectedEntryBlank",
+  "header": "A := 0 when the 8 name bytes of MIDI-file list entry Disk_SelectedEntry (0x60A480 + 8*n) are all spaces (a free slot), else 0xFE.\nSmf_WriteFile calls it when the file name is not in the list; non-zero sends the save to UI_ScreenPage 2, the pass that deletes the listed file before writing. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:179021 `call sub_F74885` -- Smf_WriteFile (caller) ...",
+   "prom_b/wsa1_prom_b.s:179022 `cp a, 0:i3` -- ... non-zero -> Smf_WriteFile_Skip58",
+   "prom_b/wsa1_prom_b.s:180400 `ld (UI_ScreenPage:16), 2` -- Skip58: page 2, then return",
+   "prom_b/wsa1_prom_b.s:179071 `call T_DiskApi_DeleteFile_Call` -- on page 2 the listed entry's .MID is deleted first",
+   "prom_b/wsa1_prom_b.s:180525 `ld a, (Disk_SelectedEntry:16)` -- entry n ...",
+   "prom_b/wsa1_prom_b.s:180523 `ld xix, 6333568` -- ... of the list at 0x60A480 (MidiFile_CountFileList's)",
+   "prom_b/wsa1_prom_b.s:180530 `cp (xix+), 32` -- 8 spaces?",
+   "prom_b/wsa1_prom_b.s:180535 `ld a, 254:opc` -- else 0xFE"
+  ]
+ },
+ {
+  "old": "sub_F748AD",
+  "verdict": "name",
+  "new": "MidiFileList_FindFileName",
+  "header": "Searches the 100 eight-byte names of the MIDI-file list at 0x60A480 for Disk_FileName's first 8 characters: found -> Disk_SelectedEntry := its index, W = 0xFF; else W = 0.\nSmf_WriteFile's first check on a fresh save: a hit sends it to UI_ScreenPage 2, the pass that deletes that file before writing. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:179018 `calr sub_F748AD` -- Smf_WriteFile, unless already on page 2 (caller)",
+   "prom_b/wsa1_prom_b.s:179019 `cp w, 0:i3` -- found -> Smf_WriteFile_Skip58 (page 2)",
+   "prom_b/wsa1_prom_b.s:180562 `ld xix, 6333568` -- list entry c at 0x60A480 + 8c",
+   "prom_b/wsa1_prom_b.s:180566 `ld xiy, Disk_FileName` -- compared with Disk_FileName",
+   "prom_b/wsa1_prom_b.s:180574 `cp l, 7:i3` -- 8 bytes",
+   "prom_b/wsa1_prom_b.s:180576 `ld (Disk_SelectedEntry:16), c` -- hit: Disk_SelectedEntry := c, W = 0xFF",
+   "prom_b/wsa1_prom_b.s:180581 `cp c, 99` -- 100 entries",
+   "prom_b/wsa1_prom_b.s:180583 `xor w, w` -- miss: W = 0"
+  ]
+ }
+]

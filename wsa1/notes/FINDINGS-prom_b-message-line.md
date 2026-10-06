@@ -202,8 +202,8 @@ one byte after its `ret`.
   `touches_buf` flag still listed it, which is why it got a second look.
   `MsgLine_FormatLengthAndPhrasing` is still refused: it writes three table-selected fields into the
   line and only the last, `TENU`/`NORM`/`STAC`/`CUTT`, is identifiable.
-* **`sub_F6D482`, `sub_F6D5BA`, `MsgLine_SetTextDashes`, `MsgLine_MeasureNumber`,
-  `sub_F6D710`, `sub_F6D86B`, `MsgLine_ControlTypeAndValue`, `sub_F6D963`, `MsgLine_PutTempoDigits`,
+* **`sub_F6D482`, `MsgLine_PutMeasureDigits`, `MsgLine_SetTextDashes`, `MsgLine_MeasureNumber`,
+  `sub_F6D710`, `sub_F6D86B`, `MsgLine_ControlTypeAndValue`, `MsgLine_PutPitchBendValue`, `MsgLine_PutTempoDigits`,
   `sub_F6DA12`, `sub_F6DA9A`, `sub_F6DAED`, `MsgLine_FormatLengthAndPhrasing`** all touch the line
   but copy no caption of their own. Three of them are close to nameable and were
   still refused, and it is worth saying why:

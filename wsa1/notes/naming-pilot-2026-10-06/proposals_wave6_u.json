@@ -1,0 +1,459 @@
+[
+ {
+  "old": "sub_F68271",
+  "verdict": "name",
+  "new": "StepRecordKind3Sub12_ButtonDispatch",
+  "header": "Button dispatcher of track-kind-3 STEP RECORD sub-screens 12 and 15 (StepRecord_SubScreenButtonTable_Kind3 entries 12/15, through StepRecordKind3Sub12_ButtonDispatch_Veneer): panel code BC 0..31 indexes DispatchTable_F6828B and the handler is called -- StepRecordSub00_ButtonDispatch's shape. Unreached in this build (track kind 3 is never written). Basis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:150321 `.long StepRecordKind3Sub12_ButtonDispatch_Veneer` -- StepRecord_SubScreenButtonTable_Kind3 [12] (and [15] at 150324)",
+   "prom_b/wsa1_prom_b.s:149396 `jp sub_F68271` -- the veneer is the only reference",
+   "prom_b/wsa1_prom_b.s:151729 `ld hl, bc` -- panel code, bounded `cp hl, 31` on the next line",
+   "prom_b/wsa1_prom_b.s:151734 `ld xix, DispatchTable_F6828B` -- 32-entry button table (SoftKeyCol1_StepRecordSub16, ExitKey_StepRecord, ...)",
+   "prom_b/wsa1_prom_b.s:151737 `call (xhl)` -- calls the selected handler, as StepRecordSub00_ButtonDispatch does (150331)"
+  ]
+ },
+ {
+  "old": "sub_F68575",
+  "verdict": "name",
+  "new": "StepRecord_BlankPrevRowText",
+  "header": "Fills the previous-measure row's 30-character text at 0x1012 with spaces (Text_FillSpaces30); StepRecord_BuildPrevMeasureRow calls it first, as StepRecord_BuildCurrentMeasureRow calls StepRecord_BlankCurrentRowText (0x1030). Basis: caller + body + twin.",
+  "basis": "callers + body + named twin",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:151890 `calr sub_F68575` -- the only call, in StepRecord_BuildPrevMeasureRow",
+   "prom_b/wsa1_prom_b.s:152180 `ld xix, 4114` -- XIX = 0x1012",
+   "prom_b/wsa1_prom_b.s:152181 `calr Text_FillSpaces30` -- 15 words of 0x2020",
+   "prom_b/wsa1_prom_b.s:152200 `ld xix, 4144` -- the named twin StepRecord_BlankCurrentRowText: same body with 0x1030"
+  ]
+ },
+ {
+  "old": "sub_F68587",
+  "verdict": "name",
+  "new": "StepRecord_BlankNextRowText",
+  "header": "Fills the next-measure row's 30-character text at 0x104E with spaces (Text_FillSpaces30); StepRecord_BuildNextMeasureRow calls it first. Twin of StepRecord_BlankCurrentRowText (0x1030). Basis: caller + body + twin.",
+  "basis": "callers + body + named twin",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:152024 `calr sub_F68587` -- the only call, in StepRecord_BuildNextMeasureRow",
+   "prom_b/wsa1_prom_b.s:152216 `ld xix, 4174` -- XIX = 0x104E",
+   "prom_b/wsa1_prom_b.s:152217 `calr Text_FillSpaces30` -- 30 spaces"
+  ]
+ },
+ {
+  "old": "sub_F6859F",
+  "verdict": "name",
+  "new": "StepRecordKind3Sub13_ButtonDispatch",
+  "header": "Button handler of track-kind-3 STEP RECORD sub-screens 13 and 14 (StepRecord_SubScreenButtonTable_Kind3 entries 13/14, through StepRecordKind3Sub13_ButtonDispatch_Veneer): only panel code 0 acts, calling SoftKeyCol1_StepRecordSub16. Unreached in this build. Basis: table index + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:150322 `.long StepRecordKind3Sub13_ButtonDispatch_Veneer` -- StepRecord_SubScreenButtonTable_Kind3 [13] (and [14])",
+   "prom_b/wsa1_prom_b.s:149402 `jp sub_F6859F` -- the veneer is the only reference",
+   "prom_b/wsa1_prom_b.s:152252 `cp bc, 0:i3` -- code 0 only",
+   "prom_b/wsa1_prom_b.s:152254 `calr SoftKeyCol1_StepRecordSub16`"
+  ]
+ },
+ {
+  "old": "sub_F68951",
+  "verdict": "name",
+  "new": "StepRecord_MainLoopService",
+  "header": "Run by MainTask_Loop every pass (T_F42ED0, right after T_Seq_MainLoopService): while STEP RECORD runs ((0x0E4E) bit 3, set by sub_F6A9E3, cleared by StepRecord_OnLeave) dispatches by track kind (0x0E63) & 3 through DispatchTable_F68972 -- kinds 1/2 sub_F68982, 3 sub_F689AD, 0 sub_F689E0 -- each acting only when SeqBuf_Ring holds input (sub_F6C507 W = 0): kinds 1/2 consume it into the step entry (sub_F67418 -> sub_F695B7) and refresh. Basis: caller + body.",
+  "basis": "caller (main loop) + body + flag setter/clearer",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:6295 `call T_Seq_MainLoopService` -- MainTask_Loop (the batch's 'MainTask_PhaseVector' is the label above it; the call is in MainTask_Loop)",
+   "prom_a/wsa1_prom_a.s:6296 `call T_F42ED0` -- next call, every pass",
+   "prom_b/wsa1_prom_b.s:92608 `T_F42ED0: jp sub_F68951`",
+   "prom_b/wsa1_prom_b.s:152803 `m_bit 3, MD16, 0x0e4e` -- gate",
+   "prom_b/wsa1_prom_b.s:157686 `m_or_mi8 MBI+r5, 0, 0x08` -- sub_F6A9E3 sets (0x0E4E) bit 3 when step recording starts",
+   "prom_b/wsa1_prom_b.s:158292 `m_and_mi8 MB16, 0x0e4e, 0xf7` -- StepRecord_OnLeave clears it",
+   "prom_b/wsa1_prom_b.s:152805 `ld l, (3683:16)` -- track kind (0x0E63), `and l, 3`",
+   "prom_b/wsa1_prom_b.s:152810 `ld xix, DispatchTable_F68972`",
+   "prom_b/wsa1_prom_b.s:152845 `calr sub_F6C507` -- W = 0 when T_SeqBufRing_IsEmpty reports data",
+   "prom_b/wsa1_prom_b.s:152848 `calr sub_F67418` -- jp sub_F695B7, which reads SeqBuf_Ring and dispatches each event by type (0x90/0xB0/0xC0...)"
+  ]
+ },
+ {
+  "old": "sub_F68B40",
+  "verdict": "name",
+  "new": "StepRecord_CursorForward",
+  "header": "The CURSOR '>' step of STEP RECORD: (0x0ED2) := 0xFF; near the track end (sub_F6C43C W = 0 with at most 2 beat marks ahead) first appends a beat mark (sub_F6B229); then the step sub_F68B91 with W = 0 (twice when (0x0E4F) bit 5), (0x0E50) := 0xFF. sub_F68B70 is the '<' twin (W = 1). Basis: table index + veneer + body.",
+  "basis": "table index + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:149960 `.long StepRecord_CursorForward_Veneer` -- entry 2 (W = 2) of the cursor table DispatchTable_F67548 (and F675BB)",
+   "prom_b/wsa1_prom_b.s:149421 `jp sub_F68B40` -- StepRecord_CursorForward_Veneer",
+   "prom_b/wsa1_prom_b.s:153085 `calr sub_F6C43C`",
+   "prom_b/wsa1_prom_b.s:153092 `ld w, 0:opc` -- forward",
+   "prom_b/wsa1_prom_b.s:153093 `calr sub_F68B91` -- the step",
+   "prom_b/wsa1_prom_b.s:153118 `ld w, 1:opc` -- sub_F68B70, the '<' twin, passes 1"
+  ]
+ },
+ {
+  "old": "sub_F68E4F",
+  "verdict": "refuse",
+  "why_refused": "Its only reference is the second `jp sub_F68E4F` at 0xF67410, a slot nothing calls (the batch credits it to the StepRecord_CursorForward_Veneer label above it); with no caller the loop over same-tick 0x9n events has no established purpose.",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:149422 `jp sub_F68E4F` -- the unreferenced slot after StepRecord_CursorForward_Veneer's `jp` (149421)",
+   "prom_b/wsa1_prom_b.s:153531 `calr BStore_ReadByteAtSongPositionPlus1` -- body: tick byte saved to (0x0EC3)",
+   "prom_b/wsa1_prom_b.s:153541 `cp a, 144` -- loops over 0x9n events at that tick (sub_F6B657 W = 6)"
+  ]
+ },
+ {
+  "old": "sub_F69019",
+  "verdict": "name",
+  "new": "StepRecord_EraseTimeSig",
+  "header": "The master-track arm of STEP RECORD's ERS (StepRecordSub00_LcdKeyRow4, entered from LcdKeyErs_StepRecord): W = 0 unless track kind 2 and the event at the step position is a tag-0x87 time-signature record (sub_F69203, (0x0F51) := its beats); at beat 0 tick 0 it refuses (message 0x68); if the meter before it (sub_F69162, 4 at song start) is the same, W = 0 (generic erase); else status 0x19 when (0x0E56) < (0x0E6A), or erases it (sub_F693F6) and re-bars (sub_F69240 / sub_F67414); W = 1. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:153714 `bit 7, w` -- LcdKeyErs_StepRecord (the 'ERS' LCD key) falls into StepRecordSub00_LcdKeyRow4",
+   "prom_b/wsa1_prom_b.s:153730 `calr sub_F69019` -- first thing StepRecordSub00_LcdKeyRow4 does; `cp w, 1` skips the generic erase",
+   "prom_b/wsa1_prom_b.s:153836 `m_cp_mi8 MB16, 0x0e63, 0x02` -- master track only",
+   "prom_b/wsa1_prom_b.s:154124 `cp a, 135` -- sub_F69203: lead byte 0x87, the time-signature tag (BStore_TimeSigFirstMeasure / SongEdit_InsertTimeSigsForMeasureInsert)",
+   "prom_b/wsa1_prom_b.s:154128 `ld (3921:16), a` -- (0x0F51) := its beats + 1",
+   "prom_b/wsa1_prom_b.s:153846 `calr sub_F6922B` -- W = 0 at beat (0x0E56) 0, tick (0x0E53) 0 ...",
+   "prom_b/wsa1_prom_b.s:153850 `calr StepRecord_PostSysEx50_87FromW` -- ... then message 0x68 and nothing erased",
+   "prom_b/wsa1_prom_b.s:153856 `calr sub_F69162` -- the meter in force before (154030: 4 when none)",
+   "prom_b/wsa1_prom_b.s:153866 `calr sub_F693F6` -- erase the record",
+   "prom_b/wsa1_prom_b.s:153870 `calr sub_F69240` -- re-bar (or 153873 sub_F67414)",
+   "prom_b/wsa1_prom_b.s:153879 `ld (UI_StatusCode:16), 25` -- refusal when (0x0E56) < (0x0E6A)"
+  ]
+ },
+ {
+  "old": "sub_F6908B",
+  "verdict": "name",
+  "new": "StepRecord_ApplyTimeSigChange",
+  "header": "Before the TIME SIG. page's record (0x12EE: 0x87, tick, beats-1) is written: W = 0 off the master track; else new beats := (0x12BA)+1; a record already at the step's beat (sub_F69183) is replaced -- erased, measures re-barred if the meter changes, the new record appended (sub_F690B5) -- else the measures are re-barred from the meter in force (sub_F69116); status 0x19 when (0x0E56) < (0x0E6A). W = 1 when it wrote or refused, W = 0 for the caller to append. Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:162590 `ld (xix), 135` -- StepRecord_SoftKeyCol3 builds the 0x87 record at 0x12EE; 162592 `ld (xix+2), a` beats-1 (0..7, MsgLine_TimeSignature)",
+   "prom_b/wsa1_prom_b.s:162620 `ld (4794:16), a` -- LcdKeyRow3_StepRecordSub05: (0x12BA) := the record's beats byte",
+   "prom_b/wsa1_prom_b.s:162621 `calr sub_F6908B`",
+   "prom_b/wsa1_prom_b.s:162622 `cp w, 1:i3` -- W != 1: the caller appends ...",
+   "prom_b/wsa1_prom_b.s:162626 `calr StepRecord_AppendBytesToCurrentEntry` -- ... the 3-byte record",
+   "prom_b/wsa1_prom_b.s:153895 `ld a, (3683:16)` -- (0x0E63) == 2 (master) else W = 0",
+   "prom_b/wsa1_prom_b.s:153905 `ld (3922:16), a` -- (0x0F52) := (0x12BA) + 1, new beats per bar",
+   "prom_b/wsa1_prom_b.s:153906 `calr sub_F69183` -- finds a 0x87 record at this beat (sub_F69203)",
+   "prom_b/wsa1_prom_b.s:153936 `calr StepRecord_AppendBytesToCurrentEntry` -- sub_F690B5 appends the new 0x12EE record itself (W = 3 bytes)",
+   "prom_b/wsa1_prom_b.s:156835 `calr sub_F6908B` -- second caller, the unnamed input arm sub_F6A4D9 (returns W = 0 off the master track)"
+  ]
+ },
+ {
+  "old": "sub_F6940B",
+  "verdict": "name",
+  "new": "StepRecord_CursorToPrevMeasure",
+  "header": "MEAS, upper switch, on STEP RECORD sub-screen 0: steps the cursor back ('<', sub_F68B70) to tick 0 / beat 0 of a measure, repeating when the beat count (0x0E56) is unchanged, so it lands on an earlier measure start (stops at beat 0); clears (0x0E4F) bit 2, (0x0E50) := 0xFF. Basis: caller + page label + body.",
+  "basis": "caller + page label + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:150535 `calr sub_F6940B` -- StepRecordSub00_SoftKeyCol1, upper switch (W bit 7 clear, 150530); soft key 1 of page 0 is 'MEAS' (prom_ab_step_record_screen_names.py)",
+   "prom_b/wsa1_prom_b.s:154425 `ld hl, (3670:16)` -- the starting beat count",
+   "prom_b/wsa1_prom_b.s:154430 `calr sub_F68B70` -- the '<' cursor step",
+   "prom_b/wsa1_prom_b.s:154432 `cp (3667:16), a` -- until tick (0x0E53) = 0 ...",
+   "prom_b/wsa1_prom_b.s:154434 `cp (3672:16), a` -- ... and beat in measure (0x0E58) = 0",
+   "prom_b/wsa1_prom_b.s:154439 `m_cp_rm MW16, 0x0e56, 3` -- again if the beat count did not change"
+  ]
+ },
+ {
+  "old": "sub_F69442",
+  "verdict": "name",
+  "new": "StepRecord_CursorToNextMeasure",
+  "header": "MEAS, lower switch, on STEP RECORD sub-screen 0: StepRecord_LoadMeasureBeat, then (0x0ECF) := beats per bar (0x0E59) - beat (0x0E58), (0x0ED0) := 0 and sub_F69814 advances the cursor that many beats to tick 0 -- the next measure's start; (0x0E50) := 0xFF. Basis: caller + page label + body.",
+  "basis": "caller + page label + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:150532 `calr sub_F69442` -- StepRecordSub00_SoftKeyCol1, lower switch (W bit 7 set)",
+   "prom_b/wsa1_prom_b.s:154462 `ld l, (3673:16)` -- beats per bar ...",
+   "prom_b/wsa1_prom_b.s:154463 `sub l, (3672:16)` -- ... minus the beat",
+   "prom_b/wsa1_prom_b.s:154467 `calr sub_F69814`",
+   "prom_b/wsa1_prom_b.s:155023 `m_add_rm MW16, 0x0e56, 3` -- sub_F69814: target beat count = (0x0E56) + (0x0ECF)",
+   "prom_b/wsa1_prom_b.s:155028 `calr StepRecord_CursorForward_Veneer` -- stepped forward until reached; 155058 `ld (3667:16), l` tick := (0x0ED0)"
+  ]
+ },
+ {
+  "old": "sub_F69811",
+  "verdict": "name",
+  "new": "StepRecord_CursorForwardByStepLength",
+  "header": "Advances the STEP RECORD cursor by one step length: sub_F6A8A1 turns (0x0E53) + the step length (0x12EA):(0x12E9) into a target tick (0x0ED0) and a beat count (0x0ECF), and the code it falls into (sub_F69814) steps forward that many beats to that tick. LcdKeyRow4_StepRecordSub00 uses it when the cursor is not at the track end; the note-input arm sub_F69697 after writing notes. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:153461 `calr sub_F6A7EB` -- LcdKeyRow4_StepRecordSub00 computes the step length first",
+   "prom_b/wsa1_prom_b.s:153472 `calr sub_F69811` -- LcdKeyRow4_StepRecordSub00, not-at-end path",
+   "prom_b/wsa1_prom_b.s:154928 `calr sub_F69811` -- sub_F69697",
+   "prom_b/wsa1_prom_b.s:155007 `calr sub_F6A8A1` -- then falls into sub_F69814",
+   "prom_b/wsa1_prom_b.s:157337 `ld (3792:16), w` -- sub_F6A8A1: target tick (0x0ED0)",
+   "prom_b/wsa1_prom_b.s:157338 `ld (3791:16), a` -- beats to advance (0x0ECF)",
+   "prom_b/wsa1_prom_b.s:155023 `m_add_rm MW16, 0x0e56, 3` -- sub_F69814 advances the beat count by (0x0ECF)"
+  ]
+ },
+ {
+  "old": "sub_F6987E",
+  "verdict": "name",
+  "new": "StepRecord_NoteNumberDown",
+  "header": "NOTE, lower switch, on STEP RECORD sub-screen 0: (0x0EFA) := 0xFF (-1), then sub_F69887 steps the note number of the note at the cursor. Its upper twin StepRecordSub00_SoftKeyCol2 stores +1. Basis: caller + page label + body.",
+  "basis": "caller + page label + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:155064 `jr nz, sub_F69814_Skip5` -- SoftKeyCol2_StepRecordSub00: W bit 7 set (lower switch) ...",
+   "prom_b/wsa1_prom_b.s:155068 `calr sub_F6987E` -- ... calls it; soft key 2 of page 0 is 'NOTE'",
+   "prom_b/wsa1_prom_b.s:155101 `ld (3834:16), 255`",
+   "prom_b/wsa1_prom_b.s:155102 `calr sub_F69887`",
+   "prom_b/wsa1_prom_b.s:155085 `ld (3834:16), 1` -- the upper twin StepRecordSub00_SoftKeyCol2"
+  ]
+ },
+ {
+  "old": "sub_F69887",
+  "verdict": "name",
+  "new": "StepRecord_StepNoteNumber",
+  "header": "On a song track ((0x0E63) = 1), when the event at the step position is a note (0x9n) at the cursor tick (0x0E53): adds (0x0EFA) (+1 / -1) to its note number (event byte 2), keeping the old one if the sum leaves 0..127, into (0x12B0) and the song; then MsgLine_FormatNoteAndVelocity and a repaint. Run by both switches of soft key 2 (NOTE) on sub-screen 0. Basis: callers + body.",
+  "basis": "callers + page label + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:155102 `calr sub_F69887` -- lower switch (sub_F6987E, (0x0EFA) = -1); the upper switch StepRecordSub00_SoftKeyCol2 calls it with +1",
+   "prom_b/wsa1_prom_b.s:155122 `m_cp_mi8 MB16, 0x0e63, 0x01` -- song track only",
+   "prom_b/wsa1_prom_b.s:155126 `cp a, 144` -- note event",
+   "prom_b/wsa1_prom_b.s:155129 `m_cp_rm MB16, 0x0e53, 1` -- at the cursor tick",
+   "prom_b/wsa1_prom_b.s:155134 `calr TrackCursor_AdvanceBytes` -- DE = 2: the note-number byte",
+   "prom_b/wsa1_prom_b.s:155139 `add a, (3834:16)` -- +/- 1; bit 7 -> keep",
+   "prom_b/wsa1_prom_b.s:155144 `ld (4784:16), a` -- (0x12B0), the note cell MsgLine_FormatNoteAndVelocity shows (155167)",
+   "prom_b/wsa1_prom_b.s:155163 `calr BStore_WriteByteAtSongPosition`"
+  ]
+ },
+ {
+  "old": "sub_F6997C",
+  "verdict": "name",
+  "new": "StepRecord_TempoDown",
+  "header": "Soft key 4, lower switch, on STEP RECORD sub-screens 7 and 17: (0x100A) := -1, (0x0EFB) := 2, sub_F69998 steps the tempo event at the cursor, then MsgLine_PutTempoDigits and a repaint. Upper twin: StepRecord_SoftKeyCol4 ((0x100A) := +1). Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:150958 `calr sub_F6997C` -- SoftKeyCol4_StepRecord, W bit 7 set (150954)",
+   "prom_b/wsa1_prom_b.s:155266 `ldw (4106:16), 65535`",
+   "prom_b/wsa1_prom_b.s:155268 `calr sub_F69998`",
+   "prom_b/wsa1_prom_b.s:155269 `call MsgLine_PutTempoDigits`",
+   "prom_b/wsa1_prom_b.s:155246 `ldw (4106:16), 1` -- StepRecord_SoftKeyCol4, the upper twin"
+  ]
+ },
+ {
+  "old": "sub_F69998",
+  "verdict": "name",
+  "new": "StepRecord_StepTempo",
+  "header": "When the event at the step position has a 0x8n lead byte (sub_F6C43C W != 0): reads its 9-bit value (byte 2 = bits 0-6, byte 3 bits 0/1 = bits 7/8), adds (0x100A), keeps the old value outside 40..300, stores it to (0x100C) and writes both bytes back. Both switches of soft key 4 on sub-screens 7/17 call it and then MsgLine_PutTempoDigits. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:155268 `calr sub_F69998` -- StepRecord_TempoDown; StepRecord_SoftKeyCol4 likewise",
+   "prom_b/wsa1_prom_b.s:155292 `cp a, 128` -- lead byte & 0xF0 = 0x80",
+   "prom_b/wsa1_prom_b.s:155298 `calr TrackCursor_AdvanceBytes` -- E = (0x0EFB) = 2",
+   "prom_b/wsa1_prom_b.s:155313 `m_add_rm MW16, 0x100a, 0` -- +/- 1",
+   "prom_b/wsa1_prom_b.s:155314 `cp wa, 40` -- lower bound; 155319 `cp wa, 300` upper bound: the tempo range",
+   "prom_b/wsa1_prom_b.s:155323 `ld (4108:16), wa` -- (0x100C)",
+   "prom_b/wsa1_prom_b.s:155328 `calr BStore_WriteByteAtSongPosition`"
+  ]
+ },
+ {
+  "old": "sub_F69A67",
+  "verdict": "name",
+  "new": "StepRecord_ControlValueDown",
+  "header": "Soft key 5, lower switch, on STEP RECORD sub-screen 3: (0x0EFA) := -1, (0x0EFB) := 2; for a control event (0xDn) at the cursor tick steps its value -- 0xD2 through sub_F69B76 (14-bit), others through StepRecord_AdjustEventByte -- display cell (0x12B9), then MsgLine_ControlTypeAndValue and a repaint. Lower twin of StepRecordSub03_SoftKeyCol5. Basis: caller + body.",
+  "basis": "caller + body + named twin",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:150706 `calr sub_F69A67` -- SoftKeyCol5_StepRecordSub03, lower switch; 150703 calls StepRecordSub03_SoftKeyCol5 for the upper",
+   "prom_b/wsa1_prom_b.s:155399 `ld (3834:16), 255` -- 155357 is the twin's `ld (3834:16), 1`",
+   "prom_b/wsa1_prom_b.s:155404 `cp a, 208` -- 0xDn lead byte",
+   "prom_b/wsa1_prom_b.s:155415 `cp l, 210` -- 0xD2 -> sub_F69B76 (155417), else StepRecord_AdjustEventByte (155420)",
+   "prom_b/wsa1_prom_b.s:155422 `call MsgLine_ControlTypeAndValue` -- the CONTROL message line"
+  ]
+ },
+ {
+  "old": "sub_F69AFF",
+  "verdict": "name",
+  "new": "StepRecord_VelocityDown",
+  "header": "VEL, lower switch, on STEP RECORD sub-screen 0: (0x0EFA) := -1, (0x0EFB) := 3; on a song track, for a note (0x9n) at the cursor tick StepRecord_AdjustEventByte lowers its velocity byte (display cell (0x12AF)), then MsgLine_FormatNoteAndVelocity and a repaint. Lower twin of StepRecordSub00_SoftKeyCol3. Basis: caller + page label + body.",
+  "basis": "caller + page label + body + named twin",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:155434 `calr sub_F69AFF` -- SoftKeyCol3_StepRecordSub00, W bit 7 set (155430); soft key 3 of page 0 is 'VEL'",
+   "prom_b/wsa1_prom_b.s:155485 `ld (3834:16), 255` -- the twin StepRecordSub00_SoftKeyCol3 stores 1 (155451)",
+   "prom_b/wsa1_prom_b.s:155486 `ld (3835:16), 3` -- event byte 3: the note-input arm sub_F69697 puts the velocity there (154885) and in (0x12AF) (154886)",
+   "prom_b/wsa1_prom_b.s:155491 `cp a, 144` -- note event",
+   "prom_b/wsa1_prom_b.s:155497 `ld xhl, 4783` -- display cell 0x12AF",
+   "prom_b/wsa1_prom_b.s:155500 `calr StepRecord_AdjustEventByte`",
+   "prom_b/wsa1_prom_b.s:155501 `call MsgLine_FormatNoteAndVelocity`"
+  ]
+ },
+ {
+  "old": "sub_F69B76",
+  "verdict": "name",
+  "new": "StepRecord_AdjustEvent14BitValue",
+  "header": "The 14-bit twin of StepRecord_AdjustEventByte: at the step position + (0x0EFB) reads two 7-bit bytes as one 0..0x3FFF value, adds (0x0EFA) (signed), keeps the old value outside 0..0x3FFF, writes both bytes back and the display cells (0x12B9)/(0x12EB). Used by both switches of soft key 5 on sub-screen 3 for the 0xD2 control event. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:155417 `call sub_F69B76` -- StepRecord's sub-screen 3 lower switch for lead 0xD2; StepRecordSub03_SoftKeyCol5 does the same",
+   "prom_b/wsa1_prom_b.s:155568 `calr BStore_ReadByteAtSongPosition` -- low 7 bits (to (0x12B9))",
+   "prom_b/wsa1_prom_b.s:155570 `call BStore_ReadByteAtSongPositionPlus1` -- high 7 bits (to (0x12EB))",
+   "prom_b/wsa1_prom_b.s:155585 `add wa, de` -- + (0x0EFA), sign-extended",
+   "prom_b/wsa1_prom_b.s:155586 `cp wa, 16383` -- 155588 `cp wa, 0`: kept within 0..0x3FFF",
+   "prom_b/wsa1_prom_b.s:155605 `calr BStore_WriteByteAtSongPosition` -- and 155609 for the second byte"
+  ]
+ },
+ {
+  "old": "sub_F6A1F1",
+  "verdict": "name",
+  "new": "StepRecord_CursorBackToMeasureStart",
+  "header": "Soft key 1, upper switch, on STEP RECORD sub-screens 16/17: StepRecord_LoadMeasureBeat, then '<' steps (sub_F68B70) until tick (0x0E53) and beat (0x0E58) are both 0 -- a measure start -- and sub_F6D5BA. The lower switch, StepRecordSub16_SoftKeyCol1, does the same with CURSOR '>'. Basis: caller + body + named twin.",
+  "basis": "caller + body + named twin",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:151831 `calr sub_F6A1F1` -- SoftKeyCol1_StepRecordSub16, W bit 7 clear (151826)",
+   "prom_b/wsa1_prom_b.s:151828 `calr StepRecordSub16_SoftKeyCol1` -- lower switch; its loop uses StepRecord_CursorForward_Veneer (156291)",
+   "prom_b/wsa1_prom_b.s:156321 `calr sub_F68B70` -- the '<' step",
+   "prom_b/wsa1_prom_b.s:156323 `cp (3667:16), a` -- until tick 0 ...",
+   "prom_b/wsa1_prom_b.s:156325 `cp (3672:16), a` -- ... and beat 0"
+  ]
+ },
+ {
+  "old": "sub_F6A2FF",
+  "verdict": "refuse",
+  "why_refused": "It sets (0x0E4E) bit 5 -- which nothing reads -- and falls into sub_F6A304, which queues the frame 0x90 0x7F 0x33 0x00 <track> on TimedEvents_Ring with (0x34D4) bit 6; what that frame does is not established, so StepRecord_OnEnter's call does not name it.",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:157537 `call sub_F6A2FF` -- StepRecord_OnEnter, before falling into sub_F6A9E3",
+   "prom_b/wsa1_prom_b.s:156489 `m_or_mi8 MB16, 0x0e4e, 0x20` -- only writer of bit 5 (cleared at 157687); no reader found",
+   "prom_b/wsa1_prom_b.s:156507 `ld a, 144:opc` -- frame bytes 0x90, 0x7F, 0x33 (156515), 0x00, track",
+   "prom_b/wsa1_prom_b.s:156526 `call T_TimedEventRing_Put`"
+  ]
+ },
+ {
+  "old": "sub_F6A7C5",
+  "verdict": "name",
+  "new": "StepRecord_AppendBeatMarks",
+  "header": "Advances the beat count (0x0E56) by (0x0ECF) and appends that many 0x81 beat marks to the current entry (sub_F6B253: (0x0E54) += 1, then one 0x81 through StepRecord_AppendBytesToCurrentEntry), then StepRecord_LoadMeasureBeat. LcdKeyRow4_StepRecordSub00 runs it after StepLength_AddTo0E53 when the cursor is at the track end. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:153468 `calr sub_F6A7C5` -- LcdKeyRow4_StepRecordSub00, right after `calr StepLength_AddTo0E53` (153467)",
+   "prom_b/wsa1_prom_b.s:154923 `calr sub_F6A7C5` -- the note-input arm sub_F69697, same pairing",
+   "prom_b/wsa1_prom_b.s:157189 `m_add_mr MW16, 0x0e56, 1` -- (0x0E56) += (0x0ECF)",
+   "prom_b/wsa1_prom_b.s:157199 `calr sub_F6B253` -- (0x0ECF) times (`djnz16`, 157200)",
+   "prom_b/wsa1_prom_b.s:158872 `ld (xiy), 129` -- sub_F6B257: the appended byte is 0x81 (158873)",
+   "prom_b/wsa1_prom_b.s:157201 `calr StepRecord_LoadMeasureBeat`"
+  ]
+ },
+ {
+  "old": "sub_F6A7EB",
+  "verdict": "name",
+  "new": "StepRecord_CalcStepAndNoteLength",
+  "header": "Step length := StepLengthTicks[(0x12AC), 0 -> 6] + StepLengthTicks[(0x12AD)] ticks, kept as beats (0x12EA) : ticks (0x12E9) at 96 per beat; note length := that x 95% / 80% / 50% / 25% for (0x12AE) = 0/1/2/3, as (0x12E8) : (0x12E7) -- bytes 5/4 of the note events the note-input arm writes. Basis: callers + table + body.",
+  "basis": "callers + table + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:153461 `calr sub_F6A7EB` -- LcdKeyRow4_StepRecordSub00, before it moves the cursor by the step length",
+   "prom_b/wsa1_prom_b.s:154850 `calr sub_F6A7EB` -- the note-input arm sub_F69697",
+   "prom_b/wsa1_prom_b.s:157227 `ld l, 6:opc` -- (0x12AC) 0 -> index 6",
+   "prom_b/wsa1_prom_b.s:157232 `ld xix, StepLengthTicks` -- 157236: the (0x12AD) entry is added",
+   "prom_b/wsa1_prom_b.s:157242 `ld (4841:16), w` -- ticks; 157243 beats",
+   "prom_b/wsa1_prom_b.s:157244 `ld a, (4782:16)` -- (0x12AE) selects x4/5 (157252), x19/20 (157266), /2 (157272), /4 (157276)",
+   "prom_b/wsa1_prom_b.s:157281 `ld (4839:16), w` -- (0x12E7), 157282 (0x12E8)",
+   "prom_b/wsa1_prom_b.s:154888 `ld (xix+4), a` -- sub_F69697 puts (0x12E7)/(0x12E8) in bytes 4/5 of each note event (154890)"
+  ]
+ },
+ {
+  "old": "sub_F6A8AD",
+  "verdict": "name",
+  "new": "StepLength_AddToTick",
+  "header": "W := the cursor tick (0x0E53) + the step length's tick part (0x12E9), A := its beat part (0x12EA), carrying 96 ticks into one beat. StepLength_AddTo0E53 stores W to (0x0E53) and A to (0x0ECF); sub_F6A8A1 stores W to (0x0ED0). Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:157319 `calr sub_F6A8AD` -- StepLength_AddTo0E53, then 157320 `ld (3667:16), w` / 157321 `ld (3791:16), a`",
+   "prom_b/wsa1_prom_b.s:157336 `calr sub_F6A8AD` -- sub_F6A8A1, then 157337 `ld (3792:16), w`",
+   "prom_b/wsa1_prom_b.s:157358 `ld w, (4841:16)` -- (0x12E9)",
+   "prom_b/wsa1_prom_b.s:157360 `add w, (3667:16)` -- + (0x0E53)",
+   "prom_b/wsa1_prom_b.s:157361 `cp w, 96` -- 157363 `sub w, 96` / 157364 `inc 1, a`: the carry into beats"
+  ]
+ },
+ {
+  "old": "sub_F6A908",
+  "verdict": "name",
+  "new": "StepRecord_AppendLatchedParamEvents",
+  "header": "For each of the 32 bytes at 0x0E6E holding a value (not 0xFF; reset to 0xFF), appends the 6-byte event 0xB0, tick (0x0E53), index, 3, value, 0x7F to the current entry; then sub_F6CE77..sub_F6D3C0 do the same for the single latches 0x1340..0x134F. The input arms fill the latches. Run by StepRecord_OnLeave, the cursor step sub_F68B91 and the note-input arm sub_F69697. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:158231 `calr sub_F6A908` -- StepRecord_OnLeave",
+   "prom_b/wsa1_prom_b.s:153146 `calr sub_F6A908` -- first instruction of the cursor step sub_F68B91; 154840 likewise in sub_F69697",
+   "prom_b/wsa1_prom_b.s:157433 `ld xhl, 3694` -- the 32-byte latch array 0x0E6E",
+   "prom_b/wsa1_prom_b.s:157436 `ld (xhl), 255` -- each latch reset as read",
+   "prom_b/wsa1_prom_b.s:157463 `ld (xiy), 176` -- event 0xB0 at 0x0E8E, 157465 tick, 157472 W = 3 (the 4th byte), 157466 0x7F",
+   "prom_b/wsa1_prom_b.s:157492 `calr StepRecord_AppendBytesToCurrentEntry` -- 6 bytes",
+   "prom_b/wsa1_prom_b.s:157444 `calr sub_F6CE77` -- .. 157452 `calr sub_F6D3C0`: the single latches",
+   "prom_b/wsa1_prom_b.s:162743 `ld (4928:16), 255` -- sub_F6CE77 consumes (0x1340) the same way (162746 append)",
+   "prom_b/wsa1_prom_b.s:156657 `ld (xhl), a` -- an input arm (sub_F6A406) stores an event's value into 0x0E6E[index]"
+  ]
+ },
+ {
+  "old": "sub_F6A9E3",
+  "verdict": "name",
+  "new": "StepRecord_BeginSession",
+  "header": "Starts step recording on track BStore_DirEntry: LENGTH fields (0x12AC..0x12AE) := 4/0/1, track kind, part and sub-screen set, (0x0E64) := UI_PartIndex; when the heap is full and the entry unused, only arms the memory-full countdown (0x0E68) := 24; else empties SeqBuf_Ring and the timed-event ring, sets the track's bit in (0x1336)/(0x133A), clears it in (0x360C)/(0x3010), opens or starts the chain, sets (0x0E4E) bit 3 and loads measure/beat. StepRecord_OnEnter falls into it. Basis: callers + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:157537 `call sub_F6A2FF` -- last instruction of StepRecord_OnEnter, which then falls into sub_F6A9E3",
+   "prom_b/wsa1_prom_b.s:152765 `calr sub_F6A9E3` -- StepRecordSub18_LcdKeyRow2 re-runs it after T_F40A04 on (0x0C70) = the track",
+   "prom_b/wsa1_prom_b.s:157554 `ld (4780:16), 4` -- 157555/157556: (0x12AD) 0, (0x12AE) 1 -- the fields StepRecord_CalcStepAndNoteLength reads",
+   "prom_b/wsa1_prom_b.s:157560 `ld (3684:16), a` -- (0x0E64) := UI_PartIndex; StepRecord_OnLeave restores it (158270)",
+   "prom_b/wsa1_prom_b.s:157564 `m_cp_mi16 MW24, BStore_FreeCount, 0x0000` -- heap full ...",
+   "prom_b/wsa1_prom_b.s:157569 `ld (3688:16), 24` -- ... memory-full countdown, then return",
+   "prom_b/wsa1_prom_b.s:157573 `calr sub_F6AD30` -- drains SeqBuf_Ring; 157574 T_TimedEventRing_Discard",
+   "prom_b/wsa1_prom_b.s:157667 `call T_NoteRouting_RebuildForSong`",
+   "prom_b/wsa1_prom_b.s:157686 `m_or_mi8 MBI+r5, 0, 0x08` -- (0x0E4E) bit 3: the gate of StepRecord_MainLoopService (sub_F68951)",
+   "prom_b/wsa1_prom_b.s:157688 `calr StepRecord_LoadMeasureBeat`"
+  ]
+ },
+ {
+  "old": "sub_F6ACF5",
+  "verdict": "name",
+  "new": "StepRecord_SelectUiPart",
+  "header": "UI_PartIndex := A, then the part-select record {0x1090, A, 0xFF} on the 0x2E00 queue through sub_F6B2EE (prom_b's copy of Queue2E00_AppendRegs) -- the post EditPartSelect_SelectUiPart and RealtimeRecord_Disarm make. StepRecord_OnLeave calls it with (0x0E64), the part saved when step recording began; sub_F6ACC8 falls into it with the track's part. Basis: callers + body.",
+  "basis": "callers + body + named siblings",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:158270 `ld a, (3684:16)` -- StepRecord_OnLeave: the part sub_F6A9E3 saved (157560) ...",
+   "prom_b/wsa1_prom_b.s:158271 `calr sub_F6ACF5` -- ... is reselected",
+   "prom_b/wsa1_prom_b.s:157995 `ld (UI_PartIndex:16), a`",
+   "prom_b/wsa1_prom_b.s:157998 `ldw wa, 4240` -- 0x1090 with D = 0xFF (157997), E = part",
+   "prom_b/wsa1_prom_b.s:157999 `calr sub_F6B2EE`",
+   "prom_b/wsa1_prom_b.s:158969 `ld xix, 11776` -- sub_F6B2EE appends at 0x2E00 + (0x60F004), as Queue2E00_AppendRegs does",
+   "prom_b/wsa1_prom_b.s:157970 `ld xix, BStore_TrackToPart` -- sub_F6ACC8, which falls into it, picks the track's part"
+  ]
+ },
+ {
+  "old": "sub_F6AF58",
+  "verdict": "name",
+  "new": "StepRecord_Tick",
+  "header": "STEP RECORD's timer tick, run from MainTask_Loop's tset-4 block (T_F42EDC, beside T_PanelLed_ProcessRequests): memory-full countdown (0x0E68) (at 24 message 0x68, status 0x0F; at 0 StepRecord_ClearMsgLineField); while step recording, a held-key release posts sub_F6A304 and the (0x0E5A) countdown ends in StepRecord_ReturnToTrackKindPage; also (0x1070) bit 1 and the screen-0x0D countdown (0x0E45). Basis: caller + body.",
+  "basis": "caller + body",
+  "evidence": [
+   "prom_a/wsa1_prom_a.s:6255 `tset 4, (0x88:8)` -- MainTask_Loop's periodic block ...",
+   "prom_a/wsa1_prom_a.s:6257 `call T_F42EDC` -- ... calls it",
+   "prom_b/wsa1_prom_b.s:92611 `T_F42EDC: jp sub_F6AF58`",
+   "prom_b/wsa1_prom_b.s:158333 `m_cp_mi8 MBI+r5, 0, 0x18` -- (0x0E68) == 24, armed by sub_F6A9E3 (157569)",
+   "prom_b/wsa1_prom_b.s:158342 `ld (UI_StatusCode:16), 15`",
+   "prom_b/wsa1_prom_b.s:158349 `decm8 1, (xiy)` -- countdown; 158352 StepRecord_ClearMsgLineField at 0",
+   "prom_b/wsa1_prom_b.s:158354 `m_bit 3, MD16, 0x0e4e` -- step recording active",
+   "prom_b/wsa1_prom_b.s:158377 `decm8 1, (xiy)` -- (0x0E5A) ...",
+   "prom_b/wsa1_prom_b.s:158380 `calr StepRecord_ReturnToTrackKindPage` -- ... at 0"
+  ]
+ },
+ {
+  "old": "sub_F6B276",
+  "verdict": "refuse",
+  "why_refused": "Run only for track kind 3, which this build never sets; it rewrites a trailing 0x81 beat mark as two 0x84 tags and truncates the chain, and what tag 0x84 means is not established (FINDINGS-prom_b-block-store.md).",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:158296 `calr sub_F6B276` -- StepRecord_OnLeave, only when (0x0E63) == 3",
+   "prom_b/wsa1_prom_b.s:158908 `ld xix, 6304894` -- cursor := the saved append point 0x60347E/0x6034A0",
+   "prom_b/wsa1_prom_b.s:158931 `ld w, 132:opc` -- writes 0x84 over the 0x81 and after it",
+   "prom_b/wsa1_prom_b.s:158939 `calr BStore_TruncateAfterSongPosition`"
+  ]
+ },
+ {
+  "old": "sub_F6B77C",
+  "verdict": "name",
+  "new": "TrackCursor_StepOneEvent",
+  "header": "Steps the current track's cursor (0x3460/0x3482 [BStore_DirEntry-1]) one event: W = 0 forward, W = 1 back, to the next event lead byte (sub_F6BC89) or 0x81 beat mark, following block links (+3 next, +1 previous); a beat mark adjusts (0x0E54) (+1 forward unless the end 0x82 follows, -1 back); (0x0ECE) := bytes stepped; W = 0xFF at the chain end. Basis: callers + veneer + body.",
+  "basis": "callers + body",
+  "evidence": [
+   "prom_b/wsa1_prom_b.s:149559 `jp sub_F6B77C` -- TrackCursor_StepOneEvent_Veneer",
+   "prom_b/wsa1_prom_b.s:159512 `ld w, 1:opc` -- TrackCursor_StepBack passes W = 1 (159513)",
+   "prom_b/wsa1_prom_b.s:159564 `cp b, 0:i3` -- direction",
+   "prom_b/wsa1_prom_b.s:159572 `cp a, 129` -- beat mark ...",
+   "prom_b/wsa1_prom_b.s:159603 `incw 1, (3668:16)` -- ... forward: beat + 1",
+   "prom_b/wsa1_prom_b.s:159574 `calr sub_F6BC89` -- event lead byte test",
+   "prom_b/wsa1_prom_b.s:159588 `ld (3790:16), c` -- (0x0ECE) := bytes stepped",
+   "prom_b/wsa1_prom_b.s:159669 `ld w, 255:opc` -- no next/previous block"
+  ]
+ }
+]

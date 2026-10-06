@@ -1066,7 +1066,7 @@ ROWS = [
     # with the SmfEvent_* handlers at 0xF6FExx; for format 1 with Smf_TrackCount != 1 it calls Smf_ReadMultiTrack (0xF6F637).
     ("F71B82", "Smf_ReadMultiTrack",
      "Smf_ReadFile's branch for format 1 with more than one track (cp (Smf_Format),1 / cp (Smf_TrackCount),1 at 0xF6F626):\n"
-     "  for track (0x11B2) = 0 .. Smf_TrackCount-1, Smf_ReadTrackChunk and Smf_MergeTrack2IntoTrack1; then sub_F72F5C."),
+     "  for track (0x11B2) = 0 .. Smf_TrackCount-1, Smf_ReadTrackChunk and Smf_MergeTrack2IntoTrack1; then Smf_SplitTrack1ByChannel."),
     ("F71BEA", "Smf_ReadTrackChunk",
      "one MTrk chunk of the multi-track path: compares the 4 tag bytes at SmfTrackTag (UI_StatusCode 49 on a mismatch), reads the\n"
      "  length into SmfOut_TrackLength, then loops delta (Smf_ReadVlqBytes_Copy / Smf_DecodeVlq) and event: 0xFF SmfEvent_Meta,\n"

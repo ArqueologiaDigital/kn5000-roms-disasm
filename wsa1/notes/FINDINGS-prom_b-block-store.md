@@ -202,7 +202,7 @@ nothing else. The new top of the list is
 
 ```
 T_Transport_StopAllRunning x29 0xF000B9   T_BStore_ReadCursorAdvance_Call x25 0xF5EBD0   T_SeqTrackKey_Press x24 0xF4E56F
-T_Seq_RequestRewind x24 0xF4542D   T_F41EE4 x23 0xF5B84C   T_F40C84 x21 0xF4D01D
+T_Seq_RequestRewind x24 0xF4542D   T_F41EE4 x23 0xF5B84C   T_BStore_BlockAddrFromHL x21 0xF4D01D
 T_BStore_ReadCursorByte x18 0xF4D0DB   T_BStore_AllocBlock_Veneer x17 0xF7A402   T_F42CA8 x15 0xF5553F
 ```
 
