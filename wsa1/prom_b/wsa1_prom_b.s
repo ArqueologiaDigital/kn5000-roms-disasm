@@ -62330,90 +62330,90 @@ Bitmap_F2CAC3:
 ; ------------------------------------------------------------------
 ScreenFieldListPtrs:
 	.long ScreenFieldList_F2D408	; [  0]  empty
-	.long ScreenFieldList_F2D400	; [  1]
-	.long ScreenFieldList_F2D404	; [  2]
+	.long ScreenFieldList_SoundMode	; [  1]
+	.long ScreenFieldList_C0mbinati0nM0de	; [  2]
 	.long ScreenFieldList_F2D408	; [  3]  empty
-	.long ScreenFieldList_F2D40A	; [  4]  empty
+	.long ScreenFieldList_Sequencer	; [  4]  empty
 	.long ScreenFieldList_F2D40C	; [  5]  empty
-	.long ScreenFieldList_F2D40E	; [  6]  empty
-	.long ScreenFieldList_F2D410	; [  7]  empty
-	.long ScreenFieldList_F2D412	; [  8]  empty
+	.long ScreenFieldList_RealtimeRecordScreen	; [  6]  empty
+	.long ScreenFieldList_CombiEditMixer	; [  7]  empty
+	.long ScreenFieldList_CycleRecordScreen	; [  8]  empty
 	.long ScreenFieldList_F2D414	; [  9]  empty
 	.long ScreenFieldList_F2D416	; [ 10]  empty
-	.long ScreenFieldList_F2D418	; [ 11]  empty
-	.long ScreenFieldList_F2D41A	; [ 12]  empty
-	.long ScreenFieldList_F2D41C	; [ 13]  empty
-	.long ScreenFieldList_F2D41E	; [ 14]  empty
-	.long ScreenFieldList_F2D420	; [ 15]  empty
-	.long ScreenFieldList_F2D422	; [ 16]  empty
-	.long ScreenFieldList_F2D424	; [ 17]  empty
-	.long ScreenFieldList_F2D426	; [ 18]  empty
-	.long ScreenFieldList_F2D428	; [ 19]  empty
-	.long ScreenFieldList_F2D42A	; [ 20]  empty
-	.long ScreenFieldList_F2D42C	; [ 21]  empty
+	.long ScreenFieldList_AfterT0uchSetting	; [ 11]  empty
+	.long ScreenFieldList_MetronomeBalanceScreen	; [ 12]  empty
+	.long ScreenFieldList_S0ngSelectName	; [ 13]  empty
+	.long ScreenFieldList_StepRecord	; [ 14]  empty
+	.long ScreenFieldList_StepRecordPartSelect	; [ 15]  empty
+	.long ScreenFieldList_TrackAssign	; [ 16]  empty
+	.long ScreenFieldList_TrackAssignPresets	; [ 17]  empty
+	.long ScreenFieldList_SeqPlayScreen	; [ 18]  empty
+	.long ScreenFieldList_SequencerMedley	; [ 19]  empty
+	.long ScreenFieldList_CyclePlayScreen	; [ 20]  empty
+	.long ScreenFieldList_ScreenCode15_Handler	; [ 21]  empty
 	.long ScreenFieldList_F2D42E	; [ 22]  empty
 	.long ScreenFieldList_F2D430	; [ 23]  empty
 	.long ScreenFieldList_F2D432	; [ 24]  empty
 	.long ScreenFieldList_F2D434	; [ 25]  empty
-	.long ScreenFieldList_F2D436	; [ 26]  empty
-	.long ScreenFieldList_F2D438	; [ 27]  empty
-	.long ScreenFieldList_F2D43A	; [ 28]  empty
-	.long ScreenFieldList_F2D43C	; [ 29]  empty
-	.long ScreenFieldList_F2D43E	; [ 30]  empty
-	.long ScreenFieldList_F2D440	; [ 31]  empty
-	.long ScreenFieldList_F2D442	; [ 32]  empty
-	.long ScreenFieldList_F2D444	; [ 33]  empty
-	.long ScreenFieldList_F2D446	; [ 34]  empty
-	.long ScreenFieldList_F2D448	; [ 35]  empty
-	.long ScreenFieldList_F2D44A	; [ 36]  empty
-	.long ScreenFieldList_F2D44C	; [ 37]  empty
+	.long ScreenFieldList_Edit	; [ 26]  empty
+	.long ScreenFieldList_SongClear	; [ 27]  empty
+	.long ScreenFieldList_TrackClear	; [ 28]  empty
+	.long ScreenFieldList_Vel0cityChange	; [ 29]  empty
+	.long ScreenFieldList_Quantize	; [ 30]  empty
+	.long ScreenFieldList_TrackMerge	; [ 31]  empty
+	.long ScreenFieldList_MeasureErase	; [ 32]  empty
+	.long ScreenFieldList_MeasureC0py	; [ 33]  empty
+	.long ScreenFieldList_MeasureInsert	; [ 34]  empty
+	.long ScreenFieldList_MeasureDelete	; [ 35]  empty
+	.long ScreenFieldList_ShowScreen_NoteEditPartSelect	; [ 36]  empty
+	.long ScreenFieldList_EditScreen_EnterNoteEdit	; [ 37]  empty
 	.long ScreenFieldList_F2D44E	; [ 38]  empty
-	.long ScreenFieldList_F2D450	; [ 39]  empty
-	.long ScreenFieldList_F2D452	; [ 40]  empty
-	.long ScreenFieldList_F2D454	; [ 41]  empty
-	.long ScreenFieldList_F2D456	; [ 42]  empty
-	.long ScreenFieldList_F2D458	; [ 43]  empty
-	.long ScreenFieldList_F2D45A	; [ 44]  empty
-	.long ScreenFieldList_F2D45C	; [ 45]  empty
-	.long ScreenFieldList_F2D45E	; [ 46]  empty
+	.long ScreenFieldList_ShowScreen_DrumEditPartSelect	; [ 39]  empty
+	.long ScreenFieldList_EditScreen_EnterDrumEdit	; [ 40]  empty
+	.long ScreenFieldList_CyclePlayEditScreen29	; [ 41]  empty
+	.long ScreenFieldList_S0ngC0py	; [ 42]  empty
+	.long ScreenFieldList_Transp0se	; [ 43]  empty
+	.long ScreenFieldList_AdvanceDelay	; [ 44]  empty
+	.long ScreenFieldList_N0teChange	; [ 45]  empty
+	.long ScreenFieldList_PanelWrite	; [ 46]  empty
 	.long ScreenFieldList_F2D460	; [ 47]  empty
 	.long ScreenFieldList_F2D408	; [ 48]  empty
 	.long ScreenFieldList_F2D408	; [ 49]  empty
 	.long ScreenFieldList_F2D408	; [ 50]  empty
 	.long ScreenFieldList_F2D408	; [ 51]  empty
-	.long ScreenFieldList_F2D462	; [ 52]  empty
+	.long ScreenFieldList_CombiEditMenu	; [ 52]  empty
 	.long ScreenFieldList_F2D464	; [ 53]  empty
-	.long ScreenFieldList_F2D466	; [ 54]  empty
+	.long ScreenFieldList_CombinationNaming	; [ 54]  empty
 	.long ScreenFieldList_F2D468	; [ 55]  empty
 	.long ScreenFieldList_F2D46A	; [ 56]  empty
-	.long ScreenFieldList_F2D46C	; [ 57]  empty
-	.long ScreenFieldList_F2D46E	; [ 58]  empty
+	.long ScreenFieldList_CombiEditDspEffect	; [ 57]  empty
+	.long ScreenFieldList_CombiEditMixer2	; [ 58]  empty
 	.long ScreenFieldList_F2D470	; [ 59]  empty
-	.long ScreenFieldList_F2D472	; [ 60]  empty
+	.long ScreenFieldList_Screen_CombinationNaming_Enter	; [ 60]  empty
 	.long ScreenFieldList_F2D408	; [ 61]  empty
 	.long ScreenFieldList_F2D408	; [ 62]  empty
 	.long ScreenFieldList_F2D408	; [ 63]  empty
-	.long ScreenFieldList_F2D474	; [ 64]  empty
+	.long ScreenFieldList_DiskMenu	; [ 64]  empty
 	.long ScreenFieldList_F2D476	; [ 65]  empty
 	.long ScreenFieldList_F2D478	; [ 66]  empty
 	.long ScreenFieldList_F2D47A	; [ 67]  empty
 	.long ScreenFieldList_F2D47C	; [ 68]  empty
-	.long ScreenFieldList_F2D47E	; [ 69]  empty
+	.long ScreenFieldList_MidiFileDirectPlay	; [ 69]  empty
 	.long ScreenFieldList_F2D480	; [ 70]  empty
-	.long ScreenFieldList_F2D482	; [ 71]  empty
+	.long ScreenFieldList_DiskL0adFile	; [ 71]  empty
 	.long ScreenFieldList_F2D484	; [ 72]  empty
-	.long ScreenFieldList_F2D486	; [ 73]  empty
+	.long ScreenFieldList_MidiFileL0ad	; [ 73]  empty
 	.long ScreenFieldList_F2D488	; [ 74]  empty
 	.long ScreenFieldList_F2D48A	; [ 75]  empty
-	.long ScreenFieldList_F2D48C	; [ 76]  empty
+	.long ScreenFieldList_PageDispatch_DiskSaveFile	; [ 76]  empty
 	.long ScreenFieldList_F2D48E	; [ 77]  empty
-	.long ScreenFieldList_F2D490	; [ 78]  empty
+	.long ScreenFieldList_PageDispatch_MidiFileSave	; [ 78]  empty
 	.long ScreenFieldList_F2D408	; [ 79]  empty
-	.long ScreenFieldList_F2D492	; [ 80]  empty
-	.long ScreenFieldList_F2D494	; [ 81]  empty
+	.long ScreenFieldList_FloppyDiskFormatSelectType	; [ 80]  empty
+	.long ScreenFieldList_FloppyDiskFormatAreYouSure	; [ 81]  empty
 	.long ScreenFieldList_F2D496	; [ 82]  empty
-	.long ScreenFieldList_F2D498	; [ 83]  empty
-	.long ScreenFieldList_F2D49A	; [ 84]  empty
+	.long ScreenFieldList_PageDispatch_L0adSingleC0mbination	; [ 83]  empty
+	.long ScreenFieldList_PageDispatch_L0adSingleS0und	; [ 84]  empty
 	.long ScreenFieldList_F2D49C	; [ 85]  empty
 	.long ScreenFieldList_F2D49E	; [ 86]  empty
 	.long ScreenFieldList_F2D4A0	; [ 87]  empty
@@ -62422,41 +62422,41 @@ ScreenFieldListPtrs:
 	.long ScreenFieldList_F2D4A6	; [ 90]  empty
 	.long ScreenFieldList_F2D408	; [ 91]  empty
 	.long ScreenFieldList_F2D408	; [ 92]  empty
-	.long ScreenFieldList_F2D4A8	; [ 93]
+	.long ScreenFieldList_Screen_SoundMute_Enter	; [ 93]
 	.long ScreenFieldList_F2D408	; [ 94]  empty
 	.long ScreenFieldList_F2D408	; [ 95]  empty
-	.long ScreenFieldList_F2D4AC	; [ 96]  empty
-	.long ScreenFieldList_F2D4AE	; [ 97]
-	.long ScreenFieldList_F2D4B6	; [ 98]
+	.long ScreenFieldList_Screen_System_Enter	; [ 96]  empty
+	.long ScreenFieldList_Screen_DataLoadFilter_Enter	; [ 97]
+	.long ScreenFieldList_Screen_TuneScale_Enter	; [ 98]
 	.long ScreenFieldList_F2D408	; [ 99]  empty
-	.long ScreenFieldList_F2D4DA	; [100]
-	.long ScreenFieldList_F2D4E4	; [101]
-	.long ScreenFieldList_F2D4FA	; [102]  empty
-	.long ScreenFieldList_F2D4FC	; [103]
+	.long ScreenFieldList_Screen_TouchSensitivityOrTest_Enter	; [100]
+	.long ScreenFieldList_Screen_ControllerAssign_Enter	; [101]
+	.long ScreenFieldList_Screen_DspEffect_Enter	; [102]  empty
+	.long ScreenFieldList_Screen_DrumsMapNaming_Enter	; [103]
 	.long ScreenFieldList_F2D408	; [104]  empty
 	.long ScreenFieldList_F2D408	; [105]  empty
-	.long ScreenFieldList_F2D500	; [106]  empty
-	.long ScreenFieldList_F2D502	; [107]  empty
-	.long ScreenFieldList_F2D504	; [108]  empty
-	.long ScreenFieldList_F2D506	; [109]  empty
-	.long ScreenFieldList_F2D508	; [110]  empty
+	.long ScreenFieldList_Screen_Initial_Enter	; [106]  empty
+	.long ScreenFieldList_Screen_MainOutEqualizer_Enter	; [107]  empty
+	.long ScreenFieldList_Screen_ReMapEdit_Enter	; [108]  empty
+	.long ScreenFieldList_Screen_SoundCombinationManager_Enter	; [109]  empty
+	.long ScreenFieldList_Screen_MemoryProtect_Enter	; [110]  empty
 	.long ScreenFieldList_F2D50A	; [111]  empty
-	.long ScreenFieldList_F2D50C	; [112]  empty
+	.long ScreenFieldList_MidiMenu	; [112]  empty
 	.long ScreenFieldList_F2D50E	; [113]  empty
 	.long ScreenFieldList_F2D510	; [114]  empty
 	.long ScreenFieldList_F2D512	; [115]  empty
 	.long ScreenFieldList_F2D408	; [116]  empty
-	.long ScreenFieldList_F2D514	; [117]  empty
+	.long ScreenFieldList_MidiRealtimeMessages	; [117]  empty
 	.long ScreenFieldList_F2D516	; [118]  empty
 	.long ScreenFieldList_F2D408	; [119]  empty
 	.long ScreenFieldList_F2D518	; [120]  empty
-	.long ScreenFieldList_F2D51A	; [121]  empty
-	.long ScreenFieldList_F2D51C	; [122]  empty
+	.long ScreenFieldList_SysexBulkDump	; [121]  empty
+	.long ScreenFieldList_GeneralMidiMode	; [122]  empty
 	.long ScreenFieldList_F2D51E	; [123]  empty
 	.long ScreenFieldList_F2D520	; [124]  empty
-	.long ScreenFieldList_F2D522	; [125]  empty
-	.long ScreenFieldList_F2D524	; [126]  empty
-	.long ScreenFieldList_F2D526	; [127]  empty
+	.long ScreenFieldList_MidiTotalMode	; [125]  empty
+	.long ScreenFieldList_MidiInputOutputFilter	; [126]  empty
+	.long ScreenFieldList_MidiOutProgramChange	; [127]  empty
 	.long ScreenFieldList_F2D408	; [128]  empty
 	.long ScreenFieldList_F2D408	; [129]  empty
 	.long ScreenFieldList_F2D408	; [130]  empty
@@ -62489,13 +62489,13 @@ ScreenFieldListPtrs:
 	.long ScreenFieldList_F2D408	; [157]  empty
 	.long ScreenFieldList_F2D408	; [158]  empty
 	.long ScreenFieldList_F2D408	; [159]  empty
-	.long ScreenFieldList_F2D528	; [160]
-	.long ScreenFieldList_F2D52C	; [161]
-	.long ScreenFieldList_F2D576	; [162]  empty
+	.long ScreenFieldList_SoundGroupMenu	; [160]
+	.long ScreenFieldList_GroupSoundDisplayHold	; [161]
+	.long ScreenFieldList_CombinationGroupMenu	; [162]  empty
 	.long ScreenFieldList_F2D408	; [163]  empty
 	.long ScreenFieldList_F2D408	; [164]  empty
-	.long ScreenFieldList_F2D578	; [165]
-	.long ScreenFieldList_F2D57C	; [166]
+	.long ScreenFieldList_CombinationGroupMenu2	; [165]
+	.long ScreenFieldList_GroupCombiDisplayHold	; [166]
 	.long ScreenFieldList_F2D582	; [167]  empty
 	.long ScreenFieldList_F2D408	; [168]  empty
 	.long ScreenFieldList_F2D408	; [169]  empty
@@ -62511,8 +62511,8 @@ ScreenFieldListPtrs:
 	.long ScreenFieldList_F2D584	; [179]
 	.long ScreenFieldList_F2D584	; [180]
 	.long ScreenFieldList_F2D584	; [181]
-	.long ScreenFieldList_F2D588	; [182]  empty
-	.long ScreenFieldList_F2D58A	; [183]  empty
+	.long ScreenFieldList_Effect2OutputConflict	; [182]  empty
+	.long ScreenFieldList_CombiEditMixer3	; [183]  empty
 	.long ScreenFieldList_F2D408	; [184]  empty
 	.long ScreenFieldList_F2D408	; [185]  empty
 	.long ScreenFieldList_F2D408	; [186]  empty
@@ -62534,7 +62534,7 @@ ScreenFieldListPtrs:
 	.long ScreenFieldList_F2D408	; [202]  empty
 	.long ScreenFieldList_F2D408	; [203]  empty
 	.long ScreenFieldList_F2D408	; [204]  empty
-	.long ScreenFieldList_F2D570	; [205]
+	.long ScreenFieldList_SoundEditControllerPage1	; [205]
 	.long ScreenFieldList_F2D408	; [206]  empty
 	.long ScreenFieldList_F2D408	; [207]  empty
 	.long ScreenFieldList_F2D408	; [208]  empty
@@ -62545,12 +62545,12 @@ ScreenFieldListPtrs:
 	.long ScreenFieldList_F2D408	; [213]  empty
 	.long ScreenFieldList_F2D408	; [214]  empty
 	.long ScreenFieldList_F2D408	; [215]  empty
-	.long ScreenFieldList_F2D58C	; [216]  empty
-	.long ScreenFieldList_F2D58E	; [217]  empty
-	.long ScreenFieldList_F2D590	; [218]
-	.long ScreenFieldList_F2D59A	; [219]  empty
+	.long ScreenFieldList_GateArrayCheck	; [216]  empty
+	.long ScreenFieldList_PanelCpuCheck	; [217]  empty
+	.long ScreenFieldList_SineWaveCheckMode	; [218]
+	.long ScreenFieldList_PanelSwLedCheck	; [219]  empty
 	.long ScreenFieldList_F2D59C	; [220]  empty
-	.long ScreenFieldList_F2D59E	; [221]  empty
+	.long ScreenFieldList_DebugMonitor	; [221]  empty
 	.long ScreenFieldList_F2D5A0	; [222]  empty
 	.long ScreenFieldList_F2D408	; [223]  empty
 	.long ScreenFieldList_F2D408	; [224]  empty
@@ -62593,49 +62593,66 @@ ScreenFieldListPtrs:
 ;   distinct targets' lists TILE this range exactly, with no hole and
 ;   no byte left over -- which is what fixes the range's end.
 ; ------------------------------------------------------------------
-ScreenFieldList_F2D400:
+; ; the field list of screen id 0x01 only (ScreenFieldListPtrs[0x01]; screen object T_InstallPainter_SoundMode_Entry)
+ScreenFieldList_SoundMode:
 	.short 0x0000
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D404:
+; ; the field list of screen id 0x02 only (ScreenFieldListPtrs[0x02]; screen object T_InstallPainter_C0mbinati0nM0de_Entry)
+ScreenFieldList_C0mbinati0nM0de:
 	.short 0x0198
 	.short 0xFFFF	; end of list
 ScreenFieldList_F2D408:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D40A:
+; ; the field list of screen id 0x04 only (ScreenFieldListPtrs[0x04]; screen object T_Paint_Sequencer)
+ScreenFieldList_Sequencer:
 	.short 0xFFFF	; end of list
 ScreenFieldList_F2D40C:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D40E:
+; ; the field list of screen id 0x06 only (ScreenFieldListPtrs[0x06]; screen object T_ScreenEnter_RealtimeRecordScreen_Fwd)
+ScreenFieldList_RealtimeRecordScreen:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D410:
+; ; the field list of screen id 0x07 only (ScreenFieldListPtrs[0x07]; screen object T_ScreenEnterBody_CombiEditMixer)
+ScreenFieldList_CombiEditMixer:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D412:
+; ; the field list of screen id 0x08 only (ScreenFieldListPtrs[0x08]; screen object T_ScreenEnter_CycleRecordScreen_Fwd)
+ScreenFieldList_CycleRecordScreen:
 	.short 0xFFFF	; end of list
 ScreenFieldList_F2D414:
 	.short 0xFFFF	; end of list
 ScreenFieldList_F2D416:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D418:
+; ; the field list of screen id 0x0B only (ScreenFieldListPtrs[0x0B]; screen object T_ScreenEnter_AfterT0uchSetting)
+ScreenFieldList_AfterT0uchSetting:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D41A:
+; ; the field list of screen id 0x0C only (ScreenFieldListPtrs[0x0C]; screen object T_ScreenEnter_MetronomeBalanceScreen_Fwd)
+ScreenFieldList_MetronomeBalanceScreen:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D41C:
+; ; the field list of screen id 0x0D only (ScreenFieldListPtrs[0x0D]; screen object T_ScreenEnter_S0ngSelectName)
+ScreenFieldList_S0ngSelectName:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D41E:
+; ; the field list of screen id 0x0E only (ScreenFieldListPtrs[0x0E]; screen object T_ScreenEnter_StepRecord)
+ScreenFieldList_StepRecord:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D420:
+; ; the field list of screen id 0x0F only (ScreenFieldListPtrs[0x0F]; screen object T_ScreenEnter_StepRecordPartSelect)
+ScreenFieldList_StepRecordPartSelect:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D422:
+; ; the field list of screen id 0x10 only (ScreenFieldListPtrs[0x10]; screen object T_ScreenEnter_TrackAssign)
+ScreenFieldList_TrackAssign:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D424:
+; ; the field list of screen id 0x11 only (ScreenFieldListPtrs[0x11]; screen object T_ScreenEnter_TrackAssignPresets)
+ScreenFieldList_TrackAssignPresets:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D426:
+; ; the field list of screen id 0x12 only (ScreenFieldListPtrs[0x12]; screen object T_ScreenEnter_SeqPlayScreen_Fwd)
+ScreenFieldList_SeqPlayScreen:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D428:
+; ; the field list of screen id 0x13 only (ScreenFieldListPtrs[0x13]; screen object T_ScreenEnter_SequencerMedley)
+ScreenFieldList_SequencerMedley:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D42A:
+; ; the field list of screen id 0x14 only (ScreenFieldListPtrs[0x14]; screen object T_ScreenEnter_CyclePlayScreen_Fwd)
+ScreenFieldList_CyclePlayScreen:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D42C:
+; ; the field list of screen id 0x15 only (ScreenFieldListPtrs[0x15]; screen object T_ScreenCode15_Handler)
+ScreenFieldList_ScreenCode15_Handler:
 	.short 0xFFFF	; end of list
 ScreenFieldList_F2D42E:
 	.short 0xFFFF	; end of list
@@ -62645,69 +62662,95 @@ ScreenFieldList_F2D432:
 	.short 0xFFFF	; end of list
 ScreenFieldList_F2D434:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D436:
+; ; the field list of screen id 0x1A only (ScreenFieldListPtrs[0x1A]; screen object T_ScreenEnter_Edit)
+ScreenFieldList_Edit:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D438:
+; ; the field list of screen id 0x1B only (ScreenFieldListPtrs[0x1B]; screen object T_ScreenEnter_SongClear)
+ScreenFieldList_SongClear:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D43A:
+; ; the field list of screen id 0x1C only (ScreenFieldListPtrs[0x1C]; screen object T_ScreenEnter_TrackClear)
+ScreenFieldList_TrackClear:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D43C:
+; ; the field list of screen id 0x1D only (ScreenFieldListPtrs[0x1D]; screen object T_ScreenEnter_Vel0cityChange)
+ScreenFieldList_Vel0cityChange:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D43E:
+; ; the field list of screen id 0x1E only (ScreenFieldListPtrs[0x1E]; screen object T_ScreenEnter_Quantize)
+ScreenFieldList_Quantize:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D440:
+; ; the field list of screen id 0x1F only (ScreenFieldListPtrs[0x1F]; screen object T_ScreenEnter_TrackMerge)
+ScreenFieldList_TrackMerge:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D442:
+; ; the field list of screen id 0x20 only (ScreenFieldListPtrs[0x20]; screen object T_ScreenEnter_MeasureErase)
+ScreenFieldList_MeasureErase:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D444:
+; ; the field list of screen id 0x21 only (ScreenFieldListPtrs[0x21]; screen object T_ScreenEnter_MeasureC0py)
+ScreenFieldList_MeasureC0py:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D446:
+; ; the field list of screen id 0x22 only (ScreenFieldListPtrs[0x22]; screen object T_ScreenEnter_MeasureInsert)
+ScreenFieldList_MeasureInsert:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D448:
+; ; the field list of screen id 0x23 only (ScreenFieldListPtrs[0x23]; screen object T_ScreenEnter_MeasureDelete)
+ScreenFieldList_MeasureDelete:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D44A:
+; ; the field list of screen id 0x24 only (ScreenFieldListPtrs[0x24]; screen object T_ShowScreen_NoteEditPartSelect)
+ScreenFieldList_ShowScreen_NoteEditPartSelect:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D44C:
+; ; the field list of screen id 0x25 only (ScreenFieldListPtrs[0x25]; screen object T_EditScreen_EnterNoteEdit)
+ScreenFieldList_EditScreen_EnterNoteEdit:
 	.short 0xFFFF	; end of list
 ScreenFieldList_F2D44E:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D450:
+; ; the field list of screen id 0x27 only (ScreenFieldListPtrs[0x27]; screen object T_ShowScreen_DrumEditPartSelect)
+ScreenFieldList_ShowScreen_DrumEditPartSelect:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D452:
+; ; the field list of screen id 0x28 only (ScreenFieldListPtrs[0x28]; screen object T_EditScreen_EnterDrumEdit)
+ScreenFieldList_EditScreen_EnterDrumEdit:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D454:
+; ; the field list of screen id 0x29 only (ScreenFieldListPtrs[0x29]; screen object T_ScreenEnter_CyclePlayEditScreen29_Fwd)
+ScreenFieldList_CyclePlayEditScreen29:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D456:
+; ; the field list of screen id 0x2A only (ScreenFieldListPtrs[0x2A]; screen object T_ScreenEnter_S0ngC0py)
+ScreenFieldList_S0ngC0py:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D458:
+; ; the field list of screen id 0x2B only (ScreenFieldListPtrs[0x2B]; screen object T_ScreenEnter_Transp0se)
+ScreenFieldList_Transp0se:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D45A:
+; ; the field list of screen id 0x2C only (ScreenFieldListPtrs[0x2C]; screen object T_ScreenEnter_AdvanceDelay)
+ScreenFieldList_AdvanceDelay:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D45C:
+; ; the field list of screen id 0x2D only (ScreenFieldListPtrs[0x2D]; screen object T_ScreenEnter_N0teChange)
+ScreenFieldList_N0teChange:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D45E:
+; ; the field list of screen id 0x2E only (ScreenFieldListPtrs[0x2E]; screen object T_ScreenEnter_PanelWrite)
+ScreenFieldList_PanelWrite:
 	.short 0xFFFF	; end of list
 ScreenFieldList_F2D460:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D462:
+; ; the field list of screen id 0x34 only (ScreenFieldListPtrs[0x34]; screen object T_ScreenEnter_CombiEditMenu)
+ScreenFieldList_CombiEditMenu:
 	.short 0xFFFF	; end of list
 ScreenFieldList_F2D464:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D466:
+; ; the field list of screen id 0x36 only (ScreenFieldListPtrs[0x36]; screen object T_ScreenEnter_CombinationNaming)
+ScreenFieldList_CombinationNaming:
 	.short 0xFFFF	; end of list
 ScreenFieldList_F2D468:
 	.short 0xFFFF	; end of list
 ScreenFieldList_F2D46A:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D46C:
+; ; the field list of screen id 0x39 only (ScreenFieldListPtrs[0x39]; screen object T_ScreenEnter_CombiEditDspEffect)
+ScreenFieldList_CombiEditDspEffect:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D46E:
+; ; the field list of screen id 0x3A only (ScreenFieldListPtrs[0x3A]; screen object T_ScreenEnter_CombiEditMixer)
+ScreenFieldList_CombiEditMixer2:
 	.short 0xFFFF	; end of list
 ScreenFieldList_F2D470:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D472:
+; ; the field list of screen id 0x3C only (ScreenFieldListPtrs[0x3C]; screen object T_Screen_CombinationNaming_Enter)
+ScreenFieldList_Screen_CombinationNaming_Enter:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D474:
+; ; the field list of screen id 0x40 only (ScreenFieldListPtrs[0x40]; screen object T_Paint_DiskMenu)
+ScreenFieldList_DiskMenu:
 	.short 0xFFFF	; end of list
 ScreenFieldList_F2D476:
 	.short 0xFFFF	; end of list
@@ -62717,35 +62760,44 @@ ScreenFieldList_F2D47A:
 	.short 0xFFFF	; end of list
 ScreenFieldList_F2D47C:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D47E:
+; ; the field list of screen id 0x45 only (ScreenFieldListPtrs[0x45]; screen object T_Paint_MidiFileDirectPlay)
+ScreenFieldList_MidiFileDirectPlay:
 	.short 0xFFFF	; end of list
 ScreenFieldList_F2D480:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D482:
+; ; the field list of screen id 0x47 only (ScreenFieldListPtrs[0x47]; screen object T_Paint_DiskL0adFile)
+ScreenFieldList_DiskL0adFile:
 	.short 0xFFFF	; end of list
 ScreenFieldList_F2D484:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D486:
+; ; the field list of screen id 0x49 only (ScreenFieldListPtrs[0x49]; screen object T_Paint_MidiFileL0ad)
+ScreenFieldList_MidiFileL0ad:
 	.short 0xFFFF	; end of list
 ScreenFieldList_F2D488:
 	.short 0xFFFF	; end of list
 ScreenFieldList_F2D48A:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D48C:
+; ; the field list of screen id 0x4C only (ScreenFieldListPtrs[0x4C]; screen object T_PageDispatch_DiskSaveFile)
+ScreenFieldList_PageDispatch_DiskSaveFile:
 	.short 0xFFFF	; end of list
 ScreenFieldList_F2D48E:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D490:
+; ; the field list of screen id 0x4E only (ScreenFieldListPtrs[0x4E]; screen object T_PageDispatch_MidiFileSave)
+ScreenFieldList_PageDispatch_MidiFileSave:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D492:
+; ; the field list of screen id 0x50 only (ScreenFieldListPtrs[0x50]; screen object T_Paint_FloppyDiskFormatSelectType)
+ScreenFieldList_FloppyDiskFormatSelectType:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D494:
+; ; the field list of screen id 0x51 only (ScreenFieldListPtrs[0x51]; screen object T_Paint_FloppyDiskFormatAreYouSure)
+ScreenFieldList_FloppyDiskFormatAreYouSure:
 	.short 0xFFFF	; end of list
 ScreenFieldList_F2D496:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D498:
+; ; the field list of screen id 0x53 only (ScreenFieldListPtrs[0x53]; screen object T_PageDispatch_L0adSingleC0mbination)
+ScreenFieldList_PageDispatch_L0adSingleC0mbination:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D49A:
+; ; the field list of screen id 0x54 only (ScreenFieldListPtrs[0x54]; screen object T_PageDispatch_L0adSingleS0und)
+ScreenFieldList_PageDispatch_L0adSingleS0und:
 	.short 0xFFFF	; end of list
 ScreenFieldList_F2D49C:
 	.short 0xFFFF	; end of list
@@ -62759,17 +62811,21 @@ ScreenFieldList_F2D4A4:
 	.short 0xFFFF	; end of list
 ScreenFieldList_F2D4A6:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D4A8:
+; ; the field list of screen id 0x5D only (ScreenFieldListPtrs[0x5D]; screen object T_Screen_SoundMute_Enter)
+ScreenFieldList_Screen_SoundMute_Enter:
 	.short 0x0998
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D4AC:
+; ; the field list of screen id 0x60 only (ScreenFieldListPtrs[0x60]; screen object T_Screen_System_Enter)
+ScreenFieldList_Screen_System_Enter:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D4AE:
+; ; the field list of screen id 0x61 only (ScreenFieldListPtrs[0x61]; screen object T_Screen_DataLoadFilter_Enter)
+ScreenFieldList_Screen_DataLoadFilter_Enter:
 	.short 0x027A
 	.short 0x027A
 	.short 0x0598
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D4B6:
+; ; the field list of screen id 0x62 only (ScreenFieldListPtrs[0x62]; screen object T_Screen_TuneScale_Enter)
+ScreenFieldList_Screen_TuneScale_Enter:
 	.short 0x0091
 	.short 0x0079
 	.short 0x0092
@@ -62788,13 +62844,15 @@ ScreenFieldList_F2D4B6:
 	.short 0x0C92
 	.short 0x0D92
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D4DA:
+; ; the field list of screen id 0x64 only (ScreenFieldListPtrs[0x64]; screen object T_Screen_TouchSensitivityOrTest_Enter)
+ScreenFieldList_Screen_TouchSensitivityOrTest_Enter:
 	.short 0x0093
 	.short 0x0293
 	.short 0x0593
 	.short 0x0693
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D4E4:
+; ; the field list of screen id 0x65 only (ScreenFieldListPtrs[0x65]; screen object T_Screen_ControllerAssign_Enter)
+ScreenFieldList_Screen_ControllerAssign_Enter:
 	.short 0x0099
 	.short 0x0299
 	.short 0x0499
@@ -62806,24 +62864,32 @@ ScreenFieldList_F2D4E4:
 	.short 0x1799
 	.short 0x1899
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D4FA:
+; ; the field list of screen id 0x66 only (ScreenFieldListPtrs[0x66]; screen object T_Screen_DspEffect_Enter)
+ScreenFieldList_Screen_DspEffect_Enter:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D4FC:
+; ; the field list of screen id 0x67 only (ScreenFieldListPtrs[0x67]; screen object T_Screen_DrumsMapNaming_Enter)
+ScreenFieldList_Screen_DrumsMapNaming_Enter:
 	.short 0x0491
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D500:
+; ; the field list of screen id 0x6A only (ScreenFieldListPtrs[0x6A]; screen object T_Screen_Initial_Enter)
+ScreenFieldList_Screen_Initial_Enter:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D502:
+; ; the field list of screen id 0x6B only (ScreenFieldListPtrs[0x6B]; screen object T_Screen_MainOutEqualizer_Enter)
+ScreenFieldList_Screen_MainOutEqualizer_Enter:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D504:
+; ; the field list of screen id 0x6C only (ScreenFieldListPtrs[0x6C]; screen object T_Screen_ReMapEdit_Enter)
+ScreenFieldList_Screen_ReMapEdit_Enter:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D506:
+; ; the field list of screen id 0x6D only (ScreenFieldListPtrs[0x6D]; screen object T_Screen_SoundCombinationManager_Enter)
+ScreenFieldList_Screen_SoundCombinationManager_Enter:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D508:
+; ; the field list of screen id 0x6E only (ScreenFieldListPtrs[0x6E]; screen object T_Screen_MemoryProtect_Enter)
+ScreenFieldList_Screen_MemoryProtect_Enter:
 	.short 0xFFFF	; end of list
 ScreenFieldList_F2D50A:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D50C:
+; ; the field list of screen id 0x70 only (ScreenFieldListPtrs[0x70]; screen object T_Paint_MidiMenu)
+ScreenFieldList_MidiMenu:
 	.short 0xFFFF	; end of list
 ScreenFieldList_F2D50E:
 	.short 0xFFFF	; end of list
@@ -62831,30 +62897,38 @@ ScreenFieldList_F2D510:
 	.short 0xFFFF	; end of list
 ScreenFieldList_F2D512:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D514:
+; ; the field list of screen id 0x75 only (ScreenFieldListPtrs[0x75]; screen object T_Paint_MidiRealtimeMessages)
+ScreenFieldList_MidiRealtimeMessages:
 	.short 0xFFFF	; end of list
 ScreenFieldList_F2D516:
 	.short 0xFFFF	; end of list
 ScreenFieldList_F2D518:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D51A:
+; ; the field list of screen id 0x79 only (ScreenFieldListPtrs[0x79]; screen object T_Paint_SysexBulkDump_Entry)
+ScreenFieldList_SysexBulkDump:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D51C:
+; ; the field list of screen id 0x7A only (ScreenFieldListPtrs[0x7A]; screen object T_Paint_GeneralMidiMode_Entry)
+ScreenFieldList_GeneralMidiMode:
 	.short 0xFFFF	; end of list
 ScreenFieldList_F2D51E:
 	.short 0xFFFF	; end of list
 ScreenFieldList_F2D520:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D522:
+; ; the field list of screen id 0x7D only (ScreenFieldListPtrs[0x7D]; screen object T_Paint_MidiTotalMode)
+ScreenFieldList_MidiTotalMode:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D524:
+; ; the field list of screen id 0x7E only (ScreenFieldListPtrs[0x7E]; screen object T_Paint_MidiInputOutputFilter)
+ScreenFieldList_MidiInputOutputFilter:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D526:
+; ; the field list of screen id 0x7F only (ScreenFieldListPtrs[0x7F]; screen object T_Paint_MidiOutProgramChange)
+ScreenFieldList_MidiOutProgramChange:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D528:
+; ; the field list of screen id 0xA0 only (ScreenFieldListPtrs[0xA0]; screen object T_InstallPainter_SoundGroupMenu_Entry)
+ScreenFieldList_SoundGroupMenu:
 	.short 0x08A8
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D52C:
+; ; the field list of screen id 0xA1 only (ScreenFieldListPtrs[0xA1]; screen object T_InstallPainter_GroupSoundDisplayHold_Entry)
+ScreenFieldList_GroupSoundDisplayHold:
 	.short 0x08A8
 	.short 0x0000
 	.short 0x0001
@@ -62889,16 +62963,20 @@ ScreenFieldList_F2D52C:
 	.short 0x001E
 	.short 0x001F
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D570:
+; ; the field list of screen id 0xCD only (ScreenFieldListPtrs[0xCD]; screen object T_ScreenEnter_SoundEditControllerPage1)
+ScreenFieldList_SoundEditControllerPage1:
 	.short 0x1920
 	.short 0x1A20
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D576:
+; ; the field list of screen id 0xA2 only (ScreenFieldListPtrs[0xA2]; screen object T_InstallPainter_CombinationGroupMenu_Entry)
+ScreenFieldList_CombinationGroupMenu:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D578:
+; ; the field list of screen id 0xA5 only (ScreenFieldListPtrs[0xA5]; screen object T_InstallPainter_CombinationGroupMenu_Entry_5)
+ScreenFieldList_CombinationGroupMenu2:
 	.short 0x08A8
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D57C:
+; ; the field list of screen id 0xA6 only (ScreenFieldListPtrs[0xA6]; screen object T_InstallPainter_GroupCombiDisplayHold_Entry)
+ScreenFieldList_GroupCombiDisplayHold:
 	.short 0x08A8
 	.short 0x0198
 	.short 0xFFFF	; end of list
@@ -62907,25 +62985,32 @@ ScreenFieldList_F2D582:
 ScreenFieldList_F2D584:
 	.short 0x1090
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D588:
+; ; the field list of screen id 0xB6 only (ScreenFieldListPtrs[0xB6]; screen object T_ScreenEnter_Effect2OutputConflict)
+ScreenFieldList_Effect2OutputConflict:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D58A:
+; ; the field list of screen id 0xB7 only (ScreenFieldListPtrs[0xB7]; screen object T_ScreenEnterBody_CombiEditMixer)
+ScreenFieldList_CombiEditMixer3:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D58C:
+; ; the field list of screen id 0xD8 only (ScreenFieldListPtrs[0xD8]; screen object T_Paint_GateArrayCheck)
+ScreenFieldList_GateArrayCheck:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D58E:
+; ; the field list of screen id 0xD9 only (ScreenFieldListPtrs[0xD9]; screen object T_Paint_PanelCpuCheck)
+ScreenFieldList_PanelCpuCheck:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D590:
+; ; the field list of screen id 0xDA only (ScreenFieldListPtrs[0xDA]; screen object T_Paint_SineWaveCheckMode)
+ScreenFieldList_SineWaveCheckMode:
 	.short 0x08A8
 	.short 0x0500
 	.short 0x0600
 	.short 0x0700
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D59A:
+; ; the field list of screen id 0xDB only (ScreenFieldListPtrs[0xDB]; screen object T_Paint_PanelSwLedCheck)
+ScreenFieldList_PanelSwLedCheck:
 	.short 0xFFFF	; end of list
 ScreenFieldList_F2D59C:
 	.short 0xFFFF	; end of list
-ScreenFieldList_F2D59E:
+; ; the field list of screen id 0xDD only (ScreenFieldListPtrs[0xDD]; screen object T_ScreenEnter_DebugMonitor)
+ScreenFieldList_DebugMonitor:
 	.short 0xFFFF	; end of list
 ScreenFieldList_F2D5A0:
 	.short 0xFFFF	; end of list
