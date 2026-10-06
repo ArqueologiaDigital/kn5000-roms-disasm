@@ -660,7 +660,10 @@ HDAE5000_Set_Menu_Visibility:	; 0x28B258 (229 bytes)
 	popw iz
 	ret
 
-HDAE5000_Return_Stub:	; 0x28B33D (1 bytes)
+; HDAE5000_NameHistory_AfterPushNop: Empty routine (a lone ret) that HDAE5000_NameHistory_Push calls last, with XWA =
+;   the history it just updated; its only caller. Basis: the single calr in NameHistory_Push (ROM search finds no
+;   other reference to 0x28B33D).
+HDAE5000_NameHistory_AfterPushNop:	; 0x28B33D (1 bytes)
 	ret
 
 HDAE5000_NameHistory_Push:	; 0x28B33E (61 bytes)
@@ -696,7 +699,7 @@ HDAE5000_NameHistory_Push:	; 0x28B33E (61 bytes)
 	incm8 1, (xiz)		; count++
 .Lgte_no_inc:
 	ld xwa, xiz
-	calr HDAE5000_Return_Stub	; NOP call (returns immediately)
+	calr HDAE5000_NameHistory_AfterPushNop	; NOP call (returns immediately)
 	pop xiz
 	ret
 
@@ -3834,9 +3837,12 @@ HDAE5000_LyricBoxProc_Ev01CA0005:
 	add	xwa, xwa
 	add	xwa, HDAE5000_LyricBoxProc_CaseTable2
 	ld	wa, (xwa)
-	lda xix, (HDAE5000_LyricBoxProc_Case0_2:24)
+	lda xix, (HDAE5000_LyricBoxProc_OnReset:24)
 	jp	t, (xix+wa)	; jp T,XIX+WA
-HDAE5000_LyricBoxProc_Case0_2:
+; HDAE5000_LyricBoxProc_OnReset: EVT_SW_IN on the lyric box, edit switch 0 = the bottom01 button captioned "Reset":
+;   re-init the lyrics (EVT_HDAE_INIT_LYRICS 1, HDAE5000_Lyrics_FillLines(0,0)) and redraw. Also the base of
+;   HDAE5000_LyricBoxProc_CaseTable2. Basis: switch on EVT_MAKE_EDIT_SW_ID + the caption drawn on bottom01.
+HDAE5000_LyricBoxProc_OnReset:
 	ld xwa, (xsp + 0x0e)
 	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + WS_RootFnTable)
@@ -3856,7 +3862,10 @@ HDAE5000_LyricBoxProc_Case0_2:
 	ld	xde, 0:i3
 	call	(xhl)
 	jr t, HDAE5000_LyricBoxProc_Default2                       ; [68 39] jr T,0x28d5fe
-HDAE5000_LyricBoxProc_Case7_2:
+; HDAE5000_LyricBoxProc_OnLoad: EVT_SW_IN on the lyric box, edit switch 7 = the bottom08 button captioned "Load":
+;   clear the lyric buffer and post EVT_SHOW to the LoadLyricFD screen. Basis: case 7 of
+;   HDAE5000_LyricBoxProc_CaseTable2 + the caption drawn on bottom08.
+HDAE5000_LyricBoxProc_OnLoad:
 	ld xwa, (xsp + 0x0e)
 	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + WS_RootFnTable)
@@ -7183,7 +7192,7 @@ HDAE5000_Get_Init_Flag:	; 28F570h
 ; This routine:
 ;   1. Clears work buffer (0xF52A bytes at 0x22A000)
 ;   2. Registers handlers with main CPU via callback at 0x280020
-;   3. Loads the VGA palette HDAE5000_Palette_Data (ROM 0x2E5DCE)
+;   3. Loads the VGA palette HDAE5000_Palette_BootSplash (ROM 0x2E5DCE)
 ;   4. Blits HDAE5000_Bitmap_BootSplash (ROM 0x2E61CE, 320x240x8bpp = 0x12C00
 ;      bytes) INTO VRAM at 0x1A0000, as two contiguous 0x9600-byte copies
 ;   5. Initializes handler function pointers at 0x230ECC/ED2/ED6
@@ -7231,7 +7240,7 @@ HDAE5000_Get_Init_Flag:	; 28F570h
 	; (EQU→inline label) HDAE5000_GFX_INIT_PARAMS = 0x2A849A
 
 ; ROM data addresses
-	; (EQU→inline label) HDAE5000_Palette_Data = 0x2E5DCE
+	; (EQU→inline label) HDAE5000_Palette_BootSplash = 0x2E5DCE
 	; (EQU→inline label) HDAE5000_Bitmap_BootSplash = 0x2E61CE
 	; (EQU→inline label) HDAE5000_Display_Params = 0x2F8DCE
 
@@ -7264,7 +7273,7 @@ HDAE5000_Boot_Init:	; 28F576h
 
 	call HDAE5000_Handler_Registration	; Register handlers with main CPU
 
-	lda xwa, (HDAE5000_Palette_Data:24); HDAE5000_Palette_Data
+	lda xwa, (HDAE5000_Palette_BootSplash:24); HDAE5000_Palette_BootSplash
 	calr HDAE5000_Load_Palette	; Load 256-entry VGA palette
 
 	; === Blit the boot splash screen into VRAM ===
@@ -10011,7 +10020,7 @@ HDAE5000_LoadSong_Rcm:	; 0x290EC0 (133 bytes)
 	ld xwa, (xwa)		; XWA = table entry value
 	cp xwa, 0xFFFFFFFF	; empty entry?
 	jr z, .Lts290_exit	; skip if -1
-	ld xiy, HDAE5000_LoadSong_Rcm_Data	; destination for ldirw
+	ld xiy, HDAE5000_RcmStream_InitialState	; destination for ldirw
 	ld xix, HDAE5000_RAM_HdStreamBufferEnd	; source for ldirw
 	ld bc, 4:i3		; count = 4 words (8 bytes)
 	mriw2 0x95, 0x11	; ldirw — copy from XIX to XIY
@@ -11031,7 +11040,7 @@ HDAE5000_SaveSong_Rcm:	; 0x2919DC (134 bytes)
 	push xiz		; save XIZ
 	ld de, bc		; DE = BC (file number param)
 	ld hl, 0:i3		; HL = 0
-	ld xiy, HDAE5000_LoadSong_Rcm_Data	; destination for ldirw
+	ld xiy, HDAE5000_RcmStream_InitialState	; destination for ldirw
 	ld xix, HDAE5000_RAM_HdStreamBufferEnd	; source for ldirw
 	ld bc, 4:i3		; count = 4 words
 	mriw2 0x95, 0x11	; ldirw — copy from XIX to XIY
@@ -11249,14 +11258,14 @@ HDAE5000_CheckFileSignature:	; 0x291C0D (2171 bytes)
 	ld	de, wa
 	extz xde
 	sll	xde, 0x03
-	lda xhl, (HDAE5000_CheckFileSignature_Data_3:24)
+	lda xhl, (HDAE5000_PartSignatureTable_Length:24)
 	add	xhl, xde
 	ld	de, (xhl)
 	pushw de                                ; push DE
 	ld	de, wa
 	extz xde
 	sll	xde, 0x03
-	lda xhl, (HDAE5000_CheckFileSignature_Data_2:24)
+	lda xhl, (HDAE5000_PartSignatureTable_FileOffset:24)
 	add	xhl, xde
 	ld	de, (xhl)
 	extz xde
@@ -11264,7 +11273,7 @@ HDAE5000_CheckFileSignature:	; 0x291C0D (2171 bytes)
 	push xde
 	extz xwa
 	sll	xwa, 0x03
-	ld	xbc, HDAE5000_CheckFileSignature_Data
+	ld	xbc, HDAE5000_PartSignatureTable
 	add	xbc, xwa
 	ld xwa, (xbc)
 	push xwa

@@ -155,7 +155,10 @@ PostReset_InitAudio:
 ; TaskSched_Dispatch then enters it through TaskSched_ContextRestore (7 x pop, pop sr, ret),
 ; so everything from here on -- Audio_System_Init and Audio_Main_Loop -- runs as task 1,
 ; ready-queue priority 3.  The return address the `call` pushed is simply abandoned.
-Task1_AudioMain_Entry:
+; Task1_StartAudioSystem: Entry PC of task 1 (TaskSched_TaskDescriptorTable record 1): arms the audio-tick interrupt
+;   (INTET01 high nibble = INTT1 level 3), initialises the three ring buffers, enables interrupts, clears word 0x103C
+;   and enters Audio_System_Init, which falls into Audio_Main_Loop. Basis: descriptor table + body.
+Task1_StartAudioSystem:
 	lda	xbc, (INTET01:8)
 	ld a, (xbc)
 	and a, 0x8F
@@ -425,7 +428,10 @@ MemClear_ExtRAM_Finish:
 ; DSP_State_DmaLoadPresets (A = 3), and no numeric branch operand left in this image targets
 ; 0x01FFFD.  So this is an unused task slot whose body is a bare RET (if it ever ran, the RET
 ; would pop the first long above its fresh stack top 0x040C20, not a return address).
-Task2_Entry_Stub:
+; Task2_NeverSpawned: Entry PC of task 2 (TaskSched_TaskDescriptorTable record 2), a bare RET: TaskSched_SpawnTask is
+;   only ever called with task 1 and task 3, so this slot is unused in v1.42. Basis: descriptor table + the SpawnTask
+;   call sites.
+Task2_NeverSpawned:
 	ret
 
 
@@ -670,9 +676,9 @@ DSP_ChecksumRange_Loop:
 ; Entry count 3: TaskSched_Init initialises exactly three 12-byte run-time descriptors at
 ; 0x1048/0x1054/0x1060 (= 0x103C + 12*A, `ld b,3`), and the six bytes after record 3 are
 ; independently claimed by TaskSched_Init's two ldir copies (below), so the table cannot be
-; longer.  Entry PCs resolve to: task 1 Task1_AudioMain_Entry (inside PostReset_InitAudio),
-; task 2 Task2_Entry_Stub (a bare RET; never spawned), task 3 Task3_Entry_Thunk (`jp` to the
-; DSP apply-task loop DSP_ApplyTask_Body).  The three stack tops partition DRAM
+; longer.  Entry PCs resolve to: task 1 Task1_StartAudioSystem (inside PostReset_InitAudio),
+; task 2 Task2_NeverSpawned (a bare RET; never spawned), task 3 Task3_EnterDspApplyLoop (`jp` to the
+; DSP apply-task loop DSP_State_ApplyTask).  The three stack tops partition DRAM
 ; 0x040000.. as: task 1 below 0x04069A, task 3 0x04069A-0x040A9B, the scheduler's own stack
 ; (`ld xsp, 0x40B1E`) 0x040A9C-0x040B1D, task 2 0x040B1E-0x040C1F.
 ; Independent corroboration: wsa1/notes/FINDINGS-kernel-in-the-kn5000.md (section 8) aligns the
@@ -680,13 +686,13 @@ DSP_ChecksumRange_Loop:
 ; operand 0xFFF980DE with this code's 0x0001FD8C (= this table - 12), and its "ROM image of the
 ; semaphore counts" with 0x0001FDBC (TaskSched_EventFlagInit below).
 TaskSched_TaskDescriptorTable:
-	.long	Task1_AudioMain_Entry, 0x0004069a	; task 1: entry, stack top
+	.long	Task1_StartAudioSystem, 0x0004069a	; task 1: entry, stack top
 	.short	0x8800					;         initial SR
 	.byte	3, 0					;         priority 3
-	.long	Task2_Entry_Stub, 0x00040c20		; task 2: entry, stack top
+	.long	Task2_NeverSpawned, 0x00040c20		; task 2: entry, stack top
 	.short	0x8800
 	.byte	1, 0					;         priority 1
-	.long	Task3_Entry_Thunk, 0x00040a9c		; task 3: entry, stack top
+	.long	Task3_EnterDspApplyLoop, 0x00040a9c		; task 3: entry, stack top
 	.short	0x8800
 	.byte	3, 0					;         priority 3
 ; Initial values of the two EVENT flag bytes 0x1080/0x1081 (events 1, 2): TaskSched_Init
@@ -945,7 +951,7 @@ TaskSched_SoftTimer_Service:
 	extz	xix
 	ld	b, 1:opc
 ; Top of the per-slot walk; XIX = current 8-byte timer entry, B = slots remaining.
-TaskSched_SoftTimer_Entry:
+TaskSched_SoftTimer_SlotLoop:
 	ld	xwa, (xix+4)
 	cp	xwa, 4294967295
 	jr	z, TaskSched_SoftTimer_Next
@@ -1439,11 +1445,11 @@ TaskEvent_Wait:
 	add	wa, 4223
 	extz	xwa
 	bitm	0, (xwa)
-	jr	z, TaskEvent_Wait_Block
+	jr	z, TaskEvent_Wait_SuspendTask
 	resm	0, (xwa)
 	jrl	TaskSched_ContextRestore
 ; No latched signal: block the caller on the event queue and dispatch.
-TaskEvent_Wait_Block:
+TaskEvent_Wait_SuspendTask:
 	ld	ix, (4166:16)
 	extz	xix
 	xor	xwa, xwa
@@ -1626,11 +1632,11 @@ TaskSched_Wait:
 	add wa, 0x1091
 	extz xwa
 	cp (xwa), 0x0
-	jr z, TaskSched_Wait_Block
+	jr z, TaskSched_Wait_SuspendTask
 	decm8 1, (xwa)
 	jrl TaskSched_ContextRestore
 
-TaskSched_Wait_Block:
+TaskSched_Wait_SuspendTask:
 	ld ix, (4166:16)
 	extz xix
 	xor xwa, xwa
@@ -2197,7 +2203,10 @@ FIFO1K_Put:
 ; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
 ; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
 ; own bytes, the few llvm-mc cannot spell stay .byte with unidasm's reading as a comment).
-FIFO1K_Put_Block:
+; FIFO1K_PutBytes: Pushes BC bytes from (XIY) onto the 1 KB FIFO (descriptor 0x040c2e) through FIFO_Engine1K_Put, one
+;   per byte; BC = (XIZ+8), XIY = (XIZ+10) from the stack frame; does not stop when the FIFO is full. No caller in
+;   this build. Basis: API siblings + body -- the multi-byte form of the one-byte put beside it.
+FIFO1K_PutBytes:
 	link	xiz, 0
 	push	xiy
 	push	xix
@@ -2307,7 +2316,10 @@ FIFO256_Put:
 ; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
 ; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
 ; own bytes, the few llvm-mc cannot spell stay .byte with unidasm's reading as a comment).
-FIFO256_Put_Block:
+; FIFO256_PutBytes: Pushes BC bytes from (XIY) onto the 256-byte FIFO (descriptor 0x041038) through
+;   FIFO_Engine256_Put, one per byte; BC = (XIZ+8), XIY = (XIZ+10) from the stack frame; does not stop when the FIFO
+;   is full. No caller in this build. Basis: API siblings + body -- the multi-byte form of the one-byte put beside it.
+FIFO256_PutBytes:
 	link	xiz, 0
 	push	xiy
 	push	xix
@@ -2414,7 +2426,10 @@ FIFO512_Put:
 ; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
 ; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
 ; own bytes, the few llvm-mc cannot spell stay .byte with unidasm's reading as a comment).
-FIFO512_Put_Block:
+; FIFO512_PutBytes: Pushes BC bytes from (XIY) onto the 512-byte FIFO (descriptor 0x041142) through
+;   FIFO_Engine512_Put, one per byte; BC = (XIZ+8), XIY = (XIZ+10) from the stack frame; does not stop when the FIFO
+;   is full. No caller in this build. Basis: API siblings + body -- the multi-byte form of the one-byte put beside it.
+FIFO512_PutBytes:
 	link	xiz, 0
 	push	xiy
 	push	xix
@@ -2789,7 +2804,7 @@ DMA_Send_Loop:
 	extz wa
 	ldw bc, 0x20
 	ld xde, (xsp + 2)
-	calr InterCPU_DMA_Send_Chunk
+	calr InterCPU_DMA_SendDataPacket
 	ld xwa, 0x20
 	add (xsp + 2), xwa
 	sub iz, 0x20
@@ -2802,13 +2817,13 @@ DMA_Send_Final:
 	ldto_berp C, 0xF8
 	extz bc
 	ld xde, (xsp + 2)
-	calr InterCPU_DMA_Send_Chunk
+	calr InterCPU_DMA_SendDataPacket
 	popw iz
 	inc 6, xsp
 	ret
 
 ; ===========================================================================
-; InterCPU_DMA_Send_Chunk - Transfer a single chunk of data to main CPU
+; InterCPU_DMA_SendDataPacket - Transfer a single chunk of data to main CPU
 ; ===========================================================================
 ; Entry: XDE = source data pointer
 ;        BC = byte count (must be non-zero)
@@ -2818,7 +2833,11 @@ DMA_Send_Final:
 ;        Waits for MSTAT1 handshake, sets up DMA, then waits for completion.
 ;        Command byte format: (A << 5) | (length - 1)
 ; ===========================================================================
-InterCPU_DMA_Send_Chunk:
+; InterCPU_DMA_SendDataPacket: Sends one sub->main data packet of 1..32 bytes: after the MSTAT1 (PD bit 4) handshake
+;   it writes the header byte (A << 5) | (BC - 1) to the latch 0x120000, then streams the BC bytes at XDE by micro-DMA
+;   2 and waits until DMA_XFER_STATE returns to 0; BC = 0 returns at once. Basis: callers + body -- InterCPU_DMA_Send
+;   splits every transfer into 32-byte packets (DMA_Send_Loop) plus the remainder (DMA_Send_Final).
+InterCPU_DMA_SendDataPacket:
 	cp c, 0:i3
 	ret z
 	ld ix, 0:i3
@@ -2873,7 +2892,7 @@ DMA_Chunk_Wait_MSTAT1_Set:
 	ret
 
 ; Sends the single command byte 0xE3 to the main CPU over the 0x120000 latch, with the same
-; two-phase MSTAT1 handshake InterCPU_DMA_Send_Chunk uses but no payload and no micro-DMA.
+; two-phase MSTAT1 handshake InterCPU_DMA_SendDataPacket uses but no payload and no micro-DMA.
 ; Gate 1 (0x020D15): wait for PD bit 4 (MSTAT1, SFR 0x34) to be HIGH; drop SSTAT0 (PD bit 0)
 ; and write 0xE3 to 0x120000. Gate 2 (0x020D23): wait for MSTAT1 to go LOW, then raise
 ; SSTAT0 and return. Each gate spins through E3_Wait_MSTAT1_Clear (0x020D2C) /
@@ -3198,7 +3217,7 @@ INT0_Exit:	; 020EFFh
 ; timers T0..T3, and bit 2 is timer 2's run bit; the old name reads like a
 ; misparse of the register name.  A 16-bit Timer 8 does exist on this part, but
 ; it runs from T16RUN and is not what is stopped here.  Corroborated by
-; InterCPU_DMA_Send_Chunk, which arms DMA2V = 22 = the INTT2 vector number
+; InterCPU_DMA_SendDataPacket, which arms DMA2V = 22 = the INTT2 vector number
 ; before setting T8RUN bit 2.)
 ;=============================================================================
 MICRODMA_CH2_HANDLER:	; Channel #2 completion		; 20F01
@@ -4092,7 +4111,7 @@ VoiceState_FullReset_Phase2:
 	cp_erpb 0xFB, 0xC0
 	jr nc, VoiceState_FullReset_Phase3
 
-VoiceState_FullReset_Phase2_Body:
+VoiceState_FullReset_Phase2_Loop:
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x5
@@ -4124,7 +4143,7 @@ VoiceState_FullReset_Phase2_Body:
 	ld	(xbc+wa), 0xff
 	inc1b_erp 0xFB
 	cp_erpb 0xFB, 0xC0
-	jr c, VoiceState_FullReset_Phase2_Body
+	jr c, VoiceState_FullReset_Phase2_Loop
 
 VoiceState_FullReset_Phase3:
 	ldib_erp 0xFB, 0
@@ -5090,7 +5109,7 @@ Voice_Reset_Engine_PhaseA:
 	cp (xsp + 4), 0x40
 	jr nc, Voice_Reset_Engine_PhaseB
 
-Voice_Reset_Engine_PhaseA_Body:
+Voice_Reset_Engine_PhaseA_VoiceLoop:
 	res	7, (P6:8)
 	ld a, (xsp + 4)
 	extz wa
@@ -5121,7 +5140,7 @@ Voice_Reset_Engine_PhaseA_Nop2:
 	nop
 	incm8 1, (xsp + 4)
 	cp (xsp + 4), 0x40
-	jr c, Voice_Reset_Engine_PhaseA_Body
+	jr c, Voice_Reset_Engine_PhaseA_VoiceLoop
 
 Voice_Reset_Engine_PhaseB:
 	cp (xsp + 4), 0x4
@@ -5130,7 +5149,7 @@ Voice_Reset_Engine_PhaseB:
 	cp (xsp + 4), 0x40
 	jr nc, Voice_Reset_Engine_PhaseC
 
-Voice_Reset_Engine_PhaseB_Body:
+Voice_Reset_Engine_PhaseB_VoiceLoop:
 	res	7, (P6:8)
 	ld a, (xsp + 4)
 	add a, 0xC0
@@ -5160,7 +5179,7 @@ Voice_Reset_Engine_PhaseB_Nop2:
 	nop
 	incm8 1, (xsp + 4)
 	cp (xsp + 4), 0x40
-	jr c, Voice_Reset_Engine_PhaseB_Body
+	jr c, Voice_Reset_Engine_PhaseB_VoiceLoop
 
 Voice_Reset_Engine_PhaseC:
 	ld (xsp + 4), 0x0
@@ -5231,7 +5250,7 @@ ChanStruct_Init_Loop:
 	cp (xsp + 4), 0x1B
 	jrl nc, VoiceNode_Init_Loop
 
-ChanStruct_Init_Entry:
+ChanStruct_Init_BindPartPool:
 	cp (xsp + 6), 0x0
 	jr nz, ChanStruct_Init_Entry_AltPtr
 	ld a, (xsp + 4)
@@ -5285,14 +5304,14 @@ ChanStruct_Init_ZeroLoop:
 ChanStruct_Init_Next:
 	incm8 1, (xsp + 4)
 	cp (xsp + 4), 0x1B
-	jrl c, ChanStruct_Init_Entry
+	jrl c, ChanStruct_Init_BindPartPool
 
 VoiceNode_Init_Loop:
 	ld (xsp + 4), 0x0
 	cp (xsp + 4), 0x40
 	jr nc, Voice_Retire_ToFreePool_All
 
-VoiceNode_Init_Body:
+VoiceNode_Init_NodeLoop:
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0x27
@@ -5316,7 +5335,7 @@ VoiceNode_Init_Body:
 	ld (xiz + 37), 0x0
 	incm8 1, (xsp + 4)
 	cp (xsp + 4), 0x40
-	jr c, VoiceNode_Init_Body
+	jr c, VoiceNode_Init_NodeLoop
 
 Voice_Retire_ToFreePool_All:
 	lda xiz, (5261:16)
@@ -5337,7 +5356,7 @@ AudioState_Init_ClearWords_Loop:
 	cp (xsp + 4), 0x4
 	jr nc, AudioState_Init_Return
 
-AudioState_Init_ClearWords_Body:
+AudioState_Init_ClearVoiceBitmaps:
 	ld a, (xsp + 4)
 	extz wa
 	add wa, wa
@@ -5350,7 +5369,7 @@ AudioState_Init_ClearWords_Body:
 	ldw	(xbc+wa), 0x0000
 	incm8 1, (xsp + 4)
 	cp (xsp + 4), 0x4
-	jr c, AudioState_Init_ClearWords_Body
+	jr c, AudioState_Init_ClearVoiceBitmaps
 
 AudioState_Init_Return:
 	calr VoiceState_FullReset
@@ -6791,7 +6810,9 @@ Pitch_Saturate_15bit_Return:
 
 ; CLAMP WA INTO [DE, BC] (signed). Out: WA and XHL. Callers 0x03079E, 0x0307E9 and the
 ; level packer at 0x023C44 / 0x023C92 / 0x023CA2 / 0x023CB2 / 0x023CC0.
-ClampS16_WA_To_DEBC:
+; Int_ClampSignedToRange: Clamps signed 16-bit WA into [DE, BC] (DE = low bound, BC = high bound); result in WA and
+;   XHL. Basis: callers + body -- 62 call sites load the bounds first (0..0xFF, 4..0x7F, -50..+50).
+Int_ClampSignedToRange:
 	cp wa, bc
 	jr le, ClampS16_WA_To_DEBC_CheckLo
 	ld wa, bc
@@ -7183,7 +7204,7 @@ TVF_Set_Bypass:
 	ldw (xwa + 68), 0x7F7F
 	ret
 
-; Clamp WA into [DE, BC]; identical code to ClampS16_WA_To_DEBC. Callers 0x03083D, 0x03086D, 0x03089D, 0x0308CD, 0x030901, 0x03093F.
+; Clamp WA into [DE, BC]; identical code to Int_ClampSignedToRange. Callers 0x03083D, 0x03086D, 0x03089D, 0x0308CD, 0x030901, 0x03093F.
 ClampS16_WA_Short:
 	cp wa, bc
 	jr le, ClampS16_WA_Short_CheckLo
@@ -9470,7 +9491,7 @@ Voice_Level_PackAndStore:
 	ld wa, (xsp + 10)
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld (xsp + 10), hl
 	ld wa, (xsp + 4)
 	calr Detune_ScaleSymmetric
@@ -9499,13 +9520,13 @@ Voice_Level_PackAndStore:
 	add wa, iz
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld (xsp + 12), hl
 	ld wa, (xsp + 14)
 	add wa, iz
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld (xsp + 14), hl
 	jr Voice_Level_PackSideChannels
 
@@ -9514,12 +9535,12 @@ Voice_Level_PackAndStore_NoVelocityMod:
 	ld wa, (xsp + 12)
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld (xsp + 12), hl
 	ld wa, (xsp + 14)
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld (xsp + 14), hl
 
 ; Map the channel-2/3 detunes, pack them with their levels and store to 0x0451EE and 0x0451F0.
@@ -10872,7 +10893,7 @@ Voice_StereoLevel_PackCh1:
 	ld wa, (xsp + 6)
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld (xsp + 6), hl
 	ld xwa, (xsp + 2)
 	ld a, (xwa + 61)
@@ -10884,7 +10905,7 @@ Voice_StereoLevel_PackCh1:
 	add wa, bc
 	ldw bc, 0x32
 	ldw de, 0xFFCE
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld wa, hl
 	calr Detune_ScaleSymmetric
 	ld h, 0x0:opc
@@ -10913,13 +10934,13 @@ Voice_StereoLevel_PackCh1:
 	add wa, iz
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld (xsp + 8), hl
 	ld wa, (xsp + 10)
 	add wa, iz
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld (xsp + 10), hl
 	jr Voice_StereoLevel_PackCh23
 
@@ -10928,12 +10949,12 @@ Voice_StereoLevel_ClampCh23_NoMod:
 	ld wa, (xsp + 8)
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld (xsp + 8), hl
 	ld wa, (xsp + 10)
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld (xsp + 10), hl
 
 ; Packs and stores channels 2 and 3 to 0x0451F4 (TG reg 0xA00) and 0x0451F6 (TG reg 0xA40),
@@ -10949,7 +10970,7 @@ Voice_StereoLevel_PackCh23:
 	add wa, bc
 	ldw bc, 0x32
 	ldw de, 0xFFCE
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld iz, hl
 	ld wa, iz
 	calr Detune_ScaleSymmetric
@@ -10964,7 +10985,7 @@ Voice_StereoLevel_PackCh23:
 	add wa, bc
 	ldw bc, 0x32
 	ldw de, 0xFFCE
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld wa, hl
 	calr Detune_ScaleSymmetric
 	ld wa, iz
@@ -11043,7 +11064,7 @@ Voice_PortaLevel_ScaleAndPack:
 	ld wa, (xsp + 8)
 	ldw bc, 0x7F
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld (xsp + 8), hl
 	ldw iz, 0x7F
 	ld xwa, (xsp + 2)
@@ -11061,7 +11082,7 @@ Voice_PortaLevel_ScaleAndPack:
 	ld wa, iz
 	ldw bc, 0x7F
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld iz, hl
 	ld wa, iz
 	ld bc, wa
@@ -12727,7 +12748,7 @@ Voice_Calc_LevelPair_PatchAtk_ApplyKeyTrack:
 	add wa, bc
 	ldw bc, 0x64
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld iz, hl
 	ldto_berp A, 0xF8
 	extz wa
@@ -12778,7 +12799,7 @@ Voice_Calc_LevelPair_PatchAtk_ApplyKeyTrack:
 	addw_erp WA, 0xFA
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld iz, hl
 	jr Voice_Calc_LevelPair_PatchAtk_CheckMax
 
@@ -12788,7 +12809,7 @@ Voice_Calc_LevelPair_PatchAtk_NoLFO:
 	add wa, (xsp + 8)
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld iz, hl
 	jr Voice_Calc_LevelPair_PatchAtk_CheckMax
 
@@ -12813,7 +12834,7 @@ Voice_Calc_LevelPair_PatchAtk_NoOscLFO:
 	addw_erp WA, 0xFA
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld iz, hl
 
 ; If bit 0 of the flag word is set and the accumulator is exactly 0xFF, decrement it -- the
@@ -12901,14 +12922,14 @@ Voice_Calc_LevelPair_PatchAtk_WriteDSP:
 	addw_erp WA, 0xFA
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld (xsp + 10), hl
 	ld wa, (xsp + 12)
 	add wa, (xsp + 8)
 	addw_erp WA, 0xFA
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld (xsp + 12), hl
 	jr Voice_Calc_LevelPair_PatchAtk_WriteChans
 
@@ -12918,13 +12939,13 @@ Voice_Calc_LevelPair_PatchAtk_NoModDepth:
 	add wa, (xsp + 8)
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld (xsp + 10), hl
 	ld wa, (xsp + 12)
 	add wa, (xsp + 8)
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld (xsp + 12), hl
 	jr Voice_Calc_LevelPair_PatchAtk_WriteChans
 
@@ -12949,13 +12970,13 @@ Voice_Calc_LevelPair_PatchAtk_NoDepth2:
 	addw_erp WA, 0xFA
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld (xsp + 10), hl
 	ld wa, (xsp + 12)
 	addw_erp WA, 0xFA
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld (xsp + 12), hl
 
 ; Falls through into the per-channel writer that fills 0x0451E6 / 0x0451E8 (TG regs 0x840 /
@@ -13079,17 +13100,17 @@ Voice_WriteChPanShift_AddShift:
 	ld iz, wa
 	add iz, bc
 
-; Clamps both fields via ClampS16_WA_To_DEBC and branches on the channel flag.
+; Clamps both fields via Int_ClampSignedToRange and branches on the channel flag.
 Voice_WriteChPanShift_ClampAndWrite:
 	ld wa, (xsp + 2)
 	ldw bc, 0x7F
 	ld de, 4:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld (xsp + 2), hl
 	ld wa, iz
 	ldw bc, 0x7F
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld iz, hl
 	cp (xsp + 4), 0x0
 	jr z, Voice_WriteChPanShift_NoChanFlag
@@ -13174,7 +13195,7 @@ Voice_Calc_LevelPair_FixedAtk:
 	ld wa, iz
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld iz, hl
 
 ; Packs (level << 8) | 0x7F and stores to 0x0451E4 (TG reg 0x800) and to the cache at
@@ -13336,12 +13357,12 @@ Voice_WriteChPanShift2_ClampAndWrite:
 	ld wa, (xsp + 2)
 	ldw bc, 0x7F
 	ld de, 4:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld (xsp + 2), hl
 	ld wa, iz
 	ldw bc, 0x7F
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld iz, hl
 	cp (xsp + 4), 0x0
 	jr z, Voice_WriteChPanShift2_NoChanFlag
@@ -13436,7 +13457,7 @@ Voice_Calc_LevelPair_Full_CheckBit11:
 ; This branch is taken when bit 11 of slot+1 is CLEAR. It reads a signed per-oscillator
 ; trim byte from tonerec[0x010C] (tonerec = the pointer at slot+35), adds it to
 ; paramA+39 (paramA = the pointer at slot+23), clamps the sum to 0..0x64 with
-; ClampS16_WA_To_DEBC, and converts it through the 101-entry curve at 0x011899 into an
+; Int_ClampSignedToRange, and converts it through the 101-entry curve at 0x011899 into an
 ; 8-bit register level. The bit-11-set branch instead takes a fixed level from the byte
 ; at 0x0118B3 and jumps straight to _CheckMax.
 ;
@@ -13464,7 +13485,7 @@ Voice_Calc_LevelPair_Full_OscTablePath:
 	add wa, bc
 	ldw bc, 0x64
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld iz, hl
 	ldto_berp A, 0xF8
 	extz wa
@@ -13515,7 +13536,7 @@ Voice_Calc_LevelPair_Full_OscTablePath:
 	addw_erp WA, 0xFA
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld iz, hl
 	jr Voice_Calc_LevelPair_Full_CheckMax
 
@@ -13525,7 +13546,7 @@ Voice_Calc_LevelPair_Full_NoDepth:
 	add wa, (xsp + 8)
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld iz, hl
 	jr Voice_Calc_LevelPair_Full_CheckMax
 
@@ -13550,7 +13571,7 @@ Voice_Calc_LevelPair_Full_NoLFO:
 	addw_erp WA, 0xFA
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld iz, hl
 
 ; If bit 0 of the byte pointed to by slot+31 is set and the computed level is exactly
@@ -13640,14 +13661,14 @@ Voice_Calc_LevelPair_Full_WriteDSP:
 	addw_erp WA, 0xFA
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld (xsp + 10), hl
 	ld wa, (xsp + 12)
 	add wa, (xsp + 8)
 	addw_erp WA, 0xFA
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld (xsp + 12), hl
 	jr Voice_Calc_LevelPair_Full_WriteChDepth
 
@@ -13657,13 +13678,13 @@ Voice_Calc_LevelPair_Full_NoModDepth:
 	add wa, (xsp + 8)
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld (xsp + 10), hl
 	ld wa, (xsp + 12)
 	add wa, (xsp + 8)
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld (xsp + 12), hl
 	jr Voice_Calc_LevelPair_Full_WriteChDepth
 
@@ -13688,13 +13709,13 @@ Voice_Calc_LevelPair_Full_NoDepth2:
 	addw_erp WA, 0xFA
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld (xsp + 10), hl
 	ld wa, (xsp + 12)
 	addw_erp WA, 0xFA
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld (xsp + 12), hl
 
 ; Rate for pair 2 = table_0x011963[paramA+42], floored at 4 (values below 4 are raised).
@@ -13827,7 +13848,7 @@ Voice_Calc_LevelPair_Mono_ComputeLevel:
 	add wa, iz
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ldfr_werp HL, 0xFA
 	jr Voice_Calc_LevelPair_Mono_CheckMax
 
@@ -13837,7 +13858,7 @@ Voice_Calc_LevelPair_Mono_NoDepth:
 	add wa, (xsp + 8)
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ldfr_werp HL, 0xFA
 	jr Voice_Calc_LevelPair_Mono_CheckMax
 
@@ -13862,7 +13883,7 @@ Voice_Calc_LevelPair_Mono_NoLFO:
 	add wa, iz
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ldfr_werp HL, 0xFA
 
 ; Same 0xFF reservation as Voice_Calc_LevelPair_Full_CheckMax.
@@ -13903,7 +13924,7 @@ Voice_Calc_LevelPair_Mono_WriteDSP:
 	add wa, bc
 	ldw bc, 0x64
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld (xsp + 10), hl
 	ld wa, (xsp + 10)
 	extz wa
@@ -13922,7 +13943,7 @@ Voice_Calc_LevelPair_Mono_WriteDSP:
 	add wa, bc
 	ldw bc, 0x64
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld (xsp + 12), hl
 	ld wa, (xsp + 12)
 	extz wa
@@ -13973,14 +13994,14 @@ Voice_Calc_LevelPair_Mono_WriteDSP:
 	add wa, iz
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld (xsp + 10), hl
 	ld wa, (xsp + 12)
 	add wa, (xsp + 8)
 	add wa, iz
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld (xsp + 12), hl
 	jr Voice_Calc_LevelPair_Mono_WriteChDepth
 
@@ -13990,13 +14011,13 @@ Voice_Calc_LevelPair_Mono_NoModDepth:
 	add wa, (xsp + 8)
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld (xsp + 10), hl
 	ld wa, (xsp + 12)
 	add wa, (xsp + 8)
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld (xsp + 12), hl
 	jr Voice_Calc_LevelPair_Mono_WriteChDepth
 
@@ -14021,13 +14042,13 @@ Voice_Calc_LevelPair_Mono_NoDepth2:
 	add wa, iz
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld (xsp + 10), hl
 	ld wa, (xsp + 12)
 	add wa, iz
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld (xsp + 12), hl
 
 ; Tail of Voice_Calc_LevelPair_Mono: rate for pair 2, floored at 4.
@@ -14442,7 +14463,7 @@ Voice_ComputePitch_WriteDone:
 
 ; Despite the name, these 17 bytes are EXECUTABLE CODE, not data.
 ; "clamp WA into [DE..BC], return in HL" -- the same operation as
-; ClampS16_WA_To_DEBC at 0x022B19, with the low bound tested first (that routine tests
+; Int_ClampSignedToRange at 0x022B19, with the low bound tested first (that routine tests
 ; the high bound first). Nothing in the image references it; it is dead code left between
 ; Voice_ComputePitch and Voice_ComputePitch_Mono.
 ; Converted from `.byte` to real mnemonics 2026-09-01 (lane SUB): `jr ge, 4` / `jr 6` /
@@ -14777,7 +14798,7 @@ Voice_Calc_LevelPair_EGA:
 	add wa, bc
 	ldw bc, 0x64
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld iz, hl
 	ldto_berp A, 0xF8
 	extz wa
@@ -14939,7 +14960,7 @@ Voice_ComputeVolume_CappedLFO_UseOscMax:
 	add wa, bc
 	ldw bc, 0x64
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld iz, hl
 	ldto_berp A, 0xF8
 	extz wa
@@ -15063,7 +15084,7 @@ Voice_Calc_LevelPair_EGB_ApplyLFO:
 	ld wa, iz
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld iz, hl
 	jr Voice_Calc_LevelPair_EGB_WriteDSP
 
@@ -15072,7 +15093,7 @@ Voice_Calc_LevelPair_EGB_NoKeyTrack:
 	ld wa, iz
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld iz, hl
 	jr Voice_Calc_LevelPair_EGB_WriteDSP
 
@@ -15097,7 +15118,7 @@ Voice_Calc_LevelPair_EGB_NoLFO:
 	ld wa, iz
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld iz, hl
 
 ; Chooses the detune arm from the sign of paramA+7 and scales paramA+16 through
@@ -15206,7 +15227,7 @@ Voice_Calc_LevelPair_EGC_ApplyLFO:
 	ld wa, iz
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld iz, hl
 	jr Voice_Calc_LevelPair_EGC_WriteDSP
 
@@ -15215,7 +15236,7 @@ Voice_Calc_LevelPair_EGC_NoKeyTrack:
 	ld wa, iz
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld iz, hl
 	jr Voice_Calc_LevelPair_EGC_WriteDSP
 
@@ -15239,7 +15260,7 @@ Voice_Calc_LevelPair_EGC_NoLFO:
 	ld wa, iz
 	ldw bc, 0xFF
 	ld de, 0:i3
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld iz, hl
 
 ; Sums paramA+61 and paramA+70, clamps to -0x32..+0x32, scales via
@@ -15255,7 +15276,7 @@ Voice_Calc_LevelPair_EGC_WriteDSP:
 	add wa, bc
 	ldw bc, 0x32
 	ldw de, 0xFFCE
-	calr ClampS16_WA_To_DEBC
+	calr Int_ClampSignedToRange
 	ld wa, hl
 	calr Detune_ScaleSymmetric
 	ld h, 0x0:opc
@@ -15461,7 +15482,7 @@ Voice_UpdateAllLFO_Loop2:
 	jr nc, Voice_UpdateAllLFO_Loop3
 
 ; Group 2 body: 64 sub-records at 0x044257, EGEnv_Compute_B, scratch 0x045204.
-Voice_UpdateAllLFO_Loop2_Body:
+Voice_UpdateAllLFO_Loop2_ProcessSlot:
 	ld wa, iz
 	extz xwa
 	ld xbc, 0x1B
@@ -15504,7 +15525,7 @@ Voice_UpdateAllLFO_DispatchVoice2:
 Voice_UpdateAllLFO_NextSlot2:
 	inc 1, iz
 	cp iz, 0x40
-	jr c, Voice_UpdateAllLFO_Loop2_Body
+	jr c, Voice_UpdateAllLFO_Loop2_ProcessSlot
 
 ; Group 3 preamble: reset the slot counter for the 128-slot pass.
 Voice_UpdateAllLFO_Loop3:
@@ -15513,7 +15534,7 @@ Voice_UpdateAllLFO_Loop3:
 	jrl nc, Voice_UpdateAllLFO_Done
 
 ; Group 3 body: 128 sub-records at 0x044260, converted via Voice_Freq_WriteLeft.
-Voice_UpdateAllLFO_Loop3_Body:
+Voice_UpdateAllLFO_Loop3_ProcessSlot:
 	ld wa, iz
 	extz xwa
 	ld xbc, 0x1B
@@ -15572,7 +15593,7 @@ Voice_UpdateAllLFO_DispatchVoice3:
 Voice_UpdateAllLFO_NextSlot3:
 	inc 1, iz
 	cp iz, 0x80
-	jrl c, Voice_UpdateAllLFO_Loop3_Body
+	jrl c, Voice_UpdateAllLFO_Loop3_ProcessSlot
 
 ; Restore IZ and return.
 Voice_UpdateAllLFO_Done:
@@ -18431,7 +18452,11 @@ AudioMod_Scale_To_Part_1F_Join:
 	ld	(xbc+wa), e
 	ret
 ; As above without the >>1; stores the byte at 0x041388 + part*0x11F (part+0x20).
-AudioMod_Scale_To_Part_20:
+; AudioMod_Scale_To_LevelPairShift: Audio-channel command 2 scaler: E = ((bipolar ? (BC-0x40)*2 : BC) * depth) / 127,
+;   signed, stored as the part's level-pair shift byte part+0x20 (0x041388 + part*0x11F). Basis: caller + readers --
+;   AudioChannel_Handler_Cmd02 is the only caller; the only readers, Voice_WriteChPanShift/2, add (layer-word bit 9
+;   clear) or subtract it from the 7-bit level pair voice+62/+64 (TG regs 0x21/0x22) while layer-word bit 8 is set.
+AudioMod_Scale_To_LevelPairShift:
 	bit	7, (xde+1)	; bit 7,(XDE+0x01)
 	jr	z, AudioMod_Scale_To_Part_20_Skip
 	ld	e, (xde+2)
@@ -19666,19 +19691,25 @@ Voice_AllNotes_SustainRetrigger_Exit:
 	lda xsp, (xsp + 10)
 	ret
 
-; --- 0x028F75-0x029E30  VoiceCC_DataTable_028F75 -- was MISLABELLED, now fully code
+; --- 0x028F75-0x029E30  TVF_Refresh_Sounding_Voices -- was MISLABELLED, now fully code
 ; All 3772 bytes are TLCS-900H instructions (previously `.byte`; converted in an earlier pass,
 ; before this note was checked -- this is a corrected marker, not a new conversion). It is the
 ; body of the audio-channel command handlers: the nine entry points below are all reached by
 ; `calr`/`jrl` from AudioChannel_DispatchTable at 0x029E5B or by absolute `call` from outside
 ; the region.  Nothing in here is data.
 ; ⚠ RENAME PROPOSAL, NOT A PLACEHOLDER FILL: this address already carries the real name
-; VoiceCC_DataTable_028F75.  Left alone; maintainer's call.  See [UNCERTAIN].
+; TVF_Refresh_Sounding_Voices.  Left alone; maintainer's call.  See [UNCERTAIN].
 ; XWA = part record (voice list at +5).  Walks the list, classifies each voice by
 ; (voice+0x01)&0x3C and calls TVF_Emit_Registers (0x024444) for 4/0x20 or
 ; Voice_PanReg_WriteDispatchB (0x024554) for 0x10, then pushes the result to TG registers
 ; 4 and 5 via ToneGen_WriteVoice_Pan_Pair with XBC = the staging record 0x0451CC.
-VoiceCC_DataTable_028F75:
+; TVF_Refresh_Sounding_Voices: Re-emits the TVF (filter) registers of every voice in a part's voice list: classes
+;   (voice+1) & 0x3C = 4 / 0x20 through TVF_Emit_Registers, 0x10 through Voice_PanReg_WriteDispatchB (class 8
+;   skipped), then TG 0x100/0x140 via ToneGen_WriteVoice_Pan_Pair -- the filter counterpart of
+;   Pitch_Refresh_Sounding_Voices. Basis: caller + body -- AudioChannel_Handler_Cmd03 calls it after storing the
+;   part's cutoff offset part+0x1F, which TVF_Emit_Offset_Reg100 adds to the cutoff field.
+;   (scripts/lanes/verify_mislabel_markers.py lists the old name.)
+TVF_Refresh_Sounding_Voices:
 	dec	4, xsp
 	push	xiz
 	lda	xbc, (274574:24)
@@ -19908,7 +19939,7 @@ AudioChannel_Handler_Cmd03:
 	extz	wa
 	call	Voice_Query_PartVoices
 	ld	xwa, xhl
-	calr	VoiceCC_DataTable_028F75
+	calr	TVF_Refresh_Sounding_Voices
 	pop	xiz
 	inc	2, xsp
 	ret
@@ -19923,7 +19954,7 @@ AudioChannel_Handler_Cmd02:
 	extz	wa
 	extz	bc
 	ld	xde, xiz
-	calr	AudioMod_Scale_To_Part_20
+	calr	AudioMod_Scale_To_LevelPairShift
 	ld	a, (xsp+8)
 	ld	e, a
 	extz	de
@@ -22461,29 +22492,45 @@ Voice_SystemMsg_DispatchTable:
 	ld a, (xwa + 3)
 	extz wa
 	jrl Voice_SetPolyphonyMode
-Voice_SystemMsg_Sub80:
+; Voice_SystemMsg_CallStubRet1: Case for system sub-command 0x80 of Voice_SystemMsg: passes message byte 3 in A/WA to
+;   a bare-`ret` stub (also called with 0x7F by Voice_ResetAllControllers): sub-command 0x80 has no effect in v1.42.
+;   Basis: table + body.
+Voice_SystemMsg_CallStubRet1:
 	ld a, (xwa + 3)
 	extz wa
 	jrl VoiceCC_Stub_Ret1
-Voice_SystemMsg_Sub81:
+; Voice_SystemMsg_CallStubRet2: Case for system sub-command 0x81 of Voice_SystemMsg: passes message byte 3 in A/WA to
+;   the second bare-`ret` stub: sub-command 0x81 has no effect in v1.42. Basis: table + body.
+Voice_SystemMsg_CallStubRet2:
 	ld a, (xwa + 3)
 	extz wa
 	jrl VoiceCC_Stub_Ret2
-Voice_SystemMsg_Sub82:
+; Voice_SystemMsg_SetMasterTune: Case for system sub-command 0x82 of Voice_SystemMsg: passes message byte 3 in A/WA to
+;   the master-tune setter (word (A - 0x40) * 2 at 0x041347) that then refreshes the sounding voices' pitch. Basis:
+;   table + body.
+Voice_SystemMsg_SetMasterTune:
 	ld a, (xwa + 3)
 	jrl Voice_SetMasterTuneAndApply
-Voice_SystemMsg_Sub83:
+; Voice_SystemMsg_SetPitchBendRange: Case for system sub-command 0x83 of Voice_SystemMsg: passes message byte 3 in
+;   A/WA to Voice_SetPitchBendRange ((s8)A << 8 at 0x041349). Basis: table + body.
+Voice_SystemMsg_SetPitchBendRange:
 	ld a, (xwa + 3)
 	jrl Voice_SetPitchBendRange
-Voice_SystemMsg_Sub85:
+; Voice_SystemMsg_SetKeyShiftEnable: Case for system sub-command 0x85 of Voice_SystemMsg: passes message byte 3 in
+;   A/WA to Voice_SetKeyShiftEnable. Basis: table + body.
+Voice_SystemMsg_SetKeyShiftEnable:
 	ld a, (xwa + 3)
 	extz wa
 	jrl Voice_SetKeyShiftEnable
-Voice_SystemMsg_Sub86:
+; Voice_SystemMsg_SetScaleTuneMode: Case for system sub-command 0x86 of Voice_SystemMsg: passes message byte 3 in A/WA
+;   to ScaleTune_Set_Global_Mode (A -> byte 0x04134D). Basis: table + body.
+Voice_SystemMsg_SetScaleTuneMode:
 	ld a, (xwa + 3)
 	extz wa
 	jrl ScaleTune_Set_Global_Mode
-Voice_SystemMsg_Sub87:
+; Voice_SystemMsg_SetRhythmMode: Case for system sub-command 0x87 of Voice_SystemMsg: passes message byte 3 in A/WA to
+;   Voice_SetRhythmMode (packed rhythm-mode byte -> 0x04135E block). Basis: table + body.
+Voice_SystemMsg_SetRhythmMode:
 	ld a, (xwa + 3)
 	extz wa
 	jrl Voice_SetRhythmMode
@@ -22590,7 +22637,9 @@ Voice_SystemMsg_SubB1:
 	ld a, (xwa + 3)
 	extz wa
 	jrl ScaleTune_Set_Global_Enabled
-Voice_SystemMsg_Sub84:
+; Voice_SystemMsg_Ignore: Case for system sub-command 0x84 of Voice_SystemMsg: a bare `ret`, so 0x84 is accepted by
+;   the range check and ignored. Basis: table + body.
+Voice_SystemMsg_Ignore:
 	ret
 
 ; Full audio-side reset.  Reached by `jp` from the audio init sequence (right after
@@ -25571,7 +25620,7 @@ Voice_Allocate_Type2_ExitB:
 ; and 4, selectors 0 and 1); then it explicitly zeroes requestrec+0x04, +0x05, +0x08 and
 ; +0x09 so layers 2 and 3 cannot be requested; then Voice_Allocate_Nodes and a commit loop over
 ; i = 0..1 only, with the same `>= 0x40` gate, the same 0x47-byte block copy and
-; live+0x00 = slot. Only caller: Voice_SetVelocity_Type80_Entry.
+; live+0x00 = slot. Only caller: Voice_SetVelocity_DrumKit.
 Voice_NoteOn_Type1:
 	lda xsp, (xsp - 10)
 	push xiz
@@ -26275,9 +26324,9 @@ Voice_SetVelocity:
 	cp a, 0xC0
 	jrl z, Voice_SetVelocity_Exit
 	cp a, 0x80
-	jrl z, Voice_SetVelocity_Type80_Entry
+	jrl z, Voice_SetVelocity_DrumKit
 	cp a, 0x40
-	jrl z, Voice_SetVelocity_Type40_Entry
+	jrl z, Voice_SetVelocity_Drawbar
 	cp a, 0:i3
 	jrl nz, Voice_SetVelocity_Exit
 	ld a, (xsp + 20)
@@ -26435,7 +26484,10 @@ Voice_SetVelocity_Type0_Loop2Exit:
 ; Part-mode 0x40 branch of VOICE_SETVELOCITY. Same shape as the mode-00 path but it uses
 ; Voice_NoteOn_Type2 and, in the per-slot loop, Voice_Release_Type4 (0x02BCD6) instead of the
 ; Init_Type2/Type4 pair. Falls into the same key-on loop and the same exit.
-Voice_SetVelocity_Type40_Entry:
+; Voice_SetVelocity_Drawbar: Part-mode 0x40 arm of Voice_SetVelocity -- the drawbar organ presets: four-layer
+;   allocation by Voice_NoteOn_Type2, then the same key-on loop and exit as the melodic path. Basis: caller (dispatch
+;   on tone byte +0x10 & 0xC0) + the tone database's part-mode values.
+Voice_SetVelocity_Drawbar:
 	ld a, (xsp + 20)
 	ld e, a
 	extz de
@@ -26550,7 +26602,11 @@ Voice_SetVelocity_Type40_Loop2Exit:
 ; Part-mode 0x80 branch. Only TWO slots (loop bound 2, not 4) and it additionally calls
 ; Voice_WriteChPitchWithVib (0x0266D8) per slot before muting, then Voice_Init_Type2.
 ; Voice allocation is done by Voice_NoteOn_Type1 (0x02C2C0).
-Voice_SetVelocity_Type80_Entry:
+; Voice_SetVelocity_DrumKit: Part-mode 0x80 arm of Voice_SetVelocity -- drum kits: two-layer allocation by
+;   Voice_NoteOn_Type1 (a percussion record has two 21-byte layers), a 2-slot key-on loop with
+;   Voice_WriteChPitchWithVib per slot. Basis: caller (dispatch on tone byte +0x10 & 0xC0) + the tone database's part-
+;   mode values.
+Voice_SetVelocity_DrumKit:
 	lda xwa, (xsp + 2)
 	ld xhl, xwa
 	ld a, (xsp + 20)
@@ -27294,7 +27350,7 @@ ToneGen_WriteReg0080_StrobeClear_Next:
 ; spots, both of which occur in this file. (a) Register-indirect access:
 ; ToneGen_ReadPitch_AndScale loads the constant 0x00100002 into XWA and stores through it 36
 ; bytes later, across a call, so a text scan sees the port constant but not the bus cycle;
-; (b) The dead routines ToneGen_WriteReg0840_Shadow2E and ToneGen_Write_Regs0100_0140 spell
+; (b) The dead routines ToneGen_WriteReg0840_Shadow2E and ToneGen_WriteVoice_TvfRegs_Dup spell
 ; the ports in decimal (1048576 / 1048578) and carry their P6.7 toggles as raw `.byte`.
 ; [INFERENCE] the chip needs the select valid before /CS, so the firmware presents it one
 ; instruction early and holds it across the cycle.
@@ -28021,7 +28077,12 @@ ToneGen_WriteReg0840_Shadow2E_Next:
 ; ** Not present in either symbol source; it lives inside the same misidentified .byte blob. **
 ; WA = channel, XBC = shadow; writes 0x0100 + ch <- +0x08 and 0x0140 + ch <- +0x0A.
 ; Unreferenced in v142.
-ToneGen_Write_Regs0100_0140:
+; ToneGen_WriteVoice_TvfRegs_Dup: Unreferenced, instruction-for-instruction copy of ToneGen_WriteVoice_Pan_Pair:
+;   writes the voice's TVF (filter) register pair, TG 0x100+ch <- shadow +0x08 and 0x140+ch <- +0x0A. Basis: the live
+;   twin's callers -- TVF_Refresh_Sounding_Voices (TVF_Refresh_Sounding_Voices) calls the twin right after
+;   TVF_Emit_Registers / Voice_PanReg_WriteDispatchB have put the clamped cutoff word and the second filter word into
+;   0x0451D4 / 0x0451D6 = staging +0x08 / +0x0A. (The twin's 'Pan' name is contradicted by the same evidence.)
+ToneGen_WriteVoice_TvfRegs_Dup:
 	dec	4, xsp
 	pushw iz
 	ld	(xsp+2), xbc
@@ -29923,7 +29984,7 @@ VoiceParam_FullSetup_CopyLUT:
 	cp_erpb 0xFB, 0x08
 	jr nc, VoiceParam_FullSetup_CountActive
 
-VoiceParam_FullSetup_CopyLUT_Body:
+VoiceParam_FullSetup_CopyLUT_Loop:
 	ldto_berp A, 0xFB
 	extz wa
 	ld de, wa
@@ -29936,7 +29997,7 @@ VoiceParam_FullSetup_CopyLUT_Body:
 	ld	(xhl+de), a
 	inc1b_erp 0xFB
 	cp_erpb 0xFB, 0x08
-	jr c, VoiceParam_FullSetup_CopyLUT_Body
+	jr c, VoiceParam_FullSetup_CopyLUT_Loop
 
 VoiceParam_FullSetup_CountActive:
 	ld c, 0x0:opc
@@ -29977,7 +30038,7 @@ VoiceParam_FullSetup_CopySlotParams:
 	cpib_erp 0xFB, 4
 	jrl nc, VoiceParam_FullSetup_Return
 
-VoiceParam_FullSetup_CopySlotParams_Body:
+VoiceParam_FullSetup_CopySlotParams_Outer:
 	ldto_berp A, 0xFB
 	extz wa
 	muls wa, 0x25
@@ -30036,7 +30097,7 @@ VoiceParam_FullSetup_CopySlotParams_Inner:
 VoiceParam_FullSetup_CopySlotParams_OuterNext:
 	inc1b_erp 0xFB
 	cpib_erp 0xFB, 4
-	jrl c, VoiceParam_FullSetup_CopySlotParams_Body
+	jrl c, VoiceParam_FullSetup_CopySlotParams_Outer
 
 VoiceParam_FullSetup_Return:
 	pop xiz
@@ -30873,7 +30934,11 @@ VoiceAlloc_Cmd_FirstAlloc:
 ; routine's timeout behaviour.  Called from tone-edit opcodes 0x14, 0x15 and 0x16
 ; (0x02EFA5, 0x02EFD5, 0x02F005), each of which first fetches the index from
 ; (ToneDB_RamBankA + 0x72A7).  NOTE the stride/length mismatch flagged in [UNCERTAIN].
-InterCPU_Reply_EditBuffer_Block:
+; InterCPU_SendEditBufferToMain: Copies one 470-byte custom-tone edit buffer to the main CPU by an E1 transfer: source
+;   (ToneDB_RamBankA) + 0x4AA7 + index*0x50, destination main-CPU address 0x1E0000 + the same offset, length 0x1D6;
+;   index in A. Basis: callers + body -- tone-edit opcodes 0x14 / 0x15 / 0x16 call it after
+;   VoiceParam_CustomTone_Apply_Catalog80 / 8C / 94 with the index latched at (ToneDB_RamBankA) + 0x72A7.
+InterCPU_SendEditBufferToMain:
 	ld	xix, 1966080
 	ldw	hl, 470
 	ld	c, a
@@ -31131,7 +31196,7 @@ Audio_Cmd_ToneEdit_Op13:
 	calr	VoiceParam_CustomTone_Select
 	jrl	Audio_Cmd_ToneEdit_Return
 ; Opcode 0x14: 0x02E9B1 with the 16-bit value (rec+3)<<8|(rec+4), then reads the edit-buffer
-; index from (ToneDB_RamBankA + 0x72A7) and calls InterCPU_Reply_EditBuffer_Block.
+; index from (ToneDB_RamBankA + 0x72A7) and calls InterCPU_SendEditBufferToMain.
 ; One of only three opcodes in this dispatcher that produce sub->main traffic.
 Audio_Cmd_ToneEdit_Op14:
 	ld	a, (xiz+4)
@@ -31147,10 +31212,10 @@ Audio_Cmd_ToneEdit_Op14:
 	ld	xwa, (283420:24)
 	ld	a, (xwa+29351)
 	extz	wa
-	calr	InterCPU_Reply_EditBuffer_Block
+	calr	InterCPU_SendEditBufferToMain
 	jr	Audio_Cmd_ToneEdit_Return
 ; Opcode 0x15: 0x02EACE with the 16-bit value and BC = rec+5, then the same
-; InterCPU_Reply_EditBuffer_Block reply.
+; InterCPU_SendEditBufferToMain reply.
 Audio_Cmd_ToneEdit_Op15:
 	ld	a, (xiz+4)
 	ld	c, a
@@ -31168,10 +31233,10 @@ Audio_Cmd_ToneEdit_Op15:
 	ld	xwa, (283420:24)
 	ld	a, (xwa+29351)
 	extz	wa
-	calr	InterCPU_Reply_EditBuffer_Block
+	calr	InterCPU_SendEditBufferToMain
 	jr	Audio_Cmd_ToneEdit_Return
 ; Opcode 0x16: 0x02EB8A with the 16-bit value and BC = rec+5, then the same
-; InterCPU_Reply_EditBuffer_Block reply.
+; InterCPU_SendEditBufferToMain reply.
 Audio_Cmd_ToneEdit_Op16:
 	ld	a, (xiz+4)
 	ld	c, a
@@ -31189,7 +31254,7 @@ Audio_Cmd_ToneEdit_Op16:
 	ld	xwa, (283420:24)
 	ld	a, (xwa+29351)
 	extz	wa
-	calr	InterCPU_Reply_EditBuffer_Block
+	calr	InterCPU_SendEditBufferToMain
 	jr	Audio_Cmd_ToneEdit_Return
 ; Opcode 0x17: calls DSP_Stub_RetB (0x035575) -- a stub.  Opcode 0x18 and opcodes 0x01..0x03
 ; jump straight to the return.
@@ -31390,12 +31455,12 @@ DSP_EffParam_Copy_V6:
 	bitm	7, (xbc+19)
 	jr	z, DSP_EffParam_Copy_V6_FlagClear
 	ld	(xde+94), 1
-	jr	t, DSP_EffParam_Copy_V6_Tail
+	jr	t, DSP_EffParam_Copy_V6_CopyRemaining
 ; Descriptor+0x13 bit 7 clear -> patch+0x5E = 0.
 DSP_EffParam_Copy_V6_FlagClear:
 	ld	(xde+94), 0
 ; Common tail: the +0x02/&0x3F, +0x00, four zeros, +0x12 stores.
-DSP_EffParam_Copy_V6_Tail:
+DSP_EffParam_Copy_V6_CopyRemaining:
 	ld	a, (xbc+2)
 	and	a, 63
 	ld	(xde+95), a
@@ -31424,12 +31489,12 @@ DSP_EffParam_Copy_V7:
 	bitm	7, (xbc+19)
 	jr	z, DSP_EffParam_Copy_V7_FlagClear
 	ld	(xde+94), 1
-	jr	t, DSP_EffParam_Copy_V7_Tail
+	jr	t, DSP_EffParam_Copy_V7_CopyRemaining
 ; Descriptor+0x13 bit 7 clear -> patch+0x5E = 0.
 DSP_EffParam_Copy_V7_FlagClear:
 	ld	(xde+94), 0
 ; Common tail of V7.
-DSP_EffParam_Copy_V7_Tail:
+DSP_EffParam_Copy_V7_CopyRemaining:
 	ld	a, (xbc+2)
 	and	a, 63
 	ld	(xde+95), a
@@ -33716,7 +33781,7 @@ DSP_EffectStateQuery_SetResult:
 ; Input XWA = PART record base.  Applies the five global offset bytes at 0x0451A6..0x0451AC
 ; to a part's four operator slots and to the part's patch record:
 ;   0x0451A6 << 2  -> slot+0x4D (and slot+0x4F for shape 5), clamped by TVF_Clamp_Cutoff
-;   0x0451AB << 2  -> slot+0x27, clamped 0..0xFF by ClampS16_WA_To_DEBC
+;   0x0451AB << 2  -> slot+0x27, clamped 0..0xFF by Int_ClampSignedToRange
 ;   0x0451AC << 2  -> slot+0x2D, same clamp
 ;   0x0451A7 << 1  -> patch+0x2B and patch+0x3B, clamped 0..0x7F (skipped when 0x0451A7
 ;                     reads 0xF5, the "unset" sentinel)
@@ -33851,7 +33916,7 @@ DSP_AdjustVoiceParams_ReverbChorus:
 	add wa, (xsp + 6)
 	ldw bc, 0xFF
 	ld de, 0:i3
-	call ClampS16_WA_To_DEBC
+	call Int_ClampSignedToRange
 	ld iz, hl
 	ldto_werp WA, 0xFA
 	extz xwa
@@ -33874,7 +33939,7 @@ DSP_AdjustVoiceParams_ReverbChorus:
 	add wa, (xsp + 8)
 	ldw bc, 0xFF
 	ld de, 0:i3
-	call ClampS16_WA_To_DEBC
+	call Int_ClampSignedToRange
 	ld iz, hl
 	ldto_werp WA, 0xFA
 	extz xwa
@@ -35151,14 +35216,14 @@ DSP_SetCoeff_CopyLoop:
 	jr nc, DSP_SetCoeff_Return
 
 ; Byte copy XIZ+ -> (XSP+8)+, 10 iterations.
-DSP_SetCoeff_CopyLoop_Body:
+DSP_SetCoeff_CopyRecordByte:
 	ld xwa, (xsp + 8)
 	ld C, (xiz+)
 	ld (xwa+), c
 	ld (xsp + 8), xwa
 	inc 1, de
 	cp de, hl
-	jr c, DSP_SetCoeff_CopyLoop_Body
+	jr c, DSP_SetCoeff_CopyRecordByte
 
 ; Frame teardown; HL still holds 10.
 DSP_SetCoeff_Return:
@@ -36199,7 +36264,7 @@ Voice_ParamFinalize:
 	add wa, wa
 	lda xix, (VOICEPARAM_FINALIZE_ACTION_JUMPTABLE:24)
 	ld	wa, (xix+wa)
-	lda xix, (ToneCmd_DispatchTable_Body:24)
+	lda xix, (VoiceParam_Action_ToneEdit:24)
 	jp	t, (xix+wa)
 
 ; --- ToneCmd_Dispatcher: Route tone/MIDI commands by type and channel ---
@@ -36209,7 +36274,11 @@ Voice_ParamFinalize:
 ; note-on/off routing, and special command handlers.
 ; Each dispatch path exits via jrl to common return.
 ; Action case 0: call 0x02ED80 with XWA = packet, then return (no reply).
-ToneCmd_DispatchTable_Body:
+; VoiceParam_Action_ToneEdit: Action case 0 (status 0x88) of Voice_ParamFinalize, and the base of
+;   VOICEPARAM_FINALIZE_ACTION_JUMPTABLE: passes the 6-byte packet to Audio_Cmd_ToneEdit_Dispatch (the tone-edit
+;   opcode tree) and returns without a reply. Basis: table + body, named like its siblings
+;   VoiceParam_Action_EffectParam (0x89) ... _SubToneLayerByteReply (0x8F).
+VoiceParam_Action_ToneEdit:
 	ld	xwa, xiz
 	calr	Audio_Cmd_ToneEdit_Dispatch
 	jrl	VoiceParamFinalize_Return
@@ -38571,7 +38640,7 @@ EnvTranspose_Epilogue:
 ; MEASURED but not interpreted: what the three group offsets select is not
 ; established; b bits 6-7 are clearly a 2-bit destination code and bit 5 an
 ; enable.  The XHL load of Part_PatchRecord_Ptr at 0x033007..0x033014 is dead.
-; Callers: VoiceCC_DataTable_028F75 (6 sites), VoiceAlloc_Apply_Algo_Group0
+; Callers: TVF_Refresh_Sounding_Voices (6 sites), VoiceAlloc_Apply_Algo_Group0
 ; (6 sites), Voice_Part_ResetSlotRouting (2), VoiceSlot_FullInit/AltInit (2).
 AlgoFlag_Write:
 	pushw iz
@@ -41852,7 +41921,10 @@ DSP_System_Init_Continue:
 	jp Voice_ResetAllControllers
 ; A stray one-byte `ret` immediately after DSP_System_Init's tail-jump.  No caller and no
 ; table reference anywhere in the authoritative source -- alignment padding or dead code.
-Audio_Process_Init_Data:
+; DSP_InitHandler_NullStub: A lone `ret` (spelled `.byte 0x0e`): the do-nothing handler that entries 1-3 of
+;   DSP_InitHandler_Pointers point to beside entry 0 = DSP_System_Init -- same shape as DSP2_InitTask_NullStub /
+;   DSP_ResetTask_NullStub. Basis: table + body; the old header's 'no caller and no table reference' is wrong.
+DSP_InitHandler_NullStub:
 	.byte 0x0e
 
 ; The per-tick audio housekeeping alternator.  Already named in the reference file.
@@ -44303,55 +44375,55 @@ CmdHandler2C_Global_BendRange:
 	exts	wa
 	call	Voice_SetPitchBendRange
 	jrl	DSP_Process_ReadNext
-; ★ NEW NAME. Table entry 6: calls DSP_Set_MixParam_45B6 (0x036237).
+; ★ NEW NAME. Table entry 6: calls DSP_Set_FadeLevel (0x036237).
 ; (Table entries 5 and 9 point straight at DSP_Process_ReadNext, i.e. accepted and ignored.)
 CmdHandler2C_Global_MixParamC:
 	ld	a, (17264:16)
 	extz	wa
-	call	DSP_Set_MixParam_45B6
+	call	DSP_Set_FadeLevel
 	jrl	DSP_Process_ReadNext
-; ★ NEW NAME. Table entry 7: calls DSP_Set_Value_45B8 (0x036252).
+; ★ NEW NAME. Table entry 7: calls DSP_Set_MicLevel (0x036252).
 CmdHandler2C_Global_SetValue45B8:
 	ld	a, (17264:16)
 	extz	wa
-	call	DSP_Set_Value_45B8
+	call	DSP_Set_MicLevel
 	jrl	DSP_Process_ReadNext
-; ★ NEW NAME. Table entry 8: calls DSP_Set_Enable_45BA (0x03627A).
+; ★ NEW NAME. Table entry 8: calls DSP_Set_MicSense (0x03627A).
 CmdHandler2C_Global_SetEnable45BA:
 	ld	a, (17264:16)
 	extz	wa
-	call	DSP_Set_Enable_45BA
+	call	DSP_Set_MicSense
 	jrl	DSP_Process_ReadNext
-; ★ NEW NAME. Table entry 10 (raw sub-command 0x21): calls DSP_Set_CfgWord_4504 (0x0362A2).
+; ★ NEW NAME. Table entry 10 (raw sub-command 0x21): calls DSP_Set_DigitalReverbOnOff (0x0362A2).
 CmdHandler2C_Global_SetValue4504:
 	ld	a, (17264:16)
 	extz	wa
-	call	DSP_Set_CfgWord_4504
+	call	DSP_Set_DigitalReverbOnOff
 	jrl	DSP_Process_ReadNext
-; ★ NEW NAME. Table entry 11 (raw 0x22): calls DSP_Set_CfgWord_453C (0x0362B6).
+; ★ NEW NAME. Table entry 11 (raw 0x22): calls DSP_Set_AcousticIllusionOnOff (0x0362B6).
 CmdHandler2C_Global_SetValue453C:
 	ld	a, (17264:16)
 	extz	wa
-	call	DSP_Set_CfgWord_453C
+	call	DSP_Set_AcousticIllusionOnOff
 	jrl	DSP_Process_ReadNext
-; ★ NEW NAME. Table entry 12 (raw 0x23): calls DSP_Set_AlgoType_45B0 (0x0362CA), the one
+; ★ NEW NAME. Table entry 12 (raw 0x23): calls DSP_Set_RotarySpeed (0x0362CA), the one
 ; global setter that re-runs DSP_ApplyAlgoForVoiceType instead of DSP_State_ApplyBuf.
 CmdHandler2C_Global_SetAlgoType:
 	ld	a, (17264:16)
 	extz	wa
-	call	DSP_Set_AlgoType_45B0
+	call	DSP_Set_RotarySpeed
 	jrl	DSP_Process_ReadNext
-; ★ NEW NAME. Table entry 13 (raw 0x24): calls DSP_Set_CfgWord_4574 (0x0362DD).
+; ★ NEW NAME. Table entry 13 (raw 0x24): calls DSP_Set_MicReverbOnOff (0x0362DD).
 CmdHandler2C_Global_SetValue4574:
 	ld	a, (17264:16)
 	extz	wa
-	call	DSP_Set_CfgWord_4574
+	call	DSP_Set_MicReverbOnOff
 	jrl	DSP_Process_ReadNext
-; ★ NEW NAME. Table entry 14 (raw 0x25): calls DSP_Set_CfgWord_45AC (0x0362F1).
+; ★ NEW NAME. Table entry 14 (raw 0x25): calls DSP_Set_EqualizerOnOff (0x0362F1).
 CmdHandler2C_Global_SetValue45AC:
 	ld	a, (17264:16)
 	extz	wa
-	call	DSP_Set_CfgWord_45AC
+	call	DSP_Set_EqualizerOnOff
 	jrl	DSP_Process_ReadNext
 
 ; Out-of-range global sub-command: DSP_RingBuf_Skip, continue.
@@ -44640,7 +44712,7 @@ DSP_WriteAlgoInitPreset_Epilogue:
 ; at offset +0x1E, the same field EFF_SlotActive_LoopNext reads as a dirty-array index --
 ; and then calls DSP_State_ApplyBuf(XWA = 0x448E) to push the whole
 ; configuration to the DSP. Callers: DSP_Reset, DSP_ApplyConfig, DSP_ReconfigAndStatus, and
-; the global setter DSP_Set_AlgoType_45B0.
+; the global setter DSP_Set_RotarySpeed.
 DSP_ApplyAlgoForVoiceType:
 	cp wa, 0x35
 	jr z, DSP_ApplyAlgoForVoiceType_TypeF
@@ -44887,7 +44959,10 @@ DSP_Set_MixParam_45B4:
 	ret
 ; ★ NEW NAME. (0x45B6) = WA, reload all three, tail-jump DSP_MixerCoeff_Compute. Dead tail at
 ; 0x03624D. CmdHandler2C global sub-command 0x06.
-DSP_Set_MixParam_45B6:
+; DSP_Set_FadeLevel: Global 0x2C sub-command 0x06: stores the FADE IN/OUT level (main-CPU parameter 0x4005, 0..127,
+;   ramped by the fade logic) at 0x45B6 and recomputes the DSP2 output gain through DSP_MixerCoeff_Compute (its DE
+;   index into DSP2_MixerGain_Curve, registers 0xD0/0xD3). Basis: caller + main-CPU sender + body.
+DSP_Set_FadeLevel:
 	extz	wa
 	ld	(17846:16), wa
 	ld	wa, (17842:16)
@@ -44900,7 +44975,10 @@ DSP_Set_MixParam_45B6:
 ; propagated when its enable word is set. Otherwise (0x448E) = 0 ("changed"),
 ; (0x454A) = (0x45B8), then DSP_State_ApplyBuf(XWA = 0x448E). Dead tail at 0x036275.
 ; CmdHandler2C global sub-command 0x07.
-DSP_Set_Value_45B8:
+; DSP_Set_MicLevel: Global 0x2C sub-command 0x07: stores the microphone level (main-CPU parameter 0x4141, 0..127, sent
+;   as 0 while 0x4142 is set) at 0x45B8 and, if MICSNS (0x45BA) is set, copies it into EFF slot 3's parameter word
+;   +0x0C (0x454A) and applies the block. Basis: caller + main-CPU sender + body.
+DSP_Set_MicLevel:
 	; Converted from a 80-byte `.byte` run. Framing: unidasm; every
 	; instruction re-encoded and the whole run compared byte for byte.
 	; 22 instructions, of which 3 needed a spelling search because
@@ -44920,7 +44998,10 @@ DSP_Set_Value_45B8:
 ; (0x454A) = (0x45B8) if A != 0 else 0, then tail-jump DSP_State_ApplyBuf(0x448E).
 ; CmdHandler2C global sub-command 0x08. Together with the previous routine this is a classic
 ; "depth + on/off" pair where 0x454A is the effective value handed to the DSP.
-DSP_Set_Enable_45BA:
+; DSP_Set_MicSense: Global 0x2C sub-command 0x08: stores the main CPU's MICSNS level (PE.4, sent on every change) at
+;   0x45BA; while it is non-zero the mic level (0x45B8) is copied into EFF slot 3's parameter word +0x0C (0x454A),
+;   otherwise 0, and the block is applied. Basis: caller + main-CPU sender + body.
+DSP_Set_MicSense:
 	ld	c, a
 	extz	bc
 	ld	(17850:16), bc
@@ -44936,7 +45017,10 @@ DSP_Set_Enable_45BA_Join:
 	jp	DSP_State_ApplyBuf
 ; ★ NEW NAME. (0x448E) = 0 ; (0x4504) = WA ; tail-jump DSP_State_ApplyBuf(0x448E).
 ; 0x4504 = 0x4496 + 0x6E = slot 1 record + 0x36. CmdHandler2C global sub-command 0x21.
-DSP_Set_CfgWord_4504:
+; DSP_Set_DigitalReverbOnOff: Global 0x2C sub-command 0x21: stores WA (0/1) in EFF slot 1's +0x36 link word (0x4504)
+;   and hands the config block to DSP_State_ApplyBuf -- the DIGITAL REVERB on/off switch. Basis: caller + main-CPU
+;   sender + readers -- 1 = EFF_LinkLoop links the slot into the chain, 0 = EFF_SecondaryLinkPath disconnects it.
+DSP_Set_DigitalReverbOnOff:
 	ldw	(17550:16), 0
 	extz	wa
 	ld	(17668:16), wa
@@ -44944,7 +45028,11 @@ DSP_Set_CfgWord_4504:
 	jp	DSP_State_ApplyBuf
 ; ★ NEW NAME. Same shape, target (0x453C) = 0x4496 + 0xA6 = slot 2 record + 0x36.
 ; CmdHandler2C global sub-command 0x22.
-DSP_Set_CfgWord_453C:
+; DSP_Set_AcousticIllusionOnOff: Global 0x2C sub-command 0x22: stores WA (0/1) in EFF slot 2's +0x36 link word
+;   (0x453C) and hands the config block to DSP_State_ApplyBuf -- the ACOUSTIC ILLUSION on/off switch. Basis: caller +
+;   main-CPU sender + readers -- 1 = EFF_LinkLoop links the slot into the chain, 0 = EFF_SecondaryLinkPath disconnects
+;   it.
+DSP_Set_AcousticIllusionOnOff:
 	ldw	(17550:16), 0
 	extz	wa
 	ld	(17724:16), wa
@@ -44954,14 +45042,22 @@ DSP_Set_CfgWord_453C:
 ; and a long jump to DSP_ApplyAlgoForVoiceType (0x03608C) -- the only one of the ten setters
 ; that goes through the algorithm path rather than straight to DSP_State_ApplyBuf.
 ; CmdHandler2C global sub-command 0x23.
-DSP_Set_AlgoType_45B0:
+; DSP_Set_RotarySpeed: Global 0x2C sub-command 0x23: stores the rotary-speaker speed switch (main-CPU parameter
+;   0x4003, sent as 0/1) at 0x45B0, then DSP_ApplyAlgoForVoiceType copies it into DSP EFFECT slot 0's parameter word
+;   +0x1E only when slot 0's algorithm is 15 ROCK ROTARY or 53 ROTARY SPEAKER. Basis: caller + main-CPU sender +
+;   reader.
+DSP_Set_RotarySpeed:
 	ldw	(17550:16), 0
 	extz	wa
 	ld	(17840:16), wa
 	ld	wa, (17558:16)
 	jrl	DSP_ApplyAlgoForVoiceType
 ; ★ NEW NAME. Target (0x4574) = 0x4496 + 0xDE = slot 3 record + 0x36. Global sub-command 0x24.
-DSP_Set_CfgWord_4574:
+; DSP_Set_MicReverbOnOff: Global 0x2C sub-command 0x24: stores WA (0/1) in EFF slot 3's +0x36 link word (0x4574) and
+;   hands the config block to DSP_State_ApplyBuf -- the microphone reverb (slot 3: ROOM/KARAOKE/BATH ROOM/STAGE)
+;   on/off switch. Basis: caller + main-CPU sender + readers -- 1 = EFF_LinkLoop links the slot into the chain, 0 =
+;   EFF_SecondaryLinkPath disconnects it.
+DSP_Set_MicReverbOnOff:
 	ldw	(17550:16), 0
 	extz	wa
 	ld	(17780:16), wa
@@ -44972,7 +45068,10 @@ DSP_Set_CfgWord_4574:
 ; form the per-slot +0x36 word that DSP_EFFParam_DiffAlgoSection diffs -- so global
 ; sub-commands 0x21..0x25 set that one word for slots 1,2,-,3,4 respectively. Slot 0's
 ; equivalent is not exposed here.
-DSP_Set_CfgWord_45AC:
+; DSP_Set_EqualizerOnOff: Global 0x2C sub-command 0x25: stores WA (0/1) in EFF slot 4's +0x36 link word (0x45AC) and
+;   hands the config block to DSP_State_ApplyBuf -- the EQUALIZER on/off switch. Basis: caller + main-CPU sender +
+;   readers -- 1 = EFF_LinkLoop links the slot into the chain, 0 = EFF_SecondaryLinkPath disconnects it.
+DSP_Set_EqualizerOnOff:
 	ldw	(17550:16), 0
 	extz	wa
 	ld	(17836:16), wa
@@ -45013,10 +45112,13 @@ DSP_WaitForTaskSlot_Epilogue:
 ; TaskSched_TaskDescriptorTable holds 0x00036327 in its +0 (entry PC) field; TaskSched_SpawnTask(3),
 ; called from DSP_State_DmaLoadPresets, puts it in the saved-PC slot of task 3's first context
 ; frame, so the first dispatch of task 3 lands here and jumps to the task body
-; DSP_ApplyTask_Body (0x038E0F, formerly DSP_State_InlineData).  Renamed from
+; DSP_State_ApplyTask (0x038E0F, formerly DSP_State_InlineData).  Renamed from
 ; DSP_WaitForTaskSlot_Data.
-Task3_Entry_Thunk:
-	jp	DSP_ApplyTask_Body
+; Task3_EnterDspApplyLoop: Entry PC of task 3 (TaskSched_TaskDescriptorTable record 3): `jp DSP_State_ApplyTask`, the
+;   forever loop that takes DSP configuration images from message queue 2, applies them with DSP_State_ApplyAll and
+;   returns the buffers to queue 1. Basis: descriptor table + body + its spawner DSP_State_DmaLoadPresets.
+Task3_EnterDspApplyLoop:
+	jp	DSP_State_ApplyTask
 
 ; ALREADY NAMED -- doc header only. `TaskSched_Wait(1)` as a tail jump. Called at the top of
 ; DSP2_Send_Command so the bit-bang burst starts on a fresh scheduler slice.
@@ -45949,7 +46051,7 @@ DSP2_Send_Command:
 	calr DSP2_SPI_ClockPulseHigh
 	ldw iz, 0x8
 	cp iz, 0:i3
-	jrl le, DSP2_SendCmd_PostLoop_Entry
+	jrl le, DSP2_SendCmd_TrailingClock
 
 ; Test bit 7 of the shift register and drive PF.0 accordingly.
 DSP2_SendCmd_BitLoop:
@@ -46115,7 +46217,7 @@ DSP2_SendCmd_ClkLow_Nop20:
 	jrl gt, DSP2_SendCmd_BitLoop
 
 ; The 9th (acknowledge) clock pulse after the 8 data bits.
-DSP2_SendCmd_PostLoop_Entry:
+DSP2_SendCmd_TrailingClock:
 	jr DSP2_SendCmd_PostLoop_Nop01
 
 DSP2_SendCmd_PostLoop_Nop01:
@@ -46455,7 +46557,7 @@ DSP2_Send_Data:
 	call DSP_Select_Chip
 	ldw iz, 0x8
 	cp iz, 0:i3
-	jrl le, DSP2_SendData_PostLoop_Entry
+	jrl le, DSP2_SendData_TrailingClock
 
 ; Bit test and PF.0 drive.
 DSP2_SendData_BitLoop:
@@ -46621,7 +46723,7 @@ DSP2_SendData_ClkLow_Nop19:
 	jrl gt, DSP2_SendData_BitLoop
 
 ; The 9th (acknowledge) clock pulse.
-DSP2_SendData_PostLoop_Entry:
+DSP2_SendData_TrailingClock:
 	jr DSP2_SendData_PostLoop_Nop01
 
 DSP2_SendData_PostLoop_Nop01:
@@ -48552,12 +48654,12 @@ DSP_ResetLoop:
 	jr nc, DSP_ResetLoop_Epilogue
 
 ; Chip loop body, IZ = 0..1.
-DSP_ResetLoop_Body:
+DSP_ResetLoop_ResetChip:
 	ld wa, iz
 	call DSP_Reset_WithDebug
 	inc 1, iz
 	cp iz, 2:i3
-	jr c, DSP_ResetLoop_Body
+	jr c, DSP_ResetLoop_ResetChip
 
 ; Restore IZ and return.
 DSP_ResetLoop_Epilogue:
@@ -48575,7 +48677,7 @@ DSP_MuteLoop:
 	jr nc, DSP_MuteLoop_Epilogue
 
 ; Chip loop body: the 0x00493A + 2*c test and the DSP_Mute_WithDebug call.
-DSP_MuteLoop_Body:
+DSP_MuteLoop_MuteActiveChip:
 	ld wa, iz
 	add wa, wa
 	lda xbc, (18746:16)
@@ -48590,7 +48692,7 @@ DSP_MuteLoop_Body:
 DSP_MuteLoop_Next:
 	inc 1, iz
 	cp iz, 2:i3
-	jr c, DSP_MuteLoop_Body
+	jr c, DSP_MuteLoop_MuteActiveChip
 
 ; Restore IZ and return.
 DSP_MuteLoop_Epilogue:
@@ -48607,7 +48709,7 @@ DSP_UnmuteLoop:
 	jr nc, DSP_UnmuteLoop_Epilogue
 
 ; Chip loop body: same 0x00493A + 2*c gate.
-DSP_UnmuteLoop_Body:
+DSP_UnmuteLoop_UnmuteActiveChip:
 	ld wa, iz
 	add wa, wa
 	lda xbc, (18746:16)
@@ -48622,7 +48724,7 @@ DSP_UnmuteLoop_Body:
 DSP_UnmuteLoop_Next:
 	inc 1, iz
 	cp iz, 2:i3
-	jr c, DSP_UnmuteLoop_Body
+	jr c, DSP_UnmuteLoop_UnmuteActiveChip
 
 ; Restore IZ and return.
 DSP_UnmuteLoop_Epilogue:
@@ -48963,7 +49065,7 @@ EFF_HeaderChangeDataLoop:
 	jr le, EFF_HeaderChangeLoop_Epilogue
 
 ; Slot body: the two header-rewrite tests on block[+0x02] and block[+0x04].
-EFF_HeaderChangeLoop_Body:
+EFF_HeaderChangeLoop_TestHeaderRewrite:
 	ld xwa, (xsp + 4)
 	cpw (xwa + 2), 0x1
 	jr z, EFF_HeaderChangeLoop_CallAlgo
@@ -49007,7 +49109,7 @@ EFF_HeaderChangeLoop_CallChange:
 	calr EFF_Change_Handler
 	dec 1, iz
 	cp iz, 0xFFFF
-	jr gt, EFF_HeaderChangeLoop_Body
+	jr gt, EFF_HeaderChangeLoop_TestHeaderRewrite
 
 ; If the accumulated maximum settle time is non-zero, DSP_ScheduleDelay(max).
 EFF_HeaderChangeLoop_Epilogue:
@@ -49037,7 +49139,7 @@ EFF_LinkLoop:
 
 ; Slot body: the 0x00496E + 50*slot test, then `lda XWA,XWA+BC` to reach
 ; block + 8 + 56*slot and test its +0x36 link flag.
-EFF_LinkLoop_Body:
+EFF_LinkLoop_LinkSlotIfOn:
 	ld wa, iz
 	mul wa, 0x32
 	add wa, 0x10
@@ -49063,7 +49165,7 @@ EFF_LinkLoop_Body:
 EFF_LinkLoop_Next:
 	dec 1, iz
 	cp iz, 0xFFFF
-	jr gt, EFF_LinkLoop_Body
+	jr gt, EFF_LinkLoop_LinkSlotIfOn
 
 ; Restore IZ, drop the frame, return.
 EFF_LinkLoop_Epilogue:
@@ -49211,7 +49313,7 @@ EFF_VolumeLoop:
 	jrl nc, EFF_VolumeLoop_Epilogue
 
 ; Slot body: the record[+0x26] lookup, the dirty test, and the effect-0x3F fork.
-EFF_VolumeLoop_Body:
+EFF_VolumeLoop_TestVolumeDirty:
 	ld wa, iz
 	extz xwa
 	ld xbc, xwa
@@ -49321,7 +49423,7 @@ EFF_VolumeLoop_ApplyDelta:
 EFF_VolumeLoop_Next:
 	inc 1, iz
 	cp iz, 5:i3
-	jrl c, EFF_VolumeLoop_Body
+	jrl c, EFF_VolumeLoop_TestVolumeDirty
 
 ; Restore IZ, drop the frame, return.
 EFF_VolumeLoop_Epilogue:
@@ -49342,7 +49444,7 @@ EFF_DisconnectLoop:
 	jr le, EFF_DisconnectLoop_Epilogue
 
 ; Slot body: the slot == 3 and slot == 2 skips, then EFF_Disconnect.
-EFF_DisconnectLoop_Body:
+EFF_DisconnectLoop_DisconnectSlot:
 	cp iz, 3:i3
 	jr z, EFF_DisconnectLoop_Next
 	cp iz, 2:i3
@@ -49356,7 +49458,7 @@ EFF_DisconnectLoop_Body:
 EFF_DisconnectLoop_Next:
 	dec 1, iz
 	cp iz, 0xFFFF
-	jr gt, EFF_DisconnectLoop_Body
+	jr gt, EFF_DisconnectLoop_DisconnectSlot
 
 ; Restore IZ, drop the frame, return.
 EFF_DisconnectLoop_Epilogue:
@@ -50242,7 +50344,10 @@ DSP_Deassert_Write:	; 0383B3h
 	set	3, (P7:8)	; Deassert write strobe
 	ret
 
-DSP_Assert_Read_Data:	; 0383B7h - RES 4,(P7), matching the res_dd8/set_dd8 idiom of every
+; DSP_Assert_Read: Asserts the DSP1 read strobe, `res 4,(P7)` (P7.4, active low); the pair of DSP_Deassert_Read. No
+;   caller in this build -- firmware never reads the DSP1 data bus (status comes from PH.0). Basis: pin-map header +
+;   paired routine + body; the _Data suffix is a leftover of its former `.byte` spelling.
+DSP_Assert_Read:	; 0383B7h - RES 4,(P7), matching the res_dd8/set_dd8 idiom of every
 	; sibling in this block. Converted from `.byte` to mnemonics 2026-09-01 (lane SUB),
 	; verified byte-identical by an llvm-mc round trip.
 	res	4, (P7:8)	; Assert read strobe (active low)
@@ -50697,7 +50802,7 @@ DSP_WriteLUT_MainLoop_Init:
 	jrl nc, DSP_WriteLUT_MainLoop_Done
 
 ; Non-first iterations only: the COMMAND 0x01 / DATA 0x01 / DATA 0x60 row separator.
-DSP_WriteLUT_MainLoop_Body:
+DSP_WriteLUT_MainLoop_RowStart:
 	cpw (xsp + 4), 0x0
 	jr z, DSP_WriteLUT_MainLoop_FirstEntry
 	ld bc, (xsp + 26)
@@ -50756,7 +50861,7 @@ DSP_WriteLUT_MainLoop_FirstEntry:
 	ld wa, (xsp + 2)
 	srl wa, 2
 	cp (xsp + 4), wa
-	jrl c, DSP_WriteLUT_MainLoop_Body
+	jrl c, DSP_WriteLUT_MainLoop_RowStart
 
 ; Restore the caller's stream cursor to its entry value, return HL, unwind the 18-byte
 ; frame, `retd 0x4`.
@@ -51407,7 +51512,7 @@ DSP_TuneOffset_WriteSequence:
 ; i.e. exactly TWO 0x122-byte buffers are ever in circulation.  Called once, from DSP_Reset
 ; (0x0360F9).  Task 3's body is the loop at 0x038E0F, reached through the thunk
 ; DSP_WaitForTaskSlot_Data (0x036327) = `jp 0x038E0F`.
-; (Now labelled Task3_Entry_Thunk -> DSP_ApplyTask_Body; the thunk is found through record 3 of
+; (Now labelled Task3_EnterDspApplyLoop -> DSP_State_ApplyTask; the thunk is found through record 3 of
 ; TaskSched_TaskDescriptorTable.)
 ; The pool size of two is the reason DSP_State_ApplyBuf can wedge -- see [UNCERTAIN].
 DSP_State_DmaLoadPresets:
@@ -51430,8 +51535,12 @@ DSP_State_DmaLoadPresets:
 ;   }
 ; The only producer for queue 2 is DSP_State_ApplyBuf (0x038E31); the only consumer of queue 1
 ; is DSP_State_ApplyBuf.  Entered through the thunk at 0x036327.
-; (Renamed DSP_State_InlineData -> DSP_ApplyTask_Body; the thunk is Task3_Entry_Thunk.)
-DSP_ApplyTask_Body:
+; (Renamed DSP_State_InlineData -> DSP_State_ApplyTask; the thunk is Task3_EnterDspApplyLoop.)
+; DSP_State_ApplyTask: Task 3's body, never returns: forever XIZ = TaskMsgQ_Receive(queue 2), DSP_State_ApplyAll(XIZ),
+;   buf[0x120] = 0, TaskMsgQ_Send(queue 1, XIZ). Basis: task table + thunk + body -- record 3 of the task descriptor
+;   table is Task3_EnterDspApplyLoop = `jp` here; DSP_State_DmaLoadPresets spawns task 3 and seeds queue 1 with the two
+;   buffers.
+DSP_State_ApplyTask:
 	push xiz
 ; Top of the task's forever-loop; target of the `jr T,0x038E10` at 0x038E2F.  This is the only
 ; branch target in the whole region with no symbol in the LLVM build -- genuinely new.
@@ -51607,7 +51716,7 @@ DSP_AlgoParam_Decode:
 	lda xwa, (xsp + 12)
 	call FP_ftod
 	lda xbc, (xsp + 12)
-	lda xde, (FP_Const_0p552_Sub:24)
+	lda xde, (FPConst_DSP_AlgoParam_Decode_0p552:24)
 	lda xwa, (xsp + 12)
 	call FP_dmul
 	lda xbc, (xsp + 12)
@@ -52043,7 +52152,7 @@ DSP_VolumeCurve_FP:
 	lda xwa, (xsp + 36)
 	call FP_fmul
 	lda xbc, (xsp + 36)
-	lda xde, (FPConst_DSP_VolumeCurve_FP_44100:24)
+	lda xde, (FPConst_DSP_VolumeCurve_FP_SampleRate:24)
 	lda xwa, (xsp + 36)
 	call FP_fmul
 	lda xbc, (xsp + 36)
@@ -52053,7 +52162,7 @@ DSP_VolumeCurve_FP:
 	lda xbc, (FPConst_DSP_VolumeCurve_FP_75:24)
 	lda xde, (xsp + 36)
 	lda xwa, (xsp + 36)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (FPConst_DSP_VolumeCurve_FP_1800:24)
 	lda xde, (xsp + 36)
 	lda xwa, (xsp + 36)
@@ -52090,17 +52199,17 @@ DSP_VolumeCurve_FP_HighRange:
 	lda xwa, (xsp + 36)
 	call FP_fmul
 	lda xbc, (xsp + 36)
-	lda xde, (FPConst_DSP_VolumeCurve_FP_HighRange_44100:24)
+	lda xde, (FPConst_DSP_VolumeCurve_FP_HighRange_SampleRate:24)
 	lda xwa, (xsp + 36)
 	call FP_fmul
 	lda xbc, (xsp + 36)
 	lda xde, (FPConst_DSP_VolumeCurve_FP_HighRange_65091600:24)
 	lda xwa, (xsp + 36)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (FPConst_DSP_VolumeCurve_FP_HighRange_24:24)
 	lda xde, (xsp + 36)
 	lda xwa, (xsp + 36)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (FPConst_DSP_VolumeCurve_FP_HighRange_576:24)
 	lda xde, (xsp + 36)
 	lda xwa, (xsp + 36)
@@ -52130,7 +52239,7 @@ DSP_VolumeCurve_FP_HighRange:
 ; produce the integer result at (XSP+0x38); unwind the 0x44-byte frame.
 DSP_VolumeCurve_FP_Finalize:
 	lda xbc, (xsp + 60)
-	lda xde, (FPConst_DSP_VolumeCurve_FP_Finalize_8388608:24)
+	lda xde, (FPConst_DSP_VolumeCurve_FP_Finalize_Q23One:24)
 	lda xwa, (xsp + 36)
 	call FP_fmul
 	lda xbc, (xsp + 36)
@@ -52342,7 +52451,7 @@ DSP_ReverbCurve_FP:
 	lda xbc, (FPConst_DSP_ReverbCurve_FP_1_2:24)
 	lda xde, (xsp + 48)
 	lda xwa, (xsp + 40)
-	call FP_DP_Sub
+	call FP_dsub
 	lda xbc, (xsp + 40)
 	lda xwa, (xsp + 60)
 	call FP_dtof
@@ -52354,13 +52463,13 @@ DSP_ReverbCurve_FP_HighRange:
 	lda xwa, (xsp + 28)
 	call FP_SP_CallWithBuf8
 	lda xbc, (xsp + 28)
-	lda xde, (FPConst_DSP_ReverbCurve_FP_HighRange_44100:24)
+	lda xde, (FPConst_DSP_ReverbCurve_FP_HighRange_SampleRate:24)
 	lda xwa, (xsp + 28)
 	call FP_fmul
 	lda xbc, (xsp + 28)
 	lda xde, (FPConst_DSP_ReverbCurve_FP_HighRange_3924900:24)
 	lda xwa, (xsp + 28)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (FPConst_DSP_ReverbCurve_FP_HighRange_10:24)
 	lda xde, (xsp + 28)
 	lda xwa, (xsp + 28)
@@ -52385,7 +52494,7 @@ DSP_ReverbCurve_FP_HighRange:
 	lda xbc, (FPConst_DSP_ReverbCurve_FP_HighRange_1:24)
 	lda xde, (xsp + 32)
 	lda xwa, (xsp + 40)
-	call FP_DP_Sub
+	call FP_dsub
 	lda xbc, (xsp + 40)
 	lda xwa, (xsp + 60)
 	call FP_dtof
@@ -52393,7 +52502,7 @@ DSP_ReverbCurve_FP_HighRange:
 ; Shared tail: FP_fmul(0x012D4F), FP_ftoi, result from (XSP+0x38).
 DSP_ReverbCurve_FP_Finalize:
 	lda xbc, (xsp + 60)
-	lda xde, (FPConst_DSP_ReverbCurve_FP_Finalize_8388608:24)
+	lda xde, (FPConst_DSP_ReverbCurve_FP_Finalize_Q23One:24)
 	lda xwa, (xsp + 28)
 	call FP_fmul
 	lda xbc, (xsp + 28)
@@ -52410,7 +52519,7 @@ DSP_ReverbCurve_FP_Finalize:
 ;   value[0] -> float, combined with the constants at 0x012D53 (32768) and 0x012D57 (65536)
 ;   value[1] -> float, top byte kept as an integer at (XSP+0x24)
 ;   XBC      -> float
-;   the three are combined through FP_SP_Sub / FP_fmul / FP_fadd against
+;   the three are combined through FP_fsub / FP_fmul / FP_fadd against
 ;   0x012D5B (99), 0x012D5F (44100), 0x012D63 (99), 0x012D67 (2376)
 ;   -> promoted to double, FP_pow with the double at 0x012D6B (2.0)
 ;   -> FP_dtof, then FP_fmul(0x012D73) and FP_ftoi.
@@ -52457,7 +52566,7 @@ DSP_ParamInterp_FPComplex:
 	lda xbc, (xsp + 24)
 	lda xde, (xsp + 28)
 	lda xwa, (xsp + 24)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (xsp + 24)
 	lda xde, (xsp + 20)
 	lda xwa, (xsp + 24)
@@ -52477,7 +52586,7 @@ DSP_ParamInterp_FPComplex:
 	lda xbc, (FPConst_DSP_ParamInterp_FPComplex_99_2:24)
 	lda xde, (xsp + 24)
 	lda xwa, (xsp + 24)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (FPConst_DSP_ParamInterp_FPComplex_2376:24)
 	lda xde, (xsp + 24)
 	lda xwa, (xsp + 24)
@@ -52505,7 +52614,7 @@ DSP_ParamInterp_FPComplex:
 	ld xwa, (xsp + 52)
 	ld (xwa), xiz
 	lda xbc, (xsp + 44)
-	lda xde, (FPConst_DSP_ParamInterp_FPComplex_8388608:24)
+	lda xde, (FPConst_DSP_ParamInterp_FPComplex_Q23One:24)
 	lda xwa, (xsp + 24)
 	call FP_fmul
 	lda xbc, (xsp + 24)
@@ -52616,7 +52725,7 @@ DSP_PanCurve_Return:
 ;   else        -> float(|x|), + 0x012D8B (200), - 0x012D8F (4800)
 ; then, if x < 0, FP_SP_CopyOrNegate4 flips the sign (DSP_DetuneCurve_ApplySign), and the shared
 ; finalisation runs the value through FP_fdiv(0x012D93), a promotion to double,
-; FP_pow against the double at 0x012D97 (2.0), FP_DP_Sub(0x012D9F, 1.0),
+; FP_pow against the double at 0x012D97 (2.0), FP_dsub(0x012D9F, 1.0),
 ; FP_ddiv(0x012DA7, 2400.0), FP_dtof, FP_fmul(0x012DAF) and
 ; FP_ftoi.  The 2400 is cents-per-octave x 2, and the 2.0 base again points at a
 ; pow(2, cents/2400) pitch-ratio computation.  Frame 0x48 bytes.
@@ -52707,7 +52816,7 @@ DSP_DetuneCurve_Range2_Compute:
 	lda xbc, (xsp + 36)
 	lda xde, (FPConst_DSP_DetuneCurve_Range2_Compute_180:24)
 	lda xwa, (xsp + 68)
-	call FP_SP_Sub
+	call FP_fsub
 	jrl DSP_DetuneCurve_ApplySign
 
 ; Recompute |x| for the third range test.
@@ -52753,7 +52862,7 @@ DSP_DetuneCurve_Range3_Compute:
 	lda xbc, (xsp + 36)
 	lda xde, (FPConst_DSP_DetuneCurve_Range3_Compute_1700:24)
 	lda xwa, (xsp + 68)
-	call FP_SP_Sub
+	call FP_fsub
 	jr DSP_DetuneCurve_ApplySign
 
 ; Fall-through range (|x| > 31): sign test only.
@@ -52783,7 +52892,7 @@ DSP_DetuneCurve_Range4_Compute:
 	lda xbc, (xsp + 36)
 	lda xde, (FPConst_DSP_DetuneCurve_Range4_Compute_4800:24)
 	lda xwa, (xsp + 68)
-	call FP_SP_Sub
+	call FP_fsub
 
 ; If the ORIGINAL input was negative, negate the accumulated float via FP_SP_CopyOrNegate4.
 DSP_DetuneCurve_ApplySign:
@@ -52820,7 +52929,7 @@ DSP_DetuneCurve_Finalize:
 	lda xbc, (FPConst_DSP_DetuneCurve_Finalize_1:24)
 	lda xde, (xsp + 40)
 	lda xwa, (xsp + 28)
-	call FP_DP_Sub
+	call FP_dsub
 	lda xbc, (xsp + 28)
 	lda xde, (FPConst_DSP_DetuneCurve_Finalize_2400_2:24)
 	lda xwa, (xsp + 28)
@@ -52829,7 +52938,7 @@ DSP_DetuneCurve_Finalize:
 	lda xwa, (xsp + 72)
 	call FP_dtof
 	lda xbc, (xsp + 72)
-	lda xde, (FPConst_DSP_DetuneCurve_Finalize_8388608:24)
+	lda xde, (FPConst_DSP_DetuneCurve_Finalize_Q23One:24)
 	lda xwa, (xsp + 36)
 	call FP_fmul
 	lda xbc, (xsp + 36)
@@ -52858,7 +52967,7 @@ DSP_DetuneCurve_Finalize:
 ;   conversion with a 0.697 dB step -- then FP_dmul with 0.9999 (0x012DC3 / 0x012DDB)
 ;   and normalise to a float.  Results land at (XSP+0x52) and (XSP+0x4A).
 ; Step 4 -- with the literal 3.0 (0x40400000) at (XSP+0x4E) it computes five coefficient floats
-;   through FP_SP_Sub / FP_fmul / FP_fadd / FP_fdiv against the constants
+;   through FP_fsub / FP_fmul / FP_fadd / FP_fdiv against the constants
 ;   0x012DE3..0x012E03 (2, 2, 1, 3, 2097152, 8388608, 4194304, 2097152, 2097152 -- note
 ;   2^21/2^23/2^22, the Q23 scalings).
 ; Step 5 -- emits: one DSP_WriteOscParam then FOUR DSP_WriteCoeffData_5B_Direct calls, i.e. a
@@ -52989,11 +53098,11 @@ DSP_BiquadWarp_ComputeCoeffs:
 	lda xbc, (xsp + 82)
 	lda xde, (FPConst_DSP_BiquadWarp_ComputeCoeffs_2:24)
 	lda xwa, (xsp + 10)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (xsp + 82)
 	lda xde, (FPConst_DSP_BiquadWarp_ComputeCoeffs_2_2:24)
 	lda xwa, (xsp + 6)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (xsp + 6)
 	lda xde, (xsp + 10)
 	lda xwa, (xsp + 6)
@@ -53001,11 +53110,11 @@ DSP_BiquadWarp_ComputeCoeffs:
 	lda xbc, (xsp + 6)
 	lda xde, (FPConst_DSP_BiquadWarp_ComputeCoeffs_1:24)
 	lda xwa, (xsp + 6)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (xsp + 78)
 	lda xde, (xsp + 74)
 	lda xwa, (xsp + 10)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (xsp + 10)
 	lda xde, (xsp + 6)
 	lda xwa, (xsp + 70)
@@ -53019,7 +53128,7 @@ DSP_BiquadWarp_ComputeCoeffs:
 	lda xwa, (xsp + 66)
 	call FP_fadd
 	lda xbc, (xsp + 78)
-	lda xde, (FPConst_DSP_BiquadWarp_ComputeCoeffs_2097152:24)
+	lda xde, (FPConst_DSP_BiquadWarp_ComputeCoeffs_Q21One:24)
 	lda xwa, (xsp + 6)
 	call FP_fmul
 	lda xbc, (xsp + 6)
@@ -53031,7 +53140,7 @@ DSP_BiquadWarp_ComputeCoeffs:
 	ld de, (xsp + 98)
 	call DSP_WriteOscParam
 	lda xbc, (xsp + 82)
-	lda xde, (FPConst_DSP_BiquadWarp_ComputeCoeffs_8388608:24)
+	lda xde, (FPConst_DSP_BiquadWarp_ComputeCoeffs_Q23One:24)
 	lda xwa, (xsp + 6)
 	call FP_fmul
 	lda xbc, (xsp + 6)
@@ -53045,7 +53154,7 @@ DSP_BiquadWarp_ComputeCoeffs:
 	lda xwa, (xsp + 6)
 	call FP_SP_CopyOrNegate4
 	lda xbc, (xsp + 6)
-	lda xde, (FPConst_DSP_BiquadWarp_ComputeCoeffs_4194304:24)
+	lda xde, (FPConst_DSP_BiquadWarp_ComputeCoeffs_Q22One:24)
 	lda xwa, (xsp + 6)
 	call FP_fmul
 	lda xbc, (xsp + 6)
@@ -53144,7 +53253,7 @@ DSP_ParamInterp_Div0xC6:
 ;       XBC <= 55 (0x37)  range 3, constants 0x012E8F..0x012EB3  (bias 24)
 ;       XBC <= 75 (0x4B)  range 4, constants 0x012EBB..0x012EDF  (bias 56)
 ;       else              range 5, constants 0x012EE7..0x012EFB  (bias 67)
-; The biases 16/24/56/67 are subtracted from XBC by the FP_SP_Sub at the head of each range, so
+; The biases 16/24/56/67 are subtracted from XBC by the FP_fsub at the head of each range, so
 ; each range restarts its curve from zero.  Range 1 additionally calls FP_dcmp
 ; (0x03D2AC -- an FP COMPARISON helper, not a voice routine; see [UNCERTAIN]) against the
 ; constant at 0x012E2F and takes a separate arm when the coefficient is non-zero.
@@ -53302,7 +53411,7 @@ DSP_ParamEQ_Range2:
 	lda xbc, (xsp + 12)
 	lda xde, (FPConst_DSP_ParamEQ_Range2_16:24)
 	lda xwa, (xsp + 12)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (xsp + 12)
 	lda xwa, (xsp + 64)
 	call FP_ftod
@@ -53362,7 +53471,7 @@ DSP_ParamEQ_Range3:
 	lda xbc, (xsp + 12)
 	lda xde, (FPConst_DSP_ParamEQ_Range3_24:24)
 	lda xwa, (xsp + 12)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (xsp + 12)
 	lda xwa, (xsp + 64)
 	call FP_ftod
@@ -53422,7 +53531,7 @@ DSP_ParamEQ_Range4:
 	lda xbc, (xsp + 12)
 	lda xde, (FPConst_DSP_ParamEQ_Range4_56:24)
 	lda xwa, (xsp + 12)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (xsp + 12)
 	lda xwa, (xsp + 64)
 	call FP_ftod
@@ -53479,7 +53588,7 @@ DSP_ParamEQ_Range5:
 	lda xbc, (xsp + 12)
 	lda xde, (FPConst_DSP_ParamEQ_Range5_67:24)
 	lda xwa, (xsp + 12)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (xsp + 12)
 	lda xwa, (xsp + 64)
 	call FP_ftod
@@ -53526,7 +53635,7 @@ DSP_ParamEQ_Finalize:
 	ld xwa, (xsp + 100)
 	ld (xwa), xiz
 	lda xbc, (xsp + 92)
-	lda xde, (FPConst_DSP_ParamEQ_Finalize_8388608:24)
+	lda xde, (FPConst_DSP_ParamEQ_Finalize_Q23One:24)
 	lda xwa, (xsp + 12)
 	call FP_fmul
 	lda xbc, (xsp + 12)
@@ -54370,7 +54479,7 @@ DSP_BiquadCoeff_Compute:
 	lda xbc, (FPConst_DSP_BiquadCoeff_Compute_1_2:24)
 	lda xde, (xsp+166:16)
 	lda xwa, (xsp + 86)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (xsp + 86)
 	lda xde, (FPConst_DSP_BiquadCoeff_Compute_Neg2:24)
 	lda xwa, (xsp+210:16)
@@ -54378,7 +54487,7 @@ DSP_BiquadCoeff_Compute:
 	lda xbc, (xsp+166:16)
 	lda xde, (xsp+170:16)
 	lda xwa, (xsp + 86)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (xsp + 86)
 	lda xde, (FPConst_DSP_BiquadCoeff_Compute_1_3:24)
 	lda xwa, (xsp+206:16)
@@ -54492,7 +54601,7 @@ DSP_BiquadCoeff_Algo0_AfterSign2:
 	lda xbc, (FPConst_DSP_BiquadCoeff_Algo0_AfterSign2_1:24)
 	lda xde, (xsp + 118)
 	lda xwa, (xsp + 118)
-	call FP_DP_Sub
+	call FP_dsub
 	lda xbc, (xsp+166:16)
 	lda xwa, (xsp + 78)
 	call FP_ftod
@@ -54583,11 +54692,11 @@ DSP_BiquadCoeff_Algo0_Assembly:
 	lda xbc, (FPConst_DSP_BiquadCoeff_Algo0_Assembly_1:24)
 	lda xde, (xsp+178:16)
 	lda xwa, (xsp + 2)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (xsp + 2)
 	lda xde, (xsp+174:16)
 	lda xwa, (xsp + 2)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (xsp + 2)
 	lda xde, (xsp + 86)
 	lda xwa, (xsp+158:16)
@@ -54634,7 +54743,7 @@ DSP_BiquadCoeff_Algo0_Fixup:
 	lda xwa, (xsp+182:16)
 	call FP_fdiv
 	lda xbc, (xsp+186:16)
-	lda xde, (FPConst_DSP_BiquadCoeff_Algo0_Fixup_4194304:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo0_Fixup_Q22One:24)
 	lda xwa, (xsp + 2)
 	call FP_fmul
 	lda xbc, (xsp + 2)
@@ -54683,7 +54792,7 @@ DSP_BiquadCoeff_Algo0_Fixup:
 	call DSP_WriteCoeffData_5B_Direct
 	ld iz, hl
 	lda xbc, (xsp+174:16)
-	lda xde, (FPConst_DSP_BiquadCoeff_Algo0_Fixup_8388608:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo0_Fixup_Q23One:24)
 	lda xwa, (xsp + 2)
 	call FP_fmul
 	lda xbc, (xsp + 2)
@@ -54740,7 +54849,7 @@ DSP_BiquadCoeff_Algo1:
 	lda xbc, (FPConst_DSP_BiquadCoeff_Algo1_1_2:24)
 	lda xde, (xsp+166:16)
 	lda xwa, (xsp + 2)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (xsp + 2)
 	lda xde, (FPConst_DSP_BiquadCoeff_Algo1_Neg2:24)
 	lda xwa, (xsp+210:16)
@@ -54748,7 +54857,7 @@ DSP_BiquadCoeff_Algo1:
 	lda xbc, (xsp+166:16)
 	lda xde, (xsp+170:16)
 	lda xwa, (xsp + 2)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (xsp + 2)
 	lda xde, (FPConst_DSP_BiquadCoeff_Algo1_1_3:24)
 	lda xwa, (xsp+206:16)
@@ -54777,7 +54886,7 @@ DSP_BiquadCoeff_Algo1:
 	lda xwa, (xsp+174:16)
 	call FP_fdiv
 	lda xbc, (xsp+186:16)
-	lda xde, (FPConst_DSP_BiquadCoeff_Algo1_4194304:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo1_Q22One:24)
 	lda xwa, (xsp + 2)
 	call FP_fmul
 	lda xbc, (xsp + 2)
@@ -54826,7 +54935,7 @@ DSP_BiquadCoeff_Algo1:
 	call DSP_WriteCoeffData_5B_Direct
 	ld iz, hl
 	lda xbc, (xsp+174:16)
-	lda xde, (FPConst_DSP_BiquadCoeff_Algo1_8388608:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo1_Q23One:24)
 	lda xwa, (xsp + 2)
 	call FP_fmul
 	lda xbc, (xsp + 2)
@@ -54912,7 +55021,7 @@ DSP_BiquadCoeff_Algo2:
 	lda xbc, (FPConst_DSP_BiquadCoeff_Algo2_1_2:24)
 	lda xde, (xsp+162:16)
 	lda xwa, (xsp + 2)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (xsp + 2)
 	lda xde, (FPConst_DSP_BiquadCoeff_Algo2_Neg2:24)
 	lda xwa, (xsp+210:16)
@@ -54920,7 +55029,7 @@ DSP_BiquadCoeff_Algo2:
 	lda xbc, (xsp+162:16)
 	lda xde, (xsp+170:16)
 	lda xwa, (xsp + 2)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (xsp + 2)
 	lda xde, (FPConst_DSP_BiquadCoeff_Algo2_1_3:24)
 	lda xwa, (xsp+206:16)
@@ -55034,7 +55143,7 @@ DSP_BiquadCoeff_Algo2_AfterSign2:
 	lda xbc, (FPConst_DSP_BiquadCoeff_Algo2_AfterSign2_1:24)
 	lda xde, (xsp + 118)
 	lda xwa, (xsp + 118)
-	call FP_DP_Sub
+	call FP_dsub
 	lda xbc, (xsp+162:16)
 	lda xwa, (xsp + 78)
 	call FP_ftod
@@ -55112,7 +55221,7 @@ DSP_BiquadCoeff_Algo2_NegBranch:
 ; DSP_BiquadCoeff_Algo0_Fixup.
 DSP_BiquadCoeff_Algo2_WriteParams:
 	lda xbc, (xsp+186:16)
-	lda xde, (FPConst_DSP_BiquadCoeff_Algo2_WriteParams_4194304:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo2_WriteParams_Q22One:24)
 	lda xwa, (xsp + 2)
 	call FP_fmul
 	lda xbc, (xsp + 2)
@@ -55136,7 +55245,7 @@ DSP_BiquadCoeff_Algo2_WriteParams:
 	call DSP_WriteParamWord
 	ld iz, hl
 	lda xbc, (xsp+174:16)
-	lda xde, (FPConst_DSP_BiquadCoeff_Algo2_WriteParams_8388608:24)
+	lda xde, (FPConst_DSP_BiquadCoeff_Algo2_WriteParams_Q23One:24)
 	lda xwa, (xsp + 2)
 	call FP_fmul
 	lda xbc, (xsp + 2)
@@ -55416,7 +55525,7 @@ DSP_SOS_Coeff_Compute:
 	lda xbc, (xsp+152:16)
 	lda xde, (FPConst_DSP_SOS_Coeff_Compute_1:24)
 	lda xwa, (xsp + 72)
-	call FP_DP_Sub
+	call FP_dsub
 	lda xbc, (xsp + 72)
 	lda xde, (xsp+160:16)
 	lda xwa, (xsp + 72)
@@ -55427,7 +55536,7 @@ DSP_SOS_Coeff_Compute:
 	lda xbc, (FPConst_DSP_SOS_Coeff_Compute_1_2:24)
 	lda xde, (xsp+202:16)
 	lda xwa, (xsp + 56)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (xsp+202:16)
 	lda xde, (FPConst_DSP_SOS_Coeff_Compute_1_3:24)
 	lda xwa, (xsp + 120)
@@ -55443,7 +55552,7 @@ DSP_SOS_Coeff_Compute:
 	lda xbc, (FPConst_DSP_SOS_Coeff_Compute_1_4:24)
 	lda xde, (xsp + 120)
 	lda xwa, (xsp + 120)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (xsp+178:16)
 	lda xde, (xsp+182:16)
 	lda xwa, (xsp + 56)
@@ -55495,7 +55604,7 @@ DSP_SOS_Algo0_NonzeroCoeff:
 	lda xbc, (xsp+136:16)
 	lda xde, (FPConst_DSP_SOS_Algo0_NonzeroCoeff_1:24)
 	lda xwa, (xsp + 72)
-	call FP_DP_Sub
+	call FP_dsub
 	lda xbc, (xsp + 72)
 	lda xde, (xsp+144:16)
 	lda xwa, (xsp + 72)
@@ -55510,7 +55619,7 @@ DSP_SOS_Algo0_NonzeroCoeff:
 	lda xbc, (FPConst_DSP_SOS_Algo0_NonzeroCoeff_1_3:24)
 	lda xde, (xsp+198:16)
 	lda xwa, (xsp + 56)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (xsp + 56)
 	lda xde, (xsp + 120)
 	lda xwa, (xsp+182:16)
@@ -55530,7 +55639,7 @@ DSP_SOS_Algo0_NonzeroCoeff:
 	lda xbc, (xsp + 56)
 	lda xde, (FPConst_DSP_SOS_Algo0_NonzeroCoeff_1_5:24)
 	lda xwa, (xsp + 56)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (xsp + 56)
 	lda xde, (xsp + 120)
 	lda xwa, (xsp+202:16)
@@ -55543,11 +55652,11 @@ DSP_SOS_Algo0_FinalChain:
 	lda xbc, (FPConst_DSP_SOS_Algo0_FinalChain_1:24)
 	lda xde, (xsp+202:16)
 	lda xwa, (xsp + 120)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (FPConst_DSP_SOS_Algo0_FinalChain_1_2:24)
 	lda xde, (xsp+198:16)
 	lda xwa, (xsp + 56)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (xsp + 56)
 	lda xde, (xsp + 120)
 	lda xwa, (xsp+194:16)
@@ -55560,7 +55669,7 @@ DSP_SOS_Algo0_FinalChain:
 	lda xwa, (xsp+186:16)
 	call FP_SP_CopyOrNegate4
 	lda xbc, (xsp+190:16)
-	lda xde, (FPConst_DSP_SOS_Algo0_FinalChain_4194304:24)
+	lda xde, (FPConst_DSP_SOS_Algo0_FinalChain_Q22One:24)
 	lda xwa, (xsp + 120)
 	call FP_fmul
 	lda xbc, (xsp + 120)
@@ -55664,7 +55773,7 @@ DSP_SOS_Algo1:
 	lda xbc, (xsp + 96)
 	lda xde, (FPConst_DSP_SOS_Algo1_1:24)
 	lda xwa, (xsp + 72)
-	call FP_DP_Sub
+	call FP_dsub
 	lda xbc, (xsp + 72)
 	lda xde, (xsp + 104)
 	lda xwa, (xsp + 72)
@@ -55679,7 +55788,7 @@ DSP_SOS_Algo1:
 	lda xbc, (FPConst_DSP_SOS_Algo1_1_3:24)
 	lda xde, (xsp+202:16)
 	lda xwa, (xsp + 56)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (xsp + 56)
 	lda xde, (xsp + 120)
 	lda xwa, (xsp+182:16)
@@ -55699,7 +55808,7 @@ DSP_SOS_Algo1:
 	lda xbc, (xsp + 56)
 	lda xde, (FPConst_DSP_SOS_Algo1_1_5:24)
 	lda xwa, (xsp + 56)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (xsp + 56)
 	lda xde, (xsp + 120)
 	lda xwa, (xsp+198:16)
@@ -55742,7 +55851,7 @@ DSP_SOS_Algo1_NonzeroCoeff:
 	lda xbc, (xsp + 80)
 	lda xde, (FPConst_DSP_SOS_Algo1_NonzeroCoeff_1:24)
 	lda xwa, (xsp + 72)
-	call FP_DP_Sub
+	call FP_dsub
 	lda xbc, (xsp + 72)
 	lda xde, (xsp + 88)
 	lda xwa, (xsp + 72)
@@ -55753,7 +55862,7 @@ DSP_SOS_Algo1_NonzeroCoeff:
 	lda xbc, (FPConst_DSP_SOS_Algo1_NonzeroCoeff_1_2:24)
 	lda xde, (xsp+198:16)
 	lda xwa, (xsp + 120)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (xsp+198:16)
 	lda xde, (FPConst_DSP_SOS_Algo1_NonzeroCoeff_1_3:24)
 	lda xwa, (xsp + 56)
@@ -55769,7 +55878,7 @@ DSP_SOS_Algo1_NonzeroCoeff:
 	lda xbc, (FPConst_DSP_SOS_Algo1_NonzeroCoeff_1_4:24)
 	lda xde, (xsp + 120)
 	lda xwa, (xsp + 120)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (xsp+178:16)
 	lda xde, (xsp+182:16)
 	lda xwa, (xsp + 56)
@@ -55805,7 +55914,7 @@ DSP_SOS_Algo1_FinalChain:
 	lda xwa, (xsp+186:16)
 	call FP_SP_CopyOrNegate4
 	lda xbc, (xsp+190:16)
-	lda xde, (FPConst_DSP_SOS_Algo1_FinalChain_2097152:24)
+	lda xde, (FPConst_DSP_SOS_Algo1_FinalChain_Q21One:24)
 	lda xwa, (xsp + 120)
 	call FP_fmul
 	lda xbc, (xsp + 120)
@@ -55818,7 +55927,7 @@ DSP_SOS_Algo1_FinalChain:
 	call DSP_WriteOscParam
 	ldfr_werp HL, 0xFA
 	lda xbc, (xsp+186:16)
-	lda xde, (FPConst_DSP_SOS_Algo1_FinalChain_4194304:24)
+	lda xde, (FPConst_DSP_SOS_Algo1_FinalChain_Q22One:24)
 	lda xwa, (xsp + 120)
 	call FP_fmul
 	lda xbc, (xsp + 120)
@@ -55908,7 +56017,7 @@ DSP_SOS_Algo2:
 	lda xbc, (xsp + 32)
 	lda xde, (FPConst_DSP_SOS_Algo2_1:24)
 	lda xwa, (xsp + 72)
-	call FP_DP_Sub
+	call FP_dsub
 	lda xbc, (xsp + 72)
 	lda xde, (xsp + 40)
 	lda xwa, (xsp + 72)
@@ -55923,7 +56032,7 @@ DSP_SOS_Algo2:
 	lda xbc, (FPConst_DSP_SOS_Algo2_1_3:24)
 	lda xde, (xsp+202:16)
 	lda xwa, (xsp + 56)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (xsp + 56)
 	lda xde, (xsp + 120)
 	lda xwa, (xsp+182:16)
@@ -55943,7 +56052,7 @@ DSP_SOS_Algo2:
 	lda xbc, (xsp + 56)
 	lda xde, (FPConst_DSP_SOS_Algo2_1_5:24)
 	lda xwa, (xsp + 56)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (xsp + 56)
 	lda xde, (xsp + 120)
 	lda xwa, (xsp+198:16)
@@ -55986,7 +56095,7 @@ DSP_SOS_Algo2_NonzeroCoeff:
 	lda xbc, (xsp + 16)
 	lda xde, (FPConst_DSP_SOS_Algo2_NonzeroCoeff_1:24)
 	lda xwa, (xsp + 72)
-	call FP_DP_Sub
+	call FP_dsub
 	lda xbc, (xsp + 72)
 	lda xde, (xsp + 24)
 	lda xwa, (xsp + 72)
@@ -55997,7 +56106,7 @@ DSP_SOS_Algo2_NonzeroCoeff:
 	lda xbc, (FPConst_DSP_SOS_Algo2_NonzeroCoeff_1_2:24)
 	lda xde, (xsp+198:16)
 	lda xwa, (xsp + 120)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (xsp+198:16)
 	lda xde, (FPConst_DSP_SOS_Algo2_NonzeroCoeff_1_3:24)
 	lda xwa, (xsp + 56)
@@ -56013,7 +56122,7 @@ DSP_SOS_Algo2_NonzeroCoeff:
 	lda xbc, (FPConst_DSP_SOS_Algo2_NonzeroCoeff_1_4:24)
 	lda xde, (xsp + 120)
 	lda xwa, (xsp + 120)
-	call FP_SP_Sub
+	call FP_fsub
 	lda xbc, (xsp+178:16)
 	lda xde, (xsp+182:16)
 	lda xwa, (xsp + 56)
@@ -56047,7 +56156,7 @@ DSP_SOS_Algo2_FinalChain:
 	lda xwa, (xsp+186:16)
 	call FP_SP_CopyOrNegate4
 	lda xbc, (xsp+186:16)
-	lda xde, (FPConst_DSP_SOS_Algo2_FinalChain_4194304:24)
+	lda xde, (FPConst_DSP_SOS_Algo2_FinalChain_Q22One:24)
 	lda xwa, (xsp + 120)
 	call FP_fmul
 	lda xbc, (xsp + 120)
@@ -56443,7 +56552,7 @@ DSP_BytecodeInterpreter_Loop:
 	cp wa, 5:i3
 	jrl ugt, DSP_BytecodeInterpreter_CheckEnd
 	add wa, wa
-	lda xix, (OFFSETS_14739:24)
+	lda xix, (DSP_BytecodeInterpreter_CaseOffsets:24)
 	ld	wa, (xix+wa)
 	lda xix, (DSP_Bytecode_Op00_Groups5_ParamMix:24)
 	jp	t, (xix+wa)
@@ -56451,7 +56560,7 @@ DSP_BytecodeInterpreter_Loop:
 
 ;  DSP_Bytecode_Programs: 1613 bytes of native TLCS-900 code implementing
 ;  6 opcode handlers (0-5) for the DSP bytecode interpreter.
-;  Dispatch table at OFFSETS_14739 contains 16-bit offsets from this address.
+;  Dispatch table at DSP_BytecodeInterpreter_CaseOffsets contains 16-bit offsets from this address.
 ;
 ;  Uses prevbank registers (D7), auto-increment addressing ld C,(XWA+),
 ;  and compact register forms. Cannot be converted to LLVM native instructions
@@ -56485,7 +56594,7 @@ DSP_BytecodeInterpreter_Loop:
 ; parameter into the template coefficient).  The source file's own comment block above this
 ; label documents all six handlers and was cross-checked against the offset table here.
 ; ★ Renamed 2026-09-25 from DSP_Bytecode_Programs: that name covered the whole 1613-byte run of six
-; handlers; this label is handler 0's entry (OFFSETS_14739 index 0), named like its siblings
+; handlers; this label is handler 0's entry (DSP_BytecodeInterpreter_CaseOffsets index 0), named like its siblings
 ; DSP_Bytecode_Op01_Groups5_Addr12 .. _Op05_Groups5_Masked.
 DSP_Bytecode_Op00_Groups5_ParamMix:
 	; Converted from a 570-byte `.byte` run. Framing: unidasm; every
@@ -57367,7 +57476,7 @@ DSP_Translator_ReadOpcode:
 	cp wa, 0x18
 	jrl ugt, DSP_Op_Unknown_Error
 	add wa, wa
-	lda xix, (OFFSETS_14745:24)
+	lda xix, (DSP_Translator_CaseOffsets:24)
 	ld	wa, (xix+wa)
 	lda xix, (DSP_Op_0x61_LinearEval:24)
 	jp	t, (xix+wa)

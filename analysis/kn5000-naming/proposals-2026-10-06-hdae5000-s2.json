@@ -1,0 +1,171 @@
+[
+ {
+  "old": "HDAE5000_CheckFileSignature_Data",
+  "tree": "hdae5000",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_PartSignatureTable",
+  "header": "Song-part file signature table, 9 x 8-byte records {u32 signature string; u16 offset in file; u16 compare length} indexed by part (LSW, PMT, SQT, CMP, TM, MSP, RCM, MD, TLX); this label is record 0 = the string-pointer column. Basis: HDAE5000_CheckFileSignature reads (base + part*8) and passes it to HDAE5000_StrNCmp.",
+  "basis": "reader + bytes",
+  "evidence": [
+   "hdae5000_ui_display.s:11265 `extz xwa / sll xwa, 0x03` -- index = part (WA) * 8, the record stride",
+   "hdae5000_ui_display.s:11267 `ld xbc, HDAE5000_CheckFileSignature_Data` then 11269-11271 `ld xwa,(xbc) / push xwa / call HDAE5000_StrNCmp` -- the long at +0 is the signature string, first StrNCmp argument",
+   "hdae5000_ui_display.s:11380 `ld wa, 0:i3 / calr HDAE5000_CheckFileSignature` -- caller HDAE5000_FdSong_CheckFiles passes the part index (0 = .LSW, 1 = .PMT, ...) after reading 512 bytes of <name><ext>",
+   "hdae5000_data_tables.s:16152 `.byte 0x98, 0x8e` + `.asciz \"/\"` -- record 0's pointer 0x002F8E98 spelled as bytes (ROM 0x2F8E20: 98 8e 2f 00 04 00 02 00 = ptr 0x2F8E98 \"HK\", offset 4, length 2)",
+   "ROM 0x2F8E20..0x2F8E67: 9 records -> \"HK\"@4/2 (LSW), \"HK\"@0/2 (PMT), 01 08@5/2 (SQT), \"H\\0K\"@0/3 (CMP), \"KN5000 SOUND RAM\"@0/16 (TM), \"H\\0K\"@0/3 (MSP), \"H\\0K\"@0/3 (RCM), \"HK\"@0/2 (MD), \"TLhd\"@0/4 (TLX); note the routine header's 'HK\\0 (CMP)' should read 'H\\0K'",
+   "Follow-up: the pointers are spelled .byte/.asciz \"/\" -- could become `.long <sig string label>`, .short offset, .short length rows (the signature strings at 0x2F8E68-0x2F8E9B have no labels yet)"
+  ]
+ },
+ {
+  "old": "HDAE5000_CheckFileSignature_Data_2",
+  "tree": "hdae5000",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_PartSignatureTable_FileOffset",
+  "header": "HDAE5000_PartSignatureTable + 4: the u16 column giving where in the part file's first 512 bytes the signature sits. Basis: HDAE5000_CheckFileSignature adds (this + part*8) to the buffer pointer before HDAE5000_StrNCmp.",
+  "basis": "reader + bytes",
+  "evidence": [
+   "hdae5000_ui_display.s:11259 `lda xhl, (HDAE5000_CheckFileSignature_Data_2:24)` + 11260-11264 `add xhl,xde / ld de,(xhl) / extz xde / add xde,xbc / push xde` -- u16 at +4 of record [part] is added to the file buffer (XBC) to form the second StrNCmp argument",
+   "hdae5000_data_tables.s:16155 `.byte 0x04` / 16156 `.byte 0x00` -- record 0 (LSW) offset = 4; ROM 0x2F8E24 = 0x2F8E20 + 4",
+   "ROM offsets per part: 4, 0, 5, 0, 0, 0, 0, 0, 0"
+  ]
+ },
+ {
+  "old": "HDAE5000_CheckFileSignature_Data_3",
+  "tree": "hdae5000",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_PartSignatureTable_Length",
+  "header": "HDAE5000_PartSignatureTable + 6: the u16 column giving how many signature bytes to compare. Basis: HDAE5000_CheckFileSignature pushes (this + part*8) as the HDAE5000_StrNCmp count.",
+  "basis": "reader + bytes",
+  "evidence": [
+   "hdae5000_ui_display.s:11252 `lda xhl, (HDAE5000_CheckFileSignature_Data_3:24)` + 11253-11255 `add xhl,xde / ld de,(xhl) / pushw de` -- u16 at +6 of record [part] is pushed first = StrNCmp's length argument",
+   "hdae5000_data_tables.s:16158 `.byte 0x02` / 16159 `.byte 0x00` -- record 0 (\"HK\") length 2; ROM 0x2F8E26 = 0x2F8E20 + 6",
+   "ROM lengths per part: 2, 2, 2, 3, 16, 3, 3, 2, 4 -- each equals its signature's length (\"KN5000 SOUND RAM\" = 16, \"TLhd\" = 4)"
+  ]
+ },
+ {
+  "old": "HDAE5000_LoadSong_Rcm_Data",
+  "tree": "hdae5000",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_RcmStream_InitialState",
+  "header": "8 zero bytes copied over the RCM stream context at RAM 0x238F1C (u16 state, u16 dir, u16 song, u16 last result) before each RCM load/save. Basis: `ldirw` (95 11 = LDIRW (XIX+),(XIY+)) in HDAE5000_LoadSong_Rcm/SaveSong_Rcm copies XIY = this ROM block to XIX = 0x238F1C; the source comments 'destination'/'source' are swapped.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "hdae5000_ui_display.s:10014-10017 `ld xiy, HDAE5000_LoadSong_Rcm_Data / ld xix, HDAE5000_RAM_HdStreamBufferEnd / ld bc, 4:i3 / mriw2 0x95, 0x11` -- 4-word block copy; prefix 0x95 = word, reg code 5 = (XIX+) <- (XIY+) (MAME 900tbl.hxx op_80/op_LDIRW: p1 = reg(op-1) = XIX is written, p2 = reg(op) = XIY is read), so this ROM label is the SOURCE and RAM 0x238F1C the destination (the inline comments say the opposite; `ldirw (xix+), (xiy+)` would also replace the raw mriw2 pseudo)",
+   "hdae5000_ui_display.s:11034-11037 -- same 8-byte copy at the start of HDAE5000_SaveSong_Rcm",
+   "hdae5000_ui_display.s:10019 `ld (0x238f1e:24), wa` / 10021 `ld (0x238f20:24), wa` -- directory and song then overwrite context words +2/+4",
+   "hdae5000_ui_display.s:14453 `ld bc, (HDAE5000_RAM_HdStreamBufferEnd:24)` / 14479 `ldw (...), 1` -- HDAE5000_RcmStream_Read uses word +0 as its state (0 = first call, 1 = continuing); RcmStream_Write uses 2; 14595 `ld hl, (0x238F22:24)` RcmStream_LastResult reads word +6",
+   "hdae5000_data_tables.s:16143-16144 `HDAE5000_LoadSong_Rcm_Data: .zero 8` -- the template is all zero: state idle, dir/song/result 0"
+  ]
+ },
+ {
+  "old": "HDAE5000_LyricBoxProc_Case0_2",
+  "tree": "hdae5000",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_LyricBoxProc_OnReset",
+  "header": "EVT_SW_IN on the lyric box, edit switch 0 = the bottom01 button captioned \"Reset\": re-init the lyrics (EVT_HDAE_INIT_LYRICS 1, HDAE5000_Lyrics_FillLines(0,0)) and redraw. Also the base of HDAE5000_LyricBoxProc_CaseTable2. Basis: switch on EVT_MAKE_EDIT_SW_ID + the caption drawn on bottom01.",
+  "basis": "switch table + caption + body",
+  "evidence": [
+   "hdae5000_ui_display.s:3221-3222 `cp xwa, EVT_SW_IN / jrl z, .LUIH_d544` -- the second switch handles a panel switch press",
+   "hdae5000_ui_display.s:3828-3838 `ld xwa,0x02600024 / ld xbc,EVT_MAKE_EDIT_SW_ID / call (xix) / cp xwa,7 / ... / lda xix,(HDAE5000_LyricBoxProc_Case0_2:24) / jp t,(xix+wa)` -- index = edit-switch id 0..7",
+   "hdae5000_data_tables.s:15929 `.short HDAE5000_LyricBoxProc_Case0_2 - HDAE5000_LyricBoxProc_Case0_2 ; 0` -- only ids 0 and 7 have cases",
+   "hdae5000_ui_display.s:3615-3621 `lda xwa,(HDAE5000_Str_Reset:24) / ... / ld xwa,HDAE5000_OBJ_bottom01 / ld xbc,EVT_PARA_DRAW` -- \"Reset\" is drawn on bottom01, the leftmost of the eight 40-px buttons along y 224-239 (hdae5000_data_tables.s:9275-9281)",
+   "hdae5000_ui_display.s:3844-3849 `ld xbc,EVT_HDAE_INIT_LYRICS / ld xde,1:i3 / call (xhl) / ld wa,0 / ld bc,0 / calr HDAE5000_Lyrics_FillLines` -- the reset itself, then EVT_DRAW"
+  ]
+ },
+ {
+  "old": "HDAE5000_LyricBoxProc_Case7_2",
+  "tree": "hdae5000",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_LyricBoxProc_OnLoad",
+  "header": "EVT_SW_IN on the lyric box, edit switch 7 = the bottom08 button captioned \"Load\": clear the lyric buffer and post EVT_SHOW to the LoadLyricFD screen. Basis: case 7 of HDAE5000_LyricBoxProc_CaseTable2 + the caption drawn on bottom08.",
+  "basis": "switch table + caption + body",
+  "evidence": [
+   "hdae5000_data_tables.s:15936 `.short HDAE5000_LyricBoxProc_Case7_2 - HDAE5000_LyricBoxProc_Case0_2 ; 7` -- case for edit-switch id 7",
+   "hdae5000_ui_display.s:3623-3629 `lda xwa,(HDAE5000_Str_Load:24) / ... / ld xwa,HDAE5000_OBJ_bottom08 / ld xbc,EVT_PARA_DRAW` -- \"Load\" is drawn on bottom08, the rightmost bottom button (box 280,224-319,239, hdae5000_data_tables.s:9338-9344)",
+   "hdae5000_ui_display.s:3866 `calr HDAE5000_Lyrics_ClearBuffer` -- empties the 0x5000-byte lyric file buffer",
+   "hdae5000_ui_display.s:3870-3871 `ld xwa, HDAE5000_OBJ_LoadLyricFD / ld xbc, EVT_SHOW` (RootFn_ApPostEvent) -- opens the load-lyric-from-floppy screen"
+  ]
+ },
+ {
+  "old": "HDAE5000_Palette_Data",
+  "tree": "hdae5000",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_Palette_BootSplash",
+  "header": "Boot-splash palette: 256 RGBX entries loaded by HDAE5000_Boot_Init right before it blits HDAE5000_Bitmap_BootSplash. Basis: Boot_Init's lda + HDAE5000_Load_Palette, and the bitmap renders correctly only with it.",
+  "basis": "reader + bytes",
+  "evidence": [
+   "hdae5000_ui_display.s:7267-7268 `lda xwa, (HDAE5000_Palette_Data:24) / calr HDAE5000_Load_Palette` -- sole code reader, in HDAE5000_Boot_Init, immediately followed by the splash blit (7270-7280: EVT_GET_BITMAP_DATA -> 0x2E61CE, copied to VRAM 0x1A0000)",
+   "hdae5000_data_tables.s:16109-16122 `HDAE5000_Palette_Data:` -- 0x400 B built from images/HDAE5000_Palette_Splash.txt; directly followed by HDAE5000_Bitmap_BootSplash (16124)",
+   "hdae5000_data_tables.s:16128 `Rendered with HDAE5000_Palette_Data (0x2E5DCE) it is unambiguous.` -- the palette that makes the splash render",
+   "Siblings are named by image: HDAE5000_Palette_TitleLogo/_DriveMech/_FilePanel/_HddIcon (hdae5000_data_tables.s:12324-12375)",
+   "Rename also: the 'name is kept as-is' note at 16111-16115, comments at ui_display.s:7186/7234, hd-ae5000_v2_06i.s:225, data_tables.s:12239/16128, scripts/build/convert_images.py:171, scripts/tools/split_hdae5000_binaries.py:89, symbols/hdae5000_symbols_reference.txt (archive/asl is not authoritative)"
+  ]
+ },
+ {
+  "old": "HDAE5000_Return_Stub",
+  "tree": "hdae5000",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_NameHistory_AfterPushNop",
+  "header": "Empty routine (a lone ret) that HDAE5000_NameHistory_Push calls last, with XWA = the history it just updated; its only caller. Basis: the single calr in NameHistory_Push (ROM search finds no other reference to 0x28B33D).",
+  "basis": "caller + body",
+  "evidence": [
+   "hdae5000_ui_display.s:698-699 `ld xwa, xiz / calr HDAE5000_Return_Stub` -- called at the end of HDAE5000_NameHistory_Push with XWA = the history",
+   "hdae5000_ui_display.s:663-664 `HDAE5000_Return_Stub: ret` -- the whole body",
+   "ROM scan of hd-ae5000_v2_06i.ic4: no 24-bit literal 0x28B33D and exactly one calr to it (at 0x28B376, the line above) -- no table or other caller",
+   "Name reflects only what is proven (empty, called after a push); what the original function did before being compiled out is unknown"
+  ]
+ },
+ {
+  "old": "HDAE5000_Str_050354",
+  "tree": "hdae5000",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_Str_HdFormatCode",
+  "header": "\"050354\": the six-digit code that, typed on the ATTEN_HD_FORMAT dialog, makes HDAE5000_FormatDialog_CodeDigit return 2, on which HDAE5000_AttenHDFormatSwCatch shows WAIT_HD_FORMAT and formats the hard disk. Basis: StrPrefixCmp in CodeDigit + the result-2 branch.",
+  "basis": "reader + caller's use of the result",
+  "evidence": [
+   "hdae5000_hd_driver.s:5315-5323 `pushw HDAE5000_Str_050354@hi16/@lo16 / lda xwa,(0x22ad9e:24) / push xwa / call HDAE5000_StrPrefixCmp / ... / ld iz, 2:i3` -- after six digits, a match returns 2",
+   "hdae5000_hd_driver.s:5547 `ld xwa, HDAE5000_OBJ_WAIT_HD_FORMAT` + 5553 `call HDAE5000_HD_FormatDrive` -- result 2 in HDAE5000_AttenHDFormatSwCatch formats the drive",
+   "hdae5000_data_tables.s:15575 message 57 (WAIT_HD_FORMAT text) \"The hard disk will now be formatted. This procedure can take about 2-3 minutes.\"",
+   "hdae5000_data_tables.s:12469-12471 `HDAE5000_Str_050354: .asciz \"050354\"`"
+  ]
+ },
+ {
+  "old": "HDAE5000_Str_965768",
+  "tree": "hdae5000",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_Str_Track0RecoverCode",
+  "header": "\"965768\": the six-digit code that, typed on the ATTEN_HD_FORMAT dialog, makes HDAE5000_FormatDialog_CodeDigit return 3, on which HDAE5000_AttenHDFormatSwCatch shows WAIT_TR0_RECOVER (\"Track O will be recovered:\") and rewrites the settings sector. Basis: StrPrefixCmp in CodeDigit + the result-3 branch.",
+  "basis": "reader + caller's use of the result",
+  "evidence": [
+   "hdae5000_hd_driver.s:5326-5334 `pushw HDAE5000_Str_965768@hi16/@lo16 / ... / call HDAE5000_StrPrefixCmp / ... / ld iz, 3:i3` -- the second code returns 3",
+   "hdae5000_hd_driver.s:5605-5618 `.LCHSC__res3: ld (HDAE5000_RAM_QuickLoadMode:24),1 / ld (HDAE5000_RAM_LoadByNumberMode:24),1 / ld (HDAE5000_RAM_JumpAfterLoad:24),1 / ... ld xwa, HDAE5000_OBJ_WAIT_TR0_RECOVER / ... / call HDAE5000_HD_StoreSettings` -- defaults set and the settings sector written",
+   "hdae5000_data_tables.s:8216-8235 WAIT_TR0_RECOVER's text child shows message 0x3B = 59; hdae5000_data_tables.s:15596 message 59 EN \"Track O will be recovered:\"",
+   "hdae5000_data_tables.s:12473-12475 `HDAE5000_Str_965768: .asciz \"965768\"`"
+  ]
+ },
+ {
+  "old": "HDAE5000_Str_ABC123",
+  "tree": "hdae5000",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "HDAE5000_Str_NamingPageUpperCase",
+  "header": "\"ABC...123...\": caption of character page 0 (upper case + digits) of the HDD naming window, drawn into HddNamingLabel. Basis: entry 0 of the 3-entry caption table that HDAE5000_AcHddNamingWindowProc indexes by the page number (0x22A02A).",
+  "basis": "table + reader",
+  "evidence": [
+   "hd-ae5000_v2_06i.s:3351-3361 `ld wa,(0x22A02A:24) / extz xwa / sll xwa,2 / ld xbc, HDAE5000_TextPtrs_ABC123_Abc123_Chr202123242526 / add xbc,xwa / ld xde,(xbc) / ... ld xwa, HDAE5000_OBJ_HddNamingLabel / ld xbc, EVT_PARA_DRAW` -- caption [page] drawn on the naming label",
+   "hdae5000_data_tables.s:12497-12500 `.long HDAE5000_Str_ABC123 / .long HDAE5000_Str_Abc123 / .long HDAE5000_Str_Chr202123242526` -- pages 0, 1, 2",
+   "hdae5000_data_tables.s:12960-12964 HDAE5000_TablePtrs_AcHddNamingWindowProc: page 0 = HDAE5000_TextPtrs_A_to_SPC (\"A\", \"B\", ...; 12668-12670), page 1 = _2 (\"a\", ...; 12825-12827), page 2 = HDAE5000_TextPtrs_Chr21_to_Chr7D (symbols)",
+   "hdae5000_data_tables.s:10529-10531 page selector objects HddNamingABC / HddNamingabc / HddNamingSymbol",
+   "Siblings for consistency (not in this batch): HDAE5000_Str_Abc123 -> ..._NamingPageLowerCase, HDAE5000_Str_Chr202123242526 -> ..._NamingPageSymbols"
+  ]
+ }
+]

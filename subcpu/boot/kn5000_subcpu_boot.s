@@ -1167,7 +1167,7 @@ INIT_DMA_SERIAL:
 ; ROUTINES:
 ; ---------
 ; SendData_Chunked  (0xFF8604): Break large transfers into 32-byte chunks
-; SendData_Block    (0xFF8649): Send single data block with handshaking
+; InterCPU_SendChunk    (0xFF8649): Send single data block with handshaking
 ; SendCmd_E3        (0xFF86AC): Signal payload ready to main CPU
 ; SendParams_E2     (0xFF86DC): Wait for DMA, then send E2 parameters
 ; TwoPhase_Transfer (0xFF874C): Execute E1 two-phase DMA sequence
@@ -1198,7 +1198,7 @@ SendData_Chunked__chunk_loop:
 	extz	wa	; Zero-extend A to WA
 	ldw bc, 0x20	; BC = 32 (chunk size)
 	mrdl3 0xAF, 0x02, 0x22	; XDE = current source address
-	calr SendData_Block	; Send 32-byte chunk
+	calr InterCPU_SendChunk	; Send 32-byte chunk
 	ld xwa, 0x20	; XWA = 32
 	mrdl3 0xAF, 0x02, 0x88	; Advance source address by 32
 	sub iz, 0x20	; Subtract 32 from remaining count
@@ -1210,13 +1210,13 @@ SendData_Chunked__send_final:
 	ldto_berp C, 0xF8	; C = remaining count (low byte)
 	extz	bc	; Zero-extend C to BC
 	mrdl3 0xAF, 0x02, 0x22	; XDE = current source address
-	calr SendData_Block	; Send final chunk
+	calr InterCPU_SendChunk	; Send final chunk
 	popw iz	; Restore IZ
 	inc 6, xsp	; Deallocate 6 bytes from stack
 	ret
 
 ; ------------------------------------------------------------------------------
-; SendData_Block (0xFF8649) - Send single data block with handshaking
+; InterCPU_SendChunk (0xFF8649) - Send single data block with handshaking
 ; ------------------------------------------------------------------------------
 ; Core DMA send routine. Implements the full handshaking protocol:
 ; 1. Wait for main CPU ready (bit 4 of INTERCPU_STATUS)
@@ -1232,7 +1232,10 @@ SendData_Chunked__send_final:
 ; Output: None
 ; Timeout: 60000 iterations (~0.3 sec at 20MHz) before giving up
 ; ------------------------------------------------------------------------------
-SendData_Block:
+; InterCPU_SendChunk: Send one chunk (1-32 bytes) to the main CPU: MSTAT1 (PD.4) handshake, command byte (A << 5) |
+;   (count - 1) to the 0x120000 latch, then micro-DMA from XDE; returns at once for count 0, gives up after 60000
+;   polls. Basis: SendData_Chunked calls it per <= 32-byte piece; the payload's twin is InterCPU_DMA_Send_Chunk.
+InterCPU_SendChunk:
 	cp c, 0:i3	; Is count zero?
 	ret z	; Yes - nothing to send
 	ld ix, 0:i3	; IX = timeout counter

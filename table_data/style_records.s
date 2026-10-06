@@ -19,7 +19,7 @@
 ;
 ; No code addresses the records directly: maincpu reaches them exclusively
 ; through the two 1000-entry pointer tables at 0x986000/0x987000
-; (StyleRec_PtrTable_C2C5 / StyleRec_PtrTable_Default, see
+; (StyleRec_PtrTable_CategoryOrder / StyleRec_PtrTable_Default, see
 ; style_record_ptr_tables.s), selected on the CURRENT UI STATE ID in RAM
 ; 0x8D38 - NOT a model code as previously documented.
 ;

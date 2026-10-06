@@ -57,7 +57,7 @@ INIT_DMA_SERIAL 00FF85AE
 SendData_Chunked 00FF8604
 SendData_Chunked__chunk_loop 00FF8615
 SendData_Chunked__send_final 00FF8635
-SendData_Block 00FF8649
+InterCPU_SendChunk 00FF8649
 SendData_Block__wait_ready1 00FF864F
 SendData_Block__wait_ready2 00FF866C
 SendData_Block__wait_dma_done 00FF868B

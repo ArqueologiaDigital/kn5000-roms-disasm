@@ -168,7 +168,7 @@ IMAGE_METADATA = {
     # descriptor at 0x28F543 returns 0x2E61CE for query A1, 0x140 (320) for A2
     # and 0xF0 (240) for A3; Boot_Init then copies exactly 2 * 0x9600 = 76,800
     # bytes of it to VRAM; and 320*240 = 76,800 exactly fills the gap between
-    # HDAE5000_Palette_Data (0x2E5DCE + 0x400) and HDAE5000_Display_Params
+    # HDAE5000_Palette_BootSplash (0x2E5DCE + 0x400) and HDAE5000_Display_Params
     # (0x2F8DCE).  Uses the main palette, immediately above it in ROM.
     "HDAE5000_SplashScreen.bin": (320, 240, 8, "Boot splash: 'HD-AE5000 Version 2 / Start-up ! Please wait . . .'"),
 

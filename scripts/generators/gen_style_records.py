@@ -10,7 +10,7 @@ Reads the original KN5000 table-data ROM and emits two .s fragments:
                             16-bit ramp remnant at 0x983557.
   style_record_ptr_tables.s ROM [0x986000, 0x988000) - the two 1000-entry
                             pointer tables that maincpu indexes by UI state
-                            (StyleRec_PtrTable_C2C5 / StyleRec_PtrTable_Default),
+                            (StyleRec_PtrTable_CategoryOrder / StyleRec_PtrTable_Default),
                             emitted as symbolic .long StyleRec_NNN entries,
                             plus the 96-byte leftover residue of each 4KB page.
 
@@ -132,7 +132,7 @@ records_header = """\
 ;
 ; No code addresses the records directly: maincpu reaches them exclusively
 ; through the two 1000-entry pointer tables at 0x986000/0x987000
-; (StyleRec_PtrTable_C2C5 / StyleRec_PtrTable_Default, see
+; (StyleRec_PtrTable_CategoryOrder / StyleRec_PtrTable_Default, see
 ; style_record_ptr_tables.s), selected on the CURRENT UI STATE ID in RAM
 ; 0x8D38 - NOT a model code as previously documented.
 ;
@@ -268,7 +268,7 @@ ptr_header = """\
 ;
 ;   EffectMode_ClampAndLookupPreset - clamps the index to 1000 (cp wa, 0x3e8,
 ;       matching the entry count), picks the table on the CURRENT UI STATE ID
-;       in RAM 0x8D38: states 0xC2 and 0xC5 use StyleRec_PtrTable_C2C5, every
+;       in RAM 0x8D38: states 0xC2 and 0xC5 use StyleRec_PtrTable_CategoryOrder, every
 ;       other state uses StyleRec_PtrTable_Default.  (0x8D38 is the UI state
 ;       byte that UIState_KeyScan_Dispatch indexes keymaps with - NOT a model
 ;       code, as this table's comments previously claimed.)
@@ -280,7 +280,7 @@ ptr_header = """\
 ;
 ; ORDERINGS: both tables list all 1000 records, keeping each style's four
 ; arrangement records together.
-;   StyleRec_PtrTable_C2C5     identity: ROM order = the ten Stylist
+;   StyleRec_PtrTable_CategoryOrder     identity: ROM order = the ten Stylist
 ;                              categories in sequence (browsing by category)
 ;   StyleRec_PtrTable_Default  re-sorted: interleaves the categories,
 ;                              starting 8-beat-like styles first (browsing
@@ -320,14 +320,14 @@ def emit_table(label, addr, banner):
             pverify.extend(struct.pack("<I", REC_BASE + REC_SIZE * k))
     pout.append("\n")
 
-emit_table("StyleRec_PtrTable_C2C5", TBL_C2C5,
+emit_table("StyleRec_PtrTable_CategoryOrder", TBL_C2C5,
            "; UI states 0xC2/0xC5: category order (identity)\n")
 res = rd(TBL_C2C5 + TBL_ENTRIES * 4, TBL_RESIDUE)
 pout.append("""\
 ; 96-byte page residue: fragment of the same ramp family as
 ; StyleRecords_ResidueRamp (16-bit LE, low byte +10 mod 256, high byte +8 on
 ; wrap, lone separator every eighth value) - leftover under the table page
-StyleRec_PtrTable_C2C5_Residue:
+StyleRec_PtrTable_CategoryOrder_Residue:
 """)
 for off in range(0, TBL_RESIDUE, 16):
     pout.append(byte_row(res[off:off + 16]))

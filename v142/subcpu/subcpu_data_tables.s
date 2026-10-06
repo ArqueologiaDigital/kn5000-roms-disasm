@@ -435,7 +435,7 @@ Voice_Pool_Quota_ModeB:
 ;  27 little-endian 32-bit pointers, one per part-allocation descriptor
 ;  (0x1349 + p*0x0C).  Every value is 0x112D + g*0x1E, the address of one of
 ;  the 18 voice pools.  Mode-B counterpart is the table at 0x00F597.
-; Read by ChanStruct_Init_Entry (0x02205A) when the caller flag at (xsp+6) is 0: entry p
+; Read by ChanStruct_Init_BindPartPool (0x02205A) when the caller flag at (xsp+6) is 0: entry p
 ; (`sla wa,2 / lda xbc,(this:24) / ld r, (xrr+rr)`) is stored at offset 0 of the 12-byte part record
 ; at 0x1349 + 12*p, for p = 0..0x1A (27 entries, the loop's `cp (xsp+4),0x1B`).  Written below
 ; as pool-record addresses 0x112D + 30*g, g = pool index.
@@ -470,7 +470,7 @@ Voice_Part_PoolPtr_ModeA:
 
 ; --- 0x00F597-0x00F602  (Voice_Pitch_Table_High) -- 27 x u32 pointers, channel -> section record, mode B
 ; ★ 0x00F597 is NOT a pitch table. Both tables have identical shape and are read by the same
-; code, ChanStruct_Init_Entry (0x02205A) / _AltPtr (0x022088): index = channel*4,
+; code, ChanStruct_Init_BindPartPool (0x02205A) / _AltPtr (0x022088): index = channel*4,
 ; value = a 32-bit pointer stored at offset 0 of the 12-byte channel record at DRAM 0x1349 + ch*12.
 ; Every value is 0x112D + 30*k, i.e. a pointer to one of the 18 section records.
 ;   mode A (0x00F52B) section per channel 0..26:
@@ -734,14 +734,14 @@ Voice_CC_Mode_CaseOffsets:
 ; 8..0x16, so entries 8..22 serve sub-commands 0xA3..0xB1 (23 entries in all).
 ; Doubled, ldw_sri / jp t, (xrr+rr).  Sub-command 0x84 lands on a bare `ret`.
 Voice_SystemMsg_CaseOffsets:
-	.short Voice_SystemMsg_Sub80 - Voice_SystemMsg_DispatchTable					; sub-command 0x80
-	.short Voice_SystemMsg_Sub81 - Voice_SystemMsg_DispatchTable					; sub-command 0x81
-	.short Voice_SystemMsg_Sub82 - Voice_SystemMsg_DispatchTable					; sub-command 0x82
-	.short Voice_SystemMsg_Sub83 - Voice_SystemMsg_DispatchTable					; sub-command 0x83
-	.short Voice_SystemMsg_Sub84 - Voice_SystemMsg_DispatchTable					; sub-command 0x84
-	.short Voice_SystemMsg_Sub85 - Voice_SystemMsg_DispatchTable					; sub-command 0x85
-	.short Voice_SystemMsg_Sub86 - Voice_SystemMsg_DispatchTable					; sub-command 0x86
-	.short Voice_SystemMsg_Sub87 - Voice_SystemMsg_DispatchTable					; sub-command 0x87
+	.short Voice_SystemMsg_CallStubRet1 - Voice_SystemMsg_DispatchTable					; sub-command 0x80
+	.short Voice_SystemMsg_CallStubRet2 - Voice_SystemMsg_DispatchTable					; sub-command 0x81
+	.short Voice_SystemMsg_SetMasterTune - Voice_SystemMsg_DispatchTable					; sub-command 0x82
+	.short Voice_SystemMsg_SetPitchBendRange - Voice_SystemMsg_DispatchTable					; sub-command 0x83
+	.short Voice_SystemMsg_Ignore - Voice_SystemMsg_DispatchTable					; sub-command 0x84
+	.short Voice_SystemMsg_SetKeyShiftEnable - Voice_SystemMsg_DispatchTable					; sub-command 0x85
+	.short Voice_SystemMsg_SetScaleTuneMode - Voice_SystemMsg_DispatchTable					; sub-command 0x86
+	.short Voice_SystemMsg_SetRhythmMode - Voice_SystemMsg_DispatchTable					; sub-command 0x87
 	.short Voice_SystemMsg_SubA3 - Voice_SystemMsg_DispatchTable					; sub-command 0xA3
 	.short Voice_SystemMsg_SubA4 - Voice_SystemMsg_DispatchTable					; sub-command 0xA4
 	.short Voice_SystemMsg_SubA5 - Voice_SystemMsg_DispatchTable					; sub-command 0xA5
@@ -1165,14 +1165,14 @@ VOICEPARAM_FINALIZE_QUERY_JUMPTABLE:
 ; --- 0x00FB2E-0x00FB3D  VOICEPARAM_FINALIZE_ACTION_JUMPTABLE -- 8 u16 jump offsets, base 0x031AA1
 ; Computed jump in Voice_ParamFinalize (status bit 3 SET -> "actions"): `jp T, 0x031AA1 + table[index*2]`.
 VOICEPARAM_FINALIZE_ACTION_JUMPTABLE:
-	.short ToneCmd_DispatchTable_Body - ToneCmd_DispatchTable_Body	; index 0
-	.short VoiceParam_Action_EffectParam - ToneCmd_DispatchTable_Body	; index 1
-	.short VoiceParam_Action_Partial0Or1Param - ToneCmd_DispatchTable_Body	; index 2
-	.short VoiceParam_Action_Partial2Or3Param - ToneCmd_DispatchTable_Body	; index 3
-	.short VoiceParam_Action_VelSplitParam - ToneCmd_DispatchTable_Body	; index 4
-	.short VoiceParam_Action_PatchByteEcho - ToneCmd_DispatchTable_Body	; index 5
-	.short VoiceParam_Action_SubToneByteReply - ToneCmd_DispatchTable_Body	; index 6
-	.short VoiceParam_Action_SubToneLayerByteReply - ToneCmd_DispatchTable_Body	; index 7
+	.short VoiceParam_Action_ToneEdit - VoiceParam_Action_ToneEdit	; index 0
+	.short VoiceParam_Action_EffectParam - VoiceParam_Action_ToneEdit	; index 1
+	.short VoiceParam_Action_Partial0Or1Param - VoiceParam_Action_ToneEdit	; index 2
+	.short VoiceParam_Action_Partial2Or3Param - VoiceParam_Action_ToneEdit	; index 3
+	.short VoiceParam_Action_VelSplitParam - VoiceParam_Action_ToneEdit	; index 4
+	.short VoiceParam_Action_PatchByteEcho - VoiceParam_Action_ToneEdit	; index 5
+	.short VoiceParam_Action_SubToneByteReply - VoiceParam_Action_ToneEdit	; index 6
+	.short VoiceParam_Action_SubToneLayerByteReply - VoiceParam_Action_ToneEdit	; index 7
 
 ; --- 0x00FB3E-0x00FB4D  VoiceParamFinalize_HandlerParams -- 16 bytes, UNREFERENCED
 ; No direct code reference located. Sits between the two VoiceParamFinalize
@@ -2583,16 +2583,16 @@ Voice_SecondaryParam_WordCurveB:
 	.short 0xffe8, 0xffec, 0xfff0, 0xfff4, 0xfff8, 0xfffc, 0x0000
 
 ; --- 0x0120D3-0x0120E2  DSP_InitHandler_Pointers -- 4 x u32 code pointers
-; Entry points {DSP_System_Init, Audio_Process_Init_Data x3}. No direct code
+; Entry points {DSP_System_Init, DSP_InitHandler_NullStub x3}. No direct code
 ; reference located in this audit; sits immediately before the DSP1 image-header
 ; string that DSP_ResetAlgoDefaults copies, so it is presumed to be the same
 ; init-descriptor family. Emitted symbolically -- byte-identity of the build
 ; verifies the resolved addresses.
 DSP_InitHandler_Pointers:
 	.long DSP_System_Init
-	.long Audio_Process_Init_Data
-	.long Audio_Process_Init_Data
-	.long Audio_Process_Init_Data
+	.long DSP_InitHandler_NullStub
+	.long DSP_InitHandler_NullStub
+	.long DSP_InitHandler_NullStub
 
 ; --- 0x0120E3-0x0120F3  DSP1_ImageHeader_SoundRAM -- "KN5000 SOUND RAM" + NUL
 ; DSP_ResetAlgoDefaults_Loop copies the 16 string bytes (NUL not included) to the
@@ -2657,7 +2657,7 @@ Voice_PolyNoteOn_Setup_PtrTable:
 ; up and two octaves down; this line used to say "octave up / octave down".
 ; ★ This is the address the ELF calls Audio_DSP_StateTable_Packed; the "table" is 6 bytes.
 ; --- 0x012171-0x014738  (Audio_DSP_StateTable_Packed) -- an ELF alias, NOT one packed table
-; The ELF symbol covers everything up to OFFSETS_14739, but only the 6 bytes below belong
+; The ELF symbol covers everything up to DSP_BytecodeInterpreter_CaseOffsets, but only the 6 bytes below belong
 ; to it.  The remainder of the region is the named tables that follow: the tone-generator
 ; pitch/dispatch tables, the DSP trace strings, the EQ and Q23 coefficient curves, the
 ; floating-point constant pool at 0x012cd3, the 128-entry mixer-gain curve at 0x0131cf and
@@ -2795,7 +2795,7 @@ EFF_ParamIter_OrderTable:
 EFF_LevelRamp_Ascending:
 	.byte 0, 14, 28, 42, 56, 70, 84, 99
 
-; --- 0x0122c4  8-step volume-reduction lookup used by EFF_VolumeLoop_Body: the per-slot
+; --- 0x0122c4  8-step volume-reduction lookup used by EFF_VolumeLoop_TestVolumeDirty: the per-slot
 ; byte at record+6 indexes this table and the value is subtracted from the slot's volume.
 EFF_VolumeReduction_Steps:
 	.byte 99, 70, 50, 40, 20, 10, 5, 0
@@ -3060,7 +3060,11 @@ DSP_CoeffCurve_Op62:
 ; --- 0x012cc3  two IEEE double constants 0.552, the FP_dmul operands of the
 ; two arms of DSP_AlgoParam_Decode (bytecode opcode 0x79): _Sub for the negated
 ; (type != 1) path, _Add for the type == 1 path.
-FP_Const_0p552_Sub:
+; FPConst_DSP_AlgoParam_Decode_0p552: f64 0.552, FP_dmul factor of DSP_AlgoParam_Decode's type != 1 arm (curve word
+;   negated first); its twin FP_Const_0p552_Add is read only by DSP_AlgoParam_Decode_Type1 and would follow as
+;   FPConst_DSP_AlgoParam_Decode_Type1_0p552. Basis: reader + bytes, named by the pool's FPConst_<reader>_<value>
+;   convention -- what 0.552 means is not established.
+FPConst_DSP_AlgoParam_Decode_0p552:
 	.double 0.552
 FP_Const_0p552_Add:
 	.double 0.552
@@ -3079,29 +3083,45 @@ FP_Const_0p552_Add:
 ; its own.  Measured by that script: 127 x f32 + 96 x f64 = 1,276 bytes tile
 ; 0x012CD3-0x0131CE exactly, read by 223 sites, one per constant (so "98 x f64" above is 2 high).
 FPConst_DSP_VolumeCurve_FP_30:	.float 3e+01	; f32 3e+01, read by DSP_VolumeCurve_FP (operand at 0x039311)
-FPConst_DSP_VolumeCurve_FP_44100:	.float 4.41e+04	; f32 4.41e+04, read by DSP_VolumeCurve_FP (operand at 0x039320)
+; FPConst_DSP_VolumeCurve_FP_SampleRate: f32 44100.0, the DSP sample rate (44.1 kHz): the x <= 75 arm of
+;   DSP_VolumeCurve_FP builds 44100*(30x + 75) and returns 2^23 * 2^(1800 / (75 - 44100*(30x + 75))) = 2^23 * 2^(-24 /
+;   (44100*T - 1)), T = 1 + 0.4x, a per-sample factor that falls by 2^-24 over 44100*T samples. Basis: reader + bytes;
+;   the x > 75 arm has the same form with T = 1.25x - 61.5, and 44100 is the hard-coded rate of the sibling decoders.
+FPConst_DSP_VolumeCurve_FP_SampleRate:	.float 4.41e+04	; f32 4.41e+04, read by DSP_VolumeCurve_FP (operand at 0x039320)
 FPConst_DSP_VolumeCurve_FP_3307500:	.float 3.3075e+06	; f32 3.3075e+06, read by DSP_VolumeCurve_FP (operand at 0x03932F)
 FPConst_DSP_VolumeCurve_FP_75:	.float 75	; f32 75, read by DSP_VolumeCurve_FP (operand at 0x03933B)
 FPConst_DSP_VolumeCurve_FP_1800:	.float 1.8e+03	; f32 1.8e+03, read by DSP_VolumeCurve_FP (operand at 0x03934A)
 FPConst_DSP_VolumeCurve_FP_2:	.double 2.0	; f64 2.0, read by DSP_VolumeCurve_FP (operand at 0x03936D)
 FPConst_DSP_VolumeCurve_FP_HighRange_30:	.float 3e+01	; f32 3e+01, read by DSP_VolumeCurve_FP_HighRange (operand at 0x03939E)
-FPConst_DSP_VolumeCurve_FP_HighRange_44100:	.float 4.41e+04	; f32 4.41e+04, read by DSP_VolumeCurve_FP_HighRange (operand at 0x0393AD)
+; FPConst_DSP_VolumeCurve_FP_HighRange_SampleRate: f32 44100.0, the DSP sample rate (44.1 kHz), in the x > 75 arm of
+;   DSP_VolumeCurve_FP: 2^23 * 2^(576 / (24 - 44100*(30x - 1476))) = 2^23 * 2^(-24 / (44100*T - 1)), T = 1.25x - 61.5
+;   -- the same form as the x <= 75 arm. Basis: reader + bytes + the twin arm.
+FPConst_DSP_VolumeCurve_FP_HighRange_SampleRate:	.float 4.41e+04	; f32 4.41e+04, read by DSP_VolumeCurve_FP_HighRange (operand at 0x0393AD)
 FPConst_DSP_VolumeCurve_FP_HighRange_65091600:	.float 6.50916e+07	; f32 6.50916e+07, read by DSP_VolumeCurve_FP_HighRange (operand at 0x0393BC)
 FPConst_DSP_VolumeCurve_FP_HighRange_24:	.float 24	; f32 24, read by DSP_VolumeCurve_FP_HighRange (operand at 0x0393C8)
 FPConst_DSP_VolumeCurve_FP_HighRange_576:	.float 576	; f32 576, read by DSP_VolumeCurve_FP_HighRange (operand at 0x0393D7)
 FPConst_DSP_VolumeCurve_FP_HighRange_2:	.double 2.0	; f64 2.0, read by DSP_VolumeCurve_FP_HighRange (operand at 0x0393FA)
-FPConst_DSP_VolumeCurve_FP_Finalize_8388608:	.float 8388608	; 2^23; f32 8388608, read by DSP_VolumeCurve_FP_Finalize (operand at 0x03941E)
+; FPConst_DSP_VolumeCurve_FP_Finalize_Q23One: f32 8388608.0 = 2^23, 1.0 in Q23: DSP_VolumeCurve_FP_Finalize multiplies
+;   the float result by it and truncates with FP_ftoi, so the opcode-0x69 value leaves as a Q23 fixed-point word for
+;   DSP_WriteOscParam. Basis: reader + bytes.
+FPConst_DSP_VolumeCurve_FP_Finalize_Q23One:	.float 8388608	; 2^23; f32 8388608, read by DSP_VolumeCurve_FP_Finalize (operand at 0x03941E)
 FPConst_DSP_ReverbCurve_FP_1:	.float 1	; f32 1, read by DSP_ReverbCurve_FP (operand at 0x0395B7)
 FPConst_DSP_ReverbCurve_FP_441:	.double 441.0	; f64 441.0, read by DSP_ReverbCurve_FP (operand at 0x0395D0)
 FPConst_DSP_ReverbCurve_FP_10:	.double 10.0	; f64 10.0, read by DSP_ReverbCurve_FP (operand at 0x0395DC)
 FPConst_DSP_ReverbCurve_FP_0p4270422:	.double 0.4270422	; f64 0.4270422, read by DSP_ReverbCurve_FP (operand at 0x0395F5)
 FPConst_DSP_ReverbCurve_FP_1_2:	.double 1.0	; f64 1.0, read by DSP_ReverbCurve_FP (operand at 0x03960C)
-FPConst_DSP_ReverbCurve_FP_HighRange_44100:	.float 4.41e+04	; f32 4.41e+04, read by DSP_ReverbCurve_FP_HighRange (operand at 0x039634)
+; FPConst_DSP_ReverbCurve_FP_HighRange_SampleRate: f32 44100.0, the DSP sample rate (44.1 kHz): the x > 89 arm of
+;   DSP_ReverbCurve_FP returns 1 - 0.4270422^(1/N) with N = (44100x - 89*44100)/10 = (x - 89) x 100 ms of samples,
+;   continuing the x <= 89 arm's N = 441*(x + 1)/10 = (x + 1) ms (44.1 samples per ms). Basis: reader + bytes + the
+;   low-range twin.
+FPConst_DSP_ReverbCurve_FP_HighRange_SampleRate:	.float 4.41e+04	; f32 4.41e+04, read by DSP_ReverbCurve_FP_HighRange (operand at 0x039634)
 FPConst_DSP_ReverbCurve_FP_HighRange_3924900:	.float 3.9249e+06	; f32 3.9249e+06, read by DSP_ReverbCurve_FP_HighRange (operand at 0x039643)
 FPConst_DSP_ReverbCurve_FP_HighRange_10:	.float 1e+01	; f32 1e+01, read by DSP_ReverbCurve_FP_HighRange (operand at 0x03964F)
 FPConst_DSP_ReverbCurve_FP_HighRange_0p4270422:	.double 0.4270422	; f64 0.4270422, read by DSP_ReverbCurve_FP_HighRange (operand at 0x039672)
 FPConst_DSP_ReverbCurve_FP_HighRange_1:	.double 1.0	; f64 1.0, read by DSP_ReverbCurve_FP_HighRange (operand at 0x039689)
-FPConst_DSP_ReverbCurve_FP_Finalize_8388608:	.float 8388608	; 2^23; f32 8388608, read by DSP_ReverbCurve_FP_Finalize (operand at 0x0396A5)
+; FPConst_DSP_ReverbCurve_FP_Finalize_Q23One: f32 2^23 = 1.0 in Q23: DSP_ReverbCurve_FP_Finalize multiplies by it and
+;   FP_ftoi's the product to get the Q23 DSP word. Basis: reader -- every use is fmul then ftoi.
+FPConst_DSP_ReverbCurve_FP_Finalize_Q23One:	.float 8388608	; 2^23; f32 8388608, read by DSP_ReverbCurve_FP_Finalize (operand at 0x0396A5)
 FPConst_DSP_ParamInterp_FPComplex_32768:	.float 32768	; f32 32768, read by DSP_ParamInterp_FPComplex (operand at 0x0396EB)
 FPConst_DSP_ParamInterp_FPComplex_65536:	.float 65536	; f32 65536, read by DSP_ParamInterp_FPComplex (operand at 0x0396FA)
 FPConst_DSP_ParamInterp_FPComplex_99:	.float 99	; f32 99, read by DSP_ParamInterp_FPComplex (operand at 0x039752)
@@ -3109,7 +3129,9 @@ FPConst_DSP_ParamInterp_FPComplex_44100:	.float 4.41e+04	; f32 4.41e+04, read by
 FPConst_DSP_ParamInterp_FPComplex_99_2:	.float 99	; f32 99, read by DSP_ParamInterp_FPComplex (operand at 0x03977A)
 FPConst_DSP_ParamInterp_FPComplex_2376:	.float 2376	; f32 2376, read by DSP_ParamInterp_FPComplex (operand at 0x039789)
 FPConst_DSP_ParamInterp_FPComplex_2:	.double 2.0	; f64 2.0, read by DSP_ParamInterp_FPComplex (operand at 0x0397AC)
-FPConst_DSP_ParamInterp_FPComplex_8388608:	.float 8388608	; 2^23; f32 8388608, read by DSP_ParamInterp_FPComplex (operand at 0x0397D5)
+; FPConst_DSP_ParamInterp_FPComplex_Q23One: f32 2^23 = 1.0 in Q23: DSP_ParamInterp_FPComplex multiplies by it and
+;   FP_ftoi's the product to get the Q23 DSP word. Basis: reader -- every use is fmul then ftoi.
+FPConst_DSP_ParamInterp_FPComplex_Q23One:	.float 8388608	; 2^23; f32 8388608, read by DSP_ParamInterp_FPComplex (operand at 0x0397D5)
 FPConst_DSP_DetuneCurve_Range1_Compute_2:	.float 2	; f32 2, read by DSP_DetuneCurve_Range1_Compute (operand at 0x039917)
 FPConst_DSP_DetuneCurve_Range2_Compute_20:	.float 2e+01	; f32 2e+01, read by DSP_DetuneCurve_Range2_Compute (operand at 0x039969)
 FPConst_DSP_DetuneCurve_Range2_Compute_180:	.float 1.8e+02	; f32 1.8e+02, read by DSP_DetuneCurve_Range2_Compute (operand at 0x039978)
@@ -3121,7 +3143,9 @@ FPConst_DSP_DetuneCurve_Finalize_2400:	.float 2.4e+03	; f32 2.4e+03, read by DSP
 FPConst_DSP_DetuneCurve_Finalize_2:	.double 2.0	; f64 2.0, read by DSP_DetuneCurve_Finalize (operand at 0x039A5D)
 FPConst_DSP_DetuneCurve_Finalize_1:	.double 1.0	; f64 1.0, read by DSP_DetuneCurve_Finalize (operand at 0x039A74)
 FPConst_DSP_DetuneCurve_Finalize_2400_2:	.double 2400.0	; f64 2400.0, read by DSP_DetuneCurve_Finalize (operand at 0x039A86)
-FPConst_DSP_DetuneCurve_Finalize_8388608:	.float 8388608	; 2^23; f32 8388608, read by DSP_DetuneCurve_Finalize (operand at 0x039A9F)
+; FPConst_DSP_DetuneCurve_Finalize_Q23One: f32 2^23 = 1.0 in Q23: DSP_DetuneCurve_Finalize multiplies by it and
+;   FP_ftoi's the product to get the Q23 DSP word. Basis: reader -- every use is fmul then ftoi.
+FPConst_DSP_DetuneCurve_Finalize_Q23One:	.float 8388608	; 2^23; f32 8388608, read by DSP_DetuneCurve_Finalize (operand at 0x039A9F)
 FPConst_DSP_BiquadWarp_ComputeCoeffs_Neg0p0697:	.double -0.0697	; f64 -0.0697, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039B31)
 FPConst_DSP_BiquadWarp_ComputeCoeffs_10:	.double 10.0	; f64 10.0, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039B47)
 FPConst_DSP_BiquadWarp_ComputeCoeffs_0p9999:	.double 0.9999	; f64 0.9999, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039B61)
@@ -3132,9 +3156,15 @@ FPConst_DSP_BiquadWarp_ComputeCoeffs_2:	.float 2	; f32 2, read by DSP_BiquadWarp
 FPConst_DSP_BiquadWarp_ComputeCoeffs_2_2:	.float 2	; f32 2, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039BEE)
 FPConst_DSP_BiquadWarp_ComputeCoeffs_1:	.float 1	; f32 1, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039C0A)
 FPConst_DSP_BiquadWarp_ComputeCoeffs_3:	.float 3	; f32 3, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039C33)
-FPConst_DSP_BiquadWarp_ComputeCoeffs_2097152:	.float 2097152	; f32 2097152, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039C4F)
-FPConst_DSP_BiquadWarp_ComputeCoeffs_8388608:	.float 8388608	; 2^23; f32 8388608, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039C78)
-FPConst_DSP_BiquadWarp_ComputeCoeffs_4194304:	.float 4194304	; f32 4194304, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039CA8)
+; FPConst_DSP_BiquadWarp_ComputeCoeffs_Q21One: f32 2^21 = 1.0 in Q21: DSP_BiquadWarp_ComputeCoeffs multiplies by it
+;   and FP_ftoi's the product to get the Q21 DSP word. Basis: reader -- every use is fmul then ftoi.
+FPConst_DSP_BiquadWarp_ComputeCoeffs_Q21One:	.float 2097152	; f32 2097152, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039C4F)
+; FPConst_DSP_BiquadWarp_ComputeCoeffs_Q23One: f32 2^23 = 1.0 in Q23: DSP_BiquadWarp_ComputeCoeffs multiplies by it
+;   and FP_ftoi's the product to get the Q23 DSP word. Basis: reader -- every use is fmul then ftoi.
+FPConst_DSP_BiquadWarp_ComputeCoeffs_Q23One:	.float 8388608	; 2^23; f32 8388608, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039C78)
+; FPConst_DSP_BiquadWarp_ComputeCoeffs_Q22One: f32 2^22 = 1.0 in Q22: DSP_BiquadWarp_ComputeCoeffs multiplies by it
+;   and FP_ftoi's the product to get the Q22 DSP word. Basis: reader -- every use is fmul then ftoi.
+FPConst_DSP_BiquadWarp_ComputeCoeffs_Q22One:	.float 4194304	; f32 4194304, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039CA8)
 FPConst_DSP_BiquadWarp_ComputeCoeffs_2097152_2:	.float 2097152	; f32 2097152, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039CCE)
 FPConst_DSP_BiquadWarp_ComputeCoeffs_2097152_3:	.float 2097152	; f32 2097152, read by DSP_BiquadWarp_ComputeCoeffs (operand at 0x039CF4)
 FPConst_DSP_ParamEQ_Curve_FP_32768:	.float 32768	; f32 32768, read by DSP_ParamEQ_Curve_FP (operand at 0x039DC1)
@@ -3172,7 +3202,9 @@ FPConst_DSP_ParamEQ_Range5_67:	.float 67	; f32 67, read by DSP_ParamEQ_Range5 (o
 FPConst_DSP_ParamEQ_Range5_Neg4p816:	.double -4.816	; f64 -4.816, read by DSP_ParamEQ_Range5 (operand at 0x03A1A7)
 FPConst_DSP_ParamEQ_Range5_10:	.double 10.0	; f64 10.0, read by DSP_ParamEQ_Range5 (operand at 0x03A1CA)
 FPConst_DSP_ParamEQ_Range5_2:	.double 2.0	; f64 2.0, read by DSP_ParamEQ_Range5 (operand at 0x03A1EE)
-FPConst_DSP_ParamEQ_Finalize_8388608:	.float 8388608	; 2^23; f32 8388608, read by DSP_ParamEQ_Finalize (operand at 0x03A20C)
+; FPConst_DSP_ParamEQ_Finalize_Q23One: f32 2^23 = 1.0 in Q23: DSP_ParamEQ_Finalize multiplies by it and FP_ftoi's the
+;   product to get the Q23 DSP word. Basis: reader -- every use is fmul then ftoi.
+FPConst_DSP_ParamEQ_Finalize_Q23One:	.float 8388608	; 2^23; f32 8388608, read by DSP_ParamEQ_Finalize (operand at 0x03A20C)
 FPConst_DSP_FilterLUT_Fetch_0p5:	.double 0.5	; f64 0.5, read by DSP_FilterLUT_Fetch (operand at 0x03A6CD)
 FPConst_DSP_FilterLUT_Fetch_Neg12:	.double -12.0	; f64 -12.0, read by DSP_FilterLUT_Fetch (operand at 0x03A6DC)
 FPConst_DSP_FilterLUT_Mode0x10_0p5:	.double 0.5	; f64 0.5, read by DSP_FilterLUT_Mode0x10 (operand at 0x03A754)
@@ -3199,21 +3231,29 @@ FPConst_DSP_BiquadCoeff_Algo0_Assembly_1_2:	.float 1	; f32 1, read by DSP_Biquad
 FPConst_DSP_BiquadCoeff_Algo0_Fixup_2:	.float 2	; f32 2, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03AD32)
 FPConst_DSP_BiquadCoeff_Algo0_Fixup_2_2:	.float 2	; f32 2, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03AD54)
 FPConst_DSP_BiquadCoeff_Algo0_Fixup_2_3:	.float 2	; f32 2, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03AD76)
-FPConst_DSP_BiquadCoeff_Algo0_Fixup_4194304:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03AD89)
+; FPConst_DSP_BiquadCoeff_Algo0_Fixup_Q22One: f32 2^22 = 1.0 in Q22: DSP_BiquadCoeff_Algo0_Fixup multiplies by it and
+;   FP_ftoi's the product to get the Q22 DSP word. Basis: reader -- every use is fmul then ftoi.
+FPConst_DSP_BiquadCoeff_Algo0_Fixup_Q22One:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03AD89)
 FPConst_DSP_BiquadCoeff_Algo0_Fixup_4194304_2:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03ADBC)
 FPConst_DSP_BiquadCoeff_Algo0_Fixup_4194304_3:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03ADEA)
 FPConst_DSP_BiquadCoeff_Algo0_Fixup_4194304_4:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03AE18)
-FPConst_DSP_BiquadCoeff_Algo0_Fixup_8388608:	.float 8388608	; 2^23; f32 8388608, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03AE46)
+; FPConst_DSP_BiquadCoeff_Algo0_Fixup_Q23One: f32 2^23 = 1.0 in Q23: DSP_BiquadCoeff_Algo0_Fixup multiplies by it and
+;   FP_ftoi's the product to get the Q23 DSP word. Basis: reader -- every use is fmul then ftoi.
+FPConst_DSP_BiquadCoeff_Algo0_Fixup_Q23One:	.float 8388608	; 2^23; f32 8388608, read by DSP_BiquadCoeff_Algo0_Fixup (operand at 0x03AE46)
 FPConst_DSP_BiquadCoeff_Algo1_7p1237929em5:	.double 7.123792865e-05	; f64 7.123792865e-05, read by DSP_BiquadCoeff_Algo1 (operand at 0x03AE81)
 FPConst_DSP_BiquadCoeff_Algo1_1:	.float 1	; f32 1, read by DSP_BiquadCoeff_Algo1 (operand at 0x03AEE8)
 FPConst_DSP_BiquadCoeff_Algo1_1_2:	.float 1	; f32 1, read by DSP_BiquadCoeff_Algo1 (operand at 0x03AEF6)
 FPConst_DSP_BiquadCoeff_Algo1_Neg2:	.float -2	; f32 -2, read by DSP_BiquadCoeff_Algo1 (operand at 0x03AF0A)
 FPConst_DSP_BiquadCoeff_Algo1_1_3:	.float 1	; f32 1, read by DSP_BiquadCoeff_Algo1 (operand at 0x03AF2C)
-FPConst_DSP_BiquadCoeff_Algo1_4194304:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo1 (operand at 0x03AFA1)
+; FPConst_DSP_BiquadCoeff_Algo1_Q22One: f32 2^22 = 1.0 in Q22: DSP_BiquadCoeff_Algo1 multiplies by it and FP_ftoi's
+;   the product to get the Q22 DSP word. Basis: reader -- every use is fmul then ftoi.
+FPConst_DSP_BiquadCoeff_Algo1_Q22One:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo1 (operand at 0x03AFA1)
 FPConst_DSP_BiquadCoeff_Algo1_4194304_2:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo1 (operand at 0x03AFD4)
 FPConst_DSP_BiquadCoeff_Algo1_4194304_3:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo1 (operand at 0x03B002)
 FPConst_DSP_BiquadCoeff_Algo1_4194304_4:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo1 (operand at 0x03B030)
-FPConst_DSP_BiquadCoeff_Algo1_8388608:	.float 8388608	; 2^23; f32 8388608, read by DSP_BiquadCoeff_Algo1 (operand at 0x03B05E)
+; FPConst_DSP_BiquadCoeff_Algo1_Q23One: f32 2^23 = 1.0 in Q23: DSP_BiquadCoeff_Algo1 multiplies by it and FP_ftoi's
+;   the product to get the Q23 DSP word. Basis: reader -- every use is fmul then ftoi.
+FPConst_DSP_BiquadCoeff_Algo1_Q23One:	.float 8388608	; 2^23; f32 8388608, read by DSP_BiquadCoeff_Algo1 (operand at 0x03B05E)
 FPConst_DSP_BiquadCoeff_Algo2_7p1237929em5:	.double 7.123792865e-05	; f64 7.123792865e-05, read by DSP_BiquadCoeff_Algo2 (operand at 0x03B099)
 FPConst_DSP_BiquadCoeff_Algo2_7p1237929em5_2:	.double 7.123792865e-05	; f64 7.123792865e-05, read by DSP_BiquadCoeff_Algo2 (operand at 0x03B0BD)
 FPConst_DSP_BiquadCoeff_Algo2_7p1237929em5_3:	.double 7.123792865e-05	; f64 7.123792865e-05, read by DSP_BiquadCoeff_Algo2 (operand at 0x03B0F3)
@@ -3229,9 +3269,13 @@ FPConst_DSP_BiquadCoeff_Algo2_AfterSign1_1:	.double 1.0	; f64 1.0, read by DSP_B
 FPConst_DSP_BiquadCoeff_Algo2_AfterSign2_20:	.float 2e+01	; f32 2e+01, read by DSP_BiquadCoeff_Algo2_AfterSign2 (operand at 0x03B29E)
 FPConst_DSP_BiquadCoeff_Algo2_AfterSign2_10:	.double 10.0	; f64 10.0, read by DSP_BiquadCoeff_Algo2_AfterSign2 (operand at 0x03B2BE)
 FPConst_DSP_BiquadCoeff_Algo2_AfterSign2_1:	.double 1.0	; f64 1.0, read by DSP_BiquadCoeff_Algo2_AfterSign2 (operand at 0x03B2EE)
-FPConst_DSP_BiquadCoeff_Algo2_WriteParams_4194304:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo2_WriteParams (operand at 0x03B41E)
+; FPConst_DSP_BiquadCoeff_Algo2_WriteParams_Q22One: f32 2^22 = 1.0 in Q22: DSP_BiquadCoeff_Algo2_WriteParams
+;   multiplies by it and FP_ftoi's the product to get the Q22 DSP word. Basis: reader -- every use is fmul then ftoi.
+FPConst_DSP_BiquadCoeff_Algo2_WriteParams_Q22One:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo2_WriteParams (operand at 0x03B41E)
 FPConst_DSP_BiquadCoeff_Algo2_WriteParams_4194304_2:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo2_WriteParams (operand at 0x03B451)
-FPConst_DSP_BiquadCoeff_Algo2_WriteParams_8388608:	.float 8388608	; 2^23; f32 8388608, read by DSP_BiquadCoeff_Algo2_WriteParams (operand at 0x03B47A)
+; FPConst_DSP_BiquadCoeff_Algo2_WriteParams_Q23One: f32 2^23 = 1.0 in Q23: DSP_BiquadCoeff_Algo2_WriteParams
+;   multiplies by it and FP_ftoi's the product to get the Q23 DSP word. Basis: reader -- every use is fmul then ftoi.
+FPConst_DSP_BiquadCoeff_Algo2_WriteParams_Q23One:	.float 8388608	; 2^23; f32 8388608, read by DSP_BiquadCoeff_Algo2_WriteParams (operand at 0x03B47A)
 FPConst_DSP_BiquadCoeff_Algo2_WriteParams_4194304_3:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo2_WriteParams (operand at 0x03B4A3)
 FPConst_DSP_BiquadCoeff_Algo2_WriteParams_4194304_4:	.float 4194304	; f32 4194304, read by DSP_BiquadCoeff_Algo2_WriteParams (operand at 0x03B4CC)
 FPConst_DSP_SOS_LUT_Fetch_0p5:	.double 0.5	; f64 0.5, read by DSP_SOS_LUT_Fetch (operand at 0x03B56F)
@@ -3256,7 +3300,10 @@ FPConst_DSP_SOS_Algo0_NonzeroCoeff_1_4:	.float 1	; f32 1, read by DSP_SOS_Algo0_
 FPConst_DSP_SOS_Algo0_NonzeroCoeff_1_5:	.float 1	; f32 1, read by DSP_SOS_Algo0_NonzeroCoeff (operand at 0x03B8E6)
 FPConst_DSP_SOS_Algo0_FinalChain_1:	.float 1	; f32 1, read by DSP_SOS_Algo0_FinalChain (operand at 0x03B901)
 FPConst_DSP_SOS_Algo0_FinalChain_1_2:	.float 1	; f32 1, read by DSP_SOS_Algo0_FinalChain (operand at 0x03B912)
-FPConst_DSP_SOS_Algo0_FinalChain_4194304:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo0_FinalChain (operand at 0x03B958)
+; FPConst_DSP_SOS_Algo0_FinalChain_Q22One: f32 4194304.0 = 2^22, 1.0 in Q22: DSP_SOS_Algo0_FinalChain multiplies a
+;   normalised second-order-section coefficient by it and truncates with FP_ftoi before writing it to the DSP. Basis:
+;   reader + bytes (siblings _4194304_2 / _4194304_3 are the same scale for the other taps).
+FPConst_DSP_SOS_Algo0_FinalChain_Q22One:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo0_FinalChain (operand at 0x03B958)
 FPConst_DSP_SOS_Algo0_FinalChain_4194304_2:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo0_FinalChain (operand at 0x03B98D)
 FPConst_DSP_SOS_Algo0_FinalChain_4194304_3:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo0_FinalChain (operand at 0x03B9B8)
 FPConst_DSP_SOS_Algo1_20:	.float 2e+01	; f32 2e+01, read by DSP_SOS_Algo1 (operand at 0x03B9E2)
@@ -3277,8 +3324,14 @@ FPConst_DSP_SOS_Algo1_NonzeroCoeff_1_4:	.float 1	; f32 1, read by DSP_SOS_Algo1_
 FPConst_DSP_SOS_Algo1_NonzeroCoeff_1_5:	.float 1	; f32 1, read by DSP_SOS_Algo1_NonzeroCoeff (operand at 0x03BC29)
 FPConst_DSP_SOS_Algo1_FinalChain_1:	.float 1	; f32 1, read by DSP_SOS_Algo1_FinalChain (operand at 0x03BC49)
 FPConst_DSP_SOS_Algo1_FinalChain_1_2:	.float 1	; f32 1, read by DSP_SOS_Algo1_FinalChain (operand at 0x03BC5A)
-FPConst_DSP_SOS_Algo1_FinalChain_2097152:	.float 2097152	; f32 2097152, read by DSP_SOS_Algo1_FinalChain (operand at 0x03BC9B)
-FPConst_DSP_SOS_Algo1_FinalChain_4194304:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo1_FinalChain (operand at 0x03BCCC)
+; FPConst_DSP_SOS_Algo1_FinalChain_Q21One: f32 2097152.0 = 2^21, 1.0 in Q21: DSP_SOS_Algo1_FinalChain multiplies a
+;   normalised second-order-section coefficient by it and truncates with FP_ftoi before writing it to the DSP. Basis:
+;   reader + bytes (siblings _2097152_2 are the same scale for the other taps).
+FPConst_DSP_SOS_Algo1_FinalChain_Q21One:	.float 2097152	; f32 2097152, read by DSP_SOS_Algo1_FinalChain (operand at 0x03BC9B)
+; FPConst_DSP_SOS_Algo1_FinalChain_Q22One: f32 4194304.0 = 2^22, 1.0 in Q22: DSP_SOS_Algo1_FinalChain multiplies a
+;   normalised second-order-section coefficient by it and truncates with FP_ftoi before writing it to the DSP. Basis:
+;   reader + bytes (the only 2^22 tap of Algo1; its other two taps use 2^21).
+FPConst_DSP_SOS_Algo1_FinalChain_Q22One:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo1_FinalChain (operand at 0x03BCCC)
 FPConst_DSP_SOS_Algo1_FinalChain_2097152_2:	.float 2097152	; f32 2097152, read by DSP_SOS_Algo1_FinalChain (operand at 0x03BCF3)
 FPConst_DSP_SOS_Algo2_20:	.float 2e+01	; f32 2e+01, read by DSP_SOS_Algo2 (operand at 0x03BD1D)
 FPConst_DSP_SOS_Algo2_10:	.double 10.0	; f64 10.0, read by DSP_SOS_Algo2 (operand at 0x03BD3D)
@@ -3298,7 +3351,10 @@ FPConst_DSP_SOS_Algo2_NonzeroCoeff_1_4:	.float 1	; f32 1, read by DSP_SOS_Algo2_
 FPConst_DSP_SOS_Algo2_NonzeroCoeff_1_5:	.float 1	; f32 1, read by DSP_SOS_Algo2_NonzeroCoeff (operand at 0x03BF62)
 FPConst_DSP_SOS_Algo2_FinalChain_1:	.float 1	; f32 1, read by DSP_SOS_Algo2_FinalChain (operand at 0x03BF82)
 FPConst_DSP_SOS_Algo2_FinalChain_1_2:	.float 1	; f32 1, read by DSP_SOS_Algo2_FinalChain (operand at 0x03BF93)
-FPConst_DSP_SOS_Algo2_FinalChain_4194304:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo2_FinalChain (operand at 0x03BFCB)
+; FPConst_DSP_SOS_Algo2_FinalChain_Q22One: f32 4194304.0 = 2^22, 1.0 in Q22: DSP_SOS_Algo2_FinalChain multiplies a
+;   normalised second-order-section coefficient by it and truncates with FP_ftoi before writing it to the DSP. Basis:
+;   reader + bytes (siblings _4194304_2 / _4194304_3 are the same scale for the other taps).
+FPConst_DSP_SOS_Algo2_FinalChain_Q22One:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo2_FinalChain (operand at 0x03BFCB)
 FPConst_DSP_SOS_Algo2_FinalChain_4194304_2:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo2_FinalChain (operand at 0x03BFFC)
 FPConst_DSP_SOS_Algo2_FinalChain_4194304_3:	.float 4194304	; f32 4194304, read by DSP_SOS_Algo2_FinalChain (operand at 0x03C028)
 
@@ -4755,7 +4811,7 @@ EFF_ParamMeta_ByteTableA:
 EFF_ParamMeta_ByteTableB:
 	.byte 1, 1, 1, 1
 
-; --- 0x014739-0x014744  OFFSETS_14739 -- 6 x u16 jump offsets, base 0x03C32E
+; --- 0x014739-0x014744  DSP_BytecodeInterpreter_CaseOffsets -- 6 x u16 jump offsets, base 0x03C32E
 ; The DSP bytecode interpreter's PRIMARY opcode dispatch. DSP_BytecodeInterpreter_Loop
 ; (0x03C2CB) takes the high nibble of the fetched byte (`srl wa,4`), special-cases 0x0E
 ; (SendCommand) and 0x0D (StateChange), rejects >5, then `add wa,wa / lda_24 xix,0x014739 /
@@ -4768,14 +4824,18 @@ EFF_ParamMeta_ByteTableB:
 ; (0x03C259). _Init performs no dispatch at all -- it copies the descriptor's four words and
 ; one long into the stack frame and then `jrl DSP_BytecodeInterpreter_CheckEnd`. The quoted
 ; instruction sequence is verbatim at the tail of _Loop.
-; --- 0x014739-0x014744  OFFSETS_14739 ("DSP_Bytecode_HandlerOffsetTable" is descriptive
+; --- 0x014739-0x014744  DSP_BytecodeInterpreter_CaseOffsets ("DSP_Bytecode_HandlerOffsetTable" is descriptive
 ;     text from symbols/proposals/subcpu-region-15.txt, not a symbol -- the label used here
-;     and in symbols/subcpu_symbols_reference.txt is OFFSETS_14739)
+;     and in symbols/subcpu_symbols_reference.txt is DSP_BytecodeInterpreter_CaseOffsets)
 ; 6 signed 16-bit offsets relative to 0x03C32E, indexed by the bytecode opcode's high nibble
 ; (0..5).  Decoded: op0 +0x000 -> 0x03C32E, op1 +0x23A -> 0x03C568, op2 +0x333 -> 0x03C661,
 ; op3 +0x3DA -> 0x03C708, op4 +0x473 -> 0x03C7A1, op5 +0x48D -> 0x03C7BB.
 ; Consumed by the computed `jp (XIX+DE)` at the tail of DSP_BytecodeInterpreter_Loop.
-OFFSETS_14739:
+; DSP_BytecodeInterpreter_CaseOffsets: 6 x s16 offsets from DSP_Bytecode_Op00_Groups5_ParamMix, indexed by the high
+;   nibble (0..5) of a DSP bytecode instruction: the computed `jp` at the tail of DSP_BytecodeInterpreter_Loop. Basis:
+;   reader + table. (Old name quoted in dsp/analysis/*.md, dsp/instruction-set.md and
+;   notes/sound/dsp_protocol_cross_product.py: dated notes keep it with '(now ...)'.)
+DSP_BytecodeInterpreter_CaseOffsets:
 	.short DSP_Bytecode_Op00_Groups5_ParamMix - DSP_Bytecode_Op00_Groups5_ParamMix	; index 0
 	.short DSP_Bytecode_Op01_Groups5_Addr12 - DSP_Bytecode_Op00_Groups5_ParamMix	; index 1
 	.short DSP_Bytecode_Op02_Groups3_Raw - DSP_Bytecode_Op00_Groups5_ParamMix	; index 2
@@ -4783,14 +4843,14 @@ OFFSETS_14739:
 	.short DSP_Bytecode_Op04_CommandOnly - DSP_Bytecode_Op00_Groups5_ParamMix	; index 4
 	.short DSP_Bytecode_Op05_Groups5_Masked - DSP_Bytecode_Op00_Groups5_ParamMix	; index 5
 
-; --- 0x014745-0x014776  OFFSETS_14745 -- 25 x u16 jump offsets, base 0x03CB8E
+; --- 0x014745-0x014776  DSP_Translator_CaseOffsets -- 25 x u16 jump offsets, base 0x03CB8E
 ; The DSP bytecode interpreter's SECONDARY dispatch, for opcodes 0x61..0x79: `sub wa,0x61 /
 ; reject <0 or >0x18 / add wa,wa / lda_24 xix,0x014745 / ldw_sri WA / lda_24 xix,0x03cb8e /
 ; jp t, (xrr+rr)`. 0x18+1 = 25 entries = 50 bytes, matching the extent exactly. Opcodes 0x21, 0x24 and
 ; 0x40 are handled before this table (Interp2Point, MultiStepInterp, PanScale).
-; --- 0x014745-0x014776  OFFSETS_14745 ("DSP_Translator_OpcodeOffsetTable" is descriptive
+; --- 0x014745-0x014776  DSP_Translator_CaseOffsets ("DSP_Translator_OpcodeOffsetTable" is descriptive
 ;     text from symbols/proposals/subcpu-region-15.txt, not a symbol -- the label used here
-;     and in symbols/subcpu_symbols_reference.txt is OFFSETS_14745)
+;     and in symbols/subcpu_symbols_reference.txt is DSP_Translator_CaseOffsets)
 ; 25 signed 16-bit offsets relative to 0x03CB8E, indexed by (opcode - 0x61) for opcodes
 ; 0x61..0x79.  Decoded targets, in opcode order:
 ;   0x61->0x03CB8E 0x62->0x03CBDE 0x63->0x03CBFA 0x64->0x03CC33 0x65->0x03CC50 0x66->0x03CC6D
@@ -4800,7 +4860,11 @@ OFFSETS_14739:
 ;   0x79->0x03CC16
 ; Consumed by the computed `jp (XIX+DE)` at 0x03CB89.  Opcodes 0x21, 0x24 and 0x40 are
 ; special-cased BEFORE this table; anything else aborts via DSP_Op_Unknown_Error.
-OFFSETS_14745:
+; DSP_Translator_CaseOffsets: 25 x s16 offsets from DSP_Op_0x61_LinearEval, indexed by (opcode - 0x61) for the DSP
+;   parameter-translator opcodes 0x61..0x79: the computed `jp` in DSP_Translator_ReadOpcode (0x21 / 0x24 / 0x40 are
+;   tested before it). Basis: reader + table. (Old name quoted in technics-docs/dsp-bytecode-interpreter.md,
+;   dsp/analysis/*.md and the dsp/tools/host_side.py comment: update or annotate there.)
+DSP_Translator_CaseOffsets:
 	.short DSP_Op_0x61_LinearEval - DSP_Op_0x61_LinearEval	; index 0
 	.short DSP_Op_0x62_ParamFetchSingle - DSP_Op_0x61_LinearEval	; index 1
 	.short DSP_Op_0x63_ParamFetchAlgoType - DSP_Op_0x61_LinearEval	; index 2
@@ -13058,7 +13122,12 @@ Serial1_Write_INTES1_FD:
 	pop	sr
 	ret
 
-Serial1_CommandHandler_RX_F4F5:
+; Serial1_HandleEnableCommand: While the serial-1 link is disabled (SERIAL_1_VAR_1034 bit 2 clear) every byte of a
+;   main-CPU 0x80-0x9F packet comes here instead of the TX ring: 0xF4 sets mode byte SERIAL_1_VAR_1038 = 3, enables
+;   the link and rewrites SC1MOD 0x29 -> 0x2B (clock-select bits 01 -> 11); 0xF5 sets mode 2 and enables it on the
+;   unchanged SC1MOD; any other byte is dropped. Basis: caller + body + the bit-2 readers (INTRX1 stores received
+;   bytes and Serial1_DataTransmit_Loop queues TX bytes only while it is set).
+Serial1_HandleEnableCommand:
 	cp a, 0xF5
 	jr z, Serial1_F5_BaudRate_Switch
 	cp a, 0xF4
@@ -13132,7 +13201,7 @@ Serial1_TX_LoopBody:
 	ld (xsp + 6), xwa
 	extz bc
 	ld wa, bc
-	calr Serial1_CommandHandler_RX_F4F5
+	calr Serial1_HandleEnableCommand
 	jr Serial1_TX_CheckNext
 
 Serial1_TX_ViaRingBuf:

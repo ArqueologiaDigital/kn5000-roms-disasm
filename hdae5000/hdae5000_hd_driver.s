@@ -5312,8 +5312,8 @@ HDAE5000_FormatDialog_CodeDigit:	; 0x2865DE (1098 bytes)
 	cp (0x22ad9c:24), 0x06; count == 6?
 	jr nz, .LCHSC__not_full
 	; 6 digits entered — match against patterns
-	pushw HDAE5000_Str_050354@hi16
-	pushw HDAE5000_Str_050354@lo16		; low half of HDAE5000_Str_050354
+	pushw HDAE5000_Str_HdFormatCode@hi16
+	pushw HDAE5000_Str_HdFormatCode@lo16		; low half of HDAE5000_Str_HdFormatCode
 	lda xwa, (0x22ad9e:24)
 	push xwa
 	call HDAE5000_StrPrefixCmp			; string compare
@@ -5323,8 +5323,8 @@ HDAE5000_FormatDialog_CodeDigit:	; 0x2865DE (1098 bytes)
 	ld iz, 2:i3			; match pattern 1 → IZ=2
 	jr t, .LCHSC__clear
 .LCHSC__try2:
-	pushw HDAE5000_Str_965768@hi16
-	pushw HDAE5000_Str_965768@lo16		; low half of HDAE5000_Str_965768
+	pushw HDAE5000_Str_Track0RecoverCode@hi16
+	pushw HDAE5000_Str_Track0RecoverCode@lo16		; low half of HDAE5000_Str_Track0RecoverCode
 	lda xwa, (0x22ad9e:24)
 	push xwa
 	call HDAE5000_StrPrefixCmp			; string compare

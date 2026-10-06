@@ -887,7 +887,7 @@ IconPixels_176_Unreferenced:	.incbin "includes/generated/IconPixels_176.bin"
 ;                       + labeled 16-bit ramp remnant, also in style_records.s)
 ;   0x983B3A-0x9999CB  HELP system + Music Stylist pointer tables -- fully
 ;                       split out into help_databases.s (stale truncated
-;                       SLIDE8K remnant, StyleRec_PtrTable_C2C5/_Default in
+;                       SLIDE8K remnant, StyleRec_PtrTable_CategoryOrder/_Default in
 ;                       style_record_ptr_tables.s,
 ;                       HelpIntro_LanguageTable + HelpDB_LanguageTable at
 ;                       0x988000/0x988018, five intro strings, five live

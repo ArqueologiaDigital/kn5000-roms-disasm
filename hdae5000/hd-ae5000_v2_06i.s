@@ -222,7 +222,7 @@
 ;   0x1C9FF-0x1D9FF  UI configuration strings (0x29BFE0-0x29CFF0):
 ;                    "infofont", "reversecolor", "fontcolor", "dial", etc.
 ;   0x1D000-0x65DCD  Additional code, lookup tables, German error messages
-;   0x65DCE-0x661CD  HDAE5000_Palette_Data - 256 RGBX VGA entries (1,024 bytes)
+;   0x65DCE-0x661CD  HDAE5000_Palette_BootSplash - 256 RGBX VGA entries (1,024 bytes)
 ;   0x661CE-0x78DCD  HDAE5000_Bitmap_BootSplash - boot splash bitmap
 ;                    (0x2E61CE, 320x240 8bpp indexed, 76,800 bytes)
 ;   0x78DCE-0x7A134  HDAE5000_Display_Params + HDAE5000_DataSegmentImage

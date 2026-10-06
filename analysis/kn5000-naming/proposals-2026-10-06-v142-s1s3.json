@@ -1,0 +1,1741 @@
+[
+ {
+  "old": "AudioMod_Scale_To_Part_20",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AudioMod_Scale_To_LevelPairShift",
+  "header": "Audio-channel command 2 scaler: E = ((bipolar ? (BC-0x40)*2 : BC) * depth) / 127, signed, stored as the part's level-pair shift byte part+0x20 (0x041388 + part*0x11F). Basis: caller + readers -- AudioChannel_Handler_Cmd02 is the only caller; the only readers, Voice_WriteChPanShift/2, add (layer-word bit 9 clear) or subtract it from the 7-bit level pair voice+62/+64 (TG regs 0x21/0x22) while layer-word bit 8 is set.",
+  "basis": "caller + readers + body",
+  "evidence": [
+   "kn5000_subprogram_v142.s:19926 `calr AudioMod_Scale_To_Part_20` -- only caller, AudioChannel_Handler_Cmd02 (dispatch stub 1 = modulation destination command 2)",
+   "kn5000_subprogram_v142.s:19933-19936 `pushw 512` / `ldw de, 256` / `calr AudioMod_Apply_BusRouting` -- command 2 owns bits 8/9 of each layer word (part+0x6E+w*0x25)+0x18",
+   "kn5000_subprogram_v142.s:18457-18465 `divs bc, 127` / `muls wa, 287` / `lda xbc, (267144:24)` / `ld (xbc+wa), e` -- signed byte stored at 0x041388 + part*0x11F = part record +0x20",
+   "kn5000_subprogram_v142.s:13278 / 13287 `bit 8, wa` / `bit 9, wa` on [(voice+39)]+0x18 -- Voice_WriteChPanShift2 applies the shift only with bit 8, subtracts with bit 9",
+   "kn5000_subprogram_v142.s:13290-13291 `ld xwa, (xwa + 35)` / `ld a, (xwa + 32)` -- reader: voice+0x23 = &part record, byte +0x20 added to voice+62/+64 & 0x7F; results written to 0x0451E6/0x0451E8 at 13373/13350 (Voice_WriteChPanShift 13039-13073 is identical)",
+   "kn5000_subprogram_v142.s:12999 / 13006 `ld (xwa + 62), bc` / `ld (xwa + 64), bc` -- Voice_Calc_LevelPair_PatchAtk computes the pair the shift is applied to",
+   "kn5000_subprogram_v142.s:41238 `lda xde, (0x041388:24)` + `ld (xde+bc), 0x00` -- Voice_NoteState_Clear resets it to 0 (neutral)",
+   "a scan of every `(xwa + 32)` read through a slot+35 part pointer finds only the eight in Voice_WriteChPanShift/2 (scratch: agent_s1, python scan)"
+  ]
+ },
+ {
+  "old": "AudioState_Init_ClearWords_Body",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "AudioState_Init_ClearVoiceBitmaps",
+  "header": "",
+  "basis": "internal loop body + readers of the cleared words",
+  "evidence": [
+   "kn5000_subprogram_v142.s:5353 `jr c, AudioState_Init_ClearWords_Body` -- back edge of the 4-iteration loop inside Voice_Reset_Engine (no outside reference)",
+   "kn5000_subprogram_v142.s:5344-5350 `lda xbc, (10542:16)` / `lda xbc, (10550:16)` / `ldw (xbc+wa), 0x0000` -- zeroes word[bank] of 0x292E and 0x2936, bank 0..3",
+   "kn5000_subprogram_v142.s:5369-5372 -- Voice_Manager_PollBank header: 0x292E + bank*2 = previous active-voice bitmap, 0x2936 + bank*2 = 'held / do not reap' bitmap",
+   "kn5000_subprogram_v142.s:5079 `lda xbc, (10542:16)` -- Voice_Reset_Engine's own head tests the same shadow bitmaps"
+  ]
+ },
+ {
+  "old": "Audio_Process_Init_Data",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSP_InitHandler_NullStub",
+  "header": "A lone `ret` (spelled `.byte 0x0e`): the do-nothing handler that entries 1-3 of DSP_InitHandler_Pointers point to beside entry 0 = DSP_System_Init -- same shape as DSP2_InitTask_NullStub / DSP_ResetTask_NullStub. Basis: table + body; the old header's 'no caller and no table reference' is wrong.",
+  "basis": "table + body",
+  "evidence": [
+   "subcpu_data_tables.s:2591-2595 `DSP_InitHandler_Pointers:` `.long DSP_System_Init` then 3 x `.long Audio_Process_Init_Data` -- table entries 1-3",
+   "kn5000_subprogram_v142.s:41855-41856 `Audio_Process_Init_Data:` `.byte 0x0e` -- 0x0E is `ret`; should be written as the instruction",
+   "kn5000_subprogram_v142.s:41853-41854 -- header claims 'No caller and no table reference anywhere', contradicted by the table above",
+   "subcpu_data_tables.s:2743-2747 `DSP_ResetTask_PtrTable:` DSP_Reset + 3 x DSP_ResetTask_NullStub -- the sibling pattern and its naming",
+   "kn5000_subprogram_v142.s:43400 `DSP2_InitTask_NullStub:` -- the other sibling (DSP2_InitTask_PtrTable)"
+  ]
+ },
+ {
+  "old": "ChanStruct_Init_Entry",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ChanStruct_Init_BindPartPool",
+  "header": "",
+  "basis": "internal loop body + tables it reads",
+  "evidence": [
+   "kn5000_subprogram_v142.s:5288 `jrl c, ChanStruct_Init_Entry` -- back edge of the per-part loop (0..0x1A) inside Voice_Reset_Engine; entered by fall-through from ChanStruct_Init_Loop",
+   "kn5000_subprogram_v142.s:5235 `cp (xsp + 6), 0x0` -- Voice_Reset_Engine's A argument (stored at 5070) selects allocation mode A or B",
+   "kn5000_subprogram_v142.s:5241-5248 `lda xhl, (4937:16)` / `lda xbc, (Voice_Part_PoolPtr_ModeA:24)` / `ld (xhl+de), xwa` -- part descriptor 0x1349 + part*12, +0 = its voice-pool pointer",
+   "kn5000_subprogram_v142.s:5259 `lda xbc, (Voice_Pitch_Table_High:24)` -- mode-B pool pointers (the table is mis-named; its header says it is the mode-B part->pool binding)",
+   "subcpu_data_tables.s:434-442 -- Voice_Part_PoolPtr_ModeA header: part -> voice-pool binding stored at offset 0 of the 12-byte part record"
+  ]
+ },
+ {
+  "old": "ClampS16_WA_To_DEBC",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Int_ClampSignedToRange",
+  "header": "Clamps signed 16-bit WA into [DE, BC] (DE = low bound, BC = high bound); result in WA and XHL. Basis: callers + body -- 62 call sites load the bounds first (0..0xFF, 4..0x7F, -50..+50).",
+  "basis": "callers + body",
+  "evidence": [
+   "kn5000_subprogram_v142.s:6794-6806 `cp wa, bc` / `jr le` / `ld wa, bc` / `cp wa, de` / `jr ge` / `ld wa, de` / `ld hl, wa` -- signed clamp to [DE, BC]",
+   "kn5000_subprogram_v142.s:13337-13339 `ldw bc, 0x7F` / `ld de, 4:i3` / `calr ClampS16_WA_To_DEBC` -- caller Voice_WriteChPanShift2 clamps to 4..0x7F",
+   "kn5000_subprogram_v142.s:9471-9472 `ldw bc, 0xFF` / `ld de, 0:i3` -- caller clamps to 0..0xFF",
+   "kn5000_subprogram_v142.s:15256-15257 `ldw bc, 0x32` / `ldw de, 0xFFCE` -- caller clamps to -50..+50",
+   "the suffix DEBC is the register pair, not an address (the batch flagged it as positional); internal labels ClampS16_WA_To_DEBC_CheckLo / _Return should follow (Int_ClampSignedToRange_CheckLo / _Return); Int_ is the prefix of Int_SignedDiv / Int_UnsignedRemainder in this image"
+  ]
+ },
+ {
+  "old": "DSP2_SendCmd_PostLoop_Entry",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSP2_SendCmd_TrailingClock",
+  "header": "",
+  "basis": "internal branch target + body",
+  "evidence": [
+   "kn5000_subprogram_v142.s:46115 `jrl gt, DSP2_SendCmd_BitLoop` -- falls through here after the 8th data bit",
+   "kn5000_subprogram_v142.s:45952 `jrl le, DSP2_SendCmd_PostLoop_Entry` -- the only explicit reference: the never-taken bit-count <= 0 guard (count is 8)",
+   "kn5000_subprogram_v142.s:46123 / 46188 `set 2, (PF:8)` / `res 2, (PF:8)` -- one extra SCK pulse (PF.2 = DSP2SCK) before DSP_Deselect_Chip",
+   "../../dsp/analysis/second-dsp-and-ready.md:48 -- IC310 has no data-in line, so this 9th clock is not an acknowledge read; the comment above the label ('acknowledge') overstates it; ../../../technics-docs/audio-subsystem.md:1445 calls it '8 data bits + 1 trailing'"
+  ]
+ },
+ {
+  "old": "DSP2_SendData_PostLoop_Entry",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSP2_SendData_TrailingClock",
+  "header": "",
+  "basis": "internal branch target + body",
+  "evidence": [
+   "kn5000_subprogram_v142.s:46621 `jrl gt, DSP2_SendData_BitLoop` -- falls through here after the 8th data bit",
+   "kn5000_subprogram_v142.s:46458 `jrl le, DSP2_SendData_PostLoop_Entry` -- never-taken bit-count <= 0 guard",
+   "kn5000_subprogram_v142.s:46629 / 46694 `set 2, (PF:8)` / `res 2, (PF:8)` -- the trailing 9th SCK pulse, then deselect and trace print",
+   "../../dsp/analysis/second-dsp-and-ready.md:48 -- write-only 3-wire link, no data-in line: 'trailing clock', not an acknowledge"
+  ]
+ },
+ {
+  "old": "DSP2_Send_Data",
+  "tree": "v142/subcpu",
+  "verdict": "refuse",
+  "why_refused": "Already semantic: 'Data' names the DSP2 data-byte transfer, the pair of DSP2_Send_Command (START + opcode, then N data bytes), not a placeholder suffix; the name is quoted in technics-docs (audio-subsystem.md:115/1445) and dsp/analysis notes. If the suffix rule must be satisfied, DSP2_Send_DataByte is the equivalent spelling.",
+  "new": null,
+  "header": "",
+  "basis": "caller + body",
+  "evidence": [
+   "kn5000_subprogram_v142.s:46439-46444 -- header: DSP2 data-byte transmitter, same bit-bang loop as DSP2_Send_Command without START",
+   "caller DSP_DispatchData_DSP2Path (BC == 1 -> DSP2_Send_Data)"
+  ]
+ },
+ {
+  "old": "DSP_Send_Data",
+  "tree": "v142/subcpu",
+  "verdict": "refuse",
+  "why_refused": "Already semantic: sends one DATA-mode byte to DSP1 (DSP_Set_Data_Mode, PZ write) and is the documented pair of DSP_Send_Command; quoted by name in technics-docs (audio-subsystem.md:113/272, subcpu-payload-loading.md, swbwr-tone-init.md). If the suffix rule must be satisfied, DSP_Send_DataByte is the equivalent spelling.",
+  "new": null,
+  "header": "",
+  "basis": "caller + body",
+  "evidence": [
+   "kn5000_subprogram_v142.s:46404 `call DSP_Set_Data_Mode` -- data mode (vs DSP_Send_Command's command mode)",
+   "kn5000_subprogram_v142.s:46416 `ld (PZ:8), a` -- the byte goes out on the DSP1 parallel port",
+   "caller DSP_DispatchData (BC == 0 -> DSP_Send_Data)"
+  ]
+ },
+ {
+  "old": "DSP_ApplyTask_Body",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSP_State_ApplyTask",
+  "header": "Task 3's body, never returns: forever XIZ = TaskMsgQ_Receive(queue 2), DSP_State_ApplyAll(XIZ), buf[0x120] = 0, TaskMsgQ_Send(queue 1, XIZ). Basis: task table + thunk + body -- record 3 of the task descriptor table is Task3_Entry_Thunk = `jp` here; DSP_State_DmaLoadPresets spawns task 3 and seeds queue 1 with the two buffers.",
+  "basis": "task table + thunk + body",
+  "evidence": [
+   "kn5000_subprogram_v142.s:689 `.long Task3_Entry_Thunk, 0x00040a9c` -- task 3 entry in the task descriptor table",
+   "kn5000_subprogram_v142.s:45019 `jp DSP_ApplyTask_Body` -- Task3_Entry_Thunk, the only reference",
+   "kn5000_subprogram_v142.s:51414-51415 `ld wa, 3:i3` / `call TaskSched_SpawnTask` -- DSP_State_DmaLoadPresets starts task 3",
+   "kn5000_subprogram_v142.s:51419 / 51423 `call TaskMsgQ_Send` / `jp TaskMsgQ_Send` -- and seeds queue 1 with the two 0x122-byte buffers 0x045324 / 0x045446",
+   "kn5000_subprogram_v142.s:51440-51448 `call TaskMsgQ_Receive` / `call DSP_State_ApplyAll` / `ldw (xiz+288), 0` / `call TaskMsgQ_Send` -- the forever loop (loop label DSP_State_ApplyTask_Loop)",
+   "../../symbols/proposals/subcpu-region-14.txt:743 -- an earlier audit already proposed DSP_State_ApplyTask for this address"
+  ]
+ },
+ {
+  "old": "DSP_Assert_Read_Data",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSP_Assert_Read",
+  "header": "Asserts the DSP1 read strobe, `res 4,(P7)` (P7.4, active low); the pair of DSP_Deassert_Read. No caller in this build -- firmware never reads the DSP1 data bus (status comes from PH.0). Basis: pin-map header + paired routine + body; the _Data suffix is a leftover of its former `.byte` spelling.",
+  "basis": "pin-map header + paired routine + body (no callers)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:50204 `;   P7.4 = DSP read strobe (active low)` -- the block's pin map",
+   "kn5000_subprogram_v142.s:50245-50249 `DSP_Assert_Read_Data:` `res 4, (P7:8)` / `ret`",
+   "kn5000_subprogram_v142.s:50251-50253 `DSP_Deassert_Read:` `set 4, (P7:8)` -- the pair, 6 callers e.g. 45054 `call DSP_Deassert_Read` in DSP_Send_Command",
+   "kn5000_subprogram_v142.s:50310-50316 DSP_Read_Status reads PH.0, never P7.4 -- why nothing calls the assert",
+   "`command grep -c -w DSP_Assert_Read_Data` on the main file = 1 (the definition only)"
+  ]
+ },
+ {
+  "old": "DSP_EffParam_Copy_V6_Tail",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSP_EffParam_Copy_V6_CopyRemaining",
+  "header": "",
+  "basis": "internal join + body",
+  "evidence": [
+   "kn5000_subprogram_v142.s:31393 `jr t, DSP_EffParam_Copy_V6_Tail` -- join after the flag-set arm (patch+0x5E = 1); flag-clear arm falls in at 31396",
+   "kn5000_subprogram_v142.s:31398-31409 `ld a, (xbc+2)` / `and a, 63` / `ld (xde+95), a` ... `ld (xde+101), a` -- copies the remaining descriptor fields into patch+0x5F..+0x65",
+   "kn5000_subprogram_v142.s:31525 `jrl t, DSP_EffParam_Copy_V6` -- reached for algorithm type 0x0A"
+  ]
+ },
+ {
+  "old": "DSP_EffParam_Copy_V7_Tail",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSP_EffParam_Copy_V7_CopyRemaining",
+  "header": "",
+  "basis": "internal join + body",
+  "evidence": [
+   "kn5000_subprogram_v142.s:31427 `jr t, DSP_EffParam_Copy_V7_Tail` -- join after the flag-set arm; flag-clear arm falls in at 31430",
+   "kn5000_subprogram_v142.s:31432-31444 `ld a, (xbc+2)` ... `ld (xde+100), a` / `ld (xde+101), a` -- copies the remaining descriptor fields into patch+0x5F..+0x65 (V7 takes +0x0E for +0x64)",
+   "kn5000_subprogram_v142.s:31530 `jrl t, DSP_EffParam_Copy_V7` -- reached for algorithm type 0x0B"
+  ]
+ },
+ {
+  "old": "DSP_MuteLoop_Body",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSP_MuteLoop_MuteActiveChip",
+  "header": "",
+  "basis": "internal loop body + body",
+  "evidence": [
+   "kn5000_subprogram_v142.s:48593 `jr c, DSP_MuteLoop_Body` -- back edge, chip c = 0..1",
+   "kn5000_subprogram_v142.s:48581-48587 `lda xbc, (18746:16)` / `cpw (xwa), 0x1` / `call DSP_Mute_WithDebug` -- mutes chip c only if its active word 0x493A + 2c is 1"
+  ]
+ },
+ {
+  "old": "DSP_ResetLoop_Body",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSP_ResetLoop_ResetChip",
+  "header": "",
+  "basis": "internal loop body + body",
+  "evidence": [
+   "kn5000_subprogram_v142.s:48560 `jr c, DSP_ResetLoop_Body` -- back edge, chip IZ = 0..1",
+   "kn5000_subprogram_v142.s:48556-48557 `ld wa, iz` / `call DSP_Reset_WithDebug` -- resets one DSP chip per iteration"
+  ]
+ },
+ {
+  "old": "DSP_UnmuteLoop_Body",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSP_UnmuteLoop_UnmuteActiveChip",
+  "header": "",
+  "basis": "internal loop body + body",
+  "evidence": [
+   "kn5000_subprogram_v142.s:48625 `jr c, DSP_UnmuteLoop_Body` -- back edge, chip c = 0..1",
+   "kn5000_subprogram_v142.s:48613-48619 `lda xbc, (18746:16)` / `cpw (xwa), 0x1` / `call DSP_Unmute_WithDebug` -- unmutes chip c only if its active word is 1"
+  ]
+ },
+ {
+  "old": "DSP_SetCoeff_CopyLoop_Body",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSP_SetCoeff_CopyRecordByte",
+  "header": "",
+  "basis": "internal loop body + body",
+  "evidence": [
+   "kn5000_subprogram_v142.s:35161 `jr c, DSP_SetCoeff_CopyLoop_Body` -- back edge; count HL = 10 set at 35148 `ldw hl, 0xA`",
+   "kn5000_subprogram_v142.s:35156-35157 `ld C, (xiz+)` / `ld (xwa+), c` -- copies one byte of the 10-byte sub-tone record to the caller's buffer"
+  ]
+ },
+ {
+  "old": "DSP_Set_AlgoType_45B0",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSP_Set_RotarySpeed",
+  "header": "Global 0x2C sub-command 0x23: stores the rotary-speaker speed switch (main-CPU parameter 0x4003, sent as 0/1) at 0x45B0, then DSP_ApplyAlgoForVoiceType copies it into DSP EFFECT slot 0's parameter word +0x1E only when slot 0's algorithm is 15 ROCK ROTARY or 53 ROTARY SPEAKER. Basis: caller + main-CPU sender + reader.",
+  "basis": "caller + main-CPU sender + reader",
+  "evidence": [
+   "kn5000_subprogram_v142.s:44342 `call DSP_Set_AlgoType_45B0` -- caller CmdHandler2C_Global_SetAlgoType (entry 12 = raw sub-command 0x23)",
+   "kn5000_subprogram_v142.s:44960-44962 `ld (17840:16), wa` / `ld wa, (17558:16)` / `jrl DSP_ApplyAlgoForVoiceType` -- WA = slot 0's algorithm word (0x4496)",
+   "kn5000_subprogram_v142.s:44645-44652 `cp wa, 0x35` / `cp wa, 0xF` / `ldmm16 17588, 17840` -- only for algorithms 53/15, (0x44B4 = slot 0 +0x1E) = (0x45B0)",
+   "../../../technics-docs/dsp-effect-data-zone.md:154 -- effect 15 = ROCK ROTARY, 53 = ROTARY SPEAKER",
+   "../../v10/maincpu/audio/note_voice_mapping.s:18356-18357 `cp bc, 64` / `jrl z, SendEpilogue_Data_Skip7` -- main-CPU parameter group 0x40",
+   "../../v10/maincpu/audio/note_voice_mapping.s:18444-18450 `cp wa, 6:i3` / `lda xix, (SendEpilogueB_SwitchOffsets:24)` / `jp t, (xix+wa)` -- index 0..6 switch; index 3 = SendEpilogue_Data_Case3",
+   "../../v10/maincpu/audio/note_voice_mapping.s:18465 `ld (0xcfc8:16), iz` -- Case3 latches the value",
+   "../../v10/maincpu/audio/note_voice_mapping.s:18983-18985 `ld wa, (0xcfc8:16)` / `call SendPartDataBlock_Block7`",
+   "../../v10/maincpu/audio/note_voice_mapping.s:26247-26249 `ld (0xe35b:16), c` / `ld xwa, 0xe35b` / `ldw bc, 0x23` -- value forced to 0/1, sent as sub-command 0x23",
+   "../../v10/maincpu/audio/dsp_config_sysex.s:3253-3262 `cp xwa, 0x491d` / `cp hl, 0x35` / `cp hl, 0xf` -> SndParam 0x4003 -- the DSP-effect page shows 0x4003 for that parameter when the effect is a rotary",
+   "../../v10/maincpu/ui/drawbar_panel_ui.s:17449-17453 `ld xwa, 0x4003` / `ld xwa, NAKA_VIEW_DrawTremolo` -- the drawbar organ page shows 0x4003 as its Tremolo (rotor fast/slow) switch; descriptor: 0x4003 = panel tag 0x70 +0 bit 2 (scratch ids40.py over lsw_param_namespace_map.py)",
+   "v10/maincpu line numbers are those of HEAD 209074874 (the v10 working tree was being renamed concurrently while this batch was read)"
+  ]
+ },
+ {
+  "old": "DSP_Set_CfgWord_4504",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSP_Set_DigitalReverbOnOff",
+  "header": "Global 0x2C sub-command 0x21: stores WA (0/1) in EFF slot 1's +0x36 link word (0x4504) and hands the config block to DSP_State_ApplyBuf -- the DIGITAL REVERB on/off switch. Basis: caller + main-CPU sender + readers -- 1 = EFF_LinkLoop links the slot into the chain, 0 = EFF_SecondaryLinkPath disconnects it.",
+  "basis": "caller + main-CPU sender + readers",
+  "evidence": [
+   "kn5000_subprogram_v142.s:44329 `call DSP_Set_CfgWord_4504` -- caller CmdHandler2C_Global_SetValue4504, raw sub-command 0x21",
+   "kn5000_subprogram_v142.s:44942 `ld (17668:16), wa` -- (0x448E + 8 + 1*0x38) + 0x36 = 0x4504, then `jp DSP_State_ApplyBuf`",
+   "kn5000_subprogram_v142.s:49047-49060 `cpw (xwa + 54), 0x1` / `call EFF_Link` -- EFF_LinkLoop links a slot whose +0x36 word is 1; 49110 / 49153 `cpw (xwa + 54), 0x0` -- EFF_SecondaryLinkPath disconnects it when 0",
+   "../../v10/maincpu/audio/note_voice_mapping.s:18462 `ld (0xcfca:16), iz` -- SendEpilogue_Data_Case2 = parameter 0x4002",
+   "../../v10/maincpu/audio/note_voice_mapping.s:18990-18992 `ld wa, (0xcfca:16)` / `call SendPartDataBlock_ClearByte`",
+   "../../v10/maincpu/audio/note_voice_mapping.s:26215-26217 `ld (0xe357:16), c` / `ld xwa, 0xe357` / `ldw bc, 0x21` -- 0/1 sent as sub-command 0x21",
+   "../../v10/maincpu/audio/note_voice_mapping.s:25816-25825 `SendCOMM_VariableLengthPacket:` `ld (xhl), 0x2c` / `ld (xhl + 1), 0x0` / `ld (xhl + 2), 0x8` / `ld (xhl + 3), c` -- the main CPU builds the global 0x2C message (sub-command in C) and sends it with sendCOMM(WA = 3) = sub-CPU handler 0x60-0x7F -> DSP ring",
+   "kn5000_subprogram_v142.s:44249-44251 `cp wa, 0x8` / `jr le, CmdHandler2C_JumpDispatch` / `sub wa, 0x17` -- DSP_CmdHandler_2C maps raw sub-commands 0..8 to entries 0..8 and 0x20..0x25 to 9..14",
+   "../../docs/kn-disk-file-formats.md:454-458 -- slot 0 DSP EFFECT, 1 DIGITAL REVERB, 2 ACOUSTIC ILLUSION, 3 ROOM/KARAOKE/BATH ROOM/STAGE, 4 EQUALIZER; :468-470 -- 0x4002/0x4004/0x4006 = tag 0x60 +1 bits 7/6/5 = on/off of slots 1/2/4, 0x4140 = tag 0x43 +0 bit 7 = on/off of slot 3",
+   "v10/maincpu line numbers are those of HEAD 209074874 (the v10 working tree was being renamed concurrently while this batch was read)"
+  ]
+ },
+ {
+  "old": "DSP_Set_CfgWord_453C",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSP_Set_AcousticIllusionOnOff",
+  "header": "Global 0x2C sub-command 0x22: stores WA (0/1) in EFF slot 2's +0x36 link word (0x453C) and hands the config block to DSP_State_ApplyBuf -- the ACOUSTIC ILLUSION on/off switch. Basis: caller + main-CPU sender + readers -- 1 = EFF_LinkLoop links the slot into the chain, 0 = EFF_SecondaryLinkPath disconnects it.",
+  "basis": "caller + main-CPU sender + readers",
+  "evidence": [
+   "kn5000_subprogram_v142.s:44335 `call DSP_Set_CfgWord_453C` -- caller CmdHandler2C_Global_SetValue453C, raw sub-command 0x22",
+   "kn5000_subprogram_v142.s:44950 `ld (17724:16), wa` -- (0x448E + 8 + 2*0x38) + 0x36 = 0x453C, then `jp DSP_State_ApplyBuf`",
+   "kn5000_subprogram_v142.s:49047-49060 `cpw (xwa + 54), 0x1` / `call EFF_Link` -- EFF_LinkLoop links a slot whose +0x36 word is 1; 49110 / 49153 `cpw (xwa + 54), 0x0` -- EFF_SecondaryLinkPath disconnects it when 0",
+   "../../v10/maincpu/audio/note_voice_mapping.s:18468 `ld (0xcfcc:16), iz` -- SendEpilogue_Data_Case4 = parameter 0x4004",
+   "../../v10/maincpu/audio/note_voice_mapping.s:18997-18999 `ld wa, (0xcfcc:16)` / `call SendPartDataBlock_ClearByte2`",
+   "../../v10/maincpu/audio/note_voice_mapping.s:26231-26233 `ld (0xe358:16), c` / `ld xwa, 0xe358` / `ldw bc, 0x22` -- 0/1 sent as sub-command 0x22",
+   "../../v10/maincpu/audio/note_voice_mapping.s:25816-25825 `SendCOMM_VariableLengthPacket:` `ld (xhl), 0x2c` / `ld (xhl + 1), 0x0` / `ld (xhl + 2), 0x8` / `ld (xhl + 3), c` -- the main CPU builds the global 0x2C message (sub-command in C) and sends it with sendCOMM(WA = 3) = sub-CPU handler 0x60-0x7F -> DSP ring",
+   "kn5000_subprogram_v142.s:44249-44251 `cp wa, 0x8` / `jr le, CmdHandler2C_JumpDispatch` / `sub wa, 0x17` -- DSP_CmdHandler_2C maps raw sub-commands 0..8 to entries 0..8 and 0x20..0x25 to 9..14",
+   "../../docs/kn-disk-file-formats.md:454-458 -- slot 0 DSP EFFECT, 1 DIGITAL REVERB, 2 ACOUSTIC ILLUSION, 3 ROOM/KARAOKE/BATH ROOM/STAGE, 4 EQUALIZER; :468-470 -- 0x4002/0x4004/0x4006 = tag 0x60 +1 bits 7/6/5 = on/off of slots 1/2/4, 0x4140 = tag 0x43 +0 bit 7 = on/off of slot 3",
+   "v10/maincpu line numbers are those of HEAD 209074874 (the v10 working tree was being renamed concurrently while this batch was read)"
+  ]
+ },
+ {
+  "old": "DSP_Set_CfgWord_4574",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSP_Set_MicReverbOnOff",
+  "header": "Global 0x2C sub-command 0x24: stores WA (0/1) in EFF slot 3's +0x36 link word (0x4574) and hands the config block to DSP_State_ApplyBuf -- the microphone reverb (slot 3: ROOM/KARAOKE/BATH ROOM/STAGE) on/off switch. Basis: caller + main-CPU sender + readers -- 1 = EFF_LinkLoop links the slot into the chain, 0 = EFF_SecondaryLinkPath disconnects it.",
+  "basis": "caller + main-CPU sender + readers",
+  "evidence": [
+   "kn5000_subprogram_v142.s:44348 `call DSP_Set_CfgWord_4574` -- caller CmdHandler2C_Global_SetValue4574, raw sub-command 0x24",
+   "kn5000_subprogram_v142.s:44967 `ld (17780:16), wa` -- (0x448E + 8 + 3*0x38) + 0x36 = 0x4574, then `jp DSP_State_ApplyBuf`",
+   "kn5000_subprogram_v142.s:49047-49060 `cpw (xwa + 54), 0x1` / `call EFF_Link` -- EFF_LinkLoop links a slot whose +0x36 word is 1; 49110 / 49153 `cpw (xwa + 54), 0x0` -- EFF_SecondaryLinkPath disconnects it when 0",
+   "../../v10/maincpu/audio/note_voice_mapping.s:18494-18496 `cp wa, 64` / `jrl nz, SendEpilogue_Data_Join` / `ld (0xcfce:16), iz` -- parameter group 0x41 index 64 = 0x4140 (mic record tag 0x43 +0 bit 7)",
+   "../../v10/maincpu/audio/note_voice_mapping.s:19004-19006 `ld wa, (0xcfce:16)` / `call SendPartDataBlock_ClearByte3`",
+   "../../v10/maincpu/audio/note_voice_mapping.s:26263-26265 `ld (0xe359:16), c` / `ld xwa, 0xe359` / `ldw bc, 0x24` -- 0/1 sent as sub-command 0x24",
+   "../../docs/kn-disk-file-formats.md:534-537 -- tag 0x43 = the microphone record ('microphone' itself is that note's [INFERENCE] from the algorithm names and the MIC LEVEL & REVERB page title)",
+   "../../v10/maincpu/audio/note_voice_mapping.s:25816-25825 `SendCOMM_VariableLengthPacket:` `ld (xhl), 0x2c` / `ld (xhl + 1), 0x0` / `ld (xhl + 2), 0x8` / `ld (xhl + 3), c` -- the main CPU builds the global 0x2C message (sub-command in C) and sends it with sendCOMM(WA = 3) = sub-CPU handler 0x60-0x7F -> DSP ring",
+   "kn5000_subprogram_v142.s:44249-44251 `cp wa, 0x8` / `jr le, CmdHandler2C_JumpDispatch` / `sub wa, 0x17` -- DSP_CmdHandler_2C maps raw sub-commands 0..8 to entries 0..8 and 0x20..0x25 to 9..14",
+   "../../docs/kn-disk-file-formats.md:454-458 -- slot 0 DSP EFFECT, 1 DIGITAL REVERB, 2 ACOUSTIC ILLUSION, 3 ROOM/KARAOKE/BATH ROOM/STAGE, 4 EQUALIZER; :468-470 -- 0x4002/0x4004/0x4006 = tag 0x60 +1 bits 7/6/5 = on/off of slots 1/2/4, 0x4140 = tag 0x43 +0 bit 7 = on/off of slot 3",
+   "v10/maincpu line numbers are those of HEAD 209074874 (the v10 working tree was being renamed concurrently while this batch was read)"
+  ]
+ },
+ {
+  "old": "DSP_Set_CfgWord_45AC",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSP_Set_EqualizerOnOff",
+  "header": "Global 0x2C sub-command 0x25: stores WA (0/1) in EFF slot 4's +0x36 link word (0x45AC) and hands the config block to DSP_State_ApplyBuf -- the EQUALIZER on/off switch. Basis: caller + main-CPU sender + readers -- 1 = EFF_LinkLoop links the slot into the chain, 0 = EFF_SecondaryLinkPath disconnects it.",
+  "basis": "caller + main-CPU sender + readers",
+  "evidence": [
+   "kn5000_subprogram_v142.s:44354 `call DSP_Set_CfgWord_45AC` -- caller CmdHandler2C_Global_SetValue45AC, raw sub-command 0x25",
+   "kn5000_subprogram_v142.s:44978 `ld (17836:16), wa` -- (0x448E + 8 + 4*0x38) + 0x36 = 0x45AC, then `jp DSP_State_ApplyBuf`",
+   "kn5000_subprogram_v142.s:49047-49060 `cpw (xwa + 54), 0x1` / `call EFF_Link` -- EFF_LinkLoop links a slot whose +0x36 word is 1; 49110 / 49153 `cpw (xwa + 54), 0x0` -- EFF_SecondaryLinkPath disconnects it when 0",
+   "../../v10/maincpu/audio/note_voice_mapping.s:18475-18478 `ldto_berp a, 248` / `extz wa` / `call SendPartDataBlock_Block9` -- SendEpilogue_Data_Case6 = parameter 0x4006",
+   "../../v10/maincpu/audio/note_voice_mapping.s:26278-26280 `ld (0xe35a:16), c` / `ld xwa, 0xe35a` / `ldw bc, 37` -- 0/1 sent as sub-command 0x25",
+   "../../v10/maincpu/audio/audio_control_engine.s:7863 `ld xwa, 0x4006` -- EQPreset_Load notifies 0x4006 = 1 after loading an EQ preset (algorithm 0x4F)",
+   "../../v10/maincpu/audio/note_voice_mapping.s:25816-25825 `SendCOMM_VariableLengthPacket:` `ld (xhl), 0x2c` / `ld (xhl + 1), 0x0` / `ld (xhl + 2), 0x8` / `ld (xhl + 3), c` -- the main CPU builds the global 0x2C message (sub-command in C) and sends it with sendCOMM(WA = 3) = sub-CPU handler 0x60-0x7F -> DSP ring",
+   "kn5000_subprogram_v142.s:44249-44251 `cp wa, 0x8` / `jr le, CmdHandler2C_JumpDispatch` / `sub wa, 0x17` -- DSP_CmdHandler_2C maps raw sub-commands 0..8 to entries 0..8 and 0x20..0x25 to 9..14",
+   "../../docs/kn-disk-file-formats.md:454-458 -- slot 0 DSP EFFECT, 1 DIGITAL REVERB, 2 ACOUSTIC ILLUSION, 3 ROOM/KARAOKE/BATH ROOM/STAGE, 4 EQUALIZER; :468-470 -- 0x4002/0x4004/0x4006 = tag 0x60 +1 bits 7/6/5 = on/off of slots 1/2/4, 0x4140 = tag 0x43 +0 bit 7 = on/off of slot 3",
+   "v10/maincpu line numbers are those of HEAD 209074874 (the v10 working tree was being renamed concurrently while this batch was read)"
+  ]
+ },
+ {
+  "old": "DSP_Set_Enable_45BA",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSP_Set_MicSense",
+  "header": "Global 0x2C sub-command 0x08: stores the main CPU's MICSNS level (PE.4, sent on every change) at 0x45BA; while it is non-zero the mic level (0x45B8) is copied into EFF slot 3's parameter word +0x0C (0x454A), otherwise 0, and the block is applied. Basis: caller + main-CPU sender + body.",
+  "basis": "caller + main-CPU sender + body",
+  "evidence": [
+   "kn5000_subprogram_v142.s:44323 `call DSP_Set_Enable_45BA` -- caller CmdHandler2C_Global_SetEnable45BA, raw sub-command 0x08",
+   "kn5000_subprogram_v142.s:44926-44936 `ld (17850:16), bc` / `cp a, 0:i3` / `ldmm16 17738, 17848` / `ldw (17738:16), 0` / `jp DSP_State_ApplyBuf` -- 0x454A (= 0x453E + 0x0C, EFF slot 3 parameter word) gets the level or 0; internal labels DSP_Set_Enable_45BA_Skip/_Join follow the rename",
+   "kn5000_subprogram_v142.s:44910 `cpw (17850:16), 0` -- DSP_Set_Value_45B8 only propagates the level while this is set; 44794-44796 DSP_ApplyConfig's slot-3 branch applies the same gate",
+   "../../v10/maincpu/audio/note_voice_mapping.s:26088-26092 `ldcf 4, (PE:8)` / `scc8 c, a` / `ld (0xe35c:16), a` / `ld xwa, 0xe35c` / `ldw bc, 0x8` -- CommPort_StatusCheckAndSend (main loop) sends a changed PE.4 level as sub-command 8",
+   "../../../technics-docs/cpu-subsystem.md:161 -- PE.4 = MICSNS (that row says the change goes to the computer-interface port; the code sends it to the sub CPU)",
+   "../../v10/maincpu/audio/note_voice_mapping.s:25816-25825 `SendCOMM_VariableLengthPacket:` `ld (xhl), 0x2c` / `ld (xhl + 1), 0x0` / `ld (xhl + 2), 0x8` / `ld (xhl + 3), c` -- the main CPU builds the global 0x2C message (sub-command in C) and sends it with sendCOMM(WA = 3) = sub-CPU handler 0x60-0x7F -> DSP ring",
+   "v10/maincpu line numbers are those of HEAD 209074874 (the v10 working tree was being renamed concurrently while this batch was read)"
+  ]
+ },
+ {
+  "old": "DSP_Set_Value_45B8",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSP_Set_MicLevel",
+  "header": "Global 0x2C sub-command 0x07: stores the microphone level (main-CPU parameter 0x4141, 0..127, sent as 0 while 0x4142 is set) at 0x45B8 and, if MICSNS (0x45BA) is set, copies it into EFF slot 3's parameter word +0x0C (0x454A) and applies the block. Basis: caller + main-CPU sender + body.",
+  "basis": "caller + main-CPU sender + body",
+  "evidence": [
+   "kn5000_subprogram_v142.s:44317 `call DSP_Set_Value_45B8` -- caller CmdHandler2C_Global_SetValue45B8, raw sub-command 0x07",
+   "kn5000_subprogram_v142.s:44909-44915 `ld (17848:16), wa` / `cpw (17850:16), 0` / `ret z` / `ldmm16 17738, 17848` / `call DSP_State_ApplyBuf`",
+   "../../v10/maincpu/audio/note_voice_mapping.s:18493 / 18498-18522 -- parameter group 0x41: index 65 sends the level unless SndParam 0x4142 == 1 (then 0); index 66 re-sends 0 or SndParam 0x4141 -- all through SendPartDataBlock_Block4",
+   "../../v10/maincpu/audio/note_voice_mapping.s:26198-26200 `ld (0xe354:16), a` / `ld xwa, 0x0000e354` / `ld bc, 7:i3` -- SendPartDataBlock_Block4 = sub-command 7",
+   "descriptors (scratch ids40.py): 0x4141 = tag 0x43 +1 mask 0x7F, 0x4142 = tag 0x43 +1 bit 7, 0x4140 = tag 0x43 +0 bit 7",
+   "../../docs/kn-disk-file-formats.md:534-537 -- tag 0x43 = microphone record (on/off, 0..127 level, second on/off), page 'MIC LEVEL & REVERB'",
+   "v10/maincpu line numbers are those of HEAD 209074874 (the v10 working tree was being renamed concurrently while this batch was read)"
+  ]
+ },
+ {
+  "old": "DSP_Set_MixParam_45B6",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSP_Set_FadeLevel",
+  "header": "Global 0x2C sub-command 0x06: stores the FADE IN/OUT level (main-CPU parameter 0x4005, 0..127, ramped by the fade logic) at 0x45B6 and recomputes the DSP2 output gain through DSP_MixerCoeff_Compute (its DE index into DSP2_MixerGain_Curve, registers 0xD0/0xD3). Basis: caller + main-CPU sender + body.",
+  "basis": "caller + main-CPU sender + body",
+  "evidence": [
+   "kn5000_subprogram_v142.s:44311 `call DSP_Set_MixParam_45B6` -- caller CmdHandler2C_Global_MixParamC, raw sub-command 0x06",
+   "kn5000_subprogram_v142.s:44892-44896 `ld (17846:16), wa` / `ld wa, (17842:16)` / `ld bc, (17844:16)` / `ld de, (17846:16)` / `jp DSP_MixerCoeff_Compute` -- DE = the new level",
+   "kn5000_subprogram_v142.s:56146 `lda xbc, (DSP2_MixerGain_Curve:16)` -- DE indexes the gain curve; product written to DSP2 register 0xD0 (56172 `ldw wa, 0xD0`)",
+   "../../v10/maincpu/audio/note_voice_mapping.s:18471-18473 `ldto_berp a, 248` / `extz wa` / `call SendPartDataBlock_Block3` -- SendEpilogue_Data_Case5 = parameter 0x4005",
+   "../../v10/maincpu/audio/note_voice_mapping.s:26189-26191 `ld (0xe353:16), a` / `ld xwa, 0x0000e353` / `ld bc, 6:i3` -- sent as sub-command 6",
+   "../../v10/maincpu/audio/dsp_config_sysex.s:1975 / 2006 `ld xwa, 0x4005` -- the ramp up (to 0x7F00 >> 8 = 127) and ramp down (to 0) post the level every tick",
+   "../../v10/maincpu/audio/dsp_config_sysex.s:2074-2087 CompIface_WriteVolume -- sets 0x4005 directly (0 or 0x7F) from DSPCfg_ProcessInput",
+   "../../v10/maincpu/audio/dsp_config_sysex.s:2115-2117 `cp c, 0x98` / `cp e, 0xb` -- DSPCfg_ProcessInput reacts to panel event 0x98/0x0B, which ../../../technics-docs/control-panel-protocol.md:422-423 lists as FADE IN / FADE OUT",
+   "v10/maincpu line numbers are those of HEAD 209074874 (the v10 working tree was being renamed concurrently while this batch was read)"
+  ]
+ },
+ {
+  "old": "DSP_Set_MixParam_45B2",
+  "tree": "v142/subcpu",
+  "verdict": "refuse",
+  "why_refused": "Mechanics are clear (global 0x2C sub-command 0x01 = main-CPU parameter 0x4000; 0x45B2 is the WA index of DSP_MixerCoeff_Compute into DSP2_MixerGain_Curve and also feeds register 0xD3), but what the user-level parameter 0x4000 is was not pinned: its only panel descriptor (tag 0x00 +0 bit 3) does not explain a 0..127 curve index and no main-CPU writer was found.",
+  "new": null,
+  "header": "",
+  "basis": "caller + main-CPU sender",
+  "evidence": [
+   "kn5000_subprogram_v142.s:44285 `call DSP_Set_MixParam_45B2` -- caller CmdHandler2C_Global_MixParamA, raw sub-command 0x01",
+   "../../v10/maincpu/audio/note_voice_mapping.s:18451-18454 `MIDI_SendEpilogue_Code:` / `call SendPartDataBlock_Block` -- parameter 0x4000 (group 0x40 index 0)",
+   "../../v10/maincpu/audio/note_voice_mapping.s:26171-26173 `ld (0xe351:16), a` / `ld xwa, 0x0000e351` / `ld bc, 1:i3` -- sent as sub-command 1",
+   "kn5000_subprogram_v142.s:56136 / 56156 `lda xbc, (DSP2_MixerGain_Curve:16)` -- DSP_MixerCoeff_Compute indexes the curve with WA twice; the second result goes through FP_ftoi (56165) to register 0xD3 (56192 `ldw wa, 0xD3`)",
+   "v10/maincpu line numbers are those of HEAD 209074874 (the v10 working tree was being renamed concurrently while this batch was read)"
+  ]
+ },
+ {
+  "old": "DSP_Set_MixParam_45B4",
+  "tree": "v142/subcpu",
+  "verdict": "refuse",
+  "why_refused": "Mechanics are clear (global 0x2C sub-command 0x02 = main-CPU parameter 0x4001; 0x45B4 is the BC index of DSP_MixerCoeff_Compute into DSP_MixerGain_Curve), but parameter 0x4001 has no panel descriptor and is only seen forced to 127 by two reset-like paths (Audio_CheckAndReinitReverb, UIState_CheckAndRenderBitmap); its user-level meaning is not established.",
+  "new": null,
+  "header": "",
+  "basis": "caller + main-CPU sender",
+  "evidence": [
+   "kn5000_subprogram_v142.s:44291 `call DSP_Set_MixParam_45B4` -- caller CmdHandler2C_Global_MixParamB, raw sub-command 0x02",
+   "../../v10/maincpu/audio/note_voice_mapping.s:18456-18459 `SendEpilogue_Data_Case1:` / `call SendPartDataBlock_Block2` -- parameter 0x4001",
+   "../../v10/maincpu/audio/note_voice_mapping.s:26180-26182 `ld (0xe352:16), a` / `ld xwa, 0x0000e352` / `ld bc, 2:i3` -- sent as sub-command 2",
+   "../../v10/maincpu/audio/audio_control_engine.s:4196 / 6623 `ld xwa, 0x4001` / `ldw bc, 0x7f` -- the only writers found",
+   "v10/maincpu line numbers are those of HEAD 209074874 (the v10 working tree was being renamed concurrently while this batch was read)"
+  ]
+ },
+ {
+  "old": "DSP_WriteLUT_MainLoop_Body",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSP_WriteLUT_MainLoop_RowStart",
+  "header": "",
+  "basis": "internal loop head + body",
+  "evidence": [
+   "kn5000_subprogram_v142.s:50759 `jrl c, DSP_WriteLUT_MainLoop_Body` -- back edge of the per-row loop (rows = size/4)",
+   "kn5000_subprogram_v142.s:50701-50713 `cpw (xsp + 4), 0x0` / `call DSP_DispatchCommand` (1) / `call DSP_DispatchData` (1, 0x60) -- every row after the first starts with the COMMAND 0x01 / DATA 0x01 / DATA 0x60 prefix, then falls into DSP_WriteLUT_MainLoop_FirstEntry"
+  ]
+ },
+ {
+  "old": "EFF_DisconnectLoop_Body",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "EFF_DisconnectLoop_DisconnectSlot",
+  "header": "",
+  "basis": "internal loop body + body",
+  "evidence": [
+   "kn5000_subprogram_v142.s:49359 `jr gt, EFF_DisconnectLoop_Body` -- back edge, slots 4..0",
+   "kn5000_subprogram_v142.s:49346-49353 `cp iz, 3:i3` / `cp iz, 2:i3` / `call EFF_Disconnect` -- disconnects every slot except 3 and 2"
+  ]
+ },
+ {
+  "old": "EFF_HeaderChangeLoop_Body",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "EFF_HeaderChangeLoop_TestHeaderRewrite",
+  "header": "",
+  "basis": "internal loop body + body",
+  "evidence": [
+   "kn5000_subprogram_v142.s:49010 `jr gt, EFF_HeaderChangeLoop_Body` -- back edge, slots 4..0",
+   "kn5000_subprogram_v142.s:48968-48977 `cpw (xwa + 2), 0x1` / `cpw (xwa + 4), 0x1` / `call EFF_WriteHeader` -- rewrites the slot header when the algorithm changed or on a cold reload"
+  ]
+ },
+ {
+  "old": "EFF_LinkLoop_Body",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "EFF_LinkLoop_LinkSlotIfOn",
+  "header": "",
+  "basis": "internal loop body + body",
+  "evidence": [
+   "kn5000_subprogram_v142.s:49066 `jr gt, EFF_LinkLoop_Body` -- back edge, slots 4..0",
+   "kn5000_subprogram_v142.s:49044-49060 `lda xbc, (18782:16)` / `cpw (xwa), 0x1` / `cpw (xwa + 54), 0x1` / `call EFF_Link` -- links the slot when its link-dirty flag is set and its +0x36 on/off word is 1"
+  ]
+ },
+ {
+  "old": "EFF_VolumeLoop_Body",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "EFF_VolumeLoop_TestVolumeDirty",
+  "header": "",
+  "basis": "internal loop body + body",
+  "evidence": [
+   "kn5000_subprogram_v142.s:49324 `jrl c, EFF_VolumeLoop_Body` -- back edge, slots 0..4",
+   "kn5000_subprogram_v142.s:49223-49231 `ld bc, (xbc + 38)` / `lda xbc, (18756:16)` / `cpw (xwa), 0x1` -- tests the dirty flag of the slot's volume parameter (index record +0x26)",
+   "kn5000_subprogram_v142.s:49250 `cpw (xbc), 0x3F` -- then forks for effect 0x3F before EFF_VolumeUpdate_WithDebug (49318)"
+  ]
+ },
+ {
+  "old": "FIFO1K_Put_Block",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FIFO1K_PutBytes",
+  "header": "Pushes BC bytes from (XIY) onto the 1 KB FIFO (descriptor 0x040c2e) through FIFO_Engine1K_Put, one per byte; BC = (XIZ+8), XIY = (XIZ+10) from the stack frame; does not stop when the FIFO is full. No caller in this build. Basis: API siblings + body -- the multi-byte form of the one-byte put beside it.",
+  "basis": "API siblings + body (no callers)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:2205-2216 `ld bc, (xiz+8)` / `ld xiy, (xiz+10)` / `lda xde, (0x040c2e:24)` / `calr FIFO_Engine1K_Put` / `djnz16 bc, -10` -- byte loop (the djnz target is still numeric)",
+   "kn5000_subprogram_v142.s: the one-byte sibling FIFO1K_Put pushes (XIZ+8) through the same engine",
+   "`command grep -w` finds the label only at its definition and in symbols/subcpu_symbols_reference.txt -- no caller, no table entry",
+   "_Block is the generic suffix the batch flags; 'Bytes' says what is pushed"
+  ]
+ },
+ {
+  "old": "FIFO256_Put_Block",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FIFO256_PutBytes",
+  "header": "Pushes BC bytes from (XIY) onto the 256-byte FIFO (descriptor 0x041038) through FIFO_Engine256_Put, one per byte; BC = (XIZ+8), XIY = (XIZ+10) from the stack frame; does not stop when the FIFO is full. No caller in this build. Basis: API siblings + body -- the multi-byte form of the one-byte put beside it.",
+  "basis": "API siblings + body (no callers)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:2315-2326 `ld bc, (xiz+8)` / `ld xiy, (xiz+10)` / `lda xde, (0x041038:24)` / `calr FIFO_Engine256_Put` / `djnz16 bc, -10` -- byte loop (the djnz target is still numeric)",
+   "kn5000_subprogram_v142.s: the one-byte sibling FIFO256_Put pushes (XIZ+8) through the same engine",
+   "`command grep -w` finds the label only at its definition and in symbols/subcpu_symbols_reference.txt -- no caller, no table entry",
+   "_Block is the generic suffix the batch flags; 'Bytes' says what is pushed"
+  ]
+ },
+ {
+  "old": "FIFO512_Put_Block",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FIFO512_PutBytes",
+  "header": "Pushes BC bytes from (XIY) onto the 512-byte FIFO (descriptor 0x041142) through FIFO_Engine512_Put, one per byte; BC = (XIZ+8), XIY = (XIZ+10) from the stack frame; does not stop when the FIFO is full. No caller in this build. Basis: API siblings + body -- the multi-byte form of the one-byte put beside it.",
+  "basis": "API siblings + body (no callers)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:2422-2433 `ld bc, (xiz+8)` / `ld xiy, (xiz+10)` / `lda xde, (0x041142:24)` / `calr FIFO_Engine512_Put` / `djnz16 bc, -10` -- byte loop (the djnz target is still numeric)",
+   "kn5000_subprogram_v142.s: the one-byte sibling FIFO512_Put pushes (XIZ+8) through the same engine",
+   "`command grep -w` finds the label only at its definition and in symbols/subcpu_symbols_reference.txt -- no caller, no table entry",
+   "_Block is the generic suffix the batch flags; 'Bytes' says what is pushed"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_ReverbCurve_FP_Finalize_8388608",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FPConst_DSP_ReverbCurve_FP_Finalize_Q23One",
+  "header": "f32 2^23 = 1.0 in Q23: DSP_ReverbCurve_FP_Finalize multiplies by it and FP_ftoi's the product to get the Q23 DSP word. Basis: reader -- every use is fmul then ftoi.",
+  "basis": "reader + value",
+  "evidence": [
+   "subcpu_data_tables.s:3104 `FPConst_DSP_ReverbCurve_FP_Finalize_8388608:` `.float 8388608` -- 2^23",
+   "kn5000_subprogram_v142.s:52396-52401 `lda xde, (FPConst_DSP_ReverbCurve_FP_Finalize_8388608:24)` / `call FP_fmul` / `call FP_ftoi` -- DSP_ReverbCurve_FP_Finalize multiplies a float by 2^23 and truncates it: float -> Q23 integer",
+   "kn5000_subprogram_v142.s:52402 `ld xhl, (xsp + 56)` -- the Q23 integer is the decoder's XHL result"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_ParamInterp_FPComplex_8388608",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FPConst_DSP_ParamInterp_FPComplex_Q23One",
+  "header": "f32 2^23 = 1.0 in Q23: DSP_ParamInterp_FPComplex multiplies by it and FP_ftoi's the product to get the Q23 DSP word. Basis: reader -- every use is fmul then ftoi.",
+  "basis": "reader + value",
+  "evidence": [
+   "subcpu_data_tables.s:3112 `FPConst_DSP_ParamInterp_FPComplex_8388608:` `.float 8388608` -- 2^23",
+   "kn5000_subprogram_v142.s:52508-52513 `lda xde, (FPConst_DSP_ParamInterp_FPComplex_8388608:24)` / `call FP_fmul` / `call FP_ftoi` -- DSP_ParamInterp_FPComplex multiplies a float by 2^23 and truncates it: float -> Q23 integer",
+   "kn5000_subprogram_v142.s:52406 `; Decoder for opcode 0x6E; result -> DSP_WriteOscParam.` -- the routine header"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_DetuneCurve_Finalize_8388608",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FPConst_DSP_DetuneCurve_Finalize_Q23One",
+  "header": "f32 2^23 = 1.0 in Q23: DSP_DetuneCurve_Finalize multiplies by it and FP_ftoi's the product to get the Q23 DSP word. Basis: reader -- every use is fmul then ftoi.",
+  "basis": "reader + value",
+  "evidence": [
+   "subcpu_data_tables.s:3124 `FPConst_DSP_DetuneCurve_Finalize_8388608:` `.float 8388608` -- 2^23",
+   "kn5000_subprogram_v142.s:52832-52837 `lda xde, (FPConst_DSP_DetuneCurve_Finalize_8388608:24)` / `call FP_fmul` / `call FP_ftoi` -- DSP_DetuneCurve_Finalize multiplies a float by 2^23 and truncates it: float -> Q23 integer",
+   "kn5000_subprogram_v142.s:52838 `ld xhl, (xsp + 64)` -- the Q23 integer is the decoder's XHL result"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_ParamEQ_Finalize_8388608",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FPConst_DSP_ParamEQ_Finalize_Q23One",
+  "header": "f32 2^23 = 1.0 in Q23: DSP_ParamEQ_Finalize multiplies by it and FP_ftoi's the product to get the Q23 DSP word. Basis: reader -- every use is fmul then ftoi.",
+  "basis": "reader + value",
+  "evidence": [
+   "subcpu_data_tables.s:3175 `FPConst_DSP_ParamEQ_Finalize_8388608:` `.float 8388608` -- 2^23",
+   "kn5000_subprogram_v142.s:53529-53534 `lda xde, (FPConst_DSP_ParamEQ_Finalize_8388608:24)` / `call FP_fmul` / `call FP_ftoi` -- DSP_ParamEQ_Finalize multiplies a float by 2^23 and truncates it: float -> Q23 integer",
+   "kn5000_subprogram_v142.s:53522-53524 -- header: 'land the result as a Q23 integer in XHL'"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_BiquadWarp_ComputeCoeffs_2097152",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FPConst_DSP_BiquadWarp_ComputeCoeffs_Q21One",
+  "header": "f32 2^21 = 1.0 in Q21: DSP_BiquadWarp_ComputeCoeffs multiplies by it and FP_ftoi's the product to get the Q21 DSP word. Basis: reader -- every use is fmul then ftoi.",
+  "basis": "reader + value",
+  "evidence": [
+   "subcpu_data_tables.s:3135 `FPConst_DSP_BiquadWarp_ComputeCoeffs_2097152:` `.float 2097152` -- 2^21",
+   "kn5000_subprogram_v142.s:53022-53027 `lda xde, (FPConst_DSP_BiquadWarp_ComputeCoeffs_2097152:24)` / `call FP_fmul` / `call FP_ftoi` -- DSP_BiquadWarp_ComputeCoeffs multiplies a float by 2^21 and truncates it: float -> Q21 integer",
+   "kn5000_subprogram_v142.s:53032 `call DSP_WriteOscParam` -- the Q21 word is written to the DSP",
+   "siblings _2097152_2 / _2097152_3 (reads at 53059 / 53070) are the same value for the same purpose and should become _Q21One_2 / _Q21One_3"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_BiquadWarp_ComputeCoeffs_8388608",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FPConst_DSP_BiquadWarp_ComputeCoeffs_Q23One",
+  "header": "f32 2^23 = 1.0 in Q23: DSP_BiquadWarp_ComputeCoeffs multiplies by it and FP_ftoi's the product to get the Q23 DSP word. Basis: reader -- every use is fmul then ftoi.",
+  "basis": "reader + value",
+  "evidence": [
+   "subcpu_data_tables.s:3136 `FPConst_DSP_BiquadWarp_ComputeCoeffs_8388608:` `.float 8388608` -- 2^23",
+   "kn5000_subprogram_v142.s:53034-53039 `lda xde, (FPConst_DSP_BiquadWarp_ComputeCoeffs_8388608:24)` / `call FP_fmul` / `call FP_ftoi` -- DSP_BiquadWarp_ComputeCoeffs multiplies a float by 2^23 and truncates it: float -> Q23 integer",
+   "kn5000_subprogram_v142.s:53043 `call DSP_WriteCoeffData_5B_Direct` -- written to the DSP"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_BiquadWarp_ComputeCoeffs_4194304",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FPConst_DSP_BiquadWarp_ComputeCoeffs_Q22One",
+  "header": "f32 2^22 = 1.0 in Q22: DSP_BiquadWarp_ComputeCoeffs multiplies by it and FP_ftoi's the product to get the Q22 DSP word. Basis: reader -- every use is fmul then ftoi.",
+  "basis": "reader + value",
+  "evidence": [
+   "subcpu_data_tables.s:3137 `FPConst_DSP_BiquadWarp_ComputeCoeffs_4194304:` `.float 4194304` -- 2^22",
+   "kn5000_subprogram_v142.s:53048-53053 `lda xde, (FPConst_DSP_BiquadWarp_ComputeCoeffs_4194304:24)` / `call FP_fmul` / `call FP_ftoi` -- DSP_BiquadWarp_ComputeCoeffs multiplies a float by 2^22 and truncates it: float -> Q22 integer",
+   "kn5000_subprogram_v142.s:53057 `call DSP_WriteCoeffData_5B_Direct` -- written to the DSP"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_BiquadCoeff_Algo0_Fixup_4194304",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FPConst_DSP_BiquadCoeff_Algo0_Fixup_Q22One",
+  "header": "f32 2^22 = 1.0 in Q22: DSP_BiquadCoeff_Algo0_Fixup multiplies by it and FP_ftoi's the product to get the Q22 DSP word. Basis: reader -- every use is fmul then ftoi.",
+  "basis": "reader + value",
+  "evidence": [
+   "subcpu_data_tables.s:3202 `FPConst_DSP_BiquadCoeff_Algo0_Fixup_4194304:` `.float 4194304` -- 2^22",
+   "kn5000_subprogram_v142.s:54637-54642 `lda xde, (FPConst_DSP_BiquadCoeff_Algo0_Fixup_4194304:24)` / `call FP_fmul` / `call FP_ftoi` -- DSP_BiquadCoeff_Algo0_Fixup multiplies a float by 2^22 and truncates it: float -> Q22 integer",
+   "kn5000_subprogram_v142.s:54606-54610 -- header: taps scaled by 2^22, the fifth by 2^23; 'the DSP's biquad registers are Q22 (Q23 for the last)'",
+   "siblings _4194304_2/_3/_4 (reads at 54650 / 54662 / 54674, same value, same use) should become _Q22One_2/_3/_4"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_BiquadCoeff_Algo0_Fixup_8388608",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FPConst_DSP_BiquadCoeff_Algo0_Fixup_Q23One",
+  "header": "f32 2^23 = 1.0 in Q23: DSP_BiquadCoeff_Algo0_Fixup multiplies by it and FP_ftoi's the product to get the Q23 DSP word. Basis: reader -- every use is fmul then ftoi.",
+  "basis": "reader + value",
+  "evidence": [
+   "subcpu_data_tables.s:3206 `FPConst_DSP_BiquadCoeff_Algo0_Fixup_8388608:` `.float 8388608` -- 2^23",
+   "kn5000_subprogram_v142.s:54686-54691 `lda xde, (FPConst_DSP_BiquadCoeff_Algo0_Fixup_8388608:24)` / `call FP_fmul` / `call FP_ftoi` -- DSP_BiquadCoeff_Algo0_Fixup multiplies a float by 2^23 and truncates it: float -> Q23 integer",
+   "kn5000_subprogram_v142.s:54695 `call DSP_WriteCoeffData_5B_Direct` -- the fifth tap, Q23 (header 54606-54610)"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_BiquadCoeff_Algo1_4194304",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FPConst_DSP_BiquadCoeff_Algo1_Q22One",
+  "header": "f32 2^22 = 1.0 in Q22: DSP_BiquadCoeff_Algo1 multiplies by it and FP_ftoi's the product to get the Q22 DSP word. Basis: reader -- every use is fmul then ftoi.",
+  "basis": "reader + value",
+  "evidence": [
+   "subcpu_data_tables.s:3212 `FPConst_DSP_BiquadCoeff_Algo1_4194304:` `.float 4194304` -- 2^22",
+   "kn5000_subprogram_v142.s:54780-54785 `lda xde, (FPConst_DSP_BiquadCoeff_Algo1_4194304:24)` / `call FP_fmul` / `call FP_ftoi` -- DSP_BiquadCoeff_Algo1 multiplies a float by 2^22 and truncates it: float -> Q22 integer",
+   "kn5000_subprogram_v142.s:54698-54701 -- header: 'Q22/Q23 scaling at 0x012FD7..0x012FE7'",
+   "siblings _4194304_2/_3/_4 (reads at 54793 / 54805 / 54817) should become _Q22One_2/_3/_4"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_BiquadCoeff_Algo1_8388608",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FPConst_DSP_BiquadCoeff_Algo1_Q23One",
+  "header": "f32 2^23 = 1.0 in Q23: DSP_BiquadCoeff_Algo1 multiplies by it and FP_ftoi's the product to get the Q23 DSP word. Basis: reader -- every use is fmul then ftoi.",
+  "basis": "reader + value",
+  "evidence": [
+   "subcpu_data_tables.s:3216 `FPConst_DSP_BiquadCoeff_Algo1_8388608:` `.float 8388608` -- 2^23",
+   "kn5000_subprogram_v142.s:54829-54834 `lda xde, (FPConst_DSP_BiquadCoeff_Algo1_8388608:24)` / `call FP_fmul` / `call FP_ftoi` -- DSP_BiquadCoeff_Algo1 multiplies a float by 2^23 and truncates it: float -> Q23 integer",
+   "kn5000_subprogram_v142.s:54838 `call DSP_WriteCoeffData_5B_Direct` -- written to the DSP"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_BiquadCoeff_Algo2_WriteParams_4194304",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FPConst_DSP_BiquadCoeff_Algo2_WriteParams_Q22One",
+  "header": "f32 2^22 = 1.0 in Q22: DSP_BiquadCoeff_Algo2_WriteParams multiplies by it and FP_ftoi's the product to get the Q22 DSP word. Basis: reader -- every use is fmul then ftoi.",
+  "basis": "reader + value",
+  "evidence": [
+   "subcpu_data_tables.s:3232 `FPConst_DSP_BiquadCoeff_Algo2_WriteParams_4194304:` `.float 4194304` -- 2^22",
+   "kn5000_subprogram_v142.s:55115-55120 `lda xde, (FPConst_DSP_BiquadCoeff_Algo2_WriteParams_4194304:24)` / `call FP_fmul` / `call FP_ftoi` -- DSP_BiquadCoeff_Algo2_WriteParams multiplies a float by 2^22 and truncates it: float -> Q22 integer",
+   "kn5000_subprogram_v142.s:55125 `call DSP_WriteOscParam` -- written to the DSP",
+   "siblings _4194304_2/_3/_4 (reads at 55128 / 55150 / 55161) should become _Q22One_2/_3/_4"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_BiquadCoeff_Algo2_WriteParams_8388608",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FPConst_DSP_BiquadCoeff_Algo2_WriteParams_Q23One",
+  "header": "f32 2^23 = 1.0 in Q23: DSP_BiquadCoeff_Algo2_WriteParams multiplies by it and FP_ftoi's the product to get the Q23 DSP word. Basis: reader -- every use is fmul then ftoi.",
+  "basis": "reader + value",
+  "evidence": [
+   "subcpu_data_tables.s:3234 `FPConst_DSP_BiquadCoeff_Algo2_WriteParams_8388608:` `.float 8388608` -- 2^23",
+   "kn5000_subprogram_v142.s:55139-55144 `lda xde, (FPConst_DSP_BiquadCoeff_Algo2_WriteParams_8388608:24)` / `call FP_fmul` / `call FP_ftoi` -- DSP_BiquadCoeff_Algo2_WriteParams multiplies a float by 2^23 and truncates it: float -> Q23 integer",
+   "kn5000_subprogram_v142.s:55147 `call DSP_WriteParamWord` -- written to the DSP"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_ParamInterp_FPComplex_32768",
+  "tree": "v142/subcpu",
+  "verdict": "refuse",
+  "why_refused": "2^15: the first half of a two-step divide (v / 32768 / 65536 = v / 2^31) that maps DSP_StreamDecode_3ByteWord's left-justified 24-bit coefficient to [-1, 1). Only the PAIR has a meaning; for each constant alone the value is the clearest name.",
+  "new": null,
+  "header": "",
+  "basis": "reader + value",
+  "evidence": [
+   "kn5000_subprogram_v142.s:52435-52441 `lda xde, (FPConst_DSP_ParamInterp_FPComplex_32768:24)` / `call FP_fdiv` / `lda xde, (FPConst_DSP_ParamInterp_FPComplex_65536:24)` / `call FP_fdiv`",
+   "kn5000_subprogram_v142.s:57807-57811 -- DSP_StreamDecode_3ByteWord left-justifies the 24-bit word into 32 bits"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_ParamInterp_FPComplex_65536",
+  "tree": "v142/subcpu",
+  "verdict": "refuse",
+  "why_refused": "2^16: the second half of the v / 2^15 / 2^16 = v / 2^31 normalisation; as with its partner, only the pair carries a meaning.",
+  "new": null,
+  "header": "",
+  "basis": "reader + value",
+  "evidence": [
+   "kn5000_subprogram_v142.s:52439-52441 `lda xde, (FPConst_DSP_ParamInterp_FPComplex_65536:24)` / `call FP_fdiv`"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_ParamInterp_FPComplex_44100",
+  "tree": "v142/subcpu",
+  "verdict": "refuse",
+  "why_refused": "Almost certainly the 44.1 kHz sample rate, but its role in this formula (x * 44100, then 99 - x, then 2376 / x, then 2^x) is not decoded, so the use does not prove what quantity it scales.",
+  "new": null,
+  "header": "",
+  "basis": "reader + value",
+  "evidence": [
+   "kn5000_subprogram_v142.s:52474-52476 `lda xde, (FPConst_DSP_ParamInterp_FPComplex_44100:24)` / `call FP_fmul`",
+   "kn5000_subprogram_v142.s:52409 -- the header itself says 'operands certain, arithmetic inferred from the helper names'"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_ParamInterp_FPComplex_2376",
+  "tree": "v142/subcpu",
+  "verdict": "refuse",
+  "why_refused": "2376 = 24 * 99 (the 0..99 parameter range times 24), used as a divisor before 2^x; the factorisation suggests '24 steps over the 0..99 range', but the operand order of FP_fdiv here and the meaning of the dividend are not established.",
+  "new": null,
+  "header": "",
+  "basis": "reader + value",
+  "evidence": [
+   "kn5000_subprogram_v142.s:52481-52484 `lda xbc, (FPConst_DSP_ParamInterp_FPComplex_2376:24)` / `call FP_fdiv`"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_DetuneCurve_Finalize_2400",
+  "tree": "v142/subcpu",
+  "verdict": "refuse",
+  "why_refused": "Divisor before 2^x, then used again as (2^(c/2400) - 1) / 2400 (the _2400_2 double); the header reads it as 'cents per octave x 2', but the input curve (2|x| to 20 at |x| = 10, 200 at 19, 1400 at 31, then +200 per step) does not by itself prove the unit is cents, so the value is the clearest name.",
+  "new": null,
+  "header": "",
+  "basis": "reader + value",
+  "evidence": [
+   "kn5000_subprogram_v142.s:52800-52802 `lda xde, (FPConst_DSP_DetuneCurve_Finalize_2400:24)` / `call FP_fdiv`, then FP_pow(2.0, .) at 52811-52818",
+   "kn5000_subprogram_v142.s:52796-52797 -- header reading '2400.0 (cents per octave x 2)'"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_DetuneCurve_Range3_Compute_1700",
+  "tree": "v142/subcpu",
+  "verdict": "refuse",
+  "why_refused": "Intercept of the third segment of a piecewise-linear curve (100*|x| - 1700), chosen so the segments meet (20*19-180 = 100*19-1700 = 200); 'intercept' adds nothing over the value, and its unflagged siblings (_180, _100, _200) stay numeric.",
+  "new": null,
+  "header": "",
+  "basis": "reader + value",
+  "evidence": [
+   "kn5000_subprogram_v142.s:52748-52756 `lda xde, (FPConst_DSP_DetuneCurve_Range3_Compute_100:24)` / `call FP_fmul` / `lda xde, (FPConst_DSP_DetuneCurve_Range3_Compute_1700:24)` / `call FP_SP_Sub`"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_DetuneCurve_Range4_Compute_4800",
+  "tree": "v142/subcpu",
+  "verdict": "refuse",
+  "why_refused": "Intercept of the fourth segment (200*|x| - 4800), meeting segment 3 at |x| = 31 (1400 = 1400); same reasoning as _Range3_Compute_1700.",
+  "new": null,
+  "header": "",
+  "basis": "reader + value",
+  "evidence": [
+   "kn5000_subprogram_v142.s:52778-52786 `lda xde, (FPConst_DSP_DetuneCurve_Range4_Compute_200:24)` / `call FP_fmul` / `lda xde, (FPConst_DSP_DetuneCurve_Range4_Compute_4800:24)` / `call FP_SP_Sub`",
+   "kn5000_subprogram_v142.s:52729 `cp xwa, 0x1F` -- the |x| <= 31 boundary of range 3"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_ParamEQ_Curve_FP_32768",
+  "tree": "v142/subcpu",
+  "verdict": "refuse",
+  "why_refused": "Same two-step v / 2^15 / 2^16 normalisation of the left-justified 24-bit stream coefficient as in DSP_ParamInterp_FPComplex; only the pair has a meaning.",
+  "new": null,
+  "header": "",
+  "basis": "reader + value",
+  "evidence": [
+   "kn5000_subprogram_v142.s:53168-53174 `lda xde, (FPConst_DSP_ParamEQ_Curve_FP_32768:24)` / `call FP_fdiv` / `lda xde, (FPConst_DSP_ParamInterp_FPComplex_65536:24)` / `call FP_fdiv`"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_ParamEQ_Curve_FP_65536",
+  "tree": "v142/subcpu",
+  "verdict": "refuse",
+  "why_refused": "Second half of the v / 2^31 normalisation pair; see _32768.",
+  "new": null,
+  "header": "",
+  "basis": "reader + value",
+  "evidence": [
+   "kn5000_subprogram_v142.s:53172-53174 `lda xde, (FPConst_DSP_ParamEQ_Curve_FP_65536:24)` / `call FP_fdiv`"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_ReverbCurve_FP_HighRange_3924900",
+  "tree": "v142/subcpu",
+  "verdict": "refuse",
+  "why_refused": "3924900 = 89 x 44100: the x > 89 arm computes e = 10 / (44100x - 3924900) = 1 / (4410*(x - 89)), so this is the split point x = 89 (`cp xwa, 0x59`) expressed at the sample rate -- N = (x - 89) x 100 ms of samples, continuing the low arm's (x + 1) ms. A name would only restate '89 x SampleRate'; the value suffix is the more exact label.",
+  "new": "",
+  "header": "",
+  "basis": "reader + bytes: a derived product, meaning = its factorisation",
+  "evidence": [
+   "kn5000_subprogram_v142.s:52308 `cp xwa, 0x59` / 52309 `jr gt, DSP_ReverbCurve_FP_HighRange` -- split at x = 89",
+   "kn5000_subprogram_v142.s:52357-52367 `..._HighRange_44100` FP_fmul, `..._HighRange_3924900` FP_SP_Sub, `..._HighRange_10` FP_fdiv -- e = 10 / (44100*(x - 89))",
+   "kn5000_subprogram_v142.s:52314-52327 `FPConst_DSP_ReverbCurve_FP_1` FP_fadd, `..._441` FP_dmul, `..._10` FP_ddiv -- low arm e = 10 / (441*(x + 1))"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_ReverbCurve_FP_HighRange_44100",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FPConst_DSP_ReverbCurve_FP_HighRange_SampleRate",
+  "header": "f32 44100.0, the DSP sample rate (44.1 kHz): the x > 89 arm of DSP_ReverbCurve_FP returns 1 - 0.4270422^(1/N) with N = (44100x - 89*44100)/10 = (x - 89) x 100 ms of samples, continuing the x <= 89 arm's N = 441*(x + 1)/10 = (x + 1) ms (44.1 samples per ms). Basis: reader + bytes + the low-range twin.",
+  "basis": "reader + bytes (formula of both arms)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:52357 `lda xde, (FPConst_DSP_ReverbCurve_FP_HighRange_44100:24)` / 52359 `call FP_fmul` -- x * 44100",
+   "kn5000_subprogram_v142.s:52361-52367 `..._3924900` FP_SP_Sub then `lda xbc, (FPConst_DSP_ReverbCurve_FP_HighRange_10:24)` FP_fdiv -- e = 10 / (44100*(x - 89))",
+   "kn5000_subprogram_v142.s:52376-52388 `..._0p4270422` ... `call FP_pow` / `..._HighRange_1` `call FP_DP_Sub` -- 1 - pow(0.4270422, e)",
+   "kn5000_subprogram_v142.s:52314-52327 `FPConst_DSP_ReverbCurve_FP_1` FP_fadd, `FPConst_DSP_ReverbCurve_FP_441` FP_dmul, `FPConst_DSP_ReverbCurve_FP_10` FP_ddiv -- low arm e = 10 / (441*(x + 1)): 441/10 = 44.1 samples per ms, joining the high arm at x = 89/90 (3969 / 4410 samples)",
+   "kn5000_subprogram_v142.s:51957 `XHL  = (XBC * 44100) / 1000 + base` / 51959 `in samples at the 44.1 kHz DSP rate` -- the sibling decoder DSP_ParamInterp_FPScale (opcode 0x67) uses 44100 as samples per second",
+   "(docs) technics-docs/dsp-effect-data-zone.md:65 `ms x 44100 / 1000 -> DRAM word count (delay times; the 44.1 kHz rate is hard-coded)`"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_SOS_Algo0_FinalChain_4194304",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FPConst_DSP_SOS_Algo0_FinalChain_Q22One",
+  "header": "f32 4194304.0 = 2^22, 1.0 in Q22: DSP_SOS_Algo0_FinalChain multiplies a normalised second-order-section coefficient by it and truncates with FP_ftoi before writing it to the DSP. Basis: reader + bytes (siblings _4194304_2 / _4194304_3 are the same scale for the other taps).",
+  "basis": "reader + bytes",
+  "evidence": [
+   "subcpu_data_tables.s:3259 `FPConst_DSP_SOS_Algo0_FinalChain_4194304:\t.float 4194304`",
+   "kn5000_subprogram_v142.s:55563 `lda xde, (FPConst_DSP_SOS_Algo0_FinalChain_4194304:24)` / 55565 `call FP_fmul` / 55568 `call FP_ftoi` -- coefficient * 2^22, truncated to an integer, then written by DSP_WriteOscParam (55573)",
+   "kn5000_subprogram_v142.s:54604-54610 `tap = tap * 2^22 ... then FP_ftoi ... So the DSP's biquad registers are Q22 (Q23 for the last)` -- the same scale-then-ftoi store pattern in DSP_BiquadCoeff_Algo0_Fixup"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_SOS_Algo1_FinalChain_2097152",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FPConst_DSP_SOS_Algo1_FinalChain_Q21One",
+  "header": "f32 2097152.0 = 2^21, 1.0 in Q21: DSP_SOS_Algo1_FinalChain multiplies a normalised second-order-section coefficient by it and truncates with FP_ftoi before writing it to the DSP. Basis: reader + bytes (siblings _2097152_2 are the same scale for the other taps).",
+  "basis": "reader + bytes",
+  "evidence": [
+   "subcpu_data_tables.s:3280 `FPConst_DSP_SOS_Algo1_FinalChain_2097152:\t.float 2097152`",
+   "kn5000_subprogram_v142.s:55808 `lda xde, (FPConst_DSP_SOS_Algo1_FinalChain_2097152:24)` / 55810 `call FP_fmul` / 55813 `call FP_ftoi` -- coefficient * 2^21, truncated to an integer, then written by DSP_WriteOscParam (55818)",
+   "kn5000_subprogram_v142.s:54604-54610 `tap = tap * 2^22 ... then FP_ftoi ... So the DSP's biquad registers are Q22 (Q23 for the last)` -- the same scale-then-ftoi store pattern in DSP_BiquadCoeff_Algo0_Fixup",
+   "kn5000_subprogram_v142.s:55600-55601 `note the 2^21 scale (2097152.0 ...) instead of 2^22, i.e. this topology's coefficients need one more headroom bit` -- the existing header of DSP_SOS_Algo1"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_SOS_Algo1_FinalChain_4194304",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FPConst_DSP_SOS_Algo1_FinalChain_Q22One",
+  "header": "f32 4194304.0 = 2^22, 1.0 in Q22: DSP_SOS_Algo1_FinalChain multiplies a normalised second-order-section coefficient by it and truncates with FP_ftoi before writing it to the DSP. Basis: reader + bytes (the only 2^22 tap of Algo1; its other two taps use 2^21).",
+  "basis": "reader + bytes",
+  "evidence": [
+   "subcpu_data_tables.s:3281 `FPConst_DSP_SOS_Algo1_FinalChain_4194304:\t.float 4194304`",
+   "kn5000_subprogram_v142.s:55821 `lda xde, (FPConst_DSP_SOS_Algo1_FinalChain_4194304:24)` / 55823 `call FP_fmul` / 55826 `call FP_ftoi` -- coefficient * 2^22, truncated to an integer, then written by DSP_WriteParamWord (55829)",
+   "kn5000_subprogram_v142.s:54604-54610 `tap = tap * 2^22 ... then FP_ftoi ... So the DSP's biquad registers are Q22 (Q23 for the last)` -- the same scale-then-ftoi store pattern in DSP_BiquadCoeff_Algo0_Fixup"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_SOS_Algo2_FinalChain_4194304",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FPConst_DSP_SOS_Algo2_FinalChain_Q22One",
+  "header": "f32 4194304.0 = 2^22, 1.0 in Q22: DSP_SOS_Algo2_FinalChain multiplies a normalised second-order-section coefficient by it and truncates with FP_ftoi before writing it to the DSP. Basis: reader + bytes (siblings _4194304_2 / _4194304_3 are the same scale for the other taps).",
+  "basis": "reader + bytes",
+  "evidence": [
+   "subcpu_data_tables.s:3301 `FPConst_DSP_SOS_Algo2_FinalChain_4194304:\t.float 4194304`",
+   "kn5000_subprogram_v142.s:56050 `lda xde, (FPConst_DSP_SOS_Algo2_FinalChain_4194304:24)` / 56052 `call FP_fmul` / 56055 `call FP_ftoi` -- coefficient * 2^22, truncated to an integer, then written by DSP_WriteOscParam (56060)",
+   "kn5000_subprogram_v142.s:54604-54610 `tap = tap * 2^22 ... then FP_ftoi ... So the DSP's biquad registers are Q22 (Q23 for the last)` -- the same scale-then-ftoi store pattern in DSP_BiquadCoeff_Algo0_Fixup"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_VolumeCurve_FP_1800",
+  "tree": "v142/subcpu",
+  "verdict": "refuse",
+  "why_refused": "1800 = 24 x 75: numerator of e = 1800 / (75 - 44100*(30x + 75)) = -24 / (44100*(1 + 0.4x) - 1), i.e. the 2^-24 target folded with the arm's /75 normalisation. A name would only restate the factorisation; the value suffix is the more exact label.",
+  "new": "",
+  "header": "",
+  "basis": "reader + bytes: a derived product, meaning = its factorisation",
+  "evidence": [
+   "kn5000_subprogram_v142.s:52042-52052 `FPConst_..._30` FP_fmul, `FPConst_DSP_VolumeCurve_FP_44100` FP_fmul, `FPConst_DSP_VolumeCurve_FP_3307500` FP_fadd -- t = 44100*(30x + 75)",
+   "kn5000_subprogram_v142.s:52053-52056 `lda xbc, (FPConst_DSP_VolumeCurve_FP_75:24)` / `call FP_SP_Sub` -- t = 75 - t (FP_SP_Sub = *XBC - *XDE, subcpu_fp_math.s:723)",
+   "kn5000_subprogram_v142.s:52057-52060 `lda xbc, (FPConst_DSP_VolumeCurve_FP_1800:24)` / `call FP_fdiv` -- e = 1800 / t (XBC = dividend, kn5000_subprogram_v142.s:58679)",
+   "kn5000_subprogram_v142.s:52069-52076 `lda xiy, (FPConst_DSP_VolumeCurve_FP_2:24)` ... `call FP_pow` -- pow(2.0, e) (x at entrySP+8, y at +0x10, subcpu_fp_math.s:211)"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_VolumeCurve_FP_3307500",
+  "tree": "v142/subcpu",
+  "verdict": "refuse",
+  "why_refused": "3307500 = 75 x 44100, a compiler-folded product: the offset that makes the x <= 75 arm's sample count 44100*(30x + 75) (T = 1 + 0.4x after the /75 that the 1800 = 24 x 75 numerator carries). A name could only restate that factorisation (e.g. '75 x SampleRate'); the value suffix is the more exact label, and what T controls (decay time?) is not proved -- the routine's own header refuses the 'volume' reading.",
+  "new": "",
+  "header": "",
+  "basis": "reader + bytes: a derived product, meaning = its factorisation",
+  "evidence": [
+   "kn5000_subprogram_v142.s:52036 `cp xwa, 0x4B` / 52037 `jrl gt, DSP_VolumeCurve_FP_HighRange` -- this arm is x <= 75",
+   "kn5000_subprogram_v142.s:52042-52052 `FPConst_..._30` FP_fmul, `FPConst_DSP_VolumeCurve_FP_44100` FP_fmul, `FPConst_DSP_VolumeCurve_FP_3307500` FP_fadd -- t = 44100*(30x + 75)",
+   "kn5000_subprogram_v142.s:52053-52056 `lda xbc, (FPConst_DSP_VolumeCurve_FP_75:24)` / `call FP_SP_Sub` -- t = 75 - t (FP_SP_Sub = *XBC - *XDE, subcpu_fp_math.s:723)",
+   "kn5000_subprogram_v142.s:52057-52060 `lda xbc, (FPConst_DSP_VolumeCurve_FP_1800:24)` / `call FP_fdiv` -- e = 1800 / t (XBC = dividend, kn5000_subprogram_v142.s:58679)"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_VolumeCurve_FP_44100",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FPConst_DSP_VolumeCurve_FP_SampleRate",
+  "header": "f32 44100.0, the DSP sample rate (44.1 kHz): the x <= 75 arm of DSP_VolumeCurve_FP builds 44100*(30x + 75) and returns 2^23 * 2^(1800 / (75 - 44100*(30x + 75))) = 2^23 * 2^(-24 / (44100*T - 1)), T = 1 + 0.4x, a per-sample factor that falls by 2^-24 over 44100*T samples. Basis: reader + bytes; the x > 75 arm has the same form with T = 1.25x - 61.5, and 44100 is the hard-coded rate of the sibling decoders.",
+  "basis": "reader + bytes (formula of both arms)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:52036 `cp xwa, 0x4B` / 52037 `jrl gt, DSP_VolumeCurve_FP_HighRange` -- this arm is x <= 75",
+   "kn5000_subprogram_v142.s:52042-52052 `FPConst_..._30` FP_fmul, `FPConst_DSP_VolumeCurve_FP_44100` FP_fmul, `FPConst_DSP_VolumeCurve_FP_3307500` FP_fadd -- t = 44100*(30x + 75)",
+   "kn5000_subprogram_v142.s:52053-52056 `lda xbc, (FPConst_DSP_VolumeCurve_FP_75:24)` / `call FP_SP_Sub` -- t = 75 - t (FP_SP_Sub = *XBC - *XDE, subcpu_fp_math.s:723)",
+   "kn5000_subprogram_v142.s:52057-52060 `lda xbc, (FPConst_DSP_VolumeCurve_FP_1800:24)` / `call FP_fdiv` -- e = 1800 / t (XBC = dividend, kn5000_subprogram_v142.s:58679)",
+   "kn5000_subprogram_v142.s:52069-52076 `lda xiy, (FPConst_DSP_VolumeCurve_FP_2:24)` ... `call FP_pow` -- pow(2.0, e) (x at entrySP+8, y at +0x10, subcpu_fp_math.s:211)",
+   "kn5000_subprogram_v142.s:52133-52138 `lda xde, (FPConst_DSP_VolumeCurve_FP_Finalize_8388608:24)` / FP_fmul / FP_ftoi -- result = 2^23 * 2^e as an integer",
+   "kn5000_subprogram_v142.s:52093-52099 `lda xde, (FPConst_DSP_VolumeCurve_FP_HighRange_44100:24)` FP_fmul, `FPConst_..._65091600` FP_SP_Sub -- t = 44100*30x - 65091600 = 44100*(30x - 1476)",
+   "kn5000_subprogram_v142.s:52100-52107 `FPConst_..._HighRange_24` FP_SP_Sub, `FPConst_..._HighRange_576` FP_fdiv -- e = 576 / (24 - t) = -24 / (44100*(1.25x - 61.5) - 1)",
+   "kn5000_subprogram_v142.s:51957 `XHL  = (XBC * 44100) / 1000 + base` / 51959 `in samples at the 44.1 kHz DSP rate` -- the sibling decoder DSP_ParamInterp_FPScale (opcode 0x67) uses 44100 as samples per second",
+   "(docs) technics-docs/dsp-effect-data-zone.md:65 `ms x 44100 / 1000 -> DRAM word count (delay times; the 44.1 kHz rate is hard-coded)`"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_VolumeCurve_FP_Finalize_8388608",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FPConst_DSP_VolumeCurve_FP_Finalize_Q23One",
+  "header": "f32 8388608.0 = 2^23, 1.0 in Q23: DSP_VolumeCurve_FP_Finalize multiplies the float result by it and truncates with FP_ftoi, so the opcode-0x69 value leaves as a Q23 fixed-point word for DSP_WriteOscParam. Basis: reader + bytes.",
+  "basis": "reader + bytes",
+  "evidence": [
+   "subcpu_data_tables.s:3093 `FPConst_DSP_VolumeCurve_FP_Finalize_8388608:\t.float 8388608\t; 2^23`",
+   "kn5000_subprogram_v142.s:52133 `lda xde, (FPConst_DSP_VolumeCurve_FP_Finalize_8388608:24)` / 52135 `call FP_fmul` / 52138 `call FP_ftoi` -- float * 2^23 then float->int",
+   "kn5000_subprogram_v142.s:57540 `call DSP_VolumeCurve_FP` -- the opcode-0x69 stub, whose result goes to DSP_WriteOscParam",
+   "kn5000_subprogram_v142.s:54610 `So the DSP's biquad registers are Q22 (Q23 for the last)` -- the same 2^22/2^23 multiply-then-ftoi pattern is already read as Q22/Q23 elsewhere in this block"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_VolumeCurve_FP_HighRange_44100",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FPConst_DSP_VolumeCurve_FP_HighRange_SampleRate",
+  "header": "f32 44100.0, the DSP sample rate (44.1 kHz), in the x > 75 arm of DSP_VolumeCurve_FP: 2^23 * 2^(576 / (24 - 44100*(30x - 1476))) = 2^23 * 2^(-24 / (44100*T - 1)), T = 1.25x - 61.5 -- the same form as the x <= 75 arm. Basis: reader + bytes + the twin arm.",
+  "basis": "reader + bytes (formula of both arms)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:52093-52099 `lda xde, (FPConst_DSP_VolumeCurve_FP_HighRange_44100:24)` FP_fmul, `FPConst_..._65091600` FP_SP_Sub -- t = 44100*30x - 65091600 = 44100*(30x - 1476)",
+   "kn5000_subprogram_v142.s:52100-52107 `FPConst_..._HighRange_24` FP_SP_Sub, `FPConst_..._HighRange_576` FP_fdiv -- e = 576 / (24 - t) = -24 / (44100*(1.25x - 61.5) - 1)",
+   "kn5000_subprogram_v142.s:52116-52123 `FPConst_DSP_VolumeCurve_FP_HighRange_2` ... `call FP_pow` -- pow(2.0, e), same finalisation",
+   "kn5000_subprogram_v142.s:52042-52052 `FPConst_..._30` FP_fmul, `FPConst_DSP_VolumeCurve_FP_44100` FP_fmul, `FPConst_DSP_VolumeCurve_FP_3307500` FP_fadd -- t = 44100*(30x + 75)",
+   "kn5000_subprogram_v142.s:52053-52056 `lda xbc, (FPConst_DSP_VolumeCurve_FP_75:24)` / `call FP_SP_Sub` -- t = 75 - t (FP_SP_Sub = *XBC - *XDE, subcpu_fp_math.s:723)",
+   "kn5000_subprogram_v142.s:52057-52060 `lda xbc, (FPConst_DSP_VolumeCurve_FP_1800:24)` / `call FP_fdiv` -- e = 1800 / t (XBC = dividend, kn5000_subprogram_v142.s:58679)",
+   "kn5000_subprogram_v142.s:51957 `XHL  = (XBC * 44100) / 1000 + base` / 51959 `in samples at the 44.1 kHz DSP rate` -- the sibling decoder DSP_ParamInterp_FPScale (opcode 0x67) uses 44100 as samples per second",
+   "(docs) technics-docs/dsp-effect-data-zone.md:65 `ms x 44100 / 1000 -> DRAM word count (delay times; the 44.1 kHz rate is hard-coded)`"
+  ]
+ },
+ {
+  "old": "FPConst_DSP_VolumeCurve_FP_HighRange_65091600",
+  "tree": "v142/subcpu",
+  "verdict": "refuse",
+  "why_refused": "65091600 = 1476 x 44100, the x > 75 arm's offset: t = 44100*(30x - 1476), giving T = 1.25x - 61.5. A compiler-folded product with no meaning of its own beyond that factorisation; the value suffix is the more exact label.",
+  "new": "",
+  "header": "",
+  "basis": "reader + bytes: a derived product, meaning = its factorisation",
+  "evidence": [
+   "kn5000_subprogram_v142.s:52093-52099 `lda xde, (FPConst_DSP_VolumeCurve_FP_HighRange_44100:24)` FP_fmul, `FPConst_..._65091600` FP_SP_Sub -- t = 44100*30x - 65091600 = 44100*(30x - 1476)",
+   "kn5000_subprogram_v142.s:52100-52107 `FPConst_..._HighRange_24` FP_SP_Sub, `FPConst_..._HighRange_576` FP_fdiv -- e = 576 / (24 - t) = -24 / (44100*(1.25x - 61.5) - 1)"
+  ]
+ },
+ {
+  "old": "FP_Const_0p552_Sub",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FPConst_DSP_AlgoParam_Decode_0p552",
+  "header": "f64 0.552, FP_dmul factor of DSP_AlgoParam_Decode's type != 1 arm (curve word negated first); its twin FP_Const_0p552_Add is read only by DSP_AlgoParam_Decode_Type1 and would follow as FPConst_DSP_AlgoParam_Decode_Type1_0p552. Basis: reader + bytes, named by the pool's FPConst_<reader>_<value> convention -- what 0.552 means is not established.",
+  "basis": "reader + bytes (pool convention)",
+  "evidence": [
+   "subcpu_data_tables.s:3063 `FP_Const_0p552_Sub:` / 3064 `.double 0.552`",
+   "kn5000_subprogram_v142.s:51593 `cp a, 1:i3` / 51594 `jr z, DSP_AlgoParam_Decode_Type1` -- this constant's arm is type != 1",
+   "kn5000_subprogram_v142.s:51599-51601 `cpl wa` / `cplw_erp 0xE2` / `inc 1, xwa` -- the fetched curve word is negated in this arm",
+   "kn5000_subprogram_v142.s:51610 `lda xde, (FP_Const_0p552_Sub:24)` / 51612 `call FP_dmul` -- the only reader",
+   "kn5000_subprogram_v142.s:51630 `lda xde, (FP_Const_0p552_Add:24)` -- the twin, read in DSP_AlgoParam_Decode_Type1",
+   "subcpu_data_tables.s:3076 `each constant now carries its own label, FPConst_<reading routine>_<value>` -- the pool's naming rule"
+  ]
+ },
+ {
+  "old": "FP_DP_Sub",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FP_dsub",
+  "header": "Double subtraction, the C runtime's __dsub: *(double*)XWA = *(double*)XBC - *(double*)XDE. Basis: callers + body -- 21 call sites use it as `a - b` in the DSP curve code (e.g. 1 - pow(...) in DSP_ReverbCurve_FP), and the body is FP_dadd's with the sign test inverted; it completes the FP_dadd / FP_dmul / FP_ddiv quartet (the locals FP_DP_Sub_SameSign / _Done follow as FP_dsub_*).",
+  "basis": "callers + body + sibling",
+  "evidence": [
+   "kn5000_subprogram_v142.s:52342 `lda xbc, (FPConst_DSP_ReverbCurve_FP_1_2:24)` / 52345 `call FP_DP_Sub` -- caller: 1.0 - pow(0.4270422, e)",
+   "kn5000_subprogram_v142.s:52385-52388 `lda xbc, (FPConst_DSP_ReverbCurve_FP_HighRange_1:24)` ... `call FP_DP_Sub` -- caller, high arm",
+   "subcpu_fp_math.s:671 `; Double SUBTRACTION: *(double*)XWA = *(double*)XBC - *(double*)XDE.`",
+   "subcpu_fp_math.s:697-701 `xor e, (xiz + 3)` / `jr z, FP_DP_Sub_SameSign` / `call FP_DP_AddMantissa` -- different signs add the magnitudes, equal signs subtract (FP_DP_SubMantissa)",
+   "subcpu_fp_math.s:1919-1920 `Double ADDITION ... identical to FP_DP_Sub (0x03D8E0) except for the polarity of the sign test` -- FP_dadd",
+   "scripts/renaming/rename_v142_fp_libm.sed `s/\\bFP_DP_Mul\\b/FP_dadd/g` ... `s/\\bVoiceFloat_SubDP\\b/FP_ddiv/g` -- the series this completes"
+  ]
+ },
+ {
+  "old": "FP_Div_Step_Bit0_Entry",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FP_Div_Step_Bit0_Shift",
+  "header": "",
+  "basis": "body (internal branch target of FP_Div_Step4Bits)",
+  "evidence": [
+   "subcpu_fp_math.s:3751 `; Shift the remainder and start the bit-0 stage.` / 3752 `FP_Div_Step_Bit0_Entry:`",
+   "subcpu_fp_math.s:3753 `sll xix, 1` ... `rlc xiy` -- the code here shifts the 64-bit remainder XIX:XIY left one bit; the trial subtraction is FP_Div_Step_Bit0, the quotient bit FP_Div_Step_Bit0_Set",
+   "subcpu_fp_math.s:3734 / 3739 / 3745 `jr ... FP_Div_Step_Bit0_Entry` -- all three referrers are the previous bit stage of FP_Div_Step4Bits"
+  ]
+ },
+ {
+  "old": "FP_Div_Step_Bit1_Entry",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FP_Div_Step_Bit1_Shift",
+  "header": "",
+  "basis": "body (internal branch target of FP_Div_Step4Bits)",
+  "evidence": [
+   "subcpu_fp_math.s:3720 `; Shift the remainder and start the bit-1 stage.` / 3721 `FP_Div_Step_Bit1_Entry:`",
+   "subcpu_fp_math.s:3722 `sll xix, 1` ... `rlc xiy` -- the code here shifts the 64-bit remainder XIX:XIY left one bit; the trial subtraction is FP_Div_Step_Bit1, the quotient bit FP_Div_Step_Bit1_Set",
+   "subcpu_fp_math.s:3703 / 3708 / 3714 `jr ... FP_Div_Step_Bit1_Entry` -- all three referrers are the previous bit stage of FP_Div_Step4Bits"
+  ]
+ },
+ {
+  "old": "FP_Div_Step_Bit2_Entry",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FP_Div_Step_Bit2_Shift",
+  "header": "",
+  "basis": "body (internal branch target of FP_Div_Step4Bits)",
+  "evidence": [
+   "subcpu_fp_math.s:3689 `; Shift the remainder and start the bit-2 stage.` / 3690 `FP_Div_Step_Bit2_Entry:`",
+   "subcpu_fp_math.s:3691 `sll xix, 1` ... `rlc xiy` -- the code here shifts the 64-bit remainder XIX:XIY left one bit; the trial subtraction is FP_Div_Step_Bit2, the quotient bit FP_Div_Step_Bit2_Set",
+   "subcpu_fp_math.s:3672 / 3677 / 3683 `jr ... FP_Div_Step_Bit2_Entry` -- all three referrers are the previous bit stage of FP_Div_Step4Bits"
+  ]
+ },
+ {
+  "old": "FP_SP_Sub",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FP_fsub",
+  "header": "Single-precision subtraction, the C runtime's __fsub: *(float*)XWA = *(float*)XBC - *(float*)XDE. Basis: callers + body -- 39 call sites use it as `a - b` (e.g. 1 - x in DSP_SOS_Algo0_FinalChain, whose Algo1 twin calls FP_fadd for x + 1), and the body is FP_fadd's with the sign test inverted; completes FP_fadd / FP_fmul / FP_fdiv (locals FP_SP_Sub_Pad / _SameSign / _Done follow as FP_fsub_*).",
+  "basis": "callers + body + sibling",
+  "evidence": [
+   "kn5000_subprogram_v142.s:55543-55546 `lda xbc, (FPConst_DSP_SOS_Algo0_FinalChain_1:24)` / `lda xde, (xsp+202:16)` / `call FP_SP_Sub` -- caller: 1.0 - coefficient",
+   "kn5000_subprogram_v142.s:55788-55791 `lda xbc, (xsp+202:16)` / `lda xde, (FPConst_DSP_SOS_Algo1_FinalChain_1:24)` / `call FP_fadd` -- the Algo1 twin adds at the same point",
+   "kn5000_subprogram_v142.s:52097-52099 `lda xde, (FPConst_DSP_VolumeCurve_FP_HighRange_65091600:24)` / `call FP_SP_Sub` -- caller: t - 65091600",
+   "subcpu_fp_math.s:723-724 `; Single-precision SUBTRACTION: *(float*)XWA = *(float*)XBC - *(float*)XDE.`",
+   "subcpu_fp_math.s:742-747 `xor e, (xiz + 3)` / `jr z, FP_SP_Sub_SameSign` / `call FP_SP_AddMantissa` -- sign test inverted relative to FP_fadd (subcpu_fp_math.s:1979)",
+   "subcpu_fp_math.s:1974-1976 `Single-precision ADDITION: *(float*)XWA = *(float*)XBC + *(float*)XDE ... this is __fadd`"
+  ]
+ },
+ {
+  "old": "FP_pow_ExpLog_Body",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "FP_pow_ExpLog_FrexpOperands",
+  "header": "",
+  "basis": "body (internal continuation of FP_pow_ExpLog)",
+  "evidence": [
+   "subcpu_fp_math.s:473-476 `call FP_log` / `cpw (265250:24), 33` / `jr nz, FP_pow_ExpLog_Body` -- reached when log(x) did not set errno (0x040C22) = EDOM (33)",
+   "subcpu_fp_math.s:482 `; Restore errno and frexp both operands into (XSP+0x24) and (XSP+0x22).`",
+   "subcpu_fp_math.s:484 `ld (0x040c22:24), iz` / 494 `call FP_frexp` / 504 `call FP_frexp` -- restores errno, splits log(x) and y into mantissa/exponent for the over/underflow pre-check"
+  ]
+ },
+ {
+  "old": "IRAM_Unreferenced_F00A",
+  "tree": "v142/subcpu",
+  "verdict": "refuse",
+  "why_refused": "No reader: no absolute operand, no 3-byte LE pointer and no branch names 0x00F00A-0x00F011 (8 x 0xFF after ToneGen_Voice_Active_Bitmap); a re-search of the source for the hex and decimal spellings found none either. Bytes alone do not pin a meaning; the positional name records exactly what is known.",
+  "new": "",
+  "header": "",
+  "basis": "no referrers",
+  "evidence": [
+   "subcpu_data_tables.s:123 `IRAM_Unreferenced_F00A:` -- preceding comment: `No reader found ... Purpose not established.`",
+   "command grep -n -i '0xf00a|61450|0xf340|62272|0xf40a|62474' over v142/subcpu/*.s -- only the banner comments (subcpu_data_tables.s:51/55/120/126) match"
+  ]
+ },
+ {
+  "old": "IRAM_Unreferenced_F340",
+  "tree": "v142/subcpu",
+  "verdict": "refuse",
+  "why_refused": "No reader: no absolute operand, no 3-byte LE pointer and no branch names 0x00F340-0x00F34D (14 bytes 00 ff 9a ee 03 00 00 10 00.. between DSP_MixerGain-area curve and the libm pool); a re-search of the source for the hex and decimal spellings found none either. Bytes alone do not pin a meaning; the positional name records exactly what is known.",
+  "new": "",
+  "header": "",
+  "basis": "no referrers",
+  "evidence": [
+   "subcpu_data_tables.s:232 `IRAM_Unreferenced_F340:` -- preceding comment: `No reader found ... Purpose not established.`",
+   "command grep -n -i '0xf00a|61450|0xf340|62272|0xf40a|62474' over v142/subcpu/*.s -- only the banner comments (subcpu_data_tables.s:51/55/120/126) match"
+  ]
+ },
+ {
+  "old": "IRAM_Unreferenced_F40A",
+  "tree": "v142/subcpu",
+  "verdict": "refuse",
+  "why_refused": "No reader: no absolute operand, no 3-byte LE pointer and no branch names 0x00F40A-0x00F41F (22 bytes c0 3f ff.. inside the libm double pool, not clean doubles); a re-search of the source for the hex and decimal spellings found none either. Bytes alone do not pin a meaning; the positional name records exactly what is known.",
+  "new": "",
+  "header": "",
+  "basis": "no referrers",
+  "evidence": [
+   "subcpu_data_tables.s:266 `IRAM_Unreferenced_F40A:` -- preceding comment: `No reader found ... Purpose not established.`",
+   "command grep -n -i '0xf00a|61450|0xf340|62272|0xf40a|62474' over v142/subcpu/*.s -- only the banner comments (subcpu_data_tables.s:51/55/120/126) match"
+  ]
+ },
+ {
+  "old": "InterCPU_DMA_Send_Chunk",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "InterCPU_DMA_SendDataPacket",
+  "header": "Sends one sub->main data packet of 1..32 bytes: after the MSTAT1 (PD bit 4) handshake it writes the header byte (A << 5) | (BC - 1) to the latch 0x120000, then streams the BC bytes at XDE by micro-DMA 2 and waits until DMA_XFER_STATE returns to 0; BC = 0 returns at once. Basis: callers + body -- InterCPU_DMA_Send splits every transfer into 32-byte packets (DMA_Send_Loop) plus the remainder (DMA_Send_Final).",
+  "basis": "callers + body",
+  "evidence": [
+   "kn5000_subprogram_v142.s:2784-2792 `cp iz, 0x20` / `jr ule, DMA_Send_Final` ... `ldw bc, 0x20` / `calr InterCPU_DMA_Send_Chunk` -- caller DMA_Send_Loop, 32 bytes per call",
+   "kn5000_subprogram_v142.s:2805 `calr InterCPU_DMA_Send_Chunk` -- caller DMA_Send_Final, the remainder",
+   "kn5000_subprogram_v142.s:2822-2823 `cp c, 0:i3` / `ret z` -- empty packet is a no-op",
+   "kn5000_subprogram_v142.s:2831-2835 `ld l, c` / `dec 1, l` / `sll a, 5` / `or a, l` / `ld (0x120000:24), a` -- header byte = channel<<5 | (length - 1)",
+   "kn5000_subprogram_v142.s:2842-2844 `ldc_cr32 xde, 0x08` / `ldc_cr16 bc, 0x48` -- micro-DMA 2 source XDE, count BC",
+   "(docs) technics-docs/inter-cpu-protocol.md:412 `| Data | 0x00-0xDF | Data packet | Low 5 bits + 1 |` -- the same header format named 'data packet'"
+  ]
+ },
+ {
+  "old": "InterCPU_Reply_EditBuffer_Block",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "InterCPU_SendEditBufferToMain",
+  "header": "Copies one 470-byte custom-tone edit buffer to the main CPU by an E1 transfer: source (ToneDB_RamBankA) + 0x4AA7 + index*0x50, destination main-CPU address 0x1E0000 + the same offset, length 0x1D6; index in A. Basis: callers + body -- tone-edit opcodes 0x14 / 0x15 / 0x16 call it after VoiceParam_CustomTone_Apply_Catalog80 / 8C / 94 with the index latched at (ToneDB_RamBankA) + 0x72A7.",
+  "basis": "callers + body",
+  "evidence": [
+   "kn5000_subprogram_v142.s:31150 / 31171 / 31192 `calr\tInterCPU_Reply_EditBuffer_Block` -- callers Audio_Cmd_ToneEdit_Op14 / _Op15 / _Op16",
+   "kn5000_subprogram_v142.s:31147-31148 `ld\txwa, (283420:24)` / `ld\ta, (xwa+29351)` -- A = the selected custom-tone index (0x04531C)+0x72A7",
+   "kn5000_subprogram_v142.s:30877-30878 `ld\txix, 1966080` / `ldw\thl, 470` -- 0x1E0000 window base, 470-byte length",
+   "kn5000_subprogram_v142.s:30881-30885 `muls\tbc, 80` / `add\tde, 19111` / `ld\txbc, (283420:24)` / `lda\txbc, (xbc+de)` -- source = (0x04531C) + 0x4AA7 + index*0x50",
+   "kn5000_subprogram_v142.s:30893-30896 `ld\txwa, xde` / `ld\txde, xbc` / `ld\tbc, hl` / `jp\tInterCPU_E1_DMA_Transfer` -- XWA = sub-CPU source, XDE = main-CPU destination",
+   "kn5000_subprogram_v142.s:3029-3032 `lda xhl, (4368:16)` / `ld (xhl), xwa` / `lda xwa, (4318:16)` / `ld (xwa), xde` and 3059-3061 `ld xbc, (xwa)` / `ldc_cr32 xbc, 0x08` -- InterCPU_E1_DMA_Transfer sends XDE in the header and DMAs from XWA (its own header at 2990-2991 has the two swapped)"
+  ]
+ },
+ {
+  "old": "OFFSETS_14739",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSP_BytecodeInterpreter_CaseOffsets",
+  "header": "6 x s16 offsets from DSP_Bytecode_Op00_Groups5_ParamMix, indexed by the high nibble (0..5) of a DSP bytecode instruction: the computed `jp` at the tail of DSP_BytecodeInterpreter_Loop. Basis: reader + table. (Old name quoted in dsp/analysis/*.md, dsp/instruction-set.md and notes/sound/dsp_protocol_cross_product.py: dated notes keep it with '(now ...)'.)",
+  "basis": "reader + table",
+  "evidence": [
+   "kn5000_subprogram_v142.s:56438-56444 `srl wa, 4` / `cp wa, 0xE` / `cp wa, 0xD` / `cp wa, 5:i3` / `jrl ugt, DSP_BytecodeInterpreter_CheckEnd` -- index = opcode high nibble, 0..5",
+   "kn5000_subprogram_v142.s:56445-56449 `add wa, wa` / `lda xix, (OFFSETS_14739:24)` / `ld\twa, (xix+wa)` / `lda xix, (DSP_Bytecode_Op00_Groups5_ParamMix:24)` / `jp\tt, (xix+wa)` -- the only reader",
+   "subcpu_data_tables.s:4778-4784 `OFFSETS_14739:` / `.short DSP_Bytecode_Op00_Groups5_ParamMix - DSP_Bytecode_Op00_Groups5_ParamMix ; index 0` ... `DSP_Bytecode_Op05_Groups5_Masked - ... ; index 5`",
+   "subcpu_data_tables.s:4771 `(\"DSP_Bytecode_HandlerOffsetTable\" is descriptive text ...)` -- the same reading, never applied",
+   "subcpu_data_tables.s:736 `Voice_SystemMsg_CaseOffsets:` -- the tree's naming for such tables (16 `*_CaseOffsets` labels in v142)"
+  ]
+ },
+ {
+  "old": "OFFSETS_14745",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "DSP_Translator_CaseOffsets",
+  "header": "25 x s16 offsets from DSP_Op_0x61_LinearEval, indexed by (opcode - 0x61) for the DSP parameter-translator opcodes 0x61..0x79: the computed `jp` in DSP_Translator_ReadOpcode (0x21 / 0x24 / 0x40 are tested before it). Basis: reader + table. (Old name quoted in technics-docs/dsp-bytecode-interpreter.md, dsp/analysis/*.md and the dsp/tools/host_side.py comment: update or annotate there.)",
+  "basis": "reader + table",
+  "evidence": [
+   "kn5000_subprogram_v142.s:57358-57368 `cp wa, 0x21` ... `sub wa, 0x61` / `jrl c, DSP_Op_Unknown_Error` / `cp wa, 0x18` / `jrl ugt, DSP_Op_Unknown_Error` -- index = opcode - 0x61, 0..0x18",
+   "kn5000_subprogram_v142.s:57369-57373 `add wa, wa` / `lda xix, (OFFSETS_14745:24)` / `ld\twa, (xix+wa)` / `lda xix, (DSP_Op_0x61_LinearEval:24)` / `jp\tt, (xix+wa)` -- the only reader",
+   "subcpu_data_tables.s:4803-4828 `OFFSETS_14745:` / `.short DSP_Op_0x61_LinearEval - DSP_Op_0x61_LinearEval ; index 0` ... `DSP_Op_0x79_AlgoParamDecode - ... ; index 24`",
+   "subcpu_data_tables.s:4791 `(\"DSP_Translator_OpcodeOffsetTable\" is descriptive text ...)` -- the same reading, never applied"
+  ]
+ },
+ {
+  "old": "Serial1_CommandHandler_RX_F4F5",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Serial1_HandleEnableCommand",
+  "header": "While the serial-1 link is disabled (SERIAL_1_VAR_1034 bit 2 clear) every byte of a main-CPU 0x80-0x9F packet comes here instead of the TX ring: 0xF4 sets mode byte SERIAL_1_VAR_1038 = 3, enables the link and rewrites SC1MOD 0x29 -> 0x2B (clock-select bits 01 -> 11); 0xF5 sets mode 2 and enables it on the unchanged SC1MOD; any other byte is dropped. Basis: caller + body + the bit-2 readers (INTRX1 stores received bytes and Serial1_DataTransmit_Loop queues TX bytes only while it is set).",
+  "basis": "caller + body + flag readers",
+  "evidence": [
+   "subcpu_data_tables.s:363 `.long Serial1_DataTransmit_Loop` -- CMD_DISPATCH_TABLE entry 4: main->sub command bytes 0x80-0x9F",
+   "subcpu_data_tables.s:13128-13135 `bit 2, (SERIAL_1_VAR_1034:16)` / `jr nz, Serial1_TX_ViaRingBuf` ... `calr Serial1_CommandHandler_RX_F4F5` -- caller: each byte while bit 2 is clear",
+   "subcpu_data_tables.s:13143-13144 `ld xwa, 0x1016` / `calr SAVE_BYTE_TO_RING_BUFFER` -- with bit 2 set the byte is queued for transmission instead",
+   "subcpu_data_tables.s:12896 `bit 2, (SERIAL_1_VAR_1034:16)\t; Check if RX enabled` -- INTRX1 keeps received bytes only when bit 2 is set",
+   "subcpu_data_tables.s:13062-13069 `cp a, 0xF5` / `cp a, 0xF4` / `ret nz` / `ld (SERIAL_1_VAR_1038:16), 3` / `set 2, (SERIAL_1_VAR_1034:16)` / `ld (SC1MOD:8), 0x2B:io`",
+   "subcpu_data_tables.s:13074-13075 `ld (SERIAL_1_VAR_1038:16), 2` / `set 2, (SERIAL_1_VAR_1034:16)` -- the 0xF5 arm",
+   "subcpu_data_tables.s:13165-13177 `ld (SERIAL_1_VAR_1034:16), 0` ... `ld (SC1MOD:8), 0x29:io` -- INIT_RING_BUFFERS starts disabled on SC1MOD 0x29",
+   "kn5000_subprogram_v142.s:113 `ld (SC1MOD:8), 0x29:io\t;receive-enable | 8-bit uart mode | serial transfer clock: baud-rate generator`"
+  ]
+ },
+ {
+  "old": "Task1_AudioMain_Entry",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Task1_StartAudioSystem",
+  "header": "Entry PC of task 1 (TaskSched_TaskDescriptorTable record 1): arms the audio-tick interrupt (INTET01 high nibble = INTT1 level 3), initialises the three ring buffers, enables interrupts, clears word 0x103C and enters Audio_System_Init, which falls into Audio_Main_Loop. Basis: descriptor table + body.",
+  "basis": "descriptor + body",
+  "evidence": [
+   "kn5000_subprogram_v142.s:683 `.long\tTask1_AudioMain_Entry, 0x0004069a\t; task 1: entry, stack top`",
+   "kn5000_subprogram_v142.s:865 `calr TaskSched_SpawnTask` (A = 1, 864) -- TaskSched_ConfigAndDispatch spawns task 1",
+   "kn5000_subprogram_v142.s:159-163 `lda\txbc, (INTET01:8)` / `and a, 0x8F` / `or a, 0x30` -- INTT1 at level 3",
+   "subcpu_vectors.s:53 `vec 21 INTT1 -> slot 20 = IntTramp_INTT1 -> Timer_AudioTick_Handler` -- INTT1 is the audio tick",
+   "kn5000_subprogram_v142.s:164 `calr Audio_InitRingBuffers` / 165 `ei 0` / 167 `jr Audio_System_Init`"
+  ]
+ },
+ {
+  "old": "Task2_Entry_Stub",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Task2_NeverSpawned",
+  "header": "Entry PC of task 2 (TaskSched_TaskDescriptorTable record 2), a bare RET: TaskSched_SpawnTask is only ever called with task 1 and task 3, so this slot is unused in v1.42. Basis: descriptor table + the SpawnTask call sites.",
+  "basis": "descriptor + callers of TaskSched_SpawnTask",
+  "evidence": [
+   "kn5000_subprogram_v142.s:686 `.long\tTask2_Entry_Stub, 0x00040c20\t\t; task 2: entry, stack top`",
+   "kn5000_subprogram_v142.s:428-429 `Task2_Entry_Stub:` / `ret`",
+   "kn5000_subprogram_v142.s:864-865 `ld a, 0x1:opc` / `calr TaskSched_SpawnTask` and 51414-51415 `ld wa, 3:i3` / `call TaskSched_SpawnTask` -- the only two SpawnTask call sites (branch xref of the linked ELF: 0x01FF02, 0x038DF1)"
+  ]
+ },
+ {
+  "old": "Task3_Entry_Thunk",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Task3_EnterDspApplyLoop",
+  "header": "Entry PC of task 3 (TaskSched_TaskDescriptorTable record 3): `jp DSP_ApplyTask_Body`, the forever loop that takes DSP configuration images from message queue 2, applies them with DSP_State_ApplyAll and returns the buffers to queue 1. Basis: descriptor table + body + its spawner DSP_State_DmaLoadPresets.",
+  "basis": "descriptor + body",
+  "evidence": [
+   "kn5000_subprogram_v142.s:689 `.long\tTask3_Entry_Thunk, 0x00040a9c\t\t; task 3: entry, stack top`",
+   "kn5000_subprogram_v142.s:51414-51415 `ld wa, 3:i3` / `call TaskSched_SpawnTask` -- DSP_State_DmaLoadPresets spawns task 3",
+   "kn5000_subprogram_v142.s:45019 `jp\tDSP_ApplyTask_Body`",
+   "kn5000_subprogram_v142.s:51438-51443 `DSP_State_ApplyTask_Loop:` / `call\tTaskMsgQ_Receive` / `call\tDSP_State_ApplyAll` -- the loop it enters"
+  ]
+ },
+ {
+  "old": "TaskEvent_Wait_Block",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "TaskEvent_Wait_SuspendTask",
+  "header": "",
+  "basis": "body (internal continuation of TaskEvent_Wait)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:1439-1444 `add\twa, 4223` / `bitm\t0, (xwa)` / `jr\tz, TaskEvent_Wait_Block` / ... `jrl\tTaskSched_ContextRestore` -- reached when event A's latched-signal bit at 0x107F + A is clear",
+   "kn5000_subprogram_v142.s:1447 `ld\tix, (4166:16)` / 1455 `ld\t(xix+9), 3` -- current task (0x1046) unlinked from its ready queue and set to state 3 (blocked)",
+   "kn5000_subprogram_v142.s:1458 `add\tde, 4212` ... 1468 `jrl\tTaskSched_Dispatch` -- appended to the event wait queue 0x1074 + 4*A, then the scheduler runs"
+  ]
+ },
+ {
+  "old": "TaskSched_SoftTimer_Entry",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "TaskSched_SoftTimer_SlotLoop",
+  "header": "",
+  "basis": "body (loop top inside TaskSched_SoftTimer_Service)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:944-946 `ldw\tix, 4298` / `extz\txix` / `ld\tb, 1:opc` -- XIX = first 8-byte timer slot at 0x10CA, B = slot count",
+   "kn5000_subprogram_v142.s:947 `; Top of the per-slot walk; XIX = current 8-byte timer entry, B = slots remaining.`",
+   "kn5000_subprogram_v142.s:960 `djnz8\tb, -30` -- the only referrer, a numeric djnz back-edge: 0x01FFAC + 3 - 30 = 0x01FF91 = this label (branch xref of the linked ELF)",
+   "kn5000_subprogram_v142.s:949-955 `ld\txwa, (xix+4)` / `cp\txwa, 4294967295` ... `dec\t1, wa` -- per slot: skip empty, count down, fire at zero"
+  ]
+ },
+ {
+  "old": "TaskSched_Wait_Block",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "TaskSched_Wait_SuspendTask",
+  "header": "",
+  "basis": "body (internal continuation of TaskSched_Wait)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:1626-1631 `add wa, 0x1091` / `cp (xwa), 0x0` / `jr z, TaskSched_Wait_Block` / `decm8 1, (xwa)` / `jrl TaskSched_ContextRestore` -- reached when semaphore A's count at 0x1091 + A is 0",
+   "kn5000_subprogram_v142.s:1634 `ld ix, (4166:16)` / 1642 `ld (xix + 9), 0x3` -- current task blocked",
+   "kn5000_subprogram_v142.s:1645 `add de, 0x107E` ... 1655 `jrl TaskSched_Dispatch` -- queued on the semaphore wait list 0x107E + 4*A, then dispatch"
+  ]
+ },
+ {
+  "old": "ToneCmd_DispatchTable_Body",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "VoiceParam_Action_ToneEdit",
+  "header": "Action case 0 (status 0x88) of Voice_ParamFinalize, and the base of VOICEPARAM_FINALIZE_ACTION_JUMPTABLE: passes the 6-byte packet to Audio_Cmd_ToneEdit_Dispatch (the tone-edit opcode tree) and returns without a reply. Basis: table + body, named like its siblings VoiceParam_Action_EffectParam (0x89) ... _SubToneLayerByteReply (0x8F).",
+  "basis": "table + body",
+  "evidence": [
+   "kn5000_subprogram_v142.s:36191-36192 `and a, 0x7` / `bitm 3, (xiz)` -- status bit 3 set selects the action table, low 3 bits the case",
+   "kn5000_subprogram_v142.s:36202-36203 `lda xix, (ToneCmd_DispatchTable_Body:24)` / `jp\tt, (xix+wa)` -- base of the computed jump",
+   "subcpu_data_tables.s:1168 `.short ToneCmd_DispatchTable_Body - ToneCmd_DispatchTable_Body\t; index 0`",
+   "kn5000_subprogram_v142.s:36211 `; Action case 0: call 0x02ED80 with XWA = packet, then return (no reply).`",
+   "kn5000_subprogram_v142.s:36213-36215 `ld\txwa, xiz` / `calr\tAudio_Cmd_ToneEdit_Dispatch` / `jrl\tVoiceParamFinalize_Return`",
+   "kn5000_subprogram_v142.s:36217 `; VoiceParam_Action_EffectParam: Status 0x89.` -- sibling naming"
+  ]
+ },
+ {
+  "old": "ToneGen_WriteReg0440_0480",
+  "tree": "v142/subcpu",
+  "verdict": "refuse",
+  "why_refused": "No caller (dead copy in the misidentified 0x02D93E blob). TG registers 0x440/0x480 receive shadow +0x10/+0x12 (0x0451DC/0x0451DE), which ExtVoice_Build_SlotRegisters fills with stream-slot numbers from ExtVoice_Alloc_StreamSlot OR'ed with mode bits; what the TG does with those slot words is not established, and the docs call the bank 'level/key parameters' or 'filter/pitch params'. The register-number name is the most honest one available.",
+  "new": "",
+  "header": "",
+  "basis": "no caller; register meaning not pinned",
+  "evidence": [
+   "kn5000_subprogram_v142.s:28499-28527 `add\twa, 1088` ... `ld\twa, (xwa+16)` ... `add\twa, 1152` ... `ld\twa, (xwa+18)` -- writes TG 0x440+ch / 0x480+ch",
+   "kn5000_subprogram_v142.s:11428 `ld (0x0451dc:24), wa` / 11633 `ld (0x0451de:24), wa` -- the shadow words hold ExtVoice_Alloc_StreamSlot results",
+   "(docs) technics-docs/tone-generator.md:97-98 `Level/key parameter bank 1/2` vs 487-488 `Filter/pitch param 1/2` -- the docs disagree",
+   "branch xref of the linked ELF: no call/calr/jp/jr targets 0x02D93E"
+  ]
+ },
+ {
+  "old": "ToneGen_Write_Regs0100_0140",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "ToneGen_WriteVoice_TvfRegs_Dup",
+  "header": "Unreferenced, instruction-for-instruction copy of ToneGen_WriteVoice_Pan_Pair: writes the voice's TVF (filter) register pair, TG 0x100+ch <- shadow +0x08 and 0x140+ch <- +0x0A. Basis: the live twin's callers -- TVF_Refresh_Sounding_Voices (VoiceCC_DataTable_028F75) calls the twin right after TVF_Emit_Registers / Voice_PanReg_WriteDispatchB have put the clamped cutoff word and the second filter word into 0x0451D4 / 0x0451D6 = staging +0x08 / +0x0A. (The twin's 'Pan' name is contradicted by the same evidence.)",
+  "basis": "twin's callers + body",
+  "evidence": [
+   "kn5000_subprogram_v142.s:28024-28052 `add\twa, 256` / `ld\twa, (xwa+8)` ... `add\twa, 320` / `ld\twa, (xwa+10)` -- this routine",
+   "kn5000_subprogram_v142.s:17877-17903 `ToneGen_WriteVoice_Pan_Pair:` ... `add\twa, 256` / `ld\twa, (xwa+8)` ... `add\twa, 320` / `ld\twa, (xwa+10)` -- the same instructions, live",
+   "kn5000_subprogram_v142.s:19710-19714 `call\tTVF_Emit_Registers` / `lda\txbc, (ToneGen_StagingBlock:24)` / `calr\tToneGen_WriteVoice_Pan_Pair` -- the twin's caller",
+   "kn5000_subprogram_v142.s:10353-10369 `calr TVF_Clamp_Cutoff` / `and wa, 0xFF80` / `ld (0x0451d4:24), wa` ... `ld (0x0451d6:24), wa` -- staging +8 = clamped TVF cutoff word (TG reg 0x100), +0xA = second filter word (TG reg 0x140)",
+   "kn5000_subprogram_v142.s:9591-9598 `sll wa, 13` / `set 10, de` / `ld (xwa + 66), bc` -- TVF_Build_Full: voice +0x42 = cutoff | slope << 13 | bit 10, the word TVF_Emit_Registers copies",
+   "branch xref of the linked ELF: nothing targets 0x02D580; 0x028120 (the twin) is called from 0x028FC6 / 0x028FDA"
+  ]
+ },
+ {
+  "old": "VoiceCC_DataTable_0280FE",
+  "tree": "v142/subcpu",
+  "verdict": "refuse",
+  "why_refused": "Code, not data, but with no caller (no call/calr/jp/jr in the image targets 0x0280FE, contrary to the region header), and instruction-identical to the equally dead ToneGen_WriteReg0840_Shadow2E: a single write TG 0x840+ch <- shadow +0x2E. 0x840 is the second word of the volume/EG 'level pair' in the sub-CPU's own writers (ToneGen_WriteNote2ch, Voice_WriteChPitchWithVib) but 'Pan Left' in technics-docs/tone-generator.md; with no caller and a disputed register meaning there is no basis for a name. Renaming also requires scripts/lanes/verify_mislabel_markers.py.",
+  "new": "",
+  "header": "",
+  "basis": "no caller; register meaning disputed",
+  "evidence": [
+   "kn5000_subprogram_v142.s:17855-17866 `VoiceCC_DataTable_0280FE:` / `add\twa, 2112` / `ld\twa, (xiz+46)` -- TG 0x840 <- +0x2E",
+   "kn5000_subprogram_v142.s:28004-28016 `ToneGen_WriteReg0840_Shadow2E:` -- the same instructions, also unreferenced",
+   "kn5000_subprogram_v142.s:14697-14698 `staged as (v<<8)|0x80 at 0x0451F8 and (v<<8) at 0x0451FA -- i.e. TG banks 0x800 and 0x840` -- the level pair",
+   "(docs) technics-docs/tone-generator.md:107 `+0x0840 ... Pan Left` -- contradicts",
+   "branch xref of the linked ELF: nothing targets 0x0280FE"
+  ]
+ },
+ {
+  "old": "VoiceCC_DataTable_028F75",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "TVF_Refresh_Sounding_Voices",
+  "header": "Re-emits the TVF (filter) registers of every voice in a part's voice list: classes (voice+1) & 0x3C = 4 / 0x20 through TVF_Emit_Registers, 0x10 through Voice_PanReg_WriteDispatchB (class 8 skipped), then TG 0x100/0x140 via ToneGen_WriteVoice_Pan_Pair -- the filter counterpart of Pitch_Refresh_Sounding_Voices. Basis: caller + body -- AudioChannel_Handler_Cmd03 calls it after storing the part's cutoff offset part+0x1F, which TVF_Emit_Offset_Reg100 adds to the cutoff field. (scripts/lanes/verify_mislabel_markers.py lists the old name.)",
+  "basis": "caller + body",
+  "evidence": [
+   "kn5000_subprogram_v142.s:19896 `calr\tAudioMod_Scale_To_Part_1F` ... 19911 `calr\tVoiceCC_DataTable_028F75` -- caller AudioChannel_Handler_Cmd03",
+   "kn5000_subprogram_v142.s:18430-18431 `lda\txbc, (267143:24)` / `ld\t(xbc+wa), e` -- AudioMod_Scale_To_Part_1F stores part+0x1F (0x041387 + part*0x11F)",
+   "kn5000_subprogram_v142.s:10332-10348 `ld xwa, (xiz + 35)` / `ld a, (xwa + 31)` / `ld bc, (xiz + 66)` / `and bc, 0x7F` / `add bc, wa` -- TVF_Emit_Offset_Reg100 adds that byte to the 7-bit cutoff field, then TVF_Clamp_Cutoff",
+   "kn5000_subprogram_v142.s:19686 `inc\t5, xwa` / 19699-19706 `and\twa, 60` / `cp\twa, 8` / `cp\twa, 16` / `cp\twa, 32` / `cp\twa, 4:i3` -- walks the part's voice list and classifies each voice",
+   "kn5000_subprogram_v142.s:19710 `call\tTVF_Emit_Registers` / 19714 `calr\tToneGen_WriteVoice_Pan_Pair` / 19718 `call\tVoice_PanReg_WriteDispatchB` / 19722 `calr\tToneGen_WriteVoice_Pan_Pair`",
+   "kn5000_subprogram_v142.s:19882 `calr\tPitch_Refresh_Sounding_Voices` -- the Cmd01 handler ends the same way for pitch"
+  ]
+ },
+ {
+  "old": "VoiceModWheel_DataTable_02A061",
+  "tree": "v142/subcpu",
+  "verdict": "refuse",
+  "why_refused": "Code with no caller: no call/calr/jrl in the image and no pointer reaches 0x02A061. The body loops i = 0..1 over AudioChannel_Dispatch with XDE = patch + 0x1D + 3i (the 3-byte modulation groups at +0x1D/+0x20, which the effect-param opcodes 0x1D/0x20 also dispatch), for part modes 0x00/0x40/0xC0 -- but which controller drives those two groups is not established, and body-only naming is not allowed. Renaming also requires scripts/lanes/verify_mislabel_markers.py.",
+  "new": "",
+  "header": "",
+  "basis": "no caller",
+  "evidence": [
+   "kn5000_subprogram_v142.s:21493-21540 `VoiceModWheel_DataTable_02A061:` ... `add\tiy, 0x1D` ... `calr\tAudioChannel_Dispatch`",
+   "kn5000_subprogram_v142.s:21483-21485 `No caller found: an exhaustive scan ... targeting 0x02A061 returns nothing.`",
+   "branch xref of the linked ELF: the only AudioChannel_Dispatch call from 0x02A061.. is 0x02A0D8, inside this routine; nothing targets 0x02A061"
+  ]
+ },
+ {
+  "old": "VoiceNode_Init_Body",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "VoiceNode_Init_NodeLoop",
+  "header": "",
+  "basis": "body (loop top)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:5290-5293 `VoiceNode_Init_Loop:` / `ld (xsp + 4), 0x0` / `cp (xsp + 4), 0x40` -- the preamble",
+   "kn5000_subprogram_v142.s:5296-5303 `muls wa, 0x27` / `lda xbc, (5261:16)` / `lda\txiz, (xbc+wa)` / `ld (xiz + 36), a` / `ld (xiz), xiz` -- per node of the 64 x 39-byte array at 0x148D: index, self-linked list heads",
+   "kn5000_subprogram_v142.s:5318-5319 `cp (xsp + 4), 0x40` / `jr c, VoiceNode_Init_Body` -- the back-edge, the only referrer"
+  ]
+ },
+ {
+  "old": "VoiceParam_FullSetup_CopyLUT_Body",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "VoiceParam_FullSetup_CopyLUT_Loop",
+  "header": "",
+  "basis": "body (loop top)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:29921-29923 `VoiceParam_FullSetup_CopyLUT:` / `ldib_erp 0xFB, 0` / `cp_erpb 0xFB, 0x08` -- the preamble",
+   "kn5000_subprogram_v142.s:29930-29935 `add de, 0x1D8` / `lda xhl, (0x044fce:24)` / `lda xbc, (DSP_VOICEPARAM_DEFAULT_TABLE:24)` / `ld\t(xhl+de), a` -- copies default byte i into the tone-option array 0x0451A6 + i",
+   "kn5000_subprogram_v142.s:29938-29939 `cp_erpb 0xFB, 0x08` / `jr c, VoiceParam_FullSetup_CopyLUT_Body` -- the back-edge, 8 iterations"
+  ]
+ },
+ {
+  "old": "VoiceParam_FullSetup_CopySlotParams_Body",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "VoiceParam_FullSetup_CopySlotParams_Outer",
+  "header": "",
+  "basis": "body (outer loop top)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:29975-29977 `VoiceParam_FullSetup_CopySlotParams:` / `ldib_erp 0xFB, 0` / `cpib_erp 0xFB, 4` -- the preamble",
+   "kn5000_subprogram_v142.s:29985-29999 `add de, 0x6E` / `lda xbc, (Part_Record_Base:24)` / `ld a, (xwa + 54)` / `and a, 0x7` / `add wa, 0x1E0` -- per sub-slot i: (slot patch +0x36) & 7 -> staging +0x1E0 + 5i",
+   "kn5000_subprogram_v142.s:30006 `VoiceParam_FullSetup_CopySlotParams_Inner:` -- the inner 4-byte loop it starts",
+   "kn5000_subprogram_v142.s:30038-30039 `cpib_erp 0xFB, 4` / `jrl c, VoiceParam_FullSetup_CopySlotParams_Body` -- back-edge from _OuterNext, the only referrer"
+  ]
+ },
+ {
+  "old": "VoiceParam_Set_Tone_Option_Case2",
+  "tree": "v142/subcpu",
+  "verdict": "refuse",
+  "why_refused": "Unchanged from the cases-c5 refusal and not resolved here: option 2 refreshes part+0x69 -> LFO sub-record +3 -> EGEnv_Compute_A_Simple -> TG 0x580, written unfaded at note-on. By elimination it is probably VIBRATO SPEED (the Easy Edit screen lists VIBRAT0 DEPTH / SPEED / DELAY, main-CPU ROM 0xF15C19 / 0xF15C46 / 0xF15C75, and options 1 and 3 are already LFO depth and delay), but neither the main-CPU code that maps Easy Edit items to tone-edit opcode 0x0B option indices nor the meaning of TG 0x580 ('Extended param 2' in the docs) has been traced.",
+  "new": "",
+  "header": "",
+  "basis": "switch value known; field meaning inferred by elimination only",
+  "evidence": [
+   "kn5000_subprogram_v142.s:30392 `call\tDSP_SlotParam_Write_Slot1` -- case 2 body",
+   "subcpu_data_tables.s:922 `.short VoiceParam_Set_Tone_Option_Case2 - VoiceParam_Set_Tone_Option_CutoffOffset\t; index 2`",
+   "kn5000_subprogram_v142.s:31079-31091 `Audio_Cmd_ToneEdit_Op0B_Alt:` ... 31086 `ld\ta, (xiz+3)` ... `calr\tVoiceParam_Set_Tone_Option` -- tone-edit opcode 0x0B passes the option index",
+   "(ROM) original_ROMs/kn5000_v10_program.rom 0xF15C19 `VIBRAT0 DEPTH:`, 0xF15C46 `VIBRAT0 SPEED:`, 0xF15C75 `VIBRAT0 DELAY:` -- Easy Edit labels (v10/maincpu/storage/flash_floppy_handlers.s:280 / 290 / 300)",
+   "(docs) technics-docs/tone-generator.md:102 `+0x0580 ... Extended param 2 (bit 15 = latch strobe)`"
+  ]
+ },
+ {
+  "old": "VoiceState_FullReset_Phase2_Body",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "VoiceState_FullReset_Phase2_Loop",
+  "header": "",
+  "basis": "body (loop top)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:4090-4093 `VoiceState_FullReset_Phase2:` / `ldib_erp 0xFB, 0` / `cp_erpb 0xFB, 0xC0` -- the preamble",
+   "kn5000_subprogram_v142.s:4098-4123 `muls wa, 0x5` / `lda xde, (8486:16)` ... `lda xbc, (8490:16)` / `ld\t(xbc+wa), 0xff` -- per i of 192 5-byte records at 0x2126: {i, i, 0, 0, 0xFF}",
+   "kn5000_subprogram_v142.s:4126-4127 `cp_erpb 0xFB, 0xC0` / `jr c, VoiceState_FullReset_Phase2_Body` -- the back-edge, the only referrer"
+  ]
+ },
+ {
+  "old": "Voice_Reset_Engine_PhaseA_Body",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Voice_Reset_Engine_PhaseA_VoiceLoop",
+  "header": "",
+  "basis": "body (loop top)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:5086-5091 `Voice_Reset_Engine_PhaseA:` / `cp (xsp + 4), 0x4` / `jr nc, Voice_Reset_Engine_PhaseB` / `ld (xsp + 4), 0x0` -- runs only when one of the four words at 0x292E is non-zero",
+   "kn5000_subprogram_v142.s:5097-5101 `add wa, 0x840` ... `ldw (ToneGen_RegDataPort:24), 0xa200` and 5111-5115 `add wa, 0x800` ... `0xa280` -- per voice 0..63: TG 0x840/0x800 level pair",
+   "kn5000_subprogram_v142.s:5123-5124 `cp (xsp + 4), 0x40` / `jr c, Voice_Reset_Engine_PhaseA_Body` -- the back-edge"
+  ]
+ },
+ {
+  "old": "Voice_Reset_Engine_PhaseB_Body",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Voice_Reset_Engine_PhaseB_VoiceLoop",
+  "header": "",
+  "basis": "body (loop top)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:5126-5131 `Voice_Reset_Engine_PhaseB:` / `cp (xsp + 4), 0x4` / `jr nc, Voice_Reset_Engine_PhaseC` / `ld (xsp + 4), 0x0` -- preamble",
+   "kn5000_subprogram_v142.s:5136-5141 `add a, 0xC0` ... `ldw (ToneGen_RegDataPort:24), 0x0000` and 5154 `ldw (ToneGen_RegDataPort:24), 0x7e00` -- per voice: TG 0x0C0+v = 0, TG 0x000+v = 0x7E00",
+   "kn5000_subprogram_v142.s:5162-5163 `cp (xsp + 4), 0x40` / `jr c, Voice_Reset_Engine_PhaseB_Body` -- the back-edge, the only referrer",
+   "kn5000_subprogram_v142.s:5087 / 5127 -- note: the guard re-tests the same counter, which is 4 (PhaseA skipped) or 0x40 (PhaseA ran) when it gets here, so as compiled this loop never runs"
+  ]
+ },
+ {
+  "old": "Voice_SetVelocity_Type40_Entry",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Voice_SetVelocity_Drawbar",
+  "header": "Part-mode 0x40 arm of Voice_SetVelocity -- the drawbar organ presets: four-layer allocation by Voice_NoteOn_Type2, then the same key-on loop and exit as the melodic path. Basis: caller (dispatch on tone byte +0x10 & 0xC0) + the tone database's part-mode values.",
+  "basis": "caller + data",
+  "evidence": [
+   "kn5000_subprogram_v142.s:26273-26280 `ld a, (xwa + 16)` / `and a, 0xC0` ... `cp a, 0x40` / `jrl z, Voice_SetVelocity_Type40_Entry` -- the only referrer",
+   "kn5000_subprogram_v142.s:26462 `calr Voice_NoteOn_Type2` -- four-layer note-on (kn5000_subprogram_v142.s:25172)",
+   "(ROM) original_ROMs/kn5000_table_data.rom 0x8706BD `<Jazz Drawbars> ` +0x10 = 0x60 and 0x870867 `<Rock Drawbars> ` +0x10 = 0x60 -> & 0xC0 = 0x40",
+   "(docs) technics-docs/tone-database.md:173 `+0x10 ... part-mode byte. & 0xC0: 0x00 = the four-partial melodic path, 0x40 = drawbar records, 0x80 = drum kits, 0xC0 = silent`"
+  ]
+ },
+ {
+  "old": "Voice_SetVelocity_Type80_Entry",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Voice_SetVelocity_DrumKit",
+  "header": "Part-mode 0x80 arm of Voice_SetVelocity -- drum kits: two-layer allocation by Voice_NoteOn_Type1 (a percussion record has two 21-byte layers), a 2-slot key-on loop with Voice_WriteChPitchWithVib per slot. Basis: caller (dispatch on tone byte +0x10 & 0xC0) + the tone database's part-mode values.",
+  "basis": "caller + data",
+  "evidence": [
+   "kn5000_subprogram_v142.s:26277-26278 `cp a, 0x80` / `jrl z, Voice_SetVelocity_Type80_Entry` -- the only referrer",
+   "kn5000_subprogram_v142.s:26566-26568 `calr Voice_NoteOn_Type1` / `ldib_erp 0xFA, 0` / `cpib_erp 0xFA, 2` -- two slots",
+   "kn5000_subprogram_v142.s:25568-25574 `Two-layer note-on ... Only caller: Voice_SetVelocity_Type80_Entry.`",
+   "(ROM) original_ROMs/kn5000_table_data.rom 0x86363C `    Jazz Kit    ` +0x10 = 0x80 (also Trad / Brush / Dance Kit)",
+   "(docs) technics-docs/tone-database.md:338 `a kit is a tone record with part mode 0x80` and :357-358 `then two 21-byte layer blocks`"
+  ]
+ },
+ {
+  "old": "Voice_SystemMsg_Sub80",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Voice_SystemMsg_CallStubRet1",
+  "header": "Case for system sub-command 0x80 of Voice_SystemMsg: passes message byte 3 in A/WA to a bare-`ret` stub (also called with 0x7F by Voice_ResetAllControllers): sub-command 0x80 has no effect in v1.42. Basis: table + body.",
+  "basis": "table + body",
+  "evidence": [
+   "subcpu_data_tables.s:737 `.short Voice_SystemMsg_Sub80 - Voice_SystemMsg_DispatchTable\t\t\t\t\t; sub-command 0x80`",
+   "kn5000_subprogram_v142.s:22423-22440 `sub bc, 0x80` / `cp bc, 7:i3` / `jr le, Voice_SystemMsg_DispatchJump` ... `jp\tt, (xix+bc)` -- index = sub-command - 0x80",
+   "kn5000_subprogram_v142.s:22465 `ld a, (xwa + 3)` ... `jrl VoiceCC_Stub_Ret1` -- the case body",
+   "kn5000_subprogram_v142.s:19086 `VoiceCC_Stub_Ret1:` -- the handler"
+  ]
+ },
+ {
+  "old": "Voice_SystemMsg_Sub81",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Voice_SystemMsg_CallStubRet2",
+  "header": "Case for system sub-command 0x81 of Voice_SystemMsg: passes message byte 3 in A/WA to the second bare-`ret` stub: sub-command 0x81 has no effect in v1.42. Basis: table + body.",
+  "basis": "table + body",
+  "evidence": [
+   "subcpu_data_tables.s:738 `.short Voice_SystemMsg_Sub81 - Voice_SystemMsg_DispatchTable\t\t\t\t\t; sub-command 0x81`",
+   "kn5000_subprogram_v142.s:22423-22440 `sub bc, 0x80` / `cp bc, 7:i3` / `jr le, Voice_SystemMsg_DispatchJump` ... `jp\tt, (xix+bc)` -- index = sub-command - 0x80",
+   "kn5000_subprogram_v142.s:22469 `ld a, (xwa + 3)` ... `jrl VoiceCC_Stub_Ret2` -- the case body",
+   "kn5000_subprogram_v142.s:19090 `VoiceCC_Stub_Ret2:` -- the handler"
+  ]
+ },
+ {
+  "old": "Voice_SystemMsg_Sub82",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Voice_SystemMsg_SetMasterTune",
+  "header": "Case for system sub-command 0x82 of Voice_SystemMsg: passes message byte 3 in A/WA to the master-tune setter (word (A - 0x40) * 2 at 0x041347) that then refreshes the sounding voices' pitch. Basis: table + body.",
+  "basis": "table + body",
+  "evidence": [
+   "subcpu_data_tables.s:739 `.short Voice_SystemMsg_Sub82 - Voice_SystemMsg_DispatchTable\t\t\t\t\t; sub-command 0x82`",
+   "kn5000_subprogram_v142.s:22423-22440 `sub bc, 0x80` / `cp bc, 7:i3` / `jr le, Voice_SystemMsg_DispatchJump` ... `jp\tt, (xix+bc)` -- index = sub-command - 0x80",
+   "kn5000_subprogram_v142.s:22473 `ld a, (xwa + 3)` ... `jrl Voice_SetMasterTuneAndApply` -- the case body",
+   "kn5000_subprogram_v142.s:22298 `Voice_SetMasterTuneAndApply:` -- the handler"
+  ]
+ },
+ {
+  "old": "Voice_SystemMsg_Sub83",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Voice_SystemMsg_SetPitchBendRange",
+  "header": "Case for system sub-command 0x83 of Voice_SystemMsg: passes message byte 3 in A/WA to Voice_SetPitchBendRange ((s8)A << 8 at 0x041349). Basis: table + body.",
+  "basis": "table + body",
+  "evidence": [
+   "subcpu_data_tables.s:740 `.short Voice_SystemMsg_Sub83 - Voice_SystemMsg_DispatchTable\t\t\t\t\t; sub-command 0x83`",
+   "kn5000_subprogram_v142.s:22423-22440 `sub bc, 0x80` / `cp bc, 7:i3` / `jr le, Voice_SystemMsg_DispatchJump` ... `jp\tt, (xix+bc)` -- index = sub-command - 0x80",
+   "kn5000_subprogram_v142.s:22476 `ld a, (xwa + 3)` ... `jrl Voice_SetPitchBendRange` -- the case body",
+   "kn5000_subprogram_v142.s:19102 `Voice_SetPitchBendRange:` -- the handler"
+  ]
+ },
+ {
+  "old": "Voice_SystemMsg_Sub84",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Voice_SystemMsg_Ignore",
+  "header": "Case for system sub-command 0x84 of Voice_SystemMsg: a bare `ret`, so 0x84 is accepted by the range check and ignored. Basis: table + body.",
+  "basis": "table + body",
+  "evidence": [
+   "subcpu_data_tables.s:741 `.short Voice_SystemMsg_Sub84 - Voice_SystemMsg_DispatchTable\t\t\t\t\t; sub-command 0x84`",
+   "kn5000_subprogram_v142.s:22593-22594 `Voice_SystemMsg_Sub84:` / `ret`",
+   "kn5000_subprogram_v142.s:22451 `index 4 (0x84)         offset 0x00F6 -> 0x02A8F2 a bare \\`ret\\` (sub-command ignored)`"
+  ]
+ },
+ {
+  "old": "Voice_SystemMsg_Sub85",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Voice_SystemMsg_SetKeyShiftEnable",
+  "header": "Case for system sub-command 0x85 of Voice_SystemMsg: passes message byte 3 in A/WA to Voice_SetKeyShiftEnable. Basis: table + body.",
+  "basis": "table + body",
+  "evidence": [
+   "subcpu_data_tables.s:742 `.short Voice_SystemMsg_Sub85 - Voice_SystemMsg_DispatchTable\t\t\t\t\t; sub-command 0x85`",
+   "kn5000_subprogram_v142.s:22423-22440 `sub bc, 0x80` / `cp bc, 7:i3` / `jr le, Voice_SystemMsg_DispatchJump` ... `jp\tt, (xix+bc)` -- index = sub-command - 0x80",
+   "kn5000_subprogram_v142.s:22479 `ld a, (xwa + 3)` ... `jrl Voice_SetKeyShiftEnable` -- the case body",
+   "kn5000_subprogram_v142.s:19111 `Voice_SetKeyShiftEnable:` -- the handler"
+  ]
+ },
+ {
+  "old": "Voice_SystemMsg_Sub86",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Voice_SystemMsg_SetScaleTuneMode",
+  "header": "Case for system sub-command 0x86 of Voice_SystemMsg: passes message byte 3 in A/WA to ScaleTune_Set_Global_Mode (A -> byte 0x04134D). Basis: table + body.",
+  "basis": "table + body",
+  "evidence": [
+   "subcpu_data_tables.s:743 `.short Voice_SystemMsg_Sub86 - Voice_SystemMsg_DispatchTable\t\t\t\t\t; sub-command 0x86`",
+   "kn5000_subprogram_v142.s:22423-22440 `sub bc, 0x80` / `cp bc, 7:i3` / `jr le, Voice_SystemMsg_DispatchJump` ... `jp\tt, (xix+bc)` -- index = sub-command - 0x80",
+   "kn5000_subprogram_v142.s:22483 `ld a, (xwa + 3)` ... `jrl ScaleTune_Set_Global_Mode` -- the case body",
+   "kn5000_subprogram_v142.s:19150 `ScaleTune_Set_Global_Mode:` -- the handler"
+  ]
+ },
+ {
+  "old": "Voice_SystemMsg_Sub87",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Voice_SystemMsg_SetRhythmMode",
+  "header": "Case for system sub-command 0x87 of Voice_SystemMsg: passes message byte 3 in A/WA to Voice_SetRhythmMode (packed rhythm-mode byte -> 0x04135E block). Basis: table + body.",
+  "basis": "table + body",
+  "evidence": [
+   "subcpu_data_tables.s:744 `.short Voice_SystemMsg_Sub87 - Voice_SystemMsg_DispatchTable\t\t\t\t\t; sub-command 0x87`",
+   "kn5000_subprogram_v142.s:22423-22440 `sub bc, 0x80` / `cp bc, 7:i3` / `jr le, Voice_SystemMsg_DispatchJump` ... `jp\tt, (xix+bc)` -- index = sub-command - 0x80",
+   "kn5000_subprogram_v142.s:22487 `ld a, (xwa + 3)` ... `jrl Voice_SetRhythmMode` -- the case body",
+   "kn5000_subprogram_v142.s:19165 `Voice_SetRhythmMode:` -- the handler"
+  ]
+ },
+ {
+  "old": "Voice_UpdateAllLFO_Loop2_Body",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Voice_UpdateAllLFO_Loop2_ProcessSlot",
+  "header": "",
+  "basis": "body (loop top of the group pass)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:15458-15463 `Voice_UpdateAllLFO_Loop2:` / `ld iz, 0:i3` / `cp iz, ...` -- the group's preamble",
+   "kn5000_subprogram_v142.s:15463 `; Group 2 body: ... sub-records at 0x044257` / 15464 `Voice_UpdateAllLFO_Loop2_Body:`",
+   "kn5000_subprogram_v142.s:15469 `lda xwa, (0x044257:24)` ... `calr Voice_AdvanceLFOPhase` -- processes one 27-byte-stride LFO sub-record: phase advance, EGEnv_Compute_B -> ToneGen_WriteExtParam_1C0_Single",
+   "kn5000_subprogram_v142.s:15506-15507 `jr(l) c, Voice_UpdateAllLFO_Loop2_Body` -- the back-edge from Voice_UpdateAllLFO_NextSlot2, the only referrer"
+  ]
+ },
+ {
+  "old": "Voice_UpdateAllLFO_Loop3_Body",
+  "tree": "v142/subcpu",
+  "verdict": "name",
+  "why_refused": null,
+  "new": "Voice_UpdateAllLFO_Loop3_ProcessSlot",
+  "header": "",
+  "basis": "body (loop top of the group pass)",
+  "evidence": [
+   "kn5000_subprogram_v142.s:15510-15515 `Voice_UpdateAllLFO_Loop3:` / `ld iz, 0:i3` / `cp iz, ...` -- the group's preamble",
+   "kn5000_subprogram_v142.s:15515 `; Group 3 body: ... sub-records at 0x044260` / 15516 `Voice_UpdateAllLFO_Loop3_Body:`",
+   "kn5000_subprogram_v142.s:15521 `lda xwa, (0x044260:24)` ... `calr Voice_AdvanceLFOPhase` -- processes one 27-byte-stride LFO sub-record: phase advance, Voice_Freq_WriteLeft -> ToneGen_WriteExtParam_TypeDispatch_Single",
+   "kn5000_subprogram_v142.s:15575 `jr(l) c, Voice_UpdateAllLFO_Loop3_Body` -- the back-edge from Voice_UpdateAllLFO_NextSlot3, the only referrer"
+  ]
+ }
+]

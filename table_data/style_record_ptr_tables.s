@@ -8,7 +8,7 @@
 ;
 ;   EffectMode_ClampAndLookupPreset - clamps the index to 1000 (cp wa, 0x3e8,
 ;       matching the entry count), picks the table on the CURRENT UI STATE ID
-;       in RAM 0x8D38: states 0xC2 and 0xC5 use StyleRec_PtrTable_C2C5, every
+;       in RAM 0x8D38: states 0xC2 and 0xC5 use StyleRec_PtrTable_CategoryOrder, every
 ;       other state uses StyleRec_PtrTable_Default.  (0x8D38 is the UI state
 ;       byte that UIState_KeyScan_Dispatch indexes keymaps with - NOT a model
 ;       code, as this table's comments previously claimed.)
@@ -20,7 +20,7 @@
 ;
 ; ORDERINGS: both tables list all 1000 records, keeping each style's four
 ; arrangement records together.
-;   StyleRec_PtrTable_C2C5     identity: ROM order = the ten Stylist
+;   StyleRec_PtrTable_CategoryOrder     identity: ROM order = the ten Stylist
 ;                              categories in sequence (browsing by category)
 ;   StyleRec_PtrTable_Default  re-sorted: interleaves the categories,
 ;                              starting 8-beat-like styles first (browsing
@@ -44,7 +44,10 @@
 ; Read at 0x986000 + 4*i by EffectMode_ClampAndLookupPreset (v10 0xFB6DAB,
 ; branch EffectMode_LookupPreset_BankC2C5) and EffectMode_DisplayPresetName
 ; (0xFB6DDC, EffectMode_DisplayName_FallbackC2C5); i < 1000 (cp wa, 0x3e8).
-StyleRec_PtrTable_C2C5:
+; StyleRec_PtrTable_CategoryOrder: 1000 x pointer to the Music Stylist records in record (= category) order, entry n
+;   -> StyleRec_n; used when the active title is 0xC2 TT_MSCTSEL or 0xC5 TT_MSALPSEL. Basis: the identity permutation
+;   in the bytes + the reader's ACTIVE_TITLE test.
+StyleRec_PtrTable_CategoryOrder:
 	.long	StyleRec_000, StyleRec_001, StyleRec_002, StyleRec_003		; German Schlager (Easy Listening)
 	.long	StyleRec_004, StyleRec_005, StyleRec_006, StyleRec_007		; Easy Play 8 Beat (Easy Listening)
 	.long	StyleRec_008, StyleRec_009, StyleRec_010, StyleRec_011		; Rock After Eight (Easy Listening)
@@ -299,7 +302,7 @@ StyleRec_PtrTable_C2C5:
 ; 96-byte page residue: fragment of the same ramp family as
 ; StyleRecords_ResidueRamp (16-bit LE, low byte +10 mod 256, high byte +8 on
 ; wrap, lone separator every eighth value) - leftover under the table page
-StyleRec_PtrTable_C2C5_Residue:
+StyleRec_PtrTable_CategoryOrder_Residue:
 	.byte	0x17, 0x57, 0x21, 0x57, 0x2b, 0x57, 0x35, 0x57, 0x3f, 0x57, 0x49, 0x57, 0x53, 0x57, 0x00, 0x5d
 	.byte	0x57, 0x67, 0x57, 0x71, 0x57, 0x7b, 0x57, 0x85, 0x57, 0x8f, 0x57, 0x99, 0x57, 0xa3, 0x57, 0x00
 	.byte	0xad, 0x57, 0xb7, 0x57, 0xc1, 0x57, 0xcb, 0x57, 0xd5, 0x57, 0xdf, 0x57, 0xe9, 0x57, 0xf3, 0x57

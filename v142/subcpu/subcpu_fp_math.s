@@ -473,14 +473,14 @@ FP_pow_ExpLog:
 	call FP_log
 	lda xsp, (xsp + 12)
 	cpw (265250:24), 33
-	jr nz, FP_pow_ExpLog_Body
+	jr nz, FP_pow_ExpLog_FrexpOperands
 	ld xwa, (xsp + 62)
 	lda xbc, (FPConst_pow_ExpLog_Zero:24)
 	call FP_DP_Raw8Copy
 	jrl FP_pow_Epilog
 
 ; Restore errno and frexp both operands into (XSP+0x24) and (XSP+0x22).
-FP_pow_ExpLog_Body:
+FP_pow_ExpLog_FrexpOperands:
 	ld (0x040c22:24), iz
 	lda xwa, (xsp + 36)
 	push xwa
@@ -677,7 +677,11 @@ FP_MulAccum64:
 ; This is the reference for the whole arithmetic quartet: compare it against
 ; FP_dadd 0x03E10E, which is byte-for-byte identical apart from the inverted sign
 ; test and is therefore the ADDITION.
-FP_DP_Sub:
+; FP_dsub: Double subtraction, the C runtime's __dsub: *(double*)XWA = *(double*)XBC - *(double*)XDE. Basis: callers +
+;   body -- 21 call sites use it as `a - b` in the DSP curve code (e.g. 1 - pow(...) in DSP_ReverbCurve_FP), and the
+;   body is FP_dadd's with the sign test inverted; it completes the FP_dadd / FP_dmul / FP_ddiv quartet (the locals
+;   FP_DP_Sub_SameSign / _Done follow as FP_dsub_*).
+FP_dsub:
 	push xiz
 	lda xsp, (xsp - 28)
 	ld xiz, xde
@@ -715,15 +719,19 @@ FP_DP_Sub_Done:
 	ret
 
 ; One 0xFF fill byte, never executed (it follows `ret`), at an odd address so that
-; FP_SP_Sub starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
+; FP_fsub starts on the next even address.  All 20 *_Pad bytes in this file are 0xFF at odd
 ; addresses (measured 2026-09-25); the library aligns some routines to 2 bytes, not all.
 FP_SP_Sub_Pad:
 	.byte 0xff
 
 ; Single-precision SUBTRACTION: *(float*)XWA = *(float*)XBC - *(float*)XDE.
-; Same shape as FP_DP_Sub using FP_SP_Decode / FP_SP_AlignMantissa /
+; Same shape as FP_dsub using FP_SP_Decode / FP_SP_AlignMantissa /
 ; FP_SP_AddMantissa / FP_SP_SubMantissa / FP_SP_Encode and 8-byte unpacked records.
-FP_SP_Sub:
+; FP_fsub: Single-precision subtraction, the C runtime's __fsub: *(float*)XWA = *(float*)XBC - *(float*)XDE. Basis:
+;   callers + body -- 39 call sites use it as `a - b` (e.g. 1 - x in DSP_SOS_Algo0_FinalChain, whose Algo1 twin calls
+;   FP_fadd for x + 1), and the body is FP_fadd's with the sign test inverted; completes FP_fadd / FP_fmul / FP_fdiv
+;   (locals FP_SP_Sub_Pad / _SameSign / _Done follow as FP_fsub_*).
+FP_fsub:
 	push xiz
 	lda xsp, (xsp - 20)
 	ld xiz, xde
@@ -879,7 +887,7 @@ FP_SinCos_Kernel_Phase3:
 	lda xwa, (xsp + 116)
 	ld xbc, xwa
 	lda xde, (FPConst_SinCos_Kernel_Phase3_Half:24)
-	call FP_DP_Sub
+	call FP_dsub
 
 ; Cody-Waite reduction proper: subtract n*pi_hi then n*pi_lo, leaving z in the local at
 ; (XSP+0x7C); then the |z| <= 2.3283e-10 shortcut test.
@@ -910,7 +918,7 @@ FP_SinCos_Kernel_Phase4:
 	lda xbc, (xsp+156:16)
 	lda xwa, (xsp + 84)
 	ld xde, xwa
-	call FP_DP_Sub
+	call FP_dsub
 	lda xwa, (xsp + 84)
 	ld xbc, xwa
 	lda xde, (xsp + 124)
@@ -925,7 +933,7 @@ FP_SinCos_Kernel_Phase4:
 	lda xbc, (xsp + 84)
 	lda xde, (xsp + 72)
 	lda xwa, (xsp+140:16)
-	call FP_DP_Sub
+	call FP_dsub
 	lda xiy, (xsp+140:16)
 	ld xix, (xiy + 4)
 	push xix
@@ -954,7 +962,7 @@ FP_SinCos_Kernel_Phase4:
 	lda xwa, (xsp + 56)
 	ld xbc, xwa
 	ld xde, xiz
-	call FP_DP_Sub
+	call FP_dsub
 	lda xwa, (xsp + 56)
 	ld xbc, xwa
 	lda xde, (xsp + 108)
@@ -970,7 +978,7 @@ FP_SinCos_Kernel_Phase4:
 	lda xde, (FPConst_InvFact11:24)
 	lda xwa, (xsp + 56)
 	ld xbc, xwa
-	call FP_DP_Sub
+	call FP_dsub
 	lda xwa, (xsp + 56)
 	ld xbc, xwa
 	lda xde, (xsp + 108)
@@ -986,7 +994,7 @@ FP_SinCos_Kernel_Phase4:
 	lda xde, (FPConst_InvFact7:24)
 	lda xwa, (xsp + 56)
 	ld xbc, xwa
-	call FP_DP_Sub
+	call FP_dsub
 	lda xwa, (xsp + 56)
 	ld xbc, xwa
 	lda xde, (xsp + 108)
@@ -1002,7 +1010,7 @@ FP_SinCos_Kernel_Phase4:
 	lda xde, (FPConst_InvFact3:24)
 	lda xwa, (xsp + 56)
 	ld xbc, xwa
-	call FP_DP_Sub
+	call FP_dsub
 	lda xwa, (xsp + 56)
 	ld xbc, xwa
 	lda xde, (xsp + 108)
@@ -1593,7 +1601,7 @@ FP_DP_ShiftDecode_Zero:
 ; exponents must already be equal - the caller has run FP_DP_AlignMantissa). If the sum
 ; carries out of bit 53 it shifts right one and increments the exponent, propagating the
 ; rounding bit. If either record carries a special flag it jumps to FP_DP_CopyWithSign.
-; Called by FP_DP_Sub (different signs) and FP_dadd (equal signs).
+; Called by FP_dsub (different signs) and FP_dadd (equal signs).
 FP_DP_AddMantissa:
 	ld e, (xwa + 2)
 	or e, (xbc + 2)
@@ -1917,7 +1925,7 @@ FP_SP_Encode_Overflow_Store:
 	ret
 
 ; Double ADDITION: *(double*)XWA = *(double*)XBC + *(double*)XDE.
-; The body is identical to FP_DP_Sub (0x03D8E0) except for the polarity of the sign
+; The body is identical to FP_dsub (0x03D8E0) except for the polarity of the sign
 ; test: here EQUAL signs take FP_DP_AddMantissa and DIFFERENT signs take
 ; FP_DP_SubMantissa, which is addition, not multiplication. It calls
 ; FP_DP_AlignMantissa, which only exists to line up exponents for add/subtract; a
@@ -2047,7 +2055,7 @@ FP_modf:
 	ld xde, xiz
 	lda xbc, (xsp + 36)
 	lda xwa, (xsp + 20)
-	call FP_DP_Sub
+	call FP_dsub
 	ld xwa, (xsp + 32)
 	lda xbc, (xsp + 20)
 	call FP_DP_Raw8Copy
@@ -2223,7 +2231,7 @@ FP_fmul:
 ; raises the smaller one to match the larger, and shifts that record's 53-bit mantissa
 ; right by the difference (32/16/8/1 bits at a time), keeping a guard byte and rounding
 ; to nearest at the end. A shift beyond 53 (0x35) bits zeroes the operand entirely and
-; marks it as zero. Called only by FP_DP_Sub and FP_dadd (= double add).
+; marks it as zero. Called only by FP_dsub and FP_dadd (= double add).
 FP_DP_AlignMantissa:
 	ld h, (xwa + 2)
 	or h, (xbc + 2)
@@ -2573,7 +2581,7 @@ FP_SP_MulMantissaCore_Divisor1:
 ; already aligned), records a borrow as a sign flip in B, takes the magnitude, and then
 ; RE-NORMALISES the difference: `bs1b` finds the new leading bit and the mantissa is
 ; shifted left (or right) with the exponent adjusted. A result of exactly zero sets the
-; record's zero flag. Special flags divert to FP_DP_NegWithSign. Called by FP_DP_Sub
+; record's zero flag. Special flags divert to FP_DP_NegWithSign. Called by FP_dsub
 ; (equal signs) and FP_dadd (different signs).
 FP_DP_SubMantissa:
 	ld e, (xwa + 2)
@@ -2899,7 +2907,7 @@ FP_log_InRange:
 	lda xbc, (xsp + 114)
 	lda xde, (FPConst_log_InRange_One_3:24)
 	lda xwa, (xsp + 72)
-	call FP_DP_Sub
+	call FP_dsub
 	lda xbc, (xsp + 72)
 	lda xde, (xsp + 48)
 	lda xwa, (xsp + 114)
@@ -2998,7 +3006,7 @@ FP_NaN_Handler:
 ;   - biased exponent 0 or 0x7FF (zero/inf/NaN) -> result = 0.0 (0x01F70E)
 ;   - unbiased exponent >= 0x28 goes straight to the large-value test
 ;   - otherwise it builds a magic value with exponent field 0x000F, adds it and
-;     subtracts it again (FP_dadd then FP_DP_Sub, i.e. add then subtract) to force
+;     subtracts it again (FP_dadd then FP_dsub, i.e. add then subtract) to force
 ;     rounding, and re-reads the exponent
 ;   - unbiased exponent < 0 (|x| < 1) -> result = 0.0 (0x01F716)
 ;   - unbiased exponent >= 0x34 (52) -> x is already integral, copy it through
@@ -3055,7 +3063,7 @@ FP_trunc_InRange:
 	lda xiz, (xsp + 16)
 	ld xbc, xiz
 	ld xwa, xiz
-	call FP_DP_Sub
+	call FP_dsub
 	ld wa, (xsp + 22)
 	and wa, 0x7FF0
 	srl wa, 4
@@ -3669,25 +3677,25 @@ FP_Div_Step4Bits:
 	sub xix, xde
 	sbc xiy, xhl
 	set 3, iz
-	jr FP_Div_Step_Bit2_Entry
+	jr FP_Div_Step_Bit2_Shift
 
 ; Alternate entry / bit-3 trial subtraction without a preceding shift.
 FP_Div_Step_Bit3:
 	cp_erpb_rr B, 0xF7
-	jr gt, FP_Div_Step_Bit2_Entry
+	jr gt, FP_Div_Step_Bit2_Shift
 	sub xix, xde
 	sbc xiy, xhl
 	jr nc, FP_Div_Step_Bit3_Set
 	add xix, xde
 	adc xiy, xhl
-	jr FP_Div_Step_Bit2_Entry
+	jr FP_Div_Step_Bit2_Shift
 
 ; Bit 3 of the quotient nibble is 1.
 FP_Div_Step_Bit3_Set:
 	set 3, iz
 
 ; Shift the remainder and start the bit-2 stage.
-FP_Div_Step_Bit2_Entry:
+FP_Div_Step_Bit2_Shift:
 	sll xix, 1
 	stcf_erpw 0xE6, 0x01
 	ldcf_erpw 0xF6, 0x0F
@@ -3700,25 +3708,25 @@ FP_Div_Step_Bit2_Entry:
 	sub xix, xde
 	sbc xiy, xhl
 	set 2, iz
-	jr FP_Div_Step_Bit1_Entry
+	jr FP_Div_Step_Bit1_Shift
 
 ; Bit-2 trial subtraction.
 FP_Div_Step_Bit2:
 	cp_erpb_rr B, 0xF7
-	jr gt, FP_Div_Step_Bit1_Entry
+	jr gt, FP_Div_Step_Bit1_Shift
 	sub xix, xde
 	sbc xiy, xhl
 	jr nc, FP_Div_Step_Bit2_Set
 	add xix, xde
 	adc xiy, xhl
-	jr FP_Div_Step_Bit1_Entry
+	jr FP_Div_Step_Bit1_Shift
 
 ; Bit 2 of the quotient nibble is 1.
 FP_Div_Step_Bit2_Set:
 	set 2, iz
 
 ; Shift the remainder and start the bit-1 stage.
-FP_Div_Step_Bit1_Entry:
+FP_Div_Step_Bit1_Shift:
 	sll xix, 1
 	stcf_erpw 0xE6, 0x01
 	ldcf_erpw 0xF6, 0x0F
@@ -3731,25 +3739,25 @@ FP_Div_Step_Bit1_Entry:
 	sub xix, xde
 	sbc xiy, xhl
 	set 1, iz
-	jr FP_Div_Step_Bit0_Entry
+	jr FP_Div_Step_Bit0_Shift
 
 ; Bit-1 trial subtraction.
 FP_Div_Step_Bit1:
 	cp_erpb_rr B, 0xF7
-	jr gt, FP_Div_Step_Bit0_Entry
+	jr gt, FP_Div_Step_Bit0_Shift
 	sub xix, xde
 	sbc xiy, xhl
 	jr nc, FP_Div_Step_Bit1_Set
 	add xix, xde
 	adc xiy, xhl
-	jr FP_Div_Step_Bit0_Entry
+	jr FP_Div_Step_Bit0_Shift
 
 ; Bit 1 of the quotient nibble is 1.
 FP_Div_Step_Bit1_Set:
 	set 1, iz
 
 ; Shift the remainder and start the bit-0 stage.
-FP_Div_Step_Bit0_Entry:
+FP_Div_Step_Bit0_Shift:
 	sll xix, 1
 	stcf_erpw 0xE6, 0x01
 	ldcf_erpw 0xF6, 0x0F

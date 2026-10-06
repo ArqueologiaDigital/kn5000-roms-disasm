@@ -1,0 +1,47 @@
+[
+ {
+  "old": "Detect_Region_Code",
+  "tree": "table_data",
+  "verdict": "refuse",
+  "why_refused": "Not a generic name (detector false positive on '_Code'): 'Region_Code' is the domain noun -- the two-pin area strap on Port H bits 2:1 (MAME's AREA 'Area Selection' DIP, ../technics-docs/mame-emulation-gaps.md), stored at RAM 0x0C06 as 1..4. The routine is a shared include also assembled in v10/v9/v7 maincpu (shared/boot_routines.s, same name); a table_data-only rename would split one routine's name across trees. If the detector must be silenced, respell it in all four trees together (e.g. DetectRegionCode); no meaning would be gained.",
+  "new": "",
+  "header": "",
+  "basis": "body + callers",
+  "evidence": [
+   "shared/boot_routines.s:39-56 `bit 2,(PH:8) / bit 1,(PH:8) / ld (3078:16), 1..4` -- PH.2/PH.1 strap -> region 1..4 at 0x0C06",
+   "kn5000_table_data.s:1516 `calr Detect_Region_Code` -- Boot_Init, once at boot",
+   "../v10/maincpu/shared/boot_routines.s:39 `Detect_Region_Code:` -- same routine, same name in the main CPU trees"
+  ]
+ },
+ {
+  "old": "Get_Region_Code",
+  "tree": "table_data",
+  "verdict": "refuse",
+  "why_refused": "Not a generic name (detector false positive on '_Code'): returns L = the region code (1..4) stored by Detect_Region_Code; table_data callers test L == 4 (IC19 custom-data flash has a second 512 KB device at +0x80000, and the HD-AE5000 parallel-port init is skipped). Shared include with v10/v9/v7 maincpu, where Get_Region_Code has ~11 callers by this name; renaming only here would split the name. Rename (if at all) in all four trees together.",
+  "new": "",
+  "header": "",
+  "basis": "body + callers",
+  "evidence": [
+   "shared/boot_routines.s:64-66 `Get_Region_Code: ld l, (3078:16) / ret`",
+   "kn5000_table_data.s:1535-1537 `calr Get_Region_Code / cp l, 4:i3 / call nz, (HDAE5000_InitializeParallelPort + 0x600000:24)` -- region 4 skips the HD-AE5000 port init",
+   "kn5000_table_data.s:1805-1807 `call Get_Region_Code + 0x600000 / cp l, 4:i3 / jr nz, Flash_Reset_16bit__done` -- region 4 also resets the high bank at base+0x80000",
+   "../v10/maincpu/boot/system_handlers.s:6158 `call Get_Region_Code` -- main-CPU users of the same name"
+  ]
+ },
+ {
+  "old": "StyleRec_PtrTable_C2C5",
+  "tree": "table_data",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "StyleRec_PtrTable_CategoryOrder",
+  "header": "1000 x pointer to the Music Stylist records in record (= category) order, entry n -> StyleRec_n; used when the active title is 0xC2 TT_MSCTSEL or 0xC5 TT_MSALPSEL. Basis: the identity permutation in the bytes + the reader's ACTIVE_TITLE test.",
+  "basis": "readers + bytes",
+  "evidence": [
+   "../v10/maincpu/ui/ui_mode_handlers.s:418-425 `ld c,(ACTIVE_TITLE:16) / cp c,0xc2 / jr z,... / cp c,0xc5 / ... / ld xbc, 0x986000` -- EffectMode_ClampAndLookupPreset picks this page for titles 0xC2/0xC5 (cross-ROM, numeric); same in v9/v7 and in EffectMode_DisplayPresetName (v10 475)",
+   "../v10/maincpu/shared/event_codes.s:2000 `TITLE_MSCTSEL, 0x1a000c2` and 2003 `TITLE_MSALPSEL, 0x1a000c5` -- what the suffix values are",
+   "style_record_ptr_tables.s:47-48 `StyleRec_PtrTable_C2C5: .long StyleRec_000, StyleRec_001, ...` -- checked: all 1000 entries are StyleRec_i at slot i (identity); their +0x08 category fields run Easy Listening, Rock & Pop, Dance Pop, Party Music, Gospel/Blues/R&B, Jazz & Swing, Show/Trad Dance, Trad & Folk, Country, Latin / World in contiguous blocks",
+   "scripts/generators/gen_style_records.py:80 `assert tables[TBL_C2C5] == list(range(TBL_ENTRIES)) # identity / category order` and :323 `emit_table(\"StyleRec_PtrTable_C2C5\", ...)` -- the generator writes the name: rename there too, with StyleRec_PtrTable_C2C5_Residue (:330, style_record_ptr_tables.s:302) -> StyleRec_PtrTable_CategoryOrder_Residue",
+   "Also mentioned by name: v7/v9/v10 ui_mode_handlers.s and ui_widgets/style_bitmaps.s comments (STYLEREC_PTRTABLE_C2C5), table_data/help_databases.s:11, kn5000_table_data.s:890, style_records.s:22, scripts/converters/style_name_override_retype.py, ../technics-docs music-stylist-database.md / table-data-rom.md / lzss-compression.md"
+  ]
+ }
+]

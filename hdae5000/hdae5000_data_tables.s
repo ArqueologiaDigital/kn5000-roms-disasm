@@ -12236,7 +12236,7 @@ HdaeUiName_000:	.asciz	"HDDMENU"                       ; 0x2A8492  [  0]
 ; ============================================================================
 ; HD-AE5000 GRAPHICS BANK -- 256-colour palettes and 8bpp indexed bitmaps
 ; ROM 0x2A849A - 0x2E1C81.  (A fifth palette/bitmap pair, the boot splash,
-; sits further down at 0x2E5DCE - 0x2F8DCD under HDAE5000_Palette_Data.)
+; sits further down at 0x2E5DCE - 0x2F8DCD under HDAE5000_Palette_BootSplash.)
 ;
 ; Layout rule, taken from the copy code inside HDAE5000_UiState_Reset and
 ; [the addresses below (0x2804BB..) are in the title-screen procedures
@@ -12466,11 +12466,17 @@ HDAE5000_Str_OFF:	; 0x2E1E24
 HDAE5000_Str_Chr2D2D2D:	; 0x2E1E28
 	; pointed at by entry 0 of HDAE5000_TextPtrs_Chr2D2D2D_OFF_DEL, a table read by DelCmpEditCheck, DelLswEditCheck, DelMdEditCheck, DelMspEditCheck, DelOpt_ShowFlags, DelPmtEditCheck, DelRcmEditCheck, DelSqtEditCheck, DelTlxEditCheck, DelTmEditCheck
 	.asciz "---"
-HDAE5000_Str_050354:	; 0x2E1E2C
+; HDAE5000_Str_HdFormatCode: "050354": the six-digit code that, typed on the ATTEN_HD_FORMAT dialog, makes
+;   HDAE5000_FormatDialog_CodeDigit return 2, on which HDAE5000_AttenHDFormatSwCatch shows WAIT_HD_FORMAT and formats
+;   the hard disk. Basis: StrPrefixCmp in CodeDigit + the result-2 branch.
+HDAE5000_Str_HdFormatCode:	; 0x2E1E2C
 	; read by FormatDialog_CodeDigit at 0x286617 (pushed operand)
 	.asciz "050354"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-HDAE5000_Str_965768:	; 0x2E1E34
+; HDAE5000_Str_Track0RecoverCode: "965768": the six-digit code that, typed on the ATTEN_HD_FORMAT dialog, makes
+;   HDAE5000_FormatDialog_CodeDigit return 3, on which HDAE5000_AttenHDFormatSwCatch shows WAIT_TR0_RECOVER ("Track O
+;   will be recovered:") and rewrites the settings sector. Basis: StrPrefixCmp in CodeDigit + the result-3 branch.
+HDAE5000_Str_Track0RecoverCode:	; 0x2E1E34
 	; read by FormatDialog_CodeDigit at 0x286631 (pushed operand)
 	.asciz "965768"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
@@ -12496,7 +12502,7 @@ HDAE5000_Str_DebugTime:	; 0x2E1EB6
 	.asciz "Debug Time!"
 HDAE5000_TextPtrs_ABC123_Abc123_Chr202123242526:	; 0x2E1EC2, 3 x .long -> string
 	; read by AcHddNamingWindowProc at 0x28228E (ld # operand); 3 string pointers, 4 bytes each, entry i at +4*i
-	.long	HDAE5000_Str_ABC123
+	.long	HDAE5000_Str_NamingPageUpperCase
 	.long	HDAE5000_Str_Abc123
 	.long	HDAE5000_Str_Chr202123242526
 HDAE5000_Str_Chr202123242526:	; 0x2E1ECE
@@ -12507,7 +12513,10 @@ HDAE5000_Str_Abc123:	; 0x2E1EDC
 	; pointed at by entry 1 of HDAE5000_TextPtrs_ABC123_Abc123_Chr202123242526, a table read by AcHddNamingWindowProc
 	.asciz "abc...123..."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-HDAE5000_Str_ABC123:	; 0x2E1EEA
+; HDAE5000_Str_NamingPageUpperCase: "ABC...123...": caption of character page 0 (upper case + digits) of the HDD
+;   naming window, drawn into HddNamingLabel. Basis: entry 0 of the 3-entry caption table that
+;   HDAE5000_AcHddNamingWindowProc indexes by the page number (0x22A02A).
+HDAE5000_Str_NamingPageUpperCase:	; 0x2E1EEA
 	; pointed at by entry 0 of HDAE5000_TextPtrs_ABC123_Abc123_Chr202123242526, a table read by AcHddNamingWindowProc
 	.asciz "ABC...123..."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
@@ -15921,19 +15930,19 @@ HDAE5000_Fmt_03i_i:	; 0x2E5BB6
 ;
 ; HDAE5000_LyricBoxProc_CaseTable2 (0x2E5BC2, 8 x u16): the switch of HDAE5000_LyricBoxProc
 ; (dispatch at 0x28D57C, hdae5000_ui_display.s:3786: bound `cp xwa,7`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
-; `lda xix,(HDAE5000_LyricBoxProc_Case0_2)`, `jp T,XIX+WA`).  Entry i is the offset from
-; HDAE5000_LyricBoxProc_Case0_2 of the case for value 0+i; 8 entries, pinned by the bound
+; `lda xix,(HDAE5000_LyricBoxProc_OnReset)`, `jp T,XIX+WA`).  Entry i is the offset from
+; HDAE5000_LyricBoxProc_OnReset of the case for value 0+i; 8 entries, pinned by the bound
 ; compare.  Asserted and written by scripts/converters/hdae5000_switch_tables.py.
 ;
 HDAE5000_LyricBoxProc_CaseTable2:
-	.short	HDAE5000_LyricBoxProc_Case0_2 - HDAE5000_LyricBoxProc_Case0_2	; 0
-	.short	HDAE5000_LyricBoxProc_Default2 - HDAE5000_LyricBoxProc_Case0_2	; 1 (default)
-	.short	HDAE5000_LyricBoxProc_Default2 - HDAE5000_LyricBoxProc_Case0_2	; 2 (default)
-	.short	HDAE5000_LyricBoxProc_Default2 - HDAE5000_LyricBoxProc_Case0_2	; 3 (default)
-	.short	HDAE5000_LyricBoxProc_Default2 - HDAE5000_LyricBoxProc_Case0_2	; 4 (default)
-	.short	HDAE5000_LyricBoxProc_Default2 - HDAE5000_LyricBoxProc_Case0_2	; 5 (default)
-	.short	HDAE5000_LyricBoxProc_Default2 - HDAE5000_LyricBoxProc_Case0_2	; 6 (default)
-	.short	HDAE5000_LyricBoxProc_Case7_2 - HDAE5000_LyricBoxProc_Case0_2	; 7
+	.short	HDAE5000_LyricBoxProc_OnReset - HDAE5000_LyricBoxProc_OnReset	; 0
+	.short	HDAE5000_LyricBoxProc_Default2 - HDAE5000_LyricBoxProc_OnReset	; 1 (default)
+	.short	HDAE5000_LyricBoxProc_Default2 - HDAE5000_LyricBoxProc_OnReset	; 2 (default)
+	.short	HDAE5000_LyricBoxProc_Default2 - HDAE5000_LyricBoxProc_OnReset	; 3 (default)
+	.short	HDAE5000_LyricBoxProc_Default2 - HDAE5000_LyricBoxProc_OnReset	; 4 (default)
+	.short	HDAE5000_LyricBoxProc_Default2 - HDAE5000_LyricBoxProc_OnReset	; 5 (default)
+	.short	HDAE5000_LyricBoxProc_Default2 - HDAE5000_LyricBoxProc_OnReset	; 6 (default)
+	.short	HDAE5000_LyricBoxProc_OnLoad - HDAE5000_LyricBoxProc_OnReset	; 7
 ;
 ; HDAE5000_LyricBoxProc_CaseTable1 (0x2E5BD2, 7 x u16): the switch of HDAE5000_LyricBoxProc
 ; (dispatch at 0x28CD6A, hdae5000_ui_display.s:3194: `sub xwa,0x01ca0003`, bound `cp xwa,6`, `add xwa,xwa`, `ld wa,(<table>+2i)`,
@@ -16106,7 +16115,10 @@ HDAE5000_Str_Rb_Extension_Check:	; 0x2E5DCA
 	.asciz "rb"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 
-HDAE5000_Palette_Data:	; 0x2E5DCE
+; HDAE5000_Palette_BootSplash: Boot-splash palette: 256 RGBX entries loaded by HDAE5000_Boot_Init right before it
+;   blits HDAE5000_Bitmap_BootSplash. Basis: Boot_Init's lda + HDAE5000_Load_Palette, and the bitmap renders correctly
+;   only with it.
+HDAE5000_Palette_BootSplash:	; 0x2E5DCE
 	; Boot-splash palette: 0x400 B = 256 RGBX entries (202 distinct colours).
 	; Loaded by HDAE5000_Boot_Init, which does `lda XWA,0x2E5DCE` at 0x28F586
 	; and calls HDAE5000_Load_Palette.  The name is kept as-is because it is
@@ -16125,7 +16137,7 @@ HDAE5000_Bitmap_BootSplash:	; 0x2E61CE
 	; 320 x 240 @ 8bpp = 0x12C00 B -- the HD-AE5000 start-up screen: a red
 	; "HD-AE5000" wordmark over a photograph of an open disk platter, with
 	; "Version 2" beneath it and "Start-up !  Please wait . . ." below that.
-	; Rendered with HDAE5000_Palette_Data (0x2E5DCE) it is unambiguous.
+	; Rendered with HDAE5000_Palette_BootSplash (0x2E5DCE) it is unambiguous.
 	;
 	; HDAE5000_Boot_Init obtains this base from HDAE5000_Alloc_Memory
 	; (request A1, the lda at 0x28F55F, with A2 = 0x140 and A3 = 0xF0) and
@@ -16140,7 +16152,11 @@ HDAE5000_Bitmap_BootSplash:	; 0x2E61CE
 HDAE5000_Display_Params:	; 0x2F8DCE
 	; Display configuration parameters
 	.asciz "HD-AE5000"
-HDAE5000_LoadSong_Rcm_Data:
+; HDAE5000_RcmStream_InitialState: 8 zero bytes copied over the RCM stream context at RAM 0x238F1C (u16 state, u16
+;   dir, u16 song, u16 last result) before each RCM load/save. Basis: `ldirw` (95 11 = LDIRW (XIX+),(XIY+)) in
+;   HDAE5000_LoadSong_Rcm/SaveSong_Rcm copies XIY = this ROM block to XIX = 0x238F1C; the source comments
+;   'destination'/'source' are swapped.
+HDAE5000_RcmStream_InitialState:
 	.zero 8
 HDAE5000_Dir_IsBlankName_Str_Blank16:	.asciz "                "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
@@ -16148,13 +16164,22 @@ HDAE5000_Fls_IsBlankName_Str_Blank16:	.asciz "                "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_FlsItem_SongRecord_Str_Blank26:	.asciz "                          "
 	.byte 0x00
-HDAE5000_CheckFileSignature_Data:
+; HDAE5000_PartSignatureTable: Song-part file signature table, 9 x 8-byte records {u32 signature string; u16 offset in
+;   file; u16 compare length} indexed by part (LSW, PMT, SQT, CMP, TM, MSP, RCM, MD, TLX); this label is record 0 =
+;   the string-pointer column. Basis: HDAE5000_CheckFileSignature reads (base + part*8) and passes it to
+;   HDAE5000_StrNCmp.
+HDAE5000_PartSignatureTable:
 	.byte 0x98, 0x8e
 	.asciz "/"
-HDAE5000_CheckFileSignature_Data_2:
+; HDAE5000_PartSignatureTable_FileOffset: HDAE5000_PartSignatureTable + 4: the u16 column giving where in the part
+;   file's first 512 bytes the signature sits. Basis: HDAE5000_CheckFileSignature adds (this + part*8) to the buffer
+;   pointer before HDAE5000_StrNCmp.
+HDAE5000_PartSignatureTable_FileOffset:
 	.byte 0x04
 	.byte 0x00
-HDAE5000_CheckFileSignature_Data_3:
+; HDAE5000_PartSignatureTable_Length: HDAE5000_PartSignatureTable + 6: the u16 column giving how many signature bytes
+;   to compare. Basis: HDAE5000_CheckFileSignature pushes (this + part*8) as the HDAE5000_StrNCmp count.
+HDAE5000_PartSignatureTable_Length:
 	.byte 0x02
 	.byte 0x00
 	.byte 0x94, 0x8e

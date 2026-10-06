@@ -1,0 +1,12 @@
+# written by scripts/renaming/apply_kn5000_naming_proposals.py
+s/\bHDAE5000_CheckFileSignature_Data\b/HDAE5000_PartSignatureTable/g
+s/\bHDAE5000_CheckFileSignature_Data_2\b/HDAE5000_PartSignatureTable_FileOffset/g
+s/\bHDAE5000_CheckFileSignature_Data_3\b/HDAE5000_PartSignatureTable_Length/g
+s/\bHDAE5000_LoadSong_Rcm_Data\b/HDAE5000_RcmStream_InitialState/g
+s/\bHDAE5000_LyricBoxProc_Case0_2\b/HDAE5000_LyricBoxProc_OnReset/g
+s/\bHDAE5000_LyricBoxProc_Case7_2\b/HDAE5000_LyricBoxProc_OnLoad/g
+s/\bHDAE5000_Palette_Data\b/HDAE5000_Palette_BootSplash/g
+s/\bHDAE5000_Return_Stub\b/HDAE5000_NameHistory_AfterPushNop/g
+s/\bHDAE5000_Str_050354\b/HDAE5000_Str_HdFormatCode/g
+s/\bHDAE5000_Str_965768\b/HDAE5000_Str_Track0RecoverCode/g
+s/\bHDAE5000_Str_ABC123\b/HDAE5000_Str_NamingPageUpperCase/g

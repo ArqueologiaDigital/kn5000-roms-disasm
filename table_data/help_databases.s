@@ -8,7 +8,7 @@
 ;
 ; LAYOUT:
 ;   0x983B3A  HelpDB_German_Stale         truncated SLIDE8K remnant (see below)
-;   0x986000  StyleRec_PtrTable_C2C5      1000 x .long StyleRec_NNN + residue
+;   0x986000  StyleRec_PtrTable_CategoryOrder      1000 x .long StyleRec_NNN + residue
 ;   0x987000  StyleRec_PtrTable_Default   1000 x .long StyleRec_NNN + residue
 ;             (both in style_record_ptr_tables.s -- see that module's header)
 ;   0x988000  HelpIntro_LanguageTable     6 x 4-byte LE pointers -> intro strings

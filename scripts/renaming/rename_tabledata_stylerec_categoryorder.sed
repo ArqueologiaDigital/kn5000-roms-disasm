@@ -1,0 +1,2 @@
+s/\bStyleRec_PtrTable_C2C5_Residue\b/StyleRec_PtrTable_CategoryOrder_Residue/g
+s/\bStyleRec_PtrTable_C2C5\b/StyleRec_PtrTable_CategoryOrder/g

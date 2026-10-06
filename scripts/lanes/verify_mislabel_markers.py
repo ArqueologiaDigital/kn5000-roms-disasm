@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """verify_mislabel_markers.py -- did the three self-tagged MISLABELLED markers in
-kn5000_subprogram_v142.s (VoiceCC_DataTable_0280FE, VoiceCC_DataTable_028F75,
+kn5000_subprogram_v142.s (VoiceCC_DataTable_0280FE, TVF_Refresh_Sounding_Voices,
 VoiceModWheel_DataTable_02A061) actually get closed, and does the rebuilt ROM still
 match the original byte-for-byte across exactly those spans?
 
@@ -39,7 +39,7 @@ ORIGINAL = REPO / "original_ROMs/kn5000_subprogram_v142.rom"
 # "0xSTART-0xEND" header text in the source.
 REGIONS = [
     ("VoiceCC_DataTable_0280FE", 0x0280FE, 0x028839),
-    ("VoiceCC_DataTable_028F75", 0x028F75, 0x029E31),
+    ("TVF_Refresh_Sounding_Voices", 0x028F75, 0x029E31),
     ("VoiceModWheel_DataTable_02A061", 0x02A061, 0x02A0E9),
 ]
 

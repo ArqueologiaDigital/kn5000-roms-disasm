@@ -6,8 +6,8 @@
 # Do not hand-edit: rename in the sources and regenerate.
 #
 #   symbols .................. 4,759
-#   semantic names ........... 4,756 (99.9%)
-#   positional names ......... 3
+#   semantic names ........... 4,757 (100.0%)
+#   positional names ......... 2
 #
 SectionDirectory_Table 00800000
 SectionBank00_AccordionGer16 00800088
@@ -3879,8 +3879,8 @@ StyleRec_999 009814AA
 StyleRecords_Residue 00981570
 StyleRecords_ResidueRamp 00983557
 HelpDB_German_Stale 00983B3A
-StyleRec_PtrTable_C2C5 00986000
-StyleRec_PtrTable_C2C5_Residue 00986FA0
+StyleRec_PtrTable_CategoryOrder 00986000
+StyleRec_PtrTable_CategoryOrder_Residue 00986FA0
 StyleRec_PtrTable_Default 00987000
 StyleRec_PtrTable_Default_Residue 00987FA0
 HelpIntro_LanguageTable 00988000

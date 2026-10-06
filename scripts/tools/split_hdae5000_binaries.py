@@ -86,7 +86,7 @@ SPLIT_POINTS = {
     0x2A6984: ('HDAE5000_UiObjectName_PtrTable', 'UI object name pointer table (790 entries)'),
     0x2A75DC: ('HDAE5000_UiObjectName_Pool', 'UI object name string pool'),
     0x2A849A: ('HDAE5000_GFX_INIT_PARAMS', 'Graphics initialization parameters'),
-    0x2E5DCE: ('HDAE5000_Palette_Data', 'VGA palette, 256 RGBX entries (1024 bytes)'),
+    0x2E5DCE: ('HDAE5000_Palette_BootSplash', 'VGA palette, 256 RGBX entries (1024 bytes)'),
     0x2E61CE: ('HDAE5000_Bitmap_BootSplash', 'Boot splash bitmap, 320x240 8bpp (76800 bytes)'),
     0x2F8DCE: ('HDAE5000_Display_Params', 'Display configuration parameters'),
     0x2F94B2: ('HDAE5000_Init_Data', 'Data copied to 0x23952A (0xC82 bytes)'),

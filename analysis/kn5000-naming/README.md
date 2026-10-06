@@ -75,3 +75,13 @@ Leads reported for later:
 - event 0x1E80010 (MT_GetParaSize) has no EVT_ constant; `MSP_Default_VarSize` / `MSP_Default_GroupOffsetB` are
   NoteEventBuffer case tables.
 - panel record 0x92 is the scale-tune record (type, key/on-off, 12 user offsets).
+
+**Single-image batches s1-s3** (`proposals-2026-10-06-{v142-s1s3,hdae5000-s2,tabledata-s2,subboot-s2}.json`): the
+generic or positional names the semantic score still counted in the sub-CPU payload (91 of 115 named), HD-AE5000
+(11 of 11), table data (1 of 3) and the sub-CPU boot ROM (1 of 1), applied with `--tree`. Highlights: the
+`DSP_Set_*` setters are the global effect switches (DIGITAL REVERB / ACOUSTIC ILLUSION / mic reverb / EQUALIZER
+on-off, rotary speed, fade level, mic level, MICSNS); the 2^21 / 2^22 / 2^23 FP constants are Q-format ones;
+`VoiceCC_DataTable_028F75` is `TVF_Refresh_Sounding_Voices`; `StyleRec_PtrTable_C2C5` (C2/C5 were the UI states
+that select it) holds the styles in category order. `Detect_Region_Code` / `Get_Region_Code` keep their names
+(the region code is the real thing, and the main-CPU trees share the routine). The website pages and the
+living scripts that quoted the old names were updated; dated notes keep them.

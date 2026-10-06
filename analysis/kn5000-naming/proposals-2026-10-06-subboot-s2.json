@@ -1,0 +1,18 @@
+[
+ {
+  "old": "SendData_Block",
+  "tree": "subcpu/boot",
+  "verdict": "name",
+  "why_refused": "",
+  "new": "InterCPU_SendChunk",
+  "header": "Send one chunk (1-32 bytes) to the main CPU: MSTAT1 (PD.4) handshake, command byte (A << 5) | (count - 1) to the 0x120000 latch, then micro-DMA from XDE; returns at once for count 0, gives up after 60000 polls. Basis: SendData_Chunked calls it per <= 32-byte piece; the payload's twin is InterCPU_DMA_Send_Chunk.",
+  "basis": "caller + body + payload counterpart",
+  "evidence": [
+   "kn5000_subcpu_boot.s:1199-1201 `ldw bc, 0x20 / ... / calr SendData_Block` and 1210-1213 `ldto_berp C, 0xF8 / ... / calr SendData_Block` -- SendData_Chunked sends 32-byte pieces and then the remainder through it",
+   "kn5000_subcpu_boot.s:1240-1248 `bit 4,(PD:8) / res 0,(PD:8) / ld (1302:16),1 / ... / sll a,5 / or a,l / ld (0x120000:24), a` -- handshake + latch command byte (channel << 5 | len-1)",
+   "kn5000_subcpu_boot.s:1254-1258 `ldc_cr32 xde, 0x08 / ldc_cr16 bc, 0x48 / ... / set 2,(T8RUN:8)` -- micro-DMA of the chunk from XDE",
+   "Byte compare: boot 0xFF8649-0xFF86AB equals v142 InterCPU_DMA_Send_Chunk (v142/subcpu/kn5000_subprogram_v142.s:2821) except the DMA state word's address (0x0516 here); that name is taken in v142, hence InterCPU_SendChunk",
+   "ROM scan of kn5000_subcpu_boot.ic30: the only references are the two calr in SendData_Chunked (0xFF8620, 0xFF8642), and SendData_Chunked itself has no caller in the boot ROM (code shared with the payload)"
+  ]
+ }
+]
