@@ -874,8 +874,7 @@ Bitmap_SplitPoint_B:
 ; Bitmap_MIDIConnections_1[108][296] (rows of 296 bytes).
 ; -----------------------------------------------------------------------------
 Bitmap_MIDIConnections_1:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0xA3D4, 0x318D
-Pad_AfterBitmap_MIDIConnections_1:	.incbin "includes/generated/naka_widget_tables_2.bin", 0xD561, 0x4B53
+	.incbin "includes/generated/naka_widget_tables_2.bin", 0xA3D4, 0x7CE0
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Bitmap_MIDIConnections_2
 ; Bitmap_MIDIConnections_2  --  296 x 108 bitmap, 8 bpp, row stride 296, 31968 bytes
@@ -907,26 +906,7 @@ Pad_AfterBitmap_MIDIConnections_1:	.incbin "includes/generated/naka_widget_table
 ; Bitmap_MIDIConnections_2[108][296] (rows of 296 bytes).
 ; -----------------------------------------------------------------------------
 Bitmap_MIDIConnections_2:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x120B4, 0x3BB0
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C64, 0x3
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C67, 0x5
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C6C, 0x4
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C70, 0x2
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C72, 0x5
-NakaData_Tables2Pad1:				.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C77, 0x2
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C79, 0x2
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C7B, 0x3
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C7E, 0x2
-NakaData_Tables2Pad2:				.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C80, 0x4
-Pad_AfterNakaData_Tables2Pad2:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C84, 0x2
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C86, 0x2
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C88, 0x1
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C89, 0x5
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C8E, 0x2
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C90, 0x1
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C91, 0xAF
-NakaData_Tables2Pad3:				.incbin "includes/generated/naka_widget_tables_2.bin", 0x15D40, 0xA4A
-Bitmap_MIDIConnections_Header:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x1678A, 0x360A
+	.incbin "includes/generated/naka_widget_tables_2.bin", 0x120B4, 0x7CE0
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Bitmap_MIDIConnections_3
 ; Bitmap_MIDIConnections_3  --  296 x 108 bitmap, 8 bpp, row stride 296, 31968 bytes

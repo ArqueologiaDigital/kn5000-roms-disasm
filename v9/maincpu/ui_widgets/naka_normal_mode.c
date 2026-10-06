@@ -11,7 +11,6 @@
 /* ── External symbols (resolved by linker script) ── */
 
 extern const char CRTC_LINE_COMPARE;
-extern const char NakaStr_SoundPresetBone;
 extern const char Naka_PresentationRootState;
 
 #define BASE  0x00ED333Cu
@@ -353,7 +352,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0486;
     uint8_t pad_53[2];  /* zero padding */
     uint16_t field_048a;
-    uint32_t NakaStr_SoundPresetBone_ptr;
+    uint32_t field_048c;
 } naka_normal_mode_t;
 
 #define SELF(field) \
@@ -789,7 +788,7 @@ const naka_normal_mode_t naka_normal_mode_data
 
     .field_048a = 0x007F,
 
-    .NakaStr_SoundPresetBone_ptr = NAKA_ADDR(NakaStr_SoundPresetBone),
+    .field_048c = 0x00EC013F,
 
 };
 

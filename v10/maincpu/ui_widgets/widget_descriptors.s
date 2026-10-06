@@ -3778,9 +3778,7 @@ Bitmap_Ntedt0d:
 ; (rows of 88 bytes).
 ; -----------------------------------------------------------------------------
 Bitmap_Dredt0k:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0xBF18, 0x1179
-Pad_AfterBitmap_Dredt0k:	.incbin "includes/generated/naka_widget_descriptors.bin", 0xD091, 0x401
-Pad_BeforeBitmap_Dredt0d:	.incbin "includes/generated/naka_widget_descriptors.bin", 0xD492, 0x136E
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0xBF18, 0x28E8
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Bitmap_Dredt0d
 ; Bitmap_Dredt0d  --  168 x 119 bitmap, 8 bpp, row stride 168, 19992 bytes
@@ -3814,24 +3812,7 @@ Pad_BeforeBitmap_Dredt0d:	.incbin "includes/generated/naka_widget_descriptors.bi
 ; (rows of 168 bytes).
 ; -----------------------------------------------------------------------------
 Bitmap_Dredt0d:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0xE800, 0x9A0
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0xF1A0, 0x2
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0xF1A2, 0x3
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0xF1A5, 0x3
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0xF1A8, 0x1
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0xF1A9, 0x1
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0xF1AA, 0x27
-Pad_NakaExternal_Block2:		.incbin "includes/generated/naka_widget_descriptors.bin", 0xF1D1, 0x15
-Pad_NakaExternal_Block3:		.incbin "includes/generated/naka_widget_descriptors.bin", 0xF1E6, 0x3B
-Pad_NakaExternal_Block4:		.incbin "includes/generated/naka_widget_descriptors.bin", 0xF221, 0x15
-NakaData_ExternalPadBlock_A:		.incbin "includes/generated/naka_widget_descriptors.bin", 0xF236, 0x13
-NakaData_ExternalPadBlock_B:		.incbin "includes/generated/naka_widget_descriptors.bin", 0xF249, 0x15
-Pad_BeforeNakaData_UserMemoryConfig:	.incbin "includes/generated/naka_widget_descriptors.bin", 0xF25E, 0x12
-NakaData_UserMemoryConfig:		.incbin "includes/generated/naka_widget_descriptors.bin", 0xF270, 0x31
-Pad_AfterNakaData_UserMemoryConfig:	.incbin "includes/generated/naka_widget_descriptors.bin", 0xF2A1, 0x15
-Pad_BeforeNakaData_StyleBitmapPad:	.incbin "includes/generated/naka_widget_descriptors.bin", 0xF2B6, 0x8F3
-NakaData_ExternalBitmapBlock:		.incbin "includes/generated/naka_widget_descriptors.bin", 0xFBA9, 0xDFE
-NakaData_StyleBitmapPad:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x109A7, 0x2C71
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0xE800, 0x4E18
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] WidgetData_DrawbarPositionTable
 ; WidgetData_DrawbarPositionTable -- Historical name, kept for

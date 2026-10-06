@@ -22,8 +22,6 @@ extern const char HelpLangChkMain;
 extern const char HelpModeFunc;
 extern const char HelpTitleFunc;
 extern const char NakaData_DescriptorZero;
-extern const char NakaData_Tables2Pad1;
-extern const char NakaData_Tables2Pad2;
 extern const char LED_patterns_firmware_v8_plus;
 extern const char MainExeCall;
 extern const char MainPanic;
@@ -13501,7 +13499,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .flag = 0x0018,
         .rect = { 0, 64, 31, 95 },
         .page = 0x0002,
-        .window = NAKA_ADDR(NakaData_Tables2Pad1),
+        .window = 0x00E70015,
     },
 
     .Help_P2 = {
@@ -13695,7 +13693,7 @@ const naka_effects_seq_t naka_effects_seq_data
         .flag = 0x0018,
         .rect = { 0, 32, 31, 63 },
         .page = 0x0001,
-        .window = NAKA_ADDR(NakaData_Tables2Pad2),
+        .window = 0x00E7001E,
     },
 
     .HelpSwTtl3Scr_IvPageControl_2 = {

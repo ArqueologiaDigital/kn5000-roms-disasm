@@ -13,7 +13,6 @@
 extern const char CRTC_LINE_COMPARE;
 extern const char FDC_CMD_READ_ID;
 extern const char NakaData_DescriptorPad1;
-extern const char NakaData_Tables2Pad3;
 extern const char NakaData_TechnichordBitmap2;
 extern const char NakaStr_SoundPreset176;
 extern const char NakaData_PerfStyleCode;

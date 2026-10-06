@@ -745,8 +745,7 @@ Str_DrawCtrl_MainPreControl:
 ; Bitmap_Accita16[95][120] (rows of 120 bytes).
 ; -----------------------------------------------------------------------------
 Bitmap_Accita16:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x728, 0x1283
-Bitmap_AccompBitmapSpacer:	.incbin "includes/generated/naka_technichord_strings.bin", 0x19AB, 0x1A05
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x728, 0x2C88
 ; -----------------------------------------------------------------------------
 ; [nakarest_retype] Bitmap_Accger16
 ; Bitmap_Accger16  --  120 x 95 bitmap, 8 bpp, row stride 120, 11400 bytes
@@ -865,8 +864,7 @@ Bitmap_SomeArrows:
 ; -----------------------------------------------------------------------------
 BitmapBound_DrawbarSlider1_Start:
 Bitmap_DrawbarNumberedSlider_1:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x671C, 0x981
-DrawbarSlider_ConfigData:	.incbin "includes/generated/naka_technichord_strings.bin", 0x709D, 0x993
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x671C, 0x1314
 ; -----------------------------------------------------------------------------
 ; [nakarest_retype] Bitmap_DrawbarNumberedSlider_2
 ; Bitmap_DrawbarNumberedSlider_2  --  22 x 222 bitmap, 8 bpp, row stride 22, 4884 bytes
