@@ -1205,7 +1205,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0c1e;
     uint16_t field_0c20;
     uint16_t field_0c22;
-    char str_4[2];
+    char C_str[2];
     uint8_t pad_166[2];  /* zero padding */
     uint16_t field_0c28;
     uint16_t field_0c2a;
@@ -1532,10 +1532,10 @@ typedef struct __attribute__((packed)) {
     char str_5[2];
     uint16_t field_1256;
     uint16_t field_1258;
-    char str_6[2];
+    char I_str[2];
     uint8_t pad_237[2];  /* zero padding */
     uint16_t field_125e;
-    char str_7[2];
+    char L_str[2];
     uint16_t field_1262;
     char str_8[2];
     uint8_t pad_238[4];  /* zero padding */
@@ -2014,7 +2014,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_18e8;
     uint16_t field_18ea;
     uint16_t field_18ec;
-    char str_13[2];
+    char A_str[2];
     uint8_t pad_294[2];  /* zero padding */
     char str_14[2];
     uint16_t field_18f4;
@@ -2030,7 +2030,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_190a;
     uint16_t field_190c;
     uint16_t field_190e;
-    char str_15[2];
+    char A_str_2[2];
     uint16_t field_1912;
     char str_16[2];
     uint16_t field_1916;
@@ -2060,7 +2060,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_194a;
     uint16_t field_194c;
     uint16_t field_194e;
-    char str_17[2];
+    char H_str[2];
     uint16_t field_1952;
     uint8_t pad_299[6];  /* zero padding */
     uint16_t field_195a;
@@ -2243,9 +2243,9 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1b20;
     char str_36[2];
     uint16_t field_1b24;
-    char str_37[2];
+    char G_str[2];
     uint16_t field_1b28;
-    char str_38[2];
+    char l_str[2];
     uint16_t field_1b2c;
     uint16_t field_1b2e;
     uint16_t field_1b30;
@@ -2309,9 +2309,9 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1ba4;
     char str_40[2];
     uint16_t field_1ba8;
-    char str_41[2];
+    char G_str_2[2];
     uint16_t field_1bac;
-    char str_42[2];
+    char l_str_2[2];
     uint16_t field_1bb0;
     uint16_t field_1bb2;
     uint16_t field_1bb4;
@@ -2321,7 +2321,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1bbc;
     char str_43[2];
     uint16_t field_1bc0;
-    char str_44[2];
+    char J_str[2];
     char str_45[4];
     uint16_t field_1bc8;
     uint16_t field_1bca;
@@ -2338,17 +2338,17 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1be8;
     uint16_t field_1bea;
     char str_50[4];
-    char str_51[4];
-    char str_52[4];
-    char str_53[4];
+    char FL1_str[4];
+    char DA0_str[4];
+    char ZJ3_str[4];
     uint16_t field_1bfc;
     uint16_t field_1bfe;
     uint16_t field_1c00;
     uint16_t field_1c02;
     char w14_code[4];
     char w14_name[4];
-    char str_54[4];
-    char str_55[4];
+    char ed3_str[4];
+    char WX3_str[4];
     uint16_t field_1c14;
     uint16_t field_1c16;
     uint16_t field_1c18;
@@ -2366,11 +2366,11 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1c30;
     char str_56[2];
     uint16_t field_1c34;
-    char str_57[2];
+    char G_str_3[2];
     uint16_t field_1c38;
-    char str_58[2];
+    char G_str_4[2];
     uint16_t field_1c3c;
-    char str_59[2];
+    char l_str_3[2];
     uint16_t field_1c40;
     uint16_t field_1c42;
     uint16_t field_1c44;
@@ -2378,9 +2378,9 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1c48;
     char str_60[2];
     uint16_t field_1c4c;
-    char str_61[2];
+    char I_str_2[2];
     uint16_t field_1c50;
-    char str_62[2];
+    char L_str_2[2];
     char str_63[4];
     uint16_t field_1c58;
     uint16_t field_1c5a;
@@ -2400,16 +2400,16 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1c7a;
     char str_67[4];
     char str_68[4];
-    char str_69[4];
-    char str_70[4];
+    char INS_str[4];
+    char dOG_str[4];
     uint16_t field_1c8c;
     char str_71[2];
     uint16_t field_1c90;
     uint16_t field_1c92;
     char w15_code[4];
     char w15_name[4];
-    char str_72[4];
-    char str_73[4];
+    char hsD_str[4];
+    char faF_str[4];
     uint16_t field_1ca4;
     char str_74[2];
     uint16_t field_1ca8;
@@ -2427,23 +2427,23 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1cc0;
     char str_76[2];
     uint16_t field_1cc4;
-    char str_77[2];
+    char l_str_4[2];
     uint16_t field_1cc8;
-    char str_78[2];
+    char l_str_5[2];
     uint16_t field_1ccc;
-    char str_79[2];
+    char l_str_6[2];
     uint16_t field_1cd0;
     uint16_t field_1cd2;
     uint16_t field_1cd4;
     uint16_t field_1cd6;
     uint16_t field_1cd8;
-    char str_80[2];
+    char M_str[2];
     uint16_t field_1cdc;
-    char str_81[2];
+    char g_str[2];
     uint16_t field_1ce0;
-    char str_82[2];
+    char l_str_7[2];
     uint16_t field_1ce4;
-    char str_83[2];
+    char l_str_8[2];
     uint16_t field_1ce8;
     uint16_t field_1cea;
     uint16_t field_1cec;
@@ -2451,7 +2451,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1cf0;
     char str_84[2];
     uint16_t field_1cf4;
-    char str_85[2];
+    char L_str_3[2];
     char str_86[4];
     char str_87[4];
     uint16_t field_1d00;
@@ -2473,7 +2473,7 @@ typedef struct __attribute__((packed)) {
     char str_89[4];
     char w17_code[4];
     char w17_name[4];
-    char str_90[4];
+    char lnk_str[4];
     uint16_t field_1d34;
     char str_91[2];
     uint16_t field_1d38;
@@ -2489,7 +2489,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1d4c;
     char str_94[2];
     uint16_t field_1d50;
-    char str_95[2];
+    char z_str[2];
     uint16_t field_1d54;
     uint16_t field_1d56;
     uint16_t field_1d58;
@@ -2501,7 +2501,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1d64;
     uint16_t field_1d66;
     uint16_t field_1d68;
-    char str_96[2];
+    char n_str[2];
     uint16_t field_1d6c;
     uint16_t field_1d6e;
     uint16_t field_1d70;
@@ -2513,7 +2513,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1d7c;
     uint16_t field_1d7e;
     uint16_t field_1d80;
-    char str_97[2];
+    char Q_str[2];
     char str_98[4];
     uint16_t field_1d88;
     uint16_t field_1d8a;
@@ -2550,9 +2550,9 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1dd4;
     uint16_t field_1dd6;
     uint16_t field_1dd8;
-    char str_106[2];
+    char H_str_2[2];
     uint16_t field_1ddc;
-    char str_107[2];
+    char __str[2];
     uint16_t field_1de0;
     uint16_t field_1de2;
     uint16_t field_1de4;
@@ -2576,11 +2576,11 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1e08;
     char str_110[2];
     uint16_t field_1e0c;
-    char str_111[2];
+    char B_str[2];
     uint16_t field_1e10;
-    char str_112[2];
+    char K_str[2];
     uint16_t field_1e14;
-    char str_113[2];
+    char S_str[2];
     uint16_t field_1e18;
     uint16_t field_1e1a;
     uint16_t field_1e1c;
@@ -2588,11 +2588,11 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1e20;
     uint16_t field_1e22;
     uint16_t field_1e24;
-    char str_115[2];
+    char S_str_2[2];
     uint16_t field_1e28;
-    char str_116[2];
+    char d_str[2];
     uint16_t field_1e2c;
-    char str_117[2];
+    char t_str[2];
     uint16_t field_1e30;
     uint16_t field_1e32;
     uint16_t field_1e34;
@@ -2604,7 +2604,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1e44;
     uint16_t field_1e46;
     uint16_t field_1e48;
-    char str_120[2];
+    char i_str[2];
     uint32_t ptr_1e4c;
     uint32_t ptr_1e50;
     uint16_t field_1e54;
@@ -4770,7 +4770,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_0c22 = NAKA_NONE,
 
-    .str_4 = "C",
+    .C_str = "C",
 
     .pad_166 = { 0 },
 
@@ -5637,13 +5637,13 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_1258 = NAKA_NONE,
 
-    .str_6 = "I",
+    .I_str = "I",
 
     .pad_237 = { 0 },
 
     .field_125e = 0x0103,
 
-    .str_7 = "L",
+    .L_str = "L",
 
     .field_1262 = 0x0137,
 
@@ -6760,7 +6760,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_18ec = 0x00D0,
 
-    .str_13 = "A",
+    .A_str = "A",
 
     .pad_294 = { 0 },
 
@@ -6792,7 +6792,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_190e = 0x00D1,
 
-    .str_15 = "A",
+    .A_str_2 = "A",
 
     .field_1912 = 0x0015,
 
@@ -6852,7 +6852,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_194e = 0x0001,
 
-    .str_17 = "H",
+    .H_str = "H",
 
     .field_1952 = 0x000D,
 
@@ -7218,11 +7218,11 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_1b24 = 0x0D06,
 
-    .str_37 = "G",
+    .G_str = "G",
 
     .field_1b28 = 0x1608,
 
-    .str_38 = "l",
+    .l_str = "l",
 
     .field_1b2c = 0x1E0C,
 
@@ -7350,11 +7350,11 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_1ba8 = 0x1A06,
 
-    .str_41 = "G",
+    .G_str_2 = "G",
 
     .field_1bac = 0x2108,
 
-    .str_42 = "l",
+    .l_str_2 = "l",
 
     .field_1bb0 = 0x270C,
 
@@ -7374,7 +7374,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_1bc0 = 0x251D,
 
-    .str_44 = "J",
+    .J_str = "J",
 
     .str_45 = "\"/l",
 
@@ -7408,11 +7408,11 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .str_50 = "8L1",
 
-    .str_51 = "FL1",
+    .FL1_str = "FL1",
 
-    .str_52 = "DA0",
+    .DA0_str = "DA0",
 
-    .str_53 = "ZJ3",
+    .ZJ3_str = "ZJ3",
 
     .field_1bfc = 0x5581,
 
@@ -7426,9 +7426,9 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .w14_name = "Td3",
 
-    .str_54 = "ed3",
+    .ed3_str = "ed3",
 
-    .str_55 = "WX3",
+    .WX3_str = "WX3",
 
     .field_1c14 = 0x6981,
 
@@ -7464,15 +7464,15 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_1c34 = 0x3C06,
 
-    .str_57 = "G",
+    .G_str_3 = "G",
 
     .field_1c38 = 0x2906,
 
-    .str_58 = "G",
+    .G_str_4 = "G",
 
     .field_1c3c = 0x2F08,
 
-    .str_59 = "l",
+    .l_str_3 = "l",
 
     .field_1c40 = 0x380C,
 
@@ -7488,11 +7488,11 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_1c4c = 0x411C,
 
-    .str_61 = "I",
+    .I_str_2 = "I",
 
     .field_1c50 = 0x351B,
 
-    .str_62 = "L",
+    .L_str_2 = "L",
 
     .str_63 = "\"=l",
 
@@ -7532,9 +7532,9 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .str_68 = ";QO",
 
-    .str_69 = "INS",
+    .INS_str = "INS",
 
-    .str_70 = "dOG",
+    .dOG_str = "dOG",
 
     .field_1c8c = 0x4F92,
 
@@ -7548,9 +7548,9 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .w15_name = "SsD",
 
-    .str_72 = "hsD",
+    .hsD_str = "hsD",
 
-    .str_73 = "faF",
+    .faF_str = "faF",
 
     .field_1ca4 = 0x6D92,
 
@@ -7586,15 +7586,15 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_1cc4 = 0x6308,
 
-    .str_77 = "l",
+    .l_str_4 = "l",
 
     .field_1cc8 = 0x5008,
 
-    .str_78 = "l",
+    .l_str_5 = "l",
 
     .field_1ccc = 0x3C08,
 
-    .str_79 = "l",
+    .l_str_6 = "l",
 
     .field_1cd0 = 0x440C,
 
@@ -7606,19 +7606,19 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_1cd8 = 0x5109,
 
-    .str_80 = "M",
+    .M_str = "M",
 
     .field_1cdc = 0x611F,
 
-    .str_81 = "g",
+    .g_str = "g",
 
     .field_1ce0 = 0x561E,
 
-    .str_82 = "l",
+    .l_str_7 = "l",
 
     .field_1ce4 = 0x471E,
 
-    .str_83 = "l",
+    .l_str_8 = "l",
 
     .field_1ce8 = 0x4D24,
 
@@ -7634,7 +7634,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_1cf4 = 0x4C1D,
 
-    .str_85 = "L",
+    .L_str_3 = "L",
 
     .str_86 = "4fr",
 
@@ -7678,7 +7678,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .w17_name = "Lxb",
 
-    .str_90 = "lnk",
+    .lnk_str = "lnk",
 
     .field_1d34 = 0x69A6,
 
@@ -7710,7 +7710,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_1d50 = 0x740B,
 
-    .str_95 = "z",
+    .z_str = "z",
 
     .field_1d54 = 0x850B,
 
@@ -7734,7 +7734,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_1d68 = 0x700C,
 
-    .str_96 = "n",
+    .n_str = "n",
 
     .field_1d6c = 0x7F21,
 
@@ -7758,7 +7758,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_1d80 = 0x600B,
 
-    .str_97 = "Q",
+    .Q_str = "Q",
 
     .str_98 = "!im",
 
@@ -7832,11 +7832,11 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_1dd8 = 0xCB5C,
 
-    .str_106 = "H",
+    .H_str_2 = "H",
 
     .field_1ddc = 0xA0A2,
 
-    .str_107 = "_",
+    .__str = "_",
 
     .field_1de0 = 0x9E0E,
 
@@ -7884,15 +7884,15 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_1e0c = 0x4219,
 
-    .str_111 = "B",
+    .B_str = "B",
 
     .field_1e10 = 0x4219,
 
-    .str_112 = "K",
+    .K_str = "K",
 
     .field_1e14 = 0x5319,
 
-    .str_113 = "S",
+    .S_str = "S",
 
     .field_1e18 = 0x6C09,
 
@@ -7908,15 +7908,15 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_1e24 = 0x5319,
 
-    .str_115 = "S",
+    .S_str_2 = "S",
 
     .field_1e28 = 0x5B19,
 
-    .str_116 = "d",
+    .d_str = "d",
 
     .field_1e2c = 0x6C19,
 
-    .str_117 = "t",
+    .t_str = "t",
 
     .field_1e30 = 0x9D19,
 
@@ -7940,7 +7940,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_1e48 = 0xFED6,
 
-    .str_120 = "i",
+    .i_str = "i",
 
     .ptr_1e4c = 0x00FF9C9C,
 

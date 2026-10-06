@@ -410,7 +410,7 @@ typedef struct __attribute__((packed)) {
     char w20_code[4];
     char w20_name[10];
     char str_0[12];
-    char str_1[10];
+    char PsGridBox_str[10];
     char w21_code[6];
     char w21_name[10];
     char w22_code[2];
@@ -480,7 +480,7 @@ typedef struct __attribute__((packed)) {
     char w54_code[2];
     char w54_name[10];
     char str_2[4];
-    char str_3[4];
+    char Box_str[4];
     char w55_code[4];
     char w55_name[8];
     char w56_code[4];
@@ -544,9 +544,9 @@ typedef struct __attribute__((packed)) {
     char w85_code[4];
     char w85_name[10];
     char str_4[4];
-    char str_5[6];
+    char VwBox_str[6];
     char str_6[8];
-    char str_7[10];
+    char Viewable_str[10];
     char w86_code[2];
     char w86_name[8];
     char w87_code[2];
@@ -567,10 +567,10 @@ typedef struct __attribute__((packed)) {
     char w94_name[6];
     char w95_code[6];
     char w95_name[6];
-    char str_8[6];
-    char str_9[14];
-    char str_10[8];
-    char str_11[6];
+    char JBBK_str[6];
+    char SupportClass_str[14];
+    char JMBBXXL_str[8];
+    char Class_str[6];
     char w96_code[2];
     char w96_name[14];
     char w97_code[2];
@@ -579,19 +579,19 @@ typedef struct __attribute__((packed)) {
     char w98_name[10];
     char w99_code[2];
     char w99_name[8];
-    char str_12[2];
+    char m_str[2];
     uint16_t field_0624;
     char str_13[2];
-    char str_14[8];
-    char str_15[8];
-    char str_16[8];
-    char str_17[8];
-    char str_18[8];
-    char str_19[8];
-    char str_20[8];
-    char str_21[8];
-    char str_22[8];
-    char str_23[8];
+    char CHARA5W_str[8];
+    char CHARA2W_str[8];
+    char CHARA1W_str[8];
+    char CHARA6_str[8];
+    char CHARA1P_str[8];
+    char CHARA5_str[8];
+    char CHARA4_str[8];
+    char CHARA3_str[8];
+    char CHARA2_str[8];
+    char CHARA1_str[8];
     char str_24[2];
     char str_25[12];
     char str_26[12];
@@ -618,15 +618,15 @@ typedef struct __attribute__((packed)) {
     char w105_name[6];
     char w106_code[6];
     char w106_name[6];
-    char str_35[12];
-    char str_36[12];
-    char str_37[10];
-    char str_38[10];
-    char str_39[10];
-    char str_40[10];
-    char str_41[10];
-    char str_42[10];
-    char str_43[10];
+    char RightSwitch_str[12];
+    char LeftSwitch_str[12];
+    char ROnOff48_str[10];
+    char ROnOff32_str[10];
+    char ROnOff24_str[10];
+    char ROnOff16_str[10];
+    char LOnOff48_str[10];
+    char LOnOff32_str[10];
+    char LOnOff24_str[10];
     char w107_code[10];
     char w107_name[8];
     char w108_code[8];
@@ -657,7 +657,7 @@ typedef struct __attribute__((packed)) {
     char w120_name[8];
     char w121_code[8];
     char w121_name[8];
-    char str_44[8];
+    char Round1a_str[8];
     uint32_t ptrs_1[256];  /* 256 pointers */
     char w122_code[2];
     char w122_name[14];
@@ -714,409 +714,409 @@ typedef struct __attribute__((packed)) {
     char w131_code[12];
     char w131_name[12];
     uint32_t ptrs_2[61];  /* 61 pointers */
-    char str_79[14];
-    char str_80[14];
-    char str_81[14];
-    char str_82[10];
-    char str_83[18];
-    char str_84[16];
-    char str_85[12];
-    char str_86[14];
-    char str_87[14];
-    char str_88[12];
-    char str_89[16];
-    char str_90[10];
-    char str_91[14];
-    char str_92[16];
-    char str_93[12];
-    char str_94[20];
-    char str_95[12];
-    char str_96[18];
-    char str_97[16];
-    char str_98[16];
-    char str_99[12];
-    char str_100[12];
-    char str_101[12];
-    char str_102[12];
-    char str_103[14];
-    char str_104[12];
-    char str_105[14];
-    char str_106[14];
-    char str_107[8];
-    char str_108[14];
-    char str_109[12];
-    char str_110[12];
-    char str_111[16];
-    char str_112[20];
-    char str_113[18];
-    char str_114[16];
-    char str_115[14];
-    char str_116[20];
-    char str_117[16];
-    char str_118[16];
-    char str_119[12];
-    char str_120[10];
-    char str_121[18];
-    char str_122[10];
-    char str_123[12];
-    char str_124[12];
-    char str_125[8];
-    char str_126[12];
-    char str_127[10];
-    char str_128[12];
-    char str_129[10];
-    char str_130[8];
-    char str_131[8];
-    char str_132[10];
-    char str_133[10];
-    char str_134[8];
-    char str_135[8];
-    char str_136[8];
-    char str_137[8];
-    char str_138[8];
+    char EV_SWIN_MODE_str[14];
+    char EV_OLD_TITLE_str[14];
+    char EV_NEW_TITLE_str[14];
+    char EV_ASSSWB_str[10];
+    char EV_DELIVERYEVENT_str[18];
+    char EV_UPDATESCREEN_str[16];
+    char EV_PAGEINIT_str[12];
+    char EV_SENDSWBOTH_str[14];
+    char EV_SENDSWOFF_str[14];
+    char EV_SENDSWON_str[12];
+    char EV_INDEXSW_BOTH_str[16];
+    char EV_SWBOTH_str[10];
+    char EV_PARTSELECT_str[14];
+    char EV_TRSWCOMMAND_str[16];
+    char EV_TRSWPART_str[12];
+    char EV_CHANGEDIALFOCUS_str[20];
+    char EV_SENDSWIN_str[12];
+    char EV_YOUARESELECTED_str[18];
+    char EV_IAMSELECTED_str[16];
+    char EV_RETURN_TITLE_str[16];
+    char EV_SWIN_AIC_str[12];
+    char EV_AUTOINC_str[12];
+    char EV_MEMODRAW_str[12];
+    char EV_BITDATA_str[12];
+    char EV_SOUNDSWNO_str[14];
+    char EV_PMEMNAME_str[12];
+    char EV_RHYTHMNAME_str[14];
+    char EV_SOUNDNAME_str[14];
+    char EV_DIAL_str[8];
+    char EV_PAGECHANGE_str[14];
+    char EV_RAMDATA_str[12];
+    char EV_LSWDATA_str[12];
+    char EV_INDEXSELECT_str[16];
+    char EV_INDEXSW_DOWN_AIC_str[20];
+    char EV_INDEXSW_UP_AIC_str[18];
+    char EV_INDEXSW_DOWN_str[16];
+    char EV_INDEXSW_UP_str[14];
+    char EV_INTERRUPT_TITLE_str[20];
+    char EV_CHANGE_TITLE_str[16];
+    char EV_CHANGE_MODE_str[16];
+    char EV_ACTIVATE_str[12];
+    char EV_TIMER_str[10];
+    char EV_CHANGEPROPERTY_str[18];
+    char EV_RESET_str[10];
+    char EV_PARADRAW_str[12];
+    char EV_SELEDRAW_str[12];
+    char EV_DRAW_str[8];
+    char EV_REPAINT_str[12];
+    char EV_PAINT_str[10];
+    char EV_ALLPAINT_str[12];
+    char EV_SWOFF_str[10];
+    char EV_SWON_str[8];
+    char EV_SWIN_str[8];
+    char EV_ACTION_str[10];
+    char EV_RESIZE_str[10];
+    char EV_MOVE_str[8];
+    char EV_INIT_str[8];
+    char EV_HIDE_str[8];
+    char EV_SHOW_str[8];
+    char EV_NONE_str[8];
     char str_139[2];
     uint32_t ptrs_3[189];  /* 189 pointers */
-    char str_140[18];
-    char str_141[16];
-    char str_142[16];
-    char str_143[18];
-    char str_144[14];
-    char str_145[16];
-    char str_146[14];
-    char str_147[18];
-    char str_148[12];
-    char str_149[16];
-    char str_150[16];
-    char str_151[18];
-    char str_152[16];
-    char str_153[16];
-    char str_154[18];
-    char str_155[18];
-    char str_156[16];
-    char str_157[14];
-    char str_158[16];
-    char str_159[16];
-    char str_160[20];
-    char str_161[14];
-    char str_162[14];
-    char str_163[20];
-    char str_164[20];
-    char str_165[18];
-    char str_166[18];
-    char str_167[18];
-    char str_168[18];
-    char str_169[18];
-    char str_170[20];
-    char str_171[14];
-    char str_172[14];
-    char str_173[12];
-    char str_174[20];
-    char str_175[18];
-    char str_176[12];
-    char str_177[12];
-    char str_178[14];
-    char str_179[20];
-    char str_180[22];
-    char str_181[22];
-    char str_182[18];
-    char str_183[16];
-    char str_184[18];
-    char str_185[18];
-    char str_186[20];
-    char str_187[12];
-    char str_188[18];
-    char str_189[18];
-    char str_190[14];
-    char str_191[16];
-    char str_192[16];
-    char str_193[14];
-    char str_194[20];
-    char str_195[18];
-    char str_196[12];
-    char str_197[12];
-    char str_198[12];
-    char str_199[14];
-    char str_200[12];
-    char str_201[18];
-    char str_202[16];
-    char str_203[20];
-    char str_204[18];
-    char str_205[16];
-    char str_206[18];
-    char str_207[22];
-    char str_208[20];
-    char str_209[20];
-    char str_210[18];
-    char str_211[20];
-    char str_212[18];
-    char str_213[20];
-    char str_214[14];
-    char str_215[16];
-    char str_216[12];
-    char str_217[12];
-    char str_218[12];
-    char str_219[16];
-    char str_220[12];
-    char str_221[10];
-    char str_222[10];
-    char str_223[10];
-    char str_224[10];
-    char str_225[10];
-    char str_226[16];
-    char str_227[10];
-    char str_228[18];
-    char str_229[16];
-    char str_230[16];
-    char str_231[16];
-    char str_232[18];
-    char str_233[16];
-    char str_234[18];
-    char str_235[14];
-    char str_236[14];
-    char str_237[14];
-    char str_238[10];
-    char str_239[10];
-    char str_240[10];
-    char str_241[14];
-    char str_242[14];
-    char str_243[14];
-    char str_244[16];
-    char str_245[18];
-    char str_246[12];
-    char str_247[14];
-    char str_248[16];
-    char str_249[16];
-    char str_250[16];
-    char str_251[18];
-    char str_252[18];
-    char str_253[20];
-    char str_254[18];
-    char str_255[20];
-    char str_256[16];
-    char str_257[14];
-    char str_258[18];
-    char str_259[10];
-    char str_260[10];
-    char str_261[16];
-    char str_262[16];
-    char str_263[18];
-    char str_264[16];
-    char str_265[16];
-    char str_266[14];
-    char str_267[18];
-    char str_268[12];
-    char str_269[14];
-    char str_270[16];
-    char str_271[16];
-    char str_272[14];
-    char str_273[16];
-    char str_274[16];
-    char str_275[16];
-    char str_276[18];
-    char str_277[18];
-    char str_278[16];
-    char str_279[14];
-    char str_280[14];
-    char str_281[14];
-    char str_282[18];
-    char str_283[18];
-    char str_284[16];
-    char str_285[16];
-    char str_286[16];
-    char str_287[12];
-    char str_288[16];
-    char str_289[18];
-    char str_290[20];
-    char str_291[16];
-    char str_292[12];
-    char str_293[16];
-    char str_294[20];
-    char str_295[20];
-    char str_296[16];
-    char str_297[16];
-    char str_298[16];
-    char str_299[16];
-    char str_300[16];
-    char str_301[16];
-    char str_302[18];
-    char str_303[16];
-    char str_304[16];
-    char str_305[12];
-    char str_306[12];
-    char str_307[14];
-    char str_308[16];
-    char str_309[16];
-    char str_310[18];
-    char str_311[12];
-    char str_312[16];
-    char str_313[22];
-    char str_314[18];
-    char str_315[18];
-    char str_316[18];
-    char str_317[18];
-    char str_318[18];
-    char str_319[18];
-    char str_320[18];
-    char str_321[18];
-    char str_322[20];
-    char str_323[16];
-    char str_324[22];
-    char str_325[18];
-    char str_326[20];
-    char str_327[14];
+    char MT_MainLoopCount_str[18];
+    char MT_SetTitleFlag_str[16];
+    char MT_GetInitData_str[16];
+    char MT_CheckInitData_str[18];
+    char MT_EasySetGo_str[14];
+    char MT_InterruptOff_str[16];
+    char MT_SearchLink_str[14];
+    char MT_RefreshSwEvent_str[18];
+    char MT_SetKeep_str[12];
+    char MT_GetBoxColor_str[16];
+    char MT_GetBoxBorder_str[16];
+    char MT_RefreshApTask_str[18];
+    char MT_WakeUpApTask_str[16];
+    char MT_SleepApTask_str[16];
+    char MT_WakeUpMainTask_str[18];
+    char MT_SleepMainTask_str[18];
+    char MT_OtherPartLed_str[16];
+    char MT_CheckHold_str[14];
+    char MT_AddSoundSwNo_str[16];
+    char MT_SetSoundSwNo_str[16];
+    char MT_RefreshParaDraw_str[20];
+    char MT_EasySetOff_str[14];
+    char MT_EasySetOn_str[14];
+    char MT_GetBitmapPalette_str[20];
+    char MT_GetBitmapHeight_str[20];
+    char MT_GetBitmapWidth_str[18];
+    char MT_GetBitmapData_str[18];
+    char MT_PartSelectPut_str[18];
+    char MT_GetLanguagePtr_str[18];
+    char MT_SetNotDrawFlag_str[18];
+    char MT_GetInterruptTime_str[20];
+    char MT_SetVisible_str[14];
+    char MT_ToggleHold_str[14];
+    char MT_SetHold_str[12];
+    char MT_SetInterruptTime_str[20];
+    char MT_InterruptHold_str[18];
+    char MT_PopWall_str[12];
+    char MT_PushWall_str[12];
+    char MT_ChangeWall_str[14];
+    char MT_CheckShowWindow_str[20];
+    char MT_ToggleTrackSwitch_str[22];
+    char MT_RequestTrackSwitch_str[22];
+    char MT_CheckGridIndex_str[18];
+    char MT_GetSelected_str[16];
+    char MT_GetSelectedCel_str[18];
+    char MT_SetSelectedCel_str[18];
+    char MT_RequestGridDraw_str[20];
+    char MT_GridDraw_str[12];
+    char MT_GetFixedRowStr_str[18];
+    char MT_GetFixedColStr_str[18];
+    char MT_GetStrPtr_str[14];
+    char MT_GetDialFocus_str[16];
+    char MT_SetDialFocus_str[16];
+    char MT_SetString_str[14];
+    char MT_AreYouClassProc_str[20];
+    char MT_GetNamingMode_str[18];
+    char MT_LswData_str[12];
+    char MT_RamData_str[12];
+    char MT_SetChara_str[12];
+    char MT_SetCursor_str[14];
+    char MT_SetPage_str[12];
+    char MT_RequestString_str[18];
+    char MT_ReturnString_str[16];
+    char MT_GetStringLength_str[20];
+    char MT_SetApFunction_str[18];
+    char MT_IsInterrupt_str[16];
+    char MT_InterruptExit_str[18];
+    char MT_ResetInterruptTime_str[22];
+    char MT_SetReturnScreen_str[20];
+    char MT_GetReturnScreen_str[20];
+    char MT_GetChildScreen_str[18];
+    char MT_GetParentScreen_str[20];
+    char MT_SetChildScreen_str[18];
+    char MT_SetParentScreen_str[20];
+    char MT_EditUpSet_str[14];
+    char MT_EditDownSet_str[16];
+    char MT_ValenSet_str[12];
+    char MT_AicenSet_str[12];
+    char MT_DrawMemo_str[12];
+    char MT_ToggleParam_str[16];
+    char MT_GetParam_str[12];
+    char MT_RamAdd_str[10];
+    char MT_RamPut_str[10];
+    char MT_RamGet_str[10];
+    char MT_BitPut_str[10];
+    char MT_BitGet_str[10];
+    char MT_GetDirection_str[16];
+    char MT_GetBit_str[10];
+    char MT_GetBitAddress_str[18];
+    char MT_GetBitString_str[16];
+    char MT_GetSoundSwNo_str[16];
+    char MT_GetPmemName_str[16];
+    char MT_GetRhythmName_str[18];
+    char MT_GetSoundName_str[16];
+    char MT_SetWallPalette_str[18];
+    char MT_LswPartGet_str[14];
+    char MT_LswPartAdd_str[14];
+    char MT_LswPartPut_str[14];
+    char MT_LswGet_str[10];
+    char MT_LswAdd_str[10];
+    char MT_LswPut_str[10];
+    char MT_GetPageNow_str[14];
+    char MT_GetPageMax_str[14];
+    char MT_GetPageMin_str[14];
+    char MT_CheckEditSw_str[16];
+    char MT_SetEditSwRect_str[18];
+    char MT_GetIndex_str[12];
+    char MT_CheckIndex_str[14];
+    char MT_SetMenuRect_str[16];
+    char MT_DrawSelected_str[16];
+    char MT_SetSelected_str[16];
+    char MT_GetTableString_str[18];
+    char MT_GetChildWindow_str[18];
+    char MT_GetParentWindow_str[20];
+    char MT_SetChildWindow_str[18];
+    char MT_SetParentWindow_str[20];
+    char MT_GetRamString_str[16];
+    char MT_GetRamSize_str[14];
+    char MT_GetRamAddress_str[18];
+    char MT_GetMin_str[10];
+    char MT_GetMax_str[10];
+    char MT_GetLswString_str[16];
+    char MT_GetLswOutput_str[16];
+    char MT_GetLswAddress_str[18];
+    char MT_GetSmallStep_str[16];
+    char MT_GetLargeStep_str[16];
+    char MT_CalcParam_str[14];
+    char MT_CheckSelected_str[18];
+    char MT_SetParam_str[12];
+    char MT_GetString_str[14];
+    char MT_GetPrevview_str[16];
+    char MT_GetNextview_str[16];
+    char MT_GetSubview_str[14];
+    char MT_GetSuperview_str[16];
+    char MT_GetTitleOld_str[16];
+    char MT_GetTitleNow_str[16];
+    char MT_GetStartScreen_str[18];
+    char MT_GetTitleProcID_str[18];
+    char MT_GetTitleProc_str[16];
+    char MT_GetUserID_str[14];
+    char MT_GetModeOld_str[14];
+    char MT_GetModeNow_str[14];
+    char MT_GetStartTitle_str[18];
+    char MT_GetModeProcID_str[18];
+    char MT_GetModeProc_str[16];
+    char MT_GetFunction_str[16];
+    char MT_MakeEditSwID_str[16];
+    char MT_MakeDump_str[12];
+    char MT_GetPropSize_str[16];
+    char MT_GetPropMember_str[18];
+    char MT_CheckPropString_str[20];
+    char MT_SearchClass_str[16];
+    char MT_AutoFree_str[12];
+    char MT_GetPropChar_str[16];
+    char MT_GetInstanceSize_str[20];
+    char MT_GetPropDataCount_str[20];
+    char MT_GetPropData_str[16];
+    char MT_SetProperty_str[16];
+    char MT_GetProperty_str[16];
+    char MT_DumpPointer_str[16];
+    char MT_DumpProperty_str[16];
+    char MT_CopyProperty_str[16];
+    char MT_GetPropString_str[18];
+    char MT_GetPropName_str[16];
+    char MT_GetPropCount_str[16];
+    char MT_SetName_str[12];
+    char MT_GetName_str[12];
+    char MT_CheckClass_str[14];
+    char MT_GetProcedure_str[16];
+    char MT_GetClassName_str[16];
+    char MT_GetParentClass_str[18];
+    char MT_GetClass_str[12];
+    char MT_GetInstance_str[16];
+    char MT_GetPropDataCountSp_str[22];
+    char MT_GetPropDataSp_str[18];
+    char MT_SetPropertyEx_str[18];
+    char MT_GetPropertyEx_str[18];
+    char MT_DumpPointerEx_str[18];
+    char MT_DumpPropertyEx_str[18];
+    char MT_CopyPropertyEx_str[18];
+    char MT_GetPropNameSp_str[18];
+    char MT_GetPropCountSp_str[18];
+    char MT_GetPropStringEx_str[20];
+    char MT_CheckClassSp_str[16];
+    char MT_GetInstanceSizeSp_str[22];
+    char MT_GetProcedureSp_str[18];
+    char MT_GetParentClassSp_str[20];
+    char MT_GetClassSp_str[14];
     uint16_t field_25fc;
     uint32_t ptrs_4[706];  /* 706 pointers */
     char w132_code[2];
     char w132_name[14];
-    char str_328[16];
-    char str_329[24];
+    char MainDeleteEvent_str[16];
+    char MainDeleteSpecificEvent_str[24];
     char w133_code[10];
     char w133_name[14];
-    char str_330[14];
-    char str_331[14];
-    char str_332[16];
+    char SetRootEvent_str[14];
+    char InitDrawTask_str[14];
+    char RefreshSwEvent_str[16];
     char w134_code[6];
     char w134_name[8];
-    char str_333[16];
-    char str_334[24];
-    char str_335[16];
-    char str_336[14];
-    char str_337[14];
-    char str_338[12];
-    char str_339[16];
-    char str_340[14];
-    char str_341[12];
-    char str_342[20];
+    char DrawBitmapFile_str[16];
+    char VwUserBitmapByNameProc_str[24];
+    char ApDeliveryEvent_str[16];
+    char RefreshApTask_str[14];
+    char WakeUpApTask_str[14];
+    char SleepApTask_str[12];
+    char WakeUpMainTask_str[16];
+    char SleepMainTask_str[14];
+    char DeleteEvent_str[12];
+    char DeleteSpecificEvent_str[20];
     char w135_code[10];
     char w135_name[18];
-    char str_343[14];
-    char str_344[14];
-    char str_345[16];
-    char str_346[14];
-    char str_347[16];
-    char str_348[18];
-    char str_349[18];
-    char str_350[14];
+    char SetWallColor_str[14];
+    char SetWallPaper_str[14];
+    char InitPaletteRGB_str[16];
+    char SetPaletteRGB_str[14];
+    char DrawBitmapFast_str[16];
+    char DrawBitmapSPFast_str[18];
+    char GetNamingWindowID_str[18];
+    char IvScreenProc_str[14];
     char w136_code[12];
     char w136_name[18];
-    char str_351[14];
-    char str_352[14];
-    char str_353[16];
-    char str_354[20];
-    char str_355[20];
-    char str_356[14];
-    char str_357[16];
-    char str_358[16];
-    char str_359[18];
-    char str_360[12];
-    char str_361[18];
-    char str_362[14];
-    char str_363[18];
-    char str_364[16];
-    char str_365[18];
-    char str_366[18];
-    char str_367[18];
-    char str_368[16];
-    char str_369[14];
-    char str_370[18];
-    char str_371[18];
-    char str_372[18];
-    char str_373[14];
-    char str_374[14];
-    char str_375[18];
-    char str_376[18];
-    char str_377[18];
-    char str_378[16];
-    char str_379[14];
-    char str_380[14];
-    char str_381[14];
-    char str_382[14];
-    char str_383[14];
-    char str_384[14];
-    char str_385[18];
-    char str_386[18];
-    char str_387[16];
-    char str_388[14];
-    char str_389[18];
-    char str_390[14];
-    char str_391[16];
-    char str_392[20];
-    char str_393[14];
-    char str_394[14];
-    char str_395[18];
-    char str_396[18];
-    char str_397[16];
+    char DrawBitmapSP_str[14];
+    char GetPartSelect_str[14];
+    char TrChordBoxProc_str[16];
+    char TrTransposeBoxProc_str[20];
+    char AcLanguageTextProc_str[20];
+    char PsTextBoxProc_str[14];
+    char IvShowHideProc_str[16];
+    char SetNotDrawFlag_str[16];
+    char ConvertStringsEx_str[18];
+    char SetVariFlag_str[12];
+    char IvIntEasySetProc_str[18];
+    char IvIntVariProc_str[14];
+    char IvIntCompleteProc_str[18];
+    char IvIntErrorProc_str[16];
+    char IvIntReminderProc_str[18];
+    char CheckNotDrawFlag_str[18];
+    char SetInterruptTime_str[18];
+    char IvInterruptProc_str[16];
+    char IntTimeIDProc_str[14];
+    char DbMemoryDumpProc_str[18];
+    char IvExitWindowProc_str[18];
+    char IvTrackSwitchProc_str[18];
+    char GetDirmdFlag_str[14];
+    char DirmdEmulator_str[14];
+    char IvDirmdScreenProc_str[18];
+    char AcTrackSwitchProc_str[18];
+    char PsTrackSwitchProc_str[18];
+    char DbDebugMenuProc_str[16];
+    char AcGridBoxProc_str[14];
+    char AcListBoxProc_str[14];
+    char PsGridBoxProc_str[14];
+    char PsListBoxProc_str[14];
+    char GetDialFocus_str[14];
+    char SetDialFocus_str[14];
+    char IvCatchEventProc_str[18];
+    char AcStrRadioBoxProc_str[18];
+    char PsRadioBoxProc_str[16];
+    char AcRamBoxProc_str[14];
+    char AcIndexToggleProc_str[18];
+    char IvNamingProc_str[14];
+    char PsCursorBoxProc_str[16];
+    char AcNamingWindowProc_str[20];
+    char IvFixWinProc_str[14];
+    char GetBoxCenter_str[14];
+    char DrawStringReverse_str[18];
+    char IvExitScreenProc_str[18];
+    char IvExitModeProc_str[16];
     char w137_code[12];
     char w137_name[14];
-    char str_398[14];
-    char str_399[16];
-    char str_400[14];
+    char GetFocusEvent_str[14];
+    char GetFocusObject_str[16];
+    char SetRootObject_str[14];
     char w138_code[12];
     char w138_name[18];
-    char str_401[14];
-    char str_402[14];
-    char str_403[14];
-    char str_404[12];
-    char str_405[14];
+    char GetRootParam_str[14];
+    char GetRootEvent_str[14];
+    char GetRootObject_str[14];
+    char KillApTimer_str[12];
+    char ResetApTimer_str[14];
     char w139_code[12];
     char w139_name[8];
-    char str_406[16];
+    char InitializeTimer_str[16];
     char w140_code[12];
     char w140_name[18];
-    char str_407[18];
+    char AcFuncToggleProc_str[18];
     char w141_code[12];
     char w141_name[12];
-    char str_408[18];
-    char str_409[16];
-    char str_410[14];
-    char str_411[16];
-    char str_412[16];
-    char str_413[18];
-    char str_414[16];
-    char str_415[18];
-    char str_416[18];
-    char str_417[12];
+    char AcBitEditBoxProc_str[18];
+    char VwEditSwBoxProc_str[16];
+    char VwMenuBoxProc_str[14];
+    char AcMixerVolProc_str[16];
+    char AcPmemNameProc_str[16];
+    char AcRhythmNameProc_str[18];
+    char AcSoundNameProc_str[16];
+    char GetWallPaletteRGB_str[18];
+    char ChangeWallPalette_str[18];
+    char SetDialDown_str[12];
     char w142_code[10];
     char w142_name[14];
-    char str_418[18];
-    char str_419[18];
-    char str_420[20];
-    char str_421[16];
-    char str_422[18];
-    char str_423[14];
-    char str_424[18];
-    char str_425[18];
-    char str_426[16];
-    char str_427[16];
-    char str_428[16];
-    char str_429[14];
-    char str_430[18];
-    char str_431[18];
-    char str_432[18];
-    char str_433[16];
-    char str_434[18];
-    char str_435[18];
-    char str_436[14];
-    char str_437[16];
-    char str_438[14];
-    char str_439[14];
+    char IvMainEditSwProc_str[18];
+    char IvPageControlProc_str[18];
+    char PsInvisibleBoxProc_str[20];
+    char PsToggleBoxProc_str[16];
+    char AcWindowPageProc_str[18];
+    char PsPageBoxProc_str[14];
+    char AcFuncEditSwProc_str[18];
+    char AcIndexEditSwProc_str[18];
+    char PsWideESBoxProc_str[16];
+    char PsEditSwBoxProc_str[16];
+    char AcTitleMenuProc_str[16];
+    char PsMenuBoxProc_str[14];
+    char AcRamEditBoxProc_str[18];
+    char AcLswEditBoxProc_str[18];
+    char AcNumEditBoxProc_str[18];
+    char AcOnOffBoxProc_str[16];
+    char PsTblEditBoxProc_str[18];
+    char PsNumEditBoxProc_str[18];
+    char PsEditBoxProc_str[14];
+    char AcTempoBoxProc_str[16];
+    char AcLswBoxProc_str[14];
+    char PsParaBoxProc_str[14];
     char w143_code[10];
     char w143_name[12];
     char w144_code[10];
     char w144_name[10];
     char w145_code[12];
     char w145_name[10];
-    char str_440[14];
+    char StringBoxProc_str[14];
     char w146_code[12];
     char w146_name[14];
-    char str_441[14];
-    char str_442[14];
+    char TitleEditProc_str[14];
+    char ModeEditProc_str[14];
     char w147_code[12];
     char w147_name[12];
     char w148_code[12];
     char w148_name[16];
-    char str_443[14];
-    char str_444[16];
+    char SetLswFilter_str[14];
+    char MainLswPartGet_str[16];
     char w149_code[12];
     char w149_name[16];
     char w150_code[12];
@@ -1125,25 +1125,25 @@ typedef struct __attribute__((packed)) {
     char w151_name[12];
     char w152_code[12];
     char w152_name[14];
-    char str_445[14];
-    char str_446[16];
-    char str_447[16];
-    char str_448[16];
+    char TtlScreenProc_str[14];
+    char DrawDesignFrame_str[16];
+    char GetClientFrame2_str[16];
+    char GetClientFrame_str[16];
     char w153_code[10];
     char w153_name[16];
     char w154_code[12];
     char w154_name[14];
-    char str_449[14];
-    char str_450[14];
-    char str_451[14];
-    char str_452[14];
-    char str_453[14];
+    char BoxLeftCheck_str[14];
+    char GetFrameColor_str[14];
+    char DrawDesignBox_str[14];
+    char GetClientBox2_str[14];
+    char GetClientBox_str[14];
     char w155_code[8];
     char w155_name[8];
     char w156_code[8];
     char w156_name[16];
-    char str_454[12];
-    char str_455[14];
+    char GetLinkView_str[12];
+    char SetSuperView_str[14];
     char w157_code[8];
     char w157_name[6];
     char w158_code[8];
@@ -1158,40 +1158,40 @@ typedef struct __attribute__((packed)) {
     char w162_name[10];
     char w163_code[10];
     char w163_name[10];
-    char str_456[14];
-    char str_457[12];
-    char str_458[12];
-    char str_459[18];
-    char str_460[14];
+    char ViewableProc_str[14];
+    char GetTitleOld_str[12];
+    char GetTitleNow_str[12];
+    char UnregisteredTitle_str[18];
+    char RegisterTitle_str[14];
     char w164_code[10];
     char w164_name[12];
     char w165_code[12];
     char w165_name[18];
-    char str_461[14];
+    char RegisterMode_str[14];
     char w166_code[10];
     char w166_name[14];
     char w167_code[12];
     char w167_name[18];
-    char str_462[16];
-    char str_463[14];
-    char str_464[12];
+    char ApFunctionProc_str[16];
+    char FunctionProc_str[14];
+    char TrackIDProc_str[12];
     char w168_code[12];
     char w168_name[12];
-    char str_465[16];
-    char str_466[14];
-    char str_467[14];
-    char str_468[12];
-    char str_469[16];
-    char str_470[18];
-    char str_471[14];
-    char str_472[16];
+    char MainFuncIDProc_str[16];
+    char ApFuncIDProc_str[14];
+    char BitmapIDProc_str[14];
+    char FrameIDProc_str[12];
+    char LineModeIDProc_str[16];
+    char EditSwStyleIDProc_str[18];
+    char EditSwIDProc_str[14];
+    char AlignmentIDProc_str[16];
     char w169_code[12];
     char w169_name[12];
-    char str_473[12];
+    char TitleIDProc_str[12];
     char w170_code[12];
     char w170_name[14];
-    char str_474[12];
-    char str_475[14];
+    char ColorIDProc_str[12];
+    char ViewFlagProc_str[14];
     char w171_code[12];
     char w171_name[14];
     char w172_code[10];
@@ -1202,302 +1202,302 @@ typedef struct __attribute__((packed)) {
     char w174_name[12];
     char w175_code[12];
     char w175_name[12];
-    char str_476[12];
+    char RectX1Proc_str[12];
     char w176_code[10];
     char w176_name[12];
-    char str_477[14];
-    char str_478[14];
-    char str_479[12];
-    char str_480[12];
-    char str_481[10];
-    char str_482[10];
+    char WindowIDProc_str[14];
+    char ScreenIDProc_str[14];
+    char ClassIDProc_str[12];
+    char pStringProc_str[12];
+    char pPropProc_str[10];
+    char pProcProc_str[10];
     char w177_code[10];
     char w177_name[14];
-    char str_483[12];
-    char str_484[12];
-    char str_485[12];
-    char str_486[12];
-    char str_487[12];
-    char str_488[12];
-    char str_489[10];
-    char str_490[10];
-    char str_491[10];
-    char str_492[10];
-    char str_493[10];
-    char str_494[10];
-    char str_495[10];
+    char pUlongProc_str[12];
+    char pSlongProc_str[12];
+    char pUcharProc_str[12];
+    char pScharProc_str[12];
+    char pUwordProc_str[12];
+    char pSwordProc_str[12];
+    char pBoolProc_str[10];
+    char boolProc_str[10];
+    char ulongProc_str[10];
+    char slongProc_str[10];
+    char scharProc_str[10];
+    char ucharProc_str[10];
+    char uwordProc_str[10];
     char w178_code[10];
     char w178_name[18];
     char w179_code[10];
     char w179_name[16];
-    char str_496[16];
-    char str_497[16];
-    char str_498[18];
-    char str_499[16];
-    char str_500[14];
-    char str_501[16];
-    char str_502[12];
-    char str_503[14];
-    char str_504[14];
-    char str_505[14];
-    char str_506[12];
-    char str_507[12];
-    char str_508[14];
-    char str_509[14];
-    char str_510[14];
-    char str_511[12];
-    char str_512[14];
-    char str_513[14];
-    char str_514[14];
-    char str_515[18];
-    char str_516[18];
-    char str_517[18];
+    char CalcTotalWidth_str[16];
+    char ConvertStrings_str[16];
+    char GetCenteredDelta_str[18];
+    char GetCharDescent_str[16];
+    char GetCharHeight_str[14];
+    char GetFrameSPSize_str[16];
+    char ResNameProc_str[12];
+    char ResStringProc_str[14];
+    char ResMethodProc_str[14];
+    char ResEventProc_str[14];
+    char ResFontProc_str[12];
+    char ResIconProc_str[12];
+    char ResFrameProc_str[14];
+    char ResBitmapProc_str[14];
+    char ResourceProc_str[14];
+    char ApPostEvent_str[12];
+    char MainGetEvent_str[14];
+    char MainPostEvent_str[14];
+    char MainSendEvent_str[14];
+    char MainDispatchEvent_str[18];
+    char SetCurrentTarget_str[18];
+    char GetCurrentTarget_str[18];
     char w180_code[10];
     char w180_name[10];
     char w181_code[10];
     char w181_name[14];
-    char str_518[22];
-    char str_519[16];
-    char str_520[12];
-    char str_521[18];
-    char str_522[16];
-    char str_523[20];
-    char str_524[22];
-    char str_525[14];
+    char InitializeEventQueue_str[22];
+    char CheckViewObject_str[16];
+    char CountObject_str[12];
+    char UnRegisterObject_str[18];
+    char RegisterObject_str[16];
+    char RegisterObjectTable_str[20];
+    char InitializeObjectTable_str[22];
+    char InheritedProc_str[14];
     char w182_code[12];
     char w182_name[20];
-    char str_526[24];
-    char str_527[22];
-    char str_528[20];
+    char DrawStringRightJustify_str[24];
+    char DrawStringLeftJustify_str[22];
+    char DrawStringCentered_str[20];
     char w183_code[12];
     char w183_name[12];
     char w184_code[10];
     char w184_name[12];
     char w185_code[10];
     char w185_name[12];
-    char str_529[12];
+    char DrawFrameEx_str[12];
     char w186_code[10];
     char w186_name[8];
     char w187_code[12];
     char w187_name[10];
-    char str_530[14];
-    char str_531[12];
+    char ModifyPixelEx_str[14];
+    char ModifyPixel_str[12];
     char w188_code[10];
     char w188_name[14];
-    char str_532[14];
-    char str_533[14];
-    char str_534[20];
-    char str_535[18];
-    char str_536[18];
-    char str_537[18];
-    char str_538[18];
-    char str_539[18];
-    char str_540[18];
-    char str_541[18];
-    char str_542[18];
-    char str_543[18];
-    char str_544[18];
-    char str_545[18];
-    char str_546[18];
-    char str_547[18];
-    char str_548[18];
-    char str_549[18];
-    char str_550[18];
-    char str_551[18];
-    char str_552[18];
-    char str_553[18];
-    char str_554[18];
-    char str_555[16];
-    char str_556[14];
-    char str_557[16];
-    char str_558[16];
-    char str_559[16];
-    char str_560[16];
-    char str_561[16];
-    char str_562[16];
-    char str_563[16];
-    char str_564[16];
-    char str_565[16];
-    char str_566[16];
+    char SetNeedUpdate_str[14];
+    char UpdateScreen_str[14];
+    char InitializeGraphics_str[20];
+    char InitializeUser31_str[18];
+    char InitializeUser30_str[18];
+    char InitializeUser29_str[18];
+    char InitializeUser28_str[18];
+    char InitializeUser27_str[18];
+    char InitializeUser26_str[18];
+    char InitializeUser25_str[18];
+    char InitializeUser24_str[18];
+    char InitializeUser23_str[18];
+    char InitializeUser22_str[18];
+    char InitializeUser21_str[18];
+    char InitializeUser20_str[18];
+    char InitializeUser19_str[18];
+    char InitializeUser18_str[18];
+    char InitializeUser17_str[18];
+    char InitializeUser16_str[18];
+    char InitializeUser15_str[18];
+    char InitializeUser14_str[18];
+    char InitializeUser13_str[18];
+    char InitializeUser12_str[18];
+    char InitializeNaka_str[16];
+    char InitializeKSS_str[14];
+    char InitializeHama_str[16];
+    char InitializeKubo_str[16];
+    char InitializeYoko_str[16];
+    char InitializeScoop_str[16];
+    char InitializeCheap_str[16];
+    char InitializeSuna_str[16];
+    char InitializeEast_str[16];
+    char InitializeToshi_str[16];
+    char InitializeMurai_str[16];
+    char InitializeRoot_str[16];
     uint16_t field_44ca;
     uint32_t ptrs_5[256];  /* 256 pointers */
     char str_567[2];
-    char str_568[6];
-    char str_569[6];
-    char str_570[6];
-    char str_571[6];
-    char str_572[6];
-    char str_573[6];
-    char str_574[6];
-    char str_575[6];
-    char str_576[6];
-    char str_577[6];
-    char str_578[6];
-    char str_579[6];
-    char str_580[6];
-    char str_581[6];
-    char str_582[6];
-    char str_583[6];
-    char str_584[6];
-    char str_585[6];
-    char str_586[6];
-    char str_587[6];
-    char str_588[6];
-    char str_589[6];
-    char str_590[6];
-    char str_591[6];
-    char str_592[6];
-    char str_593[6];
-    char str_594[6];
-    char str_595[6];
-    char str_596[6];
-    char str_597[6];
-    char str_598[6];
-    char str_599[6];
-    char str_600[6];
-    char str_601[6];
-    char str_602[6];
-    char str_603[6];
-    char str_604[6];
-    char str_605[6];
-    char str_606[6];
-    char str_607[6];
-    char str_608[6];
-    char str_609[6];
-    char str_610[6];
-    char str_611[6];
-    char str_612[6];
-    char str_613[6];
-    char str_614[6];
-    char str_615[6];
-    char str_616[6];
-    char str_617[6];
-    char str_618[6];
-    char str_619[6];
-    char str_620[6];
-    char str_621[6];
-    char str_622[6];
-    char str_623[6];
-    char str_624[6];
-    char str_625[6];
-    char str_626[6];
-    char str_627[6];
-    char str_628[6];
-    char str_629[6];
-    char str_630[6];
-    char str_631[6];
-    char str_632[6];
-    char str_633[6];
-    char str_634[6];
-    char str_635[6];
-    char str_636[6];
-    char str_637[6];
-    char str_638[6];
-    char str_639[6];
-    char str_640[6];
-    char str_641[6];
-    char str_642[4];
-    char str_643[4];
-    char str_644[4];
-    char str_645[4];
-    char str_646[4];
-    char str_647[4];
-    char str_648[4];
-    char str_649[4];
-    char str_650[4];
-    char str_651[4];
-    char str_652[4];
-    char str_653[4];
-    char str_654[4];
-    char str_655[4];
-    char str_656[4];
-    char str_657[4];
-    char str_658[4];
-    char str_659[4];
-    char str_660[4];
-    char str_661[4];
-    char str_662[4];
-    char str_663[4];
-    char str_664[4];
-    char str_665[4];
-    char str_666[4];
-    char str_667[4];
-    char str_668[4];
-    char str_669[4];
-    char str_670[4];
-    char str_671[4];
-    char str_672[4];
-    char str_673[4];
-    char str_674[4];
-    char str_675[4];
-    char str_676[4];
-    char str_677[4];
-    char str_678[4];
-    char str_679[4];
-    char str_680[4];
-    char str_681[4];
-    char str_682[4];
-    char str_683[4];
-    char str_684[4];
-    char str_685[4];
-    char str_686[4];
-    char str_687[4];
-    char str_688[4];
-    char str_689[4];
-    char str_690[4];
-    char str_691[4];
-    char str_692[4];
-    char str_693[4];
-    char str_694[4];
-    char str_695[4];
-    char str_696[4];
-    char str_697[4];
-    char str_698[4];
-    char str_699[4];
-    char str_700[4];
-    char str_701[4];
-    char str_702[4];
-    char str_703[4];
-    char str_704[4];
-    char str_705[4];
-    char str_706[4];
-    char str_707[4];
-    char str_708[4];
-    char str_709[4];
-    char str_710[4];
-    char str_711[4];
-    char str_712[4];
-    char str_713[4];
-    char str_714[4];
-    char str_715[4];
-    char str_716[4];
-    char str_717[4];
-    char str_718[4];
-    char str_719[4];
-    char str_720[4];
-    char str_721[4];
-    char str_722[4];
-    char str_723[4];
-    char str_724[4];
-    char str_725[4];
-    char str_726[4];
-    char str_727[4];
-    char str_728[4];
-    char str_729[4];
-    char str_730[4];
-    char str_731[4];
-    char str_732[4];
-    char str_733[4];
-    char str_734[4];
-    char str_735[4];
-    char str_736[4];
-    char str_737[4];
-    char str_738[4];
-    char str_739[4];
-    char str_740[4];
+    char i173_str[6];
+    char i172_str[6];
+    char i171_str[6];
+    char i170_str[6];
+    char i169_str[6];
+    char i168_str[6];
+    char i167_str[6];
+    char i166_str[6];
+    char i165_str[6];
+    char i164_str[6];
+    char i163_str[6];
+    char i162_str[6];
+    char i161_str[6];
+    char i160_str[6];
+    char i159_str[6];
+    char i158_str[6];
+    char i157_str[6];
+    char i156_str[6];
+    char i155_str[6];
+    char i154_str[6];
+    char i153_str[6];
+    char i152_str[6];
+    char i151_str[6];
+    char i150_str[6];
+    char i149_str[6];
+    char i148_str[6];
+    char i147_str[6];
+    char i146_str[6];
+    char i145_str[6];
+    char i144_str[6];
+    char i143_str[6];
+    char i142_str[6];
+    char i141_str[6];
+    char i140_str[6];
+    char i139_str[6];
+    char i138_str[6];
+    char i137_str[6];
+    char i136_str[6];
+    char i135_str[6];
+    char i134_str[6];
+    char i133_str[6];
+    char i132_str[6];
+    char i131_str[6];
+    char i130_str[6];
+    char i129_str[6];
+    char i128_str[6];
+    char i127_str[6];
+    char i126_str[6];
+    char i125_str[6];
+    char i124_str[6];
+    char i123_str[6];
+    char i122_str[6];
+    char i121_str[6];
+    char i120_str[6];
+    char i119_str[6];
+    char i118_str[6];
+    char i117_str[6];
+    char i116_str[6];
+    char i115_str[6];
+    char i114_str[6];
+    char i113_str[6];
+    char i112_str[6];
+    char i111_str[6];
+    char i110_str[6];
+    char i109_str[6];
+    char i108_str[6];
+    char i107_str[6];
+    char i106_str[6];
+    char i105_str[6];
+    char i104_str[6];
+    char i103_str[6];
+    char i102_str[6];
+    char i101_str[6];
+    char i100_str[6];
+    char i99_str[4];
+    char i98_str[4];
+    char i97_str[4];
+    char i96_str[4];
+    char i95_str[4];
+    char i94_str[4];
+    char i93_str[4];
+    char i92_str[4];
+    char i91_str[4];
+    char i90_str[4];
+    char i89_str[4];
+    char i88_str[4];
+    char i87_str[4];
+    char i86_str[4];
+    char i85_str[4];
+    char i84_str[4];
+    char i83_str[4];
+    char i82_str[4];
+    char i81_str[4];
+    char i80_str[4];
+    char i79_str[4];
+    char i78_str[4];
+    char i77_str[4];
+    char i76_str[4];
+    char i75_str[4];
+    char i74_str[4];
+    char i73_str[4];
+    char i72_str[4];
+    char i71_str[4];
+    char i70_str[4];
+    char i69_str[4];
+    char i68_str[4];
+    char i67_str[4];
+    char i66_str[4];
+    char i65_str[4];
+    char i64_str[4];
+    char i63_str[4];
+    char i62_str[4];
+    char i61_str[4];
+    char i60_str[4];
+    char i59_str[4];
+    char i58_str[4];
+    char i57_str[4];
+    char i56_str[4];
+    char i55_str[4];
+    char i54_str[4];
+    char i53_str[4];
+    char i52_str[4];
+    char i51_str[4];
+    char i50_str[4];
+    char i49_str[4];
+    char i48_str[4];
+    char i47_str[4];
+    char i46_str[4];
+    char i45_str[4];
+    char i44_str[4];
+    char i43_str[4];
+    char i42_str[4];
+    char i41_str[4];
+    char i40_str[4];
+    char i39_str[4];
+    char i38_str[4];
+    char i37_str[4];
+    char i36_str[4];
+    char i35_str[4];
+    char i34_str[4];
+    char i33_str[4];
+    char i32_str[4];
+    char i31_str[4];
+    char i30_str[4];
+    char i29_str[4];
+    char i28_str[4];
+    char i27_str[4];
+    char i26_str[4];
+    char i25_str[4];
+    char i24_str[4];
+    char i23_str[4];
+    char i22_str[4];
+    char i21_str[4];
+    char i20_str[4];
+    char i19_str[4];
+    char i18_str[4];
+    char i17_str[4];
+    char i16_str[4];
+    char i15_str[4];
+    char i14_str[4];
+    char i13_str[4];
+    char i12_str[4];
+    char i11_str[4];
+    char i10_str[4];
+    char i9_str[4];
+    char i8_str[4];
+    char i7_str[4];
+    char i6_str[4];
+    char i5_str[4];
+    char i4_str[4];
+    char i3_str[4];
+    char i2_str[4];
+    char i1_str[4];
     char w189_code[4];
     char w189_name[8];
-    char str_741[6];
+    char None_str[6];
     uint32_t ptrs_6[256];  /* 256 pointers */
     char str_742[2];
     char str_743[10];
@@ -1692,7 +1692,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_5682;
     char str_920[2];
     uint16_t field_5686;
-    char str_921[2];
+    char N_str[2];
     uint16_t field_568a;
     uint8_t pad_2[2];  /* zero padding */
 } naka_widget_names_charmap_t;
@@ -1792,7 +1792,7 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .str_0 = "c^dBBGnnsss",
 
-    .str_1 = "PsGridBox",
+    .PsGridBox_str = "PsGridBox",
 
     .w21_code = "c^dBn",
 
@@ -1932,7 +1932,7 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .str_2 = ALIGNED_STRING("^_"),
 
-    .str_3 = "Box",
+    .Box_str = "Box",
 
     .w55_code = "ejA",
 
@@ -2060,11 +2060,11 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .str_4 = "^_A",
 
-    .str_5 = "VwBox",
+    .VwBox_str = "VwBox",
 
     .str_6 = "M[[[[]P",
 
-    .str_7 = ALIGNED_STRING("Viewable"),
+    .Viewable_str = ALIGNED_STRING("Viewable"),
 
     .w86_code = "X",
 
@@ -2106,13 +2106,13 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .w95_name = ALIGNED_STRING("Mode"),
 
-    .str_8 = ALIGNED_STRING("JBBK"),
+    .JBBK_str = ALIGNED_STRING("JBBK"),
 
-    .str_9 = ALIGNED_STRING("SupportClass"),
+    .SupportClass_str = ALIGNED_STRING("SupportClass"),
 
-    .str_10 = "JMBBXXL",
+    .JMBBXXL_str = "JMBBXXL",
 
-    .str_11 = "Class",
+    .Class_str = "Class",
 
     .w96_code = ALIGNED_STRING(""),
 
@@ -2130,31 +2130,31 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .w99_name = ALIGNED_STRING("Object"),
 
-    .str_12 = "m",
+    .m_str = "m",
 
     .field_0624 = 0x000A,
 
     .str_13 = ALIGNED_STRING(""),
 
-    .str_14 = "CHARA5W",
+    .CHARA5W_str = "CHARA5W",
 
-    .str_15 = "CHARA2W",
+    .CHARA2W_str = "CHARA2W",
 
-    .str_16 = "CHARA1W",
+    .CHARA1W_str = "CHARA1W",
 
-    .str_17 = ALIGNED_STRING("CHARA6"),
+    .CHARA6_str = ALIGNED_STRING("CHARA6"),
 
-    .str_18 = "CHARA1P",
+    .CHARA1P_str = "CHARA1P",
 
-    .str_19 = ALIGNED_STRING("CHARA5"),
+    .CHARA5_str = ALIGNED_STRING("CHARA5"),
 
-    .str_20 = ALIGNED_STRING("CHARA4"),
+    .CHARA4_str = ALIGNED_STRING("CHARA4"),
 
-    .str_21 = ALIGNED_STRING("CHARA3"),
+    .CHARA3_str = ALIGNED_STRING("CHARA3"),
 
-    .str_22 = ALIGNED_STRING("CHARA2"),
+    .CHARA2_str = ALIGNED_STRING("CHARA2"),
 
-    .str_23 = ALIGNED_STRING("CHARA1"),
+    .CHARA1_str = ALIGNED_STRING("CHARA1"),
 
     .str_24 = ALIGNED_STRING(""),
 
@@ -2179,7 +2179,7 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
     .str_34 = ALIGNED_STRING("chara1.fnt"),
 
     .ptrs_0 = {
-        SELF(str_44),
+        SELF(Round1a_str),
         SELF(w121_name),
         SELF(w121_code),
         SELF(w120_name),
@@ -2210,15 +2210,15 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
         SELF(w108_code),
         SELF(w107_name),
         SELF(w107_code),
-        SELF(str_43),
-        SELF(str_42),
-        SELF(str_41),
-        SELF(str_40),
-        SELF(str_39),
-        SELF(str_38),
-        SELF(str_37),
-        SELF(str_36),
-        SELF(str_35),
+        SELF(LOnOff24_str),
+        SELF(LOnOff32_str),
+        SELF(LOnOff48_str),
+        SELF(ROnOff16_str),
+        SELF(ROnOff24_str),
+        SELF(ROnOff32_str),
+        SELF(ROnOff48_str),
+        SELF(LeftSwitch_str),
+        SELF(RightSwitch_str),
         SELF(w106_name),
         SELF(w106_code),
         SELF(w105_name),
@@ -2465,23 +2465,23 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .w106_name = "EditA",
 
-    .str_35 = "RightSwitch",
+    .RightSwitch_str = "RightSwitch",
 
-    .str_36 = ALIGNED_STRING("LeftSwitch"),
+    .LeftSwitch_str = ALIGNED_STRING("LeftSwitch"),
 
-    .str_37 = ALIGNED_STRING("ROnOff48"),
+    .ROnOff48_str = ALIGNED_STRING("ROnOff48"),
 
-    .str_38 = ALIGNED_STRING("ROnOff32"),
+    .ROnOff32_str = ALIGNED_STRING("ROnOff32"),
 
-    .str_39 = ALIGNED_STRING("ROnOff24"),
+    .ROnOff24_str = ALIGNED_STRING("ROnOff24"),
 
-    .str_40 = ALIGNED_STRING("ROnOff16"),
+    .ROnOff16_str = ALIGNED_STRING("ROnOff16"),
 
-    .str_41 = ALIGNED_STRING("LOnOff48"),
+    .LOnOff48_str = ALIGNED_STRING("LOnOff48"),
 
-    .str_42 = ALIGNED_STRING("LOnOff32"),
+    .LOnOff32_str = ALIGNED_STRING("LOnOff32"),
 
-    .str_43 = ALIGNED_STRING("LOnOff24"),
+    .LOnOff24_str = ALIGNED_STRING("LOnOff24"),
 
     .w107_code = ALIGNED_STRING("LOnOff16"),
 
@@ -2543,7 +2543,7 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .w121_name = "Round1b",
 
-    .str_44 = "Round1a",
+    .Round1a_str = "Round1a",
 
     .ptrs_1 = {
         SELF(w131_name),
@@ -2913,758 +2913,758 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
     .w131_name = ALIGNED_STRING("Round1.bmp"),
 
     .ptrs_2 = {
-        SELF(str_138),
-        SELF(str_137),
-        SELF(str_136),
-        SELF(str_135),
-        SELF(str_134),
-        SELF(str_133),
-        SELF(str_132),
-        SELF(str_131),
-        SELF(str_130),
-        SELF(str_129),
-        SELF(str_128),
-        SELF(str_127),
-        SELF(str_126),
-        SELF(str_125),
-        SELF(str_124),
-        SELF(str_123),
-        SELF(str_122),
-        SELF(str_121),
-        SELF(str_120),
-        SELF(str_119),
-        SELF(str_118),
-        SELF(str_117),
-        SELF(str_116),
-        SELF(str_115),
-        SELF(str_114),
-        SELF(str_113),
-        SELF(str_112),
-        SELF(str_111),
-        SELF(str_110),
-        SELF(str_109),
-        SELF(str_108),
-        SELF(str_107),
-        SELF(str_106),
-        SELF(str_105),
-        SELF(str_104),
-        SELF(str_103),
-        SELF(str_102),
-        SELF(str_101),
-        SELF(str_100),
-        SELF(str_99),
-        SELF(str_98),
-        SELF(str_97),
-        SELF(str_96),
-        SELF(str_95),
-        SELF(str_94),
-        SELF(str_93),
-        SELF(str_92),
-        SELF(str_91),
-        SELF(str_90),
-        SELF(str_89),
-        SELF(str_88),
-        SELF(str_87),
-        SELF(str_86),
-        SELF(str_85),
-        SELF(str_84),
-        SELF(str_83),
-        SELF(str_82),
-        SELF(str_81),
-        SELF(str_80),
-        SELF(str_79),
+        SELF(EV_NONE_str),
+        SELF(EV_SHOW_str),
+        SELF(EV_HIDE_str),
+        SELF(EV_INIT_str),
+        SELF(EV_MOVE_str),
+        SELF(EV_RESIZE_str),
+        SELF(EV_ACTION_str),
+        SELF(EV_SWIN_str),
+        SELF(EV_SWON_str),
+        SELF(EV_SWOFF_str),
+        SELF(EV_ALLPAINT_str),
+        SELF(EV_PAINT_str),
+        SELF(EV_REPAINT_str),
+        SELF(EV_DRAW_str),
+        SELF(EV_SELEDRAW_str),
+        SELF(EV_PARADRAW_str),
+        SELF(EV_RESET_str),
+        SELF(EV_CHANGEPROPERTY_str),
+        SELF(EV_TIMER_str),
+        SELF(EV_ACTIVATE_str),
+        SELF(EV_CHANGE_MODE_str),
+        SELF(EV_CHANGE_TITLE_str),
+        SELF(EV_INTERRUPT_TITLE_str),
+        SELF(EV_INDEXSW_UP_str),
+        SELF(EV_INDEXSW_DOWN_str),
+        SELF(EV_INDEXSW_UP_AIC_str),
+        SELF(EV_INDEXSW_DOWN_AIC_str),
+        SELF(EV_INDEXSELECT_str),
+        SELF(EV_LSWDATA_str),
+        SELF(EV_RAMDATA_str),
+        SELF(EV_PAGECHANGE_str),
+        SELF(EV_DIAL_str),
+        SELF(EV_SOUNDNAME_str),
+        SELF(EV_RHYTHMNAME_str),
+        SELF(EV_PMEMNAME_str),
+        SELF(EV_SOUNDSWNO_str),
+        SELF(EV_BITDATA_str),
+        SELF(EV_MEMODRAW_str),
+        SELF(EV_AUTOINC_str),
+        SELF(EV_SWIN_AIC_str),
+        SELF(EV_RETURN_TITLE_str),
+        SELF(EV_IAMSELECTED_str),
+        SELF(EV_YOUARESELECTED_str),
+        SELF(EV_SENDSWIN_str),
+        SELF(EV_CHANGEDIALFOCUS_str),
+        SELF(EV_TRSWPART_str),
+        SELF(EV_TRSWCOMMAND_str),
+        SELF(EV_PARTSELECT_str),
+        SELF(EV_SWBOTH_str),
+        SELF(EV_INDEXSW_BOTH_str),
+        SELF(EV_SENDSWON_str),
+        SELF(EV_SENDSWOFF_str),
+        SELF(EV_SENDSWBOTH_str),
+        SELF(EV_PAGEINIT_str),
+        SELF(EV_UPDATESCREEN_str),
+        SELF(EV_DELIVERYEVENT_str),
+        SELF(EV_ASSSWB_str),
+        SELF(EV_NEW_TITLE_str),
+        SELF(EV_OLD_TITLE_str),
+        SELF(EV_SWIN_MODE_str),
         0x00000000,
     },
 
-    .str_79 = ALIGNED_STRING("EV_SWIN_MODE"),
+    .EV_SWIN_MODE_str = ALIGNED_STRING("EV_SWIN_MODE"),
 
-    .str_80 = ALIGNED_STRING("EV_OLD_TITLE"),
+    .EV_OLD_TITLE_str = ALIGNED_STRING("EV_OLD_TITLE"),
 
-    .str_81 = ALIGNED_STRING("EV_NEW_TITLE"),
+    .EV_NEW_TITLE_str = ALIGNED_STRING("EV_NEW_TITLE"),
 
-    .str_82 = "EV_ASSSWB",
+    .EV_ASSSWB_str = "EV_ASSSWB",
 
-    .str_83 = ALIGNED_STRING("EV_DELIVERYEVENT"),
+    .EV_DELIVERYEVENT_str = ALIGNED_STRING("EV_DELIVERYEVENT"),
 
-    .str_84 = "EV_UPDATESCREEN",
+    .EV_UPDATESCREEN_str = "EV_UPDATESCREEN",
 
-    .str_85 = "EV_PAGEINIT",
+    .EV_PAGEINIT_str = "EV_PAGEINIT",
 
-    .str_86 = "EV_SENDSWBOTH",
+    .EV_SENDSWBOTH_str = "EV_SENDSWBOTH",
 
-    .str_87 = ALIGNED_STRING("EV_SENDSWOFF"),
+    .EV_SENDSWOFF_str = ALIGNED_STRING("EV_SENDSWOFF"),
 
-    .str_88 = "EV_SENDSWON",
+    .EV_SENDSWON_str = "EV_SENDSWON",
 
-    .str_89 = "EV_INDEXSW_BOTH",
+    .EV_INDEXSW_BOTH_str = "EV_INDEXSW_BOTH",
 
-    .str_90 = "EV_SWBOTH",
+    .EV_SWBOTH_str = "EV_SWBOTH",
 
-    .str_91 = "EV_PARTSELECT",
+    .EV_PARTSELECT_str = "EV_PARTSELECT",
 
-    .str_92 = ALIGNED_STRING("EV_TRSWCOMMAND"),
+    .EV_TRSWCOMMAND_str = ALIGNED_STRING("EV_TRSWCOMMAND"),
 
-    .str_93 = "EV_TRSWPART",
+    .EV_TRSWPART_str = "EV_TRSWPART",
 
-    .str_94 = ALIGNED_STRING("EV_CHANGEDIALFOCUS"),
+    .EV_CHANGEDIALFOCUS_str = ALIGNED_STRING("EV_CHANGEDIALFOCUS"),
 
-    .str_95 = "EV_SENDSWIN",
+    .EV_SENDSWIN_str = "EV_SENDSWIN",
 
-    .str_96 = "EV_YOUARESELECTED",
+    .EV_YOUARESELECTED_str = "EV_YOUARESELECTED",
 
-    .str_97 = ALIGNED_STRING("EV_IAMSELECTED"),
+    .EV_IAMSELECTED_str = ALIGNED_STRING("EV_IAMSELECTED"),
 
-    .str_98 = "EV_RETURN_TITLE",
+    .EV_RETURN_TITLE_str = "EV_RETURN_TITLE",
 
-    .str_99 = "EV_SWIN_AIC",
+    .EV_SWIN_AIC_str = "EV_SWIN_AIC",
 
-    .str_100 = ALIGNED_STRING("EV_AUTOINC"),
+    .EV_AUTOINC_str = ALIGNED_STRING("EV_AUTOINC"),
 
-    .str_101 = "EV_MEMODRAW",
+    .EV_MEMODRAW_str = "EV_MEMODRAW",
 
-    .str_102 = ALIGNED_STRING("EV_BITDATA"),
+    .EV_BITDATA_str = ALIGNED_STRING("EV_BITDATA"),
 
-    .str_103 = ALIGNED_STRING("EV_SOUNDSWNO"),
+    .EV_SOUNDSWNO_str = ALIGNED_STRING("EV_SOUNDSWNO"),
 
-    .str_104 = "EV_PMEMNAME",
+    .EV_PMEMNAME_str = "EV_PMEMNAME",
 
-    .str_105 = "EV_RHYTHMNAME",
+    .EV_RHYTHMNAME_str = "EV_RHYTHMNAME",
 
-    .str_106 = ALIGNED_STRING("EV_SOUNDNAME"),
+    .EV_SOUNDNAME_str = ALIGNED_STRING("EV_SOUNDNAME"),
 
-    .str_107 = "EV_DIAL",
+    .EV_DIAL_str = "EV_DIAL",
 
-    .str_108 = "EV_PAGECHANGE",
+    .EV_PAGECHANGE_str = "EV_PAGECHANGE",
 
-    .str_109 = ALIGNED_STRING("EV_RAMDATA"),
+    .EV_RAMDATA_str = ALIGNED_STRING("EV_RAMDATA"),
 
-    .str_110 = ALIGNED_STRING("EV_LSWDATA"),
+    .EV_LSWDATA_str = ALIGNED_STRING("EV_LSWDATA"),
 
-    .str_111 = ALIGNED_STRING("EV_INDEXSELECT"),
+    .EV_INDEXSELECT_str = ALIGNED_STRING("EV_INDEXSELECT"),
 
-    .str_112 = "EV_INDEXSW_DOWN_AIC",
+    .EV_INDEXSW_DOWN_AIC_str = "EV_INDEXSW_DOWN_AIC",
 
-    .str_113 = "EV_INDEXSW_UP_AIC",
+    .EV_INDEXSW_UP_AIC_str = "EV_INDEXSW_UP_AIC",
 
-    .str_114 = "EV_INDEXSW_DOWN",
+    .EV_INDEXSW_DOWN_str = "EV_INDEXSW_DOWN",
 
-    .str_115 = "EV_INDEXSW_UP",
+    .EV_INDEXSW_UP_str = "EV_INDEXSW_UP",
 
-    .str_116 = ALIGNED_STRING("EV_INTERRUPT_TITLE"),
+    .EV_INTERRUPT_TITLE_str = ALIGNED_STRING("EV_INTERRUPT_TITLE"),
 
-    .str_117 = "EV_CHANGE_TITLE",
+    .EV_CHANGE_TITLE_str = "EV_CHANGE_TITLE",
 
-    .str_118 = ALIGNED_STRING("EV_CHANGE_MODE"),
+    .EV_CHANGE_MODE_str = ALIGNED_STRING("EV_CHANGE_MODE"),
 
-    .str_119 = "EV_ACTIVATE",
+    .EV_ACTIVATE_str = "EV_ACTIVATE",
 
-    .str_120 = ALIGNED_STRING("EV_TIMER"),
+    .EV_TIMER_str = ALIGNED_STRING("EV_TIMER"),
 
-    .str_121 = "EV_CHANGEPROPERTY",
+    .EV_CHANGEPROPERTY_str = "EV_CHANGEPROPERTY",
 
-    .str_122 = ALIGNED_STRING("EV_RESET"),
+    .EV_RESET_str = ALIGNED_STRING("EV_RESET"),
 
-    .str_123 = "EV_PARADRAW",
+    .EV_PARADRAW_str = "EV_PARADRAW",
 
-    .str_124 = "EV_SELEDRAW",
+    .EV_SELEDRAW_str = "EV_SELEDRAW",
 
-    .str_125 = "EV_DRAW",
+    .EV_DRAW_str = "EV_DRAW",
 
-    .str_126 = ALIGNED_STRING("EV_REPAINT"),
+    .EV_REPAINT_str = ALIGNED_STRING("EV_REPAINT"),
 
-    .str_127 = ALIGNED_STRING("EV_PAINT"),
+    .EV_PAINT_str = ALIGNED_STRING("EV_PAINT"),
 
-    .str_128 = "EV_ALLPAINT",
+    .EV_ALLPAINT_str = "EV_ALLPAINT",
 
-    .str_129 = ALIGNED_STRING("EV_SWOFF"),
+    .EV_SWOFF_str = ALIGNED_STRING("EV_SWOFF"),
 
-    .str_130 = "EV_SWON",
+    .EV_SWON_str = "EV_SWON",
 
-    .str_131 = "EV_SWIN",
+    .EV_SWIN_str = "EV_SWIN",
 
-    .str_132 = "EV_ACTION",
+    .EV_ACTION_str = "EV_ACTION",
 
-    .str_133 = "EV_RESIZE",
+    .EV_RESIZE_str = "EV_RESIZE",
 
-    .str_134 = "EV_MOVE",
+    .EV_MOVE_str = "EV_MOVE",
 
-    .str_135 = "EV_INIT",
+    .EV_INIT_str = "EV_INIT",
 
-    .str_136 = "EV_HIDE",
+    .EV_HIDE_str = "EV_HIDE",
 
-    .str_137 = "EV_SHOW",
+    .EV_SHOW_str = "EV_SHOW",
 
-    .str_138 = "EV_NONE",
+    .EV_NONE_str = "EV_NONE",
 
     .str_139 = "<",
 
     .ptrs_3 = {
-        SELF(str_327),
-        SELF(str_326),
-        SELF(str_325),
-        SELF(str_324),
-        SELF(str_323),
-        SELF(str_322),
-        SELF(str_321),
-        SELF(str_320),
-        SELF(str_319),
-        SELF(str_318),
-        SELF(str_317),
-        SELF(str_316),
-        SELF(str_315),
-        SELF(str_314),
-        SELF(str_313),
-        SELF(str_312),
-        SELF(str_311),
-        SELF(str_310),
-        SELF(str_309),
-        SELF(str_308),
-        SELF(str_307),
-        SELF(str_306),
-        SELF(str_305),
-        SELF(str_304),
-        SELF(str_303),
-        SELF(str_302),
-        SELF(str_301),
-        SELF(str_300),
-        SELF(str_299),
-        SELF(str_298),
-        SELF(str_297),
-        SELF(str_296),
-        SELF(str_295),
-        SELF(str_294),
-        SELF(str_293),
-        SELF(str_292),
-        SELF(str_291),
-        SELF(str_290),
-        SELF(str_289),
-        SELF(str_288),
-        SELF(str_287),
-        SELF(str_286),
-        SELF(str_285),
-        SELF(str_284),
-        SELF(str_283),
-        SELF(str_282),
-        SELF(str_281),
-        SELF(str_280),
-        SELF(str_279),
-        SELF(str_278),
-        SELF(str_277),
-        SELF(str_276),
-        SELF(str_275),
-        SELF(str_274),
-        SELF(str_273),
-        SELF(str_272),
-        SELF(str_271),
-        SELF(str_270),
-        SELF(str_269),
-        SELF(str_268),
-        SELF(str_267),
-        SELF(str_266),
-        SELF(str_265),
-        SELF(str_264),
-        SELF(str_263),
-        SELF(str_262),
-        SELF(str_261),
-        SELF(str_260),
-        SELF(str_259),
-        SELF(str_258),
-        SELF(str_257),
-        SELF(str_256),
-        SELF(str_255),
-        SELF(str_254),
-        SELF(str_253),
-        SELF(str_252),
-        SELF(str_251),
-        SELF(str_250),
-        SELF(str_249),
-        SELF(str_248),
-        SELF(str_247),
-        SELF(str_246),
-        SELF(str_245),
-        SELF(str_244),
-        SELF(str_243),
-        SELF(str_242),
-        SELF(str_241),
-        SELF(str_240),
-        SELF(str_239),
-        SELF(str_238),
-        SELF(str_237),
-        SELF(str_236),
-        SELF(str_235),
-        SELF(str_234),
-        SELF(str_233),
-        SELF(str_232),
-        SELF(str_231),
-        SELF(str_230),
-        SELF(str_229),
-        SELF(str_228),
-        SELF(str_227),
-        SELF(str_226),
-        SELF(str_225),
-        SELF(str_224),
-        SELF(str_223),
-        SELF(str_222),
-        SELF(str_221),
-        SELF(str_220),
-        SELF(str_219),
-        SELF(str_218),
-        SELF(str_217),
-        SELF(str_216),
-        SELF(str_215),
-        SELF(str_214),
-        SELF(str_213),
-        SELF(str_212),
-        SELF(str_211),
-        SELF(str_210),
-        SELF(str_209),
-        SELF(str_208),
-        SELF(str_207),
-        SELF(str_206),
-        SELF(str_205),
-        SELF(str_204),
-        SELF(str_203),
-        SELF(str_202),
-        SELF(str_201),
-        SELF(str_200),
-        SELF(str_199),
-        SELF(str_198),
-        SELF(str_197),
-        SELF(str_196),
-        SELF(str_195),
-        SELF(str_194),
-        SELF(str_193),
-        SELF(str_192),
-        SELF(str_191),
-        SELF(str_190),
-        SELF(str_189),
-        SELF(str_188),
-        SELF(str_187),
-        SELF(str_186),
-        SELF(str_185),
-        SELF(str_184),
-        SELF(str_183),
-        SELF(str_182),
-        SELF(str_181),
-        SELF(str_180),
-        SELF(str_179),
-        SELF(str_178),
-        SELF(str_177),
-        SELF(str_176),
-        SELF(str_175),
-        SELF(str_174),
-        SELF(str_173),
-        SELF(str_172),
-        SELF(str_171),
-        SELF(str_170),
-        SELF(str_169),
-        SELF(str_168),
-        SELF(str_167),
-        SELF(str_166),
-        SELF(str_165),
-        SELF(str_164),
-        SELF(str_163),
-        SELF(str_162),
-        SELF(str_161),
-        SELF(str_160),
-        SELF(str_159),
-        SELF(str_158),
-        SELF(str_157),
-        SELF(str_156),
-        SELF(str_155),
-        SELF(str_154),
-        SELF(str_153),
-        SELF(str_152),
-        SELF(str_151),
-        SELF(str_150),
-        SELF(str_149),
-        SELF(str_148),
-        SELF(str_147),
-        SELF(str_146),
-        SELF(str_145),
-        SELF(str_144),
-        SELF(str_143),
-        SELF(str_142),
-        SELF(str_141),
-        SELF(str_140),
+        SELF(MT_GetClassSp_str),
+        SELF(MT_GetParentClassSp_str),
+        SELF(MT_GetProcedureSp_str),
+        SELF(MT_GetInstanceSizeSp_str),
+        SELF(MT_CheckClassSp_str),
+        SELF(MT_GetPropStringEx_str),
+        SELF(MT_GetPropCountSp_str),
+        SELF(MT_GetPropNameSp_str),
+        SELF(MT_CopyPropertyEx_str),
+        SELF(MT_DumpPropertyEx_str),
+        SELF(MT_DumpPointerEx_str),
+        SELF(MT_GetPropertyEx_str),
+        SELF(MT_SetPropertyEx_str),
+        SELF(MT_GetPropDataSp_str),
+        SELF(MT_GetPropDataCountSp_str),
+        SELF(MT_GetInstance_str),
+        SELF(MT_GetClass_str),
+        SELF(MT_GetParentClass_str),
+        SELF(MT_GetClassName_str),
+        SELF(MT_GetProcedure_str),
+        SELF(MT_CheckClass_str),
+        SELF(MT_GetName_str),
+        SELF(MT_SetName_str),
+        SELF(MT_GetPropCount_str),
+        SELF(MT_GetPropName_str),
+        SELF(MT_GetPropString_str),
+        SELF(MT_CopyProperty_str),
+        SELF(MT_DumpProperty_str),
+        SELF(MT_DumpPointer_str),
+        SELF(MT_GetProperty_str),
+        SELF(MT_SetProperty_str),
+        SELF(MT_GetPropData_str),
+        SELF(MT_GetPropDataCount_str),
+        SELF(MT_GetInstanceSize_str),
+        SELF(MT_GetPropChar_str),
+        SELF(MT_AutoFree_str),
+        SELF(MT_SearchClass_str),
+        SELF(MT_CheckPropString_str),
+        SELF(MT_GetPropMember_str),
+        SELF(MT_GetPropSize_str),
+        SELF(MT_MakeDump_str),
+        SELF(MT_MakeEditSwID_str),
+        SELF(MT_GetFunction_str),
+        SELF(MT_GetModeProc_str),
+        SELF(MT_GetModeProcID_str),
+        SELF(MT_GetStartTitle_str),
+        SELF(MT_GetModeNow_str),
+        SELF(MT_GetModeOld_str),
+        SELF(MT_GetUserID_str),
+        SELF(MT_GetTitleProc_str),
+        SELF(MT_GetTitleProcID_str),
+        SELF(MT_GetStartScreen_str),
+        SELF(MT_GetTitleNow_str),
+        SELF(MT_GetTitleOld_str),
+        SELF(MT_GetSuperview_str),
+        SELF(MT_GetSubview_str),
+        SELF(MT_GetNextview_str),
+        SELF(MT_GetPrevview_str),
+        SELF(MT_GetString_str),
+        SELF(MT_SetParam_str),
+        SELF(MT_CheckSelected_str),
+        SELF(MT_CalcParam_str),
+        SELF(MT_GetLargeStep_str),
+        SELF(MT_GetSmallStep_str),
+        SELF(MT_GetLswAddress_str),
+        SELF(MT_GetLswOutput_str),
+        SELF(MT_GetLswString_str),
+        SELF(MT_GetMax_str),
+        SELF(MT_GetMin_str),
+        SELF(MT_GetRamAddress_str),
+        SELF(MT_GetRamSize_str),
+        SELF(MT_GetRamString_str),
+        SELF(MT_SetParentWindow_str),
+        SELF(MT_SetChildWindow_str),
+        SELF(MT_GetParentWindow_str),
+        SELF(MT_GetChildWindow_str),
+        SELF(MT_GetTableString_str),
+        SELF(MT_SetSelected_str),
+        SELF(MT_DrawSelected_str),
+        SELF(MT_SetMenuRect_str),
+        SELF(MT_CheckIndex_str),
+        SELF(MT_GetIndex_str),
+        SELF(MT_SetEditSwRect_str),
+        SELF(MT_CheckEditSw_str),
+        SELF(MT_GetPageMin_str),
+        SELF(MT_GetPageMax_str),
+        SELF(MT_GetPageNow_str),
+        SELF(MT_LswPut_str),
+        SELF(MT_LswAdd_str),
+        SELF(MT_LswGet_str),
+        SELF(MT_LswPartPut_str),
+        SELF(MT_LswPartAdd_str),
+        SELF(MT_LswPartGet_str),
+        SELF(MT_SetWallPalette_str),
+        SELF(MT_GetSoundName_str),
+        SELF(MT_GetRhythmName_str),
+        SELF(MT_GetPmemName_str),
+        SELF(MT_GetSoundSwNo_str),
+        SELF(MT_GetBitString_str),
+        SELF(MT_GetBitAddress_str),
+        SELF(MT_GetBit_str),
+        SELF(MT_GetDirection_str),
+        SELF(MT_BitGet_str),
+        SELF(MT_BitPut_str),
+        SELF(MT_RamGet_str),
+        SELF(MT_RamPut_str),
+        SELF(MT_RamAdd_str),
+        SELF(MT_GetParam_str),
+        SELF(MT_ToggleParam_str),
+        SELF(MT_DrawMemo_str),
+        SELF(MT_AicenSet_str),
+        SELF(MT_ValenSet_str),
+        SELF(MT_EditDownSet_str),
+        SELF(MT_EditUpSet_str),
+        SELF(MT_SetParentScreen_str),
+        SELF(MT_SetChildScreen_str),
+        SELF(MT_GetParentScreen_str),
+        SELF(MT_GetChildScreen_str),
+        SELF(MT_GetReturnScreen_str),
+        SELF(MT_SetReturnScreen_str),
+        SELF(MT_ResetInterruptTime_str),
+        SELF(MT_InterruptExit_str),
+        SELF(MT_IsInterrupt_str),
+        SELF(MT_SetApFunction_str),
+        SELF(MT_GetStringLength_str),
+        SELF(MT_ReturnString_str),
+        SELF(MT_RequestString_str),
+        SELF(MT_SetPage_str),
+        SELF(MT_SetCursor_str),
+        SELF(MT_SetChara_str),
+        SELF(MT_RamData_str),
+        SELF(MT_LswData_str),
+        SELF(MT_GetNamingMode_str),
+        SELF(MT_AreYouClassProc_str),
+        SELF(MT_SetString_str),
+        SELF(MT_SetDialFocus_str),
+        SELF(MT_GetDialFocus_str),
+        SELF(MT_GetStrPtr_str),
+        SELF(MT_GetFixedColStr_str),
+        SELF(MT_GetFixedRowStr_str),
+        SELF(MT_GridDraw_str),
+        SELF(MT_RequestGridDraw_str),
+        SELF(MT_SetSelectedCel_str),
+        SELF(MT_GetSelectedCel_str),
+        SELF(MT_GetSelected_str),
+        SELF(MT_CheckGridIndex_str),
+        SELF(MT_RequestTrackSwitch_str),
+        SELF(MT_ToggleTrackSwitch_str),
+        SELF(MT_CheckShowWindow_str),
+        SELF(MT_ChangeWall_str),
+        SELF(MT_PushWall_str),
+        SELF(MT_PopWall_str),
+        SELF(MT_InterruptHold_str),
+        SELF(MT_SetInterruptTime_str),
+        SELF(MT_SetHold_str),
+        SELF(MT_ToggleHold_str),
+        SELF(MT_SetVisible_str),
+        SELF(MT_GetInterruptTime_str),
+        SELF(MT_SetNotDrawFlag_str),
+        SELF(MT_GetLanguagePtr_str),
+        SELF(MT_PartSelectPut_str),
+        SELF(MT_GetBitmapData_str),
+        SELF(MT_GetBitmapWidth_str),
+        SELF(MT_GetBitmapHeight_str),
+        SELF(MT_GetBitmapPalette_str),
+        SELF(MT_EasySetOn_str),
+        SELF(MT_EasySetOff_str),
+        SELF(MT_RefreshParaDraw_str),
+        SELF(MT_SetSoundSwNo_str),
+        SELF(MT_AddSoundSwNo_str),
+        SELF(MT_CheckHold_str),
+        SELF(MT_OtherPartLed_str),
+        SELF(MT_SleepMainTask_str),
+        SELF(MT_WakeUpMainTask_str),
+        SELF(MT_SleepApTask_str),
+        SELF(MT_WakeUpApTask_str),
+        SELF(MT_RefreshApTask_str),
+        SELF(MT_GetBoxBorder_str),
+        SELF(MT_GetBoxColor_str),
+        SELF(MT_SetKeep_str),
+        SELF(MT_RefreshSwEvent_str),
+        SELF(MT_SearchLink_str),
+        SELF(MT_InterruptOff_str),
+        SELF(MT_EasySetGo_str),
+        SELF(MT_CheckInitData_str),
+        SELF(MT_GetInitData_str),
+        SELF(MT_SetTitleFlag_str),
+        SELF(MT_MainLoopCount_str),
         0x00000000,
     },
 
-    .str_140 = ALIGNED_STRING("MT_MainLoopCount"),
+    .MT_MainLoopCount_str = ALIGNED_STRING("MT_MainLoopCount"),
 
-    .str_141 = "MT_SetTitleFlag",
+    .MT_SetTitleFlag_str = "MT_SetTitleFlag",
 
-    .str_142 = ALIGNED_STRING("MT_GetInitData"),
+    .MT_GetInitData_str = ALIGNED_STRING("MT_GetInitData"),
 
-    .str_143 = ALIGNED_STRING("MT_CheckInitData"),
+    .MT_CheckInitData_str = ALIGNED_STRING("MT_CheckInitData"),
 
-    .str_144 = ALIGNED_STRING("MT_EasySetGo"),
+    .MT_EasySetGo_str = ALIGNED_STRING("MT_EasySetGo"),
 
-    .str_145 = "MT_InterruptOff",
+    .MT_InterruptOff_str = "MT_InterruptOff",
 
-    .str_146 = "MT_SearchLink",
+    .MT_SearchLink_str = "MT_SearchLink",
 
-    .str_147 = "MT_RefreshSwEvent",
+    .MT_RefreshSwEvent_str = "MT_RefreshSwEvent",
 
-    .str_148 = ALIGNED_STRING("MT_SetKeep"),
+    .MT_SetKeep_str = ALIGNED_STRING("MT_SetKeep"),
 
-    .str_149 = ALIGNED_STRING("MT_GetBoxColor"),
+    .MT_GetBoxColor_str = ALIGNED_STRING("MT_GetBoxColor"),
 
-    .str_150 = "MT_GetBoxBorder",
+    .MT_GetBoxBorder_str = "MT_GetBoxBorder",
 
-    .str_151 = ALIGNED_STRING("MT_RefreshApTask"),
+    .MT_RefreshApTask_str = ALIGNED_STRING("MT_RefreshApTask"),
 
-    .str_152 = "MT_WakeUpApTask",
+    .MT_WakeUpApTask_str = "MT_WakeUpApTask",
 
-    .str_153 = ALIGNED_STRING("MT_SleepApTask"),
+    .MT_SleepApTask_str = ALIGNED_STRING("MT_SleepApTask"),
 
-    .str_154 = "MT_WakeUpMainTask",
+    .MT_WakeUpMainTask_str = "MT_WakeUpMainTask",
 
-    .str_155 = ALIGNED_STRING("MT_SleepMainTask"),
+    .MT_SleepMainTask_str = ALIGNED_STRING("MT_SleepMainTask"),
 
-    .str_156 = "MT_OtherPartLed",
+    .MT_OtherPartLed_str = "MT_OtherPartLed",
 
-    .str_157 = ALIGNED_STRING("MT_CheckHold"),
+    .MT_CheckHold_str = ALIGNED_STRING("MT_CheckHold"),
 
-    .str_158 = "MT_AddSoundSwNo",
+    .MT_AddSoundSwNo_str = "MT_AddSoundSwNo",
 
-    .str_159 = "MT_SetSoundSwNo",
+    .MT_SetSoundSwNo_str = "MT_SetSoundSwNo",
 
-    .str_160 = ALIGNED_STRING("MT_RefreshParaDraw"),
+    .MT_RefreshParaDraw_str = ALIGNED_STRING("MT_RefreshParaDraw"),
 
-    .str_161 = "MT_EasySetOff",
+    .MT_EasySetOff_str = "MT_EasySetOff",
 
-    .str_162 = ALIGNED_STRING("MT_EasySetOn"),
+    .MT_EasySetOn_str = ALIGNED_STRING("MT_EasySetOn"),
 
-    .str_163 = "MT_GetBitmapPalette",
+    .MT_GetBitmapPalette_str = "MT_GetBitmapPalette",
 
-    .str_164 = ALIGNED_STRING("MT_GetBitmapHeight"),
+    .MT_GetBitmapHeight_str = ALIGNED_STRING("MT_GetBitmapHeight"),
 
-    .str_165 = "MT_GetBitmapWidth",
+    .MT_GetBitmapWidth_str = "MT_GetBitmapWidth",
 
-    .str_166 = ALIGNED_STRING("MT_GetBitmapData"),
+    .MT_GetBitmapData_str = ALIGNED_STRING("MT_GetBitmapData"),
 
-    .str_167 = ALIGNED_STRING("MT_PartSelectPut"),
+    .MT_PartSelectPut_str = ALIGNED_STRING("MT_PartSelectPut"),
 
-    .str_168 = "MT_GetLanguagePtr",
+    .MT_GetLanguagePtr_str = "MT_GetLanguagePtr",
 
-    .str_169 = "MT_SetNotDrawFlag",
+    .MT_SetNotDrawFlag_str = "MT_SetNotDrawFlag",
 
-    .str_170 = "MT_GetInterruptTime",
+    .MT_GetInterruptTime_str = "MT_GetInterruptTime",
 
-    .str_171 = "MT_SetVisible",
+    .MT_SetVisible_str = "MT_SetVisible",
 
-    .str_172 = "MT_ToggleHold",
+    .MT_ToggleHold_str = "MT_ToggleHold",
 
-    .str_173 = ALIGNED_STRING("MT_SetHold"),
+    .MT_SetHold_str = ALIGNED_STRING("MT_SetHold"),
 
-    .str_174 = "MT_SetInterruptTime",
+    .MT_SetInterruptTime_str = "MT_SetInterruptTime",
 
-    .str_175 = ALIGNED_STRING("MT_InterruptHold"),
+    .MT_InterruptHold_str = ALIGNED_STRING("MT_InterruptHold"),
 
-    .str_176 = ALIGNED_STRING("MT_PopWall"),
+    .MT_PopWall_str = ALIGNED_STRING("MT_PopWall"),
 
-    .str_177 = "MT_PushWall",
+    .MT_PushWall_str = "MT_PushWall",
 
-    .str_178 = "MT_ChangeWall",
+    .MT_ChangeWall_str = "MT_ChangeWall",
 
-    .str_179 = ALIGNED_STRING("MT_CheckShowWindow"),
+    .MT_CheckShowWindow_str = ALIGNED_STRING("MT_CheckShowWindow"),
 
-    .str_180 = ALIGNED_STRING("MT_ToggleTrackSwitch"),
+    .MT_ToggleTrackSwitch_str = ALIGNED_STRING("MT_ToggleTrackSwitch"),
 
-    .str_181 = "MT_RequestTrackSwitch",
+    .MT_RequestTrackSwitch_str = "MT_RequestTrackSwitch",
 
-    .str_182 = "MT_CheckGridIndex",
+    .MT_CheckGridIndex_str = "MT_CheckGridIndex",
 
-    .str_183 = ALIGNED_STRING("MT_GetSelected"),
+    .MT_GetSelected_str = ALIGNED_STRING("MT_GetSelected"),
 
-    .str_184 = "MT_GetSelectedCel",
+    .MT_GetSelectedCel_str = "MT_GetSelectedCel",
 
-    .str_185 = "MT_SetSelectedCel",
+    .MT_SetSelectedCel_str = "MT_SetSelectedCel",
 
-    .str_186 = ALIGNED_STRING("MT_RequestGridDraw"),
+    .MT_RequestGridDraw_str = ALIGNED_STRING("MT_RequestGridDraw"),
 
-    .str_187 = "MT_GridDraw",
+    .MT_GridDraw_str = "MT_GridDraw",
 
-    .str_188 = "MT_GetFixedRowStr",
+    .MT_GetFixedRowStr_str = "MT_GetFixedRowStr",
 
-    .str_189 = "MT_GetFixedColStr",
+    .MT_GetFixedColStr_str = "MT_GetFixedColStr",
 
-    .str_190 = ALIGNED_STRING("MT_GetStrPtr"),
+    .MT_GetStrPtr_str = ALIGNED_STRING("MT_GetStrPtr"),
 
-    .str_191 = "MT_GetDialFocus",
+    .MT_GetDialFocus_str = "MT_GetDialFocus",
 
-    .str_192 = "MT_SetDialFocus",
+    .MT_SetDialFocus_str = "MT_SetDialFocus",
 
-    .str_193 = ALIGNED_STRING("MT_SetString"),
+    .MT_SetString_str = ALIGNED_STRING("MT_SetString"),
 
-    .str_194 = ALIGNED_STRING("MT_AreYouClassProc"),
+    .MT_AreYouClassProc_str = ALIGNED_STRING("MT_AreYouClassProc"),
 
-    .str_195 = ALIGNED_STRING("MT_GetNamingMode"),
+    .MT_GetNamingMode_str = ALIGNED_STRING("MT_GetNamingMode"),
 
-    .str_196 = ALIGNED_STRING("MT_LswData"),
+    .MT_LswData_str = ALIGNED_STRING("MT_LswData"),
 
-    .str_197 = ALIGNED_STRING("MT_RamData"),
+    .MT_RamData_str = ALIGNED_STRING("MT_RamData"),
 
-    .str_198 = "MT_SetChara",
+    .MT_SetChara_str = "MT_SetChara",
 
-    .str_199 = ALIGNED_STRING("MT_SetCursor"),
+    .MT_SetCursor_str = ALIGNED_STRING("MT_SetCursor"),
 
-    .str_200 = ALIGNED_STRING("MT_SetPage"),
+    .MT_SetPage_str = ALIGNED_STRING("MT_SetPage"),
 
-    .str_201 = ALIGNED_STRING("MT_RequestString"),
+    .MT_RequestString_str = ALIGNED_STRING("MT_RequestString"),
 
-    .str_202 = "MT_ReturnString",
+    .MT_ReturnString_str = "MT_ReturnString",
 
-    .str_203 = ALIGNED_STRING("MT_GetStringLength"),
+    .MT_GetStringLength_str = ALIGNED_STRING("MT_GetStringLength"),
 
-    .str_204 = ALIGNED_STRING("MT_SetApFunction"),
+    .MT_SetApFunction_str = ALIGNED_STRING("MT_SetApFunction"),
 
-    .str_205 = ALIGNED_STRING("MT_IsInterrupt"),
+    .MT_IsInterrupt_str = ALIGNED_STRING("MT_IsInterrupt"),
 
-    .str_206 = ALIGNED_STRING("MT_InterruptExit"),
+    .MT_InterruptExit_str = ALIGNED_STRING("MT_InterruptExit"),
 
-    .str_207 = "MT_ResetInterruptTime",
+    .MT_ResetInterruptTime_str = "MT_ResetInterruptTime",
 
-    .str_208 = ALIGNED_STRING("MT_SetReturnScreen"),
+    .MT_SetReturnScreen_str = ALIGNED_STRING("MT_SetReturnScreen"),
 
-    .str_209 = ALIGNED_STRING("MT_GetReturnScreen"),
+    .MT_GetReturnScreen_str = ALIGNED_STRING("MT_GetReturnScreen"),
 
-    .str_210 = "MT_GetChildScreen",
+    .MT_GetChildScreen_str = "MT_GetChildScreen",
 
-    .str_211 = ALIGNED_STRING("MT_GetParentScreen"),
+    .MT_GetParentScreen_str = ALIGNED_STRING("MT_GetParentScreen"),
 
-    .str_212 = "MT_SetChildScreen",
+    .MT_SetChildScreen_str = "MT_SetChildScreen",
 
-    .str_213 = ALIGNED_STRING("MT_SetParentScreen"),
+    .MT_SetParentScreen_str = ALIGNED_STRING("MT_SetParentScreen"),
 
-    .str_214 = ALIGNED_STRING("MT_EditUpSet"),
+    .MT_EditUpSet_str = ALIGNED_STRING("MT_EditUpSet"),
 
-    .str_215 = ALIGNED_STRING("MT_EditDownSet"),
+    .MT_EditDownSet_str = ALIGNED_STRING("MT_EditDownSet"),
 
-    .str_216 = "MT_ValenSet",
+    .MT_ValenSet_str = "MT_ValenSet",
 
-    .str_217 = "MT_AicenSet",
+    .MT_AicenSet_str = "MT_AicenSet",
 
-    .str_218 = "MT_DrawMemo",
+    .MT_DrawMemo_str = "MT_DrawMemo",
 
-    .str_219 = ALIGNED_STRING("MT_ToggleParam"),
+    .MT_ToggleParam_str = ALIGNED_STRING("MT_ToggleParam"),
 
-    .str_220 = "MT_GetParam",
+    .MT_GetParam_str = "MT_GetParam",
 
-    .str_221 = "MT_RamAdd",
+    .MT_RamAdd_str = "MT_RamAdd",
 
-    .str_222 = "MT_RamPut",
+    .MT_RamPut_str = "MT_RamPut",
 
-    .str_223 = "MT_RamGet",
+    .MT_RamGet_str = "MT_RamGet",
 
-    .str_224 = "MT_BitPut",
+    .MT_BitPut_str = "MT_BitPut",
 
-    .str_225 = "MT_BitGet",
+    .MT_BitGet_str = "MT_BitGet",
 
-    .str_226 = "MT_GetDirection",
+    .MT_GetDirection_str = "MT_GetDirection",
 
-    .str_227 = "MT_GetBit",
+    .MT_GetBit_str = "MT_GetBit",
 
-    .str_228 = ALIGNED_STRING("MT_GetBitAddress"),
+    .MT_GetBitAddress_str = ALIGNED_STRING("MT_GetBitAddress"),
 
-    .str_229 = "MT_GetBitString",
+    .MT_GetBitString_str = "MT_GetBitString",
 
-    .str_230 = "MT_GetSoundSwNo",
+    .MT_GetSoundSwNo_str = "MT_GetSoundSwNo",
 
-    .str_231 = ALIGNED_STRING("MT_GetPmemName"),
+    .MT_GetPmemName_str = ALIGNED_STRING("MT_GetPmemName"),
 
-    .str_232 = ALIGNED_STRING("MT_GetRhythmName"),
+    .MT_GetRhythmName_str = ALIGNED_STRING("MT_GetRhythmName"),
 
-    .str_233 = "MT_GetSoundName",
+    .MT_GetSoundName_str = "MT_GetSoundName",
 
-    .str_234 = "MT_SetWallPalette",
+    .MT_SetWallPalette_str = "MT_SetWallPalette",
 
-    .str_235 = "MT_LswPartGet",
+    .MT_LswPartGet_str = "MT_LswPartGet",
 
-    .str_236 = "MT_LswPartAdd",
+    .MT_LswPartAdd_str = "MT_LswPartAdd",
 
-    .str_237 = "MT_LswPartPut",
+    .MT_LswPartPut_str = "MT_LswPartPut",
 
-    .str_238 = "MT_LswGet",
+    .MT_LswGet_str = "MT_LswGet",
 
-    .str_239 = "MT_LswAdd",
+    .MT_LswAdd_str = "MT_LswAdd",
 
-    .str_240 = "MT_LswPut",
+    .MT_LswPut_str = "MT_LswPut",
 
-    .str_241 = "MT_GetPageNow",
+    .MT_GetPageNow_str = "MT_GetPageNow",
 
-    .str_242 = "MT_GetPageMax",
+    .MT_GetPageMax_str = "MT_GetPageMax",
 
-    .str_243 = "MT_GetPageMin",
+    .MT_GetPageMin_str = "MT_GetPageMin",
 
-    .str_244 = ALIGNED_STRING("MT_CheckEditSw"),
+    .MT_CheckEditSw_str = ALIGNED_STRING("MT_CheckEditSw"),
 
-    .str_245 = ALIGNED_STRING("MT_SetEditSwRect"),
+    .MT_SetEditSwRect_str = ALIGNED_STRING("MT_SetEditSwRect"),
 
-    .str_246 = "MT_GetIndex",
+    .MT_GetIndex_str = "MT_GetIndex",
 
-    .str_247 = "MT_CheckIndex",
+    .MT_CheckIndex_str = "MT_CheckIndex",
 
-    .str_248 = ALIGNED_STRING("MT_SetMenuRect"),
+    .MT_SetMenuRect_str = ALIGNED_STRING("MT_SetMenuRect"),
 
-    .str_249 = "MT_DrawSelected",
+    .MT_DrawSelected_str = "MT_DrawSelected",
 
-    .str_250 = ALIGNED_STRING("MT_SetSelected"),
+    .MT_SetSelected_str = ALIGNED_STRING("MT_SetSelected"),
 
-    .str_251 = "MT_GetTableString",
+    .MT_GetTableString_str = "MT_GetTableString",
 
-    .str_252 = "MT_GetChildWindow",
+    .MT_GetChildWindow_str = "MT_GetChildWindow",
 
-    .str_253 = ALIGNED_STRING("MT_GetParentWindow"),
+    .MT_GetParentWindow_str = ALIGNED_STRING("MT_GetParentWindow"),
 
-    .str_254 = "MT_SetChildWindow",
+    .MT_SetChildWindow_str = "MT_SetChildWindow",
 
-    .str_255 = ALIGNED_STRING("MT_SetParentWindow"),
+    .MT_SetParentWindow_str = ALIGNED_STRING("MT_SetParentWindow"),
 
-    .str_256 = "MT_GetRamString",
+    .MT_GetRamString_str = "MT_GetRamString",
 
-    .str_257 = "MT_GetRamSize",
+    .MT_GetRamSize_str = "MT_GetRamSize",
 
-    .str_258 = ALIGNED_STRING("MT_GetRamAddress"),
+    .MT_GetRamAddress_str = ALIGNED_STRING("MT_GetRamAddress"),
 
-    .str_259 = "MT_GetMin",
+    .MT_GetMin_str = "MT_GetMin",
 
-    .str_260 = "MT_GetMax",
+    .MT_GetMax_str = "MT_GetMax",
 
-    .str_261 = "MT_GetLswString",
+    .MT_GetLswString_str = "MT_GetLswString",
 
-    .str_262 = "MT_GetLswOutput",
+    .MT_GetLswOutput_str = "MT_GetLswOutput",
 
-    .str_263 = ALIGNED_STRING("MT_GetLswAddress"),
+    .MT_GetLswAddress_str = ALIGNED_STRING("MT_GetLswAddress"),
 
-    .str_264 = "MT_GetSmallStep",
+    .MT_GetSmallStep_str = "MT_GetSmallStep",
 
-    .str_265 = "MT_GetLargeStep",
+    .MT_GetLargeStep_str = "MT_GetLargeStep",
 
-    .str_266 = ALIGNED_STRING("MT_CalcParam"),
+    .MT_CalcParam_str = ALIGNED_STRING("MT_CalcParam"),
 
-    .str_267 = ALIGNED_STRING("MT_CheckSelected"),
+    .MT_CheckSelected_str = ALIGNED_STRING("MT_CheckSelected"),
 
-    .str_268 = "MT_SetParam",
+    .MT_SetParam_str = "MT_SetParam",
 
-    .str_269 = ALIGNED_STRING("MT_GetString"),
+    .MT_GetString_str = ALIGNED_STRING("MT_GetString"),
 
-    .str_270 = ALIGNED_STRING("MT_GetPrevview"),
+    .MT_GetPrevview_str = ALIGNED_STRING("MT_GetPrevview"),
 
-    .str_271 = ALIGNED_STRING("MT_GetNextview"),
+    .MT_GetNextview_str = ALIGNED_STRING("MT_GetNextview"),
 
-    .str_272 = "MT_GetSubview",
+    .MT_GetSubview_str = "MT_GetSubview",
 
-    .str_273 = "MT_GetSuperview",
+    .MT_GetSuperview_str = "MT_GetSuperview",
 
-    .str_274 = ALIGNED_STRING("MT_GetTitleOld"),
+    .MT_GetTitleOld_str = ALIGNED_STRING("MT_GetTitleOld"),
 
-    .str_275 = ALIGNED_STRING("MT_GetTitleNow"),
+    .MT_GetTitleNow_str = ALIGNED_STRING("MT_GetTitleNow"),
 
-    .str_276 = "MT_GetStartScreen",
+    .MT_GetStartScreen_str = "MT_GetStartScreen",
 
-    .str_277 = "MT_GetTitleProcID",
+    .MT_GetTitleProcID_str = "MT_GetTitleProcID",
 
-    .str_278 = "MT_GetTitleProc",
+    .MT_GetTitleProc_str = "MT_GetTitleProc",
 
-    .str_279 = ALIGNED_STRING("MT_GetUserID"),
+    .MT_GetUserID_str = ALIGNED_STRING("MT_GetUserID"),
 
-    .str_280 = "MT_GetModeOld",
+    .MT_GetModeOld_str = "MT_GetModeOld",
 
-    .str_281 = "MT_GetModeNow",
+    .MT_GetModeNow_str = "MT_GetModeNow",
 
-    .str_282 = ALIGNED_STRING("MT_GetStartTitle"),
+    .MT_GetStartTitle_str = ALIGNED_STRING("MT_GetStartTitle"),
 
-    .str_283 = ALIGNED_STRING("MT_GetModeProcID"),
+    .MT_GetModeProcID_str = ALIGNED_STRING("MT_GetModeProcID"),
 
-    .str_284 = ALIGNED_STRING("MT_GetModeProc"),
+    .MT_GetModeProc_str = ALIGNED_STRING("MT_GetModeProc"),
 
-    .str_285 = ALIGNED_STRING("MT_GetFunction"),
+    .MT_GetFunction_str = ALIGNED_STRING("MT_GetFunction"),
 
-    .str_286 = "MT_MakeEditSwID",
+    .MT_MakeEditSwID_str = "MT_MakeEditSwID",
 
-    .str_287 = "MT_MakeDump",
+    .MT_MakeDump_str = "MT_MakeDump",
 
-    .str_288 = ALIGNED_STRING("MT_GetPropSize"),
+    .MT_GetPropSize_str = ALIGNED_STRING("MT_GetPropSize"),
 
-    .str_289 = ALIGNED_STRING("MT_GetPropMember"),
+    .MT_GetPropMember_str = ALIGNED_STRING("MT_GetPropMember"),
 
-    .str_290 = ALIGNED_STRING("MT_CheckPropString"),
+    .MT_CheckPropString_str = ALIGNED_STRING("MT_CheckPropString"),
 
-    .str_291 = ALIGNED_STRING("MT_SearchClass"),
+    .MT_SearchClass_str = ALIGNED_STRING("MT_SearchClass"),
 
-    .str_292 = "MT_AutoFree",
+    .MT_AutoFree_str = "MT_AutoFree",
 
-    .str_293 = ALIGNED_STRING("MT_GetPropChar"),
+    .MT_GetPropChar_str = ALIGNED_STRING("MT_GetPropChar"),
 
-    .str_294 = ALIGNED_STRING("MT_GetInstanceSize"),
+    .MT_GetInstanceSize_str = ALIGNED_STRING("MT_GetInstanceSize"),
 
-    .str_295 = "MT_GetPropDataCount",
+    .MT_GetPropDataCount_str = "MT_GetPropDataCount",
 
-    .str_296 = ALIGNED_STRING("MT_GetPropData"),
+    .MT_GetPropData_str = ALIGNED_STRING("MT_GetPropData"),
 
-    .str_297 = ALIGNED_STRING("MT_SetProperty"),
+    .MT_SetProperty_str = ALIGNED_STRING("MT_SetProperty"),
 
-    .str_298 = ALIGNED_STRING("MT_GetProperty"),
+    .MT_GetProperty_str = ALIGNED_STRING("MT_GetProperty"),
 
-    .str_299 = ALIGNED_STRING("MT_DumpPointer"),
+    .MT_DumpPointer_str = ALIGNED_STRING("MT_DumpPointer"),
 
-    .str_300 = "MT_DumpProperty",
+    .MT_DumpProperty_str = "MT_DumpProperty",
 
-    .str_301 = "MT_CopyProperty",
+    .MT_CopyProperty_str = "MT_CopyProperty",
 
-    .str_302 = ALIGNED_STRING("MT_GetPropString"),
+    .MT_GetPropString_str = ALIGNED_STRING("MT_GetPropString"),
 
-    .str_303 = ALIGNED_STRING("MT_GetPropName"),
+    .MT_GetPropName_str = ALIGNED_STRING("MT_GetPropName"),
 
-    .str_304 = "MT_GetPropCount",
+    .MT_GetPropCount_str = "MT_GetPropCount",
 
-    .str_305 = ALIGNED_STRING("MT_SetName"),
+    .MT_SetName_str = ALIGNED_STRING("MT_SetName"),
 
-    .str_306 = ALIGNED_STRING("MT_GetName"),
+    .MT_GetName_str = ALIGNED_STRING("MT_GetName"),
 
-    .str_307 = "MT_CheckClass",
+    .MT_CheckClass_str = "MT_CheckClass",
 
-    .str_308 = "MT_GetProcedure",
+    .MT_GetProcedure_str = "MT_GetProcedure",
 
-    .str_309 = "MT_GetClassName",
+    .MT_GetClassName_str = "MT_GetClassName",
 
-    .str_310 = "MT_GetParentClass",
+    .MT_GetParentClass_str = "MT_GetParentClass",
 
-    .str_311 = "MT_GetClass",
+    .MT_GetClass_str = "MT_GetClass",
 
-    .str_312 = ALIGNED_STRING("MT_GetInstance"),
+    .MT_GetInstance_str = ALIGNED_STRING("MT_GetInstance"),
 
-    .str_313 = "MT_GetPropDataCountSp",
+    .MT_GetPropDataCountSp_str = "MT_GetPropDataCountSp",
 
-    .str_314 = ALIGNED_STRING("MT_GetPropDataSp"),
+    .MT_GetPropDataSp_str = ALIGNED_STRING("MT_GetPropDataSp"),
 
-    .str_315 = ALIGNED_STRING("MT_SetPropertyEx"),
+    .MT_SetPropertyEx_str = ALIGNED_STRING("MT_SetPropertyEx"),
 
-    .str_316 = ALIGNED_STRING("MT_GetPropertyEx"),
+    .MT_GetPropertyEx_str = ALIGNED_STRING("MT_GetPropertyEx"),
 
-    .str_317 = ALIGNED_STRING("MT_DumpPointerEx"),
+    .MT_DumpPointerEx_str = ALIGNED_STRING("MT_DumpPointerEx"),
 
-    .str_318 = "MT_DumpPropertyEx",
+    .MT_DumpPropertyEx_str = "MT_DumpPropertyEx",
 
-    .str_319 = "MT_CopyPropertyEx",
+    .MT_CopyPropertyEx_str = "MT_CopyPropertyEx",
 
-    .str_320 = ALIGNED_STRING("MT_GetPropNameSp"),
+    .MT_GetPropNameSp_str = ALIGNED_STRING("MT_GetPropNameSp"),
 
-    .str_321 = "MT_GetPropCountSp",
+    .MT_GetPropCountSp_str = "MT_GetPropCountSp",
 
-    .str_322 = ALIGNED_STRING("MT_GetPropStringEx"),
+    .MT_GetPropStringEx_str = ALIGNED_STRING("MT_GetPropStringEx"),
 
-    .str_323 = "MT_CheckClassSp",
+    .MT_CheckClassSp_str = "MT_CheckClassSp",
 
-    .str_324 = ALIGNED_STRING("MT_GetInstanceSizeSp"),
+    .MT_GetInstanceSizeSp_str = ALIGNED_STRING("MT_GetInstanceSizeSp"),
 
-    .str_325 = "MT_GetProcedureSp",
+    .MT_GetProcedureSp_str = "MT_GetProcedureSp",
 
-    .str_326 = "MT_GetParentClassSp",
+    .MT_GetParentClassSp_str = "MT_GetParentClassSp",
 
-    .str_327 = "MT_GetClassSp",
+    .MT_GetClassSp_str = "MT_GetClassSp",
 
     .field_25fc = 0x00BC,
 
@@ -4022,123 +4022,123 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
         NAKA_ADDR(MainDeleteEvent),
         NAKA_ADDR(DrawBitmapSP2),
         0x00000000,
-        SELF(str_566),
-        SELF(str_565),
-        SELF(str_564),
-        SELF(str_563),
-        SELF(str_562),
-        SELF(str_561),
-        SELF(str_560),
-        SELF(str_559),
-        SELF(str_558),
-        SELF(str_557),
-        SELF(str_556),
-        SELF(str_555),
-        SELF(str_554),
-        SELF(str_553),
-        SELF(str_552),
-        SELF(str_551),
-        SELF(str_550),
-        SELF(str_549),
-        SELF(str_548),
-        SELF(str_547),
-        SELF(str_546),
-        SELF(str_545),
-        SELF(str_544),
-        SELF(str_543),
-        SELF(str_542),
-        SELF(str_541),
-        SELF(str_540),
-        SELF(str_539),
-        SELF(str_538),
-        SELF(str_537),
-        SELF(str_536),
-        SELF(str_535),
-        SELF(str_534),
-        SELF(str_533),
-        SELF(str_532),
+        SELF(InitializeRoot_str),
+        SELF(InitializeMurai_str),
+        SELF(InitializeToshi_str),
+        SELF(InitializeEast_str),
+        SELF(InitializeSuna_str),
+        SELF(InitializeCheap_str),
+        SELF(InitializeScoop_str),
+        SELF(InitializeYoko_str),
+        SELF(InitializeKubo_str),
+        SELF(InitializeHama_str),
+        SELF(InitializeKSS_str),
+        SELF(InitializeNaka_str),
+        SELF(InitializeUser12_str),
+        SELF(InitializeUser13_str),
+        SELF(InitializeUser14_str),
+        SELF(InitializeUser15_str),
+        SELF(InitializeUser16_str),
+        SELF(InitializeUser17_str),
+        SELF(InitializeUser18_str),
+        SELF(InitializeUser19_str),
+        SELF(InitializeUser20_str),
+        SELF(InitializeUser21_str),
+        SELF(InitializeUser22_str),
+        SELF(InitializeUser23_str),
+        SELF(InitializeUser24_str),
+        SELF(InitializeUser25_str),
+        SELF(InitializeUser26_str),
+        SELF(InitializeUser27_str),
+        SELF(InitializeUser28_str),
+        SELF(InitializeUser29_str),
+        SELF(InitializeUser30_str),
+        SELF(InitializeUser31_str),
+        SELF(InitializeGraphics_str),
+        SELF(UpdateScreen_str),
+        SELF(SetNeedUpdate_str),
         SELF(w188_name),
         SELF(w188_code),
-        SELF(str_531),
-        SELF(str_530),
+        SELF(ModifyPixel_str),
+        SELF(ModifyPixelEx_str),
         SELF(w187_name),
         SELF(w187_code),
         SELF(w186_name),
         SELF(w186_code),
-        SELF(str_529),
+        SELF(DrawFrameEx_str),
         SELF(w185_name),
         SELF(w185_code),
         SELF(w184_name),
         SELF(w184_code),
         SELF(w183_name),
         SELF(w183_code),
-        SELF(str_528),
-        SELF(str_527),
-        SELF(str_526),
+        SELF(DrawStringCentered_str),
+        SELF(DrawStringLeftJustify_str),
+        SELF(DrawStringRightJustify_str),
         SELF(w182_name),
         SELF(w182_code),
-        SELF(str_525),
-        SELF(str_524),
-        SELF(str_523),
-        SELF(str_522),
-        SELF(str_521),
-        SELF(str_520),
-        SELF(str_519),
-        SELF(str_518),
+        SELF(InheritedProc_str),
+        SELF(InitializeObjectTable_str),
+        SELF(RegisterObjectTable_str),
+        SELF(RegisterObject_str),
+        SELF(UnRegisterObject_str),
+        SELF(CountObject_str),
+        SELF(CheckViewObject_str),
+        SELF(InitializeEventQueue_str),
         SELF(w181_name),
         SELF(w181_code),
         SELF(w180_name),
         SELF(w180_code),
-        SELF(str_517),
-        SELF(str_516),
-        SELF(str_515),
-        SELF(str_514),
-        SELF(str_513),
-        SELF(str_512),
-        SELF(str_511),
-        SELF(str_510),
-        SELF(str_509),
-        SELF(str_508),
-        SELF(str_507),
-        SELF(str_506),
-        SELF(str_505),
-        SELF(str_504),
-        SELF(str_503),
-        SELF(str_502),
-        SELF(str_501),
-        SELF(str_500),
-        SELF(str_499),
-        SELF(str_498),
-        SELF(str_497),
-        SELF(str_496),
+        SELF(GetCurrentTarget_str),
+        SELF(SetCurrentTarget_str),
+        SELF(MainDispatchEvent_str),
+        SELF(MainSendEvent_str),
+        SELF(MainPostEvent_str),
+        SELF(MainGetEvent_str),
+        SELF(ApPostEvent_str),
+        SELF(ResourceProc_str),
+        SELF(ResBitmapProc_str),
+        SELF(ResFrameProc_str),
+        SELF(ResIconProc_str),
+        SELF(ResFontProc_str),
+        SELF(ResEventProc_str),
+        SELF(ResMethodProc_str),
+        SELF(ResStringProc_str),
+        SELF(ResNameProc_str),
+        SELF(GetFrameSPSize_str),
+        SELF(GetCharHeight_str),
+        SELF(GetCharDescent_str),
+        SELF(GetCenteredDelta_str),
+        SELF(ConvertStrings_str),
+        SELF(CalcTotalWidth_str),
         SELF(w179_name),
         SELF(w179_code),
         SELF(w178_name),
         SELF(w178_code),
-        SELF(str_495),
-        SELF(str_494),
-        SELF(str_493),
-        SELF(str_492),
-        SELF(str_491),
-        SELF(str_490),
-        SELF(str_489),
-        SELF(str_488),
-        SELF(str_487),
-        SELF(str_486),
-        SELF(str_485),
-        SELF(str_484),
-        SELF(str_483),
+        SELF(uwordProc_str),
+        SELF(ucharProc_str),
+        SELF(scharProc_str),
+        SELF(slongProc_str),
+        SELF(ulongProc_str),
+        SELF(boolProc_str),
+        SELF(pBoolProc_str),
+        SELF(pSwordProc_str),
+        SELF(pUwordProc_str),
+        SELF(pScharProc_str),
+        SELF(pUcharProc_str),
+        SELF(pSlongProc_str),
+        SELF(pUlongProc_str),
         SELF(w177_name),
         SELF(w177_code),
-        SELF(str_482),
-        SELF(str_481),
-        SELF(str_480),
-        SELF(str_479),
-        SELF(str_478),
-        SELF(str_477),
+        SELF(pProcProc_str),
+        SELF(pPropProc_str),
+        SELF(pStringProc_str),
+        SELF(ClassIDProc_str),
+        SELF(ScreenIDProc_str),
+        SELF(WindowIDProc_str),
         SELF(w176_name),
         SELF(w176_code),
-        SELF(str_476),
+        SELF(RectX1Proc_str),
         SELF(w175_name),
         SELF(w175_code),
         SELF(w174_name),
@@ -4149,40 +4149,40 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
         SELF(w172_code),
         SELF(w171_name),
         SELF(w171_code),
-        SELF(str_475),
-        SELF(str_474),
+        SELF(ViewFlagProc_str),
+        SELF(ColorIDProc_str),
         SELF(w170_name),
         SELF(w170_code),
-        SELF(str_473),
+        SELF(TitleIDProc_str),
         SELF(w169_name),
         SELF(w169_code),
-        SELF(str_472),
-        SELF(str_471),
-        SELF(str_470),
-        SELF(str_469),
-        SELF(str_468),
-        SELF(str_467),
-        SELF(str_466),
-        SELF(str_465),
+        SELF(AlignmentIDProc_str),
+        SELF(EditSwIDProc_str),
+        SELF(EditSwStyleIDProc_str),
+        SELF(LineModeIDProc_str),
+        SELF(FrameIDProc_str),
+        SELF(BitmapIDProc_str),
+        SELF(ApFuncIDProc_str),
+        SELF(MainFuncIDProc_str),
         SELF(w168_name),
         SELF(w168_code),
-        SELF(str_464),
-        SELF(str_463),
-        SELF(str_462),
+        SELF(TrackIDProc_str),
+        SELF(FunctionProc_str),
+        SELF(ApFunctionProc_str),
         SELF(w167_name),
         SELF(w167_code),
         SELF(w166_name),
         SELF(w166_code),
-        SELF(str_461),
+        SELF(RegisterMode_str),
         SELF(w165_name),
         SELF(w165_code),
         SELF(w164_name),
         SELF(w164_code),
-        SELF(str_460),
-        SELF(str_459),
-        SELF(str_458),
-        SELF(str_457),
-        SELF(str_456),
+        SELF(RegisterTitle_str),
+        SELF(UnregisteredTitle_str),
+        SELF(GetTitleNow_str),
+        SELF(GetTitleOld_str),
+        SELF(ViewableProc_str),
         SELF(w163_name),
         SELF(w163_code),
         SELF(w162_name),
@@ -4197,25 +4197,25 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
         SELF(w158_code),
         SELF(w157_name),
         SELF(w157_code),
-        SELF(str_455),
-        SELF(str_454),
+        SELF(SetSuperView_str),
+        SELF(GetLinkView_str),
         SELF(w156_name),
         SELF(w156_code),
         SELF(w155_name),
         SELF(w155_code),
-        SELF(str_453),
-        SELF(str_452),
-        SELF(str_451),
-        SELF(str_450),
-        SELF(str_449),
+        SELF(GetClientBox_str),
+        SELF(GetClientBox2_str),
+        SELF(DrawDesignBox_str),
+        SELF(GetFrameColor_str),
+        SELF(BoxLeftCheck_str),
         SELF(w154_name),
         SELF(w154_code),
         SELF(w153_name),
         SELF(w153_code),
-        SELF(str_448),
-        SELF(str_447),
-        SELF(str_446),
-        SELF(str_445),
+        SELF(GetClientFrame_str),
+        SELF(GetClientFrame2_str),
+        SELF(DrawDesignFrame_str),
+        SELF(TtlScreenProc_str),
         SELF(w152_name),
         SELF(w152_code),
         SELF(w151_name),
@@ -4224,155 +4224,155 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
         SELF(w150_code),
         SELF(w149_name),
         SELF(w149_code),
-        SELF(str_444),
-        SELF(str_443),
+        SELF(MainLswPartGet_str),
+        SELF(SetLswFilter_str),
         SELF(w148_name),
         SELF(w148_code),
         SELF(w147_name),
         SELF(w147_code),
-        SELF(str_442),
-        SELF(str_441),
+        SELF(ModeEditProc_str),
+        SELF(TitleEditProc_str),
         SELF(w146_name),
         SELF(w146_code),
-        SELF(str_440),
+        SELF(StringBoxProc_str),
         SELF(w145_name),
         SELF(w145_code),
         SELF(w144_name),
         SELF(w144_code),
         SELF(w143_name),
         SELF(w143_code),
-        SELF(str_439),
-        SELF(str_438),
-        SELF(str_437),
-        SELF(str_436),
-        SELF(str_435),
-        SELF(str_434),
-        SELF(str_433),
-        SELF(str_432),
-        SELF(str_431),
-        SELF(str_430),
-        SELF(str_429),
-        SELF(str_428),
-        SELF(str_427),
-        SELF(str_426),
-        SELF(str_425),
-        SELF(str_424),
-        SELF(str_423),
-        SELF(str_422),
-        SELF(str_421),
-        SELF(str_420),
-        SELF(str_419),
-        SELF(str_418),
+        SELF(PsParaBoxProc_str),
+        SELF(AcLswBoxProc_str),
+        SELF(AcTempoBoxProc_str),
+        SELF(PsEditBoxProc_str),
+        SELF(PsNumEditBoxProc_str),
+        SELF(PsTblEditBoxProc_str),
+        SELF(AcOnOffBoxProc_str),
+        SELF(AcNumEditBoxProc_str),
+        SELF(AcLswEditBoxProc_str),
+        SELF(AcRamEditBoxProc_str),
+        SELF(PsMenuBoxProc_str),
+        SELF(AcTitleMenuProc_str),
+        SELF(PsEditSwBoxProc_str),
+        SELF(PsWideESBoxProc_str),
+        SELF(AcIndexEditSwProc_str),
+        SELF(AcFuncEditSwProc_str),
+        SELF(PsPageBoxProc_str),
+        SELF(AcWindowPageProc_str),
+        SELF(PsToggleBoxProc_str),
+        SELF(PsInvisibleBoxProc_str),
+        SELF(IvPageControlProc_str),
+        SELF(IvMainEditSwProc_str),
         SELF(w142_name),
         SELF(w142_code),
-        SELF(str_417),
-        SELF(str_416),
-        SELF(str_415),
-        SELF(str_414),
-        SELF(str_413),
-        SELF(str_412),
-        SELF(str_411),
-        SELF(str_410),
-        SELF(str_409),
-        SELF(str_408),
+        SELF(SetDialDown_str),
+        SELF(ChangeWallPalette_str),
+        SELF(GetWallPaletteRGB_str),
+        SELF(AcSoundNameProc_str),
+        SELF(AcRhythmNameProc_str),
+        SELF(AcPmemNameProc_str),
+        SELF(AcMixerVolProc_str),
+        SELF(VwMenuBoxProc_str),
+        SELF(VwEditSwBoxProc_str),
+        SELF(AcBitEditBoxProc_str),
         SELF(w141_name),
         SELF(w141_code),
-        SELF(str_407),
+        SELF(AcFuncToggleProc_str),
         SELF(w140_name),
         SELF(w140_code),
-        SELF(str_406),
+        SELF(InitializeTimer_str),
         SELF(w139_name),
         SELF(w139_code),
-        SELF(str_405),
-        SELF(str_404),
-        SELF(str_403),
-        SELF(str_402),
-        SELF(str_401),
+        SELF(ResetApTimer_str),
+        SELF(KillApTimer_str),
+        SELF(GetRootObject_str),
+        SELF(GetRootEvent_str),
+        SELF(GetRootParam_str),
         SELF(w138_name),
         SELF(w138_code),
-        SELF(str_400),
-        SELF(str_399),
-        SELF(str_398),
+        SELF(SetRootObject_str),
+        SELF(GetFocusObject_str),
+        SELF(GetFocusEvent_str),
         SELF(w137_name),
         SELF(w137_code),
-        SELF(str_397),
-        SELF(str_396),
-        SELF(str_395),
-        SELF(str_394),
-        SELF(str_393),
-        SELF(str_392),
-        SELF(str_391),
-        SELF(str_390),
-        SELF(str_389),
-        SELF(str_388),
-        SELF(str_387),
-        SELF(str_386),
-        SELF(str_385),
-        SELF(str_384),
-        SELF(str_383),
-        SELF(str_382),
-        SELF(str_381),
-        SELF(str_380),
-        SELF(str_379),
-        SELF(str_378),
-        SELF(str_377),
-        SELF(str_376),
-        SELF(str_375),
-        SELF(str_374),
-        SELF(str_373),
-        SELF(str_372),
-        SELF(str_371),
-        SELF(str_370),
-        SELF(str_369),
-        SELF(str_368),
-        SELF(str_367),
-        SELF(str_366),
-        SELF(str_365),
-        SELF(str_364),
-        SELF(str_363),
-        SELF(str_362),
-        SELF(str_361),
-        SELF(str_360),
-        SELF(str_359),
-        SELF(str_358),
-        SELF(str_357),
-        SELF(str_356),
-        SELF(str_355),
-        SELF(str_354),
-        SELF(str_353),
-        SELF(str_352),
-        SELF(str_351),
+        SELF(IvExitModeProc_str),
+        SELF(IvExitScreenProc_str),
+        SELF(DrawStringReverse_str),
+        SELF(GetBoxCenter_str),
+        SELF(IvFixWinProc_str),
+        SELF(AcNamingWindowProc_str),
+        SELF(PsCursorBoxProc_str),
+        SELF(IvNamingProc_str),
+        SELF(AcIndexToggleProc_str),
+        SELF(AcRamBoxProc_str),
+        SELF(PsRadioBoxProc_str),
+        SELF(AcStrRadioBoxProc_str),
+        SELF(IvCatchEventProc_str),
+        SELF(SetDialFocus_str),
+        SELF(GetDialFocus_str),
+        SELF(PsListBoxProc_str),
+        SELF(PsGridBoxProc_str),
+        SELF(AcListBoxProc_str),
+        SELF(AcGridBoxProc_str),
+        SELF(DbDebugMenuProc_str),
+        SELF(PsTrackSwitchProc_str),
+        SELF(AcTrackSwitchProc_str),
+        SELF(IvDirmdScreenProc_str),
+        SELF(DirmdEmulator_str),
+        SELF(GetDirmdFlag_str),
+        SELF(IvTrackSwitchProc_str),
+        SELF(IvExitWindowProc_str),
+        SELF(DbMemoryDumpProc_str),
+        SELF(IntTimeIDProc_str),
+        SELF(IvInterruptProc_str),
+        SELF(SetInterruptTime_str),
+        SELF(CheckNotDrawFlag_str),
+        SELF(IvIntReminderProc_str),
+        SELF(IvIntErrorProc_str),
+        SELF(IvIntCompleteProc_str),
+        SELF(IvIntVariProc_str),
+        SELF(IvIntEasySetProc_str),
+        SELF(SetVariFlag_str),
+        SELF(ConvertStringsEx_str),
+        SELF(SetNotDrawFlag_str),
+        SELF(IvShowHideProc_str),
+        SELF(PsTextBoxProc_str),
+        SELF(AcLanguageTextProc_str),
+        SELF(TrTransposeBoxProc_str),
+        SELF(TrChordBoxProc_str),
+        SELF(GetPartSelect_str),
+        SELF(DrawBitmapSP_str),
         SELF(w136_name),
         SELF(w136_code),
-        SELF(str_350),
-        SELF(str_349),
-        SELF(str_348),
-        SELF(str_347),
-        SELF(str_346),
-        SELF(str_345),
-        SELF(str_344),
-        SELF(str_343),
+        SELF(IvScreenProc_str),
+        SELF(GetNamingWindowID_str),
+        SELF(DrawBitmapSPFast_str),
+        SELF(DrawBitmapFast_str),
+        SELF(SetPaletteRGB_str),
+        SELF(InitPaletteRGB_str),
+        SELF(SetWallPaper_str),
+        SELF(SetWallColor_str),
         SELF(w135_name),
         SELF(w135_code),
-        SELF(str_342),
-        SELF(str_341),
-        SELF(str_340),
-        SELF(str_339),
-        SELF(str_338),
-        SELF(str_337),
-        SELF(str_336),
-        SELF(str_335),
-        SELF(str_334),
-        SELF(str_333),
+        SELF(DeleteSpecificEvent_str),
+        SELF(DeleteEvent_str),
+        SELF(SleepMainTask_str),
+        SELF(WakeUpMainTask_str),
+        SELF(SleepApTask_str),
+        SELF(WakeUpApTask_str),
+        SELF(RefreshApTask_str),
+        SELF(ApDeliveryEvent_str),
+        SELF(VwUserBitmapByNameProc_str),
+        SELF(DrawBitmapFile_str),
         SELF(w134_name),
         SELF(w134_code),
-        SELF(str_332),
-        SELF(str_331),
-        SELF(str_330),
+        SELF(RefreshSwEvent_str),
+        SELF(InitDrawTask_str),
+        SELF(SetRootEvent_str),
         SELF(w133_name),
         SELF(w133_code),
-        SELF(str_329),
-        SELF(str_328),
+        SELF(MainDeleteSpecificEvent_str),
+        SELF(MainDeleteEvent_str),
         SELF(w132_name),
         SELF(w132_code),
     },
@@ -4381,269 +4381,269 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .w132_name = "DrawBitmapSP2",
 
-    .str_328 = "MainDeleteEvent",
+    .MainDeleteEvent_str = "MainDeleteEvent",
 
-    .str_329 = "MainDeleteSpecificEvent",
+    .MainDeleteSpecificEvent_str = "MainDeleteSpecificEvent",
 
     .w133_code = ALIGNED_STRING("DrawFunc"),
 
     .w133_name = ALIGNED_STRING("SetRootParam"),
 
-    .str_330 = ALIGNED_STRING("SetRootEvent"),
+    .SetRootEvent_str = ALIGNED_STRING("SetRootEvent"),
 
-    .str_331 = ALIGNED_STRING("InitDrawTask"),
+    .InitDrawTask_str = ALIGNED_STRING("InitDrawTask"),
 
-    .str_332 = ALIGNED_STRING("RefreshSwEvent"),
+    .RefreshSwEvent_str = ALIGNED_STRING("RefreshSwEvent"),
 
     .w134_code = "LcdOn",
 
     .w134_name = ALIGNED_STRING("LcdOff"),
 
-    .str_333 = ALIGNED_STRING("DrawBitmapFile"),
+    .DrawBitmapFile_str = ALIGNED_STRING("DrawBitmapFile"),
 
-    .str_334 = ALIGNED_STRING("VwUserBitmapByNameProc"),
+    .VwUserBitmapByNameProc_str = ALIGNED_STRING("VwUserBitmapByNameProc"),
 
-    .str_335 = "ApDeliveryEvent",
+    .ApDeliveryEvent_str = "ApDeliveryEvent",
 
-    .str_336 = "RefreshApTask",
+    .RefreshApTask_str = "RefreshApTask",
 
-    .str_337 = ALIGNED_STRING("WakeUpApTask"),
+    .WakeUpApTask_str = ALIGNED_STRING("WakeUpApTask"),
 
-    .str_338 = "SleepApTask",
+    .SleepApTask_str = "SleepApTask",
 
-    .str_339 = ALIGNED_STRING("WakeUpMainTask"),
+    .WakeUpMainTask_str = ALIGNED_STRING("WakeUpMainTask"),
 
-    .str_340 = "SleepMainTask",
+    .SleepMainTask_str = "SleepMainTask",
 
-    .str_341 = "DeleteEvent",
+    .DeleteEvent_str = "DeleteEvent",
 
-    .str_342 = "DeleteSpecificEvent",
+    .DeleteSpecificEvent_str = "DeleteSpecificEvent",
 
     .w135_code = ALIGNED_STRING("FuncCall"),
 
     .w135_name = ALIGNED_STRING("IvIntWelcomeProc"),
 
-    .str_343 = ALIGNED_STRING("SetWallColor"),
+    .SetWallColor_str = ALIGNED_STRING("SetWallColor"),
 
-    .str_344 = ALIGNED_STRING("SetWallPaper"),
+    .SetWallPaper_str = ALIGNED_STRING("SetWallPaper"),
 
-    .str_345 = ALIGNED_STRING("InitPaletteRGB"),
+    .InitPaletteRGB_str = ALIGNED_STRING("InitPaletteRGB"),
 
-    .str_346 = "SetPaletteRGB",
+    .SetPaletteRGB_str = "SetPaletteRGB",
 
-    .str_347 = ALIGNED_STRING("DrawBitmapFast"),
+    .DrawBitmapFast_str = ALIGNED_STRING("DrawBitmapFast"),
 
-    .str_348 = ALIGNED_STRING("DrawBitmapSPFast"),
+    .DrawBitmapSPFast_str = ALIGNED_STRING("DrawBitmapSPFast"),
 
-    .str_349 = "GetNamingWindowID",
+    .GetNamingWindowID_str = "GetNamingWindowID",
 
-    .str_350 = ALIGNED_STRING("IvScreenProc"),
+    .IvScreenProc_str = ALIGNED_STRING("IvScreenProc"),
 
     .w136_code = ALIGNED_STRING("CaptureLcd"),
 
     .w136_name = ALIGNED_STRING("VwUserBitmapProc"),
 
-    .str_351 = ALIGNED_STRING("DrawBitmapSP"),
+    .DrawBitmapSP_str = ALIGNED_STRING("DrawBitmapSP"),
 
-    .str_352 = "GetPartSelect",
+    .GetPartSelect_str = "GetPartSelect",
 
-    .str_353 = ALIGNED_STRING("TrChordBoxProc"),
+    .TrChordBoxProc_str = ALIGNED_STRING("TrChordBoxProc"),
 
-    .str_354 = ALIGNED_STRING("TrTransposeBoxProc"),
+    .TrTransposeBoxProc_str = ALIGNED_STRING("TrTransposeBoxProc"),
 
-    .str_355 = ALIGNED_STRING("AcLanguageTextProc"),
+    .AcLanguageTextProc_str = ALIGNED_STRING("AcLanguageTextProc"),
 
-    .str_356 = "PsTextBoxProc",
+    .PsTextBoxProc_str = "PsTextBoxProc",
 
-    .str_357 = ALIGNED_STRING("IvShowHideProc"),
+    .IvShowHideProc_str = ALIGNED_STRING("IvShowHideProc"),
 
-    .str_358 = ALIGNED_STRING("SetNotDrawFlag"),
+    .SetNotDrawFlag_str = ALIGNED_STRING("SetNotDrawFlag"),
 
-    .str_359 = ALIGNED_STRING("ConvertStringsEx"),
+    .ConvertStringsEx_str = ALIGNED_STRING("ConvertStringsEx"),
 
-    .str_360 = "SetVariFlag",
+    .SetVariFlag_str = "SetVariFlag",
 
-    .str_361 = ALIGNED_STRING("IvIntEasySetProc"),
+    .IvIntEasySetProc_str = ALIGNED_STRING("IvIntEasySetProc"),
 
-    .str_362 = "IvIntVariProc",
+    .IvIntVariProc_str = "IvIntVariProc",
 
-    .str_363 = "IvIntCompleteProc",
+    .IvIntCompleteProc_str = "IvIntCompleteProc",
 
-    .str_364 = ALIGNED_STRING("IvIntErrorProc"),
+    .IvIntErrorProc_str = ALIGNED_STRING("IvIntErrorProc"),
 
-    .str_365 = "IvIntReminderProc",
+    .IvIntReminderProc_str = "IvIntReminderProc",
 
-    .str_366 = ALIGNED_STRING("CheckNotDrawFlag"),
+    .CheckNotDrawFlag_str = ALIGNED_STRING("CheckNotDrawFlag"),
 
-    .str_367 = ALIGNED_STRING("SetInterruptTime"),
+    .SetInterruptTime_str = ALIGNED_STRING("SetInterruptTime"),
 
-    .str_368 = "IvInterruptProc",
+    .IvInterruptProc_str = "IvInterruptProc",
 
-    .str_369 = "IntTimeIDProc",
+    .IntTimeIDProc_str = "IntTimeIDProc",
 
-    .str_370 = ALIGNED_STRING("DbMemoryDumpProc"),
+    .DbMemoryDumpProc_str = ALIGNED_STRING("DbMemoryDumpProc"),
 
-    .str_371 = ALIGNED_STRING("IvExitWindowProc"),
+    .IvExitWindowProc_str = ALIGNED_STRING("IvExitWindowProc"),
 
-    .str_372 = "IvTrackSwitchProc",
+    .IvTrackSwitchProc_str = "IvTrackSwitchProc",
 
-    .str_373 = ALIGNED_STRING("GetDirmdFlag"),
+    .GetDirmdFlag_str = ALIGNED_STRING("GetDirmdFlag"),
 
-    .str_374 = "DirmdEmulator",
+    .DirmdEmulator_str = "DirmdEmulator",
 
-    .str_375 = "IvDirmdScreenProc",
+    .IvDirmdScreenProc_str = "IvDirmdScreenProc",
 
-    .str_376 = "AcTrackSwitchProc",
+    .AcTrackSwitchProc_str = "AcTrackSwitchProc",
 
-    .str_377 = "PsTrackSwitchProc",
+    .PsTrackSwitchProc_str = "PsTrackSwitchProc",
 
-    .str_378 = "DbDebugMenuProc",
+    .DbDebugMenuProc_str = "DbDebugMenuProc",
 
-    .str_379 = "AcGridBoxProc",
+    .AcGridBoxProc_str = "AcGridBoxProc",
 
-    .str_380 = "AcListBoxProc",
+    .AcListBoxProc_str = "AcListBoxProc",
 
-    .str_381 = "PsGridBoxProc",
+    .PsGridBoxProc_str = "PsGridBoxProc",
 
-    .str_382 = "PsListBoxProc",
+    .PsListBoxProc_str = "PsListBoxProc",
 
-    .str_383 = ALIGNED_STRING("GetDialFocus"),
+    .GetDialFocus_str = ALIGNED_STRING("GetDialFocus"),
 
-    .str_384 = ALIGNED_STRING("SetDialFocus"),
+    .SetDialFocus_str = ALIGNED_STRING("SetDialFocus"),
 
-    .str_385 = ALIGNED_STRING("IvCatchEventProc"),
+    .IvCatchEventProc_str = ALIGNED_STRING("IvCatchEventProc"),
 
-    .str_386 = "AcStrRadioBoxProc",
+    .AcStrRadioBoxProc_str = "AcStrRadioBoxProc",
 
-    .str_387 = ALIGNED_STRING("PsRadioBoxProc"),
+    .PsRadioBoxProc_str = ALIGNED_STRING("PsRadioBoxProc"),
 
-    .str_388 = ALIGNED_STRING("AcRamBoxProc"),
+    .AcRamBoxProc_str = ALIGNED_STRING("AcRamBoxProc"),
 
-    .str_389 = "AcIndexToggleProc",
+    .AcIndexToggleProc_str = "AcIndexToggleProc",
 
-    .str_390 = ALIGNED_STRING("IvNamingProc"),
+    .IvNamingProc_str = ALIGNED_STRING("IvNamingProc"),
 
-    .str_391 = "PsCursorBoxProc",
+    .PsCursorBoxProc_str = "PsCursorBoxProc",
 
-    .str_392 = ALIGNED_STRING("AcNamingWindowProc"),
+    .AcNamingWindowProc_str = ALIGNED_STRING("AcNamingWindowProc"),
 
-    .str_393 = ALIGNED_STRING("IvFixWinProc"),
+    .IvFixWinProc_str = ALIGNED_STRING("IvFixWinProc"),
 
-    .str_394 = ALIGNED_STRING("GetBoxCenter"),
+    .GetBoxCenter_str = ALIGNED_STRING("GetBoxCenter"),
 
-    .str_395 = "DrawStringReverse",
+    .DrawStringReverse_str = "DrawStringReverse",
 
-    .str_396 = ALIGNED_STRING("IvExitScreenProc"),
+    .IvExitScreenProc_str = ALIGNED_STRING("IvExitScreenProc"),
 
-    .str_397 = ALIGNED_STRING("IvExitModeProc"),
+    .IvExitModeProc_str = ALIGNED_STRING("IvExitModeProc"),
 
     .w137_code = ALIGNED_STRING("IvExitProc"),
 
     .w137_name = "GetFocusParam",
 
-    .str_398 = "GetFocusEvent",
+    .GetFocusEvent_str = "GetFocusEvent",
 
-    .str_399 = ALIGNED_STRING("GetFocusObject"),
+    .GetFocusObject_str = ALIGNED_STRING("GetFocusObject"),
 
-    .str_400 = "SetRootObject",
+    .SetRootObject_str = "SetRootObject",
 
     .w138_code = ALIGNED_STRING("SetAutoInc"),
 
     .w138_name = "SetAutoIncDefault",
 
-    .str_401 = ALIGNED_STRING("GetRootParam"),
+    .GetRootParam_str = ALIGNED_STRING("GetRootParam"),
 
-    .str_402 = ALIGNED_STRING("GetRootEvent"),
+    .GetRootEvent_str = ALIGNED_STRING("GetRootEvent"),
 
-    .str_403 = "GetRootObject",
+    .GetRootObject_str = "GetRootObject",
 
-    .str_404 = "KillApTimer",
+    .KillApTimer_str = "KillApTimer",
 
-    .str_405 = ALIGNED_STRING("ResetApTimer"),
+    .ResetApTimer_str = ALIGNED_STRING("ResetApTimer"),
 
     .w139_code = ALIGNED_STRING("SetApTimer"),
 
     .w139_name = "ApTimer",
 
-    .str_406 = "InitializeTimer",
+    .InitializeTimer_str = "InitializeTimer",
 
     .w140_code = ALIGNED_STRING("DbMemoProc"),
 
     .w140_name = ALIGNED_STRING("PsWideToggleProc"),
 
-    .str_407 = ALIGNED_STRING("AcFuncToggleProc"),
+    .AcFuncToggleProc_str = ALIGNED_STRING("AcFuncToggleProc"),
 
     .w141_code = ALIGNED_STRING("MainBitGet"),
 
     .w141_name = ALIGNED_STRING("MainBitPut"),
 
-    .str_408 = ALIGNED_STRING("AcBitEditBoxProc"),
+    .AcBitEditBoxProc_str = ALIGNED_STRING("AcBitEditBoxProc"),
 
-    .str_409 = "VwEditSwBoxProc",
+    .VwEditSwBoxProc_str = "VwEditSwBoxProc",
 
-    .str_410 = "VwMenuBoxProc",
+    .VwMenuBoxProc_str = "VwMenuBoxProc",
 
-    .str_411 = ALIGNED_STRING("AcMixerVolProc"),
+    .AcMixerVolProc_str = ALIGNED_STRING("AcMixerVolProc"),
 
-    .str_412 = ALIGNED_STRING("AcPmemNameProc"),
+    .AcPmemNameProc_str = ALIGNED_STRING("AcPmemNameProc"),
 
-    .str_413 = ALIGNED_STRING("AcRhythmNameProc"),
+    .AcRhythmNameProc_str = ALIGNED_STRING("AcRhythmNameProc"),
 
-    .str_414 = "AcSoundNameProc",
+    .AcSoundNameProc_str = "AcSoundNameProc",
 
-    .str_415 = "GetWallPaletteRGB",
+    .GetWallPaletteRGB_str = "GetWallPaletteRGB",
 
-    .str_416 = "ChangeWallPalette",
+    .ChangeWallPalette_str = "ChangeWallPalette",
 
-    .str_417 = "SetDialDown",
+    .SetDialDown_str = "SetDialDown",
 
     .w142_code = "SetDialUp",
 
     .w142_name = "SetDialEnable",
 
-    .str_418 = ALIGNED_STRING("IvMainEditSwProc"),
+    .IvMainEditSwProc_str = ALIGNED_STRING("IvMainEditSwProc"),
 
-    .str_419 = "IvPageControlProc",
+    .IvPageControlProc_str = "IvPageControlProc",
 
-    .str_420 = ALIGNED_STRING("PsInvisibleBoxProc"),
+    .PsInvisibleBoxProc_str = ALIGNED_STRING("PsInvisibleBoxProc"),
 
-    .str_421 = "PsToggleBoxProc",
+    .PsToggleBoxProc_str = "PsToggleBoxProc",
 
-    .str_422 = ALIGNED_STRING("AcWindowPageProc"),
+    .AcWindowPageProc_str = ALIGNED_STRING("AcWindowPageProc"),
 
-    .str_423 = "PsPageBoxProc",
+    .PsPageBoxProc_str = "PsPageBoxProc",
 
-    .str_424 = ALIGNED_STRING("AcFuncEditSwProc"),
+    .AcFuncEditSwProc_str = ALIGNED_STRING("AcFuncEditSwProc"),
 
-    .str_425 = "AcIndexEditSwProc",
+    .AcIndexEditSwProc_str = "AcIndexEditSwProc",
 
-    .str_426 = "PsWideESBoxProc",
+    .PsWideESBoxProc_str = "PsWideESBoxProc",
 
-    .str_427 = "PsEditSwBoxProc",
+    .PsEditSwBoxProc_str = "PsEditSwBoxProc",
 
-    .str_428 = "AcTitleMenuProc",
+    .AcTitleMenuProc_str = "AcTitleMenuProc",
 
-    .str_429 = "PsMenuBoxProc",
+    .PsMenuBoxProc_str = "PsMenuBoxProc",
 
-    .str_430 = ALIGNED_STRING("AcRamEditBoxProc"),
+    .AcRamEditBoxProc_str = ALIGNED_STRING("AcRamEditBoxProc"),
 
-    .str_431 = ALIGNED_STRING("AcLswEditBoxProc"),
+    .AcLswEditBoxProc_str = ALIGNED_STRING("AcLswEditBoxProc"),
 
-    .str_432 = ALIGNED_STRING("AcNumEditBoxProc"),
+    .AcNumEditBoxProc_str = ALIGNED_STRING("AcNumEditBoxProc"),
 
-    .str_433 = ALIGNED_STRING("AcOnOffBoxProc"),
+    .AcOnOffBoxProc_str = ALIGNED_STRING("AcOnOffBoxProc"),
 
-    .str_434 = ALIGNED_STRING("PsTblEditBoxProc"),
+    .PsTblEditBoxProc_str = ALIGNED_STRING("PsTblEditBoxProc"),
 
-    .str_435 = ALIGNED_STRING("PsNumEditBoxProc"),
+    .PsNumEditBoxProc_str = ALIGNED_STRING("PsNumEditBoxProc"),
 
-    .str_436 = "PsEditBoxProc",
+    .PsEditBoxProc_str = "PsEditBoxProc",
 
-    .str_437 = ALIGNED_STRING("AcTempoBoxProc"),
+    .AcTempoBoxProc_str = ALIGNED_STRING("AcTempoBoxProc"),
 
-    .str_438 = ALIGNED_STRING("AcLswBoxProc"),
+    .AcLswBoxProc_str = ALIGNED_STRING("AcLswBoxProc"),
 
-    .str_439 = "PsParaBoxProc",
+    .PsParaBoxProc_str = "PsParaBoxProc",
 
     .w143_code = "VwBoxProc",
 
@@ -4657,15 +4657,15 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .w145_name = "LabelProc",
 
-    .str_440 = "StringBoxProc",
+    .StringBoxProc_str = "StringBoxProc",
 
     .w146_code = ALIGNED_STRING("WindowProc"),
 
     .w146_name = ALIGNED_STRING("GroupBoxProc"),
 
-    .str_441 = "TitleEditProc",
+    .TitleEditProc_str = "TitleEditProc",
 
-    .str_442 = ALIGNED_STRING("ModeEditProc"),
+    .ModeEditProc_str = ALIGNED_STRING("ModeEditProc"),
 
     .w147_code = ALIGNED_STRING("MainRamGet"),
 
@@ -4675,9 +4675,9 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .w148_name = ALIGNED_STRING("ResetLswFilter"),
 
-    .str_443 = ALIGNED_STRING("SetLswFilter"),
+    .SetLswFilter_str = ALIGNED_STRING("SetLswFilter"),
 
-    .str_444 = ALIGNED_STRING("MainLswPartGet"),
+    .MainLswPartGet_str = ALIGNED_STRING("MainLswPartGet"),
 
     .w149_code = ALIGNED_STRING("MainLswGet"),
 
@@ -4695,13 +4695,13 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .w152_name = ALIGNED_STRING("DrawTitleBar"),
 
-    .str_445 = "TtlScreenProc",
+    .TtlScreenProc_str = "TtlScreenProc",
 
-    .str_446 = "DrawDesignFrame",
+    .DrawDesignFrame_str = "DrawDesignFrame",
 
-    .str_447 = "GetClientFrame2",
+    .GetClientFrame2_str = "GetClientFrame2",
 
-    .str_448 = ALIGNED_STRING("GetClientFrame"),
+    .GetClientFrame_str = ALIGNED_STRING("GetClientFrame"),
 
     .w153_code = "FrameProc",
 
@@ -4711,15 +4711,15 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .w154_name = "BoxRightCheck",
 
-    .str_449 = ALIGNED_STRING("BoxLeftCheck"),
+    .BoxLeftCheck_str = ALIGNED_STRING("BoxLeftCheck"),
 
-    .str_450 = "GetFrameColor",
+    .GetFrameColor_str = "GetFrameColor",
 
-    .str_451 = "DrawDesignBox",
+    .DrawDesignBox_str = "DrawDesignBox",
 
-    .str_452 = "GetClientBox2",
+    .GetClientBox2_str = "GetClientBox2",
 
-    .str_453 = ALIGNED_STRING("GetClientBox"),
+    .GetClientBox_str = ALIGNED_STRING("GetClientBox"),
 
     .w155_code = "BoxProc",
 
@@ -4729,9 +4729,9 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .w156_name = "GetViewInstance",
 
-    .str_454 = "GetLinkView",
+    .GetLinkView_str = "GetLinkView",
 
-    .str_455 = ALIGNED_STRING("SetSuperView"),
+    .SetSuperView_str = ALIGNED_STRING("SetSuperView"),
 
     .w157_code = ALIGNED_STRING("Unlink"),
 
@@ -4761,15 +4761,15 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .w163_name = ALIGNED_STRING("SetConst"),
 
-    .str_456 = ALIGNED_STRING("ViewableProc"),
+    .ViewableProc_str = ALIGNED_STRING("ViewableProc"),
 
-    .str_457 = "GetTitleOld",
+    .GetTitleOld_str = "GetTitleOld",
 
-    .str_458 = "GetTitleNow",
+    .GetTitleNow_str = "GetTitleNow",
 
-    .str_459 = "UnregisteredTitle",
+    .UnregisteredTitle_str = "UnregisteredTitle",
 
-    .str_460 = "RegisterTitle",
+    .RegisterTitle_str = "RegisterTitle",
 
     .w164_code = "TitleProc",
 
@@ -4779,7 +4779,7 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .w165_name = ALIGNED_STRING("UnregisteredMode"),
 
-    .str_461 = ALIGNED_STRING("RegisterMode"),
+    .RegisterMode_str = ALIGNED_STRING("RegisterMode"),
 
     .w166_code = ALIGNED_STRING("ModeProc"),
 
@@ -4789,45 +4789,45 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .w167_name = ALIGNED_STRING("MainFunctionProc"),
 
-    .str_462 = ALIGNED_STRING("ApFunctionProc"),
+    .ApFunctionProc_str = ALIGNED_STRING("ApFunctionProc"),
 
-    .str_463 = ALIGNED_STRING("FunctionProc"),
+    .FunctionProc_str = ALIGNED_STRING("FunctionProc"),
 
-    .str_464 = "TrackIDProc",
+    .TrackIDProc_str = "TrackIDProc",
 
     .w168_code = ALIGNED_STRING("PartIDProc"),
 
     .w168_name = ALIGNED_STRING("UserIDProc"),
 
-    .str_465 = ALIGNED_STRING("MainFuncIDProc"),
+    .MainFuncIDProc_str = ALIGNED_STRING("MainFuncIDProc"),
 
-    .str_466 = ALIGNED_STRING("ApFuncIDProc"),
+    .ApFuncIDProc_str = ALIGNED_STRING("ApFuncIDProc"),
 
-    .str_467 = ALIGNED_STRING("BitmapIDProc"),
+    .BitmapIDProc_str = ALIGNED_STRING("BitmapIDProc"),
 
-    .str_468 = "FrameIDProc",
+    .FrameIDProc_str = "FrameIDProc",
 
-    .str_469 = ALIGNED_STRING("LineModeIDProc"),
+    .LineModeIDProc_str = ALIGNED_STRING("LineModeIDProc"),
 
-    .str_470 = "EditSwStyleIDProc",
+    .EditSwStyleIDProc_str = "EditSwStyleIDProc",
 
-    .str_471 = ALIGNED_STRING("EditSwIDProc"),
+    .EditSwIDProc_str = ALIGNED_STRING("EditSwIDProc"),
 
-    .str_472 = "AlignmentIDProc",
+    .AlignmentIDProc_str = "AlignmentIDProc",
 
     .w169_code = ALIGNED_STRING("FontIDProc"),
 
     .w169_name = ALIGNED_STRING("IconIDProc"),
 
-    .str_473 = "TitleIDProc",
+    .TitleIDProc_str = "TitleIDProc",
 
     .w170_code = ALIGNED_STRING("ModeIDProc"),
 
     .w170_name = ALIGNED_STRING("BorderIDProc"),
 
-    .str_474 = "ColorIDProc",
+    .ColorIDProc_str = "ColorIDProc",
 
-    .str_475 = ALIGNED_STRING("ViewFlagProc"),
+    .ViewFlagProc_str = ALIGNED_STRING("ViewFlagProc"),
 
     .w171_code = ALIGNED_STRING("ViewIDProc"),
 
@@ -4849,53 +4849,53 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .w175_name = ALIGNED_STRING("RectY1Proc"),
 
-    .str_476 = ALIGNED_STRING("RectX1Proc"),
+    .RectX1Proc_str = ALIGNED_STRING("RectX1Proc"),
 
     .w176_code = "RECTWProc",
 
     .w176_name = "EventIDProc",
 
-    .str_477 = ALIGNED_STRING("WindowIDProc"),
+    .WindowIDProc_str = ALIGNED_STRING("WindowIDProc"),
 
-    .str_478 = ALIGNED_STRING("ScreenIDProc"),
+    .ScreenIDProc_str = ALIGNED_STRING("ScreenIDProc"),
 
-    .str_479 = "ClassIDProc",
+    .ClassIDProc_str = "ClassIDProc",
 
-    .str_480 = "pStringProc",
+    .pStringProc_str = "pStringProc",
 
-    .str_481 = "pPropProc",
+    .pPropProc_str = "pPropProc",
 
-    .str_482 = "pProcProc",
+    .pProcProc_str = "pProcProc",
 
     .w177_code = "pFuncProc",
 
     .w177_name = ALIGNED_STRING("ObjectIDProc"),
 
-    .str_483 = ALIGNED_STRING("pUlongProc"),
+    .pUlongProc_str = ALIGNED_STRING("pUlongProc"),
 
-    .str_484 = ALIGNED_STRING("pSlongProc"),
+    .pSlongProc_str = ALIGNED_STRING("pSlongProc"),
 
-    .str_485 = ALIGNED_STRING("pUcharProc"),
+    .pUcharProc_str = ALIGNED_STRING("pUcharProc"),
 
-    .str_486 = ALIGNED_STRING("pScharProc"),
+    .pScharProc_str = ALIGNED_STRING("pScharProc"),
 
-    .str_487 = ALIGNED_STRING("pUwordProc"),
+    .pUwordProc_str = ALIGNED_STRING("pUwordProc"),
 
-    .str_488 = ALIGNED_STRING("pSwordProc"),
+    .pSwordProc_str = ALIGNED_STRING("pSwordProc"),
 
-    .str_489 = "pBoolProc",
+    .pBoolProc_str = "pBoolProc",
 
-    .str_490 = ALIGNED_STRING("boolProc"),
+    .boolProc_str = ALIGNED_STRING("boolProc"),
 
-    .str_491 = "ulongProc",
+    .ulongProc_str = "ulongProc",
 
-    .str_492 = "slongProc",
+    .slongProc_str = "slongProc",
 
-    .str_493 = "scharProc",
+    .scharProc_str = "scharProc",
 
-    .str_494 = "ucharProc",
+    .ucharProc_str = "ucharProc",
 
-    .str_495 = "uwordProc",
+    .uwordProc_str = "uwordProc",
 
     .w178_code = "swordProc",
 
@@ -4905,49 +4905,49 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .w179_name = "WordwrapStrings",
 
-    .str_496 = ALIGNED_STRING("CalcTotalWidth"),
+    .CalcTotalWidth_str = ALIGNED_STRING("CalcTotalWidth"),
 
-    .str_497 = ALIGNED_STRING("ConvertStrings"),
+    .ConvertStrings_str = ALIGNED_STRING("ConvertStrings"),
 
-    .str_498 = ALIGNED_STRING("GetCenteredDelta"),
+    .GetCenteredDelta_str = ALIGNED_STRING("GetCenteredDelta"),
 
-    .str_499 = ALIGNED_STRING("GetCharDescent"),
+    .GetCharDescent_str = ALIGNED_STRING("GetCharDescent"),
 
-    .str_500 = "GetCharHeight",
+    .GetCharHeight_str = "GetCharHeight",
 
-    .str_501 = ALIGNED_STRING("GetFrameSPSize"),
+    .GetFrameSPSize_str = ALIGNED_STRING("GetFrameSPSize"),
 
-    .str_502 = "ResNameProc",
+    .ResNameProc_str = "ResNameProc",
 
-    .str_503 = "ResStringProc",
+    .ResStringProc_str = "ResStringProc",
 
-    .str_504 = "ResMethodProc",
+    .ResMethodProc_str = "ResMethodProc",
 
-    .str_505 = ALIGNED_STRING("ResEventProc"),
+    .ResEventProc_str = ALIGNED_STRING("ResEventProc"),
 
-    .str_506 = "ResFontProc",
+    .ResFontProc_str = "ResFontProc",
 
-    .str_507 = "ResIconProc",
+    .ResIconProc_str = "ResIconProc",
 
-    .str_508 = ALIGNED_STRING("ResFrameProc"),
+    .ResFrameProc_str = ALIGNED_STRING("ResFrameProc"),
 
-    .str_509 = "ResBitmapProc",
+    .ResBitmapProc_str = "ResBitmapProc",
 
-    .str_510 = ALIGNED_STRING("ResourceProc"),
+    .ResourceProc_str = ALIGNED_STRING("ResourceProc"),
 
-    .str_511 = "ApPostEvent",
+    .ApPostEvent_str = "ApPostEvent",
 
-    .str_512 = ALIGNED_STRING("MainGetEvent"),
+    .MainGetEvent_str = ALIGNED_STRING("MainGetEvent"),
 
-    .str_513 = "MainPostEvent",
+    .MainPostEvent_str = "MainPostEvent",
 
-    .str_514 = "MainSendEvent",
+    .MainSendEvent_str = "MainSendEvent",
 
-    .str_515 = "MainDispatchEvent",
+    .MainDispatchEvent_str = "MainDispatchEvent",
 
-    .str_516 = ALIGNED_STRING("SetCurrentTarget"),
+    .SetCurrentTarget_str = ALIGNED_STRING("SetCurrentTarget"),
 
-    .str_517 = ALIGNED_STRING("GetCurrentTarget"),
+    .GetCurrentTarget_str = ALIGNED_STRING("GetCurrentTarget"),
 
     .w180_code = ALIGNED_STRING("GetEvent"),
 
@@ -4957,31 +4957,31 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .w181_name = "DispatchEvent",
 
-    .str_518 = ALIGNED_STRING("InitializeEventQueue"),
+    .InitializeEventQueue_str = ALIGNED_STRING("InitializeEventQueue"),
 
-    .str_519 = "CheckViewObject",
+    .CheckViewObject_str = "CheckViewObject",
 
-    .str_520 = "CountObject",
+    .CountObject_str = "CountObject",
 
-    .str_521 = ALIGNED_STRING("UnRegisterObject"),
+    .UnRegisterObject_str = ALIGNED_STRING("UnRegisterObject"),
 
-    .str_522 = ALIGNED_STRING("RegisterObject"),
+    .RegisterObject_str = ALIGNED_STRING("RegisterObject"),
 
-    .str_523 = "RegisterObjectTable",
+    .RegisterObjectTable_str = "RegisterObjectTable",
 
-    .str_524 = "InitializeObjectTable",
+    .InitializeObjectTable_str = "InitializeObjectTable",
 
-    .str_525 = "InheritedProc",
+    .InheritedProc_str = "InheritedProc",
 
     .w182_code = ALIGNED_STRING("ObjectProc"),
 
     .w182_name = "DrawStringAlignment",
 
-    .str_526 = ALIGNED_STRING("DrawStringRightJustify"),
+    .DrawStringRightJustify_str = ALIGNED_STRING("DrawStringRightJustify"),
 
-    .str_527 = "DrawStringLeftJustify",
+    .DrawStringLeftJustify_str = "DrawStringLeftJustify",
 
-    .str_528 = ALIGNED_STRING("DrawStringCentered"),
+    .DrawStringCentered_str = ALIGNED_STRING("DrawStringCentered"),
 
     .w183_code = ALIGNED_STRING("DrawString"),
 
@@ -4995,7 +4995,7 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .w185_name = ALIGNED_STRING("MovePixels"),
 
-    .str_529 = "DrawFrameEx",
+    .DrawFrameEx_str = "DrawFrameEx",
 
     .w186_code = "DrawFrame",
 
@@ -5005,263 +5005,263 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .w187_name = ALIGNED_STRING("DrawLine"),
 
-    .str_530 = "ModifyPixelEx",
+    .ModifyPixelEx_str = "ModifyPixelEx",
 
-    .str_531 = "ModifyPixel",
+    .ModifyPixel_str = "ModifyPixel",
 
     .w188_code = "ReadPixel",
 
     .w188_name = "SetChangeRect",
 
-    .str_532 = "SetNeedUpdate",
+    .SetNeedUpdate_str = "SetNeedUpdate",
 
-    .str_533 = ALIGNED_STRING("UpdateScreen"),
+    .UpdateScreen_str = ALIGNED_STRING("UpdateScreen"),
 
-    .str_534 = ALIGNED_STRING("InitializeGraphics"),
+    .InitializeGraphics_str = ALIGNED_STRING("InitializeGraphics"),
 
-    .str_535 = ALIGNED_STRING("InitializeUser31"),
+    .InitializeUser31_str = ALIGNED_STRING("InitializeUser31"),
 
-    .str_536 = ALIGNED_STRING("InitializeUser30"),
+    .InitializeUser30_str = ALIGNED_STRING("InitializeUser30"),
 
-    .str_537 = ALIGNED_STRING("InitializeUser29"),
+    .InitializeUser29_str = ALIGNED_STRING("InitializeUser29"),
 
-    .str_538 = ALIGNED_STRING("InitializeUser28"),
+    .InitializeUser28_str = ALIGNED_STRING("InitializeUser28"),
 
-    .str_539 = ALIGNED_STRING("InitializeUser27"),
+    .InitializeUser27_str = ALIGNED_STRING("InitializeUser27"),
 
-    .str_540 = ALIGNED_STRING("InitializeUser26"),
+    .InitializeUser26_str = ALIGNED_STRING("InitializeUser26"),
 
-    .str_541 = ALIGNED_STRING("InitializeUser25"),
+    .InitializeUser25_str = ALIGNED_STRING("InitializeUser25"),
 
-    .str_542 = ALIGNED_STRING("InitializeUser24"),
+    .InitializeUser24_str = ALIGNED_STRING("InitializeUser24"),
 
-    .str_543 = ALIGNED_STRING("InitializeUser23"),
+    .InitializeUser23_str = ALIGNED_STRING("InitializeUser23"),
 
-    .str_544 = ALIGNED_STRING("InitializeUser22"),
+    .InitializeUser22_str = ALIGNED_STRING("InitializeUser22"),
 
-    .str_545 = ALIGNED_STRING("InitializeUser21"),
+    .InitializeUser21_str = ALIGNED_STRING("InitializeUser21"),
 
-    .str_546 = ALIGNED_STRING("InitializeUser20"),
+    .InitializeUser20_str = ALIGNED_STRING("InitializeUser20"),
 
-    .str_547 = ALIGNED_STRING("InitializeUser19"),
+    .InitializeUser19_str = ALIGNED_STRING("InitializeUser19"),
 
-    .str_548 = ALIGNED_STRING("InitializeUser18"),
+    .InitializeUser18_str = ALIGNED_STRING("InitializeUser18"),
 
-    .str_549 = ALIGNED_STRING("InitializeUser17"),
+    .InitializeUser17_str = ALIGNED_STRING("InitializeUser17"),
 
-    .str_550 = ALIGNED_STRING("InitializeUser16"),
+    .InitializeUser16_str = ALIGNED_STRING("InitializeUser16"),
 
-    .str_551 = ALIGNED_STRING("InitializeUser15"),
+    .InitializeUser15_str = ALIGNED_STRING("InitializeUser15"),
 
-    .str_552 = ALIGNED_STRING("InitializeUser14"),
+    .InitializeUser14_str = ALIGNED_STRING("InitializeUser14"),
 
-    .str_553 = ALIGNED_STRING("InitializeUser13"),
+    .InitializeUser13_str = ALIGNED_STRING("InitializeUser13"),
 
-    .str_554 = ALIGNED_STRING("InitializeUser12"),
+    .InitializeUser12_str = ALIGNED_STRING("InitializeUser12"),
 
-    .str_555 = ALIGNED_STRING("InitializeNaka"),
+    .InitializeNaka_str = ALIGNED_STRING("InitializeNaka"),
 
-    .str_556 = "InitializeKSS",
+    .InitializeKSS_str = "InitializeKSS",
 
-    .str_557 = ALIGNED_STRING("InitializeHama"),
+    .InitializeHama_str = ALIGNED_STRING("InitializeHama"),
 
-    .str_558 = ALIGNED_STRING("InitializeKubo"),
+    .InitializeKubo_str = ALIGNED_STRING("InitializeKubo"),
 
-    .str_559 = ALIGNED_STRING("InitializeYoko"),
+    .InitializeYoko_str = ALIGNED_STRING("InitializeYoko"),
 
-    .str_560 = "InitializeScoop",
+    .InitializeScoop_str = "InitializeScoop",
 
-    .str_561 = "InitializeCheap",
+    .InitializeCheap_str = "InitializeCheap",
 
-    .str_562 = ALIGNED_STRING("InitializeSuna"),
+    .InitializeSuna_str = ALIGNED_STRING("InitializeSuna"),
 
-    .str_563 = ALIGNED_STRING("InitializeEast"),
+    .InitializeEast_str = ALIGNED_STRING("InitializeEast"),
 
-    .str_564 = "InitializeToshi",
+    .InitializeToshi_str = "InitializeToshi",
 
-    .str_565 = "InitializeMurai",
+    .InitializeMurai_str = "InitializeMurai",
 
-    .str_566 = ALIGNED_STRING("InitializeRoot"),
+    .InitializeRoot_str = ALIGNED_STRING("InitializeRoot"),
 
     .field_44ca = 0x00B0,
 
     .ptrs_5 = {
-        SELF(str_741),
+        SELF(None_str),
         SELF(w189_name),
         SELF(w189_code),
-        SELF(str_740),
-        SELF(str_739),
-        SELF(str_738),
-        SELF(str_737),
-        SELF(str_736),
-        SELF(str_735),
-        SELF(str_734),
-        SELF(str_733),
-        SELF(str_732),
-        SELF(str_731),
-        SELF(str_730),
-        SELF(str_729),
-        SELF(str_728),
-        SELF(str_727),
-        SELF(str_726),
-        SELF(str_725),
-        SELF(str_724),
-        SELF(str_723),
-        SELF(str_722),
-        SELF(str_721),
-        SELF(str_720),
-        SELF(str_719),
-        SELF(str_718),
-        SELF(str_717),
-        SELF(str_716),
-        SELF(str_715),
-        SELF(str_714),
-        SELF(str_713),
-        SELF(str_712),
-        SELF(str_711),
-        SELF(str_710),
-        SELF(str_709),
-        SELF(str_708),
-        SELF(str_707),
-        SELF(str_706),
-        SELF(str_705),
-        SELF(str_704),
-        SELF(str_703),
-        SELF(str_702),
-        SELF(str_701),
-        SELF(str_700),
-        SELF(str_699),
-        SELF(str_698),
-        SELF(str_697),
-        SELF(str_696),
-        SELF(str_695),
-        SELF(str_694),
-        SELF(str_693),
-        SELF(str_692),
-        SELF(str_691),
-        SELF(str_690),
-        SELF(str_689),
-        SELF(str_688),
-        SELF(str_687),
-        SELF(str_686),
-        SELF(str_685),
-        SELF(str_684),
-        SELF(str_683),
-        SELF(str_682),
-        SELF(str_681),
-        SELF(str_680),
-        SELF(str_679),
-        SELF(str_678),
-        SELF(str_677),
-        SELF(str_676),
-        SELF(str_675),
-        SELF(str_674),
-        SELF(str_673),
-        SELF(str_672),
-        SELF(str_671),
-        SELF(str_670),
-        SELF(str_669),
-        SELF(str_668),
-        SELF(str_667),
-        SELF(str_666),
-        SELF(str_665),
-        SELF(str_664),
-        SELF(str_663),
-        SELF(str_662),
-        SELF(str_661),
-        SELF(str_660),
-        SELF(str_659),
-        SELF(str_658),
-        SELF(str_657),
-        SELF(str_656),
-        SELF(str_655),
-        SELF(str_654),
-        SELF(str_653),
-        SELF(str_652),
-        SELF(str_651),
-        SELF(str_650),
-        SELF(str_649),
-        SELF(str_648),
-        SELF(str_647),
-        SELF(str_646),
-        SELF(str_645),
-        SELF(str_644),
-        SELF(str_643),
-        SELF(str_642),
-        SELF(str_641),
-        SELF(str_640),
-        SELF(str_639),
-        SELF(str_638),
-        SELF(str_637),
-        SELF(str_636),
-        SELF(str_635),
-        SELF(str_634),
-        SELF(str_633),
-        SELF(str_632),
-        SELF(str_631),
-        SELF(str_630),
-        SELF(str_629),
-        SELF(str_628),
-        SELF(str_627),
-        SELF(str_626),
-        SELF(str_625),
-        SELF(str_624),
-        SELF(str_623),
-        SELF(str_622),
-        SELF(str_621),
-        SELF(str_620),
-        SELF(str_619),
-        SELF(str_618),
-        SELF(str_617),
-        SELF(str_616),
-        SELF(str_615),
-        SELF(str_614),
-        SELF(str_613),
-        SELF(str_612),
-        SELF(str_611),
-        SELF(str_610),
-        SELF(str_609),
-        SELF(str_608),
-        SELF(str_607),
-        SELF(str_606),
-        SELF(str_605),
-        SELF(str_604),
-        SELF(str_603),
-        SELF(str_602),
-        SELF(str_601),
-        SELF(str_600),
-        SELF(str_599),
-        SELF(str_598),
-        SELF(str_597),
-        SELF(str_596),
-        SELF(str_595),
-        SELF(str_594),
-        SELF(str_593),
-        SELF(str_592),
-        SELF(str_591),
-        SELF(str_590),
-        SELF(str_589),
-        SELF(str_588),
-        SELF(str_587),
-        SELF(str_586),
-        SELF(str_585),
-        SELF(str_584),
-        SELF(str_583),
-        SELF(str_582),
-        SELF(str_581),
-        SELF(str_580),
-        SELF(str_579),
-        SELF(str_578),
-        SELF(str_577),
-        SELF(str_576),
-        SELF(str_575),
-        SELF(str_574),
-        SELF(str_573),
-        SELF(str_572),
-        SELF(str_571),
-        SELF(str_570),
-        SELF(str_569),
-        SELF(str_568),
+        SELF(i1_str),
+        SELF(i2_str),
+        SELF(i3_str),
+        SELF(i4_str),
+        SELF(i5_str),
+        SELF(i6_str),
+        SELF(i7_str),
+        SELF(i8_str),
+        SELF(i9_str),
+        SELF(i10_str),
+        SELF(i11_str),
+        SELF(i12_str),
+        SELF(i13_str),
+        SELF(i14_str),
+        SELF(i15_str),
+        SELF(i16_str),
+        SELF(i17_str),
+        SELF(i18_str),
+        SELF(i19_str),
+        SELF(i20_str),
+        SELF(i21_str),
+        SELF(i22_str),
+        SELF(i23_str),
+        SELF(i24_str),
+        SELF(i25_str),
+        SELF(i26_str),
+        SELF(i27_str),
+        SELF(i28_str),
+        SELF(i29_str),
+        SELF(i30_str),
+        SELF(i31_str),
+        SELF(i32_str),
+        SELF(i33_str),
+        SELF(i34_str),
+        SELF(i35_str),
+        SELF(i36_str),
+        SELF(i37_str),
+        SELF(i38_str),
+        SELF(i39_str),
+        SELF(i40_str),
+        SELF(i41_str),
+        SELF(i42_str),
+        SELF(i43_str),
+        SELF(i44_str),
+        SELF(i45_str),
+        SELF(i46_str),
+        SELF(i47_str),
+        SELF(i48_str),
+        SELF(i49_str),
+        SELF(i50_str),
+        SELF(i51_str),
+        SELF(i52_str),
+        SELF(i53_str),
+        SELF(i54_str),
+        SELF(i55_str),
+        SELF(i56_str),
+        SELF(i57_str),
+        SELF(i58_str),
+        SELF(i59_str),
+        SELF(i60_str),
+        SELF(i61_str),
+        SELF(i62_str),
+        SELF(i63_str),
+        SELF(i64_str),
+        SELF(i65_str),
+        SELF(i66_str),
+        SELF(i67_str),
+        SELF(i68_str),
+        SELF(i69_str),
+        SELF(i70_str),
+        SELF(i71_str),
+        SELF(i72_str),
+        SELF(i73_str),
+        SELF(i74_str),
+        SELF(i75_str),
+        SELF(i76_str),
+        SELF(i77_str),
+        SELF(i78_str),
+        SELF(i79_str),
+        SELF(i80_str),
+        SELF(i81_str),
+        SELF(i82_str),
+        SELF(i83_str),
+        SELF(i84_str),
+        SELF(i85_str),
+        SELF(i86_str),
+        SELF(i87_str),
+        SELF(i88_str),
+        SELF(i89_str),
+        SELF(i90_str),
+        SELF(i91_str),
+        SELF(i92_str),
+        SELF(i93_str),
+        SELF(i94_str),
+        SELF(i95_str),
+        SELF(i96_str),
+        SELF(i97_str),
+        SELF(i98_str),
+        SELF(i99_str),
+        SELF(i100_str),
+        SELF(i101_str),
+        SELF(i102_str),
+        SELF(i103_str),
+        SELF(i104_str),
+        SELF(i105_str),
+        SELF(i106_str),
+        SELF(i107_str),
+        SELF(i108_str),
+        SELF(i109_str),
+        SELF(i110_str),
+        SELF(i111_str),
+        SELF(i112_str),
+        SELF(i113_str),
+        SELF(i114_str),
+        SELF(i115_str),
+        SELF(i116_str),
+        SELF(i117_str),
+        SELF(i118_str),
+        SELF(i119_str),
+        SELF(i120_str),
+        SELF(i121_str),
+        SELF(i122_str),
+        SELF(i123_str),
+        SELF(i124_str),
+        SELF(i125_str),
+        SELF(i126_str),
+        SELF(i127_str),
+        SELF(i128_str),
+        SELF(i129_str),
+        SELF(i130_str),
+        SELF(i131_str),
+        SELF(i132_str),
+        SELF(i133_str),
+        SELF(i134_str),
+        SELF(i135_str),
+        SELF(i136_str),
+        SELF(i137_str),
+        SELF(i138_str),
+        SELF(i139_str),
+        SELF(i140_str),
+        SELF(i141_str),
+        SELF(i142_str),
+        SELF(i143_str),
+        SELF(i144_str),
+        SELF(i145_str),
+        SELF(i146_str),
+        SELF(i147_str),
+        SELF(i148_str),
+        SELF(i149_str),
+        SELF(i150_str),
+        SELF(i151_str),
+        SELF(i152_str),
+        SELF(i153_str),
+        SELF(i154_str),
+        SELF(i155_str),
+        SELF(i156_str),
+        SELF(i157_str),
+        SELF(i158_str),
+        SELF(i159_str),
+        SELF(i160_str),
+        SELF(i161_str),
+        SELF(i162_str),
+        SELF(i163_str),
+        SELF(i164_str),
+        SELF(i165_str),
+        SELF(i166_str),
+        SELF(i167_str),
+        SELF(i168_str),
+        SELF(i169_str),
+        SELF(i170_str),
+        SELF(i171_str),
+        SELF(i172_str),
+        SELF(i173_str),
         SELF(str_567),
         0x00000000,
         0x00000000,
@@ -5346,357 +5346,357 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .str_567 = ALIGNED_STRING(""),
 
-    .str_568 = ALIGNED_STRING("i173"),
+    .i173_str = ALIGNED_STRING("i173"),
 
-    .str_569 = ALIGNED_STRING("i172"),
+    .i172_str = ALIGNED_STRING("i172"),
 
-    .str_570 = ALIGNED_STRING("i171"),
+    .i171_str = ALIGNED_STRING("i171"),
 
-    .str_571 = ALIGNED_STRING("i170"),
+    .i170_str = ALIGNED_STRING("i170"),
 
-    .str_572 = ALIGNED_STRING("i169"),
+    .i169_str = ALIGNED_STRING("i169"),
 
-    .str_573 = ALIGNED_STRING("i168"),
+    .i168_str = ALIGNED_STRING("i168"),
 
-    .str_574 = ALIGNED_STRING("i167"),
+    .i167_str = ALIGNED_STRING("i167"),
 
-    .str_575 = ALIGNED_STRING("i166"),
+    .i166_str = ALIGNED_STRING("i166"),
 
-    .str_576 = ALIGNED_STRING("i165"),
+    .i165_str = ALIGNED_STRING("i165"),
 
-    .str_577 = ALIGNED_STRING("i164"),
+    .i164_str = ALIGNED_STRING("i164"),
 
-    .str_578 = ALIGNED_STRING("i163"),
+    .i163_str = ALIGNED_STRING("i163"),
 
-    .str_579 = ALIGNED_STRING("i162"),
+    .i162_str = ALIGNED_STRING("i162"),
 
-    .str_580 = ALIGNED_STRING("i161"),
+    .i161_str = ALIGNED_STRING("i161"),
 
-    .str_581 = ALIGNED_STRING("i160"),
+    .i160_str = ALIGNED_STRING("i160"),
 
-    .str_582 = ALIGNED_STRING("i159"),
+    .i159_str = ALIGNED_STRING("i159"),
 
-    .str_583 = ALIGNED_STRING("i158"),
+    .i158_str = ALIGNED_STRING("i158"),
 
-    .str_584 = ALIGNED_STRING("i157"),
+    .i157_str = ALIGNED_STRING("i157"),
 
-    .str_585 = ALIGNED_STRING("i156"),
+    .i156_str = ALIGNED_STRING("i156"),
 
-    .str_586 = ALIGNED_STRING("i155"),
+    .i155_str = ALIGNED_STRING("i155"),
 
-    .str_587 = ALIGNED_STRING("i154"),
+    .i154_str = ALIGNED_STRING("i154"),
 
-    .str_588 = ALIGNED_STRING("i153"),
+    .i153_str = ALIGNED_STRING("i153"),
 
-    .str_589 = ALIGNED_STRING("i152"),
+    .i152_str = ALIGNED_STRING("i152"),
 
-    .str_590 = ALIGNED_STRING("i151"),
+    .i151_str = ALIGNED_STRING("i151"),
 
-    .str_591 = ALIGNED_STRING("i150"),
+    .i150_str = ALIGNED_STRING("i150"),
 
-    .str_592 = ALIGNED_STRING("i149"),
+    .i149_str = ALIGNED_STRING("i149"),
 
-    .str_593 = ALIGNED_STRING("i148"),
+    .i148_str = ALIGNED_STRING("i148"),
 
-    .str_594 = ALIGNED_STRING("i147"),
+    .i147_str = ALIGNED_STRING("i147"),
 
-    .str_595 = ALIGNED_STRING("i146"),
+    .i146_str = ALIGNED_STRING("i146"),
 
-    .str_596 = ALIGNED_STRING("i145"),
+    .i145_str = ALIGNED_STRING("i145"),
 
-    .str_597 = ALIGNED_STRING("i144"),
+    .i144_str = ALIGNED_STRING("i144"),
 
-    .str_598 = ALIGNED_STRING("i143"),
+    .i143_str = ALIGNED_STRING("i143"),
 
-    .str_599 = ALIGNED_STRING("i142"),
+    .i142_str = ALIGNED_STRING("i142"),
 
-    .str_600 = ALIGNED_STRING("i141"),
+    .i141_str = ALIGNED_STRING("i141"),
 
-    .str_601 = ALIGNED_STRING("i140"),
+    .i140_str = ALIGNED_STRING("i140"),
 
-    .str_602 = ALIGNED_STRING("i139"),
+    .i139_str = ALIGNED_STRING("i139"),
 
-    .str_603 = ALIGNED_STRING("i138"),
+    .i138_str = ALIGNED_STRING("i138"),
 
-    .str_604 = ALIGNED_STRING("i137"),
+    .i137_str = ALIGNED_STRING("i137"),
 
-    .str_605 = ALIGNED_STRING("i136"),
+    .i136_str = ALIGNED_STRING("i136"),
 
-    .str_606 = ALIGNED_STRING("i135"),
+    .i135_str = ALIGNED_STRING("i135"),
 
-    .str_607 = ALIGNED_STRING("i134"),
+    .i134_str = ALIGNED_STRING("i134"),
 
-    .str_608 = ALIGNED_STRING("i133"),
+    .i133_str = ALIGNED_STRING("i133"),
 
-    .str_609 = ALIGNED_STRING("i132"),
+    .i132_str = ALIGNED_STRING("i132"),
 
-    .str_610 = ALIGNED_STRING("i131"),
+    .i131_str = ALIGNED_STRING("i131"),
 
-    .str_611 = ALIGNED_STRING("i130"),
+    .i130_str = ALIGNED_STRING("i130"),
 
-    .str_612 = ALIGNED_STRING("i129"),
+    .i129_str = ALIGNED_STRING("i129"),
 
-    .str_613 = ALIGNED_STRING("i128"),
+    .i128_str = ALIGNED_STRING("i128"),
 
-    .str_614 = ALIGNED_STRING("i127"),
+    .i127_str = ALIGNED_STRING("i127"),
 
-    .str_615 = ALIGNED_STRING("i126"),
+    .i126_str = ALIGNED_STRING("i126"),
 
-    .str_616 = ALIGNED_STRING("i125"),
+    .i125_str = ALIGNED_STRING("i125"),
 
-    .str_617 = ALIGNED_STRING("i124"),
+    .i124_str = ALIGNED_STRING("i124"),
 
-    .str_618 = ALIGNED_STRING("i123"),
+    .i123_str = ALIGNED_STRING("i123"),
 
-    .str_619 = ALIGNED_STRING("i122"),
+    .i122_str = ALIGNED_STRING("i122"),
 
-    .str_620 = ALIGNED_STRING("i121"),
+    .i121_str = ALIGNED_STRING("i121"),
 
-    .str_621 = ALIGNED_STRING("i120"),
+    .i120_str = ALIGNED_STRING("i120"),
 
-    .str_622 = ALIGNED_STRING("i119"),
+    .i119_str = ALIGNED_STRING("i119"),
 
-    .str_623 = ALIGNED_STRING("i118"),
+    .i118_str = ALIGNED_STRING("i118"),
 
-    .str_624 = ALIGNED_STRING("i117"),
+    .i117_str = ALIGNED_STRING("i117"),
 
-    .str_625 = ALIGNED_STRING("i116"),
+    .i116_str = ALIGNED_STRING("i116"),
 
-    .str_626 = ALIGNED_STRING("i115"),
+    .i115_str = ALIGNED_STRING("i115"),
 
-    .str_627 = ALIGNED_STRING("i114"),
+    .i114_str = ALIGNED_STRING("i114"),
 
-    .str_628 = ALIGNED_STRING("i113"),
+    .i113_str = ALIGNED_STRING("i113"),
 
-    .str_629 = ALIGNED_STRING("i112"),
+    .i112_str = ALIGNED_STRING("i112"),
 
-    .str_630 = ALIGNED_STRING("i111"),
+    .i111_str = ALIGNED_STRING("i111"),
 
-    .str_631 = ALIGNED_STRING("i110"),
+    .i110_str = ALIGNED_STRING("i110"),
 
-    .str_632 = ALIGNED_STRING("i109"),
+    .i109_str = ALIGNED_STRING("i109"),
 
-    .str_633 = ALIGNED_STRING("i108"),
+    .i108_str = ALIGNED_STRING("i108"),
 
-    .str_634 = ALIGNED_STRING("i107"),
+    .i107_str = ALIGNED_STRING("i107"),
 
-    .str_635 = ALIGNED_STRING("i106"),
+    .i106_str = ALIGNED_STRING("i106"),
 
-    .str_636 = ALIGNED_STRING("i105"),
+    .i105_str = ALIGNED_STRING("i105"),
 
-    .str_637 = ALIGNED_STRING("i104"),
+    .i104_str = ALIGNED_STRING("i104"),
 
-    .str_638 = ALIGNED_STRING("i103"),
+    .i103_str = ALIGNED_STRING("i103"),
 
-    .str_639 = ALIGNED_STRING("i102"),
+    .i102_str = ALIGNED_STRING("i102"),
 
-    .str_640 = ALIGNED_STRING("i101"),
+    .i101_str = ALIGNED_STRING("i101"),
 
-    .str_641 = ALIGNED_STRING("i100"),
+    .i100_str = ALIGNED_STRING("i100"),
 
-    .str_642 = "i99",
+    .i99_str = "i99",
 
-    .str_643 = "i98",
+    .i98_str = "i98",
 
-    .str_644 = "i97",
+    .i97_str = "i97",
 
-    .str_645 = "i96",
+    .i96_str = "i96",
 
-    .str_646 = "i95",
+    .i95_str = "i95",
 
-    .str_647 = "i94",
+    .i94_str = "i94",
 
-    .str_648 = "i93",
+    .i93_str = "i93",
 
-    .str_649 = "i92",
+    .i92_str = "i92",
 
-    .str_650 = "i91",
+    .i91_str = "i91",
 
-    .str_651 = "i90",
+    .i90_str = "i90",
 
-    .str_652 = "i89",
+    .i89_str = "i89",
 
-    .str_653 = "i88",
+    .i88_str = "i88",
 
-    .str_654 = "i87",
+    .i87_str = "i87",
 
-    .str_655 = "i86",
+    .i86_str = "i86",
 
-    .str_656 = "i85",
+    .i85_str = "i85",
 
-    .str_657 = "i84",
+    .i84_str = "i84",
 
-    .str_658 = "i83",
+    .i83_str = "i83",
 
-    .str_659 = "i82",
+    .i82_str = "i82",
 
-    .str_660 = "i81",
+    .i81_str = "i81",
 
-    .str_661 = "i80",
+    .i80_str = "i80",
 
-    .str_662 = "i79",
+    .i79_str = "i79",
 
-    .str_663 = "i78",
+    .i78_str = "i78",
 
-    .str_664 = "i77",
+    .i77_str = "i77",
 
-    .str_665 = "i76",
+    .i76_str = "i76",
 
-    .str_666 = "i75",
+    .i75_str = "i75",
 
-    .str_667 = "i74",
+    .i74_str = "i74",
 
-    .str_668 = "i73",
+    .i73_str = "i73",
 
-    .str_669 = "i72",
+    .i72_str = "i72",
 
-    .str_670 = "i71",
+    .i71_str = "i71",
 
-    .str_671 = "i70",
+    .i70_str = "i70",
 
-    .str_672 = "i69",
+    .i69_str = "i69",
 
-    .str_673 = "i68",
+    .i68_str = "i68",
 
-    .str_674 = "i67",
+    .i67_str = "i67",
 
-    .str_675 = "i66",
+    .i66_str = "i66",
 
-    .str_676 = "i65",
+    .i65_str = "i65",
 
-    .str_677 = "i64",
+    .i64_str = "i64",
 
-    .str_678 = "i63",
+    .i63_str = "i63",
 
-    .str_679 = "i62",
+    .i62_str = "i62",
 
-    .str_680 = "i61",
+    .i61_str = "i61",
 
-    .str_681 = "i60",
+    .i60_str = "i60",
 
-    .str_682 = "i59",
+    .i59_str = "i59",
 
-    .str_683 = "i58",
+    .i58_str = "i58",
 
-    .str_684 = "i57",
+    .i57_str = "i57",
 
-    .str_685 = "i56",
+    .i56_str = "i56",
 
-    .str_686 = "i55",
+    .i55_str = "i55",
 
-    .str_687 = "i54",
+    .i54_str = "i54",
 
-    .str_688 = "i53",
+    .i53_str = "i53",
 
-    .str_689 = "i52",
+    .i52_str = "i52",
 
-    .str_690 = "i51",
+    .i51_str = "i51",
 
-    .str_691 = "i50",
+    .i50_str = "i50",
 
-    .str_692 = "i49",
+    .i49_str = "i49",
 
-    .str_693 = "i48",
+    .i48_str = "i48",
 
-    .str_694 = "i47",
+    .i47_str = "i47",
 
-    .str_695 = "i46",
+    .i46_str = "i46",
 
-    .str_696 = "i45",
+    .i45_str = "i45",
 
-    .str_697 = "i44",
+    .i44_str = "i44",
 
-    .str_698 = "i43",
+    .i43_str = "i43",
 
-    .str_699 = "i42",
+    .i42_str = "i42",
 
-    .str_700 = "i41",
+    .i41_str = "i41",
 
-    .str_701 = "i40",
+    .i40_str = "i40",
 
-    .str_702 = "i39",
+    .i39_str = "i39",
 
-    .str_703 = "i38",
+    .i38_str = "i38",
 
-    .str_704 = "i37",
+    .i37_str = "i37",
 
-    .str_705 = "i36",
+    .i36_str = "i36",
 
-    .str_706 = "i35",
+    .i35_str = "i35",
 
-    .str_707 = "i34",
+    .i34_str = "i34",
 
-    .str_708 = "i33",
+    .i33_str = "i33",
 
-    .str_709 = "i32",
+    .i32_str = "i32",
 
-    .str_710 = "i31",
+    .i31_str = "i31",
 
-    .str_711 = "i30",
+    .i30_str = "i30",
 
-    .str_712 = "i29",
+    .i29_str = "i29",
 
-    .str_713 = "i28",
+    .i28_str = "i28",
 
-    .str_714 = "i27",
+    .i27_str = "i27",
 
-    .str_715 = "i26",
+    .i26_str = "i26",
 
-    .str_716 = "i25",
+    .i25_str = "i25",
 
-    .str_717 = "i24",
+    .i24_str = "i24",
 
-    .str_718 = "i23",
+    .i23_str = "i23",
 
-    .str_719 = "i22",
+    .i22_str = "i22",
 
-    .str_720 = "i21",
+    .i21_str = "i21",
 
-    .str_721 = "i20",
+    .i20_str = "i20",
 
-    .str_722 = "i19",
+    .i19_str = "i19",
 
-    .str_723 = "i18",
+    .i18_str = "i18",
 
-    .str_724 = "i17",
+    .i17_str = "i17",
 
-    .str_725 = "i16",
+    .i16_str = "i16",
 
-    .str_726 = "i15",
+    .i15_str = "i15",
 
-    .str_727 = "i14",
+    .i14_str = "i14",
 
-    .str_728 = "i13",
+    .i13_str = "i13",
 
-    .str_729 = "i12",
+    .i12_str = "i12",
 
-    .str_730 = "i11",
+    .i11_str = "i11",
 
-    .str_731 = "i10",
+    .i10_str = "i10",
 
-    .str_732 = ALIGNED_STRING("i9"),
+    .i9_str = ALIGNED_STRING("i9"),
 
-    .str_733 = ALIGNED_STRING("i8"),
+    .i8_str = ALIGNED_STRING("i8"),
 
-    .str_734 = ALIGNED_STRING("i7"),
+    .i7_str = ALIGNED_STRING("i7"),
 
-    .str_735 = ALIGNED_STRING("i6"),
+    .i6_str = ALIGNED_STRING("i6"),
 
-    .str_736 = ALIGNED_STRING("i5"),
+    .i5_str = ALIGNED_STRING("i5"),
 
-    .str_737 = ALIGNED_STRING("i4"),
+    .i4_str = ALIGNED_STRING("i4"),
 
-    .str_738 = ALIGNED_STRING("i3"),
+    .i3_str = ALIGNED_STRING("i3"),
 
-    .str_739 = ALIGNED_STRING("i2"),
+    .i2_str = ALIGNED_STRING("i2"),
 
-    .str_740 = ALIGNED_STRING("i1"),
+    .i1_str = ALIGNED_STRING("i1"),
 
     .w189_code = ALIGNED_STRING("i0"),
 
     .w189_name = "Default",
 
-    .str_741 = ALIGNED_STRING("None"),
+    .None_str = ALIGNED_STRING("None"),
 
     .ptrs_6 = {
         SELF(str_918),
@@ -6351,7 +6351,7 @@ const naka_widget_names_charmap_t naka_widget_names_charmap_data
 
     .field_5686 = 0x0138,
 
-    .str_921 = "N",
+    .N_str = "N",
 
     .field_568a = 0x0001,
 

@@ -1229,7 +1229,7 @@ typedef struct __attribute__((packed)) {
 typedef struct __attribute__((packed)) {
     char str_0[14];
     /* element 0 of Viewable slot 0x3 "Sdpart": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v3_e0;
+    naka_cls_TtlScreen_t Sdpart;
     char w0_text[20];
     /* element 1 of Viewable slot 0x3: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v3_e1;
@@ -1251,33 +1251,33 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t v3_e9;
     char w1_text[14];
     /* element 10 of Viewable slot 0x3 "SdpartSound": PsParaBox (class id 0x01600012) */
-    naka_cls_PsParaBox_t v3_e10;
+    naka_cls_PsParaBox_t SdpartSound;
     /* element 11 of Viewable slot 0x3 "SdpartPart": PsParaBox (class id 0x01600012) */
-    naka_cls_PsParaBox_t v3_e11;
+    naka_cls_PsParaBox_t SdpartPart;
     /* element 12 of Viewable slot 0x3: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v3_e12;
-    char str_37[4];
+    char VOL_str[4];
     /* element 13 of Viewable slot 0x3: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v3_e13;
-    char str_41[4];
+    char PAN_str[4];
     /* element 14 of Viewable slot 0x3: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v3_e14;
-    char str_45[4];
+    char EFF_str[4];
     /* element 15 of Viewable slot 0x3: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v3_e15;
-    char str_48[4];
+    char SUS_str[4];
     /* element 16 of Viewable slot 0x3: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v3_e16;
-    char str_50[4];
+    char KEY_str[4];
     /* element 17 of Viewable slot 0x3: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v3_e17;
-    char str_52[4];
+    char TUN_str[4];
     /* element 18 of Viewable slot 0x3: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v3_e18;
-    char str_54[4];
+    char BND_str[4];
     /* element 19 of Viewable slot 0x3: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v3_e19;
-    char str_56[4];
+    char OTH_str[4];
     /* element 20 of Viewable slot 0x3: VwEditSwBox (class id 0x0160003E) */
     naka_cls_VwEditSwBox_t v3_e20;
     char str_57[2];
@@ -1305,61 +1305,61 @@ typedef struct __attribute__((packed)) {
     /* element 28 of Viewable slot 0x3: IvSdpart (class id 0x01610000) */
     naka_cls_IvSdpart_t v3_e28;
     /* element 29 of Viewable slot 0x3 "SdpartMain": Window (class id 0x01600035) */
-    naka_cls_Window_t v3_e29;
+    naka_cls_Window_t SdpartMain;
     /* element 30 of Viewable slot 0x3: AcLswPartEditBox (class id 0x01610001) */
     naka_cls_AcLswPartEditBox_t v3_e30;
-    char str_68[14];
+    char v3_e30_caption[14];
     /* element 31 of Viewable slot 0x3: AcLswPartEditBox (class id 0x01610001) */
     naka_cls_AcLswPartEditBox_t v3_e31;
-    char str_70[14];
+    char v3_e31_caption[14];
     /* element 32 of Viewable slot 0x3: AcLswPartEditBox (class id 0x01610001) */
     naka_cls_AcLswPartEditBox_t v3_e32;
-    char str_72[14];
+    char v3_e32_caption[14];
     /* element 33 of Viewable slot 0x3: AcLswPartEditBox (class id 0x01610001) */
     naka_cls_AcLswPartEditBox_t v3_e33;
-    char str_75[14];
+    char v3_e33_caption[14];
     /* element 34 of Viewable slot 0x3: AcLswPartEditBox (class id 0x01610001) */
     naka_cls_AcLswPartEditBox_t v3_e34;
-    char str_78[14];
+    char v3_e34_caption[14];
     /* element 35 of Viewable slot 0x3: VwBox (class id 0x01600011) */
     naka_cls_VwBox_t v3_e35;
     /* element 36 of Viewable slot 0x3: AcLswPartEditBox (class id 0x01610001) */
     naka_cls_AcLswPartEditBox_t v3_e36;
-    char str_83[14];
+    char v3_e36_caption[14];
     /* element 37 of Viewable slot 0x3: AcLswPartEditBox (class id 0x01610001) */
     naka_cls_AcLswPartEditBox_t v3_e37;
-    char str_87[14];
+    char v3_e37_caption[14];
     /* element 38 of Viewable slot 0x3: AcLswPartEditBox (class id 0x01610001) */
     naka_cls_AcLswPartEditBox_t v3_e38;
-    char str_90[14];
+    char v3_e38_caption[14];
     /* element 39 of Viewable slot 0x3: AcLswPartEditBox (class id 0x01610001) */
     naka_cls_AcLswPartEditBox_t v3_e39;
-    char str_93[14];
+    char v3_e39_caption[14];
     /* element 40 of Viewable slot 0x3: AcLswPartEditBox (class id 0x01610001) */
     naka_cls_AcLswPartEditBox_t v3_e40;
-    char str_96[14];
+    char v3_e40_caption[14];
     /* element 41 of Viewable slot 0x3: AcLswPartEditBox (class id 0x01610001) */
     naka_cls_AcLswPartEditBox_t v3_e41;
-    char str_99[14];
+    char v3_e41_caption[14];
     /* element 42 of Viewable slot 0x3: AcVolPartEditBox (class id 0x01610002) */
     naka_cls_AcVolPartEditBox_t v3_e42;
-    char str_103[14];
+    char v3_e42_caption[14];
     /* element 43 of Viewable slot 0x3 "SdpartVol": Window (class id 0x01600035) */
-    naka_cls_Window_t v3_e43;
+    naka_cls_Window_t SdpartVol;
     /* element 44 of Viewable slot 0x3: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v3_e44;
     /* element 45 of Viewable slot 0x3: VwBox (class id 0x01600011) */
     naka_cls_VwBox_t v3_e45;
     /* element 46 of Viewable slot 0x3: AcVolPartEditBox (class id 0x01610002) */
     naka_cls_AcVolPartEditBox_t v3_e46;
-    char str_114[16];
+    char v3_e46_caption[16];
     /* element 47 of Viewable slot 0x3 "SdpartPan": Window (class id 0x01600035) */
-    naka_cls_Window_t v3_e47;
+    naka_cls_Window_t SdpartPan;
     /* element 48 of Viewable slot 0x3: VwBox (class id 0x01600011) */
     naka_cls_VwBox_t v3_e48;
     /* element 49 of Viewable slot 0x3: AcLswPartEditBox (class id 0x01610001) */
     naka_cls_AcLswPartEditBox_t v3_e49;
-    char str_122[6];
+    char v3_e49_caption[6];
     /* element 50 of Viewable slot 0x3: Label (class id 0x0160002B) */
     naka_cls_Label_t v3_e50;
     char w15_text[28];
@@ -1370,94 +1370,94 @@ typedef struct __attribute__((packed)) {
     /* element 53 of Viewable slot 0x3: VwBox (class id 0x01600011) */
     naka_cls_VwBox_t v3_e53;
     /* element 54 of Viewable slot 0x3 "SdpartEff": Window (class id 0x01600035) */
-    naka_cls_Window_t v3_e54;
+    naka_cls_Window_t SdpartEff;
     /* element 55 of Viewable slot 0x3: AcLswPartEditBox (class id 0x01610001) */
     naka_cls_AcLswPartEditBox_t v3_e55;
-    char str_137[14];
+    char v3_e55_caption[14];
     /* element 56 of Viewable slot 0x3: AcLswPartEditBox (class id 0x01610001) */
     naka_cls_AcLswPartEditBox_t v3_e56;
-    char str_141[14];
+    char v3_e56_caption[14];
     /* element 57 of Viewable slot 0x3: AcLswPartEditBox (class id 0x01610001) */
     naka_cls_AcLswPartEditBox_t v3_e57;
-    char str_146[14];
+    char v3_e57_caption[14];
     /* element 58 of Viewable slot 0x3: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v3_e58;
     /* element 59 of Viewable slot 0x3: VwBox (class id 0x01600011) */
     naka_cls_VwBox_t v3_e59;
     /* element 60 of Viewable slot 0x3 "SdpartSus": Window (class id 0x01600035) */
-    naka_cls_Window_t v3_e60;
+    naka_cls_Window_t SdpartSus;
     /* element 61 of Viewable slot 0x3: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v3_e61;
     /* element 62 of Viewable slot 0x3: AcLswPartEditBox (class id 0x01610001) */
     naka_cls_AcLswPartEditBox_t v3_e62;
-    char str_162[20];
+    char v3_e62_caption[20];
     /* element 63 of Viewable slot 0x3: AcLswPartEditBox (class id 0x01610001) */
     naka_cls_AcLswPartEditBox_t v3_e63;
-    char str_166[20];
+    char v3_e63_caption[20];
     /* element 64 of Viewable slot 0x3: VwBox (class id 0x01600011) */
     naka_cls_VwBox_t v3_e64;
     /* element 65 of Viewable slot 0x3 "SdpartKey": Window (class id 0x01600035) */
-    naka_cls_Window_t v3_e65;
+    naka_cls_Window_t SdpartKey;
     /* element 66 of Viewable slot 0x3: AcLswPartEditBox (class id 0x01610001) */
     naka_cls_AcLswPartEditBox_t v3_e66;
-    char str_174[16];
+    char v3_e66_caption[16];
     /* element 67 of Viewable slot 0x3: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v3_e67;
     /* element 68 of Viewable slot 0x3: VwBox (class id 0x01600011) */
     naka_cls_VwBox_t v3_e68;
     /* element 69 of Viewable slot 0x3 "SdpartTun": Window (class id 0x01600035) */
-    naka_cls_Window_t v3_e69;
+    naka_cls_Window_t SdpartTun;
     /* element 70 of Viewable slot 0x3: AcLswPartEditBox (class id 0x01610001) */
     naka_cls_AcLswPartEditBox_t v3_e70;
-    char str_185[16];
+    char v3_e70_caption[16];
     /* element 71 of Viewable slot 0x3: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v3_e71;
     /* element 72 of Viewable slot 0x3: VwBox (class id 0x01600011) */
     naka_cls_VwBox_t v3_e72;
     /* element 73 of Viewable slot 0x3 "SdpartBnd": Window (class id 0x01600035) */
-    naka_cls_Window_t v3_e73;
+    naka_cls_Window_t SdpartBnd;
     /* element 74 of Viewable slot 0x3: AcLswPartEditBox (class id 0x01610001) */
     naka_cls_AcLswPartEditBox_t v3_e74;
-    char str_196[20];
+    char v3_e74_caption[20];
     /* element 75 of Viewable slot 0x3: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v3_e75;
     /* element 76 of Viewable slot 0x3: VwBox (class id 0x01600011) */
     naka_cls_VwBox_t v3_e76;
     /* element 77 of Viewable slot 0x3 "SdpartOth": Window (class id 0x01600035) */
-    naka_cls_Window_t v3_e77;
+    naka_cls_Window_t SdpartOth;
     /* element 78 of Viewable slot 0x3: AcLswPartEditBox (class id 0x01610001) */
     naka_cls_AcLswPartEditBox_t v3_e78;
-    char str_206[14];
+    char v3_e78_caption[14];
     /* element 79 of Viewable slot 0x3: AcLswPartEditBox (class id 0x01610001) */
     naka_cls_AcLswPartEditBox_t v3_e79;
-    char str_210[14];
+    char v3_e79_caption[14];
     /* element 80 of Viewable slot 0x3: AcLswPartEditBox (class id 0x01610001) */
     naka_cls_AcLswPartEditBox_t v3_e80;
-    char str_215[14];
+    char v3_e80_caption[14];
     /* element 81 of Viewable slot 0x3: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v3_e81;
     /* element 82 of Viewable slot 0x3: AcLswPartEditBox (class id 0x01610001) */
     naka_cls_AcLswPartEditBox_t v3_e82;
-    char str_222[14];
+    char v3_e82_caption[14];
     /* element 83 of Viewable slot 0x3: AcLswPartEditBox (class id 0x01610001) */
     naka_cls_AcLswPartEditBox_t v3_e83;
-    char str_227[14];
+    char v3_e83_caption[14];
     /* element 0 of Viewable slot 0x4 "Sdmtune": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v4_e0;
+    naka_cls_TtlScreen_t Sdmtune;
     char w22_text[14];
     /* element 1 of Viewable slot 0x4: AcLswEditBox (class id 0x0160001A) */
     naka_cls_AcLswEditBox_t v4_e1;
-    char str_230[18];
+    char v4_e1_caption[18];
     /* element 2 of Viewable slot 0x4: Label (class id 0x0160002B) */
     naka_cls_Label_t v4_e2;
     char w23_text[4];
     /* element 3 of Viewable slot 0x4: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t v4_e3;
     /* element 0 of Viewable slot 0x5 "Sdscltyp": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v5_e0;
+    naka_cls_TtlScreen_t Sdscltyp;
     char w25_text[12];
     /* element 1 of Viewable slot 0x5 "SdscltypPage": AcWindowPage (class id 0x01600025) */
-    naka_cls_AcWindowPage_t v5_e1;
+    naka_cls_AcWindowPage_t SdscltypPage;
     /* element 2 of Viewable slot 0x5: IvPageControl (class id 0x01600028) */
     naka_cls_IvPageControl_t v5_e2;
     /* element 3 of Viewable slot 0x5: IvPageControl (class id 0x01600028) */
@@ -1465,22 +1465,22 @@ typedef struct __attribute__((packed)) {
     /* element 4 of Viewable slot 0x5: IvShowHide (class id 0x01600064) */
     naka_cls_IvShowHide_t v5_e4;
     /* element 5 of Viewable slot 0x5 "Sdscltyp1": Window (class id 0x01600035) */
-    naka_cls_Window_t v5_e5;
+    naka_cls_Window_t Sdscltyp1;
     /* element 6 of Viewable slot 0x5: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t v5_e6;
     /* element 7 of Viewable slot 0x5 "ScalingType": AcLswEditBox (class id 0x0160001A) */
-    naka_cls_AcLswEditBox_t v5_e7;
-    char str_241[16];
+    naka_cls_AcLswEditBox_t ScalingType;
+    char ScalingType_caption[16];
     /* element 8 of Viewable slot 0x5: AcLswEditBox (class id 0x0160001A) */
     naka_cls_AcLswEditBox_t v5_e8;
-    char str_243[16];
+    char v5_e8_caption[16];
     /* element 9 of Viewable slot 0x5: AcLswBox (class id 0x01600013) */
     naka_cls_AcLswBox_t v5_e9;
     /* element 10 of Viewable slot 0x5: AcLswEditBox (class id 0x0160001A) */
     naka_cls_AcLswEditBox_t v5_e10;
-    char str_245[16];
+    char v5_e10_caption[16];
     /* element 11 of Viewable slot 0x5 "Sdscltyp2": Window (class id 0x01600035) */
-    naka_cls_Window_t v5_e11;
+    naka_cls_Window_t Sdscltyp2;
     /* element 12 of Viewable slot 0x5: Label (class id 0x0160002B) */
     naka_cls_Label_t v5_e12;
     char w28_text[18];
@@ -1493,41 +1493,41 @@ typedef struct __attribute__((packed)) {
     /* element 16 of Viewable slot 0x5: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t v5_e16;
     /* element 17 of Viewable slot 0x5 "ScalingKey1": AcLswEditBox (class id 0x0160001A) */
-    naka_cls_AcLswEditBox_t v5_e17;
-    char str_250[2];
+    naka_cls_AcLswEditBox_t ScalingKey1;
+    char ScalingKey1_caption[2];
     /* element 18 of Viewable slot 0x5 "ScalingKey2": AcLswEditBox (class id 0x0160001A) */
-    naka_cls_AcLswEditBox_t v5_e18;
-    char str_255[2];
+    naka_cls_AcLswEditBox_t ScalingKey2;
+    char ScalingKey2_caption[2];
     /* element 19 of Viewable slot 0x5 "ScalingKey3": AcLswEditBox (class id 0x0160001A) */
-    naka_cls_AcLswEditBox_t v5_e19;
-    char str_258[2];
+    naka_cls_AcLswEditBox_t ScalingKey3;
+    char ScalingKey3_caption[2];
     /* element 20 of Viewable slot 0x5 "ScalingKey4": AcLswEditBox (class id 0x0160001A) */
-    naka_cls_AcLswEditBox_t v5_e20;
-    char str_262[2];
+    naka_cls_AcLswEditBox_t ScalingKey4;
+    char ScalingKey4_caption[2];
     /* element 21 of Viewable slot 0x5 "ScalingKey5": AcLswEditBox (class id 0x0160001A) */
-    naka_cls_AcLswEditBox_t v5_e21;
-    char str_264[2];
+    naka_cls_AcLswEditBox_t ScalingKey5;
+    char ScalingKey5_caption[2];
     /* element 22 of Viewable slot 0x5 "ScalingKey6": AcLswEditBox (class id 0x0160001A) */
-    naka_cls_AcLswEditBox_t v5_e22;
-    char str_265[2];
+    naka_cls_AcLswEditBox_t ScalingKey6;
+    char ScalingKey6_caption[2];
     /* element 23 of Viewable slot 0x5 "ScalingKey7": AcLswEditBox (class id 0x0160001A) */
-    naka_cls_AcLswEditBox_t v5_e23;
-    char str_268[2];
+    naka_cls_AcLswEditBox_t ScalingKey7;
+    char ScalingKey7_caption[2];
     /* element 24 of Viewable slot 0x5 "ScalingKey8": AcLswEditBox (class id 0x0160001A) */
-    naka_cls_AcLswEditBox_t v5_e24;
-    char str_269[2];
+    naka_cls_AcLswEditBox_t ScalingKey8;
+    char ScalingKey8_caption[2];
     /* element 25 of Viewable slot 0x5 "ScalingKey9": AcLswEditBox (class id 0x0160001A) */
-    naka_cls_AcLswEditBox_t v5_e25;
-    char str_272[2];
+    naka_cls_AcLswEditBox_t ScalingKey9;
+    char ScalingKey9_caption[2];
     /* element 26 of Viewable slot 0x5 "ScalingKey10": AcLswEditBox (class id 0x0160001A) */
-    naka_cls_AcLswEditBox_t v5_e26;
-    char str_273[2];
+    naka_cls_AcLswEditBox_t ScalingKey10;
+    char ScalingKey10_caption[2];
     /* element 27 of Viewable slot 0x5 "ScalingKey11": AcLswEditBox (class id 0x0160001A) */
-    naka_cls_AcLswEditBox_t v5_e27;
-    char str_276[2];
+    naka_cls_AcLswEditBox_t ScalingKey11;
+    char ScalingKey11_caption[2];
     /* element 28 of Viewable slot 0x5 "ScalingKey12": AcLswEditBox (class id 0x0160001A) */
-    naka_cls_AcLswEditBox_t v5_e28;
-    char str_277[2];
+    naka_cls_AcLswEditBox_t ScalingKey12;
+    char ScalingKey12_caption[2];
     /* element 29 of Viewable slot 0x5: VwBox (class id 0x01600011) */
     naka_cls_VwBox_t v5_e29;
     /* element 30 of Viewable slot 0x5: VwBox (class id 0x01600011) */
@@ -1579,15 +1579,15 @@ typedef struct __attribute__((packed)) {
     /* element 53 of Viewable slot 0x5: IvSdscltyp2 (class id 0x0161000A) */
     naka_cls_IvSdscltyp2_t v5_e53;
     /* element 0 of Viewable slot 0x7 "Sdlfthld": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v7_e0;
+    naka_cls_TtlScreen_t Sdlfthld;
     char w44_text[18];
     /* element 1 of Viewable slot 0x7: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t v7_e1;
     /* element 2 of Viewable slot 0x7: AcLswEditBox (class id 0x0160001A) */
     naka_cls_AcLswEditBox_t v7_e2;
-    char str_335[18];
+    char v7_e2_caption[18];
     /* element 0 of Viewable slot 0x8 "Sdmixer": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v8_e0;
+    naka_cls_TtlScreen_t Sdmixer;
     char w46_text[6];
     /* element 1 of Viewable slot 0x8: AcResetPage (class id 0x01610016) */
     naka_cls_AcResetPage_t v8_e1;
@@ -1613,7 +1613,7 @@ typedef struct __attribute__((packed)) {
     uint8_t pad_236[2];  /* zero padding */
     char str_338[14];
     /* element 1 of Viewable slot 0xD "SdtecdPage": AcWindowPage (class id 0x01600025) */
-    naka_cls_AcWindowPage_t vD_e1;
+    naka_cls_AcWindowPage_t SdtecdPage;
     /* element 2 of Viewable slot 0xD: IvPageControl (class id 0x01600028) */
     naka_cls_IvPageControl_t vD_e2;
     /* element 3 of Viewable slot 0xD: IvPageControl (class id 0x01600028) */
@@ -1623,7 +1623,7 @@ typedef struct __attribute__((packed)) {
     /* element 5 of Viewable slot 0xD: IvIntEasySet (class id 0x01600063) */
     naka_cls_IvIntEasySet_t vD_e5;
     /* element 6 of Viewable slot 0xD "Sdtecd1": Window (class id 0x01600035) */
-    naka_cls_Window_t vD_e6;
+    naka_cls_Window_t Sdtecd1;
     /* element 7 of Viewable slot 0xD: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t vD_e7;
     /* element 8 of Viewable slot 0xD: AcIndexEditSw (class id 0x0160001F) */
@@ -1631,61 +1631,61 @@ typedef struct __attribute__((packed)) {
     /* element 9 of Viewable slot 0xD: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t vD_e9;
     /* element 10 of Viewable slot 0xD "TcClose": PsLabelBox (class id 0x01610007) */
-    naka_cls_PsLabelBox_t vD_e10;
-    char str_357[6];
+    naka_cls_PsLabelBox_t TcClose;
+    char CLOSE_str[6];
     /* element 11 of Viewable slot 0xD "TcOpen1": PsLabelBox (class id 0x01610007) */
-    naka_cls_PsLabelBox_t vD_e11;
+    naka_cls_PsLabelBox_t TcOpen1;
     char str_362[8];
     /* element 12 of Viewable slot 0xD "TcOpen2": PsLabelBox (class id 0x01610007) */
-    naka_cls_PsLabelBox_t vD_e12;
+    naka_cls_PsLabelBox_t TcOpen2;
     char str_367[8];
     /* element 13 of Viewable slot 0xD "TcDuet1": PsLabelBox (class id 0x01610007) */
-    naka_cls_PsLabelBox_t vD_e13;
+    naka_cls_PsLabelBox_t TcDuet1;
     char str_371[8];
     /* element 14 of Viewable slot 0xD "TcDuet2": PsLabelBox (class id 0x01610007) */
-    naka_cls_PsLabelBox_t vD_e14;
+    naka_cls_PsLabelBox_t TcDuet2;
     char str_374[8];
     /* element 15 of Viewable slot 0xD "TcCountry": PsLabelBox (class id 0x01610007) */
-    naka_cls_PsLabelBox_t vD_e15;
-    char str_376[8];
+    naka_cls_PsLabelBox_t TcCountry;
+    char COUNTRY_str[8];
     /* element 16 of Viewable slot 0xD "TcTheatre": PsLabelBox (class id 0x01610007) */
-    naka_cls_PsLabelBox_t vD_e16;
-    char str_378[8];
+    naka_cls_PsLabelBox_t TcTheatre;
+    char THEATRE_str[8];
     /* element 17 of Viewable slot 0xD "TcHymn": PsLabelBox (class id 0x01610007) */
-    naka_cls_PsLabelBox_t vD_e17;
-    char str_381[6];
+    naka_cls_PsLabelBox_t TcHymn;
+    char HYMN_str[6];
     /* element 18 of Viewable slot 0xD "TcBigBandBrass": PsLabelBox (class id 0x01610007) */
-    naka_cls_PsLabelBox_t vD_e18;
+    naka_cls_PsLabelBox_t TcBigBandBrass;
     char str_384[16];
     /* element 19 of Viewable slot 0xD "TcBigBandReeds": PsLabelBox (class id 0x01610007) */
-    naka_cls_PsLabelBox_t vD_e19;
+    naka_cls_PsLabelBox_t TcBigBandReeds;
     char str_386[16];
     /* element 20 of Viewable slot 0xD "TcOctave": PsLabelBox (class id 0x01610007) */
-    naka_cls_PsLabelBox_t vD_e20;
-    char str_387[8];
+    naka_cls_PsLabelBox_t TcOctave;
+    char OCTAVE_str[8];
     /* element 21 of Viewable slot 0xD "TcBlock": PsLabelBox (class id 0x01610007) */
-    naka_cls_PsLabelBox_t vD_e21;
-    char str_390[6];
+    naka_cls_PsLabelBox_t TcBlock;
+    char BLOCK_str[6];
     /* element 22 of Viewable slot 0xD "TcHardRock": PsLabelBox (class id 0x01610007) */
-    naka_cls_PsLabelBox_t vD_e22;
+    naka_cls_PsLabelBox_t TcHardRock;
     char str_391[10];
     /* element 23 of Viewable slot 0xD "TcFanfare": PsLabelBox (class id 0x01610007) */
-    naka_cls_PsLabelBox_t vD_e23;
-    char str_392[8];
+    naka_cls_PsLabelBox_t TcFanfare;
+    char FANFARE_str[8];
     /* element 24 of Viewable slot 0xD: IvSdtecd1 (class id 0x01610009) */
     naka_cls_IvSdtecd1_t vD_e24;
     /* element 25 of Viewable slot 0xD "Sdtecd2": Window (class id 0x01600035) */
-    naka_cls_Window_t vD_e25;
+    naka_cls_Window_t Sdtecd2;
     /* element 26 of Viewable slot 0xD: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t vD_e26;
     /* element 27 of Viewable slot 0xD: AcLswEditBox (class id 0x0160001A) */
     naka_cls_AcLswEditBox_t vD_e27;
-    char str_399[16];
+    char vD_e27_caption[16];
     /* element 28 of Viewable slot 0xD: Label (class id 0x0160002B) */
     naka_cls_Label_t vD_e28;
     char w51_text[6];
     /* element 0 of Viewable slot 0xA5 "Sqmixer": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vA5_e0;
+    naka_cls_TtlScreen_t Sqmixer;
     char w52_text[12];
     /* element 1 of Viewable slot 0xA5: AcResetPage (class id 0x01610016) */
     naka_cls_AcResetPage_t vA5_e1;
@@ -1714,52 +1714,52 @@ typedef struct __attribute__((packed)) {
     naka_cls_AcPresentationBox_t vE4_e1;
     char str_405[24];
     /* element 2 of Viewable slot 0xE4 "Demofeature1": Window (class id 0x01600035) */
-    naka_cls_Window_t vE4_e2;
+    naka_cls_Window_t Demofeature1;
     /* element 3 of Viewable slot 0xE4: IvDemofeature1 (class id 0x01610019) */
     naka_cls_IvDemofeature1_t vE4_e3;
     /* element 4 of Viewable slot 0xE4: AcLanguageText (class id 0x01600066) */
     naka_cls_AcLanguageText_t vE4_e4;
     /* element 5 of Viewable slot 0xE4 "Demofeature2": Window (class id 0x01600035) */
-    naka_cls_Window_t vE4_e5;
+    naka_cls_Window_t Demofeature2;
     /* element 6 of Viewable slot 0xE4: IvDemofeature2 (class id 0x0161001A) */
     naka_cls_IvDemofeature2_t vE4_e6;
     /* element 7 of Viewable slot 0xE4: AcPresentationBox (class id 0x0161001D) */
     naka_cls_AcPresentationBox_t vE4_e7;
     char str_413[22];
     /* element 8 of Viewable slot 0xE4 "FDemoTitleBox": PsParaBox (class id 0x01600012) */
-    naka_cls_PsParaBox_t vE4_e8;
+    naka_cls_PsParaBox_t FDemoTitleBox;
     /* element 9 of Viewable slot 0xE4 "PlainScreen": Screen (class id 0x01600033) */
-    naka_cls_Screen_t vE4_e9;
+    naka_cls_Screen_t PlainScreen;
     /* element 10 of Viewable slot 0xE4 "PresentationControl": AcPresentationControl (class id 0x01610018) */
-    naka_cls_AcPresentationControl_t vE4_e10;
+    naka_cls_AcPresentationControl_t PresentationControl;
     /* element 11 of Viewable slot 0xE4: Label (class id 0x0160002B) */
     naka_cls_Label_t vE4_e11;
     char w56_text[18];
     /* element 12 of Viewable slot 0xE4 "LoadingPresentation": Screen (class id 0x01600033) */
-    naka_cls_Screen_t vE4_e12;
+    naka_cls_Screen_t LoadingPresentation;
     /* element 13 of Viewable slot 0xE4: Label (class id 0x0160002B) */
     naka_cls_Label_t vE4_e13;
     char w58_text[16];
     /* element 14 of Viewable slot 0xE4 "PresentationTitle": PsParaBox (class id 0x01600012) */
-    naka_cls_PsParaBox_t vE4_e14;
+    naka_cls_PsParaBox_t PresentationTitle;
     /* element 0 of Viewable slot 0xEA "Drawbar": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vEA_e0;
+    naka_cls_TtlScreen_t Drawbar;
     char w60_text[2];
     /* element 1 of Viewable slot 0xEA: IvIntVari (class id 0x01600062) */
     naka_cls_IvIntVari_t vEA_e1;
     /* element 2 of Viewable slot 0xEA "DrawPerc4": AcIndexToggle (class id 0x0160004E) */
-    naka_cls_AcIndexToggle_t vEA_e2;
-    char str_419[4];
-    char str_420[4];
+    naka_cls_AcIndexToggle_t DrawPerc4;
+    char DrawPerc4_stroff[4];
+    char DrawPerc4_stron[4];
     /* element 3 of Viewable slot 0xEA "DrawPerc223": AcIndexToggle (class id 0x0160004E) */
-    naka_cls_AcIndexToggle_t vEA_e3;
-    char str_421[6];
-    char str_422[6];
+    naka_cls_AcIndexToggle_t DrawPerc223;
+    char DrawPerc223_stroff[6];
+    char DrawPerc223_stron[6];
     /* element 4 of Viewable slot 0xEA "White23": Label (class id 0x0160002B) */
-    naka_cls_Label_t vEA_e4;
+    naka_cls_Label_t White23;
     char w63_text[4];
     /* element 5 of Viewable slot 0xEA "Black23": Label (class id 0x0160002B) */
-    naka_cls_Label_t vEA_e5;
+    naka_cls_Label_t Black23;
     char w64_text[4];
     /* element 6 of Viewable slot 0xEA: Label (class id 0x0160002B) */
     naka_cls_Label_t vEA_e6;
@@ -1773,11 +1773,11 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_247e;
     char str_423[2];
     uint16_t field_2484;
-    char str_424[2];
+    char P_str[2];
     uint32_t ptr_2488;
     uint8_t pad_313[4];  /* zero padding */
     uint16_t field_2490;
-    char str_425[6];
+    char TONE_str[6];
     /* element 9 of Viewable slot 0xEA: IvPageOverWrite (class id 0x01610010) */
     naka_cls_IvPageOverWrite_t vEA_e9;
     /* element 10 of Viewable slot 0xEA: IvPageOverWrite (class id 0x01610010) */
@@ -1785,11 +1785,11 @@ typedef struct __attribute__((packed)) {
     /* element 11 of Viewable slot 0xEA: IvDrawbar (class id 0x01610011) */
     naka_cls_IvDrawbar_t vEA_e11;
     /* element 12 of Viewable slot 0xEA "DrawSetting": AcDrawSetting (class id 0x01610022) */
-    naka_cls_AcDrawSetting_t vEA_e12;
-    char str_436[16];
-    char str_437[16];
+    naka_cls_AcDrawSetting_t DrawSetting;
+    char DrawSetting_stroff[16];
+    char DrawSetting_stron[16];
     /* element 13 of Viewable slot 0xEA "Drawbar1": Window (class id 0x01600035) */
-    naka_cls_Window_t vEA_e13;
+    naka_cls_Window_t Drawbar1;
     /* element 14 of Viewable slot 0xEA: VwBox (class id 0x01600011) */
     naka_cls_VwBox_t vEA_e14;
     /* element 15 of Viewable slot 0xEA: StringBox (class id 0x01600037) */
@@ -1812,19 +1812,19 @@ typedef struct __attribute__((packed)) {
     /* element 21 of Viewable slot 0xEA: VwUserBitmapSp (class id 0x0161001E) */
     naka_cls_VwUserBitmapSp_t vEA_e21;
     /* element 22 of Viewable slot 0xEA "Drawbar2": Window (class id 0x01600035) */
-    naka_cls_Window_t vEA_e22;
+    naka_cls_Window_t Drawbar2;
     /* element 23 of Viewable slot 0xEA: AcDrawEditBox (class id 0x0161001B) */
     naka_cls_AcDrawEditBox_t vEA_e23;
-    char str_451[8];
+    char vEA_e23_caption[8];
     /* element 24 of Viewable slot 0xEA: AcDrawEditBox (class id 0x0161001B) */
     naka_cls_AcDrawEditBox_t vEA_e24;
-    char str_453[8];
+    char vEA_e24_caption[8];
     /* element 25 of Viewable slot 0xEA: AcDrawEditBox (class id 0x0161001B) */
     naka_cls_AcDrawEditBox_t vEA_e25;
-    char str_456[16];
+    char vEA_e25_caption[16];
     /* element 26 of Viewable slot 0xEA: AcDrawEditBox (class id 0x0161001B) */
     naka_cls_AcDrawEditBox_t vEA_e26;
-    char str_458[16];
+    char vEA_e26_caption[16];
     /* element 27 of Viewable slot 0xEA: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t vEA_e27;
     /* element 28 of Viewable slot 0xEA: IvDrawbar2 (class id 0x01610013) */
@@ -1832,13 +1832,13 @@ typedef struct __attribute__((packed)) {
     /* element 29 of Viewable slot 0xEA: AcDrawbarName (class id 0x01610023) */
     naka_cls_AcDrawbarName_t vEA_e29;
     /* element 30 of Viewable slot 0xEA "DrawbarNorm": Window (class id 0x01600035) */
-    naka_cls_Window_t vEA_e30;
+    naka_cls_Window_t DrawbarNorm;
     /* element 31 of Viewable slot 0xEA "DrawbarPart": PsParaBox (class id 0x01600012) */
-    naka_cls_PsParaBox_t vEA_e31;
+    naka_cls_PsParaBox_t DrawbarPart;
     /* element 32 of Viewable slot 0xEA "DrawTremolo": AcIndexToggle (class id 0x0160004E) */
-    naka_cls_AcIndexToggle_t vEA_e32;
-    char str_465[6];
-    char str_466[6];
+    naka_cls_AcIndexToggle_t DrawTremolo;
+    char DrawTremolo_stroff[6];
+    char DrawTremolo_stron[6];
     /* element 33 of Viewable slot 0xEA: Label (class id 0x0160002B) */
     naka_cls_Label_t vEA_e33;
     char w75_text[8];
@@ -1852,7 +1852,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t vEA_e37;
     char w77_text[8];
     /* element 38 of Viewable slot 0xEA "DrawbarSndE": Window (class id 0x01600035) */
-    naka_cls_Window_t vEA_e38;
+    naka_cls_Window_t DrawbarSndE;
     /* element 39 of Viewable slot 0xEA: IvDrawbarSndE (class id 0x01610015) */
     naka_cls_IvDrawbarSndE_t vEA_e39;
     /* element 40 of Viewable slot 0xEA: AcTitleMenu (class id 0x0160001D) */
@@ -1866,7 +1866,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t vEA_e43;
     char w80_text[14];
     /* element 0 of Viewable slot 0xEB "Accordion": Screen (class id 0x01600033) */
-    naka_cls_Screen_t vEB_e0;
+    naka_cls_Screen_t Accordion;
     /* element 1 of Viewable slot 0xEB: Icon (class id 0x0160002D) */
     naka_cls_Icon_t vEB_e1;
     /* element 2 of Viewable slot 0xEB: IvIntVari (class id 0x01600062) */
@@ -1882,11 +1882,11 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t vEB_e6;
     char w83_text[6];
     /* element 7 of Viewable slot 0xEB "AccordionPart": PsParaBox (class id 0x01600012) */
-    naka_cls_PsParaBox_t vEB_e7;
+    naka_cls_PsParaBox_t AccordionPart;
     /* element 8 of Viewable slot 0xEB: IvAccordion (class id 0x01610004) */
     naka_cls_IvAccordion_t vEB_e8;
     /* element 9 of Viewable slot 0xEB "Accordion1": Window (class id 0x01600035) */
-    naka_cls_Window_t vEB_e9;
+    naka_cls_Window_t Accordion1;
     /* element 10 of Viewable slot 0xEB: Label (class id 0x0160002B) */
     naka_cls_Label_t vEB_e10;
     char w85_text[14];
@@ -1894,64 +1894,64 @@ typedef struct __attribute__((packed)) {
     naka_cls_VwUserBitmapSp_t vEB_e11;
     /* element 12 of Viewable slot 0xEB: AcIndexToggle (class id 0x0160004E) */
     naka_cls_AcIndexToggle_t vEB_e12;
-    char str_508[6];
-    char str_509[6];
+    char vEB_e12_stroff[6];
+    char vEB_e12_stron[6];
     /* element 13 of Viewable slot 0xEB: AcIndexToggle (class id 0x0160004E) */
     naka_cls_AcIndexToggle_t vEB_e13;
-    char str_510[6];
-    char str_511[6];
+    char vEB_e13_stroff[6];
+    char vEB_e13_stron[6];
     /* element 14 of Viewable slot 0xEB: AcAccordionTab (class id 0x01610006) */
     naka_cls_AcAccordionTab_t vEB_e14;
-    char str_514[4];
-    char str_515[4];
-    char str_516[4];
-    char str_517[4];
+    char vEB_e14_str3[4];
+    char vEB_e14_str1[4];
+    char vEB_e14_stroff[4];
+    char vEB_e14_stron[4];
     /* element 15 of Viewable slot 0xEB: AcAccordionTab (class id 0x01610006) */
     naka_cls_AcAccordionTab_t vEB_e15;
-    char str_519[4];
-    char str_520[2];
-    char str_521[4];
-    char str_522[4];
+    char vEB_e15_str3[4];
+    char vEB_e15_str1[2];
+    char vEB_e15_stroff[4];
+    char vEB_e15_stron[4];
     /* element 16 of Viewable slot 0xEB: AcAccordionTab (class id 0x01610006) */
     naka_cls_AcAccordionTab_t vEB_e16;
-    char str_525[4];
-    char str_526[4];
-    char str_527[2];
-    char str_528[2];
+    char vEB_e16_str3[4];
+    char vEB_e16_str1[4];
+    char vEB_e16_stroff[2];
+    char vEB_e16_stron[2];
     /* element 17 of Viewable slot 0xEB: AcAccordionTab (class id 0x01610006) */
     naka_cls_AcAccordionTab_t vEB_e17;
-    char str_530[4];
-    char str_531[4];
-    char str_532[10];
-    char str_533[10];
+    char vEB_e17_str3[4];
+    char vEB_e17_str1[4];
+    char vEB_e17_stroff[10];
+    char vEB_e17_stron[10];
     /* element 18 of Viewable slot 0xEB: AcAccordionTab (class id 0x01610006) */
     naka_cls_AcAccordionTab_t vEB_e18;
-    char str_534[2];
-    char str_535[4];
-    char str_536[8];
-    char str_537[8];
+    char vEB_e18_str3[2];
+    char vEB_e18_str1[4];
+    char vEB_e18_stroff[8];
+    char vEB_e18_stron[8];
     /* element 19 of Viewable slot 0xEB: AcAccordionTab (class id 0x01610006) */
     naka_cls_AcAccordionTab_t vEB_e19;
-    char str_538[2];
-    char str_539[2];
-    char str_540[10];
-    char str_541[10];
+    char vEB_e19_str3[2];
+    char vEB_e19_str1[2];
+    char vEB_e19_stroff[10];
+    char vEB_e19_stron[10];
     /* element 20 of Viewable slot 0xEB: AcAccordionTab (class id 0x01610006) */
     naka_cls_AcAccordionTab_t vEB_e20;
-    char str_542[2];
-    char str_543[4];
-    char str_544[4];
-    char str_545[4];
+    char vEB_e20_str3[2];
+    char vEB_e20_str1[4];
+    char vEB_e20_stroff[4];
+    char vEB_e20_stron[4];
     /* element 21 of Viewable slot 0xEB: AcAccordionTab (class id 0x01610006) */
     naka_cls_AcAccordionTab_t vEB_e21;
-    char str_546[2];
-    char str_547[2];
-    char str_548[4];
-    char str_549[4];
+    char vEB_e21_str3[2];
+    char vEB_e21_str1[2];
+    char vEB_e21_stroff[4];
+    char vEB_e21_stron[4];
     /* element 22 of Viewable slot 0xEB: IvAccordionX (class id 0x01610005) */
     naka_cls_IvAccordionX_t vEB_e22;
     /* element 23 of Viewable slot 0xEB "Accordion2": Window (class id 0x01600035) */
-    naka_cls_Window_t vEB_e23;
+    naka_cls_Window_t Accordion2;
     /* element 24 of Viewable slot 0xEB: Label (class id 0x0160002B) */
     naka_cls_Label_t vEB_e24;
     char w88_text[16];
@@ -1959,74 +1959,74 @@ typedef struct __attribute__((packed)) {
     naka_cls_VwUserBitmapSp_t vEB_e25;
     /* element 26 of Viewable slot 0xEB: AcIndexToggle (class id 0x0160004E) */
     naka_cls_AcIndexToggle_t vEB_e26;
-    char str_559[6];
-    char str_560[6];
+    char vEB_e26_stroff[6];
+    char vEB_e26_stron[6];
     /* element 27 of Viewable slot 0xEB: AcIndexToggle (class id 0x0160004E) */
     naka_cls_AcIndexToggle_t vEB_e27;
-    char str_561[6];
-    char str_562[6];
+    char vEB_e27_stroff[6];
+    char vEB_e27_stron[6];
     /* element 28 of Viewable slot 0xEB: AcAccordionTab (class id 0x01610006) */
     naka_cls_AcAccordionTab_t vEB_e28;
-    char str_565[4];
-    char str_566[2];
-    char str_567[4];
-    char str_568[4];
+    char vEB_e28_str3[4];
+    char vEB_e28_str1[2];
+    char vEB_e28_stroff[4];
+    char vEB_e28_stron[4];
     /* element 29 of Viewable slot 0xEB: AcAccordionTab (class id 0x01610006) */
     naka_cls_AcAccordionTab_t vEB_e29;
-    char str_570[4];
-    char str_571[2];
-    char str_572[2];
-    char str_573[2];
+    char vEB_e29_str3[4];
+    char vEB_e29_str1[2];
+    char vEB_e29_stroff[2];
+    char vEB_e29_stron[2];
     /* element 30 of Viewable slot 0xEB: AcAccordionTab (class id 0x01610006) */
     naka_cls_AcAccordionTab_t vEB_e30;
-    char str_576[4];
-    char str_577[4];
-    char str_578[2];
-    char str_579[2];
+    char vEB_e30_str3[4];
+    char vEB_e30_str1[4];
+    char vEB_e30_stroff[2];
+    char vEB_e30_stron[2];
     /* element 31 of Viewable slot 0xEB: AcAccordionTab (class id 0x01610006) */
     naka_cls_AcAccordionTab_t vEB_e31;
-    char str_582[4];
-    char str_583[4];
-    char str_584[8];
-    char str_585[8];
+    char vEB_e31_str3[4];
+    char vEB_e31_str1[4];
+    char vEB_e31_stroff[8];
+    char vEB_e31_stron[8];
     /* element 32 of Viewable slot 0xEB: AcAccordionTab (class id 0x01610006) */
     naka_cls_AcAccordionTab_t vEB_e32;
-    char str_587[2];
-    char str_588[4];
-    char str_589[8];
-    char str_590[8];
+    char vEB_e32_str3[2];
+    char vEB_e32_str1[4];
+    char vEB_e32_stroff[8];
+    char vEB_e32_stron[8];
     /* element 33 of Viewable slot 0xEB: AcAccordionTab (class id 0x01610006) */
     naka_cls_AcAccordionTab_t vEB_e33;
-    char str_593[2];
-    char str_594[2];
-    char str_595[8];
-    char str_596[8];
+    char vEB_e33_str3[2];
+    char vEB_e33_str1[2];
+    char vEB_e33_stroff[8];
+    char vEB_e33_stron[8];
     /* element 34 of Viewable slot 0xEB: AcAccordionTab (class id 0x01610006) */
     naka_cls_AcAccordionTab_t vEB_e34;
-    char str_599[2];
-    char str_600[4];
-    char str_601[4];
-    char str_602[4];
+    char vEB_e34_str3[2];
+    char vEB_e34_str1[4];
+    char vEB_e34_stroff[4];
+    char vEB_e34_stron[4];
     /* element 35 of Viewable slot 0xEB: AcAccordionTab (class id 0x01610006) */
     naka_cls_AcAccordionTab_t vEB_e35;
-    char str_605[2];
-    char str_606[2];
-    char str_607[4];
-    char str_608[4];
+    char vEB_e35_str3[2];
+    char vEB_e35_str1[2];
+    char vEB_e35_stroff[4];
+    char vEB_e35_stron[4];
     /* element 36 of Viewable slot 0xEB: IvAccordionX (class id 0x01610005) */
     naka_cls_IvAccordionX_t vEB_e36;
     /* element 0 of Viewable slot 0xEE "Mesage": IvScreen (class id 0x0160006A) */
-    naka_cls_IvScreen_t vEE_e0;
+    naka_cls_IvScreen_t Mesage;
     /* element 1 of Viewable slot 0xEE: IvMesage (class id 0x01610003) */
     naka_cls_IvMesage_t vEE_e1;
     /* element 2 of Viewable slot 0xEE "Completed": Window (class id 0x01600035) */
-    naka_cls_Window_t vEE_e2;
+    naka_cls_Window_t Completed;
     /* element 3 of Viewable slot 0xEE: AcLanguageText (class id 0x01600066) */
     naka_cls_AcLanguageText_t vEE_e3;
     /* element 4 of Viewable slot 0xEE: IvIntComplete (class id 0x01600061) */
     naka_cls_IvIntComplete_t vEE_e4;
     /* element 5 of Viewable slot 0xEE "Reminder": Window (class id 0x01600035) */
-    naka_cls_Window_t vEE_e5;
+    naka_cls_Window_t Reminder;
     /* element 6 of Viewable slot 0xEE: AcLanguageText (class id 0x01600066) */
     naka_cls_AcLanguageText_t vEE_e6;
     /* element 7 of Viewable slot 0xEE: AcLanguageText (class id 0x01600066) */
@@ -2034,7 +2034,7 @@ typedef struct __attribute__((packed)) {
     /* element 8 of Viewable slot 0xEE: IvIntReminder (class id 0x0160005F) */
     naka_cls_IvIntReminder_t vEE_e8;
     /* element 9 of Viewable slot 0xEE "Error": Window (class id 0x01600035) */
-    naka_cls_Window_t vEE_e9;
+    naka_cls_Window_t Error;
     /* element 10 of Viewable slot 0xEE: IvIntError (class id 0x01600060) */
     naka_cls_IvIntError_t vEE_e10;
     /* element 11 of Viewable slot 0xEE: AcLanguageText (class id 0x01600066) */
@@ -2042,11 +2042,11 @@ typedef struct __attribute__((packed)) {
     /* element 12 of Viewable slot 0xEE: AcLanguageText (class id 0x01600066) */
     naka_cls_AcLanguageText_t vEE_e12;
     /* element 13 of Viewable slot 0xEE "Other": Window (class id 0x01600035) */
-    naka_cls_Window_t vEE_e13;
+    naka_cls_Window_t Other;
     /* element 14 of Viewable slot 0xEE: AcLanguageText (class id 0x01600066) */
     naka_cls_AcLanguageText_t vEE_e14;
     /* element 15 of Viewable slot 0xEE "CheckMessage": Window (class id 0x01600035) */
-    naka_cls_Window_t vEE_e15;
+    naka_cls_Window_t CheckMessage;
     naka_slider_t w91;  /* NAKA_TYPE_SLIDER */
     /* element 17 of Viewable slot 0xEE: AcRamBox (class id 0x0160004F) */
     naka_cls_AcRamBox_t vEE_e17;
@@ -2054,15 +2054,15 @@ typedef struct __attribute__((packed)) {
     naka_cls_AcRamBox_t vEE_e18;
     naka_slider_t w92;  /* NAKA_TYPE_SLIDER */
     /* element 20 of Viewable slot 0xEE "NoMessage": Window (class id 0x01600035) */
-    naka_cls_Window_t vEE_e20;
+    naka_cls_Window_t NoMessage;
     /* element 21 of Viewable slot 0xEE: AcRamBox (class id 0x0160004F) */
     naka_cls_AcRamBox_t vEE_e21;
     /* element 22 of Viewable slot 0xEE "PleaseWait": Window (class id 0x01600035) */
-    naka_cls_Window_t vEE_e22;
+    naka_cls_Window_t PleaseWait;
     /* element 23 of Viewable slot 0xEE: AcPleaseWait (class id 0x01610021) */
     naka_cls_AcPleaseWait_t vEE_e23;
     /* element 0 of Viewable slot 0xEF "Welcom": AcWelcomScreen (class id 0x0161000B) */
-    naka_cls_AcWelcomScreen_t vEF_e0;
+    naka_cls_AcWelcomScreen_t Welcom;
     /* element 1 of Viewable slot 0xEF: IvIntWelcome (class id 0x0160006B) */
     naka_cls_IvIntWelcome_t vEF_e1;
     /* element 2 of Viewable slot 0xEF: VwUserBitmapSp (class id 0x0161001E) */
@@ -2070,35 +2070,35 @@ typedef struct __attribute__((packed)) {
     /* element 3 of Viewable slot 0xEF: VwUserBitmapSp (class id 0x0161001E) */
     naka_cls_VwUserBitmapSp_t vEF_e3;
     /* element 4 of Viewable slot 0xEF "AllInitial": Screen (class id 0x01600033) */
-    naka_cls_Screen_t vEF_e4;
+    naka_cls_Screen_t AllInitial;
     /* element 5 of Viewable slot 0xEF: Label (class id 0x0160002B) */
     naka_cls_Label_t vEF_e5;
     char w94_text[22];
     /* element 6 of Viewable slot 0xEF: IvIntWelcome (class id 0x0160006B) */
     naka_cls_IvIntWelcome_t vEF_e6;
     /* element 7 of Viewable slot 0xEF "MPVersion": Screen (class id 0x01600033) */
-    naka_cls_Screen_t vEF_e7;
+    naka_cls_Screen_t MPVersion;
     /* element 8 of Viewable slot 0xEF: IvMPver (class id 0x01610024) */
     naka_cls_IvMPver_t vEF_e8;
     /* element 9 of Viewable slot 0xEF: IvIntWelcome (class id 0x0160006B) */
     naka_cls_IvIntWelcome_t vEF_e9;
     /* element 10 of Viewable slot 0xEF "MPver": PsParaBox (class id 0x01600012) */
-    naka_cls_PsParaBox_t vEF_e10;
+    naka_cls_PsParaBox_t MPver;
     /* element 0 of Viewable slot 0xF0 "Softver": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vF0_e0;
+    naka_cls_TtlScreen_t Softver;
     char w97_text[14];
     /* element 1 of Viewable slot 0xF0 "MainProgram": PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t vF0_e1;
-    char str_678[16];
+    naka_cls_PsEditBox_t MainProgram;
+    char MainProgram_caption[16];
     /* element 2 of Viewable slot 0xF0 "MainTable": PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t vF0_e2;
-    char str_679[16];
+    naka_cls_PsEditBox_t MainTable;
+    char MainTable_caption[16];
     /* element 3 of Viewable slot 0xF0 "SubProgram": PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t vF0_e3;
-    char str_680[16];
+    naka_cls_PsEditBox_t SubProgram;
+    char SubProgram_caption[16];
     /* element 4 of Viewable slot 0xF0 "SoundTable": PsEditBox (class id 0x01600015) */
-    naka_cls_PsEditBox_t vF0_e4;
-    char str_681[16];
+    naka_cls_PsEditBox_t SoundTable;
+    char SoundTable_caption[16];
     /* element 5 of Viewable slot 0xF0: IvSoftver (class id 0x0161000F) */
     naka_cls_IvSoftver_t vF0_e5;
     uint32_t ptrs_8[374];  /* 374 pointers */
@@ -2122,7 +2122,7 @@ typedef struct __attribute__((packed)) {
     char str_695[2];
     char w104_code[2];
     char w104_name[12];
-    char str_696[8];
+    char Sdmenu_str[8];
     uint32_t ptrs_9[85];  /* 85 pointers */
     char str_697[2];
     char str_698[2];
@@ -2198,7 +2198,7 @@ typedef struct __attribute__((packed)) {
     char str_750[2];
     char w114_code[2];
     char w114_name[12];
-    char str_751[12];
+    char SdpartSound_str[12];
     char str_752[2];
     char str_753[2];
     char str_754[2];
@@ -2243,17 +2243,17 @@ typedef struct __attribute__((packed)) {
     char str_787[2];
     char w117_code[2];
     char w117_name[14];
-    char str_788[14];
-    char str_789[14];
-    char str_790[12];
-    char str_791[12];
-    char str_792[12];
-    char str_793[12];
-    char str_794[12];
-    char str_795[12];
-    char str_796[12];
-    char str_797[12];
-    char str_798[12];
+    char ScalingKey11_str[14];
+    char ScalingKey10_str[14];
+    char ScalingKey9_str[12];
+    char ScalingKey8_str[12];
+    char ScalingKey7_str[12];
+    char ScalingKey6_str[12];
+    char ScalingKey5_str[12];
+    char ScalingKey4_str[12];
+    char ScalingKey3_str[12];
+    char ScalingKey2_str[12];
+    char ScalingKey1_str[12];
     char str_799[2];
     char str_800[2];
     char str_801[2];
@@ -2270,7 +2270,7 @@ typedef struct __attribute__((packed)) {
     char str_806[2];
     char w121_code[2];
     char w121_name[14];
-    char str_807[10];
+    char Sdscltyp_str[10];
     uint32_t ptrs_12[4];  /* 4 pointers */
     char str_808[2];
     char str_809[2];
@@ -2295,7 +2295,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .str_0 = ALIGNED_STRING("TECHNI-CHORD"),
 
-    .v3_e0 = {
+    .Sdpart = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -2436,7 +2436,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .w1_text = "PART SELECT :",
 
-    .v3_e10 = {
+    .SdpartSound = {
         .class_ = 0x01600012,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2452,7 +2452,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .align = 0x0000,
     },
 
-    .v3_e11 = {
+    .SdpartPart = {
         .class_ = 0x01600012,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2485,10 +2485,10 @@ const naka_technichord_part_t naka_technichord_part_data
         .editsw = 0x0000,
         .selected = 0x0003E692,
         .tag = 0x0000,
-        .str = SELF(str_37),
+        .str = SELF(VOL_str),
     },
 
-    .str_37 = "VOL",
+    .VOL_str = "VOL",
 
     .v3_e13 = {
         .class_ = 0x01600051,
@@ -2507,10 +2507,10 @@ const naka_technichord_part_t naka_technichord_part_data
         .editsw = 0x0001,
         .selected = 0x0003E694,
         .tag = 0x0001,
-        .str = SELF(str_41),
+        .str = SELF(PAN_str),
     },
 
-    .str_41 = "PAN",
+    .PAN_str = "PAN",
 
     .v3_e14 = {
         .class_ = 0x01600051,
@@ -2529,10 +2529,10 @@ const naka_technichord_part_t naka_technichord_part_data
         .editsw = 0x0002,
         .selected = 0x0003E696,
         .tag = 0x0002,
-        .str = SELF(str_45),
+        .str = SELF(EFF_str),
     },
 
-    .str_45 = "EFF",
+    .EFF_str = "EFF",
 
     .v3_e15 = {
         .class_ = 0x01600051,
@@ -2551,10 +2551,10 @@ const naka_technichord_part_t naka_technichord_part_data
         .editsw = 0x0003,
         .selected = 0x0003E698,
         .tag = 0x0003,
-        .str = SELF(str_48),
+        .str = SELF(SUS_str),
     },
 
-    .str_48 = "SUS",
+    .SUS_str = "SUS",
 
     .v3_e16 = {
         .class_ = 0x01600051,
@@ -2573,10 +2573,10 @@ const naka_technichord_part_t naka_technichord_part_data
         .editsw = 0x0004,
         .selected = 0x0003E69A,
         .tag = 0x0004,
-        .str = SELF(str_50),
+        .str = SELF(KEY_str),
     },
 
-    .str_50 = "KEY",
+    .KEY_str = "KEY",
 
     .v3_e17 = {
         .class_ = 0x01600051,
@@ -2595,10 +2595,10 @@ const naka_technichord_part_t naka_technichord_part_data
         .editsw = 0x0005,
         .selected = 0x0003E69C,
         .tag = 0x0005,
-        .str = SELF(str_52),
+        .str = SELF(TUN_str),
     },
 
-    .str_52 = "TUN",
+    .TUN_str = "TUN",
 
     .v3_e18 = {
         .class_ = 0x01600051,
@@ -2617,10 +2617,10 @@ const naka_technichord_part_t naka_technichord_part_data
         .editsw = 0x0006,
         .selected = 0x0003E69E,
         .tag = 0x0006,
-        .str = SELF(str_54),
+        .str = SELF(BND_str),
     },
 
-    .str_54 = "BND",
+    .BND_str = "BND",
 
     .v3_e19 = {
         .class_ = 0x01600051,
@@ -2639,10 +2639,10 @@ const naka_technichord_part_t naka_technichord_part_data
         .editsw = 0x0007,
         .selected = 0x0003E6A0,
         .tag = 0x0007,
-        .str = SELF(str_56),
+        .str = SELF(OTH_str),
     },
 
-    .str_56 = "OTH",
+    .OTH_str = "OTH",
 
     .v3_e20 = {
         .class_ = 0x0160003E,
@@ -2822,7 +2822,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .rect = { 0, 0, 31, 31 },
     },
 
-    .v3_e29 = {
+    .SdpartMain = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 30,
@@ -2848,7 +2848,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0xFFFF,
-        .caption = SELF(str_68),
+        .caption = SELF(v3_e30_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0002,
@@ -2860,7 +2860,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E6AC,
     },
 
-    .str_68 = ALIGNED_STRING("PAN        :"),
+    .v3_e30_caption = ALIGNED_STRING("PAN        :"),
 
     .v3_e31 = {
         .class_ = 0x01610001,
@@ -2873,7 +2873,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0xFFFF,
-        .caption = SELF(str_70),
+        .caption = SELF(v3_e31_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0002,
@@ -2885,7 +2885,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E6B0,
     },
 
-    .str_70 = ALIGNED_STRING("REV. DEPTH :"),
+    .v3_e31_caption = ALIGNED_STRING("REV. DEPTH :"),
 
     .v3_e32 = {
         .class_ = 0x01610001,
@@ -2898,7 +2898,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0xFFFF,
-        .caption = SELF(str_72),
+        .caption = SELF(v3_e32_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0002,
@@ -2910,7 +2910,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E6B4,
     },
 
-    .str_72 = ALIGNED_STRING("DSP EFFECT :"),
+    .v3_e32_caption = ALIGNED_STRING("DSP EFFECT :"),
 
     .v3_e33 = {
         .class_ = 0x01610001,
@@ -2923,7 +2923,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0xFFFF,
-        .caption = SELF(str_75),
+        .caption = SELF(v3_e33_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0002,
@@ -2935,7 +2935,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E6B8,
     },
 
-    .str_75 = ALIGNED_STRING("DIG.EFFECT :"),
+    .v3_e33_caption = ALIGNED_STRING("DIG.EFFECT :"),
 
     .v3_e34 = {
         .class_ = 0x01610001,
@@ -2948,7 +2948,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0xFFFF,
-        .caption = SELF(str_78),
+        .caption = SELF(v3_e34_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0002,
@@ -2960,7 +2960,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E6BC,
     },
 
-    .str_78 = ALIGNED_STRING("SUSTAIN    :"),
+    .v3_e34_caption = ALIGNED_STRING("SUSTAIN    :"),
 
     .v3_e35 = {
         .class_ = 0x01600011,
@@ -2986,7 +2986,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0xFFFF,
-        .caption = SELF(str_83),
+        .caption = SELF(v3_e36_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0002,
@@ -2998,7 +2998,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E6C0,
     },
 
-    .str_83 = ALIGNED_STRING("SUS LENGTH :"),
+    .v3_e36_caption = ALIGNED_STRING("SUS LENGTH :"),
 
     .v3_e37 = {
         .class_ = 0x01610001,
@@ -3011,7 +3011,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0xFFFF,
-        .caption = SELF(str_87),
+        .caption = SELF(v3_e37_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0002,
@@ -3023,7 +3023,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E6C4,
     },
 
-    .str_87 = ALIGNED_STRING("KEY SHIFT  :"),
+    .v3_e37_caption = ALIGNED_STRING("KEY SHIFT  :"),
 
     .v3_e38 = {
         .class_ = 0x01610001,
@@ -3036,7 +3036,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0xFFFF,
-        .caption = SELF(str_90),
+        .caption = SELF(v3_e38_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0002,
@@ -3048,7 +3048,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E6C8,
     },
 
-    .str_90 = ALIGNED_STRING("TUNING     :"),
+    .v3_e38_caption = ALIGNED_STRING("TUNING     :"),
 
     .v3_e39 = {
         .class_ = 0x01610001,
@@ -3061,7 +3061,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0xFFFF,
-        .caption = SELF(str_93),
+        .caption = SELF(v3_e39_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0002,
@@ -3073,7 +3073,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E6CC,
     },
 
-    .str_93 = ALIGNED_STRING("BEND RANGE :"),
+    .v3_e39_caption = ALIGNED_STRING("BEND RANGE :"),
 
     .v3_e40 = {
         .class_ = 0x01610001,
@@ -3086,7 +3086,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0xFFFF,
-        .caption = SELF(str_96),
+        .caption = SELF(v3_e40_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0002,
@@ -3098,7 +3098,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E6D0,
     },
 
-    .str_96 = ALIGNED_STRING("GLIDE PEDAL:"),
+    .v3_e40_caption = ALIGNED_STRING("GLIDE PEDAL:"),
 
     .v3_e41 = {
         .class_ = 0x01610001,
@@ -3111,7 +3111,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0xFFFF,
-        .caption = SELF(str_99),
+        .caption = SELF(v3_e41_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0002,
@@ -3123,7 +3123,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E6D4,
     },
 
-    .str_99 = ALIGNED_STRING("SUST.PEDAL :"),
+    .v3_e41_caption = ALIGNED_STRING("SUST.PEDAL :"),
 
     .v3_e42 = {
         .class_ = 0x01610002,
@@ -3136,7 +3136,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0xFFFF,
-        .caption = SELF(str_103),
+        .caption = SELF(v3_e42_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0002,
@@ -3149,9 +3149,9 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E6D8,
     },
 
-    .str_103 = ALIGNED_STRING("VOLUME     :"),
+    .v3_e42_caption = ALIGNED_STRING("VOLUME     :"),
 
-    .v3_e43 = {
+    .SdpartVol = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 44,
@@ -3208,7 +3208,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x00C1,
         .index = 0x0000,
-        .caption = SELF(str_114),
+        .caption = SELF(v3_e46_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -3221,9 +3221,9 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E6E4,
     },
 
-    .str_114 = ALIGNED_STRING("VOLUME       :"),
+    .v3_e46_caption = ALIGNED_STRING("VOLUME       :"),
 
-    .v3_e47 = {
+    .SdpartPan = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 48,
@@ -3262,7 +3262,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0001,
-        .caption = SELF(str_122),
+        .caption = SELF(v3_e49_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -3274,7 +3274,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E6F0,
     },
 
-    .str_122 = "PAN =",
+    .v3_e49_caption = "PAN =",
 
     .v3_e50 = {
         .class_ = 0x0160002B,
@@ -3337,7 +3337,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .index = 0xFFFF,
     },
 
-    .v3_e54 = {
+    .SdpartEff = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 55,
@@ -3363,7 +3363,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0002,
-        .caption = SELF(str_137),
+        .caption = SELF(v3_e55_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -3375,7 +3375,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E6FE,
     },
 
-    .str_137 = "REVERB DEPTH:",
+    .v3_e55_caption = "REVERB DEPTH:",
 
     .v3_e56 = {
         .class_ = 0x01610001,
@@ -3388,7 +3388,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0002,
-        .caption = SELF(str_141),
+        .caption = SELF(v3_e56_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -3400,7 +3400,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E702,
     },
 
-    .str_141 = "DSP EFFECT  :",
+    .v3_e56_caption = "DSP EFFECT  :",
 
     .v3_e57 = {
         .class_ = 0x01610001,
@@ -3413,7 +3413,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0002,
-        .caption = SELF(str_146),
+        .caption = SELF(v3_e57_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -3425,7 +3425,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E706,
     },
 
-    .str_146 = "DIGITAL EFF.:",
+    .v3_e57_caption = "DIGITAL EFF.:",
 
     .v3_e58 = {
         .class_ = 0x0160001F,
@@ -3458,7 +3458,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .index = 0xFFFF,
     },
 
-    .v3_e60 = {
+    .SdpartSus = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 61,
@@ -3502,7 +3502,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0003,
-        .caption = SELF(str_162),
+        .caption = SELF(v3_e62_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -3514,7 +3514,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E712,
     },
 
-    .str_162 = ALIGNED_STRING("SUSTAIN ON/OFF   :"),
+    .v3_e62_caption = ALIGNED_STRING("SUSTAIN ON/OFF   :"),
 
     .v3_e63 = {
         .class_ = 0x01610001,
@@ -3527,7 +3527,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0003,
-        .caption = SELF(str_166),
+        .caption = SELF(v3_e63_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -3539,7 +3539,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E716,
     },
 
-    .str_166 = ALIGNED_STRING("SUSTAIN LENGTH   :"),
+    .v3_e63_caption = ALIGNED_STRING("SUSTAIN LENGTH   :"),
 
     .v3_e64 = {
         .class_ = 0x01600011,
@@ -3554,7 +3554,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .index = 0xFFFF,
     },
 
-    .v3_e65 = {
+    .SdpartKey = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 66,
@@ -3580,7 +3580,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x00C1,
         .index = 0x0004,
-        .caption = SELF(str_174),
+        .caption = SELF(v3_e66_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -3592,7 +3592,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E722,
     },
 
-    .str_174 = ALIGNED_STRING("KEY SHIFT    :"),
+    .v3_e66_caption = ALIGNED_STRING("KEY SHIFT    :"),
 
     .v3_e67 = {
         .class_ = 0x0160001F,
@@ -3625,7 +3625,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .index = 0xFFFF,
     },
 
-    .v3_e69 = {
+    .SdpartTun = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 70,
@@ -3651,7 +3651,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x00C1,
         .index = 0x0005,
-        .caption = SELF(str_185),
+        .caption = SELF(v3_e70_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -3663,7 +3663,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E72E,
     },
 
-    .str_185 = ALIGNED_STRING("TUNING       :"),
+    .v3_e70_caption = ALIGNED_STRING("TUNING       :"),
 
     .v3_e71 = {
         .class_ = 0x0160001F,
@@ -3696,7 +3696,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .index = 0xFFFF,
     },
 
-    .v3_e73 = {
+    .SdpartBnd = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 74,
@@ -3722,7 +3722,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x00C1,
         .index = 0x0006,
-        .caption = SELF(str_196),
+        .caption = SELF(v3_e74_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -3734,7 +3734,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E73A,
     },
 
-    .str_196 = ALIGNED_STRING("PITCH BEND RANGE :"),
+    .v3_e74_caption = ALIGNED_STRING("PITCH BEND RANGE :"),
 
     .v3_e75 = {
         .class_ = 0x0160001F,
@@ -3767,7 +3767,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .index = 0xFFFF,
     },
 
-    .v3_e77 = {
+    .SdpartOth = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 78,
@@ -3793,7 +3793,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0007,
-        .caption = SELF(str_206),
+        .caption = SELF(v3_e78_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -3805,7 +3805,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E746,
     },
 
-    .str_206 = "GLIDE PEDAL :",
+    .v3_e78_caption = "GLIDE PEDAL :",
 
     .v3_e79 = {
         .class_ = 0x01610001,
@@ -3818,7 +3818,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0007,
-        .caption = SELF(str_210),
+        .caption = SELF(v3_e79_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -3830,7 +3830,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E74A,
     },
 
-    .str_210 = "SUSTAIN PDL :",
+    .v3_e79_caption = "SUSTAIN PDL :",
 
     .v3_e80 = {
         .class_ = 0x01610001,
@@ -3843,7 +3843,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0007,
-        .caption = SELF(str_215),
+        .caption = SELF(v3_e80_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -3855,7 +3855,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E74E,
     },
 
-    .str_215 = "AFTER TOUCH :",
+    .v3_e80_caption = "AFTER TOUCH :",
 
     .v3_e81 = {
         .class_ = 0x0160001F,
@@ -3886,7 +3886,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0007,
-        .caption = SELF(str_222),
+        .caption = SELF(v3_e82_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -3898,7 +3898,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E752,
     },
 
-    .str_222 = "KEY SCALING :",
+    .v3_e82_caption = "KEY SCALING :",
 
     .v3_e83 = {
         .class_ = 0x01610001,
@@ -3911,7 +3911,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0007,
-        .caption = SELF(str_227),
+        .caption = SELF(v3_e83_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -3923,9 +3923,9 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E756,
     },
 
-    .str_227 = "PART EXP PDL:",
+    .v3_e83_caption = "PART EXP PDL:",
 
-    .v4_e0 = {
+    .Sdmtune = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -3954,7 +3954,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x00C1,
         .index = 0x0000,
-        .caption = SELF(str_230),
+        .caption = SELF(v4_e1_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -3966,7 +3966,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E75E,
     },
 
-    .str_230 = ALIGNED_STRING("MASTER TUNING  :"),
+    .v4_e1_caption = ALIGNED_STRING("MASTER TUNING  :"),
 
     .v4_e2 = {
         .class_ = 0x0160002B,
@@ -4002,7 +4002,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .style = 0x0003,
     },
 
-    .v5_e0 = {
+    .Sdscltyp = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -4020,7 +4020,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .w25_text = "KEY SCALING",
 
-    .v5_e1 = {
+    .SdscltypPage = {
         .class_ = 0x01600025,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4071,7 +4071,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .func = 0x0121001D,
     },
 
-    .v5_e5 = {
+    .Sdscltyp1 = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 6,
@@ -4105,7 +4105,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .style = 0x0003,
     },
 
-    .v5_e7 = {
+    .ScalingType = {
         .class_ = 0x0160001A,
         .super = 5,
         .sub = NAKA_NONE,
@@ -4116,7 +4116,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0000,
-        .caption = SELF(str_241),
+        .caption = SELF(ScalingType_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -4128,7 +4128,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E770,
     },
 
-    .str_241 = "SCALING TYPE  :",
+    .ScalingType_caption = "SCALING TYPE  :",
 
     .v5_e8 = {
         .class_ = 0x0160001A,
@@ -4141,7 +4141,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0000,
-        .caption = SELF(str_243),
+        .caption = SELF(v5_e8_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -4153,7 +4153,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E774,
     },
 
-    .str_243 = "SCALING SHIFT :",
+    .v5_e8_caption = "SCALING SHIFT :",
 
     .v5_e9 = {
         .class_ = 0x01600013,
@@ -4184,7 +4184,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0000,
-        .caption = SELF(str_245),
+        .caption = SELF(v5_e10_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -4196,9 +4196,9 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E77A,
     },
 
-    .str_245 = "SCALING MODE  :",
+    .v5_e10_caption = "SCALING MODE  :",
 
-    .v5_e11 = {
+    .Sdscltyp2 = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 12,
@@ -4296,7 +4296,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .style = 0x0010,
     },
 
-    .v5_e17 = {
+    .ScalingKey1 = {
         .class_ = 0x0160001A,
         .super = 11,
         .sub = NAKA_NONE,
@@ -4307,7 +4307,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0001,
-        .caption = SELF(str_250),
+        .caption = SELF(ScalingKey1_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -4319,9 +4319,9 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E786,
     },
 
-    .str_250 = ALIGNED_STRING(""),
+    .ScalingKey1_caption = ALIGNED_STRING(""),
 
-    .v5_e18 = {
+    .ScalingKey2 = {
         .class_ = 0x0160001A,
         .super = 11,
         .sub = NAKA_NONE,
@@ -4332,7 +4332,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0001,
-        .caption = SELF(str_255),
+        .caption = SELF(ScalingKey2_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -4344,9 +4344,9 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E78A,
     },
 
-    .str_255 = ALIGNED_STRING(""),
+    .ScalingKey2_caption = ALIGNED_STRING(""),
 
-    .v5_e19 = {
+    .ScalingKey3 = {
         .class_ = 0x0160001A,
         .super = 11,
         .sub = NAKA_NONE,
@@ -4357,7 +4357,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0001,
-        .caption = SELF(str_258),
+        .caption = SELF(ScalingKey3_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -4369,9 +4369,9 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E78E,
     },
 
-    .str_258 = ALIGNED_STRING(""),
+    .ScalingKey3_caption = ALIGNED_STRING(""),
 
-    .v5_e20 = {
+    .ScalingKey4 = {
         .class_ = 0x0160001A,
         .super = 11,
         .sub = NAKA_NONE,
@@ -4382,7 +4382,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0001,
-        .caption = SELF(str_262),
+        .caption = SELF(ScalingKey4_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -4394,9 +4394,9 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E792,
     },
 
-    .str_262 = ALIGNED_STRING(""),
+    .ScalingKey4_caption = ALIGNED_STRING(""),
 
-    .v5_e21 = {
+    .ScalingKey5 = {
         .class_ = 0x0160001A,
         .super = 11,
         .sub = NAKA_NONE,
@@ -4407,7 +4407,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0001,
-        .caption = SELF(str_264),
+        .caption = SELF(ScalingKey5_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -4419,9 +4419,9 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E796,
     },
 
-    .str_264 = ALIGNED_STRING(""),
+    .ScalingKey5_caption = ALIGNED_STRING(""),
 
-    .v5_e22 = {
+    .ScalingKey6 = {
         .class_ = 0x0160001A,
         .super = 11,
         .sub = NAKA_NONE,
@@ -4432,7 +4432,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0001,
-        .caption = SELF(str_265),
+        .caption = SELF(ScalingKey6_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -4444,9 +4444,9 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E79A,
     },
 
-    .str_265 = ALIGNED_STRING(""),
+    .ScalingKey6_caption = ALIGNED_STRING(""),
 
-    .v5_e23 = {
+    .ScalingKey7 = {
         .class_ = 0x0160001A,
         .super = 11,
         .sub = NAKA_NONE,
@@ -4457,7 +4457,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0001,
-        .caption = SELF(str_268),
+        .caption = SELF(ScalingKey7_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -4469,9 +4469,9 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E79E,
     },
 
-    .str_268 = ALIGNED_STRING(""),
+    .ScalingKey7_caption = ALIGNED_STRING(""),
 
-    .v5_e24 = {
+    .ScalingKey8 = {
         .class_ = 0x0160001A,
         .super = 11,
         .sub = NAKA_NONE,
@@ -4482,7 +4482,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0001,
-        .caption = SELF(str_269),
+        .caption = SELF(ScalingKey8_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -4494,9 +4494,9 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E7A2,
     },
 
-    .str_269 = ALIGNED_STRING(""),
+    .ScalingKey8_caption = ALIGNED_STRING(""),
 
-    .v5_e25 = {
+    .ScalingKey9 = {
         .class_ = 0x0160001A,
         .super = 11,
         .sub = NAKA_NONE,
@@ -4507,7 +4507,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0001,
-        .caption = SELF(str_272),
+        .caption = SELF(ScalingKey9_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -4519,9 +4519,9 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E7A6,
     },
 
-    .str_272 = ALIGNED_STRING(""),
+    .ScalingKey9_caption = ALIGNED_STRING(""),
 
-    .v5_e26 = {
+    .ScalingKey10 = {
         .class_ = 0x0160001A,
         .super = 11,
         .sub = NAKA_NONE,
@@ -4532,7 +4532,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0001,
-        .caption = SELF(str_273),
+        .caption = SELF(ScalingKey10_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -4544,9 +4544,9 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E7AA,
     },
 
-    .str_273 = ALIGNED_STRING(""),
+    .ScalingKey10_caption = ALIGNED_STRING(""),
 
-    .v5_e27 = {
+    .ScalingKey11 = {
         .class_ = 0x0160001A,
         .super = 11,
         .sub = NAKA_NONE,
@@ -4557,7 +4557,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0001,
-        .caption = SELF(str_276),
+        .caption = SELF(ScalingKey11_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -4569,9 +4569,9 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E7AE,
     },
 
-    .str_276 = ALIGNED_STRING(""),
+    .ScalingKey11_caption = ALIGNED_STRING(""),
 
-    .v5_e28 = {
+    .ScalingKey12 = {
         .class_ = 0x0160001A,
         .super = 11,
         .sub = NAKA_NONE,
@@ -4582,7 +4582,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0001,
-        .caption = SELF(str_277),
+        .caption = SELF(ScalingKey12_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -4594,7 +4594,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E7B2,
     },
 
-    .str_277 = ALIGNED_STRING(""),
+    .ScalingKey12_caption = ALIGNED_STRING(""),
 
     .v5_e29 = {
         .class_ = 0x01600011,
@@ -4906,7 +4906,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .rect = { 0, 0, 31, 31 },
     },
 
-    .v7_e0 = {
+    .Sdlfthld = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -4954,7 +4954,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x00C1,
         .index = 0x0000,
-        .caption = SELF(str_335),
+        .caption = SELF(v7_e2_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -4966,9 +4966,9 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E7BA,
     },
 
-    .str_335 = ALIGNED_STRING("LEFT HOLD      :"),
+    .v7_e2_caption = ALIGNED_STRING("LEFT HOLD      :"),
 
-    .v8_e0 = {
+    .Sdmixer = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -5064,7 +5064,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .str_338 = ALIGNED_STRING("TECHNI-CHORD"),
 
-    .vD_e1 = {
+    .SdtecdPage = {
         .class_ = 0x01600025,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5125,7 +5125,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .time = 0x0001,
     },
 
-    .vD_e6 = {
+    .Sdtecd1 = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 7,
@@ -5195,7 +5195,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .style = 0x0010,
     },
 
-    .vD_e10 = {
+    .TcClose = {
         .class_ = 0x01610007,
         .super = 6,
         .sub = NAKA_NONE,
@@ -5206,7 +5206,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0002,
-        .str = SELF(str_357),
+        .str = SELF(CLOSE_str),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -5214,9 +5214,9 @@ const naka_technichord_part_t naka_technichord_part_data
         .dialfocus = 0x0003E7D2,
     },
 
-    .str_357 = "CLOSE",
+    .CLOSE_str = "CLOSE",
 
-    .vD_e11 = {
+    .TcOpen1 = {
         .class_ = 0x01610007,
         .super = 6,
         .sub = NAKA_NONE,
@@ -5237,7 +5237,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .str_362 = ALIGNED_STRING("OPEN 1"),
 
-    .vD_e12 = {
+    .TcOpen2 = {
         .class_ = 0x01610007,
         .super = 6,
         .sub = NAKA_NONE,
@@ -5258,7 +5258,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .str_367 = ALIGNED_STRING("OPEN 2"),
 
-    .vD_e13 = {
+    .TcDuet1 = {
         .class_ = 0x01610007,
         .super = 6,
         .sub = NAKA_NONE,
@@ -5279,7 +5279,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .str_371 = ALIGNED_STRING("DUET 1"),
 
-    .vD_e14 = {
+    .TcDuet2 = {
         .class_ = 0x01610007,
         .super = 6,
         .sub = NAKA_NONE,
@@ -5300,7 +5300,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .str_374 = ALIGNED_STRING("DUET 2"),
 
-    .vD_e15 = {
+    .TcCountry = {
         .class_ = 0x01610007,
         .super = 6,
         .sub = NAKA_NONE,
@@ -5311,7 +5311,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0002,
-        .str = SELF(str_376),
+        .str = SELF(COUNTRY_str),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -5319,9 +5319,9 @@ const naka_technichord_part_t naka_technichord_part_data
         .dialfocus = 0x0003E7E6,
     },
 
-    .str_376 = "COUNTRY",
+    .COUNTRY_str = "COUNTRY",
 
-    .vD_e16 = {
+    .TcTheatre = {
         .class_ = 0x01610007,
         .super = 6,
         .sub = NAKA_NONE,
@@ -5332,7 +5332,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0002,
-        .str = SELF(str_378),
+        .str = SELF(THEATRE_str),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -5340,9 +5340,9 @@ const naka_technichord_part_t naka_technichord_part_data
         .dialfocus = 0x0003E7EA,
     },
 
-    .str_378 = "THEATRE",
+    .THEATRE_str = "THEATRE",
 
-    .vD_e17 = {
+    .TcHymn = {
         .class_ = 0x01610007,
         .super = 6,
         .sub = NAKA_NONE,
@@ -5353,7 +5353,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0002,
-        .str = SELF(str_381),
+        .str = SELF(HYMN_str),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -5361,9 +5361,9 @@ const naka_technichord_part_t naka_technichord_part_data
         .dialfocus = 0x0003E7EE,
     },
 
-    .str_381 = ALIGNED_STRING("HYMN"),
+    .HYMN_str = ALIGNED_STRING("HYMN"),
 
-    .vD_e18 = {
+    .TcBigBandBrass = {
         .class_ = 0x01610007,
         .super = 6,
         .sub = NAKA_NONE,
@@ -5384,7 +5384,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .str_384 = ALIGNED_STRING("BIG BAND BRASS"),
 
-    .vD_e19 = {
+    .TcBigBandReeds = {
         .class_ = 0x01610007,
         .super = 6,
         .sub = NAKA_NONE,
@@ -5405,7 +5405,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .str_386 = ALIGNED_STRING("BIG BAND REEDS"),
 
-    .vD_e20 = {
+    .TcOctave = {
         .class_ = 0x01610007,
         .super = 6,
         .sub = NAKA_NONE,
@@ -5416,7 +5416,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0002,
-        .str = SELF(str_387),
+        .str = SELF(OCTAVE_str),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -5424,9 +5424,9 @@ const naka_technichord_part_t naka_technichord_part_data
         .dialfocus = 0x0003E7FA,
     },
 
-    .str_387 = ALIGNED_STRING("OCTAVE"),
+    .OCTAVE_str = ALIGNED_STRING("OCTAVE"),
 
-    .vD_e21 = {
+    .TcBlock = {
         .class_ = 0x01610007,
         .super = 6,
         .sub = NAKA_NONE,
@@ -5437,7 +5437,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0002,
-        .str = SELF(str_390),
+        .str = SELF(BLOCK_str),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -5445,9 +5445,9 @@ const naka_technichord_part_t naka_technichord_part_data
         .dialfocus = 0x0003E7FE,
     },
 
-    .str_390 = "BLOCK",
+    .BLOCK_str = "BLOCK",
 
-    .vD_e22 = {
+    .TcHardRock = {
         .class_ = 0x01610007,
         .super = 6,
         .sub = NAKA_NONE,
@@ -5468,7 +5468,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .str_391 = "HARD ROCK",
 
-    .vD_e23 = {
+    .TcFanfare = {
         .class_ = 0x01610007,
         .super = 6,
         .sub = NAKA_NONE,
@@ -5479,7 +5479,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0002,
-        .str = SELF(str_392),
+        .str = SELF(FANFARE_str),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -5487,7 +5487,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .dialfocus = 0x0003E806,
     },
 
-    .str_392 = "FANFARE",
+    .FANFARE_str = "FANFARE",
 
     .vD_e24 = {
         .class_ = 0x01610009,
@@ -5499,7 +5499,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .rect = { 96, 0, 127, 31 },
     },
 
-    .vD_e25 = {
+    .Sdtecd2 = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 26,
@@ -5544,7 +5544,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x00C1,
         .index = 0x0000,
-        .caption = SELF(str_399),
+        .caption = SELF(vD_e27_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -5556,7 +5556,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E812,
     },
 
-    .str_399 = "ORCHESTRATOR  :",
+    .vD_e27_caption = "ORCHESTRATOR  :",
 
     .vD_e28 = {
         .class_ = 0x0160002B,
@@ -5573,7 +5573,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .w51_text = "VALUE",
 
-    .vA5_e0 = {
+    .Sqmixer = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -5691,7 +5691,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .str_405 = "Start the internal DEMO",
 
-    .vE4_e2 = {
+    .Demofeature1 = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 3,
@@ -5734,7 +5734,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .func = 0x0121002B,
     },
 
-    .vE4_e5 = {
+    .Demofeature2 = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 6,
@@ -5781,7 +5781,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .str_413 = "Start the loaded DEMO",
 
-    .vE4_e8 = {
+    .FDemoTitleBox = {
         .class_ = 0x01600012,
         .super = 5,
         .sub = NAKA_NONE,
@@ -5797,7 +5797,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .align = 0x0000,
     },
 
-    .vE4_e9 = {
+    .PlainScreen = {
         .class_ = 0x01600033,
         .super = NAKA_NONE,
         .sub = NAKA_NONE,
@@ -5811,7 +5811,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .window = 0x0003E832,
     },
 
-    .vE4_e10 = {
+    .PresentationControl = {
         .class_ = 0x01610018,
         .super = NAKA_NONE,
         .sub = 11,
@@ -5841,7 +5841,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .w56_text = "Presentation Mode",
 
-    .vE4_e12 = {
+    .LoadingPresentation = {
         .class_ = 0x01600033,
         .super = NAKA_NONE,
         .sub = 13,
@@ -5870,7 +5870,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .w58_text = "Loading Now....",
 
-    .vE4_e14 = {
+    .PresentationTitle = {
         .class_ = 0x01600012,
         .super = 12,
         .sub = NAKA_NONE,
@@ -5886,7 +5886,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .align = 0x0000,
     },
 
-    .vEA_e0 = {
+    .Drawbar = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -5915,7 +5915,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .time = 0x0001,
     },
 
-    .vEA_e2 = {
+    .DrawPerc4 = {
         .class_ = 0x0160004E,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5924,19 +5924,19 @@ const naka_technichord_part_t naka_technichord_part_data
         .flag = 0x0008,
         .rect = { 268, 76, 311, 93 },
         .font = 0x00000000,
-        .stron = SELF(str_420),
-        .stroff = SELF(str_419),
+        .stron = SELF(DrawPerc4_stron),
+        .stroff = SELF(DrawPerc4_stroff),
         .onoff = 0x0003E846,
         .editsw = 0x0009,
         .index = 0x0003,
         .tag = 0x0001,
     },
 
-    .str_419 = " 4'",
+    .DrawPerc4_stroff = " 4'",
 
-    .str_420 = " 4'",
+    .DrawPerc4_stron = " 4'",
 
-    .vEA_e3 = {
+    .DrawPerc223 = {
         .class_ = 0x0160004E,
         .super = 0,
         .sub = 4,
@@ -5945,19 +5945,19 @@ const naka_technichord_part_t naka_technichord_part_data
         .flag = 0x0008,
         .rect = { 268, 34, 311, 51 },
         .font = 0x00000000,
-        .stron = SELF(str_422),
-        .stroff = SELF(str_421),
+        .stron = SELF(DrawPerc223_stron),
+        .stroff = SELF(DrawPerc223_stroff),
         .onoff = 0x0003E848,
         .editsw = 0x0008,
         .index = 0x0002,
         .tag = 0x0001,
     },
 
-    .str_421 = ALIGNED_STRING("2  '"),
+    .DrawPerc223_stroff = ALIGNED_STRING("2  '"),
 
-    .str_422 = ALIGNED_STRING("2  '"),
+    .DrawPerc223_stron = ALIGNED_STRING("2  '"),
 
-    .vEA_e4 = {
+    .White23 = {
         .class_ = 0x0160002B,
         .super = 3,
         .sub = NAKA_NONE,
@@ -5972,7 +5972,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .w63_text = "2/3",
 
-    .vEA_e5 = {
+    .Black23 = {
         .class_ = 0x0160002B,
         .super = 3,
         .sub = NAKA_NONE,
@@ -6028,15 +6028,15 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .field_2484 = 0x0109,
 
-    .str_424 = "P",
+    .P_str = "P",
 
-    .ptr_2488 = SELF(str_425),
+    .ptr_2488 = SELF(TONE_str),
 
     .pad_313 = { 0 },
 
     .field_2490 = 0x00FF,
 
-    .str_425 = ALIGNED_STRING("TONE"),
+    .TONE_str = ALIGNED_STRING("TONE"),
 
     .vEA_e9 = {
         .class_ = 0x01610010,
@@ -6072,7 +6072,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .rect = { 188, 32, 219, 63 },
     },
 
-    .vEA_e12 = {
+    .DrawSetting = {
         .class_ = 0x01610022,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6081,19 +6081,19 @@ const naka_technichord_part_t naka_technichord_part_data
         .flag = 0x0008,
         .rect = { 8, 76, 138, 93 },
         .font = 0x00000000,
-        .stron = SELF(str_437),
-        .stroff = SELF(str_436),
+        .stron = SELF(DrawSetting_stron),
+        .stroff = SELF(DrawSetting_stroff),
         .onoff = 0x0003E84A,
         .editsw = 0x0089,
         .index = 0x0001,
         .tag = 0x0001,
     },
 
-    .str_436 = "DRAWBAR SETTING",
+    .DrawSetting_stroff = "DRAWBAR SETTING",
 
-    .str_437 = "DRAWBAR SETTING",
+    .DrawSetting_stron = "DRAWBAR SETTING",
 
-    .vEA_e13 = {
+    .Drawbar1 = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 14,
@@ -6220,7 +6220,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .func = 0x01210026,
     },
 
-    .vEA_e22 = {
+    .Drawbar2 = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 23,
@@ -6246,7 +6246,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0000,
-        .caption = SELF(str_451),
+        .caption = SELF(vEA_e23_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -6258,7 +6258,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E85E,
     },
 
-    .str_451 = "DECAY :",
+    .vEA_e23_caption = "DECAY :",
 
     .vEA_e24 = {
         .class_ = 0x0161001B,
@@ -6271,7 +6271,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0000,
-        .caption = SELF(str_453),
+        .caption = SELF(vEA_e24_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -6283,7 +6283,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E862,
     },
 
-    .str_453 = "LEVEL :",
+    .vEA_e24_caption = "LEVEL :",
 
     .vEA_e25 = {
         .class_ = 0x0161001B,
@@ -6296,7 +6296,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0000,
-        .caption = SELF(str_456),
+        .caption = SELF(vEA_e25_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -6308,7 +6308,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E866,
     },
 
-    .str_456 = ALIGNED_STRING("ATTACK TIME  :"),
+    .vEA_e25_caption = ALIGNED_STRING("ATTACK TIME  :"),
 
     .vEA_e26 = {
         .class_ = 0x0161001B,
@@ -6321,7 +6321,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0000,
-        .caption = SELF(str_458),
+        .caption = SELF(vEA_e26_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -6333,7 +6333,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E86A,
     },
 
-    .str_458 = ALIGNED_STRING("RELEASE TIME :"),
+    .vEA_e26_caption = ALIGNED_STRING("RELEASE TIME :"),
 
     .vEA_e27 = {
         .class_ = 0x01600022,
@@ -6382,7 +6382,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .editsw = 0x008C,
     },
 
-    .vEA_e30 = {
+    .DrawbarNorm = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 31,
@@ -6397,7 +6397,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .child = 0x0003E870,
     },
 
-    .vEA_e31 = {
+    .DrawbarPart = {
         .class_ = 0x01600012,
         .super = 30,
         .sub = NAKA_NONE,
@@ -6413,7 +6413,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .align = 0x0000,
     },
 
-    .vEA_e32 = {
+    .DrawTremolo = {
         .class_ = 0x0160004E,
         .super = 30,
         .sub = NAKA_NONE,
@@ -6422,17 +6422,17 @@ const naka_technichord_part_t naka_technichord_part_data
         .flag = 0x0008,
         .rect = { 8, 34, 51, 51 },
         .font = 0x00000000,
-        .stron = SELF(str_466),
-        .stroff = SELF(str_465),
+        .stron = SELF(DrawTremolo_stron),
+        .stroff = SELF(DrawTremolo_stroff),
         .onoff = 0x0003E874,
         .editsw = 0x0088,
         .index = 0x0000,
         .tag = 0x0001,
     },
 
-    .str_465 = ALIGNED_STRING("SLOW"),
+    .DrawTremolo_stroff = ALIGNED_STRING("SLOW"),
 
-    .str_466 = ALIGNED_STRING("FAST"),
+    .DrawTremolo_stron = ALIGNED_STRING("FAST"),
 
     .vEA_e33 = {
         .class_ = 0x0160002B,
@@ -6498,7 +6498,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .w77_text = "DRAWBAR",
 
-    .vEA_e38 = {
+    .DrawbarSndE = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 39,
@@ -6585,7 +6585,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .w80_text = ALIGNED_STRING("DRAWBAR EDIT"),
 
-    .vEB_e0 = {
+    .Accordion = {
         .class_ = 0x01600033,
         .super = NAKA_NONE,
         .sub = 1,
@@ -6687,7 +6687,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .w83_text = ALIGNED_STRING("TYPE"),
 
-    .vEB_e7 = {
+    .AccordionPart = {
         .class_ = 0x01600012,
         .super = 0,
         .sub = 8,
@@ -6713,7 +6713,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .rect = { 0, 0, 31, 31 },
     },
 
-    .vEB_e9 = {
+    .Accordion1 = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 10,
@@ -6763,17 +6763,17 @@ const naka_technichord_part_t naka_technichord_part_data
         .flag = 0x0008,
         .rect = { 261, 30, 311, 55 },
         .font = 0x00000000,
-        .stron = SELF(str_509),
-        .stroff = SELF(str_508),
+        .stron = SELF(vEB_e12_stron),
+        .stroff = SELF(vEB_e12_stroff),
         .onoff = 0x0003E88C,
         .editsw = 0x0008,
         .index = 0x0001,
         .tag = 0x0008,
     },
 
-    .str_508 = "BASS1",
+    .vEB_e12_stroff = "BASS1",
 
-    .str_509 = "BASS1",
+    .vEB_e12_stron = "BASS1",
 
     .vEB_e13 = {
         .class_ = 0x0160004E,
@@ -6784,17 +6784,17 @@ const naka_technichord_part_t naka_technichord_part_data
         .flag = 0x0008,
         .rect = { 261, 72, 311, 97 },
         .font = 0x00000000,
-        .stron = SELF(str_511),
-        .stroff = SELF(str_510),
+        .stron = SELF(vEB_e13_stron),
+        .stroff = SELF(vEB_e13_stroff),
         .onoff = 0x0003E88E,
         .editsw = 0x0009,
         .index = 0x0001,
         .tag = 0x0009,
     },
 
-    .str_510 = "BASS2",
+    .vEB_e13_stroff = "BASS2",
 
-    .str_511 = "BASS2",
+    .vEB_e13_stron = "BASS2",
 
     .vEB_e14 = {
         .class_ = 0x01610006,
@@ -6805,23 +6805,23 @@ const naka_technichord_part_t naka_technichord_part_data
         .flag = 0x0008,
         .rect = { 44, 184, 75, 238 },
         .font = 0x00000007,
-        .stron = SELF(str_517),
-        .stroff = SELF(str_516),
+        .stron = SELF(vEB_e14_stron),
+        .stroff = SELF(vEB_e14_stroff),
         .onoff = 0x0003E890,
         .editsw = 0x0001,
         .index = 0x0001,
         .tag = 0x0001,
-        .str1 = SELF(str_515),
-        .str3 = SELF(str_514),
+        .str1 = SELF(vEB_e14_str1),
+        .str3 = SELF(vEB_e14_str3),
     },
 
-    .str_514 = "~95",
+    .vEB_e14_str3 = "~95",
 
-    .str_515 = "~95",
+    .vEB_e14_str1 = "~95",
 
-    .str_516 = "~95",
+    .vEB_e14_stroff = "~95",
 
-    .str_517 = "~95",
+    .vEB_e14_stron = "~95",
 
     .vEB_e15 = {
         .class_ = 0x01610006,
@@ -6832,23 +6832,23 @@ const naka_technichord_part_t naka_technichord_part_data
         .flag = 0x0008,
         .rect = { 4, 184, 35, 238 },
         .font = 0x00000007,
-        .stron = SELF(str_522),
-        .stroff = SELF(str_521),
+        .stron = SELF(vEB_e15_stron),
+        .stroff = SELF(vEB_e15_stroff),
         .onoff = 0x0003E892,
         .editsw = 0x0000,
         .index = 0x0001,
         .tag = 0x0000,
-        .str1 = SELF(str_520),
-        .str3 = SELF(str_519),
+        .str1 = SELF(vEB_e15_str1),
+        .str3 = SELF(vEB_e15_str3),
     },
 
-    .str_519 = "~95",
+    .vEB_e15_str3 = "~95",
 
-    .str_520 = ALIGNED_STRING(""),
+    .vEB_e15_str1 = ALIGNED_STRING(""),
 
-    .str_521 = "~95",
+    .vEB_e15_stroff = "~95",
 
-    .str_522 = "~95",
+    .vEB_e15_stron = "~95",
 
     .vEB_e16 = {
         .class_ = 0x01610006,
@@ -6859,23 +6859,23 @@ const naka_technichord_part_t naka_technichord_part_data
         .flag = 0x0008,
         .rect = { 84, 184, 115, 238 },
         .font = 0x00000007,
-        .stron = SELF(str_528),
-        .stroff = SELF(str_527),
+        .stron = SELF(vEB_e16_stron),
+        .stroff = SELF(vEB_e16_stroff),
         .onoff = 0x0003E894,
         .editsw = 0x0002,
         .index = 0x0001,
         .tag = 0x0002,
-        .str1 = SELF(str_526),
-        .str3 = SELF(str_525),
+        .str1 = SELF(vEB_e16_str1),
+        .str3 = SELF(vEB_e16_str3),
     },
 
-    .str_525 = "~95",
+    .vEB_e16_str3 = "~95",
 
-    .str_526 = "~95",
+    .vEB_e16_str1 = "~95",
 
-    .str_527 = ALIGNED_STRING(""),
+    .vEB_e16_stroff = ALIGNED_STRING(""),
 
-    .str_528 = ALIGNED_STRING(""),
+    .vEB_e16_stron = ALIGNED_STRING(""),
 
     .vEB_e17 = {
         .class_ = 0x01610006,
@@ -6886,23 +6886,23 @@ const naka_technichord_part_t naka_technichord_part_data
         .flag = 0x0008,
         .rect = { 124, 184, 155, 238 },
         .font = 0x00000007,
-        .stron = SELF(str_533),
-        .stroff = SELF(str_532),
+        .stron = SELF(vEB_e17_stron),
+        .stroff = SELF(vEB_e17_stroff),
         .onoff = 0x0003E896,
         .editsw = 0x0003,
         .index = 0x0001,
         .tag = 0x0003,
-        .str1 = SELF(str_531),
-        .str3 = SELF(str_530),
+        .str1 = SELF(vEB_e17_str1),
+        .str3 = SELF(vEB_e17_str3),
     },
 
-    .str_530 = "~95",
+    .vEB_e17_str3 = "~95",
 
-    .str_531 = "~95",
+    .vEB_e17_str1 = "~95",
 
-    .str_532 = "~95~95~95",
+    .vEB_e17_stroff = "~95~95~95",
 
-    .str_533 = "~95~95~95",
+    .vEB_e17_stron = "~95~95~95",
 
     .vEB_e18 = {
         .class_ = 0x01610006,
@@ -6913,23 +6913,23 @@ const naka_technichord_part_t naka_technichord_part_data
         .flag = 0x0008,
         .rect = { 164, 184, 195, 238 },
         .font = 0x00000007,
-        .stron = SELF(str_537),
-        .stroff = SELF(str_536),
+        .stron = SELF(vEB_e18_stron),
+        .stroff = SELF(vEB_e18_stroff),
         .onoff = 0x0003E898,
         .editsw = 0x0004,
         .index = 0x0001,
         .tag = 0x0004,
-        .str1 = SELF(str_535),
-        .str3 = SELF(str_534),
+        .str1 = SELF(vEB_e18_str1),
+        .str3 = SELF(vEB_e18_str3),
     },
 
-    .str_534 = ALIGNED_STRING(""),
+    .vEB_e18_str3 = ALIGNED_STRING(""),
 
-    .str_535 = "~95",
+    .vEB_e18_str1 = "~95",
 
-    .str_536 = "~95 ~95",
+    .vEB_e18_stroff = "~95 ~95",
 
-    .str_537 = "~95 ~95",
+    .vEB_e18_stron = "~95 ~95",
 
     .vEB_e19 = {
         .class_ = 0x01610006,
@@ -6940,23 +6940,23 @@ const naka_technichord_part_t naka_technichord_part_data
         .flag = 0x0008,
         .rect = { 204, 184, 235, 238 },
         .font = 0x00000007,
-        .stron = SELF(str_541),
-        .stroff = SELF(str_540),
+        .stron = SELF(vEB_e19_stron),
+        .stroff = SELF(vEB_e19_stroff),
         .onoff = 0x0003E89A,
         .editsw = 0x0005,
         .index = 0x0001,
         .tag = 0x0005,
-        .str1 = SELF(str_539),
-        .str3 = SELF(str_538),
+        .str1 = SELF(vEB_e19_str1),
+        .str3 = SELF(vEB_e19_str3),
     },
 
-    .str_538 = ALIGNED_STRING(""),
+    .vEB_e19_str3 = ALIGNED_STRING(""),
 
-    .str_539 = ALIGNED_STRING(""),
+    .vEB_e19_str1 = ALIGNED_STRING(""),
 
-    .str_540 = "~95~95~95",
+    .vEB_e19_stroff = "~95~95~95",
 
-    .str_541 = "~95~95~95",
+    .vEB_e19_stron = "~95~95~95",
 
     .vEB_e20 = {
         .class_ = 0x01610006,
@@ -6967,23 +6967,23 @@ const naka_technichord_part_t naka_technichord_part_data
         .flag = 0x0008,
         .rect = { 244, 184, 275, 238 },
         .font = 0x00000007,
-        .stron = SELF(str_545),
-        .stroff = SELF(str_544),
+        .stron = SELF(vEB_e20_stron),
+        .stroff = SELF(vEB_e20_stroff),
         .onoff = 0x0003E89C,
         .editsw = 0x0006,
         .index = 0x0001,
         .tag = 0x0006,
-        .str1 = SELF(str_543),
-        .str3 = SELF(str_542),
+        .str1 = SELF(vEB_e20_str1),
+        .str3 = SELF(vEB_e20_str3),
     },
 
-    .str_542 = ALIGNED_STRING(""),
+    .vEB_e20_str3 = ALIGNED_STRING(""),
 
-    .str_543 = "~95",
+    .vEB_e20_str1 = "~95",
 
-    .str_544 = "~95",
+    .vEB_e20_stroff = "~95",
 
-    .str_545 = "~95",
+    .vEB_e20_stron = "~95",
 
     .vEB_e21 = {
         .class_ = 0x01610006,
@@ -6994,23 +6994,23 @@ const naka_technichord_part_t naka_technichord_part_data
         .flag = 0x0008,
         .rect = { 284, 184, 315, 238 },
         .font = 0x00000007,
-        .stron = SELF(str_549),
-        .stroff = SELF(str_548),
+        .stron = SELF(vEB_e21_stron),
+        .stroff = SELF(vEB_e21_stroff),
         .onoff = 0x0003E89E,
         .editsw = 0x0007,
         .index = 0x0001,
         .tag = 0x0007,
-        .str1 = SELF(str_547),
-        .str3 = SELF(str_546),
+        .str1 = SELF(vEB_e21_str1),
+        .str3 = SELF(vEB_e21_str3),
     },
 
-    .str_546 = ALIGNED_STRING(""),
+    .vEB_e21_str3 = ALIGNED_STRING(""),
 
-    .str_547 = ALIGNED_STRING(""),
+    .vEB_e21_str1 = ALIGNED_STRING(""),
 
-    .str_548 = "~95",
+    .vEB_e21_stroff = "~95",
 
-    .str_549 = "~95",
+    .vEB_e21_stron = "~95",
 
     .vEB_e22 = {
         .class_ = 0x01610005,
@@ -7022,7 +7022,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .rect = { 8, 112, 39, 143 },
     },
 
-    .vEB_e23 = {
+    .Accordion2 = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 24,
@@ -7072,17 +7072,17 @@ const naka_technichord_part_t naka_technichord_part_data
         .flag = 0x0008,
         .rect = { 261, 30, 311, 55 },
         .font = 0x00000000,
-        .stron = SELF(str_560),
-        .stroff = SELF(str_559),
+        .stron = SELF(vEB_e26_stron),
+        .stroff = SELF(vEB_e26_stroff),
         .onoff = 0x0003E8A8,
         .editsw = 0x0008,
         .index = 0x0001,
         .tag = 0x0012,
     },
 
-    .str_559 = "BASS1",
+    .vEB_e26_stroff = "BASS1",
 
-    .str_560 = "BASS1",
+    .vEB_e26_stron = "BASS1",
 
     .vEB_e27 = {
         .class_ = 0x0160004E,
@@ -7093,17 +7093,17 @@ const naka_technichord_part_t naka_technichord_part_data
         .flag = 0x0008,
         .rect = { 261, 72, 311, 97 },
         .font = 0x00000000,
-        .stron = SELF(str_562),
-        .stroff = SELF(str_561),
+        .stron = SELF(vEB_e27_stron),
+        .stroff = SELF(vEB_e27_stroff),
         .onoff = 0x0003E8AA,
         .editsw = 0x0009,
         .index = 0x0001,
         .tag = 0x0013,
     },
 
-    .str_561 = "BASS2",
+    .vEB_e27_stroff = "BASS2",
 
-    .str_562 = "BASS2",
+    .vEB_e27_stron = "BASS2",
 
     .vEB_e28 = {
         .class_ = 0x01610006,
@@ -7114,23 +7114,23 @@ const naka_technichord_part_t naka_technichord_part_data
         .flag = 0x0008,
         .rect = { 44, 184, 75, 238 },
         .font = 0x00000007,
-        .stron = SELF(str_568),
-        .stroff = SELF(str_567),
+        .stron = SELF(vEB_e28_stron),
+        .stroff = SELF(vEB_e28_stroff),
         .onoff = 0x0003E8AC,
         .editsw = 0x0001,
         .index = 0x0001,
         .tag = 0x000B,
-        .str1 = SELF(str_566),
-        .str3 = SELF(str_565),
+        .str1 = SELF(vEB_e28_str1),
+        .str3 = SELF(vEB_e28_str3),
     },
 
-    .str_565 = "~95",
+    .vEB_e28_str3 = "~95",
 
-    .str_566 = ALIGNED_STRING(""),
+    .vEB_e28_str1 = ALIGNED_STRING(""),
 
-    .str_567 = "~95",
+    .vEB_e28_stroff = "~95",
 
-    .str_568 = "~95",
+    .vEB_e28_stron = "~95",
 
     .vEB_e29 = {
         .class_ = 0x01610006,
@@ -7141,23 +7141,23 @@ const naka_technichord_part_t naka_technichord_part_data
         .flag = 0x0008,
         .rect = { 4, 184, 35, 238 },
         .font = 0x00000007,
-        .stron = SELF(str_573),
-        .stroff = SELF(str_572),
+        .stron = SELF(vEB_e29_stron),
+        .stroff = SELF(vEB_e29_stroff),
         .onoff = 0x0003E8AE,
         .editsw = 0x0000,
         .index = 0x0001,
         .tag = 0x000A,
-        .str1 = SELF(str_571),
-        .str3 = SELF(str_570),
+        .str1 = SELF(vEB_e29_str1),
+        .str3 = SELF(vEB_e29_str3),
     },
 
-    .str_570 = "~95",
+    .vEB_e29_str3 = "~95",
 
-    .str_571 = ALIGNED_STRING(""),
+    .vEB_e29_str1 = ALIGNED_STRING(""),
 
-    .str_572 = ALIGNED_STRING(""),
+    .vEB_e29_stroff = ALIGNED_STRING(""),
 
-    .str_573 = ALIGNED_STRING(""),
+    .vEB_e29_stron = ALIGNED_STRING(""),
 
     .vEB_e30 = {
         .class_ = 0x01610006,
@@ -7168,23 +7168,23 @@ const naka_technichord_part_t naka_technichord_part_data
         .flag = 0x0008,
         .rect = { 84, 184, 115, 238 },
         .font = 0x00000007,
-        .stron = SELF(str_579),
-        .stroff = SELF(str_578),
+        .stron = SELF(vEB_e30_stron),
+        .stroff = SELF(vEB_e30_stroff),
         .onoff = 0x0003E8B0,
         .editsw = 0x0002,
         .index = 0x0001,
         .tag = 0x000C,
-        .str1 = SELF(str_577),
-        .str3 = SELF(str_576),
+        .str1 = SELF(vEB_e30_str1),
+        .str3 = SELF(vEB_e30_str3),
     },
 
-    .str_576 = "~95",
+    .vEB_e30_str3 = "~95",
 
-    .str_577 = "~95",
+    .vEB_e30_str1 = "~95",
 
-    .str_578 = ALIGNED_STRING(""),
+    .vEB_e30_stroff = ALIGNED_STRING(""),
 
-    .str_579 = ALIGNED_STRING(""),
+    .vEB_e30_stron = ALIGNED_STRING(""),
 
     .vEB_e31 = {
         .class_ = 0x01610006,
@@ -7195,23 +7195,23 @@ const naka_technichord_part_t naka_technichord_part_data
         .flag = 0x0008,
         .rect = { 124, 184, 155, 238 },
         .font = 0x00000007,
-        .stron = SELF(str_585),
-        .stroff = SELF(str_584),
+        .stron = SELF(vEB_e31_stron),
+        .stroff = SELF(vEB_e31_stroff),
         .onoff = 0x0003E8B2,
         .editsw = 0x0003,
         .index = 0x0001,
         .tag = 0x000D,
-        .str1 = SELF(str_583),
-        .str3 = SELF(str_582),
+        .str1 = SELF(vEB_e31_str1),
+        .str3 = SELF(vEB_e31_str3),
     },
 
-    .str_582 = "~95",
+    .vEB_e31_str3 = "~95",
 
-    .str_583 = "~95",
+    .vEB_e31_str1 = "~95",
 
-    .str_584 = "~95 ~95",
+    .vEB_e31_stroff = "~95 ~95",
 
-    .str_585 = "~95 ~95",
+    .vEB_e31_stron = "~95 ~95",
 
     .vEB_e32 = {
         .class_ = 0x01610006,
@@ -7222,23 +7222,23 @@ const naka_technichord_part_t naka_technichord_part_data
         .flag = 0x0008,
         .rect = { 164, 184, 195, 238 },
         .font = 0x00000007,
-        .stron = SELF(str_590),
-        .stroff = SELF(str_589),
+        .stron = SELF(vEB_e32_stron),
+        .stroff = SELF(vEB_e32_stroff),
         .onoff = 0x0003E8B4,
         .editsw = 0x0004,
         .index = 0x0001,
         .tag = 0x000E,
-        .str1 = SELF(str_588),
-        .str3 = SELF(str_587),
+        .str1 = SELF(vEB_e32_str1),
+        .str3 = SELF(vEB_e32_str3),
     },
 
-    .str_587 = ALIGNED_STRING(""),
+    .vEB_e32_str3 = ALIGNED_STRING(""),
 
-    .str_588 = "~95",
+    .vEB_e32_str1 = "~95",
 
-    .str_589 = "~95 ~95",
+    .vEB_e32_stroff = "~95 ~95",
 
-    .str_590 = "~95 ~95",
+    .vEB_e32_stron = "~95 ~95",
 
     .vEB_e33 = {
         .class_ = 0x01610006,
@@ -7249,23 +7249,23 @@ const naka_technichord_part_t naka_technichord_part_data
         .flag = 0x0008,
         .rect = { 204, 184, 235, 238 },
         .font = 0x00000007,
-        .stron = SELF(str_596),
-        .stroff = SELF(str_595),
+        .stron = SELF(vEB_e33_stron),
+        .stroff = SELF(vEB_e33_stroff),
         .onoff = 0x0003E8B6,
         .editsw = 0x0005,
         .index = 0x0001,
         .tag = 0x000F,
-        .str1 = SELF(str_594),
-        .str3 = SELF(str_593),
+        .str1 = SELF(vEB_e33_str1),
+        .str3 = SELF(vEB_e33_str3),
     },
 
-    .str_593 = ALIGNED_STRING(""),
+    .vEB_e33_str3 = ALIGNED_STRING(""),
 
-    .str_594 = ALIGNED_STRING(""),
+    .vEB_e33_str1 = ALIGNED_STRING(""),
 
-    .str_595 = "~95 ~95",
+    .vEB_e33_stroff = "~95 ~95",
 
-    .str_596 = "~95 ~95",
+    .vEB_e33_stron = "~95 ~95",
 
     .vEB_e34 = {
         .class_ = 0x01610006,
@@ -7276,23 +7276,23 @@ const naka_technichord_part_t naka_technichord_part_data
         .flag = 0x0008,
         .rect = { 244, 184, 275, 238 },
         .font = 0x00000007,
-        .stron = SELF(str_602),
-        .stroff = SELF(str_601),
+        .stron = SELF(vEB_e34_stron),
+        .stroff = SELF(vEB_e34_stroff),
         .onoff = 0x0003E8B8,
         .editsw = 0x0006,
         .index = 0x0001,
         .tag = 0x0010,
-        .str1 = SELF(str_600),
-        .str3 = SELF(str_599),
+        .str1 = SELF(vEB_e34_str1),
+        .str3 = SELF(vEB_e34_str3),
     },
 
-    .str_599 = ALIGNED_STRING(""),
+    .vEB_e34_str3 = ALIGNED_STRING(""),
 
-    .str_600 = "~95",
+    .vEB_e34_str1 = "~95",
 
-    .str_601 = "~95",
+    .vEB_e34_stroff = "~95",
 
-    .str_602 = "~95",
+    .vEB_e34_stron = "~95",
 
     .vEB_e35 = {
         .class_ = 0x01610006,
@@ -7303,23 +7303,23 @@ const naka_technichord_part_t naka_technichord_part_data
         .flag = 0x0008,
         .rect = { 284, 184, 315, 238 },
         .font = 0x00000007,
-        .stron = SELF(str_608),
-        .stroff = SELF(str_607),
+        .stron = SELF(vEB_e35_stron),
+        .stroff = SELF(vEB_e35_stroff),
         .onoff = 0x0003E8BA,
         .editsw = 0x0007,
         .index = 0x0001,
         .tag = 0x0011,
-        .str1 = SELF(str_606),
-        .str3 = SELF(str_605),
+        .str1 = SELF(vEB_e35_str1),
+        .str3 = SELF(vEB_e35_str3),
     },
 
-    .str_605 = ALIGNED_STRING(""),
+    .vEB_e35_str3 = ALIGNED_STRING(""),
 
-    .str_606 = ALIGNED_STRING(""),
+    .vEB_e35_str1 = ALIGNED_STRING(""),
 
-    .str_607 = "~95",
+    .vEB_e35_stroff = "~95",
 
-    .str_608 = "~95",
+    .vEB_e35_stron = "~95",
 
     .vEB_e36 = {
         .class_ = 0x01610005,
@@ -7331,7 +7331,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .rect = { 0, 0, 31, 31 },
     },
 
-    .vEE_e0 = {
+    .Mesage = {
         .class_ = 0x0160006A,
         .super = NAKA_NONE,
         .sub = 1,
@@ -7355,7 +7355,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .rect = { 0, 0, 31, 31 },
     },
 
-    .vEE_e2 = {
+    .Completed = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 3,
@@ -7399,7 +7399,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .time = 0x0004,
     },
 
-    .vEE_e5 = {
+    .Reminder = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 6,
@@ -7461,7 +7461,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .time = 0x0001,
     },
 
-    .vEE_e9 = {
+    .Error = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 10,
@@ -7523,7 +7523,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .func = 0x01210015,
     },
 
-    .vEE_e13 = {
+    .Other = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 14,
@@ -7556,7 +7556,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .func = 0x01210015,
     },
 
-    .vEE_e15 = {
+    .CheckMessage = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 16,
@@ -7653,7 +7653,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .field_2a       = 0x0031,
     },
 
-    .vEE_e20 = {
+    .NoMessage = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 21,
@@ -7686,7 +7686,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .data = 0x0003E8F8,
     },
 
-    .vEE_e22 = {
+    .PleaseWait = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 23,
@@ -7717,7 +7717,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .align = 0x0000,
     },
 
-    .vEF_e0 = {
+    .Welcom = {
         .class_ = 0x0161000B,
         .super = NAKA_NONE,
         .sub = 1,
@@ -7764,7 +7764,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .func = 0x0121002A,
     },
 
-    .vEF_e4 = {
+    .AllInitial = {
         .class_ = 0x01600033,
         .super = NAKA_NONE,
         .sub = 5,
@@ -7804,7 +7804,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .time = 0x0001,
     },
 
-    .vEF_e7 = {
+    .MPVersion = {
         .class_ = 0x01600033,
         .super = NAKA_NONE,
         .sub = 8,
@@ -7839,7 +7839,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .time = 0x0001,
     },
 
-    .vEF_e10 = {
+    .MPver = {
         .class_ = 0x01600012,
         .super = 7,
         .sub = NAKA_NONE,
@@ -7855,7 +7855,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .align = 0x0000,
     },
 
-    .vF0_e0 = {
+    .Softver = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -7873,7 +7873,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .w97_text = ALIGNED_STRING("SOFT VERSION"),
 
-    .vF0_e1 = {
+    .MainProgram = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -7884,7 +7884,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x00C1,
         .index = 0xFFFF,
-        .caption = SELF(str_678),
+        .caption = SELF(MainProgram_caption),
         .font = 0x00000004,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -7894,9 +7894,9 @@ const naka_technichord_part_t naka_technichord_part_data
         .selected = 0x0003E914,
     },
 
-    .str_678 = ALIGNED_STRING("MAIN PROGRAM :"),
+    .MainProgram_caption = ALIGNED_STRING("MAIN PROGRAM :"),
 
-    .vF0_e2 = {
+    .MainTable = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -7907,7 +7907,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x00C1,
         .index = 0xFFFF,
-        .caption = SELF(str_679),
+        .caption = SELF(MainTable_caption),
         .font = 0x00000004,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -7917,9 +7917,9 @@ const naka_technichord_part_t naka_technichord_part_data
         .selected = 0x0003E916,
     },
 
-    .str_679 = ALIGNED_STRING("MAIN TABLE   :"),
+    .MainTable_caption = ALIGNED_STRING("MAIN TABLE   :"),
 
-    .vF0_e3 = {
+    .SubProgram = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -7930,7 +7930,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x00C1,
         .index = 0xFFFF,
-        .caption = SELF(str_680),
+        .caption = SELF(SubProgram_caption),
         .font = 0x00000004,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -7940,9 +7940,9 @@ const naka_technichord_part_t naka_technichord_part_data
         .selected = 0x0003E918,
     },
 
-    .str_680 = ALIGNED_STRING("SUB  PROGRAM :"),
+    .SubProgram_caption = ALIGNED_STRING("SUB  PROGRAM :"),
 
-    .vF0_e4 = {
+    .SoundTable = {
         .class_ = 0x01600015,
         .super = 0,
         .sub = NAKA_NONE,
@@ -7953,7 +7953,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .color = 0x00F5,
         .border = 0x00C1,
         .index = 0xFFFF,
-        .caption = SELF(str_681),
+        .caption = SELF(SoundTable_caption),
         .font = 0x00000004,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -7963,7 +7963,7 @@ const naka_technichord_part_t naka_technichord_part_data
         .selected = 0x0003E91A,
     },
 
-    .str_681 = ALIGNED_STRING("SOUND TABLE  :"),
+    .SoundTable_caption = ALIGNED_STRING("SOUND TABLE  :"),
 
     .vF0_e5 = {
         .class_ = 0x0161000F,
@@ -7997,7 +7997,7 @@ const naka_technichord_part_t naka_technichord_part_data
         NAKA_ADDR(NakaMenuItem_LeftHold),
         NAKA_ADDR(NakaMenuItem_TechniChord),
         0x00000000,
-        SELF(v3_e0),
+        SELF(Sdpart),
         SELF(v3_e1),
         SELF(v3_e2),
         SELF(v3_e3),
@@ -8007,8 +8007,8 @@ const naka_technichord_part_t naka_technichord_part_data
         SELF(v3_e7),
         SELF(v3_e8),
         SELF(v3_e9),
-        SELF(v3_e10),
-        SELF(v3_e11),
+        SELF(SdpartSound),
+        SELF(SdpartPart),
         SELF(v3_e12),
         SELF(v3_e13),
         SELF(v3_e14),
@@ -8026,7 +8026,7 @@ const naka_technichord_part_t naka_technichord_part_data
         SELF(v3_e26),
         SELF(v3_e27),
         SELF(v3_e28),
-        SELF(v3_e29),
+        SELF(SdpartMain),
         SELF(v3_e30),
         SELF(v3_e31),
         SELF(v3_e32),
@@ -8040,41 +8040,41 @@ const naka_technichord_part_t naka_technichord_part_data
         SELF(v3_e40),
         SELF(v3_e41),
         SELF(v3_e42),
-        SELF(v3_e43),
+        SELF(SdpartVol),
         SELF(v3_e44),
         SELF(v3_e45),
         SELF(v3_e46),
-        SELF(v3_e47),
+        SELF(SdpartPan),
         SELF(v3_e48),
         SELF(v3_e49),
         SELF(v3_e50),
         SELF(v3_e51),
         SELF(v3_e52),
         SELF(v3_e53),
-        SELF(v3_e54),
+        SELF(SdpartEff),
         SELF(v3_e55),
         SELF(v3_e56),
         SELF(v3_e57),
         SELF(v3_e58),
         SELF(v3_e59),
-        SELF(v3_e60),
+        SELF(SdpartSus),
         SELF(v3_e61),
         SELF(v3_e62),
         SELF(v3_e63),
         SELF(v3_e64),
-        SELF(v3_e65),
+        SELF(SdpartKey),
         SELF(v3_e66),
         SELF(v3_e67),
         SELF(v3_e68),
-        SELF(v3_e69),
+        SELF(SdpartTun),
         SELF(v3_e70),
         SELF(v3_e71),
         SELF(v3_e72),
-        SELF(v3_e73),
+        SELF(SdpartBnd),
         SELF(v3_e74),
         SELF(v3_e75),
         SELF(v3_e76),
-        SELF(v3_e77),
+        SELF(SdpartOth),
         SELF(v3_e78),
         SELF(v3_e79),
         SELF(v3_e80),
@@ -8082,40 +8082,40 @@ const naka_technichord_part_t naka_technichord_part_data
         SELF(v3_e82),
         SELF(v3_e83),
         0x00000000,
-        SELF(v4_e0),
+        SELF(Sdmtune),
         SELF(v4_e1),
         SELF(v4_e2),
         SELF(v4_e3),
         0x00000000,
-        SELF(v5_e0),
-        SELF(v5_e1),
+        SELF(Sdscltyp),
+        SELF(SdscltypPage),
         SELF(v5_e2),
         SELF(v5_e3),
         SELF(v5_e4),
-        SELF(v5_e5),
+        SELF(Sdscltyp1),
         SELF(v5_e6),
-        SELF(v5_e7),
+        SELF(ScalingType),
         SELF(v5_e8),
         SELF(v5_e9),
         SELF(v5_e10),
-        SELF(v5_e11),
+        SELF(Sdscltyp2),
         SELF(v5_e12),
         SELF(v5_e13),
         SELF(v5_e14),
         SELF(v5_e15),
         SELF(v5_e16),
-        SELF(v5_e17),
-        SELF(v5_e18),
-        SELF(v5_e19),
-        SELF(v5_e20),
-        SELF(v5_e21),
-        SELF(v5_e22),
-        SELF(v5_e23),
-        SELF(v5_e24),
-        SELF(v5_e25),
-        SELF(v5_e26),
-        SELF(v5_e27),
-        SELF(v5_e28),
+        SELF(ScalingKey1),
+        SELF(ScalingKey2),
+        SELF(ScalingKey3),
+        SELF(ScalingKey4),
+        SELF(ScalingKey5),
+        SELF(ScalingKey6),
+        SELF(ScalingKey7),
+        SELF(ScalingKey8),
+        SELF(ScalingKey9),
+        SELF(ScalingKey10),
+        SELF(ScalingKey11),
+        SELF(ScalingKey12),
         SELF(v5_e29),
         SELF(v5_e30),
         SELF(v5_e31),
@@ -8142,80 +8142,80 @@ const naka_technichord_part_t naka_technichord_part_data
         SELF(v5_e52),
         SELF(v5_e53),
         0x00000000,
-        SELF(v7_e0),
+        SELF(Sdlfthld),
         SELF(v7_e1),
         SELF(v7_e2),
         0x00000000,
-        SELF(v8_e0),
+        SELF(Sdmixer),
         SELF(v8_e1),
         SELF(v8_e2),
         SELF(w47),
         0x00000000,
         0x00E837A4,
-        SELF(vD_e1),
+        SELF(SdtecdPage),
         SELF(vD_e2),
         SELF(vD_e3),
         SELF(vD_e4),
         SELF(vD_e5),
-        SELF(vD_e6),
+        SELF(Sdtecd1),
         SELF(vD_e7),
         SELF(vD_e8),
         SELF(vD_e9),
-        SELF(vD_e10),
-        SELF(vD_e11),
-        SELF(vD_e12),
-        SELF(vD_e13),
-        SELF(vD_e14),
-        SELF(vD_e15),
-        SELF(vD_e16),
-        SELF(vD_e17),
-        SELF(vD_e18),
-        SELF(vD_e19),
-        SELF(vD_e20),
-        SELF(vD_e21),
-        SELF(vD_e22),
-        SELF(vD_e23),
+        SELF(TcClose),
+        SELF(TcOpen1),
+        SELF(TcOpen2),
+        SELF(TcDuet1),
+        SELF(TcDuet2),
+        SELF(TcCountry),
+        SELF(TcTheatre),
+        SELF(TcHymn),
+        SELF(TcBigBandBrass),
+        SELF(TcBigBandReeds),
+        SELF(TcOctave),
+        SELF(TcBlock),
+        SELF(TcHardRock),
+        SELF(TcFanfare),
         SELF(vD_e24),
-        SELF(vD_e25),
+        SELF(Sdtecd2),
         SELF(vD_e26),
         SELF(vD_e27),
         SELF(vD_e28),
         0x00000000,
-        SELF(vA5_e0),
+        SELF(Sqmixer),
         SELF(vA5_e1),
         SELF(vA5_e2),
         SELF(w53),
         0x00000000,
         0x00E83D88,
         SELF(vE4_e1),
-        SELF(vE4_e2),
+        SELF(Demofeature1),
         SELF(vE4_e3),
         SELF(vE4_e4),
-        SELF(vE4_e5),
+        SELF(Demofeature2),
         SELF(vE4_e6),
         SELF(vE4_e7),
-        SELF(vE4_e8),
-        SELF(vE4_e9),
-        SELF(vE4_e10),
+        SELF(FDemoTitleBox),
+        SELF(PlainScreen),
+        SELF(PresentationControl),
         SELF(vE4_e11),
-        SELF(vE4_e12),
+        SELF(LoadingPresentation),
         SELF(vE4_e13),
-        SELF(vE4_e14),
+        SELF(PresentationTitle),
         0x00000000,
-        SELF(vEA_e0),
+        SELF(Drawbar),
         SELF(vEA_e1),
-        SELF(vEA_e2),
-        SELF(vEA_e3),
-        SELF(vEA_e4),
-        SELF(vEA_e5),
+        SELF(DrawPerc4),
+        SELF(DrawPerc223),
+        SELF(White23),
+        SELF(Black23),
         SELF(vEA_e6),
         SELF(w66),
         0x00E84140,
         SELF(vEA_e9),
         SELF(vEA_e10),
         SELF(vEA_e11),
-        SELF(vEA_e12),
-        SELF(vEA_e13),
+        SELF(DrawSetting),
+        SELF(Drawbar1),
         SELF(vEA_e14),
         SELF(vEA_e15),
         SELF(vEA_e16),
@@ -8224,7 +8224,7 @@ const naka_technichord_part_t naka_technichord_part_data
         SELF(vEA_e19),
         SELF(vEA_e20),
         SELF(vEA_e21),
-        SELF(vEA_e22),
+        SELF(Drawbar2),
         SELF(vEA_e23),
         SELF(vEA_e24),
         SELF(vEA_e25),
@@ -8232,31 +8232,31 @@ const naka_technichord_part_t naka_technichord_part_data
         SELF(vEA_e27),
         SELF(vEA_e28),
         SELF(vEA_e29),
-        SELF(vEA_e30),
-        SELF(vEA_e31),
-        SELF(vEA_e32),
+        SELF(DrawbarNorm),
+        SELF(DrawbarPart),
+        SELF(DrawTremolo),
         SELF(vEA_e33),
         SELF(vEA_e34),
         SELF(vEA_e35),
         SELF(vEA_e36),
         SELF(vEA_e37),
-        SELF(vEA_e38),
+        SELF(DrawbarSndE),
         SELF(vEA_e39),
         SELF(vEA_e40),
         SELF(vEA_e41),
         SELF(vEA_e42),
         SELF(vEA_e43),
         0x00000000,
-        SELF(vEB_e0),
+        SELF(Accordion),
         SELF(vEB_e1),
         SELF(vEB_e2),
         SELF(vEB_e3),
         SELF(vEB_e4),
         SELF(vEB_e5),
         SELF(vEB_e6),
-        SELF(vEB_e7),
+        SELF(AccordionPart),
         SELF(vEB_e8),
-        SELF(vEB_e9),
+        SELF(Accordion1),
         SELF(vEB_e10),
         SELF(vEB_e11),
         SELF(vEB_e12),
@@ -8270,7 +8270,7 @@ const naka_technichord_part_t naka_technichord_part_data
         SELF(vEB_e20),
         SELF(vEB_e21),
         SELF(vEB_e22),
-        SELF(vEB_e23),
+        SELF(Accordion2),
         SELF(vEB_e24),
         SELF(vEB_e25),
         SELF(vEB_e26),
@@ -8285,51 +8285,51 @@ const naka_technichord_part_t naka_technichord_part_data
         SELF(vEB_e35),
         SELF(vEB_e36),
         0x00000000,
-        SELF(vEE_e0),
+        SELF(Mesage),
         SELF(vEE_e1),
-        SELF(vEE_e2),
+        SELF(Completed),
         SELF(vEE_e3),
         SELF(vEE_e4),
-        SELF(vEE_e5),
+        SELF(Reminder),
         SELF(vEE_e6),
         SELF(vEE_e7),
         SELF(vEE_e8),
-        SELF(vEE_e9),
+        SELF(Error),
         SELF(vEE_e10),
         SELF(vEE_e11),
         SELF(vEE_e12),
-        SELF(vEE_e13),
+        SELF(Other),
         SELF(vEE_e14),
-        SELF(vEE_e15),
+        SELF(CheckMessage),
         SELF(w91),
         SELF(vEE_e17),
         SELF(vEE_e18),
         SELF(w92),
-        SELF(vEE_e20),
+        SELF(NoMessage),
         SELF(vEE_e21),
-        SELF(vEE_e22),
+        SELF(PleaseWait),
         SELF(vEE_e23),
         0x00000000,
-        SELF(vEF_e0),
+        SELF(Welcom),
         SELF(vEF_e1),
         SELF(vEF_e2),
         SELF(vEF_e3),
-        SELF(vEF_e4),
+        SELF(AllInitial),
         SELF(vEF_e5),
         SELF(vEF_e6),
-        SELF(vEF_e7),
+        SELF(MPVersion),
         SELF(vEF_e8),
         SELF(vEF_e9),
-        SELF(vEF_e10),
+        SELF(MPver),
         0x00000000,
-        SELF(vF0_e0),
-        SELF(vF0_e1),
-        SELF(vF0_e2),
-        SELF(vF0_e3),
-        SELF(vF0_e4),
+        SELF(Softver),
+        SELF(MainProgram),
+        SELF(MainTable),
+        SELF(SubProgram),
+        SELF(SoundTable),
         SELF(vF0_e5),
         0x00000000,
-        SELF(str_696),
+        SELF(Sdmenu_str),
         SELF(w104_name),
         SELF(w104_code),
         SELF(str_695),
@@ -8392,7 +8392,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .w104_name = ALIGNED_STRING("SdmenuPage"),
 
-    .str_696 = ALIGNED_STRING("Sdmenu"),
+    .Sdmenu_str = ALIGNED_STRING("Sdmenu"),
 
     .ptrs_9 = {
         SELF(w115_name),
@@ -8405,7 +8405,7 @@ const naka_technichord_part_t naka_technichord_part_data
         SELF(str_754),
         SELF(str_753),
         SELF(str_752),
-        SELF(str_751),
+        SELF(SdpartSound_str),
         SELF(w114_name),
         SELF(w114_code),
         SELF(str_750),
@@ -8630,7 +8630,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .w114_name = ALIGNED_STRING("SdpartPart"),
 
-    .str_751 = "SdpartSound",
+    .SdpartSound_str = "SdpartSound",
 
     .str_752 = ALIGNED_STRING(""),
 
@@ -8671,7 +8671,7 @@ const naka_technichord_part_t naka_technichord_part_data
     .w116_name = "Sdmtune",
 
     .ptrs_11 = {
-        SELF(str_807),
+        SELF(Sdscltyp_str),
         SELF(w121_name),
         SELF(w121_code),
         SELF(str_806),
@@ -8688,17 +8688,17 @@ const naka_technichord_part_t naka_technichord_part_data
         SELF(str_801),
         SELF(str_800),
         SELF(str_799),
-        SELF(str_798),
-        SELF(str_797),
-        SELF(str_796),
-        SELF(str_795),
-        SELF(str_794),
-        SELF(str_793),
-        SELF(str_792),
-        SELF(str_791),
-        SELF(str_790),
-        SELF(str_789),
-        SELF(str_788),
+        SELF(ScalingKey1_str),
+        SELF(ScalingKey2_str),
+        SELF(ScalingKey3_str),
+        SELF(ScalingKey4_str),
+        SELF(ScalingKey5_str),
+        SELF(ScalingKey6_str),
+        SELF(ScalingKey7_str),
+        SELF(ScalingKey8_str),
+        SELF(ScalingKey9_str),
+        SELF(ScalingKey10_str),
+        SELF(ScalingKey11_str),
         SELF(w117_name),
         SELF(w117_code),
         SELF(str_787),
@@ -8782,27 +8782,27 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .w117_name = ALIGNED_STRING("ScalingKey12"),
 
-    .str_788 = ALIGNED_STRING("ScalingKey11"),
+    .ScalingKey11_str = ALIGNED_STRING("ScalingKey11"),
 
-    .str_789 = ALIGNED_STRING("ScalingKey10"),
+    .ScalingKey10_str = ALIGNED_STRING("ScalingKey10"),
 
-    .str_790 = "ScalingKey9",
+    .ScalingKey9_str = "ScalingKey9",
 
-    .str_791 = "ScalingKey8",
+    .ScalingKey8_str = "ScalingKey8",
 
-    .str_792 = "ScalingKey7",
+    .ScalingKey7_str = "ScalingKey7",
 
-    .str_793 = "ScalingKey6",
+    .ScalingKey6_str = "ScalingKey6",
 
-    .str_794 = "ScalingKey5",
+    .ScalingKey5_str = "ScalingKey5",
 
-    .str_795 = "ScalingKey4",
+    .ScalingKey4_str = "ScalingKey4",
 
-    .str_796 = "ScalingKey3",
+    .ScalingKey3_str = "ScalingKey3",
 
-    .str_797 = "ScalingKey2",
+    .ScalingKey2_str = "ScalingKey2",
 
-    .str_798 = "ScalingKey1",
+    .ScalingKey1_str = "ScalingKey1",
 
     .str_799 = ALIGNED_STRING(""),
 
@@ -8836,7 +8836,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .w121_name = ALIGNED_STRING("SdscltypPage"),
 
-    .str_807 = ALIGNED_STRING("Sdscltyp"),
+    .Sdscltyp_str = ALIGNED_STRING("Sdscltyp"),
 
     .ptrs_12 = {
         SELF(w122_name),

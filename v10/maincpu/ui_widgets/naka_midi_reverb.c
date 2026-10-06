@@ -976,24 +976,24 @@ typedef struct __attribute__((packed)) {
 } naka_cls_AcLswBox_t;
 
 typedef struct __attribute__((packed)) {
-    char str_0[22];
-    char str_1[20];
-    char str_2[22];
-    char str_3[22];
-    char str_4[20];
-    char str_5[26];
-    char str_6[20];
-    char str_7[20];
-    char str_8[22];
-    char str_9[22];
-    char str_10[18];
-    char str_11[18];
-    char str_12[18];
-    char str_13[22];
-    char str_14[20];
-    char str_15[22];
+    char AcMidiPartGridBoxProc_str[22];
+    char AcCtlMsgGridBoxProc_str[20];
+    char AcPmemOutRGridBoxProc_str[22];
+    char AcPmemOutLGridBoxProc_str[22];
+    char AcPcgOutGridBoxProc_str[20];
+    char AcParaLoadOptGridBoxProc_str[26];
+    char AcInOutGridBoxProc_str[20];
+    char AcVocalGridBoxProc_str[20];
+    char AcFadeSetGridBoxProc_str[22];
+    char AcLswFuncEditBoxProc_str[22];
+    char AcLswFuncBoxProc_str[18];
+    char AcGMOnOffBoxProc_str[18];
+    char AcSendEditSwProc_str[18];
+    char IvMpstPageControlProc_str[22];
+    char PsHarmOnOffBoxProc_str[20];
+    char AcVocalistListBoxProc_str[22];
     /* element 0 of Viewable slot 0x9 "ReverbEqualizerMenu": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v9_e0;
+    naka_cls_TtlScreen_t ReverbEqualizerMenu;
     char w0_text[28];
     /* element 1 of Viewable slot 0x9: AcTitleMenu (class id 0x0160001D) */
     naka_cls_AcTitleMenu_t v9_e1;
@@ -1005,15 +1005,15 @@ typedef struct __attribute__((packed)) {
     naka_cls_AcTitleMenu_t v9_e3;
     char w3_text[28];
     /* element 0 of Viewable slot 0xF "R12OctaveSetting": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vF_e0;
+    naka_cls_TtlScreen_t R12OctaveSetting;
     char w4_text[22];
     /* element 1 of Viewable slot 0xF: AcLswEditBox (class id 0x0160001A) */
     naka_cls_AcLswEditBox_t vF_e1;
-    char str_17[12];
+    char vF_e1_caption[12];
     /* element 2 of Viewable slot 0xF: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t vF_e2;
     /* element 0 of Viewable slot 0x18 "ReverbPreset": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v18_e0;
+    naka_cls_TtlScreen_t ReverbPreset;
     char w6_text[16];
     /* element 1 of Viewable slot 0x18: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v18_e1;
@@ -1037,7 +1037,7 @@ typedef struct __attribute__((packed)) {
     char str_36[14];
     /* element 8 of Viewable slot 0x18: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v18_e8;
-    char str_40[12];
+    char Reflection_str[12];
     /* element 9 of Viewable slot 0x18: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v18_e9;
     char str_43[12];
@@ -1046,9 +1046,9 @@ typedef struct __attribute__((packed)) {
     char str_45[14];
     /* element 11 of Viewable slot 0x18: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v18_e11;
-    char str_47[10];
+    char Cavernous_str[10];
     /* element 0 of Viewable slot 0x19 "EqualizerPreset": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v19_e0;
+    naka_cls_TtlScreen_t EqualizerPreset;
     char w7_text[18];
     /* element 1 of Viewable slot 0x19: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v19_e1;
@@ -1080,11 +1080,11 @@ typedef struct __attribute__((packed)) {
     /* element 10 of Viewable slot 0x19: IvCatchEvent (class id 0x01600052) */
     naka_cls_IvCatchEvent_t v19_e10;
     /* element 11 of Viewable slot 0x19 "EqOnOffBox": AcFuncToggle (class id 0x01600044) */
-    naka_cls_AcFuncToggle_t v19_e11;
-    char str_77[10];
-    char str_78[8];
+    naka_cls_AcFuncToggle_t EqOnOffBox;
+    char EqOnOffBox_stroff[10];
+    char EqOnOffBox_stron[8];
     /* element 0 of Viewable slot 0x1A "ReverbEqualizerPreset": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v1A_e0;
+    naka_cls_TtlScreen_t ReverbEqualizerPreset;
     char w9_text[28];
     /* element 1 of Viewable slot 0x1A: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v1A_e1;
@@ -1109,21 +1109,21 @@ typedef struct __attribute__((packed)) {
     char str_99[8];
     /* element 8 of Viewable slot 0x1A: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v1A_e8;
-    char str_102[8];
+    char Stadium_str[8];
     /* element 9 of Viewable slot 0x1A: AcStrRadioBox (class id 0x01600051) */
     naka_cls_AcStrRadioBox_t v1A_e9;
     char str_104[10];
     /* element 10 of Viewable slot 0x1A "RevEqOnOffBox": AcFuncToggle (class id 0x01600044) */
-    naka_cls_AcFuncToggle_t v1A_e10;
-    char str_106[10];
-    char str_107[8];
+    naka_cls_AcFuncToggle_t RevEqOnOffBox;
+    char RevEqOnOffBox_stroff[10];
+    char RevEqOnOffBox_stron[8];
     /* element 11 of Viewable slot 0x1A: IvCatchEvent (class id 0x01600052) */
     naka_cls_IvCatchEvent_t v1A_e11;
     /* element 0 of Viewable slot 0x50 "MidiMenu": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v50_e0;
+    naka_cls_TtlScreen_t MidiMenu;
     char w11_text[10];
     /* element 1 of Viewable slot 0x50 "MdmenuPage": AcWindowPage (class id 0x01600025) */
-    naka_cls_AcWindowPage_t v50_e1;
+    naka_cls_AcWindowPage_t MdmenuPage;
     /* element 2 of Viewable slot 0x50: IvPageControl (class id 0x01600028) */
     naka_cls_IvPageControl_t v50_e2;
     /* element 3 of Viewable slot 0x50: IvPageControl (class id 0x01600028) */
@@ -1133,7 +1133,7 @@ typedef struct __attribute__((packed)) {
     /* element 5 of Viewable slot 0x50: IvShowHide (class id 0x01600064) */
     naka_cls_IvShowHide_t v50_e5;
     /* element 6 of Viewable slot 0x50 "MidiMenuPage1": Window (class id 0x01600035) */
-    naka_cls_Window_t v50_e6;
+    naka_cls_Window_t MidiMenuPage1;
     /* element 7 of Viewable slot 0x50: AcTitleMenu (class id 0x0160001D) */
     naka_cls_AcTitleMenu_t v50_e7;
     char w14_text[14];
@@ -1165,7 +1165,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_AcTitleMenu_t v50_e16;
     char w23_text[14];
     /* element 17 of Viewable slot 0x50 "MidiMenuPage2": Window (class id 0x01600035) */
-    naka_cls_Window_t v50_e17;
+    naka_cls_Window_t MidiMenuPage2;
     /* element 18 of Viewable slot 0x50: AcTitleMenu (class id 0x0160001D) */
     naka_cls_AcTitleMenu_t v50_e18;
     char w24_text[20];
@@ -1173,12 +1173,12 @@ typedef struct __attribute__((packed)) {
     naka_cls_AcTitleMenu_t v50_e19;
     char w25_text[26];
     /* element 0 of Viewable slot 0x51 "MidiPartSetting": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v51_e0;
+    naka_cls_TtlScreen_t MidiPartSetting;
     char w26_text[14];
     /* element 1 of Viewable slot 0x51 "MdPartSetGridBox": AcMidiPartGridBox (class id 0x0163000F) */
-    naka_cls_AcMidiPartGridBox_t v51_e1;
-    char str_123[52];
-    char str_124[30];
+    naka_cls_AcMidiPartGridBox_t MdPartSetGridBox;
+    char MdPartSetGridBox_fixedrow[52];
+    char MdPartSetGridBox_fixedcol[30];
     /* element 2 of Viewable slot 0x51: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t v51_e2;
     /* element 3 of Viewable slot 0x51: AcIndexWideES (class id 0x01600022) */
@@ -1190,14 +1190,14 @@ typedef struct __attribute__((packed)) {
     /* element 6 of Viewable slot 0x51: IvShowHide (class id 0x01600064) */
     naka_cls_IvShowHide_t v51_e6;
     /* element 0 of Viewable slot 0x52 "MidiControlMessage": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v52_e0;
+    naka_cls_TtlScreen_t MidiControlMessage;
     char w31_text[18];
     /* element 1 of Viewable slot 0x52: PsPageBox (class id 0x01600024) */
     naka_cls_PsPageBox_t v52_e1;
     /* element 2 of Viewable slot 0x52 "CtlMsgGridBox": AcCtlMsgGridBox (class id 0x0163000E) */
-    naka_cls_AcCtlMsgGridBox_t v52_e2;
-    char str_128[80];
-    char str_129[10];
+    naka_cls_AcCtlMsgGridBox_t CtlMsgGridBox;
+    char CtlMsgGridBox_fixedrow[80];
+    char CtlMsgGridBox_fixedcol[10];
     /* element 3 of Viewable slot 0x52: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t v52_e3;
     /* element 4 of Viewable slot 0x52: Label (class id 0x0160002B) */
@@ -1211,32 +1211,32 @@ typedef struct __attribute__((packed)) {
     /* element 7 of Viewable slot 0x52: IvShowHide (class id 0x01600064) */
     naka_cls_IvShowHide_t v52_e7;
     /* element 0 of Viewable slot 0x53 "MidiRealtimeMessage": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v53_e0;
+    naka_cls_TtlScreen_t MidiRealtimeMessage;
     char w36_text[18];
     /* element 1 of Viewable slot 0x53: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t v53_e1;
     /* element 2 of Viewable slot 0x53 "RealtimeCommandBox": AcLswFuncEditBox (class id 0x01630005) */
-    naka_cls_AcLswFuncEditBox_t v53_e2;
-    char str_133[6];
-    char str_134[6];
-    char str_135[20];
+    naka_cls_AcLswFuncEditBox_t RealtimeCommandBox;
+    char RealtimeCommandBox_off_str[6];
+    char RealtimeCommandBox_on_str[6];
+    char RealtimeCommandBox_caption[20];
     /* element 3 of Viewable slot 0x53 "ClockBox": AcLswFuncEditBox (class id 0x01630005) */
-    naka_cls_AcLswFuncEditBox_t v53_e3;
-    char str_136[12];
-    char str_137[12];
-    char str_138[24];
+    naka_cls_AcLswFuncEditBox_t ClockBox;
+    char ClockBox_off_str[12];
+    char ClockBox_on_str[12];
+    char ClockBox_caption[24];
     /* element 4 of Viewable slot 0x53: Label (class id 0x0160002B) */
     naka_cls_Label_t v53_e4;
     char w38_text[6];
     /* element 5 of Viewable slot 0x53: IvShowHide (class id 0x01600064) */
     naka_cls_IvShowHide_t v53_e5;
     /* element 0 of Viewable slot 0x54 "MidiCommonSetting": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v54_e0;
+    naka_cls_TtlScreen_t MidiCommonSetting;
     char w39_text[16];
     /* element 1 of Viewable slot 0x54 "ComSetGridBox": AcGridBox (class id 0x01600056) */
-    naka_cls_AcGridBox_t v54_e1;
-    char str_141[208];
-    char str_142[10];
+    naka_cls_AcGridBox_t ComSetGridBox;
+    char ComSetGridBox_fixedrow[208];
+    char ComSetGridBox_fixedcol[10];
     /* element 2 of Viewable slot 0x54: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t v54_e2;
     /* element 3 of Viewable slot 0x54: AcIndexWideES (class id 0x01600022) */
@@ -1244,12 +1244,12 @@ typedef struct __attribute__((packed)) {
     /* element 4 of Viewable slot 0x54: IvShowHide (class id 0x01600064) */
     naka_cls_IvShowHide_t v54_e4;
     /* element 0 of Viewable slot 0x55 "MidiInOutSetting": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v55_e0;
+    naka_cls_TtlScreen_t MidiInOutSetting;
     char w42_text[22];
     /* element 1 of Viewable slot 0x55 "InOutGridBox": AcInOutGridBox (class id 0x01630009) */
-    naka_cls_AcInOutGridBox_t v55_e1;
-    char str_145[188];
-    char str_146[10];
+    naka_cls_AcInOutGridBox_t InOutGridBox;
+    char InOutGridBox_fixedrow[188];
+    char InOutGridBox_fixedcol[10];
     /* element 2 of Viewable slot 0x55: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t v55_e2;
     /* element 3 of Viewable slot 0x55: AcIndexWideES (class id 0x01600022) */
@@ -1257,22 +1257,22 @@ typedef struct __attribute__((packed)) {
     /* element 4 of Viewable slot 0x55: IvShowHide (class id 0x01600064) */
     naka_cls_IvShowHide_t v55_e4;
     /* element 0 of Viewable slot 0x56 "MidiPresets": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v56_e0;
+    naka_cls_TtlScreen_t MidiPresets;
     char w45_text[14];
     /* element 1 of Viewable slot 0x56 "MdPresetPageBox": AcWindowPage (class id 0x01600025) */
-    naka_cls_AcWindowPage_t v56_e1;
+    naka_cls_AcWindowPage_t MdPresetPageBox;
     /* element 2 of Viewable slot 0x56: IvPageControl (class id 0x01600028) */
     naka_cls_IvPageControl_t v56_e2;
     /* element 3 of Viewable slot 0x56: IvPageControl (class id 0x01600028) */
     naka_cls_IvPageControl_t v56_e3;
     /* element 4 of Viewable slot 0x56 "MpstPageCtl1": IvMpstPageControl (class id 0x01630002) */
-    naka_cls_IvMpstPageControl_t v56_e4;
+    naka_cls_IvMpstPageControl_t MpstPageCtl1;
     /* element 5 of Viewable slot 0x56 "MpstPageCtl2": IvMpstPageControl (class id 0x01630002) */
-    naka_cls_IvMpstPageControl_t v56_e5;
+    naka_cls_IvMpstPageControl_t MpstPageCtl2;
     /* element 6 of Viewable slot 0x56: IvShowHide (class id 0x01600064) */
     naka_cls_IvShowHide_t v56_e6;
     /* element 7 of Viewable slot 0x56 "MidiPresetSlaveWithout": Window (class id 0x01600035) */
-    naka_cls_Window_t v56_e7;
+    naka_cls_Window_t MidiPresetSlaveWithout;
     /* element 8 of Viewable slot 0x56: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t v56_e8;
     /* element 9 of Viewable slot 0x56: AcFuncEditSw (class id 0x01600020) */
@@ -1283,8 +1283,8 @@ typedef struct __attribute__((packed)) {
     /* element 11 of Viewable slot 0x56: VwBox (class id 0x01600011) */
     naka_cls_VwBox_t v56_e11;
     /* element 12 of Viewable slot 0x56 "MpstSlaveWithoutList": AcListBox (class id 0x01600055) */
-    naka_cls_AcListBox_t v56_e12;
-    char str_172[132];
+    naka_cls_AcListBox_t MpstSlaveWithoutList;
+    char MpstSlaveWithoutList_list[132];
     /* element 13 of Viewable slot 0x56: AcFuncWideES (class id 0x01600023) */
     naka_cls_AcFuncWideES_t v56_e13;
     /* element 14 of Viewable slot 0x56: Label (class id 0x0160002B) */
@@ -1301,12 +1301,12 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t v56_e18;
     char w53_text[8];
     /* element 19 of Viewable slot 0x56 "MidiPresetSlaveWith": Window (class id 0x01600035) */
-    naka_cls_Window_t v56_e19;
+    naka_cls_Window_t MidiPresetSlaveWith;
     /* element 20 of Viewable slot 0x56: VwBox (class id 0x01600011) */
     naka_cls_VwBox_t v56_e20;
     /* element 21 of Viewable slot 0x56 "MpstSlaveWithList": AcListBox (class id 0x01600055) */
-    naka_cls_AcListBox_t v56_e21;
-    char str_185[208];
+    naka_cls_AcListBox_t MpstSlaveWithList;
+    char MpstSlaveWithList_list[208];
     /* element 22 of Viewable slot 0x56: VwUserBitmap (class id 0x01600069) */
     naka_cls_VwUserBitmap_t v56_e22;
     /* element 23 of Viewable slot 0x56: Label (class id 0x0160002B) */
@@ -1330,10 +1330,10 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t v56_e30;
     char w60_text[6];
     /* element 31 of Viewable slot 0x56 "MidiPresetPage3": Window (class id 0x01600035) */
-    naka_cls_Window_t v56_e31;
+    naka_cls_Window_t MidiPresetPage3;
     /* element 32 of Viewable slot 0x56 "MdPresetUserLoadList": AcListBox (class id 0x01600055) */
-    naka_cls_AcListBox_t v56_e32;
-    char str_202[52];
+    naka_cls_AcListBox_t MdPresetUserLoadList;
+    char MdPresetUserLoadList_list[52];
     /* element 33 of Viewable slot 0x56: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t v56_e33;
     /* element 34 of Viewable slot 0x56: AcFuncEditSw (class id 0x01600020) */
@@ -1342,10 +1342,10 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t v56_e35;
     char w63_text[6];
     /* element 36 of Viewable slot 0x56 "MidiPresetPage4": Window (class id 0x01600035) */
-    naka_cls_Window_t v56_e36;
+    naka_cls_Window_t MidiPresetPage4;
     /* element 37 of Viewable slot 0x56 "MdPresetUserWriteList": AcListBox (class id 0x01600055) */
-    naka_cls_AcListBox_t v56_e37;
-    char str_210[52];
+    naka_cls_AcListBox_t MdPresetUserWriteList;
+    char MdPresetUserWriteList_list[52];
     /* element 38 of Viewable slot 0x56: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t v56_e38;
     /* element 39 of Viewable slot 0x56: AcFuncEditSw (class id 0x01600020) */
@@ -1354,19 +1354,19 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t v56_e40;
     char w66_text[6];
     /* element 41 of Viewable slot 0x56 "MdpstSplitBox": AcFuncToggle (class id 0x01600044) */
-    naka_cls_AcFuncToggle_t v56_e41;
-    char str_212[24];
-    char str_213[26];
+    naka_cls_AcFuncToggle_t MdpstSplitBox;
+    char MdpstSplitBox_stroff[24];
+    char MdpstSplitBox_stron[26];
     /* element 42 of Viewable slot 0x56: Label (class id 0x0160002B) */
     naka_cls_Label_t v56_e42;
     char w68_text[6];
     /* element 43 of Viewable slot 0x56 "MidiPresetMasterWithout": Window (class id 0x01600035) */
-    naka_cls_Window_t v56_e43;
+    naka_cls_Window_t MidiPresetMasterWithout;
     /* element 44 of Viewable slot 0x56: VwBox (class id 0x01600011) */
     naka_cls_VwBox_t v56_e44;
     /* element 45 of Viewable slot 0x56 "MpstMasterWithoutList": AcListBox (class id 0x01600055) */
-    naka_cls_AcListBox_t v56_e45;
-    char str_223[50];
+    naka_cls_AcListBox_t MpstMasterWithoutList;
+    char MpstMasterWithoutList_list[50];
     /* element 46 of Viewable slot 0x56: VwUserBitmap (class id 0x01600069) */
     naka_cls_VwUserBitmap_t v56_e46;
     /* element 47 of Viewable slot 0x56: Label (class id 0x0160002B) */
@@ -1390,12 +1390,12 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t v56_e54;
     char w75_text[6];
     /* element 55 of Viewable slot 0x56 "MidiPresetMasterWith": Window (class id 0x01600035) */
-    naka_cls_Window_t v56_e55;
+    naka_cls_Window_t MidiPresetMasterWith;
     /* element 56 of Viewable slot 0x56: VwBox (class id 0x01600011) */
     naka_cls_VwBox_t v56_e56;
     /* element 57 of Viewable slot 0x56 "MpstMasterWithList": AcListBox (class id 0x01600055) */
-    naka_cls_AcListBox_t v56_e57;
-    char str_254[50];
+    naka_cls_AcListBox_t MpstMasterWithList;
+    char MpstMasterWithList_list[50];
     /* element 58 of Viewable slot 0x56: AcFuncEditSw (class id 0x01600020) */
     naka_cls_AcFuncEditSw_t v56_e58;
     /* element 59 of Viewable slot 0x56: AcIndexWideES (class id 0x01600022) */
@@ -1419,7 +1419,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t v56_e66;
     char w82_text[8];
     /* element 0 of Viewable slot 0x57 "MidiExclusive": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v57_e0;
+    naka_cls_TtlScreen_t MidiExclusive;
     char w83_text[16];
     /* element 1 of Viewable slot 0x57: AcFuncEditSw (class id 0x01600020) */
     naka_cls_AcFuncEditSw_t v57_e1;
@@ -1427,14 +1427,14 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t v57_e2;
     char w85_text[6];
     /* element 3 of Viewable slot 0x57 "ExcListBox": AcListBox (class id 0x01600055) */
-    naka_cls_AcListBox_t v57_e3;
-    char str_278[94];
+    naka_cls_AcListBox_t ExcListBox;
+    char ExcListBox_list[94];
     /* element 4 of Viewable slot 0x57: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t v57_e4;
     /* element 5 of Viewable slot 0x57: IvShowHide (class id 0x01600064) */
     naka_cls_IvShowHide_t v57_e5;
     /* element 6 of Viewable slot 0x57 "ExcSendWindow": Window (class id 0x01600035) */
-    naka_cls_Window_t v57_e6;
+    naka_cls_Window_t ExcSendWindow;
     /* element 7 of Viewable slot 0x57: Label (class id 0x0160002B) */
     naka_cls_Label_t v57_e7;
     char w87_text[18];
@@ -1445,26 +1445,26 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t v57_e9;
     char w89_text[14];
     /* element 10 of Viewable slot 0x57 "ExcSendShowBox": VwBox (class id 0x01600011) */
-    naka_cls_VwBox_t v57_e10;
+    naka_cls_VwBox_t ExcSendShowBox;
     /* element 11 of Viewable slot 0x57 "ExcSendPmemBox": AcRamEditBox (class id 0x0160001B) */
-    naka_cls_AcRamEditBox_t v57_e11;
-    char str_282[22];
+    naka_cls_AcRamEditBox_t ExcSendPmemBox;
+    char ExcSendPmemBox_caption[22];
     /* element 12 of Viewable slot 0x57 "ExcSendSmemBox": AcRamEditBox (class id 0x0160001B) */
-    naka_cls_AcRamEditBox_t v57_e12;
-    char str_283[22];
+    naka_cls_AcRamEditBox_t ExcSendSmemBox;
+    char ExcSendSmemBox_caption[22];
     /* element 13 of Viewable slot 0x57 "ExcSendCmpBox": AcRamEditBox (class id 0x0160001B) */
-    naka_cls_AcRamEditBox_t v57_e13;
-    char str_284[22];
+    naka_cls_AcRamEditBox_t ExcSendCmpBox;
+    char ExcSendCmpBox_caption[22];
     /* element 14 of Viewable slot 0x57 "ExcSendSeqBox": AcRamEditBox (class id 0x0160001B) */
-    naka_cls_AcRamEditBox_t v57_e14;
-    char str_285[22];
+    naka_cls_AcRamEditBox_t ExcSendSeqBox;
+    char ExcSendSeqBox_caption[22];
     /* element 15 of Viewable slot 0x57 "ExcSendMspBox": AcRamEditBox (class id 0x0160001B) */
-    naka_cls_AcRamEditBox_t v57_e15;
-    char str_286[22];
+    naka_cls_AcRamEditBox_t ExcSendMspBox;
+    char ExcSendMspBox_caption[22];
     /* element 16 of Viewable slot 0x57 "ExcSendDotBox": AcRamBox (class id 0x0160004F) */
-    naka_cls_AcRamBox_t v57_e16;
+    naka_cls_AcRamBox_t ExcSendDotBox;
     /* element 17 of Viewable slot 0x57 "ExcRcvWindow": Window (class id 0x01600035) */
-    naka_cls_Window_t v57_e17;
+    naka_cls_Window_t ExcRcvWindow;
     /* element 18 of Viewable slot 0x57: Label (class id 0x0160002B) */
     naka_cls_Label_t v57_e18;
     char w91_text[18];
@@ -1475,30 +1475,30 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t v57_e20;
     char w93_text[14];
     /* element 21 of Viewable slot 0x57 "ExcRcvShowBox": VwBox (class id 0x01600011) */
-    naka_cls_VwBox_t v57_e21;
+    naka_cls_VwBox_t ExcRcvShowBox;
     /* element 22 of Viewable slot 0x57 "ExcRcvPmemBox": AcRamEditBox (class id 0x0160001B) */
-    naka_cls_AcRamEditBox_t v57_e22;
-    char str_292[22];
+    naka_cls_AcRamEditBox_t ExcRcvPmemBox;
+    char ExcRcvPmemBox_caption[22];
     /* element 23 of Viewable slot 0x57 "ExcRcvSmemBox": AcRamEditBox (class id 0x0160001B) */
-    naka_cls_AcRamEditBox_t v57_e23;
-    char str_293[22];
+    naka_cls_AcRamEditBox_t ExcRcvSmemBox;
+    char ExcRcvSmemBox_caption[22];
     /* element 24 of Viewable slot 0x57 "ExcRcvCmpBox": AcRamEditBox (class id 0x0160001B) */
-    naka_cls_AcRamEditBox_t v57_e24;
-    char str_294[22];
+    naka_cls_AcRamEditBox_t ExcRcvCmpBox;
+    char ExcRcvCmpBox_caption[22];
     /* element 25 of Viewable slot 0x57 "ExcRcvSeqBox": AcRamEditBox (class id 0x0160001B) */
-    naka_cls_AcRamEditBox_t v57_e25;
-    char str_295[22];
+    naka_cls_AcRamEditBox_t ExcRcvSeqBox;
+    char ExcRcvSeqBox_caption[22];
     /* element 26 of Viewable slot 0x57 "ExcRcvMspBox": AcRamEditBox (class id 0x0160001B) */
-    naka_cls_AcRamEditBox_t v57_e26;
-    char str_296[22];
+    naka_cls_AcRamEditBox_t ExcRcvMspBox;
+    char ExcRcvMspBox_caption[22];
     /* element 27 of Viewable slot 0x57 "ExcRcvDotBox": AcRamBox (class id 0x0160004F) */
-    naka_cls_AcRamBox_t v57_e27;
+    naka_cls_AcRamBox_t ExcRcvDotBox;
     /* element 0 of Viewable slot 0x58 "MidiGmMode": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v58_e0;
+    naka_cls_TtlScreen_t MidiGmMode;
     char w95_text[14];
     /* element 1 of Viewable slot 0x58 "GMOnOffBox": AcGMOnOffBox (class id 0x01630004) */
-    naka_cls_AcGMOnOffBox_t v58_e1;
-    char str_301[18];
+    naka_cls_AcGMOnOffBox_t GMOnOffBox;
+    char GMOnOffBox_caption[18];
     /* element 2 of Viewable slot 0x58: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t v58_e2;
     /* element 3 of Viewable slot 0x58: AcFuncEditSw (class id 0x01600020) */
@@ -1506,7 +1506,7 @@ typedef struct __attribute__((packed)) {
     /* element 4 of Viewable slot 0x58: IvShowHide (class id 0x01600064) */
     naka_cls_IvShowHide_t v58_e4;
     /* element 5 of Viewable slot 0x58 "GMONSure": Window (class id 0x01600035) */
-    naka_cls_Window_t v58_e5;
+    naka_cls_Window_t GMONSure;
     /* element 6 of Viewable slot 0x58: VwBox (class id 0x01600011) */
     naka_cls_VwBox_t v58_e6;
     /* element 7 of Viewable slot 0x58: AcLanguageText (class id 0x01600066) */
@@ -1522,7 +1522,7 @@ typedef struct __attribute__((packed)) {
     /* element 12 of Viewable slot 0x58: IvExitWindow (class id 0x0160005C) */
     naka_cls_IvExitWindow_t v58_e12;
     /* element 13 of Viewable slot 0x58 "GMOFFSure": Window (class id 0x01600035) */
-    naka_cls_Window_t v58_e13;
+    naka_cls_Window_t GMOFFSure;
     /* element 14 of Viewable slot 0x58: AcFuncEditSw (class id 0x01600020) */
     naka_cls_AcFuncEditSw_t v58_e14;
     /* element 15 of Viewable slot 0x58: AcFuncEditSw (class id 0x01600020) */
@@ -1538,25 +1538,25 @@ typedef struct __attribute__((packed)) {
     /* element 20 of Viewable slot 0x58: AcLanguageText (class id 0x01600066) */
     naka_cls_AcLanguageText_t v58_e20;
     /* element 0 of Viewable slot 0x59 "MidiPcgOutput": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v59_e0;
+    naka_cls_TtlScreen_t MidiPcgOutput;
     char w104_text[24];
     /* element 1 of Viewable slot 0x59 "PcgOutGridBox": AcPcgOutGridBox (class id 0x0163000B) */
-    naka_cls_AcPcgOutGridBox_t v59_e1;
-    char str_333[94];
-    char str_334[10];
+    naka_cls_AcPcgOutGridBox_t PcgOutGridBox;
+    char PcgOutGridBox_fixedrow[94];
+    char PcgOutGridBox_fixedcol[10];
     /* element 2 of Viewable slot 0x59: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t v59_e2;
     /* element 3 of Viewable slot 0x59: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t v59_e3;
-    char str_335[6];
+    char SEND_str[6];
     /* element 5 of Viewable slot 0x59: IvShowHide (class id 0x01600064) */
     naka_cls_IvShowHide_t v59_e5;
     /* element 0 of Viewable slot 0x5A "MidiComputerConnection": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v5A_e0;
+    naka_cls_TtlScreen_t MidiComputerConnection;
     char w107_text[20];
     /* element 1 of Viewable slot 0x5A: AcLswEditBox (class id 0x0160001A) */
     naka_cls_AcLswEditBox_t v5A_e1;
-    char str_339[8];
+    char v5A_e1_caption[8];
     /* element 2 of Viewable slot 0x5A: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t v5A_e2;
     /* element 3 of Viewable slot 0x5A: VwBox (class id 0x01600011) */
@@ -1567,7 +1567,7 @@ typedef struct __attribute__((packed)) {
     /* element 5 of Viewable slot 0x5A: IvShowHide (class id 0x01600064) */
     naka_cls_IvShowHide_t v5A_e5;
     /* element 0 of Viewable slot 0x5B "MidiPanelMemoryOutput": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v5B_e0;
+    naka_cls_TtlScreen_t MidiPanelMemoryOutput;
     char w111_text[20];
     /* element 1 of Viewable slot 0x5B: Label (class id 0x0160002B) */
     naka_cls_Label_t v5B_e1;
@@ -1591,13 +1591,13 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t v5B_e7;
     char w118_text[4];
     /* element 8 of Viewable slot 0x5B "PmemOutLeft": AcPmemOutLGridBox (class id 0x0163000C) */
-    naka_cls_AcPmemOutLGridBox_t v5B_e8;
-    char str_342[24];
-    char str_343[4];
+    naka_cls_AcPmemOutLGridBox_t PmemOutLeft;
+    char PmemOutLeft_fixedrow[24];
+    char PmemOutLeft_fixedcol[4];
     /* element 9 of Viewable slot 0x5B "PmemOutRight": AcPmemOutRGridBox (class id 0x0163000D) */
-    naka_cls_AcPmemOutRGridBox_t v5B_e9;
-    char str_345[28];
-    char str_346[6];
+    naka_cls_AcPmemOutRGridBox_t PmemOutRight;
+    char PmemOutRight_fixedrow[28];
+    char PmemOutRight_fixedcol[6];
     /* element 10 of Viewable slot 0x5B: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v5B_e10;
     /* element 11 of Viewable slot 0x5B: AcIndexEditSw (class id 0x0160001F) */
@@ -1613,12 +1613,12 @@ typedef struct __attribute__((packed)) {
     /* element 16 of Viewable slot 0x5B: IvShowHide (class id 0x01600064) */
     naka_cls_IvShowHide_t v5B_e16;
     /* element 0 of Viewable slot 0x5C "MidiSetup": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v5C_e0;
+    naka_cls_TtlScreen_t MidiSetup;
     char w119_text[26];
     /* element 1 of Viewable slot 0x5C "MdSetOptGridBox": AcParaLoadOptGridBox (class id 0x0163000A) */
-    naka_cls_AcParaLoadOptGridBox_t v5C_e1;
-    char str_352[110];
-    char str_353[8];
+    naka_cls_AcParaLoadOptGridBox_t MdSetOptGridBox;
+    char MdSetOptGridBox_fixedrow[110];
+    char MdSetOptGridBox_fixedcol[8];
     /* element 2 of Viewable slot 0x5C: Label (class id 0x0160002B) */
     naka_cls_Label_t v5C_e2;
     char w120_text[22];
@@ -1634,18 +1634,18 @@ typedef struct __attribute__((packed)) {
     /* element 7 of Viewable slot 0x5C: IvShowHide (class id 0x01600064) */
     naka_cls_IvShowHide_t v5C_e7;
     /* element 0 of Viewable slot 0xD7 "EntertainerVocal": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vD7_e0;
+    naka_cls_TtlScreen_t EntertainerVocal;
     char w125_text[22];
     /* element 1 of Viewable slot 0xD7: IvPageControl (class id 0x01600028) */
     naka_cls_IvPageControl_t vD7_e1;
     /* element 2 of Viewable slot 0xD7: IvPageControl (class id 0x01600028) */
     naka_cls_IvPageControl_t vD7_e2;
     /* element 3 of Viewable slot 0xD7 "VocalistPage": AcWindowPage (class id 0x01600025) */
-    naka_cls_AcWindowPage_t vD7_e3;
+    naka_cls_AcWindowPage_t VocalistPage;
     /* element 4 of Viewable slot 0xD7: IvShowHide (class id 0x01600064) */
     naka_cls_IvShowHide_t vD7_e4;
     /* element 5 of Viewable slot 0xD7 "VocalistPage1": Window (class id 0x01600035) */
-    naka_cls_Window_t vD7_e5;
+    naka_cls_Window_t VocalistPage1;
     /* element 6 of Viewable slot 0xD7: Label (class id 0x0160002B) */
     naka_cls_Label_t vD7_e6;
     char w127_text[16];
@@ -1657,20 +1657,20 @@ typedef struct __attribute__((packed)) {
     /* element 9 of Viewable slot 0xD7: AcFuncEditSw (class id 0x01600020) */
     naka_cls_AcFuncEditSw_t vD7_e9;
     /* element 10 of Viewable slot 0xD7 "VocalistListBox": AcVocalistListBox (class id 0x01630001) */
-    naka_cls_AcVocalistListBox_t vD7_e10;
-    char str_366[204];
+    naka_cls_AcVocalistListBox_t VocalistListBox;
+    char VocalistListBox_list[204];
     /* element 11 of Viewable slot 0xD7: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t vD7_e11;
     /* element 12 of Viewable slot 0xD7 "HarmOnOffBox": PsHarmOnOffBox (class id 0x01630000) */
-    naka_cls_PsHarmOnOffBox_t vD7_e12;
-    char str_368[24];
-    char str_369[24];
+    naka_cls_PsHarmOnOffBox_t HarmOnOffBox;
+    char HarmOnOffBox_stroff[24];
+    char HarmOnOffBox_stron[24];
     /* element 13 of Viewable slot 0xD7 "VocalistPage2": Window (class id 0x01600035) */
-    naka_cls_Window_t vD7_e13;
+    naka_cls_Window_t VocalistPage2;
     /* element 14 of Viewable slot 0xD7 "VocalistPage2Box": AcVocalGridBox (class id 0x01630008) */
-    naka_cls_AcVocalGridBox_t vD7_e14;
-    char str_372[112];
-    char str_373[16];
+    naka_cls_AcVocalGridBox_t VocalistPage2Box;
+    char VocalistPage2Box_fixedrow[112];
+    char VocalistPage2Box_fixedcol[16];
     /* element 15 of Viewable slot 0xD7: Label (class id 0x0160002B) */
     naka_cls_Label_t vD7_e15;
     char w132_text[6];
@@ -1695,12 +1695,12 @@ typedef struct __attribute__((packed)) {
     /* element 23 of Viewable slot 0xD7: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t vD7_e23;
     /* element 0 of Viewable slot 0xD8 "EntertainerFade": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vD8_e0;
+    naka_cls_TtlScreen_t EntertainerFade;
     char w141_text[20];
     /* element 1 of Viewable slot 0xD8 "FadeInOutGridBox": AcFadeSetGridBox (class id 0x01630007) */
-    naka_cls_AcFadeSetGridBox_t vD8_e1;
-    char str_376[110];
-    char str_377[8];
+    naka_cls_AcFadeSetGridBox_t FadeInOutGridBox;
+    char FadeInOutGridBox_fixedrow[110];
+    char FadeInOutGridBox_fixedcol[8];
     /* element 2 of Viewable slot 0xD8: Label (class id 0x0160002B) */
     naka_cls_Label_t vD8_e2;
     char w142_text[8];
@@ -1716,7 +1716,7 @@ typedef struct __attribute__((packed)) {
     /* element 7 of Viewable slot 0xD8: IvShowHide (class id 0x01600064) */
     naka_cls_IvShowHide_t vD8_e7;
     /* element 0 of Viewable slot 0xEC "SplitSetting": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vEC_e0;
+    naka_cls_TtlScreen_t SplitSetting;
     char w146_text[12];
     /* element 1 of Viewable slot 0xEC: VwBox (class id 0x01600011) */
     naka_cls_VwBox_t vEC_e1;
@@ -1741,7 +1741,7 @@ typedef struct __attribute__((packed)) {
     char str_395[2];
     char str_396[2];
     char str_397[2];
-    char str_398[18];
+    char R12OctaveSetting_str[18];
     uint32_t ptrs_3[13];  /* 13 pointers */
     char str_399[2];
     char str_400[2];
@@ -1805,7 +1805,7 @@ typedef struct __attribute__((packed)) {
     char str_441[2];
     char w157_code[2];
     char w157_name[12];
-    char str_442[10];
+    char MidiMenu_str[10];
     uint32_t ptrs_7[8];  /* 8 pointers */
     char str_443[2];
     char str_444[2];
@@ -1814,7 +1814,7 @@ typedef struct __attribute__((packed)) {
     char str_447[2];
     char w158_code[2];
     char w158_name[18];
-    char str_448[16];
+    char MidiPartSetting_str[16];
 } naka_midi_reverb_t;
 
 #define SELF(field) \
@@ -1826,39 +1826,39 @@ _Static_assert(sizeof(naka_midi_reverb_t) == 17766,
 const naka_midi_reverb_t naka_midi_reverb_data
     __attribute__((section(".text"), used)) = {
 
-    .str_0 = "AcMidiPartGridBoxProc",
+    .AcMidiPartGridBoxProc_str = "AcMidiPartGridBoxProc",
 
-    .str_1 = "AcCtlMsgGridBoxProc",
+    .AcCtlMsgGridBoxProc_str = "AcCtlMsgGridBoxProc",
 
-    .str_2 = "AcPmemOutRGridBoxProc",
+    .AcPmemOutRGridBoxProc_str = "AcPmemOutRGridBoxProc",
 
-    .str_3 = "AcPmemOutLGridBoxProc",
+    .AcPmemOutLGridBoxProc_str = "AcPmemOutLGridBoxProc",
 
-    .str_4 = "AcPcgOutGridBoxProc",
+    .AcPcgOutGridBoxProc_str = "AcPcgOutGridBoxProc",
 
-    .str_5 = ALIGNED_STRING("AcParaLoadOptGridBoxProc"),
+    .AcParaLoadOptGridBoxProc_str = ALIGNED_STRING("AcParaLoadOptGridBoxProc"),
 
-    .str_6 = ALIGNED_STRING("AcInOutGridBoxProc"),
+    .AcInOutGridBoxProc_str = ALIGNED_STRING("AcInOutGridBoxProc"),
 
-    .str_7 = ALIGNED_STRING("AcVocalGridBoxProc"),
+    .AcVocalGridBoxProc_str = ALIGNED_STRING("AcVocalGridBoxProc"),
 
-    .str_8 = ALIGNED_STRING("AcFadeSetGridBoxProc"),
+    .AcFadeSetGridBoxProc_str = ALIGNED_STRING("AcFadeSetGridBoxProc"),
 
-    .str_9 = ALIGNED_STRING("AcLswFuncEditBoxProc"),
+    .AcLswFuncEditBoxProc_str = ALIGNED_STRING("AcLswFuncEditBoxProc"),
 
-    .str_10 = ALIGNED_STRING("AcLswFuncBoxProc"),
+    .AcLswFuncBoxProc_str = ALIGNED_STRING("AcLswFuncBoxProc"),
 
-    .str_11 = ALIGNED_STRING("AcGMOnOffBoxProc"),
+    .AcGMOnOffBoxProc_str = ALIGNED_STRING("AcGMOnOffBoxProc"),
 
-    .str_12 = ALIGNED_STRING("AcSendEditSwProc"),
+    .AcSendEditSwProc_str = ALIGNED_STRING("AcSendEditSwProc"),
 
-    .str_13 = "IvMpstPageControlProc",
+    .IvMpstPageControlProc_str = "IvMpstPageControlProc",
 
-    .str_14 = ALIGNED_STRING("PsHarmOnOffBoxProc"),
+    .PsHarmOnOffBoxProc_str = ALIGNED_STRING("PsHarmOnOffBoxProc"),
 
-    .str_15 = "AcVocalistListBoxProc",
+    .AcVocalistListBoxProc_str = "AcVocalistListBoxProc",
 
-    .v9_e0 = {
+    .ReverbEqualizerMenu = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -1945,7 +1945,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .w3_text = ALIGNED_STRING("REVERB + EQUALIZER PRESETS"),
 
-    .vF_e0 = {
+    .R12OctaveSetting = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -1974,7 +1974,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .color = 0x00F5,
         .border = 0x00C1,
         .index = 0x0001,
-        .caption = SELF(str_17),
+        .caption = SELF(vF_e1_caption),
         .font = 0x00000004,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -1986,7 +1986,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .data = 0x0003E402,
     },
 
-    .str_17 = ALIGNED_STRING("OCTAVE   :"),
+    .vF_e1_caption = ALIGNED_STRING("OCTAVE   :"),
 
     .vF_e2 = {
         .class_ = 0x01600022,
@@ -2007,7 +2007,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .style = 0x0003,
     },
 
-    .v18_e0 = {
+    .ReverbPreset = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -2185,10 +2185,10 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .editsw = 0x0009,
         .selected = 0x0003E414,
         .tag = 0x0006,
-        .str = SELF(str_40),
+        .str = SELF(Reflection_str),
     },
 
-    .str_40 = ALIGNED_STRING("Reflection"),
+    .Reflection_str = ALIGNED_STRING("Reflection"),
 
     .v18_e9 = {
         .class_ = 0x01600051,
@@ -2251,12 +2251,12 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .editsw = 0x000C,
         .selected = 0x0003E41A,
         .tag = 0x0009,
-        .str = SELF(str_47),
+        .str = SELF(Cavernous_str),
     },
 
-    .str_47 = "Cavernous",
+    .Cavernous_str = "Cavernous",
 
-    .v19_e0 = {
+    .EqualizerPreset = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -2483,7 +2483,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .func = 0x01230038,
     },
 
-    .v19_e11 = {
+    .EqOnOffBox = {
         .class_ = 0x01600044,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2492,18 +2492,18 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .flag = 0x0008,
         .rect = { 241, 202, 311, 219 },
         .font = 0x00000000,
-        .stron = SELF(str_78),
-        .stroff = SELF(str_77),
+        .stron = SELF(EqOnOffBox_stron),
+        .stroff = SELF(EqOnOffBox_stroff),
         .onoff = 0x0003E432,
         .editsw = 0x000C,
         .func = 0x01230039,
     },
 
-    .str_77 = ALIGNED_STRING("EQ : OFF"),
+    .EqOnOffBox_stroff = ALIGNED_STRING("EQ : OFF"),
 
-    .str_78 = "EQ : ON",
+    .EqOnOffBox_stron = "EQ : ON",
 
-    .v1A_e0 = {
+    .ReverbEqualizerPreset = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -2692,10 +2692,10 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .editsw = 0x000A,
         .selected = 0x0003E446,
         .tag = 0x0007,
-        .str = SELF(str_102),
+        .str = SELF(Stadium_str),
     },
 
-    .str_102 = "Stadium",
+    .Stadium_str = "Stadium",
 
     .v1A_e9 = {
         .class_ = 0x01600051,
@@ -2719,7 +2719,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .str_104 = "Live Room",
 
-    .v1A_e10 = {
+    .RevEqOnOffBox = {
         .class_ = 0x01600044,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2728,16 +2728,16 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .flag = 0x0008,
         .rect = { 241, 202, 311, 219 },
         .font = 0x00000000,
-        .stron = SELF(str_107),
-        .stroff = SELF(str_106),
+        .stron = SELF(RevEqOnOffBox_stron),
+        .stroff = SELF(RevEqOnOffBox_stroff),
         .onoff = 0x0003E44A,
         .editsw = 0x000C,
         .func = 0x0123003B,
     },
 
-    .str_106 = ALIGNED_STRING("EQ : OFF"),
+    .RevEqOnOffBox_stroff = ALIGNED_STRING("EQ : OFF"),
 
-    .str_107 = "EQ : ON",
+    .RevEqOnOffBox_stron = "EQ : ON",
 
     .v1A_e11 = {
         .class_ = 0x01600052,
@@ -2750,7 +2750,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .func = 0x0123003A,
     },
 
-    .v50_e0 = {
+    .MidiMenu = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -2768,7 +2768,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .w11_text = "MIDI MENU",
 
-    .v50_e1 = {
+    .MdmenuPage = {
         .class_ = 0x01600025,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2830,7 +2830,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .func = 0x01230000,
     },
 
-    .v50_e6 = {
+    .MidiMenuPage1 = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 7,
@@ -3075,7 +3075,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .w23_text = ALIGNED_STRING("P.MEM OUTPUT"),
 
-    .v50_e17 = {
+    .MidiMenuPage2 = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 18,
@@ -3136,7 +3136,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .w25_text = "MIDI SETTINGS LOAD OPTION",
 
-    .v51_e0 = {
+    .MidiPartSetting = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -3154,7 +3154,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .w26_text = ALIGNED_STRING("PART SETTING"),
 
-    .v51_e1 = {
+    .MdPartSetGridBox = {
         .class_ = 0x0163000F,
         .super = 0,
         .sub = 2,
@@ -3176,15 +3176,15 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .pcol = 0x0003E482,
         .prow = 0x0003E486,
         .crow = 0x0003E48A,
-        .fixedcol = SELF(str_124),
-        .fixedrow = SELF(str_123),
+        .fixedcol = SELF(MdPartSetGridBox_fixedcol),
+        .fixedrow = SELF(MdPartSetGridBox_fixedrow),
         .func = 0x01230016,
         .page = 0x0003E48E,
     },
 
-    .str_123 = "|-|RIGHT1|RIGHT2|LEFT|PART4|PART5|PART6|PART7|PART8",
+    .MdPartSetGridBox_fixedrow = "|-|RIGHT1|RIGHT2|LEFT|PART4|PART5|PART6|PART7|PART8",
 
-    .str_124 = ALIGNED_STRING(" PART |CHANNEL|OCTAVE| LOCAL"),
+    .MdPartSetGridBox_fixedcol = ALIGNED_STRING(" PART |CHANNEL|OCTAVE| LOCAL"),
 
     .v51_e2 = {
         .class_ = 0x01600022,
@@ -3273,7 +3273,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .func = 0x01230015,
     },
 
-    .v52_e0 = {
+    .MidiControlMessage = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -3305,7 +3305,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .page = 0x0003E494,
     },
 
-    .v52_e2 = {
+    .CtlMsgGridBox = {
         .class_ = 0x0163000E,
         .super = 0,
         .sub = 3,
@@ -3327,15 +3327,15 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .pcol = 0x0003E49A,
         .prow = 0x0003E49E,
         .crow = 0x0003E4A2,
-        .fixedcol = SELF(str_129),
-        .fixedrow = SELF(str_128),
+        .fixedcol = SELF(CtlMsgGridBox_fixedcol),
+        .fixedrow = SELF(CtlMsgGridBox_fixedrow),
         .func = 0x01230014,
         .page = 0x0003E4A6,
     },
 
-    .str_128 = "PRG.CHANGE|BANK SELECT|PITCH BEND|VOLUME|EXPRESSION|PAN|SUSTAIN|EFFECT & REVERB",
+    .CtlMsgGridBox_fixedrow = "PRG.CHANGE|BANK SELECT|PITCH BEND|VOLUME|EXPRESSION|PAN|SUSTAIN|EFFECT & REVERB",
 
-    .str_129 = "     |   ",
+    .CtlMsgGridBox_fixedcol = "     |   ",
 
     .v52_e3 = {
         .class_ = 0x01600022,
@@ -3416,7 +3416,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .func = 0x01230013,
     },
 
-    .v53_e0 = {
+    .MidiRealtimeMessage = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -3453,7 +3453,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .style = 0x0003,
     },
 
-    .v53_e2 = {
+    .RealtimeCommandBox = {
         .class_ = 0x01630005,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3464,7 +3464,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0001,
-        .caption = SELF(str_135),
+        .caption = SELF(RealtimeCommandBox_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -3473,19 +3473,19 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .dial = 0x0001,
         .selected = 0x0003E4AC,
         .data = 0x0003E4AE,
-        .on_str = SELF(str_134),
-        .off_str = SELF(str_133),
+        .on_str = SELF(RealtimeCommandBox_on_str),
+        .off_str = SELF(RealtimeCommandBox_off_str),
         .pman_adr = 0x00002281,
         .pman_out = 0x0001,
     },
 
-    .str_133 = " OFF ",
+    .RealtimeCommandBox_off_str = " OFF ",
 
-    .str_134 = " ON  ",
+    .RealtimeCommandBox_on_str = " ON  ",
 
-    .str_135 = "REALTIME COMMANDS :",
+    .RealtimeCommandBox_caption = "REALTIME COMMANDS :",
 
-    .v53_e3 = {
+    .ClockBox = {
         .class_ = 0x01630005,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3496,7 +3496,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0001,
-        .caption = SELF(str_138),
+        .caption = SELF(ClockBox_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -3505,17 +3505,17 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .dial = 0x0001,
         .selected = 0x0003E4B0,
         .data = 0x0003E4B2,
-        .on_str = SELF(str_137),
-        .off_str = SELF(str_136),
+        .on_str = SELF(ClockBox_on_str),
+        .off_str = SELF(ClockBox_off_str),
         .pman_adr = 0x00002200,
         .pman_out = 0x0001,
     },
 
-    .str_136 = ALIGNED_STRING(" INTERNAL "),
+    .ClockBox_off_str = ALIGNED_STRING(" INTERNAL "),
 
-    .str_137 = ALIGNED_STRING("   MIDI   "),
+    .ClockBox_on_str = ALIGNED_STRING("   MIDI   "),
 
-    .str_138 = ALIGNED_STRING("    CLOCK            :"),
+    .ClockBox_caption = ALIGNED_STRING("    CLOCK            :"),
 
     .v53_e4 = {
         .class_ = 0x0160002B,
@@ -3543,7 +3543,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .func = 0x01230001,
     },
 
-    .v54_e0 = {
+    .MidiCommonSetting = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -3561,7 +3561,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .w39_text = ALIGNED_STRING("COMMON SETTING"),
 
-    .v54_e1 = {
+    .ComSetGridBox = {
         .class_ = 0x01600056,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3583,14 +3583,14 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .pcol = 0x0003E4BC,
         .prow = 0x0003E4C0,
         .crow = 0x0003E4C4,
-        .fixedcol = SELF(str_142),
-        .fixedrow = SELF(str_141),
+        .fixedcol = SELF(ComSetGridBox_fixedcol),
+        .fixedrow = SELF(ComSetGridBox_fixedrow),
         .func = 0x0123000F,
     },
 
-    .str_141 = ALIGNED_STRING(" NOTE ONLY           :| PRG.CHANGE TO P.MEM :| REALTIME SYSEX      :| INTRO,FILLIN ENDING :| APC CONTROL         :| FADE IN/OUT         :| PROGRAM CHANGE MODE :| DRUMS TYPE          :| SONG SELECT         :"),
+    .ComSetGridBox_fixedrow = ALIGNED_STRING(" NOTE ONLY           :| PRG.CHANGE TO P.MEM :| REALTIME SYSEX      :| INTRO,FILLIN ENDING :| APC CONTROL         :| FADE IN/OUT         :| PROGRAM CHANGE MODE :| DRUMS TYPE          :| SONG SELECT         :"),
 
-    .str_142 = ALIGNED_STRING("     |  "),
+    .ComSetGridBox_fixedcol = ALIGNED_STRING("     |  "),
 
     .v54_e2 = {
         .class_ = 0x01600022,
@@ -3641,7 +3641,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .func = 0x0123000E,
     },
 
-    .v55_e0 = {
+    .MidiInOutSetting = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -3659,7 +3659,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .w42_text = ALIGNED_STRING("INPUT/OUTPUT SETTING"),
 
-    .v55_e1 = {
+    .InOutGridBox = {
         .class_ = 0x01630009,
         .super = 0,
         .sub = 2,
@@ -3681,14 +3681,14 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .pcol = 0x0003E4D0,
         .prow = 0x0003E4D4,
         .crow = 0x0003E4D8,
-        .fixedcol = SELF(str_146),
-        .fixedrow = SELF(str_145),
+        .fixedcol = SELF(InOutGridBox_fixedcol),
+        .fixedrow = SELF(InOutGridBox_fixedrow),
         .func = 0x01230034,
     },
 
-    .str_145 = ALIGNED_STRING(" RIGHT 1 INPUT          :| AUTO PLAY CHORD INPUT  :| VELOCITY INPUT         :| a|-| TECHNI-CHORD OUTPUT    :| TRANSPOSE OUTPUT       :| DRUM PATTERN OUTPUT    :| AUTO PLAY CHORD OUTPUT :"),
+    .InOutGridBox_fixedrow = ALIGNED_STRING(" RIGHT 1 INPUT          :| AUTO PLAY CHORD INPUT  :| VELOCITY INPUT         :| a|-| TECHNI-CHORD OUTPUT    :| TRANSPOSE OUTPUT       :| DRUM PATTERN OUTPUT    :| AUTO PLAY CHORD OUTPUT :"),
 
-    .str_146 = ALIGNED_STRING("     |  "),
+    .InOutGridBox_fixedcol = ALIGNED_STRING("     |  "),
 
     .v55_e2 = {
         .class_ = 0x01600022,
@@ -3739,7 +3739,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .func = 0x01230033,
     },
 
-    .v56_e0 = {
+    .MidiPresets = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -3757,7 +3757,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .w45_text = ALIGNED_STRING("MIDI PRESETS"),
 
-    .v56_e1 = {
+    .MdPresetPageBox = {
         .class_ = 0x01600025,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3797,7 +3797,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .window = 0x00560024,
     },
 
-    .v56_e4 = {
+    .MpstPageCtl1 = {
         .class_ = 0x01630002,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3810,7 +3810,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .window1 = 0x00560013,
     },
 
-    .v56_e5 = {
+    .MpstPageCtl2 = {
         .class_ = 0x01630002,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3834,7 +3834,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .func = 0x0123001F,
     },
 
-    .v56_e7 = {
+    .MidiPresetSlaveWithout = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 8,
@@ -3915,7 +3915,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .index = 0xFFFF,
     },
 
-    .v56_e12 = {
+    .MpstSlaveWithoutList = {
         .class_ = 0x01600055,
         .super = 11,
         .sub = NAKA_NONE,
@@ -3931,11 +3931,11 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .align = 0x0001,
         .row = 0x0006,
         .selected = 0x0003E4EA,
-        .list = SELF(str_172),
+        .list = SELF(MpstSlaveWithoutList_list),
         .dial = 0x0001,
     },
 
-    .str_172 = "Organ             ~95|Organ Fixed Touch ~95|PX Piano          ~95|Accordion         ~95|Bass Pedals       ~95|Ext. Sequencer    ~95",
+    .MpstSlaveWithoutList_list = "Organ             ~95|Organ Fixed Touch ~95|PX Piano          ~95|Accordion         ~95|Bass Pedals       ~95|Ext. Sequencer    ~95",
 
     .v56_e13 = {
         .class_ = 0x01600023,
@@ -4033,7 +4033,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .w53_text = ALIGNED_STRING("KN5000"),
 
-    .v56_e19 = {
+    .MidiPresetSlaveWith = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 20,
@@ -4061,7 +4061,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .index = 0xFFFF,
     },
 
-    .v56_e21 = {
+    .MpstSlaveWithList = {
         .class_ = 0x01600055,
         .super = 20,
         .sub = NAKA_NONE,
@@ -4077,11 +4077,11 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .align = 0x0001,
         .row = 0x0009,
         .selected = 0x0003E4F4,
-        .list = SELF(str_185),
+        .list = SELF(MpstSlaveWithList_list),
         .dial = 0x0001,
     },
 
-    .str_185 = ALIGNED_STRING("Organ 1            ~95|Organ 2            ~95|Organ 1 Fixed Touch~95|PX Piano           ~95|Accordion 1        ~95|Accordion 2        ~95|Accordion 3        ~95|Bass Pedals        ~95|Ext. Sequencer     ~95"),
+    .MpstSlaveWithList_list = ALIGNED_STRING("Organ 1            ~95|Organ 2            ~95|Organ 1 Fixed Touch~95|PX Piano           ~95|Accordion 1        ~95|Accordion 2        ~95|Accordion 3        ~95|Bass Pedals        ~95|Ext. Sequencer     ~95"),
 
     .v56_e22 = {
         .class_ = 0x01600069,
@@ -4232,7 +4232,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .w60_text = "VALUE",
 
-    .v56_e31 = {
+    .MidiPresetPage3 = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 32,
@@ -4247,7 +4247,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .child = 0x0003E4FA,
     },
 
-    .v56_e32 = {
+    .MdPresetUserLoadList = {
         .class_ = 0x01600055,
         .super = 31,
         .sub = NAKA_NONE,
@@ -4263,11 +4263,11 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .align = 0x0000,
         .row = 0x0003,
         .selected = 0x0003E4FE,
-        .list = SELF(str_202),
+        .list = SELF(MdPresetUserLoadList_list),
         .dial = 0x0001,
     },
 
-    .str_202 = ALIGNED_STRING(" USER 1 SETTING | USER 2 SETTING | USER 3 SETTING "),
+    .MdPresetUserLoadList_list = ALIGNED_STRING(" USER 1 SETTING | USER 2 SETTING | USER 3 SETTING "),
 
     .v56_e33 = {
         .class_ = 0x01600022,
@@ -4322,7 +4322,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .w63_text = "VALUE",
 
-    .v56_e36 = {
+    .MidiPresetPage4 = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 37,
@@ -4337,7 +4337,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .child = 0x0003E504,
     },
 
-    .v56_e37 = {
+    .MdPresetUserWriteList = {
         .class_ = 0x01600055,
         .super = 36,
         .sub = NAKA_NONE,
@@ -4353,11 +4353,11 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .align = 0x0000,
         .row = 0x0003,
         .selected = 0x0003E508,
-        .list = SELF(str_210),
+        .list = SELF(MdPresetUserWriteList_list),
         .dial = 0x0001,
     },
 
-    .str_210 = ALIGNED_STRING(" USER 1 SETTING | USER 2 SETTING | USER 3 SETTING "),
+    .MdPresetUserWriteList_list = ALIGNED_STRING(" USER 1 SETTING | USER 2 SETTING | USER 3 SETTING "),
 
     .v56_e38 = {
         .class_ = 0x01600022,
@@ -4412,7 +4412,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .w66_text = "WRITE",
 
-    .v56_e41 = {
+    .MdpstSplitBox = {
         .class_ = 0x01600044,
         .super = 36,
         .sub = NAKA_NONE,
@@ -4421,16 +4421,16 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .flag = 0x0008,
         .rect = { 8, 32, 227, 55 },
         .font = 0x00000000,
-        .stron = SELF(str_213),
-        .stroff = SELF(str_212),
+        .stron = SELF(MdpstSplitBox_stron),
+        .stroff = SELF(MdpstSplitBox_stroff),
         .onoff = 0x0003E50A,
         .editsw = 0x0088,
         .func = 0x01200000,
     },
 
-    .str_212 = "WITH SPLIT POINT ? : NO",
+    .MdpstSplitBox_stroff = "WITH SPLIT POINT ? : NO",
 
-    .str_213 = ALIGNED_STRING("WITH SPLIT POINT ? : YES"),
+    .MdpstSplitBox_stron = ALIGNED_STRING("WITH SPLIT POINT ? : YES"),
 
     .v56_e42 = {
         .class_ = 0x0160002B,
@@ -4447,7 +4447,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .w68_text = "VALUE",
 
-    .v56_e43 = {
+    .MidiPresetMasterWithout = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 44,
@@ -4475,7 +4475,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .index = 0xFFFF,
     },
 
-    .v56_e45 = {
+    .MpstMasterWithoutList = {
         .class_ = 0x01600055,
         .super = 44,
         .sub = NAKA_NONE,
@@ -4491,11 +4491,11 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .align = 0x0001,
         .row = 0x0003,
         .selected = 0x0003E514,
-        .list = SELF(str_223),
+        .list = SELF(MpstMasterWithoutList_list),
         .dial = 0x0001,
     },
 
-    .str_223 = ALIGNED_STRING("~95 Sound Module|~95 Vocalist|~95 Ext. Sequencer"),
+    .MpstMasterWithoutList_list = ALIGNED_STRING("~95 Sound Module|~95 Vocalist|~95 Ext. Sequencer"),
 
     .v56_e46 = {
         .class_ = 0x01600069,
@@ -4646,7 +4646,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .w75_text = "VALUE",
 
-    .v56_e55 = {
+    .MidiPresetMasterWith = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 56,
@@ -4674,7 +4674,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .index = 0xFFFF,
     },
 
-    .v56_e57 = {
+    .MpstMasterWithList = {
         .class_ = 0x01600055,
         .super = 56,
         .sub = NAKA_NONE,
@@ -4690,11 +4690,11 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .align = 0x0001,
         .row = 0x0003,
         .selected = 0x0003E51E,
-        .list = SELF(str_254),
+        .list = SELF(MpstMasterWithList_list),
         .dial = 0x0001,
     },
 
-    .str_254 = ALIGNED_STRING("~95 Sound Module|~95 Vocalist|~95 Ext. Sequencer"),
+    .MpstMasterWithList_list = ALIGNED_STRING("~95 Sound Module|~95 Vocalist|~95 Ext. Sequencer"),
 
     .v56_e58 = {
         .class_ = 0x01600020,
@@ -4845,7 +4845,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .w82_text = ALIGNED_STRING("KN5000"),
 
-    .v57_e0 = {
+    .MidiExclusive = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -4897,7 +4897,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .w85_text = ALIGNED_STRING("SEND"),
 
-    .v57_e3 = {
+    .ExcListBox = {
         .class_ = 0x01600055,
         .super = 0,
         .sub = NAKA_NONE,
@@ -4913,11 +4913,11 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .align = 0x0001,
         .row = 0x0006,
         .selected = 0x0003E524,
-        .list = SELF(str_278),
+        .list = SELF(ExcListBox_list),
         .dial = 0x0001,
     },
 
-    .str_278 = " PERFORMANCE | CURRENT PANEL + PANEL MEMORY | COMPOSER | SEQUENCER | MSP USER | SOUND MEMORY ",
+    .ExcListBox_list = " PERFORMANCE | CURRENT PANEL + PANEL MEMORY | COMPOSER | SEQUENCER | MSP USER | SOUND MEMORY ",
 
     .v57_e4 = {
         .class_ = 0x01600022,
@@ -4949,7 +4949,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .func = 0x01230017,
     },
 
-    .v57_e6 = {
+    .ExcSendWindow = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 7,
@@ -5009,7 +5009,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .w89_text = ALIGNED_STRING("PLEASE WAIT!"),
 
-    .v57_e10 = {
+    .ExcSendShowBox = {
         .class_ = 0x01600011,
         .super = 6,
         .sub = 11,
@@ -5022,7 +5022,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .index = 0xFFFF,
     },
 
-    .v57_e11 = {
+    .ExcSendPmemBox = {
         .class_ = 0x0160001B,
         .super = 10,
         .sub = NAKA_NONE,
@@ -5033,7 +5033,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0xFFFF,
-        .caption = SELF(str_282),
+        .caption = SELF(ExcSendPmemBox_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -5045,9 +5045,9 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .data = 0x0003E530,
     },
 
-    .str_282 = ALIGNED_STRING("PANEL MEMORY       :"),
+    .ExcSendPmemBox_caption = ALIGNED_STRING("PANEL MEMORY       :"),
 
-    .v57_e12 = {
+    .ExcSendSmemBox = {
         .class_ = 0x0160001B,
         .super = 10,
         .sub = NAKA_NONE,
@@ -5058,7 +5058,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0xFFFF,
-        .caption = SELF(str_283),
+        .caption = SELF(ExcSendSmemBox_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -5070,9 +5070,9 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .data = 0x0003E536,
     },
 
-    .str_283 = ALIGNED_STRING("SOUND MEMORY       :"),
+    .ExcSendSmemBox_caption = ALIGNED_STRING("SOUND MEMORY       :"),
 
-    .v57_e13 = {
+    .ExcSendCmpBox = {
         .class_ = 0x0160001B,
         .super = 10,
         .sub = NAKA_NONE,
@@ -5083,7 +5083,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0xFFFF,
-        .caption = SELF(str_284),
+        .caption = SELF(ExcSendCmpBox_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -5095,9 +5095,9 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .data = 0x0003E53C,
     },
 
-    .str_284 = ALIGNED_STRING("COMPOSER           :"),
+    .ExcSendCmpBox_caption = ALIGNED_STRING("COMPOSER           :"),
 
-    .v57_e14 = {
+    .ExcSendSeqBox = {
         .class_ = 0x0160001B,
         .super = 10,
         .sub = NAKA_NONE,
@@ -5108,7 +5108,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0xFFFF,
-        .caption = SELF(str_285),
+        .caption = SELF(ExcSendSeqBox_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -5120,9 +5120,9 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .data = 0x0003E542,
     },
 
-    .str_285 = ALIGNED_STRING("SEQUENCER          :"),
+    .ExcSendSeqBox_caption = ALIGNED_STRING("SEQUENCER          :"),
 
-    .v57_e15 = {
+    .ExcSendMspBox = {
         .class_ = 0x0160001B,
         .super = 10,
         .sub = NAKA_NONE,
@@ -5133,7 +5133,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0xFFFF,
-        .caption = SELF(str_286),
+        .caption = SELF(ExcSendMspBox_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -5145,9 +5145,9 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .data = 0x0003E548,
     },
 
-    .str_286 = ALIGNED_STRING("MSP USER           :"),
+    .ExcSendMspBox_caption = ALIGNED_STRING("MSP USER           :"),
 
-    .v57_e16 = {
+    .ExcSendDotBox = {
         .class_ = 0x0160004F,
         .super = 6,
         .sub = NAKA_NONE,
@@ -5165,7 +5165,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .data = 0x0003E54C,
     },
 
-    .v57_e17 = {
+    .ExcRcvWindow = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 18,
@@ -5225,7 +5225,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .w93_text = ALIGNED_STRING("PLEASE WAIT!"),
 
-    .v57_e21 = {
+    .ExcRcvShowBox = {
         .class_ = 0x01600011,
         .super = 17,
         .sub = 22,
@@ -5238,7 +5238,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .index = 0xFFFF,
     },
 
-    .v57_e22 = {
+    .ExcRcvPmemBox = {
         .class_ = 0x0160001B,
         .super = 21,
         .sub = NAKA_NONE,
@@ -5249,7 +5249,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0xFFFF,
-        .caption = SELF(str_292),
+        .caption = SELF(ExcRcvPmemBox_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -5261,9 +5261,9 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .data = 0x0003E55A,
     },
 
-    .str_292 = ALIGNED_STRING("PANEL MEMORY       :"),
+    .ExcRcvPmemBox_caption = ALIGNED_STRING("PANEL MEMORY       :"),
 
-    .v57_e23 = {
+    .ExcRcvSmemBox = {
         .class_ = 0x0160001B,
         .super = 21,
         .sub = NAKA_NONE,
@@ -5274,7 +5274,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0xFFFF,
-        .caption = SELF(str_293),
+        .caption = SELF(ExcRcvSmemBox_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -5286,9 +5286,9 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .data = 0x0003E560,
     },
 
-    .str_293 = ALIGNED_STRING("SOUND MEMORY       :"),
+    .ExcRcvSmemBox_caption = ALIGNED_STRING("SOUND MEMORY       :"),
 
-    .v57_e24 = {
+    .ExcRcvCmpBox = {
         .class_ = 0x0160001B,
         .super = 21,
         .sub = NAKA_NONE,
@@ -5299,7 +5299,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0xFFFF,
-        .caption = SELF(str_294),
+        .caption = SELF(ExcRcvCmpBox_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -5311,9 +5311,9 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .data = 0x0003E566,
     },
 
-    .str_294 = ALIGNED_STRING("COMPOSER           :"),
+    .ExcRcvCmpBox_caption = ALIGNED_STRING("COMPOSER           :"),
 
-    .v57_e25 = {
+    .ExcRcvSeqBox = {
         .class_ = 0x0160001B,
         .super = 21,
         .sub = NAKA_NONE,
@@ -5324,7 +5324,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0xFFFF,
-        .caption = SELF(str_295),
+        .caption = SELF(ExcRcvSeqBox_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -5336,9 +5336,9 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .data = 0x0003E56C,
     },
 
-    .str_295 = ALIGNED_STRING("SEQUENCER          :"),
+    .ExcRcvSeqBox_caption = ALIGNED_STRING("SEQUENCER          :"),
 
-    .v57_e26 = {
+    .ExcRcvMspBox = {
         .class_ = 0x0160001B,
         .super = 21,
         .sub = NAKA_NONE,
@@ -5349,7 +5349,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0xFFFF,
-        .caption = SELF(str_296),
+        .caption = SELF(ExcRcvMspBox_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -5361,9 +5361,9 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .data = 0x0003E572,
     },
 
-    .str_296 = ALIGNED_STRING("MSP USER           :"),
+    .ExcRcvMspBox_caption = ALIGNED_STRING("MSP USER           :"),
 
-    .v57_e27 = {
+    .ExcRcvDotBox = {
         .class_ = 0x0160004F,
         .super = 17,
         .sub = NAKA_NONE,
@@ -5381,7 +5381,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .data = 0x0003E576,
     },
 
-    .v58_e0 = {
+    .MidiGmMode = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -5399,7 +5399,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .w95_text = ALIGNED_STRING("GENERAL MIDI"),
 
-    .v58_e1 = {
+    .GMOnOffBox = {
         .class_ = 0x01630004,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5410,7 +5410,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .color = 0x00F5,
         .border = 0x00C1,
         .index = 0x0001,
-        .caption = SELF(str_301),
+        .caption = SELF(GMOnOffBox_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -5421,7 +5421,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .onoff = 0x0003E580,
     },
 
-    .str_301 = ALIGNED_STRING("GENERAL MIDI   :"),
+    .GMOnOffBox_caption = ALIGNED_STRING("GENERAL MIDI   :"),
 
     .v58_e2 = {
         .class_ = 0x01600022,
@@ -5472,7 +5472,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .func = 0x01230024,
     },
 
-    .v58_e5 = {
+    .GMONSure = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 6,
@@ -5602,7 +5602,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .rect = { 0, 0, 31, 31 },
     },
 
-    .v58_e13 = {
+    .GMOFFSure = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 14,
@@ -5732,7 +5732,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .func = 0x01230029,
     },
 
-    .v59_e0 = {
+    .MidiPcgOutput = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -5750,7 +5750,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .w104_text = "PROGRAM CHANGE MIDI OUT",
 
-    .v59_e1 = {
+    .PcgOutGridBox = {
         .class_ = 0x0163000B,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5772,14 +5772,14 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .pcol = 0x0003E59A,
         .prow = 0x0003E59E,
         .crow = 0x0003E5A2,
-        .fixedcol = SELF(str_334),
-        .fixedrow = SELF(str_333),
+        .fixedcol = SELF(PcgOutGridBox_fixedcol),
+        .fixedrow = SELF(PcgOutGridBox_fixedrow),
         .func = 0x0123000C,
     },
 
-    .str_333 = "  MIDI CHANNEL   :|  PROGRAM CHANGE :|  BANK MSB       :|  BANK LSB       :| ( BANK SELECT #=",
+    .PcgOutGridBox_fixedrow = "  MIDI CHANNEL   :|  PROGRAM CHANGE :|  BANK MSB       :|  BANK LSB       :| ( BANK SELECT #=",
 
-    .str_334 = "     |   ",
+    .PcgOutGridBox_fixedcol = "     |   ",
 
     .v59_e2 = {
         .class_ = 0x01600022,
@@ -5819,7 +5819,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .style = 0x0003,
     },
 
-    .str_335 = ALIGNED_STRING("SEND"),
+    .SEND_str = ALIGNED_STRING("SEND"),
 
     .v59_e5 = {
         .class_ = 0x01600064,
@@ -5832,7 +5832,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .func = 0x0123000B,
     },
 
-    .v5A_e0 = {
+    .MidiComputerConnection = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -5861,7 +5861,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .color = 0x00F5,
         .border = 0x00C1,
         .index = 0x0001,
-        .caption = SELF(str_339),
+        .caption = SELF(v5A_e1_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -5873,7 +5873,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .data = 0x0003E5AE,
     },
 
-    .str_339 = ALIGNED_STRING("MODE :"),
+    .v5A_e1_caption = ALIGNED_STRING("MODE :"),
 
     .v5A_e2 = {
         .class_ = 0x01600022,
@@ -5933,7 +5933,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .func = 0x01230005,
     },
 
-    .v5B_e0 = {
+    .MidiPanelMemoryOutput = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -6056,7 +6056,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .w118_text = "~95",
 
-    .v5B_e8 = {
+    .PmemOutLeft = {
         .class_ = 0x0163000C,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6078,16 +6078,16 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .pcol = 0x0003E5B8,
         .prow = 0x0003E5BC,
         .crow = 0x0003E5C0,
-        .fixedcol = SELF(str_343),
-        .fixedrow = SELF(str_342),
+        .fixedcol = SELF(PmemOutLeft_fixedcol),
+        .fixedrow = SELF(PmemOutLeft_fixedrow),
         .func = 0x01230011,
     },
 
-    .str_342 = ALIGNED_STRING("P.MEM:|ON/OFF:|-|PART:"),
+    .PmemOutLeft_fixedrow = ALIGNED_STRING("P.MEM:|ON/OFF:|-|PART:"),
 
-    .str_343 = " | ",
+    .PmemOutLeft_fixedcol = " | ",
 
-    .v5B_e9 = {
+    .PmemOutRight = {
         .class_ = 0x0163000D,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6109,14 +6109,14 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .pcol = 0x0003E5C8,
         .prow = 0x0003E5CC,
         .crow = 0x0003E5D0,
-        .fixedcol = SELF(str_346),
-        .fixedrow = SELF(str_345),
+        .fixedcol = SELF(PmemOutRight_fixedcol),
+        .fixedrow = SELF(PmemOutRight_fixedrow),
         .func = 0x01230012,
     },
 
-    .str_345 = ALIGNED_STRING("PRG. CHANGE:|BANK:|VOLUME:"),
+    .PmemOutRight_fixedrow = ALIGNED_STRING("PRG. CHANGE:|BANK:|VOLUME:"),
 
-    .str_346 = ALIGNED_STRING("  | "),
+    .PmemOutRight_fixedcol = ALIGNED_STRING("  | "),
 
     .v5B_e10 = {
         .class_ = 0x0160001F,
@@ -6237,7 +6237,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .func = 0x01230010,
     },
 
-    .v5C_e0 = {
+    .MidiSetup = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -6255,7 +6255,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .w119_text = "MIDI SETTINGS LOAD OPTION",
 
-    .v5C_e1 = {
+    .MdSetOptGridBox = {
         .class_ = 0x0163000A,
         .super = 0,
         .sub = 2,
@@ -6277,14 +6277,14 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .pcol = 0x0003E5DC,
         .prow = 0x0003E5E0,
         .crow = 0x0003E5E4,
-        .fixedcol = SELF(str_353),
-        .fixedrow = SELF(str_352),
+        .fixedcol = SELF(MdSetOptGridBox_fixedcol),
+        .fixedrow = SELF(MdSetOptGridBox_fixedrow),
         .func = 0x01230009,
     },
 
-    .str_352 = " |-|From Registration file :|From Sequencer song    :|-| |-|GM mode is ON          :|GM mode is OFF         :",
+    .MdSetOptGridBox_fixedrow = " |-|From Registration file :|From Sequencer song    :|-| |-|GM mode is ON          :|GM mode is OFF         :",
 
-    .str_353 = "    |  ",
+    .MdSetOptGridBox_fixedcol = "    |  ",
 
     .v5C_e2 = {
         .class_ = 0x0160002B,
@@ -6384,7 +6384,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .func = 0x01230008,
     },
 
-    .vD7_e0 = {
+    .EntertainerVocal = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -6426,7 +6426,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .window = 0x00D7000D,
     },
 
-    .vD7_e3 = {
+    .VocalistPage = {
         .class_ = 0x01600025,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6453,7 +6453,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .func = 0x0123002D,
     },
 
-    .vD7_e5 = {
+    .VocalistPage1 = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 6,
@@ -6530,7 +6530,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .func = 0x0123002F,
     },
 
-    .vD7_e10 = {
+    .VocalistListBox = {
         .class_ = 0x01630001,
         .super = 5,
         .sub = NAKA_NONE,
@@ -6546,11 +6546,11 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .align = 0x0001,
         .row = 0x0006,
         .selected = 0x0003E5F6,
-        .list = SELF(str_366),
+        .list = SELF(VocalistListBox_list),
         .dial = 0x0001,
     },
 
-    .str_366 = " CHORD  ~95 CHORDAL PROGRAM      | RIGHT1 ~95 CHORDAL PROGRAM      | CHORD  ~95 VOCODER PROGRAM      | RIGHT1 ~95 VOCODER PROGRAM      | TECHNI-CHORD(PART4) ~95 VOCODER | SMF HARMONY CHANNEL ~95 VOCODER ",
+    .VocalistListBox_list = " CHORD  ~95 CHORDAL PROGRAM      | RIGHT1 ~95 CHORDAL PROGRAM      | CHORD  ~95 VOCODER PROGRAM      | RIGHT1 ~95 VOCODER PROGRAM      | TECHNI-CHORD(PART4) ~95 VOCODER | SMF HARMONY CHANNEL ~95 VOCODER ",
 
     .vD7_e11 = {
         .class_ = 0x01600022,
@@ -6571,7 +6571,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .style = 0x000E,
     },
 
-    .vD7_e12 = {
+    .HarmOnOffBox = {
         .class_ = 0x01630000,
         .super = 5,
         .sub = NAKA_NONE,
@@ -6580,18 +6580,18 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .flag = 0x0008,
         .rect = { 8, 199, 207, 222 },
         .font = 0x00000000,
-        .stron = SELF(str_369),
-        .stroff = SELF(str_368),
+        .stron = SELF(HarmOnOffBox_stron),
+        .stroff = SELF(HarmOnOffBox_stroff),
         .onoff = 0x0003E5F8,
         .editsw = 0x008C,
         .func = 0x0123002C,
     },
 
-    .str_368 = "HARMONY PART LOCAL: OFF",
+    .HarmOnOffBox_stroff = "HARMONY PART LOCAL: OFF",
 
-    .str_369 = ALIGNED_STRING("HARMONY PART LOCAL: ON"),
+    .HarmOnOffBox_stron = ALIGNED_STRING("HARMONY PART LOCAL: ON"),
 
-    .vD7_e13 = {
+    .VocalistPage2 = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 14,
@@ -6606,7 +6606,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .child = 0x0003E5FE,
     },
 
-    .vD7_e14 = {
+    .VocalistPage2Box = {
         .class_ = 0x01630008,
         .super = 13,
         .sub = 15,
@@ -6628,14 +6628,14 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .pcol = 0x0003E606,
         .prow = 0x0003E60A,
         .crow = 0x0003E60E,
-        .fixedcol = SELF(str_373),
-        .fixedrow = SELF(str_372),
+        .fixedcol = SELF(VocalistPage2Box_fixedcol),
+        .fixedrow = SELF(VocalistPage2Box_fixedrow),
         .func = 0x0123002E,
     },
 
-    .str_372 = " |-|MIDI CHANNEL|PROGRAM     |HARMONY     |KEY         |P.CNG OPTION|CONTROL VOL.|-| |VOCODER     |CHORDAL     ",
+    .VocalistPage2Box_fixedrow = " |-|MIDI CHANNEL|PROGRAM     |HARMONY     |KEY         |P.CNG OPTION|CONTROL VOL.|-| |VOCODER     |CHORDAL     ",
 
-    .str_373 = ALIGNED_STRING("     |    |   "),
+    .VocalistPage2Box_fixedcol = ALIGNED_STRING("     |    |   "),
 
     .vD7_e15 = {
         .class_ = 0x0160002B,
@@ -6788,7 +6788,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .style = 0x000E,
     },
 
-    .vD8_e0 = {
+    .EntertainerFade = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -6806,7 +6806,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .w141_text = "FADE IN/OUT SETTING",
 
-    .vD8_e1 = {
+    .FadeInOutGridBox = {
         .class_ = 0x01630007,
         .super = 0,
         .sub = 2,
@@ -6828,14 +6828,14 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .pcol = 0x0003E61A,
         .prow = 0x0003E61E,
         .crow = 0x0003E622,
-        .fixedcol = SELF(str_377),
-        .fixedrow = SELF(str_376),
+        .fixedcol = SELF(FadeInOutGridBox_fixedcol),
+        .fixedrow = SELF(FadeInOutGridBox_fixedrow),
         .func = 0x01230032,
     },
 
-    .str_376 = ALIGNED_STRING(" |  Time             :| |  Time             :|  Auto reset       :|  Rhythm Auto stop :|  SEQ Auto stop    :"),
+    .FadeInOutGridBox_fixedrow = ALIGNED_STRING(" |  Time             :| |  Time             :|  Auto reset       :|  Rhythm Auto stop :|  SEQ Auto stop    :"),
 
-    .str_377 = ALIGNED_STRING("   |  "),
+    .FadeInOutGridBox_fixedcol = ALIGNED_STRING("   |  "),
 
     .vD8_e2 = {
         .class_ = 0x0160002B,
@@ -6927,7 +6927,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         .func = 0x01230031,
     },
 
-    .vEC_e0 = {
+    .SplitSetting = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -7019,16 +7019,16 @@ const naka_midi_reverb_t naka_midi_reverb_data
     },
 
     .ptrs_0 = {
-        SELF(v9_e0),
+        SELF(ReverbEqualizerMenu),
         SELF(v9_e1),
         SELF(v9_e2),
         SELF(v9_e3),
         0x00000000,
-        SELF(vF_e0),
+        SELF(R12OctaveSetting),
         SELF(vF_e1),
         SELF(vF_e2),
         0x00000000,
-        SELF(v18_e0),
+        SELF(ReverbPreset),
         SELF(v18_e1),
         SELF(v18_e2),
         SELF(v18_e3),
@@ -7041,7 +7041,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         SELF(v18_e10),
         SELF(v18_e11),
         0x00000000,
-        SELF(v19_e0),
+        SELF(EqualizerPreset),
         SELF(v19_e1),
         SELF(v19_e2),
         SELF(v19_e3),
@@ -7052,9 +7052,9 @@ const naka_midi_reverb_t naka_midi_reverb_data
         SELF(v19_e8),
         SELF(v19_e9),
         SELF(v19_e10),
-        SELF(v19_e11),
+        SELF(EqOnOffBox),
         0x00000000,
-        SELF(v1A_e0),
+        SELF(ReverbEqualizerPreset),
         SELF(v1A_e1),
         SELF(v1A_e2),
         SELF(v1A_e3),
@@ -7064,16 +7064,16 @@ const naka_midi_reverb_t naka_midi_reverb_data
         SELF(v1A_e7),
         SELF(v1A_e8),
         SELF(v1A_e9),
-        SELF(v1A_e10),
+        SELF(RevEqOnOffBox),
         SELF(v1A_e11),
         0x00000000,
-        SELF(v50_e0),
-        SELF(v50_e1),
+        SELF(MidiMenu),
+        SELF(MdmenuPage),
         SELF(v50_e2),
         SELF(v50_e3),
         SELF(v50_e4),
         SELF(v50_e5),
-        SELF(v50_e6),
+        SELF(MidiMenuPage1),
         SELF(v50_e7),
         SELF(v50_e8),
         SELF(v50_e9),
@@ -7084,68 +7084,68 @@ const naka_midi_reverb_t naka_midi_reverb_data
         SELF(v50_e14),
         SELF(v50_e15),
         SELF(v50_e16),
-        SELF(v50_e17),
+        SELF(MidiMenuPage2),
         SELF(v50_e18),
         SELF(v50_e19),
         0x00000000,
-        SELF(v51_e0),
-        SELF(v51_e1),
+        SELF(MidiPartSetting),
+        SELF(MdPartSetGridBox),
         SELF(v51_e2),
         SELF(v51_e3),
         SELF(v51_e4),
         SELF(v51_e5),
         SELF(v51_e6),
         0x00000000,
-        SELF(v52_e0),
+        SELF(MidiControlMessage),
         SELF(v52_e1),
-        SELF(v52_e2),
+        SELF(CtlMsgGridBox),
         SELF(v52_e3),
         SELF(v52_e4),
         SELF(v52_e5),
         SELF(v52_e6),
         SELF(v52_e7),
         0x00000000,
-        SELF(v53_e0),
+        SELF(MidiRealtimeMessage),
         SELF(v53_e1),
-        SELF(v53_e2),
-        SELF(v53_e3),
+        SELF(RealtimeCommandBox),
+        SELF(ClockBox),
         SELF(v53_e4),
         SELF(v53_e5),
         0x00000000,
-        SELF(v54_e0),
-        SELF(v54_e1),
+        SELF(MidiCommonSetting),
+        SELF(ComSetGridBox),
         SELF(v54_e2),
         SELF(v54_e3),
         SELF(v54_e4),
         0x00000000,
-        SELF(v55_e0),
-        SELF(v55_e1),
+        SELF(MidiInOutSetting),
+        SELF(InOutGridBox),
         SELF(v55_e2),
         SELF(v55_e3),
         SELF(v55_e4),
         0x00000000,
-        SELF(v56_e0),
-        SELF(v56_e1),
+        SELF(MidiPresets),
+        SELF(MdPresetPageBox),
         SELF(v56_e2),
         SELF(v56_e3),
-        SELF(v56_e4),
-        SELF(v56_e5),
+        SELF(MpstPageCtl1),
+        SELF(MpstPageCtl2),
         SELF(v56_e6),
-        SELF(v56_e7),
+        SELF(MidiPresetSlaveWithout),
         SELF(v56_e8),
         SELF(v56_e9),
         SELF(v56_e10),
         SELF(v56_e11),
-        SELF(v56_e12),
+        SELF(MpstSlaveWithoutList),
         SELF(v56_e13),
         SELF(v56_e14),
         SELF(v56_e15),
         SELF(v56_e16),
         SELF(v56_e17),
         SELF(v56_e18),
-        SELF(v56_e19),
+        SELF(MidiPresetSlaveWith),
         SELF(v56_e20),
-        SELF(v56_e21),
+        SELF(MpstSlaveWithList),
         SELF(v56_e22),
         SELF(v56_e23),
         SELF(v56_e24),
@@ -7155,21 +7155,21 @@ const naka_midi_reverb_t naka_midi_reverb_data
         SELF(v56_e28),
         SELF(v56_e29),
         SELF(v56_e30),
-        SELF(v56_e31),
-        SELF(v56_e32),
+        SELF(MidiPresetPage3),
+        SELF(MdPresetUserLoadList),
         SELF(v56_e33),
         SELF(v56_e34),
         SELF(v56_e35),
-        SELF(v56_e36),
+        SELF(MidiPresetPage4),
         0x00E57D62,
         SELF(v56_e38),
         SELF(v56_e39),
         SELF(v56_e40),
-        SELF(v56_e41),
+        SELF(MdpstSplitBox),
         SELF(v56_e42),
-        SELF(v56_e43),
+        SELF(MidiPresetMasterWithout),
         SELF(v56_e44),
-        SELF(v56_e45),
+        SELF(MpstMasterWithoutList),
         SELF(v56_e46),
         SELF(v56_e47),
         SELF(v56_e48),
@@ -7179,9 +7179,9 @@ const naka_midi_reverb_t naka_midi_reverb_data
         SELF(v56_e52),
         SELF(v56_e53),
         SELF(v56_e54),
-        SELF(v56_e55),
+        SELF(MidiPresetMasterWith),
         SELF(v56_e56),
-        SELF(v56_e57),
+        SELF(MpstMasterWithList),
         SELF(v56_e58),
         SELF(v56_e59),
         SELF(v56_e60),
@@ -7192,41 +7192,41 @@ const naka_midi_reverb_t naka_midi_reverb_data
         SELF(v56_e65),
         SELF(v56_e66),
         0x00000000,
-        SELF(v57_e0),
+        SELF(MidiExclusive),
         SELF(v57_e1),
         SELF(v57_e2),
-        SELF(v57_e3),
+        SELF(ExcListBox),
         SELF(v57_e4),
         SELF(v57_e5),
-        SELF(v57_e6),
+        SELF(ExcSendWindow),
         SELF(v57_e7),
         SELF(v57_e8),
         SELF(v57_e9),
-        SELF(v57_e10),
-        SELF(v57_e11),
-        SELF(v57_e12),
-        SELF(v57_e13),
-        SELF(v57_e14),
-        SELF(v57_e15),
-        SELF(v57_e16),
-        SELF(v57_e17),
+        SELF(ExcSendShowBox),
+        SELF(ExcSendPmemBox),
+        SELF(ExcSendSmemBox),
+        SELF(ExcSendCmpBox),
+        SELF(ExcSendSeqBox),
+        SELF(ExcSendMspBox),
+        SELF(ExcSendDotBox),
+        SELF(ExcRcvWindow),
         SELF(v57_e18),
         SELF(v57_e19),
         SELF(v57_e20),
-        SELF(v57_e21),
-        SELF(v57_e22),
-        SELF(v57_e23),
-        SELF(v57_e24),
-        SELF(v57_e25),
-        SELF(v57_e26),
-        SELF(v57_e27),
+        SELF(ExcRcvShowBox),
+        SELF(ExcRcvPmemBox),
+        SELF(ExcRcvSmemBox),
+        SELF(ExcRcvCmpBox),
+        SELF(ExcRcvSeqBox),
+        SELF(ExcRcvMspBox),
+        SELF(ExcRcvDotBox),
         0x00000000,
-        SELF(v58_e0),
-        SELF(v58_e1),
+        SELF(MidiGmMode),
+        SELF(GMOnOffBox),
         SELF(v58_e2),
         SELF(v58_e3),
         SELF(v58_e4),
-        SELF(v58_e5),
+        SELF(GMONSure),
         SELF(v58_e6),
         SELF(v58_e7),
         SELF(v58_e8),
@@ -7234,7 +7234,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         SELF(v58_e10),
         SELF(v58_e11),
         SELF(v58_e12),
-        SELF(v58_e13),
+        SELF(GMOFFSure),
         SELF(v58_e14),
         SELF(v58_e15),
         SELF(v58_e16),
@@ -7243,8 +7243,8 @@ const naka_midi_reverb_t naka_midi_reverb_data
         SELF(v58_e19),
         SELF(v58_e20),
         0x00000000,
-        SELF(v59_e0),
-        SELF(v59_e1),
+        SELF(MidiPcgOutput),
+        SELF(PcgOutGridBox),
         SELF(v59_e2),
         SELF(v59_e3),
     },
@@ -7256,14 +7256,14 @@ const naka_midi_reverb_t naka_midi_reverb_data
     .ptrs_1 = {
         SELF(v59_e5),
         0x00000000,
-        SELF(v5A_e0),
+        SELF(MidiComputerConnection),
         SELF(v5A_e1),
         SELF(v5A_e2),
         SELF(v5A_e3),
         SELF(v5A_e4),
         SELF(v5A_e5),
         0x00000000,
-        SELF(v5B_e0),
+        SELF(MidiPanelMemoryOutput),
         SELF(v5B_e1),
         SELF(v5B_e2),
         SELF(v5B_e3),
@@ -7271,8 +7271,8 @@ const naka_midi_reverb_t naka_midi_reverb_data
         SELF(v5B_e5),
         SELF(v5B_e6),
         SELF(v5B_e7),
-        SELF(v5B_e8),
-        SELF(v5B_e9),
+        SELF(PmemOutLeft),
+        SELF(PmemOutRight),
         SELF(v5B_e10),
         SELF(v5B_e11),
         SELF(v5B_e12),
@@ -7281,8 +7281,8 @@ const naka_midi_reverb_t naka_midi_reverb_data
         SELF(v5B_e15),
         SELF(v5B_e16),
         0x00000000,
-        SELF(v5C_e0),
-        SELF(v5C_e1),
+        SELF(MidiSetup),
+        SELF(MdSetOptGridBox),
         SELF(v5C_e2),
         SELF(v5C_e3),
         SELF(v5C_e4),
@@ -7290,21 +7290,21 @@ const naka_midi_reverb_t naka_midi_reverb_data
         SELF(v5C_e6),
         SELF(v5C_e7),
         0x00000000,
-        SELF(vD7_e0),
+        SELF(EntertainerVocal),
         SELF(vD7_e1),
         SELF(vD7_e2),
-        SELF(vD7_e3),
+        SELF(VocalistPage),
         SELF(vD7_e4),
-        SELF(vD7_e5),
+        SELF(VocalistPage1),
         SELF(vD7_e6),
         SELF(vD7_e7),
         SELF(vD7_e8),
         SELF(vD7_e9),
-        SELF(vD7_e10),
+        SELF(VocalistListBox),
         SELF(vD7_e11),
-        SELF(vD7_e12),
-        SELF(vD7_e13),
-        SELF(vD7_e14),
+        SELF(HarmOnOffBox),
+        SELF(VocalistPage2),
+        SELF(VocalistPage2Box),
         SELF(vD7_e15),
         SELF(vD7_e16),
         SELF(vD7_e17),
@@ -7315,8 +7315,8 @@ const naka_midi_reverb_t naka_midi_reverb_data
         SELF(vD7_e22),
         SELF(vD7_e23),
         0x00000000,
-        SELF(vD8_e0),
-        SELF(vD8_e1),
+        SELF(EntertainerFade),
+        SELF(FadeInOutGridBox),
         SELF(vD8_e2),
         SELF(vD8_e3),
         SELF(vD8_e4),
@@ -7324,7 +7324,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
         SELF(vD8_e6),
         SELF(vD8_e7),
         0x00000000,
-        SELF(vEC_e0),
+        SELF(SplitSetting),
         SELF(vEC_e1),
         SELF(vEC_e2),
         SELF(vEC_e3),
@@ -7349,7 +7349,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
     .w149_name = "ReverbEqualizerMenu",
 
     .ptrs_2 = {
-        SELF(str_398),
+        SELF(R12OctaveSetting_str),
         SELF(str_397),
         SELF(str_396),
         SELF(str_395),
@@ -7361,7 +7361,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .str_397 = ALIGNED_STRING(""),
 
-    .str_398 = ALIGNED_STRING("R12OctaveSetting"),
+    .R12OctaveSetting_str = ALIGNED_STRING("R12OctaveSetting"),
 
     .ptrs_3 = {
         SELF(w150_name),
@@ -7490,7 +7490,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
     .w154_name = "ReverbEqualizerPreset",
 
     .ptrs_6 = {
-        SELF(str_442),
+        SELF(MidiMenu_str),
         SELF(w157_name),
         SELF(w157_code),
         SELF(str_441),
@@ -7553,10 +7553,10 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .w157_name = ALIGNED_STRING("MdmenuPage"),
 
-    .str_442 = ALIGNED_STRING("MidiMenu"),
+    .MidiMenu_str = ALIGNED_STRING("MidiMenu"),
 
     .ptrs_7 = {
-        SELF(str_448),
+        SELF(MidiPartSetting_str),
         SELF(w158_name),
         SELF(w158_code),
         SELF(str_447),
@@ -7580,7 +7580,7 @@ const naka_midi_reverb_t naka_midi_reverb_data
 
     .w158_name = ALIGNED_STRING("MdPartSetGridBox"),
 
-    .str_448 = "MidiPartSetting",
+    .MidiPartSetting_str = "MidiPartSetting",
 
 };
 

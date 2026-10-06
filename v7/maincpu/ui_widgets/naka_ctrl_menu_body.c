@@ -1059,13 +1059,13 @@ typedef struct __attribute__((packed)) {
 
 typedef struct __attribute__((packed)) {
     /* element 0 of Viewable slot 0x41 "ControlIni": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v41_e0;
+    naka_cls_TtlScreen_t ControlIni;
     char w0_text[8];
     /* element 1 of Viewable slot 0x41: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t v41_e1;
     /* element 2 of Viewable slot 0x41 "SYSINI": AcListBox (class id 0x01600055) */
-    naka_cls_AcListBox_t v41_e2;
-    char str_3[172];
+    naka_cls_AcListBox_t SYSINI;
+    char SYSINI_list[172];
     /* element 3 of Viewable slot 0x41: AcFuncEditSw (class id 0x01600020) */
     naka_cls_AcFuncEditSw_t v41_e3;
     /* element 4 of Viewable slot 0x41: IvShowHide (class id 0x01600064) */
@@ -1076,7 +1076,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_TtlScreen_t v41_e6;
     char w3_text[8];
     /* element 7 of Viewable slot 0x41 "SYSINISURE": Screen (class id 0x01600033) */
-    naka_cls_Screen_t v41_e7;
+    naka_cls_Screen_t SYSINISURE;
     /* element 8 of Viewable slot 0x41: Label (class id 0x0160002B) */
     naka_cls_Label_t v41_e8;
     char w5_text[8];
@@ -1097,12 +1097,12 @@ typedef struct __attribute__((packed)) {
     /* element 16 of Viewable slot 0x41: IvShowHide (class id 0x01600064) */
     naka_cls_IvShowHide_t v41_e16;
     /* element 0 of Viewable slot 0x42 "ControlFsw": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v42_e0;
+    naka_cls_TtlScreen_t ControlFsw;
     char w9_text[18];
     /* element 1 of Viewable slot 0x42: AcFSWAssGridBox (class id 0x01620010) */
     naka_cls_AcFSWAssGridBox_t v42_e1;
-    char str_19[108];
-    char str_20[32];
+    char v42_e1_fixedrow[108];
+    char v42_e1_fixedcol[32];
     /* element 2 of Viewable slot 0x42: Label (class id 0x0160002B) */
     naka_cls_Label_t v42_e2;
     char w10_text[12];
@@ -1114,12 +1114,12 @@ typedef struct __attribute__((packed)) {
     /* element 5 of Viewable slot 0x42: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t v42_e5;
     /* element 0 of Viewable slot 0x43 "ControlSns": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v43_e0;
+    naka_cls_TtlScreen_t ControlSns;
     char w14_text[26];
     /* element 1 of Viewable slot 0x43: AcTchSensGridBox (class id 0x0162000F) */
     naka_cls_AcTchSensGridBox_t v43_e1;
-    char str_23[122];
-    char str_24[10];
+    char v43_e1_fixedrow[122];
+    char v43_e1_fixedcol[10];
     /* element 2 of Viewable slot 0x43: Label (class id 0x0160002B) */
     naka_cls_Label_t v43_e2;
     char w15_text[14];
@@ -1200,7 +1200,7 @@ typedef struct __attribute__((packed)) {
     /* element 4 of Viewable slot 0x45: IvIntEasySet (class id 0x01600063) */
     naka_cls_IvIntEasySet_t v45_e4;
     /* element 5 of Viewable slot 0x45 "PMEM1": Window (class id 0x01600035) */
-    naka_cls_Window_t v45_e5;
+    naka_cls_Window_t PMEM1;
     /* element 6 of Viewable slot 0x45: PmemModeBox (class id 0x0162000B) */
     naka_cls_PmemModeBox_t v45_e6;
     /* element 7 of Viewable slot 0x45: EditSw (class id 0x01600030) */
@@ -1220,11 +1220,11 @@ typedef struct __attribute__((packed)) {
     /* element 12 of Viewable slot 0x45: AcLanguageText (class id 0x01600066) */
     naka_cls_AcLanguageText_t v45_e12;
     /* element 13 of Viewable slot 0x45 "PMEM2": Window (class id 0x01600035) */
-    naka_cls_Window_t v45_e13;
+    naka_cls_Window_t PMEM2;
     /* element 14 of Viewable slot 0x45: AcPmExpFilterGridBox (class id 0x01620011) */
     naka_cls_AcPmExpFilterGridBox_t v45_e14;
-    char str_50[128];
-    char str_51[10];
+    char v45_e14_fixedrow[128];
+    char v45_e14_fixedcol[10];
     /* element 15 of Viewable slot 0x45: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t v45_e15;
     /* element 16 of Viewable slot 0x45: AcIndexWideES (class id 0x01600022) */
@@ -1235,12 +1235,12 @@ typedef struct __attribute__((packed)) {
     /* element 18 of Viewable slot 0x45: Window (class id 0x01600035) */
     naka_cls_Window_t v45_e18;
     /* element 0 of Viewable slot 0x47 "ControlSys": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v47_e0;
+    naka_cls_TtlScreen_t ControlSys;
     char w42_text[18];
     /* element 1 of Viewable slot 0x47: AcDispTimeSetGridBox (class id 0x01620012) */
     naka_cls_AcDispTimeSetGridBox_t v47_e1;
-    char str_58[98];
-    char str_59[6];
+    char v47_e1_fixedrow[98];
+    char v47_e1_fixedcol[6];
     /* element 2 of Viewable slot 0x47: Label (class id 0x0160002B) */
     naka_cls_Label_t v47_e2;
     char w43_text[14];
@@ -1260,14 +1260,14 @@ typedef struct __attribute__((packed)) {
     naka_cls_AcTitleMenu_t v48_e1;
     char w49_text[6];
     /* element 2 of Viewable slot 0x48 "ControlWallSet": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v48_e2;
+    naka_cls_TtlScreen_t ControlWallSet;
     char w50_text[18];
     /* element 3 of Viewable slot 0x48: AcTitleMenu (class id 0x0160001D) */
     naka_cls_AcTitleMenu_t v48_e3;
     char w51_text[6];
     /* element 4 of Viewable slot 0x48: AcRamEditBox (class id 0x0160001B) */
     naka_cls_AcRamEditBox_t v48_e4;
-    char str_62[22];
+    char v48_e4_caption[22];
     /* element 5 of Viewable slot 0x48: Label (class id 0x0160002B) */
     naka_cls_Label_t v48_e5;
     char w52_text[12];
@@ -1276,10 +1276,10 @@ typedef struct __attribute__((packed)) {
     char w53_text[20];
     /* element 7 of Viewable slot 0x48: AcRamEditBox (class id 0x0160001B) */
     naka_cls_AcRamEditBox_t v48_e7;
-    char str_64[22];
+    char v48_e7_caption[22];
     /* element 8 of Viewable slot 0x48: AcRamEditBox (class id 0x0160001B) */
     naka_cls_AcRamEditBox_t v48_e8;
-    char str_65[22];
+    char v48_e8_caption[22];
     /* element 9 of Viewable slot 0x48: AcFuncEditSw (class id 0x01600020) */
     naka_cls_AcFuncEditSw_t v48_e9;
     /* element 10 of Viewable slot 0x48: Label (class id 0x0160002B) */
@@ -1295,7 +1295,7 @@ typedef struct __attribute__((packed)) {
     /* element 14 of Viewable slot 0x48: IvShowHide (class id 0x01600064) */
     naka_cls_IvShowHide_t v48_e14;
     /* element 15 of Viewable slot 0x48 "WALLSETSURE": Screen (class id 0x01600033) */
-    naka_cls_Screen_t v48_e15;
+    naka_cls_Screen_t WALLSETSURE;
     /* element 16 of Viewable slot 0x48: Box (class id 0x01600031) */
     naka_cls_Box_t v48_e16;
     /* element 17 of Viewable slot 0x48: AcLanguageText (class id 0x01600066) */
@@ -1316,7 +1316,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t v48_e24;
     char w63_text[18];
     /* element 0 of Viewable slot 0xC0 "ONETCH": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vC0_e0;
+    naka_cls_TtlScreen_t ONETCH;
     char w64_text[2];
     /* element 1 of Viewable slot 0xC0: Label (class id 0x0160002B) */
     naka_cls_Label_t vC0_e1;
@@ -1326,7 +1326,7 @@ typedef struct __attribute__((packed)) {
     /* element 3 of Viewable slot 0xC0: IvExitMode (class id 0x01600048) */
     naka_cls_IvExitMode_t vC0_e3;
     /* element 0 of Viewable slot 0xC1 "MUSICSTYL": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vC1_e0;
+    naka_cls_TtlScreen_t MUSICSTYL;
     char w67_text[14];
     /* element 1 of Viewable slot 0xC1: AcTitleMenu (class id 0x0160001D) */
     naka_cls_AcTitleMenu_t vC1_e1;
@@ -1337,7 +1337,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_AcTitleMenu_t vC1_e3;
     char w70_text[20];
     /* element 0 of Viewable slot 0xC2 "MSCTSEL": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vC2_e0;
+    naka_cls_TtlScreen_t MSCTSEL;
     char w71_text[16];
     /* element 1 of Viewable slot 0xC2: IvMstStyleWindowPgCtl (class id 0x0162000E) */
     naka_cls_IvMstStyleWindowPgCtl_t vC2_e1;
@@ -1346,11 +1346,11 @@ typedef struct __attribute__((packed)) {
     /* element 3 of Viewable slot 0xC2: IvPageControl (class id 0x01600028) */
     naka_cls_IvPageControl_t vC2_e3;
     /* element 4 of Viewable slot 0xC2 "STYLE1": Window (class id 0x01600035) */
-    naka_cls_Window_t vC2_e4;
+    naka_cls_Window_t STYLE1;
     /* element 5 of Viewable slot 0xC2: AcMstStyle1GridBox (class id 0x01620015) */
     naka_cls_AcMstStyle1GridBox_t vC2_e5;
-    char str_92[20];
-    char str_93[4];
+    char vC2_e5_fixedrow[20];
+    char vC2_e5_fixedcol[4];
     /* element 6 of Viewable slot 0xC2: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t vC2_e6;
     /* element 7 of Viewable slot 0xC2: VwEditSwBox (class id 0x0160003E) */
@@ -1361,19 +1361,19 @@ typedef struct __attribute__((packed)) {
     char w74_text[14];
     /* element 9 of Viewable slot 0xC2: AcMstStyle1SubGridBox (class id 0x01620016) */
     naka_cls_AcMstStyle1SubGridBox_t vC2_e9;
-    char str_96[20];
-    char str_97[4];
+    char vC2_e9_fixedrow[20];
+    char vC2_e9_fixedcol[4];
     /* element 10 of Viewable slot 0xC2: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t vC2_e10;
     /* element 11 of Viewable slot 0xC2: Label (class id 0x0160002B) */
     naka_cls_Label_t vC2_e11;
     char w76_text[14];
     /* element 12 of Viewable slot 0xC2 "STYLE2": Window (class id 0x01600035) */
-    naka_cls_Window_t vC2_e12;
+    naka_cls_Window_t STYLE2;
     /* element 13 of Viewable slot 0xC2: AcMstStyle2GridBox (class id 0x01620017) */
     naka_cls_AcMstStyle2GridBox_t vC2_e13;
-    char str_102[18];
-    char str_103[4];
+    char vC2_e13_fixedrow[18];
+    char vC2_e13_fixedcol[4];
     /* element 14 of Viewable slot 0xC2: Box (class id 0x01600031) */
     naka_cls_Box_t vC2_e14;
     /* element 15 of Viewable slot 0xC2: Label (class id 0x0160002B) */
@@ -1391,7 +1391,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t vC2_e19;
     char w82_text[6];
     /* element 0 of Viewable slot 0xC3 "MSSCTSEL": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vC3_e0;
+    naka_cls_TtlScreen_t MSSCTSEL;
     char w83_text[20];
     /* element 1 of Viewable slot 0xC3: IvMstStyleWindowPgCtl (class id 0x0162000E) */
     naka_cls_IvMstStyleWindowPgCtl_t vC3_e1;
@@ -1400,11 +1400,11 @@ typedef struct __attribute__((packed)) {
     /* element 3 of Viewable slot 0xC3: IvPageControl (class id 0x01600028) */
     naka_cls_IvPageControl_t vC3_e3;
     /* element 4 of Viewable slot 0xC3 "SONG1": Window (class id 0x01600035) */
-    naka_cls_Window_t vC3_e4;
+    naka_cls_Window_t SONG1;
     /* element 5 of Viewable slot 0xC3: AcMstSong1GridBox (class id 0x01620018) */
     naka_cls_AcMstSong1GridBox_t vC3_e5;
-    char str_111[22];
-    char str_112[4];
+    char vC3_e5_fixedrow[22];
+    char vC3_e5_fixedcol[4];
     /* element 6 of Viewable slot 0xC3: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t vC3_e6;
     /* element 7 of Viewable slot 0xC3: VwEditSwBox (class id 0x0160003E) */
@@ -1414,11 +1414,11 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t vC3_e8;
     char w86_text[14];
     /* element 9 of Viewable slot 0xC3 "SONG2": Window (class id 0x01600035) */
-    naka_cls_Window_t vC3_e9;
+    naka_cls_Window_t SONG2;
     /* element 10 of Viewable slot 0xC3: AcMstSong2GridBox (class id 0x01620019) */
     naka_cls_AcMstSong2GridBox_t vC3_e10;
-    char str_118[18];
-    char str_119[4];
+    char vC3_e10_fixedrow[18];
+    char vC3_e10_fixedcol[4];
     /* element 11 of Viewable slot 0xC3: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t vC3_e11;
     /* element 12 of Viewable slot 0xC3: Box (class id 0x01600031) */
@@ -1436,12 +1436,12 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t vC3_e16;
     char w92_text[6];
     /* element 0 of Viewable slot 0xC4 "MSSONGLIST": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vC4_e0;
+    naka_cls_TtlScreen_t MSSONGLIST;
     char w93_text[20];
     /* element 1 of Viewable slot 0xC4: AcMstSugAlpGridBox (class id 0x01620013) */
     naka_cls_AcMstSugAlpGridBox_t vC4_e1;
-    char str_123[22];
-    char str_124[4];
+    char vC4_e1_fixedrow[22];
+    char vC4_e1_fixedcol[4];
     /* element 2 of Viewable slot 0xC4: Label (class id 0x0160002B) */
     naka_cls_Label_t vC4_e2;
     char w94_text[14];
@@ -1459,12 +1459,12 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t vC4_e7;
     char w99_text[6];
     /* element 0 of Viewable slot 0xC5 "MSSTLSEL": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vC5_e0;
+    naka_cls_TtlScreen_t MSSTLSEL;
     char w100_text[20];
     /* element 1 of Viewable slot 0xC5: AcMstStyleAlpGridBox (class id 0x01620014) */
     naka_cls_AcMstStyleAlpGridBox_t vC5_e1;
-    char str_128[22];
-    char str_129[4];
+    char vC5_e1_fixedrow[22];
+    char vC5_e1_fixedcol[4];
     /* element 2 of Viewable slot 0xC5: Box (class id 0x01600031) */
     naka_cls_Box_t vC5_e2;
     /* element 3 of Viewable slot 0xC5: Label (class id 0x0160002B) */
@@ -1479,7 +1479,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t vC5_e6;
     char w105_text[6];
     /* element 0 of Viewable slot 0xD0 "PMBANK": PmBankScreen (class id 0x01620008) */
-    naka_cls_PmBankScreen_t vD0_e0;
+    naka_cls_PmBankScreen_t PMBANK;
     /* element 1 of Viewable slot 0xD0: Icon (class id 0x0160002D) */
     naka_cls_Icon_t vD0_e1;
     /* element 2 of Viewable slot 0xD0: StringBox (class id 0x01600037) */
@@ -1493,11 +1493,11 @@ typedef struct __attribute__((packed)) {
     /* element 5 of Viewable slot 0xD0: IvIntEasySet (class id 0x01600063) */
     naka_cls_IvIntEasySet_t vD0_e5;
     /* element 0 of Viewable slot 0xD1 "PMVIEW": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vD1_e0;
+    naka_cls_TtlScreen_t PMVIEW;
     char w107_text[10];
     /* element 1 of Viewable slot 0xD1: AcPmBkEditBox (class id 0x01620009) */
     naka_cls_AcPmBkEditBox_t vD1_e1;
-    char str_140[2];
+    char vD1_e1_caption[2];
     /* element 2 of Viewable slot 0xD1: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t vD1_e2;
     /* element 3 of Viewable slot 0xD1: PsPageBox (class id 0x01600024) */
@@ -1529,7 +1529,7 @@ typedef struct __attribute__((packed)) {
     /* element 12 of Viewable slot 0xD1: IvIntEasySet (class id 0x01600063) */
     naka_cls_IvIntEasySet_t vD1_e12;
     /* element 0 of Viewable slot 0xD2 "PMNAME": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vD2_e0;
+    naka_cls_TtlScreen_t PMNAME;
     char w117_text[8];
     /* element 1 of Viewable slot 0xD2: IvNaming (class id 0x0160004D) */
     naka_cls_IvNaming_t vD2_e1;
@@ -1560,7 +1560,7 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_2454;
     uint16_t field_2458;
     uint8_t pad_191[2];  /* zero padding */
-    char str_146[8];
+    char NAMING_str[8];
     /* element 1 of Viewable slot 0xD3: IvNaming (class id 0x0160004D) */
     naka_cls_IvNaming_t vD3_e1;
     /* element 2 of Viewable slot 0xD3: AcFuncEditSw (class id 0x01600020) */
@@ -1606,7 +1606,7 @@ typedef struct __attribute__((packed)) {
     /* element 1 of Viewable slot 0xE8: IvIntVari (class id 0x01600062) */
     naka_cls_IvIntVari_t vE8_e1;
     /* element 0 of Viewable slot 0xE9 "RVARI": RVariScreen (class id 0x01620002) */
-    naka_cls_RVariScreen_t vE9_e0;
+    naka_cls_RVariScreen_t RVARI;
     /* element 1 of Viewable slot 0xE9: AcTempoBox (class id 0x01600014) */
     naka_cls_AcTempoBox_t vE9_e1;
     /* element 2 of Viewable slot 0xE9: IvIntVari (class id 0x01600062) */
@@ -1615,7 +1615,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_TtlScreen_t vF4_e0;
     char w126_text[2];
     /* element 1 of Viewable slot 0xF4 "TEST1RAM": Window (class id 0x01600035) */
-    naka_cls_Window_t vF4_e1;
+    naka_cls_Window_t TEST1RAM;
     /* element 2 of Viewable slot 0xF4: Label (class id 0x0160002B) */
     naka_cls_Label_t vF4_e2;
     char w127_text[10];
@@ -1632,7 +1632,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t vF4_e6;
     char w131_text[28];
     /* element 7 of Viewable slot 0xF4 "TEST1CP": Window (class id 0x01600035) */
-    naka_cls_Window_t vF4_e7;
+    naka_cls_Window_t TEST1CP;
 } naka_ctrl_menu_body_t;
 
 #define SELF(field) \
@@ -1644,7 +1644,7 @@ _Static_assert(sizeof(naka_ctrl_menu_body_t) == 10164,
 const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
     __attribute__((section(".text"), used)) = {
 
-    .v41_e0 = {
+    .ControlIni = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -1681,7 +1681,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .style = 0x000E,
     },
 
-    .v41_e2 = {
+    .SYSINI = {
         .class_ = 0x01600055,
         .super = 0,
         .sub = NAKA_NONE,
@@ -1697,11 +1697,11 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .align = 0x0001,
         .row = 0x0009,
         .selected = 0x0003F44A,
-        .list = SELF(str_3),
+        .list = SELF(SYSINI_list),
         .dial = 0x0001,
     },
 
-    .str_3 = "PERFORMANCE        |  CURRENT PANEL   |    PART SETTING  |    MIDI SETTING  |  PANEL MEMORY    |  COMPOSER        |  SEQUENCER       |  MSP USER        |  SOUND MEMORY    ",
+    .SYSINI_list = "PERFORMANCE        |  CURRENT PANEL   |    PART SETTING  |    MIDI SETTING  |  PANEL MEMORY    |  COMPOSER        |  SEQUENCER       |  MSP USER        |  SOUND MEMORY    ",
 
     .v41_e3 = {
         .class_ = 0x01600020,
@@ -1769,7 +1769,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
 
     .w3_text = "INITIAL",
 
-    .v41_e7 = {
+    .SYSINISURE = {
         .class_ = 0x01600033,
         .super = NAKA_NONE,
         .sub = 8,
@@ -1924,7 +1924,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .func = 0x01220007,
     },
 
-    .v42_e0 = {
+    .ControlFsw = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -1964,14 +1964,14 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .pcol = 0x0003F45C,
         .prow = 0x0003F460,
         .crow = 0x0003F464,
-        .fixedcol = SELF(str_20),
-        .fixedrow = SELF(str_19),
+        .fixedcol = SELF(v42_e1_fixedcol),
+        .fixedrow = SELF(v42_e1_fixedrow),
         .func = 0x0122000C,
     },
 
-    .str_19 = "|-|FOOT SWITCH 1 |FOOT SWITCH 2 |FOOT CONT.SW 1|FOOT CONT.SW 2|FOOT CONT.SW 3|FOOT CONT.SW 4|EXPRESS. PEDAL",
+    .v42_e1_fixedrow = "|-|FOOT SWITCH 1 |FOOT SWITCH 2 |FOOT CONT.SW 1|FOOT CONT.SW 2|FOOT CONT.SW 3|FOOT CONT.SW 4|EXPRESS. PEDAL",
 
-    .str_20 = ALIGNED_STRING("              |               "),
+    .v42_e1_fixedcol = ALIGNED_STRING("              |               "),
 
     .v42_e2 = {
         .class_ = 0x0160002B,
@@ -2041,7 +2041,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .style = 0x0003,
     },
 
-    .v43_e0 = {
+    .ControlSns = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -2081,14 +2081,14 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .pcol = 0x0003F470,
         .prow = 0x0003F474,
         .crow = 0x0003F478,
-        .fixedcol = SELF(str_24),
-        .fixedrow = SELF(str_23),
+        .fixedcol = SELF(v43_e1_fixedcol),
+        .fixedrow = SELF(v43_e1_fixedrow),
         .func = 0x0122000B,
     },
 
-    .str_23 = "|        VELOCITY SENSE :       |-||      ON/OFF         :     |      CURVE          :     |       THRESHOLD      :      ",
+    .v43_e1_fixedrow = "|        VELOCITY SENSE :       |-||      ON/OFF         :     |      CURVE          :     |       THRESHOLD      :      ",
 
-    .str_24 = ALIGNED_STRING("     |  "),
+    .v43_e1_fixedcol = ALIGNED_STRING("     |  "),
 
     .v43_e2 = {
         .class_ = 0x0160002B,
@@ -2551,7 +2551,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .time = 0x0001,
     },
 
-    .v45_e5 = {
+    .PMEM1 = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 6,
@@ -2685,7 +2685,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .func = 0x01220029,
     },
 
-    .v45_e13 = {
+    .PMEM2 = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 14,
@@ -2722,14 +2722,14 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .pcol = 0x0003F4AA,
         .prow = 0x0003F4AE,
         .crow = 0x0003F4B2,
-        .fixedcol = SELF(str_51),
-        .fixedrow = SELF(str_50),
+        .fixedcol = SELF(v45_e14_fixedcol),
+        .fixedrow = SELF(v45_e14_fixedrow),
         .func = 0x0122000D,
     },
 
-    .str_50 = ALIGNED_STRING("|-|RHYTHM SELECT|TEMPO|APC&MEMORY|SPLIT POINT|TRANSPOSE|FOOT CONT. SETTING|MIC LEVEL & REVERB|FADE IN/OUT SETTING|R1/R2 OCTAVE"),
+    .v45_e14_fixedrow = ALIGNED_STRING("|-|RHYTHM SELECT|TEMPO|APC&MEMORY|SPLIT POINT|TRANSPOSE|FOOT CONT. SETTING|MIC LEVEL & REVERB|FADE IN/OUT SETTING|R1/R2 OCTAVE"),
 
-    .str_51 = "     |   ",
+    .v45_e14_fixedcol = "     |   ",
 
     .v45_e15 = {
         .class_ = 0x01600022,
@@ -2802,7 +2802,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .child = 0x0003F4BA,
     },
 
-    .v47_e0 = {
+    .ControlSys = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -2842,14 +2842,14 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .pcol = 0x0003F4C6,
         .prow = 0x0003F4CA,
         .crow = 0x0003F4CE,
-        .fixedcol = SELF(str_59),
-        .fixedrow = SELF(str_58),
+        .fixedcol = SELF(v47_e1_fixedcol),
+        .fixedrow = SELF(v47_e1_fixedrow),
         .func = 0x0122000E,
     },
 
-    .str_58 = "|-|SAVE REMINDER|'COMPLETED' MESSAGE|ARE YOU SURE?|ERROR MESSAGE|SOUND/RHYTHM SELECT|EASY SETTING",
+    .v47_e1_fixedrow = "|-|SAVE REMINDER|'COMPLETED' MESSAGE|ARE YOU SURE?|ERROR MESSAGE|SOUND/RHYTHM SELECT|EASY SETTING",
 
-    .str_59 = ALIGNED_STRING("  | "),
+    .v47_e1_fixedcol = ALIGNED_STRING("  | "),
 
     .v47_e2 = {
         .class_ = 0x0160002B,
@@ -2979,7 +2979,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
 
     .w49_text = ALIGNED_STRING("LOAD"),
 
-    .v48_e2 = {
+    .ControlWallSet = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 3,
@@ -3031,7 +3031,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0001,
-        .caption = SELF(str_62),
+        .caption = SELF(v48_e4_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -3043,7 +3043,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .data = 0x0003F4E0,
     },
 
-    .str_62 = "                    :",
+    .v48_e4_caption = "                    :",
 
     .v48_e5 = {
         .class_ = 0x0160002B,
@@ -3086,7 +3086,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0001,
-        .caption = SELF(str_64),
+        .caption = SELF(v48_e7_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -3098,7 +3098,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .data = 0x0003F4E6,
     },
 
-    .str_64 = "MENU PAGES          :",
+    .v48_e7_caption = "MENU PAGES          :",
 
     .v48_e8 = {
         .class_ = 0x0160001B,
@@ -3111,7 +3111,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0001,
-        .caption = SELF(str_65),
+        .caption = SELF(v48_e8_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -3123,7 +3123,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .data = 0x0003F4EC,
     },
 
-    .str_65 = "OTHERS              :",
+    .v48_e8_caption = "OTHERS              :",
 
     .v48_e9 = {
         .class_ = 0x01600020,
@@ -3223,7 +3223,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .func = 0x01220024,
     },
 
-    .v48_e15 = {
+    .WALLSETSURE = {
         .class_ = 0x01600033,
         .super = NAKA_NONE,
         .sub = 16,
@@ -3378,7 +3378,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
 
     .w63_text = "WALLPAPER SETTING",
 
-    .vC0_e0 = {
+    .ONETCH = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -3440,7 +3440,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .mode = 0x01800001,
     },
 
-    .vC1_e0 = {
+    .MUSICSTYL = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -3515,7 +3515,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
 
     .w70_text = ALIGNED_STRING("STYLE ALPHABETICAL"),
 
-    .vC2_e0 = {
+    .MSCTSEL = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -3568,7 +3568,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .window = 0x00C2000C,
     },
 
-    .vC2_e4 = {
+    .STYLE1 = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 5,
@@ -3605,17 +3605,17 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .pcol = 0x0003F516,
         .prow = 0x0003F51A,
         .crow = 0x0003F51E,
-        .fixedcol = SELF(str_93),
-        .fixedrow = SELF(str_92),
+        .fixedcol = SELF(vC2_e5_fixedcol),
+        .fixedrow = SELF(vC2_e5_fixedrow),
         .func = 0x01220011,
         .nowstylectgdtno = 0x0003F522,
         .nowstylectgmaxpage = 0x0003F524,
         .nowstylectgpage = 0x0003F526,
     },
 
-    .str_92 = " | | | | | | | | | ",
+    .vC2_e5_fixedrow = " | | | | | | | | | ",
 
-    .str_93 = ALIGNED_STRING("| "),
+    .vC2_e5_fixedcol = ALIGNED_STRING("| "),
 
     .vC2_e6 = {
         .class_ = 0x01600022,
@@ -3694,17 +3694,17 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .pcol = 0x0003F52C,
         .prow = 0x0003F530,
         .crow = 0x0003F534,
-        .fixedcol = SELF(str_97),
-        .fixedrow = SELF(str_96),
+        .fixedcol = SELF(vC2_e9_fixedcol),
+        .fixedrow = SELF(vC2_e9_fixedrow),
         .func = 0x01220012,
         .nowstylesubctgdtno = 0x0003F538,
         .nowstylesubctgmaxpage = 0x0003F53A,
         .nowstylesubctgpage = 0x0003F53C,
     },
 
-    .str_96 = " | | | | | | | | | ",
+    .vC2_e9_fixedrow = " | | | | | | | | | ",
 
-    .str_97 = ALIGNED_STRING("| "),
+    .vC2_e9_fixedcol = ALIGNED_STRING("| "),
 
     .vC2_e10 = {
         .class_ = 0x01600022,
@@ -3740,7 +3740,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
 
     .w76_text = ALIGNED_STRING("SUB CATEGORY"),
 
-    .vC2_e12 = {
+    .STYLE2 = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 13,
@@ -3777,8 +3777,8 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .pcol = 0x0003F54A,
         .prow = 0x0003F54E,
         .crow = 0x0003F552,
-        .fixedcol = SELF(str_103),
-        .fixedrow = SELF(str_102),
+        .fixedcol = SELF(vC2_e13_fixedcol),
+        .fixedrow = SELF(vC2_e13_fixedrow),
         .func = 0x01220013,
         .nowstylesubctgdtno = 0x0003F556,
         .nowstylesubctgmaxpage = 0x0003F558,
@@ -3789,9 +3789,9 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .nowstylesubsubdtno2 = 0x0003F562,
     },
 
-    .str_102 = " | | | || | | | |",
+    .vC2_e13_fixedrow = " | | | || | | | |",
 
-    .str_103 = ALIGNED_STRING("| "),
+    .vC2_e13_fixedcol = ALIGNED_STRING("| "),
 
     .vC2_e14 = {
         .class_ = 0x01600031,
@@ -3890,7 +3890,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
 
     .w82_text = ALIGNED_STRING("SKIP"),
 
-    .vC3_e0 = {
+    .MSSCTSEL = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -3943,7 +3943,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .window = 0x00C30009,
     },
 
-    .vC3_e4 = {
+    .SONG1 = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 5,
@@ -3980,17 +3980,17 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .pcol = 0x0003F576,
         .prow = 0x0003F57A,
         .crow = 0x0003F57E,
-        .fixedcol = SELF(str_112),
-        .fixedrow = SELF(str_111),
+        .fixedcol = SELF(vC3_e5_fixedcol),
+        .fixedrow = SELF(vC3_e5_fixedrow),
         .func = 0x01220014,
         .nowsongctgdtno = 0x0003F582,
         .nowsongctgmaxpage = 0x0003F584,
         .nowsongctgpage = 0x0003F586,
     },
 
-    .str_111 = ALIGNED_STRING(" | | | | | | | | | |"),
+    .vC3_e5_fixedrow = ALIGNED_STRING(" | | | | | | | | | |"),
 
-    .str_112 = ALIGNED_STRING("| "),
+    .vC3_e5_fixedcol = ALIGNED_STRING("| "),
 
     .vC3_e6 = {
         .class_ = 0x01600022,
@@ -4047,7 +4047,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
 
     .w86_text = "(BY CATEGORY)",
 
-    .vC3_e9 = {
+    .SONG2 = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 10,
@@ -4084,8 +4084,8 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .pcol = 0x0003F594,
         .prow = 0x0003F598,
         .crow = 0x0003F59C,
-        .fixedcol = SELF(str_119),
-        .fixedrow = SELF(str_118),
+        .fixedcol = SELF(vC3_e10_fixedcol),
+        .fixedrow = SELF(vC3_e10_fixedrow),
         .func = 0x01220015,
         .nowsongsubctgdtno = 0x0003F5A0,
         .nowsongsubctgmaxpage = 0x0003F5A2,
@@ -4096,9 +4096,9 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .nowsongsubsubdtno2 = 0x0003F5AC,
     },
 
-    .str_118 = ALIGNED_STRING(" | | | || | | | "),
+    .vC3_e10_fixedrow = ALIGNED_STRING(" | | | || | | | "),
 
-    .str_119 = ALIGNED_STRING("| "),
+    .vC3_e10_fixedcol = ALIGNED_STRING("| "),
 
     .vC3_e11 = {
         .class_ = 0x01600022,
@@ -4197,7 +4197,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
 
     .w92_text = ALIGNED_STRING("SKIP"),
 
-    .vC4_e0 = {
+    .MSSONGLIST = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -4237,8 +4237,8 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .pcol = 0x0003F5B6,
         .prow = 0x0003F5BA,
         .crow = 0x0003F5BE,
-        .fixedcol = SELF(str_124),
-        .fixedrow = SELF(str_123),
+        .fixedcol = SELF(vC4_e1_fixedcol),
+        .fixedrow = SELF(vC4_e1_fixedrow),
         .func = 0x0122000F,
         .nowalph = 0x0003F5C2,
         .nowalphtop = 0x0003F5C4,
@@ -4249,9 +4249,9 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .nowttlselsong = 0x0003F5CE,
     },
 
-    .str_123 = ALIGNED_STRING(" | | | | | | | | | |"),
+    .vC4_e1_fixedrow = ALIGNED_STRING(" | | | | | | | | | |"),
 
-    .str_124 = ALIGNED_STRING("| "),
+    .vC4_e1_fixedcol = ALIGNED_STRING("| "),
 
     .vC4_e2 = {
         .class_ = 0x0160002B,
@@ -4350,7 +4350,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
 
     .w99_text = ALIGNED_STRING("SKIP"),
 
-    .vC5_e0 = {
+    .MSSTLSEL = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -4390,8 +4390,8 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .pcol = 0x0003F5D8,
         .prow = 0x0003F5DC,
         .crow = 0x0003F5E0,
-        .fixedcol = SELF(str_129),
-        .fixedrow = SELF(str_128),
+        .fixedcol = SELF(vC5_e1_fixedcol),
+        .fixedrow = SELF(vC5_e1_fixedrow),
         .func = 0x01220010,
         .nowalph = 0x0003F5E4,
         .nowalphtop = 0x0003F5E6,
@@ -4400,9 +4400,9 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .nowalphpage = 0x0003F5EC,
     },
 
-    .str_128 = ALIGNED_STRING(" | | | | | | | | | |"),
+    .vC5_e1_fixedrow = ALIGNED_STRING(" | | | | | | | | | |"),
 
-    .str_129 = ALIGNED_STRING("| "),
+    .vC5_e1_fixedcol = ALIGNED_STRING("| "),
 
     .vC5_e2 = {
         .class_ = 0x01600031,
@@ -4486,7 +4486,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
 
     .w105_text = ALIGNED_STRING("SKIP"),
 
-    .vD0_e0 = {
+    .PMBANK = {
         .class_ = 0x01620008,
         .super = NAKA_NONE,
         .sub = 1,
@@ -4575,7 +4575,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .time = 0x0001,
     },
 
-    .vD1_e0 = {
+    .PMVIEW = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -4604,7 +4604,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .color = 0x00F5,
         .border = 0x00C1,
         .index = 0x0001,
-        .caption = SELF(str_140),
+        .caption = SELF(vD1_e1_caption),
         .font = 0x00000001,
         .fontcolor = 0x00FB,
         .align = 0x0000,
@@ -4616,7 +4616,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .data = 0x0003F600,
     },
 
-    .str_140 = ALIGNED_STRING(""),
+    .vD1_e1_caption = ALIGNED_STRING(""),
 
     .vD1_e2 = {
         .class_ = 0x01600022,
@@ -4788,7 +4788,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .time = 0x0001,
     },
 
-    .vD2_e0 = {
+    .PMNAME = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -4921,13 +4921,13 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
 
     .field_2452 = 0x0003,
 
-    .ptr_2454 = SELF(str_146),
+    .ptr_2454 = SELF(NAMING_str),
 
     .field_2458 = 0x0099,
 
     .pad_191 = { 0 },
 
-    .str_146 = ALIGNED_STRING("NAMING"),
+    .NAMING_str = ALIGNED_STRING("NAMING"),
 
     .vD3_e1 = {
         .class_ = 0x0160004D,
@@ -5087,7 +5087,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
         .time = 0x0001,
     },
 
-    .vE9_e0 = {
+    .RVARI = {
         .class_ = 0x01620002,
         .super = NAKA_NONE,
         .sub = 1,
@@ -5155,7 +5155,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
 
     .w126_text = ALIGNED_STRING(""),
 
-    .vF4_e1 = {
+    .TEST1RAM = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 2,
@@ -5245,7 +5245,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
 
     .w131_text = ALIGNED_STRING("this unit needs repairing."),
 
-    .vF4_e7 = {
+    .TEST1CP = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 8,

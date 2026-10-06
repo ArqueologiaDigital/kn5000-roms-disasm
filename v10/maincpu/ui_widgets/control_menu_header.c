@@ -94,7 +94,7 @@ typedef struct __attribute__((packed)) {
 typedef struct __attribute__((packed)) {
     /* w1: CONTAINER "CONTROL MENU" */
     /* element 0 of Viewable slot 0x40 "ControlMenu": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v40_e0;
+    naka_cls_TtlScreen_t ControlMenu;
     char w1_text[14];       /* "CONTROL MENU" + NUL + 0xFF pad */
 
     /* w2: MENU_ITEM "INITIAL" */
@@ -149,7 +149,7 @@ const ctrl_menu_header_t ctrl_menu_header_data
     __attribute__((section(".text"), used)) = {
 
     /* ─── w1: CONTAINER "CONTROL MENU" ─────────────────── */
-    .v40_e0 = {
+    .ControlMenu = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,

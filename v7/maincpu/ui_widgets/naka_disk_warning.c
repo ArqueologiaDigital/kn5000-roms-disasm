@@ -171,15 +171,15 @@ typedef struct __attribute__((packed)) {
     char str_59[14];
     char str_60[14];
     char str_61[6];
-    char str_62[4];
-    char str_63[4];
-    char str_64[4];
+    char ISC_str[4];
+    char ISD_str[4];
+    char WWC_str[4];
     uint8_t pad_1[2];  /* zero padding */
     uint16_t field_0bfc;
     char str_65[2];
-    char str_66[2];
-    char str_67[2];
-    char str_68[2];
+    char A_str[2];
+    char W_str[2];
+    char l_str[2];
     uint8_t pad_2[2];  /* zero padding */
     uint16_t field_0c08;
     uint16_t field_0c0a;
@@ -202,8 +202,8 @@ typedef struct __attribute__((packed)) {
     char str_71[2];
     char str_72[2];
     char str_73[2];
-    char str_74[2];
-    char str_75[2];
+    char A_str_2[2];
+    char F_str[2];
     uint16_t field_0c36;
     uint8_t pad_4[2];  /* zero padding */
     uint16_t field_0c3a;
@@ -353,14 +353,14 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0d70;
     uint32_t ptr_0d72;
     char str_85[2];
-    char str_86[2];
+    char R_str[2];
     uint16_t field_0d7a;
     uint16_t field_0d7c;
-    char str_87[2];
-    char str_88[2];
+    char h_str[2];
+    char s_str[2];
     uint16_t field_0d82;
     uint32_t ptr_0d84;
-    char str_89[2];
+    char G_str[2];
     char str_90[2];
     uint16_t field_0d8c;
     uint16_t field_0d8e;
@@ -456,14 +456,14 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0e6a;
     uint16_t field_0e6c;
     uint16_t field_0e6e;
-    char str_93[2];
-    char str_94[2];
-    char str_95[2];
-    char str_96[2];
-    char str_97[2];
-    char str_98[2];
-    char str_99[2];
-    char str_100[2];
+    char F_str_2[2];
+    char K_str[2];
+    char P_str[2];
+    char U_str[2];
+    char Z_str[2];
+    char __str[2];
+    char d_str[2];
+    char i_str[2];
     uint16_t field_0e80;
     uint16_t field_0e82;
     char str_101[2];
@@ -475,7 +475,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0e90;
     uint16_t field_0e92;
     uint16_t field_0e94;
-    char str_104[2];
+    char K_str_2[2];
     char str_105[2];
     uint16_t field_0e9a;
     uint16_t field_0e9c;
@@ -484,7 +484,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0ea2;
     uint16_t field_0ea4;
     uint16_t field_0ea6;
-    char str_106[2];
+    char q_str[2];
     uint16_t field_0eaa;
     uint16_t field_0eac;
     uint16_t field_0eae;
@@ -502,7 +502,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0f1a;
     uint16_t field_0f1c;
     uint16_t field_0f1e;
-    char str_111[2];
+    char S_str[2];
     uint16_t field_0f22;
     uint16_t field_0f24;
     uint16_t field_0f26;
@@ -527,7 +527,7 @@ typedef struct __attribute__((packed)) {
     char str_115[14];
     uint32_t ptrs_11[39];  /* 39 pointers */
     char str_116[2];
-    char str_117[4];
+    char SPC_str[4];
     char str_118[2];
     char str_119[2];
     char str_120[2];
@@ -538,36 +538,36 @@ typedef struct __attribute__((packed)) {
     char str_125[2];
     char str_126[2];
     char str_127[2];
-    char str_128[2];
-    char str_129[2];
-    char str_130[2];
-    char str_131[2];
-    char str_132[2];
-    char str_133[2];
-    char str_134[2];
-    char str_135[2];
-    char str_136[2];
-    char str_137[2];
-    char str_138[2];
-    char str_139[2];
-    char str_140[2];
-    char str_141[2];
-    char str_142[2];
-    char str_143[2];
-    char str_144[2];
-    char str_145[2];
-    char str_146[2];
-    char str_147[2];
-    char str_148[2];
-    char str_149[2];
-    char str_150[2];
-    char str_151[2];
-    char str_152[2];
-    char str_153[2];
-    char str_154[2];
+    char __str_2[2];
+    char Z_str_2[2];
+    char Y_str[2];
+    char X_str[2];
+    char W_str_2[2];
+    char V_str[2];
+    char U_str_2[2];
+    char T_str[2];
+    char S_str_2[2];
+    char R_str_2[2];
+    char Q_str[2];
+    char P_str_2[2];
+    char O_str[2];
+    char N_str[2];
+    char M_str[2];
+    char L_str[2];
+    char K_str_3[2];
+    char J_str[2];
+    char I_str[2];
+    char H_str[2];
+    char G_str_2[2];
+    char F_str_3[2];
+    char E_str[2];
+    char D_str[2];
+    char C_str[2];
+    char B_str[2];
+    char A_str_3[2];
     uint32_t ptrs_12[39];  /* 39 pointers */
     char str_155[2];
-    char str_156[4];
+    char SPC_str_2[4];
     char str_157[2];
     char str_158[2];
     char str_159[2];
@@ -578,33 +578,33 @@ typedef struct __attribute__((packed)) {
     char str_164[2];
     char str_165[2];
     char str_166[2];
-    char str_167[2];
-    char str_168[2];
-    char str_169[2];
-    char str_170[2];
-    char str_171[2];
-    char str_172[2];
-    char str_173[2];
-    char str_174[2];
-    char str_175[2];
-    char str_176[2];
-    char str_177[2];
-    char str_178[2];
-    char str_179[2];
-    char str_180[2];
-    char str_181[2];
-    char str_182[2];
-    char str_183[2];
-    char str_184[2];
-    char str_185[2];
-    char str_186[2];
-    char str_187[2];
-    char str_188[2];
-    char str_189[2];
-    char str_190[2];
-    char str_191[2];
-    char str_192[2];
-    char str_193[2];
+    char __str_3[2];
+    char z_str[2];
+    char y_str[2];
+    char x_str[2];
+    char w_str[2];
+    char v_str[2];
+    char u_str[2];
+    char t_str[2];
+    char s_str_2[2];
+    char r_str[2];
+    char q_str_2[2];
+    char p_str[2];
+    char o_str[2];
+    char n_str[2];
+    char m_str[2];
+    char l_str_2[2];
+    char k_str[2];
+    char j_str[2];
+    char i_str_2[2];
+    char h_str_2[2];
+    char g_str[2];
+    char f_str[2];
+    char e_str[2];
+    char d_str_2[2];
+    char c_str[2];
+    char b_str[2];
+    char a_str[2];
     uint32_t ptrs_13[33];  /* 33 pointers */
     char str_194[2];
     char str_195[2];
@@ -648,11 +648,11 @@ typedef struct __attribute__((packed)) {
     uint16_t field_123c;
     uint32_t ptr_123e;
     uint32_t ptr_1242;
-    char str_231[2];
+    char __str_4[2];
     char str_232[2];
     uint8_t pad_79[2];  /* zero padding */
     char str_233[2];
-    char str_234[2];
+    char a_str_2[2];
     uint16_t field_1250;
     uint16_t field_1252;
     uint16_t field_1254;
@@ -898,7 +898,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_14af;
     uint16_t field_14b1;
     uint16_t field_14b3;
-    char str_240[4];
+    char BMP_str[4];
     uint16_t field_14b9;
     char str_241[3];
     char str_242[4];
@@ -921,9 +921,9 @@ typedef struct __attribute__((packed)) {
     uint16_t field_15a6;
     uint16_t field_15a8;
     uint16_t field_15aa;
-    char str_253[2];
+    char k_str_2[2];
     uint16_t field_15ae;
-    char str_254[2];
+    char k_str_3[2];
     uint16_t field_15b2;
     uint16_t field_15b4;
     uint16_t field_15b6;
@@ -934,18 +934,18 @@ typedef struct __attribute__((packed)) {
     uint8_t pad_105[4];  /* zero padding */
     char str_257[2];
     char str_258[4];
-    char str_259[2];
+    char d_str_3[2];
     uint32_t ptr_15d6;
     uint32_t ptr_15da;
     char str_260[8];
-    char str_261[8];
+    char PASSIVE_str[8];
     uint32_t ptr_15ee;
     uint32_t ptr_15f2;
     char str_262[4];
-    char str_263[4];
+    char OFF_str[4];
     char str_264[2];
     char str_265[4];
-    char str_266[2];
+    char d_str_4[2];
     char str_267[4];
     char str_268[4];
     uint16_t field_160e;
@@ -961,39 +961,39 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_1622;
     uint32_t ptr_1626;
     char str_275[6];
-    char str_276[6];
-    char str_277[4];
-    char str_278[4];
+    char FALSE_str[6];
+    char ON_str[4];
+    char OFF_str_2[4];
     char str_279[4];
     char str_280[4];
     char str_281[4];
     char str_282[4];
-    char str_283[4];
-    char str_284[4];
-    char str_285[4];
+    char ON_str_2[4];
+    char OFF_str_3[4];
+    char OK_str[4];
     char str_286[2];
     char str_287[2];
     char str_288[4];
     char str_289[4];
-    char str_290[4];
-    char str_291[4];
+    char YES_str[4];
+    char NO_str[4];
     uint8_t pad_107[2];  /* zero padding */
     uint16_t field_1670;
     uint16_t field_1672;
-    char str_292[2];
+    char w_str_2[2];
     char str_293[2];
     char str_294[2];
     char str_295[2];
-    char str_296[2];
-    char str_297[2];
+    char D_str_2[2];
+    char K_str_4[2];
     char str_298[2];
-    char str_299[2];
-    char str_300[2];
+    char g_str_2[2];
+    char w_str_3[2];
     char str_301[2];
     char str_302[2];
-    char str_303[2];
-    char str_304[2];
-    char str_305[2];
+    char w_str_4[2];
+    char R_str_3[2];
+    char Y_str_2[2];
     uint16_t field_1690;
     uint16_t field_1692;
     uint16_t field_1694;
@@ -1007,56 +1007,56 @@ typedef struct __attribute__((packed)) {
     char str_306[2];
     char str_307[2];
     char str_308[12];
-    char str_309[6];
-    char str_310[6];
-    char str_311[6];
+    char PAGE_str[6];
+    char MnSw_str[6];
+    char EXIT_str[6];
     char w0_code[6];
     char w0_name[6];
-    char str_312[6];
+    char ExWn_str[6];
     char w1_code[6];
     char w1_name[6];
     char w2_code[6];
     char w2_name[6];
-    char str_313[6];
-    char str_314[6];
-    char str_315[6];
-    char str_316[6];
-    char str_317[6];
-    char str_318[6];
+    char IntT_str[6];
+    char iRem_str[6];
+    char iCmp_str[6];
+    char iErr_str[6];
+    char iVar_str[6];
+    char iEsy_str[6];
     char w3_code[6];
     char w3_name[6];
     char str_319[18];
     char str_320[16];
     char str_321[28];
     uint32_t ptrs_15[28];  /* 28 pointers */
-    char str_322[4];
-    char str_323[6];
-    char str_324[6];
-    char str_325[4];
-    char str_326[4];
-    char str_327[6];
-    char str_328[6];
-    char str_329[6];
-    char str_330[6];
-    char str_331[6];
-    char str_332[6];
-    char str_333[6];
-    char str_334[6];
-    char str_335[6];
-    char str_336[6];
-    char str_337[6];
-    char str_338[6];
-    char str_339[6];
-    char str_340[6];
-    char str_341[4];
-    char str_342[4];
-    char str_343[4];
-    char str_344[4];
-    char str_345[4];
-    char str_346[4];
-    char str_347[6];
-    char str_348[4];
-    char str_349[4];
+    char MIC_str[4];
+    char METR_str[6];
+    char CTRL_str[6];
+    char MSP_str[4];
+    char MSP_str_2[4];
+    char RTBS_str[6];
+    char CHRD_str[6];
+    char DRUM_str[6];
+    char BASS_str[6];
+    char ACP3_str[6];
+    char ACP2_str[6];
+    char ACP1_str[6];
+    char PT16_str[6];
+    char PT15_str[6];
+    char PT14_str[6];
+    char PT13_str[6];
+    char PT12_str[6];
+    char PT11_str[6];
+    char PT10_str[6];
+    char PT9_str[4];
+    char PT8_str[4];
+    char PT7_str[4];
+    char PT6_str[4];
+    char PT5_str[4];
+    char PT4_str[4];
+    char LEFT_str[6];
+    char RT2_str[4];
+    char RT1_str[4];
     uint16_t field_1860;
     uint8_t pad_109[2];  /* zero padding */
     uint16_t field_1864;
@@ -1192,9 +1192,9 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1968;
     uint8_t pad_158[2];  /* zero padding */
     uint16_t field_196c;
-    char str_350[3];
+    char AA_str[3];
     uint16_t field_1971;
-    char str_351[2];
+    char A_str_4[2];
     uint16_t field_1975;
     uint16_t field_1977;
     uint8_t pad_159[3];  /* zero padding */
@@ -1237,7 +1237,7 @@ typedef struct __attribute__((packed)) {
     char str_353[2];
     uint8_t pad_178[62];  /* zero padding */
     char str_354[4];
-    char str_355[6];
+    char MUTE_str[6];
     char str_356[12];
     char str_357[12];
     char str_358[40];
@@ -1264,31 +1264,31 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1aa0;
     uint16_t field_1aa2;
     uint32_t ptrs_17[20];  /* 20 pointers */
-    char str_364[4];
-    char str_365[4];
-    char str_366[4];
-    char str_367[4];
-    char str_368[4];
-    char str_369[4];
-    char str_370[4];
-    char str_371[4];
+    char P15_str[4];
+    char P14_str[4];
+    char P13_str[4];
+    char RHY_str[4];
+    char CTL_str[4];
+    char APC_str[4];
+    char CHD_str[4];
+    char DRM_str[4];
     char str_372[4];
     char str_373[4];
     char str_374[4];
     char str_375[4];
-    char str_376[4];
-    char str_377[4];
-    char str_378[4];
+    char P12_str[4];
+    char P11_str[4];
+    char P10_str[4];
     char str_379[4];
     char str_380[4];
-    char str_381[4];
-    char str_382[4];
-    char str_383[4];
+    char RT2_str_2[4];
+    char LFT_str[4];
+    char RT1_str_2[4];
     uint32_t ptrs_18[5];  /* 5 pointers */
-    char str_384[4];
-    char str_385[6];
-    char str_386[6];
-    char str_387[4];
+    char CLR_str[4];
+    char MUTE_str_2[6];
+    char PLAY_str[6];
+    char REC_str[4];
     char str_388[2];
     uint16_t field_1b6e;
     uint16_t field_1b70;
@@ -1305,20 +1305,20 @@ typedef struct __attribute__((packed)) {
     char w6_name[8];
     char w7_code[8];
     char w7_name[8];
-    char str_390[4];
-    char str_391[6];
-    char str_392[8];
+    char YZ_str[4];
+    char name_str[6];
+    char romram_str[8];
     char str_393[2];
     uint8_t pad_186[2];  /* zero padding */
     uint16_t field_1bfa;
     char str_394[2];
     uint16_t field_1bfe;
-    char str_395[2];
+    char A_str_5[2];
     uint16_t field_1c02;
     uint16_t field_1c04;
     uint16_t field_1c06;
     uint16_t field_1c08;
-    char str_396[2];
+    char P_str_3[2];
     uint16_t field_1c0c;
     uint16_t field_1c0e;
     uint16_t field_1c10;
@@ -1350,15 +1350,15 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1c50;
     uint16_t field_1c52;
     char str_402[2];
-    char str_403[2];
+    char z_str_2[2];
     uint16_t field_1c58;
     uint16_t field_1c5a;
     uint16_t field_1c5c;
     char str_404[2];
-    char str_405[2];
+    char S_str_3[2];
     uint16_t field_1c62;
     uint16_t field_1c64;
-    char str_406[2];
+    char j_str_2[2];
     char str_407[2];
     char str_408[2];
     uint16_t field_1c6c;
@@ -1367,11 +1367,11 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1c72;
     char str_409[2];
     uint8_t pad_190[4];  /* zero padding */
-    char str_410[2];
+    char E_str_2[2];
     uint16_t field_1c7c;
     uint16_t field_1c7e;
     uint16_t field_1c80;
-    char str_411[2];
+    char d_str_5[2];
     uint8_t pad_191[4];  /* zero padding */
     uint16_t field_1c88;
     uint16_t field_1c8a;
@@ -1385,7 +1385,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1c9c;
     char str_413[2];
     uint8_t pad_193[4];  /* zero padding */
-    char str_414[2];
+    char D_str_3[2];
     uint16_t field_1ca6;
     uint16_t field_1ca8;
     uint16_t field_1caa;
@@ -1397,7 +1397,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1cb8;
     char str_416[2];
     uint8_t pad_195[4];  /* zero padding */
-    char str_417[2];
+    char a_str_3[2];
     uint16_t field_1cc2;
     uint16_t field_1cc4;
     uint16_t field_1cc6;
@@ -1433,17 +1433,17 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1d0c;
     char str_423[2];
     uint8_t pad_201[4];  /* zero padding */
-    char str_424[2];
+    char j_str_3[2];
     uint16_t field_1d16;
     char str_425[2];
-    char str_426[2];
+    char S_str_4[2];
     uint16_t field_1d1c;
     uint16_t field_1d1e;
     uint8_t pad_202[2];  /* zero padding */
     uint16_t field_1d22;
     uint16_t field_1d24;
     char str_427[2];
-    char str_428[2];
+    char S_str_5[2];
     char str_429[2];
     uint16_t field_1d2c;
     uint32_t ptr_1d2e;
@@ -1451,7 +1451,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1d34;
     uint16_t field_1d36;
     uint16_t field_1d38;
-    char str_430[2];
+    char K_str_5[2];
     uint16_t field_1d3c;
     uint16_t field_1d3e;
     uint16_t field_1d40;
@@ -1503,36 +1503,36 @@ typedef struct __attribute__((packed)) {
     char str_452[2];
     char str_453[4];
     char str_454[2];
-    char str_455[4];
+    char idc_str[4];
     char str_456[2];
     char str_457[2];
-    char str_458[4];
-    char str_459[8];
-    char str_460[4];
-    char str_461[4];
-    char str_462[4];
-    char str_463[8];
+    char id_str[4];
+    char idICON__str[8];
+    char id_str_2[4];
+    char idf_str[4];
+    char idf_str_2[4];
+    char idNONE_str[8];
     char str_464[6];
     char str_465[8];
     char str_466[8];
     char str_467[6];
     char str_468[8];
-    char str_469[8];
-    char str_470[8];
+    char idNONE_str_2[8];
+    char idNONE_str_3[8];
     char str_471[6];
     char str_472[8];
     char str_473[6];
     char str_474[8];
-    char str_475[8];
+    char idNONE_str_4[8];
     char str_476[6];
     char str_477[8];
-    char str_478[8];
-    char str_479[8];
+    char idNONE_str_5[8];
+    char idNONE_str_6[8];
     char str_480[6];
     char str_481[8];
     char str_482[6];
     char str_483[8];
-    char str_484[8];
+    char idNONE_str_7[8];
     char str_485[6];
     char str_486[8];
     char w8_code[8];
@@ -1546,10 +1546,10 @@ typedef struct __attribute__((packed)) {
     char str_491[16];
     char w10_code[8];
     char w10_name[8];
-    char str_492[6];
+    char name_str_2[6];
     char str_493[2];
     char str_494[2];
-    char str_495[8];
+    char romram_str_2[8];
     char str_496[2];
     char str_497[2];
     char str_498[2];
@@ -1809,7 +1809,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_2141;
     uint16_t field_2143;
     uint16_t field_2145;
-    char str_503[2];
+    char M_str_2[2];
     uint16_t field_2149;
     uint16_t field_214b;
     uint16_t field_214d;
@@ -1852,12 +1852,12 @@ typedef struct __attribute__((packed)) {
     uint16_t field_2197;
     uint16_t field_2199;
     uint16_t field_219b;
-    char str_504[2];
+    char M_str_3[2];
     uint16_t field_219f;
-    char str_505[2];
+    char M_str_4[2];
     uint16_t field_21a3;
     char str_506[13];
-    char str_507[4];
+    char wb_str[4];
     uint16_t field_21b6;
     uint16_t field_21b8;
     uint16_t field_21ba;
@@ -2115,26 +2115,26 @@ typedef struct __attribute__((packed)) {
     uint32_t ptrs_24[26];  /* 26 pointers */
     char w11_code[2];
     char w11_name[14];
-    char str_536[16];
-    char str_537[16];
-    char str_538[14];
+    char CaptureLcdCheck_str[16];
+    char UserBitmapCheck_str[16];
+    char LanguageCheck_str[14];
     char w12_code[10];
     char w12_name[18];
-    char str_539[12];
-    char str_540[14];
-    char str_541[14];
-    char str_542[14];
-    char str_543[14];
-    char str_544[16];
+    char NamingCheck_str[12];
+    char BitEditCheck_str[14];
+    char PasTableCheck_str[14];
+    char RamEditCheck_str[14];
+    char LswEditCheck_str[14];
+    char DefaultFunction_str[16];
     char str_545[2];
     uint32_t ptrs_25[256];  /* 256 pointers */
     char w13_code[2];
     char w13_name[6];
-    char str_546[12];
-    char str_547[12];
+    char LiMetronome_str[12];
+    char LiGMSpecial_str[12];
     char w14_code[10];
     char w14_name[8];
-    char str_548[12];
+    char LiAccordion_str[12];
     char w15_code[10];
     char w15_name[8];
     char w16_code[10];
@@ -2161,8 +2161,8 @@ typedef struct __attribute__((packed)) {
     char w26_name[14];
     char w27_code[10];
     char w27_name[10];
-    char str_549[14];
-    char str_550[10];
+    char GoldTechnics_str[14];
+    char TrashIcon_str[10];
     uint32_t ptrs_26[256];  /* 256 pointers */
     char str_551[2];
     char str_552[10];
@@ -2204,323 +2204,323 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_31ee;
     uint32_t ptr_31f2;
     char str_587[2];
-    char str_588[6];
+    char func_str[6];
     uint32_t ptr_31fe;
     char str_589[2];
     uint32_t ptr_3204;
     char str_590[2];
     uint32_t ptrs_27[8];  /* 8 pointers */
     char str_591[2];
-    char str_592[10];
-    char str_593[10];
-    char str_594[6];
-    char str_595[10];
-    char str_596[8];
-    char str_597[8];
-    char str_598[6];
+    char propname_str[10];
+    char propdata_str[10];
+    char name_str_3[6];
+    char selfsize_str[10];
+    char allsize_str[8];
+    char parent_str[8];
+    char proc_str[6];
     uint32_t ptrs_28[5];  /* 5 pointers */
     char str_599[2];
-    char str_600[6];
-    char str_601[6];
-    char str_602[6];
-    char str_603[6];
+    char prop_str[6];
+    char size_str[6];
+    char count_str[6];
+    char proc_str_2[6];
     uint32_t ptrs_29[5];  /* 5 pointers */
     char str_604[2];
-    char str_605[6];
-    char str_606[6];
-    char str_607[6];
-    char str_608[6];
+    char name_str_4[6];
+    char user_str[6];
+    char title_str[6];
+    char proc_str_3[6];
     uint32_t ptrs_30[8];  /* 8 pointers */
     char str_609[2];
-    char str_610[6];
-    char str_611[6];
-    char str_612[4];
-    char str_613[6];
-    char str_614[6];
-    char str_615[4];
-    char str_616[6];
+    char next_str[6];
+    char prev_str[6];
+    char now_str[4];
+    char name_str_5[6];
+    char user_str_2[6];
+    char top_str[4];
+    char proc_str_4[6];
     uint32_t ptr_330a;
     uint32_t ptr_330e;
     char str_617[2];
-    char str_618[6];
+    char data_str[6];
     uint32_t ptr_331a;
     uint32_t ptr_331e;
     char str_619[2];
-    char str_620[6];
+    char data_str_2[6];
     uint32_t ptr_332a;
     uint32_t ptr_332e;
     char str_621[2];
-    char str_622[6];
+    char data_str_3[6];
     uint32_t ptr_333a;
     uint32_t ptr_333e;
     char str_623[2];
-    char str_624[6];
+    char data_str_4[6];
     uint32_t ptr_334a;
     uint32_t ptr_334e;
     char str_625[2];
-    char str_626[6];
+    char name_str_6[6];
     uint32_t ptr_335a;
     uint32_t ptr_335e;
     char str_627[2];
-    char str_628[6];
+    char name_str_7[6];
     uint32_t ptr_336a;
     uint32_t ptr_336e;
     char str_629[2];
-    char str_630[6];
+    char data_str_5[6];
     uint32_t ptr_337a;
     uint32_t ptr_337e;
     char str_631[2];
-    char str_632[6];
+    char name_str_8[6];
     uint32_t ptrs_31[8];  /* 8 pointers */
     char str_633[2];
-    char str_634[6];
-    char str_635[6];
-    char str_636[6];
-    char str_637[6];
-    char str_638[4];
-    char str_639[6];
-    char str_640[6];
+    char rect_str[6];
+    char flag_str[6];
+    char prev_str_2[6];
+    char next_str_2[6];
+    char sub_str[4];
+    char super_str[6];
+    char class_str[6];
     uint32_t ptrs_32[4];  /* 4 pointers */
     char str_641[2];
-    char str_642[6];
-    char str_643[8];
-    char str_644[6];
+    char index_str[6];
+    char border_str[8];
+    char color_str[6];
     uint32_t ptrs_33[4];  /* 4 pointers */
     char str_645[2];
-    char str_646[6];
-    char str_647[10];
-    char str_648[6];
+    char align_str[6];
+    char fontcolor_str[10];
+    char font_str[6];
     uint32_t ptrs_34[3];  /* 3 pointers */
     char str_649[2];
-    char str_650[6];
-    char str_651[6];
+    char data_str_6[6];
+    char func_str_2[6];
     uint32_t ptr_343c;
     char str_652[2];
     uint32_t ptrs_35[9];  /* 9 pointers */
     char str_653[2];
-    char str_654[10];
-    char str_655[6];
-    char str_656[8];
-    char str_657[8];
-    char str_658[6];
-    char str_659[10];
-    char str_660[6];
-    char str_661[8];
+    char selected_str[10];
+    char dial_str[6];
+    char editsw_str[8];
+    char length_str[8];
+    char align_str_2[6];
+    char fontcolor_str_2[10];
+    char font_str_2[6];
+    char caption_str[8];
     uint32_t ptr_34a6;
     uint32_t ptr_34aa;
     char str_662[2];
-    char str_663[8];
+    char figures_str[8];
     uint32_t ptr_34b8;
     uint32_t ptr_34bc;
     char str_664[2];
-    char str_665[6];
+    char func_str_3[6];
     uint32_t ptr_34c8;
     uint32_t ptr_34cc;
     char str_666[2];
-    char str_667[6];
+    char onoff_str[6];
     uint32_t ptrs_36[7];  /* 7 pointers */
     char str_668[2];
-    char str_669[10];
-    char str_670[10];
-    char str_671[4];
-    char str_672[4];
-    char str_673[8];
-    char str_674[4];
+    char smallstep_str[10];
+    char largestep_str[10];
+    char min_str[4];
+    char max_str[4];
+    char figures_str_2[8];
+    char num_str[4];
     uint32_t ptrs_37[3];  /* 3 pointers */
     char str_675[2];
-    char str_676[6];
-    char str_677[6];
+    char data_str_7[6];
+    char func_str_4[6];
     uint32_t ptrs_38[3];  /* 3 pointers */
     char str_678[2];
-    char str_679[6];
-    char str_680[6];
+    char data_str_8[6];
+    char func_str_5[6];
     uint32_t ptrs_39[6];  /* 6 pointers */
     char str_681[2];
-    char str_682[10];
-    char str_683[8];
-    char str_684[6];
-    char str_685[10];
-    char str_686[6];
+    char selected_str_2[10];
+    char editsw_str_2[8];
+    char align_str_3[6];
+    char fontcolor_str_3[10];
+    char font_str_3[6];
     uint32_t ptrs_40[4];  /* 4 pointers */
     char str_687[2];
-    char str_688[6];
-    char str_689[6];
-    char str_690[4];
+    char icon_str[6];
+    char title_str_2[6];
+    char str_str[4];
     uint32_t ptrs_41[5];  /* 5 pointers */
     char str_691[2];
-    char str_692[8];
-    char str_693[6];
-    char str_694[10];
-    char str_695[6];
+    char editsw_str_3[8];
+    char align_str_4[6];
+    char fontcolor_str_4[10];
+    char font_str_4[6];
     uint32_t ptr_35ea;
     uint32_t ptr_35ee;
     char str_696[2];
-    char str_697[6];
+    char style_str[6];
     uint32_t ptrs_42[3];  /* 3 pointers */
     char str_698[2];
-    char str_699[6];
-    char str_700[6];
+    char func_str_6[6];
+    char style_str_2[6];
     uint32_t ptr_3614;
     uint32_t ptr_3618;
     char str_701[2];
-    char str_702[8];
+    char editsw2_str[8];
     uint32_t ptr_3626;
     uint32_t ptr_362a;
     char str_703[2];
-    char str_704[6];
+    char style_str_3[6];
     uint32_t ptrs_43[3];  /* 3 pointers */
     char str_705[2];
-    char str_706[6];
-    char str_707[6];
+    char func_str_7[6];
+    char style_str_4[6];
     uint32_t ptr_3650;
     uint32_t ptr_3654;
     char str_708[2];
-    char str_709[6];
+    char page_str[6];
     uint32_t ptrs_44[3];  /* 3 pointers */
     char str_710[2];
-    char str_711[8];
-    char str_712[8];
+    char pagemax_str[8];
+    char pagemin_str[8];
     uint32_t ptrs_45[6];  /* 6 pointers */
     char str_713[2];
-    char str_714[8];
-    char str_715[6];
-    char str_716[8];
-    char str_717[6];
-    char str_718[6];
+    char editsw_str_4[8];
+    char onoff_str_2[6];
+    char stroff_str[8];
+    char stron_str[6];
+    char font_str_5[6];
     uint32_t ptr_36ba;
     char str_719[2];
     uint32_t ptrs_46[3];  /* 3 pointers */
     char str_720[2];
-    char str_721[8];
-    char str_722[6];
+    char window_str[8];
+    char page_str_2[6];
     uint32_t ptr_36dc;
     uint32_t ptr_36e0;
     char str_723[2];
-    char str_724[6];
+    char func_str_8[6];
     uint32_t ptr_36ec;
     uint32_t ptr_36f0;
     char str_725[2];
-    char str_726[6];
+    char part_str[6];
     uint32_t ptrs_47[4];  /* 4 pointers */
     char str_727[2];
-    char str_728[10];
-    char str_729[6];
-    char str_730[4];
+    char fontcolor_str_5[10];
+    char font_str_6[6];
+    char str_str_2[4];
     uint32_t ptr_3722;
     uint32_t ptr_3726;
     char str_731[2];
-    char str_732[4];
+    char bmp_str[4];
     uint32_t ptr_3730;
     uint32_t ptr_3734;
     char str_733[2];
-    char str_734[6];
+    char icon_str_2[6];
     uint32_t ptrs_48[3];  /* 3 pointers */
     char str_735[2];
-    char str_736[10];
-    char str_737[6];
+    char linemode_str[10];
+    char color_str_2[6];
     uint32_t ptrs_49[4];  /* 4 pointers */
     char str_738[2];
-    char str_739[6];
-    char str_740[6];
-    char str_741[6];
+    char color_str_3[6];
+    char width_str[6];
+    char frame_str[6];
     uint32_t ptrs_50[4];  /* 4 pointers */
     char str_742[2];
-    char str_743[6];
-    char str_744[6];
-    char str_745[8];
+    char index_str_2[6];
+    char func_str_9[6];
+    char editsw_str_5[8];
     uint32_t ptrs_51[3];  /* 3 pointers */
     char str_746[2];
-    char str_747[8];
-    char str_748[6];
+    char border_str_2[8];
+    char color_str_4[6];
     uint32_t ptr_37c4;
     char str_749[2];
     uint32_t ptrs_52[3];  /* 3 pointers */
     char str_750[2];
-    char str_751[8];
-    char str_752[6];
+    char window_str_2[8];
+    char exit_str[6];
     uint32_t ptrs_53[3];  /* 3 pointers */
     char str_753[2];
-    char str_754[6];
-    char str_755[6];
+    char icon_str_3[6];
+    char title_str_3[6];
     uint32_t ptrs_54[4];  /* 4 pointers */
     char str_756[2];
-    char str_757[6];
-    char str_758[8];
-    char str_759[6];
+    char child_str[6];
+    char parent_str_2[8];
+    char modal_str[6];
     uint32_t ptrs_55[6];  /* 6 pointers */
     char str_760[2];
-    char str_761[6];
-    char str_762[10];
-    char str_763[10];
-    char str_764[6];
-    char str_765[6];
+    char lines_str[6];
+    char alignment_str[10];
+    char fontcolor_str_6[10];
+    char font_str_7[6];
+    char text_str[6];
     uint32_t ptrs_56[5];  /* 5 pointers */
     char str_766[2];
-    char str_767[10];
-    char str_768[10];
-    char str_769[6];
-    char str_770[4];
+    char alignment_str_2[10];
+    char fontcolor_str_7[10];
+    char font_str_8[6];
+    char str_str_3[4];
     uint32_t ptrs_57[6];  /* 6 pointers */
     char str_771[2];
-    char str_772[6];
-    char str_773[6];
-    char str_774[6];
-    char str_775[6];
-    char str_776[6];
+    char name_str_9[6];
+    char user_str_3[6];
+    char title_str_4[6];
+    char proc_str_5[6];
+    char mode_str[6];
     uint32_t ptrs_58[6];  /* 6 pointers */
     char str_777[2];
-    char str_778[6];
-    char str_779[6];
-    char str_780[4];
-    char str_781[6];
-    char str_782[6];
+    char name_str_10[6];
+    char user_str_4[6];
+    char top_str_2[4];
+    char proc_str_6[6];
+    char title_str_5[6];
     uint32_t ptr_3908;
     char str_783[2];
     uint32_t ptr_390e;
     char str_784[2];
     uint32_t ptrs_59[3];  /* 3 pointers */
     char str_785[2];
-    char str_786[8];
-    char str_787[6];
+    char editsw_str_6[8];
+    char part_str_2[6];
     uint32_t ptrs_60[3];  /* 3 pointers */
     char str_788[2];
-    char str_789[6];
-    char str_790[4];
+    char icon_str_4[6];
+    char str_str_4[4];
     uint32_t ptrs_61[3];  /* 3 pointers */
     char str_791[2];
-    char str_792[4];
-    char str_793[6];
+    char str_str_5[4];
+    char style_str_5[6];
     uint32_t ptrs_62[3];  /* 3 pointers */
     char str_794[2];
-    char str_795[4];
-    char str_796[6];
+    char str_str_6[4];
+    char style_str_6[6];
     uint32_t ptrs_63[4];  /* 4 pointers */
     char str_797[2];
-    char str_798[6];
-    char str_799[6];
-    char str_800[4];
+    char icon_str_5[6];
+    char mode_str_2[6];
+    char str_str_7[4];
     uint32_t ptrs_64[4];  /* 4 pointers */
     char str_801[2];
-    char str_802[6];
-    char str_803[8];
-    char str_804[4];
+    char icon_str_6[6];
+    char screen_str[8];
+    char str_str_8[4];
     uint32_t ptrs_65[4];  /* 4 pointers */
     char str_805[2];
-    char str_806[6];
-    char str_807[8];
-    char str_808[4];
+    char icon_str_7[6];
+    char window_str_3[8];
+    char str_str_9[4];
     uint32_t ptrs_66[3];  /* 3 pointers */
     char str_809[2];
-    char str_810[6];
-    char str_811[6];
+    char data_str_9[6];
+    char func_str_10[6];
     uint32_t ptr_39fc;
     uint32_t ptr_3a00;
     char str_812[2];
-    char str_813[6];
+    char func_str_11[6];
     uint32_t ptr_3a0c;
     uint32_t ptr_3a10;
     char str_814[2];
-    char str_815[8];
+    char editsw2_str_2[8];
     uint32_t ptr_3a1e;
     char str_816[2];
     uint32_t ptr_3a24;
@@ -2528,88 +2528,88 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_3a2a;
     uint32_t ptr_3a2e;
     char str_818[2];
-    char str_819[6];
+    char mode_str_3[6];
     uint32_t ptr_3a3a;
     uint32_t ptr_3a3e;
     char str_820[2];
-    char str_821[8];
+    char screen_str_2[8];
     uint32_t ptr_3a4c;
     uint32_t ptr_3a50;
     char str_822[2];
-    char str_823[8];
+    char window_str_4[8];
     uint32_t ptr_3a5e;
     char str_824[2];
     uint32_t ptr_3a64;
     uint32_t ptr_3a68;
     char str_825[2];
-    char str_826[8];
+    char cursor_str[8];
     uint32_t ptr_3a76;
     uint32_t ptr_3a7a;
     char str_827[2];
-    char str_828[6];
+    char func_str_12[6];
     uint32_t ptrs_67[3];  /* 3 pointers */
     char str_829[2];
-    char str_830[4];
-    char str_831[6];
+    char tag_str[4];
+    char index_str_3[6];
     uint32_t ptrs_68[3];  /* 3 pointers */
     char str_832[2];
-    char str_833[6];
-    char str_834[6];
+    char data_str_10[6];
+    char func_str_13[6];
     uint32_t ptrs_69[7];  /* 7 pointers */
     char str_835[2];
-    char str_836[4];
-    char str_837[10];
-    char str_838[8];
-    char str_839[6];
-    char str_840[10];
-    char str_841[6];
+    char tag_str_2[4];
+    char selected_str_3[10];
+    char editsw_str_7[8];
+    char align_str_5[6];
+    char fontcolor_str_8[10];
+    char font_str_9[6];
     uint32_t ptr_3b02;
     uint32_t ptr_3b06;
     char str_842[2];
-    char str_843[4];
+    char str_str_10[4];
     uint32_t ptr_3b10;
     uint32_t ptr_3b14;
     char str_844[2];
-    char str_845[6];
+    char func_str_14[6];
     uint32_t ptrs_70[6];  /* 6 pointers */
     char str_846[2];
-    char str_847[10];
-    char str_848[4];
-    char str_849[6];
-    char str_850[10];
-    char str_851[6];
+    char selected_str_4[10];
+    char row_str[4];
+    char align_str_6[6];
+    char fontcolor_str_9[10];
+    char font_str_10[6];
     uint32_t ptrs_71[12];  /* 12 pointers */
     char str_852[2];
-    char str_853[6];
-    char str_854[6];
-    char str_855[6];
-    char str_856[8];
-    char str_857[8];
-    char str_858[10];
-    char str_859[4];
-    char str_860[4];
-    char str_861[6];
-    char str_862[10];
-    char str_863[6];
+    char crow_str[6];
+    char prow_str[6];
+    char pcol_str[6];
+    char selcol_str[8];
+    char selrow_str[8];
+    char vertline_str[10];
+    char col_str[4];
+    char row_str_2[4];
+    char align_str_7[6];
+    char fontcolor_str_10[10];
+    char font_str_11[6];
     uint32_t ptrs_72[3];  /* 3 pointers */
     char str_864[2];
-    char str_865[6];
-    char str_866[6];
+    char dial_str_2[6];
+    char list_str[6];
     uint32_t ptrs_73[4];  /* 4 pointers */
     char str_867[2];
-    char str_868[6];
-    char str_869[10];
-    char str_870[10];
+    char func_str_15[6];
+    char fixedrow_str[10];
+    char fixedcol_str[10];
     uint32_t ptr_3c20;
     uint32_t ptr_3c24;
     char str_871[2];
-    char str_872[6];
+    char page_str_3[6];
     uint32_t ptrs_74[5];  /* 5 pointers */
     char str_873[2];
-    char str_874[8];
-    char str_875[6];
-    char str_876[6];
-    char str_877[6];
+    char recplay_str[8];
+    char part_str_3[6];
+    char onoff_str_3[6];
+    char track_str[6];
     uint32_t ptr_3c60;
     char str_878[2];
     uint32_t ptr_3c66;
@@ -2621,11 +2621,11 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_3c78;
     uint32_t ptr_3c7c;
     char str_882[2];
-    char str_883[4];
+    char adr_str[4];
     uint32_t ptr_3c86;
     uint32_t ptr_3c8a;
     char str_884[2];
-    char str_885[6];
+    char time_str[6];
     uint32_t ptr_3c96;
     char str_886[2];
     uint32_t ptr_3c9c;
@@ -2639,17 +2639,17 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_3cb4;
     uint32_t ptr_3cb8;
     char str_891[2];
-    char str_892[6];
+    char func_str_16[6];
     uint32_t ptrs_75[5];  /* 5 pointers */
     char str_893[2];
-    char str_894[6];
-    char str_895[10];
-    char str_896[10];
-    char str_897[6];
+    char lines_str_2[6];
+    char alignment_str_3[10];
+    char fontcolor_str_11[10];
+    char font_str_12[6];
     uint32_t ptr_3cfa;
     uint32_t ptr_3cfe;
     char str_898[2];
-    char str_899[6];
+    char func_str_17[6];
     uint32_t ptr_3d0a;
     char str_900[2];
     uint32_t ptr_3d10;
@@ -2657,7 +2657,7 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_3d16;
     uint32_t ptr_3d1a;
     char str_902[2];
-    char str_903[6];
+    char func_str_18[6];
     uint32_t ptr_3d26;
     char str_904[2];
     uint32_t ptr_3d2c;
@@ -2665,7 +2665,7 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_3d32;
     uint32_t ptr_3d36;
     char str_906[2];
-    char str_907[6];
+    char file_str[6];
     /* class definition 0x160:0: Object (parent -, allsize 2, fields -) */
     naka_classdef_t classdef_160_0;
     /* class definition 0x160:1: Function (parent Object, allsize 4, fields func) */
@@ -2957,11 +2957,11 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_61 = "1shot",
 
-    .str_62 = "ISC",
+    .ISC_str = "ISC",
 
-    .str_63 = "ISD",
+    .ISD_str = "ISD",
 
-    .str_64 = "WWC",
+    .WWC_str = "WWC",
 
     .pad_1 = { 0 },
 
@@ -2969,11 +2969,11 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_65 = "+",
 
-    .str_66 = "A",
+    .A_str = "A",
 
-    .str_67 = "W",
+    .W_str = "W",
 
-    .str_68 = "l",
+    .l_str = "l",
 
     .pad_2 = { 0 },
 
@@ -3019,9 +3019,9 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_73 = "<",
 
-    .str_74 = "A",
+    .A_str_2 = "A",
 
-    .str_75 = "F",
+    .F_str = "F",
 
     .field_0c36 = 0x0007,
 
@@ -3321,21 +3321,21 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_85 = "<",
 
-    .str_86 = "R",
+    .R_str = "R",
 
     .field_0d7a = 0x00F6,
 
     .field_0d7c = 0x0101,
 
-    .str_87 = "h",
+    .h_str = "h",
 
-    .str_88 = "s",
+    .s_str = "s",
 
     .field_0d82 = 0x00BF,
 
     .ptr_0d84 = NAKA_ADDR(Data_WidgetNamesCharMapBlock),
 
-    .str_89 = "G",
+    .G_str = "G",
 
     .str_90 = "]",
 
@@ -3537,21 +3537,21 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .field_0e6e = 0x05EC,
 
-    .str_93 = "F",
+    .F_str_2 = "F",
 
-    .str_94 = "K",
+    .K_str = "K",
 
-    .str_95 = "P",
+    .P_str = "P",
 
-    .str_96 = "U",
+    .U_str = "U",
 
-    .str_97 = "Z",
+    .Z_str = "Z",
 
-    .str_98 = "_",
+    .__str = "_",
 
-    .str_99 = "d",
+    .d_str = "d",
 
-    .str_100 = "i",
+    .i_str = "i",
 
     .field_0e80 = 0x0004,
 
@@ -3575,7 +3575,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .field_0e94 = 0x0018,
 
-    .str_104 = "K",
+    .K_str_2 = "K",
 
     .str_105 = "]",
 
@@ -3593,7 +3593,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .field_0ea6 = 0x0125,
 
-    .str_106 = "q",
+    .q_str = "q",
 
     .field_0eaa = 0x0125,
 
@@ -3634,7 +3634,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .field_0f1e = 0x0080,
 
-    .str_111 = "S",
+    .S_str = "S",
 
     .field_0f22 = 0x0080,
 
@@ -3685,33 +3685,33 @@ const naka_disk_warning_t naka_disk_warning_data
     .str_115 = ALIGNED_STRING("ABC...123..."),
 
     .ptrs_11 = {
-        SELF(str_154),
-        SELF(str_153),
-        SELF(str_152),
-        SELF(str_151),
-        SELF(str_150),
-        SELF(str_149),
-        SELF(str_148),
-        SELF(str_147),
-        SELF(str_146),
-        SELF(str_145),
-        SELF(str_144),
-        SELF(str_143),
-        SELF(str_142),
-        SELF(str_141),
-        SELF(str_140),
-        SELF(str_139),
-        SELF(str_138),
-        SELF(str_137),
-        SELF(str_136),
-        SELF(str_135),
-        SELF(str_134),
-        SELF(str_133),
-        SELF(str_132),
-        SELF(str_131),
-        SELF(str_130),
-        SELF(str_129),
-        SELF(str_128),
+        SELF(A_str_3),
+        SELF(B_str),
+        SELF(C_str),
+        SELF(D_str),
+        SELF(E_str),
+        SELF(F_str_3),
+        SELF(G_str_2),
+        SELF(H_str),
+        SELF(I_str),
+        SELF(J_str),
+        SELF(K_str_3),
+        SELF(L_str),
+        SELF(M_str),
+        SELF(N_str),
+        SELF(O_str),
+        SELF(P_str_2),
+        SELF(Q_str),
+        SELF(R_str_2),
+        SELF(S_str_2),
+        SELF(T_str),
+        SELF(U_str_2),
+        SELF(V_str),
+        SELF(W_str_2),
+        SELF(X_str),
+        SELF(Y_str),
+        SELF(Z_str_2),
+        SELF(__str_2),
         SELF(str_127),
         SELF(str_126),
         SELF(str_125),
@@ -3722,13 +3722,13 @@ const naka_disk_warning_t naka_disk_warning_data
         SELF(str_120),
         SELF(str_119),
         SELF(str_118),
-        SELF(str_117),
+        SELF(SPC_str),
         SELF(str_116),
     },
 
     .str_116 = ALIGNED_STRING(""),
 
-    .str_117 = "SPC",
+    .SPC_str = "SPC",
 
     .str_118 = "9",
 
@@ -3750,88 +3750,88 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_127 = "0",
 
-    .str_128 = "_",
+    .__str_2 = "_",
 
-    .str_129 = "Z",
+    .Z_str_2 = "Z",
 
-    .str_130 = "Y",
+    .Y_str = "Y",
 
-    .str_131 = "X",
+    .X_str = "X",
 
-    .str_132 = "W",
+    .W_str_2 = "W",
 
-    .str_133 = "V",
+    .V_str = "V",
 
-    .str_134 = "U",
+    .U_str_2 = "U",
 
-    .str_135 = "T",
+    .T_str = "T",
 
-    .str_136 = "S",
+    .S_str_2 = "S",
 
-    .str_137 = "R",
+    .R_str_2 = "R",
 
-    .str_138 = "Q",
+    .Q_str = "Q",
 
-    .str_139 = "P",
+    .P_str_2 = "P",
 
-    .str_140 = "O",
+    .O_str = "O",
 
-    .str_141 = "N",
+    .N_str = "N",
 
-    .str_142 = "M",
+    .M_str = "M",
 
-    .str_143 = "L",
+    .L_str = "L",
 
-    .str_144 = "K",
+    .K_str_3 = "K",
 
-    .str_145 = "J",
+    .J_str = "J",
 
-    .str_146 = "I",
+    .I_str = "I",
 
-    .str_147 = "H",
+    .H_str = "H",
 
-    .str_148 = "G",
+    .G_str_2 = "G",
 
-    .str_149 = "F",
+    .F_str_3 = "F",
 
-    .str_150 = "E",
+    .E_str = "E",
 
-    .str_151 = "D",
+    .D_str = "D",
 
-    .str_152 = "C",
+    .C_str = "C",
 
-    .str_153 = "B",
+    .B_str = "B",
 
-    .str_154 = "A",
+    .A_str_3 = "A",
 
     .ptrs_12 = {
-        SELF(str_193),
-        SELF(str_192),
-        SELF(str_191),
-        SELF(str_190),
-        SELF(str_189),
-        SELF(str_188),
-        SELF(str_187),
-        SELF(str_186),
-        SELF(str_185),
-        SELF(str_184),
-        SELF(str_183),
-        SELF(str_182),
-        SELF(str_181),
-        SELF(str_180),
-        SELF(str_179),
-        SELF(str_178),
-        SELF(str_177),
-        SELF(str_176),
-        SELF(str_175),
-        SELF(str_174),
-        SELF(str_173),
-        SELF(str_172),
-        SELF(str_171),
-        SELF(str_170),
-        SELF(str_169),
-        SELF(str_168),
-        SELF(str_167),
+        SELF(a_str),
+        SELF(b_str),
+        SELF(c_str),
+        SELF(d_str_2),
+        SELF(e_str),
+        SELF(f_str),
+        SELF(g_str),
+        SELF(h_str_2),
+        SELF(i_str_2),
+        SELF(j_str),
+        SELF(k_str),
+        SELF(l_str_2),
+        SELF(m_str),
+        SELF(n_str),
+        SELF(o_str),
+        SELF(p_str),
+        SELF(q_str_2),
+        SELF(r_str),
+        SELF(s_str_2),
+        SELF(t_str),
+        SELF(u_str),
+        SELF(v_str),
+        SELF(w_str),
+        SELF(x_str),
+        SELF(y_str),
+        SELF(z_str),
+        SELF(__str_3),
         SELF(str_166),
         SELF(str_165),
         SELF(str_164),
@@ -3842,13 +3842,13 @@ const naka_disk_warning_t naka_disk_warning_data
         SELF(str_159),
         SELF(str_158),
         SELF(str_157),
-        SELF(str_156),
+        SELF(SPC_str_2),
         SELF(str_155),
     },
 
     .str_155 = ALIGNED_STRING(""),
 
-    .str_156 = "SPC",
+    .SPC_str_2 = "SPC",
 
     .str_157 = "9",
 
@@ -3870,59 +3870,59 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_166 = "0",
 
-    .str_167 = "_",
+    .__str_3 = "_",
 
-    .str_168 = "z",
+    .z_str = "z",
 
-    .str_169 = "y",
+    .y_str = "y",
 
-    .str_170 = "x",
+    .x_str = "x",
 
-    .str_171 = "w",
+    .w_str = "w",
 
-    .str_172 = "v",
+    .v_str = "v",
 
-    .str_173 = "u",
+    .u_str = "u",
 
-    .str_174 = "t",
+    .t_str = "t",
 
-    .str_175 = "s",
+    .s_str_2 = "s",
 
-    .str_176 = "r",
+    .r_str = "r",
 
-    .str_177 = "q",
+    .q_str_2 = "q",
 
-    .str_178 = "p",
+    .p_str = "p",
 
-    .str_179 = "o",
+    .o_str = "o",
 
-    .str_180 = "n",
+    .n_str = "n",
 
-    .str_181 = "m",
+    .m_str = "m",
 
-    .str_182 = "l",
+    .l_str_2 = "l",
 
-    .str_183 = "k",
+    .k_str = "k",
 
-    .str_184 = "j",
+    .j_str = "j",
 
-    .str_185 = "i",
+    .i_str_2 = "i",
 
-    .str_186 = "h",
+    .h_str_2 = "h",
 
-    .str_187 = "g",
+    .g_str = "g",
 
-    .str_188 = "f",
+    .f_str = "f",
 
-    .str_189 = "e",
+    .e_str = "e",
 
-    .str_190 = "d",
+    .d_str_2 = "d",
 
-    .str_191 = "c",
+    .c_str = "c",
 
-    .str_192 = "b",
+    .b_str = "b",
 
-    .str_193 = "a",
+    .a_str = "a",
 
     .ptrs_13 = {
         SELF(str_226),
@@ -4046,9 +4046,9 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .ptr_123e = SELF(str_232),
 
-    .ptr_1242 = SELF(str_231),
+    .ptr_1242 = SELF(__str_4),
 
-    .str_231 = "_",
+    .__str_4 = "_",
 
     .str_232 = " ",
 
@@ -4056,7 +4056,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_233 = "-",
 
-    .str_234 = "a",
+    .a_str_2 = "a",
 
     .field_1250 = 0x00DD,
 
@@ -4548,7 +4548,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .field_14b3 = 0x2E07,
 
-    .str_240 = "BMP",
+    .BMP_str = "BMP",
 
     .field_14b9 = 0x7EFF,
 
@@ -4594,11 +4594,11 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .field_15aa = 0x0ADB,
 
-    .str_253 = "k",
+    .k_str_2 = "k",
 
     .field_15ae = 0x0116,
 
-    .str_254 = "k",
+    .k_str_3 = "k",
 
     .field_15b2 = 0x0116,
 
@@ -4620,29 +4620,29 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_258 = ALIGNED_STRING("%d"),
 
-    .str_259 = "d",
+    .d_str_3 = "d",
 
-    .ptr_15d6 = SELF(str_261),
+    .ptr_15d6 = SELF(PASSIVE_str),
 
     .ptr_15da = SELF(str_260),
 
     .str_260 = "ACTIVE ",
 
-    .str_261 = "PASSIVE",
+    .PASSIVE_str = "PASSIVE",
 
-    .ptr_15ee = SELF(str_263),
+    .ptr_15ee = SELF(OFF_str),
 
     .ptr_15f2 = SELF(str_262),
 
     .str_262 = "ON ",
 
-    .str_263 = "OFF",
+    .OFF_str = "OFF",
 
     .str_264 = "%",
 
     .str_265 = ALIGNED_STRING("%d"),
 
-    .str_266 = "d",
+    .d_str_4 = "d",
 
     .str_267 = "%3d",
 
@@ -4668,17 +4668,17 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .pad_106 = { 0 },
 
-    .ptr_1622 = SELF(str_276),
+    .ptr_1622 = SELF(FALSE_str),
 
     .ptr_1626 = SELF(str_275),
 
     .str_275 = "TRUE ",
 
-    .str_276 = "FALSE",
+    .FALSE_str = "FALSE",
 
-    .str_277 = ALIGNED_STRING("ON"),
+    .ON_str = ALIGNED_STRING("ON"),
 
-    .str_278 = "OFF",
+    .OFF_str_2 = "OFF",
 
     .str_279 = "~9b",
 
@@ -4688,11 +4688,11 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_282 = "~81",
 
-    .str_283 = ALIGNED_STRING("ON"),
+    .ON_str_2 = ALIGNED_STRING("ON"),
 
-    .str_284 = "OFF",
+    .OFF_str_3 = "OFF",
 
-    .str_285 = ALIGNED_STRING("OK"),
+    .OK_str = ALIGNED_STRING("OK"),
 
     .str_286 = "<",
 
@@ -4702,9 +4702,9 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_289 = "~80",
 
-    .str_290 = "YES",
+    .YES_str = "YES",
 
-    .str_291 = ALIGNED_STRING("NO"),
+    .NO_str = ALIGNED_STRING("NO"),
 
     .pad_107 = { 0 },
 
@@ -4712,7 +4712,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .field_1672 = 0x001A,
 
-    .str_292 = "w",
+    .w_str_2 = "w",
 
     .str_293 = "/",
 
@@ -4720,25 +4720,25 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_295 = "=",
 
-    .str_296 = "D",
+    .D_str_2 = "D",
 
-    .str_297 = "K",
+    .K_str_4 = "K",
 
     .str_298 = "`",
 
-    .str_299 = "g",
+    .g_str_2 = "g",
 
-    .str_300 = "w",
+    .w_str_3 = "w",
 
     .str_301 = "!",
 
     .str_302 = "(",
 
-    .str_303 = "w",
+    .w_str_4 = "w",
 
-    .str_304 = "R",
+    .R_str_3 = "R",
 
-    .str_305 = "Y",
+    .Y_str_2 = "Y",
 
     .field_1690 = 0x0100,
 
@@ -4766,17 +4766,17 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_308 = ALIGNED_STRING("PAGE %d/%d"),
 
-    .str_309 = ALIGNED_STRING("PAGE"),
+    .PAGE_str = ALIGNED_STRING("PAGE"),
 
-    .str_310 = ALIGNED_STRING("MnSw"),
+    .MnSw_str = ALIGNED_STRING("MnSw"),
 
-    .str_311 = ALIGNED_STRING("EXIT"),
+    .EXIT_str = ALIGNED_STRING("EXIT"),
 
     .w0_code = ALIGNED_STRING("ExMD"),
 
     .w0_name = ALIGNED_STRING("ExSC"),
 
-    .str_312 = ALIGNED_STRING("ExWn"),
+    .ExWn_str = ALIGNED_STRING("ExWn"),
 
     .w1_code = ALIGNED_STRING("FWin"),
 
@@ -4786,17 +4786,17 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .w2_name = ALIGNED_STRING("CcEv"),
 
-    .str_313 = ALIGNED_STRING("IntT"),
+    .IntT_str = ALIGNED_STRING("IntT"),
 
-    .str_314 = ALIGNED_STRING("iRem"),
+    .iRem_str = ALIGNED_STRING("iRem"),
 
-    .str_315 = ALIGNED_STRING("iCmp"),
+    .iCmp_str = ALIGNED_STRING("iCmp"),
 
-    .str_316 = ALIGNED_STRING("iErr"),
+    .iErr_str = ALIGNED_STRING("iErr"),
 
-    .str_317 = ALIGNED_STRING("iVar"),
+    .iVar_str = ALIGNED_STRING("iVar"),
 
-    .str_318 = ALIGNED_STRING("iEsy"),
+    .iEsy_str = ALIGNED_STRING("iEsy"),
 
     .w3_code = ALIGNED_STRING("iVar"),
 
@@ -4809,91 +4809,91 @@ const naka_disk_warning_t naka_disk_warning_data
     .str_321 = "PMEM:%2d-                  ",
 
     .ptrs_15 = {
-        SELF(str_349),
-        SELF(str_348),
-        SELF(str_347),
-        SELF(str_346),
-        SELF(str_345),
-        SELF(str_344),
-        SELF(str_343),
-        SELF(str_342),
-        SELF(str_341),
-        SELF(str_340),
-        SELF(str_339),
-        SELF(str_338),
-        SELF(str_337),
-        SELF(str_336),
-        SELF(str_335),
-        SELF(str_334),
-        SELF(str_333),
-        SELF(str_332),
-        SELF(str_331),
-        SELF(str_330),
-        SELF(str_329),
-        SELF(str_328),
-        SELF(str_327),
-        SELF(str_326),
-        SELF(str_325),
-        SELF(str_324),
-        SELF(str_323),
-        SELF(str_322),
+        SELF(RT1_str),
+        SELF(RT2_str),
+        SELF(LEFT_str),
+        SELF(PT4_str),
+        SELF(PT5_str),
+        SELF(PT6_str),
+        SELF(PT7_str),
+        SELF(PT8_str),
+        SELF(PT9_str),
+        SELF(PT10_str),
+        SELF(PT11_str),
+        SELF(PT12_str),
+        SELF(PT13_str),
+        SELF(PT14_str),
+        SELF(PT15_str),
+        SELF(PT16_str),
+        SELF(ACP1_str),
+        SELF(ACP2_str),
+        SELF(ACP3_str),
+        SELF(BASS_str),
+        SELF(DRUM_str),
+        SELF(CHRD_str),
+        SELF(RTBS_str),
+        SELF(MSP_str_2),
+        SELF(MSP_str),
+        SELF(CTRL_str),
+        SELF(METR_str),
+        SELF(MIC_str),
     },
 
-    .str_322 = "MIC",
+    .MIC_str = "MIC",
 
-    .str_323 = ALIGNED_STRING("METR"),
+    .METR_str = ALIGNED_STRING("METR"),
 
-    .str_324 = ALIGNED_STRING("CTRL"),
+    .CTRL_str = ALIGNED_STRING("CTRL"),
 
-    .str_325 = "MSP",
+    .MSP_str = "MSP",
 
-    .str_326 = "MSP",
+    .MSP_str_2 = "MSP",
 
-    .str_327 = ALIGNED_STRING("RTBS"),
+    .RTBS_str = ALIGNED_STRING("RTBS"),
 
-    .str_328 = ALIGNED_STRING("CHRD"),
+    .CHRD_str = ALIGNED_STRING("CHRD"),
 
-    .str_329 = ALIGNED_STRING("DRUM"),
+    .DRUM_str = ALIGNED_STRING("DRUM"),
 
-    .str_330 = ALIGNED_STRING("BASS"),
+    .BASS_str = ALIGNED_STRING("BASS"),
 
-    .str_331 = ALIGNED_STRING("ACP3"),
+    .ACP3_str = ALIGNED_STRING("ACP3"),
 
-    .str_332 = ALIGNED_STRING("ACP2"),
+    .ACP2_str = ALIGNED_STRING("ACP2"),
 
-    .str_333 = ALIGNED_STRING("ACP1"),
+    .ACP1_str = ALIGNED_STRING("ACP1"),
 
-    .str_334 = ALIGNED_STRING("PT16"),
+    .PT16_str = ALIGNED_STRING("PT16"),
 
-    .str_335 = ALIGNED_STRING("PT15"),
+    .PT15_str = ALIGNED_STRING("PT15"),
 
-    .str_336 = ALIGNED_STRING("PT14"),
+    .PT14_str = ALIGNED_STRING("PT14"),
 
-    .str_337 = ALIGNED_STRING("PT13"),
+    .PT13_str = ALIGNED_STRING("PT13"),
 
-    .str_338 = ALIGNED_STRING("PT12"),
+    .PT12_str = ALIGNED_STRING("PT12"),
 
-    .str_339 = ALIGNED_STRING("PT11"),
+    .PT11_str = ALIGNED_STRING("PT11"),
 
-    .str_340 = ALIGNED_STRING("PT10"),
+    .PT10_str = ALIGNED_STRING("PT10"),
 
-    .str_341 = "PT9",
+    .PT9_str = "PT9",
 
-    .str_342 = "PT8",
+    .PT8_str = "PT8",
 
-    .str_343 = "PT7",
+    .PT7_str = "PT7",
 
-    .str_344 = "PT6",
+    .PT6_str = "PT6",
 
-    .str_345 = "PT5",
+    .PT5_str = "PT5",
 
-    .str_346 = "PT4",
+    .PT4_str = "PT4",
 
-    .str_347 = ALIGNED_STRING("LEFT"),
+    .LEFT_str = ALIGNED_STRING("LEFT"),
 
-    .str_348 = "RT2",
+    .RT2_str = "RT2",
 
-    .str_349 = "RT1",
+    .RT1_str = "RT1",
 
     .field_1860 = 0x8007,
 
@@ -5165,11 +5165,11 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .field_196c = 0x0003,
 
-    .str_350 = ALIGNED_STRING("AA"),
+    .AA_str = ALIGNED_STRING("AA"),
 
     .field_1971 = 0x4200,
 
-    .str_351 = "A",
+    .A_str_4 = "A",
 
     .field_1975 = 0x0300,
 
@@ -5255,7 +5255,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_354 = "%3d",
 
-    .str_355 = ALIGNED_STRING("MUTE"),
+    .MUTE_str = ALIGNED_STRING("MUTE"),
 
     .str_356 = "Debug Time!",
 
@@ -5313,43 +5313,43 @@ const naka_disk_warning_t naka_disk_warning_data
     .field_1aa2 = NAKA_NONE,
 
     .ptrs_17 = {
-        SELF(str_383),
-        SELF(str_382),
-        SELF(str_381),
+        SELF(RT1_str_2),
+        SELF(LFT_str),
+        SELF(RT2_str_2),
         SELF(str_380),
         SELF(str_379),
-        SELF(str_378),
-        SELF(str_377),
-        SELF(str_376),
+        SELF(P10_str),
+        SELF(P11_str),
+        SELF(P12_str),
         SELF(str_375),
         SELF(str_374),
         SELF(str_373),
         SELF(str_372),
-        SELF(str_371),
-        SELF(str_370),
-        SELF(str_369),
-        SELF(str_368),
-        SELF(str_367),
-        SELF(str_366),
-        SELF(str_365),
-        SELF(str_364),
+        SELF(DRM_str),
+        SELF(CHD_str),
+        SELF(APC_str),
+        SELF(CTL_str),
+        SELF(RHY_str),
+        SELF(P13_str),
+        SELF(P14_str),
+        SELF(P15_str),
     },
 
-    .str_364 = "P15",
+    .P15_str = "P15",
 
-    .str_365 = "P14",
+    .P14_str = "P14",
 
-    .str_366 = "P13",
+    .P13_str = "P13",
 
-    .str_367 = "RHY",
+    .RHY_str = "RHY",
 
-    .str_368 = "CTL",
+    .CTL_str = "CTL",
 
-    .str_369 = "APC",
+    .APC_str = "APC",
 
-    .str_370 = "CHD",
+    .CHD_str = "CHD",
 
-    .str_371 = "DRM",
+    .DRM_str = "DRM",
 
     .str_372 = "P 4",
 
@@ -5359,37 +5359,37 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_375 = "P 5",
 
-    .str_376 = "P12",
+    .P12_str = "P12",
 
-    .str_377 = "P11",
+    .P11_str = "P11",
 
-    .str_378 = "P10",
+    .P10_str = "P10",
 
     .str_379 = "P 9",
 
     .str_380 = "P 8",
 
-    .str_381 = "RT2",
+    .RT2_str_2 = "RT2",
 
-    .str_382 = "LFT",
+    .LFT_str = "LFT",
 
-    .str_383 = "RT1",
+    .RT1_str_2 = "RT1",
 
     .ptrs_18 = {
         SELF(str_388),
-        SELF(str_387),
-        SELF(str_386),
-        SELF(str_385),
-        SELF(str_384),
+        SELF(REC_str),
+        SELF(PLAY_str),
+        SELF(MUTE_str_2),
+        SELF(CLR_str),
     },
 
-    .str_384 = "CLR",
+    .CLR_str = "CLR",
 
-    .str_385 = ALIGNED_STRING("MUTE"),
+    .MUTE_str_2 = ALIGNED_STRING("MUTE"),
 
-    .str_386 = ALIGNED_STRING("PLAY"),
+    .PLAY_str = ALIGNED_STRING("PLAY"),
 
-    .str_387 = "REC",
+    .REC_str = "REC",
 
     .str_388 = ALIGNED_STRING(""),
 
@@ -5430,11 +5430,11 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .w7_name = "English",
 
-    .str_390 = ALIGNED_STRING("YZ"),
+    .YZ_str = ALIGNED_STRING("YZ"),
 
-    .str_391 = ALIGNED_STRING("name"),
+    .name_str = ALIGNED_STRING("name"),
 
-    .str_392 = ALIGNED_STRING("romram"),
+    .romram_str = ALIGNED_STRING("romram"),
 
     .str_393 = ALIGNED_STRING(""),
 
@@ -5446,7 +5446,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .field_1bfe = 0x0014,
 
-    .str_395 = "A",
+    .A_str_5 = "A",
 
     .field_1c02 = 0x029D,
 
@@ -5456,7 +5456,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .field_1c08 = 0x00A8,
 
-    .str_396 = "P",
+    .P_str_3 = "P",
 
     .field_1c0c = 0x0112,
 
@@ -5524,7 +5524,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_402 = " ",
 
-    .str_403 = "z",
+    .z_str_2 = "z",
 
     .field_1c58 = 0x0104,
 
@@ -5534,13 +5534,13 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_404 = "=",
 
-    .str_405 = "S",
+    .S_str_3 = "S",
 
     .field_1c62 = 0x009A,
 
     .field_1c64 = 0x00A2,
 
-    .str_406 = "j",
+    .j_str_2 = "j",
 
     .str_407 = ALIGNED_STRING(""),
 
@@ -5558,7 +5558,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .pad_190 = { 0 },
 
-    .str_410 = "E",
+    .E_str_2 = "E",
 
     .field_1c7c = 0x01A0,
 
@@ -5566,7 +5566,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .field_1c80 = 0x01C0,
 
-    .str_411 = "d",
+    .d_str_5 = "d",
 
     .pad_191 = { 0 },
 
@@ -5594,7 +5594,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .pad_193 = { 0 },
 
-    .str_414 = "D",
+    .D_str_3 = "D",
 
     .field_1ca6 = 0x01A0,
 
@@ -5618,7 +5618,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .pad_195 = { 0 },
 
-    .str_417 = "a",
+    .a_str_3 = "a",
 
     .field_1cc2 = 0x01A0,
 
@@ -5690,13 +5690,13 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .pad_201 = { 0 },
 
-    .str_424 = "j",
+    .j_str_3 = "j",
 
     .field_1d16 = 0x001C,
 
     .str_425 = "=",
 
-    .str_426 = "S",
+    .S_str_4 = "S",
 
     .field_1d1c = 0x009A,
 
@@ -5710,7 +5710,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_427 = "*",
 
-    .str_428 = "S",
+    .S_str_5 = "S",
 
     .str_429 = "}",
 
@@ -5726,7 +5726,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .field_1d38 = 0x01A1,
 
-    .str_430 = "K",
+    .K_str_5 = "K",
 
     .field_1d3c = 0x0091,
 
@@ -5830,23 +5830,23 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_454 = "}",
 
-    .str_455 = "idc",
+    .idc_str = "idc",
 
     .str_456 = "\"",
 
     .str_457 = "\"",
 
-    .str_458 = ALIGNED_STRING("id"),
+    .id_str = ALIGNED_STRING("id"),
 
-    .str_459 = "idICON_",
+    .idICON__str = "idICON_",
 
-    .str_460 = ALIGNED_STRING("id"),
+    .id_str_2 = ALIGNED_STRING("id"),
 
-    .str_461 = "idf",
+    .idf_str = "idf",
 
-    .str_462 = "idf",
+    .idf_str_2 = "idf",
 
-    .str_463 = ALIGNED_STRING("idNONE"),
+    .idNONE_str = ALIGNED_STRING("idNONE"),
 
     .str_464 = "idi%s",
 
@@ -5858,9 +5858,9 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_468 = "idi%s%d",
 
-    .str_469 = ALIGNED_STRING("idNONE"),
+    .idNONE_str_2 = ALIGNED_STRING("idNONE"),
 
-    .str_470 = ALIGNED_STRING("idNONE"),
+    .idNONE_str_3 = ALIGNED_STRING("idNONE"),
 
     .str_471 = "idi%s",
 
@@ -5870,15 +5870,15 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_474 = "idi%s%d",
 
-    .str_475 = ALIGNED_STRING("idNONE"),
+    .idNONE_str_4 = ALIGNED_STRING("idNONE"),
 
     .str_476 = "idi%s",
 
     .str_477 = "idi%s%d",
 
-    .str_478 = ALIGNED_STRING("idNONE"),
+    .idNONE_str_5 = ALIGNED_STRING("idNONE"),
 
-    .str_479 = ALIGNED_STRING("idNONE"),
+    .idNONE_str_6 = ALIGNED_STRING("idNONE"),
 
     .str_480 = "idi%s",
 
@@ -5888,7 +5888,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_483 = "idi%s%d",
 
-    .str_484 = ALIGNED_STRING("idNONE"),
+    .idNONE_str_7 = ALIGNED_STRING("idNONE"),
 
     .str_485 = "idi%s",
 
@@ -5916,13 +5916,13 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .w10_name = "Title%d",
 
-    .str_492 = ALIGNED_STRING("name"),
+    .name_str_2 = ALIGNED_STRING("name"),
 
     .str_493 = ALIGNED_STRING(""),
 
     .str_494 = ALIGNED_STRING(""),
 
-    .str_495 = ALIGNED_STRING("romram"),
+    .romram_str_2 = ALIGNED_STRING("romram"),
 
     .str_496 = ALIGNED_STRING(""),
 
@@ -6447,7 +6447,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .field_2145 = 0x42FF,
 
-    .str_503 = "M",
+    .M_str_2 = "M",
 
     .field_2149 = 0x63FF,
 
@@ -6533,17 +6533,17 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .field_219b = 0x420D,
 
-    .str_504 = "M",
+    .M_str_3 = "M",
 
     .field_219f = 0x42FF,
 
-    .str_505 = "M",
+    .M_str_4 = "M",
 
     .field_21a3 = 0x48FF,
 
     .str_506 = ALIGNED_STRING("KLCD%03d.BMP"),
 
-    .str_507 = ALIGNED_STRING("wb"),
+    .wb_str = ALIGNED_STRING("wb"),
 
     .field_21b6 = 0xD000,
 
@@ -7142,17 +7142,17 @@ const naka_disk_warning_t naka_disk_warning_data
         NAKA_ADDR(CaptureLcdCheck),
         NAKA_ADDR(ApTaskControl),
         0x00000000,
-        SELF(str_544),
-        SELF(str_543),
-        SELF(str_542),
-        SELF(str_541),
-        SELF(str_540),
-        SELF(str_539),
+        SELF(DefaultFunction_str),
+        SELF(LswEditCheck_str),
+        SELF(RamEditCheck_str),
+        SELF(PasTableCheck_str),
+        SELF(BitEditCheck_str),
+        SELF(NamingCheck_str),
         SELF(w12_name),
         SELF(w12_code),
-        SELF(str_538),
-        SELF(str_537),
-        SELF(str_536),
+        SELF(LanguageCheck_str),
+        SELF(UserBitmapCheck_str),
+        SELF(CaptureLcdCheck_str),
         SELF(w11_name),
         SELF(w11_code),
     },
@@ -7161,33 +7161,33 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .w11_name = "ApTaskControl",
 
-    .str_536 = "CaptureLcdCheck",
+    .CaptureLcdCheck_str = "CaptureLcdCheck",
 
-    .str_537 = "UserBitmapCheck",
+    .UserBitmapCheck_str = "UserBitmapCheck",
 
-    .str_538 = "LanguageCheck",
+    .LanguageCheck_str = "LanguageCheck",
 
     .w12_code = "GridCheck",
 
     .w12_name = ALIGNED_STRING("DefaultClassProc"),
 
-    .str_539 = "NamingCheck",
+    .NamingCheck_str = "NamingCheck",
 
-    .str_540 = ALIGNED_STRING("BitEditCheck"),
+    .BitEditCheck_str = ALIGNED_STRING("BitEditCheck"),
 
-    .str_541 = "PasTableCheck",
+    .PasTableCheck_str = "PasTableCheck",
 
-    .str_542 = ALIGNED_STRING("RamEditCheck"),
+    .RamEditCheck_str = ALIGNED_STRING("RamEditCheck"),
 
-    .str_543 = ALIGNED_STRING("LswEditCheck"),
+    .LswEditCheck_str = ALIGNED_STRING("LswEditCheck"),
 
-    .str_544 = "DefaultFunction",
+    .DefaultFunction_str = "DefaultFunction",
 
     .str_545 = "\"",
 
     .ptrs_25 = {
-        SELF(str_550),
-        SELF(str_549),
+        SELF(TrashIcon_str),
+        SELF(GoldTechnics_str),
         SELF(w27_name),
         SELF(w27_code),
         SELF(w26_name),
@@ -7214,11 +7214,11 @@ const naka_disk_warning_t naka_disk_warning_data
         SELF(w16_code),
         SELF(w15_name),
         SELF(w15_code),
-        SELF(str_548),
+        SELF(LiAccordion_str),
         SELF(w14_name),
         SELF(w14_code),
-        SELF(str_547),
-        SELF(str_546),
+        SELF(LiGMSpecial_str),
+        SELF(LiMetronome_str),
         SELF(w13_name),
         SELF(w13_code),
         0x00000000,
@@ -7448,15 +7448,15 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .w13_name = "LiMIC",
 
-    .str_546 = "LiMetronome",
+    .LiMetronome_str = "LiMetronome",
 
-    .str_547 = "LiGMSpecial",
+    .LiGMSpecial_str = "LiGMSpecial",
 
     .w14_code = ALIGNED_STRING("LedSwOff"),
 
     .w14_name = "LedSwOn",
 
-    .str_548 = "LiAccordion",
+    .LiAccordion_str = "LiAccordion",
 
     .w15_code = "LiDrawbar",
 
@@ -7510,9 +7510,9 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .w27_name = "SlideBase",
 
-    .str_549 = ALIGNED_STRING("GoldTechnics"),
+    .GoldTechnics_str = ALIGNED_STRING("GoldTechnics"),
 
-    .str_550 = "TrashIcon",
+    .TrashIcon_str = "TrashIcon",
 
     .ptrs_26 = {
         SELF(str_585),
@@ -7847,13 +7847,13 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_586 = ALIGNED_STRING(""),
 
-    .ptr_31ee = SELF(str_588),
+    .ptr_31ee = SELF(func_str),
 
     .ptr_31f2 = SELF(str_587),
 
     .str_587 = ALIGNED_STRING(""),
 
-    .str_588 = ALIGNED_STRING("func"),
+    .func_str = ALIGNED_STRING("func"),
 
     .ptr_31fe = SELF(str_589),
 
@@ -7864,717 +7864,717 @@ const naka_disk_warning_t naka_disk_warning_data
     .str_590 = ALIGNED_STRING(""),
 
     .ptrs_27 = {
-        SELF(str_598),
-        SELF(str_597),
-        SELF(str_596),
-        SELF(str_595),
-        SELF(str_594),
-        SELF(str_593),
-        SELF(str_592),
+        SELF(proc_str),
+        SELF(parent_str),
+        SELF(allsize_str),
+        SELF(selfsize_str),
+        SELF(name_str_3),
+        SELF(propdata_str),
+        SELF(propname_str),
         SELF(str_591),
     },
 
     .str_591 = ALIGNED_STRING(""),
 
-    .str_592 = ALIGNED_STRING("propname"),
+    .propname_str = ALIGNED_STRING("propname"),
 
-    .str_593 = ALIGNED_STRING("propdata"),
+    .propdata_str = ALIGNED_STRING("propdata"),
 
-    .str_594 = ALIGNED_STRING("name"),
+    .name_str_3 = ALIGNED_STRING("name"),
 
-    .str_595 = ALIGNED_STRING("selfsize"),
+    .selfsize_str = ALIGNED_STRING("selfsize"),
 
-    .str_596 = "allsize",
+    .allsize_str = "allsize",
 
-    .str_597 = ALIGNED_STRING("parent"),
+    .parent_str = ALIGNED_STRING("parent"),
 
-    .str_598 = ALIGNED_STRING("proc"),
+    .proc_str = ALIGNED_STRING("proc"),
 
     .ptrs_28 = {
-        SELF(str_603),
-        SELF(str_602),
-        SELF(str_601),
-        SELF(str_600),
+        SELF(proc_str_2),
+        SELF(count_str),
+        SELF(size_str),
+        SELF(prop_str),
         SELF(str_599),
     },
 
     .str_599 = ALIGNED_STRING(""),
 
-    .str_600 = ALIGNED_STRING("prop"),
+    .prop_str = ALIGNED_STRING("prop"),
 
-    .str_601 = ALIGNED_STRING("size"),
+    .size_str = ALIGNED_STRING("size"),
 
-    .str_602 = "count",
+    .count_str = "count",
 
-    .str_603 = ALIGNED_STRING("proc"),
+    .proc_str_2 = ALIGNED_STRING("proc"),
 
     .ptrs_29 = {
-        SELF(str_608),
-        SELF(str_607),
-        SELF(str_606),
-        SELF(str_605),
+        SELF(proc_str_3),
+        SELF(title_str),
+        SELF(user_str),
+        SELF(name_str_4),
         SELF(str_604),
     },
 
     .str_604 = ALIGNED_STRING(""),
 
-    .str_605 = ALIGNED_STRING("name"),
+    .name_str_4 = ALIGNED_STRING("name"),
 
-    .str_606 = ALIGNED_STRING("user"),
+    .user_str = ALIGNED_STRING("user"),
 
-    .str_607 = "title",
+    .title_str = "title",
 
-    .str_608 = ALIGNED_STRING("proc"),
+    .proc_str_3 = ALIGNED_STRING("proc"),
 
     .ptrs_30 = {
-        SELF(str_616),
-        SELF(str_615),
-        SELF(str_614),
-        SELF(str_613),
-        SELF(str_612),
-        SELF(str_611),
-        SELF(str_610),
+        SELF(proc_str_4),
+        SELF(top_str),
+        SELF(user_str_2),
+        SELF(name_str_5),
+        SELF(now_str),
+        SELF(prev_str),
+        SELF(next_str),
         SELF(str_609),
     },
 
     .str_609 = ALIGNED_STRING(""),
 
-    .str_610 = ALIGNED_STRING("next"),
+    .next_str = ALIGNED_STRING("next"),
 
-    .str_611 = ALIGNED_STRING("prev"),
+    .prev_str = ALIGNED_STRING("prev"),
 
-    .str_612 = "now",
+    .now_str = "now",
 
-    .str_613 = ALIGNED_STRING("name"),
+    .name_str_5 = ALIGNED_STRING("name"),
 
-    .str_614 = ALIGNED_STRING("user"),
+    .user_str_2 = ALIGNED_STRING("user"),
 
-    .str_615 = "top",
+    .top_str = "top",
 
-    .str_616 = ALIGNED_STRING("proc"),
+    .proc_str_4 = ALIGNED_STRING("proc"),
 
-    .ptr_330a = SELF(str_618),
+    .ptr_330a = SELF(data_str),
 
     .ptr_330e = SELF(str_617),
 
     .str_617 = ALIGNED_STRING(""),
 
-    .str_618 = ALIGNED_STRING("data"),
+    .data_str = ALIGNED_STRING("data"),
 
-    .ptr_331a = SELF(str_620),
+    .ptr_331a = SELF(data_str_2),
 
     .ptr_331e = SELF(str_619),
 
     .str_619 = ALIGNED_STRING(""),
 
-    .str_620 = ALIGNED_STRING("data"),
+    .data_str_2 = ALIGNED_STRING("data"),
 
-    .ptr_332a = SELF(str_622),
+    .ptr_332a = SELF(data_str_3),
 
     .ptr_332e = SELF(str_621),
 
     .str_621 = ALIGNED_STRING(""),
 
-    .str_622 = ALIGNED_STRING("data"),
+    .data_str_3 = ALIGNED_STRING("data"),
 
-    .ptr_333a = SELF(str_624),
+    .ptr_333a = SELF(data_str_4),
 
     .ptr_333e = SELF(str_623),
 
     .str_623 = ALIGNED_STRING(""),
 
-    .str_624 = ALIGNED_STRING("data"),
+    .data_str_4 = ALIGNED_STRING("data"),
 
-    .ptr_334a = SELF(str_626),
+    .ptr_334a = SELF(name_str_6),
 
     .ptr_334e = SELF(str_625),
 
     .str_625 = ALIGNED_STRING(""),
 
-    .str_626 = ALIGNED_STRING("name"),
+    .name_str_6 = ALIGNED_STRING("name"),
 
-    .ptr_335a = SELF(str_628),
+    .ptr_335a = SELF(name_str_7),
 
     .ptr_335e = SELF(str_627),
 
     .str_627 = ALIGNED_STRING(""),
 
-    .str_628 = ALIGNED_STRING("name"),
+    .name_str_7 = ALIGNED_STRING("name"),
 
-    .ptr_336a = SELF(str_630),
+    .ptr_336a = SELF(data_str_5),
 
     .ptr_336e = SELF(str_629),
 
     .str_629 = ALIGNED_STRING(""),
 
-    .str_630 = ALIGNED_STRING("data"),
+    .data_str_5 = ALIGNED_STRING("data"),
 
-    .ptr_337a = SELF(str_632),
+    .ptr_337a = SELF(name_str_8),
 
     .ptr_337e = SELF(str_631),
 
     .str_631 = ALIGNED_STRING(""),
 
-    .str_632 = ALIGNED_STRING("name"),
+    .name_str_8 = ALIGNED_STRING("name"),
 
     .ptrs_31 = {
-        SELF(str_640),
-        SELF(str_639),
-        SELF(str_638),
-        SELF(str_637),
-        SELF(str_636),
-        SELF(str_635),
-        SELF(str_634),
+        SELF(class_str),
+        SELF(super_str),
+        SELF(sub_str),
+        SELF(next_str_2),
+        SELF(prev_str_2),
+        SELF(flag_str),
+        SELF(rect_str),
         SELF(str_633),
     },
 
     .str_633 = ALIGNED_STRING(""),
 
-    .str_634 = ALIGNED_STRING("rect"),
+    .rect_str = ALIGNED_STRING("rect"),
 
-    .str_635 = ALIGNED_STRING("flag"),
+    .flag_str = ALIGNED_STRING("flag"),
 
-    .str_636 = ALIGNED_STRING("prev"),
+    .prev_str_2 = ALIGNED_STRING("prev"),
 
-    .str_637 = ALIGNED_STRING("next"),
+    .next_str_2 = ALIGNED_STRING("next"),
 
-    .str_638 = "sub",
+    .sub_str = "sub",
 
-    .str_639 = "super",
+    .super_str = "super",
 
-    .str_640 = "class",
+    .class_str = "class",
 
     .ptrs_32 = {
-        SELF(str_644),
-        SELF(str_643),
-        SELF(str_642),
+        SELF(color_str),
+        SELF(border_str),
+        SELF(index_str),
         SELF(str_641),
     },
 
     .str_641 = ALIGNED_STRING(""),
 
-    .str_642 = "index",
+    .index_str = "index",
 
-    .str_643 = ALIGNED_STRING("border"),
+    .border_str = ALIGNED_STRING("border"),
 
-    .str_644 = "color",
+    .color_str = "color",
 
     .ptrs_33 = {
-        SELF(str_648),
-        SELF(str_647),
-        SELF(str_646),
+        SELF(font_str),
+        SELF(fontcolor_str),
+        SELF(align_str),
         SELF(str_645),
     },
 
     .str_645 = ALIGNED_STRING(""),
 
-    .str_646 = "align",
+    .align_str = "align",
 
-    .str_647 = "fontcolor",
+    .fontcolor_str = "fontcolor",
 
-    .str_648 = ALIGNED_STRING("font"),
+    .font_str = ALIGNED_STRING("font"),
 
     .ptrs_34 = {
-        SELF(str_651),
-        SELF(str_650),
+        SELF(func_str_2),
+        SELF(data_str_6),
         SELF(str_649),
     },
 
     .str_649 = ALIGNED_STRING(""),
 
-    .str_650 = ALIGNED_STRING("data"),
+    .data_str_6 = ALIGNED_STRING("data"),
 
-    .str_651 = ALIGNED_STRING("func"),
+    .func_str_2 = ALIGNED_STRING("func"),
 
     .ptr_343c = SELF(str_652),
 
     .str_652 = ALIGNED_STRING(""),
 
     .ptrs_35 = {
-        SELF(str_661),
-        SELF(str_660),
-        SELF(str_659),
-        SELF(str_658),
-        SELF(str_657),
-        SELF(str_656),
-        SELF(str_655),
-        SELF(str_654),
+        SELF(caption_str),
+        SELF(font_str_2),
+        SELF(fontcolor_str_2),
+        SELF(align_str_2),
+        SELF(length_str),
+        SELF(editsw_str),
+        SELF(dial_str),
+        SELF(selected_str),
         SELF(str_653),
     },
 
     .str_653 = ALIGNED_STRING(""),
 
-    .str_654 = ALIGNED_STRING("selected"),
+    .selected_str = ALIGNED_STRING("selected"),
 
-    .str_655 = ALIGNED_STRING("dial"),
+    .dial_str = ALIGNED_STRING("dial"),
 
-    .str_656 = ALIGNED_STRING("editsw"),
+    .editsw_str = ALIGNED_STRING("editsw"),
 
-    .str_657 = ALIGNED_STRING("length"),
+    .length_str = ALIGNED_STRING("length"),
 
-    .str_658 = "align",
+    .align_str_2 = "align",
 
-    .str_659 = "fontcolor",
+    .fontcolor_str_2 = "fontcolor",
 
-    .str_660 = ALIGNED_STRING("font"),
+    .font_str_2 = ALIGNED_STRING("font"),
 
-    .str_661 = "caption",
+    .caption_str = "caption",
 
-    .ptr_34a6 = SELF(str_663),
+    .ptr_34a6 = SELF(figures_str),
 
     .ptr_34aa = SELF(str_662),
 
     .str_662 = ALIGNED_STRING(""),
 
-    .str_663 = "figures",
+    .figures_str = "figures",
 
-    .ptr_34b8 = SELF(str_665),
+    .ptr_34b8 = SELF(func_str_3),
 
     .ptr_34bc = SELF(str_664),
 
     .str_664 = ALIGNED_STRING(""),
 
-    .str_665 = ALIGNED_STRING("func"),
+    .func_str_3 = ALIGNED_STRING("func"),
 
-    .ptr_34c8 = SELF(str_667),
+    .ptr_34c8 = SELF(onoff_str),
 
     .ptr_34cc = SELF(str_666),
 
     .str_666 = ALIGNED_STRING(""),
 
-    .str_667 = "onoff",
+    .onoff_str = "onoff",
 
     .ptrs_36 = {
-        SELF(str_674),
-        SELF(str_673),
-        SELF(str_672),
-        SELF(str_671),
-        SELF(str_670),
-        SELF(str_669),
+        SELF(num_str),
+        SELF(figures_str_2),
+        SELF(max_str),
+        SELF(min_str),
+        SELF(largestep_str),
+        SELF(smallstep_str),
         SELF(str_668),
     },
 
     .str_668 = ALIGNED_STRING(""),
 
-    .str_669 = "smallstep",
+    .smallstep_str = "smallstep",
 
-    .str_670 = "largestep",
+    .largestep_str = "largestep",
 
-    .str_671 = "min",
+    .min_str = "min",
 
-    .str_672 = "max",
+    .max_str = "max",
 
-    .str_673 = "figures",
+    .figures_str_2 = "figures",
 
-    .str_674 = "num",
+    .num_str = "num",
 
     .ptrs_37 = {
-        SELF(str_677),
-        SELF(str_676),
+        SELF(func_str_4),
+        SELF(data_str_7),
         SELF(str_675),
     },
 
     .str_675 = ALIGNED_STRING(""),
 
-    .str_676 = ALIGNED_STRING("data"),
+    .data_str_7 = ALIGNED_STRING("data"),
 
-    .str_677 = ALIGNED_STRING("func"),
+    .func_str_4 = ALIGNED_STRING("func"),
 
     .ptrs_38 = {
-        SELF(str_680),
-        SELF(str_679),
+        SELF(func_str_5),
+        SELF(data_str_8),
         SELF(str_678),
     },
 
     .str_678 = ALIGNED_STRING(""),
 
-    .str_679 = ALIGNED_STRING("data"),
+    .data_str_8 = ALIGNED_STRING("data"),
 
-    .str_680 = ALIGNED_STRING("func"),
+    .func_str_5 = ALIGNED_STRING("func"),
 
     .ptrs_39 = {
-        SELF(str_686),
-        SELF(str_685),
-        SELF(str_684),
-        SELF(str_683),
-        SELF(str_682),
+        SELF(font_str_3),
+        SELF(fontcolor_str_3),
+        SELF(align_str_3),
+        SELF(editsw_str_2),
+        SELF(selected_str_2),
         SELF(str_681),
     },
 
     .str_681 = ALIGNED_STRING(""),
 
-    .str_682 = ALIGNED_STRING("selected"),
+    .selected_str_2 = ALIGNED_STRING("selected"),
 
-    .str_683 = ALIGNED_STRING("editsw"),
+    .editsw_str_2 = ALIGNED_STRING("editsw"),
 
-    .str_684 = "align",
+    .align_str_3 = "align",
 
-    .str_685 = "fontcolor",
+    .fontcolor_str_3 = "fontcolor",
 
-    .str_686 = ALIGNED_STRING("font"),
+    .font_str_3 = ALIGNED_STRING("font"),
 
     .ptrs_40 = {
-        SELF(str_690),
-        SELF(str_689),
-        SELF(str_688),
+        SELF(str_str),
+        SELF(title_str_2),
+        SELF(icon_str),
         SELF(str_687),
     },
 
     .str_687 = ALIGNED_STRING(""),
 
-    .str_688 = ALIGNED_STRING("icon"),
+    .icon_str = ALIGNED_STRING("icon"),
 
-    .str_689 = "title",
+    .title_str_2 = "title",
 
-    .str_690 = "str",
+    .str_str = "str",
 
     .ptrs_41 = {
-        SELF(str_695),
-        SELF(str_694),
-        SELF(str_693),
-        SELF(str_692),
+        SELF(font_str_4),
+        SELF(fontcolor_str_4),
+        SELF(align_str_4),
+        SELF(editsw_str_3),
         SELF(str_691),
     },
 
     .str_691 = ALIGNED_STRING(""),
 
-    .str_692 = ALIGNED_STRING("editsw"),
+    .editsw_str_3 = ALIGNED_STRING("editsw"),
 
-    .str_693 = "align",
+    .align_str_4 = "align",
 
-    .str_694 = "fontcolor",
+    .fontcolor_str_4 = "fontcolor",
 
-    .str_695 = ALIGNED_STRING("font"),
+    .font_str_4 = ALIGNED_STRING("font"),
 
-    .ptr_35ea = SELF(str_697),
+    .ptr_35ea = SELF(style_str),
 
     .ptr_35ee = SELF(str_696),
 
     .str_696 = ALIGNED_STRING(""),
 
-    .str_697 = "style",
+    .style_str = "style",
 
     .ptrs_42 = {
-        SELF(str_700),
-        SELF(str_699),
+        SELF(style_str_2),
+        SELF(func_str_6),
         SELF(str_698),
     },
 
     .str_698 = ALIGNED_STRING(""),
 
-    .str_699 = ALIGNED_STRING("func"),
+    .func_str_6 = ALIGNED_STRING("func"),
 
-    .str_700 = "style",
+    .style_str_2 = "style",
 
-    .ptr_3614 = SELF(str_702),
+    .ptr_3614 = SELF(editsw2_str),
 
     .ptr_3618 = SELF(str_701),
 
     .str_701 = ALIGNED_STRING(""),
 
-    .str_702 = "editsw2",
+    .editsw2_str = "editsw2",
 
-    .ptr_3626 = SELF(str_704),
+    .ptr_3626 = SELF(style_str_3),
 
     .ptr_362a = SELF(str_703),
 
     .str_703 = ALIGNED_STRING(""),
 
-    .str_704 = "style",
+    .style_str_3 = "style",
 
     .ptrs_43 = {
-        SELF(str_707),
-        SELF(str_706),
+        SELF(style_str_4),
+        SELF(func_str_7),
         SELF(str_705),
     },
 
     .str_705 = ALIGNED_STRING(""),
 
-    .str_706 = ALIGNED_STRING("func"),
+    .func_str_7 = ALIGNED_STRING("func"),
 
-    .str_707 = "style",
+    .style_str_4 = "style",
 
-    .ptr_3650 = SELF(str_709),
+    .ptr_3650 = SELF(page_str),
 
     .ptr_3654 = SELF(str_708),
 
     .str_708 = ALIGNED_STRING(""),
 
-    .str_709 = ALIGNED_STRING("page"),
+    .page_str = ALIGNED_STRING("page"),
 
     .ptrs_44 = {
-        SELF(str_712),
-        SELF(str_711),
+        SELF(pagemin_str),
+        SELF(pagemax_str),
         SELF(str_710),
     },
 
     .str_710 = ALIGNED_STRING(""),
 
-    .str_711 = "pagemax",
+    .pagemax_str = "pagemax",
 
-    .str_712 = "pagemin",
+    .pagemin_str = "pagemin",
 
     .ptrs_45 = {
-        SELF(str_718),
-        SELF(str_717),
-        SELF(str_716),
-        SELF(str_715),
-        SELF(str_714),
+        SELF(font_str_5),
+        SELF(stron_str),
+        SELF(stroff_str),
+        SELF(onoff_str_2),
+        SELF(editsw_str_4),
         SELF(str_713),
     },
 
     .str_713 = ALIGNED_STRING(""),
 
-    .str_714 = ALIGNED_STRING("editsw"),
+    .editsw_str_4 = ALIGNED_STRING("editsw"),
 
-    .str_715 = "onoff",
+    .onoff_str_2 = "onoff",
 
-    .str_716 = ALIGNED_STRING("stroff"),
+    .stroff_str = ALIGNED_STRING("stroff"),
 
-    .str_717 = "stron",
+    .stron_str = "stron",
 
-    .str_718 = ALIGNED_STRING("font"),
+    .font_str_5 = ALIGNED_STRING("font"),
 
     .ptr_36ba = SELF(str_719),
 
     .str_719 = ALIGNED_STRING(""),
 
     .ptrs_46 = {
-        SELF(str_722),
-        SELF(str_721),
+        SELF(page_str_2),
+        SELF(window_str),
         SELF(str_720),
     },
 
     .str_720 = ALIGNED_STRING(""),
 
-    .str_721 = ALIGNED_STRING("window"),
+    .window_str = ALIGNED_STRING("window"),
 
-    .str_722 = ALIGNED_STRING("page"),
+    .page_str_2 = ALIGNED_STRING("page"),
 
-    .ptr_36dc = SELF(str_724),
+    .ptr_36dc = SELF(func_str_8),
 
     .ptr_36e0 = SELF(str_723),
 
     .str_723 = ALIGNED_STRING(""),
 
-    .str_724 = ALIGNED_STRING("func"),
+    .func_str_8 = ALIGNED_STRING("func"),
 
-    .ptr_36ec = SELF(str_726),
+    .ptr_36ec = SELF(part_str),
 
     .ptr_36f0 = SELF(str_725),
 
     .str_725 = ALIGNED_STRING(""),
 
-    .str_726 = ALIGNED_STRING("part"),
+    .part_str = ALIGNED_STRING("part"),
 
     .ptrs_47 = {
-        SELF(str_730),
-        SELF(str_729),
-        SELF(str_728),
+        SELF(str_str_2),
+        SELF(font_str_6),
+        SELF(fontcolor_str_5),
         SELF(str_727),
     },
 
     .str_727 = ALIGNED_STRING(""),
 
-    .str_728 = "fontcolor",
+    .fontcolor_str_5 = "fontcolor",
 
-    .str_729 = ALIGNED_STRING("font"),
+    .font_str_6 = ALIGNED_STRING("font"),
 
-    .str_730 = "str",
+    .str_str_2 = "str",
 
-    .ptr_3722 = SELF(str_732),
+    .ptr_3722 = SELF(bmp_str),
 
     .ptr_3726 = SELF(str_731),
 
     .str_731 = ALIGNED_STRING(""),
 
-    .str_732 = "bmp",
+    .bmp_str = "bmp",
 
-    .ptr_3730 = SELF(str_734),
+    .ptr_3730 = SELF(icon_str_2),
 
     .ptr_3734 = SELF(str_733),
 
     .str_733 = ALIGNED_STRING(""),
 
-    .str_734 = ALIGNED_STRING("icon"),
+    .icon_str_2 = ALIGNED_STRING("icon"),
 
     .ptrs_48 = {
-        SELF(str_737),
-        SELF(str_736),
+        SELF(color_str_2),
+        SELF(linemode_str),
         SELF(str_735),
     },
 
     .str_735 = ALIGNED_STRING(""),
 
-    .str_736 = ALIGNED_STRING("linemode"),
+    .linemode_str = ALIGNED_STRING("linemode"),
 
-    .str_737 = "color",
+    .color_str_2 = "color",
 
     .ptrs_49 = {
-        SELF(str_741),
-        SELF(str_740),
-        SELF(str_739),
+        SELF(frame_str),
+        SELF(width_str),
+        SELF(color_str_3),
         SELF(str_738),
     },
 
     .str_738 = ALIGNED_STRING(""),
 
-    .str_739 = "color",
+    .color_str_3 = "color",
 
-    .str_740 = "width",
+    .width_str = "width",
 
-    .str_741 = "frame",
+    .frame_str = "frame",
 
     .ptrs_50 = {
-        SELF(str_745),
-        SELF(str_744),
-        SELF(str_743),
+        SELF(editsw_str_5),
+        SELF(func_str_9),
+        SELF(index_str_2),
         SELF(str_742),
     },
 
     .str_742 = ALIGNED_STRING(""),
 
-    .str_743 = "index",
+    .index_str_2 = "index",
 
-    .str_744 = ALIGNED_STRING("func"),
+    .func_str_9 = ALIGNED_STRING("func"),
 
-    .str_745 = ALIGNED_STRING("editsw"),
+    .editsw_str_5 = ALIGNED_STRING("editsw"),
 
     .ptrs_51 = {
-        SELF(str_748),
-        SELF(str_747),
+        SELF(color_str_4),
+        SELF(border_str_2),
         SELF(str_746),
     },
 
     .str_746 = ALIGNED_STRING(""),
 
-    .str_747 = ALIGNED_STRING("border"),
+    .border_str_2 = ALIGNED_STRING("border"),
 
-    .str_748 = "color",
+    .color_str_4 = "color",
 
     .ptr_37c4 = SELF(str_749),
 
     .str_749 = ALIGNED_STRING(""),
 
     .ptrs_52 = {
-        SELF(str_752),
-        SELF(str_751),
+        SELF(exit_str),
+        SELF(window_str_2),
         SELF(str_750),
     },
 
     .str_750 = ALIGNED_STRING(""),
 
-    .str_751 = ALIGNED_STRING("window"),
+    .window_str_2 = ALIGNED_STRING("window"),
 
-    .str_752 = ALIGNED_STRING("exit"),
+    .exit_str = ALIGNED_STRING("exit"),
 
     .ptrs_53 = {
-        SELF(str_755),
-        SELF(str_754),
+        SELF(title_str_3),
+        SELF(icon_str_3),
         SELF(str_753),
     },
 
     .str_753 = ALIGNED_STRING(""),
 
-    .str_754 = ALIGNED_STRING("icon"),
+    .icon_str_3 = ALIGNED_STRING("icon"),
 
-    .str_755 = "title",
+    .title_str_3 = "title",
 
     .ptrs_54 = {
-        SELF(str_759),
-        SELF(str_758),
-        SELF(str_757),
+        SELF(modal_str),
+        SELF(parent_str_2),
+        SELF(child_str),
         SELF(str_756),
     },
 
     .str_756 = ALIGNED_STRING(""),
 
-    .str_757 = "child",
+    .child_str = "child",
 
-    .str_758 = ALIGNED_STRING("parent"),
+    .parent_str_2 = ALIGNED_STRING("parent"),
 
-    .str_759 = "modal",
+    .modal_str = "modal",
 
     .ptrs_55 = {
-        SELF(str_765),
-        SELF(str_764),
-        SELF(str_763),
-        SELF(str_762),
-        SELF(str_761),
+        SELF(text_str),
+        SELF(font_str_7),
+        SELF(fontcolor_str_6),
+        SELF(alignment_str),
+        SELF(lines_str),
         SELF(str_760),
     },
 
     .str_760 = ALIGNED_STRING(""),
 
-    .str_761 = "lines",
+    .lines_str = "lines",
 
-    .str_762 = "alignment",
+    .alignment_str = "alignment",
 
-    .str_763 = "fontcolor",
+    .fontcolor_str_6 = "fontcolor",
 
-    .str_764 = ALIGNED_STRING("font"),
+    .font_str_7 = ALIGNED_STRING("font"),
 
-    .str_765 = ALIGNED_STRING("text"),
+    .text_str = ALIGNED_STRING("text"),
 
     .ptrs_56 = {
-        SELF(str_770),
-        SELF(str_769),
-        SELF(str_768),
-        SELF(str_767),
+        SELF(str_str_3),
+        SELF(font_str_8),
+        SELF(fontcolor_str_7),
+        SELF(alignment_str_2),
         SELF(str_766),
     },
 
     .str_766 = ALIGNED_STRING(""),
 
-    .str_767 = "alignment",
+    .alignment_str_2 = "alignment",
 
-    .str_768 = "fontcolor",
+    .fontcolor_str_7 = "fontcolor",
 
-    .str_769 = ALIGNED_STRING("font"),
+    .font_str_8 = ALIGNED_STRING("font"),
 
-    .str_770 = "str",
+    .str_str_3 = "str",
 
     .ptrs_57 = {
-        SELF(str_776),
-        SELF(str_775),
-        SELF(str_774),
-        SELF(str_773),
-        SELF(str_772),
+        SELF(mode_str),
+        SELF(proc_str_5),
+        SELF(title_str_4),
+        SELF(user_str_3),
+        SELF(name_str_9),
         SELF(str_771),
     },
 
     .str_771 = ALIGNED_STRING(""),
 
-    .str_772 = ALIGNED_STRING("name"),
+    .name_str_9 = ALIGNED_STRING("name"),
 
-    .str_773 = ALIGNED_STRING("user"),
+    .user_str_3 = ALIGNED_STRING("user"),
 
-    .str_774 = "title",
+    .title_str_4 = "title",
 
-    .str_775 = ALIGNED_STRING("proc"),
+    .proc_str_5 = ALIGNED_STRING("proc"),
 
-    .str_776 = ALIGNED_STRING("mode"),
+    .mode_str = ALIGNED_STRING("mode"),
 
     .ptrs_58 = {
-        SELF(str_782),
-        SELF(str_781),
-        SELF(str_780),
-        SELF(str_779),
-        SELF(str_778),
+        SELF(title_str_5),
+        SELF(proc_str_6),
+        SELF(top_str_2),
+        SELF(user_str_4),
+        SELF(name_str_10),
         SELF(str_777),
     },
 
     .str_777 = ALIGNED_STRING(""),
 
-    .str_778 = ALIGNED_STRING("name"),
+    .name_str_10 = ALIGNED_STRING("name"),
 
-    .str_779 = ALIGNED_STRING("user"),
+    .user_str_4 = ALIGNED_STRING("user"),
 
-    .str_780 = "top",
+    .top_str_2 = "top",
 
-    .str_781 = ALIGNED_STRING("proc"),
+    .proc_str_6 = ALIGNED_STRING("proc"),
 
-    .str_782 = "title",
+    .title_str_5 = "title",
 
     .ptr_3908 = SELF(str_783),
 
@@ -8585,125 +8585,125 @@ const naka_disk_warning_t naka_disk_warning_data
     .str_784 = ALIGNED_STRING(""),
 
     .ptrs_59 = {
-        SELF(str_787),
-        SELF(str_786),
+        SELF(part_str_2),
+        SELF(editsw_str_6),
         SELF(str_785),
     },
 
     .str_785 = ALIGNED_STRING(""),
 
-    .str_786 = ALIGNED_STRING("editsw"),
+    .editsw_str_6 = ALIGNED_STRING("editsw"),
 
-    .str_787 = ALIGNED_STRING("part"),
+    .part_str_2 = ALIGNED_STRING("part"),
 
     .ptrs_60 = {
-        SELF(str_790),
-        SELF(str_789),
+        SELF(str_str_4),
+        SELF(icon_str_4),
         SELF(str_788),
     },
 
     .str_788 = ALIGNED_STRING(""),
 
-    .str_789 = ALIGNED_STRING("icon"),
+    .icon_str_4 = ALIGNED_STRING("icon"),
 
-    .str_790 = "str",
+    .str_str_4 = "str",
 
     .ptrs_61 = {
-        SELF(str_793),
-        SELF(str_792),
+        SELF(style_str_5),
+        SELF(str_str_5),
         SELF(str_791),
     },
 
     .str_791 = ALIGNED_STRING(""),
 
-    .str_792 = "str",
+    .str_str_5 = "str",
 
-    .str_793 = "style",
+    .style_str_5 = "style",
 
     .ptrs_62 = {
-        SELF(str_796),
-        SELF(str_795),
+        SELF(style_str_6),
+        SELF(str_str_6),
         SELF(str_794),
     },
 
     .str_794 = ALIGNED_STRING(""),
 
-    .str_795 = "str",
+    .str_str_6 = "str",
 
-    .str_796 = "style",
+    .style_str_6 = "style",
 
     .ptrs_63 = {
-        SELF(str_800),
-        SELF(str_799),
-        SELF(str_798),
+        SELF(str_str_7),
+        SELF(mode_str_2),
+        SELF(icon_str_5),
         SELF(str_797),
     },
 
     .str_797 = ALIGNED_STRING(""),
 
-    .str_798 = ALIGNED_STRING("icon"),
+    .icon_str_5 = ALIGNED_STRING("icon"),
 
-    .str_799 = ALIGNED_STRING("mode"),
+    .mode_str_2 = ALIGNED_STRING("mode"),
 
-    .str_800 = "str",
+    .str_str_7 = "str",
 
     .ptrs_64 = {
-        SELF(str_804),
-        SELF(str_803),
-        SELF(str_802),
+        SELF(str_str_8),
+        SELF(screen_str),
+        SELF(icon_str_6),
         SELF(str_801),
     },
 
     .str_801 = ALIGNED_STRING(""),
 
-    .str_802 = ALIGNED_STRING("icon"),
+    .icon_str_6 = ALIGNED_STRING("icon"),
 
-    .str_803 = ALIGNED_STRING("screen"),
+    .screen_str = ALIGNED_STRING("screen"),
 
-    .str_804 = "str",
+    .str_str_8 = "str",
 
     .ptrs_65 = {
-        SELF(str_808),
-        SELF(str_807),
-        SELF(str_806),
+        SELF(str_str_9),
+        SELF(window_str_3),
+        SELF(icon_str_7),
         SELF(str_805),
     },
 
     .str_805 = ALIGNED_STRING(""),
 
-    .str_806 = ALIGNED_STRING("icon"),
+    .icon_str_7 = ALIGNED_STRING("icon"),
 
-    .str_807 = ALIGNED_STRING("window"),
+    .window_str_3 = ALIGNED_STRING("window"),
 
-    .str_808 = "str",
+    .str_str_9 = "str",
 
     .ptrs_66 = {
-        SELF(str_811),
-        SELF(str_810),
+        SELF(func_str_10),
+        SELF(data_str_9),
         SELF(str_809),
     },
 
     .str_809 = ALIGNED_STRING(""),
 
-    .str_810 = ALIGNED_STRING("data"),
+    .data_str_9 = ALIGNED_STRING("data"),
 
-    .str_811 = ALIGNED_STRING("func"),
+    .func_str_10 = ALIGNED_STRING("func"),
 
-    .ptr_39fc = SELF(str_813),
+    .ptr_39fc = SELF(func_str_11),
 
     .ptr_3a00 = SELF(str_812),
 
     .str_812 = ALIGNED_STRING(""),
 
-    .str_813 = ALIGNED_STRING("func"),
+    .func_str_11 = ALIGNED_STRING("func"),
 
-    .ptr_3a0c = SELF(str_815),
+    .ptr_3a0c = SELF(editsw2_str_2),
 
     .ptr_3a10 = SELF(str_814),
 
     .str_814 = ALIGNED_STRING(""),
 
-    .str_815 = "editsw2",
+    .editsw2_str_2 = "editsw2",
 
     .ptr_3a1e = SELF(str_816),
 
@@ -8713,226 +8713,226 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_817 = ALIGNED_STRING(""),
 
-    .ptr_3a2a = SELF(str_819),
+    .ptr_3a2a = SELF(mode_str_3),
 
     .ptr_3a2e = SELF(str_818),
 
     .str_818 = ALIGNED_STRING(""),
 
-    .str_819 = ALIGNED_STRING("mode"),
+    .mode_str_3 = ALIGNED_STRING("mode"),
 
-    .ptr_3a3a = SELF(str_821),
+    .ptr_3a3a = SELF(screen_str_2),
 
     .ptr_3a3e = SELF(str_820),
 
     .str_820 = ALIGNED_STRING(""),
 
-    .str_821 = ALIGNED_STRING("screen"),
+    .screen_str_2 = ALIGNED_STRING("screen"),
 
-    .ptr_3a4c = SELF(str_823),
+    .ptr_3a4c = SELF(window_str_4),
 
     .ptr_3a50 = SELF(str_822),
 
     .str_822 = ALIGNED_STRING(""),
 
-    .str_823 = ALIGNED_STRING("window"),
+    .window_str_4 = ALIGNED_STRING("window"),
 
     .ptr_3a5e = SELF(str_824),
 
     .str_824 = ALIGNED_STRING(""),
 
-    .ptr_3a64 = SELF(str_826),
+    .ptr_3a64 = SELF(cursor_str),
 
     .ptr_3a68 = SELF(str_825),
 
     .str_825 = ALIGNED_STRING(""),
 
-    .str_826 = ALIGNED_STRING("cursor"),
+    .cursor_str = ALIGNED_STRING("cursor"),
 
-    .ptr_3a76 = SELF(str_828),
+    .ptr_3a76 = SELF(func_str_12),
 
     .ptr_3a7a = SELF(str_827),
 
     .str_827 = ALIGNED_STRING(""),
 
-    .str_828 = ALIGNED_STRING("func"),
+    .func_str_12 = ALIGNED_STRING("func"),
 
     .ptrs_67 = {
-        SELF(str_831),
-        SELF(str_830),
+        SELF(index_str_3),
+        SELF(tag_str),
         SELF(str_829),
     },
 
     .str_829 = ALIGNED_STRING(""),
 
-    .str_830 = "tag",
+    .tag_str = "tag",
 
-    .str_831 = "index",
+    .index_str_3 = "index",
 
     .ptrs_68 = {
-        SELF(str_834),
-        SELF(str_833),
+        SELF(func_str_13),
+        SELF(data_str_10),
         SELF(str_832),
     },
 
     .str_832 = ALIGNED_STRING(""),
 
-    .str_833 = ALIGNED_STRING("data"),
+    .data_str_10 = ALIGNED_STRING("data"),
 
-    .str_834 = ALIGNED_STRING("func"),
+    .func_str_13 = ALIGNED_STRING("func"),
 
     .ptrs_69 = {
-        SELF(str_841),
-        SELF(str_840),
-        SELF(str_839),
-        SELF(str_838),
-        SELF(str_837),
-        SELF(str_836),
+        SELF(font_str_9),
+        SELF(fontcolor_str_8),
+        SELF(align_str_5),
+        SELF(editsw_str_7),
+        SELF(selected_str_3),
+        SELF(tag_str_2),
         SELF(str_835),
     },
 
     .str_835 = ALIGNED_STRING(""),
 
-    .str_836 = "tag",
+    .tag_str_2 = "tag",
 
-    .str_837 = ALIGNED_STRING("selected"),
+    .selected_str_3 = ALIGNED_STRING("selected"),
 
-    .str_838 = ALIGNED_STRING("editsw"),
+    .editsw_str_7 = ALIGNED_STRING("editsw"),
 
-    .str_839 = "align",
+    .align_str_5 = "align",
 
-    .str_840 = "fontcolor",
+    .fontcolor_str_8 = "fontcolor",
 
-    .str_841 = ALIGNED_STRING("font"),
+    .font_str_9 = ALIGNED_STRING("font"),
 
-    .ptr_3b02 = SELF(str_843),
+    .ptr_3b02 = SELF(str_str_10),
 
     .ptr_3b06 = SELF(str_842),
 
     .str_842 = ALIGNED_STRING(""),
 
-    .str_843 = "str",
+    .str_str_10 = "str",
 
-    .ptr_3b10 = SELF(str_845),
+    .ptr_3b10 = SELF(func_str_14),
 
     .ptr_3b14 = SELF(str_844),
 
     .str_844 = ALIGNED_STRING(""),
 
-    .str_845 = ALIGNED_STRING("func"),
+    .func_str_14 = ALIGNED_STRING("func"),
 
     .ptrs_70 = {
-        SELF(str_851),
-        SELF(str_850),
-        SELF(str_849),
-        SELF(str_848),
-        SELF(str_847),
+        SELF(font_str_10),
+        SELF(fontcolor_str_9),
+        SELF(align_str_6),
+        SELF(row_str),
+        SELF(selected_str_4),
         SELF(str_846),
     },
 
     .str_846 = ALIGNED_STRING(""),
 
-    .str_847 = ALIGNED_STRING("selected"),
+    .selected_str_4 = ALIGNED_STRING("selected"),
 
-    .str_848 = "row",
+    .row_str = "row",
 
-    .str_849 = "align",
+    .align_str_6 = "align",
 
-    .str_850 = "fontcolor",
+    .fontcolor_str_9 = "fontcolor",
 
-    .str_851 = ALIGNED_STRING("font"),
+    .font_str_10 = ALIGNED_STRING("font"),
 
     .ptrs_71 = {
-        SELF(str_863),
-        SELF(str_862),
-        SELF(str_861),
-        SELF(str_860),
-        SELF(str_859),
-        SELF(str_858),
-        SELF(str_857),
-        SELF(str_856),
-        SELF(str_855),
-        SELF(str_854),
-        SELF(str_853),
+        SELF(font_str_11),
+        SELF(fontcolor_str_10),
+        SELF(align_str_7),
+        SELF(row_str_2),
+        SELF(col_str),
+        SELF(vertline_str),
+        SELF(selrow_str),
+        SELF(selcol_str),
+        SELF(pcol_str),
+        SELF(prow_str),
+        SELF(crow_str),
         SELF(str_852),
     },
 
     .str_852 = ALIGNED_STRING(""),
 
-    .str_853 = ALIGNED_STRING("crow"),
+    .crow_str = ALIGNED_STRING("crow"),
 
-    .str_854 = ALIGNED_STRING("prow"),
+    .prow_str = ALIGNED_STRING("prow"),
 
-    .str_855 = ALIGNED_STRING("pcol"),
+    .pcol_str = ALIGNED_STRING("pcol"),
 
-    .str_856 = ALIGNED_STRING("selcol"),
+    .selcol_str = ALIGNED_STRING("selcol"),
 
-    .str_857 = ALIGNED_STRING("selrow"),
+    .selrow_str = ALIGNED_STRING("selrow"),
 
-    .str_858 = ALIGNED_STRING("vertline"),
+    .vertline_str = ALIGNED_STRING("vertline"),
 
-    .str_859 = "col",
+    .col_str = "col",
 
-    .str_860 = "row",
+    .row_str_2 = "row",
 
-    .str_861 = "align",
+    .align_str_7 = "align",
 
-    .str_862 = "fontcolor",
+    .fontcolor_str_10 = "fontcolor",
 
-    .str_863 = ALIGNED_STRING("font"),
+    .font_str_11 = ALIGNED_STRING("font"),
 
     .ptrs_72 = {
-        SELF(str_866),
-        SELF(str_865),
+        SELF(list_str),
+        SELF(dial_str_2),
         SELF(str_864),
     },
 
     .str_864 = ALIGNED_STRING(""),
 
-    .str_865 = ALIGNED_STRING("dial"),
+    .dial_str_2 = ALIGNED_STRING("dial"),
 
-    .str_866 = ALIGNED_STRING("list"),
+    .list_str = ALIGNED_STRING("list"),
 
     .ptrs_73 = {
-        SELF(str_870),
-        SELF(str_869),
-        SELF(str_868),
+        SELF(fixedcol_str),
+        SELF(fixedrow_str),
+        SELF(func_str_15),
         SELF(str_867),
     },
 
     .str_867 = ALIGNED_STRING(""),
 
-    .str_868 = ALIGNED_STRING("func"),
+    .func_str_15 = ALIGNED_STRING("func"),
 
-    .str_869 = ALIGNED_STRING("fixedrow"),
+    .fixedrow_str = ALIGNED_STRING("fixedrow"),
 
-    .str_870 = ALIGNED_STRING("fixedcol"),
+    .fixedcol_str = ALIGNED_STRING("fixedcol"),
 
-    .ptr_3c20 = SELF(str_872),
+    .ptr_3c20 = SELF(page_str_3),
 
     .ptr_3c24 = SELF(str_871),
 
     .str_871 = ALIGNED_STRING(""),
 
-    .str_872 = ALIGNED_STRING("page"),
+    .page_str_3 = ALIGNED_STRING("page"),
 
     .ptrs_74 = {
-        SELF(str_877),
-        SELF(str_876),
-        SELF(str_875),
-        SELF(str_874),
+        SELF(track_str),
+        SELF(onoff_str_3),
+        SELF(part_str_3),
+        SELF(recplay_str),
         SELF(str_873),
     },
 
     .str_873 = ALIGNED_STRING(""),
 
-    .str_874 = "recplay",
+    .recplay_str = "recplay",
 
-    .str_875 = ALIGNED_STRING("part"),
+    .part_str_3 = ALIGNED_STRING("part"),
 
-    .str_876 = "onoff",
+    .onoff_str_3 = "onoff",
 
-    .str_877 = "track",
+    .track_str = "track",
 
     .ptr_3c60 = SELF(str_878),
 
@@ -8950,21 +8950,21 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_881 = ALIGNED_STRING(""),
 
-    .ptr_3c78 = SELF(str_883),
+    .ptr_3c78 = SELF(adr_str),
 
     .ptr_3c7c = SELF(str_882),
 
     .str_882 = ALIGNED_STRING(""),
 
-    .str_883 = "adr",
+    .adr_str = "adr",
 
-    .ptr_3c86 = SELF(str_885),
+    .ptr_3c86 = SELF(time_str),
 
     .ptr_3c8a = SELF(str_884),
 
     .str_884 = ALIGNED_STRING(""),
 
-    .str_885 = ALIGNED_STRING("time"),
+    .time_str = ALIGNED_STRING("time"),
 
     .ptr_3c96 = SELF(str_886),
 
@@ -8986,39 +8986,39 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_890 = ALIGNED_STRING(""),
 
-    .ptr_3cb4 = SELF(str_892),
+    .ptr_3cb4 = SELF(func_str_16),
 
     .ptr_3cb8 = SELF(str_891),
 
     .str_891 = ALIGNED_STRING(""),
 
-    .str_892 = ALIGNED_STRING("func"),
+    .func_str_16 = ALIGNED_STRING("func"),
 
     .ptrs_75 = {
-        SELF(str_897),
-        SELF(str_896),
-        SELF(str_895),
-        SELF(str_894),
+        SELF(font_str_12),
+        SELF(fontcolor_str_11),
+        SELF(alignment_str_3),
+        SELF(lines_str_2),
         SELF(str_893),
     },
 
     .str_893 = ALIGNED_STRING(""),
 
-    .str_894 = "lines",
+    .lines_str_2 = "lines",
 
-    .str_895 = "alignment",
+    .alignment_str_3 = "alignment",
 
-    .str_896 = "fontcolor",
+    .fontcolor_str_11 = "fontcolor",
 
-    .str_897 = ALIGNED_STRING("font"),
+    .font_str_12 = ALIGNED_STRING("font"),
 
-    .ptr_3cfa = SELF(str_899),
+    .ptr_3cfa = SELF(func_str_17),
 
     .ptr_3cfe = SELF(str_898),
 
     .str_898 = ALIGNED_STRING(""),
 
-    .str_899 = ALIGNED_STRING("func"),
+    .func_str_17 = ALIGNED_STRING("func"),
 
     .ptr_3d0a = SELF(str_900),
 
@@ -9028,13 +9028,13 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_901 = ALIGNED_STRING(""),
 
-    .ptr_3d16 = SELF(str_903),
+    .ptr_3d16 = SELF(func_str_18),
 
     .ptr_3d1a = SELF(str_902),
 
     .str_902 = ALIGNED_STRING(""),
 
-    .str_903 = ALIGNED_STRING("func"),
+    .func_str_18 = ALIGNED_STRING("func"),
 
     .ptr_3d26 = SELF(str_904),
 
@@ -9044,13 +9044,13 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_905 = ALIGNED_STRING(""),
 
-    .ptr_3d32 = SELF(str_907),
+    .ptr_3d32 = SELF(file_str),
 
     .ptr_3d36 = SELF(str_906),
 
     .str_906 = ALIGNED_STRING(""),
 
-    .str_907 = ALIGNED_STRING("file"),
+    .file_str = ALIGNED_STRING("file"),
 
     .classdef_160_0 = { .proc = NAKA_ADDR(ObjectProc), .parent = 0xFFFFFFFF, .allsize = 2, .selfsize = 0, .name = 0x00EADA8A, .propdata = 0x00EADA88, .propname = SELF(ptr_31e8) },
 

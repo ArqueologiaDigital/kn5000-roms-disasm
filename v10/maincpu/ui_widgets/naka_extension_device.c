@@ -217,11 +217,11 @@ typedef struct __attribute__((packed)) {
     naka_cls_TtlScreen_t vF4_e13;
     char w0_text[2];
     /* element 0 of Viewable slot 0xF5 "TEST2": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vF5_e0;
+    naka_cls_TtlScreen_t TEST2;
     char w1_text[2];
     /* element 1 of Viewable slot 0xF5: TextBox (class id 0x01600036) */
     naka_cls_TextBox_t vF5_e1;
-    char str_3[106];
+    char vF5_e1_text[106];
     /* element 2 of Viewable slot 0xF5: Label (class id 0x0160002B) */
     naka_cls_Label_t vF5_e2;
     char w2_text[20];
@@ -246,7 +246,7 @@ typedef struct __attribute__((packed)) {
     /* element 10 of Viewable slot 0xF5: IvPageControl (class id 0x01600028) */
     naka_cls_IvPageControl_t vF5_e10;
     /* element 11 of Viewable slot 0xF5 "TEST2OKOK": Window (class id 0x01600035) */
-    naka_cls_Window_t vF5_e11;
+    naka_cls_Window_t TEST2OKOK;
     /* element 12 of Viewable slot 0xF5: Label (class id 0x0160002B) */
     naka_cls_Label_t vF5_e12;
     char w7_text[4];
@@ -254,7 +254,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t vF5_e13;
     char w8_text[4];
     /* element 14 of Viewable slot 0xF5 "TEST2NGNG": Window (class id 0x01600035) */
-    naka_cls_Window_t vF5_e14;
+    naka_cls_Window_t TEST2NGNG;
     /* element 15 of Viewable slot 0xF5: Label (class id 0x0160002B) */
     naka_cls_Label_t vF5_e15;
     char w9_text[4];
@@ -262,7 +262,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t vF5_e16;
     char w10_text[4];
     /* element 17 of Viewable slot 0xF5 "TEST2NGOK": Window (class id 0x01600035) */
-    naka_cls_Window_t vF5_e17;
+    naka_cls_Window_t TEST2NGOK;
     /* element 18 of Viewable slot 0xF5: Label (class id 0x0160002B) */
     naka_cls_Label_t vF5_e18;
     char w11_text[4];
@@ -270,7 +270,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t vF5_e19;
     char w12_text[4];
     /* element 20 of Viewable slot 0xF5 "TEST2OKNG": Window (class id 0x01600035) */
-    naka_cls_Window_t vF5_e20;
+    naka_cls_Window_t TEST2OKNG;
     /* element 21 of Viewable slot 0xF5: Label (class id 0x0160002B) */
     naka_cls_Label_t vF5_e21;
     char w13_text[4];
@@ -278,18 +278,18 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t vF5_e22;
     char w14_text[4];
     /* element 0 of Viewable slot 0xF6 "TEST3": SineWaveScreen (class id 0x0162001A) */
-    naka_cls_SineWaveScreen_t vF6_e0;
+    naka_cls_SineWaveScreen_t TEST3;
     /* element 0 of Viewable slot 0xF7 "TEST4": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vF7_e0;
+    naka_cls_TtlScreen_t TEST4;
     char w15_text[2];
     /* element 1 of Viewable slot 0xF7: TextBox (class id 0x01600036) */
     naka_cls_TextBox_t vF7_e1;
-    char str_16[114];
+    char vF7_e1_text[114];
     /* element 2 of Viewable slot 0xF7: Label (class id 0x0160002B) */
     naka_cls_Label_t vF7_e2;
     char w16_text[20];
     /* element 0 of Viewable slot 0xF8 "TEST5": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vF8_e0;
+    naka_cls_TtlScreen_t TEST5;
     char w17_text[2];
     /* element 1 of Viewable slot 0xF8: IvPageControl (class id 0x01600028) */
     naka_cls_IvPageControl_t vF8_e1;
@@ -302,32 +302,32 @@ typedef struct __attribute__((packed)) {
     /* element 5 of Viewable slot 0xF8: IvPageControl (class id 0x01600028) */
     naka_cls_IvPageControl_t vF8_e5;
     /* element 6 of Viewable slot 0xF8 "TEST51": Window (class id 0x01600035) */
-    naka_cls_Window_t vF8_e6;
+    naka_cls_Window_t TEST51;
     /* element 7 of Viewable slot 0xF8: Label (class id 0x0160002B) */
     naka_cls_Label_t vF8_e7;
     char w18_text[16];
     /* element 8 of Viewable slot 0xF8 "TEST52": Window (class id 0x01600035) */
-    naka_cls_Window_t vF8_e8;
+    naka_cls_Window_t TEST52;
     /* element 9 of Viewable slot 0xF8: Label (class id 0x0160002B) */
     naka_cls_Label_t vF8_e9;
     char w19_text[16];
     /* element 10 of Viewable slot 0xF8 "TEST53": Window (class id 0x01600035) */
-    naka_cls_Window_t vF8_e10;
+    naka_cls_Window_t TEST53;
     /* element 11 of Viewable slot 0xF8: Label (class id 0x0160002B) */
     naka_cls_Label_t vF8_e11;
     char w20_text[16];
     /* element 12 of Viewable slot 0xF8 "TEST54": Window (class id 0x01600035) */
-    naka_cls_Window_t vF8_e12;
+    naka_cls_Window_t TEST54;
     /* element 13 of Viewable slot 0xF8: Label (class id 0x0160002B) */
     naka_cls_Label_t vF8_e13;
     char w21_text[16];
     /* element 14 of Viewable slot 0xF8 "TEST55": Window (class id 0x01600035) */
-    naka_cls_Window_t vF8_e14;
+    naka_cls_Window_t TEST55;
     /* element 15 of Viewable slot 0xF8: Label (class id 0x0160002B) */
     naka_cls_Label_t vF8_e15;
     char w22_text[16];
     /* element 16 of Viewable slot 0xF8 "TEST56": Window (class id 0x01600035) */
-    naka_cls_Window_t vF8_e16;
+    naka_cls_Window_t TEST56;
     /* element 17 of Viewable slot 0xF8: Frame (class id 0x0160002F) */
     naka_cls_Frame_t vF8_e17;
     /* element 18 of Viewable slot 0xF8: Label (class id 0x0160002B) */
@@ -474,7 +474,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t vF8_e66;
     char w67_text[2];
     /* element 0 of Viewable slot 0xF9 "TEST6": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vF9_e0;
+    naka_cls_TtlScreen_t TEST6;
     char w68_text[2];
     /* element 1 of Viewable slot 0xF9: Label (class id 0x0160002B) */
     naka_cls_Label_t vF9_e1;
@@ -487,25 +487,25 @@ typedef struct __attribute__((packed)) {
     /* element 4 of Viewable slot 0xF9: IvPageControl (class id 0x01600028) */
     naka_cls_IvPageControl_t vF9_e4;
     /* element 5 of Viewable slot 0xF9 "TEST6OK": Window (class id 0x01600035) */
-    naka_cls_Window_t vF9_e5;
+    naka_cls_Window_t TEST6OK;
     /* element 6 of Viewable slot 0xF9: Label (class id 0x0160002B) */
     naka_cls_Label_t vF9_e6;
     char w71_text[12];
     /* element 7 of Viewable slot 0xF9 "TEST6NG": Window (class id 0x01600035) */
-    naka_cls_Window_t vF9_e7;
+    naka_cls_Window_t TEST6NG;
     /* element 8 of Viewable slot 0xF9: Label (class id 0x0160002B) */
     naka_cls_Label_t vF9_e8;
     char w72_text[6];
     /* element 0 of Viewable slot 0xFB "EXT": IvScreen (class id 0x0160006A) */
-    naka_cls_IvScreen_t vFB_e0;
+    naka_cls_IvScreen_t EXT;
     uint32_t ptrs_0[482];  /* 482 pointers */
     char str_53[2];
     char str_54[2];
     char str_55[2];
-    char str_56[8];
+    char FADEOUT_str[8];
     char str_57[2];
     char str_58[2];
-    char str_59[8];
+    char FADEIN_str[8];
     char str_60[2];
     char str_61[2];
     char str_62[2];
@@ -514,7 +514,7 @@ typedef struct __attribute__((packed)) {
     char str_65[2];
     char str_66[2];
     char str_67[2];
-    char str_68[4];
+    char N4_str[4];
     char str_69[2];
     char str_70[2];
     char str_71[2];
@@ -523,13 +523,13 @@ typedef struct __attribute__((packed)) {
     char str_74[2];
     char str_75[2];
     char str_76[2];
-    char str_77[4];
+    char N3_str[4];
     char str_78[2];
     char str_79[2];
     char str_80[2];
     char str_81[2];
     char str_82[2];
-    char str_83[4];
+    char N2_str[4];
     char str_84[2];
     char str_85[2];
     char str_86[2];
@@ -538,7 +538,7 @@ typedef struct __attribute__((packed)) {
     char str_89[2];
     char str_90[2];
     char str_91[2];
-    char str_92[4];
+    char N1_str[4];
     char str_93[2];
     char str_94[2];
     char str_95[2];
@@ -585,12 +585,12 @@ typedef struct __attribute__((packed)) {
     char str_130[2];
     char str_131[2];
     char str_132[2];
-    char str_133[12];
+    char SYSINISURE_str[12];
     char str_134[2];
     char str_135[2];
     char str_136[2];
     char str_137[2];
-    char str_138[8];
+    char SYSINI_str[8];
     char w75_code[2];
     char w75_name[12];
     uint32_t ptrs_3[7];  /* 7 pointers */
@@ -639,7 +639,7 @@ typedef struct __attribute__((packed)) {
     char str_174[2];
     char str_175[2];
     char str_176[2];
-    char str_177[6];
+    char PMEM2_str[6];
     char str_178[2];
     char str_179[2];
     char str_180[2];
@@ -647,7 +647,7 @@ typedef struct __attribute__((packed)) {
     char str_182[2];
     char str_183[2];
     char str_184[2];
-    char str_185[6];
+    char PMEM1_str[6];
     char str_186[2];
     char str_187[2];
     char str_188[2];
@@ -675,7 +675,7 @@ typedef struct __attribute__((packed)) {
     char str_205[2];
     char str_206[2];
     char str_207[2];
-    char str_208[12];
+    char WALLSETSURE_str[12];
     char str_209[2];
     char str_210[2];
     char str_211[2];
@@ -696,13 +696,13 @@ typedef struct __attribute__((packed)) {
     char str_223[2];
     char str_224[2];
     char str_225[2];
-    char str_226[8];
+    char ONETCH_str[8];
     uint32_t ptrs_10[5];  /* 5 pointers */
     char str_227[2];
     char str_228[2];
     char str_229[2];
     char str_230[2];
-    char str_231[10];
+    char MUSICSTYL_str[10];
     uint32_t ptrs_11[21];  /* 21 pointers */
     char str_232[2];
     char str_233[2];
@@ -712,7 +712,7 @@ typedef struct __attribute__((packed)) {
     char str_237[2];
     char str_238[2];
     char str_239[2];
-    char str_240[8];
+    char STYLE2_str[8];
     char str_241[2];
     char str_242[2];
     char str_243[2];
@@ -720,11 +720,11 @@ typedef struct __attribute__((packed)) {
     char str_245[2];
     char str_246[2];
     char str_247[2];
-    char str_248[8];
+    char STYLE1_str[8];
     char str_249[2];
     char str_250[2];
     char str_251[2];
-    char str_252[8];
+    char MSCTSEL_str[8];
     uint32_t ptrs_12[18];  /* 18 pointers */
     char str_253[2];
     char str_254[2];
@@ -734,16 +734,16 @@ typedef struct __attribute__((packed)) {
     char str_258[2];
     char str_259[2];
     char str_260[2];
-    char str_261[6];
+    char SONG2_str[6];
     char str_262[2];
     char str_263[2];
     char str_264[2];
     char str_265[2];
-    char str_266[6];
+    char SONG1_str[6];
     char str_267[2];
     char str_268[2];
     char str_269[2];
-    char str_270[10];
+    char MSSCTSEL_str[10];
     uint32_t ptrs_13[9];  /* 9 pointers */
     char str_271[2];
     char str_272[2];
@@ -753,7 +753,7 @@ typedef struct __attribute__((packed)) {
     char str_276[2];
     char str_277[2];
     char str_278[2];
-    char str_279[12];
+    char MSSONGLIST_str[12];
     uint32_t ptrs_14[8];  /* 8 pointers */
     char str_280[2];
     char str_281[2];
@@ -762,7 +762,7 @@ typedef struct __attribute__((packed)) {
     char str_284[2];
     char str_285[2];
     char str_286[2];
-    char str_287[10];
+    char MSSTLSEL_str[10];
     uint32_t ptrs_15[7];  /* 7 pointers */
     char str_288[2];
     char str_289[2];
@@ -770,7 +770,7 @@ typedef struct __attribute__((packed)) {
     char str_291[2];
     char str_292[2];
     char str_293[2];
-    char str_294[8];
+    char PMBANK_str[8];
     uint32_t ptrs_16[14];  /* 14 pointers */
     char str_295[2];
     char str_296[2];
@@ -785,7 +785,7 @@ typedef struct __attribute__((packed)) {
     char str_305[2];
     char str_306[2];
     char str_307[2];
-    char str_308[8];
+    char PMVIEW_str[8];
     uint32_t ptrs_17[8];  /* 8 pointers */
     char str_309[2];
     char str_310[2];
@@ -794,7 +794,7 @@ typedef struct __attribute__((packed)) {
     char str_313[2];
     char str_314[2];
     char str_315[2];
-    char str_316[8];
+    char PMNAME_str[8];
     uint32_t ptrs_18[8];  /* 8 pointers */
     char str_317[2];
     char str_318[2];
@@ -803,16 +803,16 @@ typedef struct __attribute__((packed)) {
     char str_321[2];
     char str_322[2];
     char str_323[2];
-    char str_324[10];
+    char PMBKNAME_str[10];
     uint32_t ptrs_19[3];  /* 3 pointers */
     char str_325[2];
     char str_326[2];
-    char str_327[6];
+    char SVARI_str[6];
     uint32_t ptrs_20[4];  /* 4 pointers */
     char str_328[2];
     char str_329[2];
     char str_330[2];
-    char str_331[6];
+    char RVARI_str[6];
     uint32_t ptrs_21[15];  /* 15 pointers */
     char str_332[2];
     char str_333[2];
@@ -821,28 +821,28 @@ typedef struct __attribute__((packed)) {
     char str_336[2];
     char str_337[2];
     char str_338[2];
-    char str_339[8];
+    char TEST1CP_str[8];
     char str_340[2];
     char str_341[2];
     char str_342[2];
     char str_343[2];
     char str_344[2];
-    char str_345[10];
+    char TEST1RAM_str[10];
     char str_346[2];
     uint32_t ptrs_22[24];  /* 24 pointers */
     char str_347[2];
     char str_348[2];
     char str_349[2];
-    char str_350[10];
+    char TEST2OKNG_str[10];
     char str_351[2];
     char str_352[2];
-    char str_353[10];
+    char TEST2NGOK_str[10];
     char str_354[2];
     char str_355[2];
-    char str_356[10];
+    char TEST2NGNG_str[10];
     char str_357[2];
     char str_358[2];
-    char str_359[10];
+    char TEST2OKOK_str[10];
     char str_360[2];
     char str_361[2];
     char str_362[2];
@@ -853,16 +853,16 @@ typedef struct __attribute__((packed)) {
     char str_367[2];
     char str_368[2];
     char str_369[2];
-    char str_370[6];
+    char TEST2_str[6];
     uint32_t ptr_1f6a;
     uint32_t ptr_1f6e;
     char str_371[2];
-    char str_372[6];
+    char TEST3_str[6];
     uint32_t ptrs_23[4];  /* 4 pointers */
     char str_373[2];
     char str_374[2];
     char str_375[2];
-    char str_376[6];
+    char TEST4_str[6];
     uint32_t ptrs_24[68];  /* 68 pointers */
     char str_377[2];
     char str_378[2];
@@ -915,70 +915,70 @@ typedef struct __attribute__((packed)) {
     char str_425[2];
     char str_426[2];
     char str_427[2];
-    char str_428[8];
+    char TEST56_str[8];
     char str_429[2];
-    char str_430[8];
+    char TEST55_str[8];
     char str_431[2];
-    char str_432[8];
+    char TEST54_str[8];
     char str_433[2];
-    char str_434[8];
+    char TEST53_str[8];
     char str_435[2];
-    char str_436[8];
+    char TEST52_str[8];
     char str_437[2];
-    char str_438[8];
+    char TEST51_str[8];
     char str_439[2];
     char str_440[2];
     char str_441[2];
     char str_442[2];
     char str_443[2];
-    char str_444[6];
+    char TEST5_str[6];
     uint32_t ptrs_25[10];  /* 10 pointers */
     char str_445[2];
     char str_446[2];
-    char str_447[8];
+    char TEST6NG_str[8];
     char str_448[2];
-    char str_449[8];
+    char TEST6OK_str[8];
     char str_450[2];
     char str_451[2];
     char str_452[2];
     char str_453[2];
-    char str_454[6];
+    char TEST6_str[6];
     uint32_t ptr_21a2;
     uint32_t ptr_21a6;
     char str_455[2];
-    char str_456[4];
-    char str_457[10];
-    char str_458[12];
-    char str_459[8];
-    char str_460[10];
-    char str_461[10];
-    char str_462[10];
-    char str_463[12];
-    char str_464[12];
-    char str_465[12];
-    char str_466[10];
-    char str_467[12];
-    char str_468[12];
-    char str_469[14];
-    char str_470[10];
-    char str_471[14];
-    char str_472[12];
-    char str_473[12];
-    char str_474[14];
-    char str_475[12];
-    char str_476[12];
-    char str_477[10];
-    char str_478[10];
-    char str_479[12];
-    char str_480[10];
-    char str_481[10];
-    char str_482[10];
-    char str_483[10];
-    char str_484[10];
-    char str_485[10];
-    char str_486[10];
-    char str_487[10];
-    char str_488[8];
+    char EXT_str[4];
+    char MD_NORMAL_str[10];
+    char MD_CONTROL_str[12];
+    char MD_OTP_str[8];
+    char TT_NORMAL_str[10];
+    char TT_CTMENU_str[10];
+    char TT_CTINIT_str[10];
+    char TT_CTFSWAS_str[12];
+    char TT_CTTOUCH_str[12];
+    char TT_MSAMODE_str[12];
+    char TT_CTPMMD_str[10];
+    char TT_CTPMPARA_str[12];
+    char TT_CTSYSTEM_str[12];
+    char TT_CTWALLSET_str[14];
+    char TT_ONETCH_str[10];
+    char TT_MUSICSTYL_str[14];
+    char TT_MSCTSEL_str[12];
+    char TT_MSSCTSEL_str[12];
+    char TT_MSSONGLIST_str[14];
+    char TT_MSALPSEL_str[12];
+    char TT_PMBKSEL_str[12];
+    char TT_PMVIEW_str[10];
+    char TT_PMNAME_str[10];
+    char TT_PMBKNAME_str[12];
+    char TT_SVARI_str[10];
+    char TT_RVARI_str[10];
+    char TT_TEST1_str[10];
+    char TT_TEST2_str[10];
+    char TT_TEST3_str[10];
+    char TT_TEST4_str[10];
+    char TT_TEST5_str[10];
+    char TT_TEST6_str[10];
+    char TT_EXT_str[8];
     uint16_t field_230e;
     uint16_t field_2310;
     uint16_t field_2312;
@@ -1267,7 +1267,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_254e;
     uint16_t field_2550;
     uint16_t field_2552;
-    char str_491[2];
+    char c_str[2];
     uint16_t field_2556;
     uint16_t field_2558;
     uint16_t field_255a;
@@ -1311,7 +1311,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_25aa;
     uint16_t field_25ac;
     uint16_t field_25ae;
-    char str_494[2];
+    char g_str[2];
     uint16_t field_25b2;
     uint16_t field_25b4;
     uint16_t field_25b6;
@@ -1487,7 +1487,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_270e;
     uint16_t field_2710;
     uint16_t field_2712;
-    char str_497[2];
+    char Z_str[2];
     uint16_t field_2716;
     uint16_t field_2718;
     uint16_t field_271a;
@@ -1626,11 +1626,11 @@ typedef struct __attribute__((packed)) {
     uint8_t pad_66[2];  /* zero padding */
     uint32_t ptr_282c;
     uint16_t field_2830;
-    char str_499[2];
+    char H_str[2];
     uint8_t pad_67[2];  /* zero padding */
     uint32_t ptr_2836;
     uint16_t field_283a;
-    char str_500[2];
+    char b_str[2];
     uint8_t pad_68[2];  /* zero padding */
     uint32_t ptr_2840;
     uint16_t field_2844;
@@ -1807,15 +1807,15 @@ typedef struct __attribute__((packed)) {
     uint8_t pad_112[2];  /* zero padding */
     uint32_t ptr_29f8;
     uint16_t field_29fc;
-    char str_503[2];
+    char H_str_2[2];
     uint8_t pad_113[2];  /* zero padding */
     uint32_t ptr_2a02;
     uint16_t field_2a06;
-    char str_504[2];
+    char T_str[2];
     uint8_t pad_114[2];  /* zero padding */
     uint32_t ptr_2a0c;
     uint16_t field_2a10;
-    char str_505[2];
+    char x_str[2];
     uint8_t pad_115[2];  /* zero padding */
     uint32_t ptr_2a16;
     uint16_t field_2a1a;
@@ -2032,7 +2032,7 @@ typedef struct __attribute__((packed)) {
     char str_511[2];
     uint32_t ptr_2c4f;
     char str_512[2];
-    char str_513[2];
+    char P_str[2];
     uint8_t pad_171[3];  /* zero padding */
     uint16_t field_2c5a;
     uint8_t pad_172[4];  /* zero padding */
@@ -2110,7 +2110,7 @@ typedef struct __attribute__((packed)) {
     char str_516[2];
     uint32_t ptr_2d39;
     char str_517[2];
-    char str_518[2];
+    char P_str_2[2];
     uint8_t pad_197[3];  /* zero padding */
     uint16_t field_2d44;
     uint8_t pad_198[4];  /* zero padding */
@@ -2188,7 +2188,7 @@ typedef struct __attribute__((packed)) {
     char str_521[2];
     uint32_t ptr_2e23;
     char str_522[2];
-    char str_523[2];
+    char P_str_3[2];
     uint8_t pad_223[3];  /* zero padding */
     uint16_t field_2e2e;
     uint8_t pad_224[4];  /* zero padding */
@@ -2198,13 +2198,13 @@ typedef struct __attribute__((packed)) {
     uint16_t field_2e46;
     char str_524[2];
     char str_525[2];
-    char str_526[2];
+    char F_str[2];
     uint8_t pad_226[8];  /* zero padding */
     uint16_t field_2e56;
     uint16_t field_2e58;
     char str_527[2];
     char str_528[2];
-    char str_529[2];
+    char C_str[2];
     uint16_t field_2e60;
     uint16_t field_2e62;
     uint16_t field_2e64;
@@ -2212,9 +2212,9 @@ typedef struct __attribute__((packed)) {
     uint8_t pad_227[2];  /* zero padding */
     uint16_t field_2e6a;
     char str_530[2];
-    char str_531[2];
-    char str_532[2];
-    char str_533[2];
+    char V_str[2];
+    char r_str[2];
+    char H_str_3[2];
     uint16_t field_2e74;
     uint32_t ptr_2e76;
     uint16_t field_2e7a;
@@ -2226,7 +2226,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_2e8a;
     uint16_t field_2e8c;
     uint32_t ptr_2e8e;
-    char str_534[2];
+    char H_str_4[2];
     uint16_t field_2e94;
     uint32_t ptr_2e96;
     uint16_t field_2e9a;
@@ -2316,7 +2316,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_2f7a;
     uint16_t field_2f7c;
     uint32_t ptr_2f7e;
-    char str_535[2];
+    char p_str[2];
     uint16_t field_2f84;
     uint32_t ptr_2f86;
     uint16_t field_2f8a;
@@ -2343,7 +2343,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_2fc2;
     uint16_t field_2fc4;
     uint32_t ptr_2fc6;
-    char str_536[2];
+    char H_str_5[2];
     char str_537[2];
     uint32_t ptr_2fce;
     uint16_t field_2fd2;
@@ -3194,7 +3194,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .w0_text = ALIGNED_STRING(""),
 
-    .vF5_e0 = {
+    .TEST2 = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -3222,14 +3222,14 @@ const naka_extension_device_t naka_extension_device_data
         .rect = { 0, 64, 319, 119 },
         .color = 0x00F5,
         .border = 0x0000,
-        .text = SELF(str_3),
+        .text = SELF(vF5_e1_text),
         .font = 0x00000000,
         .fontcolor = 0x00FB,
         .alignment = 0x0000,
         .lines = 0x0003,
     },
 
-    .str_3 = ALIGNED_STRING("Please check by the LED of test port. (PANEL CPU:                            OK=Lit SHORT, NO=Lit LONG) "),
+    .vF5_e1_text = ALIGNED_STRING("Please check by the LED of test port. (PANEL CPU:                            OK=Lit SHORT, NO=Lit LONG) "),
 
     .vF5_e2 = {
         .class_ = 0x0160002B,
@@ -3354,7 +3354,7 @@ const naka_extension_device_t naka_extension_device_data
         .window = 0x00F50014,
     },
 
-    .vF5_e11 = {
+    .TEST2OKOK = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 12,
@@ -3399,7 +3399,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .w8_text = ALIGNED_STRING("OK"),
 
-    .vF5_e14 = {
+    .TEST2NGNG = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 15,
@@ -3444,7 +3444,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .w10_text = ALIGNED_STRING("NO"),
 
-    .vF5_e17 = {
+    .TEST2NGOK = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 18,
@@ -3489,7 +3489,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .w12_text = ALIGNED_STRING("OK"),
 
-    .vF5_e20 = {
+    .TEST2OKNG = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 21,
@@ -3534,7 +3534,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .w14_text = ALIGNED_STRING("NO"),
 
-    .vF6_e0 = {
+    .TEST3 = {
         .class_ = 0x0162001A,
         .super = NAKA_NONE,
         .sub = NAKA_NONE,
@@ -3553,7 +3553,7 @@ const naka_extension_device_t naka_extension_device_data
         .oldswno = 0x0003F670,
     },
 
-    .vF7_e0 = {
+    .TEST4 = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -3581,14 +3581,14 @@ const naka_extension_device_t naka_extension_device_data
         .rect = { 44, 84, 311, 199 },
         .color = 0x00F5,
         .border = 0x0000,
-        .text = SELF(str_16),
+        .text = SELF(vF7_e1_text),
         .font = 0x00000000,
         .fontcolor = 0x00FB,
         .alignment = 0x0001,
         .lines = 0x0004,
     },
 
-    .str_16 = ALIGNED_STRING("After all LEDs ON and OFF,  Please push any button.         If LED near the button turn ON/OFF,it is working OK."),
+    .vF7_e1_text = ALIGNED_STRING("After all LEDs ON and OFF,  Please push any button.         If LED near the button turn ON/OFF,it is working OK."),
 
     .vF7_e2 = {
         .class_ = 0x0160002B,
@@ -3605,7 +3605,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .w16_text = ALIGNED_STRING("PANEL SW&LED CHECK"),
 
-    .vF8_e0 = {
+    .TEST5 = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -3683,7 +3683,7 @@ const naka_extension_device_t naka_extension_device_data
         .window = 0x00F8000E,
     },
 
-    .vF8_e6 = {
+    .TEST51 = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 7,
@@ -3713,7 +3713,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .w18_text = ALIGNED_STRING("LCD PANEL TEST"),
 
-    .vF8_e8 = {
+    .TEST52 = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 9,
@@ -3743,7 +3743,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .w19_text = ALIGNED_STRING("LCD PANEL TEST"),
 
-    .vF8_e10 = {
+    .TEST53 = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 11,
@@ -3773,7 +3773,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .w20_text = ALIGNED_STRING("LCD PANEL TEST"),
 
-    .vF8_e12 = {
+    .TEST54 = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 13,
@@ -3803,7 +3803,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .w21_text = ALIGNED_STRING("LCD PANEL TEST"),
 
-    .vF8_e14 = {
+    .TEST55 = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 15,
@@ -3833,7 +3833,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .w22_text = ALIGNED_STRING("LCD PANEL TEST"),
 
-    .vF8_e16 = {
+    .TEST56 = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 17,
@@ -4588,7 +4588,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .w67_text = "H",
 
-    .vF9_e0 = {
+    .TEST6 = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -4660,7 +4660,7 @@ const naka_extension_device_t naka_extension_device_data
         .window = 0x00F90007,
     },
 
-    .vF9_e5 = {
+    .TEST6OK = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 6,
@@ -4690,7 +4690,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .w71_text = "= may be OK",
 
-    .vF9_e7 = {
+    .TEST6NG = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 8,
@@ -4720,7 +4720,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .w72_text = ALIGNED_STRING("= NO"),
 
-    .vFB_e0 = {
+    .EXT = {
         .class_ = 0x0160006A,
         .super = NAKA_NONE,
         .sub = NAKA_NONE,
@@ -5043,7 +5043,7 @@ const naka_extension_device_t naka_extension_device_data
         NAKA_ADDR(ErrorDialog_RecoveryLine3),
         SELF(vF4_e13),
         0x00000000,
-        SELF(vF5_e0),
+        SELF(TEST2),
         SELF(vF5_e1),
         SELF(vF5_e2),
         SELF(vF5_e3),
@@ -5054,42 +5054,42 @@ const naka_extension_device_t naka_extension_device_data
         SELF(vF5_e8),
         SELF(vF5_e9),
         SELF(vF5_e10),
-        SELF(vF5_e11),
+        SELF(TEST2OKOK),
         SELF(vF5_e12),
         SELF(vF5_e13),
-        SELF(vF5_e14),
+        SELF(TEST2NGNG),
         SELF(vF5_e15),
         SELF(vF5_e16),
-        SELF(vF5_e17),
+        SELF(TEST2NGOK),
         SELF(vF5_e18),
         SELF(vF5_e19),
-        SELF(vF5_e20),
+        SELF(TEST2OKNG),
         SELF(vF5_e21),
         SELF(vF5_e22),
         0x00000000,
-        SELF(vF6_e0),
+        SELF(TEST3),
         0x00000000,
-        SELF(vF7_e0),
+        SELF(TEST4),
         SELF(vF7_e1),
         SELF(vF7_e2),
         0x00000000,
-        SELF(vF8_e0),
+        SELF(TEST5),
         SELF(vF8_e1),
         SELF(vF8_e2),
         SELF(vF8_e3),
         SELF(vF8_e4),
         SELF(vF8_e5),
-        SELF(vF8_e6),
+        SELF(TEST51),
         SELF(vF8_e7),
-        SELF(vF8_e8),
+        SELF(TEST52),
         SELF(vF8_e9),
-        SELF(vF8_e10),
+        SELF(TEST53),
         SELF(vF8_e11),
-        SELF(vF8_e12),
+        SELF(TEST54),
         SELF(vF8_e13),
-        SELF(vF8_e14),
+        SELF(TEST55),
         SELF(vF8_e15),
-        SELF(vF8_e16),
+        SELF(TEST56),
         SELF(vF8_e17),
         SELF(vF8_e18),
         SELF(vF8_e19),
@@ -5141,17 +5141,17 @@ const naka_extension_device_t naka_extension_device_data
         SELF(vF8_e65),
         SELF(vF8_e66),
         0x00000000,
-        SELF(vF9_e0),
+        SELF(TEST6),
         SELF(vF9_e1),
         SELF(vF9_e2),
         SELF(vF9_e3),
         SELF(vF9_e4),
-        SELF(vF9_e5),
+        SELF(TEST6OK),
         SELF(vF9_e6),
-        SELF(vF9_e7),
+        SELF(TEST6NG),
         SELF(vF9_e8),
         0x00000000,
-        SELF(vFB_e0),
+        SELF(EXT),
         0x00000000,
         SELF(w73_name),
         SELF(w73_code),
@@ -5177,7 +5177,7 @@ const naka_extension_device_t naka_extension_device_data
         SELF(str_95),
         SELF(str_94),
         SELF(str_93),
-        SELF(str_92),
+        SELF(N1_str),
         SELF(str_91),
         SELF(str_90),
         SELF(str_89),
@@ -5186,13 +5186,13 @@ const naka_extension_device_t naka_extension_device_data
         SELF(str_86),
         SELF(str_85),
         SELF(str_84),
-        SELF(str_83),
+        SELF(N2_str),
         SELF(str_82),
         SELF(str_81),
         SELF(str_80),
         SELF(str_79),
         SELF(str_78),
-        SELF(str_77),
+        SELF(N3_str),
         SELF(str_76),
         SELF(str_75),
         SELF(str_74),
@@ -5201,7 +5201,7 @@ const naka_extension_device_t naka_extension_device_data
         SELF(str_71),
         SELF(str_70),
         SELF(str_69),
-        SELF(str_68),
+        SELF(N4_str),
         SELF(str_67),
         SELF(str_66),
         SELF(str_65),
@@ -5210,10 +5210,10 @@ const naka_extension_device_t naka_extension_device_data
         SELF(str_62),
         SELF(str_61),
         SELF(str_60),
-        SELF(str_59),
+        SELF(FADEIN_str),
         SELF(str_58),
         SELF(str_57),
-        SELF(str_56),
+        SELF(FADEOUT_str),
         SELF(str_55),
         SELF(str_54),
         SELF(str_53),
@@ -5225,13 +5225,13 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_55 = ALIGNED_STRING(""),
 
-    .str_56 = "FADEOUT",
+    .FADEOUT_str = "FADEOUT",
 
     .str_57 = ALIGNED_STRING(""),
 
     .str_58 = ALIGNED_STRING(""),
 
-    .str_59 = ALIGNED_STRING("FADEIN"),
+    .FADEIN_str = ALIGNED_STRING("FADEIN"),
 
     .str_60 = ALIGNED_STRING(""),
 
@@ -5249,7 +5249,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_67 = ALIGNED_STRING(""),
 
-    .str_68 = ALIGNED_STRING("N4"),
+    .N4_str = ALIGNED_STRING("N4"),
 
     .str_69 = ALIGNED_STRING(""),
 
@@ -5267,7 +5267,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_76 = ALIGNED_STRING(""),
 
-    .str_77 = ALIGNED_STRING("N3"),
+    .N3_str = ALIGNED_STRING("N3"),
 
     .str_78 = ALIGNED_STRING(""),
 
@@ -5279,7 +5279,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_82 = ALIGNED_STRING(""),
 
-    .str_83 = ALIGNED_STRING("N2"),
+    .N2_str = ALIGNED_STRING("N2"),
 
     .str_84 = ALIGNED_STRING(""),
 
@@ -5297,7 +5297,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_91 = ALIGNED_STRING(""),
 
-    .str_92 = ALIGNED_STRING("N1"),
+    .N1_str = ALIGNED_STRING("N1"),
 
     .str_93 = ALIGNED_STRING(""),
 
@@ -5383,12 +5383,12 @@ const naka_extension_device_t naka_extension_device_data
     .ptrs_2 = {
         SELF(w75_name),
         SELF(w75_code),
-        SELF(str_138),
+        SELF(SYSINI_str),
         SELF(str_137),
         SELF(str_136),
         SELF(str_135),
         SELF(str_134),
-        SELF(str_133),
+        SELF(SYSINISURE_str),
         SELF(str_132),
         SELF(str_131),
         SELF(str_130),
@@ -5421,7 +5421,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_132 = ALIGNED_STRING(""),
 
-    .str_133 = ALIGNED_STRING("SYSINISURE"),
+    .SYSINISURE_str = ALIGNED_STRING("SYSINISURE"),
 
     .str_134 = ALIGNED_STRING(""),
 
@@ -5431,7 +5431,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_137 = ALIGNED_STRING(""),
 
-    .str_138 = ALIGNED_STRING("SYSINI"),
+    .SYSINI_str = ALIGNED_STRING("SYSINI"),
 
     .w75_code = ALIGNED_STRING(""),
 
@@ -5560,7 +5560,7 @@ const naka_extension_device_t naka_extension_device_data
         SELF(str_188),
         SELF(str_187),
         SELF(str_186),
-        SELF(str_185),
+        SELF(PMEM1_str),
         SELF(str_184),
         SELF(str_183),
         SELF(str_182),
@@ -5568,7 +5568,7 @@ const naka_extension_device_t naka_extension_device_data
         SELF(str_180),
         SELF(str_179),
         SELF(str_178),
-        SELF(str_177),
+        SELF(PMEM2_str),
         SELF(str_176),
         SELF(str_175),
         SELF(str_174),
@@ -5589,7 +5589,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_176 = ALIGNED_STRING(""),
 
-    .str_177 = "PMEM2",
+    .PMEM2_str = "PMEM2",
 
     .str_178 = ALIGNED_STRING(""),
 
@@ -5605,7 +5605,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_184 = ALIGNED_STRING(""),
 
-    .str_185 = "PMEM1",
+    .PMEM1_str = "PMEM1",
 
     .str_186 = ALIGNED_STRING(""),
 
@@ -5664,7 +5664,7 @@ const naka_extension_device_t naka_extension_device_data
         SELF(str_211),
         SELF(str_210),
         SELF(str_209),
-        SELF(str_208),
+        SELF(WALLSETSURE_str),
         SELF(str_207),
         SELF(str_206),
         SELF(str_205),
@@ -5697,7 +5697,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_207 = ALIGNED_STRING(""),
 
-    .str_208 = "WALLSETSURE",
+    .WALLSETSURE_str = "WALLSETSURE",
 
     .str_209 = ALIGNED_STRING(""),
 
@@ -5730,7 +5730,7 @@ const naka_extension_device_t naka_extension_device_data
     .str_221 = ALIGNED_STRING(""),
 
     .ptrs_9 = {
-        SELF(str_226),
+        SELF(ONETCH_str),
         SELF(str_225),
         SELF(str_224),
         SELF(str_223),
@@ -5745,10 +5745,10 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_225 = ALIGNED_STRING(""),
 
-    .str_226 = ALIGNED_STRING("ONETCH"),
+    .ONETCH_str = ALIGNED_STRING("ONETCH"),
 
     .ptrs_10 = {
-        SELF(str_231),
+        SELF(MUSICSTYL_str),
         SELF(str_230),
         SELF(str_229),
         SELF(str_228),
@@ -5763,14 +5763,14 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_230 = ALIGNED_STRING(""),
 
-    .str_231 = "MUSICSTYL",
+    .MUSICSTYL_str = "MUSICSTYL",
 
     .ptrs_11 = {
-        SELF(str_252),
+        SELF(MSCTSEL_str),
         SELF(str_251),
         SELF(str_250),
         SELF(str_249),
-        SELF(str_248),
+        SELF(STYLE1_str),
         SELF(str_247),
         SELF(str_246),
         SELF(str_245),
@@ -5778,7 +5778,7 @@ const naka_extension_device_t naka_extension_device_data
         SELF(str_243),
         SELF(str_242),
         SELF(str_241),
-        SELF(str_240),
+        SELF(STYLE2_str),
         SELF(str_239),
         SELF(str_238),
         SELF(str_237),
@@ -5805,7 +5805,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_239 = ALIGNED_STRING(""),
 
-    .str_240 = ALIGNED_STRING("STYLE2"),
+    .STYLE2_str = ALIGNED_STRING("STYLE2"),
 
     .str_241 = ALIGNED_STRING(""),
 
@@ -5821,7 +5821,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_247 = ALIGNED_STRING(""),
 
-    .str_248 = ALIGNED_STRING("STYLE1"),
+    .STYLE1_str = ALIGNED_STRING("STYLE1"),
 
     .str_249 = ALIGNED_STRING(""),
 
@@ -5829,19 +5829,19 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_251 = ALIGNED_STRING(""),
 
-    .str_252 = "MSCTSEL",
+    .MSCTSEL_str = "MSCTSEL",
 
     .ptrs_12 = {
-        SELF(str_270),
+        SELF(MSSCTSEL_str),
         SELF(str_269),
         SELF(str_268),
         SELF(str_267),
-        SELF(str_266),
+        SELF(SONG1_str),
         SELF(str_265),
         SELF(str_264),
         SELF(str_263),
         SELF(str_262),
-        SELF(str_261),
+        SELF(SONG2_str),
         SELF(str_260),
         SELF(str_259),
         SELF(str_258),
@@ -5868,7 +5868,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_260 = ALIGNED_STRING(""),
 
-    .str_261 = "SONG2",
+    .SONG2_str = "SONG2",
 
     .str_262 = ALIGNED_STRING(""),
 
@@ -5878,7 +5878,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_265 = ALIGNED_STRING(""),
 
-    .str_266 = "SONG1",
+    .SONG1_str = "SONG1",
 
     .str_267 = ALIGNED_STRING(""),
 
@@ -5886,10 +5886,10 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_269 = ALIGNED_STRING(""),
 
-    .str_270 = ALIGNED_STRING("MSSCTSEL"),
+    .MSSCTSEL_str = ALIGNED_STRING("MSSCTSEL"),
 
     .ptrs_13 = {
-        SELF(str_279),
+        SELF(MSSONGLIST_str),
         SELF(str_278),
         SELF(str_277),
         SELF(str_276),
@@ -5916,10 +5916,10 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_278 = ALIGNED_STRING(""),
 
-    .str_279 = ALIGNED_STRING("MSSONGLIST"),
+    .MSSONGLIST_str = ALIGNED_STRING("MSSONGLIST"),
 
     .ptrs_14 = {
-        SELF(str_287),
+        SELF(MSSTLSEL_str),
         SELF(str_286),
         SELF(str_285),
         SELF(str_284),
@@ -5943,10 +5943,10 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_286 = ALIGNED_STRING(""),
 
-    .str_287 = ALIGNED_STRING("MSSTLSEL"),
+    .MSSTLSEL_str = ALIGNED_STRING("MSSTLSEL"),
 
     .ptrs_15 = {
-        SELF(str_294),
+        SELF(PMBANK_str),
         SELF(str_293),
         SELF(str_292),
         SELF(str_291),
@@ -5967,10 +5967,10 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_293 = ALIGNED_STRING(""),
 
-    .str_294 = ALIGNED_STRING("PMBANK"),
+    .PMBANK_str = ALIGNED_STRING("PMBANK"),
 
     .ptrs_16 = {
-        SELF(str_308),
+        SELF(PMVIEW_str),
         SELF(str_307),
         SELF(str_306),
         SELF(str_305),
@@ -6012,10 +6012,10 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_307 = ALIGNED_STRING(""),
 
-    .str_308 = ALIGNED_STRING("PMVIEW"),
+    .PMVIEW_str = ALIGNED_STRING("PMVIEW"),
 
     .ptrs_17 = {
-        SELF(str_316),
+        SELF(PMNAME_str),
         SELF(str_315),
         SELF(str_314),
         SELF(str_313),
@@ -6039,10 +6039,10 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_315 = ALIGNED_STRING(""),
 
-    .str_316 = ALIGNED_STRING("PMNAME"),
+    .PMNAME_str = ALIGNED_STRING("PMNAME"),
 
     .ptrs_18 = {
-        SELF(str_324),
+        SELF(PMBKNAME_str),
         SELF(str_323),
         SELF(str_322),
         SELF(str_321),
@@ -6066,10 +6066,10 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_323 = ALIGNED_STRING(""),
 
-    .str_324 = ALIGNED_STRING("PMBKNAME"),
+    .PMBKNAME_str = ALIGNED_STRING("PMBKNAME"),
 
     .ptrs_19 = {
-        SELF(str_327),
+        SELF(SVARI_str),
         SELF(str_326),
         SELF(str_325),
     },
@@ -6078,10 +6078,10 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_326 = ALIGNED_STRING(""),
 
-    .str_327 = "SVARI",
+    .SVARI_str = "SVARI",
 
     .ptrs_20 = {
-        SELF(str_331),
+        SELF(RVARI_str),
         SELF(str_330),
         SELF(str_329),
         SELF(str_328),
@@ -6093,17 +6093,17 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_330 = ALIGNED_STRING(""),
 
-    .str_331 = "RVARI",
+    .RVARI_str = "RVARI",
 
     .ptrs_21 = {
         SELF(str_346),
-        SELF(str_345),
+        SELF(TEST1RAM_str),
         SELF(str_344),
         SELF(str_343),
         SELF(str_342),
         SELF(str_341),
         SELF(str_340),
-        SELF(str_339),
+        SELF(TEST1CP_str),
         SELF(str_338),
         SELF(str_337),
         SELF(str_336),
@@ -6127,7 +6127,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_338 = ALIGNED_STRING(""),
 
-    .str_339 = "TEST1CP",
+    .TEST1CP_str = "TEST1CP",
 
     .str_340 = ALIGNED_STRING(""),
 
@@ -6139,12 +6139,12 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_344 = ALIGNED_STRING(""),
 
-    .str_345 = ALIGNED_STRING("TEST1RAM"),
+    .TEST1RAM_str = ALIGNED_STRING("TEST1RAM"),
 
     .str_346 = ALIGNED_STRING(""),
 
     .ptrs_22 = {
-        SELF(str_370),
+        SELF(TEST2_str),
         SELF(str_369),
         SELF(str_368),
         SELF(str_367),
@@ -6155,16 +6155,16 @@ const naka_extension_device_t naka_extension_device_data
         SELF(str_362),
         SELF(str_361),
         SELF(str_360),
-        SELF(str_359),
+        SELF(TEST2OKOK_str),
         SELF(str_358),
         SELF(str_357),
-        SELF(str_356),
+        SELF(TEST2NGNG_str),
         SELF(str_355),
         SELF(str_354),
-        SELF(str_353),
+        SELF(TEST2NGOK_str),
         SELF(str_352),
         SELF(str_351),
-        SELF(str_350),
+        SELF(TEST2OKNG_str),
         SELF(str_349),
         SELF(str_348),
         SELF(str_347),
@@ -6176,25 +6176,25 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_349 = ALIGNED_STRING(""),
 
-    .str_350 = "TEST2OKNG",
+    .TEST2OKNG_str = "TEST2OKNG",
 
     .str_351 = ALIGNED_STRING(""),
 
     .str_352 = ALIGNED_STRING(""),
 
-    .str_353 = "TEST2NGOK",
+    .TEST2NGOK_str = "TEST2NGOK",
 
     .str_354 = ALIGNED_STRING(""),
 
     .str_355 = ALIGNED_STRING(""),
 
-    .str_356 = "TEST2NGNG",
+    .TEST2NGNG_str = "TEST2NGNG",
 
     .str_357 = ALIGNED_STRING(""),
 
     .str_358 = ALIGNED_STRING(""),
 
-    .str_359 = "TEST2OKOK",
+    .TEST2OKOK_str = "TEST2OKOK",
 
     .str_360 = ALIGNED_STRING(""),
 
@@ -6216,18 +6216,18 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_369 = ALIGNED_STRING(""),
 
-    .str_370 = "TEST2",
+    .TEST2_str = "TEST2",
 
-    .ptr_1f6a = SELF(str_372),
+    .ptr_1f6a = SELF(TEST3_str),
 
     .ptr_1f6e = SELF(str_371),
 
     .str_371 = ALIGNED_STRING(""),
 
-    .str_372 = "TEST3",
+    .TEST3_str = "TEST3",
 
     .ptrs_23 = {
-        SELF(str_376),
+        SELF(TEST4_str),
         SELF(str_375),
         SELF(str_374),
         SELF(str_373),
@@ -6239,26 +6239,26 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_375 = ALIGNED_STRING(""),
 
-    .str_376 = "TEST4",
+    .TEST4_str = "TEST4",
 
     .ptrs_24 = {
-        SELF(str_444),
+        SELF(TEST5_str),
         SELF(str_443),
         SELF(str_442),
         SELF(str_441),
         SELF(str_440),
         SELF(str_439),
-        SELF(str_438),
+        SELF(TEST51_str),
         SELF(str_437),
-        SELF(str_436),
+        SELF(TEST52_str),
         SELF(str_435),
-        SELF(str_434),
+        SELF(TEST53_str),
         SELF(str_433),
-        SELF(str_432),
+        SELF(TEST54_str),
         SELF(str_431),
-        SELF(str_430),
+        SELF(TEST55_str),
         SELF(str_429),
-        SELF(str_428),
+        SELF(TEST56_str),
         SELF(str_427),
         SELF(str_426),
         SELF(str_425),
@@ -6414,27 +6414,27 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_427 = ALIGNED_STRING(""),
 
-    .str_428 = ALIGNED_STRING("TEST56"),
+    .TEST56_str = ALIGNED_STRING("TEST56"),
 
     .str_429 = ALIGNED_STRING(""),
 
-    .str_430 = ALIGNED_STRING("TEST55"),
+    .TEST55_str = ALIGNED_STRING("TEST55"),
 
     .str_431 = ALIGNED_STRING(""),
 
-    .str_432 = ALIGNED_STRING("TEST54"),
+    .TEST54_str = ALIGNED_STRING("TEST54"),
 
     .str_433 = ALIGNED_STRING(""),
 
-    .str_434 = ALIGNED_STRING("TEST53"),
+    .TEST53_str = ALIGNED_STRING("TEST53"),
 
     .str_435 = ALIGNED_STRING(""),
 
-    .str_436 = ALIGNED_STRING("TEST52"),
+    .TEST52_str = ALIGNED_STRING("TEST52"),
 
     .str_437 = ALIGNED_STRING(""),
 
-    .str_438 = ALIGNED_STRING("TEST51"),
+    .TEST51_str = ALIGNED_STRING("TEST51"),
 
     .str_439 = ALIGNED_STRING(""),
 
@@ -6446,17 +6446,17 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_443 = ALIGNED_STRING(""),
 
-    .str_444 = "TEST5",
+    .TEST5_str = "TEST5",
 
     .ptrs_25 = {
-        SELF(str_454),
+        SELF(TEST6_str),
         SELF(str_453),
         SELF(str_452),
         SELF(str_451),
         SELF(str_450),
-        SELF(str_449),
+        SELF(TEST6OK_str),
         SELF(str_448),
-        SELF(str_447),
+        SELF(TEST6NG_str),
         SELF(str_446),
         SELF(str_445),
     },
@@ -6465,11 +6465,11 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_446 = ALIGNED_STRING(""),
 
-    .str_447 = "TEST6NG",
+    .TEST6NG_str = "TEST6NG",
 
     .str_448 = ALIGNED_STRING(""),
 
-    .str_449 = "TEST6OK",
+    .TEST6OK_str = "TEST6OK",
 
     .str_450 = ALIGNED_STRING(""),
 
@@ -6479,79 +6479,79 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_453 = ALIGNED_STRING(""),
 
-    .str_454 = "TEST6",
+    .TEST6_str = "TEST6",
 
-    .ptr_21a2 = SELF(str_456),
+    .ptr_21a2 = SELF(EXT_str),
 
     .ptr_21a6 = SELF(str_455),
 
     .str_455 = ALIGNED_STRING(""),
 
-    .str_456 = "EXT",
+    .EXT_str = "EXT",
 
-    .str_457 = "MD_NORMAL",
+    .MD_NORMAL_str = "MD_NORMAL",
 
-    .str_458 = ALIGNED_STRING("MD_CONTROL"),
+    .MD_CONTROL_str = ALIGNED_STRING("MD_CONTROL"),
 
-    .str_459 = ALIGNED_STRING("MD_OTP"),
+    .MD_OTP_str = ALIGNED_STRING("MD_OTP"),
 
-    .str_460 = "TT_NORMAL",
+    .TT_NORMAL_str = "TT_NORMAL",
 
-    .str_461 = "TT_CTMENU",
+    .TT_CTMENU_str = "TT_CTMENU",
 
-    .str_462 = "TT_CTINIT",
+    .TT_CTINIT_str = "TT_CTINIT",
 
-    .str_463 = ALIGNED_STRING("TT_CTFSWAS"),
+    .TT_CTFSWAS_str = ALIGNED_STRING("TT_CTFSWAS"),
 
-    .str_464 = ALIGNED_STRING("TT_CTTOUCH"),
+    .TT_CTTOUCH_str = ALIGNED_STRING("TT_CTTOUCH"),
 
-    .str_465 = ALIGNED_STRING("TT_MSAMODE"),
+    .TT_MSAMODE_str = ALIGNED_STRING("TT_MSAMODE"),
 
-    .str_466 = "TT_CTPMMD",
+    .TT_CTPMMD_str = "TT_CTPMMD",
 
-    .str_467 = "TT_CTPMPARA",
+    .TT_CTPMPARA_str = "TT_CTPMPARA",
 
-    .str_468 = "TT_CTSYSTEM",
+    .TT_CTSYSTEM_str = "TT_CTSYSTEM",
 
-    .str_469 = ALIGNED_STRING("TT_CTWALLSET"),
+    .TT_CTWALLSET_str = ALIGNED_STRING("TT_CTWALLSET"),
 
-    .str_470 = "TT_ONETCH",
+    .TT_ONETCH_str = "TT_ONETCH",
 
-    .str_471 = ALIGNED_STRING("TT_MUSICSTYL"),
+    .TT_MUSICSTYL_str = ALIGNED_STRING("TT_MUSICSTYL"),
 
-    .str_472 = ALIGNED_STRING("TT_MSCTSEL"),
+    .TT_MSCTSEL_str = ALIGNED_STRING("TT_MSCTSEL"),
 
-    .str_473 = "TT_MSSCTSEL",
+    .TT_MSSCTSEL_str = "TT_MSSCTSEL",
 
-    .str_474 = "TT_MSSONGLIST",
+    .TT_MSSONGLIST_str = "TT_MSSONGLIST",
 
-    .str_475 = "TT_MSALPSEL",
+    .TT_MSALPSEL_str = "TT_MSALPSEL",
 
-    .str_476 = ALIGNED_STRING("TT_PMBKSEL"),
+    .TT_PMBKSEL_str = ALIGNED_STRING("TT_PMBKSEL"),
 
-    .str_477 = "TT_PMVIEW",
+    .TT_PMVIEW_str = "TT_PMVIEW",
 
-    .str_478 = "TT_PMNAME",
+    .TT_PMNAME_str = "TT_PMNAME",
 
-    .str_479 = "TT_PMBKNAME",
+    .TT_PMBKNAME_str = "TT_PMBKNAME",
 
-    .str_480 = ALIGNED_STRING("TT_SVARI"),
+    .TT_SVARI_str = ALIGNED_STRING("TT_SVARI"),
 
-    .str_481 = ALIGNED_STRING("TT_RVARI"),
+    .TT_RVARI_str = ALIGNED_STRING("TT_RVARI"),
 
-    .str_482 = ALIGNED_STRING("TT_TEST1"),
+    .TT_TEST1_str = ALIGNED_STRING("TT_TEST1"),
 
-    .str_483 = ALIGNED_STRING("TT_TEST2"),
+    .TT_TEST2_str = ALIGNED_STRING("TT_TEST2"),
 
-    .str_484 = ALIGNED_STRING("TT_TEST3"),
+    .TT_TEST3_str = ALIGNED_STRING("TT_TEST3"),
 
-    .str_485 = ALIGNED_STRING("TT_TEST4"),
+    .TT_TEST4_str = ALIGNED_STRING("TT_TEST4"),
 
-    .str_486 = ALIGNED_STRING("TT_TEST5"),
+    .TT_TEST5_str = ALIGNED_STRING("TT_TEST5"),
 
-    .str_487 = ALIGNED_STRING("TT_TEST6"),
+    .TT_TEST6_str = ALIGNED_STRING("TT_TEST6"),
 
-    .str_488 = ALIGNED_STRING("TT_EXT"),
+    .TT_EXT_str = ALIGNED_STRING("TT_EXT"),
 
     .field_230e = NAKA_NONE,
 
@@ -7129,7 +7129,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_2552 = 0x007F,
 
-    .str_491 = "c",
+    .c_str = "c",
 
     .field_2556 = 0x0300,
 
@@ -7217,7 +7217,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_25ae = 0x0200,
 
-    .str_494 = "g",
+    .g_str = "g",
 
     .field_25b2 = 0x0303,
 
@@ -7569,7 +7569,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_2712 = 0x6300,
 
-    .str_497 = "Z",
+    .Z_str = "Z",
 
     .field_2716 = 0xC00B,
 
@@ -7847,7 +7847,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_2830 = 0x1801,
 
-    .str_499 = "H",
+    .H_str = "H",
 
     .pad_67 = { 0 },
 
@@ -7855,7 +7855,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_283a = 0x1802,
 
-    .str_500 = "b",
+    .b_str = "b",
 
     .pad_68 = { 0 },
 
@@ -8209,7 +8209,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_29fc = 0x1298,
 
-    .str_503 = "H",
+    .H_str_2 = "H",
 
     .pad_113 = { 0 },
 
@@ -8217,7 +8217,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_2a06 = 0x0A91,
 
-    .str_504 = "T",
+    .T_str = "T",
 
     .pad_114 = { 0 },
 
@@ -8225,7 +8225,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_2a10 = 0x2293,
 
-    .str_505 = "x",
+    .x_str = "x",
 
     .pad_115 = { 0 },
 
@@ -8659,7 +8659,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_512 = ALIGNED_STRING(""),
 
-    .str_513 = "P",
+    .P_str = "P",
 
     .pad_171 = { 0 },
 
@@ -8815,7 +8815,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_517 = ALIGNED_STRING(""),
 
-    .str_518 = "P",
+    .P_str_2 = "P",
 
     .pad_197 = { 0 },
 
@@ -8971,7 +8971,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_522 = ALIGNED_STRING(""),
 
-    .str_523 = "P",
+    .P_str_3 = "P",
 
     .pad_223 = { 0 },
 
@@ -8991,7 +8991,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_525 = "5",
 
-    .str_526 = "F",
+    .F_str = "F",
 
     .pad_226 = { 0 },
 
@@ -9003,7 +9003,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_528 = "2",
 
-    .str_529 = "C",
+    .C_str = "C",
 
     .field_2e60 = 0x008F,
 
@@ -9019,11 +9019,11 @@ const naka_extension_device_t naka_extension_device_data
 
     .str_530 = ":",
 
-    .str_531 = "V",
+    .V_str = "V",
 
-    .str_532 = "r",
+    .r_str = "r",
 
-    .str_533 = "H",
+    .H_str_3 = "H",
 
     .field_2e74 = 0x7F00,
 
@@ -9047,7 +9047,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .ptr_2e8e = NAKA_ADDR(Encoder_AlignByte),
 
-    .str_534 = "H",
+    .H_str_4 = "H",
 
     .field_2e94 = 0x0100,
 
@@ -9227,7 +9227,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .ptr_2f7e = 0x00FC6085,
 
-    .str_535 = "p",
+    .p_str = "p",
 
     .field_2f84 = 0x2005,
 
@@ -9281,7 +9281,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .ptr_2fc6 = NAKA_ADDR(Encoder_AlignByte),
 
-    .str_536 = "H",
+    .H_str_5 = "H",
 
     .str_537 = ALIGNED_STRING(""),
 
@@ -10243,13 +10243,13 @@ const naka_extension_device_t naka_extension_device_data
 
     .ptrs_26 = {
         NAKA_ADDR(Encoder_AlignByte),
-        SELF(str_533),
-        SELF(str_534),
+        SELF(H_str_3),
+        SELF(H_str_4),
         SELF(field_2ee2),
         SELF(field_2f3a),
         SELF(field_2f72),
         SELF(field_2faa),
-        SELF(str_536),
+        SELF(H_str_5),
         SELF(field_2fea),
         SELF(field_307a),
         SELF(field_30ba),

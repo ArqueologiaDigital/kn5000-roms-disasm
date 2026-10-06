@@ -400,16 +400,16 @@ typedef struct __attribute__((packed)) {
     naka_cls_AcWindowMenu_t v0_e5;
     char str_1[14];
     /* element 6 of Viewable slot 0x0 "ClipBoard": Screen (class id 0x01600033) */
-    naka_cls_Screen_t v0_e6;
+    naka_cls_Screen_t ClipBoard;
     /* element 7 of Viewable slot 0x0 "DebugWindow": Window (class id 0x01600035) */
-    naka_cls_Window_t v0_e7;
+    naka_cls_Window_t DebugWindow;
     /* element 8 of Viewable slot 0x0: Label (class id 0x0160002B) */
     naka_cls_Label_t v0_e8;
     char w4_text[14];
     /* element 9 of Viewable slot 0x0: DbDebugMenu (class id 0x01600057) */
     naka_cls_DbDebugMenu_t v0_e9;
     /* element 10 of Viewable slot 0x0 "NamingWindow": AcNamingWindow (class id 0x0160004B) */
-    naka_cls_AcNamingWindow_t v0_e10;
+    naka_cls_AcNamingWindow_t NamingWindow;
     /* element 11 of Viewable slot 0x0: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v0_e11;
     /* element 12 of Viewable slot 0x0: Label (class id 0x0160002B) */
@@ -438,11 +438,11 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t v0_e21;
     char w9_text[10];
     /* element 22 of Viewable slot 0x0 "NamingCursorBox": PsCursorBox (class id 0x0160004C) */
-    naka_cls_PsCursorBox_t v0_e22;
-    char str_29[4];
-    char str_30[4];
-    char str_31[4];
-    char str_32[4];
+    naka_cls_PsCursorBox_t NamingCursorBox;
+    char ABC_str[4];
+    char ABC_str_2[4];
+    char abc_str[4];
+    char abc_str_2[4];
     char str_33[4];
     char str_34[4];
     /* element 26 of Viewable slot 0x0: AcIndexEditSw (class id 0x0160001F) */
@@ -452,13 +452,13 @@ typedef struct __attribute__((packed)) {
     /* element 28 of Viewable slot 0x0: AcIndexEditSw (class id 0x0160001F) */
     naka_cls_AcIndexEditSw_t v0_e28;
     /* element 29 of Viewable slot 0x0 "NamingLabel": PsParaBox (class id 0x01600012) */
-    naka_cls_PsParaBox_t v0_e29;
+    naka_cls_PsParaBox_t NamingLabel;
     /* element 30 of Viewable slot 0x0 "MemoWindow": Window (class id 0x01600035) */
-    naka_cls_Window_t v0_e30;
+    naka_cls_Window_t MemoWindow;
     /* element 31 of Viewable slot 0x0: DbMemo (class id 0x01600046) */
     naka_cls_DbMemo_t v0_e31;
     /* element 32 of Viewable slot 0x0 "TrackSwitchWindow": Window (class id 0x01600035) */
-    naka_cls_Window_t v0_e32;
+    naka_cls_Window_t TrackSwitchWindow;
     /* element 33 of Viewable slot 0x0: AcTrackSwitch (class id 0x01600059) */
     naka_cls_AcTrackSwitch_t v0_e33;
     /* element 34 of Viewable slot 0x0: AcTrackSwitch (class id 0x01600059) */
@@ -492,30 +492,30 @@ typedef struct __attribute__((packed)) {
     /* element 48 of Viewable slot 0x0: AcTrackSwitch (class id 0x01600059) */
     naka_cls_AcTrackSwitch_t v0_e48;
     /* element 49 of Viewable slot 0x0 "MemDumpWindow": Window (class id 0x01600035) */
-    naka_cls_Window_t v0_e49;
+    naka_cls_Window_t MemDumpWindow;
     /* element 50 of Viewable slot 0x0: DbMemoryDump (class id 0x0160005D) */
     naka_cls_DbMemoryDump_t v0_e50;
     /* element 0 of Viewable slot 0xFF "CheckTitle": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vFF_e0;
+    naka_cls_TtlScreen_t CheckTitle;
     char w11_text[12];
     /* element 1 of Viewable slot 0xFF: IvExitScreen (class id 0x01600049) */
     naka_cls_IvExitScreen_t vFF_e1;
     /* element 2 of Viewable slot 0xFF: AcScreenMenu (class id 0x01600041) */
     naka_cls_AcScreenMenu_t vFF_e2;
-    char str_127[8];
+    char Naming_str[8];
     /* element 3 of Viewable slot 0xFF: AcScreenMenu (class id 0x01600041) */
     naka_cls_AcScreenMenu_t vFF_e3;
-    char str_129[6];
+    char Wall_str[6];
     /* element 4 of Viewable slot 0xFF "CheckNaming": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vFF_e4;
+    naka_cls_TtlScreen_t CheckNaming;
     char w12_text[14];
     /* element 5 of Viewable slot 0xFF: IvNaming (class id 0x0160004D) */
     naka_cls_IvNaming_t vFF_e5;
     /* element 6 of Viewable slot 0xFF: IvExitScreen (class id 0x01600049) */
     naka_cls_IvExitScreen_t vFF_e6;
     /* element 7 of Viewable slot 0xFF "CheckWall": Screen (class id 0x01600033) */
-    naka_cls_Screen_t vFF_e7;
-    char str_134[2];
+    naka_cls_Screen_t CheckWall;
+    char I_str[2];
     uint16_t field_085e;
     uint16_t field_0860;
     uint16_t field_0862;
@@ -555,14 +555,14 @@ typedef struct __attribute__((packed)) {
     char w15_name[18];
     char w16_code[2];
     char w16_name[12];
-    char str_151[12];
+    char NamingLabel_str[12];
     char str_152[2];
     char str_153[2];
     char w17_code[2];
     char w17_name[14];
     char w18_code[10];
     char w18_name[10];
-    char str_154[16];
+    char NamingCursorBox_str[16];
     char str_155[2];
     char str_156[2];
     char str_157[2];
@@ -578,7 +578,7 @@ typedef struct __attribute__((packed)) {
     char str_165[2];
     char w20_code[2];
     char w20_name[12];
-    char str_166[10];
+    char ClipBoard_str[10];
     char str_167[2];
     char str_168[2];
     char str_169[2];
@@ -596,24 +596,24 @@ typedef struct __attribute__((packed)) {
     char str_174[2];
     char w24_code[2];
     char w24_name[12];
-    char str_175[6];
-    char str_176[6];
-    char str_177[10];
+    char MD_PS_str[6];
+    char TT_PS_str[6];
+    char TT_CHECK_str[10];
     uint32_t ptrs_5[28];  /* 28 pointers */
     char w25_code[2];
     char w25_name[16];
-    char str_178[16];
-    char str_179[16];
-    char str_180[16];
-    char str_181[16];
-    char str_182[16];
-    char str_183[16];
-    char str_184[18];
-    char str_185[18];
-    char str_186[14];
-    char str_187[16];
-    char str_188[18];
-    char str_189[16];
+    char DirmdTitleFunc_str[16];
+    char MainTrSwControl_str[16];
+    char CheckTitleFunc_str[16];
+    char MainRamControl_str[16];
+    char MainBitControl_str[16];
+    char MainGetPmemName_str[16];
+    char MainGetRhythmName_str[18];
+    char MainGetSoundName_str[18];
+    char MainAutoFree_str[14];
+    char MainPmanControl_str[16];
+    char MainTitleControl_str[18];
+    char DefMainFunction_str[16];
     /* DefaultPalette: the default 256-colour palette: InitPaletteRGB (display/graphics_text_vga.s) copies these 0x400 bytes to the palette RAM at 0x0324FC (SetPaletteRGB / Table_LookupDword index it 4 bytes per colour).  256 x {3 colour bytes, 0}; the channel order was not traced. */
     uint8_t DefaultPalette[256][4];
     /* NakaColor_Palette1: a wallpaper palette, entry 1 of the wallpaper-palette table Naka_DrawbarReg_Table (RAM 0x3F1E4 after Boot_InitWorkRAM), read by GetWallPaletteRGB.  256 x {3 colour bytes, 0}; the channel order was not traced. */
@@ -662,7 +662,7 @@ typedef struct __attribute__((packed)) {
     uint32_t ptrs_6[4];  /* 4 pointers */
     char w26_code[2];
     char w26_name[6];
-    char str_340[6];
+    char True_str[6];
     uint32_t ptr_3d42;
     uint8_t pad_82[5];  /* zero padding */
     uint16_t field_3d4b;
@@ -725,8 +725,8 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_3e06;
     uint8_t pad_102[5];  /* zero padding */
     uint16_t field_3e0f;
-    char str_341[9];
-    char str_342[10];
+    char F_AllRom_str[9];
+    char CF_AllRam_str[10];
     uint32_t ptr_3e24;
     uint8_t pad_103[5];  /* zero padding */
     uint16_t field_3e2d;
@@ -750,12 +750,12 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_3e5e;
     uint8_t pad_110[5];  /* zero padding */
     uint16_t field_3e67;
-    char str_343[15];
-    char str_344[10];
-    char str_345[10];
-    char str_346[10];
-    char str_347[14];
-    char str_348[8];
+    char F_InvisibleBox_str[15];
+    char VF_Const_str[10];
+    char VF_Change_str[10];
+    char VF_Fixed_str[10];
+    char VF_Invisible_str[14];
+    char VF_None_str[8];
     uint32_t ptrs_7[3];  /* 3 pointers */
     uint16_t field_3eb8;
     uint8_t pad_111[2];  /* zero padding */
@@ -843,36 +843,36 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_3f94;
     uint8_t pad_139[5];  /* zero padding */
     uint16_t field_3f9d;
-    char str_349[14];
+    char L_WallPattern_str[14];
     uint16_t field_3fad;
-    char str_350[11];
-    char str_351[16];
-    char str_352[10];
-    char str_353[12];
-    char str_354[12];
-    char str_355[8];
-    char str_356[12];
-    char str_357[10];
-    char str_358[14];
-    char str_359[14];
-    char str_360[12];
-    char str_361[10];
-    char str_362[8];
-    char str_363[12];
-    char str_364[8];
-    char str_365[10];
-    char str_366[8];
-    char str_367[8];
-    char str_368[10];
-    char str_369[8];
-    char str_370[12];
-    char str_371[8];
-    char str_372[10];
-    char str_373[8];
-    char str_374[10];
-    char str_375[10];
-    char str_376[10];
-    char str_377[10];
+    char L_HairLine_str[11];
+    char CL_Transparent_str[16];
+    char CL_EditSw_str[10];
+    char CL_PageBack_str[12];
+    char CL_Selected_str[12];
+    char CL_Text_str[8];
+    char CL_IconBack_str[12];
+    char CL_White_str[10];
+    char CL_LightGreen_str[14];
+    char CL_DarkYellow_str[14];
+    char CL_FireRed_str[12];
+    char CL_Orange_str[10];
+    char CL_Aqua_str[8];
+    char CL_Fuchsia_str[12];
+    char CL_Blue_str[8];
+    char CL_Yellow_str[10];
+    char CL_Lime_str[8];
+    char CL_Red_str[8];
+    char CL_Silver_str[10];
+    char CL_Gray_str[8];
+    char CL_DarkGray_str[12];
+    char CL_Teal_str[8];
+    char CL_Purple_str[10];
+    char CL_Navy_str[8];
+    char CL_Olive_str[10];
+    char CL_Green_str[10];
+    char CL_Maroon_str[10];
+    char CL_Black_str[10];
     uint32_t ptrs_8[3];  /* 3 pointers */
     uint16_t field_40de;
     uint8_t pad_140[2];  /* zero padding */
@@ -933,28 +933,28 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_4172;
     uint8_t pad_159[5];  /* zero padding */
     uint16_t field_417b;
-    char str_378[14];
+    char D_TrackSwDown_str[14];
     uint16_t field_418b;
-    char str_379[12];
+    char D_TrackSwUp_str[12];
     uint16_t field_4199;
-    char str_380[13];
-    char str_381[14];
-    char str_382[12];
-    char str_383[12];
-    char str_384[10];
-    char str_385[10];
-    char str_386[12];
-    char str_387[10];
-    char str_388[10];
-    char str_389[10];
-    char str_390[10];
-    char str_391[10];
-    char str_392[12];
-    char str_393[12];
-    char str_394[12];
-    char str_395[12];
-    char str_396[12];
-    char str_397[8];
+    char D_EditSwDown_str[13];
+    char BD_EditSwitch_str[14];
+    char BD_3D_DOWN2_str[12];
+    char BD_3D_DOWN1_str[12];
+    char BD_3D_UP2_str[10];
+    char BD_3D_UP1_str[10];
+    char BD_Round14_str[12];
+    char BD_Round9_str[10];
+    char BD_Round5_str[10];
+    char BD_Round2_str[10];
+    char BD_Round1_str[10];
+    char BD_Round0_str[10];
+    char BD_Shadow2_str[12];
+    char BD_Shadow1_str[12];
+    char BD_Double1_str[12];
+    char BD_Single2_str[12];
+    char BD_Single1_str[12];
+    char BD_None_str[8];
     uint32_t ptr_4264;
     uint8_t pad_160[5];  /* zero padding */
     uint16_t field_426d;
@@ -978,9 +978,9 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_42a4;
     uint8_t pad_167[5];  /* zero padding */
     uint16_t field_42ad;
-    char str_398[15];
-    char str_399[16];
-    char str_400[10];
+    char L_RightJustify_str[15];
+    char AL_LeftJustify_str[16];
+    char AL_Center_str[10];
     uint32_t ptrs_9[3];  /* 3 pointers */
     uint16_t field_42e4;
     uint8_t pad_168[2];  /* zero padding */
@@ -1041,26 +1041,26 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_4378;
     uint8_t pad_187[5];  /* zero padding */
     uint16_t field_4381;
-    char str_401[7];
-    char str_402[8];
-    char str_403[10];
-    char str_404[10];
-    char str_405[10];
-    char str_406[10];
-    char str_407[10];
-    char str_408[10];
-    char str_409[10];
-    char str_410[10];
-    char str_411[10];
-    char str_412[10];
-    char str_413[12];
-    char str_414[12];
-    char str_415[12];
-    char str_416[12];
-    char str_417[12];
-    char str_418[12];
-    char str_419[12];
-    char str_420[12];
+    char S_None_str[7];
+    char ES_Exit_str[8];
+    char ES_Right5_str[10];
+    char ES_Right4_str[10];
+    char ES_Right3_str[10];
+    char ES_Right2_str[10];
+    char ES_Right1_str[10];
+    char ES_Left5_str[10];
+    char ES_Left4_str[10];
+    char ES_Left3_str[10];
+    char ES_Left2_str[10];
+    char ES_Left1_str[10];
+    char ES_Bottom8_str[12];
+    char ES_Bottom7_str[12];
+    char ES_Bottom6_str[12];
+    char ES_Bottom5_str[12];
+    char ES_Bottom4_str[12];
+    char ES_Bottom3_str[12];
+    char ES_Bottom2_str[12];
+    char ES_Bottom1_str[12];
     uint32_t ptrs_10[3];  /* 3 pointers */
     uint16_t field_4462;
     uint8_t pad_188[2];  /* zero padding */
@@ -1112,32 +1112,32 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_44de;
     uint8_t pad_204[5];  /* zero padding */
     uint16_t field_44e7;
-    char str_421[9];
-    char str_422[10];
-    char str_423[12];
-    char str_424[10];
-    char str_425[8];
-    char str_426[10];
-    char str_427[6];
-    char str_428[8];
-    char str_429[10];
-    char str_430[8];
-    char str_431[6];
-    char str_432[8];
-    char str_433[6];
-    char str_434[10];
-    char str_435[8];
-    char str_436[6];
-    char str_437[12];
+    char S_Right2_str[9];
+    char SS_Left2_str[10];
+    char SS_UpDown2_str[12];
+    char SS_Down2_str[10];
+    char SS_Up2_str[8];
+    char SS_OnOff_str[10];
+    char SS_No_str[6];
+    char SS_Yes_str[8];
+    char SS_Right_str[10];
+    char SS_Left_str[8];
+    char SS_OK_str[6];
+    char SS_Off_str[8];
+    char SS_On_str[6];
+    char SS_UpDown_str[10];
+    char SS_Down_str[8];
+    char SS_Up_str[6];
+    char SS_Special_str[12];
     uint32_t ptrs_11[3];  /* 3 pointers */
     uint16_t field_4588;
     uint8_t pad_205[2];  /* zero padding */
     uint32_t ptr_458c;
     uint8_t pad_206[5];  /* zero padding */
     uint16_t field_4595;
-    char str_438[12];
+    char M_RightDown_str[12];
     uint16_t field_45a3;
-    char str_439[10];
+    char M_RightUp_str[10];
     uint16_t field_45af;
     uint16_t field_45b1;
     uint8_t pad_207[5];  /* zero padding */
@@ -1147,8 +1147,8 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_45c0;
     uint8_t pad_209[5];  /* zero padding */
     uint16_t field_45c9;
-    char str_440[9];
-    char str_441[8];
+    char R_Single_str[9];
+    char FR_None_str[8];
     uint32_t ptr_45dc;
     uint8_t pad_210[5];  /* zero padding */
     uint16_t field_45e5;
@@ -1199,16 +1199,16 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_4662;
     uint8_t pad_225[5];  /* zero padding */
     uint16_t field_466b;
-    char str_442[7];
-    char str_443[8];
-    char str_444[8];
-    char str_445[8];
-    char str_446[8];
-    char str_447[8];
-    char str_448[10];
-    char str_449[10];
-    char str_450[8];
-    char str_451[8];
+    char duNone_str[7];
+    char iduNaka_str[8];
+    char iduKSS_str[8];
+    char iduHama_str[8];
+    char iduKubo_str[8];
+    char iduYoko_str[8];
+    char iduScoop_str[10];
+    char iduCheap_str[10];
+    char iduSuna_str[8];
+    char iduEast_str[8];
 } naka_debug_naming_t;
 
 #define SELF(field) \
@@ -1292,7 +1292,7 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .str_1 = ALIGNED_STRING("DEBUG WINDOW"),
 
-    .v0_e6 = {
+    .ClipBoard = {
         .class_ = 0x01600033,
         .super = NAKA_NONE,
         .sub = NAKA_NONE,
@@ -1306,7 +1306,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .window = 0x0003F0B4,
     },
 
-    .v0_e7 = {
+    .DebugWindow = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 8,
@@ -1355,7 +1355,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .page = 0x0003F0C2,
     },
 
-    .v0_e10 = {
+    .NamingWindow = {
         .class_ = 0x0160004B,
         .super = NAKA_NONE,
         .sub = 11,
@@ -1553,7 +1553,7 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .w9_text = ALIGNED_STRING("POSITION"),
 
-    .v0_e22 = {
+    .NamingCursorBox = {
         .class_ = 0x0160004C,
         .super = 10,
         .sub = NAKA_NONE,
@@ -1570,13 +1570,13 @@ const naka_debug_naming_t naka_debug_naming_data
         .cursor = 0x0003F0CC,
     },
 
-    .str_29 = "ABC",
+    .ABC_str = "ABC",
 
-    .str_30 = "ABC",
+    .ABC_str_2 = "ABC",
 
-    .str_31 = "abc",
+    .abc_str = "abc",
 
-    .str_32 = "abc",
+    .abc_str_2 = "abc",
 
     .str_33 = "!#$",
 
@@ -1636,7 +1636,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .style = 0x0010,
     },
 
-    .v0_e29 = {
+    .NamingLabel = {
         .class_ = 0x01600012,
         .super = 10,
         .sub = NAKA_NONE,
@@ -1652,7 +1652,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .align = 0x0000,
     },
 
-    .v0_e30 = {
+    .MemoWindow = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 31,
@@ -1677,7 +1677,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .rect = { 48, 81, 270, 231 },
     },
 
-    .v0_e32 = {
+    .TrackSwitchWindow = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 33,
@@ -1916,7 +1916,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .recplay = 0x0003F142,
     },
 
-    .v0_e49 = {
+    .MemDumpWindow = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 50,
@@ -1942,7 +1942,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .adr = 0x0003F14C,
     },
 
-    .vFF_e0 = {
+    .CheckTitle = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -1987,12 +1987,12 @@ const naka_debug_naming_t naka_debug_naming_data
         .align = 0x0000,
         .editsw = 0x008C,
         .selected = 0x0003F154,
-        .str = SELF(str_127),
+        .str = SELF(Naming_str),
         .screen = 0x00FF0004,
         .icon = 0x00000000,
     },
 
-    .str_127 = ALIGNED_STRING("Naming"),
+    .Naming_str = ALIGNED_STRING("Naming"),
 
     .vFF_e3 = {
         .class_ = 0x01600041,
@@ -2010,14 +2010,14 @@ const naka_debug_naming_t naka_debug_naming_data
         .align = 0x0000,
         .editsw = 0x000C,
         .selected = 0x0003F156,
-        .str = SELF(str_129),
+        .str = SELF(Wall_str),
         .screen = 0x00FF0007,
         .icon = 0x00000000,
     },
 
-    .str_129 = ALIGNED_STRING("Wall"),
+    .Wall_str = ALIGNED_STRING("Wall"),
 
-    .vFF_e4 = {
+    .CheckNaming = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 5,
@@ -2057,7 +2057,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .screen = 0x00FF0000,
     },
 
-    .vFF_e7 = {
+    .CheckWall = {
         .class_ = 0x01600033,
         .super = NAKA_NONE,
         .sub = 8,
@@ -2071,7 +2071,7 @@ const naka_debug_naming_t naka_debug_naming_data
         .window = 0x0003F15C,
     },
 
-    .str_134 = "I",
+    .I_str = "I",
 
     .field_085e = 0x0160,
 
@@ -2099,11 +2099,11 @@ const naka_debug_naming_t naka_debug_naming_data
         SELF(v0_e3),
         SELF(v0_e4),
         SELF(v0_e5),
-        SELF(v0_e6),
-        SELF(v0_e7),
+        SELF(ClipBoard),
+        SELF(DebugWindow),
         SELF(v0_e8),
         SELF(v0_e9),
-        SELF(v0_e10),
+        SELF(NamingWindow),
         SELF(v0_e11),
         SELF(v0_e12),
         SELF(v0_e13),
@@ -2115,7 +2115,7 @@ const naka_debug_naming_t naka_debug_naming_data
         SELF(v0_e19),
         SELF(v0_e20),
         SELF(v0_e21),
-        SELF(v0_e22),
+        SELF(NamingCursorBox),
     },
 
     .field_08d2 = 0xF160,
@@ -2134,10 +2134,10 @@ const naka_debug_naming_t naka_debug_naming_data
         SELF(v0_e26),
         SELF(v0_e27),
         SELF(v0_e28),
-        SELF(v0_e29),
-        SELF(v0_e30),
+        SELF(NamingLabel),
+        SELF(MemoWindow),
         SELF(v0_e31),
-        SELF(v0_e32),
+        SELF(TrackSwitchWindow),
         SELF(v0_e33),
         SELF(v0_e34),
         SELF(v0_e35),
@@ -2154,18 +2154,18 @@ const naka_debug_naming_t naka_debug_naming_data
         SELF(v0_e46),
         SELF(v0_e47),
         SELF(v0_e48),
-        SELF(v0_e49),
+        SELF(MemDumpWindow),
         SELF(v0_e50),
         0x00000000,
-        SELF(vFF_e0),
+        SELF(CheckTitle),
         SELF(vFF_e1),
         SELF(vFF_e2),
         SELF(vFF_e3),
-        SELF(vFF_e4),
+        SELF(CheckNaming),
         SELF(vFF_e5),
         SELF(vFF_e6),
-        SELF(vFF_e7),
-        SELF(str_134),
+        SELF(CheckWall),
+        SELF(I_str),
         0x00000000,
         SELF(w21_name),
         SELF(w21_code),
@@ -2173,7 +2173,7 @@ const naka_debug_naming_t naka_debug_naming_data
         SELF(str_169),
         SELF(str_168),
         SELF(str_167),
-        SELF(str_166),
+        SELF(ClipBoard_str),
         SELF(w20_name),
         SELF(w20_code),
         SELF(str_165),
@@ -2189,14 +2189,14 @@ const naka_debug_naming_t naka_debug_naming_data
         SELF(str_157),
         SELF(str_156),
         SELF(str_155),
-        SELF(str_154),
+        SELF(NamingCursorBox_str),
         SELF(w18_name),
         SELF(w18_code),
         SELF(w17_name),
         SELF(w17_code),
         SELF(str_153),
         SELF(str_152),
-        SELF(str_151),
+        SELF(NamingLabel_str),
         SELF(w16_name),
         SELF(w16_code),
         SELF(w15_name),
@@ -2265,7 +2265,7 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .w16_name = ALIGNED_STRING("MemoWindow"),
 
-    .str_151 = "NamingLabel",
+    .NamingLabel_str = "NamingLabel",
 
     .str_152 = ALIGNED_STRING(""),
 
@@ -2279,7 +2279,7 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .w18_name = "NamingABC",
 
-    .str_154 = "NamingCursorBox",
+    .NamingCursorBox_str = "NamingCursorBox",
 
     .str_155 = ALIGNED_STRING(""),
 
@@ -2311,7 +2311,7 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .w20_name = "DebugWindow",
 
-    .str_166 = "ClipBoard",
+    .ClipBoard_str = "ClipBoard",
 
     .str_167 = ALIGNED_STRING(""),
 
@@ -2358,11 +2358,11 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .w24_name = ALIGNED_STRING("CheckTitle"),
 
-    .str_175 = "MD_PS",
+    .MD_PS_str = "MD_PS",
 
-    .str_176 = "TT_PS",
+    .TT_PS_str = "TT_PS",
 
-    .str_177 = ALIGNED_STRING("TT_CHECK"),
+    .TT_CHECK_str = ALIGNED_STRING("TT_CHECK"),
 
     .ptrs_5 = {
         NAKA_ADDR(DefMainFunction),
@@ -2379,18 +2379,18 @@ const naka_debug_naming_t naka_debug_naming_data
         NAKA_ADDR(DirmdTitleFunc),
         NAKA_ADDR(MainTaskControl),
         0x00000000,
-        SELF(str_189),
-        SELF(str_188),
-        SELF(str_187),
-        SELF(str_186),
-        SELF(str_185),
-        SELF(str_184),
-        SELF(str_183),
-        SELF(str_182),
-        SELF(str_181),
-        SELF(str_180),
-        SELF(str_179),
-        SELF(str_178),
+        SELF(DefMainFunction_str),
+        SELF(MainTitleControl_str),
+        SELF(MainPmanControl_str),
+        SELF(MainAutoFree_str),
+        SELF(MainGetSoundName_str),
+        SELF(MainGetRhythmName_str),
+        SELF(MainGetPmemName_str),
+        SELF(MainBitControl_str),
+        SELF(MainRamControl_str),
+        SELF(CheckTitleFunc_str),
+        SELF(MainTrSwControl_str),
+        SELF(DirmdTitleFunc_str),
         SELF(w25_name),
         SELF(w25_code),
     },
@@ -2399,29 +2399,29 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .w25_name = "MainTaskControl",
 
-    .str_178 = ALIGNED_STRING("DirmdTitleFunc"),
+    .DirmdTitleFunc_str = ALIGNED_STRING("DirmdTitleFunc"),
 
-    .str_179 = "MainTrSwControl",
+    .MainTrSwControl_str = "MainTrSwControl",
 
-    .str_180 = ALIGNED_STRING("CheckTitleFunc"),
+    .CheckTitleFunc_str = ALIGNED_STRING("CheckTitleFunc"),
 
-    .str_181 = ALIGNED_STRING("MainRamControl"),
+    .MainRamControl_str = ALIGNED_STRING("MainRamControl"),
 
-    .str_182 = ALIGNED_STRING("MainBitControl"),
+    .MainBitControl_str = ALIGNED_STRING("MainBitControl"),
 
-    .str_183 = "MainGetPmemName",
+    .MainGetPmemName_str = "MainGetPmemName",
 
-    .str_184 = "MainGetRhythmName",
+    .MainGetRhythmName_str = "MainGetRhythmName",
 
-    .str_185 = ALIGNED_STRING("MainGetSoundName"),
+    .MainGetSoundName_str = ALIGNED_STRING("MainGetSoundName"),
 
-    .str_186 = ALIGNED_STRING("MainAutoFree"),
+    .MainAutoFree_str = ALIGNED_STRING("MainAutoFree"),
 
-    .str_187 = "MainPmanControl",
+    .MainPmanControl_str = "MainPmanControl",
 
-    .str_188 = ALIGNED_STRING("MainTitleControl"),
+    .MainTitleControl_str = ALIGNED_STRING("MainTitleControl"),
 
-    .str_189 = "DefMainFunction",
+    .DefMainFunction_str = "DefMainFunction",
 
     .DefaultPalette = {
         /*   0 */ { 0x00, 0x00, 0x00, 0x00 },
@@ -5584,7 +5584,7 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .w26_name = "False",
 
-    .str_340 = ALIGNED_STRING("True"),
+    .True_str = ALIGNED_STRING("True"),
 
     .ptr_3d42 = 0x00EB6848,
 
@@ -5710,9 +5710,9 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .field_3e0f = 0x43FF,
 
-    .str_341 = ALIGNED_STRING("F_AllRom"),
+    .F_AllRom_str = ALIGNED_STRING("F_AllRom"),
 
-    .str_342 = "CF_AllRam",
+    .CF_AllRam_str = "CF_AllRam",
 
     .ptr_3e24 = 0x00EB692A,
 
@@ -5724,25 +5724,25 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .pad_104 = { 0 },
 
-    .ptr_3e36 = SELF(str_347),
+    .ptr_3e36 = SELF(VF_Invisible_str),
 
     .field_3e3a = 0x0001,
 
     .pad_105 = { 0 },
 
-    .ptr_3e3e = SELF(str_346),
+    .ptr_3e3e = SELF(VF_Fixed_str),
 
     .field_3e42 = 0x0002,
 
     .pad_106 = { 0 },
 
-    .ptr_3e46 = SELF(str_345),
+    .ptr_3e46 = SELF(VF_Change_str),
 
     .field_3e4a = 0x0004,
 
     .pad_107 = { 0 },
 
-    .ptr_3e4e = SELF(str_344),
+    .ptr_3e4e = SELF(VF_Const_str),
 
     .field_3e52 = 0x0008,
 
@@ -5760,173 +5760,173 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .field_3e67 = 0x56FF,
 
-    .str_343 = ALIGNED_STRING("F_InvisibleBox"),
+    .F_InvisibleBox_str = ALIGNED_STRING("F_InvisibleBox"),
 
-    .str_344 = ALIGNED_STRING("VF_Const"),
+    .VF_Const_str = ALIGNED_STRING("VF_Const"),
 
-    .str_345 = "VF_Change",
+    .VF_Change_str = "VF_Change",
 
-    .str_346 = ALIGNED_STRING("VF_Fixed"),
+    .VF_Fixed_str = ALIGNED_STRING("VF_Fixed"),
 
-    .str_347 = ALIGNED_STRING("VF_Invisible"),
+    .VF_Invisible_str = ALIGNED_STRING("VF_Invisible"),
 
-    .str_348 = "VF_None",
+    .VF_None_str = "VF_None",
 
     .ptrs_7 = {
-        SELF(str_377),
+        SELF(CL_Black_str),
         0x00000000,
-        SELF(str_376),
+        SELF(CL_Maroon_str),
     },
 
     .field_3eb8 = 0x0001,
 
     .pad_111 = { 0 },
 
-    .ptr_3ebc = SELF(str_375),
+    .ptr_3ebc = SELF(CL_Green_str),
 
     .field_3ec0 = 0x0002,
 
     .pad_112 = { 0 },
 
-    .ptr_3ec4 = SELF(str_374),
+    .ptr_3ec4 = SELF(CL_Olive_str),
 
     .field_3ec8 = 0x0003,
 
     .pad_113 = { 0 },
 
-    .ptr_3ecc = SELF(str_373),
+    .ptr_3ecc = SELF(CL_Navy_str),
 
     .field_3ed0 = 0x0004,
 
     .pad_114 = { 0 },
 
-    .ptr_3ed4 = SELF(str_372),
+    .ptr_3ed4 = SELF(CL_Purple_str),
 
     .field_3ed8 = 0x0005,
 
     .pad_115 = { 0 },
 
-    .ptr_3edc = SELF(str_371),
+    .ptr_3edc = SELF(CL_Teal_str),
 
     .field_3ee0 = 0x0006,
 
     .pad_116 = { 0 },
 
-    .ptr_3ee4 = SELF(str_370),
+    .ptr_3ee4 = SELF(CL_DarkGray_str),
 
     .field_3ee8 = 0x0008,
 
     .pad_117 = { 0 },
 
-    .ptr_3eec = SELF(str_369),
+    .ptr_3eec = SELF(CL_Gray_str),
 
     .field_3ef0 = 0x00F8,
 
     .pad_118 = { 0 },
 
-    .ptr_3ef4 = SELF(str_368),
+    .ptr_3ef4 = SELF(CL_Silver_str),
 
     .field_3ef8 = 0x0007,
 
     .pad_119 = { 0 },
 
-    .ptr_3efc = SELF(str_367),
+    .ptr_3efc = SELF(CL_Red_str),
 
     .field_3f00 = 0x00F9,
 
     .pad_120 = { 0 },
 
-    .ptr_3f04 = SELF(str_366),
+    .ptr_3f04 = SELF(CL_Lime_str),
 
     .field_3f08 = 0x00FA,
 
     .pad_121 = { 0 },
 
-    .ptr_3f0c = SELF(str_365),
+    .ptr_3f0c = SELF(CL_Yellow_str),
 
     .field_3f10 = 0x00FB,
 
     .pad_122 = { 0 },
 
-    .ptr_3f14 = SELF(str_364),
+    .ptr_3f14 = SELF(CL_Blue_str),
 
     .field_3f18 = 0x00FC,
 
     .pad_123 = { 0 },
 
-    .ptr_3f1c = SELF(str_363),
+    .ptr_3f1c = SELF(CL_Fuchsia_str),
 
     .field_3f20 = 0x00FD,
 
     .pad_124 = { 0 },
 
-    .ptr_3f24 = SELF(str_362),
+    .ptr_3f24 = SELF(CL_Aqua_str),
 
     .field_3f28 = 0x00FE,
 
     .pad_125 = { 0 },
 
-    .ptr_3f2c = SELF(str_361),
+    .ptr_3f2c = SELF(CL_Orange_str),
 
     .field_3f30 = 0x0009,
 
     .pad_126 = { 0 },
 
-    .ptr_3f34 = SELF(str_360),
+    .ptr_3f34 = SELF(CL_FireRed_str),
 
     .field_3f38 = 0x000A,
 
     .pad_127 = { 0 },
 
-    .ptr_3f3c = SELF(str_359),
+    .ptr_3f3c = SELF(CL_DarkYellow_str),
 
     .field_3f40 = 0x000C,
 
     .pad_128 = { 0 },
 
-    .ptr_3f44 = SELF(str_358),
+    .ptr_3f44 = SELF(CL_LightGreen_str),
 
     .field_3f48 = 0x000D,
 
     .pad_129 = { 0 },
 
-    .ptr_3f4c = SELF(str_357),
+    .ptr_3f4c = SELF(CL_White_str),
 
     .field_3f50 = 0x00FF,
 
     .pad_130 = { 0 },
 
-    .ptr_3f54 = SELF(str_356),
+    .ptr_3f54 = SELF(CL_IconBack_str),
 
     .field_3f58 = 0x00F0,
 
     .pad_131 = { 0 },
 
-    .ptr_3f5c = SELF(str_355),
+    .ptr_3f5c = SELF(CL_Text_str),
 
     .field_3f60 = 0x00F1,
 
     .pad_132 = { 0 },
 
-    .ptr_3f64 = SELF(str_354),
+    .ptr_3f64 = SELF(CL_Selected_str),
 
     .field_3f68 = 0x00F2,
 
     .pad_133 = { 0 },
 
-    .ptr_3f6c = SELF(str_353),
+    .ptr_3f6c = SELF(CL_PageBack_str),
 
     .field_3f70 = 0x00F3,
 
     .pad_134 = { 0 },
 
-    .ptr_3f74 = SELF(str_352),
+    .ptr_3f74 = SELF(CL_EditSw_str),
 
     .field_3f78 = 0x00F4,
 
     .pad_135 = { 0 },
 
-    .ptr_3f7c = SELF(str_351),
+    .ptr_3f7c = SELF(CL_Transparent_str),
 
     .field_3f80 = 0x00F7,
 
@@ -5950,107 +5950,107 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .field_3f9d = 0x43FF,
 
-    .str_349 = "L_WallPattern",
+    .L_WallPattern_str = "L_WallPattern",
 
     .field_3fad = 0x43FF,
 
-    .str_350 = ALIGNED_STRING("L_HairLine"),
+    .L_HairLine_str = ALIGNED_STRING("L_HairLine"),
 
-    .str_351 = ALIGNED_STRING("CL_Transparent"),
+    .CL_Transparent_str = ALIGNED_STRING("CL_Transparent"),
 
-    .str_352 = "CL_EditSw",
+    .CL_EditSw_str = "CL_EditSw",
 
-    .str_353 = "CL_PageBack",
+    .CL_PageBack_str = "CL_PageBack",
 
-    .str_354 = "CL_Selected",
+    .CL_Selected_str = "CL_Selected",
 
-    .str_355 = "CL_Text",
+    .CL_Text_str = "CL_Text",
 
-    .str_356 = "CL_IconBack",
+    .CL_IconBack_str = "CL_IconBack",
 
-    .str_357 = ALIGNED_STRING("CL_White"),
+    .CL_White_str = ALIGNED_STRING("CL_White"),
 
-    .str_358 = "CL_LightGreen",
+    .CL_LightGreen_str = "CL_LightGreen",
 
-    .str_359 = "CL_DarkYellow",
+    .CL_DarkYellow_str = "CL_DarkYellow",
 
-    .str_360 = ALIGNED_STRING("CL_FireRed"),
+    .CL_FireRed_str = ALIGNED_STRING("CL_FireRed"),
 
-    .str_361 = "CL_Orange",
+    .CL_Orange_str = "CL_Orange",
 
-    .str_362 = "CL_Aqua",
+    .CL_Aqua_str = "CL_Aqua",
 
-    .str_363 = ALIGNED_STRING("CL_Fuchsia"),
+    .CL_Fuchsia_str = ALIGNED_STRING("CL_Fuchsia"),
 
-    .str_364 = "CL_Blue",
+    .CL_Blue_str = "CL_Blue",
 
-    .str_365 = "CL_Yellow",
+    .CL_Yellow_str = "CL_Yellow",
 
-    .str_366 = "CL_Lime",
+    .CL_Lime_str = "CL_Lime",
 
-    .str_367 = ALIGNED_STRING("CL_Red"),
+    .CL_Red_str = ALIGNED_STRING("CL_Red"),
 
-    .str_368 = "CL_Silver",
+    .CL_Silver_str = "CL_Silver",
 
-    .str_369 = "CL_Gray",
+    .CL_Gray_str = "CL_Gray",
 
-    .str_370 = "CL_DarkGray",
+    .CL_DarkGray_str = "CL_DarkGray",
 
-    .str_371 = "CL_Teal",
+    .CL_Teal_str = "CL_Teal",
 
-    .str_372 = "CL_Purple",
+    .CL_Purple_str = "CL_Purple",
 
-    .str_373 = "CL_Navy",
+    .CL_Navy_str = "CL_Navy",
 
-    .str_374 = ALIGNED_STRING("CL_Olive"),
+    .CL_Olive_str = ALIGNED_STRING("CL_Olive"),
 
-    .str_375 = ALIGNED_STRING("CL_Green"),
+    .CL_Green_str = ALIGNED_STRING("CL_Green"),
 
-    .str_376 = "CL_Maroon",
+    .CL_Maroon_str = "CL_Maroon",
 
-    .str_377 = ALIGNED_STRING("CL_Black"),
+    .CL_Black_str = ALIGNED_STRING("CL_Black"),
 
     .ptrs_8 = {
-        SELF(str_397),
+        SELF(BD_None_str),
         0x00000000,
-        SELF(str_396),
+        SELF(BD_Single1_str),
     },
 
     .field_40de = 0x0001,
 
     .pad_140 = { 0 },
 
-    .ptr_40e2 = SELF(str_395),
+    .ptr_40e2 = SELF(BD_Single2_str),
 
     .field_40e6 = 0x0002,
 
     .pad_141 = { 0 },
 
-    .ptr_40ea = SELF(str_394),
+    .ptr_40ea = SELF(BD_Double1_str),
 
     .field_40ee = 0x0003,
 
     .pad_142 = { 0 },
 
-    .ptr_40f2 = SELF(str_393),
+    .ptr_40f2 = SELF(BD_Shadow1_str),
 
     .field_40f6 = 0x0004,
 
     .pad_143 = { 0 },
 
-    .ptr_40fa = SELF(str_392),
+    .ptr_40fa = SELF(BD_Shadow2_str),
 
     .field_40fe = 0x0005,
 
     .pad_144 = { 0 },
 
-    .ptr_4102 = SELF(str_391),
+    .ptr_4102 = SELF(BD_Round0_str),
 
     .field_4106 = 0x0006,
 
     .pad_145 = { 0 },
 
-    .ptr_410a = SELF(str_390),
+    .ptr_410a = SELF(BD_Round1_str),
 
     .field_410e = 0x0007,
 
@@ -6062,49 +6062,49 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .pad_147 = { 0 },
 
-    .ptr_411a = SELF(str_388),
+    .ptr_411a = SELF(BD_Round5_str),
 
     .field_411e = 0x0009,
 
     .pad_148 = { 0 },
 
-    .ptr_4122 = SELF(str_387),
+    .ptr_4122 = SELF(BD_Round9_str),
 
     .field_4126 = 0x000A,
 
     .pad_149 = { 0 },
 
-    .ptr_412a = SELF(str_386),
+    .ptr_412a = SELF(BD_Round14_str),
 
     .field_412e = 0x000B,
 
     .pad_150 = { 0 },
 
-    .ptr_4132 = SELF(str_385),
+    .ptr_4132 = SELF(BD_3D_UP1_str),
 
     .field_4136 = 0x00C0,
 
     .pad_151 = { 0 },
 
-    .ptr_413a = SELF(str_384),
+    .ptr_413a = SELF(BD_3D_UP2_str),
 
     .field_413e = 0x00C1,
 
     .pad_152 = { 0 },
 
-    .ptr_4142 = SELF(str_383),
+    .ptr_4142 = SELF(BD_3D_DOWN1_str),
 
     .field_4146 = 0x00C2,
 
     .pad_153 = { 0 },
 
-    .ptr_414a = SELF(str_382),
+    .ptr_414a = SELF(BD_3D_DOWN2_str),
 
     .field_414e = 0x00C3,
 
     .pad_154 = { 0 },
 
-    .ptr_4152 = SELF(str_381),
+    .ptr_4152 = SELF(BD_EditSwitch_str),
 
     .field_4156 = 0x00C9,
 
@@ -6134,49 +6134,49 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .field_417b = 0x42FF,
 
-    .str_378 = "D_TrackSwDown",
+    .D_TrackSwDown_str = "D_TrackSwDown",
 
     .field_418b = 0x42FF,
 
-    .str_379 = "D_TrackSwUp",
+    .D_TrackSwUp_str = "D_TrackSwUp",
 
     .field_4199 = 0x42FF,
 
-    .str_380 = ALIGNED_STRING("D_EditSwDown"),
+    .D_EditSwDown_str = ALIGNED_STRING("D_EditSwDown"),
 
-    .str_381 = "BD_EditSwitch",
+    .BD_EditSwitch_str = "BD_EditSwitch",
 
-    .str_382 = "BD_3D_DOWN2",
+    .BD_3D_DOWN2_str = "BD_3D_DOWN2",
 
-    .str_383 = "BD_3D_DOWN1",
+    .BD_3D_DOWN1_str = "BD_3D_DOWN1",
 
-    .str_384 = "BD_3D_UP2",
+    .BD_3D_UP2_str = "BD_3D_UP2",
 
-    .str_385 = "BD_3D_UP1",
+    .BD_3D_UP1_str = "BD_3D_UP1",
 
-    .str_386 = ALIGNED_STRING("BD_Round14"),
+    .BD_Round14_str = ALIGNED_STRING("BD_Round14"),
 
-    .str_387 = "BD_Round9",
+    .BD_Round9_str = "BD_Round9",
 
-    .str_388 = "BD_Round5",
+    .BD_Round5_str = "BD_Round5",
 
-    .str_389 = "BD_Round2",
+    .BD_Round2_str = "BD_Round2",
 
-    .str_390 = "BD_Round1",
+    .BD_Round1_str = "BD_Round1",
 
-    .str_391 = "BD_Round0",
+    .BD_Round0_str = "BD_Round0",
 
-    .str_392 = ALIGNED_STRING("BD_Shadow2"),
+    .BD_Shadow2_str = ALIGNED_STRING("BD_Shadow2"),
 
-    .str_393 = ALIGNED_STRING("BD_Shadow1"),
+    .BD_Shadow1_str = ALIGNED_STRING("BD_Shadow1"),
 
-    .str_394 = ALIGNED_STRING("BD_Double1"),
+    .BD_Double1_str = ALIGNED_STRING("BD_Double1"),
 
-    .str_395 = ALIGNED_STRING("BD_Single2"),
+    .BD_Single2_str = ALIGNED_STRING("BD_Single2"),
 
-    .str_396 = ALIGNED_STRING("BD_Single1"),
+    .BD_Single1_str = ALIGNED_STRING("BD_Single1"),
 
-    .str_397 = "BD_None",
+    .BD_None_str = "BD_None",
 
     .ptr_4264 = 0x00EB6D6A,
 
@@ -6206,7 +6206,7 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .pad_164 = { 0 },
 
-    .ptr_4294 = SELF(str_399),
+    .ptr_4294 = SELF(AL_LeftJustify_str),
 
     .field_4298 = 0x0001,
 
@@ -6224,41 +6224,41 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .field_42ad = 0x41FF,
 
-    .str_398 = ALIGNED_STRING("L_RightJustify"),
+    .L_RightJustify_str = ALIGNED_STRING("L_RightJustify"),
 
-    .str_399 = ALIGNED_STRING("AL_LeftJustify"),
+    .AL_LeftJustify_str = ALIGNED_STRING("AL_LeftJustify"),
 
-    .str_400 = "AL_Center",
+    .AL_Center_str = "AL_Center",
 
     .ptrs_9 = {
-        SELF(str_420),
+        SELF(ES_Bottom1_str),
         0x00000000,
-        SELF(str_419),
+        SELF(ES_Bottom2_str),
     },
 
     .field_42e4 = 0x0001,
 
     .pad_168 = { 0 },
 
-    .ptr_42e8 = SELF(str_418),
+    .ptr_42e8 = SELF(ES_Bottom3_str),
 
     .field_42ec = 0x0002,
 
     .pad_169 = { 0 },
 
-    .ptr_42f0 = SELF(str_417),
+    .ptr_42f0 = SELF(ES_Bottom4_str),
 
     .field_42f4 = 0x0003,
 
     .pad_170 = { 0 },
 
-    .ptr_42f8 = SELF(str_416),
+    .ptr_42f8 = SELF(ES_Bottom5_str),
 
     .field_42fc = 0x0004,
 
     .pad_171 = { 0 },
 
-    .ptr_4300 = SELF(str_415),
+    .ptr_4300 = SELF(ES_Bottom6_str),
 
     .field_4304 = 0x0005,
 
@@ -6270,73 +6270,73 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .pad_173 = { 0 },
 
-    .ptr_4310 = SELF(str_413),
+    .ptr_4310 = SELF(ES_Bottom8_str),
 
     .field_4314 = 0x0007,
 
     .pad_174 = { 0 },
 
-    .ptr_4318 = SELF(str_412),
+    .ptr_4318 = SELF(ES_Left1_str),
 
     .field_431c = 0x0088,
 
     .pad_175 = { 0 },
 
-    .ptr_4320 = SELF(str_411),
+    .ptr_4320 = SELF(ES_Left2_str),
 
     .field_4324 = 0x0089,
 
     .pad_176 = { 0 },
 
-    .ptr_4328 = SELF(str_410),
+    .ptr_4328 = SELF(ES_Left3_str),
 
     .field_432c = 0x008A,
 
     .pad_177 = { 0 },
 
-    .ptr_4330 = SELF(str_409),
+    .ptr_4330 = SELF(ES_Left4_str),
 
     .field_4334 = 0x008B,
 
     .pad_178 = { 0 },
 
-    .ptr_4338 = SELF(str_408),
+    .ptr_4338 = SELF(ES_Left5_str),
 
     .field_433c = 0x008C,
 
     .pad_179 = { 0 },
 
-    .ptr_4340 = SELF(str_407),
+    .ptr_4340 = SELF(ES_Right1_str),
 
     .field_4344 = 0x0008,
 
     .pad_180 = { 0 },
 
-    .ptr_4348 = SELF(str_406),
+    .ptr_4348 = SELF(ES_Right2_str),
 
     .field_434c = 0x0009,
 
     .pad_181 = { 0 },
 
-    .ptr_4350 = SELF(str_405),
+    .ptr_4350 = SELF(ES_Right3_str),
 
     .field_4354 = 0x000A,
 
     .pad_182 = { 0 },
 
-    .ptr_4358 = SELF(str_404),
+    .ptr_4358 = SELF(ES_Right4_str),
 
     .field_435c = 0x000B,
 
     .pad_183 = { 0 },
 
-    .ptr_4360 = SELF(str_403),
+    .ptr_4360 = SELF(ES_Right5_str),
 
     .field_4364 = 0x000C,
 
     .pad_184 = { 0 },
 
-    .ptr_4368 = SELF(str_402),
+    .ptr_4368 = SELF(ES_Exit_str),
 
     .field_436c = 0x000F,
 
@@ -6354,135 +6354,135 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .field_4381 = 0x45FF,
 
-    .str_401 = ALIGNED_STRING("S_None"),
+    .S_None_str = ALIGNED_STRING("S_None"),
 
-    .str_402 = "ES_Exit",
+    .ES_Exit_str = "ES_Exit",
 
-    .str_403 = "ES_Right5",
+    .ES_Right5_str = "ES_Right5",
 
-    .str_404 = "ES_Right4",
+    .ES_Right4_str = "ES_Right4",
 
-    .str_405 = "ES_Right3",
+    .ES_Right3_str = "ES_Right3",
 
-    .str_406 = "ES_Right2",
+    .ES_Right2_str = "ES_Right2",
 
-    .str_407 = "ES_Right1",
+    .ES_Right1_str = "ES_Right1",
 
-    .str_408 = ALIGNED_STRING("ES_Left5"),
+    .ES_Left5_str = ALIGNED_STRING("ES_Left5"),
 
-    .str_409 = ALIGNED_STRING("ES_Left4"),
+    .ES_Left4_str = ALIGNED_STRING("ES_Left4"),
 
-    .str_410 = ALIGNED_STRING("ES_Left3"),
+    .ES_Left3_str = ALIGNED_STRING("ES_Left3"),
 
-    .str_411 = ALIGNED_STRING("ES_Left2"),
+    .ES_Left2_str = ALIGNED_STRING("ES_Left2"),
 
-    .str_412 = ALIGNED_STRING("ES_Left1"),
+    .ES_Left1_str = ALIGNED_STRING("ES_Left1"),
 
-    .str_413 = ALIGNED_STRING("ES_Bottom8"),
+    .ES_Bottom8_str = ALIGNED_STRING("ES_Bottom8"),
 
-    .str_414 = ALIGNED_STRING("ES_Bottom7"),
+    .ES_Bottom7_str = ALIGNED_STRING("ES_Bottom7"),
 
-    .str_415 = ALIGNED_STRING("ES_Bottom6"),
+    .ES_Bottom6_str = ALIGNED_STRING("ES_Bottom6"),
 
-    .str_416 = ALIGNED_STRING("ES_Bottom5"),
+    .ES_Bottom5_str = ALIGNED_STRING("ES_Bottom5"),
 
-    .str_417 = ALIGNED_STRING("ES_Bottom4"),
+    .ES_Bottom4_str = ALIGNED_STRING("ES_Bottom4"),
 
-    .str_418 = ALIGNED_STRING("ES_Bottom3"),
+    .ES_Bottom3_str = ALIGNED_STRING("ES_Bottom3"),
 
-    .str_419 = ALIGNED_STRING("ES_Bottom2"),
+    .ES_Bottom2_str = ALIGNED_STRING("ES_Bottom2"),
 
-    .str_420 = ALIGNED_STRING("ES_Bottom1"),
+    .ES_Bottom1_str = ALIGNED_STRING("ES_Bottom1"),
 
     .ptrs_10 = {
-        SELF(str_437),
+        SELF(SS_Special_str),
         0x00000000,
-        SELF(str_436),
+        SELF(SS_Up_str),
     },
 
     .field_4462 = 0x0001,
 
     .pad_188 = { 0 },
 
-    .ptr_4466 = SELF(str_435),
+    .ptr_4466 = SELF(SS_Down_str),
 
     .field_446a = 0x0002,
 
     .pad_189 = { 0 },
 
-    .ptr_446e = SELF(str_434),
+    .ptr_446e = SELF(SS_UpDown_str),
 
     .field_4472 = 0x0003,
 
     .pad_190 = { 0 },
 
-    .ptr_4476 = SELF(str_433),
+    .ptr_4476 = SELF(SS_On_str),
 
     .field_447a = 0x0004,
 
     .pad_191 = { 0 },
 
-    .ptr_447e = SELF(str_432),
+    .ptr_447e = SELF(SS_Off_str),
 
     .field_4482 = 0x0005,
 
     .pad_192 = { 0 },
 
-    .ptr_4486 = SELF(str_431),
+    .ptr_4486 = SELF(SS_OK_str),
 
     .field_448a = 0x0006,
 
     .pad_193 = { 0 },
 
-    .ptr_448e = SELF(str_430),
+    .ptr_448e = SELF(SS_Left_str),
 
     .field_4492 = 0x0007,
 
     .pad_194 = { 0 },
 
-    .ptr_4496 = SELF(str_429),
+    .ptr_4496 = SELF(SS_Right_str),
 
     .field_449a = 0x0008,
 
     .pad_195 = { 0 },
 
-    .ptr_449e = SELF(str_428),
+    .ptr_449e = SELF(SS_Yes_str),
 
     .field_44a2 = 0x0009,
 
     .pad_196 = { 0 },
 
-    .ptr_44a6 = SELF(str_427),
+    .ptr_44a6 = SELF(SS_No_str),
 
     .field_44aa = 0x000A,
 
     .pad_197 = { 0 },
 
-    .ptr_44ae = SELF(str_426),
+    .ptr_44ae = SELF(SS_OnOff_str),
 
     .field_44b2 = 0x000B,
 
     .pad_198 = { 0 },
 
-    .ptr_44b6 = SELF(str_425),
+    .ptr_44b6 = SELF(SS_Up2_str),
 
     .field_44ba = 0x000C,
 
     .pad_199 = { 0 },
 
-    .ptr_44be = SELF(str_424),
+    .ptr_44be = SELF(SS_Down2_str),
 
     .field_44c2 = 0x000D,
 
     .pad_200 = { 0 },
 
-    .ptr_44c6 = SELF(str_423),
+    .ptr_44c6 = SELF(SS_UpDown2_str),
 
     .field_44ca = 0x000E,
 
     .pad_201 = { 0 },
 
-    .ptr_44ce = SELF(str_422),
+    .ptr_44ce = SELF(SS_Left2_str),
 
     .field_44d2 = 0x000F,
 
@@ -6500,39 +6500,39 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .field_44e7 = 0x53FF,
 
-    .str_421 = ALIGNED_STRING("S_Right2"),
+    .S_Right2_str = ALIGNED_STRING("S_Right2"),
 
-    .str_422 = ALIGNED_STRING("SS_Left2"),
+    .SS_Left2_str = ALIGNED_STRING("SS_Left2"),
 
-    .str_423 = ALIGNED_STRING("SS_UpDown2"),
+    .SS_UpDown2_str = ALIGNED_STRING("SS_UpDown2"),
 
-    .str_424 = ALIGNED_STRING("SS_Down2"),
+    .SS_Down2_str = ALIGNED_STRING("SS_Down2"),
 
-    .str_425 = ALIGNED_STRING("SS_Up2"),
+    .SS_Up2_str = ALIGNED_STRING("SS_Up2"),
 
-    .str_426 = ALIGNED_STRING("SS_OnOff"),
+    .SS_OnOff_str = ALIGNED_STRING("SS_OnOff"),
 
-    .str_427 = "SS_No",
+    .SS_No_str = "SS_No",
 
-    .str_428 = ALIGNED_STRING("SS_Yes"),
+    .SS_Yes_str = ALIGNED_STRING("SS_Yes"),
 
-    .str_429 = ALIGNED_STRING("SS_Right"),
+    .SS_Right_str = ALIGNED_STRING("SS_Right"),
 
-    .str_430 = "SS_Left",
+    .SS_Left_str = "SS_Left",
 
-    .str_431 = "SS_OK",
+    .SS_OK_str = "SS_OK",
 
-    .str_432 = ALIGNED_STRING("SS_Off"),
+    .SS_Off_str = ALIGNED_STRING("SS_Off"),
 
-    .str_433 = "SS_On",
+    .SS_On_str = "SS_On",
 
-    .str_434 = "SS_UpDown",
+    .SS_UpDown_str = "SS_UpDown",
 
-    .str_435 = "SS_Down",
+    .SS_Down_str = "SS_Down",
 
-    .str_436 = "SS_Up",
+    .SS_Up_str = "SS_Up",
 
-    .str_437 = ALIGNED_STRING("SS_Special"),
+    .SS_Special_str = ALIGNED_STRING("SS_Special"),
 
     .ptrs_11 = {
         0x00EB70A2,
@@ -6550,11 +6550,11 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .field_4595 = 0x4CFF,
 
-    .str_438 = "M_RightDown",
+    .M_RightDown_str = "M_RightDown",
 
     .field_45a3 = 0x4CFF,
 
-    .str_439 = "M_RightUp",
+    .M_RightUp_str = "M_RightUp",
 
     .field_45af = 0xD2FF,
 
@@ -6574,9 +6574,9 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .field_45c9 = 0x46FF,
 
-    .str_440 = ALIGNED_STRING("R_Single"),
+    .R_Single_str = ALIGNED_STRING("R_Single"),
 
-    .str_441 = "FR_None",
+    .FR_None_str = "FR_None",
 
     .ptr_45dc = 0x00EB70E2,
 
@@ -6612,55 +6612,55 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .pad_215 = { 0 },
 
-    .ptr_4612 = SELF(str_451),
+    .ptr_4612 = SELF(iduEast_str),
 
     .field_4616 = 0x0003,
 
     .pad_216 = { 0 },
 
-    .ptr_461a = SELF(str_450),
+    .ptr_461a = SELF(iduSuna_str),
 
     .field_461e = 0x0004,
 
     .pad_217 = { 0 },
 
-    .ptr_4622 = SELF(str_449),
+    .ptr_4622 = SELF(iduCheap_str),
 
     .field_4626 = 0x0005,
 
     .pad_218 = { 0 },
 
-    .ptr_462a = SELF(str_448),
+    .ptr_462a = SELF(iduScoop_str),
 
     .field_462e = 0x0006,
 
     .pad_219 = { 0 },
 
-    .ptr_4632 = SELF(str_447),
+    .ptr_4632 = SELF(iduYoko_str),
 
     .field_4636 = 0x0007,
 
     .pad_220 = { 0 },
 
-    .ptr_463a = SELF(str_446),
+    .ptr_463a = SELF(iduKubo_str),
 
     .field_463e = 0x0008,
 
     .pad_221 = { 0 },
 
-    .ptr_4642 = SELF(str_445),
+    .ptr_4642 = SELF(iduHama_str),
 
     .field_4646 = 0x0009,
 
     .pad_222 = { 0 },
 
-    .ptr_464a = SELF(str_444),
+    .ptr_464a = SELF(iduKSS_str),
 
     .field_464e = 0x000A,
 
     .pad_223 = { 0 },
 
-    .ptr_4652 = SELF(str_443),
+    .ptr_4652 = SELF(iduNaka_str),
 
     .field_4656 = 0x000B,
 
@@ -6678,25 +6678,25 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .field_466b = 0x69FF,
 
-    .str_442 = ALIGNED_STRING("duNone"),
+    .duNone_str = ALIGNED_STRING("duNone"),
 
-    .str_443 = "iduNaka",
+    .iduNaka_str = "iduNaka",
 
-    .str_444 = ALIGNED_STRING("iduKSS"),
+    .iduKSS_str = ALIGNED_STRING("iduKSS"),
 
-    .str_445 = "iduHama",
+    .iduHama_str = "iduHama",
 
-    .str_446 = "iduKubo",
+    .iduKubo_str = "iduKubo",
 
-    .str_447 = "iduYoko",
+    .iduYoko_str = "iduYoko",
 
-    .str_448 = ALIGNED_STRING("iduScoop"),
+    .iduScoop_str = ALIGNED_STRING("iduScoop"),
 
-    .str_449 = ALIGNED_STRING("iduCheap"),
+    .iduCheap_str = ALIGNED_STRING("iduCheap"),
 
-    .str_450 = "iduSuna",
+    .iduSuna_str = "iduSuna",
 
-    .str_451 = "iduEast",
+    .iduEast_str = "iduEast",
 
 };
 

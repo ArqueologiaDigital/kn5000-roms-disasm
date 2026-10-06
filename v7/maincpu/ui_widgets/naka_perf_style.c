@@ -205,13 +205,13 @@ typedef struct __attribute__((packed)) {
 
 typedef struct __attribute__((packed)) {
     /* element 0 of Viewable slot 0xFD "ftdemo01": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vFD_e0;
+    naka_cls_TtlScreen_t ftdemo01;
     char w0_text[2];
     /* element 1 of Viewable slot 0xFD "ftdemobmptop": VwUserBitmapByName (class id 0x0160006C) */
-    naka_cls_VwUserBitmapByName_t vFD_e1;
-    char str_3[8];
+    naka_cls_VwUserBitmapByName_t ftdemobmptop;
+    char ftdemobmptop_file[8];
     /* element 2 of Viewable slot 0xFD "ftdemo02": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vFD_e2;
+    naka_cls_TtlScreen_t ftdemo02;
     char w1_text[2];
     /* element 3 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e3;
@@ -353,7 +353,7 @@ typedef struct __attribute__((packed)) {
     /* element 64 of Viewable slot 0xFD: Line (class id 0x0160002E) */
     naka_cls_Line_t vFD_e64;
     /* element 65 of Viewable slot 0xFD "ftdemo03": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vFD_e65;
+    naka_cls_TtlScreen_t ftdemo03;
     char w25_text[2];
     /* element 66 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e66;
@@ -455,11 +455,11 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t vFD_e108;
     char w57_text[22];
     /* element 109 of Viewable slot 0xFD "ftdemo04": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vFD_e109;
+    naka_cls_TtlScreen_t ftdemo04;
     char w58_text[2];
     /* element 110 of Viewable slot 0xFD "ftdemobmp3D": VwUserBitmapByName (class id 0x0160006C) */
-    naka_cls_VwUserBitmapByName_t vFD_e110;
-    char str_204[8];
+    naka_cls_VwUserBitmapByName_t ftdemobmp3D;
+    char ftdemobmp3D_file[8];
     /* element 111 of Viewable slot 0xFD: AcLanguageText (class id 0x01600066) */
     naka_cls_AcLanguageText_t vFD_e111;
     /* element 112 of Viewable slot 0xFD: Box (class id 0x01600031) */
@@ -469,64 +469,64 @@ typedef struct __attribute__((packed)) {
     /* element 114 of Viewable slot 0xFD: AcLanguageText (class id 0x01600066) */
     naka_cls_AcLanguageText_t vFD_e114;
     /* element 115 of Viewable slot 0xFD "ftdemo05": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vFD_e115;
+    naka_cls_TtlScreen_t ftdemo05;
     char w60_text[2];
     /* element 116 of Viewable slot 0xFD: AcLanguageText (class id 0x01600066) */
     naka_cls_AcLanguageText_t vFD_e116;
     /* element 117 of Viewable slot 0xFD: AcLanguageText (class id 0x01600066) */
     naka_cls_AcLanguageText_t vFD_e117;
     /* element 118 of Viewable slot 0xFD "ftdemo06": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vFD_e118;
+    naka_cls_TtlScreen_t ftdemo06;
     char w61_text[2];
     /* element 119 of Viewable slot 0xFD: AcLanguageText (class id 0x01600066) */
     naka_cls_AcLanguageText_t vFD_e119;
     /* element 120 of Viewable slot 0xFD "ftdemobmpsoft": VwUserBitmapByName (class id 0x0160006C) */
-    naka_cls_VwUserBitmapByName_t vFD_e120;
-    char str_237[8];
+    naka_cls_VwUserBitmapByName_t ftdemobmpsoft;
+    char ftdemobmpsoft_file[8];
     /* element 121 of Viewable slot 0xFD "ftdemo07": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vFD_e121;
+    naka_cls_TtlScreen_t ftdemo07;
     char w62_text[2];
     /* element 122 of Viewable slot 0xFD "ftdemobmpcnv": VwUserBitmapByName (class id 0x0160006C) */
-    naka_cls_VwUserBitmapByName_t vFD_e122;
-    char str_243[8];
+    naka_cls_VwUserBitmapByName_t ftdemobmpcnv;
+    char ftdemobmpcnv_file[8];
     /* element 123 of Viewable slot 0xFD: AcLanguageText (class id 0x01600066) */
     naka_cls_AcLanguageText_t vFD_e123;
     /* element 124 of Viewable slot 0xFD "ftdemo08": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vFD_e124;
+    naka_cls_TtlScreen_t ftdemo08;
     char w63_text[2];
     /* element 125 of Viewable slot 0xFD: AcLanguageText (class id 0x01600066) */
     naka_cls_AcLanguageText_t vFD_e125;
     /* element 126 of Viewable slot 0xFD "ftdemo09": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vFD_e126;
+    naka_cls_TtlScreen_t ftdemo09;
     char w64_text[2];
     /* element 127 of Viewable slot 0xFD: AcLanguageText (class id 0x01600066) */
     naka_cls_AcLanguageText_t vFD_e127;
     /* element 128 of Viewable slot 0xFD: AcLanguageText (class id 0x01600066) */
     naka_cls_AcLanguageText_t vFD_e128;
     /* element 129 of Viewable slot 0xFD "ftdemo10": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vFD_e129;
+    naka_cls_TtlScreen_t ftdemo10;
     char w65_text[2];
     /* element 130 of Viewable slot 0xFD: AcLanguageText (class id 0x01600066) */
     naka_cls_AcLanguageText_t vFD_e130;
     /* element 131 of Viewable slot 0xFD: AcLanguageText (class id 0x01600066) */
     naka_cls_AcLanguageText_t vFD_e131;
     /* element 132 of Viewable slot 0xFD "ftdemo20": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vFD_e132;
+    naka_cls_TtlScreen_t ftdemo20;
     char w66_text[2];
     /* element 133 of Viewable slot 0xFD: AcLanguageText (class id 0x01600066) */
     naka_cls_AcLanguageText_t vFD_e133;
     /* element 134 of Viewable slot 0xFD: AcLanguageText (class id 0x01600066) */
     naka_cls_AcLanguageText_t vFD_e134;
     /* element 135 of Viewable slot 0xFD "ftdemobmpill": VwUserBitmapByName (class id 0x0160006C) */
-    naka_cls_VwUserBitmapByName_t vFD_e135;
-    char str_272[8];
+    naka_cls_VwUserBitmapByName_t ftdemobmpill;
+    char ftdemobmpill_file[8];
     /* element 136 of Viewable slot 0xFD "ftdemo21": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vFD_e136;
+    naka_cls_TtlScreen_t ftdemo21;
     char w67_text[2];
     /* element 137 of Viewable slot 0xFD: AcLanguageText (class id 0x01600066) */
     naka_cls_AcLanguageText_t vFD_e137;
     /* element 138 of Viewable slot 0xFD "ftdemo22": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vFD_e138;
+    naka_cls_TtlScreen_t ftdemo22;
     char w68_text[10];
     /* element 139 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e139;
@@ -590,7 +590,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t vFD_e161;
     char w89_text[10];
     /* element 162 of Viewable slot 0xFD "ftdemo23": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vFD_e162;
+    naka_cls_TtlScreen_t ftdemo23;
     char w90_text[18];
     /* element 163 of Viewable slot 0xFD: Label (class id 0x0160002B) */
     naka_cls_Label_t vFD_e163;
@@ -651,7 +651,7 @@ typedef struct __attribute__((packed)) {
     /* element 184 of Viewable slot 0xFD: Bitmap (class id 0x0160002C) */
     naka_cls_Bitmap_t vFD_e184;
     /* element 185 of Viewable slot 0xFD "ftdemo24": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vFD_e185;
+    naka_cls_TtlScreen_t ftdemo24;
     char w106_text[12];
     /* element 186 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e186;
@@ -758,13 +758,13 @@ typedef struct __attribute__((packed)) {
     /* element 223 of Viewable slot 0xFD: Frame (class id 0x0160002F) */
     naka_cls_Frame_t vFD_e223;
     /* element 224 of Viewable slot 0xFD "ftdemo25": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vFD_e224;
+    naka_cls_TtlScreen_t ftdemo25;
     char w141_text[2];
     /* element 225 of Viewable slot 0xFD "ftdemobmpend": VwUserBitmapByName (class id 0x0160006C) */
-    naka_cls_VwUserBitmapByName_t vFD_e225;
-    char str_304[8];
+    naka_cls_VwUserBitmapByName_t ftdemobmpend;
+    char ftdemobmpend_file[8];
     /* element 226 of Viewable slot 0xFD "ftdemo26": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vFD_e226;
+    naka_cls_TtlScreen_t ftdemo26;
     char w142_text[20];
     /* element 227 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e227;
@@ -817,7 +817,7 @@ typedef struct __attribute__((packed)) {
     /* element 245 of Viewable slot 0xFD: Line (class id 0x0160002E) */
     naka_cls_Line_t vFD_e245;
     /* element 246 of Viewable slot 0xFD "ftdemo40": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vFD_e246;
+    naka_cls_TtlScreen_t ftdemo40;
     char w157_text[2];
     /* element 247 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e247;
@@ -836,7 +836,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t vFD_e252;
     char w163_text[28];
     /* element 253 of Viewable slot 0xFD "ftdemo41": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vFD_e253;
+    naka_cls_TtlScreen_t ftdemo41;
     char w164_text[16];
     /* element 254 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e254;
@@ -941,7 +941,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t vFD_e290;
     char w194_text[4];
     /* element 291 of Viewable slot 0xFD "ftdemo42": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vFD_e291;
+    naka_cls_TtlScreen_t ftdemo42;
     char w195_text[16];
     /* element 292 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e292;
@@ -1046,7 +1046,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t vFD_e328;
     char w225_text[4];
     /* element 329 of Viewable slot 0xFD "ftdemo44": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vFD_e329;
+    naka_cls_TtlScreen_t ftdemo44;
     char w226_text[16];
     /* element 330 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e330;
@@ -1109,7 +1109,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t vFD_e351;
     char w243_text[22];
     /* element 352 of Viewable slot 0xFD "ftdemo45": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vFD_e352;
+    naka_cls_TtlScreen_t ftdemo45;
     char w244_text[16];
     /* element 353 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e353;
@@ -1172,7 +1172,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_Label_t vFD_e374;
     char w261_text[22];
     /* element 375 of Viewable slot 0xFD "ftdemo46": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vFD_e375;
+    naka_cls_TtlScreen_t ftdemo46;
     char w262_text[22];
     /* element 376 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e376;
@@ -1235,7 +1235,7 @@ typedef struct __attribute__((packed)) {
     /* element 397 of Viewable slot 0xFD: Line (class id 0x0160002E) */
     naka_cls_Line_t vFD_e397;
     /* element 398 of Viewable slot 0xFD "ftdemo47": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vFD_e398;
+    naka_cls_TtlScreen_t ftdemo47;
     char w280_text[22];
     /* element 399 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e399;
@@ -1292,7 +1292,7 @@ typedef struct __attribute__((packed)) {
     /* element 418 of Viewable slot 0xFD: Line (class id 0x0160002E) */
     naka_cls_Line_t vFD_e418;
     /* element 419 of Viewable slot 0xFD "ftdemo48": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vFD_e419;
+    naka_cls_TtlScreen_t ftdemo48;
     char w296_text[22];
     /* element 420 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e420;
@@ -1349,7 +1349,7 @@ typedef struct __attribute__((packed)) {
     /* element 439 of Viewable slot 0xFD: Line (class id 0x0160002E) */
     naka_cls_Line_t vFD_e439;
     /* element 440 of Viewable slot 0xFD "ftdemo43": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vFD_e440;
+    naka_cls_TtlScreen_t ftdemo43;
     char w312_text[16];
     /* element 441 of Viewable slot 0xFD: Box (class id 0x01600031) */
     naka_cls_Box_t vFD_e441;
@@ -1492,7 +1492,7 @@ typedef struct __attribute__((packed)) {
     char str_423[2];
     char str_424[2];
     char str_425[2];
-    char str_426[10];
+    char ftdemo43_str[10];
     char str_427[2];
     char str_428[2];
     char str_429[2];
@@ -1513,7 +1513,7 @@ typedef struct __attribute__((packed)) {
     char str_444[2];
     char str_445[2];
     char str_446[2];
-    char str_447[10];
+    char ftdemo48_str[10];
     char str_448[2];
     char str_449[2];
     char str_450[2];
@@ -1534,7 +1534,7 @@ typedef struct __attribute__((packed)) {
     char str_465[2];
     char str_466[2];
     char str_467[2];
-    char str_468[10];
+    char ftdemo47_str[10];
     char str_469[2];
     char str_470[2];
     char str_471[2];
@@ -1557,7 +1557,7 @@ typedef struct __attribute__((packed)) {
     char str_488[2];
     char str_489[2];
     char str_490[2];
-    char str_491[10];
+    char ftdemo46_str[10];
     char str_492[2];
     char str_493[2];
     char str_494[2];
@@ -1580,7 +1580,7 @@ typedef struct __attribute__((packed)) {
     char str_511[2];
     char str_512[2];
     char str_513[2];
-    char str_514[10];
+    char ftdemo45_str[10];
     char str_515[2];
     char str_516[2];
     char str_517[2];
@@ -1603,7 +1603,7 @@ typedef struct __attribute__((packed)) {
     char str_534[2];
     char str_535[2];
     char str_536[2];
-    char str_537[10];
+    char ftdemo44_str[10];
     char str_538[2];
     char str_539[2];
     char str_540[2];
@@ -1641,7 +1641,7 @@ typedef struct __attribute__((packed)) {
     char str_572[2];
     char str_573[2];
     char str_574[2];
-    char str_575[10];
+    char ftdemo42_str[10];
     char str_576[2];
     char str_577[2];
     char str_578[2];
@@ -1679,14 +1679,14 @@ typedef struct __attribute__((packed)) {
     char str_610[2];
     char str_611[2];
     char str_612[2];
-    char str_613[10];
+    char ftdemo41_str[10];
     char str_614[2];
     char str_615[2];
     char str_616[2];
     char str_617[2];
     char str_618[2];
     char str_619[2];
-    char str_620[10];
+    char ftdemo40_str[10];
     char str_621[2];
     char str_622[2];
     char str_623[2];
@@ -1706,9 +1706,9 @@ typedef struct __attribute__((packed)) {
     char str_637[2];
     char str_638[2];
     char str_639[2];
-    char str_640[10];
-    char str_641[14];
-    char str_642[10];
+    char ftdemo26_str[10];
+    char ftdemobmpend_str[14];
+    char ftdemo25_str[10];
     char str_643[2];
     char str_644[2];
     char str_645[2];
@@ -1747,7 +1747,7 @@ typedef struct __attribute__((packed)) {
     char str_678[2];
     char str_679[2];
     char str_680[2];
-    char str_681[10];
+    char ftdemo24_str[10];
     char str_682[2];
     char str_683[2];
     char str_684[2];
@@ -1770,7 +1770,7 @@ typedef struct __attribute__((packed)) {
     char str_701[2];
     char str_702[2];
     char str_703[2];
-    char str_704[10];
+    char ftdemo23_str[10];
     char str_705[2];
     char str_706[2];
     char str_707[2];
@@ -1794,36 +1794,36 @@ typedef struct __attribute__((packed)) {
     char str_725[2];
     char str_726[2];
     char str_727[2];
-    char str_728[10];
+    char ftdemo22_str[10];
     char str_729[2];
-    char str_730[10];
-    char str_731[14];
+    char ftdemo21_str[10];
+    char ftdemobmpill_str[14];
     char str_732[2];
     char str_733[2];
-    char str_734[10];
+    char ftdemo20_str[10];
     char str_735[2];
     char str_736[2];
-    char str_737[10];
+    char ftdemo10_str[10];
     char str_738[2];
     char str_739[2];
-    char str_740[10];
+    char ftdemo09_str[10];
     char str_741[2];
-    char str_742[10];
+    char ftdemo08_str[10];
     char str_743[2];
-    char str_744[14];
-    char str_745[10];
-    char str_746[14];
+    char ftdemobmpcnv_str[14];
+    char ftdemo07_str[10];
+    char ftdemobmpsoft_str[14];
     char str_747[2];
-    char str_748[10];
+    char ftdemo06_str[10];
     char str_749[2];
     char str_750[2];
-    char str_751[10];
+    char ftdemo05_str[10];
     char str_752[2];
     char str_753[2];
     char str_754[2];
     char str_755[2];
-    char str_756[12];
-    char str_757[10];
+    char ftdemobmp3D_str[12];
+    char ftdemo04_str[10];
     char str_758[2];
     char str_759[2];
     char str_760[2];
@@ -1867,7 +1867,7 @@ typedef struct __attribute__((packed)) {
     char str_798[2];
     char str_799[2];
     char str_800[2];
-    char str_801[10];
+    char ftdemo03_str[10];
     char str_802[2];
     char str_803[2];
     char str_804[2];
@@ -1930,16 +1930,16 @@ typedef struct __attribute__((packed)) {
     char str_861[2];
     char str_862[2];
     char str_863[2];
-    char str_864[10];
-    char str_865[14];
-    char str_866[10];
-    char str_867[10];
+    char ftdemo02_str[10];
+    char ftdemobmptop_str[14];
+    char ftdemo01_str[10];
+    char TT_FDMSP_str[10];
     uint8_t pad_133[4];  /* zero padding */
     uint32_t ptr_5eb4;
     char str_868[2];
     uint32_t ptrs_1[6];  /* 6 pointers */
     char str_869[18];
-    char str_870[8];
+    char Italian_str[8];
     char str_871[2];
     char str_872[26];
     char str_873[18];
@@ -1953,7 +1953,7 @@ typedef struct __attribute__((packed)) {
     char str_880[2];
     uint32_t ptrs_3[6];  /* 6 pointers */
     char str_881[96];
-    char str_882[8];
+    char Italian_str_2[8];
     char txt_El_porton_para_bajos_y_graves[84];
     char str_883[8];
     uint16_t field_6048;
@@ -1968,14 +1968,14 @@ typedef struct __attribute__((packed)) {
     char str_886[74];
     uint32_t ptrs_4[6];  /* 6 pointers */
     char str_887[12];
-    char str_888[8];
+    char Italian_str_3[8];
     char str_889[16];
     char txt_Diversite_des_styles[22];
     char str_891[26];
     char str_892[12];
     uint32_t ptrs_5[6];  /* 6 pointers */
     char str_893[56];
-    char str_894[8];
+    char Italian_str_4[8];
     char str_895[58];
     char txt_Grace_au_Music_Stylist_explorez[86];
     uint16_t field_62be;
@@ -1983,14 +1983,14 @@ typedef struct __attribute__((packed)) {
     char str_898[52];
     uint32_t ptrs_6[6];  /* 6 pointers */
     char str_899[78];
-    char str_900[8];
+    char Italian_str_5[8];
     char txt_Disfrute_mas_con_la_gran[72];
     char txt_Encore_plus_de_possibilites[70];
     char txt_Nutzen_Sie_das_groe_Technics[88];
     char str_904[62];
     uint32_t ptrs_7[6];  /* 6 pointers */
     char str_905[78];
-    char str_906[8];
+    char Italian_str_6[8];
     uint16_t field_6546;
     char str_907[54];
     char str_908[88];
@@ -1998,7 +1998,7 @@ typedef struct __attribute__((packed)) {
     char str_910[58];
     uint32_t ptrs_8[6];  /* 6 pointers */
     char str_911[90];
-    char str_912[8];
+    char Italian_str_7[8];
     uint16_t field_66de;
     char str_913[92];
     char txt_Enregistrez_vos_motifs_preferes[96];
@@ -2006,14 +2006,14 @@ typedef struct __attribute__((packed)) {
     char str_916[84];
     uint32_t ptrs_9[6];  /* 6 pointers */
     char str_917[20];
-    char str_918[8];
+    char Italian_str_8[8];
     char str_919[20];
     char str_920[20];
     char str_921[20];
     char str_922[20];
     uint32_t ptrs_10[6];  /* 6 pointers */
     char str_923[72];
-    char str_924[8];
+    char Italian_str_9[8];
     char txt_Un_mundo_de_sonidos_de_acordeon[86];
     char txt_Avec_la_fonction_Accordion[86];
     char txt_ACCORDION_REGISTER_eroffnet[60];
@@ -2021,14 +2021,14 @@ typedef struct __attribute__((packed)) {
     char str_928[76];
     uint32_t ptrs_11[6];  /* 6 pointers */
     char str_929[16];
-    char str_930[8];
+    char Italian_str_10[8];
     char str_931[16];
     char str_932[16];
     char str_933[16];
     char str_934[16];
     uint32_t ptrs_12[6];  /* 6 pointers */
     char str_935[58];
-    char str_936[8];
+    char Italian_str_11[8];
     uint16_t field_6b38;
     uint16_t field_6b3a;
     uint16_t field_6b3c;
@@ -2046,42 +2046,42 @@ typedef struct __attribute__((packed)) {
     char str_940[50];
     uint32_t ptrs_13[6];  /* 6 pointers */
     char str_941[18];
-    char str_942[8];
+    char Italian_str_12[8];
     char str_943[18];
     char str_944[18];
     char str_945[18];
     char str_946[18];
     uint32_t ptrs_14[6];  /* 6 pointers */
     char str_947[60];
-    char str_948[8];
+    char Italian_str_13[8];
     char txt_El_Acoustic_Illusion_amplia_su[56];
     char txt_La_fonction_Acoustic_Illusion[80];
     char txt_ACCOUSTIC_ILLUSION_verleiht_dem[70];
     char str_952[56];
     uint32_t ptrs_15[6];  /* 6 pointers */
     char str_953[74];
-    char str_954[8];
+    char Italian_str_14[8];
     char txt_Una_serie_de_funciones[70];
     char txt_Une_grande_diversite_de[52];
     char txt_Viele_weitere_leistungsfahige[86];
     char str_958[54];
     uint32_t ptrs_16[6];  /* 6 pointers */
     char str_959[12];
-    char str_960[8];
+    char Italian_str_15[8];
     char str_961[12];
     char str_962[12];
     char str_963[16];
     char str_964[12];
     uint32_t ptrs_17[6];  /* 6 pointers */
     char str_965[12];
-    char str_966[8];
+    char Italian_str_16[8];
     char str_967[12];
     char str_968[12];
     char str_969[16];
     char str_970[12];
     uint32_t ptrs_18[6];  /* 6 pointers */
     char str_971[12];
-    char str_972[8];
+    char Italian_str_17[8];
     char str_973[12];
     char str_974[12];
     char str_975[16];
@@ -2123,7 +2123,7 @@ typedef struct __attribute__((packed)) {
     uint8_t pad_135[11];  /* zero padding */
     uint16_t field_71b8;
     uint16_t field_71ba;
-    char str_977[2];
+    char X_str[2];
     uint8_t pad_136[16];  /* zero padding */
     char str_978[2];
     uint16_t field_71d0;
@@ -2151,7 +2151,7 @@ _Static_assert(sizeof(naka_perf_style_t) == 29164,
 const naka_perf_style_t naka_perf_style_data
     __attribute__((section(".text"), used)) = {
 
-    .vFD_e0 = {
+    .ftdemo01 = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -2169,7 +2169,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w0_text = ALIGNED_STRING(""),
 
-    .vFD_e1 = {
+    .ftdemobmptop = {
         .class_ = 0x0160006C,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2177,12 +2177,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 0, 0, 32, 32 },
-        .file = SELF(str_3),
+        .file = SELF(ftdemobmptop_file),
     },
 
-    .str_3 = "FTBMP01",
+    .ftdemobmptop_file = "FTBMP01",
 
-    .vFD_e2 = {
+    .ftdemo02 = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 3,
@@ -2989,7 +2989,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e65 = {
+    .ftdemo03 = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 66,
@@ -3562,7 +3562,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w57_text = "various instruments !",
 
-    .vFD_e109 = {
+    .ftdemo04 = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 110,
@@ -3580,7 +3580,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w58_text = ALIGNED_STRING(""),
 
-    .vFD_e110 = {
+    .ftdemobmp3D = {
         .class_ = 0x0160006C,
         .super = 109,
         .sub = NAKA_NONE,
@@ -3588,10 +3588,10 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 0, 108, 32, 140 },
-        .file = SELF(str_204),
+        .file = SELF(ftdemobmp3D_file),
     },
 
-    .str_204 = "FTBMP02",
+    .ftdemobmp3D_file = "FTBMP02",
 
     .vFD_e111 = {
         .class_ = 0x01600066,
@@ -3659,7 +3659,7 @@ const naka_perf_style_t naka_perf_style_data
         .func = 0x012B0001,
     },
 
-    .vFD_e115 = {
+    .ftdemo05 = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 116,
@@ -3713,7 +3713,7 @@ const naka_perf_style_t naka_perf_style_data
         .func = 0x012B0004,
     },
 
-    .vFD_e118 = {
+    .ftdemo06 = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 119,
@@ -3749,7 +3749,7 @@ const naka_perf_style_t naka_perf_style_data
         .func = 0x012B0005,
     },
 
-    .vFD_e120 = {
+    .ftdemobmpsoft = {
         .class_ = 0x0160006C,
         .super = 118,
         .sub = NAKA_NONE,
@@ -3757,12 +3757,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 119,
         .flag = 0x0008,
         .rect = { 0, 108, 32, 140 },
-        .file = SELF(str_237),
+        .file = SELF(ftdemobmpsoft_file),
     },
 
-    .str_237 = "FTBMP03",
+    .ftdemobmpsoft_file = "FTBMP03",
 
-    .vFD_e121 = {
+    .ftdemo07 = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 122,
@@ -3780,7 +3780,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w62_text = ALIGNED_STRING(""),
 
-    .vFD_e122 = {
+    .ftdemobmpcnv = {
         .class_ = 0x0160006C,
         .super = 121,
         .sub = NAKA_NONE,
@@ -3788,10 +3788,10 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 0, 108, 32, 140 },
-        .file = SELF(str_243),
+        .file = SELF(ftdemobmpcnv_file),
     },
 
-    .str_243 = "FTBMP04",
+    .ftdemobmpcnv_file = "FTBMP04",
 
     .vFD_e123 = {
         .class_ = 0x01600066,
@@ -3811,7 +3811,7 @@ const naka_perf_style_t naka_perf_style_data
         .func = 0x012B0006,
     },
 
-    .vFD_e124 = {
+    .ftdemo08 = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 125,
@@ -3847,7 +3847,7 @@ const naka_perf_style_t naka_perf_style_data
         .func = 0x012B0007,
     },
 
-    .vFD_e126 = {
+    .ftdemo09 = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 127,
@@ -3901,7 +3901,7 @@ const naka_perf_style_t naka_perf_style_data
         .func = 0x012B0009,
     },
 
-    .vFD_e129 = {
+    .ftdemo10 = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 130,
@@ -3955,7 +3955,7 @@ const naka_perf_style_t naka_perf_style_data
         .func = 0x012B000B,
     },
 
-    .vFD_e132 = {
+    .ftdemo20 = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 133,
@@ -4009,7 +4009,7 @@ const naka_perf_style_t naka_perf_style_data
         .func = 0x012B000D,
     },
 
-    .vFD_e135 = {
+    .ftdemobmpill = {
         .class_ = 0x0160006C,
         .super = 132,
         .sub = NAKA_NONE,
@@ -4017,12 +4017,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = 134,
         .flag = 0x0008,
         .rect = { 0, 100, 32, 132 },
-        .file = SELF(str_272),
+        .file = SELF(ftdemobmpill_file),
     },
 
-    .str_272 = "FTBMP05",
+    .ftdemobmpill_file = "FTBMP05",
 
-    .vFD_e136 = {
+    .ftdemo21 = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 137,
@@ -4058,7 +4058,7 @@ const naka_perf_style_t naka_perf_style_data
         .func = 0x012B000E,
     },
 
-    .vFD_e138 = {
+    .ftdemo22 = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 139,
@@ -4430,7 +4430,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w89_text = ALIGNED_STRING("PAGE 2/2"),
 
-    .vFD_e162 = {
+    .ftdemo23 = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 163,
@@ -4779,7 +4779,7 @@ const naka_perf_style_t naka_perf_style_data
         .bmp = 0x0000000B,
     },
 
-    .vFD_e185 = {
+    .ftdemo24 = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 186,
@@ -5338,7 +5338,7 @@ const naka_perf_style_t naka_perf_style_data
         .color = 0x00F2,
     },
 
-    .vFD_e224 = {
+    .ftdemo25 = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 225,
@@ -5356,7 +5356,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w141_text = ALIGNED_STRING(""),
 
-    .vFD_e225 = {
+    .ftdemobmpend = {
         .class_ = 0x0160006C,
         .super = 224,
         .sub = NAKA_NONE,
@@ -5364,12 +5364,12 @@ const naka_perf_style_t naka_perf_style_data
         .prev = NAKA_NONE,
         .flag = 0x0008,
         .rect = { 0, 0, 32, 32 },
-        .file = SELF(str_304),
+        .file = SELF(ftdemobmpend_file),
     },
 
-    .str_304 = "FTBMP06",
+    .ftdemobmpend_file = "FTBMP06",
 
-    .vFD_e226 = {
+    .ftdemo26 = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 227,
@@ -5662,7 +5662,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e246 = {
+    .ftdemo40 = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 247,
@@ -5764,7 +5764,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w163_text = "> Alphabetical style select",
 
-    .vFD_e253 = {
+    .ftdemo41 = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 254,
@@ -6327,7 +6327,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w194_text = "2/4",
 
-    .vFD_e291 = {
+    .ftdemo42 = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 292,
@@ -6890,7 +6890,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w225_text = "2/4",
 
-    .vFD_e329 = {
+    .ftdemo44 = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 330,
@@ -7231,7 +7231,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w243_text = "CATEGORY : Rock & Pop",
 
-    .vFD_e352 = {
+    .ftdemo45 = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 353,
@@ -7572,7 +7572,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .w261_text = "CATEGORY : Rock & Pop",
 
-    .vFD_e375 = {
+    .ftdemo46 = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 376,
@@ -7913,7 +7913,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e398 = {
+    .ftdemo47 = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 399,
@@ -8224,7 +8224,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e419 = {
+    .ftdemo48 = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 420,
@@ -8535,7 +8535,7 @@ const naka_perf_style_t naka_perf_style_data
         .linemode = 0x0001,
     },
 
-    .vFD_e440 = {
+    .ftdemo43 = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 441,
@@ -9099,9 +9099,9 @@ const naka_perf_style_t naka_perf_style_data
     .w342_text = "2/4",
 
     .ptrs_0 = {
-        SELF(vFD_e0),
-        SELF(vFD_e1),
-        SELF(vFD_e2),
+        SELF(ftdemo01),
+        SELF(ftdemobmptop),
+        SELF(ftdemo02),
         SELF(vFD_e3),
         SELF(vFD_e4),
         SELF(vFD_e5),
@@ -9164,7 +9164,7 @@ const naka_perf_style_t naka_perf_style_data
         SELF(vFD_e62),
         SELF(vFD_e63),
         SELF(vFD_e64),
-        SELF(vFD_e65),
+        SELF(ftdemo03),
         SELF(vFD_e66),
         SELF(vFD_e67),
         SELF(vFD_e68),
@@ -9208,36 +9208,36 @@ const naka_perf_style_t naka_perf_style_data
         SELF(vFD_e106),
         SELF(vFD_e107),
         SELF(vFD_e108),
-        SELF(vFD_e109),
-        SELF(vFD_e110),
+        SELF(ftdemo04),
+        SELF(ftdemobmp3D),
         SELF(vFD_e111),
         SELF(vFD_e112),
         SELF(vFD_e113),
         SELF(vFD_e114),
-        SELF(vFD_e115),
+        SELF(ftdemo05),
         SELF(vFD_e116),
         SELF(vFD_e117),
-        SELF(vFD_e118),
+        SELF(ftdemo06),
         SELF(vFD_e119),
-        SELF(vFD_e120),
-        SELF(vFD_e121),
-        SELF(vFD_e122),
+        SELF(ftdemobmpsoft),
+        SELF(ftdemo07),
+        SELF(ftdemobmpcnv),
         SELF(vFD_e123),
-        SELF(vFD_e124),
+        SELF(ftdemo08),
         SELF(vFD_e125),
-        SELF(vFD_e126),
+        SELF(ftdemo09),
         SELF(vFD_e127),
         SELF(vFD_e128),
-        SELF(vFD_e129),
+        SELF(ftdemo10),
         SELF(vFD_e130),
         SELF(vFD_e131),
-        SELF(vFD_e132),
+        SELF(ftdemo20),
         SELF(vFD_e133),
         SELF(vFD_e134),
-        SELF(vFD_e135),
-        SELF(vFD_e136),
+        SELF(ftdemobmpill),
+        SELF(ftdemo21),
         SELF(vFD_e137),
-        SELF(vFD_e138),
+        SELF(ftdemo22),
         SELF(vFD_e139),
         SELF(vFD_e140),
         SELF(vFD_e141),
@@ -9261,7 +9261,7 @@ const naka_perf_style_t naka_perf_style_data
         SELF(vFD_e159),
         SELF(vFD_e160),
         SELF(vFD_e161),
-        SELF(vFD_e162),
+        SELF(ftdemo23),
         SELF(vFD_e163),
         SELF(vFD_e164),
         SELF(vFD_e165),
@@ -9284,7 +9284,7 @@ const naka_perf_style_t naka_perf_style_data
         SELF(vFD_e182),
         SELF(vFD_e183),
         SELF(vFD_e184),
-        SELF(vFD_e185),
+        SELF(ftdemo24),
         SELF(vFD_e186),
         SELF(vFD_e187),
         SELF(vFD_e188),
@@ -9323,9 +9323,9 @@ const naka_perf_style_t naka_perf_style_data
         SELF(vFD_e221),
         SELF(vFD_e222),
         SELF(vFD_e223),
-        SELF(vFD_e224),
-        SELF(vFD_e225),
-        SELF(vFD_e226),
+        SELF(ftdemo25),
+        SELF(ftdemobmpend),
+        SELF(ftdemo26),
         SELF(vFD_e227),
         SELF(vFD_e228),
         SELF(vFD_e229),
@@ -9345,14 +9345,14 @@ const naka_perf_style_t naka_perf_style_data
         SELF(vFD_e243),
         SELF(vFD_e244),
         SELF(vFD_e245),
-        SELF(vFD_e246),
+        SELF(ftdemo40),
         SELF(vFD_e247),
         SELF(vFD_e248),
         SELF(vFD_e249),
         SELF(vFD_e250),
         SELF(vFD_e251),
         SELF(vFD_e252),
-        SELF(vFD_e253),
+        SELF(ftdemo41),
         SELF(vFD_e254),
         SELF(vFD_e255),
         SELF(vFD_e256),
@@ -9390,7 +9390,7 @@ const naka_perf_style_t naka_perf_style_data
         SELF(vFD_e288),
         SELF(vFD_e289),
         SELF(vFD_e290),
-        SELF(vFD_e291),
+        SELF(ftdemo42),
         SELF(vFD_e292),
         SELF(vFD_e293),
         SELF(vFD_e294),
@@ -9428,7 +9428,7 @@ const naka_perf_style_t naka_perf_style_data
         SELF(vFD_e326),
         SELF(vFD_e327),
         SELF(vFD_e328),
-        SELF(vFD_e329),
+        SELF(ftdemo44),
         SELF(vFD_e330),
         SELF(vFD_e331),
         SELF(vFD_e332),
@@ -9451,7 +9451,7 @@ const naka_perf_style_t naka_perf_style_data
         SELF(vFD_e349),
         SELF(vFD_e350),
         SELF(vFD_e351),
-        SELF(vFD_e352),
+        SELF(ftdemo45),
         SELF(vFD_e353),
         SELF(vFD_e354),
         SELF(vFD_e355),
@@ -9474,7 +9474,7 @@ const naka_perf_style_t naka_perf_style_data
         SELF(vFD_e372),
         SELF(vFD_e373),
         SELF(vFD_e374),
-        SELF(vFD_e375),
+        SELF(ftdemo46),
         SELF(vFD_e376),
         SELF(vFD_e377),
         SELF(vFD_e378),
@@ -9497,7 +9497,7 @@ const naka_perf_style_t naka_perf_style_data
         SELF(vFD_e395),
         SELF(vFD_e396),
         SELF(vFD_e397),
-        SELF(vFD_e398),
+        SELF(ftdemo47),
         SELF(vFD_e399),
         SELF(vFD_e400),
         SELF(vFD_e401),
@@ -9518,7 +9518,7 @@ const naka_perf_style_t naka_perf_style_data
         SELF(vFD_e416),
         SELF(vFD_e417),
         SELF(vFD_e418),
-        SELF(vFD_e419),
+        SELF(ftdemo48),
         SELF(vFD_e420),
         SELF(vFD_e421),
         SELF(vFD_e422),
@@ -9539,7 +9539,7 @@ const naka_perf_style_t naka_perf_style_data
         SELF(vFD_e437),
         SELF(vFD_e438),
         SELF(vFD_e439),
-        SELF(vFD_e440),
+        SELF(ftdemo43),
         SELF(vFD_e441),
         SELF(vFD_e442),
         SELF(vFD_e443),
@@ -9578,9 +9578,9 @@ const naka_perf_style_t naka_perf_style_data
         SELF(vFD_e476),
         SELF(vFD_e477),
         0x00000000,
-        SELF(str_866),
-        SELF(str_865),
-        SELF(str_864),
+        SELF(ftdemo01_str),
+        SELF(ftdemobmptop_str),
+        SELF(ftdemo02_str),
         SELF(str_863),
         SELF(str_862),
         SELF(str_861),
@@ -9643,7 +9643,7 @@ const naka_perf_style_t naka_perf_style_data
         SELF(str_804),
         SELF(str_803),
         SELF(str_802),
-        SELF(str_801),
+        SELF(ftdemo03_str),
         SELF(str_800),
         SELF(str_799),
         SELF(str_798),
@@ -9687,36 +9687,36 @@ const naka_perf_style_t naka_perf_style_data
         SELF(str_760),
         SELF(str_759),
         SELF(str_758),
-        SELF(str_757),
-        SELF(str_756),
+        SELF(ftdemo04_str),
+        SELF(ftdemobmp3D_str),
         SELF(str_755),
         SELF(str_754),
         SELF(str_753),
         SELF(str_752),
-        SELF(str_751),
+        SELF(ftdemo05_str),
         SELF(str_750),
         SELF(str_749),
-        SELF(str_748),
+        SELF(ftdemo06_str),
         SELF(str_747),
-        SELF(str_746),
-        SELF(str_745),
-        SELF(str_744),
+        SELF(ftdemobmpsoft_str),
+        SELF(ftdemo07_str),
+        SELF(ftdemobmpcnv_str),
         SELF(str_743),
-        SELF(str_742),
+        SELF(ftdemo08_str),
         SELF(str_741),
-        SELF(str_740),
+        SELF(ftdemo09_str),
         SELF(str_739),
         SELF(str_738),
-        SELF(str_737),
+        SELF(ftdemo10_str),
         SELF(str_736),
         SELF(str_735),
-        SELF(str_734),
+        SELF(ftdemo20_str),
         SELF(str_733),
         SELF(str_732),
-        SELF(str_731),
-        SELF(str_730),
+        SELF(ftdemobmpill_str),
+        SELF(ftdemo21_str),
         SELF(str_729),
-        SELF(str_728),
+        SELF(ftdemo22_str),
         SELF(str_727),
         SELF(str_726),
         SELF(str_725),
@@ -9740,7 +9740,7 @@ const naka_perf_style_t naka_perf_style_data
         SELF(str_707),
         SELF(str_706),
         SELF(str_705),
-        SELF(str_704),
+        SELF(ftdemo23_str),
         SELF(str_703),
         SELF(str_702),
         SELF(str_701),
@@ -9763,7 +9763,7 @@ const naka_perf_style_t naka_perf_style_data
         SELF(str_684),
         SELF(str_683),
         SELF(str_682),
-        SELF(str_681),
+        SELF(ftdemo24_str),
         SELF(str_680),
         SELF(str_679),
         SELF(str_678),
@@ -9802,9 +9802,9 @@ const naka_perf_style_t naka_perf_style_data
         SELF(str_645),
         SELF(str_644),
         SELF(str_643),
-        SELF(str_642),
-        SELF(str_641),
-        SELF(str_640),
+        SELF(ftdemo25_str),
+        SELF(ftdemobmpend_str),
+        SELF(ftdemo26_str),
         SELF(str_639),
         SELF(str_638),
         SELF(str_637),
@@ -9824,14 +9824,14 @@ const naka_perf_style_t naka_perf_style_data
         SELF(str_623),
         SELF(str_622),
         SELF(str_621),
-        SELF(str_620),
+        SELF(ftdemo40_str),
         SELF(str_619),
         SELF(str_618),
         SELF(str_617),
         SELF(str_616),
         SELF(str_615),
         SELF(str_614),
-        SELF(str_613),
+        SELF(ftdemo41_str),
         SELF(str_612),
         SELF(str_611),
         SELF(str_610),
@@ -9869,7 +9869,7 @@ const naka_perf_style_t naka_perf_style_data
         SELF(str_578),
         SELF(str_577),
         SELF(str_576),
-        SELF(str_575),
+        SELF(ftdemo42_str),
         SELF(str_574),
         SELF(str_573),
         SELF(str_572),
@@ -9907,7 +9907,7 @@ const naka_perf_style_t naka_perf_style_data
         SELF(str_540),
         SELF(str_539),
         SELF(str_538),
-        SELF(str_537),
+        SELF(ftdemo44_str),
         SELF(str_536),
         SELF(str_535),
         SELF(str_534),
@@ -9930,7 +9930,7 @@ const naka_perf_style_t naka_perf_style_data
         SELF(str_517),
         SELF(str_516),
         SELF(str_515),
-        SELF(str_514),
+        SELF(ftdemo45_str),
         SELF(str_513),
         SELF(str_512),
         SELF(str_511),
@@ -9953,7 +9953,7 @@ const naka_perf_style_t naka_perf_style_data
         SELF(str_494),
         SELF(str_493),
         SELF(str_492),
-        SELF(str_491),
+        SELF(ftdemo46_str),
         SELF(str_490),
         SELF(str_489),
         SELF(str_488),
@@ -9976,7 +9976,7 @@ const naka_perf_style_t naka_perf_style_data
         SELF(str_471),
         SELF(str_470),
         SELF(str_469),
-        SELF(str_468),
+        SELF(ftdemo47_str),
         SELF(str_467),
         SELF(str_466),
         SELF(str_465),
@@ -9997,7 +9997,7 @@ const naka_perf_style_t naka_perf_style_data
         SELF(str_450),
         SELF(str_449),
         SELF(str_448),
-        SELF(str_447),
+        SELF(ftdemo48_str),
         SELF(str_446),
         SELF(str_445),
         SELF(str_444),
@@ -10018,7 +10018,7 @@ const naka_perf_style_t naka_perf_style_data
         SELF(str_429),
         SELF(str_428),
         SELF(str_427),
-        SELF(str_426),
+        SELF(ftdemo43_str),
         SELF(str_425),
         SELF(str_424),
         SELF(str_423),
@@ -10135,7 +10135,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .str_425 = ALIGNED_STRING(""),
 
-    .str_426 = ALIGNED_STRING("ftdemo43"),
+    .ftdemo43_str = ALIGNED_STRING("ftdemo43"),
 
     .str_427 = ALIGNED_STRING(""),
 
@@ -10177,7 +10177,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .str_446 = ALIGNED_STRING(""),
 
-    .str_447 = ALIGNED_STRING("ftdemo48"),
+    .ftdemo48_str = ALIGNED_STRING("ftdemo48"),
 
     .str_448 = ALIGNED_STRING(""),
 
@@ -10219,7 +10219,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .str_467 = ALIGNED_STRING(""),
 
-    .str_468 = ALIGNED_STRING("ftdemo47"),
+    .ftdemo47_str = ALIGNED_STRING("ftdemo47"),
 
     .str_469 = ALIGNED_STRING(""),
 
@@ -10265,7 +10265,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .str_490 = ALIGNED_STRING(""),
 
-    .str_491 = ALIGNED_STRING("ftdemo46"),
+    .ftdemo46_str = ALIGNED_STRING("ftdemo46"),
 
     .str_492 = ALIGNED_STRING(""),
 
@@ -10311,7 +10311,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .str_513 = ALIGNED_STRING(""),
 
-    .str_514 = ALIGNED_STRING("ftdemo45"),
+    .ftdemo45_str = ALIGNED_STRING("ftdemo45"),
 
     .str_515 = ALIGNED_STRING(""),
 
@@ -10357,7 +10357,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .str_536 = ALIGNED_STRING(""),
 
-    .str_537 = ALIGNED_STRING("ftdemo44"),
+    .ftdemo44_str = ALIGNED_STRING("ftdemo44"),
 
     .str_538 = ALIGNED_STRING(""),
 
@@ -10433,7 +10433,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .str_574 = ALIGNED_STRING(""),
 
-    .str_575 = ALIGNED_STRING("ftdemo42"),
+    .ftdemo42_str = ALIGNED_STRING("ftdemo42"),
 
     .str_576 = ALIGNED_STRING(""),
 
@@ -10509,7 +10509,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .str_612 = ALIGNED_STRING(""),
 
-    .str_613 = ALIGNED_STRING("ftdemo41"),
+    .ftdemo41_str = ALIGNED_STRING("ftdemo41"),
 
     .str_614 = ALIGNED_STRING(""),
 
@@ -10523,7 +10523,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .str_619 = ALIGNED_STRING(""),
 
-    .str_620 = ALIGNED_STRING("ftdemo40"),
+    .ftdemo40_str = ALIGNED_STRING("ftdemo40"),
 
     .str_621 = ALIGNED_STRING(""),
 
@@ -10563,11 +10563,11 @@ const naka_perf_style_t naka_perf_style_data
 
     .str_639 = ALIGNED_STRING(""),
 
-    .str_640 = ALIGNED_STRING("ftdemo26"),
+    .ftdemo26_str = ALIGNED_STRING("ftdemo26"),
 
-    .str_641 = ALIGNED_STRING("ftdemobmpend"),
+    .ftdemobmpend_str = ALIGNED_STRING("ftdemobmpend"),
 
-    .str_642 = ALIGNED_STRING("ftdemo25"),
+    .ftdemo25_str = ALIGNED_STRING("ftdemo25"),
 
     .str_643 = ALIGNED_STRING(""),
 
@@ -10645,7 +10645,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .str_680 = ALIGNED_STRING(""),
 
-    .str_681 = ALIGNED_STRING("ftdemo24"),
+    .ftdemo24_str = ALIGNED_STRING("ftdemo24"),
 
     .str_682 = ALIGNED_STRING(""),
 
@@ -10691,7 +10691,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .str_703 = ALIGNED_STRING(""),
 
-    .str_704 = ALIGNED_STRING("ftdemo23"),
+    .ftdemo23_str = ALIGNED_STRING("ftdemo23"),
 
     .str_705 = ALIGNED_STRING(""),
 
@@ -10739,53 +10739,53 @@ const naka_perf_style_t naka_perf_style_data
 
     .str_727 = ALIGNED_STRING(""),
 
-    .str_728 = ALIGNED_STRING("ftdemo22"),
+    .ftdemo22_str = ALIGNED_STRING("ftdemo22"),
 
     .str_729 = ALIGNED_STRING(""),
 
-    .str_730 = ALIGNED_STRING("ftdemo21"),
+    .ftdemo21_str = ALIGNED_STRING("ftdemo21"),
 
-    .str_731 = ALIGNED_STRING("ftdemobmpill"),
+    .ftdemobmpill_str = ALIGNED_STRING("ftdemobmpill"),
 
     .str_732 = ALIGNED_STRING(""),
 
     .str_733 = ALIGNED_STRING(""),
 
-    .str_734 = ALIGNED_STRING("ftdemo20"),
+    .ftdemo20_str = ALIGNED_STRING("ftdemo20"),
 
     .str_735 = ALIGNED_STRING(""),
 
     .str_736 = ALIGNED_STRING(""),
 
-    .str_737 = ALIGNED_STRING("ftdemo10"),
+    .ftdemo10_str = ALIGNED_STRING("ftdemo10"),
 
     .str_738 = ALIGNED_STRING(""),
 
     .str_739 = ALIGNED_STRING(""),
 
-    .str_740 = ALIGNED_STRING("ftdemo09"),
+    .ftdemo09_str = ALIGNED_STRING("ftdemo09"),
 
     .str_741 = ALIGNED_STRING(""),
 
-    .str_742 = ALIGNED_STRING("ftdemo08"),
+    .ftdemo08_str = ALIGNED_STRING("ftdemo08"),
 
     .str_743 = ALIGNED_STRING(""),
 
-    .str_744 = ALIGNED_STRING("ftdemobmpcnv"),
+    .ftdemobmpcnv_str = ALIGNED_STRING("ftdemobmpcnv"),
 
-    .str_745 = ALIGNED_STRING("ftdemo07"),
+    .ftdemo07_str = ALIGNED_STRING("ftdemo07"),
 
-    .str_746 = "ftdemobmpsoft",
+    .ftdemobmpsoft_str = "ftdemobmpsoft",
 
     .str_747 = ALIGNED_STRING(""),
 
-    .str_748 = ALIGNED_STRING("ftdemo06"),
+    .ftdemo06_str = ALIGNED_STRING("ftdemo06"),
 
     .str_749 = ALIGNED_STRING(""),
 
     .str_750 = ALIGNED_STRING(""),
 
-    .str_751 = ALIGNED_STRING("ftdemo05"),
+    .ftdemo05_str = ALIGNED_STRING("ftdemo05"),
 
     .str_752 = ALIGNED_STRING(""),
 
@@ -10795,9 +10795,9 @@ const naka_perf_style_t naka_perf_style_data
 
     .str_755 = ALIGNED_STRING(""),
 
-    .str_756 = "ftdemobmp3D",
+    .ftdemobmp3D_str = "ftdemobmp3D",
 
-    .str_757 = ALIGNED_STRING("ftdemo04"),
+    .ftdemo04_str = ALIGNED_STRING("ftdemo04"),
 
     .str_758 = ALIGNED_STRING(""),
 
@@ -10885,7 +10885,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .str_800 = ALIGNED_STRING(""),
 
-    .str_801 = ALIGNED_STRING("ftdemo03"),
+    .ftdemo03_str = ALIGNED_STRING("ftdemo03"),
 
     .str_802 = ALIGNED_STRING(""),
 
@@ -11011,13 +11011,13 @@ const naka_perf_style_t naka_perf_style_data
 
     .str_863 = ALIGNED_STRING(""),
 
-    .str_864 = ALIGNED_STRING("ftdemo02"),
+    .ftdemo02_str = ALIGNED_STRING("ftdemo02"),
 
-    .str_865 = ALIGNED_STRING("ftdemobmptop"),
+    .ftdemobmptop_str = ALIGNED_STRING("ftdemobmptop"),
 
-    .str_866 = ALIGNED_STRING("ftdemo01"),
+    .ftdemo01_str = ALIGNED_STRING("ftdemo01"),
 
-    .str_867 = ALIGNED_STRING("TT_FDMSP"),
+    .TT_FDMSP_str = ALIGNED_STRING("TT_FDMSP"),
 
     .pad_133 = { 0 },
 
@@ -11030,13 +11030,13 @@ const naka_perf_style_t naka_perf_style_data
         SELF(str_873),
         SELF(str_872),
         SELF(str_871),
-        SELF(str_870),
+        SELF(Italian_str),
         SELF(str_869),
     },
 
     .str_869 = "Bass Port Speaker",
 
-    .str_870 = "Italian",
+    .Italian_str = "Italian",
 
     .str_871 = ALIGNED_STRING(""),
 
@@ -11072,13 +11072,13 @@ const naka_perf_style_t naka_perf_style_data
         SELF(str_885),
         SELF(field_6048),
         SELF(txt_El_porton_para_bajos_y_graves),
-        SELF(str_882),
+        SELF(Italian_str_2),
         SELF(str_881),
     },
 
     .str_881 = ALIGNED_STRING("Special Woofer dan Bass Port yang terdapat pada KN-5000 menghasilkan suara yang kuat dan baik."),
 
-    .str_882 = "Italian",
+    .Italian_str_2 = "Italian",
 
     .txt_El_porton_para_bajos_y_graves = "\241El port\363n para bajos y graves especiales del KN5000 produce un sonido potente y m\341s",
 
@@ -11109,13 +11109,13 @@ const naka_perf_style_t naka_perf_style_data
         SELF(str_891),
         SELF(txt_Diversite_des_styles),
         SELF(str_889),
-        SELF(str_888),
+        SELF(Italian_str_3),
         SELF(str_887),
     },
 
     .str_887 = "Huge Styles",
 
-    .str_888 = "Italian",
+    .Italian_str_3 = "Italian",
 
     .str_889 = "Estilos enormes",
 
@@ -11130,13 +11130,13 @@ const naka_perf_style_t naka_perf_style_data
         SELF(field_62be),
         SELF(txt_Grace_au_Music_Stylist_explorez),
         SELF(str_895),
-        SELF(str_894),
+        SELF(Italian_str_4),
         SELF(str_893),
     },
 
     .str_893 = ALIGNED_STRING("Menghasilkan 1000 gaya permainan dengan Music Stylist."),
 
-    .str_894 = "Italian",
+    .Italian_str_4 = "Italian",
 
     .str_895 = ALIGNED_STRING("Explore los 1000 estilos musicales con el Music Stylist."),
 
@@ -11153,13 +11153,13 @@ const naka_perf_style_t naka_perf_style_data
         SELF(txt_Nutzen_Sie_das_groe_Technics),
         SELF(txt_Encore_plus_de_possibilites),
         SELF(txt_Disfrute_mas_con_la_gran),
-        SELF(str_900),
+        SELF(Italian_str_5),
         SELF(str_899),
     },
 
     .str_899 = "Tambahkan kesenangan Anda dengan berbagai jenis Software Music dari Technics.",
 
-    .str_900 = "Italian",
+    .Italian_str_5 = "Italian",
 
     .txt_Disfrute_mas_con_la_gran = "Disfrute m\341s con la gran variedad de programas de software de Technics\0\377",
 
@@ -11174,13 +11174,13 @@ const naka_perf_style_t naka_perf_style_data
         SELF(str_909),
         SELF(str_908),
         SELF(field_6546),
-        SELF(str_906),
+        SELF(Italian_str_6),
         SELF(str_905),
     },
 
     .str_905 = "Dan dapat mengubah hampir semua software yang dihasilkan oleh pabrik manapun!",
 
-    .str_906 = "Italian",
+    .Italian_str_6 = "Italian",
 
     .field_6546 = 0x59A1,
 
@@ -11197,13 +11197,13 @@ const naka_perf_style_t naka_perf_style_data
         SELF(str_915),
         SELF(txt_Enregistrez_vos_motifs_preferes),
         SELF(field_66de),
-        SELF(str_912),
+        SELF(Italian_str_7),
         SELF(str_911),
     },
 
     .str_911 = "Simpan pola-pola software favorit Anda kedalam Custom Rhythm Group ..... secara permanen!",
 
-    .str_912 = "Italian",
+    .Italian_str_7 = "Italian",
 
     .field_66de = 0x4DA1,
 
@@ -11220,13 +11220,13 @@ const naka_perf_style_t naka_perf_style_data
         SELF(str_921),
         SELF(str_920),
         SELF(str_919),
-        SELF(str_918),
+        SELF(Italian_str_8),
         SELF(str_917),
     },
 
     .str_917 = ALIGNED_STRING("Accordion Register"),
 
-    .str_918 = "Italian",
+    .Italian_str_8 = "Italian",
 
     .str_919 = ALIGNED_STRING("Accordion Register"),
 
@@ -11241,13 +11241,13 @@ const naka_perf_style_t naka_perf_style_data
         SELF(txt_ACCORDION_REGISTER_eroffnet),
         SELF(txt_Avec_la_fonction_Accordion),
         SELF(txt_Un_mundo_de_sonidos_de_acordeon),
-        SELF(str_924),
+        SELF(Italian_str_9),
         SELF(str_923),
     },
 
     .str_923 = ALIGNED_STRING("Suara-suara akordion pada ujung jari Anda ada pada Accordion Register!"),
 
-    .str_924 = "Italian",
+    .Italian_str_9 = "Italian",
 
     .txt_Un_mundo_de_sonidos_de_acordeon = "\241Un mundo de sonidos de acorde\363n en la punta de sus dedos con el Accordion Register!\0\377",
 
@@ -11264,13 +11264,13 @@ const naka_perf_style_t naka_perf_style_data
         SELF(str_933),
         SELF(str_932),
         SELF(str_931),
-        SELF(str_930),
+        SELF(Italian_str_10),
         SELF(str_929),
     },
 
     .str_929 = "Digital Drawbar",
 
-    .str_930 = "Italian",
+    .Italian_str_10 = "Italian",
 
     .str_931 = "Digital Drawbar",
 
@@ -11285,13 +11285,13 @@ const naka_perf_style_t naka_perf_style_data
         SELF(txt_Erzeugen_Sie_legendare),
         SELF(txt_Avec_les_tirettes_harmoniques),
         SELF(field_6b38),
-        SELF(str_936),
+        SELF(Italian_str_11),
         SELF(str_935),
     },
 
     .str_935 = ALIGNED_STRING("Suara-suara Organ Classic dengan Jazz dan Rock Drawbars!"),
 
-    .str_936 = "Italian",
+    .Italian_str_11 = "Italian",
 
     .field_6b38 = 0x53A1,
 
@@ -11328,13 +11328,13 @@ const naka_perf_style_t naka_perf_style_data
         SELF(str_945),
         SELF(str_944),
         SELF(str_943),
-        SELF(str_942),
+        SELF(Italian_str_12),
         SELF(str_941),
     },
 
     .str_941 = "Acoustic Illusion",
 
-    .str_942 = "Italian",
+    .Italian_str_12 = "Italian",
 
     .str_943 = "Acoustic Illusion",
 
@@ -11349,13 +11349,13 @@ const naka_perf_style_t naka_perf_style_data
         SELF(txt_ACCOUSTIC_ILLUSION_verleiht_dem),
         SELF(txt_La_fonction_Acoustic_Illusion),
         SELF(txt_El_Acoustic_Illusion_amplia_su),
-        SELF(str_948),
+        SELF(Italian_str_13),
         SELF(str_947),
     },
 
     .str_947 = ALIGNED_STRING("Acoustic Illusion memperluas musik Anda kedalam 3 Dimensi!"),
 
-    .str_948 = "Italian",
+    .Italian_str_13 = "Italian",
 
     .txt_El_Acoustic_Illusion_amplia_su = "\241El Acoustic Illusion amplia su m\372sica a 3 dimensiones!\0",
 
@@ -11370,13 +11370,13 @@ const naka_perf_style_t naka_perf_style_data
         SELF(txt_Viele_weitere_leistungsfahige),
         SELF(txt_Une_grande_diversite_de),
         SELF(txt_Una_serie_de_funciones),
-        SELF(str_954),
+        SELF(Italian_str_14),
         SELF(str_953),
     },
 
     .str_953 = ALIGNED_STRING("Satu pilihan daripada gambar-gambar untuk disesuaikan ke gaya permainan!"),
 
-    .str_954 = "Italian",
+    .Italian_str_14 = "Italian",
 
     .txt_Una_serie_de_funciones = "\241Una serie de funciones apropiadas para cualquier estilo y ejecuci\363n!\0",
 
@@ -11391,13 +11391,13 @@ const naka_perf_style_t naka_perf_style_data
         SELF(str_963),
         SELF(str_962),
         SELF(str_961),
-        SELF(str_960),
+        SELF(Italian_str_15),
         SELF(str_959),
     },
 
     .str_959 = "Huge Styles",
 
-    .str_960 = "Italian",
+    .Italian_str_15 = "Italian",
 
     .str_961 = "Huge Styles",
 
@@ -11412,13 +11412,13 @@ const naka_perf_style_t naka_perf_style_data
         SELF(str_969),
         SELF(str_968),
         SELF(str_967),
-        SELF(str_966),
+        SELF(Italian_str_16),
         SELF(str_965),
     },
 
     .str_965 = "Huge Styles",
 
-    .str_966 = "Italian",
+    .Italian_str_16 = "Italian",
 
     .str_967 = "Huge Styles",
 
@@ -11433,13 +11433,13 @@ const naka_perf_style_t naka_perf_style_data
         SELF(str_975),
         SELF(str_974),
         SELF(str_973),
-        SELF(str_972),
+        SELF(Italian_str_17),
         SELF(str_971),
     },
 
     .str_971 = "Huge Styles",
 
-    .str_972 = "Italian",
+    .Italian_str_17 = "Italian",
 
     .str_973 = "Huge Styles",
 
@@ -11523,7 +11523,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .field_71ba = 0x8020,
 
-    .str_977 = "X",
+    .X_str = "X",
 
     .pad_136 = { 0 },
 

@@ -135,16 +135,16 @@ typedef struct __attribute__((packed)) {
 } mst_group_ref_t;
 
 typedef struct __attribute__((packed)) {
-    char str_0[10];
-    char str_1[10];
-    char str_2[8];
+    char iduToshi_str[10];
+    char iduMurai_str[10];
+    char iduRoot_str[8];
     uint32_t ptr_001c;
     uint16_t field_0020;
     uint8_t pad_0[2];  /* zero padding */
     uint32_t ptrs_0[4];  /* 4 pointers */
     char w0_code[2];
     char w0_name[6];
-    char str_3[6];
+    char True_str[6];
     uint32_t ptr_0042;
     uint8_t pad_1[5];  /* zero padding */
     uint16_t field_004b;
@@ -255,35 +255,35 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_0170;
     uint8_t pad_37[5];  /* zero padding */
     uint16_t field_0179;
-    char str_4[13];
-    char str_5[14];
-    char str_6[14];
-    char str_7[12];
-    char str_8[8];
-    char str_9[8];
-    char str_10[12];
-    char str_11[10];
-    char str_12[8];
-    char str_13[8];
-    char str_14[12];
-    char str_15[12];
-    char str_16[12];
-    char str_17[10];
-    char str_18[10];
-    char str_19[10];
-    char str_20[10];
-    char str_21[10];
-    char str_22[10];
-    char str_23[10];
-    char str_24[10];
-    char str_25[10];
-    char str_26[10];
-    char str_27[10];
-    char str_28[10];
-    char str_29[10];
-    char str_30[10];
-    char str_31[10];
-    char str_32[10];
+    char T_PartSelect_str[13];
+    char PT_Microphone_str[14];
+    char PT_Metronome_str[14];
+    char PT_Control_str[12];
+    char PT_Msp2_str[8];
+    char PT_Msp1_str[8];
+    char PT_RootBass_str[12];
+    char PT_Chord_str[10];
+    char PT_Drum_str[8];
+    char PT_Bass_str[8];
+    char PT_Accomp3_str[12];
+    char PT_Accomp2_str[12];
+    char PT_Accomp1_str[12];
+    char PT_Part16_str[10];
+    char PT_Part15_str[10];
+    char PT_Part14_str[10];
+    char PT_Part13_str[10];
+    char PT_Part12_str[10];
+    char PT_Part11_str[10];
+    char PT_Part10_str[10];
+    char PT_Part9_str[10];
+    char PT_Part8_str[10];
+    char PT_Part7_str[10];
+    char PT_Part6_str[10];
+    char PT_Part5_str[10];
+    char PT_Part4_str[10];
+    char PT_Part3_str[10];
+    char PT_Part2_str[10];
+    char PT_Part1_str[10];
     uint32_t ptrs_1[3];  /* 3 pointers */
     uint16_t field_02b6;
     uint8_t pad_38[2];  /* zero padding */
@@ -335,31 +335,31 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_0332;
     uint8_t pad_54[5];  /* zero padding */
     uint16_t field_033b;
-    char str_33[6];
+    char R_All_str[6];
     uint16_t field_0343;
-    char str_34[10];
+    char R_Track16_str[10];
     uint16_t field_034f;
-    char str_35[10];
+    char R_Track15_str[10];
     uint16_t field_035b;
-    char str_36[10];
+    char R_Track14_str[10];
     uint16_t field_0367;
-    char str_37[10];
+    char R_Track13_str[10];
     uint16_t field_0373;
-    char str_38[10];
+    char R_Track12_str[10];
     uint16_t field_037f;
-    char str_39[10];
+    char R_Track11_str[10];
     uint16_t field_038b;
-    char str_40[10];
+    char R_Track10_str[10];
     uint16_t field_0397;
-    char str_41[9];
-    char str_42[10];
-    char str_43[10];
-    char str_44[10];
-    char str_45[10];
-    char str_46[10];
-    char str_47[10];
-    char str_48[10];
-    char str_49[10];
+    char R_Track9_str[9];
+    char TR_Track8_str[10];
+    char TR_Track7_str[10];
+    char TR_Track6_str[10];
+    char TR_Track5_str[10];
+    char TR_Track4_str[10];
+    char TR_Track3_str[10];
+    char TR_Track2_str[10];
+    char TR_Track1_str[10];
     uint32_t ptrs_2[3];  /* 3 pointers */
     uint16_t field_03fe;
     uint8_t pad_55[2];  /* zero padding */
@@ -399,20 +399,20 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_045a;
     uint8_t pad_67[5];  /* zero padding */
     uint16_t field_0463;
-    char str_50[8];
+    char T_10Sec_str[8];
     uint16_t field_046d;
-    char str_51[7];
-    char str_52[8];
-    char str_53[8];
-    char str_54[8];
-    char str_55[8];
-    char str_56[8];
-    char str_57[8];
-    char str_58[8];
-    char str_59[8];
-    char str_60[8];
-    char str_61[12];
-    char str_62[8];
+    char T_9Sec_str[7];
+    char IT_8Sec_str[8];
+    char IT_7Sec_str[8];
+    char IT_6Sec_str[8];
+    char IT_5Sec_str[8];
+    char IT_4Sec_str[8];
+    char IT_3Sec_str[8];
+    char IT_2Sec_str[8];
+    char IT_1Sec_str[8];
+    char IT_Hold_str[8];
+    char IT_Default_str[12];
+    char IT_Off_str[8];
     uint32_t ptr_04d2;
     uint8_t pad_68[2];  /* zero padding */
     uint16_t field_04d8;
@@ -954,7 +954,7 @@ typedef struct __attribute__((packed)) {
     uint8_t pad_174[2];  /* zero padding */
     uint16_t field_0a00;
     uint8_t pad_175[2];  /* zero padding */
-    char str_63[2];
+    char H_str[2];
     uint16_t field_0a06;
     uint8_t pad_176[2];  /* zero padding */
     char str_64[18];
@@ -967,10 +967,10 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0a2d;
     uint8_t pad_180[3];  /* zero padding */
     uint16_t field_0a32;
-    char str_65[2];
+    char d_str[2];
     uint8_t pad_181[2];  /* zero padding */
     uint16_t field_0a38;
-    char str_66[2];
+    char d_str_2[2];
     uint8_t pad_182[2];  /* zero padding */
     uint16_t field_0a3e;
     uint16_t field_0a40;
@@ -3508,13 +3508,13 @@ _Static_assert(sizeof(naka_style_bitmaps_t) == 101962,
 const naka_style_bitmaps_t naka_style_bitmaps_data
     __attribute__((section(".text"), used)) = {
 
-    .str_0 = ALIGNED_STRING("iduToshi"),
+    .iduToshi_str = ALIGNED_STRING("iduToshi"),
 
-    .str_1 = ALIGNED_STRING("iduMurai"),
+    .iduMurai_str = ALIGNED_STRING("iduMurai"),
 
-    .str_2 = "iduRoot",
+    .iduRoot_str = "iduRoot",
 
-    .ptr_001c = SELF(str_3),
+    .ptr_001c = SELF(True_str),
 
     .field_0020 = 0x0001,
 
@@ -3531,7 +3531,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .w0_name = "False",
 
-    .str_3 = ALIGNED_STRING("True"),
+    .True_str = ALIGNED_STRING("True"),
 
     .ptr_0042 = 0x00eb7208,
 
@@ -3579,163 +3579,163 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .pad_8 = { 0 },
 
-    .ptr_0090 = SELF(str_31),
+    .ptr_0090 = SELF(PT_Part2_str),
 
     .field_0094 = 0x0001,
 
     .pad_9 = { 0 },
 
-    .ptr_0098 = SELF(str_30),
+    .ptr_0098 = SELF(PT_Part3_str),
 
     .field_009c = 0x0002,
 
     .pad_10 = { 0 },
 
-    .ptr_00a0 = SELF(str_29),
+    .ptr_00a0 = SELF(PT_Part4_str),
 
     .field_00a4 = 0x0003,
 
     .pad_11 = { 0 },
 
-    .ptr_00a8 = SELF(str_28),
+    .ptr_00a8 = SELF(PT_Part5_str),
 
     .field_00ac = 0x0004,
 
     .pad_12 = { 0 },
 
-    .ptr_00b0 = SELF(str_27),
+    .ptr_00b0 = SELF(PT_Part6_str),
 
     .field_00b4 = 0x0005,
 
     .pad_13 = { 0 },
 
-    .ptr_00b8 = SELF(str_26),
+    .ptr_00b8 = SELF(PT_Part7_str),
 
     .field_00bc = 0x0006,
 
     .pad_14 = { 0 },
 
-    .ptr_00c0 = SELF(str_25),
+    .ptr_00c0 = SELF(PT_Part8_str),
 
     .field_00c4 = 0x0007,
 
     .pad_15 = { 0 },
 
-    .ptr_00c8 = SELF(str_24),
+    .ptr_00c8 = SELF(PT_Part9_str),
 
     .field_00cc = 0x0008,
 
     .pad_16 = { 0 },
 
-    .ptr_00d0 = SELF(str_23),
+    .ptr_00d0 = SELF(PT_Part10_str),
 
     .field_00d4 = 0x0009,
 
     .pad_17 = { 0 },
 
-    .ptr_00d8 = SELF(str_22),
+    .ptr_00d8 = SELF(PT_Part11_str),
 
     .field_00dc = 0x000a,
 
     .pad_18 = { 0 },
 
-    .ptr_00e0 = SELF(str_21),
+    .ptr_00e0 = SELF(PT_Part12_str),
 
     .field_00e4 = 0x000b,
 
     .pad_19 = { 0 },
 
-    .ptr_00e8 = SELF(str_20),
+    .ptr_00e8 = SELF(PT_Part13_str),
 
     .field_00ec = 0x000c,
 
     .pad_20 = { 0 },
 
-    .ptr_00f0 = SELF(str_19),
+    .ptr_00f0 = SELF(PT_Part14_str),
 
     .field_00f4 = 0x000d,
 
     .pad_21 = { 0 },
 
-    .ptr_00f8 = SELF(str_18),
+    .ptr_00f8 = SELF(PT_Part15_str),
 
     .field_00fc = 0x000e,
 
     .pad_22 = { 0 },
 
-    .ptr_0100 = SELF(str_17),
+    .ptr_0100 = SELF(PT_Part16_str),
 
     .field_0104 = 0x000f,
 
     .pad_23 = { 0 },
 
-    .ptr_0108 = SELF(str_16),
+    .ptr_0108 = SELF(PT_Accomp1_str),
 
     .field_010c = 0x0010,
 
     .pad_24 = { 0 },
 
-    .ptr_0110 = SELF(str_15),
+    .ptr_0110 = SELF(PT_Accomp2_str),
 
     .field_0114 = 0x0011,
 
     .pad_25 = { 0 },
 
-    .ptr_0118 = SELF(str_14),
+    .ptr_0118 = SELF(PT_Accomp3_str),
 
     .field_011c = 0x0012,
 
     .pad_26 = { 0 },
 
-    .ptr_0120 = SELF(str_13),
+    .ptr_0120 = SELF(PT_Bass_str),
 
     .field_0124 = 0x0013,
 
     .pad_27 = { 0 },
 
-    .ptr_0128 = SELF(str_12),
+    .ptr_0128 = SELF(PT_Drum_str),
 
     .field_012c = 0x0014,
 
     .pad_28 = { 0 },
 
-    .ptr_0130 = SELF(str_11),
+    .ptr_0130 = SELF(PT_Chord_str),
 
     .field_0134 = 0x0015,
 
     .pad_29 = { 0 },
 
-    .ptr_0138 = SELF(str_10),
+    .ptr_0138 = SELF(PT_RootBass_str),
 
     .field_013c = 0x0016,
 
     .pad_30 = { 0 },
 
-    .ptr_0140 = SELF(str_9),
+    .ptr_0140 = SELF(PT_Msp1_str),
 
     .field_0144 = 0x0017,
 
     .pad_31 = { 0 },
 
-    .ptr_0148 = SELF(str_8),
+    .ptr_0148 = SELF(PT_Msp2_str),
 
     .field_014c = 0x0018,
 
     .pad_32 = { 0 },
 
-    .ptr_0150 = SELF(str_7),
+    .ptr_0150 = SELF(PT_Control_str),
 
     .field_0154 = 0x0019,
 
     .pad_33 = { 0 },
 
-    .ptr_0158 = SELF(str_6),
+    .ptr_0158 = SELF(PT_Metronome_str),
 
     .field_015c = 0x001a,
 
     .pad_34 = { 0 },
 
-    .ptr_0160 = SELF(str_5),
+    .ptr_0160 = SELF(PT_Microphone_str),
 
     .field_0164 = 0x001b,
 
@@ -3753,105 +3753,105 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0179 = 0x50ff,
 
-    .str_4 = ALIGNED_STRING("T_PartSelect"),
+    .T_PartSelect_str = ALIGNED_STRING("T_PartSelect"),
 
-    .str_5 = "PT_Microphone",
+    .PT_Microphone_str = "PT_Microphone",
 
-    .str_6 = ALIGNED_STRING("PT_Metronome"),
+    .PT_Metronome_str = ALIGNED_STRING("PT_Metronome"),
 
-    .str_7 = ALIGNED_STRING("PT_Control"),
+    .PT_Control_str = ALIGNED_STRING("PT_Control"),
 
-    .str_8 = "PT_Msp2",
+    .PT_Msp2_str = "PT_Msp2",
 
-    .str_9 = "PT_Msp1",
+    .PT_Msp1_str = "PT_Msp1",
 
-    .str_10 = "PT_RootBass",
+    .PT_RootBass_str = "PT_RootBass",
 
-    .str_11 = ALIGNED_STRING("PT_Chord"),
+    .PT_Chord_str = ALIGNED_STRING("PT_Chord"),
 
-    .str_12 = "PT_Drum",
+    .PT_Drum_str = "PT_Drum",
 
-    .str_13 = "PT_Bass",
+    .PT_Bass_str = "PT_Bass",
 
-    .str_14 = ALIGNED_STRING("PT_Accomp3"),
+    .PT_Accomp3_str = ALIGNED_STRING("PT_Accomp3"),
 
-    .str_15 = ALIGNED_STRING("PT_Accomp2"),
+    .PT_Accomp2_str = ALIGNED_STRING("PT_Accomp2"),
 
-    .str_16 = ALIGNED_STRING("PT_Accomp1"),
+    .PT_Accomp1_str = ALIGNED_STRING("PT_Accomp1"),
 
-    .str_17 = "PT_Part16",
+    .PT_Part16_str = "PT_Part16",
 
-    .str_18 = "PT_Part15",
+    .PT_Part15_str = "PT_Part15",
 
-    .str_19 = "PT_Part14",
+    .PT_Part14_str = "PT_Part14",
 
-    .str_20 = "PT_Part13",
+    .PT_Part13_str = "PT_Part13",
 
-    .str_21 = "PT_Part12",
+    .PT_Part12_str = "PT_Part12",
 
-    .str_22 = "PT_Part11",
+    .PT_Part11_str = "PT_Part11",
 
-    .str_23 = "PT_Part10",
+    .PT_Part10_str = "PT_Part10",
 
-    .str_24 = ALIGNED_STRING("PT_Part9"),
+    .PT_Part9_str = ALIGNED_STRING("PT_Part9"),
 
-    .str_25 = ALIGNED_STRING("PT_Part8"),
+    .PT_Part8_str = ALIGNED_STRING("PT_Part8"),
 
-    .str_26 = ALIGNED_STRING("PT_Part7"),
+    .PT_Part7_str = ALIGNED_STRING("PT_Part7"),
 
-    .str_27 = ALIGNED_STRING("PT_Part6"),
+    .PT_Part6_str = ALIGNED_STRING("PT_Part6"),
 
-    .str_28 = ALIGNED_STRING("PT_Part5"),
+    .PT_Part5_str = ALIGNED_STRING("PT_Part5"),
 
-    .str_29 = ALIGNED_STRING("PT_Part4"),
+    .PT_Part4_str = ALIGNED_STRING("PT_Part4"),
 
-    .str_30 = ALIGNED_STRING("PT_Part3"),
+    .PT_Part3_str = ALIGNED_STRING("PT_Part3"),
 
-    .str_31 = ALIGNED_STRING("PT_Part2"),
+    .PT_Part2_str = ALIGNED_STRING("PT_Part2"),
 
-    .str_32 = ALIGNED_STRING("PT_Part1"),
+    .PT_Part1_str = ALIGNED_STRING("PT_Part1"),
 
     .ptrs_1 = {
-        SELF(str_49),
+        SELF(TR_Track1_str),
         0x00000000,
-        SELF(str_48),
+        SELF(TR_Track2_str),
     },
 
     .field_02b6 = 0x0001,
 
     .pad_38 = { 0 },
 
-    .ptr_02ba = SELF(str_47),
+    .ptr_02ba = SELF(TR_Track3_str),
 
     .field_02be = 0x0002,
 
     .pad_39 = { 0 },
 
-    .ptr_02c2 = SELF(str_46),
+    .ptr_02c2 = SELF(TR_Track4_str),
 
     .field_02c6 = 0x0003,
 
     .pad_40 = { 0 },
 
-    .ptr_02ca = SELF(str_45),
+    .ptr_02ca = SELF(TR_Track5_str),
 
     .field_02ce = 0x0004,
 
     .pad_41 = { 0 },
 
-    .ptr_02d2 = SELF(str_44),
+    .ptr_02d2 = SELF(TR_Track6_str),
 
     .field_02d6 = 0x0005,
 
     .pad_42 = { 0 },
 
-    .ptr_02da = SELF(str_43),
+    .ptr_02da = SELF(TR_Track7_str),
 
     .field_02de = 0x0006,
 
     .pad_43 = { 0 },
 
-    .ptr_02e2 = SELF(str_42),
+    .ptr_02e2 = SELF(TR_Track8_str),
 
     .field_02e6 = 0x0007,
 
@@ -3917,115 +3917,115 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_033b = 0x54ff,
 
-    .str_33 = "R_All",
+    .R_All_str = "R_All",
 
     .field_0343 = 0x54ff,
 
-    .str_34 = "R_Track16",
+    .R_Track16_str = "R_Track16",
 
     .field_034f = 0x54ff,
 
-    .str_35 = "R_Track15",
+    .R_Track15_str = "R_Track15",
 
     .field_035b = 0x54ff,
 
-    .str_36 = "R_Track14",
+    .R_Track14_str = "R_Track14",
 
     .field_0367 = 0x54ff,
 
-    .str_37 = "R_Track13",
+    .R_Track13_str = "R_Track13",
 
     .field_0373 = 0x54ff,
 
-    .str_38 = "R_Track12",
+    .R_Track12_str = "R_Track12",
 
     .field_037f = 0x54ff,
 
-    .str_39 = "R_Track11",
+    .R_Track11_str = "R_Track11",
 
     .field_038b = 0x54ff,
 
-    .str_40 = "R_Track10",
+    .R_Track10_str = "R_Track10",
 
     .field_0397 = 0x54ff,
 
-    .str_41 = ALIGNED_STRING("R_Track9"),
+    .R_Track9_str = ALIGNED_STRING("R_Track9"),
 
-    .str_42 = "TR_Track8",
+    .TR_Track8_str = "TR_Track8",
 
-    .str_43 = "TR_Track7",
+    .TR_Track7_str = "TR_Track7",
 
-    .str_44 = "TR_Track6",
+    .TR_Track6_str = "TR_Track6",
 
-    .str_45 = "TR_Track5",
+    .TR_Track5_str = "TR_Track5",
 
-    .str_46 = "TR_Track4",
+    .TR_Track4_str = "TR_Track4",
 
-    .str_47 = "TR_Track3",
+    .TR_Track3_str = "TR_Track3",
 
-    .str_48 = "TR_Track2",
+    .TR_Track2_str = "TR_Track2",
 
-    .str_49 = "TR_Track1",
+    .TR_Track1_str = "TR_Track1",
 
     .ptrs_2 = {
-        SELF(str_62),
+        SELF(IT_Off_str),
         0x00000000,
-        SELF(str_61),
+        SELF(IT_Default_str),
     },
 
     .field_03fe = 0x0001,
 
     .pad_55 = { 0 },
 
-    .ptr_0402 = SELF(str_60),
+    .ptr_0402 = SELF(IT_Hold_str),
 
     .field_0406 = 0x0002,
 
     .pad_56 = { 0 },
 
-    .ptr_040a = SELF(str_59),
+    .ptr_040a = SELF(IT_1Sec_str),
 
     .field_040e = 0x0003,
 
     .pad_57 = { 0 },
 
-    .ptr_0412 = SELF(str_58),
+    .ptr_0412 = SELF(IT_2Sec_str),
 
     .field_0416 = 0x0004,
 
     .pad_58 = { 0 },
 
-    .ptr_041a = SELF(str_57),
+    .ptr_041a = SELF(IT_3Sec_str),
 
     .field_041e = 0x0005,
 
     .pad_59 = { 0 },
 
-    .ptr_0422 = SELF(str_56),
+    .ptr_0422 = SELF(IT_4Sec_str),
 
     .field_0426 = 0x0006,
 
     .pad_60 = { 0 },
 
-    .ptr_042a = SELF(str_55),
+    .ptr_042a = SELF(IT_5Sec_str),
 
     .field_042e = 0x0007,
 
     .pad_61 = { 0 },
 
-    .ptr_0432 = SELF(str_54),
+    .ptr_0432 = SELF(IT_6Sec_str),
 
     .field_0436 = 0x0008,
 
     .pad_62 = { 0 },
 
-    .ptr_043a = SELF(str_53),
+    .ptr_043a = SELF(IT_7Sec_str),
 
     .field_043e = 0x0009,
 
     .pad_63 = { 0 },
 
-    .ptr_0442 = SELF(str_52),
+    .ptr_0442 = SELF(IT_8Sec_str),
 
     .field_0446 = 0x000a,
 
@@ -4049,33 +4049,33 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0463 = 0x49ff,
 
-    .str_50 = "T_10Sec",
+    .T_10Sec_str = "T_10Sec",
 
     .field_046d = 0x49ff,
 
-    .str_51 = ALIGNED_STRING("T_9Sec"),
+    .T_9Sec_str = ALIGNED_STRING("T_9Sec"),
 
-    .str_52 = "IT_8Sec",
+    .IT_8Sec_str = "IT_8Sec",
 
-    .str_53 = "IT_7Sec",
+    .IT_7Sec_str = "IT_7Sec",
 
-    .str_54 = "IT_6Sec",
+    .IT_6Sec_str = "IT_6Sec",
 
-    .str_55 = "IT_5Sec",
+    .IT_5Sec_str = "IT_5Sec",
 
-    .str_56 = "IT_4Sec",
+    .IT_4Sec_str = "IT_4Sec",
 
-    .str_57 = "IT_3Sec",
+    .IT_3Sec_str = "IT_3Sec",
 
-    .str_58 = "IT_2Sec",
+    .IT_2Sec_str = "IT_2Sec",
 
-    .str_59 = "IT_1Sec",
+    .IT_1Sec_str = "IT_1Sec",
 
-    .str_60 = "IT_Hold",
+    .IT_Hold_str = "IT_Hold",
 
-    .str_61 = ALIGNED_STRING("IT_Default"),
+    .IT_Default_str = ALIGNED_STRING("IT_Default"),
 
-    .str_62 = ALIGNED_STRING("IT_Off"),
+    .IT_Off_str = ALIGNED_STRING("IT_Off"),
 
     .ptr_04d2 = NAKA_ADDR(swordProc),
 
@@ -5169,7 +5169,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .pad_175 = { 0 },
 
-    .str_63 = "H",
+    .H_str = "H",
 
     .field_0a06 = 0xff92,
 
@@ -5195,13 +5195,13 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .field_0a32 = 0x0201,
 
-    .str_65 = "d",
+    .d_str = "d",
 
     .pad_181 = { 0 },
 
     .field_0a38 = 0x0203,
 
-    .str_66 = "d",
+    .d_str_2 = "d",
 
     .pad_182 = { 0 },
 

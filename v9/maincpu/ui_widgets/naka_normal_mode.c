@@ -271,31 +271,31 @@ typedef struct __attribute__((packed)) {
 } naka_cls_IvPageOverWr_t;
 
 typedef struct __attribute__((packed)) {
-    char str_0[10];
-    char str_1[10];
-    char str_2[10];
-    char str_3[10];
-    char str_4[22];
-    char str_5[18];
-    char str_6[14];
-    char str_7[14];
+    char TEST6FUNC_str[10];
+    char TEST4FUNC_str[10];
+    char TEST3FUNC_str[10];
+    char TEST2FUNC_str[10];
+    char MainWallSetFlashFunc_str[22];
+    char MainTimeFlashFunc_str[18];
+    char MainMssSetUp_str[14];
+    char FswAsIniFunc_str[14];
     char w0_code[12];
     char w0_name[16];
     char w1_code[12];
     char w1_name[10];
-    char str_8[14];
-    char str_9[18];
-    char str_10[18];
-    char str_11[16];
-    char str_12[14];
-    char str_13[16];
-    char str_14[14];
-    char str_15[12];
+    char MainChordPre_str[14];
+    char MainGetRhyGrpName_str[18];
+    char MainGetSndGrpName_str[18];
+    char MainGetRhyName_str[16];
+    char MainRvariIni_str[14];
+    char MainGetSndName_str[16];
+    char MainSvariIni_str[14];
+    char MainVariSet_str[12];
     /* element 0 of Viewable slot 0x1 "Normal": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v1_e0;
+    naka_cls_TtlScreen_t Normal;
     char w2_text[8];
     /* element 1 of Viewable slot 0x1 "normal": NormScreen (class id 0x01620000) */
-    naka_cls_NormScreen_t v1_e1;
+    naka_cls_NormScreen_t normal;
     uint8_t field_0174;
     uint8_t field_0175;
     /* element 2 of Viewable slot 0x1: AcTempoBox (class id 0x01600014) */
@@ -310,18 +310,18 @@ typedef struct __attribute__((packed)) {
     naka_cls_AcSoundName_t v1_e6;
     /* element 7 of Viewable slot 0x1: StringBox (class id 0x01600037) */
     naka_cls_StringBox_t v1_e7;
-    char str_35[8];
+    char RIGHT2_str[8];
     /* element 8 of Viewable slot 0x1: AcSoundName (class id 0x0160002A) */
     naka_cls_AcSoundName_t v1_e8;
     /* element 9 of Viewable slot 0x1: StringBox (class id 0x01600037) */
     naka_cls_StringBox_t v1_e9;
-    char str_41[8];
+    char RIGHT1_str[8];
     /* element 10 of Viewable slot 0x1: StringBox (class id 0x01600037) */
     naka_cls_StringBox_t v1_e10;
-    char str_45[6];
+    char LEFT_str[6];
     /* element 11 of Viewable slot 0x1: StringBox (class id 0x01600037) */
     naka_cls_StringBox_t v1_e11;
-    char str_49[8];
+    char RHYTHM_str[8];
     /* element 12 of Viewable slot 0x1: TransposeBox (class id 0x01620003) */
     naka_cls_TransposeBox_t v1_e12;
     /* element 13 of Viewable slot 0x1: ChordBox (class id 0x01620004) */
@@ -365,21 +365,21 @@ _Static_assert(sizeof(naka_normal_mode_t) == 1168,
 const naka_normal_mode_t naka_normal_mode_data
     __attribute__((section(".text"), used)) = {
 
-    .str_0 = "TEST6FUNC",
+    .TEST6FUNC_str = "TEST6FUNC",
 
-    .str_1 = "TEST4FUNC",
+    .TEST4FUNC_str = "TEST4FUNC",
 
-    .str_2 = "TEST3FUNC",
+    .TEST3FUNC_str = "TEST3FUNC",
 
-    .str_3 = "TEST2FUNC",
+    .TEST2FUNC_str = "TEST2FUNC",
 
-    .str_4 = ALIGNED_STRING("MainWallSetFlashFunc"),
+    .MainWallSetFlashFunc_str = ALIGNED_STRING("MainWallSetFlashFunc"),
 
-    .str_5 = "MainTimeFlashFunc",
+    .MainTimeFlashFunc_str = "MainTimeFlashFunc",
 
-    .str_6 = ALIGNED_STRING("MainMssSetUp"),
+    .MainMssSetUp_str = ALIGNED_STRING("MainMssSetUp"),
 
-    .str_7 = ALIGNED_STRING("FswAsIniFunc"),
+    .FswAsIniFunc_str = ALIGNED_STRING("FswAsIniFunc"),
 
     .w0_code = ALIGNED_STRING("CntIniFunc"),
 
@@ -389,23 +389,23 @@ const naka_normal_mode_t naka_normal_mode_data
 
     .w1_name = "MainPmGet",
 
-    .str_8 = ALIGNED_STRING("MainChordPre"),
+    .MainChordPre_str = ALIGNED_STRING("MainChordPre"),
 
-    .str_9 = "MainGetRhyGrpName",
+    .MainGetRhyGrpName_str = "MainGetRhyGrpName",
 
-    .str_10 = "MainGetSndGrpName",
+    .MainGetSndGrpName_str = "MainGetSndGrpName",
 
-    .str_11 = ALIGNED_STRING("MainGetRhyName"),
+    .MainGetRhyName_str = ALIGNED_STRING("MainGetRhyName"),
 
-    .str_12 = ALIGNED_STRING("MainRvariIni"),
+    .MainRvariIni_str = ALIGNED_STRING("MainRvariIni"),
 
-    .str_13 = ALIGNED_STRING("MainGetSndName"),
+    .MainGetSndName_str = ALIGNED_STRING("MainGetSndName"),
 
-    .str_14 = ALIGNED_STRING("MainSvariIni"),
+    .MainSvariIni_str = ALIGNED_STRING("MainSvariIni"),
 
-    .str_15 = "MainVariSet",
+    .MainVariSet_str = "MainVariSet",
 
-    .v1_e0 = {
+    .Normal = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = NAKA_NONE,
@@ -423,7 +423,7 @@ const naka_normal_mode_t naka_normal_mode_data
 
     .w2_text = ALIGNED_STRING("NORMAL"),
 
-    .v1_e1 = {
+    .normal = {
         .class_ = 0x01620000,
         .super = NAKA_NONE,
         .sub = 2,
@@ -535,13 +535,13 @@ const naka_normal_mode_t naka_normal_mode_data
         .rect = { 176, 60, 220, 70 },
         .color = 0x0002,
         .border = 0x0000,
-        .str = SELF(str_35),
+        .str = SELF(RIGHT2_str),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
         .alignment = 0x0000,
     },
 
-    .str_35 = ALIGNED_STRING("RIGHT2"),
+    .RIGHT2_str = ALIGNED_STRING("RIGHT2"),
 
     .v1_e8 = {
         .class_ = 0x0160002A,
@@ -570,13 +570,13 @@ const naka_normal_mode_t naka_normal_mode_data
         .rect = { 176, 28, 220, 38 },
         .color = 0x0002,
         .border = 0x0000,
-        .str = SELF(str_41),
+        .str = SELF(RIGHT1_str),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
         .alignment = 0x0000,
     },
 
-    .str_41 = ALIGNED_STRING("RIGHT1"),
+    .RIGHT1_str = ALIGNED_STRING("RIGHT1"),
 
     .v1_e10 = {
         .class_ = 0x01600037,
@@ -588,13 +588,13 @@ const naka_normal_mode_t naka_normal_mode_data
         .rect = { 176, 92, 220, 102 },
         .color = 0x0002,
         .border = 0x0000,
-        .str = SELF(str_45),
+        .str = SELF(LEFT_str),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
         .alignment = 0x0000,
     },
 
-    .str_45 = ALIGNED_STRING("LEFT"),
+    .LEFT_str = ALIGNED_STRING("LEFT"),
 
     .v1_e11 = {
         .class_ = 0x01600037,
@@ -606,13 +606,13 @@ const naka_normal_mode_t naka_normal_mode_data
         .rect = { 12, 28, 51, 38 },
         .color = 0x000C,
         .border = 0x0000,
-        .str = SELF(str_49),
+        .str = SELF(RHYTHM_str),
         .font = 0x00000003,
         .fontcolor = 0x00FF,
         .alignment = 0x0000,
     },
 
-    .str_49 = ALIGNED_STRING("RHYTHM"),
+    .RHYTHM_str = ALIGNED_STRING("RHYTHM"),
 
     .v1_e12 = {
         .class_ = 0x01620003,

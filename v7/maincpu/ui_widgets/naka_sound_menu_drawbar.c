@@ -111,7 +111,7 @@ typedef struct __attribute__((packed)) {
     uint32_t classrun_161_x008C;
     uint8_t pad_0[21];  /* zero padding */
     uint16_t field_00a5;
-    char str_0[7];
+    char vMPver_str[7];
     char AcDrawbarName_code[4];
     char AcDrawbarName_name[14];
     char AcDrawSetting_code[4];
@@ -186,75 +186,75 @@ typedef struct __attribute__((packed)) {
     char w41_name[10];
     char str_1[2];
     uint32_t ptrs_0[11];  /* 11 pointers */
-    char str_2[14];
-    char str_3[12];
-    char str_4[20];
-    char str_5[12];
-    char str_6[14];
-    char str_7[14];
-    char str_8[12];
-    char str_9[14];
-    char str_10[20];
-    char str_11[16];
+    char EV_MPVERSION_str[14];
+    char EV_TONEMODE_str[12];
+    char EV_EXECPRESENTATION_str[20];
+    char EV_ENDSONG_str[12];
+    char EV_STARTSONG_str[14];
+    char EV_ALLINITIAL_str[14];
+    char EV_READSONG_str[12];
+    char EV_READACTION_str[14];
+    char EV_READPRESENTATION_str[20];
+    char EV_ACCORDIONTAB_str[16];
     uint16_t field_03c2;
     uint32_t ptrs_1[16];  /* 16 pointers */
-    char str_12[16];
-    char str_13[20];
-    char str_14[20];
-    char str_15[22];
-    char str_16[20];
-    char str_17[24];
-    char str_18[16];
-    char str_19[20];
-    char str_20[22];
-    char str_21[12];
-    char str_22[14];
-    char str_23[20];
-    char str_24[14];
-    char str_25[16];
-    char str_26[12];
+    char MT_GetToneMode_str[16];
+    char MT_ExitPresentation_str[20];
+    char MT_InitPresentation_str[20];
+    char MT_ExistPresentation_str[22];
+    char MT_SetMemoryDrawbar_str[20];
+    char MT_RequestMemoryDrawbar_str[24];
+    char MT_RefreshParam_str[16];
+    char MT_ExecPresentation_str[20];
+    char MT_StartPresentation_str[22];
+    char MT_ReadSong_str[12];
+    char MT_ReadAction_str[14];
+    char MT_ReadPresentation_str[20];
+    char MT_CheckPart_str[14];
+    char MT_GetLswDataNo_str[16];
+    char MT_GetPart_str[12];
     uint16_t field_0510;
     uint32_t ptrs_2[76];  /* 76 pointers */
     char w42_code[2];
     char w42_name[12];
-    char str_27[18];
-    char str_28[18];
-    char str_29[18];
-    char str_30[16];
-    char str_31[18];
-    char str_32[20];
-    char str_33[22];
-    char str_34[18];
-    char str_35[18];
-    char str_36[20];
-    char str_37[20];
-    char str_38[26];
-    char str_39[14];
-    char str_40[16];
-    char str_41[18];
-    char str_42[18];
-    char str_43[16];
-    char str_44[16];
-    char str_45[14];
-    char str_46[20];
-    char str_47[14];
-    char str_48[18];
-    char str_49[16];
-    char str_50[20];
-    char str_51[20];
-    char str_52[16];
-    char str_53[14];
-    char str_54[14];
-    char str_55[16];
-    char str_56[20];
-    char str_57[18];
-    char str_58[16];
-    char str_59[14];
-    char str_60[22];
-    char str_61[22];
-    char str_62[14];
+    char AcDrawbarNameProc_str[18];
+    char AcDrawSettingProc_str[18];
+    char AcPleaseWaitProc_str[18];
+    char AcSndEMenuProc_str[16];
+    char AcFdemoScreenProc_str[18];
+    char VwUserBitmapSpProc_str[20];
+    char AcPresentationBoxProc_str[22];
+    char AcLswPartPanProc_str[18];
+    char AcDrawEditBoxProc_str[18];
+    char IvDemofeature2Proc_str[20];
+    char IvDemofeature1Proc_str[20];
+    char AcPresentationControlProc_str[26];
+    char PsVariBoxProc_str[14];
+    char AcResetPageProc_str[16];
+    char IvDrawbarSndEProc_str[18];
+    char IvDrawbarNormProc_str[18];
+    char IvDrawbar2Proc_str[16];
+    char IvDrawbar1Proc_str[16];
+    char IvDrawbarProc_str[14];
+    char IvPageOverWriteProc_str[20];
+    char IvSoftverProc_str[14];
+    char AcTrackMixerProc_str[18];
+    char AcPartMixerProc_str[16];
+    char PsMixerControlProc_str[20];
+    char AcWelcomScreenProc_str[20];
+    char IvSdscltyp2Proc_str[16];
+    char IvSdtecd1Proc_str[14];
+    char IvSdtecdProc_str[14];
+    char PsLabelBoxProc_str[16];
+    char AcAccordionTabProc_str[20];
+    char IvAccordionXProc_str[18];
+    char IvAccordionProc_str[16];
+    char IvMesageProc_str[14];
+    char AcVolPartEditBoxProc_str[22];
+    char AcLswPartEditBoxProc_str[22];
+    char IvSdpartProc_str[14];
     /* element 0 of Viewable slot 0x2 "Sdmenu": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v2_e0;
+    naka_cls_TtlScreen_t Sdmenu;
     char w43_text[12];
     char str_63[2];
     uint16_t field_0906;
@@ -298,7 +298,7 @@ const naka_sound_menu_drawbar_t naka_sound_menu_drawbar_data
 
     .field_00a5 = 0x49FF,
 
-    .str_0 = ALIGNED_STRING("vMPver"),
+    .vMPver_str = ALIGNED_STRING("vMPver"),
 
     .AcDrawbarName_code = ALIGNED_STRING("ue"),
 
@@ -447,89 +447,89 @@ const naka_sound_menu_drawbar_t naka_sound_menu_drawbar_data
     .str_1 = "%",
 
     .ptrs_0 = {
-        SELF(str_11),
-        SELF(str_10),
-        SELF(str_9),
-        SELF(str_8),
-        SELF(str_7),
-        SELF(str_6),
-        SELF(str_5),
-        SELF(str_4),
-        SELF(str_3),
-        SELF(str_2),
+        SELF(EV_ACCORDIONTAB_str),
+        SELF(EV_READPRESENTATION_str),
+        SELF(EV_READACTION_str),
+        SELF(EV_READSONG_str),
+        SELF(EV_ALLINITIAL_str),
+        SELF(EV_STARTSONG_str),
+        SELF(EV_ENDSONG_str),
+        SELF(EV_EXECPRESENTATION_str),
+        SELF(EV_TONEMODE_str),
+        SELF(EV_MPVERSION_str),
         0x00000000,
     },
 
-    .str_2 = ALIGNED_STRING("EV_MPVERSION"),
+    .EV_MPVERSION_str = ALIGNED_STRING("EV_MPVERSION"),
 
-    .str_3 = "EV_TONEMODE",
+    .EV_TONEMODE_str = "EV_TONEMODE",
 
-    .str_4 = "EV_EXECPRESENTATION",
+    .EV_EXECPRESENTATION_str = "EV_EXECPRESENTATION",
 
-    .str_5 = ALIGNED_STRING("EV_ENDSONG"),
+    .EV_ENDSONG_str = ALIGNED_STRING("EV_ENDSONG"),
 
-    .str_6 = ALIGNED_STRING("EV_STARTSONG"),
+    .EV_STARTSONG_str = ALIGNED_STRING("EV_STARTSONG"),
 
-    .str_7 = "EV_ALLINITIAL",
+    .EV_ALLINITIAL_str = "EV_ALLINITIAL",
 
-    .str_8 = "EV_READSONG",
+    .EV_READSONG_str = "EV_READSONG",
 
-    .str_9 = "EV_READACTION",
+    .EV_READACTION_str = "EV_READACTION",
 
-    .str_10 = "EV_READPRESENTATION",
+    .EV_READPRESENTATION_str = "EV_READPRESENTATION",
 
-    .str_11 = "EV_ACCORDIONTAB",
+    .EV_ACCORDIONTAB_str = "EV_ACCORDIONTAB",
 
     .field_03c2 = 0x000A,
 
     .ptrs_1 = {
-        SELF(str_26),
-        SELF(str_25),
-        SELF(str_24),
-        SELF(str_23),
-        SELF(str_22),
-        SELF(str_21),
-        SELF(str_20),
-        SELF(str_19),
-        SELF(str_18),
-        SELF(str_17),
-        SELF(str_16),
-        SELF(str_15),
-        SELF(str_14),
-        SELF(str_13),
-        SELF(str_12),
+        SELF(MT_GetPart_str),
+        SELF(MT_GetLswDataNo_str),
+        SELF(MT_CheckPart_str),
+        SELF(MT_ReadPresentation_str),
+        SELF(MT_ReadAction_str),
+        SELF(MT_ReadSong_str),
+        SELF(MT_StartPresentation_str),
+        SELF(MT_ExecPresentation_str),
+        SELF(MT_RefreshParam_str),
+        SELF(MT_RequestMemoryDrawbar_str),
+        SELF(MT_SetMemoryDrawbar_str),
+        SELF(MT_ExistPresentation_str),
+        SELF(MT_InitPresentation_str),
+        SELF(MT_ExitPresentation_str),
+        SELF(MT_GetToneMode_str),
         0x00000000,
     },
 
-    .str_12 = ALIGNED_STRING("MT_GetToneMode"),
+    .MT_GetToneMode_str = ALIGNED_STRING("MT_GetToneMode"),
 
-    .str_13 = "MT_ExitPresentation",
+    .MT_ExitPresentation_str = "MT_ExitPresentation",
 
-    .str_14 = "MT_InitPresentation",
+    .MT_InitPresentation_str = "MT_InitPresentation",
 
-    .str_15 = ALIGNED_STRING("MT_ExistPresentation"),
+    .MT_ExistPresentation_str = ALIGNED_STRING("MT_ExistPresentation"),
 
-    .str_16 = "MT_SetMemoryDrawbar",
+    .MT_SetMemoryDrawbar_str = "MT_SetMemoryDrawbar",
 
-    .str_17 = "MT_RequestMemoryDrawbar",
+    .MT_RequestMemoryDrawbar_str = "MT_RequestMemoryDrawbar",
 
-    .str_18 = "MT_RefreshParam",
+    .MT_RefreshParam_str = "MT_RefreshParam",
 
-    .str_19 = "MT_ExecPresentation",
+    .MT_ExecPresentation_str = "MT_ExecPresentation",
 
-    .str_20 = ALIGNED_STRING("MT_StartPresentation"),
+    .MT_StartPresentation_str = ALIGNED_STRING("MT_StartPresentation"),
 
-    .str_21 = "MT_ReadSong",
+    .MT_ReadSong_str = "MT_ReadSong",
 
-    .str_22 = "MT_ReadAction",
+    .MT_ReadAction_str = "MT_ReadAction",
 
-    .str_23 = "MT_ReadPresentation",
+    .MT_ReadPresentation_str = "MT_ReadPresentation",
 
-    .str_24 = ALIGNED_STRING("MT_CheckPart"),
+    .MT_CheckPart_str = ALIGNED_STRING("MT_CheckPart"),
 
-    .str_25 = "MT_GetLswDataNo",
+    .MT_GetLswDataNo_str = "MT_GetLswDataNo",
 
-    .str_26 = ALIGNED_STRING("MT_GetPart"),
+    .MT_GetPart_str = ALIGNED_STRING("MT_GetPart"),
 
     .field_0510 = 0x000F,
 
@@ -572,42 +572,42 @@ const naka_sound_menu_drawbar_t naka_sound_menu_drawbar_data
         NAKA_ADDR(AcDrawbarNameProc),
         NAKA_ADDR(IvMPverProc),
         0x00000000,
-        SELF(str_62),
-        SELF(str_61),
-        SELF(str_60),
-        SELF(str_59),
-        SELF(str_58),
-        SELF(str_57),
-        SELF(str_56),
-        SELF(str_55),
-        SELF(str_54),
-        SELF(str_53),
-        SELF(str_52),
-        SELF(str_51),
-        SELF(str_50),
-        SELF(str_49),
-        SELF(str_48),
-        SELF(str_47),
-        SELF(str_46),
-        SELF(str_45),
-        SELF(str_44),
-        SELF(str_43),
-        SELF(str_42),
-        SELF(str_41),
-        SELF(str_40),
-        SELF(str_39),
-        SELF(str_38),
-        SELF(str_37),
-        SELF(str_36),
-        SELF(str_35),
-        SELF(str_34),
-        SELF(str_33),
-        SELF(str_32),
-        SELF(str_31),
-        SELF(str_30),
-        SELF(str_29),
-        SELF(str_28),
-        SELF(str_27),
+        SELF(IvSdpartProc_str),
+        SELF(AcLswPartEditBoxProc_str),
+        SELF(AcVolPartEditBoxProc_str),
+        SELF(IvMesageProc_str),
+        SELF(IvAccordionProc_str),
+        SELF(IvAccordionXProc_str),
+        SELF(AcAccordionTabProc_str),
+        SELF(PsLabelBoxProc_str),
+        SELF(IvSdtecdProc_str),
+        SELF(IvSdtecd1Proc_str),
+        SELF(IvSdscltyp2Proc_str),
+        SELF(AcWelcomScreenProc_str),
+        SELF(PsMixerControlProc_str),
+        SELF(AcPartMixerProc_str),
+        SELF(AcTrackMixerProc_str),
+        SELF(IvSoftverProc_str),
+        SELF(IvPageOverWriteProc_str),
+        SELF(IvDrawbarProc_str),
+        SELF(IvDrawbar1Proc_str),
+        SELF(IvDrawbar2Proc_str),
+        SELF(IvDrawbarNormProc_str),
+        SELF(IvDrawbarSndEProc_str),
+        SELF(AcResetPageProc_str),
+        SELF(PsVariBoxProc_str),
+        SELF(AcPresentationControlProc_str),
+        SELF(IvDemofeature1Proc_str),
+        SELF(IvDemofeature2Proc_str),
+        SELF(AcDrawEditBoxProc_str),
+        SELF(AcLswPartPanProc_str),
+        SELF(AcPresentationBoxProc_str),
+        SELF(VwUserBitmapSpProc_str),
+        SELF(AcFdemoScreenProc_str),
+        SELF(AcSndEMenuProc_str),
+        SELF(AcPleaseWaitProc_str),
+        SELF(AcDrawSettingProc_str),
+        SELF(AcDrawbarNameProc_str),
         SELF(w42_name),
         SELF(w42_code),
     },
@@ -616,79 +616,79 @@ const naka_sound_menu_drawbar_t naka_sound_menu_drawbar_data
 
     .w42_name = "IvMPverProc",
 
-    .str_27 = "AcDrawbarNameProc",
+    .AcDrawbarNameProc_str = "AcDrawbarNameProc",
 
-    .str_28 = "AcDrawSettingProc",
+    .AcDrawSettingProc_str = "AcDrawSettingProc",
 
-    .str_29 = ALIGNED_STRING("AcPleaseWaitProc"),
+    .AcPleaseWaitProc_str = ALIGNED_STRING("AcPleaseWaitProc"),
 
-    .str_30 = ALIGNED_STRING("AcSndEMenuProc"),
+    .AcSndEMenuProc_str = ALIGNED_STRING("AcSndEMenuProc"),
 
-    .str_31 = "AcFdemoScreenProc",
+    .AcFdemoScreenProc_str = "AcFdemoScreenProc",
 
-    .str_32 = ALIGNED_STRING("VwUserBitmapSpProc"),
+    .VwUserBitmapSpProc_str = ALIGNED_STRING("VwUserBitmapSpProc"),
 
-    .str_33 = "AcPresentationBoxProc",
+    .AcPresentationBoxProc_str = "AcPresentationBoxProc",
 
-    .str_34 = ALIGNED_STRING("AcLswPartPanProc"),
+    .AcLswPartPanProc_str = ALIGNED_STRING("AcLswPartPanProc"),
 
-    .str_35 = "AcDrawEditBoxProc",
+    .AcDrawEditBoxProc_str = "AcDrawEditBoxProc",
 
-    .str_36 = ALIGNED_STRING("IvDemofeature2Proc"),
+    .IvDemofeature2Proc_str = ALIGNED_STRING("IvDemofeature2Proc"),
 
-    .str_37 = ALIGNED_STRING("IvDemofeature1Proc"),
+    .IvDemofeature1Proc_str = ALIGNED_STRING("IvDemofeature1Proc"),
 
-    .str_38 = "AcPresentationControlProc",
+    .AcPresentationControlProc_str = "AcPresentationControlProc",
 
-    .str_39 = "PsVariBoxProc",
+    .PsVariBoxProc_str = "PsVariBoxProc",
 
-    .str_40 = "AcResetPageProc",
+    .AcResetPageProc_str = "AcResetPageProc",
 
-    .str_41 = "IvDrawbarSndEProc",
+    .IvDrawbarSndEProc_str = "IvDrawbarSndEProc",
 
-    .str_42 = "IvDrawbarNormProc",
+    .IvDrawbarNormProc_str = "IvDrawbarNormProc",
 
-    .str_43 = ALIGNED_STRING("IvDrawbar2Proc"),
+    .IvDrawbar2Proc_str = ALIGNED_STRING("IvDrawbar2Proc"),
 
-    .str_44 = ALIGNED_STRING("IvDrawbar1Proc"),
+    .IvDrawbar1Proc_str = ALIGNED_STRING("IvDrawbar1Proc"),
 
-    .str_45 = "IvDrawbarProc",
+    .IvDrawbarProc_str = "IvDrawbarProc",
 
-    .str_46 = "IvPageOverWriteProc",
+    .IvPageOverWriteProc_str = "IvPageOverWriteProc",
 
-    .str_47 = "IvSoftverProc",
+    .IvSoftverProc_str = "IvSoftverProc",
 
-    .str_48 = ALIGNED_STRING("AcTrackMixerProc"),
+    .AcTrackMixerProc_str = ALIGNED_STRING("AcTrackMixerProc"),
 
-    .str_49 = "AcPartMixerProc",
+    .AcPartMixerProc_str = "AcPartMixerProc",
 
-    .str_50 = ALIGNED_STRING("PsMixerControlProc"),
+    .PsMixerControlProc_str = ALIGNED_STRING("PsMixerControlProc"),
 
-    .str_51 = ALIGNED_STRING("AcWelcomScreenProc"),
+    .AcWelcomScreenProc_str = ALIGNED_STRING("AcWelcomScreenProc"),
 
-    .str_52 = "IvSdscltyp2Proc",
+    .IvSdscltyp2Proc_str = "IvSdscltyp2Proc",
 
-    .str_53 = "IvSdtecd1Proc",
+    .IvSdtecd1Proc_str = "IvSdtecd1Proc",
 
-    .str_54 = ALIGNED_STRING("IvSdtecdProc"),
+    .IvSdtecdProc_str = ALIGNED_STRING("IvSdtecdProc"),
 
-    .str_55 = ALIGNED_STRING("PsLabelBoxProc"),
+    .PsLabelBoxProc_str = ALIGNED_STRING("PsLabelBoxProc"),
 
-    .str_56 = ALIGNED_STRING("AcAccordionTabProc"),
+    .AcAccordionTabProc_str = ALIGNED_STRING("AcAccordionTabProc"),
 
-    .str_57 = ALIGNED_STRING("IvAccordionXProc"),
+    .IvAccordionXProc_str = ALIGNED_STRING("IvAccordionXProc"),
 
-    .str_58 = "IvAccordionProc",
+    .IvAccordionProc_str = "IvAccordionProc",
 
-    .str_59 = ALIGNED_STRING("IvMesageProc"),
+    .IvMesageProc_str = ALIGNED_STRING("IvMesageProc"),
 
-    .str_60 = ALIGNED_STRING("AcVolPartEditBoxProc"),
+    .AcVolPartEditBoxProc_str = ALIGNED_STRING("AcVolPartEditBoxProc"),
 
-    .str_61 = ALIGNED_STRING("AcLswPartEditBoxProc"),
+    .AcLswPartEditBoxProc_str = ALIGNED_STRING("AcLswPartEditBoxProc"),
 
-    .str_62 = ALIGNED_STRING("IvSdpartProc"),
+    .IvSdpartProc_str = ALIGNED_STRING("IvSdpartProc"),
 
-    .v2_e0 = {
+    .Sdmenu = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,

@@ -1057,7 +1057,7 @@ typedef struct __attribute__((packed)) {
     char w0_code[2];
     char w0_name[18];
     /* element 0 of Viewable slot 0x6F "DpSmf": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v6F_e0;
+    naka_cls_TtlScreen_t DpSmf;
     char w1_text[18];
     /* element 1 of Viewable slot 0x6F: AcTempoBox (class id 0x01600014) */
     naka_cls_AcTempoBox_t v6F_e1;
@@ -1074,21 +1074,21 @@ typedef struct __attribute__((packed)) {
     naka_cls_AcIndexEditSw_t v6F_e6;
     /* element 7 of Viewable slot 0x6F: AcRamEditBox (class id 0x0160001B) */
     naka_cls_AcRamEditBox_t v6F_e7;
-    char str_6[2];
+    char v6F_e7_caption[2];
     /* element 8 of Viewable slot 0x6F: IvMainEditSw (class id 0x01600029) */
     naka_cls_IvMainEditSw_t v6F_e8;
     /* element 9 of Viewable slot 0x6F: IvFixWin (class id 0x0160004A) */
     naka_cls_IvFixWin_t v6F_e9;
     /* element 10 of Viewable slot 0x6F "SMFMuteSw": AcMuteToggleBox (class id 0x0167000F) */
-    naka_cls_AcMuteToggleBox_t v6F_e10;
-    char str_11[4];
-    char str_12[4];
+    naka_cls_AcMuteToggleBox_t SMFMuteSw;
+    char SMFMuteSw_stroff[4];
+    char SMFMuteSw_stron[4];
     /* element 11 of Viewable slot 0x6F: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t v6F_e11;
-    char str_16[6];
+    char MIXER_str[6];
     /* element 12 of Viewable slot 0x6F: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t v6F_e12;
-    char str_21[4];
+    char MIC_str[4];
     /* element 13 of Viewable slot 0x6F: Label (class id 0x0160002B) */
     naka_cls_Label_t v6F_e13;
     char w5_text[10];
@@ -1119,7 +1119,7 @@ typedef struct __attribute__((packed)) {
     /* element 23 of Viewable slot 0x6F: Box (class id 0x01600031) */
     naka_cls_Box_t v6F_e23;
     /* element 24 of Viewable slot 0x6F "CDswWindow": Window (class id 0x01600035) */
-    naka_cls_Window_t v6F_e24;
+    naka_cls_Window_t CDswWindow;
     /* element 25 of Viewable slot 0x6F: VwEditSwBox (class id 0x0160003E) */
     naka_cls_VwEditSwBox_t v6F_e25;
     char str_23[2];
@@ -1148,21 +1148,21 @@ typedef struct __attribute__((packed)) {
     /* element 35 of Viewable slot 0x6F: IvMainEditSw (class id 0x01600029) */
     naka_cls_IvMainEditSw_t v6F_e35;
     /* element 36 of Viewable slot 0x6F "PauseDisp": AcRamBox (class id 0x0160004F) */
-    naka_cls_AcRamBox_t v6F_e36;
+    naka_cls_AcRamBox_t PauseDisp;
     /* element 37 of Viewable slot 0x6F "PlayDisp": AcRamBox (class id 0x0160004F) */
-    naka_cls_AcRamBox_t v6F_e37;
+    naka_cls_AcRamBox_t PlayDisp;
     /* element 38 of Viewable slot 0x6F "Lyrics": Window (class id 0x01600035) */
-    naka_cls_Window_t v6F_e38;
+    naka_cls_Window_t Lyrics;
     /* element 39 of Viewable slot 0x6F "LyricsData": LyricsBox (class id 0x01670010) */
-    naka_cls_LyricsBox_t v6F_e39;
+    naka_cls_LyricsBox_t LyricsData;
     /* element 40 of Viewable slot 0x6F: VwBox (class id 0x01600011) */
     naka_cls_VwBox_t v6F_e40;
     /* element 41 of Viewable slot 0x6F "LyricsSong": SongNameBox (class id 0x01670011) */
-    naka_cls_SongNameBox_t v6F_e41;
+    naka_cls_SongNameBox_t LyricsSong;
     /* element 42 of Viewable slot 0x6F "Comporser": ComporserNameBox (class id 0x01670012) */
-    naka_cls_ComporserNameBox_t v6F_e42;
+    naka_cls_ComporserNameBox_t Comporser;
     /* element 0 of Viewable slot 0x70 "DpDoc": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v70_e0;
+    naka_cls_TtlScreen_t DpDoc;
     char w21_text[18];
     /* element 1 of Viewable slot 0x70: AcTempoBox (class id 0x01600014) */
     naka_cls_AcTempoBox_t v70_e1;
@@ -1177,25 +1177,25 @@ typedef struct __attribute__((packed)) {
     /* element 6 of Viewable slot 0x70: IvFixWin (class id 0x0160004A) */
     naka_cls_IvFixWin_t v70_e6;
     /* element 7 of Viewable slot 0x70 "DOCR1Sw": AcMuteToggleBox (class id 0x0167000F) */
-    naka_cls_AcMuteToggleBox_t v70_e7;
-    char str_74[4];
-    char str_75[4];
+    naka_cls_AcMuteToggleBox_t DOCR1Sw;
+    char DOCR1Sw_stroff[4];
+    char DOCR1Sw_stron[4];
     /* element 8 of Viewable slot 0x70 "DOCR2Sw": AcMuteToggleBox (class id 0x0167000F) */
-    naka_cls_AcMuteToggleBox_t v70_e8;
-    char str_76[4];
-    char str_77[4];
+    naka_cls_AcMuteToggleBox_t DOCR2Sw;
+    char DOCR2Sw_stroff[4];
+    char DOCR2Sw_stron[4];
     /* element 9 of Viewable slot 0x70 "DOCOrchSw": AcMuteToggleBox (class id 0x0167000F) */
-    naka_cls_AcMuteToggleBox_t v70_e9;
-    char str_78[6];
-    char str_79[6];
+    naka_cls_AcMuteToggleBox_t DOCOrchSw;
+    char DOCOrchSw_stroff[6];
+    char DOCOrchSw_stron[6];
     /* element 10 of Viewable slot 0x70: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t v70_e10;
-    char str_83[6];
+    char MIXER_str_2[6];
     /* element 11 of Viewable slot 0x70: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t v70_e11;
-    char str_88[4];
+    char MIC_str_2[4];
     /* element 0 of Viewable slot 0x71 "DpPd": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v71_e0;
+    naka_cls_TtlScreen_t DpPd;
     char w24_text[28];
     /* element 1 of Viewable slot 0x71: AcTempoBox (class id 0x01600014) */
     naka_cls_AcTempoBox_t v71_e1;
@@ -1210,21 +1210,21 @@ typedef struct __attribute__((packed)) {
     /* element 6 of Viewable slot 0x71: IvFixWin (class id 0x0160004A) */
     naka_cls_IvFixWin_t v71_e6;
     /* element 7 of Viewable slot 0x71 "PDR1Sw": AcMuteToggleBox (class id 0x0167000F) */
-    naka_cls_AcMuteToggleBox_t v71_e7;
-    char str_101[4];
-    char str_102[4];
+    naka_cls_AcMuteToggleBox_t PDR1Sw;
+    char PDR1Sw_stroff[4];
+    char PDR1Sw_stron[4];
     /* element 8 of Viewable slot 0x71 "PDOrchSw": AcMuteToggleBox (class id 0x0167000F) */
-    naka_cls_AcMuteToggleBox_t v71_e8;
-    char str_103[6];
-    char str_104[6];
+    naka_cls_AcMuteToggleBox_t PDOrchSw;
+    char PDOrchSw_stroff[6];
+    char PDOrchSw_stron[6];
     /* element 9 of Viewable slot 0x71: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t v71_e9;
-    char str_108[6];
+    char MIXER_str_3[6];
     /* element 10 of Viewable slot 0x71: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t v71_e10;
-    char str_113[4];
+    char MIC_str_3[4];
     /* element 0 of Viewable slot 0x72 "DpSmfLyr": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v72_e0;
+    naka_cls_TtlScreen_t DpSmfLyr;
     char w27_text[18];
     /* element 1 of Viewable slot 0x72: AcTempoBox (class id 0x01600014) */
     naka_cls_AcTempoBox_t v72_e1;
@@ -1234,13 +1234,13 @@ typedef struct __attribute__((packed)) {
     naka_cls_IvFixWin_t v72_e3;
     /* element 4 of Viewable slot 0x72: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t v72_e4;
-    char str_121[4];
+    char MIC_str_4[4];
     /* element 5 of Viewable slot 0x72: IvFixWin (class id 0x0160004A) */
     naka_cls_IvFixWin_t v72_e5;
     /* element 6 of Viewable slot 0x72 "LyricsFunc": LyeicsBoxFunc (class id 0x01670013) */
-    naka_cls_LyeicsBoxFunc_t v72_e6;
+    naka_cls_LyeicsBoxFunc_t LyricsFunc;
     /* element 0 of Viewable slot 0x73 "DpMdlySmf": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v73_e0;
+    naka_cls_TtlScreen_t DpMdlySmf;
     char w29_text[12];
     /* element 1 of Viewable slot 0x73: AcTitleMenu (class id 0x0160001D) */
     naka_cls_AcTitleMenu_t v73_e1;
@@ -1263,7 +1263,7 @@ typedef struct __attribute__((packed)) {
     char w33_text[6];
     /* element 9 of Viewable slot 0x73: AcRamEditBox (class id 0x0160001B) */
     naka_cls_AcRamEditBox_t v73_e9;
-    char str_135[2];
+    char v73_e9_caption[2];
     /* element 10 of Viewable slot 0x73: IvMainEditSw (class id 0x01600029) */
     naka_cls_IvMainEditSw_t v73_e10;
     naka_dispatch_t w35;  /* 0x47 */
@@ -1280,14 +1280,14 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0dd2;
     uint16_t field_0dd4;
     uint16_t field_0dd6;
-    char str_136[4];
-    char str_137[4];
+    char OFF_str[4];
+    char ON_str[4];
     /* element 13 of Viewable slot 0x73: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t v73_e13;
-    char str_141[6];
+    char MIXER_str_4[6];
     /* element 14 of Viewable slot 0x73: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t v73_e14;
-    char str_146[4];
+    char MIC_str_5[4];
     /* element 15 of Viewable slot 0x73: Label (class id 0x0160002B) */
     naka_cls_Label_t v73_e15;
     char w36_text[10];
@@ -1295,7 +1295,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_TtlScreen_t v74_e0;
     char w37_text[12];
     /* element 1 of Viewable slot 0x74 "DpMdlyDoc": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v74_e1;
+    naka_cls_TtlScreen_t DpMdlyDoc;
     char w38_text[12];
     /* element 2 of Viewable slot 0x74: Box (class id 0x01600031) */
     naka_cls_Box_t v74_e2;
@@ -1321,7 +1321,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0ff8;
     uint16_t field_0ffa;
     uint16_t field_0ffc;
-    char str_155[2];
+    char v_str[2];
     uint16_t field_1000;
     uint16_t field_1002;
     uint8_t pad_174[4];  /* zero padding */
@@ -1332,24 +1332,24 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1014;
     uint16_t field_1016;
     uint16_t field_1018;
-    char str_156[4];
-    char str_157[4];
+    char RT1_str[4];
+    char RT1_str_2[4];
     /* element 11 of Viewable slot 0x74 "DOCMedR2Sw": AcMuteToggleBox (class id 0x0167000F) */
-    naka_cls_AcMuteToggleBox_t v74_e11;
-    char str_158[4];
-    char str_159[4];
+    naka_cls_AcMuteToggleBox_t DOCMedR2Sw;
+    char pad_174_stroff[4];
+    char pad_174_stron[4];
     /* element 12 of Viewable slot 0x74 "DOCMedOrchSw": AcMuteToggleBox (class id 0x0167000F) */
-    naka_cls_AcMuteToggleBox_t v74_e12;
-    char str_160[6];
-    char str_161[6];
+    naka_cls_AcMuteToggleBox_t DOCMedOrchSw;
+    char DOCMedOrchSw_stroff[6];
+    char DOCMedOrchSw_stron[6];
     /* element 13 of Viewable slot 0x74: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t v74_e13;
-    char str_165[6];
+    char MIXER_str_5[6];
     /* element 14 of Viewable slot 0x74: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t v74_e14;
-    char str_170[4];
+    char MIC_str_6[4];
     /* element 0 of Viewable slot 0x75 "DpMdlyPd": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v75_e0;
+    naka_cls_TtlScreen_t DpMdlyPd;
     char w44_text[22];
     /* element 1 of Viewable slot 0x75: AcTempoBox (class id 0x01600014) */
     naka_cls_AcTempoBox_t v75_e1;
@@ -1375,7 +1375,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1250;
     uint16_t field_1252;
     uint16_t field_1254;
-    char str_179[2];
+    char v_str_2[2];
     uint16_t field_1258;
     uint16_t field_125a;
     uint8_t pad_198[4];  /* zero padding */
@@ -1386,20 +1386,20 @@ typedef struct __attribute__((packed)) {
     uint16_t field_126c;
     uint16_t field_126e;
     uint16_t field_1270;
-    char str_180[4];
-    char str_181[4];
+    char RT1_str_3[4];
+    char RT1_str_4[4];
     /* element 10 of Viewable slot 0x75 "PDMedOrchSw": AcMuteToggleBox (class id 0x0167000F) */
-    naka_cls_AcMuteToggleBox_t v75_e10;
-    char str_182[6];
-    char str_183[6];
+    naka_cls_AcMuteToggleBox_t PDMedOrchSw;
+    char pad_197_stroff[6];
+    char pad_197_stron[6];
     /* element 11 of Viewable slot 0x75: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t v75_e11;
-    char str_187[6];
+    char MIXER_str_6[6];
     /* element 12 of Viewable slot 0x75: VwMenuBox (class id 0x0160003D) */
     naka_cls_VwMenuBox_t v75_e12;
-    char str_192[4];
+    char MIC_str_7[4];
     /* element 0 of Viewable slot 0x76 "DpMdlySmfLyr": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v76_e0;
+    naka_cls_TtlScreen_t DpMdlySmfLyr;
     char w50_text[12];
     /* element 1 of Viewable slot 0x76: AcTempoBox (class id 0x01600014) */
     naka_cls_AcTempoBox_t v76_e1;
@@ -1433,11 +1433,11 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1426;
     uint32_t ptr_1428;
     uint8_t pad_220[4];  /* zero padding */
-    char str_196[4];
+    char MIC_str_8[4];
     /* element 7 of Viewable slot 0x76: IvFixWin (class id 0x0160004A) */
     naka_cls_IvFixWin_t v76_e7;
     /* element 0 of Viewable slot 0x78 "DkMdlyPly": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v78_e0;
+    naka_cls_TtlScreen_t DkMdlyPly;
     char w55_text[20];
     /* element 1 of Viewable slot 0x78: Box (class id 0x01600031) */
     naka_cls_Box_t v78_e1;
@@ -1469,7 +1469,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_15f8;
     uint16_t field_15fa;
     uint16_t field_15fc;
-    char str_216[2];
+    char r_str[2];
     char str_217[2];
     uint32_t ptr_1602;
     uint8_t pad_241[2];  /* zero padding */
@@ -1482,7 +1482,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1616;
     uint32_t ptr_1618;
     uint8_t pad_244[4];  /* zero padding */
-    char str_218[6];
+    char MIXER_str_7[6];
     /* element 13 of Viewable slot 0x78: Window (class id 0x01600035) */
     naka_cls_Window_t v78_e13;
     /* element 14 of Viewable slot 0x78: AcTrackSwitch (class id 0x01600059) */
@@ -1518,7 +1518,7 @@ typedef struct __attribute__((packed)) {
     /* element 29 of Viewable slot 0x78: AcTrackSwitch (class id 0x01600059) */
     naka_cls_AcTrackSwitch_t v78_e29;
     /* element 0 of Viewable slot 0x7A "SqMdlyPly": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v7A_e0;
+    naka_cls_TtlScreen_t SqMdlyPly;
     char w61_text[12];
     /* element 1 of Viewable slot 0x7A: Box (class id 0x01600031) */
     naka_cls_Box_t v7A_e1;
@@ -1548,7 +1548,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1a08;
     uint16_t field_1a0a;
     uint16_t field_1a0c;
-    char str_262[2];
+    char r_str_2[2];
     char str_263[2];
     uint32_t ptr_1a12;
     uint8_t pad_262[2];  /* zero padding */
@@ -1561,9 +1561,9 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1a26;
     uint32_t ptr_1a28;
     uint8_t pad_265[4];  /* zero padding */
-    char str_264[6];
+    char MIXER_str_8[6];
     /* element 0 of Viewable slot 0x89 "SqTrSel": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v89_e0;
+    naka_cls_TtlScreen_t SqTrSel;
     char w67_text[20];
     /* element 1 of Viewable slot 0x89: Label (class id 0x0160002B) */
     naka_cls_Label_t v89_e1;
@@ -1577,7 +1577,7 @@ typedef struct __attribute__((packed)) {
     /* element 0 of Viewable slot 0x8A: IvDirmdScreen (class id 0x0160005A) */
     naka_cls_IvDirmdScreen_t v8A_e0;
     /* element 0 of Viewable slot 0x8B "SqTrAs": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v8B_e0;
+    naka_cls_TtlScreen_t SqTrAs;
     char w69_text[16];
     /* element 1 of Viewable slot 0x8B: AcTitleMenu (class id 0x0160001D) */
     naka_cls_AcTitleMenu_t v8B_e1;
@@ -1587,18 +1587,18 @@ typedef struct __attribute__((packed)) {
     uint8_t field_1bb6;
     uint8_t field_1bb7;
     /* element 4 of Viewable slot 0x8B "TrAsGrid": AcTrAsGridBox (class id 0x01670006) */
-    naka_cls_AcTrAsGridBox_t v8B_e4;
-    char str_271[44];
-    char str_272[16];
+    naka_cls_AcTrAsGridBox_t TrAsGrid;
+    char TrAsGrid_fixedrow[44];
+    char TrAsGrid_fixedcol[16];
     /* element 5 of Viewable slot 0x8B: TextBox (class id 0x01600036) */
     naka_cls_TextBox_t v8B_e5;
-    char str_277[16];
+    char v8B_e5_text[16];
     /* element 6 of Viewable slot 0x8B: TextBox (class id 0x01600036) */
     naka_cls_TextBox_t v8B_e6;
-    char str_281[14];
+    char v8B_e6_text[14];
     /* element 7 of Viewable slot 0x8B: TextBox (class id 0x01600036) */
     naka_cls_TextBox_t v8B_e7;
-    char str_285[12];
+    char v8B_e7_text[12];
     /* element 8 of Viewable slot 0x8B: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t v8B_e8;
     /* element 10 of Viewable slot 0x8B: AcIndexEditSw (class id 0x0160001F) */
@@ -1608,7 +1608,7 @@ typedef struct __attribute__((packed)) {
     /* element 12 of Viewable slot 0x8B: IvMainEditSw (class id 0x01600029) */
     naka_cls_IvMainEditSw_t v8B_e12;
     /* element 13 of Viewable slot 0x8B "SqTrAsSure": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v8B_e13;
+    naka_cls_TtlScreen_t SqTrAsSure;
     char w73_text[14];
     /* element 14 of Viewable slot 0x8B: Box (class id 0x01600031) */
     naka_cls_Box_t v8B_e14;
@@ -1629,7 +1629,7 @@ typedef struct __attribute__((packed)) {
     /* element 21 of Viewable slot 0x8B: IvExitScreen (class id 0x01600049) */
     naka_cls_IvExitScreen_t v8B_e21;
     /* element 0 of Viewable slot 0x8C "SqTrAsPs": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v8C_e0;
+    naka_cls_TtlScreen_t SqTrAsPs;
     char w78_text[20];
     /* element 1 of Viewable slot 0x8C: Label (class id 0x0160002B) */
     naka_cls_Label_t v8C_e1;
@@ -1638,16 +1638,16 @@ typedef struct __attribute__((packed)) {
     naka_cls_AcIndexWideES_t v8C_e2;
     /* element 3 of Viewable slot 0x8C: AcRamEditBox (class id 0x0160001B) */
     naka_cls_AcRamEditBox_t v8C_e3;
-    char str_298[10];
+    char v8C_e3_caption[10];
     /* element 4 of Viewable slot 0x8C "TrAsPsIniSel": AcModeSelBox (class id 0x01670002) */
-    naka_cls_AcModeSelBox_t v8C_e4;
-    char str_300[8];
+    naka_cls_AcModeSelBox_t TrAsPsIniSel;
+    char TrAsPsIniSel_caption[8];
     /* element 5 of Viewable slot 0x8C "TrAsPsTechSel": AcModeSelBox (class id 0x01670002) */
-    naka_cls_AcModeSelBox_t v8C_e5;
-    char str_303[26];
+    naka_cls_AcModeSelBox_t TrAsPsTechSel;
+    char TrAsPsTechSel_caption[26];
     /* element 6 of Viewable slot 0x8C "TrAsPsGmSel": AcModeSelBox (class id 0x01670002) */
-    naka_cls_AcModeSelBox_t v8C_e6;
-    char str_305[20];
+    naka_cls_AcModeSelBox_t TrAsPsGmSel;
+    char TrAsPsGmSel_caption[20];
     /* element 7 of Viewable slot 0x8C: IvMainEditSw (class id 0x01600029) */
     naka_cls_IvMainEditSw_t v8C_e7;
     /* element 8 of Viewable slot 0x8C: VwEditSwBox (class id 0x0160003E) */
@@ -1656,7 +1656,7 @@ typedef struct __attribute__((packed)) {
     /* element 9 of Viewable slot 0x8C: AcLanguageText (class id 0x01600066) */
     naka_cls_AcLanguageText_t v8C_e9;
     /* element 10 of Viewable slot 0x8C "SqTrAsPsSure1": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v8C_e10;
+    naka_cls_TtlScreen_t SqTrAsPsSure1;
     char w83_text[20];
     /* element 11 of Viewable slot 0x8C: IvMainEditSw (class id 0x01600029) */
     naka_cls_IvMainEditSw_t v8C_e11;
@@ -1677,7 +1677,7 @@ typedef struct __attribute__((packed)) {
     /* element 18 of Viewable slot 0x8C: AcLanguageText (class id 0x01600066) */
     naka_cls_AcLanguageText_t v8C_e18;
     /* element 19 of Viewable slot 0x8C "SqTrAsPsSure2": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v8C_e19;
+    naka_cls_TtlScreen_t SqTrAsPsSure2;
     char w88_text[20];
     /* element 20 of Viewable slot 0x8C: Box (class id 0x01600031) */
     naka_cls_Box_t v8C_e20;
@@ -1698,7 +1698,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_VwEditSwBox_t v8C_e27;
     char str_329[2];
     /* element 0 of Viewable slot 0x8E "SqSngSel": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v8E_e0;
+    naka_cls_TtlScreen_t SqSngSel;
     char w93_text[20];
     /* element 1 of Viewable slot 0x8E: AcTitleMenu (class id 0x0160001D) */
     naka_cls_AcTitleMenu_t v8E_e1;
@@ -1710,7 +1710,7 @@ typedef struct __attribute__((packed)) {
     /* element 4 of Viewable slot 0x8E: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t v8E_e4;
     /* element 0 of Viewable slot 0x8F "SqNameing": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v8F_e0;
+    naka_cls_TtlScreen_t SqNameing;
     char w96_text[8];
     /* element 1 of Viewable slot 0x8F: AcCurrentSongBox (class id 0x01670004) */
     naka_cls_AcCurrentSongBox_t v8F_e1;
@@ -1724,17 +1724,17 @@ typedef struct __attribute__((packed)) {
     /* element 5 of Viewable slot 0x8F: IvNamingExit (class id 0x01670000) */
     naka_cls_IvNamingExit_t v8F_e5;
     /* element 0 of Viewable slot 0x92 "AfterTouchSet": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t v92_e0;
+    naka_cls_TtlScreen_t AfterTouchSet;
     char w99_text[20];
     /* element 1 of Viewable slot 0x92: AcIndexWideES (class id 0x01600022) */
     naka_cls_AcIndexWideES_t v92_e1;
     /* element 2 of Viewable slot 0x92: AcBitEditBox (class id 0x01600043) */
     naka_cls_AcBitEditBox_t v92_e2;
-    char str_339[24];
+    char v92_e2_caption[24];
     /* element 3 of Viewable slot 0x92: AcLanguageText (class id 0x01600066) */
     naka_cls_AcLanguageText_t v92_e3;
     /* element 0 of Viewable slot 0xA9 "StepPartBal": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vA9_e0;
+    naka_cls_TtlScreen_t StepPartBal;
     char w101_text[14];
     /* element 1 of Viewable slot 0xA9: AcMixerVol (class id 0x0160003C) */
     naka_cls_AcMixerVol_t vA9_e1;
@@ -1747,7 +1747,7 @@ typedef struct __attribute__((packed)) {
     /* element 5 of Viewable slot 0xA9: AcMixerVol (class id 0x0160003C) */
     naka_cls_AcMixerVol_t vA9_e5;
     /* element 0 of Viewable slot 0xE0 "DemoMenu": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vE0_e0;
+    naka_cls_TtlScreen_t DemoMenu;
     char w102_text[14];
     /* element 1 of Viewable slot 0xE0: AcTitleMenu (class id 0x0160001D) */
     naka_cls_AcTitleMenu_t vE0_e1;
@@ -1758,108 +1758,108 @@ typedef struct __attribute__((packed)) {
     /* element 3 of Viewable slot 0xE0: IvExitMode (class id 0x01600048) */
     naka_cls_IvExitMode_t vE0_e3;
     /* element 0 of Viewable slot 0xE1 "DemoStyle": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vE1_e0;
+    naka_cls_TtlScreen_t DemoStyle;
     char w106_text[14];
     /* element 1 of Viewable slot 0xE1 "DemoSong0": AcDemoSongBox (class id 0x01670003) */
-    naka_cls_AcDemoSongBox_t vE1_e1;
-    char str_355[12];
+    naka_cls_AcDemoSongBox_t DemoSong0;
+    char DemoSong0_caption[12];
     /* element 2 of Viewable slot 0xE1 "DemoSong1": AcDemoSongBox (class id 0x01670003) */
-    naka_cls_AcDemoSongBox_t vE1_e2;
-    char str_357[18];
+    naka_cls_AcDemoSongBox_t DemoSong1;
+    char DemoSong1_caption[18];
     /* element 3 of Viewable slot 0xE1 "DemoSong2": AcDemoSongBox (class id 0x01670003) */
-    naka_cls_AcDemoSongBox_t vE1_e3;
-    char str_358[12];
+    naka_cls_AcDemoSongBox_t DemoSong2;
+    char DemoSong2_caption[12];
     /* element 4 of Viewable slot 0xE1 "DemoSong3": AcDemoSongBox (class id 0x01670003) */
-    naka_cls_AcDemoSongBox_t vE1_e4;
-    char str_361[10];
+    naka_cls_AcDemoSongBox_t DemoSong3;
+    char DemoSong3_caption[10];
     /* element 5 of Viewable slot 0xE1 "DemoSong4": AcDemoSongBox (class id 0x01670003) */
-    naka_cls_AcDemoSongBox_t vE1_e5;
-    char str_363[6];
+    naka_cls_AcDemoSongBox_t DemoSong4;
+    char DemoSong4_caption[6];
     /* element 6 of Viewable slot 0xE1 "DemoSong5": AcDemoSongBox (class id 0x01670003) */
-    naka_cls_AcDemoSongBox_t vE1_e6;
-    char str_364[14];
+    naka_cls_AcDemoSongBox_t DemoSong5;
+    char DemoSong5_caption[14];
     /* element 7 of Viewable slot 0xE1: PsWideToggle (class id 0x01600045) */
     naka_cls_PsWideToggle_t vE1_e7;
-    char str_365[6];
-    char str_366[6];
+    char vE1_e7_stroff[6];
+    char vE1_e7_stron[6];
     /* element 8 of Viewable slot 0xE1: PsWideToggle (class id 0x01600045) */
     naka_cls_PsWideToggle_t vE1_e8;
-    char str_367[6];
-    char str_368[6];
+    char vE1_e8_stroff[6];
+    char vE1_e8_stron[6];
     /* element 9 of Viewable slot 0xE1: PsWideToggle (class id 0x01600045) */
     naka_cls_PsWideToggle_t vE1_e9;
-    char str_369[8];
-    char str_370[8];
+    char vE1_e9_stroff[8];
+    char vE1_e9_stron[8];
     /* element 10 of Viewable slot 0xE1: IvMainEditSw (class id 0x01600029) */
     naka_cls_IvMainEditSw_t vE1_e10;
     /* element 11 of Viewable slot 0xE1 "DemoMed1": AcDemoMedleyDispBox (class id 0x01670014) */
-    naka_cls_AcDemoMedleyDispBox_t vE1_e11;
+    naka_cls_AcDemoMedleyDispBox_t DemoMed1;
     /* element 0 of Viewable slot 0xE2 "DemoSound": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vE2_e0;
+    naka_cls_TtlScreen_t DemoSound;
     char w111_text[14];
     /* element 1 of Viewable slot 0xE2 "DemoSong6": AcDemoSongBox (class id 0x01670003) */
-    naka_cls_AcDemoSongBox_t vE2_e1;
-    char str_376[8];
+    naka_cls_AcDemoSongBox_t DemoSong6;
+    char DemoSong6_caption[8];
     /* element 2 of Viewable slot 0xE2 "DemoSong7": AcDemoSongBox (class id 0x01670003) */
-    naka_cls_AcDemoSongBox_t vE2_e2;
-    char str_378[8];
+    naka_cls_AcDemoSongBox_t DemoSong7;
+    char DemoSong7_caption[8];
     /* element 3 of Viewable slot 0xE2 "DemoSong8": AcDemoSongBox (class id 0x01670003) */
-    naka_cls_AcDemoSongBox_t vE2_e3;
-    char str_379[8];
+    naka_cls_AcDemoSongBox_t DemoSong8;
+    char DemoSong8_caption[8];
     /* element 4 of Viewable slot 0xE2 "DemoSong9": AcDemoSongBox (class id 0x01670003) */
-    naka_cls_AcDemoSongBox_t vE2_e4;
-    char str_382[6];
+    naka_cls_AcDemoSongBox_t DemoSong9;
+    char DemoSong9_caption[6];
     /* element 5 of Viewable slot 0xE2 "DemoSong10": AcDemoSongBox (class id 0x01670003) */
-    naka_cls_AcDemoSongBox_t vE2_e5;
-    char str_384[10];
+    naka_cls_AcDemoSongBox_t DemoSong10;
+    char DemoSong10_caption[10];
     /* element 6 of Viewable slot 0xE2 "DemoSong11": AcDemoSongBox (class id 0x01670003) */
-    naka_cls_AcDemoSongBox_t vE2_e6;
-    char str_385[6];
+    naka_cls_AcDemoSongBox_t DemoSong11;
+    char DemoSong11_caption[6];
     /* element 7 of Viewable slot 0xE2: PsWideToggle (class id 0x01600045) */
     naka_cls_PsWideToggle_t vE2_e7;
-    char str_386[6];
-    char str_387[6];
+    char vE2_e7_stroff[6];
+    char vE2_e7_stron[6];
     /* element 8 of Viewable slot 0xE2: PsWideToggle (class id 0x01600045) */
     naka_cls_PsWideToggle_t vE2_e8;
-    char str_388[6];
-    char str_389[6];
+    char vE2_e8_stroff[6];
+    char vE2_e8_stron[6];
     /* element 9 of Viewable slot 0xE2: PsWideToggle (class id 0x01600045) */
     naka_cls_PsWideToggle_t vE2_e9;
-    char str_390[8];
-    char str_391[8];
+    char vE2_e9_stroff[8];
+    char vE2_e9_stron[8];
     /* element 10 of Viewable slot 0xE2: IvMainEditSw (class id 0x01600029) */
     naka_cls_IvMainEditSw_t vE2_e10;
     /* element 11 of Viewable slot 0xE2 "DemoMed2": AcDemoMedleyDispBox (class id 0x01670014) */
-    naka_cls_AcDemoMedleyDispBox_t vE2_e11;
+    naka_cls_AcDemoMedleyDispBox_t DemoMed2;
     /* element 0 of Viewable slot 0xE3 "DemoRhy": TtlScreen (class id 0x01600034) */
-    naka_cls_TtlScreen_t vE3_e0;
+    naka_cls_TtlScreen_t DemoRhy;
     char w116_text[14];
     /* element 1 of Viewable slot 0xE3 "DemoSong12": AcDemoSongBox (class id 0x01670003) */
-    naka_cls_AcDemoSongBox_t vE3_e1;
-    char str_397[12];
+    naka_cls_AcDemoSongBox_t DemoSong12;
+    char DemoSong12_caption[12];
     /* element 2 of Viewable slot 0xE3 "DemoSong13": AcDemoSongBox (class id 0x01670003) */
-    naka_cls_AcDemoSongBox_t vE3_e2;
-    char str_399[16];
+    naka_cls_AcDemoSongBox_t DemoSong13;
+    char DemoSong13_caption[16];
     /* element 3 of Viewable slot 0xE3 "DemoSong14": AcDemoSongBox (class id 0x01670003) */
-    naka_cls_AcDemoSongBox_t vE3_e3;
-    char str_400[12];
+    naka_cls_AcDemoSongBox_t DemoSong14;
+    char DemoSong14_caption[12];
     /* element 4 of Viewable slot 0xE3 "DemoSong15": AcDemoSongBox (class id 0x01670003) */
-    naka_cls_AcDemoSongBox_t vE3_e4;
-    char str_403[14];
+    naka_cls_AcDemoSongBox_t DemoSong15;
+    char DemoSong15_caption[14];
     /* element 5 of Viewable slot 0xE3 "DemoSong16": AcDemoSongBox (class id 0x01670003) */
-    naka_cls_AcDemoSongBox_t vE3_e5;
-    char str_405[16];
+    naka_cls_AcDemoSongBox_t DemoSong16;
+    char DemoSong16_caption[16];
     /* element 6 of Viewable slot 0xE3 "DemoSong17": AcDemoSongBox (class id 0x01670003) */
-    naka_cls_AcDemoSongBox_t vE3_e6;
-    char str_406[18];
+    naka_cls_AcDemoSongBox_t DemoSong17;
+    char DemoSong17_caption[18];
     /* element 7 of Viewable slot 0xE3: PsWideToggle (class id 0x01600045) */
     naka_cls_PsWideToggle_t vE3_e7;
-    char str_407[6];
-    char str_408[6];
+    char vE3_e7_stroff[6];
+    char vE3_e7_stron[6];
     /* element 8 of Viewable slot 0xE3: PsWideToggle (class id 0x01600045) */
     naka_cls_PsWideToggle_t vE3_e8;
-    char str_409[6];
-    char str_410[6];
+    char vE3_e8_stroff[6];
+    char vE3_e8_stron[6];
     naka_dispatch_t w119;  /* 0x45 */
     uint8_t pad_482[2];  /* zero padding */
     uint32_t ptr_2fd2;
@@ -1879,7 +1879,7 @@ const naka_direct_play_t naka_direct_play_data
 
     .w0_name = ALIGNED_STRING("PsSongSelBoxProc"),
 
-    .v6F_e0 = {
+    .DpSmf = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -2009,7 +2009,7 @@ const naka_direct_play_t naka_direct_play_data
         .color = 0x00F5,
         .border = 0x00C1,
         .index = 0x0000,
-        .caption = SELF(str_6),
+        .caption = SELF(v6F_e7_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -2021,7 +2021,7 @@ const naka_direct_play_t naka_direct_play_data
         .data = 0x0003DD0E,
     },
 
-    .str_6 = " ",
+    .v6F_e7_caption = " ",
 
     .v6F_e8 = {
         .class_ = 0x01600029,
@@ -2045,7 +2045,7 @@ const naka_direct_play_t naka_direct_play_data
         .window = 0x006F0018,
     },
 
-    .v6F_e10 = {
+    .SMFMuteSw = {
         .class_ = 0x0167000F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2054,16 +2054,16 @@ const naka_direct_play_t naka_direct_play_data
         .flag = 0x0008,
         .rect = { 244, 216, 275, 238 },
         .font = 0x00000000,
-        .stron = SELF(str_12),
-        .stroff = SELF(str_11),
+        .stron = SELF(SMFMuteSw_stron),
+        .stroff = SELF(SMFMuteSw_stroff),
         .onoff = 0x0003DD12,
         .editsw = 0x0006,
         .func = 0x0127000D,
     },
 
-    .str_11 = "OFF",
+    .SMFMuteSw_stroff = "OFF",
 
-    .str_12 = ALIGNED_STRING("ON"),
+    .SMFMuteSw_stron = ALIGNED_STRING("ON"),
 
     .v6F_e11 = {
         .class_ = 0x0160003D,
@@ -2081,11 +2081,11 @@ const naka_direct_play_t naka_direct_play_data
         .align = 0x0000,
         .editsw = 0x008A,
         .selected = 0x0003DD14,
-        .str = SELF(str_16),
+        .str = SELF(MIXER_str),
         .icon = 0x00000000,
     },
 
-    .str_16 = "MIXER",
+    .MIXER_str = "MIXER",
 
     .v6F_e12 = {
         .class_ = 0x0160003D,
@@ -2103,11 +2103,11 @@ const naka_direct_play_t naka_direct_play_data
         .align = 0x0000,
         .editsw = 0x0089,
         .selected = 0x0003DD16,
-        .str = SELF(str_21),
+        .str = SELF(MIC_str),
         .icon = 0x00000000,
     },
 
-    .str_21 = "MIC",
+    .MIC_str = "MIC",
 
     .v6F_e13 = {
         .class_ = 0x0160002B,
@@ -2306,7 +2306,7 @@ const naka_direct_play_t naka_direct_play_data
         .border = 0x00C1,
     },
 
-    .v6F_e24 = {
+    .CDswWindow = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 25,
@@ -2494,7 +2494,7 @@ const naka_direct_play_t naka_direct_play_data
         .func = 0x01470002,
     },
 
-    .v6F_e36 = {
+    .PauseDisp = {
         .class_ = 0x0160004F,
         .super = 24,
         .sub = NAKA_NONE,
@@ -2512,7 +2512,7 @@ const naka_direct_play_t naka_direct_play_data
         .data = 0x0003DD2A,
     },
 
-    .v6F_e37 = {
+    .PlayDisp = {
         .class_ = 0x0160004F,
         .super = 24,
         .sub = NAKA_NONE,
@@ -2530,7 +2530,7 @@ const naka_direct_play_t naka_direct_play_data
         .data = 0x0003DD2E,
     },
 
-    .v6F_e38 = {
+    .Lyrics = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 39,
@@ -2545,7 +2545,7 @@ const naka_direct_play_t naka_direct_play_data
         .child = 0x0003DD36,
     },
 
-    .v6F_e39 = {
+    .LyricsData = {
         .class_ = 0x01670010,
         .super = 38,
         .sub = NAKA_NONE,
@@ -2576,7 +2576,7 @@ const naka_direct_play_t naka_direct_play_data
         .index = 0xFFFF,
     },
 
-    .v6F_e41 = {
+    .LyricsSong = {
         .class_ = 0x01670011,
         .super = 40,
         .sub = NAKA_NONE,
@@ -2593,7 +2593,7 @@ const naka_direct_play_t naka_direct_play_data
         .lines = 0x0001,
     },
 
-    .v6F_e42 = {
+    .Comporser = {
         .class_ = 0x01670012,
         .super = 40,
         .sub = NAKA_NONE,
@@ -2610,7 +2610,7 @@ const naka_direct_play_t naka_direct_play_data
         .lines = 0x0001,
     },
 
-    .v70_e0 = {
+    .DpDoc = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -2710,7 +2710,7 @@ const naka_direct_play_t naka_direct_play_data
         .window = 0x006F0018,
     },
 
-    .v70_e7 = {
+    .DOCR1Sw = {
         .class_ = 0x0167000F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2719,18 +2719,18 @@ const naka_direct_play_t naka_direct_play_data
         .flag = 0x0008,
         .rect = { 270, 118, 311, 135 },
         .font = 0x00000000,
-        .stron = SELF(str_75),
-        .stroff = SELF(str_74),
+        .stron = SELF(DOCR1Sw_stron),
+        .stroff = SELF(DOCR1Sw_stroff),
         .onoff = 0x0003DD3E,
         .editsw = 0x000A,
         .func = 0x0127000E,
     },
 
-    .str_74 = "RT1",
+    .DOCR1Sw_stroff = "RT1",
 
-    .str_75 = "RT1",
+    .DOCR1Sw_stron = "RT1",
 
-    .v70_e8 = {
+    .DOCR2Sw = {
         .class_ = 0x0167000F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2739,18 +2739,18 @@ const naka_direct_play_t naka_direct_play_data
         .flag = 0x0008,
         .rect = { 270, 160, 311, 177 },
         .font = 0x00000000,
-        .stron = SELF(str_77),
-        .stroff = SELF(str_76),
+        .stron = SELF(DOCR2Sw_stron),
+        .stroff = SELF(DOCR2Sw_stroff),
         .onoff = 0x0003DD40,
         .editsw = 0x000B,
         .func = 0x0127000F,
     },
 
-    .str_76 = "RT2",
+    .DOCR2Sw_stroff = "RT2",
 
-    .str_77 = "RT2",
+    .DOCR2Sw_stron = "RT2",
 
-    .v70_e9 = {
+    .DOCOrchSw = {
         .class_ = 0x0167000F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2759,16 +2759,16 @@ const naka_direct_play_t naka_direct_play_data
         .flag = 0x0008,
         .rect = { 270, 202, 311, 219 },
         .font = 0x00000000,
-        .stron = SELF(str_79),
-        .stroff = SELF(str_78),
+        .stron = SELF(DOCOrchSw_stron),
+        .stroff = SELF(DOCOrchSw_stroff),
         .onoff = 0x0003DD42,
         .editsw = 0x000C,
         .func = 0x01270010,
     },
 
-    .str_78 = ALIGNED_STRING("ORCH"),
+    .DOCOrchSw_stroff = ALIGNED_STRING("ORCH"),
 
-    .str_79 = ALIGNED_STRING("ORCH"),
+    .DOCOrchSw_stron = ALIGNED_STRING("ORCH"),
 
     .v70_e10 = {
         .class_ = 0x0160003D,
@@ -2786,11 +2786,11 @@ const naka_direct_play_t naka_direct_play_data
         .align = 0x0000,
         .editsw = 0x008A,
         .selected = 0x0003DD44,
-        .str = SELF(str_83),
+        .str = SELF(MIXER_str_2),
         .icon = 0x00000000,
     },
 
-    .str_83 = "MIXER",
+    .MIXER_str_2 = "MIXER",
 
     .v70_e11 = {
         .class_ = 0x0160003D,
@@ -2808,13 +2808,13 @@ const naka_direct_play_t naka_direct_play_data
         .align = 0x0000,
         .editsw = 0x0089,
         .selected = 0x0003DD46,
-        .str = SELF(str_88),
+        .str = SELF(MIC_str_2),
         .icon = 0x00000000,
     },
 
-    .str_88 = "MIC",
+    .MIC_str_2 = "MIC",
 
-    .v71_e0 = {
+    .DpPd = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -2914,7 +2914,7 @@ const naka_direct_play_t naka_direct_play_data
         .window = 0x006F0018,
     },
 
-    .v71_e7 = {
+    .PDR1Sw = {
         .class_ = 0x0167000F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2923,18 +2923,18 @@ const naka_direct_play_t naka_direct_play_data
         .flag = 0x0008,
         .rect = { 270, 118, 311, 135 },
         .font = 0x00000000,
-        .stron = SELF(str_102),
-        .stroff = SELF(str_101),
+        .stron = SELF(PDR1Sw_stron),
+        .stroff = SELF(PDR1Sw_stroff),
         .onoff = 0x0003DD4C,
         .editsw = 0x000A,
         .func = 0x0127000E,
     },
 
-    .str_101 = "RT1",
+    .PDR1Sw_stroff = "RT1",
 
-    .str_102 = "RT1",
+    .PDR1Sw_stron = "RT1",
 
-    .v71_e8 = {
+    .PDOrchSw = {
         .class_ = 0x0167000F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -2943,16 +2943,16 @@ const naka_direct_play_t naka_direct_play_data
         .flag = 0x0008,
         .rect = { 270, 160, 311, 177 },
         .font = 0x00000000,
-        .stron = SELF(str_104),
-        .stroff = SELF(str_103),
+        .stron = SELF(PDOrchSw_stron),
+        .stroff = SELF(PDOrchSw_stroff),
         .onoff = 0x0003DD4E,
         .editsw = 0x000B,
         .func = 0x01270011,
     },
 
-    .str_103 = ALIGNED_STRING("ORCH"),
+    .PDOrchSw_stroff = ALIGNED_STRING("ORCH"),
 
-    .str_104 = ALIGNED_STRING("ORCH"),
+    .PDOrchSw_stron = ALIGNED_STRING("ORCH"),
 
     .v71_e9 = {
         .class_ = 0x0160003D,
@@ -2970,11 +2970,11 @@ const naka_direct_play_t naka_direct_play_data
         .align = 0x0000,
         .editsw = 0x008A,
         .selected = 0x0003DD50,
-        .str = SELF(str_108),
+        .str = SELF(MIXER_str_3),
         .icon = 0x00000000,
     },
 
-    .str_108 = "MIXER",
+    .MIXER_str_3 = "MIXER",
 
     .v71_e10 = {
         .class_ = 0x0160003D,
@@ -2992,13 +2992,13 @@ const naka_direct_play_t naka_direct_play_data
         .align = 0x0000,
         .editsw = 0x0089,
         .selected = 0x0003DD52,
-        .str = SELF(str_113),
+        .str = SELF(MIC_str_3),
         .icon = 0x00000000,
     },
 
-    .str_113 = "MIC",
+    .MIC_str_3 = "MIC",
 
-    .v72_e0 = {
+    .DpSmfLyr = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -3070,11 +3070,11 @@ const naka_direct_play_t naka_direct_play_data
         .align = 0x0000,
         .editsw = 0x0088,
         .selected = 0x0003DD58,
-        .str = SELF(str_121),
+        .str = SELF(MIC_str_4),
         .icon = 0x00000000,
     },
 
-    .str_121 = "MIC",
+    .MIC_str_4 = "MIC",
 
     .v72_e5 = {
         .class_ = 0x0160004A,
@@ -3087,7 +3087,7 @@ const naka_direct_play_t naka_direct_play_data
         .window = 0x006F0026,
     },
 
-    .v72_e6 = {
+    .LyricsFunc = {
         .class_ = 0x01670013,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3097,7 +3097,7 @@ const naka_direct_play_t naka_direct_play_data
         .rect = { 0, 96, 31, 127 },
     },
 
-    .v73_e0 = {
+    .DpMdlySmf = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -3263,7 +3263,7 @@ const naka_direct_play_t naka_direct_play_data
         .color = 0x00F5,
         .border = 0x00C1,
         .index = 0x0000,
-        .caption = SELF(str_135),
+        .caption = SELF(v73_e9_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -3275,7 +3275,7 @@ const naka_direct_play_t naka_direct_play_data
         .data = 0x0003DD62,
     },
 
-    .str_135 = " ",
+    .v73_e9_caption = " ",
 
     .v73_e10 = {
         .class_ = 0x01600029,
@@ -3315,8 +3315,8 @@ const naka_direct_play_t naka_direct_play_data
     .ptrs_2 = {
         NAKA_ADDR(NakaInst_Param_Val00_01),
         0x00000000,
-        SELF(str_137),
-        SELF(str_136),
+        SELF(ON_str),
+        SELF(OFF_str),
     },
 
     .field_0dce = 0xDD66,
@@ -3329,9 +3329,9 @@ const naka_direct_play_t naka_direct_play_data
 
     .field_0dd6 = 0x0127,
 
-    .str_136 = "OFF",
+    .OFF_str = "OFF",
 
-    .str_137 = ALIGNED_STRING("ON"),
+    .ON_str = ALIGNED_STRING("ON"),
 
     .v73_e13 = {
         .class_ = 0x0160003D,
@@ -3349,11 +3349,11 @@ const naka_direct_play_t naka_direct_play_data
         .align = 0x0000,
         .editsw = 0x008A,
         .selected = 0x0003DD68,
-        .str = SELF(str_141),
+        .str = SELF(MIXER_str_4),
         .icon = 0x00000000,
     },
 
-    .str_141 = "MIXER",
+    .MIXER_str_4 = "MIXER",
 
     .v73_e14 = {
         .class_ = 0x0160003D,
@@ -3371,11 +3371,11 @@ const naka_direct_play_t naka_direct_play_data
         .align = 0x0000,
         .editsw = 0x0089,
         .selected = 0x0003DD6A,
-        .str = SELF(str_146),
+        .str = SELF(MIC_str_5),
         .icon = 0x00000000,
     },
 
-    .str_146 = "MIC",
+    .MIC_str_5 = "MIC",
 
     .v73_e15 = {
         .class_ = 0x0160002B,
@@ -3410,7 +3410,7 @@ const naka_direct_play_t naka_direct_play_data
 
     .w37_text = ALIGNED_STRING("SMF MEDLEY"),
 
-    .v74_e1 = {
+    .DpMdlyDoc = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 2,
@@ -3559,7 +3559,7 @@ const naka_direct_play_t naka_direct_play_data
 
     .field_0ffc = 0x010E,
 
-    .str_155 = "v",
+    .v_str = "v",
 
     .field_1000 = 0x0137,
 
@@ -3567,9 +3567,9 @@ const naka_direct_play_t naka_direct_play_data
 
     .pad_174 = { 0 },
 
-    .ptr_1008 = SELF(str_157),
+    .ptr_1008 = SELF(RT1_str_2),
 
-    .ptr_100c = SELF(str_156),
+    .ptr_100c = SELF(RT1_str),
 
     .field_1010 = 0xDD74,
 
@@ -3581,11 +3581,11 @@ const naka_direct_play_t naka_direct_play_data
 
     .field_1018 = 0x0127,
 
-    .str_156 = "RT1",
+    .RT1_str = "RT1",
 
-    .str_157 = "RT1",
+    .RT1_str_2 = "RT1",
 
-    .v74_e11 = {
+    .DOCMedR2Sw = {
         .class_ = 0x0167000F,
         .super = 1,
         .sub = NAKA_NONE,
@@ -3594,18 +3594,18 @@ const naka_direct_play_t naka_direct_play_data
         .flag = 0x0008,
         .rect = { 270, 160, 311, 177 },
         .font = 0x00000000,
-        .stron = SELF(str_159),
-        .stroff = SELF(str_158),
+        .stron = SELF(pad_174_stron),
+        .stroff = SELF(pad_174_stroff),
         .onoff = 0x0003DD76,
         .editsw = 0x000B,
         .func = 0x0127000F,
     },
 
-    .str_158 = "RT2",
+    .pad_174_stroff = "RT2",
 
-    .str_159 = "RT2",
+    .pad_174_stron = "RT2",
 
-    .v74_e12 = {
+    .DOCMedOrchSw = {
         .class_ = 0x0167000F,
         .super = 1,
         .sub = NAKA_NONE,
@@ -3614,16 +3614,16 @@ const naka_direct_play_t naka_direct_play_data
         .flag = 0x0008,
         .rect = { 270, 202, 311, 219 },
         .font = 0x00000000,
-        .stron = SELF(str_161),
-        .stroff = SELF(str_160),
+        .stron = SELF(DOCMedOrchSw_stron),
+        .stroff = SELF(DOCMedOrchSw_stroff),
         .onoff = 0x0003DD78,
         .editsw = 0x000C,
         .func = 0x01270010,
     },
 
-    .str_160 = ALIGNED_STRING("ORCH"),
+    .DOCMedOrchSw_stroff = ALIGNED_STRING("ORCH"),
 
-    .str_161 = ALIGNED_STRING("ORCH"),
+    .DOCMedOrchSw_stron = ALIGNED_STRING("ORCH"),
 
     .v74_e13 = {
         .class_ = 0x0160003D,
@@ -3641,11 +3641,11 @@ const naka_direct_play_t naka_direct_play_data
         .align = 0x0000,
         .editsw = 0x008A,
         .selected = 0x0003DD7A,
-        .str = SELF(str_165),
+        .str = SELF(MIXER_str_5),
         .icon = 0x00000000,
     },
 
-    .str_165 = "MIXER",
+    .MIXER_str_5 = "MIXER",
 
     .v74_e14 = {
         .class_ = 0x0160003D,
@@ -3663,13 +3663,13 @@ const naka_direct_play_t naka_direct_play_data
         .align = 0x0000,
         .editsw = 0x0089,
         .selected = 0x0003DD7C,
-        .str = SELF(str_170),
+        .str = SELF(MIC_str_6),
         .icon = 0x00000000,
     },
 
-    .str_170 = "MIC",
+    .MIC_str_6 = "MIC",
 
-    .v75_e0 = {
+    .DpMdlyPd = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -3818,7 +3818,7 @@ const naka_direct_play_t naka_direct_play_data
 
     .field_1254 = 0x010E,
 
-    .str_179 = "v",
+    .v_str_2 = "v",
 
     .field_1258 = 0x0137,
 
@@ -3826,9 +3826,9 @@ const naka_direct_play_t naka_direct_play_data
 
     .pad_198 = { 0 },
 
-    .ptr_1260 = SELF(str_181),
+    .ptr_1260 = SELF(RT1_str_4),
 
-    .ptr_1264 = SELF(str_180),
+    .ptr_1264 = SELF(RT1_str_3),
 
     .field_1268 = 0xDD82,
 
@@ -3840,11 +3840,11 @@ const naka_direct_play_t naka_direct_play_data
 
     .field_1270 = 0x0127,
 
-    .str_180 = "RT1",
+    .RT1_str_3 = "RT1",
 
-    .str_181 = "RT1",
+    .RT1_str_4 = "RT1",
 
-    .v75_e10 = {
+    .PDMedOrchSw = {
         .class_ = 0x0167000F,
         .super = 0,
         .sub = NAKA_NONE,
@@ -3853,16 +3853,16 @@ const naka_direct_play_t naka_direct_play_data
         .flag = 0x0008,
         .rect = { 270, 160, 311, 177 },
         .font = 0x00000000,
-        .stron = SELF(str_183),
-        .stroff = SELF(str_182),
+        .stron = SELF(pad_197_stron),
+        .stroff = SELF(pad_197_stroff),
         .onoff = 0x0003DD84,
         .editsw = 0x000B,
         .func = 0x01270011,
     },
 
-    .str_182 = ALIGNED_STRING("ORCH"),
+    .pad_197_stroff = ALIGNED_STRING("ORCH"),
 
-    .str_183 = ALIGNED_STRING("ORCH"),
+    .pad_197_stron = ALIGNED_STRING("ORCH"),
 
     .v75_e11 = {
         .class_ = 0x0160003D,
@@ -3880,11 +3880,11 @@ const naka_direct_play_t naka_direct_play_data
         .align = 0x0000,
         .editsw = 0x008A,
         .selected = 0x0003DD86,
-        .str = SELF(str_187),
+        .str = SELF(MIXER_str_6),
         .icon = 0x00000000,
     },
 
-    .str_187 = "MIXER",
+    .MIXER_str_6 = "MIXER",
 
     .v75_e12 = {
         .class_ = 0x0160003D,
@@ -3902,13 +3902,13 @@ const naka_direct_play_t naka_direct_play_data
         .align = 0x0000,
         .editsw = 0x0089,
         .selected = 0x0003DD88,
-        .str = SELF(str_192),
+        .str = SELF(MIC_str_7),
         .icon = 0x00000000,
     },
 
-    .str_192 = "MIC",
+    .MIC_str_7 = "MIC",
 
-    .v76_e0 = {
+    .DpMdlySmfLyr = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -4037,11 +4037,11 @@ const naka_direct_play_t naka_direct_play_data
 
     .field_1426 = 0x0003,
 
-    .ptr_1428 = SELF(str_196),
+    .ptr_1428 = SELF(MIC_str_8),
 
     .pad_220 = { 0 },
 
-    .str_196 = "MIC",
+    .MIC_str_8 = "MIC",
 
     .v76_e7 = {
         .class_ = 0x0160004A,
@@ -4054,7 +4054,7 @@ const naka_direct_play_t naka_direct_play_data
         .window = 0x006F0026,
     },
 
-    .v78_e0 = {
+    .DkMdlyPly = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -4242,7 +4242,7 @@ const naka_direct_play_t naka_direct_play_data
 
     .field_15fc = 0x0008,
 
-    .str_216 = "r",
+    .r_str = "r",
 
     .str_217 = "9",
 
@@ -4264,11 +4264,11 @@ const naka_direct_play_t naka_direct_play_data
 
     .field_1616 = 0x0003,
 
-    .ptr_1618 = SELF(str_218),
+    .ptr_1618 = SELF(MIXER_str_7),
 
     .pad_244 = { 0 },
 
-    .str_218 = "MIXER",
+    .MIXER_str_7 = "MIXER",
 
     .v78_e13 = {
         .class_ = 0x01600035,
@@ -4509,7 +4509,7 @@ const naka_direct_play_t naka_direct_play_data
         .recplay = 0x0003DDFC,
     },
 
-    .v7A_e0 = {
+    .SqMdlyPly = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -4681,7 +4681,7 @@ const naka_direct_play_t naka_direct_play_data
 
     .field_1a0c = 0x0008,
 
-    .str_262 = "r",
+    .r_str_2 = "r",
 
     .str_263 = "9",
 
@@ -4703,13 +4703,13 @@ const naka_direct_play_t naka_direct_play_data
 
     .field_1a26 = 0x0003,
 
-    .ptr_1a28 = SELF(str_264),
+    .ptr_1a28 = SELF(MIXER_str_8),
 
     .pad_265 = { 0 },
 
-    .str_264 = "MIXER",
+    .MIXER_str_8 = "MIXER",
 
-    .v89_e0 = {
+    .SqTrSel = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -4794,7 +4794,7 @@ const naka_direct_play_t naka_direct_play_data
         .window = 0x0003DE08,
     },
 
-    .v8B_e0 = {
+    .SqTrAs = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -4855,7 +4855,7 @@ const naka_direct_play_t naka_direct_play_data
 
     .field_1bb7 = 0xFF,
 
-    .v8B_e4 = {
+    .TrAsGrid = {
         .class_ = 0x01670006,
         .super = 0,
         .sub = 5,
@@ -4877,14 +4877,14 @@ const naka_direct_play_t naka_direct_play_data
         .pcol = 0x0003DE16,
         .prow = 0x0003DE1A,
         .crow = 0x0003DE1E,
-        .fixedcol = SELF(str_272),
-        .fixedrow = SELF(str_271),
+        .fixedcol = SELF(TrAsGrid_fixedcol),
+        .fixedrow = SELF(TrAsGrid_fixedrow),
         .func = 0x01270014,
     },
 
-    .str_271 = ALIGNED_STRING("|-|TR 1|TR 2|TR 3|TR 4|TR 5|TR 6|TR 7|TR 8"),
+    .TrAsGrid_fixedrow = ALIGNED_STRING("|-|TR 1|TR 2|TR 3|TR 4|TR 5|TR 6|TR 7|TR 8"),
 
-    .str_272 = "    |    |  |  ",
+    .TrAsGrid_fixedcol = "    |    |  |  ",
 
     .v8B_e5 = {
         .class_ = 0x01600036,
@@ -4896,14 +4896,14 @@ const naka_direct_play_t naka_direct_play_data
         .rect = { 83, 38, 158, 57 },
         .color = 0x00F5,
         .border = 0x0000,
-        .text = SELF(str_277),
+        .text = SELF(v8B_e5_text),
         .font = 0x00000003,
         .fontcolor = 0x00F1,
         .alignment = 0x0000,
         .lines = 0x0002,
     },
 
-    .str_277 = ALIGNED_STRING("TRACK~0DASSIGN"),
+    .v8B_e5_text = ALIGNED_STRING("TRACK~0DASSIGN"),
 
     .v8B_e6 = {
         .class_ = 0x01600036,
@@ -4915,14 +4915,14 @@ const naka_direct_play_t naka_direct_play_data
         .rect = { 161, 38, 198, 57 },
         .color = 0x00F5,
         .border = 0x0000,
-        .text = SELF(str_281),
+        .text = SELF(v8B_e6_text),
         .font = 0x00000003,
         .fontcolor = 0x00F1,
         .alignment = 0x0000,
         .lines = 0x0002,
     },
 
-    .str_281 = "LOCAL~0DCONT.",
+    .v8B_e6_text = "LOCAL~0DCONT.",
 
     .v8B_e7 = {
         .class_ = 0x01600036,
@@ -4934,14 +4934,14 @@ const naka_direct_play_t naka_direct_play_data
         .rect = { 200, 38, 239, 57 },
         .color = 0x00F5,
         .border = 0x0000,
-        .text = SELF(str_285),
+        .text = SELF(v8B_e7_text),
         .font = 0x00000003,
         .fontcolor = 0x00F1,
         .alignment = 0x0000,
         .lines = 0x0002,
     },
 
-    .str_285 = ALIGNED_STRING("MIDI~0DOUT"),
+    .v8B_e7_text = ALIGNED_STRING("MIDI~0DOUT"),
 
     .v8B_e8 = {
         .class_ = 0x01600022,
@@ -5009,7 +5009,7 @@ const naka_direct_play_t naka_direct_play_data
         .func = 0x01470006,
     },
 
-    .v8B_e13 = {
+    .SqTrAsSure = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 14,
@@ -5157,7 +5157,7 @@ const naka_direct_play_t naka_direct_play_data
         .screen = 0x008B0000,
     },
 
-    .v8C_e0 = {
+    .SqTrAsPs = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -5220,7 +5220,7 @@ const naka_direct_play_t naka_direct_play_data
         .color = 0x00F5,
         .border = 0x00C1,
         .index = 0x0000,
-        .caption = SELF(str_298),
+        .caption = SELF(v8C_e3_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -5232,9 +5232,9 @@ const naka_direct_play_t naka_direct_play_data
         .data = 0x0003DE2C,
     },
 
-    .str_298 = "SONG   : ",
+    .v8C_e3_caption = "SONG   : ",
 
-    .v8C_e4 = {
+    .TrAsPsIniSel = {
         .class_ = 0x01670002,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5245,7 +5245,7 @@ const naka_direct_play_t naka_direct_play_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0001,
-        .caption = SELF(str_300),
+        .caption = SELF(TrAsPsIniSel_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -5257,9 +5257,9 @@ const naka_direct_play_t naka_direct_play_data
         ._pad_51 = { 0x00 },
     },
 
-    .str_300 = "INITIAL",
+    .TrAsPsIniSel_caption = "INITIAL",
 
-    .v8C_e5 = {
+    .TrAsPsTechSel = {
         .class_ = 0x01670002,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5270,7 +5270,7 @@ const naka_direct_play_t naka_direct_play_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0001,
-        .caption = SELF(str_303),
+        .caption = SELF(TrAsPsTechSel_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -5282,9 +5282,9 @@ const naka_direct_play_t naka_direct_play_data
         ._pad_51 = { 0x00 },
     },
 
-    .str_303 = ALIGNED_STRING("TECHNICS MULTI RECORDING"),
+    .TrAsPsTechSel_caption = ALIGNED_STRING("TECHNICS MULTI RECORDING"),
 
-    .v8C_e6 = {
+    .TrAsPsGmSel = {
         .class_ = 0x01670002,
         .super = 0,
         .sub = NAKA_NONE,
@@ -5295,7 +5295,7 @@ const naka_direct_play_t naka_direct_play_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0001,
-        .caption = SELF(str_305),
+        .caption = SELF(TrAsPsGmSel_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0001,
@@ -5307,7 +5307,7 @@ const naka_direct_play_t naka_direct_play_data
         ._pad_51 = { 0x00 },
     },
 
-    .str_305 = ALIGNED_STRING("GM MULTI RECORDING"),
+    .TrAsPsGmSel_caption = ALIGNED_STRING("GM MULTI RECORDING"),
 
     .v8C_e7 = {
         .class_ = 0x01600029,
@@ -5359,7 +5359,7 @@ const naka_direct_play_t naka_direct_play_data
         .func = 0x01270002,
     },
 
-    .v8C_e10 = {
+    .SqTrAsPsSure1 = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 11,
@@ -5507,7 +5507,7 @@ const naka_direct_play_t naka_direct_play_data
         .func = 0x01270004,
     },
 
-    .v8C_e19 = {
+    .SqTrAsPsSure2 = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 20,
@@ -5655,7 +5655,7 @@ const naka_direct_play_t naka_direct_play_data
 
     .str_329 = ALIGNED_STRING(""),
 
-    .v8E_e0 = {
+    .SqSngSel = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -5757,7 +5757,7 @@ const naka_direct_play_t naka_direct_play_data
         .style = 0x000E,
     },
 
-    .v8F_e0 = {
+    .SqNameing = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -5846,7 +5846,7 @@ const naka_direct_play_t naka_direct_play_data
         .rect = { 32, 0, 63, 31 },
     },
 
-    .v92_e0 = {
+    .AfterTouchSet = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -5894,7 +5894,7 @@ const naka_direct_play_t naka_direct_play_data
         .color = 0x00F5,
         .border = 0x00C1,
         .index = 0x0000,
-        .caption = SELF(str_339),
+        .caption = SELF(v92_e2_caption),
         .font = 0x00000000,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -5906,7 +5906,7 @@ const naka_direct_play_t naka_direct_play_data
         .data = 0x0003DE52,
     },
 
-    .str_339 = "  AFTER TOUCH RECORD  :",
+    .v92_e2_caption = "  AFTER TOUCH RECORD  :",
 
     .v92_e3 = {
         .class_ = 0x01600066,
@@ -5926,7 +5926,7 @@ const naka_direct_play_t naka_direct_play_data
         .func = 0x01270001,
     },
 
-    .vA9_e0 = {
+    .StepPartBal = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -6019,7 +6019,7 @@ const naka_direct_play_t naka_direct_play_data
         .editsw = 0x0004,
     },
 
-    .vE0_e0 = {
+    .DemoMenu = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -6094,7 +6094,7 @@ const naka_direct_play_t naka_direct_play_data
         .mode = 0x01800001,
     },
 
-    .vE1_e0 = {
+    .DemoStyle = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -6112,7 +6112,7 @@ const naka_direct_play_t naka_direct_play_data
 
     .w106_text = ALIGNED_STRING("PERFORMANCES"),
 
-    .vE1_e1 = {
+    .DemoSong0 = {
         .class_ = 0x01670003,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6123,7 +6123,7 @@ const naka_direct_play_t naka_direct_play_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0000,
-        .caption = SELF(str_355),
+        .caption = SELF(DemoSong0_caption),
         .font = 0x00000001,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -6134,9 +6134,9 @@ const naka_direct_play_t naka_direct_play_data
         .func = 0x01270009,
     },
 
-    .str_355 = "Main Medley",
+    .DemoSong0_caption = "Main Medley",
 
-    .vE1_e2 = {
+    .DemoSong1 = {
         .class_ = 0x01670003,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6147,7 +6147,7 @@ const naka_direct_play_t naka_direct_play_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0000,
-        .caption = SELF(str_357),
+        .caption = SELF(DemoSong1_caption),
         .font = 0x00000001,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -6158,9 +6158,9 @@ const naka_direct_play_t naka_direct_play_data
         .func = 0x01270009,
     },
 
-    .str_357 = ALIGNED_STRING("Accordion Medley"),
+    .DemoSong1_caption = ALIGNED_STRING("Accordion Medley"),
 
-    .vE1_e3 = {
+    .DemoSong2 = {
         .class_ = 0x01670003,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6171,7 +6171,7 @@ const naka_direct_play_t naka_direct_play_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0000,
-        .caption = SELF(str_358),
+        .caption = SELF(DemoSong2_caption),
         .font = 0x00000001,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -6182,9 +6182,9 @@ const naka_direct_play_t naka_direct_play_data
         .func = 0x01270009,
     },
 
-    .str_358 = "Folk Medley",
+    .DemoSong2_caption = "Folk Medley",
 
-    .vE1_e4 = {
+    .DemoSong3 = {
         .class_ = 0x01670003,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6195,7 +6195,7 @@ const naka_direct_play_t naka_direct_play_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0000,
-        .caption = SELF(str_361),
+        .caption = SELF(DemoSong3_caption),
         .font = 0x00000001,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -6206,9 +6206,9 @@ const naka_direct_play_t naka_direct_play_data
         .func = 0x01270009,
     },
 
-    .str_361 = "Classical",
+    .DemoSong3_caption = "Classical",
 
-    .vE1_e5 = {
+    .DemoSong4 = {
         .class_ = 0x01670003,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6219,7 +6219,7 @@ const naka_direct_play_t naka_direct_play_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0000,
-        .caption = SELF(str_363),
+        .caption = SELF(DemoSong4_caption),
         .font = 0x00000001,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -6230,9 +6230,9 @@ const naka_direct_play_t naka_direct_play_data
         .func = 0x01270009,
     },
 
-    .str_363 = ALIGNED_STRING("Show"),
+    .DemoSong4_caption = ALIGNED_STRING("Show"),
 
-    .vE1_e6 = {
+    .DemoSong5 = {
         .class_ = 0x01670003,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6243,7 +6243,7 @@ const naka_direct_play_t naka_direct_play_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0000,
-        .caption = SELF(str_364),
+        .caption = SELF(DemoSong5_caption),
         .font = 0x00000001,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -6254,7 +6254,7 @@ const naka_direct_play_t naka_direct_play_data
         .func = 0x01270009,
     },
 
-    .str_364 = ALIGNED_STRING("Contemporary"),
+    .DemoSong5_caption = ALIGNED_STRING("Contemporary"),
 
     .vE1_e7 = {
         .class_ = 0x01600045,
@@ -6265,16 +6265,16 @@ const naka_direct_play_t naka_direct_play_data
         .flag = 0x0008,
         .rect = { 4, 216, 75, 238 },
         .font = 0x00000000,
-        .stron = SELF(str_366),
-        .stroff = SELF(str_365),
+        .stron = SELF(vE1_e7_stron),
+        .stroff = SELF(vE1_e7_stroff),
         .onoff = 0x0003DE70,
         .editsw = 0x0000,
         .editsw2 = 0x0001,
     },
 
-    .str_365 = "STYLE",
+    .vE1_e7_stroff = "STYLE",
 
-    .str_366 = "STYLE",
+    .vE1_e7_stron = "STYLE",
 
     .vE1_e8 = {
         .class_ = 0x01600045,
@@ -6285,16 +6285,16 @@ const naka_direct_play_t naka_direct_play_data
         .flag = 0x0008,
         .rect = { 124, 216, 195, 238 },
         .font = 0x00000000,
-        .stron = SELF(str_368),
-        .stroff = SELF(str_367),
+        .stron = SELF(vE1_e8_stron),
+        .stroff = SELF(vE1_e8_stroff),
         .onoff = 0x0003DE72,
         .editsw = 0x0003,
         .editsw2 = 0x0004,
     },
 
-    .str_367 = "SOUND",
+    .vE1_e8_stroff = "SOUND",
 
-    .str_368 = "SOUND",
+    .vE1_e8_stron = "SOUND",
 
     .vE1_e9 = {
         .class_ = 0x01600045,
@@ -6305,16 +6305,16 @@ const naka_direct_play_t naka_direct_play_data
         .flag = 0x0008,
         .rect = { 244, 216, 315, 238 },
         .font = 0x00000000,
-        .stron = SELF(str_370),
-        .stroff = SELF(str_369),
+        .stron = SELF(vE1_e9_stron),
+        .stroff = SELF(vE1_e9_stroff),
         .onoff = 0x0003DE74,
         .editsw = 0x0006,
         .editsw2 = 0x0007,
     },
 
-    .str_369 = ALIGNED_STRING("RHYTHM"),
+    .vE1_e9_stroff = ALIGNED_STRING("RHYTHM"),
 
-    .str_370 = ALIGNED_STRING("RHYTHM"),
+    .vE1_e9_stron = ALIGNED_STRING("RHYTHM"),
 
     .vE1_e10 = {
         .class_ = 0x01600029,
@@ -6327,7 +6327,7 @@ const naka_direct_play_t naka_direct_play_data
         .func = 0x01470019,
     },
 
-    .vE1_e11 = {
+    .DemoMed1 = {
         .class_ = 0x01670014,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6343,7 +6343,7 @@ const naka_direct_play_t naka_direct_play_data
         .align = 0x0000,
     },
 
-    .vE2_e0 = {
+    .DemoSound = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -6361,7 +6361,7 @@ const naka_direct_play_t naka_direct_play_data
 
     .w111_text = ALIGNED_STRING("PERFORMANCES"),
 
-    .vE2_e1 = {
+    .DemoSong6 = {
         .class_ = 0x01670003,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6372,7 +6372,7 @@ const naka_direct_play_t naka_direct_play_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0000,
-        .caption = SELF(str_376),
+        .caption = SELF(DemoSong6_caption),
         .font = 0x00000001,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -6383,9 +6383,9 @@ const naka_direct_play_t naka_direct_play_data
         .func = 0x01270009,
     },
 
-    .str_376 = "Strings",
+    .DemoSong6_caption = "Strings",
 
-    .vE2_e2 = {
+    .DemoSong7 = {
         .class_ = 0x01670003,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6396,7 +6396,7 @@ const naka_direct_play_t naka_direct_play_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0000,
-        .caption = SELF(str_378),
+        .caption = SELF(DemoSong7_caption),
         .font = 0x00000001,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -6407,9 +6407,9 @@ const naka_direct_play_t naka_direct_play_data
         .func = 0x01270009,
     },
 
-    .str_378 = "Gamelan",
+    .DemoSong7_caption = "Gamelan",
 
-    .vE2_e3 = {
+    .DemoSong8 = {
         .class_ = 0x01670003,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6420,7 +6420,7 @@ const naka_direct_play_t naka_direct_play_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0000,
-        .caption = SELF(str_379),
+        .caption = SELF(DemoSong8_caption),
         .font = 0x00000001,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -6431,9 +6431,9 @@ const naka_direct_play_t naka_direct_play_data
         .func = 0x01270009,
     },
 
-    .str_379 = ALIGNED_STRING("Guitar"),
+    .DemoSong8_caption = ALIGNED_STRING("Guitar"),
 
-    .vE2_e4 = {
+    .DemoSong9 = {
         .class_ = 0x01670003,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6444,7 +6444,7 @@ const naka_direct_play_t naka_direct_play_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0000,
-        .caption = SELF(str_382),
+        .caption = SELF(DemoSong9_caption),
         .font = 0x00000001,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -6455,9 +6455,9 @@ const naka_direct_play_t naka_direct_play_data
         .func = 0x01270009,
     },
 
-    .str_382 = "Piano",
+    .DemoSong9_caption = "Piano",
 
-    .vE2_e5 = {
+    .DemoSong10 = {
         .class_ = 0x01670003,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6468,7 +6468,7 @@ const naka_direct_play_t naka_direct_play_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0000,
-        .caption = SELF(str_384),
+        .caption = SELF(DemoSong10_caption),
         .font = 0x00000001,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -6479,9 +6479,9 @@ const naka_direct_play_t naka_direct_play_data
         .func = 0x01270009,
     },
 
-    .str_384 = "Sax&Brass",
+    .DemoSong10_caption = "Sax&Brass",
 
-    .vE2_e6 = {
+    .DemoSong11 = {
         .class_ = 0x01670003,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6492,7 +6492,7 @@ const naka_direct_play_t naka_direct_play_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0000,
-        .caption = SELF(str_385),
+        .caption = SELF(DemoSong11_caption),
         .font = 0x00000001,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -6503,7 +6503,7 @@ const naka_direct_play_t naka_direct_play_data
         .func = 0x01270009,
     },
 
-    .str_385 = "Organ",
+    .DemoSong11_caption = "Organ",
 
     .vE2_e7 = {
         .class_ = 0x01600045,
@@ -6514,16 +6514,16 @@ const naka_direct_play_t naka_direct_play_data
         .flag = 0x0008,
         .rect = { 4, 216, 75, 238 },
         .font = 0x00000000,
-        .stron = SELF(str_387),
-        .stroff = SELF(str_386),
+        .stron = SELF(vE2_e7_stron),
+        .stroff = SELF(vE2_e7_stroff),
         .onoff = 0x0003DE86,
         .editsw = 0x0000,
         .editsw2 = 0x0001,
     },
 
-    .str_386 = "STYLE",
+    .vE2_e7_stroff = "STYLE",
 
-    .str_387 = "STYLE",
+    .vE2_e7_stron = "STYLE",
 
     .vE2_e8 = {
         .class_ = 0x01600045,
@@ -6534,16 +6534,16 @@ const naka_direct_play_t naka_direct_play_data
         .flag = 0x0008,
         .rect = { 124, 216, 195, 238 },
         .font = 0x00000000,
-        .stron = SELF(str_389),
-        .stroff = SELF(str_388),
+        .stron = SELF(vE2_e8_stron),
+        .stroff = SELF(vE2_e8_stroff),
         .onoff = 0x0003DE88,
         .editsw = 0x0003,
         .editsw2 = 0x0004,
     },
 
-    .str_388 = "SOUND",
+    .vE2_e8_stroff = "SOUND",
 
-    .str_389 = "SOUND",
+    .vE2_e8_stron = "SOUND",
 
     .vE2_e9 = {
         .class_ = 0x01600045,
@@ -6554,16 +6554,16 @@ const naka_direct_play_t naka_direct_play_data
         .flag = 0x0008,
         .rect = { 244, 216, 315, 238 },
         .font = 0x00000000,
-        .stron = SELF(str_391),
-        .stroff = SELF(str_390),
+        .stron = SELF(vE2_e9_stron),
+        .stroff = SELF(vE2_e9_stroff),
         .onoff = 0x0003DE8A,
         .editsw = 0x0006,
         .editsw2 = 0x0007,
     },
 
-    .str_390 = ALIGNED_STRING("RHYTHM"),
+    .vE2_e9_stroff = ALIGNED_STRING("RHYTHM"),
 
-    .str_391 = ALIGNED_STRING("RHYTHM"),
+    .vE2_e9_stron = ALIGNED_STRING("RHYTHM"),
 
     .vE2_e10 = {
         .class_ = 0x01600029,
@@ -6576,7 +6576,7 @@ const naka_direct_play_t naka_direct_play_data
         .func = 0x0147001A,
     },
 
-    .vE2_e11 = {
+    .DemoMed2 = {
         .class_ = 0x01670014,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6592,7 +6592,7 @@ const naka_direct_play_t naka_direct_play_data
         .align = 0x0000,
     },
 
-    .vE3_e0 = {
+    .DemoRhy = {
         .class_ = 0x01600034,
         .super = NAKA_NONE,
         .sub = 1,
@@ -6610,7 +6610,7 @@ const naka_direct_play_t naka_direct_play_data
 
     .w116_text = ALIGNED_STRING("PERFORMANCES"),
 
-    .vE3_e1 = {
+    .DemoSong12 = {
         .class_ = 0x01670003,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6621,7 +6621,7 @@ const naka_direct_play_t naka_direct_play_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0000,
-        .caption = SELF(str_397),
+        .caption = SELF(DemoSong12_caption),
         .font = 0x00000001,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -6632,9 +6632,9 @@ const naka_direct_play_t naka_direct_play_data
         .func = 0x01270009,
     },
 
-    .str_397 = "Hokie Dance",
+    .DemoSong12_caption = "Hokie Dance",
 
-    .vE3_e2 = {
+    .DemoSong13 = {
         .class_ = 0x01670003,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6645,7 +6645,7 @@ const naka_direct_play_t naka_direct_play_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0000,
-        .caption = SELF(str_399),
+        .caption = SELF(DemoSong13_caption),
         .font = 0x00000001,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -6656,9 +6656,9 @@ const naka_direct_play_t naka_direct_play_data
         .func = 0x01270009,
     },
 
-    .str_399 = ALIGNED_STRING("Gospel Revival"),
+    .DemoSong13_caption = ALIGNED_STRING("Gospel Revival"),
 
-    .vE3_e3 = {
+    .DemoSong14 = {
         .class_ = 0x01670003,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6669,7 +6669,7 @@ const naka_direct_play_t naka_direct_play_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0000,
-        .caption = SELF(str_400),
+        .caption = SELF(DemoSong14_caption),
         .font = 0x00000001,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -6680,9 +6680,9 @@ const naka_direct_play_t naka_direct_play_data
         .func = 0x01270009,
     },
 
-    .str_400 = "Organ Combo",
+    .DemoSong14_caption = "Organ Combo",
 
-    .vE3_e4 = {
+    .DemoSong15 = {
         .class_ = 0x01670003,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6693,7 +6693,7 @@ const naka_direct_play_t naka_direct_play_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0000,
-        .caption = SELF(str_403),
+        .caption = SELF(DemoSong15_caption),
         .font = 0x00000001,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -6704,9 +6704,9 @@ const naka_direct_play_t naka_direct_play_data
         .func = 0x01270009,
     },
 
-    .str_403 = ALIGNED_STRING("Big Band Mid"),
+    .DemoSong15_caption = ALIGNED_STRING("Big Band Mid"),
 
-    .vE3_e5 = {
+    .DemoSong16 = {
         .class_ = 0x01670003,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6717,7 +6717,7 @@ const naka_direct_play_t naka_direct_play_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0000,
-        .caption = SELF(str_405),
+        .caption = SELF(DemoSong16_caption),
         .font = 0x00000001,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -6728,9 +6728,9 @@ const naka_direct_play_t naka_direct_play_data
         .func = 0x01270009,
     },
 
-    .str_405 = ALIGNED_STRING("Bavarian Polka"),
+    .DemoSong16_caption = ALIGNED_STRING("Bavarian Polka"),
 
-    .vE3_e6 = {
+    .DemoSong17 = {
         .class_ = 0x01670003,
         .super = 0,
         .sub = NAKA_NONE,
@@ -6741,7 +6741,7 @@ const naka_direct_play_t naka_direct_play_data
         .color = 0x00F5,
         .border = 0x0000,
         .index = 0x0000,
-        .caption = SELF(str_406),
+        .caption = SELF(DemoSong17_caption),
         .font = 0x00000001,
         .fontcolor = 0x00FF,
         .align = 0x0000,
@@ -6752,7 +6752,7 @@ const naka_direct_play_t naka_direct_play_data
         .func = 0x01270009,
     },
 
-    .str_406 = ALIGNED_STRING("Modern Bluegrass"),
+    .DemoSong17_caption = ALIGNED_STRING("Modern Bluegrass"),
 
     .vE3_e7 = {
         .class_ = 0x01600045,
@@ -6763,16 +6763,16 @@ const naka_direct_play_t naka_direct_play_data
         .flag = 0x0008,
         .rect = { 4, 216, 75, 238 },
         .font = 0x00000000,
-        .stron = SELF(str_408),
-        .stroff = SELF(str_407),
+        .stron = SELF(vE3_e7_stron),
+        .stroff = SELF(vE3_e7_stroff),
         .onoff = 0x0003DE9C,
         .editsw = 0x0000,
         .editsw2 = 0x0001,
     },
 
-    .str_407 = "STYLE",
+    .vE3_e7_stroff = "STYLE",
 
-    .str_408 = "STYLE",
+    .vE3_e7_stron = "STYLE",
 
     .vE3_e8 = {
         .class_ = 0x01600045,
@@ -6783,16 +6783,16 @@ const naka_direct_play_t naka_direct_play_data
         .flag = 0x0008,
         .rect = { 124, 216, 195, 238 },
         .font = 0x00000000,
-        .stron = SELF(str_410),
-        .stroff = SELF(str_409),
+        .stron = SELF(vE3_e8_stron),
+        .stroff = SELF(vE3_e8_stroff),
         .onoff = 0x0003DE9E,
         .editsw = 0x0003,
         .editsw2 = 0x0004,
     },
 
-    .str_409 = "SOUND",
+    .vE3_e8_stroff = "SOUND",
 
-    .str_410 = "SOUND",
+    .vE3_e8_stron = "SOUND",
 
     .w119 = {
         .header    = NAKA_HDR(0x45),

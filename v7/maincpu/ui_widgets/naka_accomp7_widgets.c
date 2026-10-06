@@ -126,57 +126,57 @@ typedef struct __attribute__((packed)) {
 
 typedef struct __attribute__((packed)) {
     /* element 1 of Viewable slot 0xC8 "MspBkslWin": AcWindowPage (class id 0x01600025) */
-    naka_cls_AcWindowPage_t vC8_e1;
+    naka_cls_AcWindowPage_t MspBkslWin;
     /* element 2 of Viewable slot 0xC8 "MspBnkP1Ctl": IvPageControl (class id 0x01600028) */
-    naka_cls_IvPageControl_t vC8_e2;
+    naka_cls_IvPageControl_t MspBnkP1Ctl;
     /* element 3 of Viewable slot 0xC8 "MspBnkP2Ctl": IvPageControl (class id 0x01600028) */
-    naka_cls_IvPageControl_t vC8_e3;
+    naka_cls_IvPageControl_t MspBnkP2Ctl;
     /* element 4 of Viewable slot 0xC8: IvShowHide (class id 0x01600064) */
     naka_cls_IvShowHide_t vC8_e4;
     /* element 5 of Viewable slot 0xC8: IvIntVari (class id 0x01600062) */
     naka_cls_IvIntVari_t vC8_e5;
     /* element 6 of Viewable slot 0xC8 "MspBkslP1Win": Window (class id 0x01600035) */
-    naka_cls_Window_t vC8_e6;
+    naka_cls_Window_t MspBkslP1Win;
     /* element 7 of Viewable slot 0xC8 "Eff1Bnk": VwVariBox (class id 0x01640024) */
-    naka_cls_VwVariBox_t vC8_e7;
+    naka_cls_VwVariBox_t Eff1Bnk;
     /* element 8 of Viewable slot 0xC8 "Eff2Bnk": VwVariBox (class id 0x01640024) */
-    naka_cls_VwVariBox_t vC8_e8;
+    naka_cls_VwVariBox_t Eff2Bnk;
     /* element 9 of Viewable slot 0xC8 "ComicBnk": VwVariBox (class id 0x01640024) */
-    naka_cls_VwVariBox_t vC8_e9;
+    naka_cls_VwVariBox_t ComicBnk;
     /* element 10 of Viewable slot 0xC8 "MovieBnk": VwVariBox (class id 0x01640024) */
-    naka_cls_VwVariBox_t vC8_e10;
+    naka_cls_VwVariBox_t MovieBnk;
     /* element 11 of Viewable slot 0xC8 "EnterBnk": VwVariBox (class id 0x01640024) */
-    naka_cls_VwVariBox_t vC8_e11;
+    naka_cls_VwVariBox_t EnterBnk;
     /* element 12 of Viewable slot 0xC8 "ArpgioBnk": VwVariBox (class id 0x01640024) */
-    naka_cls_VwVariBox_t vC8_e12;
+    naka_cls_VwVariBox_t ArpgioBnk;
     /* element 13 of Viewable slot 0xC8 "Rock1Bnk": VwVariBox (class id 0x01640024) */
-    naka_cls_VwVariBox_t vC8_e13;
+    naka_cls_VwVariBox_t Rock1Bnk;
     /* element 14 of Viewable slot 0xC8 "Rock2Bnk": VwVariBox (class id 0x01640024) */
-    naka_cls_VwVariBox_t vC8_e14;
+    naka_cls_VwVariBox_t Rock2Bnk;
     /* element 15 of Viewable slot 0xC8 "DanceBnk": VwVariBox (class id 0x01640024) */
-    naka_cls_VwVariBox_t vC8_e15;
+    naka_cls_VwVariBox_t DanceBnk;
     /* element 16 of Viewable slot 0xC8 "FunkBnk": VwVariBox (class id 0x01640024) */
-    naka_cls_VwVariBox_t vC8_e16;
+    naka_cls_VwVariBox_t FunkBnk;
     /* element 17 of Viewable slot 0xC8 "MspBkslP2Win": Window (class id 0x01600035) */
-    naka_cls_Window_t vC8_e17;
+    naka_cls_Window_t MspBkslP2Win;
     /* element 18 of Viewable slot 0xC8 "JazzBnk": VwVariBox (class id 0x01640024) */
-    naka_cls_VwVariBox_t vC8_e18;
+    naka_cls_VwVariBox_t JazzBnk;
     /* element 19 of Viewable slot 0xC8 "LatinBnk": VwVariBox (class id 0x01640024) */
-    naka_cls_VwVariBox_t vC8_e19;
+    naka_cls_VwVariBox_t LatinBnk;
     /* element 20 of Viewable slot 0xC8 "HitBnk": VwVariBox (class id 0x01640024) */
-    naka_cls_VwVariBox_t vC8_e20;
+    naka_cls_VwVariBox_t HitBnk;
     /* element 21 of Viewable slot 0xC8 "User1Bnk": VwVariBox (class id 0x01640024) */
-    naka_cls_VwVariBox_t vC8_e21;
+    naka_cls_VwVariBox_t User1Bnk;
     /* element 22 of Viewable slot 0xC8 "User2Bnk": VwVariBox (class id 0x01640024) */
-    naka_cls_VwVariBox_t vC8_e22;
+    naka_cls_VwVariBox_t User2Bnk;
     /* element 23 of Viewable slot 0xC8 "Cmpile1Bnk": VwVariBox (class id 0x01640024) */
-    naka_cls_VwVariBox_t vC8_e23;
+    naka_cls_VwVariBox_t Cmpile1Bnk;
     /* element 24 of Viewable slot 0xC8 "Cmpile2Bnk": VwVariBox (class id 0x01640024) */
-    naka_cls_VwVariBox_t vC8_e24;
+    naka_cls_VwVariBox_t Cmpile2Bnk;
     /* element 25 of Viewable slot 0xC8 "Ctrl1Bnk": VwVariBox (class id 0x01640024) */
-    naka_cls_VwVariBox_t vC8_e25;
+    naka_cls_VwVariBox_t Ctrl1Bnk;
     /* element 26 of Viewable slot 0xC8 "Ctrl2Bnk": VwVariBox (class id 0x01640024) */
-    naka_cls_VwVariBox_t vC8_e26;
+    naka_cls_VwVariBox_t Ctrl2Bnk;
 } naka_accomp7_widgets_t;
 
 #define SELF(field) \
@@ -188,7 +188,7 @@ _Static_assert(sizeof(naka_accomp7_widgets_t) == 1050,
 const naka_accomp7_widgets_t naka_accomp7_widgets_data
     __attribute__((section(".text"), used)) = {
 
-    .vC8_e1 = {
+    .MspBkslWin = {
         .class_ = 0x01600025,
         .super = 0,
         .sub = NAKA_NONE,
@@ -204,7 +204,7 @@ const naka_accomp7_widgets_t naka_accomp7_widgets_data
         .pagemax = 0x0002,
     },
 
-    .vC8_e2 = {
+    .MspBnkP1Ctl = {
         .class_ = 0x01600028,
         .super = 0,
         .sub = NAKA_NONE,
@@ -216,7 +216,7 @@ const naka_accomp7_widgets_t naka_accomp7_widgets_data
         .window = 0x00C80006,
     },
 
-    .vC8_e3 = {
+    .MspBnkP2Ctl = {
         .class_ = 0x01600028,
         .super = 0,
         .sub = NAKA_NONE,
@@ -250,7 +250,7 @@ const naka_accomp7_widgets_t naka_accomp7_widgets_data
         .time = 0x0001,
     },
 
-    .vC8_e6 = {
+    .MspBkslP1Win = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 7,
@@ -265,7 +265,7 @@ const naka_accomp7_widgets_t naka_accomp7_widgets_data
         .child = 0x0003D730,
     },
 
-    .vC8_e7 = {
+    .Eff1Bnk = {
         .class_ = 0x01640024,
         .super = 6,
         .sub = NAKA_NONE,
@@ -285,7 +285,7 @@ const naka_accomp7_widgets_t naka_accomp7_widgets_data
         ._pad_43 = { 0x00 },
     },
 
-    .vC8_e8 = {
+    .Eff2Bnk = {
         .class_ = 0x01640024,
         .super = 6,
         .sub = NAKA_NONE,
@@ -305,7 +305,7 @@ const naka_accomp7_widgets_t naka_accomp7_widgets_data
         ._pad_43 = { 0x00 },
     },
 
-    .vC8_e9 = {
+    .ComicBnk = {
         .class_ = 0x01640024,
         .super = 6,
         .sub = NAKA_NONE,
@@ -325,7 +325,7 @@ const naka_accomp7_widgets_t naka_accomp7_widgets_data
         ._pad_43 = { 0x00 },
     },
 
-    .vC8_e10 = {
+    .MovieBnk = {
         .class_ = 0x01640024,
         .super = 6,
         .sub = NAKA_NONE,
@@ -345,7 +345,7 @@ const naka_accomp7_widgets_t naka_accomp7_widgets_data
         ._pad_43 = { 0x00 },
     },
 
-    .vC8_e11 = {
+    .EnterBnk = {
         .class_ = 0x01640024,
         .super = 6,
         .sub = NAKA_NONE,
@@ -365,7 +365,7 @@ const naka_accomp7_widgets_t naka_accomp7_widgets_data
         ._pad_43 = { 0x00 },
     },
 
-    .vC8_e12 = {
+    .ArpgioBnk = {
         .class_ = 0x01640024,
         .super = 6,
         .sub = NAKA_NONE,
@@ -385,7 +385,7 @@ const naka_accomp7_widgets_t naka_accomp7_widgets_data
         ._pad_43 = { 0x00 },
     },
 
-    .vC8_e13 = {
+    .Rock1Bnk = {
         .class_ = 0x01640024,
         .super = 6,
         .sub = NAKA_NONE,
@@ -405,7 +405,7 @@ const naka_accomp7_widgets_t naka_accomp7_widgets_data
         ._pad_43 = { 0x00 },
     },
 
-    .vC8_e14 = {
+    .Rock2Bnk = {
         .class_ = 0x01640024,
         .super = 6,
         .sub = NAKA_NONE,
@@ -425,7 +425,7 @@ const naka_accomp7_widgets_t naka_accomp7_widgets_data
         ._pad_43 = { 0x00 },
     },
 
-    .vC8_e15 = {
+    .DanceBnk = {
         .class_ = 0x01640024,
         .super = 6,
         .sub = NAKA_NONE,
@@ -445,7 +445,7 @@ const naka_accomp7_widgets_t naka_accomp7_widgets_data
         ._pad_43 = { 0x00 },
     },
 
-    .vC8_e16 = {
+    .FunkBnk = {
         .class_ = 0x01640024,
         .super = 6,
         .sub = NAKA_NONE,
@@ -465,7 +465,7 @@ const naka_accomp7_widgets_t naka_accomp7_widgets_data
         ._pad_43 = { 0x00 },
     },
 
-    .vC8_e17 = {
+    .MspBkslP2Win = {
         .class_ = 0x01600035,
         .super = NAKA_NONE,
         .sub = 18,
@@ -480,7 +480,7 @@ const naka_accomp7_widgets_t naka_accomp7_widgets_data
         .child = 0x0003D74C,
     },
 
-    .vC8_e18 = {
+    .JazzBnk = {
         .class_ = 0x01640024,
         .super = 17,
         .sub = NAKA_NONE,
@@ -500,7 +500,7 @@ const naka_accomp7_widgets_t naka_accomp7_widgets_data
         ._pad_43 = { 0x00 },
     },
 
-    .vC8_e19 = {
+    .LatinBnk = {
         .class_ = 0x01640024,
         .super = 17,
         .sub = NAKA_NONE,
@@ -520,7 +520,7 @@ const naka_accomp7_widgets_t naka_accomp7_widgets_data
         ._pad_43 = { 0x00 },
     },
 
-    .vC8_e20 = {
+    .HitBnk = {
         .class_ = 0x01640024,
         .super = 17,
         .sub = NAKA_NONE,
@@ -540,7 +540,7 @@ const naka_accomp7_widgets_t naka_accomp7_widgets_data
         ._pad_43 = { 0x00 },
     },
 
-    .vC8_e21 = {
+    .User1Bnk = {
         .class_ = 0x01640024,
         .super = 17,
         .sub = NAKA_NONE,
@@ -560,7 +560,7 @@ const naka_accomp7_widgets_t naka_accomp7_widgets_data
         ._pad_43 = { 0x00 },
     },
 
-    .vC8_e22 = {
+    .User2Bnk = {
         .class_ = 0x01640024,
         .super = 17,
         .sub = NAKA_NONE,
@@ -580,7 +580,7 @@ const naka_accomp7_widgets_t naka_accomp7_widgets_data
         ._pad_43 = { 0x00 },
     },
 
-    .vC8_e23 = {
+    .Cmpile1Bnk = {
         .class_ = 0x01640024,
         .super = 17,
         .sub = NAKA_NONE,
@@ -600,7 +600,7 @@ const naka_accomp7_widgets_t naka_accomp7_widgets_data
         ._pad_43 = { 0x00 },
     },
 
-    .vC8_e24 = {
+    .Cmpile2Bnk = {
         .class_ = 0x01640024,
         .super = 17,
         .sub = NAKA_NONE,
@@ -620,7 +620,7 @@ const naka_accomp7_widgets_t naka_accomp7_widgets_data
         ._pad_43 = { 0x00 },
     },
 
-    .vC8_e25 = {
+    .Ctrl1Bnk = {
         .class_ = 0x01640024,
         .super = 17,
         .sub = NAKA_NONE,
@@ -640,7 +640,7 @@ const naka_accomp7_widgets_t naka_accomp7_widgets_data
         ._pad_43 = { 0x00 },
     },
 
-    .vC8_e26 = {
+    .Ctrl2Bnk = {
         .class_ = 0x01640024,
         .super = 17,
         .sub = NAKA_NONE,
