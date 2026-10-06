@@ -1477,7 +1477,7 @@ AccPlay_SetupSoundParams:
 	ld D, 0x10:opc
 	ld A, 0x17:opc
 	ld W, 0xff:opc
-	call SysEx_ApplyVoiceParam_49
+	call SwbtWr_QueuePostEvent
 	ld a, (0xfd62:16)
 	ld w, (0xfd63:16)
 	cp WA,0x01ff
@@ -1489,12 +1489,12 @@ AccPlay_SetupSoundParams:
 	ld D, 0x01:opc
 	ld A, 0x00:opc
 	ld W, 0x7f:opc
-	call SysEx_ApplyVoiceParam_49
+	call SwbtWr_QueuePostEvent
 	ld E, 0x17:opc
 	ld D, 0x00:opc
 	ld A, 0x00:opc
 	ld W, 0xff:opc
-	call SysEx_ApplyVoiceParam_49
+	call SwbtWr_QueuePostEvent
 	ld H, 0x00:opc
 	ld L, 0x00:opc
 	ld (0x905b:16), 0x17
@@ -1520,7 +1520,7 @@ AccPlay_SetupSoundParams_Loop:
 	ld	d, 30:opc
 	sub	d, c
 	ld	w, 255:opc
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 	pop	xbc
 	pop	xix
 	pop	xiy
@@ -2118,12 +2118,12 @@ AccPlay_SendBankProgram:
 	ld	d, 1:opc
 	ld	a, w
 	ld	w, 127:opc
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 	ld	wa, (xiy+9)
 	ld	e, 23:opc
 	ld	d, 0:opc
 	ld	w, 255:opc
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 	ld	a, (xiy+12)
 	ld	e, a
 	ld	w, 4:opc
@@ -2134,7 +2134,7 @@ AccPlay_SendBankProgram:
 	ld	e, 23:opc
 	ld	d, 8:opc
 	ld	w, 127:opc
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 	ld	a, (xiy+13)
 	ld	e, 0:opc
 	bit	0, a
@@ -2157,7 +2157,7 @@ AccPlay_WriteReverbFlag:
 	ld	d, 4:opc
 	ld	a, w
 	ld	w, 64:opc
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 	ld	a, (xiy+14)
 	ld	e, 0:opc
 	bit	0, a
@@ -2180,7 +2180,7 @@ AccPlay_WriteChorusFlag:
 	ld	d, 4:opc
 	ld	a, w
 	ld	w, 8:opc
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 	ret
 AccPlay_ClearSlotTable:
 	ld	xhl, 32223
@@ -2263,7 +2263,7 @@ AccPlay_SaveMuteStates:
 	ld	e, 23:opc
 	ld	d, 13:opc
 	ld	w, 207:opc
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 	calr	AccompSeq_QueueAllMutes
 	ret
 AccompSeq_QueueAllMutes:
@@ -2344,7 +2344,7 @@ AccompSeq_QueueAllMutes:
 AccompSeq_QueueMuteEvent:
 	ld	d, 13:opc
 	ld	w, 207:opc
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 	ret
 AccPlay_RestoreMuteStates:
 	ld	wa, (32384:16)
@@ -2389,7 +2389,7 @@ AccPlay_RestoreMuteStates:
 	ld	e, 23:opc
 	ld	d, 13:opc
 	ld	w, 79:opc
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 	calr	AccompSeq_QueueAllMutes
 	ret
 Util_ExtractAndShiftBits:
@@ -3550,7 +3550,7 @@ AcVocalGrid_CopyViewString:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	Vocalist_ReturnZeroJmp
 AcVocalGridBoxProc_OnLswData:	; cases 29360156, 29360157
@@ -3761,7 +3761,7 @@ VocalistGridCheck_Join5:
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	VocalistGridCheck_Join6
 VocalistGridCheck_Skip6:
@@ -3850,7 +3850,7 @@ VocalistGridCheck_Join7:
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 VocalistGridCheck_Skip10:
 	call	GetFocusObject
@@ -3872,7 +3872,7 @@ VocalistGridCheck_Join8:
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	VocalistGridCheck_Join9
 VocalistGridCheck_Skip12:
@@ -3933,7 +3933,7 @@ VocalistGridCheck_Skip13:
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -3972,7 +3972,7 @@ VocalistGrid_CheckHandler:
 
 VocalistGrid_CheckDispData:
 	ld	xwa, 11520
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 16
 	jr	z, VocalistGridCheck_Skip14	; -> 0xF73901
 	cp	hl, 17
@@ -3985,12 +3985,12 @@ VocalistGridCheck_Join10:
 	push	xwa
 	lda	xwa, (xsp+24)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	VocalistGridCheck_Join11	; -> 0xF73930
 VocalistGridCheck_Skip15:
 	ld	xwa, 11520
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	inc	1, hl
 	pushw	hl
 	pushw	VocalistGrid_CheckDispData_Str_Fmt2d@hi16
@@ -4007,7 +4007,7 @@ VocalistGridCheck_Join11:
 	jrl	VocalistGridCheck_Join15	; -> 0xF73BA6
 VocalistGrid_DispatchData_Case11522:
 	ld	xwa, 11522
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	inc	1, hl
 	pushw	hl
 	pushw	VocalistGrid_CheckDispData_Str_Fmt3d@hi16
@@ -4023,7 +4023,7 @@ VocalistGrid_DispatchData_Case11522:
 	jrl	VocalistGridCheck_Join15	; -> 0xF73BA6
 VocalistGrid_DispatchData_Case11524:
 	ld	xwa, 11524
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	inc	1, hl
 	pushw	hl
 	pushw	VocalistGrid_CheckDispData_Str_Fmtd@hi16
@@ -4039,7 +4039,7 @@ VocalistGrid_DispatchData_Case11524:
 	jrl	VocalistGridCheck_Join15	; -> 0xF73BA6
 VocalistGrid_DispatchData_Case11526:
 	ld	xwa, 11526
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda	xwa, (MidiPart_NoteNameTable:24)
 	ld	xwa, (xwa+hl)
@@ -4057,7 +4057,7 @@ VocalistGrid_DispatchData_Case11526:
 	jrl	VocalistGridCheck_Join15	; -> 0xF73BA6
 VocalistGrid_DispatchData_Case11528:
 	ld	xwa, 11528
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 3:i3
 	jr	z, VocalistGridCheck_Skip18	; -> 0xF73A04
 	cp	hl, 2:i3
@@ -4080,7 +4080,7 @@ VocalistGridCheck_Join12:
 	push	xwa
 	lda	xwa, (xsp+24)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 VocalistGridCheck_Skip19:
 	call	GetFocusObject
@@ -4090,7 +4090,7 @@ VocalistGridCheck_Skip19:
 	jrl	VocalistGridCheck_Join15	; -> 0xF73BA6
 VocalistGrid_DispatchData_Case11530:
 	ld	xwa, 11530
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	lda	xbc, (xsp+20)
 	cp	hl, 120
 	jr	z, VocalistGridCheck_Skip20	; -> 0xF73A44
@@ -4103,12 +4103,12 @@ VocalistGridCheck_Skip20:
 VocalistGridCheck_Join13:
 	push	xwa
 	push	xbc
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	VocalistGridCheck_Join14	; -> 0xF73A6E
 VocalistGridCheck_Skip21:
 	ld	xwa, 11530
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	pushw	hl
 	pushw	VocalistGridCheck_Entry2_Str_CC_Fmt3d@hi16
 	pushw	VocalistGridCheck_Entry2_Str_CC_Fmt3d@lo16
@@ -4124,7 +4124,7 @@ VocalistGridCheck_Join14:
 	jrl	VocalistGridCheck_Join15	; -> 0xF73BA6
 VocalistGrid_DispatchData_Case11532:
 	ld	xwa, 11533
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	exts	xhl
 	divs	hl, 12
 	sla	hl, 2
@@ -4132,7 +4132,7 @@ VocalistGrid_DispatchData_Case11532:
 	ld	xwa, (xbc+hl)
 	push	xwa
 	ld	xwa, 11533
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	exts	xhl
 	divs	hl, 12
 	ld	wa, qhl
@@ -4141,7 +4141,7 @@ VocalistGrid_DispatchData_Case11532:
 	ld	xwa, (xbc+wa)
 	push	xwa
 	ld	xwa, 11534
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda	xwa, (VocalistGrid_DispatchData_PtrTable:24)
 	ld	xwa, (xwa+hl)
@@ -4159,7 +4159,7 @@ VocalistGrid_DispatchData_Case11532:
 	jrl	VocalistGridCheck_Join15	; -> 0xF73BA6
 VocalistGrid_DispatchData_Case11536:
 	ld	xwa, 11537
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	exts	xhl
 	divs	hl, 12
 	sla	hl, 2
@@ -4167,7 +4167,7 @@ VocalistGrid_DispatchData_Case11536:
 	ld	xwa, (xbc+hl)
 	push	xwa
 	ld	xwa, 11537
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	exts	xhl
 	divs	hl, 12
 	ld	wa, qhl
@@ -4176,7 +4176,7 @@ VocalistGrid_DispatchData_Case11536:
 	ld	xwa, (xbc+wa)
 	push	xwa
 	ld	xwa, 11538
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda	xwa, (VocalistGrid_DispatchData_PtrTable:24)
 	ld	xwa, (xwa+hl)
@@ -4199,7 +4199,7 @@ VocalistGrid_DispatchData_Case11521:	; cases 11521, 11523, 11525, 11527, 11529, 
 	dec	4, wa
 	add	bc, wa
 	ld	xwa, (xde+bc)
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	xwa, VocalistGrid_DispatchData_Str_17
 	cp	hl, 0:i3
 	jr	z, VocalistGridCheck_Skip22	; -> 0xF73B8D
@@ -4208,7 +4208,7 @@ VocalistGridCheck_Skip22:
 	push	xwa
 	lda	xwa, (xsp+24)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -4506,7 +4506,7 @@ VocalistPage2OKFunc_Skip:
 	ld	bc, 0:i3
 	ld	de, 2:i3
 VocalistPage2OKFunc_Join:
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	ld	(GLOBAL_ERROR_CODE:16), 35
 	ld	xwa, 4294967295
 	ld	xbc, EVT_INTERRUPT_TITLE
@@ -4540,7 +4540,7 @@ VocalistPage2OKFunc_Skip2:
 	ld	bc, 0:i3
 	ld	de, 2:i3
 VocalistPage2OKFunc_Join3:
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	ld	(GLOBAL_ERROR_CODE:16), 35
 	ld	xwa, 4294967295
 	ld	xbc, EVT_INTERRUPT_TITLE
@@ -4555,7 +4555,7 @@ MainVocalistPage1OKFunc_Case4:
 	ld	xwa, 16897
 	ld	bc, 3:i3
 	ld	de, 2:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	ld	xwa, (xsp)
 	srl	xwa, 16
 	ld	qwa, 0
@@ -4570,7 +4570,7 @@ VocalistPage2OKFunc_Skip3:
 	ld	bc, 0:i3
 	ld	de, 2:i3
 VocalistPage2OKFunc_Join4:
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	ld	(GLOBAL_ERROR_CODE:16), 35
 	ld	xwa, 4294967295
 	ld	xbc, EVT_INTERRUPT_TITLE
@@ -4731,7 +4731,7 @@ EqSel_NoPresetMatch:
 EqSel_SendPresetEvent:
 	call	SendEvent
 	ld	xwa, 16390
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	exts	xhl
 	ld	xwa, 1638411
 	ld	xbc, EVT_SET_PARAM
@@ -4842,7 +4842,7 @@ RevEqSel_NoPresetMatch:
 RevEqSel_SendPresetEvent:
 	call	SendEvent
 	ld	xwa, 16390
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	exts	xhl
 	ld	xwa, 1703946
 	ld	xbc, EVT_SET_PARAM
@@ -4981,7 +4981,7 @@ AcGMOnOff_InitHandler:
 	call	GetViewInstance
 	ld	xiz, xhl
 	ld	xwa, 192
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	xwa, (xiz+50)
 	ld	(xwa), hl
 	ld	xwa, (xsp+12)
@@ -5159,7 +5159,7 @@ SplitPointFunc:
 	ld	xwa, 16768
 	ld	bc, 0:i3
 	ld	de, 1:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	ld	xwa, (xsp+8)
 	ldfr_berp	a, 251	; ld qizh,a
 	cp_erpb	251, 36	; cp qizh,0x24
@@ -5297,7 +5297,7 @@ AccWrap_SetMinVelocity:
 
 	ld de, 1:i3
 
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 
 	ret
 
@@ -5357,7 +5357,7 @@ R12Octave_OctaveDefault:
 R12Octave_StringCopyAndSendEvent:
 	push	xwa
 	push	xbc
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xwa, 4294967295
 	ld	xbc, EVT_RESET_INTERRUPT_TIME

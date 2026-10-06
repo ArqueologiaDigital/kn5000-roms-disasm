@@ -1800,7 +1800,7 @@ PerfMode_Evt04_VolumeHandler:
 	ld	d, 3:opc
 	ld	w, 127:opc
 	pushw	de
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 	call	PerfMode_VolumeParam_Process_Helper
 	popw	de
 	ld	c, e
@@ -6914,7 +6914,7 @@ Display_CallMenuInit_Helper:
 	ld	d, 3:opc
 	ldb_d8	a, (0xfc5d)
 	ld	w, 8:opc
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 PerfMode_Handler_EvtB_Helper2:
 	ld (0x3678:16), 0x04
 	ld (0x3679:16), 0x00
@@ -6995,7 +6995,7 @@ PerfMode_Handler_EvtB_Helper2:
 	ld	(0x2875:16), de
 	ldto_werp DE, 0x3e	; ld DE,QHL3
 	ldw	(0x0f58:16), 65535
-	call	PerfMode_Handler_EvtB_Helper2_Helper11
+	call	Audio_CheckSubsystemReady
 	call	VoiceState_DataBlock2_Helper7
 	cp	w, 0:i3
 	jrl	z, PerfMode_Handler_EvtB_Helper2_Skip
@@ -7165,7 +7165,7 @@ Interrupt_FlagSetBytecode:
 MemConfig_Handler_5_Code_Helper10:
 	ld	(3432:16), 2
 	ld	(3431:16), 4
-	call	PerfMode_Handler_EvtB_Helper2_Helper11
+	call	Audio_CheckSubsystemReady
 	ret
 Interrupt_SendAllNotesOff:
 	ld	(3432:16), 3
@@ -7206,12 +7206,12 @@ Interrupt_ClearModeRegs:
 	xor	a, a
 	ld	(3432:16), a
 	ld	(3431:16), a
-	call	PerfMode_Handler_EvtB_Helper2_Helper11
+	call	Audio_CheckSubsystemReady
 	ret
 Interrupt_SetFlagBytecode:
 	ld	(3432:16), 4
 	ld	(3431:16), 0
-	call	PerfMode_Handler_EvtB_Helper2_Helper11
+	call	Audio_CheckSubsystemReady
 	ret
 Interrupt_UpdateFromHW:
 	call Display_RegionUpdateFromHW
@@ -7543,7 +7543,7 @@ PerfMode_Handler_EvtB_Helper2_Helper8:
 	ld	e, 72:opc
 	ld	d, 7:opc
 	ld	w, 48:opc
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 ClockConfig_Handler_0_Skip:
 	ld	bc, 6:i3
 	ld	xiy, ClockConfig_Handler_0_Tbl2
@@ -7647,7 +7647,7 @@ ClockConfig_Handler_0_Skip4:
 	ld	e, 72:opc
 	ld	d, 3:opc
 	ld	w, 8:opc
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 	ldb_d8	a, (0x0d66)
 	call	PortConfig_DataTable_A_Sub
 	xor	wa, wa
@@ -7663,7 +7663,7 @@ ClockConfig_Handler_0_Skip4:
 	call	ClockConfig_Handler_0_Tbl2_Helper
 	ldw_d16	wa, (0xf1d0)
 	ld	(0x0f58:16), wa
-	call	PerfMode_Handler_EvtB_Helper2_Helper11
+	call	Audio_CheckSubsystemReady
 	pushw	wa
 	xor	a, a
 	call	Part_InitVoiceDefaults

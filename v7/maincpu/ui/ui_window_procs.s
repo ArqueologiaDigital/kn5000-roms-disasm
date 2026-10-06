@@ -791,7 +791,7 @@ WndEvt_EventCodeDispatch_Skip10:
 	push	xbc
 	ld	xwa, (xsp+14)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	ld	wa, (0x0274d6:24)
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
@@ -809,7 +809,7 @@ WndEvt_EventCodeDispatch_Skip10:
 	ld	xbc, 0x0274b0
 	add	xbc, xwa
 	push	xbc
-	call	Free_Compare2
+	call	Strcpy
 	ld	xwa, (xsp+26)
 	push	xwa
 	call	Free
@@ -913,7 +913,7 @@ WndScroll_CopyStringAndSend:
 	push	xwa
 	pushw	2
 	pushw	29872
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xwa, (xsp+50)
 	ld	xbc, EVT_SET_CURSOR
@@ -924,7 +924,7 @@ WndScroll_CopyFromSource:
 	pushw	29872
 	ld	xwa, (xsp+46)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jrl	UIDialog_ReturnZeroJmp
 WndScroll_StoreCallerPtr:
@@ -1685,7 +1685,7 @@ VwUserBitmapByName_HandlePaint:
 	push	xwa
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	pushw	VwUserBitmapByName_HandlePaint_Data@hi16
 	pushw	VwUserBitmapByName_HandlePaint_Data@lo16
 	lda	xwa, (xsp+16)
@@ -2063,7 +2063,7 @@ DrawDesignFrame_Skip2:
 DrawDesignFrame_Join:
 	push	xwa
 	push	xbc
-	call	Free_Compare2
+	call	Strcpy
 	lda	xwa, (xsp+20)
 	push	xwa
 	call	Strlen
@@ -2090,7 +2090,7 @@ DrawDesignFrame_Skip3:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+22)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xbc, (xsp+8)
 	ld	xwa, (xbc+22)
@@ -2185,7 +2185,7 @@ DrawEditSw_SelectVariantC:
 DrawEditSw_CopyVariant:
 	push	xwa
 	push	xbc
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xwa, (xsp+2)
 	ld	xbc, 0:i3
@@ -2546,7 +2546,7 @@ PsParaBox_UseEventText:
 	ld	xwa, (xsp+272)
 	push	xwa
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 PsParaBox_DrawAligned:
 	lda xwa, (xsp+264)
@@ -2987,11 +2987,11 @@ AcTempoBox_HandleConfirm:
 
 AcTempoBox_MatchTempoID:
 	ld	xwa, 8704
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 0:i3
 	jr	nz, AcTempoBox_CopyTempoString
 	ld	xwa, 4:i3
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	pushw	hl
 	pushw	AcTempoBox_MatchTempoID_Str_aa_Fmt3d@hi16
 	pushw	AcTempoBox_MatchTempoID_Str_aa_Fmt3d@lo16
@@ -3005,7 +3005,7 @@ AcTempoBox_CopyTempoString:
 	pushw	AcTempoBox_CopyTempoString_Str_aa@lo16
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 AcTempoBox_SendConfirmEvent:
 	lda xde, (xsp + 4)
@@ -3104,7 +3104,7 @@ PsRadioBox_Confirm_CopyText:
 	ld	xwa, (xsp+284)
 	push	xwa
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 PsRadioBox_Confirm_Draw:
 	calr GetDialFocus
@@ -3357,7 +3357,7 @@ AcStrRadioBox_GetText:
 	ld	xwa, (xhl+44)
 	push	xwa
 	push	xiz
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, 0:i3
 AcStrRadioBox_Epilogue:
@@ -3418,7 +3418,7 @@ PsListBox_Confirm_CopyText:
 	ld	xwa, (xsp+294)
 	push	xwa
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 PsListBox_Confirm_Layout:
 	ld XWA, (xsp + 0x012a)
@@ -3807,7 +3807,7 @@ PsListBox_GetText:
 	pushw	PsListBox_GetText_Str_No_My_Car_Day_Memory_AyaSam@lo16
 	ld	xwa, (xsp+298)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 PsListBox_ReturnZero:
 	ld xhl, 0:i3
@@ -3953,7 +3953,7 @@ AcListBox_GetText:
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 AcListBox_ReturnZero:
 	ld xhl, 0:i3
@@ -7052,7 +7052,7 @@ CaptureLcd:
 	pushw CaptureLcd_Str_BM@hi16
 	pushw CaptureLcd_Str_BM@lo16
 	push XWA
-	call Free_Compare2
+	call Strcpy
 	lda xbc, (xsp + 0x0442)
 	ld XWA,0x00013036
 	ld (XBC+0x02),XWA

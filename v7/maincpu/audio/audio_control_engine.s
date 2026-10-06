@@ -88,7 +88,7 @@ PanelAction_PostUnlessDemoOrParamC0:
 	cp	(CURRENT_MODE:16), 19
 	jr	z, PanelAction_PostUnlessDemoOrParamC0_Epilogue
 	ld	xwa, 192
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	z, PanelAction_PostUnlessDemoOrParamC0_Epilogue
 	ld	xwa, xiz
@@ -110,7 +110,7 @@ PanelButton_PanelMemorySet:
 	cp	a, 19
 	jr	z, PanelButton_PanelMemorySet_Skip
 	ld	xwa, 192
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	nz, PanelButton_PanelMemorySet_Skip2
 PanelButton_PanelMemorySet_Skip:
@@ -214,7 +214,7 @@ FileIO_BytecodeData_Code_Helper:
 	ld	(xiz), 255
 FileIO_BytecodeData_Code_Skip11:
 	ld	xwa, 192
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	nz, FileIO_BytecodeData_Code_Skip13
 	ld	a, (xiz+2)
@@ -507,7 +507,7 @@ FileIO_BytecodeData_Code_Skip33:
 	jr	z, FileIO_BytecodeData_Code_Epilogue9
 FileIO_BytecodeData_Code_Skip34:
 	ld	xwa, 192
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	nz, FileIO_BytecodeData_Code_Skip37
 	ld	xwa, (xsp+2)
@@ -639,7 +639,7 @@ PanelButton_PanelMemoryNumber_Skip2:
 	cp	a, 210
 	jr	z, PanelButton_PanelMemoryNumber_Skip3
 	ld	xwa, 192
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	nz, FileIO_BytecodeData_Code_Entry5
 PanelButton_PanelMemoryNumber_Skip3:
@@ -694,7 +694,7 @@ PanelButton_PanelMemoryNextBank_Skip2:
 	cp	a, 210
 	jr	z, PanelButton_PanelMemoryNextBank_Skip3
 	ld	xwa, 192
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	nz, PanelButton_PanelMemoryNextBank_Skip4
 PanelButton_PanelMemoryNextBank_Skip3:
@@ -757,7 +757,7 @@ PanelButton_AutoPlayChord:
 	cp	(CURRENT_MODE:16), 19
 	jr	z, PanelButton_AutoPlayChord_Epilogue
 	ld	xwa, 192
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	z, PanelButton_AutoPlayChord_Epilogue
 	ld	xwa, xiz
@@ -765,7 +765,7 @@ PanelButton_AutoPlayChord:
 	.byte	0xf1, 0x1e, 0x04, 0xca
 	jr	z, PanelButton_AutoPlayChord_Skip
 	ld	xwa, 163968
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 0:i3
 	jr	nz, PanelButton_AutoPlayChord_Skip2
 PanelButton_AutoPlayChord_Skip:
@@ -890,7 +890,7 @@ PanelButton_DspEffect_Skip2:
 	ld	a, (PART_SELECT:16)
 	extz	wa
 	ldw	bc, 93
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	and	hl, 127
 	lda	xde, (xiz+3)
 	lda	xbc, (xiz+2)
@@ -973,7 +973,7 @@ PanelButton_MusicStyleArranger:
 	cp	(CURRENT_MODE:16), 19
 	jr	z, PanelButton_MusicStyleArranger_Epilogue
 	ld	xwa, 192
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	z, PanelButton_MusicStyleArranger_Epilogue
 	.byte	0x8e, 0x02, 0x3f, 0x00
@@ -995,7 +995,7 @@ PanelButton_MspNumber:
 	cp	(CURRENT_MODE:16), 19
 	jrl	z, PanelButton_MspNumber_Epilogue
 	ld	xwa, 192
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	z, PanelButton_MspNumber_Epilogue
 	ld	xwa, (xsp+2)
@@ -1005,7 +1005,7 @@ PanelButton_MspNumber:
 	call	Util_FindLowestSetBit
 	ldfr_berp	l, 251
 	ld	xwa, 165888
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ldto_berp	c, 251
 	extz	bc
 	ld	wa, bc
@@ -1063,10 +1063,10 @@ PanelButton_Variation:
 	ldfr_berp	l, 251
 	ld	(xsp+4), 72
 	ld	xwa, 163840
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	(xsp+5), l
 	ld	xwa, 163841
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	lda	xwa, (xsp+2)
 	ld	(xwa+4), l
 	call	SndParam_ResolveVoiceEntry
@@ -1121,7 +1121,7 @@ PanelAction_FootSwitch1:
 	cp	(CURRENT_MODE:16), 19
 	jr	z, PanelAction_Event28Bit0_Epilogue
 	ld	xwa, 10374
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	xwa, xiz
 	ld	bc, hl
@@ -1136,7 +1136,7 @@ PanelAction_FootSwitch2:
 	cp	(CURRENT_MODE:16), 19
 	jr	z, PanelAction_Event28Bit1_Epilogue
 	ld	xwa, 10376
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	xwa, xiz
 	ld	bc, hl
@@ -1151,7 +1151,7 @@ PanelAction_FootController1:
 	cp	(CURRENT_MODE:16), 19
 	jr	z, PanelAction_Event29Bit0_Epilogue
 	ld	xwa, 10378
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	xwa, xiz
 	ld	bc, hl
@@ -1166,7 +1166,7 @@ PanelAction_FootController2:
 	cp	(CURRENT_MODE:16), 19
 	jr	z, PanelAction_Event29Bit1_Epilogue
 	ld	xwa, 10380
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	xwa, xiz
 	ld	bc, hl
@@ -1181,7 +1181,7 @@ PanelAction_FootController3:
 	cp	(CURRENT_MODE:16), 19
 	jr	z, PanelAction_Event29Bit2_Epilogue
 	ld	xwa, 10382
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	xwa, xiz
 	ld	bc, hl
@@ -1196,7 +1196,7 @@ PanelAction_FootController4:
 	cp	(CURRENT_MODE:16), 19
 	jr	z, PanelAction_Event29Bit3_Epilogue
 	ld	xwa, 10384
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	xwa, xiz
 	ld	bc, hl
@@ -1230,7 +1230,7 @@ PanelAction_ModWheel:
 	push	xiz
 	ld	xiz, xwa
 	ld	xwa, 10368
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 183
 	jr	z, PanelAction_Event26_Skip
 	cp	hl, 182
@@ -1260,7 +1260,7 @@ PanelAction_Volume:
 	cp	(CURRENT_MODE:16), 19
 	jr	z, PanelAction_Event27_Epilogue
 	ld	xwa, 260
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 0:i3
 	jr	z, PanelAction_Event27_Epilogue
 	ld	xwa, xiz
@@ -1280,12 +1280,12 @@ FileIO_BytecodeData_Code_Helper3:
 	ld	a, (PART_SELECT:16)
 	extz	wa
 	ld	bc, 0:i3
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	ld	(xsp+3), l
 	ld	a, (PART_SELECT:16)
 	extz	wa
 	ldw	bc, 32
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	lda	xwa, (xsp)
 	ld	(xwa+4), l
 	.byte	0xb8, 0x02, 0x14, 0x9e, 0x8c
@@ -1295,10 +1295,10 @@ FileIO_BytecodeData_Code_Helper3:
 	ret
 	dec	6, xsp
 	ld	xwa, 163840
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	(xsp+3), l
 	ld	xwa, 163841
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	lda	xwa, (xsp)
 	ld	(xwa+4), l
 	ld	(xwa+2), 72
@@ -1346,7 +1346,7 @@ FileIO_BytecodeData_Code_Loop2:
 	jr	z, FileIO_BytecodeData_Code_Epilogue33
 	extz	wa
 	ldw	bc, 1537
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	cp	hl, 1:i3
 	jr	nz, FileIO_BytecodeData_Code_Skip67
 	lda	xwa, (0x905f:16)
@@ -1405,7 +1405,7 @@ FileIO_BytecodeData_Code_Skip69:
 	jr	FileIO_BytecodeData_Code_Epilogue34
 FileIO_BytecodeData_Code_Skip70:
 	ld	xwa, 192
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	z, FileIO_BytecodeData_Code_Epilogue34
 	ld	a, (xiz+3)
@@ -1415,7 +1415,7 @@ FileIO_BytecodeData_Code_Skip70:
 	ld	(xiz), 152
 	ld	(xiz+1), 1
 	ld	xwa, 768
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	lda	xwa, (xiz+2)
 	cp	l, 80
 	jr	c, FileIO_BytecodeData_Code_Skip71
@@ -1451,7 +1451,7 @@ FileIO_BytecodeData_Code_Skip72:
 	jr	FileIO_BytecodeData_Code_Epilogue35
 FileIO_BytecodeData_Code_Skip73:
 	ld	xwa, 192
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	z, FileIO_BytecodeData_Code_Epilogue35
 	ld	a, (xiz+3)
@@ -1461,7 +1461,7 @@ FileIO_BytecodeData_Code_Skip73:
 	ld	(xiz), 152
 	ld	(xiz+1), 1
 	ld	xwa, 768
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	lda	xwa, (xiz+2)
 	cp	l, 1:i3
 	jr	ugt, FileIO_BytecodeData_Code_Skip74
@@ -1547,7 +1547,7 @@ ExtDev_SndParam_Write98_Block:
 	ld	a, (PART_SELECT:16)
 	extz	wa
 	ldw	bc, 1539
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	cp	hl, 1:i3
 	jr	nz, FileIO_BytecodeData_Code_Helper4_Epilogue
 	set	1, (36957:16)
@@ -1650,7 +1650,7 @@ ExtDev_SndParam_ConfigAndWrite:
 	ld	a, (PART_SELECT:16)
 	extz	wa
 	ldw	bc, 93
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	lda	xbc, (xiz+2)
 	cp	hl, 0:i3
 	jr	nz, FileIO_BytecodeData_Code_Helper4_Skip5
@@ -1689,7 +1689,7 @@ ExtDev_SndParam_Write48_Block:
 	push	xiz
 	ld	xiz, xwa
 	ld	xwa, 192
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 0:i3
 	jr	nz, FileIO_BytecodeData_Code_Helper4_Epilogue2
 	set	1, (36957:16)
@@ -1765,7 +1765,7 @@ FileIO_BytecodeData_Code_Skip82:
 	jr	FileIO_BytecodeData_Code_Helper4_Epilogue3
 FileIO_BytecodeData_Code_Helper4_Skip7:
 	ld	xwa, 192
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	z, FileIO_BytecodeData_Code_Helper4_Epilogue3
 	set	1, (36957:16)
@@ -1804,7 +1804,7 @@ FileIO_BytecodeData_Code_Skip83:
 	jr	FileIO_BytecodeData_Code_Helper4_Epilogue4
 FileIO_BytecodeData_Code_Helper4_Skip8:
 	ld	xwa, 192
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	z, FileIO_BytecodeData_Code_Helper4_Epilogue4
 	set	1, (36957:16)
@@ -1858,7 +1858,7 @@ FileIO_BytecodeData_Code_Skip84:
 	jr	FileIO_BytecodeData_Code_Helper4_Epilogue5
 FileIO_BytecodeData_Code_Helper4_Skip9:
 	ld	xwa, 192
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	z, FileIO_BytecodeData_Code_Helper4_Epilogue5
 	ld	a, (xiz+3)
@@ -2638,7 +2638,7 @@ SndParam_SetResBit0_Via028100:
 	push	xiz
 	.byte 0xf1, 0x7c, 0x8e, 0x36
 	ld	xwa, 0x00028100
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	lda	xwa, (xiz+4)
 	cp	hl, 1:i3
 	jr	nz, SndParam028100_ResBit0
@@ -2654,11 +2654,11 @@ SndParam_SetResBit1_ViaRegs0100_0101:
 	push	xiz
 	lda	xiz, (ENCODER_STATE_BASE:16)
 	ld	xwa, 0x00028100
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 2:i3
 	jr	z, SndParam028101_SetBit1
 	ld	xwa, 0x00028101
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	nz, SndParam028101_ResBit1
 SndParam028101_SetBit1:
@@ -2674,11 +2674,11 @@ SndParam_SetResBit2_ViaRegs0101_0102:
 	push	xiz
 	lda	xiz, (ENCODER_STATE_BASE:16)
 	ld	xwa, 0x00028101
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 2:i3
 	jr	z, SndParam028102_SetBit2
 	ld	xwa, 0x00028102
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	nz, SndParam028102_ResBit2
 SndParam028102_SetBit2:
@@ -2694,11 +2694,11 @@ SndParam_SetResBit3_ViaRegs0101_0102:
 	push	xiz
 	lda	xiz, (ENCODER_STATE_BASE:16)
 	ld	xwa, 0x00028101
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 3:i3
 	jr	z, SndParam028102_SetBit3
 	ld	xwa, 0x00028102
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 2:i3
 	jr	nz, SndParam028102_ResBit3
 SndParam028102_SetBit3:
@@ -2714,7 +2714,7 @@ SndParam_SetResBit3_Via4002:
 	push	xiz
 	lda	xiz, (ENCODER_STATE_BASE:16)
 	ld	xwa, 0x00004002
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	lda	xwa, (xiz+6)
 	cp	hl, 0:i3
 	jr	z, SndParam4002_ResBit3
@@ -2730,7 +2730,7 @@ SndParam_SetResBit4_Via4004:
 	push	xiz
 	lda	xiz, (ENCODER_STATE_BASE:16)
 	ld	xwa, 0x00004004
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	lda	xwa, (xiz+6)
 	cp	hl, 0:i3
 	jr	z, SndParam4004_ResBit4
@@ -2746,7 +2746,7 @@ SndParam_TableLookup_Via4100:
 	push	xiz
 	lda	xiz, (ENCODER_STATE_BASE:16)
 	ld	xwa, 0x00004100
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	lda	xwa, (AudioCtl_SmallTables:24)
 	ld	a, (xwa+hl)
 	and	a, 0x07
@@ -2763,7 +2763,7 @@ SndParam_SetResBit1_ViaPartCC5E:
 	extz	hl
 	ld	wa, hl
 	ldw	bc, 0x005e
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	lda	xwa, (xiz+6)
 	cp	hl, 0x007f
 	jr	nz, SndParamCC5E_ResBit1
@@ -2782,14 +2782,14 @@ SndParam_SetResBit2_ViaPartCC5D:
 	extz	hl
 	ld	wa, hl
 	ldw	bc, 0x005d
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	cp	hl, 0:i3
 	jr	z, SndParamCC5D_ResBit2
 	call	GetCurrentPartSelect
 	extz	hl
 	ld	wa, hl
 	ldw	bc, 0x005d
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	cp	hl, 0xffff
 	jr	nz, SndParamCC5D_SetBit2
 SndParamCC5D_ResBit2:
@@ -2808,7 +2808,7 @@ SndParam_SetResBit0_ViaPartCC40:
 	extz	hl
 	ld	wa, hl
 	ldw	bc, 0x0040
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	lda	xwa, (xiz+6)
 	cp	hl, 0x007f
 	jr	nz, SndParamCC40_ResBit0
@@ -2826,14 +2826,14 @@ SndParam_GuardedNibbleSet_ViaReg0103:
 	bit	2, (1054:16)
 	jr	nz, MidiCtrl_PopIzRet
 	ld	xwa, 0x00028103
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 0:i3
 	jr	nz, MidiCtrl_PopIzRet
 	andmi8	(xiz+14), 240
 	bit	2, (SEQ_TRANSPORT_STATE:16)
 	jr	z, MidiCtrl_PopIzRet
 	ld	xwa, 1:i3
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	nz, MidiCtrl_PopIzRet
 	lda	xbc, (xiz+14)
@@ -2849,7 +2849,7 @@ SndParam_SetResBit0_Via028103:
 	push	xiz
 	lda	xiz, (ENCODER_STATE_BASE:16)
 	ld	xwa, 0x00028103
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	lda	xwa, (xiz+13)
 	cp	hl, 1:i3
 	jr	nz, SndParam028103_ResBit0
@@ -2865,7 +2865,7 @@ SndParam_SetResBit5_Via028080:
 	push	xiz
 	lda	xiz, (ENCODER_STATE_BASE:16)
 	ld	xwa, 0x00028080
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	lda	xwa, (xiz+3)
 	cp	hl, 0:i3
 	jr	nz, SndParam028080_SetBit5
@@ -2883,10 +2883,10 @@ SndParam_VoiceEntryLookup_ViaReg8000:
 	lda	xiz, (ENCODER_STATE_BASE:16)
 	ld	(xsp+6), 0x48
 	ld	xwa, 0x00028000
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	(xsp+7), l
 	ld	xwa, 0x00028001
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	lda	xwa, (xsp+4)
 	ld	(xwa+4), l
 	call	SndParam_ResolveVoiceEntry
@@ -2894,7 +2894,7 @@ SndParam_VoiceEntryLookup_ViaReg8000:
 	cp	(xwa), 0x0e
 	jr	nc, SndParam028000_GetBankBit
 	ld	xwa, 0x00028002
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	jr	t, SndParam028000_LookupAndMerge
@@ -2915,7 +2915,7 @@ SndParam_SetResBit7_Via4200:
 	push	xiz
 	lda	xiz, (ENCODER_STATE_BASE:16)
 	ld	xwa, 0x00004200
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	lda	xwa, (xiz+10)
 	cp	hl, 1:i3
 	jr	nz, SndParam4200_ResBit7
@@ -2939,7 +2939,7 @@ SndParam_DecrLookup_Via0300:
 	push	xiz
 	lda	xiz, (ENCODER_STATE_BASE:16)
 	ld	xwa, 0x00000300
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 0:i3
 	jr	nz, SndParam0300_DecrAndMask
 	ld	l, 0x00:opc
@@ -2959,7 +2959,7 @@ SndParam_SetResBit4_Via0400:
 	push	xiz
 	lda	xiz, (ENCODER_STATE_BASE:16)
 	ld	xwa, 0x00000400
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	lda	xwa, (xiz+3)
 	cp	hl, 1:i3
 	jr	nz, SndParam0400_ResBit4
@@ -3120,13 +3120,13 @@ MIDI_ProcessChangedChannels_Data_Target0:
 	extz	hl
 	ld	wa, hl
 	ld	bc, 0:i3
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	ld	(xsp+11), l
 	call	GetCurrentPartSelect
 	extz	hl
 	ld	wa, hl
 	ldw	bc, 32
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	ld	(xsp+12), l
 	call	GetCurrentPartSelect
 	lda	xwa, (xsp+8)
@@ -3181,10 +3181,10 @@ MidiChanged_ProcessGroup2_Data_Target0:
 	ld	(xiz+1), 0
 	and	(xiz+2), 128
 	ld	xwa, 0x028000
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	(xsp+7), l
 	ld	xwa, 0x028001
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	lda	xwa, (xsp+4)
 	ld	(xwa+4), l
 	ld	(xwa+2), 72
@@ -3260,7 +3260,7 @@ MidiChanged_ProcessGroup3_Data_Target9:
 	push	xiz
 	lda	xiz, (ENCODER_STATE_BASE:16)
 	ld	xwa, 0x40c0
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	nz, MidiChanged_ProcessGroup3_Data_Target9_Entry
 	.byte	0xb6, 0xbd
@@ -3275,7 +3275,7 @@ CtrlPanel_SetResBit6_ViaLookup:
 	push	xiz
 	lda	xiz, (ENCODER_STATE_BASE:16)
 	ld	xwa, 0x000040c1
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	nz, CtrlPanel_ResBit6
 	setm	6, (xiz)
@@ -3290,7 +3290,7 @@ CtrlPanel_MultiWayBitManip_ViaE0:
 	push	xiz
 	lda	xiz, (ENCODER_STATE_BASE:16)
 	ld	xwa, 0x000040e0
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	lda	xbc, (xiz+13)
 	ld	a, (xbc)
 	cp	hl, 0x0058
@@ -3423,7 +3423,7 @@ CtrlPanel_GuardedNibbleSet_8F4E:
 	bit	2, (1054:16)
 	jr	nz, CtrlPanel_BitOp_Cleanup
 	ld	xwa, 0x00028103
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 0:i3
 	jr	z, CtrlPanelGuard_PassedCheck
 	cp	(CURRENT_MODE:16), 19
@@ -3684,7 +3684,7 @@ MidiChannel_ScanPending:
 	bit	2, (0x28a7:16)
 	jr	nz, MidiScan_AltPathCheck
 	ld	xwa, 0x28103
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	lda	xbc, (xiz + 14)
 	cp	hl, 1:i3
 	jr	nz, MidiScan_CheckBit2InAddr1057
@@ -3779,7 +3779,7 @@ UIState_ProcessExtendedMode_Case5:	; cases 5, 6
 	ret
 UIState_ProcessExtendedMode_Case3:
 	ld	xwa, 0x028080
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	l, 0:i3
 	jr	z, UIState_ProcessExtendedMode_Skip
 	ld	(0xffc8:24), l
@@ -3894,13 +3894,13 @@ Audio_ResetAfterPayloadError:
 	cp	(CURRENT_TITLE:16), 65
 	jr	nz, Audio_ReinitDisplay
 	ld	xwa, 0xc0
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	nz, Audio_ReinitDisplay
 	ld	xwa, 0xc0
 	ld	bc, 0:i3
 	ld	de, 1:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	push	xde
 	push	xhl
 	push	xix
@@ -3987,7 +3987,7 @@ Audio_FullReinitWithPreset:
 	ld	xwa, 0xc0
 	ld	bc, 0:i3
 	ld	de, 1:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	push	xde
 	push	xhl
 	push	xix
@@ -3999,13 +3999,13 @@ Audio_FullReinitWithPreset:
 	pop	xde
 Audio_CheckAndReinitReverb:
 	ld	xwa, 0x2880
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 0xb7
 	ret	nz
 	ld	xwa, 0x4001
 	ldw	bc, 0x7f
 	ld	de, 2:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	push	xde
 	push	xhl
 	push	xix
@@ -6320,7 +6320,7 @@ UIState_CheckAndRenderBitmap_Loop:
 	ld	wa, iz
 	ldw	bc, 11
 	ldw	de, 127
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	inc	1, iz
 	cp	iz, 15
 	jr	ule, UIState_CheckAndRenderBitmap_Loop
@@ -6329,7 +6329,7 @@ UIState_CheckAndRenderBitmap_Skip:
 	ld	xwa, 0x4001
 	ldw	bc, 127
 	ld	de, 3:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 UIState_CheckAndRenderBitmap_Epilogue:
 	popw	iz
 	ret
@@ -6362,7 +6362,7 @@ UIState_RenderBitmapData_Skip:
 	pushw	3
 	ldw	bc, 0x1b2
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 UIState_RenderBitmapData_Skip2:
 	cp	(SWBTWR_PAYLOAD_1:16), 4
 	ret	nz
@@ -6375,7 +6375,7 @@ UIState_RenderBitmapData_Skip2:
 	pushw	3
 	ldw	bc, 11
 	ldw	de, 127
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	ret
 ToshiCmd_DefaultHandler_Ret:
 	ret
@@ -7010,7 +7010,7 @@ MidiStream_CmdPedalNotify_Helper2_Helper:
 	ld	c, (xde)
 	ld	(xwa+4), c
 	ld	(xwa+2), (0x905b)
-	call	MidiStream_CmdPedalNotify_Helper2_Helper_Helper
+	call	SndBuf_WriteParamEntries_Helper
 	lda	xbc, (0x9052:16)
 	lda	xwa, (xsp)
 	ld	l, (xwa)
@@ -7447,7 +7447,7 @@ ReverbPreset_SendLoop:
 	ld	xwa, 0x4002
 	ldw	bc, 0x7f
 	ld	de, 1:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	popw	iz
 	ret
 ; =============================================================================
@@ -7487,7 +7487,7 @@ EQPreset_SendLoop:
 	ld	xwa, 0x4006
 	ld	bc, 1:i3
 	ld	de, 1:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	popw	iz
 	ret
 ; =============================================================================
@@ -7554,11 +7554,11 @@ CombinedPreset_SendEQLoop:
 	ld	xwa, 0x4002
 	ldw	bc, 0x7f
 	ld	de, 1:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	ld	xwa, 0x4006
 	ld	bc, 1:i3
 	ld	de, 1:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	popw	iz
 	inc	4, xsp
 	ret
@@ -10951,7 +10951,6 @@ MidiStream_CmdPedalNotify:
 ; a one-instruction stub round-trips byte-exact by construction.
 MidiStream_CmdPedalDone:
 	ret
-; v10 name for this address: MidiStream_HandlePartSelect -- not a label here: v7 defines that name outside this span (= 0xFCC2FE)
 	cp	a, 72
 	jr	z, MidiStream_PartSelectDone
 	and	w, 15
@@ -10984,28 +10983,27 @@ MidiStream_CmdPedalDone:
 	inc	2, xsp
 MidiStream_PartSelectDone:
 	ret
-; v10 name for this address: MidiStream_ExtendedDispatch -- not a label here: v7 defines that name outside this span (= 0xFCC351)
 MidiStream_CmdPedalNotify_Helper3:
 	ret
 MidiRx_ProgramChange_Helper:
 	cp	(0x95a8:16), 20
-	jr	nz, MidiStream_CmdPedalNotify_Skip
+	jr	nz, MidiStream_ExtendedDispatch_Skip8
 	ld	(0x95a8:16), 72
 	ld	c, 72:opc
-MidiStream_CmdPedalNotify_Skip:
+MidiStream_ExtendedDispatch_Skip8:
 	cp	(CURRENT_MODE:16), 14
-	jr	z, MidiStream_CmdPedalNotify_Skip2
+	jr	z, MidiStream_ExtendedDispatch_Skip9
 	cp	(CURRENT_MODE:16), 17
-	jr	nz, MidiStream_CmdPedalNotify_Skip3
-MidiStream_CmdPedalNotify_Skip2:
+	jr	nz, MidiStream_ExtendedDispatch_Skip10
+MidiStream_ExtendedDispatch_Skip9:
 	cp	c, 72
 	jr	z, MidiStream_ExtendedDispatch_Return4
-MidiStream_CmdPedalNotify_Skip3:
+MidiStream_ExtendedDispatch_Skip10:
 	ld	(0x905c:16), 255
 	cp	c, 0:i3
-	jr	nz, MidiStream_CmdPedalNotify_Skip4
+	jr	nz, MidiStream_ExtendedDispatch_Skip11
 	bit	3, (0xfd50:16)
-	jr	z, MidiStream_CmdPedalNotify_Skip4
+	jr	z, MidiStream_ExtendedDispatch_Skip11
 	cp	(CURRENT_MODE:16), 14
 	jr	z, MidiStream_ExtendedDispatch_Return4
 	cp	(CURRENT_MODE:16), 17
@@ -11021,7 +11019,7 @@ MidiStream_ExtendedDispatch_Return4:
 	ret
 	calr	MidiStream_CmdPedalNotify_Helper3
 	ret
-MidiStream_CmdPedalNotify_Skip4:
+MidiStream_ExtendedDispatch_Skip11:
 	ldb_d8	l, (0xfd50)
 	and	l, 3
 	sla	l, 2
@@ -11239,11 +11237,11 @@ MidiStream_ExtendedDispatch_Helper_Skip2:
 	jr	nz, MidiStream_ExtendedDispatch_Epilogue2
 MidiStream_ExtendedDispatch_Skip6:
 	call	MidiStream_ExtendedDispatch_Helper_Helper2
-	jr	c, MidiStream_ExtendedDispatch_Helper_Entry
+	jr	c, MidiStream_ExtendedDispatch_Helper_Skip3
 	jr	MidiStream_ExtendedDispatch_Helper_Join
 MidiStream_ExtendedDispatch_Skip7:
 	call	MidiStream_ExtendedDispatch_Helper_Helper2
-	jr	nc, MidiStream_ExtendedDispatch_Helper_Entry
+	jr	nc, MidiStream_ExtendedDispatch_Helper_Skip3
 	cp	c, 15
 	jr	z, MidiStream_ExtendedDispatch_Epilogue2
 MidiStream_ExtendedDispatch_Helper_Join:
@@ -11252,7 +11250,7 @@ MidiStream_ExtendedDispatch_Helper_Join:
 	and	a, 31
 	pop_a
 	jr	nz, MidiStream_ExtendedDispatch_Epilogue2
-MidiStream_ExtendedDispatch_Helper_Entry:
+MidiStream_ExtendedDispatch_Helper_Skip3:
 	set	1, (0x905e:16)
 MidiStream_ExtendedDispatch_Epilogue2:
 	popw	de
@@ -11262,19 +11260,19 @@ MidiStream_ExtendedDispatch_Epilogue2:
 	ret
 MidiStream_ExtendedDispatch_Helper_Helper2:
 	cp	e, 15
-	jr	nz, MidiStream_ExtendedDispatch_Helper_Skip3
+	jr	nz, MidiStream_ExtendedDispatch_Helper_Skip4
 	scf
 	ret
-MidiStream_ExtendedDispatch_Helper_Skip3:
+MidiStream_ExtendedDispatch_Helper_Skip4:
 	rcf
 	ret
 MidiCC_Handler_PairedParamA_Helper:
 	cp	(0x95a8:16), 72
-	jr	nz, MidiStream_ExtendedDispatch_Helper_Skip4
+	jr	nz, MidiStream_ExtendedDispatch_Helper_Skip5
 	ld	(0x95a8:16), 20
 	cp	(CURRENT_MODE:16), 14
 	jrl	z, MidiStream_ExtendedDispatch_Helper_Return
-MidiStream_ExtendedDispatch_Helper_Skip4:
+MidiStream_ExtendedDispatch_Helper_Skip5:
 	ldw_d16	bc, (0x95a8)
 	ldw_d16	de, (0x95aa)
 	ld	xix, 0x9336
@@ -11283,11 +11281,11 @@ MidiStream_ExtendedDispatch_Helper_Skip4:
 	ld	l, c
 	sll	hl, 1
 	cp	e, 255
-	jr	z, MidiStream_ExtendedDispatch_Helper_Skip5
+	jr	z, MidiStream_ExtendedDispatch_Helper_Skip6
 	res	7, e
 	ld	(xix+hl), e
 	jr	MidiStream_ExtendedDispatch_Join2
-MidiStream_ExtendedDispatch_Helper_Skip5:
+MidiStream_ExtendedDispatch_Helper_Skip6:
 	res	7, d
 	inc	1, xix
 	ld	(xix+hl), d
@@ -11318,18 +11316,18 @@ MidiStream_ExtDispatch_ModeJump02:
 	jr	MidiStream_ExtendedDispatch_Helper_Join2
 MidiStream_ExtDispatch_ModeJump1:
 	bit	0, w
-	jr	z, MidiStream_ExtendedDispatch_Helper_Skip7
+	jr	z, MidiStream_ExtendedDispatch_Helper_Skip8
 	srl	a, 4
 	and	a, 15
 	cp	a, 2:i3
-	jr	c, MidiStream_ExtendedDispatch_Helper_Skip6
+	jr	c, MidiStream_ExtendedDispatch_Helper_Skip7
 	cp	a, 6:i3
-	jr	nc, MidiStream_ExtendedDispatch_Helper_Skip6
+	jr	nc, MidiStream_ExtendedDispatch_Helper_Skip7
 	xor	a, a
-MidiStream_ExtendedDispatch_Helper_Skip6:
+MidiStream_ExtendedDispatch_Helper_Skip7:
 	set	7, a
 	jr	MidiStream_ExtendedDispatch_Helper_Join2
-MidiStream_ExtendedDispatch_Helper_Skip7:
+MidiStream_ExtendedDispatch_Helper_Skip8:
 	srl	a, 4
 	and	a, 15
 	jr	MidiStream_ExtendedDispatch_Helper_Join2
@@ -11626,7 +11624,7 @@ MidiStream_DispatchLoop_PtrTable:	.long	MidiStream_StatusPrecheck
 	.long	0xffffffff
 	.long	0xffffffff
 	.long	0xffffffff
-Audio_ResetAfterPayloadError_Helper:
+SoundParam_NotifyChange:
 	lda	xsp, (xsp-0xa)
 	push	xiz
 	ld	(xsp+0xa), de
@@ -11655,28 +11653,28 @@ Audio_ResetAfterPayloadError_Helper:
 	ld	xbc, 0x7ff
 	call	DivMod32
 	ld	ix, hl
-	jr	MidiStream_HandleRunningStatus_Join2
-MidiStream_HandleRunningStatus_Loop:
+	jr	SndParam_ProbeEntry
+SndParam_ProbeCheckMatch:
 	ld	bc, 0:i3
 	cp	xiz, xde
-	jr	z, MidiStream_HandleRunningStatus_Skip5
+	jr	z, SndParam_ProbeMatchFound
 	ldw	bc, 0xffff
-	jr	MidiStream_HandleRunningStatus_Join
-MidiStream_HandleRunningStatus_Skip5:
+	jr	SndParam_ProbeAdvance
+SndParam_ProbeMatchFound:
 	cp	bc, 0xffff
-	jr	z, MidiStream_HandleRunningStatus_Join
+	jr	z, SndParam_ProbeAdvance
 	ld	xwa, (xwa+0x4)
 	ld	(xsp+0x6), xwa
-MidiStream_HandleRunningStatus_Join:
+SndParam_ProbeAdvance:
 	inc	1, hl
 	cp	hl, 0x7ff
-	jr	ugt, MidiStream_HandleRunningStatus_Skip6
+	jr	ugt, SndParam_DispatchCallback
 	ld	wa, ix
 	inc	3, wa
 	extz	xwa
 	div	wa, 0x7ff
 	ld	ix, qwa
-MidiStream_HandleRunningStatus_Join2:
+SndParam_ProbeEntry:
 	ld	bc, ix
 	extz	xbc
 	sll	xbc, 3
@@ -11684,16 +11682,16 @@ MidiStream_HandleRunningStatus_Join2:
 	add	xwa, xbc
 	ld	xde, (xwa)
 	cp	xde, SNDPARAM_HASH_EMPTY_KEY
-	jr	nz, MidiStream_HandleRunningStatus_Loop
-MidiStream_HandleRunningStatus_Skip6:
+	jr	nz, SndParam_ProbeCheckMatch
+SndParam_DispatchCallback:
 	ld	xwa, (xsp+0x6)
 	or	xwa, xwa
-	jr	z, MidiStream_HandleRunningStatus_Skip8
+	jr	z, SndParam_NotFound
 	cpw	(xsp+0xa), 5
-	jr	z, MidiStream_HandleRunningStatus_Skip9
+	jr	z, SndParam_DispatchTypeDE5
 	ld	c, (xwa+0xd)
 	cp	c, 9
-	jr	nc, MidiStream_HandleRunningStatus_Skip8
+	jr	nc, SndParam_NotFound
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SndParam_RegisterHandlers:24)
@@ -11704,30 +11702,30 @@ MidiStream_HandleRunningStatus_Skip6:
 	call	(xhl)
 	ld	xbc, xhl
 	cpw	(xbc), 0xffff
-	jr	z, MidiStream_HandleRunningStatus_Skip8
+	jr	z, SndParam_NotFound
 	ld	wa, (xbc+0x2)
 	cp	wa, 1:i3
-	jr	z, MidiStream_HandleRunningStatus_Skip7
+	jr	z, SndParam_CallbackType1
 	cp	wa, 0:i3
-	jr	nz, MidiStream_HandleRunningStatus_Loop2
+	jr	nz, SndParam_Epilogue
 	ld	wa, (xsp+0xa)
 	calr	Audio_ResetAfterPayloadError_Helper_Helper
-	jr	MidiStream_HandleRunningStatus_Loop2
-MidiStream_HandleRunningStatus_Skip7:
+	jr	SndParam_Epilogue
+SndParam_CallbackType1:
 	ld	wa, (xsp+0xa)
 	calr	Audio_ResetAfterPayloadError_Helper_Helper2
-	jr	MidiStream_HandleRunningStatus_Loop2
-MidiStream_HandleRunningStatus_Skip8:
+	jr	SndParam_Epilogue
+SndParam_NotFound:
 	ldw	(xsp+0x4), 0xffff
-MidiStream_HandleRunningStatus_Loop2:
+SndParam_Epilogue:
 	ld	hl, (xsp+0x4)
 	pop	xiz
 	lda	xsp, (xsp+0xa)
 	ret
-MidiStream_HandleRunningStatus_Skip9:
+SndParam_DispatchTypeDE5:
 	ld	c, (xwa+0x10)
 	cp	c, 6:i3
-	jr	nc, MidiStream_HandleRunningStatus_Loop2
+	jr	nc, SndParam_Epilogue
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SndParam_WriteHandlers:24)
@@ -11736,18 +11734,18 @@ MidiStream_HandleRunningStatus_Skip9:
 	ld	xhl, (xde)
 	call	(xhl)
 	ld	(xsp+0x4), hl
-	jr	MidiStream_HandleRunningStatus_Loop2
-UIState_CheckAndRenderBitmap_Helper:
+	jr	SndParam_Epilogue
+SndParam_NotifyAndReturn:
 	pushw	iz
 	ld	iz, de
 	calr	UIState_CheckAndRenderBitmap_Helper_Helper
 	ld	xwa, xhl
 	ld	bc, iz
 	ld	de, (xsp+0x6)
-	calr	Audio_ResetAfterPayloadError_Helper
+	calr	SoundParam_NotifyChange
 	popw	iz
 	retd	2
-MainTitle_PrepareAndDispatch_Helper:
+SndParam_LookupByKey:
 	lda	xsp, (xsp-0xa)
 	push	xiz
 	ld	(xsp+0xa), de
@@ -11776,28 +11774,28 @@ MainTitle_PrepareAndDispatch_Helper:
 	ld	xbc, 0x7ff
 	call	DivMod32
 	ld	ix, hl
-	jr	MidiStream_HandleRunningStatus_Join4
-MidiStream_HandleRunningStatus_Loop3:
+	jr	SndParam_Lkp2_ProbeEntry
+SndParam_Lkp2_ProbeCheck:
 	ld	bc, 0:i3
 	cp	xiz, xde
-	jr	z, MidiStream_HandleRunningStatus_Skip10
+	jr	z, SndParam_Lkp2_MatchFound
 	ldw	bc, 0xffff
-	jr	MidiStream_HandleRunningStatus_Join3
-MidiStream_HandleRunningStatus_Skip10:
+	jr	SndParam_Lkp2_ProbeAdvance
+SndParam_Lkp2_MatchFound:
 	cp	bc, 0xffff
-	jr	z, MidiStream_HandleRunningStatus_Join3
+	jr	z, SndParam_Lkp2_ProbeAdvance
 	ld	xwa, (xwa+0x4)
 	ld	(xsp+0x6), xwa
-MidiStream_HandleRunningStatus_Join3:
+SndParam_Lkp2_ProbeAdvance:
 	inc	1, hl
 	cp	hl, 0x7ff
-	jr	ugt, MidiStream_HandleRunningStatus_Skip11
+	jr	ugt, SndParam_Lkp2_Dispatch
 	ld	wa, ix
 	inc	3, wa
 	extz	xwa
 	div	wa, 0x7ff
 	ld	ix, qwa
-MidiStream_HandleRunningStatus_Join4:
+SndParam_Lkp2_ProbeEntry:
 	ld	bc, ix
 	extz	xbc
 	sll	xbc, 3
@@ -11805,14 +11803,14 @@ MidiStream_HandleRunningStatus_Join4:
 	add	xwa, xbc
 	ld	xde, (xwa)
 	cp	xde, SNDPARAM_HASH_EMPTY_KEY
-	jr	nz, MidiStream_HandleRunningStatus_Loop3
-MidiStream_HandleRunningStatus_Skip11:
+	jr	nz, SndParam_Lkp2_ProbeCheck
+SndParam_Lkp2_Dispatch:
 	ld	xwa, (xsp+0x6)
 	or	xwa, xwa
-	jr	z, interrupt_vector_trampolines_Skip2
+	jr	z, SndParam_Lkp2_NotFound
 	ld	a, (xwa+0xe)
 	cp	a, 8
-	jr	nc, interrupt_vector_trampolines_Skip2
+	jr	nc, SndParam_Lkp2_NotFound
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (SndParam_Register2Handlers:24)
@@ -11824,12 +11822,12 @@ MidiStream_HandleRunningStatus_Skip11:
 	call	(xhl)
 	ld	xbc, xhl
 	cpw	(xbc), 0xffff
-	jr	z, interrupt_vector_trampolines_Skip2
+	jr	z, SndParam_Lkp2_NotFound
 	ld	wa, (xbc+0x2)
 	cp	wa, 1:i3
-	jr	z, interrupt_vector_trampolines_Skip
+	jr	z, SndParam_Lkp2_CallType1
 	cp	wa, 0:i3
-	jr	nz, interrupt_vector_trampolines_Join
+	jr	nz, SndParam_Lkp2_Epilogue
 	ld	wa, (xsp+0xa)
 	calr	Audio_ResetAfterPayloadError_Helper_Helper
-	jr	interrupt_vector_trampolines_Join
+	jr	SndParam_Lkp2_Epilogue

@@ -32,7 +32,7 @@ FDemo_DisplayResourceData_Loop:
 	push	xiz
 	lda	xwa, (xsp+0x112)
 	push	xwa
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xwa, (xsp+0x116)
 	ld	(xwa+0x8), 0
 	pushw	FDemo_DisplayResourceData_Str_SQT@hi16
@@ -274,7 +274,7 @@ ApPreControl_OnReadSong:
 	pushw	2
 	pushw	18552
 	push	xiz
-	call	Free_Compare2
+	call	Strcpy
 	lda	xsp, (xsp+14)
 	ld	xwa, NAKA_MAINFUNC_MainPreControl
 	ld	xbc, EVT_READ_ACTION_REQ
@@ -460,7 +460,7 @@ FDemo_LinkedListSearchInsert_Skip3:
 	jr	z, FDemo_LinkedListSearchInsert_Skip4
 	push	xwa
 	push	xiz
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xwa, (xsp+4)
 	ld	(xiz+16), xwa
@@ -489,7 +489,7 @@ FDemo_FileOpenAndProcess:
 	push	xwa
 	lda	xwa, (xsp+14)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xwa, (xsp+10)
 	calr	FDemo_LinkedListSearchInsert
@@ -556,7 +556,7 @@ DemoMode_Main_Operation:
 	calr Voice_CopyPreset
 	call MIDI_BroadcastPitchReset
 	calr Timer7_DisableInterrupt
-	call PerfMode_Handler_EvtB_Helper2_Helper11
+	call Audio_CheckSubsystemReady
 	set 6, (0xb746:16)
 	res 3, (DEMO_CONTROL_FLAGS:16)
 	call SeqInit_PostEventSequence
@@ -596,7 +596,7 @@ DemoMode_Initialize:
 FDemo_PostBannerCheck:
 	calr	Banner_Loop_Check
 ; call Audio_CheckSubsystemReady (v7 addr)
-	call	PerfMode_Handler_EvtB_Helper2_Helper11
+	call	Audio_CheckSubsystemReady
 ; resda 6, 0xb7e2 (v7 patched)
 	res	6, (0xb746:16)
 
@@ -895,7 +895,7 @@ Demo_SelectEntry_StartPlayback:
 	cp (CURRENT_MODE:16), 0x13
 	ret NZ
 	call Seq_ResetAndRestartAccompaniment
-	call PerfMode_Handler_EvtB_Helper2_Helper11
+	call Audio_CheckSubsystemReady
 	ldmm8 DEMO_TARGET_SONG, DEMO_ACTIVE_ENTRY
 	cp (ACTIVE_TITLE:16), 0xe4
 	ret Z
@@ -3535,7 +3535,7 @@ FileIO_ByteBlock_DemoProc1_Join5:
 	ld	c, (xsp+14)
 	extz	bc
 	ld	de, iz
-	call	SendPartDataBlock_InitVal4
+	call	TmFlashWrite_Block1_Entry
 FileIO_ByteBlock_DemoProc1_Skip19:
 	call	FileIO_CloseHandle
 	ld	hl, iz
@@ -8513,7 +8513,7 @@ FileIO_MidiOutSendByte:
 	dec	2, xsp
 	ld	(xsp), a
 	ld	xwa, 8832
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 0:i3
 	jr	z, MidiOutSend_Return
 	ld	(1060:16), 243

@@ -23,19 +23,19 @@
 
 ; (v7 label ScreenGroup_ReInit stood here; dropped, see the file header)
 	.byte	0x67, 0xfc, 0xc9
-	jr	z, screen_group_dispatch_Skip2
+	jr	z, AudioVoice_Callback
 	ld	wa, (0xc4f8:16)
 	bit	4, wa
-	jr	nz, screen_group_dispatch_Skip
+	jr	nz, AudioDispatch_ClearVoiceFlags
 	set	2, (0xc162:16)
-	jr	screen_group_dispatch_Entry
+	jr	AudioDispatch_SetBusyFlag
 ; (v7 label ScreenGroup_Dispatch stood here; dropped, see the file header)
 ; (v7 label ScreenGroup_DispatchAlt stood here; dropped, see the file header)
-screen_group_dispatch_Skip:
+AudioDispatch_ClearVoiceFlags:
 	ld	(0xc162:16), 0
-screen_group_dispatch_Entry:
+AudioDispatch_SetBusyFlag:
 	.byte	0xd1, 0x00, 0xc5, 0x3e, 0x01, 0x00
-screen_group_dispatch_Skip2:
+AudioVoice_Callback:
 	ld	a, (CURRENT_MODE:16)
 	extz	wa
 ; (v7 label ScreenGroup_SetupWidgetPtr stood here; dropped, see the file header)
@@ -44,13 +44,13 @@ screen_group_dispatch_Skip2:
 	lda	xbc, (AudioVoiceHandler_Table:24)
 	ld	xhl, (xbc+wa)
 	ld	xbc, xhl
-	lda	xwa, (AudioModeChange_Handler_Code:24)
+	lda	xwa, (AudioInit_MixFallbackDefault_Code:24)
 	cp	xwa, xbc
-	jr	z, screen_group_dispatch_Skip3
+	jr	z, AudioVoice_SkipToDispatch
 	ld	wa, 0:i3
 	call	(xhl)
-	call	DSPCfg_EventType50_Code_Helper4
-screen_group_dispatch_Skip3:
+	call	AudioInit_ClearPartFlags_ByMode
+AudioVoice_SkipToDispatch:
 	jp	AudioInit_DispatchChanges
 AudioMode_SetStereoFlags:
 	bit	0, (0xfc69:16)
@@ -62,18 +62,18 @@ AudioMode_SetStereoFlags:
 	ret
 AudioMode_ResetVoiceState:
 	bit	1, (0xfc67:16)
-	jr	z, DkMdlyPly_CheckState_Helper2_Join
+	jr	z, AudioVoiceReset_Handler
 	ld	wa, (0xc4f8:16)
 	bit	4, wa
 ; (v7 label ScreenGroup_InitState stood here; dropped, see the file header)
-	jr	nz, DkMdlyPly_CheckState_Helper2_Skip
+	jr	nz, AudioVoiceReset_ClearFlags
 	set	2, (0xc162:16)
-	jr	DkMdlyPly_CheckState_Helper2_Join
-DkMdlyPly_CheckState_Helper2_Skip:
+	jr	AudioVoiceReset_Handler
+AudioVoiceReset_ClearFlags:
 	ld	(0xc162:16), 0
 ; (v7 label .Lc_fdd7f0 stood here; dropped, see the file header)
 ; [v10] Audio subsystem callback
-DkMdlyPly_CheckState_Helper2_Join:
+AudioVoiceReset_Handler:
 	res	3, (0xc162:16)
 	ld	(0xc218:16), 255
 	ld	(0xc220:16), 255
@@ -92,46 +92,45 @@ DkMdlyPly_CheckState_Helper2_Join:
 	ret	z
 	ld	wa, 1:i3
 	call	(xhl)
-	call	DSPCfg_EventType50_Code_Helper3
-	call	DSPCfg_EventType50_Code_Helper
-	call	DSPCfg_EventType50_Code_Helper2
-	call	DSPCfg_EventType50_Code_Helper4
+	call	AudioInit_DrumRoutingCheck
+	call	AudioInit_DrumSaveReturn
+	call	AudioInit_VoiceParamCtrl
+	call	AudioInit_ClearPartFlags_ByMode
 	call	AudioInit_DispatchChanges
 	ret
-MimeSyori_Helper:
+AudioMode_ConfigureExternal:
 	ld	(0xc162:16), 0
 	cp	a, 0:i3
-	jr	z, DkMdlyPly_CheckState_Helper2_Skip2
+	jr	z, AudioMode_ConfigExternal_Off
 	orw	(0xc4f8:16), 16
-	jr	ScreenGroup_InitVoiceLoop_Code_Join2
-DkMdlyPly_CheckState_Helper2_Skip2:
+	jr	AudioMode_ConfigExternal_Apply
+AudioMode_ConfigExternal_Off:
 	andw	(0xc4f8:16), 0xffef
-	.set	ScreenGroup_InitVoiceLoop, . + 2	; no instruction starts here: the name points 2 byte(s) into the one below
 	bit	0, (64614:16)
-	jr	z, ScreenGroup_InitVoiceLoop_Code_Skip
+	jr	z, AudioMode_ConfigExternal_CheckBit1
 	set	0, (0xc162:16)
-ScreenGroup_InitVoiceLoop_Code_Skip:
+AudioMode_ConfigExternal_CheckBit1:
 	bit	1, (0xfc66:16)
-	jr	z, ScreenGroup_InitVoiceLoop_Code_Skip2
+	jr	z, AudioMode_ConfigExternal_CheckStereo
 	set	1, (0xc162:16)
-ScreenGroup_InitVoiceLoop_Code_Skip2:
+AudioMode_ConfigExternal_CheckStereo:
 	bit	1, (0xfc67:16)
-	jr	z, ScreenGroup_InitVoiceLoop_Code_Skip3
+	jr	z, AudioMode_ConfigExternal_NoStereo
 	orw	(0xc4fa:16), 32
-	jr	ScreenGroup_InitVoiceLoop_Code_Join
-ScreenGroup_InitVoiceLoop_Code_Skip3:
+	jr	AudioMode_ConfigExternal_MergeFlags
+AudioMode_ConfigExternal_NoStereo:
 	andw	(0xc4fa:16), 0xffdf
 	ld	wa, (0xc4fa:16)
 	and	wa, 0x7
 	call	z, (AudioInit_RefreshToneBank:24)
-ScreenGroup_InitVoiceLoop_Code_Join:
+AudioMode_ConfigExternal_MergeFlags:
 	res	2, (0xc162:16)
 	ld	a, (0xfc67:16)
 	and	a, 0x2
 	ld	c, a
 	add	a, c
 	or	(0xc162:16), a
-ScreenGroup_InitVoiceLoop_Code_Join2:
+AudioMode_ConfigExternal_Apply:
 	orw	(0xc4f8:16), 4
 	jrl	AudioInit_ProcessModeChange
 ; [v10] ============================================================================
@@ -142,6 +141,7 @@ ScreenGroup_InitVoiceLoop_Code_Join2:
 ; [v10] Handles MIDI events (note on/off, control change, etc.) within the UI
 ; [v10] state machine, updating relevant display elements.
 ; [v10] ============================================================================
+UIState_ProcessMidiEvent:
 	cp	(SWBTWR_EVENT_TYPE:16), 24
 	ret	ugt
 	ld	l, (SWBTWR_EVENT_TYPE:16)
@@ -155,11 +155,11 @@ ScreenGroup_InitVoiceLoop_Code_Join2:
 	ld	xwa, (xbc+wa)
 	ld	a, h
 	cp	a, 0x16
-	jrl	z, AudioDispatch_CheckStereoMode_Code_Skip26
+	jrl	z, UIStateEvt_TransposeUpdate
 	cp	a, 0xd
 	jr	z, UIStateEvt_VoiceAssign
 	cp	a, 0xc
-	jr	z, ScreenGroup_InitVoiceLoop_Code_Skip4
+	jr	z, UIStateEvt_PartRouting
 	cp	a, 0:i3
 	ret	nz
 	ld	a, e
@@ -167,7 +167,7 @@ ScreenGroup_InitVoiceLoop_Code_Join2:
 	ret	z
 	orw	(0xc4f8:16), 4
 	ret
-ScreenGroup_InitVoiceLoop_Code_Skip4:
+UIStateEvt_PartRouting:
 	ld	a, e
 	and	a, 0x7
 	ret	z
@@ -215,7 +215,7 @@ UIStateEvt_VoiceAssign:
 	and	a, 0xf
 	ld	(xix), a
 ; (v7 label ScreenGroup_InitParam8ComplexLoop stood here; dropped, see the file header)
-	jr	ScreenGroup_InitVoiceLoop_Code_Join3
+	jr	UIStateEvt_VoiceAssign_Notify
 UIStateEvt_VoiceAssign_Reset:
 	ld	a, l
 	extz	wa
@@ -226,7 +226,7 @@ UIStateEvt_VoiceAssign_Reset:
 	extz	xwa
 	add	xwa, xbc
 	ld	(xwa), 0xff
-ScreenGroup_InitVoiceLoop_Code_Join3:
+UIStateEvt_VoiceAssign_Notify:
 	orw	(0xc500:16), 2048
 	orw	(0xc4f8:16), 4
 UIStateEvt_ToneChange:
@@ -244,10 +244,10 @@ UIStateEvt_ToneChange:
 	add	xwa, xbc
 	ld	(xwa), 0xff
 	cp	l, 0x13
-	jr	nz, ScreenGroup_InitVoiceLoop_Code_Join4
+	jr	nz, Tone_WriteEndMarker
 	ld	(0xc17c:16), 255
 ; (v7 label ScreenGroup_FinalInit stood here; dropped, see the file header)
-	jr	ScreenGroup_InitVoiceLoop_Code_Join4
+	jr	Tone_WriteEndMarker
 UIStateEvt_ToneChange_Set:
 	ld	a, l
 	extz	wa
@@ -265,9 +265,9 @@ UIStateEvt_ToneChange_Set:
 	ld	a, (xbc+wa)
 	ld	(xix), a
 	cp	l, 0x13
-	jr	nz, ScreenGroup_InitVoiceLoop_Code_Join4
+	jr	nz, Tone_WriteEndMarker
 	ld	(0xc17c:16), 22
-ScreenGroup_InitVoiceLoop_Code_Join4:
+Tone_WriteEndMarker:
 	orw	(0xc500:16), 4
 	orw	(0xc4f8:16), 4
 ; (v7 label ScreenGroup_InitFinalize stood here; dropped, see the file header)

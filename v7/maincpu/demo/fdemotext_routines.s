@@ -1262,7 +1262,7 @@ FDemoText_ByteData_DisplayRefresh_Skip2:
 	push	xhl
 	pushw 2
 	pushw 18422
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 FDemoText_ByteData_DisplayRefresh_Join:
 	lda	xhl, (149494:24)
@@ -1275,7 +1275,7 @@ FDemoText_TextDispatch_Helper:
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xwa, 255
 	ld	(xsp+4), xwa
@@ -1520,7 +1520,7 @@ FDemoText_ProcessMarkup_AllocCopy:
 	inc	1, xwa
 	push	xwa
 	push	xbc
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xsp, (xsp+12)
 	ld	xwa, (xsp+12)
 	add	xwa, xiz
@@ -1748,14 +1748,14 @@ FDemoText_ByteData_TextRenderer:
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	ld	iz, 0:i3
 	pushw	64
 	ld	xwa, (xsp+18)
 	push	xwa
 	ld	xwa, (xsp+26)
 	push	xwa
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xsp, (xsp+24)
 	ld	xwa, (xsp+6)
 	ld	(xwa+64), 0
@@ -1774,7 +1774,7 @@ FDemoText_ByteData_TextRenderer_Loop:
 	push	xde
 	ld	xwa, (xsp+10)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	inc	1, iz
 	ld	xde, (xsp+2)
@@ -1788,7 +1788,7 @@ FDemoText_ByteData_TextRenderer_Loop:
 	push	xwa
 	ld	xwa, (xsp+22)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	ld	xwa, (xsp+26)
 	push	xwa
 	call	Strlen
@@ -1802,7 +1802,7 @@ FDemoText_ProcessTextMarkup_Skip:
 	push	xbc
 	ld	xwa, (xsp+22)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	FDemoText_ProcessTextMarkup_Skip2
 FDemoText_ByteData_TextRenderer_Skip:
@@ -1889,7 +1889,7 @@ FDemoText_TextDispatch_Skip2:
 	lda	xwa, (xsp+24)
 	push	xwa
 FDemoText_TextDispatch_Join6:
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 FDemoText_TextDispatch_Join:
 	inc	1, qiz
@@ -1924,12 +1924,12 @@ FDemoText_TextDispatch_Skip3:
 	push	xwa
 	pushw	2
 	pushw	0x4878
-	call	Free_Compare2
+	call	Strcpy
 	lda	xwa, (xsp+40)
 	push	xwa
 	pushw	2
 	pushw	0x4882
-	call	Free_Compare2
+	call	Strcpy
 	lda	xsp, (xsp+28)
 	ld	xwa, NAKA_VIEW_Demofeature1
 	ld	xbc, EVT_HIDE
@@ -1961,7 +1961,7 @@ FDemoText_TextDispatch_Skip3:
 	pushw	2
 	pushw	0x4878
 	push	xiz
-	call	Free_Compare2
+	call	Strcpy
 	lda	xsp, (xsp+14)
 	ld	xwa, NAKA_MAINFUNC_MainPreControl
 	ld	xbc, EVT_READ_SONG_REQ
@@ -2321,7 +2321,7 @@ FDemoText_TextDispatch_Skip27:
 	lda	xwa, (xsp+8)
 	push	xwa
 FDemoText_TextDispatch_Join11:
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 FDemoText_TextDispatch_Skip24:
 	inc	1, qiz
@@ -2391,7 +2391,7 @@ FDemoText_TextDispatch_Loop11:
 	push	xwa
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 FDemoText_TextDispatch_Skip10:
 	inc	1, qiz
@@ -2655,7 +2655,7 @@ FDemoText_Layout_Setup:
 	push	xwa
 	ld	xwa, (xsp+26)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	lda	xsp, (xsp+14)
 	ld	xwa, (xsp+16)
 	ld	(xsp+6), xwa
@@ -2870,7 +2870,7 @@ Seq_InitVoiceLoop:
 	lda	xwa, (149976:24)
 	lda	xwa, (xwa+bc)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	wa, qiz
 	muls	wa, 24
@@ -2944,7 +2944,7 @@ Seq_InitializeAndStart:
 	ld	xwa, (xsp+10)
 	push	xwa
 	push	xiz
-	call	Free_Compare2
+	call	Strcpy
 	lda	xsp, (xsp+14)
 	ld	xwa, NAKA_MAINFUNC_MainPreControl
 	ld	xbc, EVT_READ_PRESENTATION_REQ
@@ -3029,7 +3029,7 @@ Seq_FillBufferLoop:
 	push	xiz
 	lda	xwa, (xsp+14)
 	push	xwa
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xwa, (xsp+18)
 	ld	(xwa+8), 0
 	pushw	Seq_FillBufferLoop_Str_ACT@hi16

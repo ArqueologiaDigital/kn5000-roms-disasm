@@ -167,18 +167,18 @@ EffectMode_ByteData_Block3:
 	jr	EffectMode_ByteData_Block3_Join
 EffectMode_ByteData_Block3_Skip:
 	ld	xwa, 1025
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 3:i3
 	jr	z, EffectMode_ByteData_Block3_Skip2
 	cp	hl, 2:i3
 	jr	nz, EffectMode_ByteData_Block3_Join
 EffectMode_ByteData_Block3_Skip2:
 	ld	xwa, 1024
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 0:i3
 	jr	z, EffectMode_ByteData_Block3_Join
 	ld	xwa, 0x028002
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	(0x8cb8:16), l
 	set	7, (0xb746:16)
 	set	3, (0x8cb6:16)
@@ -194,18 +194,18 @@ EffectMode_ByteData_Block3_Skip3:
 	and	a, 0x28
 	jr	z, EffectMode_ByteData_Block3_Skip5
 	ld	xwa, 1025
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 3:i3
 	jr	z, EffectMode_ByteData_Block3_Skip4
 	cp	hl, 2:i3
 	jr	nz, EffectMode_ByteData_Block3_Skip5
 EffectMode_ByteData_Block3_Skip4:
 	ld	xwa, 1024
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 0:i3
 	jr	z, EffectMode_ByteData_Block3_Skip5
 	ld	xwa, 0x028002
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	(0x8cb8:16), l
 	set	7, (0xb746:16)
 	calr	EffectMode_CheckModeAndReinit
@@ -222,18 +222,18 @@ EffectMode_ByteData_Block4:
 	and	a, 0x28
 	jr	z, EffectMode_ByteData_Block4_Skip2
 	ld	xwa, 1025
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 3:i3
 	jr	z, EffectMode_ByteData_Block4_Skip
 	cp	hl, 2:i3
 	jr	nz, EffectMode_ByteData_Block4_Skip2
 EffectMode_ByteData_Block4_Skip:
 	ld	xwa, 1024
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 0:i3
 	jr	z, EffectMode_ByteData_Block4_Skip2
 	ld	xwa, 0x028002
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	(0x8cb8:16), l
 	set	7, (0xb746:16)
 	calr	EffectMode_CheckModeAndReinit
@@ -255,7 +255,7 @@ EffectMode_ApplyTranspose_StoreTimer:
 	jr	EffectMode_CheckTransposeAndLookup
 EffectMode_CheckTransposeAndLookup:
 	ld	xwa, 163840
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	bit	7, hl
 	ret	nz
 	calr	SndParam_LoadTransposeValues
@@ -263,10 +263,10 @@ EffectMode_CheckTransposeAndLookup:
 	ret
 SndParam_LoadTransposeValues:
 	ld	xwa, 163840
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	(36942:16), l
 	ld	xwa, 163841
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	lda	xwa, (36942:16)
 	ld	(xwa+1), l
 	ld	(xwa+2), 72
@@ -331,7 +331,7 @@ EffectMode_TimerCountdown_SetBit7:
 
 EffectMode_CheckTransposeChanged:
 	ld XWA,0x00028000
-	call AcApcToggleProc_Helper
+	call SndParam_LookupReadOnly
 	bit 0x07,HL
 	jr nz, EffectMode_TransposeInvalid
 	calr	SndParam_LoadTransposeValues
@@ -498,7 +498,7 @@ EffectMode_DisplayName_DefaultLookup:
 EffectMode_DisplayName_Render:
 	lda	xwa, (63906:16)
 	push	xwa
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xsp, (xsp+10)
 	ldw	wa, 128
 	call	BitMapOut_GetRenderMode_CheckBit3
@@ -820,7 +820,7 @@ EffectMode_CheckPedalType:
 	bit	0, wa
 	jr	z, EffectMode_SendPedalType_Bank1
 	ld	xwa, 164097
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 2:i3
 	jr	z, EffectMode_PopIzRet
 	push	xde
@@ -836,7 +836,7 @@ EffectMode_CheckPedalType:
 	jr	EffectMode_PopIzRet
 EffectMode_SendPedalType_Bank1:
 	ld	xwa, 164097
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 3:i3
 	jr	z, EffectMode_PopIzRet
 	push	xde
@@ -906,12 +906,12 @@ EffectMode_CopyPresetBits:
 	ret
 EffectMode_ReinitSoundOutput:
 	ld	xwa, 770
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	(36020:16), l
 	ld	xwa, 770
 	ld	bc, 1:i3
 	ld	de, 0:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	ldw	wa, 128
 	ld	xbc, 246468
 	call	BitMapOut_CopyVoicePreset9
@@ -931,7 +931,7 @@ EffectMode_ReinitSound_NotifyBank1:
 	ld de, 0:i3
 
 EffectMode_ReinitSound_CallNotify:
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	jp	SwbtWr_ReinitOutputBank
 EffectMode_ReinitWithFlag:
 	set 5, (0x8cb6:16)
@@ -965,7 +965,7 @@ EffectMode_CheckModeAndReinit:
 	ret	nz
 SndOutput_ReinitByMode:
 	ld	xwa, 1025
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 3:i3
 	jr	z, SndOutput_ReinitByMode_TypeA
 	cp	hl, 2:i3
@@ -1004,7 +1004,7 @@ SndOutput_ReinitByMode_NotifyParam:
 	extz	bc
 	ld	xwa, 768
 	ld	de, 3:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	ld	a, (36022:16)
 	bit	5, a
 	jr	z, SndOutput_ReinitByMode_CheckBit3
@@ -2076,7 +2076,7 @@ TEST3FUNC_Helper:
 	ld	xwa, 16386
 	ldw	bc, 128
 	ld	de, 3:i3
-	call	MainTitle_PrepareAndDispatch_Helper
+	call	SndParam_LookupByKey
 	call	Voice_InitializeAll
 	ret
 Voice_EmitNoteWithVelocity:
@@ -2723,7 +2723,7 @@ AcMstStyleAlp_Boundary_Skip3:
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	AcMstStyleAlp_Boundary_Join2
 AcMstStyleAlp_Boundary_Skip4:
@@ -2731,7 +2731,7 @@ AcMstStyleAlp_Boundary_Skip4:
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xwa, (xsp+8)
 	ld	xwa, (xwa+78)
@@ -2828,14 +2828,14 @@ MasterSetup_DialTurn_ScrollUp:
 	ld	xwa, (xde+wa)
 	push	xwa
 	push	xbc
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	MasterSetup_ScrollUp_UpdateView
 MasterSetup_ScrollUp_Overflow:
 	ld	xwa, (StyleSong_MasterTable:24)
 	push	xwa
 	push	xbc
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xwa, (xsp+8)
 	ld	xwa, (xwa+78)
@@ -2944,7 +2944,7 @@ AcMstStyleAlp_Boundary_OnIndexswUp:	; cases 29360151, 29360153
 	ld	xwa, (xhl+wa)
 	push	xwa
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	MasterSetup_DialDown_UpdateView
 MasterSetup_DialDown_Underflow:
@@ -2954,7 +2954,7 @@ MasterSetup_DialDown_Underflow:
 
 	push xde
 
-	call	Free_Compare2
+	call	Strcpy
 
 	inc 8, xsp
 
@@ -3170,7 +3170,7 @@ AcMstStyleAlp_Boundary_OnIndexswDown:	; cases 29360152, 29360154
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	MstStyleAlp_UpdateFocusIndex
 MstStyleAlp_OverflowCopy:
@@ -3182,7 +3182,7 @@ MstStyleAlp_OverflowCopy:
 
 	push xwa
 
-	call	Free_Compare2
+	call	Strcpy
 
 	inc 8, xsp
 
@@ -3350,7 +3350,7 @@ MasterSetup_GetNameA:
 	push	xwa
 	ld	xwa, (xsp+70)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jrl	SeqFile_ReturnZeroJmp2
 MasterSetup_GetNameB_DrawString:
@@ -3361,7 +3361,7 @@ MasterSetup_GetNameB_DrawString:
 	push	xwa
 	ld	xwa, (xsp+70)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	lda	xhl, (xsp+54)
 	ldw	(xhl), 14
 	lda	xbc, (xhl+2)
@@ -3539,7 +3539,7 @@ MstStyleAlp_CellSelect:
 	push XWA
 	ld XWA,(XSP+0x10)
 	push XWA
-	call Free_Compare2
+	call Strcpy
 	inc 8,XSP
 	ld (XSP+0x0e),0x00
 	jr t, MstStyleAlp_PadLoopCond
@@ -3581,7 +3581,7 @@ MstStyleAlp_OverflowStr:
 	pushw	MstStyleAlp_OverflowStr_Str_Blank32@lo16
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	MstStyleAlp_FinalSendEvent
 MstStyleAlp_CopyEntryAndPad:
@@ -3594,7 +3594,7 @@ MstStyleAlp_CopyEntryAndPad:
 	push XWA
 	ld XWA,(XSP+0x10)
 	push XWA
-	call Free_Compare2
+	call Strcpy
 	inc 8,XSP
 	ld (XSP+0x0e),0x00
 	jr t, MstStyleAlp_PadLoopCond2
@@ -3939,7 +3939,7 @@ MstStyle_GetName_Load:
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	SeqFileAlt_ReturnZeroJmp
 MstStyle_ForwardToChild:
@@ -4042,7 +4042,7 @@ MstStyle1Grid_CellSelect:
 	ld	xwa, (xwa+ix)
 	push	xwa
 	push	xbc
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	(xsp+10), 0
 	jr	MstStyle1Grid_PadLeft_Check
@@ -4079,7 +4079,7 @@ MstStyle1Grid_OutOfRange:
 	pushw	MstStyle1Grid_OutOfRange_Str_Blank16@hi16
 	pushw	MstStyle1Grid_OutOfRange_Str_Blank16@lo16
 	push	xbc
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	MstStyle1Grid_CheckPlayAudio
 MstStyle1Grid_BottomSection:
@@ -4089,7 +4089,7 @@ MstStyle1Grid_BottomSection:
 	ld	xwa, (xwa+ix)
 	push	xwa
 	push	xbc
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	(xsp+10), 0
 	jr	MstStyle1Grid_PadLeft_CheckB
@@ -4590,7 +4590,7 @@ MstStyle1Sub_GetNameA:
 	push	xwa
 	ld	xwa, (xsp+62)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jrl	SeqFile_ReturnZeroJmp
 MstStyle1Sub_GetNameB_DrawString:
@@ -4602,7 +4602,7 @@ MstStyle1Sub_GetNameB_DrawString:
 	push XWA
 	ld XWA,(XSP+0x3e)
 	push XWA
-	call Free_Compare2
+	call Strcpy
 	lda xhl, (xsp + 0x36)
 	ldw (XHL), 0x00fe
 	lda xbc, (xhl + 0x02)
@@ -4737,7 +4737,7 @@ MstStyle1SubGrid_CellSelect:
 	ld	xwa, (xhl)
 	push	xwa
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ldib_erp	251, 0
 	jr	MstStyle1SubGrid_PadLeft_Check
@@ -4785,7 +4785,7 @@ MstStyle1SubGrid_OutOfRange:
 	pushw	MstStyle1SubGrid_OutOfRange_Str_Blank16@hi16
 	pushw	MstStyle1SubGrid_OutOfRange_Str_Blank16@lo16
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	MstStyle1SubGrid_CheckPlayAudio
 MstStyle1SubGrid_BottomSection:
@@ -4796,7 +4796,7 @@ MstStyle1SubGrid_BottomSection:
 	ld	xwa, (xhl)
 	push	xwa
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ldib_erp	251, 0	; ld qizh, 0
 	jr	MstStyle1SubGrid_PadLeft_CheckB
@@ -5875,7 +5875,7 @@ MstStyle2_GetNameA:
 	push	xwa
 	ld	xwa, (xsp+52)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jrl	SeqData_ReturnZero
 MstStyle2_GetNameB_DrawString:
@@ -5886,7 +5886,7 @@ MstStyle2_GetNameB_DrawString:
 	push XWA
 	ld XWA,(XSP+0x34)
 	push XWA
-	call Free_Compare2
+	call Strcpy
 	lda xhl, (xsp + 0x2c)
 	ldw (XHL), 0x000a
 	lda xbc, (xhl + 0x02)
@@ -5940,7 +5940,7 @@ MstStyle2_GetNameB_DrawString:
 	pushw MstStyle2_GetNameB_DrawString_Str_Blank17@hi16
 	pushw MstStyle2_GetNameB_DrawString_Str_Blank17@lo16
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xwa, MstStyle2_GetNameB_DrawString_Str_Blank5
 	jr	MstStyle2_NameB_Render
@@ -5976,7 +5976,7 @@ MstStyle2_NameB_Render:
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xbc, (xsp+36)
 	ldw	(xbc), 10
@@ -6216,7 +6216,7 @@ MstGrid2_CellSelect:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	(xsp+18), 0
 	jr	MstGrid2_PadLeft_CheckA
@@ -6260,7 +6260,7 @@ MstGrid2_UpperHalf:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	(xsp+18), 0
 	jr	MstGrid2_PadLeft_CheckB
@@ -6306,7 +6306,7 @@ MstGrid2_LowerSection:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	(xsp+18), 0
 	jr	MstGrid2_PadLeft_CheckC
@@ -6359,7 +6359,7 @@ MstGrid2_BottomRight:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	(xsp+18), 0
 	jr	MstGrid2_PadLeft_CheckD
@@ -6403,7 +6403,7 @@ MstGrid2_CopyFallback:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 MstGrid2_CheckPlayAudio:
 	ld wa, (xsp + 54)
@@ -6750,7 +6750,7 @@ TchSens_GetName_Load:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	TchSens_ReturnZeroJmp
 AcTchSensGridBoxProc_OnLswData:
@@ -6945,7 +6945,7 @@ TchSensGridCheck_Skip:
 TchSensGridCheck_Skip2:
 	push	xwa
 	push	xbc
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -7007,7 +7007,7 @@ TchSensGrid_CellSelect:
 	cpw (XWA), 0x0001
 	jr nz, .Lc_fba51b
 	ld XWA,0x00000100
-	call AcApcToggleProc_Helper
+	call SndParam_LookupReadOnly
 	pushw hl
 	pushw TchSensGrid_CellSelect_Str_Fmt3d@hi16
 	pushw TchSensGrid_CellSelect_Str_Fmt3d@lo16
@@ -7027,7 +7027,7 @@ TchSensGrid_CheckCell_1_4:
 	cpw (XWA), 0x0004
 	jr nz, TchSensGrid_CheckCell_1_5
 	ld XWA,0x00000104
-	call AcApcToggleProc_Helper
+	call SndParam_LookupReadOnly
 	ld XWA,TchSensGrid_CheckCell_1_4_Str_ON
 	cp hl, 0:i3
 	jr nz, TchSensGrid_Cell_1_4_Render
@@ -7036,7 +7036,7 @@ TchSensGrid_Cell_1_4_Render:
 	push	xwa
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -7049,7 +7049,7 @@ TchSensGrid_CheckCell_1_5:
 	cpw	(xwa), 5
 	jr	nz, TchSensGrid_CheckCell_1_6
 	ld	xwa, 258
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	pushw	hl
 	pushw	TchSensGrid_CheckCell_1_5_Str_Fmt3d@hi16
 	pushw	TchSensGrid_CheckCell_1_5_Str_Fmt3d@lo16
@@ -7068,7 +7068,7 @@ TchSensGrid_CheckCell_1_6:
 	cpw	(xwa), 6
 	jr	nz, TchSensGrid_ReturnZero
 	ld	xwa, 259
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	pushw	hl
 	pushw	TchSensGrid_CheckCell_1_6_Str_Fmt3d@hi16
 	pushw	TchSensGrid_CheckCell_1_6_Str_Fmt3d@lo16
@@ -7293,7 +7293,7 @@ FSWAss_GetName_Load:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	FSWAss_ReturnZeroJmp
 AcFSWAssGridBoxProc_OnLswData:
@@ -7371,14 +7371,14 @@ FSWAssGrid_EventDispatch:
 	cp	de, 2:i3
 	jr	nz, FSWAssGrid_EventDispatch_Skip4
 	ld	xwa, 10374
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	AudioTable_FindMatchIndex
 	cp	l, 28
 	jrl	nc, AudioTable_ReturnZero
 	ld	xwa, 10374
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	AudioTable_FindMatchIndex
@@ -7396,14 +7396,14 @@ FSWAssGrid_EventDispatch_Skip4:
 	cp	de, 3:i3
 	jr	nz, FSWAssGrid_EventDispatch_Skip5
 	ld	xwa, 10376
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	AudioTable_FindMatchIndex
 	cp	l, 28
 	jrl	nc, AudioTable_ReturnZero
 	ld	xwa, 10376
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	AudioTable_FindMatchIndex
@@ -7421,14 +7421,14 @@ FSWAssGrid_EventDispatch_Skip5:
 	cp	de, 4:i3
 	jr	nz, FSWAssGrid_EventDispatch_Skip6
 	ld	xwa, 10378
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	AudioTable_FindMatchIndex
 	cp	l, 28
 	jrl	nc, AudioTable_ReturnZero
 	ld	xwa, 10378
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	AudioTable_FindMatchIndex
@@ -7446,14 +7446,14 @@ FSWAssGrid_EventDispatch_Skip6:
 	cp	de, 5:i3
 	jr	nz, FSWAssGrid_EventDispatch_Skip7
 	ld	xwa, 10380
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	AudioTable_FindMatchIndex
 	cp	l, 28
 	jrl	nc, AudioTable_ReturnZero
 	ld	xwa, 10380
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	AudioTable_FindMatchIndex
@@ -7471,14 +7471,14 @@ FSWAssGrid_EventDispatch_Skip7:
 	cp	de, 6:i3
 	jr	nz, FSWAssGrid_EventDispatch_Skip8
 	ld	xwa, 10382
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	AudioTable_FindMatchIndex
 	cp	l, 28
 	jrl	nc, AudioTable_ReturnZero
 	ld	xwa, 10382
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	AudioTable_FindMatchIndex
@@ -7496,14 +7496,14 @@ FSWAssGrid_EventDispatch_Skip8:
 	cp	de, 7:i3
 	jr	nz, FSWAssGrid_EventDispatch_Skip9
 	ld	xwa, 10384
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	AudioTable_FindMatchIndex
 	cp	l, 28
 	jrl	nc, AudioTable_ReturnZero
 	ld	xwa, 10384
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	AudioTable_FindMatchIndex
@@ -7521,14 +7521,14 @@ FSWAssGrid_EventDispatch_Skip9:
 	cp	de, 8
 	jrl	nz, AudioTable_ReturnZero
 	ld	xwa, 10368
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	AudioTable_FindMatchIndex
 	cp	l, 30
 	jrl	nc, AudioTable_ReturnZero
 	ld	xwa, 10368
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	AudioTable_FindMatchIndex
@@ -7558,14 +7558,14 @@ FSWAssGridCheck_OnIndexswDown:
 	cp	de, 2:i3
 	jr	nz, FSWAssGridCheck_Entry7
 	ld	xwa, 10374
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	AudioTable_FindMatchIndex
 	cp	l, 0:i3
 	jrl	z, AudioTable_ReturnZero
 	ld	xwa, 10374
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	AudioTable_FindMatchIndex
@@ -7583,14 +7583,14 @@ FSWAssGridCheck_Entry7:
 	cp	de, 3:i3
 	jr	nz, FSWAssGridCheck_Entry8
 	ld	xwa, 10376
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	AudioTable_FindMatchIndex
 	cp	l, 0:i3
 	jrl	z, AudioTable_ReturnZero
 	ld	xwa, 10376
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	AudioTable_FindMatchIndex
@@ -7608,14 +7608,14 @@ FSWAssGridCheck_Entry8:
 	cp	de, 4:i3
 	jr	nz, FSWAssGridCheck_Entry9
 	ld	xwa, 10378
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	AudioTable_FindMatchIndex
 	cp	l, 0:i3
 	jrl	z, AudioTable_ReturnZero
 	ld	xwa, 10378
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	AudioTable_FindMatchIndex
@@ -7633,14 +7633,14 @@ FSWAssGridCheck_Entry9:
 	cp	de, 5:i3
 	jr	nz, FSWAssGridCheck_Entry10
 	ld	xwa, 10380
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	AudioTable_FindMatchIndex
 	cp	l, 0:i3
 	jrl	z, AudioTable_ReturnZero
 	ld	xwa, 10380
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	AudioTable_FindMatchIndex
@@ -7658,14 +7658,14 @@ FSWAssGridCheck_Entry10:
 	cp	de, 6:i3
 	jr	nz, FSWAssGridCheck_Entry11
 	ld	xwa, 10382
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	AudioTable_FindMatchIndex
 	cp	l, 0:i3
 	jrl	z, AudioTable_ReturnZero
 	ld	xwa, 10382
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	AudioTable_FindMatchIndex
@@ -7683,14 +7683,14 @@ FSWAssGridCheck_Entry11:
 	cp	de, 7:i3
 	jr	nz, FSWAssGridCheck_Entry12
 	ld	xwa, 10384
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	AudioTable_FindMatchIndex
 	cp	l, 0:i3
 	jrl	z, AudioTable_ReturnZero
 	ld	xwa, 10384
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	AudioTable_FindMatchIndex
@@ -7708,14 +7708,14 @@ FSWAssGridCheck_Entry12:
 	cp	de, 8
 	jrl	nz, AudioTable_ReturnZero
 	ld	xwa, 10368
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	AudioTable_FindMatchIndex
 	cp	l, 29
 	jrl	ule, AudioTable_ReturnZero
 	ld	xwa, 10368
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	calr	AudioTable_FindMatchIndex
@@ -7932,7 +7932,7 @@ FSWAssGrid_CellSelect:
 	cpw (XWA), 0x0002
 	jr nz, .Lc_fbaf8b
 	ld XWA,0x00002886
-	call AcApcToggleProc_Helper
+	call SndParam_LookupReadOnly
 	extz HL
 	ld WA,HL
 	calr AudioTable_FindMatchIndex
@@ -7959,7 +7959,7 @@ FSWAssGrid_CheckCell_1_3:
 	cpw (XWA), 0x0003
 	jr nz, .Lc_fbafdb
 	ld XWA,0x00002888
-	call AcApcToggleProc_Helper
+	call SndParam_LookupReadOnly
 	extz HL
 	ld WA,HL
 	calr AudioTable_FindMatchIndex
@@ -7986,7 +7986,7 @@ FSWAssGrid_CheckCell_1_4:
 	cpw (XWA), 0x0004
 	jr nz, .Lc_fbb02b
 	ld XWA,0x0000288a
-	call AcApcToggleProc_Helper
+	call SndParam_LookupReadOnly
 	extz HL
 	ld WA,HL
 	calr AudioTable_FindMatchIndex
@@ -8013,7 +8013,7 @@ FSWAssGrid_CheckCell_1_5:
 	cpw (XWA), 0x0005
 	jr nz, .Lc_fbb07b
 	ld XWA,0x0000288c
-	call AcApcToggleProc_Helper
+	call SndParam_LookupReadOnly
 	extz HL
 	ld WA,HL
 	calr AudioTable_FindMatchIndex
@@ -8040,7 +8040,7 @@ FSWAssGrid_CheckCell_1_6:
 	cpw (XWA), 0x0006
 	jr nz, .Lc_fbb0cb
 	ld XWA,0x0000288e
-	call AcApcToggleProc_Helper
+	call SndParam_LookupReadOnly
 	extz HL
 	ld WA,HL
 	calr AudioTable_FindMatchIndex
@@ -8067,7 +8067,7 @@ FSWAssGrid_CheckCell_1_7:
 	cpw (XWA), 0x0007
 	jr nz, .Lc_fbb11a
 	ld XWA,0x00002890
-	call AcApcToggleProc_Helper
+	call SndParam_LookupReadOnly
 	extz HL
 	ld WA,HL
 	calr AudioTable_FindMatchIndex
@@ -8094,7 +8094,7 @@ FSWAssGrid_CheckCell_1_8:
 	cpw (XWA), 0x0008
 	jr nz, AudioTable_ReturnZero
 	ld XWA,0x00002880
-	call AcApcToggleProc_Helper
+	call SndParam_LookupReadOnly
 	extz HL
 	ld WA,HL
 	calr AudioTable_FindMatchIndex
@@ -8168,13 +8168,13 @@ SeqLoadFunc_ReturnZero:
 
 FSWAss_CheckAndNotify:
 	ld	xwa, 16512
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	ret	nz
 	ld	xwa, 16512
 	ld	bc, 0:i3
 	ld	de, 4:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	ret
 FSWAss_RefreshAllVoices:
 	push	xde
@@ -8531,7 +8531,7 @@ PmExpFilter_DrawCellBank1:
 	pushw PmExpFilter_DrawCellBank1_Str_PAGE_2_3@lo16
 	lda	xwa, (xsp+28)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xwa, (xsp+16)
 	lda	xbc, (xsp+12)
@@ -8599,7 +8599,7 @@ PmExpFilter_DrawCellBank2:
 	pushw PmExpFilter_DrawCellBank2_Data@lo16
 	lda	xwa, (xsp+28)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xwa, (xsp+16)
 	lda	xbc, (xsp+12)
@@ -8782,7 +8782,7 @@ PmExpFilter_GetNameCommon:
 	push	xwa
 	ld	xwa, (xsp+292)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	SeqLoad_ReturnZeroJmp
 AcPmExpFilterGridBoxProc_OnLswData:
@@ -9004,7 +9004,7 @@ PmExpFilterGridCheck_Loop:
 PmExpFilterGridCheck_Skip3:
 	push	xwa
 	push	xhl
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -9050,7 +9050,7 @@ PmExpFilterGridCheck_Loop2:
 PmExpFilterGridCheck_Skip6:
 	push	xwa
 	push	xhl
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -9093,7 +9093,7 @@ PmExpFilterCheck_CellDecode:
 	jrl	gt, SeqLoad_StoreReturnZero
 	lda	xwa, (PmExpFilter_CellKeys:24)
 	ld	xwa, (xwa+bc)
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	xwa, PmExpFilterCheck_CellDecode_Str_OFF
 	cp	hl, 0:i3
 	jr	nz, PmExpFilterCheck_SendNameA
@@ -9102,7 +9102,7 @@ PmExpFilterCheck_SendNameA:
 	push	xwa
 	lda	xwa, (xsp+4)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -9116,7 +9116,7 @@ PmExpFilterCheck_AltDecode:
 	jr	gt, PmExpFilterCheck_PushDefault	; -> 0xFBBC1E
 	lda	xwa, (PmExpFilter_AltKeys:24)
 	ld	xwa, (xwa+bc)
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	lda	xbc, (xsp)
 	ld	xwa, PmExpFilterCheck_AltDecode_Str_OFF
 	cp	hl, 0:i3
@@ -9133,7 +9133,7 @@ PmExpFilterCheck_PushDefault:
 	push xde
 
 PmExpFilterCheck_StrcpySend:
-	call	Free_Compare2
+	call	Strcpy
 
 	inc 8, xsp
 
@@ -9391,7 +9391,7 @@ DispTimeSet_GetNameCommon:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	SeqSave_ReturnZeroJmp
 AcDispTimeSetGridBoxProc_OnLswData:
@@ -10091,7 +10091,7 @@ IvWindowPgCtl_Init:
 	call	GetViewInstance
 	ld	xiz, xhl
 	ld	xwa, 192
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	lda	xbc, (xiz+22)
 	ld	wa, 1:i3
 	cp	hl, 1:i3
@@ -10186,7 +10186,7 @@ IvWindowPgCtl_TryNextPage:
 	cpw	(xwa), 4
 	jr	nz, IvWindowPgCtl_DisableAll
 	ld	xwa, 192
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	xwa, (xsp+4)
 	lda	xbc, (xwa+22)
 	ld	wa, 1:i3
@@ -10222,7 +10222,7 @@ UI_MainFuncCall_Execute:
 
 IvWindowPgCtl_JumpToEnd:
 	ld XWA,0x000000c0
-	call AcApcToggleProc_Helper
+	call SndParam_LookupReadOnly
 	cp hl, 1:i3
 	jr nz, IvWindowPgCtl_JumpToStart
 	ld XWA,(XSP+0x04)
@@ -10305,7 +10305,7 @@ IvPageOverWr_GetName:
 	pushw	IvPageOverWr_GetName_Data@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jrl	PmNamingCheck_CleanupRet
 IvPageOverWr_PageSelect:
@@ -10390,7 +10390,7 @@ PmNamingCheck:
 	cp	xbc, EVT_GET_STRING
 	jrl	nz, PmBankNamingCheck_Ret
 	ld	xwa, 768
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	ld	wa, hl
 	ld	xbc, (xsp+22)
@@ -10406,7 +10406,7 @@ PmNaming_HandleKeyPress:
 	cp	xwa, 11
 	jr	nz, PmNaming_HandleF_Confirm
 	ld	xwa, 768
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	l, 0:i3
 	jr	z, PmNaming_HandleF_Confirm
 	call	GetNamingWindowID
@@ -10415,7 +10415,7 @@ PmNaming_HandleKeyPress:
 	ld	xbc, EVT_GET_STRING
 	call	SendEvent
 	ld	xwa, 768
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	extz	hl
 	lda	xbc, (xsp+4)
 	ld	wa, hl
@@ -10429,7 +10429,7 @@ PmNaming_HandleKeyPress:
 	push	xwa
 	pushw	0
 	pushw	63906
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xwa, 4294967295
 	ld	xbc, EVT_INTERRUPT_TITLE
@@ -10564,7 +10564,7 @@ MssName_EventDispatch:
 	pushw	MssName_EventDispatch_Str_Memory_data@lo16
 	ld	xwa, (xiz+18)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jrl	MssNameFunc_Join2
 MssNameFunc_Skip:
@@ -10586,7 +10586,7 @@ MssNameFunc_Skip2:
 	push	xhl
 	ld	xwa, (xiz+18)
 	push	xwa
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	pushw	2
 	pushw	32
 	ld	xwa, (xiz+18)
@@ -10607,7 +10607,7 @@ MssNameFunc_Skip3:
 	push	xwa
 	ld	xwa, (xiz+18)
 	push	xwa
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xsp, (xsp+10)
 	ld	xwa, MssName_EventDispatch_Str_Blank2_2
 MssNameFunc_Join:
@@ -10699,7 +10699,7 @@ AcPmBkNoBox_Match:
 	pushw	AcPmBkNoBox_Match_Str_Blank8@hi16
 	pushw	AcPmBkNoBox_Match_Str_Blank8@lo16
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	AcPmBkNoBox_SendConfirm
 AcPmBkNoBox_FormatBankNo:
@@ -10832,7 +10832,7 @@ MsaModeScreenProc:
 	cp	xwa, 3
 	jr	nz, MsaMode_Init_Forward
 	ld	xwa, 1024
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 0:i3
 	jr	nz, MsaMode_Init_Forward
 	ld	xwa, 1024
@@ -11176,7 +11176,7 @@ PmemMode_Paint:
 
 	push xwa
 
-	call	Free_Compare2
+	call	Strcpy
 
 	inc 8, xsp
 
@@ -11766,7 +11766,7 @@ AcPmBkEdit_OK:
 
 AcPmBkEdit_OK_Load:
 	ld	xwa, 768
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	l, 0:i3
 	jr	z, AcPmBkEdit_OK_LoadEmpty
 	ld	xwa, 4294967295
@@ -11996,12 +11996,12 @@ VariScreen_HandleShow:
 	ld	a, (PART_SELECT:16)
 	extz	wa
 	ld	bc, 0:i3
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	ld	(xsp+31), l
 	ld	a, (PART_SELECT:16)
 	extz	wa
 	ldw	bc, 32
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	lda	xwa, (xsp+28)
 	ld	(xwa+4), l
 	ld	(xwa+2), (PART_SELECT)	; differs from v10 here and llvm-objdump cannot read it
@@ -12097,12 +12097,12 @@ VariScreen_HandlePaint:
 	ld	a, (PART_SELECT:16)
 	extz	wa
 	ld	bc, 0:i3
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	ld	(xsp+31), l
 	ld	a, (PART_SELECT:16)
 	extz	wa
 	ldw	bc, 32
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	lda	xwa, (xsp+28)
 	ld	(xwa+4), l
 	ld	(xwa+2), (PART_SELECT)
@@ -13748,10 +13748,10 @@ RVariScreenProc:
 	call	GetViewInstance
 	ld	xiz, xhl
 	ld	xwa, 163840
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	(xsp+17), l
 	ld	xwa, 163841
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	lda	xwa, (xsp+14)
 	ld	(xwa+4), l
 	ld	(xwa+2), 72
@@ -13866,10 +13866,10 @@ RVari_Paint:
 	ld	xde, RVari_Paint_Str_RHYTHM
 	call	DrawString
 	ld	xwa, 163840
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	(xsp+17), l
 	ld	xwa, 163841
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	lda	xwa, (xsp+14)
 	ld	(xwa+4), l
 	ld	(xwa+2), 72

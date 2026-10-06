@@ -30,8 +30,9 @@
 ; scripts/tools/midi_lane_v7_from_v10.py): every line below was derived
 ; from the v10 line emitting the same bytes at v10 = v7 + 0x7D1, with v7's
 ; own bytes decoded and re-encoded.  Addresses quoted in carried-over
-; headers are v10's.  Labels marked `v7 NAME DISPLACED` are the old v7
-; names, kept because another v7 file references them; see that note.
+; headers are v10's.  The old v7 names that other files kept 0x41A away from
+; their code (`v7 NAME DISPLACED`) were moved to it on 2026-10-06:
+; scripts/tools/fix_v7_displaced_names.py --audit checks every name here.
 ;
 ; The first bytes of this file are the TAIL of an instruction whose head
 ; is the last bytes of the previous file: the v7 file boundary sits 0x41A
@@ -520,8 +521,6 @@ Continue_ClearPositionAndSetSrc1:
 Continue_Return:
 	ret
 ; (pre-port v7 note about the bytes at 0xFCEE28:)
-; v7 NAME DISPLACED: `AltClk_DisabledClockPath` sits where v10 has `AltClk_DisabledClockPath` (v10 0xFCF5F9).
-; Kept because another v7 file references this address by this name.
 AltClk_DisabledClockPath:
 	ld	(1066:16), 0
 	pushw	wa
@@ -636,9 +635,6 @@ QueuePair_LinearBufWrite:
 	ld	(1141:16), hl
 	ret
 ; (pre-port v7 note about the bytes at 0xFCEF62:)
-; v7 NAME DISPLACED: `ClkTick_BeatSubdivCheck` sits where v10 has `MIDI_CHANNEL_MESSAGE_DISPATCHER` (v10 0xFCF733).
-; The v7 code v10 calls `ClkTick_BeatSubdivCheck` is 0x41A earlier, at v7 0xFCEB48.
-; Kept because another v7 file references this address by this name.
 MIDI_CHANNEL_MESSAGE_DISPATCHER:
 	ld	e, a
 	ld	a, (1059:16)
@@ -780,8 +776,6 @@ SysEx_InProgressByte:
 SysEx_InProgressReturn:
 	ret
 ; (pre-port v7 note about the bytes at 0xFCF08C:)
-; v7 NAME DISPLACED: `MIDI_RX_CONTEXT_RESTORE` sits where v10 has `MIDI_RX_CONTEXT_RESTORE` (v10 0xFCF85D).
-; Kept because another v7 file references this address by this name.
 MIDI_RX_CONTEXT_RESTORE:
 	ld	xwa, (1080:16)
 	ld	xbc, (1084:16)
@@ -864,9 +858,6 @@ SC0Init_ClearContextSlots:
 	ld	(1092:16), 0
 	ld	(1096:16), 0
 ; (pre-port v7 note about the bytes at 0xFCF164:)
-; v7 NAME DISPLACED: `MIDI_RESET_PLAYBACK_STATE` sits where v10 has no label (v10 0xFCF935).
-; The v7 code v10 calls `MIDI_RESET_PLAYBACK_STATE` is 0x41A earlier, at v7 0xFCED4A.
-; Kept because another v7 file references this address by this name.
 SC0Init_ClearContextSlots_Part:
 	ld	(1100:16), 0
 	ld	(1104:16), 0
@@ -979,6 +970,7 @@ MidiSerial_Return:
 ; which dispatches system messages on the low nibble through
 ; MidiSerial_CmdJumpTable.  Previously spelled as `swi 7 / cpm_spiw ix, 250 /
 ; nop` x 7.
+MidiSerial_StatusTable:
 	.byte	0xff
 MidiSerial_StatusHandlers:
 	.long	MidiRx_ChannelMsgDispatch
@@ -1125,16 +1117,13 @@ MidiCC_Handler_SimpleParamStore:
 	or	(0x428:16), 1
 	ret
 MidiRx_ControlChange:
-	ld	xix, MidiRx_ControlChange_Data
+	ld	xix, MidiCC_ChannelMappingData
 	ld	l, (0x9599:16)
 	ld	a, (xix+l)
 	ld	(0x95bb:16), a
 	cp	a, 255
 	jr	z, MidiRx_ControlChange_Return
 ; (pre-port v7 note about the bytes at 0xFCF3A9:)
-; v7 NAME DISPLACED: `MIDI_CHANNEL_HANDLER_JUMP_TABLE` sits where v10 has no label (v10 0xFCFB7A).
-; The v7 code v10 calls `MIDI_CHANNEL_HANDLER_JUMP_TABLE` is 0x41A earlier, at v7 0xFCEF8F.
-; Kept because another v7 file references this address by this name.
 MidiSerial_ProcessInput_Part:
 	extz	wa
 	sll	a, 1
@@ -1182,7 +1171,7 @@ MidiCC_ExtendedRange_Table:
 	.long	MidiCC_RxFunc15
 	.long	MidiCC_Handler_RangeCheck
 	.long	MidiCC_Handler_ChannelMapping
-	.long	MidiCC_ExtendedRange_Table_Target18
+	.long	MidiCC_Handler_BitManipulation
 	.long	MidiCC_NullHandlerBlock
 	.long	MidiCC_NullHandlerBlock
 	.long	MidiCC_NullHandlerBlock
@@ -1214,7 +1203,7 @@ MidiCC_ExtendedRange_Table:
 	.long	MidiCC_NullHandlerBlock
 MidiCC_NullHandlerBlock:
 	ret
-MidiCC_ExtendedRange_Table_Target18:
+MidiCC_Handler_BitManipulation:
 	bit	2, (0xfd51:16)
 	jr	z, MidiCC_Handler_BitManipulation_Return
 	ld	a, (0x95ce:16)
@@ -1243,7 +1232,7 @@ MidiCC_Handler_BitManipulation_Return:
 	.byte	0xff
 ; (pre-port v7 note about the bytes at 0xFCF4E8:)
 ; MidiCC_CC83_ValueMap (0xFCF4E8, 3 x u8): controller value 0..2 -> E.  Reader
-; MidiCC_Handler_BitManipulation (0xFCF8BD), CC function 18 <- CC83
+; MidiCC_RxCC91_Reverb + 60 (0xFCF8BD), CC function 18 <- CC83
 ; (MidiCC_ChannelMappingData): only for part 25, with `bit 2, (0xfd51)` set;
 ; `ld a, (0x9636) / cp a, 2 / jr ugt` (E stays 0 above 2) / `ld e, (xix+a)`,
 ; then BC = 0x0B98, D = 0xC0 -> MidiCC_NullHandlerBlock_Helper.

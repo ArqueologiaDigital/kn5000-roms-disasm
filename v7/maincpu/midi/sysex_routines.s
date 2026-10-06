@@ -135,7 +135,7 @@ ExcPmemFunc_HandlerJumpTable:
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	ExcPmemFunc_Return
@@ -177,7 +177,7 @@ ExcSmemFunc_HandlerJumpTable:
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	ExcSmemFunc_Return
@@ -219,7 +219,7 @@ ExcCompFunc_HandlerJumpTable:
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	ExcCompFunc_Return
@@ -261,7 +261,7 @@ ExcSeqFunc_HandlerJumpTable:
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	ExcSeqFunc_Return
@@ -303,7 +303,7 @@ ExcMspFunc_HandlerJumpTable:
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	ExcMspFunc_Return

@@ -22,7 +22,7 @@ ParaLoadOpt_BuildFromIZ1:
 	push	xwa
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -38,7 +38,7 @@ ParaLoadOpt_BuildFromIZ2:
 	push	xwa
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -62,7 +62,7 @@ ParaLoadOpt_BuildFromIZ3:
 
 	push xwa
 
-	call Free_Compare2	; call Strcpy (v7 addr)
+	call Strcpy	; call Strcpy (v7 addr)
 
 	inc 8, xsp
 
@@ -767,7 +767,7 @@ IvTimer_HandleEvent3A:
 	pushw	IvTimer_HandleEvent3A_Str_N1shot@lo16
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	IvTimer_ReturnZero
 IvTimer_HandleEvent09:
@@ -1380,7 +1380,7 @@ Slider_Case1E0006A:
 	pushw	IvIndexSwCtrlProc_Str_ISC@lo16
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jrl	Slider_NoChange
 Slider_Case1E0006B:
@@ -1750,7 +1750,7 @@ Bounds_Case1E0006A:
 	pushw	IvIndexSwDelayProc_Str_ISD@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	Bounds_Done
 Bounds_Default:
@@ -1833,7 +1833,7 @@ Edit_Case1E00069:
 	pushw	IvWaitWinCtlProc_Str_WWC@hi16
 	pushw	IvWaitWinCtlProc_Str_WWC@lo16
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	Edit_NoChange
 Edit_Case1E00068:
@@ -2662,19 +2662,19 @@ MainPmanCtrl_Case0:
 	ld xwa, (xiz)
 	ld bc, (xiz+4)
 	ld de, (xiz+6)
-	call Audio_ResetAfterPayloadError_Helper
+	call SoundParam_NotifyChange
 	jrl MainTitle_SendEventDone
 MainPmanCtrl_Case1:
 	ld xiz, xde
 	ld xwa, (xiz)
 	ld bc, (xiz+4)
 	ld de, (xiz+6)
-	call MainTitle_PrepareAndDispatch_Helper
+	call SndParam_LookupByKey
 	jrl MainTitle_SendEventDone
 MainPmanCtrl_Case2:
 	ld xiz, xde
 	ld xwa, (xiz)
-	call AcApcToggleProc_Helper
+	call SndParam_LookupReadOnly
 	ld (xiz+4), hl
 	pushw 12
 	call Malloc
@@ -2701,7 +2701,7 @@ MainPmanCtrl_Case3:
 	ld xbc, (xiz)
 	pushm (xiz+6)
 	ld de, (xiz+4)
-	call UIState_CheckAndRenderBitmap_Helper
+	call SndParam_NotifyAndReturn
 	jrl MainTitle_SendEventDone
 MainPmanCtrl_Case4:
 	ld xiz, xde
@@ -2711,7 +2711,7 @@ MainPmanCtrl_Case4:
 	ld xbc, (xiz)
 	pushm (xiz+6)
 	ld de, (xiz+4)
-	call KeyScan_Disable_Helper
+	call SndParam_WrapNotify2
 	jrl MainTitle_SendEventDone
 MainPmanCtrl_Case5:
 	ld xiz, xde
@@ -2719,7 +2719,7 @@ MainPmanCtrl_Case5:
 	srl xwa, 16
 	ld qwa, 0
 	ld xbc, (xiz)
-	call DkMdlyPly_CheckState_Helper
+	call SndParam_LookupViaEncode
 	ld (xiz+4), hl
 	pushw 12
 	call Malloc
@@ -2754,7 +2754,7 @@ MainPmanCtrl_StorePartSelect:
 	jr	MainPmanCtrl_LoadPartSelect
 MainPmanCtrl_CheckSoundParam:
 	ld	xwa, 16640
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	l, 1:i3
 	jr	z, MainPmanCtrl_SetPartSelectOne
 	cp	l, 5:i3

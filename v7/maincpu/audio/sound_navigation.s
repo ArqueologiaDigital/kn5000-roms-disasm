@@ -23,11 +23,11 @@ MainGetSoundName:
 	.byte 0x16, 0x00, 0x6b, 0x2c
 GetSoundName_BuildString:
 	ld	bc, 0:i3
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	ldfr_berp	l, 251
 	ld	xwa, (xsp+20)
 	ldw	bc, 32
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	ldto_berp	a, 251
 	extz	wa
 	extz	hl
@@ -42,7 +42,7 @@ GetSoundName_DefaultString:
 	pushw	GetSoundName_DefaultString_Data@lo16
 	ld	xwa, (xsp+14)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 GetSoundName_DispatchResult:
 	ld xwa, 0xffffffff
@@ -60,11 +60,11 @@ GetSoundName_DispatchResult:
 
 SoundLookup_ByCategory:
 	ld	bc, 0:i3
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	ld	(xsp+17), l
 	ld	xwa, (xsp+20)
 	ldw	bc, 32
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	lda	xwa, (xsp+14)
 	ld	(xwa+4), l
 	ld	xbc, (xsp+20)
@@ -140,7 +140,7 @@ Sound_Navigate_Init:
 
 	ld bc, 0:i3
 
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 
 	ld (xsp + 17), l
 
@@ -148,7 +148,7 @@ Sound_Navigate_Init:
 
 	ldw bc, 0x20
 
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 
 	lda xwa, (xsp + 14)
 
@@ -371,7 +371,7 @@ GetSoundBankCount_CheckSpecial:
 	jr z, GetSoundBankCount_Invalid
 
 GetSoundBankCount_DoLookup:
-	call	DirectReturn_DoDrainQue
+	call	CharMap_ActivePreamb_Prologue
 	exts	hl
 	jr	GetSoundBankCount_Return
 MainGetRhythmName:
@@ -380,10 +380,10 @@ MainGetRhythmName:
 	cp	xbc, EVT_GET_RHYTHM_NAME
 	jrl	nz, MainGetRhythmName_Return	; -> 0xF98C6F
 	ld	xwa, 163840
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ldfr_berp	l, 250
 	ld	xwa, 163841
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ldfr_berp	l, 251
 	pushw	17
 	call	Malloc
@@ -414,7 +414,7 @@ MainGetRhythmName:
 	push	xhl
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xsp, (xsp+10)
 	ld	xwa, (xsp+2)
 	ld	(xwa+13), 0
@@ -445,7 +445,7 @@ MainGetPmemName:
 	call	BitMapOut_PrepareRender_CheckBit1
 	ldfr_berp	l, 251
 	ld	xwa, 768
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	xwa, (xsp+2)
 	ld	(xwa+2), hl
 	pushw	17
@@ -453,7 +453,7 @@ MainGetPmemName:
 	pushw	63906
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xsp, (xsp+10)
 	ld	xwa, (xsp+2)
 	lda	xbc, (xwa+2)

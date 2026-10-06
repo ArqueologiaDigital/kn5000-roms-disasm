@@ -693,7 +693,7 @@ SetWall_CrossTypeChange:
 
 	call	SetWall_CrossType_Validate	; call SetWall_CrossType_Validate (v7 addr)
 
-	call	PerfMode_Handler_EvtB_Helper2_Helper11	; call Audio_CheckSubsystemReady (v7 addr)
+	call	Audio_CheckSubsystemReady	; call Audio_CheckSubsystemReady (v7 addr)
 
 	ret
 
@@ -1854,7 +1854,7 @@ SetWall_SendPanelCtrl:
 
 	ld d, 0x3:opc
 
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 
 	ret
 
@@ -2195,7 +2195,7 @@ SetWall_Sync_FinalUpdate:
 
 	and (0x28b1:16), 254
 
-	call	PerfMode_Handler_EvtB_Helper2_Helper11
+	call	Audio_CheckSubsystemReady
 
 	ret
 

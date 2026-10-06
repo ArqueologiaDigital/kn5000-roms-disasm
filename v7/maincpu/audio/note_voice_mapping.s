@@ -642,7 +642,7 @@ AccNoteOn_CheckSpecialChannel:
 	jr	nz, AccNoteOn_CheckLayer3Only
 	ld	wa, (0xc4fc:16)
 	and	wa, 0xa
-	jr	z, AccNoteOn_ProcessVoiceSetup_Skip
+	jr	z, AccNoteOn_SpecialDirectAdd
 	ld	xhl, 0xcade
 	ld	xbc, 0xcb82
 	lda	xwa, (xsp + 10)
@@ -667,7 +667,7 @@ AccNoteOn_SpecialMergeAndAdd:
 	ldw	de, 21
 	call	NoteMap_AddEntry
 	jr	AccNoteOn_FinalizeAndAutoPlay
-AccNoteOn_ProcessVoiceSetup_Skip:
+AccNoteOn_SpecialDirectAdd:
 	ld	xwa, 0xcb82
 	ld	xbc, (xsp + 2)
 	ldw	de, 0x15
@@ -3920,7 +3920,7 @@ AltCheckEmit_LoadParam2:
 	call	NoteMap_FindBestFreeVoice
 	cp	l, 0:i3
 	jr	nz, NoteMap_AllocCheckChannel
-	call	NoteMap_AddEntry_Helper
+	call	VoiceMap_AllocateSlot
 	cp	l, 0xff
 	jr	z, NoteMap_AllocCheckChannel
 	ld	xwa, (xsp + 4)
@@ -4110,7 +4110,7 @@ NoteMap_AddEntry_Skip7:
 	call	NoteMap_FindBestFreeVoice
 	cp	l, 0:i3
 	jr	nz, NoteMap_AddEntry_Skip3
-	call	NoteMap_AddEntry_Helper
+	call	VoiceMap_AllocateSlot
 	cp	l, 255
 	jr	z, NoteMap_AddEntry_Skip3
 	ld	xwa, (xsp+4)
@@ -4313,7 +4313,7 @@ CollectBestVoice_NonSpecialPath:
 	call	NoteMap_FindBestFreeVoice
 	cp	l, 0:i3
 	jr	nz, NoteMap_CollectAndAllocVoice
-	call	NoteMap_AddEntry_Helper
+	call	VoiceMap_AllocateSlot
 	cp	l, 0xff
 	jr	z, NoteMap_CollectAndAllocVoice
 	ld	xwa, (xsp+168)
@@ -4521,7 +4521,7 @@ FallbackVoiceCheck_LoadParam2:
 	call	NoteMap_FindBestFreeVoice
 	cp	l, 1:i3
 	jr	nz, NoteMap_LookupAllocEmit
-	call	NoteMap_AddEntry_Helper
+	call	VoiceMap_AllocateSlot
 	cp	l, 0xff
 	jr	z, NoteMap_LookupAllocEmit
 	ld	xwa, (xsp + 4)
@@ -4689,7 +4689,7 @@ IndirectCollectEmit_LoadFromStack:
 	call	NoteMap_FindBestFreeVoice
 	cp	l, 1:i3
 	jr	nz, NoteMap_LookupAllocAndSetChannel
-	call	NoteMap_AddEntry_Helper
+	call	VoiceMap_AllocateSlot
 	cp	l, 0xff
 	jr	z, NoteMap_LookupAllocAndSetChannel
 	ld	xwa, (xsp+168)
@@ -4858,7 +4858,7 @@ UpdateEntry_NonSpecialPath:
 	call	NoteMap_FindBestFreeVoice
 	cp	l, 0:i3
 	jr	nz, NoteMap_DirectLookupEmit
-	call	NoteMap_AddEntry_Helper
+	call	VoiceMap_AllocateSlot
 	cp	l, 0xff
 	jr	z, NoteMap_DirectLookupEmit
 	ld	xwa, (xsp + 4)
@@ -5026,7 +5026,7 @@ FindAllocBest_NonSpecialPath:
 	call	NoteMap_FindBestFreeVoice
 	cp	l, 0:i3
 	jr	nz, NoteMap_CollectAndAllocVoice_NoTimerReset
-	call	NoteMap_AddEntry_Helper
+	call	VoiceMap_AllocateSlot
 	cp	l, 0xff
 	jr	z, NoteMap_CollectAndAllocVoice_NoTimerReset
 	ld	xwa, (xsp+168)
@@ -5186,7 +5186,7 @@ AllocVoice_Done_LoadParam:
 	cp	l, 3:i3
 	jr	nz, AllocVoice_Done_LoadIter
 AllocVoice_Done_TryAlloc:
-	call	NoteMap_AddEntry_Helper
+	call	VoiceMap_AllocateSlot
 	cp	l, 0xff
 	jr	z, NoteMap_AllocVoiceEntry_Continue
 	ld	xwa, xiz
@@ -5320,7 +5320,7 @@ ProcessNoteEvent_LoadFromStack2:
 	cp	l, 3:i3
 	jr	nz, ProcessNoteEvent_LoadFromStack3
 ProcessNoteEvent_TryAlloc:
-	call	NoteMap_AddEntry_Helper
+	call	VoiceMap_AllocateSlot
 	cp	l, 0xff
 	jr	z, NoteMap_LookupAllocAndStore
 	ld	xwa, (xsp+166)
@@ -9033,16 +9033,16 @@ ResetTimers_Return_LoadParam2:
 	ld	a, (xsp + 16)
 	extz	wa
 	ld	bc, 0:i3
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	ld	(xsp + 12), hl
 	ld	a, (xsp + 16)
 	extz	wa
 	ldw	bc, 0x20
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	ld	(xsp + 14), hl
 	ld	(xsp + 8), 0x2
 	ld	xwa, 0x2205
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 3:i3
 	jr	z, ResetTimers_Return_LoadParam4
 	cp	hl, 1:i3
@@ -9257,16 +9257,16 @@ Voice_ApplyTransposeWithEncode:
 	ld	a, (xsp + 14)
 	extz	wa
 	ld	bc, 0:i3
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	ld	(xsp + 10), hl
 	ld	a, (xsp + 14)
 	extz	wa
 	ldw	bc, 0x20
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	ld	(xsp + 12), hl
 	ld	a, 0x2:opc
 	ld	xwa, 0x2205
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 3:i3
 	jr	z, ApplyTransposeWithEn_LoadParam2
 	cp	hl, 1:i3
@@ -9424,16 +9424,16 @@ SndParam_ComputeVoiceTuning:
 	ld	a, (xsp + 12)
 	extz	wa
 	ld	bc, 0:i3
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	ld	(xsp + 8), hl
 	ld	a, (xsp + 12)
 	extz	wa
 	ldw	bc, 0x20
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	ld	(xsp + 10), hl
 	ld	a, 0x2:opc
 	ld	xwa, 0x2205
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 3:i3
 	jr	z, ComputeVoiceTuning_LoadParam2
 	cp	hl, 1:i3
@@ -9596,16 +9596,16 @@ NoteMap_ComputePitchOffset:
 	ld	a, (xsp + 12)
 	extz	wa
 	ld	bc, 0:i3
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	ld	(xsp + 8), hl
 	ld	a, (xsp + 12)
 	extz	wa
 	ldw	bc, 0x20
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	ld	(xsp + 10), hl
 	ld	a, 0x2:opc
 	ld	xwa, 0x2205
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 3:i3
 	jr	z, PitchOffset_BothDirs
 	cp	hl, 1:i3
@@ -9972,11 +9972,11 @@ SelectTone_Continue_Prologue:
 	jr	nz, SelectTone_Continue_LoadReg
 	ld	wa, 0:i3
 	ld	bc, 0:i3
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	ld	(xsp + 3), l
 	ld	wa, 0:i3
 	ldw	bc, 0x20
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	ld	(xsp + 4), l
 	ld	(xsp + 2), 0x0
 	lda	xwa, (xsp)
@@ -10005,7 +10005,7 @@ Note_CheckTransposeRange:
 	ld	(xsp + 2), a
 	ld	l, 0x0:opc
 	ld	xwa, 0xc0
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	nz, CheckTransposeRange_LoadParam
 	cp	(xsp), 0x78
@@ -12622,24 +12622,24 @@ ProcessEventDispatch_LoadParam:
 	pushw	0x5
 	ld	de, (xsp + 8)
 	ld	bc, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	ld	wa, (xsp + 4)
 	pushw	0x5
 	ld	de, (xsp + 10)
 	ldw	bc, 0x20
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	cp	(CURRENT_TITLE:16), 220
 	jr	z, ProcessEventDispatch_InitVal
 	ld	wa, (xsp + 4)
 	pushw	0x3
 	ld	de, (xsp + 8)
 	ld	bc, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	ld	wa, (xsp + 4)
 	pushw	0x3
 	ld	de, (xsp + 10)
 	ldw	bc, 0x20
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 ProcessEventDispatch_InitVal:
 	ld	wa, 0:i3
 	cpw	(xsp + 10), 0x0
@@ -12655,14 +12655,14 @@ ProcessEventDispatch_LoadParam2:
 	pushw	0x5
 	ld	de, (xsp + 12)
 	ldw	bc, 0x5e
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	cp	(CURRENT_TITLE:16), 220
 	jr	z, ProcessEventDispatch_LoadParam3
 	ld	wa, (xsp + 4)
 	pushw	0x3
 	ld	de, (xsp + 12)
 	ldw	bc, 0x5e
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 ProcessEventDispatch_LoadParam3:
 	ld	wa, (xsp + 4)
 	ld	de, (xsp + 12)
@@ -12672,12 +12672,12 @@ ProcessEventDispatch_LoadParam3:
 	pushw	0x5
 	ld	de, (xsp + 14)
 	ldw	bc, 0xa
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	ld	wa, (xsp + 4)
 	pushw	0x3
 	ld	de, (xsp + 14)
 	ldw	bc, 0xa
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	ldw	wa, 0x7f
 	cpw	(xsp + 14), 0x48
 	jr	ge, ProcessEventDispatch_LoadParam4
@@ -12693,12 +12693,12 @@ ProcessEventDispatch_LoadParam4:
 	pushw	0x5
 	ld	de, (xsp + 16)
 	ldw	bc, 0xb
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	ld	wa, (xsp + 4)
 	pushw	0x3
 	ld	de, (xsp + 16)
 	ldw	bc, 0xb
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	jrl	RhythmBuf_EventDispatchLoop
 SeqPart_EmitNoteOn_Full_Case208:
 	call	RhythmBuf_ReadAlternate
@@ -12727,7 +12727,7 @@ ProcessEventDispatch_LoadIter:
 	pushw	0x5
 	ld	bc, 1:i3
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	ld	wa, iz
 	ldw	bc, 0x1b0
 	ldw	de, 0x2000
@@ -12736,7 +12736,7 @@ ProcessEventDispatch_LoadIter:
 	pushw	0x5
 	ldw	bc, 0x1b0
 	ldw	de, 0x2000
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	ld	wa, iz
 	ldw	bc, 0x40
 	ld	de, 0:i3
@@ -12745,12 +12745,12 @@ ProcessEventDispatch_LoadIter:
 	pushw	0x5
 	ldw	bc, 0x40
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	ld	wa, iz
 	pushw	0x3
 	ldw	bc, 0x40
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	ld	wa, iz
 	ldw	bc, 0xb
 	ldw	de, 0x7f
@@ -12759,7 +12759,7 @@ ProcessEventDispatch_LoadIter:
 	pushw	0x5
 	ldw	bc, 0xb
 	ldw	de, 0x7f
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	inc	1, iz
 	cp	iz, 0x14
 	jr	lt, ProcessEventDispatch_LoadIter
@@ -12802,7 +12802,7 @@ SeqPart_EmitNoteOn_Full_Case212:	; cases 212, 213, 214, 215, 216
 	pushw	0x5
 	ld	de, iz
 	ld	bc, 1:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	jrl	RhythmBuf_EventDispatchLoop
 ProcessEventDispatch_InitVal2:
 	ld	wa, 0:i3
@@ -12825,7 +12825,7 @@ ProcessEventDispatch_LoadReg:
 	pushw	0x5
 	ld	de, bc
 	ldw	bc, 0x1b0
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	jrl	RhythmBuf_EventDispatchLoop
 ProcessEventDispatch_LoadParam5:
 	ld	wa, (xsp + 4)
@@ -12836,12 +12836,12 @@ ProcessEventDispatch_LoadParam5:
 	pushw	0x5
 	ld	de, iz
 	ldw	bc, 0x40
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	ld	wa, (xsp + 4)
 	pushw	0x3
 	ld	de, iz
 	ldw	bc, 0x40
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	jrl	RhythmBuf_EventDispatchLoop
 ProcessEventDispatch_LoadParam6:
 	ld	wa, (xsp + 4)
@@ -12852,12 +12852,12 @@ ProcessEventDispatch_LoadParam6:
 	pushw	0x5
 	ld	de, iz
 	ldw	bc, 0xa
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	ld	wa, (xsp + 4)
 	pushw	0x3
 	ld	de, iz
 	ldw	bc, 0xa
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	jrl	RhythmBuf_EventDispatchLoop
 ProcessEventDispatch_LoadParam7:
 	ld	wa, (xsp + 4)
@@ -12868,7 +12868,7 @@ ProcessEventDispatch_LoadParam7:
 	pushw	0x5
 	ld	de, iz
 	ldw	bc, 0xb
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	jrl	RhythmBuf_EventDispatchLoop
 ProcessEventDispatch_DoInit:
 	ldto_berp	A, 0xf8
@@ -12895,9 +12895,9 @@ SeqEvtBuf_NonNoteDispatchLoop:
 	jrl	z, SeqPerformance_Event_Send
 	ld	wa, (xsp + 4)
 	cp	wa, 0xd2
-	jrl	z, SeqPart_EmitPercussionNote_Skip
+	jrl	z, SeqEvtBuf_NoteDispatch
 	cp	wa, 0xd1
-	jrl	z, SeqPart_EmitPercussionNote_Skip
+	jrl	z, SeqEvtBuf_NoteDispatch
 	cp	wa, 0xd0
 	jrl	z, NonNoteDispatchLoop_ReadAlt2
 	cp	wa, 0xc2
@@ -12943,17 +12943,17 @@ NonNoteDispatchLoop_LoadParam:
 	pushw	0x3
 	ld	de, (xsp + 8)
 	ld	bc, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	ld	wa, (xsp + 4)
 	pushw	0x3
 	ld	de, (xsp + 10)
 	ldw	bc, 0x20
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	ld	wa, (xsp + 4)
 	pushw	0x3
 	ldw	bc, 0x5e
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	jrl	SeqEvtBuf_NonNoteDispatchLoop
 NonNoteDispatchLoop_ReadAlt2:
 	call	SeqEvtBuf_ReadAlternate
@@ -12994,29 +12994,28 @@ NonNoteDispatchLoop_LoadParam2:
 	pushw	0x3
 	ld	bc, 1:i3
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	ld	wa, (xsp + 8)
 	pushw	0x3
 	ldw	bc, 0x1b0
 	ldw	de, 0x2000
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	ld	wa, (xsp + 8)
 	pushw	0x3
 	ldw	bc, 0x40
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	ld	wa, (xsp + 8)
 	pushw	0x3
 	ldw	bc, 0xb
 	ldw	de, 0x7f
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	incw	1, (xsp + 8)
 	cpw	(xsp + 8), 0x18
 	jr	lt, NonNoteDispatchLoop_LoadParam2
 	jrl	SeqEvtBuf_NonNoteDispatchLoop
-; v10 name for this address: SeqEvtBuf_NoteDispatch -- not a label here: v7 keeps that name at 0xFE8598 for ui_widgets/widget_dispatch.s
 ; Sequencer event buffer note dispatch
-SeqPart_EmitPercussionNote_Skip:
+SeqEvtBuf_NoteDispatch:
 	call	SeqEvtBuf_ReadAlternate
 	ldfr_werp	HL, 0xfa
 	ldto_werp	WA, 0xfa
@@ -13042,11 +13041,10 @@ SeqPart_EmitPercussionNote_Skip:
 	add	wa, wa
 	lda	xix, (SeqEvtBuf_SwitchOffsets:24)
 	ld	wa, (xix+wa)
-	lda	xix, (NonNoteDispatchLoop_LoadParam2_Code:24)
+	lda	xix, (SeqPerformance_EventDispatch:24)
 	jp	t, (xix+wa)
-; v10 name for this address: SeqPerformance_EventDispatch -- not a label here: v7 keeps that name at 0xFE85F3 for ui_widgets/widget_dispatch.s
 ; Sequence performance event dispatch (6-entry, table 0xee8fc0)
-NonNoteDispatchLoop_LoadParam2_Code:
+SeqPerformance_EventDispatch:
 	ld	wa, (xsp+4)
 	ld	de, iz
 	ld	bc, 1:i3
@@ -13055,9 +13053,9 @@ NonNoteDispatchLoop_LoadParam2_Code:
 	pushw	3
 	ld	de, iz
 	ld	bc, 1:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	jrl	SeqEvtBuf_NonNoteDispatchLoop
-NonNoteDispatchLoop_ReadAlt2_Case2:
+SeqEvtBuf_NoteDispatch_Case2:
 	ld	wa, 0:i3
 	cp	iz, 64
 	jr	lt, ProcessEventDispatch_Prologue_Skip
@@ -13078,9 +13076,9 @@ ProcessEventDispatch_Prologue_Skip:
 	pushw	3
 	ld	de, bc
 	ldw	bc, 432
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	jrl	SeqEvtBuf_NonNoteDispatchLoop
-NonNoteDispatchLoop_ReadAlt2_Case3:
+SeqEvtBuf_NoteDispatch_Case3:
 	ld	wa, (xsp+4)
 	ld	de, iz
 	ldw	bc, 64
@@ -13089,9 +13087,9 @@ NonNoteDispatchLoop_ReadAlt2_Case3:
 	pushw	3
 	ld	de, iz
 	ldw	bc, 64
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	jrl	SeqEvtBuf_NonNoteDispatchLoop
-NonNoteDispatchLoop_ReadAlt2_Case4:
+SeqEvtBuf_NoteDispatch_Case4:
 	ld	wa, (xsp+4)
 	ld	de, iz
 	ldw	bc, 10
@@ -13100,9 +13098,9 @@ NonNoteDispatchLoop_ReadAlt2_Case4:
 	pushw	3
 	ld	de, iz
 	ldw	bc, 10
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	jrl	SeqEvtBuf_NonNoteDispatchLoop
-NonNoteDispatchLoop_ReadAlt2_Case5:
+SeqEvtBuf_NoteDispatch_Case5:
 	ld	wa, (xsp+4)
 	ld	de, iz
 	ldw	bc, 11
@@ -13111,9 +13109,9 @@ NonNoteDispatchLoop_ReadAlt2_Case5:
 	pushw	3
 	ld	de, iz
 	ldw	bc, 11
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	jrl	SeqEvtBuf_NonNoteDispatchLoop
-NonNoteDispatchLoop_ReadAlt2_Case7:
+SeqEvtBuf_NoteDispatch_Case7:
 	ld	wa, (xsp+4)
 	ld	de, iz
 	ldw	bc, 94
@@ -13122,7 +13120,7 @@ NonNoteDispatchLoop_ReadAlt2_Case7:
 	pushw	3
 	ld	de, iz
 	ldw	bc, 94
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	jrl	SeqEvtBuf_NonNoteDispatchLoop
 SeqPerformance_Event_Block:
 	jrl	SeqEvtBuf_NonNoteDispatchLoop
@@ -13133,13 +13131,12 @@ SeqPerformance_Event_Send:
 	ret
 SndParam_DispatchReturn:
 	ret
-; v10 name for this address: VoiceMap_AllocateSlot -- not a label here: v7 keeps that name at 0xFE86CC for ui_widgets/widget_dispatch.s
-NoteMap_AddEntry_Helper:
+VoiceMap_AllocateSlot:
 	ld	l, 0xff:opc
 	cpw	(0xcdca:16), 0
 	jr	nz, VoiceMap_AllocateSlo_Block
 	lda	xwa, (0xcd86:16)
-	calr	SeqPart_EmitPercussionNote_Helper
+	calr	NoteMap_GetVoiceData_Entry
 	cp	l, 0xff
 	jr	z, VoiceMap_AllocateSlo_SetByteFF
 	calr	UIParam_ScanAndCollect
@@ -13153,17 +13150,16 @@ VoiceMap_AllocateSlo_SetByteFF:
 	jr	NoteMap_FindBestMatch_Return
 VoiceMap_AllocateSlo_Block:
 	cpw	(0xcd86:16), 0
-	jr	nz, SeqPart_EmitPercussionNote_Skip2
+	jr	nz, VoiceMap_AllocateSlo_Block2
 	calr	Voice_ResetSearchState
 	ld	(0xce12:16), 255
 	ld	(0xce14:16), 255
 	ld	wa, (0xcd88:16)
 	ld	l, a
 	jr	NoteMap_FindBestMatch_Return
-; v10 name for this address: VoiceMap_AllocateSlo_Block2 -- not a label here: v7 keeps that name at 0xFE871A for ui_widgets/widget_dispatch.s
-SeqPart_EmitPercussionNote_Skip2:
+VoiceMap_AllocateSlo_Block2:
 	lda	xwa, (0xcd86:16)
-	calr	SeqPart_EmitPercussionNote_Helper
+	calr	NoteMap_GetVoiceData_Entry
 	cp	l, 0xff
 	jr	z, VoiceMap_AllocateSlo_SetByteFF2
 	ld	(0xe8f6:16), 10
@@ -13207,7 +13203,7 @@ NoteMap_FindBestMatch:
 	jr	z, CheckVoiceReuse_SetByteFF2
 NoteMap_CheckVoiceReuse:
 	lda	xwa, (0xcd86:16)
-	calr	SeqPart_EmitPercussionNote_Helper
+	calr	NoteMap_GetVoiceData_Entry
 	cp	l, 0xff
 	jr	z, CheckVoiceReuse_SetByteFF
 	calr	UIParam_ScanAndCollect
@@ -13230,8 +13226,7 @@ CheckVoiceReuse_Block:
 	ld	l, a
 NoteMap_GetVoiceData_Return:
 	ret
-; v10 name for this address: NoteMap_GetVoiceData_Entry -- not a label here: v7 keeps that name at 0xFE87BA for ui_widgets/widget_dispatch.s
-SeqPart_EmitPercussionNote_Helper:
+NoteMap_GetVoiceData_Entry:
 	ld	c, (0xce0e:16)
 	ld	(0xce10:16), c
 	ld	c, (0xce0f:16)
@@ -13316,9 +13311,8 @@ UIParam_CallbackDispatch:
 	jr	z, UIParam_StoreAndReturn
 	ld	hl, 0:i3
 	jr	UIParam_CompareResult
-; v10 name for this address: UIParam_CallbackReturn -- not a label here: v7 keeps that name at 0xFE8887 for ui_widgets/widget_dispatch.s
 ; UI parameter callback return (table 0xeeae04)
-UIParam_ScanAndCollect_Loop:
+UIParam_CallbackReturn:
 	ld	wa, hl
 	extz	xwa
 	add	xwa, xwa
@@ -13346,7 +13340,7 @@ UIParam_ScanAndCollect_Loop:
 	inc	1, hl
 UIParam_CompareResult:
 	cp	hl, (xsp + 2)
-	jr	c, UIParam_ScanAndCollect_Loop
+	jr	c, UIParam_CallbackReturn
 UIParam_StoreAndReturn:
 	ld	wa, (0xcd88:16)
 	ld	(0xcdcc:16), wa
@@ -13436,8 +13430,7 @@ SearchVoice_BubbleSortOuter:
 	ld	de, 0:i3
 	cp	de, hl
 	jr	nc, SearchVoice_BubbleOuterNext
-; v10 name for this address: SearchVoice_BubbleSortInner -- not a label here: v7 keeps that name at 0xFE8989 for ui_widgets/widget_dispatch.s
-NoteMap_SearchVoiceEntry_Loop:
+SearchVoice_BubbleSortInner:
 	ld	bc, de
 	extz	xbc
 	add	xbc, xbc
@@ -13457,9 +13450,7 @@ NoteMap_SearchVoiceEntry_Loop:
 	ld	bc, de
 	extz	xbc
 	add	xbc, xbc
-	.set	SeqEvtBuf_NoteDispatch, . + 1	; no instruction starts here: the name points 1 byte(s) into the one below
 	inc	4, xbc
-	; SeqEvtBuf_NoteDispatch is kept at this address only for ui_widgets/widget_dispatch.s; v10's SeqEvtBuf_NoteDispatch is the code at 0xFE817E
 	add	xbc, xwa
 	ld	c, (xbc + 1)
 	ldfr_berp	C, 0xea
@@ -13489,7 +13480,7 @@ NoteMap_SearchVoiceEntry_Loop:
 SearchVoice_BubbleAdvance:
 	inc	1, de
 	cp	de, hl
-	jr	c, NoteMap_SearchVoiceEntry_Loop
+	jr	c, SearchVoice_BubbleSortInner
 SearchVoice_BubbleOuterNext:
 	sub	hl, 0x1
 	jr	nz, SearchVoice_BubbleSortOuter
@@ -13505,9 +13496,7 @@ SoundFX_Handler_12:
 	jr	z, SoundFX_Handler_12_LoadReg
 	ldw	(xiz), 0x1
 SoundFX_Handler_12_LoadReg:
-	.set	SeqPerformance_EventDispatch, . + 1	; no instruction starts here: the name points 1 byte(s) into the one below
 	ld	hl, (xiz)
-	; SeqPerformance_EventDispatch is kept at this address only for ui_widgets/widget_dispatch.s; v10's SeqPerformance_EventDispatch is the code at 0xFE81D9
 	pop	xiz
 	ret
 SoundFX_Handler_0:
@@ -13542,7 +13531,7 @@ SoundFX_Handler_1_Block:
 	ld	de, (xiz)
 	sub	de, 0x1
 	jr	z, SoundFX_SetVolumeOffset_Return
-; v10 name for this address: SoundFX_Handler_1_LoadReg -- not a label here: v7 keeps that name at 0xFE8A54 for ui_widgets/widget_dispatch.s
+SoundFX_Handler_1_LoadReg:
 	ld	wa, de
 	extz	xwa
 	add	xwa, xwa
@@ -13605,8 +13594,6 @@ SoundFX_Handler_2:
 	jr	SoundFX_Handler_2_LoadReg
 SoundFX_Handler_2_ClearWord:
 	.byte 0xb6, 0x02
-; VoiceMap_AllocateSlot is kept at this address only for ui_widgets/widget_dispatch.s; v10's VoiceMap_AllocateSlot is the code at 0xFE82B2
-VoiceMap_AllocateSlot:
 	.byte 0x00, 0x00
 SoundFX_Handler_2_LoadReg:
 	ld	hl, (xiz)
@@ -13640,9 +13627,7 @@ SoundFX_Handler_3:
 	dec	1, a
 	extz	wa
 	muls	wa, 0xc
-	.set	VoiceMap_AllocateSlo_Block2, . + 4	; no instruction starts here: the name points 4 byte(s) into the one below
 	lda	xbc, (Harmony_Offsets1_B:24)
-	; VoiceMap_AllocateSlo_Block2 is kept at this address only for ui_widgets/widget_dispatch.s; v10's VoiceMap_AllocateSlo_Block2 is the code at 0xFE8300
 	exts	xwa
 	add	xwa, xbc
 	ld	c, (xwa+de)
@@ -13657,7 +13642,7 @@ SoundFX_Handler_3_LoadReg:
 	ld	hl, (xiz)
 	pop	xiz
 	ret
-; v10 name for this address: SoundFX_Handler_4 -- not a label here: v7 keeps that name at 0xFE8B55 for ui_widgets/widget_dispatch.s
+SoundFX_Handler_4:
 	push	xiz
 	ld	xiz, xwa
 	ld	a, (0xce43:16)
@@ -13705,9 +13690,7 @@ SoundFX_Handler_3_LoadReg:
 	lda	xbc, (Harmony_Offsets2:24)
 	exts	xwa
 	add	xwa, xbc
-	.set	NoteMap_GetVoiceData_Entry, . + 3	; no instruction starts here: the name points 3 byte(s) into the one below
 	lda	xwa, (xwa+de)
-	; NoteMap_GetVoiceData_Entry is kept at this address only for ui_widgets/widget_dispatch.s; v10's NoteMap_GetVoiceData_Entry is the code at 0xFE83A0
 	ld	c, (xwa + 1)
 	ld	a, (0xce0e:16)
 	sub	a, c
@@ -13784,8 +13767,6 @@ SoundFX_Handler_5:
 	lda	xbc, (Harmony_Offsets3_A:24)
 	exts	xwa
 	add	xwa, xbc
-; UIParam_CallbackReturn is kept at this address only for ui_widgets/widget_dispatch.s; v10's UIParam_CallbackReturn is the code at 0xFE846D
-UIParam_CallbackReturn:
 	lda	xwa, (xwa+de)
 	ld	c, (xwa + 2)
 	ld	a, (0xce0e:16)
@@ -13880,9 +13861,7 @@ SoundFX_Handler_6:
 	exts	xwa
 	add	xwa, xbc
 	lda	xwa, (xwa+de)
-	.set	SearchVoice_BubbleSortInner, . + 1	; no instruction starts here: the name points 1 byte(s) into the one below
 	ld	c, (xwa+3)
-	; SearchVoice_BubbleSortInner is kept at this address only for ui_widgets/widget_dispatch.s; v10's SearchVoice_BubbleSortInner is the code at 0xFE856F
 	ld	a, (0xce0e:16)
 	sub	a, c
 	ld	(xiz + 11), a
@@ -13958,9 +13937,7 @@ SoundFX_Handler_7:
 	lda	xbc, (Harmony_Offsets3_B:24)
 	exts	xwa
 	add	xwa, xbc
-	.set	SoundFX_Handler_1_LoadReg, . + 1	; no instruction starts here: the name points 1 byte(s) into the one below
 	lda	xwa, (xwa+de)
-	; SoundFX_Handler_1_LoadReg is kept at this address only for ui_widgets/widget_dispatch.s; v10's SoundFX_Handler_1_LoadReg is the code at 0xFE863A
 	ld	c, (xwa + 2)
 	ld	a, (0xce0e:16)
 	sub	a, c
@@ -14054,9 +14031,7 @@ SoundFX_Handler_8:
 	exts	xwa
 	add	xwa, xbc
 	lda	xwa, (xwa+de)
-	.set	SoundFX_Handler_4, . + 1	; no instruction starts here: the name points 1 byte(s) into the one below
 	ld	c, (xwa+3)
-	; SoundFX_Handler_4 is kept at this address only for ui_widgets/widget_dispatch.s; v10's SoundFX_Handler_4 is the code at 0xFE873B
 	ld	a, (0xce0e:16)
 	sub	a, c
 	ld	(xiz + 11), a
@@ -14511,7 +14486,7 @@ VoiceSlot_StoreParams_LoadReg:
 	ld	xiz, ChordTables_NoteToPitchClass
 	ld	c, (xiz+l)
 	ldto_werp	WA, 0x30
-	ld	xiz, Chord_BitMask16
+	ld	xiz, VoiceSlot_CheckAndApply_Data2
 	and_sriw_rm	WA, 0x03, 0xf8, 0xe4
 	jr	nz, VoiceSlot_StoreParams_Decrement
 	or_sriw_rm	WA, 0x03, 0xf8, 0xe4
@@ -14557,7 +14532,7 @@ VoiceSlot_StoreParams_LoadReg4:
 	ld	xiz, ChordTables_NoteToPitchClass
 	ld	l, (xiz+hl)
 	dec	1, hl
-	ld	xiz, VoiceSlot_StoreParams_LoadReg4_Code
+	ld	xiz, VoiceSlot_StoreParams_Data
 	or	a, (xiz+hl)
 VoiceSlot_StoreParams_Increment:
 	inc	2, iy
@@ -14572,8 +14547,7 @@ VoiceSlot_StoreParams_LoadReg5:
 	and	(0xce42:24), 127
 	and	(0xce42:24), 239
 	ret
-; v10 name for this address: VoiceSlot_StoreParams_Data -- not a label here: v7 keeps that name at 0xFE9457 for shared/positional_labels.s
-VoiceSlot_StoreParams_LoadReg4_Code:
+VoiceSlot_StoreParams_Data:
 	normal
 	push	sr
 	normal
@@ -14992,9 +14966,7 @@ Voice_ProcessSlotEntry:
 	jr	Audio_PopIzRet
 ProcessSlotEntry_Block:
 	ldw	(0xce93:24), 0x0000
-	.set	VoiceSlot_StoreParams_Data, . + 5	; no instruction starts here: the name points 5 byte(s) into the one below
 	and	(52802:24), 253
-	; VoiceSlot_StoreParams_Data is kept at this address only for shared/positional_labels.s; v10's VoiceSlot_StoreParams_Data is the code at 0xFE903D
 	ld	(0xce45:24), 0x00
 	ld	(0xce49:24), 0x07
 	ld	de, (0xce63:24)
@@ -15631,7 +15603,6 @@ VoiceSlot_CheckAndApply_DoCheckDis:
 	call	BitMapOut_CheckDiskAndApply
 VoiceSlot_CheckAndApply_Return:
 	ret
-; v10 name for this address: VoiceSlot_CheckAndApply_Data -- not a label here: v7 keeps that name at 0xFE9F94 for shared/positional_labels.s
 ; CHORD TABLES used by the fingered-chord code, 441 bytes, five parts, byte-
 ; identical to v9/v10 (see the header there for the readers in detail).  In v7
 ; the readers sit 0x7CF lower than in v10 (InitPartAllocState_TestBit242's code
@@ -15749,7 +15720,6 @@ VoiceSlot_CheckAndApply_LoadReg:
 	inc	1, bc
 	ldirw
 	ret
-; v10 name for this address: VoiceSlot_CheckAndApply_Data2 -- not a label here: v7 keeps that name at 0xFEA15F for ui_widgets/widget_dispatch.s
 ; 16 x .short 1 << i.  Reader VoiceSlot_StoreParams_LoadReg (v7 0xFE8F80; v9/v10 0xFE974F):
 ;   ld c, (xiz + l)  with XIZ = the note -> pitch-class+1 part of the chord
 ;                    tables (_Data_0xD), then  ld xiz, <this table> /
@@ -15758,7 +15728,7 @@ VoiceSlot_CheckAndApply_LoadReg:
 ; words it can read (0x0200, 0x0002, 0x0400, 0x0004, ... 0x4000, 0x0040) are
 ; still 12 distinct single bits, so WA works as a set of pitch classes seen
 ; while collecting the held notes (no duplicates stored).
-Chord_BitMask16:
+VoiceSlot_CheckAndApply_Data2:
 	.short	0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0x0040, 0x0080
 	.short	0x0100, 0x0200, 0x0400, 0x0800, 0x1000, 0x2000, 0x4000, 0x8000
 ; Evaluate a chord from the ALTERNATE note buffer at RAM 0xCEB6 without
@@ -15962,10 +15932,7 @@ NoteDisplay_StoreAnd_LoadReg2:
 	ld	(0xce45:16), 0
 	jr	NoteDisplay_StoreAnd_Block
 NoteDisplay_StoreAnd_LoadDRAM:
-	.byte 0xc1, 0x49
-; VoiceSlot_CheckAndApply_Data is kept at this address only for shared/positional_labels.s; v10's VoiceSlot_CheckAndApply_Data is the code at 0xFE9B7A
-VoiceSlot_CheckAndApply_Data:
-	.byte 0xce, 0x21
+	ld	a, (0xce49:16)
 	dec	1, a
 	extz	wa
 	lda	xbc, (0xce4a:16)
@@ -16025,7 +15992,6 @@ SndParam_Init:
 	call	MIDI_PostSendStub
 	inc	6, xsp
 	ret
-; v10 name for this address: UIState_ProcessKeyEvent -- not a label here: v7 keeps that name at 0xFEA45D for shared/positional_labels.s
 ; ============================================================================
 ; UIState_ProcessKeyEvent - Process a key press/release event in UI state
 ; ============================================================================
@@ -16034,6 +16000,7 @@ SndParam_Init:
 ; Dispatches keyboard and control panel button events within the UI state
 ; machine to the appropriate page handler.
 ; ============================================================================
+UIState_ProcessKeyEvent:
 	dec	4, xsp
 	ld	(xsp+0:8), (SWBTWR_EVENT_TYPE)
 	ld	(xsp+0x1), (SWBTWR_PAYLOAD_1)
@@ -16048,9 +16015,9 @@ SndParam_Init:
 	add	wa, wa
 	lda	xix, (KeyEvent_SwitchOffsets:24)
 	ld	wa, (xix+wa)
-	lda	xix, (SndParam_Init_Code:24)
+	lda	xix, (UIState_ProcessKeyEvent_Code:24)
 	jp	t, (xix+wa)
-SndParam_Init_Code:
+UIState_ProcessKeyEvent_Code:
 	ld	a, (xsp+0x3)
 	and	a, 255
 	jrl	z, SndParam_ProcessEntry_Epilogue
@@ -16068,10 +16035,10 @@ SndParam_Init_Code:
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jrl	SndParam_ProcessEntry_Epilogue
-SndParam_Init_Case1:
+UIState_ProcessKeyEvent_Case1:
 	ld	a, (xsp+0x3)
+	.set	SndParam_ProcessEntry, . + 1	; no instruction starts here, as in v10: the name points 1 byte(s) into the one below
 	res	7, a
-; v10 name for this address: SndParam_ProcessEntry -- not a label here: v7 keeps that name at 0xFEA4CA for ui_widgets/widget_dispatch.s
 	cp	a, 0:i3
 	jrl	z, SndParam_ProcessEntry_Epilogue
 	ld	a, (xsp+0:8)
@@ -16088,7 +16055,7 @@ SndParam_Init_Case1:
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jrl	SndParam_ProcessEntry_Epilogue
-SndParam_Init_Case3:
+UIState_ProcessKeyEvent_Case3:
 	ld	a, (xsp+0x3)
 	and	a, 255
 	jrl	z, SndParam_ProcessEntry_Epilogue
@@ -16096,7 +16063,7 @@ SndParam_Init_Case3:
 	ldw	bc, 127
 	calr	UIState_ProcessKeyEvent_Helper
 	jrl	SndParam_ProcessEntry_Epilogue
-SndParam_Init_Case4:
+UIState_ProcessKeyEvent_Case4:
 	ld	a, (xsp+0x3)
 	and	a, 7
 	jr	z, SndParam_ProcessEntry_Entry
@@ -16110,7 +16077,7 @@ SndParam_Init_Case4:
 	calr	UIState_ProcessKeyEvent_Helper
 SndParam_ProcessEntry_Entry:
 	bitm	3, (xsp+0x3)
-	jr	z, SndParam_Init_Skip
+	jr	z, UIState_ProcessKeyEvent_Skip
 	lda	xwa, (xsp)
 	ld	xde, xwa
 	ld	a, (xsp+0x3)
@@ -16119,7 +16086,7 @@ SndParam_ProcessEntry_Entry:
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
-SndParam_Init_Skip:
+UIState_ProcessKeyEvent_Skip:
 	bitm	6, (xsp+0x3)
 	jrl	z, SndParam_ProcessEntry_Epilogue
 	ld	a, (xsp+0:8)
@@ -16136,23 +16103,7 @@ SndParam_Init_Skip:
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jrl	SndParam_ProcessEntry_Epilogue
-SndParam_Init_Case5:
-	ld	a, (xsp+0x3)
-	res	7, a
-	cp	a, 0:i3
-	jrl	z, SndParam_ProcessEntry_Epilogue
-	lda	xwa, (xsp)
-	ld	xde, xwa
-	ld	a, (xsp+0x3)
-	res	7, a
-; VoiceSlot_CheckAndApply_Data2 is kept at this address only for ui_widgets/widget_dispatch.s; v10's VoiceSlot_CheckAndApply_Data2 is the code at 0xFE9D45
-VoiceSlot_CheckAndApply_Data2:
-	ld	c, a
-	extz	bc
-	ld	xwa, xde
-	calr	UIState_ProcessKeyEvent_Helper
-	jrl	SndParam_ProcessEntry_Epilogue
-SndParam_Init_Case7:
+UIState_ProcessKeyEvent_Case5:
 	ld	a, (xsp+0x3)
 	res	7, a
 	cp	a, 0:i3
@@ -16166,7 +16117,21 @@ SndParam_Init_Case7:
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jrl	SndParam_ProcessEntry_Epilogue
-SndParam_Init_Case8:
+UIState_ProcessKeyEvent_Case7:
+	ld	a, (xsp+0x3)
+	res	7, a
+	cp	a, 0:i3
+	jrl	z, SndParam_ProcessEntry_Epilogue
+	lda	xwa, (xsp)
+	ld	xde, xwa
+	ld	a, (xsp+0x3)
+	res	7, a
+	ld	c, a
+	extz	bc
+	ld	xwa, xde
+	calr	UIState_ProcessKeyEvent_Helper
+	jrl	SndParam_ProcessEntry_Epilogue
+UIState_ProcessKeyEvent_Case8:
 	ld	a, (xsp+0x3)
 	res	7, a
 	cp	a, 0:i3
@@ -16185,7 +16150,7 @@ SndParam_Init_Case8:
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jrl	SndParam_ProcessEntry_Epilogue
-SndParam_Init_Case9:
+UIState_ProcessKeyEvent_Case9:
 	ld	a, (xsp+0x3)
 	res	7, a
 	cp	a, 0:i3
@@ -16199,7 +16164,7 @@ SndParam_Init_Case9:
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jr	SndParam_ProcessEntry_Epilogue
-SndParam_Init_Case10:
+UIState_ProcessKeyEvent_Case10:
 	ld	a, (xsp+0x3)
 	and	a, 255
 	jr	z, SndParam_ProcessEntry_Epilogue
@@ -16212,7 +16177,7 @@ SndParam_Init_Case10:
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jr	SndParam_ProcessEntry_Epilogue
-SndParam_Init_Case11:
+UIState_ProcessKeyEvent_Case11:
 	ld	a, (xsp+0x3)
 	res	7, a
 	cp	a, 0:i3
@@ -16226,9 +16191,9 @@ SndParam_Init_Case11:
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jr	SndParam_ProcessEntry_Epilogue
-SndParam_Init_Case12:
+UIState_ProcessKeyEvent_Case12:
 	bitm	3, (xsp+0x3)
-	jr	z, VoiceSlot_CheckAndApply_Data2_Skip
+	jr	z, UIState_ProcessKeyEvent_Skip2
 	lda	xwa, (xsp)
 	ld	xde, xwa
 	ld	a, (xsp+0x3)
@@ -16237,7 +16202,7 @@ SndParam_Init_Case12:
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
-VoiceSlot_CheckAndApply_Data2_Skip:
+UIState_ProcessKeyEvent_Skip2:
 	bitm	5, (xsp+0x3)
 	jr	z, SndParam_ProcessEntry_Epilogue
 	lda	xwa, (xsp)
@@ -16259,9 +16224,9 @@ HdaeRom_Entry:
 	ld	(xsp+0x3), (SWBTWR_PAYLOAD_3)
 	ld	a, (xsp+0x1)
 	cp	a, 1:i3
-	jr	nz, VoiceSlot_CheckAndApply_Data2_Epilogue
+	jr	nz, HdaeRom_Entry_Epilogue
 	bitm	7, (xsp+0x3)
-	jr	z, VoiceSlot_CheckAndApply_Data2_Skip2
+	jr	z, HdaeRom_Entry_Skip
 	lda	xwa, (xsp)
 	ld	xde, xwa
 	ld	a, (xsp+0x3)
@@ -16270,9 +16235,9 @@ HdaeRom_Entry:
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
-VoiceSlot_CheckAndApply_Data2_Skip2:
+HdaeRom_Entry_Skip:
 	bitm	6, (xsp+0x3)
-	jr	z, VoiceSlot_CheckAndApply_Data2_Skip3
+	jr	z, HdaeRom_Entry_Skip2
 	lda	xwa, (xsp)
 	ld	xde, xwa
 	ld	a, (xsp+0x3)
@@ -16281,9 +16246,9 @@ VoiceSlot_CheckAndApply_Data2_Skip2:
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
-VoiceSlot_CheckAndApply_Data2_Skip3:
+HdaeRom_Entry_Skip2:
 	bitm	5, (xsp+0x3)
-	jr	z, VoiceSlot_CheckAndApply_Data2_Epilogue
+	jr	z, HdaeRom_Entry_Epilogue
 	lda	xwa, (xsp)
 	ld	xde, xwa
 	ld	a, (xsp+0x3)
@@ -16292,7 +16257,7 @@ VoiceSlot_CheckAndApply_Data2_Skip3:
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
-VoiceSlot_CheckAndApply_Data2_Epilogue:
+HdaeRom_Entry_Epilogue:
 	inc	4, xsp
 	ret
 HdaeRom_ProcessBlock:
@@ -16303,12 +16268,12 @@ HdaeRom_ProcessBlock:
 	ld	(xsp+0x3), (SWBTWR_PAYLOAD_3)
 	ld	a, (xsp+0x1)
 	cp	a, 24
-	jr	ugt, VoiceSlot_CheckAndApply_Data2_Epilogue2
+	jr	ugt, HdaeRom_ProcessBlock_Epilogue
 	cp	a, 0:i3
-	jr	c, VoiceSlot_CheckAndApply_Data2_Epilogue2
+	jr	c, HdaeRom_ProcessBlock_Epilogue
 	ld	a, (xsp+0x3)
 	and	a, 255
-	jr	z, VoiceSlot_CheckAndApply_Data2_Epilogue2
+	jr	z, HdaeRom_ProcessBlock_Epilogue
 	ld	(xsp+0x1), 0
 	lda	xwa, (xsp)
 	ld	xde, xwa
@@ -16318,7 +16283,7 @@ HdaeRom_ProcessBlock:
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
-VoiceSlot_CheckAndApply_Data2_Epilogue2:
+HdaeRom_ProcessBlock_Epilogue:
 	inc	4, xsp
 	ret
 HdaeRom_ReadParam:
@@ -16330,12 +16295,12 @@ HdaeRom_ReadParam:
 	ld	(xsp+0x3), (SWBTWR_PAYLOAD_3)
 	ld	a, (xsp+0x1)
 	cp	a, 24
-	jr	ugt, VoiceSlot_CheckAndApply_Data2_Epilogue3
+	jr	ugt, HdaeRom_ReadParam_Epilogue
 	cp	a, 0:i3
-	jr	c, VoiceSlot_CheckAndApply_Data2_Epilogue3
+	jr	c, HdaeRom_ReadParam_Epilogue
 	ld	a, (xsp+0x3)
 	and	a, 255
-	jr	z, VoiceSlot_CheckAndApply_Data2_Epilogue3
+	jr	z, HdaeRom_ReadParam_Epilogue
 	ld	(xsp+0x1), 0
 	lda	xwa, (xsp)
 	ld	xde, xwa
@@ -16345,7 +16310,7 @@ HdaeRom_ReadParam:
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
-VoiceSlot_CheckAndApply_Data2_Epilogue3:
+HdaeRom_ReadParam_Epilogue:
 	inc	4, xsp
 	ret
 HdaeRom_WriteParam:
@@ -16356,12 +16321,12 @@ HdaeRom_WriteParam:
 	ld	(xsp+0x3), (SWBTWR_PAYLOAD_3)
 	ld	a, (xsp+0x1)
 	cp	a, 24
-	jr	ugt, VoiceSlot_CheckAndApply_Data2_Epilogue4
+	jr	ugt, HdaeRom_WriteParam_Epilogue
 	cp	a, 0:i3
-	jr	c, VoiceSlot_CheckAndApply_Data2_Epilogue4
+	jr	c, HdaeRom_WriteParam_Epilogue
 	ld	a, (xsp+0x3)
 	and	a, 255
-	jr	z, VoiceSlot_CheckAndApply_Data2_Epilogue4
+	jr	z, HdaeRom_WriteParam_Epilogue
 	ld	(xsp+0x1), 0
 	lda	xwa, (xsp)
 	ld	xde, xwa
@@ -16371,7 +16336,7 @@ HdaeRom_WriteParam:
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
-VoiceSlot_CheckAndApply_Data2_Epilogue4:
+HdaeRom_WriteParam_Epilogue:
 	inc	4, xsp
 	ret
 HdaeRom_CheckResult:
@@ -16382,12 +16347,12 @@ HdaeRom_CheckResult:
 	ld	(xsp+0x3), (SWBTWR_PAYLOAD_3)
 	ld	a, (xsp+0x1)
 	cp	a, 24
-	jr	ugt, VoiceSlot_CheckAndApply_Data2_Epilogue5
+	jr	ugt, HdaeRom_CheckResult_Epilogue
 	cp	a, 0:i3
-	jr	c, VoiceSlot_CheckAndApply_Data2_Epilogue5
+	jr	c, HdaeRom_CheckResult_Epilogue
 	ld	a, (xsp+0x3)
 	and	a, 255
-	jr	z, VoiceSlot_CheckAndApply_Data2_Epilogue5
+	jr	z, HdaeRom_CheckResult_Epilogue
 	ld	(xsp+0x1), 0
 	lda	xwa, (xsp)
 	ld	xde, xwa
@@ -16397,7 +16362,7 @@ HdaeRom_CheckResult:
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
-VoiceSlot_CheckAndApply_Data2_Epilogue5:
+HdaeRom_CheckResult_Epilogue:
 	inc	4, xsp
 	ret
 HdaeRom_FinishBlock:
@@ -16456,11 +16421,10 @@ HdaeRom_TableEntry2_Code:
 	lda	xbc, (xsp+0x2)
 	ld	a, 0:opc
 	bitm	7, (xsp+0x2)
-	jr	nz, UIState_ProcessKeyEvent
+	jr	nz, HdaeRom_TableEntry2_Skip
 	ld	a, (xsp+0x2)
 	res	7, a
-; UIState_ProcessKeyEvent is kept at this address only for shared/positional_labels.s; v10's UIState_ProcessKeyEvent is the code at 0xFEA043
-UIState_ProcessKeyEvent:
+HdaeRom_TableEntry2_Skip:
 	ld	(xbc), a
 	ld	a, (xsp+0x2)
 	extz	wa
@@ -16506,15 +16470,13 @@ UIStateEvt_ProcessHandler:
 	ld	(xsp+0x1), (SWBTWR_PAYLOAD_1)
 	ld	(xsp+0x2), (SWBTWR_PAYLOAD_2)
 	ld	(xsp+0x3), (SWBTWR_PAYLOAD_3)
-; SndParam_ProcessEntry is kept at this address only for ui_widgets/widget_dispatch.s; v10's SndParam_ProcessEntry is the code at 0xFEA0B0
-SndParam_ProcessEntry:
 	ld	a, (xsp+0x1)
 	cp	a, 3:i3
-	jr	z, SndParam_ProcessEntry_Skip2
+	jr	z, UIStateEvt_ProcessHandler_Skip2
 	cp	a, 2:i3
 	jr	z, UIStateEvt_ProcessHandler_Epilogue
 	cp	a, 1:i3
-	jr	z, SndParam_ProcessEntry_Skip
+	jr	z, UIStateEvt_ProcessHandler_Skip
 	cp	a, 0:i3
 	jr	nz, UIStateEvt_ProcessHandler_Epilogue
 	ld	a, (xsp+0x3)
@@ -16529,7 +16491,7 @@ SndParam_ProcessEntry:
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jr	UIStateEvt_ProcessHandler_Epilogue
-SndParam_ProcessEntry_Skip:
+UIStateEvt_ProcessHandler_Skip:
 	ld	a, (xsp+0x3)
 	and	a, 255
 	jr	z, UIStateEvt_ProcessHandler_Epilogue
@@ -16542,7 +16504,7 @@ SndParam_ProcessEntry_Skip:
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jr	UIStateEvt_ProcessHandler_Epilogue
-SndParam_ProcessEntry_Skip2:
+UIStateEvt_ProcessHandler_Skip2:
 	bitm	0, (xsp+0x3)
 	jr	z, UIStateEvt_ProcessHandler_Epilogue
 	lda	xwa, (xsp)
@@ -16829,7 +16791,7 @@ HdaeRom_AltTableEntry4:
 	cp	(xsp+0x1), 16
 	jr	c, HdaeRom_AltTableEntry4_Skip
 	cp	(xsp+0x1), 20
-	jr	ule, SndParam_ProcessEntry_Epilogue2
+	jr	ule, HdaeRom_AltTableEntry4_Epilogue
 HdaeRom_AltTableEntry4_Skip:
 	lda	xwa, (xsp)
 	ld	xde, xwa
@@ -16839,7 +16801,7 @@ HdaeRom_AltTableEntry4_Skip:
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
-SndParam_ProcessEntry_Epilogue2:
+HdaeRom_AltTableEntry4_Epilogue:
 	inc	4, xsp
 	ret
 HdaeRom_AltTableEntry5:
@@ -16939,7 +16901,7 @@ UIState_ProcessKeyEvent_Helper:
 	lda	xwa, (xsp+10)
 	ld	xde, xwa
 	ld	xwa, xiz
-	call	GroupBoxProc_StartSSFPresentation_Helper
+	call	SndParam_ResolveWidget
 	cp	hl, 0xffff
 	jr	z, HdaeRom_AltTableEntry9_Join
 	lda	xwa, (xsp+12)
@@ -16960,7 +16922,7 @@ UIState_ProcessKeyEvent_Helper:
 HdaeRom_AltTableEntry9_Skip:
 	ld	xwa, (xsp+12)
 	ld	bc, (xsp+10)
-	calr	UIState_ProcessKeyEvent_Helper_Helper
+	calr	SendEpilogue_Data
 HdaeRom_AltTableEntry9_Join:
 	ld	a, (xsp+4)
 	ld	(xiz+3), a
@@ -17042,7 +17004,7 @@ SndPart_SetModWheel:
 SndPart_SetVolume:
 	ld	wa, (xsp + 2)
 	ldw	bc, 0x8
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	cp	hl, 1:i3
 	jr	nz, SndPart_SetVolume_LoadReg
 	ld	iz, 0:i3
@@ -17166,7 +17128,7 @@ SndPart_SetCoarseTun_LoadReg:
 SndPart_SetPitchBendSens:
 	ld	bc, iz
 	ld	wa, (xsp + 2)
-	calr	SndPart_SetParam_Helper
+	calr	MIDI_SendChannelPressure
 	jr	MIDI_SendEpilogue
 SndPart_SetAllSoundOff:
 	ld	wa, (xsp + 2)
@@ -17178,8 +17140,7 @@ MIDI_SendEpilogue:
 	popw	iz
 	inc	2, xsp
 	ret
-; v10 name for this address: SendEpilogue_Data -- not a label here: v7 keeps that name at 0xFEAF0E for ui_widgets/widget_dispatch.s
-UIState_ProcessKeyEvent_Helper_Helper:
+SendEpilogue_Data:
 	dec	4, xsp
 	push	xiz
 	ld	iz, bc
@@ -17304,26 +17265,26 @@ MIDI_SendEpilogue_Code:
 	extz	wa
 	call	SendPartDataBlock_Block
 	jrl	SendEpilogue_Data_Join
-UIState_ProcessKeyEvent_Helper_Helper_Case1:
+SendEpilogue_Data_Case1:
 	ldto_berp	a, 248
 	extz	wa
 	call	SendPartDataBlock_Block2
 	jrl	SendEpilogue_Data_Join
-UIState_ProcessKeyEvent_Helper_Helper_Case2:
+SendEpilogue_Data_Case2:
 	ld	(0xcf2e:16), iz
 	jrl	SendEpilogue_Data_Join
-UIState_ProcessKeyEvent_Helper_Helper_Case3:
+SendEpilogue_Data_Case3:
 	ld	(0xcf2c:16), iz
 	jrl	SendEpilogue_Data_Join
-UIState_ProcessKeyEvent_Helper_Helper_Case4:
+SendEpilogue_Data_Case4:
 	ld	(0xcf30:16), iz
 	jrl	SendEpilogue_Data_Join
-UIState_ProcessKeyEvent_Helper_Helper_Case5:
+SendEpilogue_Data_Case5:
 	ldto_berp	a, 248
 	extz	wa
 	call	SendPartDataBlock_Block3
 	jrl	SendEpilogue_Data_Join
-UIState_ProcessKeyEvent_Helper_Helper_Case6:
+SendEpilogue_Data_Case6:
 	ldto_berp	a, 248
 	extz	wa
 	call	SendPartDataBlock_Block9
@@ -17348,7 +17309,7 @@ SendEpilogue_Data_Skip9:
 	jrl	SendEpilogue_Data_Join
 SendEpilogue_Data_Skip10:
 	ld	xwa, 0x4142
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	nz, SendEpilogue_Data_Skip11
 	ld	iz, 0:i3
@@ -17359,7 +17320,7 @@ SendEpilogue_Data_Skip11:
 	jrl	SendEpilogue_Data_Join
 SendEpilogue_Data_Skip12:
 	ld	xwa, 0x4142
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	nz, SendEpilogue_Data_Skip13
 	ld	wa, 0:i3
@@ -17367,7 +17328,7 @@ SendEpilogue_Data_Skip12:
 	jrl	SendEpilogue_Data_Join
 SendEpilogue_Data_Skip13:
 	ld	xwa, 0x4141
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	a, l
 	extz	wa
 	call	SendPartDataBlock_Block4
@@ -17398,7 +17359,7 @@ SendEpilogue_Data_Skip15:
 	ldw	bc, 177
 	calr	SeqVoice_CheckAndRet_Prologue
 	jrl	SendEpilogue_Data_Join
-UIState_ProcessKeyEvent_Helper_Helper_Switch2_Case129:
+SendEpilogue_Data_Switch2_Case129:
 	ldto_berp	a, 248
 	extz	wa
 	calr	SendEpilogue_Data_Helper
@@ -17413,7 +17374,7 @@ UIState_ProcessKeyEvent_Helper_Helper_Switch2_Case129:
 	jrl	nz, SendEpilogue_Data_Join
 	ldto_berp	a, 248
 	extz	wa
-	calr	SndPart_SetParam_Helper2
+	calr	SeqVoice_CheckAndRet_Data
 	ld	(xsp+4), xhl
 	ld	iz, 0:i3
 	cp	iz, 12
@@ -17442,9 +17403,9 @@ SendEpilogue_Data_Skip16:
 	cp	iz, 12
 	jr	lt, SendEpilogue_Data_Loop
 	jrl	SendEpilogue_Data_Join
-UIState_ProcessKeyEvent_Helper_Helper_Switch2_Case130:
+SendEpilogue_Data_Switch2_Case130:
 	ld	xwa, 0x4281
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	a, l
 	extz	wa
 	calr	SendEpilogue_Data_Helper
@@ -17453,10 +17414,10 @@ UIState_ProcessKeyEvent_Helper_Helper_Switch2_Case130:
 	and	wa, 65280
 	jrl	nz, SendEpilogue_Data_Join
 	ld	xwa, 0x4281
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	a, l
 	extz	wa
-	calr	SndPart_SetParam_Helper2
+	calr	SeqVoice_CheckAndRet_Data
 	ld	(xsp+4), xhl
 	ld	iz, 0:i3
 	cp	iz, 12
@@ -17485,9 +17446,9 @@ SendEpilogue_Data_Skip17:
 	cp	iz, 12
 	jr	lt, SendEpilogue_Data_Loop2
 	jrl	SendEpilogue_Data_Join
-UIState_ProcessKeyEvent_Helper_Helper_Switch2_Case131:
+SendEpilogue_Data_Switch2_Case131:
 	ld	xwa, 0x4281
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, SendEpilogue_Data_Join
 	ld	a, (0xfd1d:16)
@@ -17508,9 +17469,9 @@ SendEpilogue_Data_Skip18:
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
 	jrl	SendEpilogue_Data_Join
-UIState_ProcessKeyEvent_Helper_Helper_Switch2_Case132:
+SendEpilogue_Data_Switch2_Case132:
 	ld	xwa, 0x4281
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, SendEpilogue_Data_Join
 	ld	a, (0xfd1d:16)
@@ -17532,9 +17493,9 @@ SendEpilogue_Data_Skip19:
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
 	jrl	SendEpilogue_Data_Join
-UIState_ProcessKeyEvent_Helper_Helper_Switch2_Case133:
+SendEpilogue_Data_Switch2_Case133:
 	ld	xwa, 0x4281
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, SendEpilogue_Data_Join
 	ld	a, (0xfd1d:16)
@@ -17556,9 +17517,9 @@ SendEpilogue_Data_Skip20:
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
 	jrl	SendEpilogue_Data_Join
-UIState_ProcessKeyEvent_Helper_Helper_Switch2_Case134:
+SendEpilogue_Data_Switch2_Case134:
 	ld	xwa, 0x4281
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, SendEpilogue_Data_Join
 	ld	a, (0xfd1d:16)
@@ -17567,9 +17528,7 @@ UIState_ProcessKeyEvent_Helper_Helper_Switch2_Case134:
 	ld	c, a
 	extz	bc
 	ld	wa, bc
-	.set	SendEpilogue_Data, . + 2	; no instruction starts here: the name points 2 byte(s) into the one below
 	cp	wa, 12
-	; SendEpilogue_Data is kept at this address only for ui_widgets/widget_dispatch.s; v10's SendEpilogue_Data is the code at 0xFEAAF4
 	jr	lt, SendEpilogue_Data_Skip21
 	sub	bc, 12
 SendEpilogue_Data_Skip21:
@@ -17582,9 +17541,9 @@ SendEpilogue_Data_Skip21:
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
 	jrl	SendEpilogue_Data_Join
-UIState_ProcessKeyEvent_Helper_Helper_Switch2_Case135:
+SendEpilogue_Data_Switch2_Case135:
 	ld	xwa, 0x4281
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, SendEpilogue_Data_Join
 	ld	a, (0xfd1d:16)
@@ -17606,9 +17565,9 @@ SendEpilogue_Data_Skip22:
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
 	jrl	SendEpilogue_Data_Join
-UIState_ProcessKeyEvent_Helper_Helper_Switch2_Case136:
+SendEpilogue_Data_Switch2_Case136:
 	ld	xwa, 0x4281
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, SendEpilogue_Data_Join
 	ld	a, (0xfd1d:16)
@@ -17630,9 +17589,9 @@ SendEpilogue_Data_Skip23:
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
 	jrl	SendEpilogue_Data_Join
-UIState_ProcessKeyEvent_Helper_Helper_Switch2_Case137:
+SendEpilogue_Data_Switch2_Case137:
 	ld	xwa, 0x4281
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, SendEpilogue_Data_Join
 	ld	a, (0xfd1d:16)
@@ -17654,9 +17613,9 @@ SendEpilogue_Data_Skip24:
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
 	jrl	SendEpilogue_Data_Join
-UIState_ProcessKeyEvent_Helper_Helper_Switch2_Case138:
+SendEpilogue_Data_Switch2_Case138:
 	ld	xwa, 0x4281
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, SendEpilogue_Data_Join
 	ld	a, (0xfd1d:16)
@@ -17678,9 +17637,9 @@ SendEpilogue_Data_Skip25:
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
 	jrl	SendEpilogue_Data_Join
-UIState_ProcessKeyEvent_Helper_Helper_Switch2_Case139:
+SendEpilogue_Data_Switch2_Case139:
 	ld	xwa, 0x4281
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, SendEpilogue_Data_Join
 	ld	a, (0xfd1d:16)
@@ -17702,9 +17661,9 @@ SendEpilogue_Data_Skip26:
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
 	jrl	SendEpilogue_Data_Join
-UIState_ProcessKeyEvent_Helper_Helper_Switch2_Case140:
+SendEpilogue_Data_Switch2_Case140:
 	ld	xwa, 0x4281
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, SendEpilogue_Data_Join
 	ld	a, (0xfd1d:16)
@@ -17726,9 +17685,9 @@ SendEpilogue_Data_Skip27:
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
 	jrl	SendEpilogue_Data_Join
-UIState_ProcessKeyEvent_Helper_Helper_Switch2_Case141:
+SendEpilogue_Data_Switch2_Case141:
 	ld	xwa, 0x4281
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, SendEpilogue_Data_Join
 	ld	a, (0xfd1d:16)
@@ -17750,9 +17709,9 @@ SendEpilogue_Data_Skip28:
 	ldw	wa, 80
 	calr	SeqVoice_CheckAndRet_Prologue
 	jr	SendEpilogue_Data_Join
-UIState_ProcessKeyEvent_Helper_Helper_Switch2_Case142:
+SendEpilogue_Data_Switch2_Case142:
 	ld	xwa, 0x4281
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jr	nz, SendEpilogue_Data_Join
 	ld	a, (0xfd1d:16)
@@ -17876,7 +17835,7 @@ SendPartDataBlocks_LoadIter:
 	jr	nz, SendPartDataBlocks_LoadIter2
 	ld	wa, iz
 	ldw	bc, 0x5e
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	jr	SendPartDataBlocks_LoadReg
 SendPartDataBlocks_LoadIter2:
 	ld	wa, iz
@@ -18008,8 +17967,7 @@ MIDI_SendPitchBend:
 	call	MIDI_PostSendStub
 	inc	6, xsp
 	ret
-; v10 name for this address: MIDI_SendChannelPressure -- not a label here: v7 keeps that name at 0xFEB7B0 for boot/system_handlers.s
-SndPart_SetParam_Helper:
+MIDI_SendChannelPressure:
 	dec	6, xsp
 	ld	(xsp + 0:8), 0x4
 	ld	(xsp + 1), 0xd0
@@ -18099,8 +18057,7 @@ SeqVoice_CheckAndRet_Prologue:
 	call	MIDI_PostSendStub
 	inc	6, xsp
 	ret
-; v10 name for this address: SeqVoice_CheckAndRet_Data -- not a label here: v7 keeps that name at 0xFEB8A1 for shared/positional_labels.s
-SndPart_SetParam_Helper2:
+SeqVoice_CheckAndRet_Data:
 	cp	a, 128
 	jrl	z, SeqVoice_CheckAndRet_Data_Skip8
 	cp	a, 5:i3
@@ -18149,25 +18106,25 @@ SeqVoice_CheckAndRet_Data_Skip6:
 SeqVoice_CheckAndRet_Data_Skip7:
 	lda	xhl, (SemitoneBias_TableG:24)
 	jr	SeqVoice_CheckAndRet_Data_Return
-SndPart_SetParam_Helper2_Case16:
+SeqVoice_CheckAndRet_Data_Case16:
 	lda	xhl, (SemitoneBias_TableH:24)
 	jr	SeqVoice_CheckAndRet_Data_Return
-SndPart_SetParam_Helper2_Case17:
+SeqVoice_CheckAndRet_Data_Case17:
 	lda	xhl, (SemitoneBias_TableI:24)
 	jr	SeqVoice_CheckAndRet_Data_Return
-SndPart_SetParam_Helper2_Case18:
+SeqVoice_CheckAndRet_Data_Case18:
 	lda	xhl, (SemitoneBias_TableJ:24)
 	jr	SeqVoice_CheckAndRet_Data_Return
-SndPart_SetParam_Helper2_Case19:
+SeqVoice_CheckAndRet_Data_Case19:
 	lda	xhl, (SemitoneBias_TableK:24)
 	jr	SeqVoice_CheckAndRet_Data_Return
-SndPart_SetParam_Helper2_Case20:
+SeqVoice_CheckAndRet_Data_Case20:
 	lda	xhl, (SemitoneBias_TableL:24)
 	jr	SeqVoice_CheckAndRet_Data_Return
-SndPart_SetParam_Helper2_Case21:
+SeqVoice_CheckAndRet_Data_Case21:
 	lda	xhl, (SemitoneBias_TableM:24)
 	jr	SeqVoice_CheckAndRet_Data_Return
-SndPart_SetParam_Helper2_Case22:
+SeqVoice_CheckAndRet_Data_Case22:
 	lda	xhl, (SemitoneBias_TableN:24)
 	jr	SeqVoice_CheckAndRet_Data_Return
 SeqVoice_CheckAndRet_Data_Skip8:
@@ -18293,7 +18250,7 @@ WriteAndCheck_LoadParam:
 MIDI_SendPartVolumes_Loop:
 	ld	wa, (xsp)
 	ldw	bc, 0x8
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	cp	hl, 1:i3
 	jr	nz, MIDI_SendPartVol_LookupFallback
 	ld	(xsp + 2), 0x0
@@ -18301,7 +18258,7 @@ MIDI_SendPartVolumes_Loop:
 MIDI_SendPartVol_LookupFallback:
 	ld	wa, (xsp)
 	ld	bc, 7:i3
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	ld	(xsp + 2), l
 MIDI_SendPartVol_StoreAndSend:
 	ld	de, (xsp)
@@ -18317,14 +18274,14 @@ MIDI_SendPartVol_StoreAndSend:
 	jr	le, MIDI_SendPartVolumes_Loop
 MIDI_SendPartVol_ExtraParts:
 	ld	xwa, 0x2880b
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	nz, MIDI_SendPartVol_ExtraLookup
 	ld	(xsp + 2), 0x0
 	jr	MIDI_SendPartVol_ExtraSend
 MIDI_SendPartVol_ExtraLookup:
 	ld	xwa, 0x28801
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	(xsp + 2), l
 MIDI_SendPartVol_ExtraSend:
 	ld	a, (xsp + 2)
@@ -18472,9 +18429,7 @@ MIDI_PostSendStub:
 SeqState_GetFlags:
 	ld	hl, (0xe91f:16)
 	ret
-; MIDI_SendChannelPressure is kept at this address only for boot/system_handlers.s; v10's MIDI_SendChannelPressure is the code at 0xFEB396
 MIDI_OutputFlush:
-MIDI_SendChannelPressure:
 	pushw	iz
 	calr	OutputFlush_Prologue
 	ld	iz, hl
@@ -18584,8 +18539,6 @@ Acc_LoadAndStartPlayback:
 	ld	xwa, (xsp + 2)
 	calr	NotifyChangeComplete_Prologue
 	ld	iz, hl
-; SeqVoice_CheckAndRet_Data is kept at this address only for shared/positional_labels.s; v10's SeqVoice_CheckAndRet_Data is the code at 0xFEB487
-SeqVoice_CheckAndRet_Data:
 	ld	wa, iz
 	cp	wa, 0:i3
 	jr	ge, LoadAndStartPlayback_LoadParam
@@ -18617,7 +18570,7 @@ LoadAndStartPlayback_LoadParam3:
 	push	xwa
 	lda	xwa, (0xe8fe:16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	wa, 6:i3
 	calr	AccWrap_PlayModeStateMachine
@@ -19404,20 +19357,20 @@ SeqInit_SetDefaultMode:
 	calr	SoundParam_InitDefaultBanks
 SeqInit_ConfigureBanks:
 	ld	xwa, 4:i3
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	wa, hl
 	exts	xwa
 	set	15, wa
 	ld	(4597:16), wa
 	ld	xwa, 0xc0
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	nz, ConfigureBanks_Send
 	ld	(4330:16), 1
 	ld	xwa, 0xc0
 	ld	bc, 1:i3
 	ld	de, 1:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	push	xiz
 	call	SwbtWr_ReinitBothBanks
 	pop	xiz
@@ -19530,7 +19483,7 @@ ConfigureBanks_LoadAddr2:
 	jrl	z, FileIO_SeekRecord_LoopDone
 	ld	xwa, (xsp + 4)
 	extz	wa
-	calr	ConfigureBanks_WriteReg_Helper
+	calr	MidiRingBuf_WriteByte
 	ld	xwa, (xsp + 4)
 	ld	de, wa
 	lda	xwa, (xsp + 8)
@@ -19607,7 +19560,7 @@ ConfigureBanks_LoadReg4:
 	ld	bc, iz
 	ld	xwa, 4:i3
 	ld	de, 3:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	call	SeqTimer_UpdateTempoReg
 	ld	(0xe925:16), xiz
 	jr	FileIO_SeekRecord_LoopDone
@@ -19702,14 +19655,14 @@ SeekRecord_Done_Compare:
 	cp	(xsp + 8), 0x9
 	jr	nz, FileIO_SeekRecord_SendMidi
 	ld	xwa, 0xc0
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	nz, SeekRecord_Done_DoLookupRe
 	cp	(xsp + 8), 0x1
 	jr	nz, SeekRecord_Done_Block2
 SeekRecord_Done_DoLookupRe:
 	ld	xwa, 0xc0
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 0:i3
 	jr	nz, SeekRecord_Done_DoGetPlayS
 	cp	(xsp + 8), 0x2
@@ -20567,7 +20520,7 @@ RecordReadOK_LoadReg6:
 	ld	bc, wa
 	ld	xwa, 4:i3
 	ld	de, 3:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	call	SeqTimer_UpdateTempoReg
 	ld	xwa, 0:i3
 	ld	(0xe921:16), xwa
@@ -20582,7 +20535,7 @@ Epilogue_Prologue:
 	ld	wa, 2:i3
 	calr	SoundParam_InitDefaultBanks
 	ld	xwa, 4:i3
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	wa, hl
 	exts	xwa
 	set	15, wa
@@ -20591,32 +20544,32 @@ Epilogue_Prologue:
 	ld	wa, 0:i3
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ld	wa, 0:i3
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ld	wa, 0:i3
 	ld	bc, 7:i3
 	ldw	de, 0x78
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ld	wa, 1:i3
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ld	wa, 1:i3
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ld	wa, 1:i3
 	ld	bc, 7:i3
 	ldw	de, 0x78
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	ldw	wa, 0x63
 	ldw	bc, 0x14
 	call	SysEx_ApplyAndReloadPreset
@@ -20645,7 +20598,7 @@ Epilogue_LoadIter:
 	pushw	0x2
 	ldw	bc, 0x80
 	ld	de, 3:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	inc	1, iz
 	cp	iz, 0x10
 	jr	lt, Epilogue_LoadIter
@@ -20662,7 +20615,7 @@ Epilogue_Prologue2:
 	ld	wa, 2:i3
 	calr	SoundParam_InitDefaultBanks
 	ld	xwa, 4:i3
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	wa, hl
 	exts	xwa
 	set	15, wa
@@ -20671,162 +20624,162 @@ Epilogue_Prologue2:
 	ld	wa, 0:i3
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ld	wa, 0:i3
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ld	wa, 1:i3
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ld	wa, 1:i3
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ld	wa, 2:i3
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ld	wa, 2:i3
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ld	wa, 3:i3
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ld	wa, 3:i3
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ld	wa, 4:i3
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ld	wa, 4:i3
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ld	wa, 5:i3
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ld	wa, 5:i3
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ld	wa, 6:i3
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ld	wa, 6:i3
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ld	wa, 7:i3
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ld	wa, 7:i3
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ldw	wa, 0x8
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ldw	wa, 0x8
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ldw	wa, 0x9
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ldw	wa, 0x9
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ldw	wa, 0xa
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ldw	wa, 0xa
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ldw	wa, 0xb
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ldw	wa, 0xb
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ldw	wa, 0xc
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ldw	wa, 0xc
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ldw	wa, 0xd
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ldw	wa, 0xd
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ldw	wa, 0xe
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ldw	wa, 0xe
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ldw	wa, 0xf
 	ld	bc, 0:i3
 	ldw	de, 0xf0
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ldw	wa, 0xf
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	ldw	wa, 0x63
 	ldw	bc, 0x14
 	call	SysEx_ApplyAndReloadPreset
@@ -20855,7 +20808,7 @@ Epilogue_LoadIter2:
 	pushw	0x2
 	ldw	bc, 0x80
 	ld	de, 3:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	inc	1, iz
 	cp	iz, 0x10
 	jr	lt, Epilogue_LoadIter2
@@ -21053,7 +21006,7 @@ Dispatch_LoadAddr:
 	jr	lt, Dispatch_Block3
 Dispatch_LoadAddr2:
 	lda	xwa, (xsp + 4)
-	calr	MidiSysMsg_Handler_Helper2
+	calr	Dispatch_Prologue
 Dispatch_InitVal2:
 	ld	hl, 0:i3
 Dispatch_Epilogue:
@@ -21143,7 +21096,7 @@ Dispatch_Data_Join:
 	ld	bc, wa
 	ld	xwa, 4:i3
 	ld	de, 3:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	call	SeqTimer_UpdateTempoReg
 	ld	xwa, xiz
 	set	15, wa
@@ -21151,8 +21104,7 @@ Dispatch_Data_Join:
 Dispatch_Data_Epilogue:
 	pop	xiz
 	ret
-; v10 name for this address: Dispatch_Prologue -- not a label here: v7 keeps that name at 0xFED4F6 for audio/sound_data_synth.c
-MidiSysMsg_Handler_Helper2:
+Dispatch_Prologue:
 	lda	xsp, (xsp - 10)
 	push	xiz
 	ld	xiz, xwa
@@ -21168,7 +21120,7 @@ MidiSysMsg_Handler_Helper2:
 	extz	wa
 	lda	xbc, (xsp + 12)
 	lda	xde, (xsp + 10)
-	call	Dispatch_Data_Entry_Code_Helper
+	call	SndParam_LookupFromPointerTable
 	ld	a, (xiz)
 	and	a, 0xf
 	or	a, 0xb0
@@ -21302,23 +21254,23 @@ ToneGen_ResetAndInitBanks:
 	ld	xwa, 4:i3
 	ldw	bc, 0x76
 	ld	de, 3:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	call	SeqTimer_UpdateTempoReg
 	pushw	0x2
 	ld	wa, 0:i3
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ld	wa, 0:i3
 	ldw	bc, 0x20
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	pushw	0x2
 	ld	wa, 0:i3
 	ld	bc, 7:i3
 	ldw	de, 0x7f
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	ld	hl, 0:i3
 	ret
 MidiRealtime_ReadAndProcess:
@@ -21597,9 +21549,7 @@ VoiceReset_Return_Block:
 	ld	(xsp + 5), a
 	ld	iz, 2:i3
 VoiceReset_Return_LoadDRAM:
-	.set	Dispatch_Prologue, . + 1	; no instruction starts here: the name points 1 byte(s) into the one below
 	ld	a, (53250:16)
-	; Dispatch_Prologue is kept at this address only for audio/sound_data_synth.c; v10's Dispatch_Prologue is the code at 0xFED0DC
 	and	a, 0xf0
 	cp	a, 0xc0
 	jr	z, VoiceReset_Return_Block2
@@ -21737,7 +21687,7 @@ SoundParam_InitDefaultBanks:
 	ld	xwa, 0xc1
 	ld	bc, 0:i3
 	ld	de, 1:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	push	xiz
 	call	SwbtWr_ReinitBothBanks
 	pop	xiz
@@ -21745,7 +21695,7 @@ SoundParam_InitDefaultBanks:
 	ld	xwa, 0xc0
 	ld	bc, 0:i3
 	ld	de, 1:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	push	xiz
 	call	SwbtWr_ReinitBothBanks
 	pop	xiz
@@ -21762,7 +21712,7 @@ SoundParam_InitDefau_LoadReg:
 	ld	wa, de
 	ld	de, bc
 	ldw	bc, 0x401
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	lda	xbc, (0xf1a0:16)
 	lda	xwa, (xsp + 66)
 	ld	a, (xwa+iz)
@@ -21776,7 +21726,7 @@ SoundParam_InitDefau_Block:
 	ld	xwa, 0xc1
 	ld	bc, 0:i3
 	ld	de, 1:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	push	xiz
 	call	SwbtWr_ReinitBothBanks
 	pop	xiz
@@ -21784,7 +21734,7 @@ SoundParam_InitDefau_Block:
 	ld	xwa, 0xc0
 	ld	bc, 1:i3
 	ld	de, 1:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	push	xiz
 	call	SwbtWr_ReinitBothBanks
 	pop	xiz
@@ -21801,7 +21751,7 @@ SoundParam_InitDefau_LoadReg2:
 	ld	wa, de
 	ld	de, bc
 	ldw	bc, 0x401
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	lda	xbc, (0xf1a0:16)
 	lda	xwa, (xsp + 34)
 	ld	a, (xwa+iz)
@@ -21815,7 +21765,7 @@ SoundParam_InitDefau_Block2:
 	ld	xwa, 0xc0
 	ld	bc, 0:i3
 	ld	de, 1:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	push	xiz
 	call	SwbtWr_ReinitBothBanks
 	pop	xiz
@@ -21823,7 +21773,7 @@ SoundParam_InitDefau_Block2:
 	ld	xwa, 0xc1
 	ld	bc, 1:i3
 	ld	de, 1:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	push	xiz
 	call	SwbtWr_ReinitBothBanks
 	pop	xiz
@@ -21840,7 +21790,7 @@ SoundParam_InitDefau_LoadReg3:
 	ld	wa, de
 	ld	de, bc
 	ldw	bc, 0x401
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	lda	xbc, (0xf1a0:16)
 	lda	xwa, (xsp + 2)
 	ld	a, (xwa+iz)
@@ -21852,11 +21802,11 @@ SoundParam_InitDefau_LoadReg4:
 	ld	xwa, 0x2201
 	ld	bc, 1:i3
 	ld	de, 2:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	ld	xwa, 0x2205
 	ld	bc, 1:i3
 	ld	de, 2:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 ToneGen_NotifyChangeComplete_Return:
 	popw	iz
 	lda	xsp, (xsp + 96)
@@ -21918,18 +21868,16 @@ FileIO_ReadNextRecord:
 	calr	Seq_CalcAddrOffset
 	cp	hl, 0x780
 	jr	lt, ReadNextRecord_Block2
-	jr	FileIO_ReadNextRecord_Join
-; v10 name for this address: ReadNextRecord_Block -- not a label here: v7 keeps that name at 0xFEDC26 for ui_widgets/widget_dispatch.s
-FileIO_ReadNextRecord_Loop:
+	jr	ReadNextRecord_Block3
+ReadNextRecord_Block:
 	calr	Seq_CalcAddrOffset
 	cp	hl, 0x780
-	jr	ge, FileIO_ReadNextRecord_Join
+	jr	ge, ReadNextRecord_Block3
 ReadNextRecord_Block2:
 	calr	SongFile_DecodeMidiEvent
 	cp	hl, 0:i3
-	jr	z, FileIO_ReadNextRecord_Loop
-; v10 name for this address: ReadNextRecord_Block3 -- not a label here: v7 keeps that name at 0xFEDC36 for ui_widgets/widget_dispatch.s
-FileIO_ReadNextRecord_Join:
+	jr	z, ReadNextRecord_Block
+ReadNextRecord_Block3:
 	calr	RingBuffer_ReadByte
 	cp	hl, 0xfffd
 	ret	nz
@@ -21950,16 +21898,15 @@ DirectReturn_LoadDRAM:
 	cp	a, 4:i3
 	jr	z, DirectReturn_DoLookupC
 	cp	a, 3:i3
-	jr	z, DirectReturn_LoadDRAM_Skip
+	jr	z, DirectReturn_DoDrainQue
 	cp	a, 2:i3
-	jr	z, DirectReturn_LoadDRAM_Skip
+	jr	z, DirectReturn_DoDrainQue
 	cp	a, 1:i3
 	jr	nz, SndParam_StoreAndReturn
 	call	FDC_DrainQueuesAndReset
 	calr	FileIO_InitTrackSlots
 	jr	SndParam_StoreAndReturn
-; v10 name for this address: DirectReturn_DoDrainQue -- not a label here: v7 keeps that name at 0xFEDC70 for audio/sound_navigation.s
-DirectReturn_LoadDRAM_Skip:
+DirectReturn_DoDrainQue:
 	call	FDC_DrainQueuesAndReset
 	jr	SndParam_StoreAndReturn
 DirectReturn_DoLookupC:
@@ -22263,8 +22210,7 @@ MidiRingBuf_ClearCheck:
 	cp	wa, (0xe01c:16)
 	jr	c, MidiRingBuf_ClearLoop
 	ret
-; v10 name for this address: MidiRingBuf_WriteByte -- not a label here: v7 keeps that name at 0xFEDF43 for sequencer/sequencer_engine.s
-ConfigureBanks_WriteReg_Helper:
+MidiRingBuf_WriteByte:
 	cpw	(0xe01c:16), 0
 	jr	nz, MidiRingBuf_StoreAndAdvance
 	ldw	hl, 0xffff
@@ -22358,7 +22304,7 @@ StoreAndAdvance_LoadParam:
 	ld	wa, (xsp + 2)
 	ld	a, (xbc+wa)
 	extz	wa
-	calr	ConfigureBanks_WriteReg_Helper
+	calr	MidiRingBuf_WriteByte
 	incw	1, (xsp + 2)
 	ld	wa, (xsp + 2)
 	cp	wa, iz
@@ -22383,8 +22329,6 @@ StoreAndAdvance_Prologue2_Epilogue:
 StoreAndAdvance_Prologue2_Epilogue2:
 	ld	hl, iz
 	popw	iz
-; ReadNextRecord_Block is kept at this address only for ui_widgets/widget_dispatch.s; v10's ReadNextRecord_Block is the code at 0xFED80C
-ReadNextRecord_Block:
 	ret
 CharMap_NullPreamble_0:
 	ret
@@ -22395,9 +22339,7 @@ CharMap_NullPreamble_2:
 CharMap_ActivePreamble:
 	ld	(0xe09e:16), 0
 	ld	(0xe09f:16), 1
-	.set	ReadNextRecord_Block3, . + 2	; no instruction starts here: the name points 2 byte(s) into the one below
 	ld	xde, 0xe09e
-	; ReadNextRecord_Block3 is kept at this address only for ui_widgets/widget_dispatch.s; v10's ReadNextRecord_Block3 is the code at 0xFED81C
 	ld	wa, 5:i3
 	ld	bc, 2:i3
 	jp	sendCOMM
@@ -22417,14 +22359,12 @@ CharMap_ActivePreamb_LoadDRAM:
 	ld	bc, 2:i3
 	call	sendCOMM
 	ret
-; DirectReturn_DoDrainQue is kept at this address only for audio/sound_navigation.s; v10's DirectReturn_DoDrainQue is the code at 0xFED856
-; v10 name for this address: CharMap_ActivePreamb_Prologue -- not a label here: v7 keeps that name at 0xFEE08A for audio/sound_data_accordion_reg.c, audio/sound_data_bass.c, audio/sound_data_digital_drawbar.c, audio/sound_data_drum_kits.c, audio/sound_data_gm_special.c
-DirectReturn_DoDrainQue:
+CharMap_ActivePreamb_Prologue:
 	dec	4, xsp
 	ld	(xsp), c
 	ld	(xsp + 2), a
 	ld	xwa, 0xc0
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	c, (xsp)
 	extz	bc
 	cp	hl, 1:i3
@@ -22471,7 +22411,7 @@ CharMap_ActivePreamb_Prologue2:
 	ld	c, (xsp)
 	extz	bc
 	ld	wa, hl
-	calr	DirectReturn_DoDrainQue
+	calr	CharMap_ActivePreamb_Prologue
 	inc	2, xsp
 	ret
 SndParam_ApplyMaskClamp:
@@ -22480,7 +22420,7 @@ SndParam_ApplyMaskClamp:
 	ld	(xsp + 4), xbc
 	ld	xiz, xwa
 	ld	xwa, 0xc0
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jrl	z, SndParam_PopIzSkip4Ret
 	ld	xwa, (xsp + 4)
@@ -22723,9 +22663,7 @@ ApplyProgramChangeAs_LoadParam2:
 	popw_erp	0xfa
 	inc	6, xsp
 	ret
-; MidiRingBuf_WriteByte is kept at this address only for sequencer/sequencer_engine.s; v10's MidiRingBuf_WriteByte is the code at 0xFEDB29
 ApplyProgramChangeAs_Prologue2:
-MidiRingBuf_WriteByte:
 	dec	8, xsp
 	pushw_erp	0xfa
 	ld	(xsp + 2), xde
@@ -22765,7 +22703,7 @@ ApplyProgramChangeAs_RestoreReg2:
 	ret
 ApplyProgramChangeAs_DoLookupRe:
 	ld	xwa, 0xc0
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	nz, ApplyProgramChangeAs_LoadDRAM
 	call	GetCurrentPartSelect
@@ -22782,8 +22720,7 @@ ApplyProgramChangeAs_LoadDRAM:
 	ld	l, a
 ApplyProgramChangeAs_Return:
 	ret
-; v10 name for this address: ApplyProgramChangeAs_LoadDRAM2 -- not a label here: v7 keeps that name at 0xFEE3E3 for audio/sound_data_flute.c, audio/sound_data_piano.c
-MIDI_DistributeParamToChannels_Helper_Join:
+ApplyProgramChangeAs_LoadDRAM2:
 	ld	xhl, (0xe0b2:16)
 	add	xhl, xbc
 	ld	xix, (xhl)
@@ -22812,23 +22749,22 @@ MIDI_DistributeParamToChannels_Helper_Join:
 ApplyProgramChangeAs_LoadReg:
 	ld	xbc, 0x10
 	ldw	de, 0x400
-	jr	MIDI_DistributeParamToChannels_Helper_Join
-; v10 name for this address: ApplyProgramChangeAs_LoadReg2 -- not a label here: v7 keeps that name at 0xFEE429 for shared/positional_labels.s
-SndParam_FetchOscTableEntry_Helper:
+	jr	ApplyProgramChangeAs_LoadDRAM2
+ApplyProgramChangeAs_LoadReg2:
 	ld	xbc, 0x20
 	ldw	de, 0x200
-	jr	MIDI_DistributeParamToChannels_Helper_Join
-MidiStream_CmdPedalNotify_Helper2_Helper_Helper:
+	jr	ApplyProgramChangeAs_LoadDRAM2
+SndBuf_WriteParamEntries_Helper:
 	jr	ApplyProgramChangeAs_LoadReg
 SndParam_FetchOscTableEntry:
 	push	xiz
 	ld	xiz, xwa
 	ld	xwa, 0xc0
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	nz, FetchOscTableEntry_LoadIter
 	ld	xwa, xiz
-	calr	SndParam_FetchOscTableEntry_Helper
+	calr	ApplyProgramChangeAs_LoadReg2
 	jr	FetchOscTableEntry_Epilogue
 FetchOscTableEntry_LoadIter:
 	ld	xwa, xiz
@@ -22836,8 +22772,7 @@ FetchOscTableEntry_LoadIter:
 FetchOscTableEntry_Epilogue:
 	pop	xiz
 	ret
-; v10 name for this address: FetchOscTableEntry_Prologue -- not a label here: v7 keeps that name at 0xFEE453 for audio/sound_data_guitar.c
-SndParam_FetchOscTableEntry_Join:
+FetchOscTableEntry_Prologue:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp + 4), xbc
@@ -22877,17 +22812,15 @@ FetchOscTableEntry_Compute:
 	ret
 FetchOscTableEntry_LoadReg:
 	ld	xbc, 0x14
-	.set	CharMap_ActivePreamb_Prologue, . + 1	; no instruction starts here: the name points 1 byte(s) into the one below
-	jr	SndParam_FetchOscTableEntry_Join
-	; CharMap_ActivePreamb_Prologue is kept at this address only for audio/sound_data_accordion_reg.c, audio/sound_data_bass.c, audio/sound_data_digital_drawbar.c, audio/sound_data_drum_kits.c, audio/sound_data_gm_special.c; v10's CharMap_ActivePreamb_Prologue is the code at 0xFEDC70
+	jr	FetchOscTableEntry_Prologue
 FetchOscTableEntry_LoadReg2:
 	ld	xbc, 0x24
-	jr	SndParam_FetchOscTableEntry_Join
+	jr	FetchOscTableEntry_Prologue
 SndParam_ApplyProgramChange:
 	push	xiz
 	ld	xiz, xwa
 	ld	xwa, 0xc0
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	nz, ApplyProgramChange_LoadIter
 	ld	xwa, xiz
@@ -22899,8 +22832,7 @@ ApplyProgramChange_LoadIter:
 ApplyProgramChange_Epilogue:
 	pop	xiz
 	ret
-; v10 name for this address: ApplyProgramChange_LoadDRAM -- not a label here: v7 keeps that name at 0xFEE4CA for audio/sound_data_mallet_orch_perc.c, audio/sound_data_strings_vocal.c
-SeMenu_SetDisplayValue_Helper_Join:
+ApplyProgramChange_LoadDRAM:
 	ld	xhl, (0xe0b2:16)
 	add	xhl, xbc
 	ld	xix, (xhl)
@@ -22930,16 +22862,16 @@ SeMenu_SetDisplayValue_Helper_Join:
 ApplyProgramChange_LoadReg:
 	ld	xbc, 0x18
 	ldw	de, 0x400
-	jr	SeMenu_SetDisplayValue_Helper_Join
+	jr	ApplyProgramChange_LoadDRAM
 SndParam_InitBufferConverge:
 	ld	xbc, 0x28
 	ldw	de, 0x200
-	jr	SeMenu_SetDisplayValue_Helper_Join
+	jr	ApplyProgramChange_LoadDRAM
 SndParam_ComputeVoiceIndex:
 	push	xiz
 	ld	xiz, xwa
 	ld	xwa, 0xc0
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	nz, ComputeVoiceIndex_LoadIter
 	ld	xwa, xiz
@@ -22951,8 +22883,7 @@ ComputeVoiceIndex_LoadIter:
 ComputeVoiceIndex_Epilogue:
 	pop	xiz
 	ret
-; v10 name for this address: SndParam_LookupOscEnvelope -- not a label here: v7 keeps that name at 0xFEE53C for audio/sound_data_organ_accordion.c
-MidiPgmChg_Mode0_SetupA_Code_Helper:
+SndParam_LookupOscEnvelope:
 	push	xiz
 	ld	xiz, xwa
 	ld	a, (xiz + 5)
@@ -22960,7 +22891,7 @@ MidiPgmChg_Mode0_SetupA_Code_Helper:
 	jr	z, LookupOscEnvelope_LoadDRAM2
 	extz	wa
 	ld	bc, 0:i3
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	lda	xbc, (xiz + 2)
 	cp	hl, 0xf0
 	jr	lt, LookupOscEnvelope_LoadDRAM
@@ -23012,7 +22943,7 @@ SndParam_ApplyVoiceValue:
 	jr	z, SndParam_SetDefaultKeyOff
 	extz	wa
 	ldw	bc, 0x20
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	lda	xbc, (xiz + 4)
 	ld	a, (xiz + 2)
 	ld	(xiz + 3), a
@@ -23035,7 +22966,7 @@ SndParam_CheckAndApplyMode:
 	push	xiz
 	ld	xiz, xwa
 	ld	xwa, 192
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	nz, SndParam_CheckAndApplyMode_Skip
 	ld	xwa, xiz
@@ -23043,12 +22974,11 @@ SndParam_CheckAndApplyMode:
 	jr	SndParam_CheckAndApplyMode_Epilogue
 SndParam_CheckAndApplyMode_Skip:
 	ld	xwa, xiz
-	calr	MidiPgmChg_Mode0_SetupA_Code_Helper
+	calr	SndParam_LookupOscEnvelope
 SndParam_CheckAndApplyMode_Epilogue:
 	pop	xiz
 	ret
-; v10 name for this address: SndParam_LookupFromPointerTable -- not a label here: v7 keeps that name at 0xFEE608 for audio/sound_data_synth.c
-Dispatch_Data_Entry_Code_Helper:
+SndParam_LookupFromPointerTable:
 	ld	xix, (0xe0b2:16)
 	add	xix, 0x38
 	ld	xiy, (xix)
@@ -23068,8 +22998,7 @@ Dispatch_Data_Entry_Code_Helper:
 	ld	a, (xiy + 1)
 	ld	(xde), a
 	ret
-; v10 name for this address: SndParam_LookupByPartAndNote -- not a label here: v7 keeps that name at 0xFEE635 for audio/sound_data_orchestral_pad.c
-MidiNoteOn_SetupVoiceA_Code_Helper:
+SndParam_LookupByPartAndNote:
 	dec	6, xsp
 	push	xiz
 	ld	e, c
@@ -23095,15 +23024,14 @@ SndParam_CompactLookupStub:
 	extz	wa
 	ld	l, a
 	ret
-; v10 name for this address: SndParam_LookupAndDispatch -- not a label here: v7 keeps that name at 0xFEE66F for audio/sound_data_organ_accordion.c
-SndParam_LookupByChannel_Helper:
+SndParam_LookupAndDispatch:
 	dec	6, xsp
 	pushw_erp	0xfa
 	ld	(xsp + 4), c
 	ld	(xsp + 6), a
 	ld	(xsp + 2), 0xff
 	ld	xwa, 0xc0
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	z, SndParam_ReturnResult
 	cp	(xsp + 4), 0x78
@@ -23167,7 +23095,7 @@ SndParam_LookupByChannel:
 	extz	de
 	ld	wa, bc
 	ld	bc, de
-	calr	SndParam_LookupByChannel_Helper
+	calr	SndParam_LookupAndDispatch
 	ld	c, (xsp + 6)
 	cp	l, 0xff
 	jr	z, SndParam_LoadReturnByte
@@ -23233,7 +23161,7 @@ SndParam_OffsetHandler:
 	extz	bc
 	ld	wa, bc
 	ld	bc, 0:i3
-	calr	SndParam_LookupByChannel_Helper
+	calr	SndParam_LookupAndDispatch
 	cp	l, 0xff
 	jr	z, LookupTableConverge_LoadParam
 	ld	e, (xsp + 2)
@@ -23266,9 +23194,7 @@ SndParam_LookupTableConverge:
 	extz	hl
 	muls	hl, 0x18
 	add	hl, bc
-	.set	ApplyProgramChangeAs_LoadDRAM2, . + 1	; no instruction starts here: the name points 1 byte(s) into the one below
 	lda	xbc, (60235:16)
-	; ApplyProgramChangeAs_LoadDRAM2 is kept at this address only for audio/sound_data_flute.c, audio/sound_data_piano.c; v10's ApplyProgramChangeAs_LoadDRAM2 is the code at 0xFEDFC9
 	ld	xbc, (xbc+hl)
 	ld	xwa, 0:i3
 	ld	a, (xsp)
@@ -23304,8 +23230,6 @@ Param_SignExtendRetu_Block2:
 Param_SignExtendReturn_Helper:
 	ld	l, (xwa + 9)
 	res	7, l
-; ApplyProgramChangeAs_LoadReg2 is kept at this address only for shared/positional_labels.s; v10's ApplyProgramChangeAs_LoadReg2 is the code at 0xFEE00F
-ApplyProgramChangeAs_LoadReg2:
 	ld	h, 0x0:opc
 	extz	xhl
 	sll	xhl, 14
@@ -23324,9 +23248,7 @@ ApplyProgramChangeAs_LoadReg2:
 Param_SignExtendRetu_Data:
 	ld	xhl, 0:i3
 	ld	l, (xwa+6)
-	.set	FetchOscTableEntry_Prologue, . + 2	; no instruction starts here: the name points 2 byte(s) into the one below
 	sll	xhl, 14
-	; FetchOscTableEntry_Prologue is kept at this address only for audio/sound_data_guitar.c; v10's FetchOscTableEntry_Prologue is the code at 0xFEE039
 	ld	e, (xwa+7)
 	res	7, e
 	ld	d, 0:opc
@@ -23359,9 +23281,9 @@ Param_SignExtendReturn_Helper3:
 	add	xhl, xhl
 	add	xhl, ParamSx_SwitchC
 	ld	hl, (xhl)
-	lda	xix, (FetchOscTableEntry_Prologue_Code:24)
+	lda	xix, (Param_SignExtendReturn_Code2:24)
 	jp	t, (xix+hl)
-FetchOscTableEntry_Prologue_Code:
+Param_SignExtendReturn_Code2:
 	ld	a, (xsp)
 	exts	wa
 	pushw	127
@@ -23371,8 +23293,6 @@ FetchOscTableEntry_Prologue_Code:
 	jrl	Param_SignExtendReturn_Join
 Param_SignExtendReturn_Skip:
 	.byte 0xe9, 0xcf, 0x66
-; ApplyProgramChange_LoadDRAM is kept at this address only for audio/sound_data_mallet_orch_perc.c, audio/sound_data_strings_vocal.c; v10's ApplyProgramChange_LoadDRAM is the code at 0xFEE0B0
-ApplyProgramChange_LoadDRAM:
 	.byte 0x00, 0x00, 0x00
 	jrl	c, Param_SignExtendReturn_Skip2
 	sub	xbc, 102
@@ -23387,9 +23307,9 @@ ApplyProgramChange_LoadDRAM:
 	sll	hl, 1
 	ld	xix, ParamSx_SwitchB
 	ld	hl, (xix+hl)
-	lda	xix, (ApplyProgramChange_LoadDRAM_Code:24)
+	lda	xix, (Param_SignExtendReturn_Code:24)
 	jp	t, (xix+hl)
-ApplyProgramChange_LoadDRAM_Code:
+Param_SignExtendReturn_Code:
 	ld	a, (xsp)
 	exts	wa
 	pushw	50
@@ -23397,7 +23317,7 @@ ApplyProgramChange_LoadDRAM_Code:
 	ldw	bc, 0xffff
 	ld	de, 0:i3
 	jrl	Param_SignExtendReturn_Join
-ApplyProgramChange_LoadDRAM_Case1:
+Param_SignExtendReturn_Helper3_Switch2_Case1:
 	ld	a, (xsp)
 	exts	wa
 	pushw	128
@@ -23405,17 +23325,15 @@ ApplyProgramChange_LoadDRAM_Case1:
 	ldw	bc, 0xffff
 	ld	de, 0:i3
 	jrl	Param_SignExtendReturn_Join
-ApplyProgramChange_LoadDRAM_Case2:
+Param_SignExtendReturn_Helper3_Switch2_Case2:
 	ld	a, (xsp)
 	exts	wa
 	pushw	127
 	pushw	0
 	ldw	bc, 0xffff
-; SndParam_LookupOscEnvelope is kept at this address only for audio/sound_data_organ_accordion.c; v10's SndParam_LookupOscEnvelope is the code at 0xFEE122
-SndParam_LookupOscEnvelope:
 	ld	de, 0:i3
 	jrl	Param_SignExtendReturn_Join
-ApplyProgramChange_LoadDRAM_Case4:
+Param_SignExtendReturn_Helper3_Switch2_Case4:
 	ld	a, (xsp)
 	exts	wa
 	pushw	24
@@ -23423,7 +23341,7 @@ ApplyProgramChange_LoadDRAM_Case4:
 	ldw	bc, 0xffff
 	ld	de, 0:i3
 	jrl	Param_SignExtendReturn_Join
-ApplyProgramChange_LoadDRAM_Case5:
+Param_SignExtendReturn_Helper3_Switch2_Case5:
 	ld	a, (xsp)
 	exts	wa
 	pushw	50
@@ -23431,7 +23349,7 @@ ApplyProgramChange_LoadDRAM_Case5:
 	ldw	bc, 0xffff
 	ld	de, 0:i3
 	jrl	Param_SignExtendReturn_Join
-ApplyProgramChange_LoadDRAM_Case6:
+Param_SignExtendReturn_Helper3_Switch2_Case6:
 	ld	a, (xsp)
 	exts	wa
 	pushw	100
@@ -23467,7 +23385,7 @@ Param_SignExtendReturn_Skip4:
 	ldw	bc, 0xffff
 	ld	de, 0:i3
 	jr	Param_SignExtendReturn_Join
-ApplyProgramChange_LoadDRAM_Switch2_Case1:
+Param_SignExtendReturn_Helper3_Switch3_Case1:
 	ld	a, (xsp)
 	exts	wa
 	pushw	66
@@ -23475,7 +23393,7 @@ ApplyProgramChange_LoadDRAM_Switch2_Case1:
 	ldw	bc, 0xffff
 	ld	de, 0:i3
 	jr	Param_SignExtendReturn_Join
-ApplyProgramChange_LoadDRAM_Switch2_Case2:
+Param_SignExtendReturn_Helper3_Switch3_Case2:
 	ld	a, (xsp)
 	exts	wa
 	pushw	49
@@ -23483,7 +23401,7 @@ ApplyProgramChange_LoadDRAM_Switch2_Case2:
 	ldw	bc, 127
 	ld	de, 0:i3
 	jr	Param_SignExtendReturn_Join
-ApplyProgramChange_LoadDRAM_Switch2_Case3:
+Param_SignExtendReturn_Helper3_Switch3_Case3:
 	ld	a, (xsp)
 	exts	wa
 	pushw	127
@@ -23491,17 +23409,15 @@ ApplyProgramChange_LoadDRAM_Switch2_Case3:
 	ldw	bc, 0xffff
 	ld	de, 0:i3
 	jr	Param_SignExtendReturn_Join
-ApplyProgramChange_LoadDRAM_Switch2_Case4:
+Param_SignExtendReturn_Helper3_Switch3_Case4:
 	ld	a, (xsp)
-; SndParam_LookupFromPointerTable is kept at this address only for audio/sound_data_synth.c; v10's SndParam_LookupFromPointerTable is the code at 0xFEE1EE
-SndParam_LookupFromPointerTable:
 	exts	wa
 	pushw	10
 	pushw	6
 	ldw	bc, 0xffff
 	ld	de, 0:i3
 	jr	Param_SignExtendReturn_Join
-ApplyProgramChange_LoadDRAM_Switch2_Case5:
+Param_SignExtendReturn_Helper3_Switch3_Case5:
 	ld	a, (xsp)
 	exts	wa
 	pushw	50
@@ -23509,14 +23425,12 @@ ApplyProgramChange_LoadDRAM_Switch2_Case5:
 	ldw	bc, 127
 	ld	de, 0:i3
 	jr	Param_SignExtendReturn_Join
-ApplyProgramChange_LoadDRAM_Switch2_Case6:
+Param_SignExtendReturn_Helper3_Switch3_Case6:
 	ld	a, (xsp)
 	exts	wa
 	pushw	30
 	pushw	0
 	ldw	bc, 63
-; SndParam_LookupByPartAndNote is kept at this address only for audio/sound_data_orchestral_pad.c; v10's SndParam_LookupByPartAndNote is the code at 0xFEE21B
-SndParam_LookupByPartAndNote:
 	ld	de, 0:i3
 Param_SignExtendReturn_Join:
 	calr	Param_SignExtendReturn_Helper2
@@ -23539,9 +23453,7 @@ Param_SignExtendReturn_Skip5:
 	sub	xwa, 295
 	ld	xbc, 80
 	call	Math_DivideU32
-	.set	SndParam_LookupAndDispatch, . + 1	; no instruction starts here: the name points 1 byte(s) into the one below
 	ld	a, l
-	; SndParam_LookupAndDispatch is kept at this address only for audio/sound_data_organ_accordion.c; v10's SndParam_LookupAndDispatch is the code at 0xFEE255
 	extz	wa
 	muls	wa, 80
 	extz	xwa
@@ -23559,9 +23471,9 @@ Param_SignExtendReturn_Skip5:
 	add	xhl, xhl
 	add	xhl, ParamSx_SwitchF
 	ld	hl, (xhl)
-	lda	xix, (SndParam_LookupAndDispatch_Code:24)
+	lda	xix, (Param_SignExtendReturn_Code3:24)
 	jp	t, (xix+hl)
-SndParam_LookupAndDispatch_Code:
+Param_SignExtendReturn_Code3:
 	pushw	127
 	pushw	0
 	ld	wa, (xsp+10)
@@ -23600,42 +23512,42 @@ Param_SignExtendReturn_Skip8:
 	ldw	bc, 0xffff
 	ld	de, 0:i3
 	jrl	Param_SignExtendReturn_Join2
-ApplyProgramChange_LoadDRAM_Switch4_Case1:
+Param_SignExtendReturn_Helper3_Switch5_Case1:
 	pushw	127
 	pushw	0
 	ld	wa, (xsp+10)
 	ldw	bc, 0xffff
 	ld	de, 0:i3
 	jrl	Param_SignExtendReturn_Join2
-ApplyProgramChange_LoadDRAM_Switch4_Case6:
+Param_SignExtendReturn_Helper3_Switch5_Case6:
 	pushw	50
 	pushw	0
 	ld	wa, (xsp+10)
 	ldw	bc, 0xffff
 	ld	de, 0:i3
 	jrl	Param_SignExtendReturn_Join2
-ApplyProgramChange_LoadDRAM_Switch4_Case2:
+Param_SignExtendReturn_Helper3_Switch5_Case2:
 	pushw	128
 	pushw	0
 	ld	wa, (xsp+10)
 	ldw	bc, 0xffff
 	ld	de, 0:i3
 	jrl	Param_SignExtendReturn_Join2
-ApplyProgramChange_LoadDRAM_Switch4_Case3:
+Param_SignExtendReturn_Helper3_Switch5_Case3:
 	pushw	127
 	pushw	0
 	ld	wa, (xsp+10)
 	ldw	bc, 0xffff
 	ld	de, 0:i3
 	jrl	Param_SignExtendReturn_Join2
-ApplyProgramChange_LoadDRAM_Switch4_Case4:
+Param_SignExtendReturn_Helper3_Switch5_Case4:
 	pushw	50
 	pushw	0xffce
 	ld	wa, (xsp+10)
 	ldw	bc, 0xffff
 	ld	de, 0:i3
 	jrl	Param_SignExtendReturn_Join2
-ApplyProgramChange_LoadDRAM_Switch4_Case5:
+Param_SignExtendReturn_Helper3_Switch5_Case5:
 	pushw	100
 	pushw	0
 	ld	wa, (xsp+10)
@@ -23669,14 +23581,14 @@ Param_SignExtendReturn_Skip11:
 	ldw	bc, 0xffff
 	ld	de, 0:i3
 	jr	Param_SignExtendReturn_Join2
-ApplyProgramChange_LoadDRAM_Switch5_Case1:
+Param_SignExtendReturn_Helper3_Switch6_Case1:
 	pushw	49
 	pushw	0
 	ld	wa, (xsp+10)
 	ldw	bc, 127
 	ld	de, 0:i3
 	jr	Param_SignExtendReturn_Join2
-ApplyProgramChange_LoadDRAM_Switch5_Case2:
+Param_SignExtendReturn_Helper3_Switch6_Case2:
 	pushw	127
 	pushw	0
 	ld	wa, (xsp+10)
@@ -23691,7 +23603,7 @@ Param_SignExtendReturn_Skip12:
 	inc	6, xsp
 	ret
 	ret
-SndParam_LookupAndDispatch_Code_Join:
+Param_SignExtendReturn_Join7:
 	lda	xsp, (xsp-0x16)
 	pushw	iz
 	ld	(xsp+0x14), xwa
@@ -23785,7 +23697,7 @@ Param_SignExtendReturn_Join3:
 	popw	iz
 	lda	xsp, (xsp+22)
 	ret
-SeqAlt_ApplyDescriptor_TypeB_Helper:
+SeqAlt_PopIzSkip4Ret2_Helper:
 	ld	xde, xwa
 	lda	xhl, (xde+12)
 	ld	c, (xhl+1)
@@ -23856,18 +23768,18 @@ Param_SignExtendReturn_Return:
 	ld	bc, (xsp+0x4)
 	add	bc, bc
 	add	bc, 13
-	call	SndParam_LookupAndDispatch_Code_Helper
+	call	Param_SignExtendReturn_Helper3_Helper
 	ld	(xiz+), l
 	ld	(xiz), 247
 	ld	xwa, (0xe0f7:16)
 	ld	bc, (xsp+0x4)
 	add	bc, bc
 	add	bc, 15
-	call	SndParam_LookupAndDispatch_Code_Helper2
+	call	Param_SignExtendReturn_Helper3_Helper2
 	pop	xiz
 	inc	2, xsp
 	ret
-SeqData_FormatOutput_CaseB_Helper:
+SeqData_FormatOutput_Default_Helper:
 	dec	4, xsp
 	push	xiz
 	ld	xiz, xwa
@@ -24210,8 +24122,7 @@ TmFlash_Return_Prologue:
 	ld	iz, 0:i3
 	cpiw_erp	0xfa, 0
 	jr	ule, TmFlash_Return_CheckZero
-; v10 name for this address: TmFlash_Return_LoadReg -- not a label here: v7 keeps that name at 0xFEF1CF for display/graphics_text_vga.s
-TmFlash_Return_Prologue_Loop:
+TmFlash_Return_LoadReg:
 	ld	bc, iz
 	extz	xbc
 	ld	wa, (xsp + 4)
@@ -24226,7 +24137,7 @@ TmFlash_Return_Prologue_Loop:
 	call	SendPartDataBlock_Prologue
 	inc	1, iz
 	cpw_erp	IZ, 0xfa
-	jr	c, TmFlash_Return_Prologue_Loop
+	jr	c, TmFlash_Return_LoadReg
 TmFlash_Return_CheckZero:
 	cpw	(xsp + 8), 0x0
 	jr	nz, TmFlash_Return_LoadParam2
@@ -24638,8 +24549,7 @@ SendPartDataBlock_SetWord6:
 	jp	COMM_BuildAndSendPacket
 SendPartDataBlock_Return4:
 	ret
-; TmFlash_Return_LoadReg is kept at this address only for display/graphics_text_vga.s; v10's TmFlash_Return_LoadReg is the code at 0xFEEDB5
-TmFlash_Return_LoadReg:
+SendPartDataBlock_DoGetError:
 	ldw	wa, 0xff
 	ldw	bc, 0xff
 	.byte 0x1b, 0x86, 0xec, 0xfe
@@ -25246,7 +25156,7 @@ SendPartDataBlock_Return5_Skip6:
 	ld	a, (xde+12)
 	ld	(xbc+46), a
 	ld	(xbc+47), 0
-; v10 name for this address: SendPartDataBlock_Data2 -- not a label here: v7 keeps that name at 0xFEFC40 for ui_widgets/naka_debug_naming.c, ui_widgets/naka_debug_naming_link.ld, ui_widgets/naka_disk_warning.c, ui_widgets/naka_disk_warning_link.ld, ui_widgets/naka_widget_descriptors.c, ui_widgets/naka_widget_descriptors_link.ld, ui_widgets/naka_widget_tables_2.c, ui_widgets/naka_widget_tables_2_link.ld
+SendPartDataBlock_Data2:
 	ld	a, (xde+13)
 	sll	a, 1
 	ld	(xbc+41), a
@@ -25254,8 +25164,8 @@ SendPartDataBlock_Return5_Skip6:
 	sla	a, 1
 	ld	(xbc+42), a
 	ld	a, (xde+15)
+	.set	SendPartDataBlock_Data3, . + 2	; no instruction starts here, as in v10: the name points 2 byte(s) into the one below
 	sll	a, 1
-	; v10 name for this address: SendPartDataBlock_Data3 -- not a label here: v7 keeps that name at 0xFEFC57 for ui_widgets/naka_effects_seq.c, ui_widgets/naka_effects_seq_link.ld
 	ld	(xbc+43), a
 	ld	a, (xde+16)
 	sla	a, 1
@@ -25325,11 +25235,11 @@ SendPartDataBlock_Return5_Skip9:
 	ld	xwa, (xsp+18)
 	ld	(xwa), l
 	cp	(xde+30), 255
-	jr	z, SendPartDataBlock_Return5_Entry2_Code_Skip2
+	jr	z, SendPartDataBlock_Return5_Entry2_Code_Skip
+	.set	SendPartDataBlock_Data4, . + 1	; no instruction starts here, as in v10: the name points 1 byte(s) into the one below
 	set	0, l
-	; v10 name for this address: SendPartDataBlock_Data4 -- not a label here: v7 keeps that name at 0xFEFD00 for ui_widgets/naka_composer_style.c, ui_widgets/naka_composer_style_link.ld
 	ld	(xwa), l
-SendPartDataBlock_Return5_Entry2_Code_Skip2:
+SendPartDataBlock_Return5_Entry2_Code_Skip:
 	lda	xix, (xbc+77)
 	ld	a, (xde+27)
 	ld	(xix), a
@@ -25338,12 +25248,12 @@ SendPartDataBlock_Return5_Entry2_Code_Skip2:
 	ld	a, l
 	and	a, 128
 	cp	a, 128
-	jr	nz, SendPartDataBlock_Return5_Entry2_Code_Skip
+	jr	nz, SendPartDataBlock_Return5_Entry2_Code_Skip2
 	and	l, 15
 	cp	l, 10
-	jr	nz, SendPartDataBlock_Return5_Entry2_Code_Skip
+	jr	nz, SendPartDataBlock_Return5_Entry2_Code_Skip2
 	ld	(xix), 127
-SendPartDataBlock_Return5_Entry2_Code_Skip:
+SendPartDataBlock_Return5_Entry2_Code_Skip2:
 	ld	a, (xde+28)
 	ld	(xbc+55), a
 	ld	a, (xde+31)
@@ -25352,8 +25262,8 @@ SendPartDataBlock_Return5_Entry2_Code_Skip:
 	ld	a, (xde+32)
 	ld	(xix), a
 	lda	xiy, (xbc+59)
+	.set	SendPartDataBlock_Data5, . + 2	; no instruction starts here, as in v10: the name points 2 byte(s) into the one below
 	ld	a, (xde+33)
-	; v10 name for this address: SendPartDataBlock_Data5 -- not a label here: v7 keeps that name at 0xFEFD3F for ui_widgets/naka_debug_naming.c, ui_widgets/naka_debug_naming_link.ld, ui_widgets/naka_sequencer_channels.c, ui_widgets/naka_sequencer_channels_link.ld, ui_widgets/naka_technichord_strings.c, ui_widgets/naka_technichord_strings_link.ld, ui_widgets/naka_widget_descriptors.c, ui_widgets/naka_widget_descriptors_link.ld, ui_widgets/naka_widget_tables_2.c, ui_widgets/naka_widget_tables_2_link.ld
 	ld	(xiy), a
 	lda	xhl, (xbc+57)
 	ld	(xhl), 66
@@ -25377,8 +25287,7 @@ SendPartDataBlock_Return5_Skip10:
 	pop	xiz
 	lda	xsp, (xsp+26)
 	ret
-; v10 name for this address: SendPartDataBlock_InitVal4 -- not a label here: v7 keeps that name at 0xFEFD6E for demo/file_demo_proc.s
-HdaeRom_DataHandler_Helper3:
+SendPartDataBlock_InitVal4:
 	ld	de, 0:i3
 	lda	xhl, (SoundRam_Id_KN5000:24)
 SendPartDataBlock_LoadReg2:
@@ -25534,7 +25443,7 @@ HdaeRom_DataHandler:
 	ld	(xsp+440), c
 	ld	(xsp+442), a
 	ld	xwa, 0x1e0000
-	calr	HdaeRom_DataHandler_Helper3
+	calr	SendPartDataBlock_InitVal4
 	lda	xbc, (0x1e0000:24)
 	extz	hl
 	dec	1, hl
@@ -25704,7 +25613,6 @@ HdaeRom_DataDispatch_Block3_Loop:
 	lda	xhl, (xwa+bc)
 	and	(xhl+1), 0xcf
 	exts	xbc
-SendPartDataBlock_Data3:	; kept: ui_widgets/naka_effects_seq_link.ld names this address
 	add	xbc, xwa
 	set	5, (xbc+1)
 	incb_erp	234, 1	; inc 1,QE
@@ -25712,12 +25620,11 @@ SendPartDataBlock_Data3:	; kept: ui_widgets/naka_effects_seq_link.ld names this 
 	cp_erpb	234, 0x80	; cp QE,0x80
 	jr	c, HdaeRom_DataDispatch_Block3_Loop
 	ret
-	.set	SendPartDataBlock_Data2, HdaeRom_DataDispatch_Block3_Skip + 2	; inside `ld (xhl), 1`; kept for the C link scripts that name it
 ; HDAE ROM alt dispatch handler
 HdaeRom_AltHandler:
 	pushw	iz
 	ld	xwa, 0x1e0000
-	calr	HdaeRom_DataHandler_Helper3
+	calr	SendPartDataBlock_InitVal4
 	extz	hl
 	dec	1, hl
 	cp	hl, 0:i3
@@ -25775,9 +25682,7 @@ PostTmLoad:
 PostTmLoad_Send:
 	ldw	wa, 0xff
 	ldw	bc, 0xff
-	.set	SendPartDataBlock_Data4, . + 1	; no instruction starts here: the name points 1 byte(s) into the one below
 	call	COMM_BuildAndSendPacket
-	; SendPartDataBlock_Data4 is kept at this address only for ui_widgets/naka_composer_style.c, ui_widgets/naka_composer_style_link.ld; v10's SendPartDataBlock_Data4 is the code at 0xFEF8E6
 PostTmLoad_Block:
 	jp	FDemoText_RefreshFullDisplay
 PreTmSave:
@@ -25790,7 +25695,7 @@ PostTmSave:
 	call	COMM_BuildAndSendPacket
 	ret
 PostTmSave_ByteBlock:
-	calr	HdaeRom_DataHandler_Helper3
+	calr	SendPartDataBlock_InitVal4
 	cp	l, 6:i3
 	jr	ugt, PostTmSave_ByteBlock_Skip
 	cp	l, 1:i3
@@ -25809,8 +25714,6 @@ PostTmSave_Success:
 	ldw	wa, 0xff
 	ldw	bc, 0xff
 	calr	HdaeRom_AltHandler
-; SendPartDataBlock_Data5 is kept at this address only for ui_widgets/naka_debug_naming.c, ui_widgets/naka_debug_naming_link.ld, ui_widgets/naka_sequencer_channels.c, ui_widgets/naka_sequencer_channels_link.ld, ui_widgets/naka_technichord_strings.c, ui_widgets/naka_technichord_strings_link.ld, ui_widgets/naka_widget_descriptors.c, ui_widgets/naka_widget_descriptors_link.ld, ui_widgets/naka_widget_tables_2.c, ui_widgets/naka_widget_tables_2_link.ld; v10's SendPartDataBlock_Data5 is the code at 0xFEF925
-SendPartDataBlock_Data5:
 	calr	HdaeRom_DataDispatch_Block
 	ld	xwa, 0x1e0000
 	ldw	bc, 0x72aa
@@ -25828,8 +25731,7 @@ PostTmSave_JumpToRestore:
 	jp	FDemoText_RefreshFullDisplay
 TmFlashWrite_Block1:
 	ret
-; SendPartDataBlock_InitVal4 is kept at this address only for demo/file_demo_proc.s; v10's SendPartDataBlock_InitVal4 is the code at 0xFEF954
-SendPartDataBlock_InitVal4:
+TmFlashWrite_Block1_Entry:
 	dec	4, xsp
 	ld	(xsp), c
 	ld	(xsp+2), a
@@ -25898,7 +25800,7 @@ TmFlashWrite_ValidateParams:
 	ld	iz, 0:i3
 	cp	(xsp+4), 64
 	jr	nc, TmFlashWrite_ValidateParams_Loop2
-FileIO_ByteBlock_DemoProc1_Helper7_Loop:
+TmFlashWrite_ValidateParams_Loop:
 	ld	a, (xsp+4)
 	extz	wa
 	ldto_berp	c, 248
@@ -25906,7 +25808,7 @@ FileIO_ByteBlock_DemoProc1_Helper7_Loop:
 	calr	HdaeRom_DataHandler
 	inc	1, iz
 	cp	iz, 20
-	jr	c, FileIO_ByteBlock_DemoProc1_Helper7_Loop
+	jr	c, TmFlashWrite_ValidateParams_Loop
 	calr	HdaeRom_DataDispatch_Block
 	ld	a, (xsp+4)
 	ldfr_berp	a, 248
@@ -26046,7 +25948,7 @@ TmFlash_BulkTransferToSubCPU:
 	call	InterCPU_E1_Bulk_Transfer
 	jp	TmFlash_Return
 	ld	xwa, 0x1e0000
-	calr	HdaeRom_DataHandler_Helper3
+	calr	SendPartDataBlock_InitVal4
 	ldw	wa, 0xff9a
 	cp	l, 6:i3
 	jr	nz, TmFlash_BulkTransferToSubCPU_Skip
@@ -26055,7 +25957,7 @@ TmFlash_BulkTransferToSubCPU_Skip:
 	ld	hl, wa
 	ret
 	ld	xwa, 0x1e0000
-	calr	HdaeRom_DataHandler_Helper3
+	calr	SendPartDataBlock_InitVal4
 	cp	l, 6:i3
 	jr	ugt, TmFlash_BulkTransferToSubCPU_Skip2
 	cp	l, 1:i3
@@ -26078,7 +25980,7 @@ TmFlash_BulkTransferToSubCPU_Skip2:
 	ld	iz, bc
 	ld	(xsp+2), xwa
 	ld	xwa, (xsp+2)
-	calr	HdaeRom_DataHandler_Helper3
+	calr	SendPartDataBlock_InitVal4
 	ld	wa, iz
 	extz	xwa
 	extz	hl
@@ -26147,7 +26049,7 @@ TmFlash_BulkTransferToSubCPU_Epilogue2:
 	ld	iz, bc
 	ld	(xsp+0x6), xwa
 	ld	xwa, (xsp+0x6)
-	calr	HdaeRom_DataHandler_Helper3
+	calr	SendPartDataBlock_InitVal4
 	ld	bc, iz
 	extz	xbc
 	extz	hl
@@ -26462,16 +26364,15 @@ Free_Block:
 	ld	xix, (0x03d52c:24)
 	ld	xde, xix
 	or	xix, xix
-	jr	z, SLIDE_Decompress_4K_Init_Helper_Skip
+	jr	z, Free_Compare2
 Free_Compare:
 	cp	xbc, xix
-	jr	ule, SLIDE_Decompress_4K_Init_Helper_Skip
+	jr	ule, Free_Compare2
 	ld	xde, xix
 	ld	xix, (xix)
 	or	xix, xix
 	jr	nz, Free_Compare
-; v10 name for this address: Free_Compare2 -- not a label here: v7 keeps that name at 0xFF0770 for audio/sound_editor_ui.s, audio/sound_navigation.s, demo/demo_seq_bridge.s, demo/fdemotext_routines.s, demo/file_demo_proc.s, display/graphics_text_vga.s, factory_test/fd_test_code.s, file_io/medley.s, file_io/misc_ui.s, kn5000_v7_program.s, midi/ac_listener_handlers.s, midi/computer_interface_config.s, midi/computer_interface_pcg.s, midi/param_load_routines.s, midi/sysex_routines.s, sequencer/accompaniment_engine.s, sequencer/seq_event_playback.s, sequencer/sequencer_ui.s, sequencer/smf_event_processor.s, storage/flash_floppy_handlers.s, ui/drawbar_panel_ui.s, ui/psgridbox_routines.s, ui/ui_control_panel.s, ui/ui_mode_handlers.s, ui/ui_playback_modes.s, ui/ui_widget_defs.s, ui/ui_window_procs.s
-SLIDE_Decompress_4K_Init_Helper_Skip:
+Free_Compare2:
 	cp	xbc, xix
 	jr	nz, Free_LoadReg
 	ld	wa, 1:i3
@@ -26707,10 +26608,9 @@ String_Compare_ClearByte:
 String_Compare_Extend:
 	exts	hl
 	ret
-; v10 name for this address: Strncpy -- not a label here: v7 keeps that name at 0xFF0930 for ui_widgets/naka_widget_descriptors.c
 ; Strncpy -- Copy string with length limit, zero-pad remainder
 ; Args: (xsp+4)=dest, (xsp+8)=src, (xsp+12)=maxlen
-CmpNamingCheck_Helper:
+Strncpy:
 	ld	bc, (xsp + 12)
 	ld	xde, (xsp + 8)
 	ld	xix, (xsp + 4)
@@ -27033,9 +26933,7 @@ Strcmp:
 	lda	xsp, (xsp + 14)
 	pop	xiz
 	ret
-; Free_Compare2 is kept at this address only for audio/sound_editor_ui.s, audio/sound_navigation.s, demo/demo_seq_bridge.s, demo/fdemotext_routines.s, demo/file_demo_proc.s, display/graphics_text_vga.s, factory_test/fd_test_code.s, file_io/medley.s, file_io/misc_ui.s, kn5000_v7_program.s, midi/ac_listener_handlers.s, midi/computer_interface_config.s, midi/computer_interface_pcg.s, midi/param_load_routines.s, midi/sysex_routines.s, sequencer/accompaniment_engine.s, sequencer/seq_event_playback.s, sequencer/sequencer_ui.s, sequencer/smf_event_processor.s, storage/flash_floppy_handlers.s, ui/drawbar_panel_ui.s, ui/psgridbox_routines.s, ui/ui_control_panel.s, ui/ui_mode_handlers.s, ui/ui_playback_modes.s, ui/ui_widget_defs.s, ui/ui_window_procs.s; v10's Free_Compare2 is the code at 0xFF0356
-; v10 name for this address: Strcpy -- not a label here: v7 keeps that name at 0xFF0B8A for ui_widgets/naka_widget_descriptors.c
-Free_Compare2:
+Strcpy:
 	push	xiz
 	pushw	0xfffe
 	pushw	0x0

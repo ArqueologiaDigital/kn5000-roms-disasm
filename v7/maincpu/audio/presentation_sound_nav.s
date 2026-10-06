@@ -51,14 +51,14 @@ GroupBoxProc_StartSSFPresentation:
 	ld	(xwa), c
 	lda	xbc, (xsp+10)
 	lda	xde, (xsp+8)
-	call	GroupBoxProc_StartSSFPresentation_Helper
+	call	SndParam_ResolveWidget
 	cp	hl, 65535
 	jrl	z, GroupBox_ReturnZero
 GroupBoxProc_SSFItemLoop:
 	ld	xwa, (xsp+10)
 	ld	(xsp+18), xwa
 	ld	xwa, (xsp+10)
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	lda	xde, (xsp+18)
 	ld	(xde+4), hl
 	ldw	(xde+6), 0
@@ -70,7 +70,7 @@ GroupBoxProc_SSFItemLoop:
 	lda	xwa, (xsp+14)
 	lda	xbc, (xsp+10)
 	lda	xde, (xsp+8)
-	call	GroupBoxProc_StartSSFPresentation_Helper
+	call	SndParam_ResolveWidget
 	cp	hl, 65535
 	jr	nz, GroupBoxProc_SSFItemLoop	; -> 0xF99EAD
 	jrl	GroupBox_ReturnZero	; -> 0xF9A119

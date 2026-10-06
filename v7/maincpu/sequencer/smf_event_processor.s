@@ -699,7 +699,7 @@ SMF_SysEx_CheckBlockLimit:
 	jr	z, Seq_ReturnToDispatcher
 	ld	xwa, 6753
 	ld	xbc, 0:i3
-	call	SMF_ProcessSysExBlock_Helper
+	call	SysEx_ValidateRolandHeader
 	jp	Seq_ReturnToDispatcher
 Seq_AdvanceBlock:
 	call Sequencer_AdvanceBlockPosition
@@ -818,7 +818,7 @@ SMF_RestoreTimerState:
 	ld	wa, (65516:24)
 	ld	(61854:16), wa
 	push	xhl
-	call	PerfMode_Handler_EvtB_Helper2_Helper11
+	call	Audio_CheckSubsystemReady
 	pop	xhl
 SMF_SeekReturn:
 	ret
@@ -2966,7 +2966,7 @@ FileOpen_CopyFilename:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xwa, (xsp+12)
 	ld	(xsp+16), xwa
@@ -7650,7 +7650,7 @@ SeqChan_ReadNextFromLoop:
 	pushw SeqChan_ReadNextFromLoop_Str_Dot@lo16
 	lda	xwa, (xsp+14)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	ld	(xsp+30), 16
 	lda	xwa, (xsp+31)
 	push	xwa
@@ -9690,7 +9690,7 @@ FindFirst_CopyAndSearch:
 	ld	xwa, (xsp+12)
 	push	xwa
 	push	xiz
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xwa, (xsp+8)
 	ld	(xwa+4), xiz
@@ -10843,7 +10843,7 @@ Rhythm_InitDataBlock:
 	.zero 128
 
 Rhythm_QueuePartChangeEvent:
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 	ret
 Seq_ReadTempoLookup:
 	xor	xhl, xhl

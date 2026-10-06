@@ -456,7 +456,7 @@ LyricsBox_DrawLineLoop:
 	push XHL
 	pushw 0x0002
 	pushw 0x0dfe
-	call Free_Compare2
+	call Strcpy
 	inc 8,XSP
 	lda xbc, (xsp + 0x14)
 	lda xwa, (xsp + 0x28)
@@ -485,7 +485,7 @@ LyricsBox_CheckCurrentLine:
 	pushm (xsp + 0x0a)
 	push XHL
 	push XBC
-	call CmpNamingCheck_Helper
+	call Strncpy
 	lda xsp, (xsp + 0x0a)
 	ld WA,(XSP+0x0a)
 	extz XWA
@@ -520,7 +520,7 @@ LyricsBox_CheckCurrentLine:
 	push XBC
 	pushw 0x0002
 	pushw 0x0dfe
-	call Free_Compare2
+	call Strcpy
 	inc 8,XSP
 	ld BC,(XSP+0x0a)
 	sll BC, 0x03
@@ -547,7 +547,7 @@ LyricsBox_CopyAndDraw:
 
 	push xbc
 
-	call	Free_Compare2
+	call	Strcpy
 
 	inc 8, xsp
 
@@ -651,7 +651,7 @@ LyricsBox_DrawCurrentLine:
 
 	pushw 0xdfe
 
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 
 	lda xsp, (xsp + 10)
 
@@ -767,7 +767,7 @@ LyricsBox_DrawSelLine:
 
 	pushw 0xdfe
 
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 
 	lda xsp, (xsp + 10)
 
@@ -907,7 +907,7 @@ SongEdit_CheckBounds:
 	exts XWA
 	add XWA,XBC
 	push XWA
-	call CmpNamingCheck_Helper
+	call Strncpy
 	lda xsp, (xsp + 0x0a)
 	lda xbc, (0x020e4a:24)
 	ld A,(XSP)
@@ -1010,7 +1010,7 @@ SongEdit_OverflowCheck:
 
 	push xwa
 
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 
 	lda xsp, (xsp + 10)
 
@@ -1269,7 +1269,7 @@ LyricsFile_InsertNormalChar:
 	lda xwa, (0x20cbe:24)
 	lda	xwa, (xwa+bc)
 	push xwa
-	call CmpNamingCheck_Helper
+	call Strncpy
 	lda xsp, (xsp+14)
 	lda xwa, (0x20e42:24)
 	ld bc, iz
@@ -1322,7 +1322,7 @@ LyricsBoxFunc_CopyString:
 	pushw	NakaT1_Str021A4@hi16
 	pushw	NakaT1_Str021A4@lo16
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jrl	SongName_ReturnZeroJmp
 LyricsBoxFunc_ResetCursors:
@@ -1818,7 +1818,7 @@ AcDiskFileName_HandleEventF:
 	pushw	AcDiskFileName_HandleEventF_Str_Blank25@lo16
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -1828,7 +1828,7 @@ AcDiskFileName_HandleEventF:
 	pushw	7270
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -1888,7 +1888,7 @@ AcSmfFileName_HandleEventF:
 	pushw	AcSmfFileName_HandleEventF_Str_Blank25@lo16
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -1898,7 +1898,7 @@ AcSmfFileName_HandleEventF:
 	pushw	7284
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -1958,7 +1958,7 @@ AcSmfSongName_HandleEventF:
 	pushw	AcSmfSongName_HandleEventF_Str_Blank25@lo16
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -1968,7 +1968,7 @@ AcSmfSongName_HandleEventF:
 	pushw	7304
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -2028,7 +2028,7 @@ AcDocSongName_HandleEventF:
 	pushw	AcDocSongName_HandleEventF_Str_Blank25@lo16
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -2038,7 +2038,7 @@ AcDocSongName_HandleEventF:
 	pushw	7326
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -2098,7 +2098,7 @@ AcDocFileNo_HandleEventF:
 	pushw	AcDocFileNo_HandleEventF_Str_Blank25@lo16
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -2108,7 +2108,7 @@ AcDocFileNo_HandleEventF:
 	pushw	7362
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -2168,7 +2168,7 @@ AcPDSongName_HandleEventF:
 	pushw	AcPDSongName_HandleEventF_Str_Blank25@lo16
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -2178,7 +2178,7 @@ AcPDSongName_HandleEventF:
 	pushw	7340
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -2238,7 +2238,7 @@ AcPDFileNo_HandleEventF:
 	pushw	AcPDFileNo_HandleEventF_Str_Blank25@lo16
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -2248,7 +2248,7 @@ AcPDFileNo_HandleEventF:
 	pushw	7366
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -2282,7 +2282,7 @@ IvNamingExit_CopyString:
 	pushw	IvNamingExit_CopyString_Str_ExMD@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, 0:i3
 	jr	IvNamingExit_Epilogue
@@ -2502,7 +2502,7 @@ IvNamingExit_ScreenData_Skip2:
 	push	xwa
 	lda	xwa, (xsp+30)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xbc, (xsp+10)
 	ld	xix, (xbc+42)
@@ -2612,7 +2612,7 @@ AcTrAsGridBoxProc:
 
 TrAsGrid_HandleInit:
 	ld	xwa, 192
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 0:i3
 	jr	z, TrAsGrid_InitStateZero
 	ld	xwa, 9109513
@@ -2936,7 +2936,7 @@ TrAsGrid_PushLabelAddr:
 TrAsGrid_CopyLabel:
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jrl	TrAsGrid_ReturnZero
 TrAsGrid_HandleSelectEvent:
@@ -3856,7 +3856,7 @@ AcCurSongName_HandleEventF:
 	pushw	AcCurSongName_HandleEventF_Str_Blank22@lo16
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -3866,7 +3866,7 @@ AcCurSongName_HandleEventF:
 	pushw	7248
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -3911,7 +3911,7 @@ MuteChSel_Dispatch:
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	MuteChSel_Epilogue
@@ -3955,7 +3955,7 @@ SqTrAsPsSong_Dispatch:
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	SqTrAsPsSong_Epilogue
@@ -3993,7 +3993,7 @@ SqAftSetFunc:
 	push	xwa
 	ld	xwa, (xde+10)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	SqAftSet_LookupExit	; -> 0xF2CD0D
@@ -4049,7 +4049,7 @@ MuteChSet_Dispatch:
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	SqAftSet_LookupTableEntry_Epilogue
@@ -4290,13 +4290,13 @@ SeqNamingCheck:
 	pushw	62080
 	pushw	2
 	pushw	3234
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xwa, (134306:24)
 	ld	(xwa+16), 0
 	push	xwa
 	ld	xwa, (xsp+18)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	lda	xsp, (xsp+18)
 	ld	xhl, xiz
 	jr	SeqNameOK_Epilogue
@@ -4551,7 +4551,7 @@ IvExitTrSel_CopyString:
 	pushw	DPPauseDspCheck_CaseTable_Strings@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, 0:i3
 	jr	IvExitTrSel_Epilogue
@@ -4771,7 +4771,7 @@ IvRealRecExit_CopyString:
 	pushw	NakaDesc_Str0330A@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, 0:i3
 	jr	IvRealRecExit_Epilogue
@@ -5245,7 +5245,7 @@ HelpTtlFunc_LookupSlide:
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
 HelpTtlFunc_Epilogue:
@@ -5277,7 +5277,7 @@ IvSdrev_CheckParam:
 	cp	xwa, 3
 	jr	nz, MasterParam_Return
 	ld	xwa, 16386
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 0:i3
 	jr	nz, MasterParam_Return
 	ld	xwa, 16386
@@ -5307,7 +5307,7 @@ IvSdrev_CopyString:
 	pushw	HelpTtlFunc_LookupSlide_PtrTable_Strings@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 IvSdrev_ReturnZero:
 	ld xhl, 0:i3
@@ -5346,7 +5346,7 @@ IvSddsp_CheckParam:
 	ld	iz, hl
 	ld	wa, iz
 	ldw	bc, 93
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	cp	hl, 0:i3
 	jr	nz, FilterParam_Return
 	lda	xwa, (37105:16)
@@ -5382,7 +5382,7 @@ IvSddsp_CopyString:
 	pushw	IvSddsp_CopyString_Str_Dsp@lo16
 	ld	xwa, (xsp+6)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 IvSddsp_ReturnZero:
 	ld xhl, 0:i3
@@ -5417,7 +5417,7 @@ IvSdacc_CheckParam:
 	cp	xwa, 3
 	jr	nz, OscillatorParam_Return
 	ld	xwa, 16388
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 0:i3
 	jr	nz, OscillatorParam_Return
 	ld	xwa, 16388
@@ -5447,7 +5447,7 @@ IvSdacc_CopyString:
 	pushw	IvSdacc_CopyString_Str_Acc@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 IvSdacc_ReturnZero:
 	ld xhl, 0:i3
@@ -5478,7 +5478,7 @@ IvPlayExit_CopyString:
 	pushw	IvPlayExit_CopyString_Str_ExMD@lo16
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, 0:i3
 	jr	IvPlayExit_Epilogue
@@ -5534,7 +5534,7 @@ IvPunchExit_CopyString:
 	pushw	IvPunchExit_CopyString_Str_ExPR@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, 0:i3
 	jr	IvPunchExit_Epilogue
@@ -5585,7 +5585,7 @@ IvAutoPunchExit_CopyString:
 	pushw	IvAutoPunchExit_CopyString_Str_ExAP@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, 0:i3
 	jr	IvAutoPunchExit_Epilogue
@@ -6280,7 +6280,7 @@ NoteEditBox_EventDispatch2_Skip2:
 	pushw StsAtPunchCheck_PtrTable_Strings@lo16
 	lda	xwa, (xsp+40)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xwa, (xsp+28)
 	lda	xbc, (xsp+24)
@@ -6333,7 +6333,7 @@ NoteEditBox_EventDispatch2_Skip3:
 	pushw NoteEditBox_EventDispatch2_Str_N81@lo16
 	lda	xwa, (xsp+40)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xwa, (xsp+28)
 	lda	xbc, (xsp+24)
@@ -6968,7 +6968,7 @@ NoteEdit_FormatTempoString:
 	pushw NoteEdit_FormatTempoString_Str_Star_Star_Star_Dot@lo16
 	ld	xwa, (xiz+18)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jrl	NoteEdit_RestoreAndReturn
 NoteEditFunc_OnGetHakuString:
@@ -6998,7 +6998,7 @@ NoteEditFunc_OnGetNoteString:
 	push	xwa
 	ld	xwa, (xiz+18)
 	push	xwa
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xsp, (xsp+10)
 	jrl	NoteEdit_RestoreAndReturn
 NoteEdit_FormatNoteOther:
@@ -7087,7 +7087,7 @@ NoteEdit_GateTimePushAndCopy:
 	push xwa
 
 NoteEdit_GateTimeStrcpy:
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jrl	NoteEdit_RestoreAndReturn
 NoteEdit_GateTimeNumeric:
@@ -7226,7 +7226,7 @@ NoteEdit_CopyNoteName:
 NoteEdit_DoStrncpy:
 	ld	xwa, (xiz+18)
 	push	xwa
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xsp, (xsp+10)
 NoteEdit_RestoreAndReturn:
 	ld xhl, (xsp + 4)
@@ -7434,7 +7434,7 @@ SngSelFunc_HandleEvent47:
 	pushw	NoteEditFunc_CaseTable_Strings@lo16
 	ld	xwa, (xiz+18)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	ld	a, (65507:24)
 	inc	1, a
 	extz	wa
@@ -7454,7 +7454,7 @@ SngSelFunc_HandleEvent47:
 	ld	xwa, (xbc)
 	inc	7, xwa
 	push	xwa
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xsp, (xsp+28)
 	ld	xwa, (xiz+18)
 	ld	(xwa+23), 0
@@ -7759,7 +7759,7 @@ EntGrid_GetViewAndCopy:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	Entertainer_ReturnZeroJmp
 AcEntertainerGridBoxProc_OnLswData:	; cases 29360156, 29360157
@@ -8025,7 +8025,7 @@ SndParam_Dispatch_Skip4:
 SndParam_Dispatch_Skip5:
 	push	xwa
 	push	xbc
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -8072,7 +8072,7 @@ EntGridCheck_Handler:
 	jr z, EntGridCheck_Handle4140
 	cp XDE,0x00004141
 	jrl nz, SndParam_ReturnZero
-	call AcApcToggleProc_Helper
+	call SndParam_LookupReadOnly
 	pushw hl
 	pushw EntGridCheck_Handler_Str_Fmt3d@hi16
 	pushw EntGridCheck_Handler_Str_Fmt3d@lo16
@@ -8086,7 +8086,7 @@ EntGridCheck_Handler:
 	ld XBC,EVT_GRID_DRAW
 	jrl t, SndParam_SendEventReturnZero
 EntGridCheck_Handle4140:
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	xwa, EntGridCheck_Handle4140_Str_2
 	cp	hl, 0:i3
 	jr	z, EntGridCheck_CopyStringResult
@@ -8095,7 +8095,7 @@ EntGridCheck_CopyStringResult:
 	push	xwa
 	lda	xwa, (xsp+52)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -8113,7 +8113,7 @@ EntGridCheck_Handle4E00:
 	push	xwa
 	ld	xwa, (xsp+26)
 	push	xwa
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xsp, (xsp+10)
 	ld	(xsp+57), 0
 	call	GetFocusObject
@@ -8137,7 +8137,7 @@ EntGridCheck_Handle4E10:
 	push	xwa
 	ld	xwa, (xsp+38)
 	push	xwa
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp+48)
 	ld	(xwa+7), 115
@@ -8162,7 +8162,7 @@ EntGridCheck_Handle4E11:
 	push	xwa
 	ld	xwa, (xsp+42)
 	push	xwa
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp+48)
 	ld	(xwa+6), 72
@@ -8192,7 +8192,7 @@ EntGridCheck_Handle4E12:
 	push	xwa
 	lda	xwa, (xde+3)
 	push	xwa
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp+48)
 	ld	(xwa+8), 32
@@ -8262,7 +8262,7 @@ EntGridCheck_Return:
 
 	push xde
 
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 
 	lda xsp, (xsp + 10)
 
@@ -8321,7 +8321,7 @@ EntGridCheck_Default:
 	push XWA
 	ld XWA,(XSP+0x2a)
 	push XWA
-	call CmpNamingCheck_Helper
+	call Strncpy
 	lda xsp, (xsp + 0x0a)
 	lda xwa, (xsp + 0x30)
 	ld (XWA+0x07),0x73
@@ -8339,7 +8339,7 @@ EntGridCheck_DefaultCase1:
 	add	xwa, xde
 	push	xwa
 	push	xbc
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp+48)
 	ld	(xwa+6), 72
@@ -8363,7 +8363,7 @@ EntGridCheck_DefaultCase2:
 	ld	xwa, (xsp+26)
 	inc	3, xwa
 	push	xwa
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp+48)
 	ld	(xwa+8), 32
@@ -8425,7 +8425,7 @@ IvSongCopyExit_CopyString:
 	pushw	EntertainerGridCheck_CaseTable_Strings@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, 0:i3
 	jr	IvSongCopyExit_Epilogue
@@ -8488,7 +8488,7 @@ IvPnlWrExit_CopyString:
 	pushw	IvPnlWrExit_CopyString_Str_ExMD@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, 0:i3
 	jr	IvPnlWrExit_Epilogue
@@ -12511,7 +12511,7 @@ EffectBox_PostFillSetup:
 	push xbc
 	lda xwa, (xsp+44)
 	push xwa
-	call CmpNamingCheck_Helper
+	call Strncpy
 	lda xsp, (xsp+10)
 	lda xwa, (xsp+318)
 	lda xbc, (xsp+314)
@@ -12572,7 +12572,7 @@ EffectBox_PostFill3Setup:
 	push	xbc
 	lda	xwa, (xsp+44)
 	push	xwa
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp+318)
 	lda	xbc, (xsp+314)
@@ -12623,7 +12623,7 @@ EffectBox_PostFill3Setup:
 	push	xwa
 	lda	xwa, (xsp+44)
 	push	xwa
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xsp, (xsp+10)
 	ld	(xsp+42), 0
 	jr	EffectBox_DrawField1
@@ -12675,7 +12675,7 @@ EffectBox_DrawField1:
 	lda	xbc, (xsp+10)
 	push	xbc
 	push	xwa
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xsp, (xsp+10)
 	ld	(xsp+42), 0
 	jr	EffectBox_DrawField2
@@ -12824,7 +12824,7 @@ EffectBox_Dispatch_Join:
 	push xwa
 	lda xwa, (xsp+44)
 	push xwa
-	call CmpNamingCheck_Helper
+	call Strncpy
 	lda xsp, (xsp+10)
 	ld xwa, (xsp+4)
 	ld xwa, (xwa+28)
@@ -13773,7 +13773,7 @@ EqOnOff_HandleToggleOn:
 	ld	xwa, xiz
 	call	InheritedProc
 	ld	xwa, 16390
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	nz, EqOnOff_HandleToggleOff
 	ld	xwa, xiz
@@ -13871,7 +13871,7 @@ SqplyFunc_FormatCases_Join:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+18)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jrl	SqplyFunc_RestoreAndReturn
 SqplyFunc_FormatCases_Skip2:
@@ -13938,7 +13938,7 @@ SqplyFunc_FormatCases_Skip3:
 	ld	xwa, (xwa+18)
 	push	xwa
 SqplyFunc_FormatCases_Join4:
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jrl	SqplyFunc_RestoreAndReturn
 SqplyFunc_OnGetCycSrtMString:
@@ -13989,7 +13989,7 @@ SqplyFunc_CopyPatternString:
 	push	xwa
 	ld	xwa, (xbc)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	SqplyFunc_RestoreAndReturn
 SqplyFunc_FormatPatternNumeric:
@@ -14542,7 +14542,7 @@ SqedtFunc_OnGetTnString:
 	ld	xwa, (xbc)
 	inc	1, xwa
 	push	xwa
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xsp, (xsp+10)
 	ld	a, (9750:16)
 	extz	wa
@@ -14566,7 +14566,7 @@ SqedtFunc_OnGetCnString:
 	ld	xwa, (xbc)
 	inc	1, xwa
 	push	xwa
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xsp, (xsp+10)
 	ld	a, (9816:16)
 	extz	wa
@@ -14771,7 +14771,7 @@ SqedtFunc_Case2:
 	ld XWA,(XSP+0x08)
 	ld XWA,(XWA+0x12)
 	push XWA
-	call Free_Compare2
+	call Strcpy
 	inc 8,XSP
 	jr t, StringCopyEpilog
 SqedtFunc_Case2_CopyParam:
@@ -14796,7 +14796,7 @@ SqedtFunc_CheckMode:
 	ld XWA,(XSP+0x08)
 	ld XWA,(XWA+0x12)
 	push XWA
-	call Free_Compare2
+	call Strcpy
 	inc 8,XSP
 	jr t, StringCopyEpilog
 SqedtFunc_CheckMode_CopyParam:
@@ -14837,7 +14837,7 @@ SqedtFunc_ModeC_Entry:
 	ld	xwa, (xsp+10)
 	ld	xwa, (xwa+18)
 	push	xwa
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xsp, (xsp+10)
 StringCopyEpilog:
 	ld xhl, (xsp + 12)
@@ -15508,7 +15508,7 @@ DspItem0_DisplayEffectName:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+18)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jrl	DspItem0_ExitWithHL	; -> 0xF356FB
 DspItem0CngFunc_OnGetEffFixString:
@@ -15535,7 +15535,7 @@ DspItem0_DisplayParamNames:
 	ld xwa, (xwa+18)
 	add xwa, xbc
 	push xwa
-	call CmpNamingCheck_Helper
+	call Strncpy
 	lda xsp, (xsp+10)
 	incm 1, (xsp+18)
 	cpw (xsp+18), 8
@@ -15564,7 +15564,7 @@ DspItem0_DisplayParamValues:
 	ld xwa, (xwa+18)
 	add xwa, xbc
 	push xwa
-	call CmpNamingCheck_Helper
+	call Strncpy
 	lda xsp, (xsp+10)
 	incm 1, (xsp+18)
 	cpw (xsp+18), 8
@@ -15930,7 +15930,7 @@ FormatEqParamValue:
 FormatEqParam_CopyAndReturn:
 	ld	xwa, (xix+18)
 	push	xwa
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xsp, (xsp+10)
 	ld	xhl, xiz
 	jr	Equalizer_PopIzRet
@@ -16212,14 +16212,14 @@ FormatParamStr_CopyEnumName:
 	add XWA,XDE
 	push XWA
 	push XHL
-	call CmpNamingCheck_Helper
+	call Strncpy
 	lda xsp, (xsp + 0x0a)
 	jr t, Equalizer_PadSpaceAndReturn
 Equalizer_CopyFixedString:
 	pushw	Equalizer_CopyFixedString_Str_Blank5@hi16
 	pushw	Equalizer_CopyFixedString_Str_Blank5@lo16
 	push	xhl
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	Equalizer_PadSpaceAndReturn
 PrepareAudioParam:

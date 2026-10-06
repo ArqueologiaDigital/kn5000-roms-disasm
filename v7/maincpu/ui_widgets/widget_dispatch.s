@@ -1155,17 +1155,17 @@ SndParam_RegisterHandlers:
 	.long SndParam_RegisterEntry_Data
 	.long SndParam_RegisterEntryAlt_Data
 	.long SndParam_UpdateEntry_Data
-	.long SndParam_RegisterType4_Handler
+	.long SndParam_RegisterMultiField_Data
 	.long SndParam_RegisterBitfield_Data
 	.long SndParam_RegisterLinked_Data
 	.long SndParam_RegisterLinked2_Data
-	.long SndParam_RegisterMultiField_Data
+	.long SndParam_RegisterSimple_Data
 ; 8 x u32 routine pointers, one per record type; SndParam_Lkp2_Dispatch (0xFCD011):
 ; `lda xbc,(<this>); lda xhl, (xbc+wa); ld xhl,(xhl); call (xhl)`.
 ; Extent: up to the next table's base (each base is loaded by its own reader).
 SndParam_Register2Handlers:
-	.long SndParam_RegisterMultiField_Data + 163
-	.long SndParam_RegisterMultiField_Data + 186
+	.long SndParam_DeregisterEntry_Data
+	.long SndParam_RegisterChained_Data
 	.long SndParam_RegisterChained2_Data
 	.long SndParam_RegisterComplex_Data
 	.long SndParam_NotifyQuick_Data
@@ -1324,99 +1324,99 @@ SeqData_ReadFieldByIndex_Data:
 	.short	SeqData_ReadFieldByIndex_Case14 - SeqData_FieldDispatch
 	.short	SeqData_ReadFieldByIndex_Case15 - SeqData_FieldDispatch
 ArpQueue_ComputeAndEnqueue_Data:	.incbin "includes/generated/sound_config_lookup.bin", 0x17F6, 0x2
-; 39 x u32 routine pointers; MidiTable_DispatchHelper (0xFD773E): `lda xbc,(<this>); ld xhl, (xbc+wa); call (xhl)`.
+; 39 x u32 routine pointers; SeqChan_StepCmd_Field6_Data + 29 (0xFD773E): `lda xbc,(<this>); ld xhl, (xbc+wa); call (xhl)`.
 ; Extent: to the next object's base (loaded by its own reader).
 SeqChan_CommandHandlers:
 	.set SeqChan_CommandDispatch_Table, SeqChan_CommandHandlers
-	.long SeqChan_StepCmd_Field1to2 + 9
-	.long SeqChan_StepCmd_Field1to2 + 10
-	.long SeqChan_StepCmd_Field1to2 + 11
-	.long MidiPkt_ArpExtHandler_E_Data + 30
-	.long MidiPkt_ArpExtHandler_H_Data + 27
-	.long SeqChan_StepCmd_Field1to2 + 27
-	.long SeqChan_StepCmd_Field1to2 + 12
-	.long MidiPkt_ArpConfigChain_Data + 64
-	.long MidiPkt_ArpConfigChain_Data + 88
-	.long SeqChan_StepCmd_Field1to2 + 9
-	.long MidiPkt_ArpConfigChain_Data + 745
-	.long MidiPkt_ArpConfigChain_Data + 161
-	.long MidiPkt_ArpConfigChain_Data + 213
-	.long MidiPkt_ArpConfigChain_Data + 252
-	.long MidiPkt_ArpConfigChain_Data + 300
-	.long MidiPkt_ArpConfigChain_Data + 339
-	.long MidiPkt_ArpConfigChain_Data + 391
-	.long MidiPkt_ArpConfigChain_Data + 431
-	.long MidiPkt_ArpConfigChain_Data + 611
-	.long MidiPkt_ArpConfigChain_Data + 659
-	.long MidiPkt_ArpConfigChain_Data + 699
-	.long MidiPkt_ArpConfigChain_Data + 743
-	.long MidiPkt_ArpConfigChain_Data + 744
-	.long MidiPkt_ArpConfigChain_Data + 475
-	.long MidiPkt_ArpConfigChain_Data + 527
-	.long MidiPkt_ArpConfigChain_Data + 567
-	.long SeqChan_StepCmd_Field1to2 + 9
-	.long SeqChan_StepCmd_Field1to2 + 9
-	.long SeqChan_StepCmd_Field1to2 + 9
-	.long SeqChan_StepCmd_Field1to2 + 9
-	.long SeqChan_StepCmd_Field1to2 + 9
-	.long SeqChan_StepCmd_Field1to2 + 9
-	.long SeqChan_StepCmd_Field1to2 + 9
-	.long SeqChan_StepCmd_Field1to2 + 9
-	.long SeqChan_StepCmd_Field1to2 + 9
-	.long SeqChan_StepCmd_Field1to2 + 9
-	.long SeqChan_StepCmd_Field1to2 + 9
-	.long SeqChan_StepCmd_Field1to2 + 9
-	.long SeqChan_StepCmd_Field1to2 + 9
+	.long SeqChan_UnhandledCmd
+	.long SeqChan_UnhandledCmd + 1
+	.long SeqChan_UnhandledCmd + 2
+	.long SeqChan_DispatchByType_Data
+	.long MidiSysEx_ProcessBlock
+	.long MidiPkt_ArpChordHandler_Helper + 14
+	.long SeqChan_UnhandledCmd + 3
+	.long MidiPkt_InitSingleField_Data
+	.long MidiPkt_HandleCmdCode01
+	.long SeqChan_UnhandledCmd
+	.long MidiPkt_ArpExtHandler_N_Data
+	.long MidiPkt_ArpExtHandler_A
+	.long MidiPkt_ArpExtHandler_B_Data
+	.long MidiPkt_ArpExtHandler_C_Data
+	.long MidiPkt_ArpExtHandler_D_Data
+	.long MidiPkt_ArpExtHandler_E_Data
+	.long MidiPkt_ArpExtHandler_F_Data
+	.long MidiPkt_ArpExtHandler_G
+	.long MidiPkt_ArpExtHandler_K
+	.long MidiPkt_ArpExtHandler_L
+	.long MidiPkt_ArpExtHandler_M_Data
+	.long MidiPkt_RetStub_A
+	.long MidiPkt_RetStub_B
+	.long MidiPkt_ArpExtHandler_H_Data
+	.long MidiPkt_ArpExtHandler_I_Data
+	.long MidiPkt_ArpExtHandler_J
+	.long SeqChan_UnhandledCmd
+	.long SeqChan_UnhandledCmd
+	.long SeqChan_UnhandledCmd
+	.long SeqChan_UnhandledCmd
+	.long SeqChan_UnhandledCmd
+	.long SeqChan_UnhandledCmd
+	.long SeqChan_UnhandledCmd
+	.long SeqChan_UnhandledCmd
+	.long SeqChan_UnhandledCmd
+	.long SeqChan_UnhandledCmd
+	.long SeqChan_UnhandledCmd
+	.long SeqChan_UnhandledCmd
+	.long SeqChan_UnhandledCmd
 ; 22 x u32 routine pointers; MidiPkt_ArpExtHandler_N_Data (0xFD763F): `lda xbc,(<this>); ld xhl, (xbc+hl); call (xhl)`.
 ; Extent: to the next object's base (loaded by its own reader).
 SeqChan_StepCmdHandlers:
-	.long MidiPkt_ArpConfigChain_Data + 778
-	.long MidiPkt_ArpConfigChain_Data + 791
-	.long MidiPkt_ArpConfigChain_Data + 835
-	.long MidiPkt_ArpConfigChain_Data + 778
+	.long SeqChan_ProcessStepCmd
+	.long SeqChan_StepCmd_Field1to2
+	.long SeqChan_StepCmd_Field2to3
+	.long SeqChan_ProcessStepCmd
 	.long SeqChan_StepCmd_Field4to5
 	.long SeqChan_StepCmd_Field5to6
-	.long MidiPkt_ArpConfigChain_Data + 778
-	.long ArpChord_CheckPlaybackDone + 16
-	.long MidiTable_DispatchHelper + 16
-	.long MidiTable_FlushArpNotes + 4
-	.long MidiPkt_ArpConfigChain_Data + 778
-	.long MidiPkt_ArpExtHandler_A + 35
-	.long MidiPkt_ArpExtHandler_C_Data + 1
-	.long MidiPkt_ArpExtHandler_D_Data + 10
-	.long MidiPkt_ArpConfigChain_Data + 778
-	.long MidiPkt_ArpExtHandler_E_Data + 28
-	.long MidiPkt_ArpExtHandler_E_Data + 29
-	.long MidiPkt_ArpConfigChain_Data + 778
-	.long MidiTable_UseDefaultBuf + 6
-	.long MidiPkt_HandleCmdCode01 + 16
-	.long MidiPkt_SetSlot18 + 2
-	.long MidiPkt_ArpConfigChain_Data + 778
+	.long SeqChan_ProcessStepCmd
+	.long SeqChan_StepCmd_Field6_Data
+	.long SeqChan_StepCmd_Field8to9
+	.long SeqChan_StepCmd_Field9to10
+	.long SeqChan_ProcessStepCmd
+	.long SeqChan_StepCmd_Field11_Data
+	.long SeqChan_StepCmd_Field12_Data
+	.long SeqChan_StepCmd_Field13Write
+	.long SeqChan_ProcessStepCmd
+	.long SeqChan_RetStub_A
+	.long SeqChan_RetStub_B
+	.long SeqChan_ProcessStepCmd
+	.long SeqChan_StepCmd_Field10_Data
+	.long SeqChan_StepCmd_Field13_Data
+	.long SeqChan_StepCmd_Field20to21
+	.long SeqChan_ProcessStepCmd
 ; 22 x u32 routine pointers; SeqChan_DispatchByType_Data (0xFD78E1): `lda xbc,(<this>); ld xhl, (xbc+wa); call (xhl)`.
 ; Extent: to the next object's base (loaded by its own reader).
 SeqChan_WriteFieldHandlers:
-	.long MidiPkt_ArpExtHandler_F_Data + 12
-	.long MidiPkt_ArpExtHandler_F_Data + 12
-	.long MidiPkt_ArpExtHandler_F_Data + 12
-	.long MidiPkt_ArpExtHandler_F_Data + 25
-	.long MidiPkt_ArpExtHandler_F_Data + 12
-	.long MidiPkt_ArpExtHandler_F_Data + 12
-	.long MidiPkt_ArpExtHandler_G + 2
-	.long MidiPkt_ArpExtHandler_F_Data + 12
-	.long MidiPkt_ArpExtHandler_F_Data + 12
-	.long MidiPkt_ArpExtHandler_F_Data + 12
-	.long MidiPkt_ArpExtHandler_G + 19
-	.long MidiPkt_ArpExtHandler_F_Data + 12
-	.long MidiPkt_ArpExtHandler_F_Data + 12
-	.long MidiPkt_ArpExtHandler_F_Data + 12
-	.long MidiPkt_ArpExtHandler_G + 36
-	.long MidiPkt_ArpExtHandler_F_Data + 12
-	.long MidiPkt_ArpExtHandler_F_Data + 12
-	.long MidiPkt_ArpExtHandler_H_Data + 9
-	.long MidiPkt_ArpExtHandler_F_Data + 12
-	.long MidiPkt_ArpExtHandler_F_Data + 12
-	.long MidiPkt_ArpExtHandler_F_Data + 12
-	.long MidiPkt_ArpExtHandler_H_Data + 10
+	.long SeqChan_DefaultHandler
+	.long SeqChan_DefaultHandler
+	.long SeqChan_DefaultHandler
+	.long SeqChan_WriteField_Data_A
+	.long SeqChan_DefaultHandler
+	.long SeqChan_DefaultHandler
+	.long SeqChan_WriteField_Data_B
+	.long SeqChan_DefaultHandler
+	.long SeqChan_DefaultHandler
+	.long SeqChan_DefaultHandler
+	.long SeqChan_WriteField_Data_C
+	.long SeqChan_DefaultHandler
+	.long SeqChan_DefaultHandler
+	.long SeqChan_DefaultHandler
+	.long SeqChan_WriteField_Data_D
+	.long SeqChan_DefaultHandler
+	.long SeqChan_DefaultHandler
+	.long SeqChan_RetStub_C
+	.long SeqChan_DefaultHandler
+	.long SeqChan_DefaultHandler
+	.long SeqChan_DefaultHandler
+	.long SeqChan_WriteField_Data_E
 ; 6-byte template: MidiSysEx_ProcessBlock_Helper7 (0xFD7A1D) copies it into its frame (`ld xiy,<this>; ld xix,xsp; ld bc,3; ldirw`).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 MidiSysEx_BlockTemplate:
@@ -1456,10 +1456,10 @@ MidiChan_ZeroRegTemplate:
 ; SeqFormat_ReferenceData kept (positional_labels.s derives from it).
 SeqFormat_HandlerTable:
 	.set SeqFormat_ReferenceData, SeqFormat_HandlerTable
-	.long SoundMode_ResetJump2	; no label at this target yet; v10: SoundMode_ResetJump2
-	.long SoundMode_RetStub_A	; no label at this target yet; v10: SoundMode_RetStub_A
-	.long SoundMode_RetStub_B	; no label at this target yet; v10: SoundMode_RetStub_B
-	.long SoundMode_RetStub_C	; no label at this target yet; v10: SoundMode_RetStub_C
+	.long SoundMode_ResetJump2
+	.long SoundMode_RetStub_A
+	.long SoundMode_RetStub_B
+	.long SoundMode_RetStub_C
 ; 16 x u32 RAM addresses 0xFDDA + 0x14*i.  VoiceData_ZeroFillAll (0xFD827D):
 ; `lda xbc,(<this>); ld xwa,xbc; lda xbc,(xbc+64)` -- walks the 16 entries
 ; (end = <this>+64) and clears each block.
@@ -1487,45 +1487,45 @@ SysExSend_SwitchOffsets:
 ; Extent: to the next object's base (loaded by its own reader).
 SeqData_Handlers:
 	.set SeqData_SubDispatch_Table, SeqData_Handlers
-	.long TGReg_WriteCC11_PartMode + 14
-	.long MidiPkt_ArpPassLoop + 28
-	.long MidiPkt_ArpPassLoop + 28
-	.long MidiPkt_ArpPassLoop + 28
-	.long MidiPkt_ArpPassLoop + 28
-	.long MidiPkt_ArpPassLoop + 28
-	.long MidiPkt_ArpPassLoop + 28
-	.long MidiPkt_ArpPassLoop + 28
-	.long MidiPkt_ArpPassLoop + 28
-	.long VoiceData_ZeroFillInner + 3
-	.long MidiPkt_ArpPassLoop + 28
-	.long MidiPkt_ArpPassLoop + 28
-	.long MidiPkt_ArpPassLoop + 28
-	.long MidiPkt_ArpPassLoop + 28
-	.long MidiPkt_ArpPassLoop + 28
-	.long MidiPkt_ArpPassLoop + 28
-	.long MidiPkt_ArpPassLoop + 28
-	.long MidiPkt_ArpPassLoop + 28
-	.long MidiPkt_ArpPassLoop + 28
-	.long MidiPkt_ArpPassLoop + 28
-	.long MidiPkt_ArpPassLoop + 28
-	.long MidiPkt_ArpPassLoop + 28
-	.long MidiPkt_ArpPassLoop + 28
-	.long MidiPkt_ArpPassLoop + 28
-	.long MidiPkt_ArpPassLoop + 28
-	.long MidiPkt_ArpPassLoop + 28
-	.long SwbtWr_InitAndWrite_CC_B1 + 10
-	.long SwbtWr_WriteLoop_CC_B2 + 8
-	.long SwbtWr_WriteLoop_CC_B1 + 12
-	.long SeqAlt_DescriptorBlock_Data + 697
-	.long MidiPkt_EnqueueControl_335C + 86
-	.long MidiPkt_EnqueueControl_335C_ZeroData
-	.long MidiPkt_EnqueueControl_335C_ZeroData + 7
-	.long MidiPkt_EnqueueControl_335C_ZeroData + 14
-	.long MidiPkt_EnqueueControl_335C_ZeroData + 21
-	.long MidiPkt_EnqueueControl_335C_ZeroData + 28
-	.long MidiPkt_EnqueueControl_3358 + 109
-	.long MidiPkt_EnqueueControl_3358_SplitNibbles + 8
-	.long MidiPkt_EnqueueControl_335E + 25
+	.long SeqData_DispatchLoop_Check
+	.long MidiPkt_ArpChordHandler
+	.long MidiPkt_ArpChordHandler
+	.long MidiPkt_ArpChordHandler
+	.long MidiPkt_ArpChordHandler
+	.long MidiPkt_ArpChordHandler
+	.long MidiPkt_ArpChordHandler
+	.long MidiPkt_ArpChordHandler
+	.long MidiPkt_ArpChordHandler
+	.long SeqData_FormatOutput_Dispatch
+	.long MidiPkt_ArpChordHandler
+	.long MidiPkt_ArpChordHandler
+	.long MidiPkt_ArpChordHandler
+	.long MidiPkt_ArpChordHandler
+	.long MidiPkt_ArpChordHandler
+	.long MidiPkt_ArpChordHandler
+	.long MidiPkt_ArpChordHandler
+	.long MidiPkt_ArpChordHandler
+	.long MidiPkt_ArpChordHandler
+	.long MidiPkt_ArpChordHandler
+	.long MidiPkt_ArpChordHandler
+	.long MidiPkt_ArpChordHandler
+	.long MidiPkt_ArpChordHandler
+	.long MidiPkt_ArpChordHandler
+	.long MidiPkt_ArpChordHandler
+	.long MidiPkt_ArpChordHandler
+	.long SeqData_FormatOutput_CaseC
+	.long SeqData_FormatOutput_Data
+	.long SeqData_FormatOutput_Default
+	.long VoiceParam_AssSwb_MultiBlock_Data
+	.long MidiPkt_DispatchData_Chan4
+	.long MidiPkt_DispatchData_Chan3
+	.long MidiPkt_DispatchData_Chan1
+	.long MidiPkt_DispatchData_Chan2
+	.long MidiPkt_DispatchData_Chan5
+	.long MidiPkt_DispatchData_Chan6
+	.long MidiPkt_SysExValidator_Data
+	.long MidiPkt_SysExProcessor_Data
+	.long MidiPkt_SysExBulkTransfer_Data
 ; 4-byte template: SeqData_DispatchLoop_Done (0xFD862C) copies it into its frame (`ld xiy,<this>; ld xix,xsp; ldi85; ldiw` -- 3 bytes).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 SeqData_OutTemplate:
@@ -1540,17 +1540,17 @@ SeqDataFmt_SwitchOffsets:
 	.short	SeqData_FormatOutput_Data_Helper_Case5 - SeqData_FormatOutput_Default_Code
 	.short	SeqData_FormatOutput_Data_Helper_Case6 - SeqData_FormatOutput_Default_Code
 	.short	SeqData_FormatOutput_Data_Helper_Case7 - SeqData_FormatOutput_Default_Code
-; 7 x s16 switch offsets.  VoiceParam_AssSwb_MultiBlock_Data (0xFD9655): `ld_rrw ..,xix,..;
+; 7 x s16 switch offsets.  MidiPkt_BuildControl + 134 (0xFD9655): `ld_rrw ..,xix,..;
 ; lda xix,(0xFD9A3E); jp_rr 8,xix,..` -- targets 0xFD9A3E + offset (no labels yet).
 AssSwbMulti_SwitchOffsets:
 	.short	VoiceParam_MultiMode_StubRet_Code - VoiceParam_MultiMode_StubRet_Code
-	.short	VoiceParam_MultiModeDispatch_Case2 - VoiceParam_MultiMode_StubRet_Code
-	.short	VoiceParam_MultiModeDispatch_Case3 - VoiceParam_MultiMode_StubRet_Code
-	.short	VoiceParam_MultiModeDispatch_Case4 - VoiceParam_MultiMode_StubRet_Code
-	.short	VoiceParam_MultiModeDispatch_Case5 - VoiceParam_MultiMode_StubRet_Code
-	.short	VoiceParam_MultiModeDispatch_Case6 - VoiceParam_MultiMode_StubRet_Code
-	.short	VoiceParam_MultiModeDispatch_Case7 - VoiceParam_MultiMode_StubRet_Code
-; 4-byte template: MidiPkt_BuildControl (0xFD99E9) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+6); ldi85; ldiw` -- 3 bytes).
+	.short	VoiceParam_AssSwb_MultiBlock_Data_Case2 - VoiceParam_MultiMode_StubRet_Code
+	.short	VoiceParam_AssSwb_MultiBlock_Data_Case3 - VoiceParam_MultiMode_StubRet_Code
+	.short	VoiceParam_AssSwb_MultiBlock_Data_Case4 - VoiceParam_MultiMode_StubRet_Code
+	.short	VoiceParam_AssSwb_MultiBlock_Data_Case5 - VoiceParam_MultiMode_StubRet_Code
+	.short	VoiceParam_AssSwb_MultiBlock_Data_Case6 - VoiceParam_MultiMode_StubRet_Code
+	.short	VoiceParam_AssSwb_MultiBlock_Data_Case7 - VoiceParam_MultiMode_StubRet_Code
+; 4-byte template: MidiPkt_DispatchViaTable_4DAE + 71 (0xFD99E9) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+6); ldi85; ldiw` -- 3 bytes).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 MidiPkt_ControlTemplate:
 	.byte 0x00, 0x00, 0x00, 0xff
@@ -1565,198 +1565,198 @@ MidiPkt_ControlTemplate:
 ; MidiPkt_Nop; the rest dispatch to sub-table handlers.
 ; 192 entries = exactly up to the next referenced object.
 MidiPkt_EventType_Table:
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_MultiBlock_Epilogue_Data + 4
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 585
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_MultiBlock_Epilogue_Data + 56
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long MidiPkt_ExtractAndPack + 33
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_LookupAndEnqueue + 41
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long MidiPkt_ExtractAndPack_StoreShifted + 9
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long MidiPkt_BuildControl + 51
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
-	.long VoiceParam_AssSwb_MultiBlock_Data + 584
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_DispatchViaTable_4D82
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_DispatchViaTable_4D6A
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_DispatchViaTable_4D8E
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_DispatchViaTable_4DA6
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_DispatchViaTable_4D9A
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_DispatchViaTable_4DAE
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_DispatchSpecialType
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
+	.long MidiPkt_Nop
 ; 4-byte template: MidiPkt_EnqueueControl_3354 (0xFD9AA7) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+4); ldi85; ldiw` -- 3 bytes).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 MidiPkt_MsgTemplate_334C:
@@ -1765,15 +1765,15 @@ MidiPkt_MsgTemplate_334C:
 ; Trailing 0xFF (if any) is padding the copy does not take.
 MidiPkt_MsgTemplate_3350:
 	.byte 0x00, 0x00, 0x00, 0xff
-; 4-byte template: MidiPkt_EnqueueControl_335C (0xFD9FD2) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+4); ldi85; ldiw` -- 3 bytes).
+; 4-byte template: MidiPkt_CheckGateCondition_Second + 9 (0xFD9FD2) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+4); ldi85; ldiw` -- 3 bytes).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 MidiPkt_MsgTemplate_3354:
 	.byte 0x00, 0x00, 0x00, 0xff
-; 6-byte template: MidiPkt_EnqueueControl_3358 (0xFDA058) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+4); ld bc,2; ldirw; ldi85` -- 5 bytes).
+; 6-byte template: MidiPkt_DispatchData_Chan6_Join + 6 (0xFDA058) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+4); ld bc,2; ldirw; ldi85` -- 5 bytes).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 MidiPkt_MsgTemplate_3358:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0xff
-; 6-byte template: MidiPkt_EnqueueControl_335E (0xFDA137) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+4); ld bc,2; ldirw; ldi85` -- 5 bytes).
+; 6-byte template: MidiPkt_SysExProcessor_Data_Skip3 + 18 (0xFDA137) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+4); ld bc,2; ldirw; ldi85` -- 5 bytes).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 MidiPkt_MsgTemplate_335E:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0xff
@@ -1793,11 +1793,11 @@ MidiPkt_MsgTemplate_336C:
 ; lda xix,(0xFDA94D); jp_rr 8,xix,..` -- targets 0xFDA94D + offset (no labels yet).
 SysExBulk_SwitchOffsets:
 	.short	MidiPkt_SendBankSelect_Send_Code - MidiPkt_SendBankSelect_Send_Code
-	.short	MidiPkt_SendBankSelect_Send_Case2 - MidiPkt_SendBankSelect_Send_Code
-	.short	MidiPkt_SendBankSelect_Send_Case3 - MidiPkt_SendBankSelect_Send_Code
-	.short	MidiPkt_SendBankSelect_Send_Case4 - MidiPkt_SendBankSelect_Send_Code
-	.short	MidiPkt_SendBankSelect_Send_Case5 - MidiPkt_SendBankSelect_Send_Code
-	.short	MidiPkt_SendBankSelect_Send_Case6 - MidiPkt_SendBankSelect_Send_Code
+	.short	MidiPkt_SysExBulkTransfer_Data_Case2 - MidiPkt_SendBankSelect_Send_Code
+	.short	MidiPkt_SysExBulkTransfer_Data_Case3 - MidiPkt_SendBankSelect_Send_Code
+	.short	MidiPkt_SysExBulkTransfer_Data_Case4 - MidiPkt_SendBankSelect_Send_Code
+	.short	MidiPkt_SysExBulkTransfer_Data_Case5 - MidiPkt_SendBankSelect_Send_Code
+	.short	MidiPkt_SysExBulkTransfer_Data_Case6 - MidiPkt_SendBankSelect_Send_Code
 ; 16 x u8 (15, 0..8, 10..14, 9).  MidiPkt_SysExBulkTransfer_Data_Join (0xFDA1E0):
 ; `lda xbc,(<this>); ld a, (xbc+wa)`.
 SysExBulk_SlotMap:
@@ -1899,14 +1899,14 @@ SysEx4B_ChannelWords7:
 ; 8 x s16 switch offsets.  SysEx_DispatchByChannel (0xFDACEA): `ld_rrw ..,xix,..;
 ; lda xix,(0xFDAD13); jp_rr 8,xix,..` -- targets 0xFDAD13 (SysEx_ChannelHandler_4B_Data) + offset (no labels yet).
 SysEx4B_ChannelSwitch:
-	.short	SysEx_DispatchByChannel_Code - SysEx_DispatchByChannel_Code
-	.short	SysEx_DispatchByChannel_Case1 - SysEx_DispatchByChannel_Code
-	.short	SysEx_DispatchByChannel_Case2 - SysEx_DispatchByChannel_Code
-	.short	SysEx_DispatchByChannel_Case3 - SysEx_DispatchByChannel_Code
-	.short	SysEx_DispatchByChannel_Case4 - SysEx_DispatchByChannel_Code
-	.short	SysEx_DispatchByChannel_Case5 - SysEx_DispatchByChannel_Code
-	.short	SysEx_DispatchByChannel_Case6 - SysEx_DispatchByChannel_Code
-	.short	SysEx_DispatchByChannel_Case7 - SysEx_DispatchByChannel_Code
+	.short	SysEx_ChannelHandler_4B_Data - SysEx_ChannelHandler_4B_Data
+	.short	SysEx_DispatchByChannel_Case1 - SysEx_ChannelHandler_4B_Data
+	.short	SysEx_DispatchByChannel_Case2 - SysEx_ChannelHandler_4B_Data
+	.short	SysEx_DispatchByChannel_Case3 - SysEx_ChannelHandler_4B_Data
+	.short	SysEx_DispatchByChannel_Case4 - SysEx_ChannelHandler_4B_Data
+	.short	SysEx_DispatchByChannel_Case5 - SysEx_ChannelHandler_4B_Data
+	.short	SysEx_DispatchByChannel_Case6 - SysEx_ChannelHandler_4B_Data
+	.short	SysEx_DispatchByChannel_Case7 - SysEx_ChannelHandler_4B_Data
 ; 5 x s16 (count pinned by the `cp c,5; ret nc` guard): case 0 of
 ; SysEx_ChannelHandler_49_Data (0xFDAD9A) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld hl, (xwa+de)`).
@@ -1950,19 +1950,19 @@ SysEx49_ChannelWords7:
 ; 8 x s16 switch offsets.  SysEx_DispatchByChannel_49 (0xFDAD71): `ld_rrw ..,xix,..;
 ; lda xix,(0xFDAD9A); jp_rr 8,xix,..` -- targets 0xFDAD9A (SysEx_ChannelHandler_49_Data) + offset (no labels yet).
 SysEx49_ChannelSwitch:
-	.short	SysEx_DispatchByChannel_49_Code - SysEx_DispatchByChannel_49_Code
-	.short	SysEx_DispatchByChannel_49_Case1 - SysEx_DispatchByChannel_49_Code
-	.short	SysEx_DispatchByChannel_49_Case2 - SysEx_DispatchByChannel_49_Code
-	.short	SysEx_DispatchByChannel_49_Case3 - SysEx_DispatchByChannel_49_Code
-	.short	SysEx_DispatchByChannel_49_Case4 - SysEx_DispatchByChannel_49_Code
-	.short	SysEx_DispatchByChannel_49_Case5 - SysEx_DispatchByChannel_49_Code
-	.short	SysEx_DispatchByChannel_49_Case6 - SysEx_DispatchByChannel_49_Code
-	.short	SysEx_DispatchByChannel_49_Case7 - SysEx_DispatchByChannel_49_Code
-; MIDI system-exclusive bytes (0xF0 ...) sent by MidiTable_FlushArpNotes (0xFD7778): `ld xwa,<this>;
+	.short	SysEx_ChannelHandler_49_Data - SysEx_ChannelHandler_49_Data
+	.short	SysEx_DispatchByChannel_49_Case1 - SysEx_ChannelHandler_49_Data
+	.short	SysEx_DispatchByChannel_49_Case2 - SysEx_ChannelHandler_49_Data
+	.short	SysEx_DispatchByChannel_49_Case3 - SysEx_ChannelHandler_49_Data
+	.short	SysEx_DispatchByChannel_49_Case4 - SysEx_ChannelHandler_49_Data
+	.short	SysEx_DispatchByChannel_49_Case5 - SysEx_ChannelHandler_49_Data
+	.short	SysEx_DispatchByChannel_49_Case6 - SysEx_ChannelHandler_49_Data
+	.short	SysEx_DispatchByChannel_49_Case7 - SysEx_ChannelHandler_49_Data
+; MIDI system-exclusive bytes (0xF0 ...) sent by SeqChan_StepCmd_Field8to9 + 42 (0xFD7778): `ld xwa,<this>;
 ; ld bc,5; call SeqBuf_FlushNoteOffs` queues the first 5 bytes; the rest is 0xFF padding.
 SysEx_Msg_3594:
 	.byte 0xf0, 0x50, 0x23, 0x7e, 0xf7, 0xff
-; MIDI system-exclusive bytes (0xF0 ...) sent by MidiTable_UseDefaultBuf (0xFD77A4): `ld xwa,<this>;
+; MIDI system-exclusive bytes (0xF0 ...) sent by SeqChan_StepCmd_Field9to10 + 40 (0xFD77A4): `ld xwa,<this>;
 ; ld bc,5; call SeqBuf_FlushNoteOffs` queues the first 5 bytes; the rest is 0xFF padding.
 SysEx_Msg_359A:
 	.byte 0xf0, 0x50, 0x24, 0x7e, 0xf7, 0xff
@@ -1986,7 +1986,7 @@ SysEx_Msg_35B2:
 ; ld bc,3; call SeqBuf_FlushNoteOffs` queues the first 3 bytes; the rest is 0xFF padding.
 SysEx_Msg_35B8:
 	.byte 0xf0, 0x50, 0x7e, 0xff
-; MIDI system-exclusive bytes (0xF0 ...) sent by MidiPkt_ArpPassLoop (0xFD72BC): `ld xwa,<this>;
+; MIDI system-exclusive bytes (0xF0 ...) sent by SysEx_SendDispatch_Helper2 + 52 (0xFD72BC): `ld xwa,<this>;
 ; ld bc,7; call SeqBuf_FlushNoteOffs` queues the first 7 bytes; the rest is 0xFF padding.
 SysEx_Msg_35BC:
 	.byte 0xf0, 0x50, 0x21, 0x01, 0x28, 0x12, 0xf7, 0xff
@@ -3603,7 +3603,7 @@ MidiPkt_CheckGateCondition_Second_Data:
 	.byte 0x40, 0x40
 ; 1 x {u16 length, u32 pointer} = {78, MidiCtl_SignedRamp78}.  SeqAlt_ApplyDescriptor_TypeA
 ; (0xFD91E1): record +14 must be < 1, `muls wa,6; lda xbc,(<this>); ld de,(xwa);
-; ld xbc,(xwa+2)`; SeqAlt_DescriptorBlock_Data (0xFD8F82) reads +2 as a u32 table.
+; ld xbc,(xwa+2)`; SeqAlt_ApplyDescriptor_WithAssSwb + 16 (0xFD8F82) reads +2 as a u32 table.
 MidiCtl_SubTableDesc:
 	.short 0x004e
 SeqAlt_PopIzSkip4Ret2_Data:
@@ -3754,38 +3754,38 @@ NoRef_EnqueueNopPtr:
 ; (9 sites): `ld c,(xbc+16); extz bc; sla bc,2; lda xde,(<this>); add xbc,xde;
 ; ld xhl,(xbc); call (xhl)`.
 MidiCtl_Handlers:
-	.long MidiPkt_BuildControl + 189	; no label at this target yet; v10: MidiPkt_EnqueueControlNop
-	.long MidiPkt_BuildControl + 190	; no label at this target yet; v10: MidiPkt_EnqueueControl_3354
-	.long MidiPkt_EnqueueControl_3364	; no label at this target yet; v10: MidiPkt_EnqueueControl_3364
-	.long MidiPkt_BuildControl + 463	; no label at this target yet; v10: MidiPkt_EnqueueControl_335C
-	.long SeqAlt_DescriptorBlock_Data_Helper2	; no label at this target yet; v10: MidiPkt_EnqueueControl_3358
-	.long MidiPkt_EnqueueControl_3368	; no label at this target yet; v10: MidiPkt_EnqueueControl_3368
+	.long MidiPkt_EnqueueControlNop
+	.long MidiPkt_EnqueueControl_3354
+	.long MidiPkt_EnqueueControl_3364
+	.long MidiPkt_EnqueueControl_335C
+	.long MidiPkt_EnqueueControl_3358
+	.long MidiPkt_EnqueueControl_3368
 ; 12 x u32 routines selected by a record's +17 (values 0-11): SeqData_FormatOutput_Data
 ; (0xFD8F2A) and its _Code_Epilogue* siblings: `ld c,(xbc+17); sla bc,2;
 ; lda xde,(<this>); ... call (xhl)`.
 MidiCtl_FormatHandlers:
-	.long SeqAlt_NibbleSearch_Ret	; no label at this target yet; v10: SeqAlt_NibbleSearch_Ret
-	.long SeqAlt_ApplyDescriptor_TypeA	; no label at this target yet; v10: SeqAlt_ApplyDescriptor_TypeA
-	.long SeqAlt_ApplyDescriptor_WithAssSwb	; no label at this target yet; v10: SeqAlt_ApplyDescriptor_WithAssSwb
-	.long SeqAlt_ApplyDescriptor_TypeC	; no label at this target yet; v10: SeqAlt_ApplyDescriptor_TypeC
-	.long SeqAlt_ApplyDescriptor_TypeD	; no label at this target yet; v10: SeqAlt_ApplyDescriptor_TypeD
-	.long SeqAlt_DescriptorBlock_Data + 175	; no label at this target yet; v10: DSPParam_StoreWithLoop
-	.long SeqAlt_DescriptorBlock_Data + 332	; no label at this target yet; v10: VoiceParam_ApplyBoundsCheck
-	.long SeqAlt_DescriptorBlock_Data + 480	; no label at this target yet; v10: VoiceParam_StoreToBuffer
-	.long SeqAlt_DescriptorBlock_Data + 520	; no label at this target yet; v10: VoiceParam_DirectHardwareWrite
-	.long SeqAlt_DescriptorBlock_Data + 571	; no label at this target yet; v10: VoiceParam_MultiModeDispatch
-	.long SeqAlt_DescriptorBlock_Data + 121	; no label at this target yet; v10: SeqAlt_DualNibblePack
-	.long SeqAlt_ApplyDescriptor_TypeB	; no label at this target yet; v10: SeqAlt_ApplyDescriptor_TypeB
+	.long SeqAlt_NibbleSearch_Ret
+	.long SeqAlt_ApplyDescriptor_TypeA
+	.long SeqAlt_ApplyDescriptor_WithAssSwb
+	.long SeqAlt_ApplyDescriptor_TypeC
+	.long SeqAlt_ApplyDescriptor_TypeD
+	.long DSPParam_StoreWithLoop
+	.long VoiceParam_ApplyBoundsCheck
+	.long VoiceParam_StoreToBuffer
+	.long VoiceParam_DirectHardwareWrite
+	.long VoiceParam_MultiModeDispatch
+	.long SeqAlt_DualNibblePack
+	.long SeqAlt_ApplyDescriptor_TypeB
 ; 6 x u32 routines selected by a record's +18 (values 0-5):
-; VoiceParam_AssSwb_MultiBlock_Data (0xFD9655) and siblings: `ld c,(xbc+18);
+; MidiPkt_BuildControl + 134 (0xFD9655) and siblings: `ld c,(xbc+18);
 ; sla bc,2; lda xde,(<this>); ... call (xhl)`.
 MidiCtl_AssSwbHandlers:
-	.long VoiceParam_MultiBlock_Ret	; no label at this target yet; v10: VoiceParam_MultiBlock_Ret
-	.long SeqAlt_DescriptorBlock_Data_Epilogue + 4	; no label at this target yet; v10: VoiceParam_LookupAndEnqueue
-	.long VoiceParam_AssSwb_MultiBlock_Data + 351	; no label at this target yet; v10: MidiPkt_BuildStatusDirect
-	.long MidiPkt_BuildDirect	; no label at this target yet; v10: MidiPkt_BuildDirect
-	.long VoiceParam_AssSwb_MultiBlock_Data + 457	; no label at this target yet; v10: MidiPkt_BuildZeroData
-	.long VoiceParam_AssSwb_MultiBlock_Data + 411	; no label at this target yet; v10: MidiPkt_BuildFromConstant
+	.long VoiceParam_MultiBlock_Ret
+	.long VoiceParam_LookupAndEnqueue
+	.long MidiPkt_BuildStatusDirect
+	.long MidiPkt_BuildDirect
+	.long MidiPkt_BuildZeroData
+	.long MidiPkt_BuildFromConstant
 ; B0 00 00 20 00 C0 00 + 0xFF: control change 0 (bank MSB) = 0, CC 0x20 (bank
 ; LSB) = 0, program change 0 on channel 1.  Readers below. by the operand scan.
 ; Readers (claims_lint.py unread-claims, 2026-10-02): MidiSysEx_BuildAndSend (0xFDB15A, pushw far
@@ -4550,12 +4550,12 @@ DspCfg_ResolveFallback_WordTable:	.short 0, 2, 4, 5, 3
 ; (`jp t, (xix+wa)`).  The targets have no labels yet, so the offsets stay
 ; numeric: 0xFDCCD3, 0xFDCCDC, 0xFDCCE3, 0xFDCCEC, 0xFDCCF5, 0xFDCCFE (v10).
 DspCfg_OpLetter_JumpOffsets:
-	.short	DSPCfg_WriteAllSlots_Combined_Code - DSPCfg_WriteAllSlots_Combined_Code
-	.short	EffEdit_DSPConfigBlock_Helper_Case98 - DSPCfg_WriteAllSlots_Combined_Code
-	.short	EffEdit_DSPConfigBlock_Helper_Case99 - DSPCfg_WriteAllSlots_Combined_Code
-	.short	EffEdit_DSPConfigBlock_Helper_Case100 - DSPCfg_WriteAllSlots_Combined_Code
-	.short	EffEdit_DSPConfigBlock_Helper_Case101 - DSPCfg_WriteAllSlots_Combined_Code
-	.short	EffEdit_DSPConfigBlock_Helper_Case102 - DSPCfg_WriteAllSlots_Combined_Code
+	.short	DSPCfg_Data_ParamDispatch_Code - DSPCfg_Data_ParamDispatch_Code
+	.short	EffEdit_DSPConfigBlock_Helper_Case98 - DSPCfg_Data_ParamDispatch_Code
+	.short	EffEdit_DSPConfigBlock_Helper_Case99 - DSPCfg_Data_ParamDispatch_Code
+	.short	EffEdit_DSPConfigBlock_Helper_Case100 - DSPCfg_Data_ParamDispatch_Code
+	.short	EffEdit_DSPConfigBlock_Helper_Case101 - DSPCfg_Data_ParamDispatch_Code
+	.short	EffEdit_DSPConfigBlock_Helper_Case102 - DSPCfg_Data_ParamDispatch_Code
 ; switch table: u16 offset from AssSwb_SwapEntriesAndDispatch, 21 entries,
 ; used by DspConfig_EventDispatch (0xFDCACC: index = type-1 for 0..8, or
 ; type-1-0x12 for 9..20; `add bc,bc`, `ld r, (xrr+rr)`, `jp t, (xrr+rr)`).  Offset 0 is the
@@ -5948,7 +5948,7 @@ SwbtB1_Code81_Listeners:	.long 0xffffffff
 SwbtB1_Code90_Listeners:	.long 0xffffffff
 ; code 0x91: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB1_Code91_Listeners:
-	.long MidiSysEx_ProcessBlock + 347	; no label at this callback entry yet; v10: MidiCtrl_ModeSwitchHandler
+	.long MidiCtrl_ModeSwitchHandler
 	.long 0xffffffff
 SwbtB1_Code92_Listeners:	.long 0xffffffff
 SwbtB1_Code93_Listeners:	.long 0xffffffff
@@ -6186,10 +6186,10 @@ Naka_RenderMode_A_Table:
 	.byte 0xff				; separator (read by nothing)
 ; code 0x00: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code00_Listeners:
-	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
+	.long UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
-	.long MidiRx_ChannelPressure_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
+	.long UIState_ProcessMidiEvent
+	.long UIState_ProcessDisplayUpdate
 	.long UIState_RenderBitmapData
 	.long SeMenu_NameEditor_End
 	.long BitMapOut_ByteData_RenderB
@@ -6199,10 +6199,10 @@ SwbtB2_Code00_Listeners:
 	.long 0xffffffff
 ; code 0x01: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code01_Listeners:
-	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
+	.long UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
-	.long MidiRx_ChannelPressure_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
+	.long UIState_ProcessMidiEvent
+	.long UIState_ProcessDisplayUpdate
 	.long UIState_RenderBitmapData
 	.long SeMenu_NameEditor_End
 	.long BitMapOut_ByteData_RenderB
@@ -6211,10 +6211,10 @@ SwbtB2_Code01_Listeners:
 	.long 0xffffffff
 ; code 0x02: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code02_Listeners:
-	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
+	.long UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
-	.long MidiRx_ChannelPressure_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
+	.long UIState_ProcessMidiEvent
+	.long UIState_ProcessDisplayUpdate
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
@@ -6222,275 +6222,275 @@ SwbtB2_Code02_Listeners:
 	.long 0xffffffff
 ; code 0x03: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code03_Listeners:
-	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
+	.long UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
-	.long MidiRx_ChannelPressure_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
+	.long UIState_ProcessMidiEvent
+	.long UIState_ProcessDisplayUpdate
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x04: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code04_Listeners:
-	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
+	.long UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
-	.long MidiRx_ChannelPressure_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
+	.long UIState_ProcessMidiEvent
+	.long UIState_ProcessDisplayUpdate
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x05: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code05_Listeners:
-	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
+	.long UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
-	.long MidiRx_ChannelPressure_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
+	.long UIState_ProcessMidiEvent
+	.long UIState_ProcessDisplayUpdate
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x06: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code06_Listeners:
-	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
+	.long UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
-	.long MidiRx_ChannelPressure_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
+	.long UIState_ProcessMidiEvent
+	.long UIState_ProcessDisplayUpdate
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x07: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code07_Listeners:
-	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
+	.long UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
-	.long MidiRx_ChannelPressure_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
+	.long UIState_ProcessMidiEvent
+	.long UIState_ProcessDisplayUpdate
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x08: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code08_Listeners:
-	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
+	.long UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
-	.long MidiRx_ChannelPressure_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
+	.long UIState_ProcessMidiEvent
+	.long UIState_ProcessDisplayUpdate
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x09: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code09_Listeners:
-	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
+	.long UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
-	.long MidiRx_ChannelPressure_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
+	.long UIState_ProcessMidiEvent
+	.long UIState_ProcessDisplayUpdate
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x0A: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code0A_Listeners:
-	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
+	.long UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
-	.long MidiRx_ChannelPressure_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
+	.long UIState_ProcessMidiEvent
+	.long UIState_ProcessDisplayUpdate
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x0B: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code0B_Listeners:
-	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
+	.long UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
-	.long MidiRx_ChannelPressure_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
+	.long UIState_ProcessMidiEvent
+	.long UIState_ProcessDisplayUpdate
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x0C: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code0C_Listeners:
-	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
+	.long UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
-	.long MidiRx_ChannelPressure_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
+	.long UIState_ProcessMidiEvent
+	.long UIState_ProcessDisplayUpdate
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x0D: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code0D_Listeners:
-	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
+	.long UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
-	.long MidiRx_ChannelPressure_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
+	.long UIState_ProcessMidiEvent
+	.long UIState_ProcessDisplayUpdate
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x0E: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code0E_Listeners:
-	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
+	.long UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
-	.long MidiRx_ChannelPressure_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
+	.long UIState_ProcessMidiEvent
+	.long UIState_ProcessDisplayUpdate
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x0F: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code0F_Listeners:
-	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
+	.long UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
-	.long MidiRx_ChannelPressure_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
+	.long UIState_ProcessMidiEvent
+	.long UIState_ProcessDisplayUpdate
 	.long UIState_RenderBitmapData
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x10: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code10_Listeners:
-	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
+	.long UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
-	.long MidiRx_ChannelPressure_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
+	.long UIState_ProcessMidiEvent
+	.long UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x11: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code11_Listeners:
-	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
+	.long UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
-	.long MidiRx_ChannelPressure_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
+	.long UIState_ProcessMidiEvent
+	.long UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x12: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code12_Listeners:
-	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
+	.long UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
-	.long MidiRx_ChannelPressure_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
+	.long UIState_ProcessMidiEvent
+	.long UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x13: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code13_Listeners:
-	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
+	.long UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
-	.long MidiRx_ChannelPressure_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
+	.long UIState_ProcessMidiEvent
+	.long UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x14: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code14_Listeners:
-	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
+	.long UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
-	.long MidiRx_ChannelPressure_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
+	.long UIState_ProcessMidiEvent
+	.long UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x15: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code15_Listeners:
-	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
+	.long UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
-	.long MidiRx_ChannelPressure_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
+	.long UIState_ProcessMidiEvent
+	.long UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x16: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code16_Listeners:
-	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
+	.long UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
-	.long MidiRx_ChannelPressure_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
+	.long UIState_ProcessMidiEvent
+	.long UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x17: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code17_Listeners:
-	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
+	.long UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
-	.long MidiRx_ChannelPressure_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
+	.long UIState_ProcessMidiEvent
+	.long UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x18: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code18_Listeners:
-	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
+	.long UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
-	.long MidiRx_ChannelPressure_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
+	.long UIState_ProcessMidiEvent
+	.long UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x19: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code19_Listeners:
-	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
+	.long UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
-	.long MidiRx_ChannelPressure_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
+	.long UIState_ProcessMidiEvent
+	.long UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x1A: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code1A_Listeners:
-	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
+	.long UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
-	.long MidiRx_ChannelPressure_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
+	.long UIState_ProcessMidiEvent
+	.long UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x1B: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code1B_Listeners:
-	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
+	.long UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
-	.long MidiRx_ChannelPressure_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
+	.long UIState_ProcessMidiEvent
+	.long UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x1C: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code1C_Listeners:
-	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
+	.long UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
-	.long MidiRx_ChannelPressure_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
+	.long UIState_ProcessMidiEvent
+	.long UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x1D: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code1D_Listeners:
-	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
+	.long UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
-	.long MidiRx_ChannelPressure_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
+	.long UIState_ProcessMidiEvent
+	.long UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x1E: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code1E_Listeners:
-	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
+	.long UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
-	.long MidiRx_ChannelPressure_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
+	.long UIState_ProcessMidiEvent
+	.long UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x1F: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code1F_Listeners:
-	.long VoiceSlot_CheckAndApply_Data + 175	; no label at this callback entry yet; v10: UIState_ProcessKeyEvent
+	.long UIState_ProcessKeyEvent
 	.long UIState_UpdateControlBits
-	.long ScreenGroup_InitVoiceLoop + 79	; no label at this callback entry yet; v10: UIState_ProcessMidiEvent
-	.long MidiRx_ChannelPressure_Return + 1	; no label at this callback entry yet; v10: UIState_ProcessDisplayUpdate
+	.long UIState_ProcessMidiEvent
+	.long UIState_ProcessDisplayUpdate
 	.long BitMapOut_ByteData_RenderB
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
@@ -6535,7 +6535,7 @@ SwbtB2_Code42_Listeners:	.long 0xffffffff
 ; code 0x43: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code43_Listeners:
 	.long UIState_KeyScan_Dispatch
-	.long HdaeRom_AltTableEntry9	; no label at this callback entry yet; v10: HdaeRom_AltTableEntry9
+	.long HdaeRom_AltTableEntry9
 	.long 0xffffffff
 ; code 0x44: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code44_Listeners:
@@ -6560,11 +6560,11 @@ SwbtB2_Code47_Listeners:
 SwbtB2_Code48_Listeners:
 	.long UIState_ProcessExtendedMode
 	.long AccWrap_ReplayStop
-	.long Audio_CheckSubsystemReady + 31	; no label at this callback entry yet; v10: UIStateEvt_ParamEdit_Data
+	.long UIStateEvt_ParamEdit_Data
 	.long NotePool_DataBlock_8BA
 	.long UIState_KeyScan_Dispatch
 	.long BitMapOut_ByteData_RenderE
-	.long MidiSysEx_ApplyChannel + 4	; no label at this callback entry yet; v10: DSPCfg_ProcessInput
+	.long DSPCfg_ProcessInput
 	.long 0xffffffff
 SwbtB2_Code49_Listeners:	.long 0xffffffff
 SwbtB2_Code50_Listeners:	.long 0xffffffff
@@ -6574,45 +6574,45 @@ SwbtB2_Code53_Listeners:	.long 0xffffffff
 SwbtB2_Code54_Listeners:	.long 0xffffffff
 ; code 0x60: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code60_Listeners:
-	.long VoiceSlot_CheckAndApply_Data2 + 234	; no label at this callback entry yet; v10: HdaeRom_Entry
+	.long HdaeRom_Entry
 	.long UIState_ProcessSimpleMode
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x61: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code61_Listeners:
-	.long VoiceSlot_CheckAndApply_Data2 + 338	; no label at this callback entry yet; v10: HdaeRom_ProcessBlock
+	.long HdaeRom_ProcessBlock
 	.long UIState_KeyScan_Dispatch
 	.long EffEdit_DSPConfigBlock
 	.long 0xffffffff
 ; code 0x62: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code62_Listeners:
-	.long VoiceSlot_CheckAndApply_Data2_Epilogue2 + 3	; no label at this callback entry yet; v10: HdaeRom_ReadParam
+	.long HdaeRom_ReadParam
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x63: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code63_Listeners:
-	.long VoiceSlot_CheckAndApply_Data2_Epilogue2 + 4	; no label at this callback entry yet
+	.long HdaeRom_ProcessBlock_Epilogue + 4	; no label at this callback entry yet
 	.long UIState_KeyScan_Dispatch
 	.long EffEdit_DSPConfigBlock
 	.long 0xffffffff
 ; code 0x64: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code64_Listeners:
 	.long EffEdit_DSPConfigBlock
-	.long HdaeRom_WriteParam	; no label at this callback entry yet; v10: HdaeRom_WriteParam
+	.long HdaeRom_WriteParam
 	.long 0xffffffff
 ; code 0x65: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code65_Listeners:
 	.long EffEdit_DSPConfigBlock
-	.long HdaeRom_CheckResult	; no label at this callback entry yet; v10: HdaeRom_CheckResult
+	.long HdaeRom_CheckResult
 	.long 0xffffffff
 ; code 0x66: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code66_Listeners:
 	.long EffEdit_DSPConfigBlock
-	.long HdaeRom_FinishBlock	; no label at this callback entry yet; v10: HdaeRom_FinishBlock
+	.long HdaeRom_FinishBlock
 	.long 0xffffffff
 ; code 0x68: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code68_Listeners:
-	.long HdaeRom_TableEntry0	; no label at this callback entry yet; v10: HdaeRom_TableEntry0
+	.long HdaeRom_TableEntry0
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x69: callbacks SwbtWr_DispatchLoop calls for it
@@ -6622,7 +6622,7 @@ SwbtB2_Code69_Listeners:
 	.long 0xffffffff
 ; code 0x6A: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code6A_Listeners:
-	.long HdaeRom_TableEntry1	; no label at this callback entry yet; v10: HdaeRom_TableEntry1
+	.long HdaeRom_TableEntry1
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x6B: callbacks SwbtWr_DispatchLoop calls for it
@@ -6636,19 +6636,19 @@ SwbtB2_Code6E_Listeners:	.long 0xffffffff
 ; code 0x70: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code70_Listeners:
 	.long UIState_NullReturn
-	.long SndParam_ProcessEntry + 201	; no label at this callback entry yet; v10: HdaeRom_AltReadParam
-	.long UIStateEvt_TransposeUpdate + 25	; no label at this callback entry yet; v10: UIStateEvt_EffectSelect_Data
+	.long HdaeRom_AltReadParam
+	.long UIStateEvt_EffectSelect_Data
 	.long UIState_KeyScan_Dispatch
-	.long MidiSysEx_ApplyChannel + 4	; no label at this callback entry yet; v10: DSPCfg_ProcessInput
+	.long DSPCfg_ProcessInput
 	.long 0xffffffff
 ; code 0x71: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code71_Listeners:
-	.long UIStateEvt_VolumeMixer_Data + 127	; no label at this callback entry yet
+	.long UIStateEvt_MuteToggle_Data_Join + 7	; no label at this callback entry yet
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x72: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code72_Listeners:
-	.long HdaeRom_TableEntry2	; no label at this callback entry yet; v10: HdaeRom_TableEntry2
+	.long HdaeRom_TableEntry2
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 SwbtB2_Code78_Listeners:	.long 0xffffffff
@@ -6656,8 +6656,8 @@ SwbtB2_Code79_Listeners:	.long 0xffffffff
 SwbtB2_Code7A_Listeners:	.long 0xffffffff
 ; code 0x80: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code80_Listeners:
-	.long UIState_ProcessKeyEvent + 86	; no label at this callback entry yet; v10: HdaeRom_AltEntry
-	.long UIStateEvt_ParamEdit_Data + 297	; no label at this callback entry yet; v10: UIStateEvt_ChannelConfig_Data
+	.long HdaeRom_AltEntry
+	.long UIStateEvt_ChannelConfig_Data
 	.long UIWidget_MidiStreamControl
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
@@ -6665,7 +6665,7 @@ SwbtB2_Code81_Listeners:	.long 0xffffffff
 ; code 0x90: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code90_Listeners:
 	.long UIState_SwitchOnDisplayMode
-	.long UIStateEvt_PartRouting + 42	; no label at this callback entry yet; v10: UIStateEvt_VolumeMixer_Data
+	.long UIStateEvt_VolumeMixer_Data
 	.long AccStyle_JumpTable2
 	.long UIState_KeyScan_Dispatch
 	.long CtrlPanel_HandleKeyInput
@@ -6673,36 +6673,36 @@ SwbtB2_Code90_Listeners:
 	.long 0xffffffff
 ; code 0x91: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code91_Listeners:
-	.long MidiBuf_CalcFillRange + 35	; no label at this callback entry yet; v10: MidiCtrl_ModeSwitch_Data
-	.long UIState_ProcessKeyEvent + 87	; no label at this callback entry yet; v10: UIStateEvt_ProcessHandler
-	.long UIStateEvt_VolumeMixer_Data + 83	; no label at this callback entry yet; v10: UIStateEvt_StubReturn
+	.long MidiCtrl_ModeSwitch_Data
+	.long UIStateEvt_ProcessHandler
+	.long UIStateEvt_StubReturn
 	.long UIStateEvt_NullHandler
 	.long UIStateEvt_VoiceParamHandler
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x92: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code92_Listeners:
-	.long SndParam_ProcessEntry + 104	; no label at this callback entry yet; v10: HdaeRom_AltProcessBlock
+	.long HdaeRom_AltProcessBlock
 	.long UIState_KeyScan_Dispatch
 	.long 0xffffffff
 ; code 0x93: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code93_Listeners:
-	.long UIStateEvt_VolumeMixer_Data + 84	; no label at this callback entry yet
-	.long ReadNextRecord_Block3 + 11	; no label at this callback entry yet; v10: CharMap_ActivePreamb_LoadDRAM
+	.long UIStateEvt_StubReturn + 1	; no label at this callback entry yet
+	.long CharMap_ActivePreamb_LoadDRAM
 	.long UIState_KeyScan_Dispatch
 	.long Encoder_ApplySystemModeSettings
 	.long 0xffffffff
 ; code 0x98: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code98_Listeners:
 	.long UIState_ProcessAltMode
-	.long UIStateEvt_ParamEdit_Data + 243	; no label at this callback entry yet; v10: UIStateEvt_PlayModeGuard_Data
+	.long UIStateEvt_PlayModeGuard_Data
 	.long AccWrap_ReplayStopAlt
-	.long SndParam_ProcessEntry + 302	; no label at this callback entry yet; v10: HdaeRom_AltCheckResult
+	.long HdaeRom_AltCheckResult
 	.long BitMapOut_ByteData_DisplayUpdate
-	.long BitMapOut_CopyRegion_Done + 29	; no label at this callback entry yet; v10: MidiOut_RealtimeDispatch_Handler
+	.long MidiOut_RealtimeDispatch_Handler
 	.long UIState_KeyScan_Dispatch
 	.long BitMapOut_ByteData_TransitionSeq
-	.long MidiSysEx_ApplyChannel + 4	; no label at this callback entry yet; v10: DSPCfg_ProcessInput
+	.long DSPCfg_ProcessInput
 	.long 0xffffffff
 ; code 0x99: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_Code99_Listeners:
@@ -6721,7 +6721,7 @@ SwbtB2_CodeA8_Listeners:
 	.long AccStyle_JumpTable
 	.long PerfMode_Handler_EvtB_Return + 1	; no label at this callback entry yet
 	.long Demo_SelectEntry_ByteTable
-	.long UIStateEvt_VolumeMixer_Data + 85	; no label at this callback entry yet; v10: UIStateEvt_MuteToggle_Data
+	.long UIStateEvt_MuteToggle_Data
 	.long FileIO_ErrorCodeByteBlock
 	.long BitMapOut_ByteData_RenderState
 	.long UIState_KeyScan_Dispatch
@@ -6736,39 +6736,39 @@ SwbtB2_CodeAC_Listeners:	.long 0xffffffff
 SwbtB2_CodeAD_Listeners:	.long 0xffffffff
 ; code 0xAE: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_CodeAE_Listeners:
-	.long HdaeRom_AltTableEntry0	; no label at this callback entry yet; v10: HdaeRom_AltTableEntry0
+	.long HdaeRom_AltTableEntry0
 	.long 0xffffffff
 ; code 0xB0: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_CodeB0_Listeners:
-	.long HdaeRom_AltTableEntry1	; no label at this callback entry yet; v10: HdaeRom_AltTableEntry1
+	.long HdaeRom_AltTableEntry1
 	.long 0xffffffff
 ; code 0xB1: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_CodeB1_Listeners:
-	.long HdaeRom_AltTableEntry2	; no label at this callback entry yet; v10: HdaeRom_AltTableEntry2
+	.long HdaeRom_AltTableEntry2
 	.long 0xffffffff
 ; code 0xB2: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_CodeB2_Listeners:
-	.long HdaeRom_AltTableEntry3	; no label at this callback entry yet; v10: HdaeRom_AltTableEntry3
+	.long HdaeRom_AltTableEntry3
 	.long 0xffffffff
 ; code 0xB3: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_CodeB3_Listeners:
-	.long HdaeRom_AltTableEntry4	; no label at this callback entry yet; v10: HdaeRom_AltTableEntry4
+	.long HdaeRom_AltTableEntry4
 	.long 0xffffffff
 ; code 0xB4: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_CodeB4_Listeners:
-	.long HdaeRom_AltTableEntry5	; no label at this callback entry yet; v10: HdaeRom_AltTableEntry5
+	.long HdaeRom_AltTableEntry5
 	.long 0xffffffff
 ; code 0xB5: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_CodeB5_Listeners:
-	.long HdaeRom_AltTableEntry6	; no label at this callback entry yet; v10: HdaeRom_AltTableEntry6
+	.long HdaeRom_AltTableEntry6
 	.long 0xffffffff
 ; code 0xB6: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_CodeB6_Listeners:
-	.long HdaeRom_AltTableEntry7	; no label at this callback entry yet; v10: HdaeRom_AltTableEntry7
+	.long HdaeRom_AltTableEntry7
 	.long 0xffffffff
 ; code 0xB7: callbacks SwbtWr_DispatchLoop calls for it
 SwbtB2_CodeB7_Listeners:
-	.long HdaeRom_AltTableEntry8	; no label at this callback entry yet; v10: HdaeRom_AltTableEntry8
+	.long HdaeRom_AltTableEntry8
 	.long 0xffffffff
 SwbtB2_CodeB8_Listeners:	.long 0xffffffff
 SwbtB2_CodeB9_Listeners:	.long 0xffffffff
@@ -6779,10 +6779,10 @@ SwbtB2_CodeBD_Listeners:	.long 0xffffffff
 UIState_DefaultConfig_B:	.long 0xffffffff	; codes 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x5B, 0x5C, 0x5D, 0x5E, 0x5F, 0x67, 0x6F, 0x73, 0x74, 0x75, 0x76, 0x77, 0x7B, 0x7C, 0x7D, 0x7E, 0x7F, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89, 0x8A, 0x8B, 0x8C, 0x8D, 0x8E, 0x8F, 0x94, 0x95, 0x96, 0x97, 0x9B, 0x9C, 0x9D, 0x9E, 0x9F, 0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6, 0xA7, 0xAB, 0xAF, 0xBE, 0xBF; name kept: its +4 is the post list
 ; bank 2 post list: SwbtWr_PostCallback_Loop calls each entry once the queue drains
 SwbtBank2_PostCallbacks:
-	.long SendEpilogue_Data_Join + 8	; no label at this callback entry yet; v10: Song_SendPartDataBlocks
-	.long DSPCfg_EventType50 + 27	; no label at this callback entry yet; v10: AudioInit_ProcessModeChange
+	.long Song_SendPartDataBlocks
+	.long AudioInit_ProcessModeChange
 	.long PerfMode_Handler_EvtB_Epilogue + 5	; no label at this callback entry yet
-	.long UIState_ProcessDisplayUpdate_Return + 1	; no label at this callback entry yet; v10: UIState_DisplayUpdate_BitmapHandler
+	.long UIState_DisplayUpdate_BitmapHandler
 	.long BitMapOut_ByteData_RenderC
 	.long FDemoText_ProcessVoiceFlags
 	.long 0xffffffff
@@ -7242,7 +7242,7 @@ Subsys_HandlerTableList:
 	.long Seq_InitFuncTable
 	.long Subsys_HandlerTable01
 	.long FDTest_String_TestTitleFunc_PtrTable
-	.long MIDI_SC0_DISPATCH_TABLE	; no label at this target yet; v10: MIDI_SC0_DISPATCH_TABLE
+	.long MIDI_SC0_DISPATCH_TABLE
 	.long SeqFormat_ReferenceData
 	.long NakaInst_SoundConfig_LookupTable
 	.long SoundProgram_ParamPtrTable
@@ -7265,7 +7265,7 @@ Subsys_HandlerTableList:
 NoRef_Bytes_EE8CCE:
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0xff
 ; 16 x u16 single-bit masks 1<<i (i = 0..15).  Read with `lda xix,(<this>);
-; ld_rrw wa,xix,wa` by AudioInit_ChannelLoop_Body (0xFDECF2) and five more
+; ld_rrw wa,xix,wa` by AudioInit_NoTypeE_CheckD + 26 (0xFDECF2) and five more
 ; AudioInit_* routines and and-ed with a channel mask (AudioInit_ChannelLoop_Body:
 ; `andda16 xwa,(0xF290)`).
 Bit16Mask_Table:
@@ -7280,38 +7280,38 @@ Bit16Mask_Table:
 ; AudioInit_VoiceDispatch_Table (kept for positional_labels.s) is entry 1.
 AudioVoiceHandler_Table:
 	.set AudioInit_VoiceDispatch_Table, AudioVoiceHandler_Table + 4
-	.long UIStateEvt_VolumeMixer_Data + 128	; no label at this target yet; v10: AudioInit_ConfigStereoVoice
-	.long UIStateEvt_VolumeMixer_Data + 128	; no label at this target yet; v10: AudioInit_ConfigStereoVoice
-	.long UIStateEvt_EffectSelect_Data + 219	; no label at this target yet; v10: AudioInit_CheckSoundGroup
-	.long UIStateEvt_VolumeMixer_Data + 128	; no label at this target yet; v10: AudioInit_ConfigStereoVoice
-	.long UIStateEvt_VolumeMixer_Data + 128	; no label at this target yet; v10: AudioInit_ConfigStereoVoice
-	.long UIStateEvt_PlayModeGuard_Data + 50	; no label at this target yet; v10: AudioInit_CheckSoundGroup51
-	.long UIStateEvt_ChannelConfig_Data + 132	; no label at this target yet; v10: AudioInit_CheckMixMode
-	.long UIStateEvt_VolumeMixer_Data + 128	; no label at this target yet; v10: AudioInit_ConfigStereoVoice
-	.long UIStateEvt_VolumeMixer_Data + 343	; no label at this target yet; v10: AudioInit_ConfigureVoiceFromFlags
-	.long UIStateEvt_VolumeMixer_Data + 343	; no label at this target yet; v10: AudioInit_ConfigureVoiceFromFlags
-	.long UIStateEvt_VolumeMixer_Data + 128	; no label at this target yet; v10: AudioInit_ConfigStereoVoice
-	.long UIStateEvt_VolumeMixer_Data + 343	; no label at this target yet; v10: AudioInit_ConfigureVoiceFromFlags
-	.long UIStateEvt_VolumeMixer_Data + 343	; no label at this target yet; v10: AudioInit_ConfigureVoiceFromFlags
-	.long UIStateEvt_VolumeMixer_Data + 343	; no label at this target yet; v10: AudioInit_ConfigureVoiceFromFlags
-	.long UIStateEvt_EffectSelect_Data + 56	; no label at this target yet; v10: AudioInit_SelectVoiceByType
-	.long UIStateEvt_EffectSelect_Data + 175	; no label at this target yet; v10: AudioInit_PushAndConfigVoiceAlt
-	.long UIStateEvt_EffectSelect_Data + 175	; no label at this target yet; v10: AudioInit_PushAndConfigVoiceAlt
-	.long UIStateEvt_VolumeMixer_Data + 128	; no label at this target yet; v10: AudioInit_ConfigStereoVoice
-	.long UIStateEvt_VolumeMixer_Data + 128	; no label at this target yet; v10: AudioInit_ConfigStereoVoice
-	.long UIStateEvt_EffectSelect_Data + 147	; no label at this target yet; v10: AudioInit_PushAndConfigVoice
-	.long UIStateEvt_VolumeMixer_Data + 128	; no label at this target yet; v10: AudioInit_ConfigStereoVoice
-	.long UIStateEvt_VolumeMixer_Data + 128	; no label at this target yet; v10: AudioInit_ConfigStereoVoice
-	.long UIStateEvt_VolumeMixer_Data + 128	; no label at this target yet; v10: AudioInit_ConfigStereoVoice
-	.long UIStateEvt_VolumeMixer_Data + 128	; no label at this target yet; v10: AudioInit_ConfigStereoVoice
-	.long UIStateEvt_VolumeMixer_Data + 128	; no label at this target yet; v10: AudioInit_ConfigStereoVoice
-	.long UIStateEvt_VolumeMixer_Data + 128	; no label at this target yet; v10: AudioInit_ConfigStereoVoice
-	.long UIStateEvt_VolumeMixer_Data + 128	; no label at this target yet; v10: AudioInit_ConfigStereoVoice
-	.long UIStateEvt_VolumeMixer_Data + 128	; no label at this target yet; v10: AudioInit_ConfigStereoVoice
-	.long UIStateEvt_VolumeMixer_Data + 128	; no label at this target yet; v10: AudioInit_ConfigStereoVoice
-	.long UIStateEvt_VolumeMixer_Data + 128	; no label at this target yet; v10: AudioInit_ConfigStereoVoice
-	.long UIStateEvt_VolumeMixer_Data + 128	; no label at this target yet; v10: AudioInit_ConfigStereoVoice
-	.long UIStateEvt_VolumeMixer_Data + 128	; no label at this target yet; v10: AudioInit_ConfigStereoVoice
+	.long AudioInit_ConfigStereoVoice
+	.long AudioInit_ConfigStereoVoice
+	.long AudioInit_CheckSoundGroup
+	.long AudioInit_ConfigStereoVoice
+	.long AudioInit_ConfigStereoVoice
+	.long AudioInit_CheckSoundGroup51
+	.long AudioInit_CheckMixMode
+	.long AudioInit_ConfigStereoVoice
+	.long AudioInit_ConfigureVoiceFromFlags
+	.long AudioInit_ConfigureVoiceFromFlags
+	.long AudioInit_ConfigStereoVoice
+	.long AudioInit_ConfigureVoiceFromFlags
+	.long AudioInit_ConfigureVoiceFromFlags
+	.long AudioInit_ConfigureVoiceFromFlags
+	.long AudioInit_SelectVoiceByType
+	.long AudioInit_PushAndConfigVoiceAlt
+	.long AudioInit_PushAndConfigVoiceAlt
+	.long AudioInit_ConfigStereoVoice
+	.long AudioInit_ConfigStereoVoice
+	.long AudioInit_PushAndConfigVoice
+	.long AudioInit_ConfigStereoVoice
+	.long AudioInit_ConfigStereoVoice
+	.long AudioInit_ConfigStereoVoice
+	.long AudioInit_ConfigStereoVoice
+	.long AudioInit_ConfigStereoVoice
+	.long AudioInit_ConfigStereoVoice
+	.long AudioInit_ConfigStereoVoice
+	.long AudioInit_ConfigStereoVoice
+	.long AudioInit_ConfigStereoVoice
+	.long AudioInit_ConfigStereoVoice
+	.long AudioInit_ConfigStereoVoice
+	.long AudioInit_ConfigStereoVoice
 ; 32 x u32 RAM addresses of 26-byte (0x1A) part records: 0xF9B6 + 0x1A*i for
 ; i = 0..22, then 0xFD62, 0xFD7C, then 0xF9B6 again.  UIState_ProcessMidiEvent
 ; (0xFDE084), UIStateEvt_DrumAssign_Set (0xFDDA39: `ld a,(xwa+13)`) and
@@ -7358,7 +7358,7 @@ PartIndex_ByteMap:
 	.byte 8, 9, 10, 11, 12, 13, 14, 15
 	.byte 16, 17, 18, 19, 20, 21, 22, 23
 	.byte 24, 25, 26, 27, 28, 29, 30, 31
-; 8 x u8 (0,1,2,3,0,0xFD,0xFE,0xFF).  UIStateEvt_PartRouting (0xFDDD19) reads
+; 8 x u8 (0,1,2,3,0,0xFD,0xFE,0xFF).  UIStateEvt_ParamEdit_Data_Skip16 + 7 (0xFDDD19) reads
 ; an entry with `ld a, (xbc+wa)`, then `and a,7 / sla a,1`.
 PartRouting_ByteTable:
 	.byte 0, 1, 2, 3, 0, -3, -2, -1
@@ -7372,25 +7372,25 @@ EffectSelect_StepTable:
 ParamEdit_WordTable:
 	.short 0x0000, 0x0001, 0x0002, 0x0004, 0x0000, 0x0000, 0x0000, 0x0000
 	.short 0x0010, 0x0011, 0x0012, 0x0014, 0x0000, 0x0000, 0x0000, 0x0000
-; 7 x u16 switch offsets.  UIStateEvt_ParamEdit_Data (0xFDDEF1): `ld_rrw wa,xix,wa;
+; 7 x u16 switch offsets.  UIStateEvt_EffectSelect_Data + 69 (0xFDDEF1): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFDE2CF); jp_rr 8,xix,wa` -- targets 0xFDE2CF + offset (no labels yet).
 ParamEdit_SwitchOffsets:
 	.short	UIStateEvt_ParamEdit_Data_Epilogue - UIStateEvt_TransposeUpdate_Apply_Code
 	.short	UIStateEvt_ParamEdit_Data_Epilogue - UIStateEvt_TransposeUpdate_Apply_Code
 	.short	UIStateEvt_ParamEdit_Data_Epilogue - UIStateEvt_TransposeUpdate_Apply_Code
 	.short	UIStateEvt_TransposeUpdate_Apply_Code - UIStateEvt_TransposeUpdate_Apply_Code
-	.short	UIStateEvt_TransposeUpdate_Clear_Case4 - UIStateEvt_TransposeUpdate_Apply_Code
-	.short	UIStateEvt_TransposeUpdate_Clear_Case5 - UIStateEvt_TransposeUpdate_Apply_Code
-	.short	UIStateEvt_TransposeUpdate_Clear_Case6 - UIStateEvt_TransposeUpdate_Apply_Code
-; 6 x u16 switch offsets.  UIStateEvt_VolumeMixer_Data (0xFDE15D): `ld_rrw wa,xix,wa;
+	.short	UIStateEvt_ParamEdit_Data_Case4 - UIStateEvt_TransposeUpdate_Apply_Code
+	.short	UIStateEvt_ParamEdit_Data_Case5 - UIStateEvt_TransposeUpdate_Apply_Code
+	.short	UIStateEvt_ParamEdit_Data_Case6 - UIStateEvt_TransposeUpdate_Apply_Code
+; 6 x u16 switch offsets.  UIStateEvt_ChannelConfig_Data_Entry7 + 6 (0xFDE15D): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFDE538); jp_rr` -- targets 0xFDE538 + offset (no labels yet).
 VolumeMixer_SwitchOffsets:
 	.short	UIStateEvt_TransposeUpdate_Apply_Code_2 - UIStateEvt_TransposeUpdate_Apply_Code_2
-	.short	UIStateEvt_TransposeUpdate_Clear_Switch2_Case1 - UIStateEvt_TransposeUpdate_Apply_Code_2
-	.short	UIStateEvt_TransposeUpdate_Clear_Switch2_Case2 - UIStateEvt_TransposeUpdate_Apply_Code_2
-	.short	UIStateEvt_TransposeUpdate_Clear_Switch2_Case3 - UIStateEvt_TransposeUpdate_Apply_Code_2
-	.short	UIStateEvt_TransposeUpdate_Clear_Switch2_Case4 - UIStateEvt_TransposeUpdate_Apply_Code_2
-	.short	UIStateEvt_TransposeUpdate_Clear_Switch2_Case5 - UIStateEvt_TransposeUpdate_Apply_Code_2
+	.short	UIStateEvt_VolumeMixer_Data_Case1 - UIStateEvt_TransposeUpdate_Apply_Code_2
+	.short	UIStateEvt_VolumeMixer_Data_Case2 - UIStateEvt_TransposeUpdate_Apply_Code_2
+	.short	UIStateEvt_VolumeMixer_Data_Case3 - UIStateEvt_TransposeUpdate_Apply_Code_2
+	.short	UIStateEvt_VolumeMixer_Data_Case4 - UIStateEvt_TransposeUpdate_Apply_Code_2
+	.short	UIStateEvt_VolumeMixer_Data_Case5 - UIStateEvt_TransposeUpdate_Apply_Code_2
 ; 32 x u8: 0..15 then 16 x 0xFF (no mapping).  AudioInit_ConfigStereoVoice
 ; (0xFDE9AE, two sites) and AudioInit_LoadGroupVoice index it with
 ; `extz xwa; add xwa,xbc` after `lda xbc,(<this>)`.
@@ -7400,7 +7400,7 @@ AudioInit_ChannelMapA:
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 ; 32 x u8, same contents as AudioInit_ChannelMapA but a separate object:
-; AudioInit_CheckSoundGroup51 (0xFDE84A) and AudioInit_LoadAndConfigure
+; AudioInit_ClearVoiceGroupFlags + 9 (0xFDE84A) and AudioInit_LoadAndConfigure
 ; (0xFDECB6) read it with `ld c, (xde+bc)`.
 AudioInit_ChannelMapB:
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07
@@ -7408,7 +7408,7 @@ AudioInit_ChannelMapB:
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 ; 20 x u8 slot map (0,2,1,7,8,9,10,11,4,5,6,3,15,0x15,0x15,0xFF,0x15,12,13,14).
-; Read with `ld a, (xix+wa)` at 18 sites: AudioInit_ChannelLoop_Body (0xFDECF2),
+; Read with `ld a, (xix+wa)` at 18 sites: AudioInit_NoTypeE_CheckD + 26 (0xFDECF2),
 ; AudioInit_CheckGroupA/B, AudioInit_GroupA/B_* and HdaeRom_AltCheckResult.
 AudioInit_SlotOrderMap:
 	.byte 0x00, 0x02, 0x01, 0x07, 0x08, 0x09, 0x0a, 0x0b
@@ -7549,16 +7549,16 @@ RhythmBuf_SwitchOffsets:
 	.short	SeqPart_EmitNoteOn_Full_Case212 - Rhythm_ProcessEventDispatch
 	.short	SeqPart_EmitNoteOn_Full_Case212 - Rhythm_ProcessEventDispatch
 	.short	SeqPart_EmitNoteOn_Full_Case212 - Rhythm_ProcessEventDispatch
-; 7 x u16 switch offsets.  SeqEvtBuf_NoteDispatch (0xFE8598): `ld_rrw wa,xix,wa;
+; 7 x u16 switch offsets.  SearchVoice_BubbleSortInner + 41 (0xFE8598): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFE8BA8); jp_rr` -- targets 0xFE8BA8 + offset (no labels yet).
 SeqEvtBuf_SwitchOffsets:
-	.short	NonNoteDispatchLoop_LoadParam2_Code - NonNoteDispatchLoop_LoadParam2_Code
-	.short	NonNoteDispatchLoop_ReadAlt2_Case2 - NonNoteDispatchLoop_LoadParam2_Code
-	.short	NonNoteDispatchLoop_ReadAlt2_Case3 - NonNoteDispatchLoop_LoadParam2_Code
-	.short	NonNoteDispatchLoop_ReadAlt2_Case4 - NonNoteDispatchLoop_LoadParam2_Code
-	.short	NonNoteDispatchLoop_ReadAlt2_Case5 - NonNoteDispatchLoop_LoadParam2_Code
-	.short	SeqPerformance_Event_Block - NonNoteDispatchLoop_LoadParam2_Code
-	.short	NonNoteDispatchLoop_ReadAlt2_Case7 - NonNoteDispatchLoop_LoadParam2_Code
+	.short	SeqPerformance_EventDispatch - SeqPerformance_EventDispatch
+	.short	SeqEvtBuf_NoteDispatch_Case2 - SeqPerformance_EventDispatch
+	.short	SeqEvtBuf_NoteDispatch_Case3 - SeqPerformance_EventDispatch
+	.short	SeqEvtBuf_NoteDispatch_Case4 - SeqPerformance_EventDispatch
+	.short	SeqEvtBuf_NoteDispatch_Case5 - SeqPerformance_EventDispatch
+	.short	SeqPerformance_Event_Block - SeqPerformance_EventDispatch
+	.short	SeqEvtBuf_NoteDispatch_Case7 - SeqPerformance_EventDispatch
 ; 28 rows x 12 columns x 1 byte = 336 bytes.  SoundFX_Handler_2 (0xFE8669): row = RAM byte
 ; 0xCEDF - 1 (`muls wa,0xc`), column = (0xCEAA - 0xCEE0 + VoiceBank_MapNoteToOffset
 ; + 1) mod 12 (`div a,0xc`); each byte is subtracted from RAM 0xCEAA and the
@@ -7594,7 +7594,7 @@ Harmony_Offsets1_A:
 	.byte 0x04, 0x04, 0x03, 0x03, 0x04, 0x03, 0x03, 0x03, 0x04, 0x05, 0x06, 0x03
 	.byte 0x09, 0x07, 0x03, 0x04, 0x05, 0x03, 0x03, 0x04, 0x05, 0x06, 0x04, 0x05
 	.byte 0x05, 0x04, 0x04, 0x03, 0x04, 0x03, 0x03, 0x03, 0x04, 0x05, 0x03, 0x04
-; 28 rows x 12 columns x 2 bytes = 672 bytes.  SoundFX_Handler_4 (0xFE8B55): row = RAM byte
+; 28 rows x 12 columns x 2 bytes = 672 bytes.  SoundFX_Handler_8 + 227 (0xFE8B55): row = RAM byte
 ; 0xCEDF - 1 (`muls wa,0x18`), column = (0xCEAA - 0xCEE0 + VoiceBank_MapNoteToOffset
 ; + 1) mod 12 (`div a,0xc`), x2; each byte is subtracted from RAM 0xCEAA and the
 ; result stored at (xiz+5), +7.  28 rows pinned: every table here is exactly
@@ -8247,22 +8247,22 @@ SoundFX_Handler_11_Data_2:	.byte	-5
 ; positional_labels.s derives 36 SoundEffect_Dispatch_Table_0xNN names from it.
 Harmony_HandlerTable:
 	.set SoundEffect_Dispatch_Table, Harmony_HandlerTable + 4
-	.long NoteMap_SearchVoiceEntry	; no label at this target yet; v10: NoteMap_SearchVoiceEntry
-	.long SeqPerformance_EventDispatch + 3	; no label at this target yet; v10: SoundFX_Handler_0
-	.long SeqPerformance_EventDispatch + 23	; no label at this target yet; v10: SoundFX_Handler_1
-	.long SeqPerformance_EventDispatch + 118	; no label at this target yet; v10: SoundFX_Handler_2
-	.long VoiceMap_AllocateSlot + 6	; no label at this target yet; v10: SoundFX_Handler_3
-	.long VoiceMap_AllocateSlo_Block2 + 33	; no label at this target yet; v10: SoundFX_Handler_4
-	.long NoteMap_GetVoiceData_Entry + 28	; no label at this target yet; v10: SoundFX_Handler_5
-	.long UIParam_CallbackReturn + 31	; no label at this target yet; v10: SoundFX_Handler_6
-	.long SearchVoice_BubbleSortInner + 25	; no label at this target yet; v10: SoundFX_Handler_7
-	.long SoundFX_Handler_1_LoadReg + 30	; no label at this target yet; v10: SoundFX_Handler_8
-	.long SoundFX_Handler_4 + 25	; no label at this target yet; v10: SoundFX_Handler_9
-	.long SoundFX_Handler_4 + 60	; no label at this target yet; v10: SoundFX_Handler_10
-	.long SoundFX_Handler_4 + 95	; no label at this target yet; v10: SoundFX_Handler_11
-	.long SeqEvtBuf_NoteDispatch + 74	; no label at this target yet; v10: SoundFX_Handler_12
-	.long UIParam_CallbackReturn + 31	; no label at this target yet; v10: SoundFX_Handler_6
-	.long UIParam_CallbackReturn + 31	; no label at this target yet; v10: SoundFX_Handler_6
+	.long NoteMap_SearchVoiceEntry
+	.long SoundFX_Handler_0
+	.long SoundFX_Handler_1
+	.long SoundFX_Handler_2
+	.long SoundFX_Handler_3
+	.long SoundFX_Handler_4
+	.long SoundFX_Handler_5
+	.long SoundFX_Handler_6
+	.long SoundFX_Handler_7
+	.long SoundFX_Handler_8
+	.long SoundFX_Handler_9
+	.long SoundFX_Handler_10
+	.long SoundFX_Handler_11
+	.long SoundFX_Handler_12
+	.long SoundFX_Handler_6
+	.long SoundFX_Handler_6
 ; 2048 x {u8, u8}, indexed by an 11-bit interval mask.  Voice_ComputeNoteBitPosition
 ; (0xFE981C) sets one bit per held note relative to the lowest one and ORs in
 ; 0x800; Voice_LookupNoteAndComputePitch (0xFE95C2), LookupNoteAndCompute_Prologue
@@ -8567,22 +8567,22 @@ NoteMask9_ClassTable:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-; 13 x s16 switch offsets.  UIState_ProcessKeyEvent (0xFEA45D): `ld_rrw wa,xix,wa;
+; 13 x s16 switch offsets.  HdaeRom_TableEntry2_Skip (0xFEA45D): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFEA84F); jp_rr 8,xix,wa` -- targets 0xFEA84F + offset (no labels yet).
 KeyEvent_SwitchOffsets:
-	.short	SndParam_Init_Code - SndParam_Init_Code
-	.short	SndParam_Init_Case1 - SndParam_Init_Code
-	.short	SndParam_ProcessEntry_Epilogue - SndParam_Init_Code
-	.short	SndParam_Init_Case3 - SndParam_Init_Code
-	.short	SndParam_Init_Case4 - SndParam_Init_Code
-	.short	SndParam_Init_Case5 - SndParam_Init_Code
-	.short	SndParam_ProcessEntry_Epilogue - SndParam_Init_Code
-	.short	SndParam_Init_Case7 - SndParam_Init_Code
-	.short	SndParam_Init_Case8 - SndParam_Init_Code
-	.short	SndParam_Init_Case9 - SndParam_Init_Code
-	.short	SndParam_Init_Case10 - SndParam_Init_Code
-	.short	SndParam_Init_Case11 - SndParam_Init_Code
-	.short	SndParam_Init_Case12 - SndParam_Init_Code
+	.short	UIState_ProcessKeyEvent_Code - UIState_ProcessKeyEvent_Code
+	.short	UIState_ProcessKeyEvent_Case1 - UIState_ProcessKeyEvent_Code
+	.short	SndParam_ProcessEntry_Epilogue - UIState_ProcessKeyEvent_Code
+	.short	UIState_ProcessKeyEvent_Case3 - UIState_ProcessKeyEvent_Code
+	.short	UIState_ProcessKeyEvent_Case4 - UIState_ProcessKeyEvent_Code
+	.short	UIState_ProcessKeyEvent_Case5 - UIState_ProcessKeyEvent_Code
+	.short	SndParam_ProcessEntry_Epilogue - UIState_ProcessKeyEvent_Code
+	.short	UIState_ProcessKeyEvent_Case7 - UIState_ProcessKeyEvent_Code
+	.short	UIState_ProcessKeyEvent_Case8 - UIState_ProcessKeyEvent_Code
+	.short	UIState_ProcessKeyEvent_Case9 - UIState_ProcessKeyEvent_Code
+	.short	UIState_ProcessKeyEvent_Case10 - UIState_ProcessKeyEvent_Code
+	.short	UIState_ProcessKeyEvent_Case11 - UIState_ProcessKeyEvent_Code
+	.short	UIState_ProcessKeyEvent_Case12 - UIState_ProcessKeyEvent_Code
 ; 8 x s16 switch offsets.  HdaeRom_TableEntry2 (0xFEA40A): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFEAC14); jp_rr 8,xix,wa` -- targets 0xFEAC14 + offset (no labels yet).
 HdaeRomEntry2_SwitchOffsets:
@@ -8598,32 +8598,32 @@ HdaeRomEntry2_SwitchOffsets:
 ; lda xix,(0xFEB4EE); jp_rr 8,xix,wa` -- targets 0xFEB4EE + offset (no labels yet).
 SendEpilogueA_SwitchOffsets:
 	.short	MIDI_SendEpilogue_Code_2 - MIDI_SendEpilogue_Code_2
-	.short	UIState_ProcessKeyEvent_Helper_Helper_Switch2_Case129 - MIDI_SendEpilogue_Code_2
-	.short	UIState_ProcessKeyEvent_Helper_Helper_Switch2_Case130 - MIDI_SendEpilogue_Code_2
-	.short	UIState_ProcessKeyEvent_Helper_Helper_Switch2_Case131 - MIDI_SendEpilogue_Code_2
-	.short	UIState_ProcessKeyEvent_Helper_Helper_Switch2_Case132 - MIDI_SendEpilogue_Code_2
-	.short	UIState_ProcessKeyEvent_Helper_Helper_Switch2_Case133 - MIDI_SendEpilogue_Code_2
-	.short	UIState_ProcessKeyEvent_Helper_Helper_Switch2_Case134 - MIDI_SendEpilogue_Code_2
-	.short	UIState_ProcessKeyEvent_Helper_Helper_Switch2_Case135 - MIDI_SendEpilogue_Code_2
-	.short	UIState_ProcessKeyEvent_Helper_Helper_Switch2_Case136 - MIDI_SendEpilogue_Code_2
-	.short	UIState_ProcessKeyEvent_Helper_Helper_Switch2_Case137 - MIDI_SendEpilogue_Code_2
-	.short	UIState_ProcessKeyEvent_Helper_Helper_Switch2_Case138 - MIDI_SendEpilogue_Code_2
-	.short	UIState_ProcessKeyEvent_Helper_Helper_Switch2_Case139 - MIDI_SendEpilogue_Code_2
-	.short	UIState_ProcessKeyEvent_Helper_Helper_Switch2_Case140 - MIDI_SendEpilogue_Code_2
-	.short	UIState_ProcessKeyEvent_Helper_Helper_Switch2_Case141 - MIDI_SendEpilogue_Code_2
-	.short	UIState_ProcessKeyEvent_Helper_Helper_Switch2_Case142 - MIDI_SendEpilogue_Code_2
+	.short	SendEpilogue_Data_Switch2_Case129 - MIDI_SendEpilogue_Code_2
+	.short	SendEpilogue_Data_Switch2_Case130 - MIDI_SendEpilogue_Code_2
+	.short	SendEpilogue_Data_Switch2_Case131 - MIDI_SendEpilogue_Code_2
+	.short	SendEpilogue_Data_Switch2_Case132 - MIDI_SendEpilogue_Code_2
+	.short	SendEpilogue_Data_Switch2_Case133 - MIDI_SendEpilogue_Code_2
+	.short	SendEpilogue_Data_Switch2_Case134 - MIDI_SendEpilogue_Code_2
+	.short	SendEpilogue_Data_Switch2_Case135 - MIDI_SendEpilogue_Code_2
+	.short	SendEpilogue_Data_Switch2_Case136 - MIDI_SendEpilogue_Code_2
+	.short	SendEpilogue_Data_Switch2_Case137 - MIDI_SendEpilogue_Code_2
+	.short	SendEpilogue_Data_Switch2_Case138 - MIDI_SendEpilogue_Code_2
+	.short	SendEpilogue_Data_Switch2_Case139 - MIDI_SendEpilogue_Code_2
+	.short	SendEpilogue_Data_Switch2_Case140 - MIDI_SendEpilogue_Code_2
+	.short	SendEpilogue_Data_Switch2_Case141 - MIDI_SendEpilogue_Code_2
+	.short	SendEpilogue_Data_Switch2_Case142 - MIDI_SendEpilogue_Code_2
 ; 7 x s16 switch offsets.  SendEpilogue_Data_Skip7 (0xFEAC0D): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFEB40D); jp_rr 8,xix,wa` -- targets 0xFEB40D + offset (no labels yet).
 SendEpilogueB_SwitchOffsets:
 	.short	MIDI_SendEpilogue_Code - MIDI_SendEpilogue_Code
-	.short	UIState_ProcessKeyEvent_Helper_Helper_Case1 - MIDI_SendEpilogue_Code
-	.short	UIState_ProcessKeyEvent_Helper_Helper_Case2 - MIDI_SendEpilogue_Code
-	.short	UIState_ProcessKeyEvent_Helper_Helper_Case3 - MIDI_SendEpilogue_Code
-	.short	UIState_ProcessKeyEvent_Helper_Helper_Case4 - MIDI_SendEpilogue_Code
-	.short	UIState_ProcessKeyEvent_Helper_Helper_Case5 - MIDI_SendEpilogue_Code
-	.short	UIState_ProcessKeyEvent_Helper_Helper_Case6 - MIDI_SendEpilogue_Code
+	.short	SendEpilogue_Data_Case1 - MIDI_SendEpilogue_Code
+	.short	SendEpilogue_Data_Case2 - MIDI_SendEpilogue_Code
+	.short	SendEpilogue_Data_Case3 - MIDI_SendEpilogue_Code
+	.short	SendEpilogue_Data_Case4 - MIDI_SendEpilogue_Code
+	.short	SendEpilogue_Data_Case5 - MIDI_SendEpilogue_Code
+	.short	SendEpilogue_Data_Case6 - MIDI_SendEpilogue_Code
 ; 12-byte per-semitone tables (one byte per pitch class C..B; 0x80 = centre).
-; SeqVoice_CheckAndRet_Data (0xFEB8A1) maps its selector byte (0x80, 5, 4, 3,
+; Acc_LoadAndStartPlayback + 34 (0xFEB8A1) maps its selector byte (0x80, 5, 4, 3,
 ; 0x40-0x42, 0, 0x10-0x16 through SeqVoiceSel_SwitchOffsets) to one of them
 ; and returns its address in xhl (`lda_24 xhl,(table)` at 14 case labels;
 ; the 15th returns RAM 0xFD1E).  [INFERENCE] scale-tuning presets.
@@ -8631,17 +8631,17 @@ SemitoneBias_TableA:
 	.byte 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80
 	.byte 0x80, 0x80, 0x80, 0x80
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
-; SeqVoice_CheckAndRet_Data (0xFEB8A1) case returns it (`lda_24 xhl,(<this>)`).
+; Acc_LoadAndStartPlayback + 34 (0xFEB8A1) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableB:
 	.byte 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80
 	.byte 0x80, 0x80, 0x80, 0x80
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
-; SeqVoice_CheckAndRet_Data (0xFEB8A1) case returns it (`lda_24 xhl,(<this>)`).
+; Acc_LoadAndStartPlayback + 34 (0xFEB8A1) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableC:
 	.byte 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80
 	.byte 0x80, 0x80, 0x80, 0x80
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
-; SeqVoice_CheckAndRet_Data (0xFEB8A1) case returns it (`lda_24 xhl,(<this>)`).
+; Acc_LoadAndStartPlayback + 34 (0xFEB8A1) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableD:
 	.byte 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80
 	.byte 0x80, 0x80, 0x80, 0x80
@@ -8652,65 +8652,65 @@ NoRef_SemitoneBias_EEC0CA:
 	.byte 0x93, 0x70, 0x98, 0xa8, 0x83, 0x92, 0x6f, 0x96, 0xf4, 0x80, 0x2a, 0x84
 	.byte 0x93, 0xbf, 0x98, 0xa8, 0x83, 0x92, 0xbb, 0x96, 0xa5, 0x80, 0xaa, 0x84
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
-; SeqVoice_CheckAndRet_Data (0xFEB8A1) case returns it (`lda_24 xhl,(<this>)`).
+; Acc_LoadAndStartPlayback + 34 (0xFEB8A1) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableE:
 	.byte 0x78, 0x8a, 0x7d, 0x71, 0x83, 0x76, 0x88, 0x7b
 	.byte 0x8d, 0x80, 0x74, 0x71
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
-; SeqVoice_CheckAndRet_Data (0xFEB8A1) case returns it (`lda_24 xhl,(<this>)`).
+; Acc_LoadAndStartPlayback + 34 (0xFEB8A1) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableF:
 	.byte 0x8f, 0x83, 0x85, 0x88, 0x83, 0x8d, 0x80, 0x8a
 	.byte 0x85, 0x80, 0x8a, 0x7d
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
-; SeqVoice_CheckAndRet_Data (0xFEB8A1) case returns it (`lda_24 xhl,(<this>)`).
+; Acc_LoadAndStartPlayback + 34 (0xFEB8A1) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableG:
 	.byte 0x8d, 0x80, 0x84, 0x85, 0x83, 0x8a, 0x80, 0x89
 	.byte 0x83, 0x80, 0x88, 0x85
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
-; SeqVoice_CheckAndRet_Data (0xFEB8A1) case returns it (`lda_24 xhl,(<this>)`).
+; Acc_LoadAndStartPlayback + 34 (0xFEB8A1) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableH:
 	.byte 0x80, 0x80, 0x80, 0x80, 0x40, 0x80, 0x80, 0x80
 	.byte 0x80, 0x80, 0x80, 0x40
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
-; SeqVoice_CheckAndRet_Data (0xFEB8A1) case returns it (`lda_24 xhl,(<this>)`).
+; Acc_LoadAndStartPlayback + 34 (0xFEB8A1) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableI:
 	.byte 0x80, 0x80, 0x80, 0x80, 0x40, 0x80, 0x80, 0x80
 	.byte 0x80, 0x40, 0x80, 0x80
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
-; SeqVoice_CheckAndRet_Data (0xFEB8A1) case returns it (`lda_24 xhl,(<this>)`).
+; Acc_LoadAndStartPlayback + 34 (0xFEB8A1) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableJ:
 	.byte 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x40, 0x80
 	.byte 0x80, 0x80, 0x80, 0x40
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
-; SeqVoice_CheckAndRet_Data (0xFEB8A1) case returns it (`lda_24 xhl,(<this>)`).
+; Acc_LoadAndStartPlayback + 34 (0xFEB8A1) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableK:
 	.byte 0x80, 0x80, 0x40, 0x80, 0x80, 0x80, 0x80, 0x80
 	.byte 0x80, 0x40, 0x80, 0x80
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
-; SeqVoice_CheckAndRet_Data (0xFEB8A1) case returns it (`lda_24 xhl,(<this>)`).
+; Acc_LoadAndStartPlayback + 34 (0xFEB8A1) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableL:
 	.byte 0x80, 0x40, 0x80, 0x80, 0x80, 0x80, 0x40, 0x80
 	.byte 0x80, 0x80, 0x80, 0x80
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
-; SeqVoice_CheckAndRet_Data (0xFEB8A1) case returns it (`lda_24 xhl,(<this>)`).
+; Acc_LoadAndStartPlayback + 34 (0xFEB8A1) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableM:
 	.byte 0x80, 0x80, 0xd1, 0x80, 0x80, 0x6f, 0x80, 0xb2
 	.byte 0x80, 0xe0, 0x80, 0x80
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
-; SeqVoice_CheckAndRet_Data (0xFEB8A1) case returns it (`lda_24 xhl,(<this>)`).
+; Acc_LoadAndStartPlayback + 34 (0xFEB8A1) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableN:
 	.byte 0x80, 0x80, 0x56, 0x80, 0x8f, 0xaf, 0x80, 0x6b
 	.byte 0x80, 0xad, 0x80, 0x80
-; 7 x s16 switch offsets.  SeqVoice_CheckAndRet_Data (0xFEB8A1): `ld_rrw wa,xix,wa;
+; 7 x s16 switch offsets.  Acc_LoadAndStartPlayback + 34 (0xFEB8A1): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFEBCA0); jp_rr 8,xix,wa` -- targets 0xFEBCA0 + offset (no labels yet).
 SeqVoiceSel_SwitchOffsets:
-	.short	SndPart_SetParam_Helper2_Case16 - SeqVoice_CheckAndRet_Data_Skip
-	.short	SndPart_SetParam_Helper2_Case17 - SeqVoice_CheckAndRet_Data_Skip
-	.short	SndPart_SetParam_Helper2_Case18 - SeqVoice_CheckAndRet_Data_Skip
-	.short	SndPart_SetParam_Helper2_Case19 - SeqVoice_CheckAndRet_Data_Skip
-	.short	SndPart_SetParam_Helper2_Case20 - SeqVoice_CheckAndRet_Data_Skip
-	.short	SndPart_SetParam_Helper2_Case21 - SeqVoice_CheckAndRet_Data_Skip
-	.short	SndPart_SetParam_Helper2_Case22 - SeqVoice_CheckAndRet_Data_Skip
+	.short	SeqVoice_CheckAndRet_Data_Case16 - SeqVoice_CheckAndRet_Data_Skip
+	.short	SeqVoice_CheckAndRet_Data_Case17 - SeqVoice_CheckAndRet_Data_Skip
+	.short	SeqVoice_CheckAndRet_Data_Case18 - SeqVoice_CheckAndRet_Data_Skip
+	.short	SeqVoice_CheckAndRet_Data_Case19 - SeqVoice_CheckAndRet_Data_Skip
+	.short	SeqVoice_CheckAndRet_Data_Case20 - SeqVoice_CheckAndRet_Data_Skip
+	.short	SeqVoice_CheckAndRet_Data_Case21 - SeqVoice_CheckAndRet_Data_Skip
+	.short	SeqVoice_CheckAndRet_Data_Case22 - SeqVoice_CheckAndRet_Data_Skip
 ; 7 x s16 switch offsets.  SendEpilogue_Data_Helper (0xFEB53F): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFEBD57); jp_rr 8,xix,wa` -- targets 0xFEBD57 + offset (no labels yet).
 SendEpilogueC_SwitchOffsets:
@@ -8818,10 +8818,10 @@ Disk_DefaultPath:
 ; entry 18 of Subsys_HandlerTableList, so VoiceInit_Dispatch (0xFDDB5A) calls one entry
 ; of it with every other subsystem's table.
 CharMap_Preamble_Table:
-	.long ReadNextRecord_Block + 1
-	.long ReadNextRecord_Block + 2
-	.long ReadNextRecord_Block + 3
-	.long ReadNextRecord_Block + 4
+	.long CharMap_NullPreamble_0
+	.long CharMap_NullPreamble_1
+	.long CharMap_NullPreamble_2
+	.long CharMap_ActivePreamble
 ; 128 x 0xFF.  No reader: nothing in the v10 ROM names 0xEEC298 (instruction
 ; operands and 32-bit data pointers both searched).  Purpose not established.
 NoRef_FF128_EEC298:
@@ -9365,10 +9365,10 @@ SndParamOffs_SwitchOffsets:
 ; (kn5000_v10_program.s also names this address Subsys_HandlerTable11
 ; as an absolute .set; it is not a permutation table.)
 Subsys_HandlerTable11:
-	.long Param_SignExtendRetu_Block2	; no label at this target yet; v10: Param_SignExtendRetu_Block2
-	.long ApplyProgramChangeAs_LoadDRAM2 + 51	; no label at this target yet; v10: Param_SignExtendRetu_Return
-	.long ApplyProgramChangeAs_LoadDRAM2 + 51	; no label at this target yet; v10: Param_SignExtendRetu_Return
-	.long ApplyProgramChangeAs_LoadDRAM2 + 51	; no label at this target yet; v10: Param_SignExtendRetu_Return
+	.long Param_SignExtendRetu_Block2
+	.long Param_SignExtendRetu_Return
+	.long Param_SignExtendRetu_Return
+	.long Param_SignExtendRetu_Return
 ; 77 x u8 case numbers 0..6.  Param_SignExtendReturn_Skip3 (0xFEE589):
 ; `add xbc,<this>; ld bc,(xbc); extz bc; sll bc,1; ld xix,<ParamSx_SwitchA>;
 ; ld_rrw ..; jp` -- a two-level switch: this byte, then the offset table.
@@ -9387,12 +9387,12 @@ ParamSx_CaseMapA:
 ; jp_rr 8,xix,..` -- targets 0xFEED91 + offset (no labels yet).
 ParamSx_SwitchA:
 	.short	Param_SignExtendReturn_Skip5 - Param_SignExtendReturn_Skip4
-	.short	ApplyProgramChange_LoadDRAM_Switch2_Case1 - Param_SignExtendReturn_Skip4
-	.short	ApplyProgramChange_LoadDRAM_Switch2_Case2 - Param_SignExtendReturn_Skip4
-	.short	ApplyProgramChange_LoadDRAM_Switch2_Case3 - Param_SignExtendReturn_Skip4
-	.short	ApplyProgramChange_LoadDRAM_Switch2_Case4 - Param_SignExtendReturn_Skip4
-	.short	ApplyProgramChange_LoadDRAM_Switch2_Case5 - Param_SignExtendReturn_Skip4
-	.short	ApplyProgramChange_LoadDRAM_Switch2_Case6 - Param_SignExtendReturn_Skip4
+	.short	Param_SignExtendReturn_Helper3_Switch3_Case1 - Param_SignExtendReturn_Skip4
+	.short	Param_SignExtendReturn_Helper3_Switch3_Case2 - Param_SignExtendReturn_Skip4
+	.short	Param_SignExtendReturn_Helper3_Switch3_Case3 - Param_SignExtendReturn_Skip4
+	.short	Param_SignExtendReturn_Helper3_Switch3_Case4 - Param_SignExtendReturn_Skip4
+	.short	Param_SignExtendReturn_Helper3_Switch3_Case5 - Param_SignExtendReturn_Skip4
+	.short	Param_SignExtendReturn_Helper3_Switch3_Case6 - Param_SignExtendReturn_Skip4
 ; 77 x u8 case numbers 0..6.  Param_SignExtendReturn_Skip (0xFEE4C7), same
 ; two-level switch as ParamSx_CaseMapA with ParamSx_SwitchB.
 ParamSx_CaseMapB:
@@ -9409,26 +9409,26 @@ ParamSx_CaseMapB:
 ; 7 x s16 switch offsets.  Param_SignExtendReturn_Skip (0xFEE4C7): `ld_rrw ..,xix,..; lda xix,(0xFEECDA);
 ; jp_rr 8,xix,..` -- targets 0xFEECDA + offset (no labels yet).
 ParamSx_SwitchB:
-	.short	ApplyProgramChange_LoadDRAM_Code - ApplyProgramChange_LoadDRAM_Code
-	.short	ApplyProgramChange_LoadDRAM_Case1 - ApplyProgramChange_LoadDRAM_Code
-	.short	ApplyProgramChange_LoadDRAM_Case2 - ApplyProgramChange_LoadDRAM_Code
-	.short	Param_SignExtendReturn_Skip5 - ApplyProgramChange_LoadDRAM_Code
-	.short	ApplyProgramChange_LoadDRAM_Case4 - ApplyProgramChange_LoadDRAM_Code
-	.short	ApplyProgramChange_LoadDRAM_Case5 - ApplyProgramChange_LoadDRAM_Code
-	.short	ApplyProgramChange_LoadDRAM_Case6 - ApplyProgramChange_LoadDRAM_Code
+	.short	Param_SignExtendReturn_Code - Param_SignExtendReturn_Code
+	.short	Param_SignExtendReturn_Helper3_Switch2_Case1 - Param_SignExtendReturn_Code
+	.short	Param_SignExtendReturn_Helper3_Switch2_Case2 - Param_SignExtendReturn_Code
+	.short	Param_SignExtendReturn_Skip5 - Param_SignExtendReturn_Code
+	.short	Param_SignExtendReturn_Helper3_Switch2_Case4 - Param_SignExtendReturn_Code
+	.short	Param_SignExtendReturn_Helper3_Switch2_Case5 - Param_SignExtendReturn_Code
+	.short	Param_SignExtendReturn_Helper3_Switch2_Case6 - Param_SignExtendReturn_Code
 ; 10 x s16 offsets.  Param_SignExtendReturn_Helper3 (0xFEE479): `add xhl,<this>;
 ; ld hl,(xhl); lda xix,(0xFEEC84); jp_rr` -- targets 0xFEEC84 + offset.
 ParamSx_SwitchC:
-	.short	FetchOscTableEntry_Prologue_Code - FetchOscTableEntry_Prologue_Code
-	.short	FetchOscTableEntry_Prologue_Code - FetchOscTableEntry_Prologue_Code
-	.short	FetchOscTableEntry_Prologue_Code - FetchOscTableEntry_Prologue_Code
-	.short	FetchOscTableEntry_Prologue_Code - FetchOscTableEntry_Prologue_Code
-	.short	Param_SignExtendReturn_Skip5 - FetchOscTableEntry_Prologue_Code
-	.short	FetchOscTableEntry_Prologue_Code - FetchOscTableEntry_Prologue_Code
-	.short	Param_SignExtendReturn_Skip5 - FetchOscTableEntry_Prologue_Code
-	.short	FetchOscTableEntry_Prologue_Code - FetchOscTableEntry_Prologue_Code
-	.short	Param_SignExtendReturn_Skip5 - FetchOscTableEntry_Prologue_Code
-	.short	FetchOscTableEntry_Prologue_Code - FetchOscTableEntry_Prologue_Code
+	.short	Param_SignExtendReturn_Code2 - Param_SignExtendReturn_Code2
+	.short	Param_SignExtendReturn_Code2 - Param_SignExtendReturn_Code2
+	.short	Param_SignExtendReturn_Code2 - Param_SignExtendReturn_Code2
+	.short	Param_SignExtendReturn_Code2 - Param_SignExtendReturn_Code2
+	.short	Param_SignExtendReturn_Skip5 - Param_SignExtendReturn_Code2
+	.short	Param_SignExtendReturn_Code2 - Param_SignExtendReturn_Code2
+	.short	Param_SignExtendReturn_Skip5 - Param_SignExtendReturn_Code2
+	.short	Param_SignExtendReturn_Code2 - Param_SignExtendReturn_Code2
+	.short	Param_SignExtendReturn_Skip5 - Param_SignExtendReturn_Code2
+	.short	Param_SignExtendReturn_Code2 - Param_SignExtendReturn_Code2
 ; 23 x u8 case numbers 0..2.  Param_SignExtendReturn_Skip10 (0xFEE7A4): byte,
 ; then ParamSx_SwitchD.
 ParamSx_CaseMapD:
@@ -9437,8 +9437,8 @@ ParamSx_CaseMapD:
 ; jp_rr 8,xix,..` -- targets 0xFEEFAA + offset (no labels yet).
 ParamSx_SwitchD:
 	.short	Param_SignExtendReturn_Skip12 - Param_SignExtendReturn_Skip11
-	.short	ApplyProgramChange_LoadDRAM_Switch5_Case1 - Param_SignExtendReturn_Skip11
-	.short	ApplyProgramChange_LoadDRAM_Switch5_Case2 - Param_SignExtendReturn_Skip11
+	.short	Param_SignExtendReturn_Helper3_Switch6_Case1 - Param_SignExtendReturn_Skip11
+	.short	Param_SignExtendReturn_Helper3_Switch6_Case2 - Param_SignExtendReturn_Skip11
 ; 41 x u8 case numbers 0..6.  Param_SignExtendReturn_Skip7 (0xFEE6E3): byte,
 ; then ParamSx_SwitchE.
 ParamSx_CaseMapE:
@@ -9448,25 +9448,25 @@ ParamSx_CaseMapE:
 ; jp_rr 8,xix,..` -- targets 0xFEEEEB + offset (no labels yet).
 ParamSx_SwitchE:
 	.short	Param_SignExtendReturn_Skip12 - Param_SignExtendReturn_Skip8
-	.short	ApplyProgramChange_LoadDRAM_Switch4_Case1 - Param_SignExtendReturn_Skip8
-	.short	ApplyProgramChange_LoadDRAM_Switch4_Case2 - Param_SignExtendReturn_Skip8
-	.short	ApplyProgramChange_LoadDRAM_Switch4_Case3 - Param_SignExtendReturn_Skip8
-	.short	ApplyProgramChange_LoadDRAM_Switch4_Case4 - Param_SignExtendReturn_Skip8
-	.short	ApplyProgramChange_LoadDRAM_Switch4_Case5 - Param_SignExtendReturn_Skip8
-	.short	ApplyProgramChange_LoadDRAM_Switch4_Case6 - Param_SignExtendReturn_Skip8
+	.short	Param_SignExtendReturn_Helper3_Switch5_Case1 - Param_SignExtendReturn_Skip8
+	.short	Param_SignExtendReturn_Helper3_Switch5_Case2 - Param_SignExtendReturn_Skip8
+	.short	Param_SignExtendReturn_Helper3_Switch5_Case3 - Param_SignExtendReturn_Skip8
+	.short	Param_SignExtendReturn_Helper3_Switch5_Case4 - Param_SignExtendReturn_Skip8
+	.short	Param_SignExtendReturn_Helper3_Switch5_Case5 - Param_SignExtendReturn_Skip8
+	.short	Param_SignExtendReturn_Helper3_Switch5_Case6 - Param_SignExtendReturn_Skip8
 ; 10 x s16 offsets.  Param_SignExtendReturn_Skip5 (0xFEE63C): `add xhl,<this>;
 ; ld hl,(xhl); lda xix,(0xFEEE7F); jp_rr` -- targets 0xFEEE7F + offset.
 ParamSx_SwitchF:
-	.short	SndParam_LookupAndDispatch_Code - SndParam_LookupAndDispatch_Code
-	.short	SndParam_LookupAndDispatch_Code - SndParam_LookupAndDispatch_Code
-	.short	SndParam_LookupAndDispatch_Code - SndParam_LookupAndDispatch_Code
-	.short	SndParam_LookupAndDispatch_Code - SndParam_LookupAndDispatch_Code
-	.short	Param_SignExtendReturn_Skip12 - SndParam_LookupAndDispatch_Code
-	.short	SndParam_LookupAndDispatch_Code - SndParam_LookupAndDispatch_Code
-	.short	Param_SignExtendReturn_Skip12 - SndParam_LookupAndDispatch_Code
-	.short	SndParam_LookupAndDispatch_Code - SndParam_LookupAndDispatch_Code
-	.short	Param_SignExtendReturn_Skip12 - SndParam_LookupAndDispatch_Code
-	.short	SndParam_LookupAndDispatch_Code - SndParam_LookupAndDispatch_Code
+	.short	Param_SignExtendReturn_Code3 - Param_SignExtendReturn_Code3
+	.short	Param_SignExtendReturn_Code3 - Param_SignExtendReturn_Code3
+	.short	Param_SignExtendReturn_Code3 - Param_SignExtendReturn_Code3
+	.short	Param_SignExtendReturn_Code3 - Param_SignExtendReturn_Code3
+	.short	Param_SignExtendReturn_Skip12 - Param_SignExtendReturn_Code3
+	.short	Param_SignExtendReturn_Code3 - Param_SignExtendReturn_Code3
+	.short	Param_SignExtendReturn_Skip12 - Param_SignExtendReturn_Code3
+	.short	Param_SignExtendReturn_Code3 - Param_SignExtendReturn_Code3
+	.short	Param_SignExtendReturn_Skip12 - Param_SignExtendReturn_Code3
+	.short	Param_SignExtendReturn_Code3 - Param_SignExtendReturn_Code3
 ; 11 x u8 (0,2,4,5,3,0,1,1,4,2,3).  TmFlash_Return_Prologue (0xFEED38):
 ; `ld xbc,<this>; add xbc,xwa; ld a,(xbc)`.
 TmFlash_ByteMap:
@@ -9475,10 +9475,10 @@ TmFlash_ByteMap:
 ; Subsys_HandlerTable11; kn5000_v10_program.s's absolute .set
 ; Subsys_HandlerTable01 names the same address).
 Subsys_HandlerTable01:
-	.long CommParam_SetComplete_Block	; no label at this target yet; v10: CommParam_SetComplete_Block
+	.long CommParam_SetComplete_Block
 	.long CommParam_SetComplete_Block2
-	.long CommParam_SetComplete_Return2	; no label at this target yet; v10: CommParam_SetComplete_Return2
-	.long CommParam_SetComplete_Return3	; no label at this target yet; v10: CommParam_SetComplete_Return3
+	.long CommParam_SetComplete_Return2
+	.long CommParam_SetComplete_Return3
 ; Sound-RAM data identifier "KN2000": SendPartDataBlock_InitVal7 (0xFEF9D2)
 ; loads it (`lda_24 xhl,(<this>)`) and compares/copies it byte by byte.
 SoundRam_Id_KN2000:
@@ -9506,10 +9506,10 @@ SoundRam_Id_KN5000:
 ; 4 x u32 routine pointers: entry 16 of Subsys_HandlerTableList (VoiceInit_Dispatch
 ; calls one entry of it with every subsystem's table).
 SoundRam_HandlerTable:
-	.long SendPartDataBlock_ClearByte4	; no label at this target yet; v10: SendPartDataBlock_ClearByte4
-	.long SendPartDataBlock_Return4	; no label at this target yet; v10: SendPartDataBlock_Return4
-	.long TmFlash_Return_LoadReg
-	.long TmFlash_Return_LoadReg + 10	; no label at this target yet; v10: SendPartDataBlock_Return5
+	.long SendPartDataBlock_ClearByte4
+	.long SendPartDataBlock_Return4
+	.long SendPartDataBlock_DoGetError
+	.long SendPartDataBlock_Return5
 ; 16 x u8.  HdaeRom_DataHandler_Helper (0xFEF44E): `lda xhl,(<this>);
 ; ld_rrb c,xhl,bc`.
 HdaeRom_DataByteMap:

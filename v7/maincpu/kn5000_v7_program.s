@@ -2661,7 +2661,7 @@ DrawText_QueueDeferred:
 	ld	xwa, (xsp + 8)
 	push	xwa
 	push	xbc
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xwa, (xsp + 28)
 	ld	(xiz + 20), xwa
@@ -2821,7 +2821,7 @@ TextRender_CustomFontWidth:
 	push	xwa
 	lda	xwa, (xsp+42)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xwa, (xsp+38)
 	ld	(xsp+30), xwa
@@ -3232,7 +3232,7 @@ AcChordBox_HandleChordUpdate:
 	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	ld	xwa, 192
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 0:i3
 	jr	nz, AcChordBox_ReturnZero
 	lda	xde, (xsp+4)
@@ -3496,7 +3496,7 @@ EmptyRoutine_03:
 	and	xwa, xix
 	and	xwa, 0xff
 	jr	z, SndParam_RW_ChainCheckFirst
-EmptyRoutine_03_Skip:
+SndParam_RW_ChainExactMatch:
 	ld	hl, 0:i3
 	jr	SndParam_RW_FoundCallback
 SndParam_RW_ChainCheckFirst:
@@ -3508,8 +3508,8 @@ SndParam_RW_FoundCallback:
 SndParam_RW_ChainContinue:
 	ld	xwa, (xde + 8)
 	or	xwa, xwa
-	jr	nz, DkMdlyPly_CheckState_Helper_Loop
-EmptyRoutine_03_Skip2:
+	jr	nz, SndParam_RW_ChainNext
+SndParam_RW_NoEntry:
 	ld	xwa, 0:i3
 SndParam_RW_ProcessResult:
 	ld	xiz, xwa
@@ -3622,31 +3622,6 @@ Boot_CallInitHandlers_Data:	.byte	0x00
 SubCPU_Send_Payload_Data:	.byte	0xff
 
 	.include "boot/rom_end_structure.s"
-
-; v7-specific internal labels for UIStateEvt
-	.set AudioInit_ClearPartFlags_ByMode, UIStateEvt_TransposeUpdate + 3475
-
-	.set AudioInit_ChannelLoop_Body, UIStateEvt_TransposeUpdate + 3679
-	.set UIStateEvt_ParamEdit_Data, UIStateEvt_TransposeUpdate + 94
-	.set UIStateEvt_VolumeMixer_Data, UIStateEvt_TransposeUpdate + 714
-	.set UIStateEvt_EffectSelect_Data, UIStateEvt_TransposeUpdate + 1075
-	.set UIStateEvt_PlayModeGuard_Data, UIStateEvt_TransposeUpdate + 1387
-	.set UIStateEvt_ChannelConfig_Data, UIStateEvt_TransposeUpdate + 1441
-	.set UIStateEvt_StubReturn, UIStateEvt_TransposeUpdate + 1847
-	.set UIStateEvt_MuteToggle_Data, UIStateEvt_TransposeUpdate + 1849
-	.set AudioInit_ConfigStereoVoice, UIStateEvt_TransposeUpdate + 1892
-	.set AudioInit_ConfigureVoiceFromFlags, UIStateEvt_TransposeUpdate + 2107
-	.set AudioInit_SelectVoiceByType, UIStateEvt_TransposeUpdate + 2181
-	.set AudioInit_PushAndConfigVoice, UIStateEvt_TransposeUpdate + 2272
-	.set AudioInit_PushAndConfigVoiceAlt, UIStateEvt_TransposeUpdate + 2272
-	.set AudioInit_CheckSoundGroup, UIStateEvt_TransposeUpdate + 2344
-	.set AudioInit_CheckSoundGroup51, UIStateEvt_TransposeUpdate + 2487
-	.set AudioInit_MixFallbackDefault, UIStateEvt_TransposeUpdate + 2613
-	.set AudioInit_CheckMixMode, UIStateEvt_TransposeUpdate + 2623
-	.set AudioInit_DrumSaveReturn, UIStateEvt_TransposeUpdate + 2709
-	.set AudioInit_VoiceParamCtrl, UIStateEvt_TransposeUpdate + 2738
-	.set AudioInit_DrumRoutingCheck, UIStateEvt_TransposeUpdate + 2872
-	.set Audio_CheckInitStatus, UIStateEvt_TransposeUpdate + 3598
 
 ; v7-specific internal labels for .incbin-replaced blocks
 	.set SeqPlay_ConfigureVoiceChannels, SeqPlay_VoiceChannelCfg + 11

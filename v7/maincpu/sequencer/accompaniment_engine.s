@@ -7384,7 +7384,7 @@ AccAutoPlay_NoteDispatch_Process:
 	bit 0, (0x33fc:16)
 	jr z, AccAutoPlay_NoteDispatch_Return
 	and (0x28b3:16), 0xf7
-	call PerfMode_Handler_EvtB_Helper2_Helper11
+	call Audio_CheckSubsystemReady
 AccAutoPlay_NoteDispatch_Return:
 	ret
 
@@ -8699,12 +8699,12 @@ AccReplay_FullStop:
 	ld wa, 0:i3
 	ld D, 0x05:opc
 	ld E, 0x48:opc
-	call SysEx_ApplyVoiceParam_49
+	call SwbtWr_QueuePostEvent
 	and (0xfc60:16), 0xfb
 	ld wa, 0:i3
 	ld D, 0x06:opc
 	ld E, 0x48:opc
-	call SysEx_ApplyVoiceParam_49
+	call SwbtWr_QueuePostEvent
 AccReplay_Stop_ClearPedals:
 .Lc_f5aef4:
 	call Seq_DispatcherEntry
@@ -9942,7 +9942,7 @@ AccDir_DispatchEvent:
 	ld D, 0x07:opc
 	ld a, (0xfc61:16)
 	ld W, 0x30:opc
-	call SysEx_ApplyVoiceParam_49
+	call SwbtWr_QueuePostEvent
 	ld a, (0xfd99:16)
 	and A,0x70
 	cp A,0x10
@@ -10589,7 +10589,7 @@ AccStyle_IndexedLookup:
 	ld	e, 144:opc
 	ld	d, 16:opc
 	ld	w, 255:opc
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 AccStyle_IndexedLookup_Ret:
 	ret
 
@@ -10611,7 +10611,7 @@ AccStyle_ModeEnter:
 	jr z, .Lc_f5c281
 	call SeqAcc_SetIndicator_PB
 	ldw (0xf19e:16), 0x0000
-	call PerfMode_Handler_EvtB_Helper2_Helper11
+	call Audio_CheckSubsystemReady
 	or (0x3335:16), 0x01
 AccStyle_ModeEnter_SetFlags:
 .Lc_f5c281:
@@ -14379,7 +14379,7 @@ AccPatch_PartChanges_MapLookup:
 	ld	e, 144:opc
 	ld	d, 16:opc
 	ld	w, 255:opc
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 AccPatch_PartChanges_Update:
 	calr AccPatch_SyncAllVoiceParams
 
@@ -14472,14 +14472,14 @@ AccPatch_UpdateChain_Rhythm:
 	ld	d, 1:opc
 	ld	w, 127:opc
 	ld	e, 19:opc
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 	pop	e
 	push	e
 	ld	a, e
 	ld	d, 0:opc
 	ld	w, 255:opc
 	ld	e, 19:opc
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 	pop e
 	pop d
 	ld	h, d
@@ -14493,7 +14493,7 @@ AccPatch_UpdateChain_Rhythm:
 	ld	d, 4:opc
 	ld	w, 64:opc
 	ld	e, 19:opc
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 	pop	xiy
 	ret
 AccPatch_UpdateChain_Bass:
@@ -14527,14 +14527,14 @@ AccPatch_UpdateChain_Bass:
 	ld	d, 1:opc
 	ld	w, 127:opc
 	ld	e, 20:opc
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 	pop	e
 	push	e
 	ld	a, e
 	ld	d, 0:opc
 	ld	w, 255:opc
 	ld	e, 20:opc
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 	pop e
 	pop d
 	ld	h, d
@@ -14548,7 +14548,7 @@ AccPatch_UpdateChain_Bass:
 	ld	d, 4:opc
 	ld	w, 64:opc
 	ld	e, 20:opc
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 	pop	xiy
 	ret
 AccPatch_UpdateChain_Acc1:
@@ -14581,14 +14581,14 @@ AccPatch_UpdateChain_Acc1:
 	ld	d, 1:opc
 	ld	w, 127:opc
 	ld	e, 16:opc
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 	pop	e
 	push	e
 	ld	a, e
 	ld	d, 0:opc
 	ld	w, 255:opc
 	ld	e, 16:opc
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 	pop e
 	pop d
 	ld	h, d
@@ -14602,7 +14602,7 @@ AccPatch_UpdateChain_Acc1:
 	ld	d, 4:opc
 	ld	w, 64:opc
 	ld	e, 16:opc
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 	pop	xiy
 	ret
 AccPatch_UpdateChain_Acc2:
@@ -14635,14 +14635,14 @@ AccPatch_UpdateChain_Acc2:
 	ld	d, 1:opc
 	ld	w, 127:opc
 	ld	e, 17:opc
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 	pop	e
 	push	e
 	ld	a, e
 	ld	d, 0:opc
 	ld	w, 255:opc
 	ld	e, 17:opc
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 	pop e
 	pop d
 	ld	h, d
@@ -14656,7 +14656,7 @@ AccPatch_UpdateChain_Acc2:
 	ld	d, 4:opc
 	ld	w, 64:opc
 	ld	e, 17:opc
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 	pop	xiy
 	ret
 AccPatch_UpdateChain_Acc3:
@@ -14690,7 +14690,7 @@ AccPatch_UpdateChain_Acc3:
 	ld	w, 127:opc
 	ld	e, 18:opc
 	push	xiy
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 	pop	xiy
 	pop	e
 	push	e
@@ -14699,7 +14699,7 @@ AccPatch_UpdateChain_Acc3:
 	ld	w, 255:opc
 	ld	e, 18:opc
 	push	xiy
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 	pop	xiy
 	pop e
 	pop d
@@ -14716,7 +14716,7 @@ AccPatch_UpdateChain_Acc3:
 	ld	d, 4:opc
 	ld	w, 64:opc
 	ld	e, 18:opc
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 	pop	xiy
 	ret
 AccPatch_SyncAllVoiceParams:
@@ -23216,7 +23216,7 @@ DrumKitInit_ClearAssignFlags:
 	xor wa, wa
 
 	; call SwbtWr_QueuePostEvent (v7 addr)
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 DrumKitInit_CheckExtAssign:
 	bit	2, (0xfc60:16)
 	jr	z, DrumKitInit_FinalSetup
@@ -23224,13 +23224,13 @@ DrumKitInit_CheckExtAssign:
 	ld	d, 6:opc
 	ld	e, 72:opc
 	xor	wa, wa
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 DrumKitInit_FinalSetup:
 	call	AccPatch_CountSlots_Wrapper
 	ld	(0x3470:16), 0
 	call	SeqAcc_SetIndicator_PB
 	ldw	(0xf19e:16), 0
-	call	PerfMode_Handler_EvtB_Helper2_Helper11
+	call	Audio_CheckSubsystemReady
 	and	(0xe31c:16), 158
 	or	(0x3431:16), 64
 DrumKitInit_Return:
@@ -23381,7 +23381,7 @@ DrumKit_PostMidiEvents:
 	ld	d, 1:opc
 	ld	w, 0:opc
 	push_a
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 	pop_a
 	ld	h, a
 	ld	e, 72:opc
@@ -23391,7 +23391,7 @@ DrumKit_PostMidiEvents:
 	ld	w, 0:opc
 	push	h
 	push_a
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 	pop_a
 	pop	h
 	ld	l, a
@@ -23528,7 +23528,7 @@ DrumKit_UpdateStatusFlags_Helper3:
 	ld	w, 8:opc
 	ld	e, 72:opc
 	ld	d, 3:opc
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 DrumKit_UpdateStatusFlags_Return2:
 	ret
 DrumSlot_DispatchWrapper:
@@ -27390,7 +27390,7 @@ VoiceSlot_Dispatch_Return_Helper:
 	ld	w, 0:opc
 	ld	e, 72:opc
 	ld	d, 0:opc
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 	ret
 DrumParam_ProcessChannel:
 	push xiz
@@ -31687,7 +31687,7 @@ MiddleNameFunc:
 	jr	nz, MiddleName_ReturnZero
 	push	xde
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	push	xde
 	push	xhl
@@ -31703,7 +31703,7 @@ MiddleNameFunc:
 MiddleName_HandleEvent01:
 	push	xde
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	c, (32418:16)
 	ld	a, c
@@ -31725,7 +31725,7 @@ MiddleName_CopyAndPost:
 	pushw	0
 	pushw	13344
 	push	xwa
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xsp, (xsp+10)
 	ldw	wa, 202
 MiddleName_PostModeChange:
@@ -31780,10 +31780,10 @@ MainCmpCpFunc:
 	inc	2, xsp
 	ld	xiz, xhl
 	ld	xwa, 163840
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	(xsp+7), l
 	ld	xwa, 163841
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	lda	xwa, (xsp+4)
 	ld	(xwa+4), l
 	ld	(xwa+2), 72
@@ -31812,10 +31812,10 @@ MainCmpCp_HandleEvent03:
 	inc	2, xsp
 	ld	xiz, xhl
 	ld	xwa, 163840
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	(xsp+7), l
 	ld	xwa, 163841
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	lda	xwa, (xsp+4)
 	ld	(xwa+4), l
 	ld	(xwa+2), 72
@@ -32263,7 +32263,7 @@ AccGuard_CheckMode09:
 
 AccGuard_SendProgramChange:
 	ld	xwa, 163968
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 0:i3
 	ret	z
 	ldw	wa, 237
@@ -32401,7 +32401,7 @@ MspMenuTtlFunc:
 ; MspMenuTtlFunc title dispatch
 MspMenuTtl_Dispatch:
 	ld	xwa, 165888
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	l, 13
 	jr	c, MspMenuTtlFunc_Skip
 	cp	l, 16
@@ -32431,7 +32431,7 @@ MspMenuTtlFunc_Join2:
 	push	xwa
 	pushw	0
 	pushw	13344
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xsp, (xsp+10)
 	ld	(13360:16), 0
 MspNameTtl_ReturnZero:
@@ -32469,7 +32469,7 @@ MspNameTtl_Dispatch:
 	ld	de, 0:i3
 
 	; call	SoundParam_NotifyChange (v7 addr)
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 MspNameTtl_Dispatch_Code_Entry:
 	; cpdi8	(0x8d37), 204 (v7 patched)
 	cp	(PREVIOUS_TITLE:16), 204
@@ -32528,9 +32528,9 @@ MspRecTtl_Dispatch:
 	ld	xwa, 164099
 	ld	bc, 0:i3
 	ld	de, 3:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	ld	xwa, 165888
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	l, 13
 	jr	z, MspRecTtl_Dispatch_Code_Skip
 	cp	l, 14
@@ -32558,7 +32558,7 @@ MspRecTtl_Dispatch_Code_Skip2:
 	jr	MspRecTtl_ReturnZero
 MspRecTtl_SubA:
 	ld	xwa, 165888
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	l, 13
 	jr	z, MspRecTtl_SubA_CheckRange
 	cp	l, 14
@@ -32720,10 +32720,10 @@ SndArgNmGet:
 	ldw	bc, 10
 	ldirw
 	ld	xwa, 163840
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	(xsp+9), l
 	ld	xwa, 163841
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	lda	xwa, (xsp+6)
 	ld	(xwa+4), l
 	ld	(xwa+2), 72
@@ -35080,7 +35080,7 @@ AccBankData_FinalizeCheck:
 	ld	bc, (xwa)
 	ld	xwa, 4:i3
 	ld	de, 3:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	call	SeqTimer_UpdateTempoReg
 	ld	xbc, (0x3cc0:16)
 	add	xbc, 93184
@@ -35248,7 +35248,7 @@ AccBankData_NotifyAndUpdateTempo:
 	ld	bc, (xwa)
 	ld	xwa, 4:i3
 	ld	de, 3:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	call	SeqTimer_UpdateTempoReg
 AccBankData_PostModeChange:
 	ldw wa, 0x16
@@ -35646,7 +35646,7 @@ StylCnvModl_CopyDefaultName:
 	pushw	0
 	pushw	58124
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 StylCnvModl_DrawListUI:
 	ld xwa, 0x110007
@@ -36483,7 +36483,7 @@ StylCnvDisp_CheckType:
 	ld	xwa, 1047553
 	push	xwa
 	push	xbc
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	(15466:16), 5
 	ldw	wa, 20
@@ -36524,7 +36524,7 @@ StylCnvDisp_Subtype10_Process:
 	lda	xwa, (15468:16)
 	push	xwa
 StylCnvDisp_CopyAndFinalize:
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jrl	StylCnv_ClearAndFinalize
 StylCnvDisp_Subtype80_Process:
@@ -36804,7 +36804,7 @@ StylCnv_Type3_SearchLoop:
 	push	xhl
 	lda	xwa, (xsp+22)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	pushw	0
 	pushw	18416
 	lda	xwa, (xsp+30)
@@ -36818,7 +36818,7 @@ StylCnv_Type3_SearchLoop:
 	extz	xwa
 	add	xwa, xbc
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	lda	xsp, (xsp+24)
 	ld	de, (xsp+4)
 	sll	de, 2
@@ -36850,7 +36850,7 @@ StylCnv_Type3_LoadFileLoop:
 	push	xwa
 	lda	xwa, (xsp+22)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xwa, (xsp+18)
 	ld	xbc, StylCnv_ModeRb_Type3
@@ -36893,7 +36893,7 @@ StylCnv_Type3_LoadFileLoop:
 	jr	z, StylCnv_Type3_EmptyName
 	push	xhl
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	StylCnv_Type3_CloseFile
 StylCnv_Type3_EmptyName:
@@ -37244,7 +37244,7 @@ StylCnv_Type6_Case1_CopyName:
 	push XBC
 	lda xwa, (xsp + 0x16)
 	push XWA
-	call Free_Compare2
+	call Strcpy
 	inc 8,XSP
 	ld xwa, (0x3cc0:16)
 	ld (XSP+0x0a),XWA
@@ -37572,7 +37572,7 @@ StylCnv_Multi_ParseLoop:
 	add XWA,(XSP+0x12)
 	inc 1,XWA
 	push XWA
-	call Free_Compare2
+	call Strcpy
 	inc 8,XSP
 	incw 1, (0x39e6:16)
 	jr t, StylCnv_Multi_Finalize
@@ -37593,7 +37593,7 @@ StylCnv_Multi_HandleSeparator:
 	add XWA,(XSP+0x12)
 	inc 1,XWA
 	push XWA
-	call Free_Compare2
+	call Strcpy
 	inc 8,XSP
 	lda xbc, (xsp + 0x12)
 	ld XWA,XBC

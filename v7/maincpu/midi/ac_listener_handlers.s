@@ -66,7 +66,7 @@ AcLswBox_PushDefaultStr:
 AcLswBox_StrcpyAndReturn:
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jrl	AudioMix_ReturnZeroJmp2
 AcLswBox_HandlePut:
@@ -294,7 +294,7 @@ AcLswEdit_PushDefaultStr:
 AcLswEdit_StrcpyAndReturn:
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jrl	AudioMix_ReturnZeroJmp
 AcLswEdit_HandlePut:
@@ -707,7 +707,7 @@ FadeGrid_GetViewAndStrcpy:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	AudioMix_ReturnZeroJmp3
 AcFadeSetGridBoxProc_OnLswData:	; cases 29360156, 29360157
@@ -888,7 +888,7 @@ FadeSetGridCheck_Skip2:
 FadeSetGridCheck_Skip3:
 	push	xwa
 	push	xbc
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -925,7 +925,7 @@ AcInOutGrid_Handler:
 	jr nz, SndParam_ReturnZero2
 
 SndParam_LookupAndSendCmd:
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	pushw	hl
 	pushw	SndParam_LookupAndSendCmd_Str_Fmt2d_measure@hi16
 	pushw	SndParam_LookupAndSendCmd_Str_Fmt2d_measure@lo16
@@ -939,7 +939,7 @@ SndParam_LookupAndSendCmd:
 	ld	xbc, EVT_GRID_DRAW
 	jr	SndParam_SendEventAndReturn
 SndParam_FormatAndDisplay:
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	lda	xbc, (xsp+12)
 	ld	xwa, SndParam_FormatAndDisplay_Str_2
 	cp	hl, 0:i3
@@ -948,7 +948,7 @@ SndParam_FormatAndDisplay:
 SndParam_PushStrAndCopy:
 	push	xwa
 	push	xbc
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -1065,7 +1065,7 @@ AcInOutGridBoxProc_OnIndexswUp:	; cases 29360151, 29360153
 	call	SendEvent
 	ld	iz, hl
 	ld	xwa, 20480
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	wa, iz
 	add	wa, wa
 	cp	hl, 0:i3
@@ -1143,7 +1143,7 @@ AcInOutGridBoxProc_OnIndexswDown:	; cases 29360152, 29360154
 	call	SendEvent
 	ld	iz, hl
 	ld	xwa, 20480
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	wa, iz
 	add	wa, wa
 	cp	hl, 0:i3
@@ -1215,7 +1215,7 @@ AcInOutGrid_GetColText:
 
 AcInOutGrid_GetRowText:
 	ld	xwa, 20480
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 2:i3
 	jr	z, AcInOutGrid_GetRowText_Src2
 	cp	hl, 1:i3
@@ -1237,7 +1237,7 @@ AcInOutGrid_GetRowText_Push:
 AcInOutGrid_Strcpy:
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	AcInOutGrid_ReturnZero
 AcInOutGridBoxProc_OnLswData:	; cases 29360156, 29360157
@@ -1343,7 +1343,7 @@ InOutGridCheck_Switch2_Case2:
 	jrl	InOutGridCheck_Join
 InOutGridCheck_Switch2_Case3:
 	ld	xwa, 0x5000
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 2:i3
 	jr	z, InOutGridCheck_Skip
 	cp	hl, 1:i3
@@ -1424,7 +1424,7 @@ InOutGridCheck_Switch3_Case2:
 	jr	InOutGridCheck_Join
 InOutGridCheck_Switch3_Case3:
 	ld	xwa, 0x5000
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 2:i3
 	jr	z, InOutGridCheck_Skip2
 	cp	hl, 1:i3
@@ -1494,7 +1494,7 @@ InOutGridCheck_OnLswData:
 	ld	xwa, (xbc+wa)
 	push	xwa
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -1508,7 +1508,7 @@ InOutGridCheck_Skip3:
 	ld	xwa, (xhl+wa)
 	push	xwa
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -1531,7 +1531,7 @@ InOutGridCheck_Skip4:
 	ld	xwa, (xhl+wa)
 	push	xwa
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -1550,7 +1550,7 @@ InOutGridCheck_Skip5:
 	ld	xwa, (xhl+wa)
 	push	xwa
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -1569,7 +1569,7 @@ InOutGridCheck_Skip6:
 	ld	xwa, (xhl+wa)
 	push	xwa
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -1584,7 +1584,7 @@ InOutGridCheck_Skip6:
 InOutGridCheck_Skip7:
 	ldw	(xbc), 3
 	ld	xwa, 0x5000
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	nz, InOutGridCheck_Skip8
 	ld	wa, (xiz+4)
@@ -1602,7 +1602,7 @@ InOutGridCheck_Skip8:
 	pushw	Data_InOutGridDispatch_Str_Blank5@lo16
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 InOutGridCheck_Join2:
 	call	GetFocusObject
@@ -1613,7 +1613,7 @@ InOutGridCheck_Join2:
 InOutGridCheck_Skip9:
 	ldw	(xbc), 3
 	ld	xwa, 0x5000
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 2:i3
 	jr	nz, InOutGridCheck_Skip10
 	; v10 does not spell this byte either
@@ -1632,7 +1632,7 @@ InOutGridCheck_Skip10:
 	pushw	Data_InOutGridDispatch_Str_Blank5_2@lo16
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 InOutGridCheck_Join3:
 	call	GetFocusObject
@@ -1647,7 +1647,7 @@ InOutGridCheck_Skip11:
 	ld	xwa, (xhl+wa)
 	push	xwa
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -1661,7 +1661,7 @@ InOutGridCheck_Skip12:
 	ld	xwa, (xhl+wa)
 	push	xwa
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -1675,7 +1675,7 @@ InOutGridCheck_Skip13:
 	ld	xwa, (xhl+wa)
 	push	xwa
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -1692,7 +1692,7 @@ InOutGridCheck_Entry:
 	ld	xwa, (xhl+bc)
 	push	xwa
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -1724,14 +1724,14 @@ ParaLoadOpt_Entry:
 
 Data_ParaLoadOptDispatch:
 	ld	xwa, 8448
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda	xwa, (Data_InOutGridDispatch_PtrTable_2:24)
 	ld	xwa, (xwa+hl)
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -1740,14 +1740,14 @@ Data_ParaLoadOptDispatch:
 	jrl	InOutGridCheck_Join4	; -> 0xF75DF0
 Data_InOutGridDispatch_Case1:
 	ld	xwa, 8449
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda	xwa, (Data_InOutGridDispatch_PtrTable:24)
 	ld	xwa, (xwa+hl)
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -1756,14 +1756,14 @@ Data_InOutGridDispatch_Case1:
 	jrl	InOutGridCheck_Join4	; -> 0xF75DF0
 Data_InOutGridDispatch_Case2:
 	ld	xwa, 20480
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda	xwa, (Data_InOutGridDispatch_PtrTable_3:24)
 	ld	xwa, (xwa+hl)
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -1771,7 +1771,7 @@ Data_InOutGridDispatch_Case2:
 	ld	xbc, EVT_GRID_DRAW
 	call	SendEvent
 	ld	xwa, 20480
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 2:i3
 	jr	z, InOutGridCheck_Skip15	; -> 0xF75C6B
 	lda	xwa, (xsp+6)
@@ -1784,7 +1784,7 @@ Data_InOutGridDispatch_Case2:
 	pushw	Data_ParaLoadOptDispatch_Str_Blank5@lo16
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -1794,7 +1794,7 @@ Data_InOutGridDispatch_Case2:
 InOutGridCheck_Skip14:
 	ldw	(xwa), 3
 	ld	xwa, 20481
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	exts	hl
 	pushw	hl
 	pushw	Data_ParaLoadOptDispatch_Str_Fmt3d@hi16
@@ -1811,7 +1811,7 @@ InOutGridCheck_Skip14:
 InOutGridCheck_Skip15:
 	ldw	(xsp+6), 3
 	ld	xwa, 20482
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	pushw	hl
 	pushw	Data_ParaLoadOptDispatch_Str_Fmt3d_2@hi16
 	pushw	Data_ParaLoadOptDispatch_Str_Fmt3d_2@lo16
@@ -1826,7 +1826,7 @@ InOutGridCheck_Skip15:
 	jrl	InOutGridCheck_Join4	; -> 0xF75DF0
 Data_InOutGridDispatch_Case3:
 	ld	xwa, 20480
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 2:i3
 	jr	z, InOutGridCheck_Skip17	; -> 0xF75D01
 	cp	hl, 1:i3
@@ -1837,7 +1837,7 @@ Data_InOutGridDispatch_Case3:
 	pushw	Data_ParaLoadOptDispatch_Str_Blank5_2@lo16
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -1846,7 +1846,7 @@ Data_InOutGridDispatch_Case3:
 	jrl	InOutGridCheck_Join4	; -> 0xF75DF0
 InOutGridCheck_Skip16:
 	ld	xwa, 20481
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	exts	hl
 	pushw	hl
 	pushw	Data_ParaLoadOptDispatch_Str_Fmt3d_3@hi16
@@ -1862,7 +1862,7 @@ InOutGridCheck_Skip16:
 	jrl	InOutGridCheck_Join4	; -> 0xF75DF0
 InOutGridCheck_Skip17:
 	ld	xwa, 20482
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	pushw	hl
 	pushw	Data_ParaLoadOptDispatch_Str_Fmt3d_4@hi16
 	pushw	Data_ParaLoadOptDispatch_Str_Fmt3d_4@lo16
@@ -1877,14 +1877,14 @@ InOutGridCheck_Skip17:
 	jrl	InOutGridCheck_Join4	; -> 0xF75DF0
 Data_InOutGridDispatch_Case5:
 	ld	xwa, 8577
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda	xwa, (Data_InOutGridDispatch_PtrTable:24)
 	ld	xwa, (xwa+hl)
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -1893,14 +1893,14 @@ Data_InOutGridDispatch_Case5:
 	jrl	InOutGridCheck_Join4	; -> 0xF75DF0
 Data_InOutGridDispatch_Case6:
 	ld	xwa, 8580
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda	xwa, (Data_InOutGridDispatch_PtrTable:24)
 	ld	xwa, (xwa+hl)
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -1909,14 +1909,14 @@ Data_InOutGridDispatch_Case6:
 	jr	InOutGridCheck_Join4	; -> 0xF75DF0
 Data_InOutGridDispatch_Case7:
 	ld	xwa, 8578
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda	xwa, (Data_InOutGridDispatch_PtrTable:24)
 	ld	xwa, (xwa+hl)
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -1925,14 +1925,14 @@ Data_InOutGridDispatch_Case7:
 	jr	InOutGridCheck_Join4	; -> 0xF75DF0
 Data_InOutGridDispatch_Case8:
 	ld	xwa, 8579
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda	xwa, (Data_InOutGridDispatch_PtrTable:24)
 	ld	xwa, (xwa+hl)
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -2000,7 +2000,7 @@ IvMpst_HandleGetName:
 	pushw	InOutGridCheck_CaseTable_Strings@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jrl	IvMpst_ReturnZero
 IvMpst_HandlePageSwitch:

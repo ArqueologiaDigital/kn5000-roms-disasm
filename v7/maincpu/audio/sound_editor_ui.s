@@ -16213,7 +16213,7 @@ PsCstmCpNameBox_HandleEvt2D:
 	push XWA
 	lda xwa, (xsp + 0x08)
 	push XWA
-	call Free_Compare2
+	call Strcpy
 	inc 8,XSP
 	lda xde, (xsp + 0x04)
 	ld XWA,XIZ
@@ -16228,7 +16228,7 @@ PsCstmCpNameBox_HandleEvt2E:
 	push XWA
 	lda xwa, (xsp + 0x08)
 	push XWA
-	call Free_Compare2
+	call Strcpy
 	inc 8,XSP
 	lda xde, (xsp + 0x04)
 	ld XWA,XIZ
@@ -16765,13 +16765,13 @@ CmpNamingCheck:
 	pushw	0
 	pushw	13344
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	pushw	13
 	pushw	0
 	pushw	13344
 	pushw	2
 	pushw	3156
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xsp, (xsp+18)
 	ld	(134241:24), 0
 	ld	xhl, xiz
@@ -17104,7 +17104,7 @@ EasyCmp_GridCheck_Case2:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	EasyCmp_ReturnZeroJmp
 EasyCmp_GridCheck_Case3:
@@ -17299,7 +17299,7 @@ EasyCmp_GridEvtCase_Default:
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	MspNameBnkFunc_Epilogue
@@ -17331,7 +17331,7 @@ EasyCmp_GridEvtCase_Epilogue:
 	push	xwa
 	pushw	0
 	pushw	13344
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xsp, (xsp+10)
 	ld	(13360:16), 0
 MspNaming_CleanupExit:
@@ -17353,13 +17353,13 @@ MspNamingCheck:
 	pushw	0
 	pushw	13344
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	pushw	16
 	pushw	0
 	pushw	13344
 	pushw	2
 	pushw	3184
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xsp, (xsp+18)
 	ld	xhl, xiz
 	jr	MspNamingCheck_Epilogue
@@ -17488,7 +17488,7 @@ VwVariBoxProc:
 VwVariBox_Init:
 	ld xwa, 0x28800
 
-	call AcApcToggleProc_Helper
+	call SndParam_LookupReadOnly
 
 	ld (xsp + 6), hl
 
@@ -17537,7 +17537,7 @@ VwVariBox_Match:
 	call GetViewInstance
 	ld XIZ,XHL
 	ld XWA,0x00028800
-	call AcApcToggleProc_Helper
+	call SndParam_LookupReadOnly
 	ld (XSP+0x06),HL
 	ld XWA,(XSP+0x0114)
 	ld XWA,(XWA)
@@ -17833,7 +17833,7 @@ MspBnkShow:
 	cp	xhl, xiz
 	jr	z, MspBnk_ReturnZero
 	ld	xwa, 165888
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 10
 	jr	ge, MspBnk_SendEvt56_Case2
 	ld	xwa, 13107201
@@ -18707,7 +18707,7 @@ MspPlayModeFunc_DataBlock:
 	push	xwa
 	ld	xwa, (xiz+18)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, (xsp+12)
 	jr	MspPlayModeFunc_Epilogue
@@ -18968,7 +18968,7 @@ AcSndArgGrid_CopyText:
 	push	xwa
 	ld	xwa, (xsp+22)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jrl	AcSndArgGrid_ReturnHandled
 AcSndArgGridBoxProc_OnLswData:
@@ -19184,7 +19184,7 @@ SndArgGridCheck_PlayCol_4:
 SndArgGridCheck_PlayCol_Strcpy:
 	push	xwa
 	push	xbc
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 SndArgGridCheck_PlayCol_Send:
 	call GetFocusObject
@@ -19412,7 +19412,7 @@ ParaListBox_HandleEvtF:
 	push	xwa
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xbc, (xsp+6)
 	ld	xix, (xbc+38)
@@ -19490,7 +19490,7 @@ StylCnvStorBnkSel_DataBlock:
 	push	xwa
 	ld	xwa, (xhl+18)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	StylCnvStorBnkSel_Epilogue
@@ -19544,7 +19544,7 @@ SCTxtBox_HandleEvtBC:
 	pushw	15564
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -19597,7 +19597,7 @@ SCTxtBox2_HandleEvtBC:
 	pushw	15564
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -20240,7 +20240,7 @@ StylCnvVer_HandleEvtBC:
 	pushw	16076
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xde, (xsp+4)
 	ld	xwa, xiz

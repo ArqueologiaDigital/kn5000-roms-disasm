@@ -4620,7 +4620,7 @@ PasswordOk:
 	pushw	PasswordOk_Str_Query_Query@hi16
 	pushw	PasswordOk_Str_Query_Query@lo16
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	PwdOk_Exit
@@ -4673,7 +4673,7 @@ CheckPasswordOk:
 	pushw	CheckPasswordOk_Str_Query_Query@hi16
 	pushw	CheckPasswordOk_Str_Query_Query@lo16
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
 	jrl	CheckOk_Exit

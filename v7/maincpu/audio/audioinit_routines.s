@@ -1,4 +1,3 @@
-; v10 name for this address: AudioInit_ConfigStereoVoice -- not a label here: v7 defines that name outside this span (= 0xFDE5F7)
 ; ============================================================================
 ; AudioInit_ConfigStereoVoice - Configure stereo voice routing and panning
 ; ============================================================================
@@ -7,7 +6,7 @@
 ; Default handler in voice-source dispatch table. Routes voices by type:
 ; simple stereo (type < 3) or extended routing with panning configuration.
 ; ============================================================================
-AudioInit_VoiceNotConfigured_Code_Helper:
+AudioInit_ConfigStereoVoice:
 	ld	a, (PART_SELECT:16)
 	extz	wa
 	lda	xbc, (AudioInit_ChannelMapA:24)
@@ -80,7 +79,7 @@ AudioInit_RouteAndPan:
 	call	AudioInit_ConfigureVoiceRouting
 	call	AudioInit_ConfigurePanning
 	jp	AudioInit_CheckStereoMode
-; v10 name for this address: AudioInit_ConfigureVoiceFromFlags -- not a label here: v7 defines that name outside this span (= 0xFDE6CE)
+AudioInit_ConfigureVoiceFromFlags:
 	ld	bc, (0xc4fc:16)
 	bit	0, bc
 	jr	z, AudioInit_FallbackToStereo
@@ -104,8 +103,8 @@ AudioInit_VoiceRouteJump:
 	jp	AudioInit_ConfigurePanning
 AudioInit_FallbackToStereo:
 	extz	wa
-	jrl	AudioInit_VoiceNotConfigured_Code_Helper
-; v10 name for this address: AudioInit_SelectVoiceByType -- not a label here: v7 defines that name outside this span (= 0xFDE718)
+	jrl	AudioInit_ConfigStereoVoice
+AudioInit_SelectVoiceByType:
 	ld	a, (0x36ff:16)
 	cp	a, 0x60
 	jr	z, AudioInit_StereoVoiceCfg
@@ -138,7 +137,7 @@ AudioInit_StereoVoiceCfg:
 	ld	(0xc163:16), 20
 	orw	(0xc500:16), 2
 	ret
-; v10 name for this address: AudioInit_PushAndConfigVoice -- not a label here: v7 defines that name outside this span (= 0xFDE773)
+AudioInit_PushAndConfigVoice:
 	dec	2, xsp
 	ld	(xsp), a
 	cp	(xsp), 0x1
@@ -146,10 +145,10 @@ AudioInit_StereoVoiceCfg:
 	orw	(0xc4f8:16), 2
 	ld	a, (xsp)
 	extz	wa
-	calr	AudioInit_VoiceNotConfigured_Code_Helper
+	calr	AudioInit_ConfigStereoVoice
 	inc	2, xsp
 	ret
-; v10 name for this address: AudioInit_PushAndConfigVoiceAlt -- not a label here: v7 defines that name outside this span (= 0xFDE773)
+AudioInit_PushAndConfigVoiceAlt:
 	dec	2, xsp
 	ld	(xsp), a
 	cp	(xsp), 0x1
@@ -163,11 +162,11 @@ AudioInit_StereoVoiceCfg:
 AudioInit_LoadStackAndConfig:
 	ld	a, (xsp)
 	extz	wa
-	calr	AudioInit_VoiceNotConfigured_Code_Helper
+	calr	AudioInit_ConfigStereoVoice
 AudioInit_RestoreStack:
 	inc	2, xsp
 	ret
-; v10 name for this address: AudioInit_CheckSoundGroup -- not a label here: v7 defines that name outside this span (= 0xFDE7BB)
+AudioInit_CheckSoundGroup:
 	cp	(CURRENT_TITLE:16), 3
 	jr	z, AudioInit_LoadGroupVoice
 	cp	(CURRENT_TITLE:16), 8
@@ -211,11 +210,11 @@ AudioInit_CheckGroupBit5_FBF1:
 	jp	AudioInit_ConfigurePanning
 AudioInit_GroupFallbackStereo:
 	extz	wa
-	jrl	AudioInit_VoiceNotConfigured_Code_Helper
+	jrl	AudioInit_ConfigStereoVoice
 AudioInit_GroupFallbackDefault:
 	extz	wa
-	jrl	AudioInit_VoiceNotConfigured_Code_Helper
-; v10 name for this address: AudioInit_CheckSoundGroup51 -- not a label here: v7 defines that name outside this span (= 0xFDE84A)
+	jrl	AudioInit_ConfigStereoVoice
+AudioInit_CheckSoundGroup51:
 	cp	(CURRENT_TITLE:16), 81
 	jr	nz, AudioInit_G51FallbackDefault
 	ld	c, (PART_SELECT:16)
@@ -256,11 +255,11 @@ AudioInit_CheckG51Bit5_FBF1:
 	jp	AudioInit_ConfigurePanning
 AudioInit_G51FallbackStereo:
 	extz	wa
-	jrl	AudioInit_VoiceNotConfigured_Code_Helper
+	jrl	AudioInit_ConfigStereoVoice
 AudioInit_G51FallbackDefault:
 	extz	wa
-	jrl	AudioInit_VoiceNotConfigured_Code_Helper
-; v10 name for this address: AudioInit_CheckMixMode -- not a label here: v7 defines that name outside this span (= 0xFDE8D2)
+	jrl	AudioInit_ConfigStereoVoice
+AudioInit_CheckMixMode:
 	ld	c, (CURRENT_TITLE:16)
 	cp	c, 0x76
 	jr	z, AudioInit_LoadAndConfigure
@@ -269,7 +268,7 @@ AudioInit_G51FallbackDefault:
 	cp	c, 0x72
 	jr	z, AudioInit_LoadAndConfigure
 	cp	c, 0x6f
-	jr	nz, AudioInit_VoiceNotConfigured_Code_Skip
+	jr	nz, AudioInit_MixFallbackDefault
 AudioInit_LoadAndConfigure:
 	ld	c, (PART_SELECT:16)	; LD C, (238D3Ah) - 24-bit addressing mode
 	extz	bc
@@ -286,17 +285,15 @@ AudioInit_LoadAndConfigure:
 	ret
 AudioInit_MixFallbackConfig:
 	extz	wa
-	calr	AudioInit_VoiceNotConfigured_Code_Helper
+	calr	AudioInit_ConfigStereoVoice
 	ret
-; v10 name for this address: AudioInit_MixFallbackDefault -- not a label here: v7 defines that name outside this span (= 0xFDE8C8)
-AudioInit_VoiceNotConfigured_Code_Skip:
+AudioInit_MixFallbackDefault:
 	extz	wa
-	jrl	AudioInit_VoiceNotConfigured_Code_Helper
-AudioModeChange_Handler_Code:
+	jrl	AudioInit_ConfigStereoVoice
+AudioInit_MixFallbackDefault_Code:
 	extz	wa
-	jrl	AudioInit_VoiceNotConfigured_Code_Helper
-; v10 name for this address: AudioInit_DrumSaveReturn -- not a label here: v7 defines that name outside this span (= 0xFDE928)
-DSPCfg_EventType50_Code_Helper:
+	jrl	AudioInit_ConfigStereoVoice
+AudioInit_DrumSaveReturn:
 	ldw	(0xc508:16), 0
 	ldw	(0xc50a:16), 0
 	push	xde
@@ -310,8 +307,7 @@ DSPCfg_EventType50_Code_Helper:
 	pop	xhl
 	pop	xde
 	ret
-; v10 name for this address: AudioInit_VoiceParamCtrl -- not a label here: v7 defines that name outside this span (= 0xFDE945)
-DSPCfg_EventType50_Code_Helper2:
+AudioInit_VoiceParamCtrl:
 	dec	6, xsp
 	ld	c, 0x0:opc
 	bit	0, (0xfd53:16)
@@ -363,8 +359,7 @@ AudioInit_CompareAndSendMIDI:
 AudioInit_VoiceParamDone:
 	inc	6, xsp
 	ret
-; v10 name for this address: AudioInit_DrumRoutingCheck -- not a label here: v7 defines that name outside this span (= 0xFDE9CB)
-DSPCfg_EventType50_Code_Helper3:
+AudioInit_DrumRoutingCheck:
 	ld	de, 0:i3
 	bit	2, (0xc162:16)
 	.byte 0x6e, 0x16
@@ -543,8 +538,7 @@ AudioInit_ClearDrumMode:
 AudioInit_ClearDrumModeAlt:
 	and	(0x8ebc:16), 248
 	ret
-; v10 name for this address: AudioInit_ClearPartFlags_ByMode -- not a label here: v7 defines that name outside this span (= 0xFDEC26)
-DSPCfg_EventType50_Code_Helper4:
+AudioInit_ClearPartFlags_ByMode:
 	ld	wa, (0xc4f8:16)
 	and	wa, 0x3
 	jr	z, AudioInit_SetPartMasks
@@ -610,8 +604,7 @@ AudioInit_ClearReverbFlag:
 	res	5, (0xc2b8:16)
 	orw	(0xc500:16), 8
 	ret
-; v10 name for this address: Audio_CheckInitStatus -- not a label here: v7 defines that name outside this span (= 0xFDECA1)
-DSPCfg_EventType50_Code_Helper5:
+Audio_CheckInitStatus:
 	dec	2, xsp
 	ldw	(xsp), 0x0
 	ldw	(0xc4fc:16), 0
@@ -639,8 +632,7 @@ AudioInit_ChannelLoop_Init:
 	ld	e, 0x0:opc
 	cp	e, 0x10
 	jrl	nc, AudioInit_ChannelLoop_Done
-; v10 name for this address: AudioInit_ChannelLoop_Body -- not a label here: v7 defines that name outside this span (= 0xFDECF2)
-AudioInit_ProcessVoiceAssign_Code_Loop:
+AudioInit_ChannelLoop_Body:
 	ld	a, e
 	extz	wa
 	lda	xix, (0xf1a0:16)
@@ -996,7 +988,7 @@ AudioInit_ChannelLoop_Next:
 	orw	(0xc500:16), 192
 	inc	1, e
 	cp	e, 0x10
-	jrl	c, AudioInit_ProcessVoiceAssign_Code_Loop
+	jrl	c, AudioInit_ChannelLoop_Body
 AudioInit_ChannelLoop_Done:
 	cpw	(xsp), 0x1
 	jr	nz, AudioInit_SetChangedFlag
@@ -1905,7 +1897,7 @@ AudioInit_ChannelMap_Loop:
 	add	xwa, xbc
 	ld	a, (xwa)
 	cp	a, (xde)
-	jr	z, AudioInit_VoiceCompare_NotBothFF_Code_Skip
+	jr	z, AudioInit_ChannelMap_CheckPrimary
 	ldto_berp	A, 0xf8
 	ld	l, a
 	extz	hl
@@ -1926,7 +1918,7 @@ AudioInit_ChannelMap_Loop:
 	ld	bc, hl
 	ld	wa, 3:i3
 	calr	AudioInit_QueueCommand
-AudioInit_VoiceCompare_NotBothFF_Code_Skip:
+AudioInit_ChannelMap_CheckPrimary:
 	ld	wa, iz
 	lda	xbc, (49638:16)
 	ld	de, wa

@@ -209,7 +209,7 @@ AcGridBox_CopyText:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	AcGridBox_ReturnZero
 AcGridBox_CellSelect:
@@ -533,7 +533,7 @@ PsEditBox_Confirm_CopyText:
 	ld	xwa, (xsp+536)
 	push	xwa
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 PsEditBox_Confirm_Render:
 	ld xiy, (xsp + 8)
@@ -697,7 +697,7 @@ PsNumEditBox_Confirm:
 	pushw	PsNumEditBox_Confirm_Str_Chr25@lo16
 	lda	xwa, (xsp+28)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	pushw	(xiz+50)
 	pushw	PsNumEditBox_Confirm_Str_Fmtd@hi16
 	pushw	PsNumEditBox_Confirm_Str_Fmtd@lo16
@@ -778,7 +778,7 @@ PasTableCheck:
 	ld	xwa, (xbc)
 	push	xwa
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 PasTableCheck_Return:
 	ld xhl, 0:i3
@@ -822,7 +822,7 @@ AcOnOff_GetText:
 	push	xwa
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jrl	AcOnOff_ReturnZero
 AcOnOff_SetValue:
@@ -934,7 +934,7 @@ AcNumEdit_GetText:
 	pushw AcNumEdit_GetText_Str_Chr25@lo16
 	lda	xwa, (xsp+22)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	ld	xwa, (xsp+12)
 	pushw	(xwa+54)
 	pushw	AcNumEdit_GetText_Str_Fmtd@hi16
@@ -2384,7 +2384,7 @@ BitEditCheck:
 	push	xwa
 	ld	xwa, (xde+10)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	BitEditCheck_Return	; -> 0xF9FD78
@@ -2543,7 +2543,7 @@ PsMenuBox_Confirm_CopyText:
 	ld	xwa, (xsp+276)
 	push	xwa
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 PsMenuBox_Confirm_Render:
 	lda xhl, (xsp+268)
@@ -3661,7 +3661,7 @@ ButtonState_PaintProc_Join:
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 ButtonState_Paint_DrawAligned:
 	lda xwa, (xsp+288)
@@ -4118,7 +4118,7 @@ VwEditSwBox_GetText_CopyStr:
 	push	xwa
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 VwEditSwBox_ReturnZero:
 	ld xhl, 0:i3
@@ -4956,7 +4956,7 @@ IvPageControl_GetText:
 	pushw	IvPageControl_GetText_Str_PAGE@lo16
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	IvPageControl_ReturnZero
 IvPageControl_PageChange:
@@ -5032,7 +5032,7 @@ IvMainEditSw_GetText:
 	pushw	IvMainEditSw_GetText_Str_MnSw@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	IvMainEditSw_ReturnZero
 IvMainEditSw_BtnOK:
@@ -5109,7 +5109,7 @@ IvExit_GetText:
 	pushw	IvExit_GetText_Str_EXIT@hi16
 	pushw	IvExit_GetText_Str_EXIT@lo16
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 IvExit_ReturnZero:
 	ld xhl, 0:i3
@@ -5145,7 +5145,7 @@ IvExitMode_GetText:
 	pushw	IvExitMode_GetText_Str_ExMD@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, 0:i3
 	jr	IvExitMode_Return
@@ -5218,7 +5218,7 @@ IvExitScreen_GetText:
 	pushw	IvExitScreen_GetText_Str_ExSC@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, 0:i3
 	jr	IvExitScreen_Return
@@ -5290,7 +5290,7 @@ IvExitWindow_GetText:
 	pushw	IvExitWindow_GetText_Str_ExWn@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, 0:i3
 	jr	IvExitWindow_Return
@@ -5482,7 +5482,7 @@ NamingCheck:
 	jr	nz, NamingCheck_NotHandled
 	push	xwa
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	NamingCheck_Return
@@ -5697,7 +5697,7 @@ IvInterrupt_GetText:
 	pushw	IvInterrupt_GetText_Str_IntT@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 IvInterrupt_ReturnZero:
 	ld xhl, 0:i3
@@ -5732,7 +5732,7 @@ IvIntReminderProc:
 	pushw	IvIntReminderProc_Str_iRem@hi16
 	pushw	IvIntReminderProc_Str_iRem@lo16
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, 0:i3
 	ret
@@ -5749,7 +5749,7 @@ IvIntCompleteProc:
 	pushw	IvIntCompleteProc_Str_iCmp@hi16
 	pushw	IvIntCompleteProc_Str_iCmp@lo16
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, 0:i3
 	ret
@@ -5766,7 +5766,7 @@ IvIntErrorProc:
 	pushw	IvIntErrorProc_Str_iErr@hi16
 	pushw	IvIntErrorProc_Str_iErr@lo16
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, 0:i3
 	ret
@@ -5819,7 +5819,7 @@ IvIntVari_GetText:
 	pushw	IvIntVari_GetText_Str_iVar@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 IvIntVari_ReturnZero:
 	ld xhl, 0:i3
@@ -5842,7 +5842,7 @@ IvIntEasySetProc:
 	pushw	IvIntEasySetProc_Str_iEsy@hi16
 	pushw	IvIntEasySetProc_Str_iEsy@lo16
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, 0:i3
 	ret
@@ -5895,7 +5895,7 @@ IvIntWelcome_GetText:
 	pushw	IvIntWelcome_GetText_Str_iVar@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 IvIntWelcome_ReturnZero:
 	ld xhl, 0:i3
@@ -6466,7 +6466,7 @@ AcMixerVol_Confirm:
 	ld XWA,AcMixerVol_Confirm_Data
 	add XWA,XBC
 	ld XWA,(XWA)
-	call AcApcToggleProc_Helper
+	call SndParam_LookupReadOnly
 	ld (XSP+0x04),HL
 	ld XWA,(XSP+0x08)
 	ld WA,(XWA+0x1c)
@@ -6478,7 +6478,7 @@ AcMixerVol_Confirm:
 	lda xwa, (AcMixerVol_Confirm_Data_2:24)
 	add XWA,XBC
 	ld XWA,(XWA)
-	call AcApcToggleProc_Helper
+	call SndParam_LookupReadOnly
 	ld (XSP+0x06),HL
 	lda xbc, (xsp + 0x18)
 	ld XWA,(XSP+0x2c)
@@ -6675,7 +6675,7 @@ AcMixerVol_OK:
 	lda xwa, (AcMixerVol_Confirm_Data_2:24)
 	add XWA,XBC
 	ld XWA,(XWA)
-	call AcApcToggleProc_Helper
+	call SndParam_LookupReadOnly
 	ld (XSP+0x06),HL
 	ld XWA,(XSP+0x08)
 	lda xwa, (xwa + 0x1c)
@@ -6824,11 +6824,11 @@ AcMixerVol_Reset_Fallthrough:
 AcMixerVol_EncoderUpdate:
 	ld	xwa, (xsp+36)
 	ld	bc, 0:i3
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	ld	(xsp+15), l
 	ld	xwa, (xsp+36)
 	ldw	bc, 32
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	lda	xwa, (xsp+12)
 	ld	(xwa+4), l
 	ld	xbc, (xsp+36)
@@ -7002,7 +7002,7 @@ DbMemo_DrawContent_Loop:
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xsp, (xsp+10)
 	ld	wa, (xsp+4)
 	extz	xwa
@@ -7040,7 +7040,7 @@ DbMemo_DrawContent_Loop_0x61:
 	ld	xwa, (xsp+10)
 	push	xwa
 	push	xiz
-	call	Free_Compare2
+	call	Strcpy
 	lda	xsp, (xsp+14)
 	ld	xwa, 4294967295
 	ld	xbc, EVT_MEMO_DRAW
@@ -7395,7 +7395,7 @@ PsCursorBox_Confirm_CopyText:
 	ld	xwa, (xsp+554)
 	push	xwa
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 PsCursorBox_Confirm_CheckCursor:
 	ld xwa, (xsp + 14)
@@ -8607,14 +8607,14 @@ ObjectProc_Skip2:
 	pushw ObjectProc_OnGetPropName_Str_romram@lo16
 	push	xwa
 ObjectProc_Join:
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jrl	ObjectProc_Join4
 ObjectProc_Skip3:
 	pushw ObjectProc_OnGetPropName_Str_Empty@hi16
 	pushw ObjectProc_OnGetPropName_Str_Empty@lo16
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xwa, xiz
 	ld	xbc, EVT_GET_PROP_NAME_SP
@@ -9324,7 +9324,7 @@ ClassProc_OnGetPropStringEx:
 	ld	xwa, (xiz+16)
 	push	xwa
 	push	xde
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xwa, 0:i3
 	ld	(xsp+10), xwa
@@ -9353,7 +9353,7 @@ TitleWidget_Confirm:
 	push	xwa
 	ld	xwa, (xsp+286)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	lda	xsp, (xsp+16)
 	ld	wa, (xsp+8)
 	extz	xwa
@@ -9403,7 +9403,7 @@ TitleWidget_Confirm_DrawLayout:
 	push	xwa
 	lda	xwa, (xsp+150)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xwa, 0:i3
 	ld	(xsp+10), xwa
@@ -9445,7 +9445,7 @@ TitleWidget_Confirm_DrawRowNext:
 	push XWA
 	lda xwa, (xsp + 0x16)
 	push XWA
-	call Free_Compare2
+	call Strcpy
 	inc 8,XSP
 	lda xwa, (xsp + 0x0092)
 	add XWA,(XSP+0x0a)
@@ -9466,7 +9466,7 @@ TitleWidget_Confirm_DrawRowNext:
 	push XWA
 	ld XWA,(XBC+0x04)
 	push XWA
-	call Free_Compare2
+	call Strcpy
 	inc 8,XSP
 	jr t, ClassProc_ReturnZeroJmp
 TitleWidget_Confirm_SkipEmpty:
@@ -11579,7 +11579,7 @@ Viewable_SetName_Copy:
 
 	push xwa
 
-	call	Free_Compare2
+	call	Strcpy
 
 	inc 8, xsp
 
@@ -13623,7 +13623,7 @@ EdgeDraw_TopLeft:
 	push	xiz
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	ix, 0:i3
 	ld	iy, 0:i3
@@ -13710,7 +13710,7 @@ EdgeDraw_TopRight_Done:
 	pushw	EdgeDraw_TopRight_Inner_Str_LBrace@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	ld	xwa, (xsp+272)
 	push	xwa
 	lda	xwa, (xsp+20)
@@ -13720,7 +13720,7 @@ EdgeDraw_TopRight_Done:
 	push	xwa
 	ld	xwa, (xsp+284)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	lda	xsp, (xsp+24)
 EdgeDraw_BottomLeft:
 	ld xhl, 0:i3
@@ -14071,7 +14071,7 @@ EdgeVariant_B_CalcWidth:
 	push	xwa
 	lda	xwa, (xsp+6)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	iy, 0:i3
 	ld	iz, 0:i3
@@ -14148,7 +14148,7 @@ EdgeVariant_C_CalcHeight:
 	pushw	EdgeVariant_C_CalcHeight_Str_LBrace@lo16
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	ld	xwa, (xsp+268)
 	push	xwa
 	lda	xwa, (xsp+16)
@@ -14158,7 +14158,7 @@ EdgeVariant_C_CalcHeight:
 	push	xwa
 	ld	xwa, (xsp+280)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	lda	xsp, (xsp+24)
 EdgeVariant_C_CheckInner:
 	ld xhl, 0:i3
@@ -14360,7 +14360,7 @@ ShadowBox_B_Prologue:
 	pushw	ShadowBox_B_Prologue_Str_idc@lo16
 	lda	xwa, (xsp+20)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	ld	xwa, (xsp+4376)
 	push	xwa
 	lda	xwa, (xsp+28)
@@ -14389,7 +14389,7 @@ ShadowBox_B_CheckInner:
 	push xwa
 
 ShadowBox_B_InnerFill:
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, 0:i3
 	jrl	ViewFlagProc_Return
@@ -15140,7 +15140,7 @@ ScrollBar_CalcRange:
 	pushw	ScrollBar_CalcRange_Str_DQuote@lo16
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	ld	xwa, (xsp+322)
 	push	xwa
 	lda	xwa, (xsp+26)
@@ -15202,7 +15202,7 @@ ScrollBar_ReturnAlt:
 	push xwa
 
 ScrollBar_ReturnAlt2:
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, 0:i3
 ScrollBar_Return:
@@ -15245,7 +15245,7 @@ SliderH_Prologue:
 	pushw	SliderH_Prologue_Str_id@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	ld	xwa, (xsp+272)
 	push	xwa
 	lda	xwa, (xsp+20)
@@ -15276,7 +15276,7 @@ SliderH_CalcThumb:
 	push xwa
 
 SliderH_CalcThumb_Clamp:
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, 0:i3
 	jr	SliderH_ReturnAlt5
@@ -15366,7 +15366,7 @@ SliderV_Prologue:
 	pushw	SliderV_Prologue_Str_idICON@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	ld	xwa, (xsp+272)
 	push	xwa
 	lda	xwa, (xsp+20)
@@ -15397,7 +15397,7 @@ SliderV_CalcThumb:
 	push xwa
 
 SliderV_CalcThumb_Clamp:
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, 0:i3
 	jr	BitmapIDProc_Return
@@ -15487,7 +15487,7 @@ DrawHelper_A_Prologue:
 	pushw	DrawHelper_A_Prologue_Str_id@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	ld	xwa, (xsp+272)
 	push	xwa
 	lda	xwa, (xsp+20)
@@ -15518,7 +15518,7 @@ DrawHelper_A_CalcThumb:
 	push xwa
 
 DrawHelper_A_ClampThumb:
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, 0:i3
 	jr	ApFuncIDProc_Return
@@ -15656,7 +15656,7 @@ DrawHelper_B_FinishAlt:
 	pushw	DrawHelper_B_FinishAlt_Str_idf@lo16
 	lda	xwa, (xsp+24)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	ld	xwa, (xsp+4380)
 	push	xwa
 	lda	xwa, (xsp+32)
@@ -15688,7 +15688,7 @@ DrawHelper_C_CalcRange:
 	push xwa
 
 DrawHelper_C_CalcThumb:
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, 0:i3
 	jrl	MainFuncIDProc_Return
@@ -15849,7 +15849,7 @@ DrawHelper_D_FinishAlt:
 	pushw	DrawHelper_D_FinishAlt_Str_idf@lo16
 	lda	xwa, (xsp+24)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	ld	xwa, (xsp+4380)
 	push	xwa
 	lda	xwa, (xsp+32)
@@ -15881,7 +15881,7 @@ DrawHelper_E_CalcRange:
 	push xwa
 
 DrawHelper_E_CalcThumb:
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, 0:i3
 	jrl	ViewIDProc_Return
@@ -16100,7 +16100,7 @@ ViewID_GetInfoStr:
 	pushw	ViewID_GetInfoStr_Str_sword@lo16
 	lda	xwa, (xsp+24)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	ld	xwa, (xsp+4380)
 	push	xwa
 	lda	xwa, (xsp+32)
@@ -16176,7 +16176,7 @@ ViewID_GetCurrent_None:
 	push xwa
 
 ViewID_StrCpy:
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 ViewID_ReturnZero:
 	ld xhl, 0:i3
@@ -16460,7 +16460,7 @@ ScreenID_GetCurrent_None:
 	ld	xwa, (xsp+8)
 	ld	xwa, (xwa+4)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 ScreenID_ReturnZero:
 	ld xhl, 0:i3
@@ -16802,7 +16802,7 @@ WindowID_GetCurrent_None:
 	ld	xwa, (xsp+8)
 	ld	xwa, (xwa+4)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 WindowID_ReturnZero:
 	ld xhl, 0:i3
@@ -17094,7 +17094,7 @@ ModeID_GetNext_HasName:
 	push xwa
 
 ModeID_Strcpy:
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 ModeID_ReturnZero:
 	ld xhl, 0:i3
@@ -17122,7 +17122,7 @@ ModeID_EnumOpen_SearchLoop:
 	push	xhl
 	lda	xwa, (xsp+20)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xbc, (xsp+16)
 	cp	(xbc), 0
@@ -17333,7 +17333,7 @@ TitleID_GetNext_HasName:
 	push xwa
 
 TitleID_Strcpy:
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 TitleID_ReturnZero:
 	ld xhl, 0:i3
@@ -17361,7 +17361,7 @@ TitleID_EnumOpen_SearchLoop:
 	push	xhl
 	lda	xwa, (xsp+20)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xbc, (xsp+16)
 	cp	(xbc), 0
@@ -17472,7 +17472,7 @@ NameProc_ReturnZero:
 	push xwa
 
 NameProc_DefaultForward:
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 NameProc_Return:
 	ld xhl, 0:i3
@@ -17530,7 +17530,7 @@ ConstFlagProc_SetValue_Check:
 	push xwa
 
 ConstFlagProc_SetValue_Store:
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	ConstFlagProc_Default_Forward
 ConstFlagProc_Default:
@@ -17652,7 +17652,7 @@ CommonIDProc_Join:
 	ld	xwa, (xsp+8)
 	ld	xwa, (xwa+4)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	CommonIDProc_ReturnZero
 CommonIDProc_OnDumpPropertyEx:
@@ -17683,7 +17683,7 @@ CommonIDProc_SearchLoop_Compare:
 	ld	xwa, (xsp+8)
 	ld	xwa, (xwa+4)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	CommonIDProc_ReturnZero
 CommonIDProc_SearchLoop_Next:

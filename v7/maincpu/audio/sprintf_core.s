@@ -83,9 +83,7 @@ Sprintf_ParseWidthDigit:
 	ld	bc, iz
 	sub	bc, 0x30
 	ld	wa, (xsp + 8)
-	.set	Strncpy, . + 3	; no instruction starts here: the name points 3 byte(s) into the one below
 	muls	wa, 10
-	; Strncpy is kept at this address only for ui_widgets/naka_widget_descriptors.c; v10's Strncpy is the code at 0xFF0516
 	ld	(xsp + 8), wa
 	add	(xsp + 8), bc
 	ld	xwa, (xsp + 82)
@@ -330,9 +328,7 @@ Sprintf_Decimal_GetShortArg:
 	ld	xwa, 2:i3
 	add	(xbc), xwa
 	ld	xwa, (xbc)
-	.set	Strcpy, . + 1	; no instruction starts here: the name points 1 byte(s) into the one below
 	ld	wa, (xwa-2)
-	; Strcpy is kept at this address only for ui_widgets/naka_widget_descriptors.c; v10's Strcpy is the code at 0xFF0770
 	exts	xwa
 	ld	(xsp + 16), xwa
 Sprintf_Decimal_Setup:
@@ -849,15 +845,14 @@ Sprintf_Octal_PadLeftLoop:
 	jr	nz, Sprintf_Octal_PadLeftSpace
 Sprintf_Octal_EmitPrefix:
 	cpw	(xsp + 18), 0x0
-	jr	z, Strcpy_Code_Skip
+	jr	z, Sprintf_Octal_ZeroFill
 	cp	iz, 0:i3
-	jr	z, Strcpy_Code_Skip
+	jr	z, Sprintf_Octal_ZeroFill
 	pushw	0x30
 	ld	xwa, (xsp + 92)
 	call	(xwa)
 	inc	2, xsp
-; v10 name for this address: Sprintf_Octal_ZeroFill -- not a label here: v7 keeps that name at 0xFF1462 for shared/positional_labels.s
-Strcpy_Code_Skip:
+Sprintf_Octal_ZeroFill:
 	ld	wa, (xsp + 6)
 	bit	1, wa
 	jr	nz, Sprintf_Octal_PrecZeroLoop
@@ -1317,8 +1312,6 @@ Sprintf_FFixed_SignSpace:
 	pushw	0x20
 Sprintf_FFixed_SignEmit:
 	ld	xwa, (xsp + 14)
-; Sprintf_Octal_ZeroFill is kept at this address only for shared/positional_labels.s; v10's Sprintf_Octal_ZeroFill is the code at 0xFF1048
-Sprintf_Octal_ZeroFill:
 	call	(xwa)
 	inc	2, xsp
 	incw	1, (0x3c222:24)

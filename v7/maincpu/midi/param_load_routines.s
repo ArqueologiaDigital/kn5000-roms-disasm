@@ -541,7 +541,7 @@ ParaLoadOpt_GetViewAndCopy:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	AccFunc_ReturnZeroJmp
 AcParaLoadOptGridBoxProc_OnLswData:	; cases 29360156, 29360157
@@ -774,7 +774,7 @@ ParaLoadOptGridCheck_OnRamData:
 	push	xwa
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -794,7 +794,7 @@ ParaLoadOpt_GridDispatch_Skip7:
 	push	xwa
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -814,7 +814,7 @@ ParaLoadOpt_GridDispatch_Skip8:
 	push	xwa
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -834,7 +834,7 @@ ParaLoadOpt_GridDispatch_Skip9:
 	push	xwa
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl

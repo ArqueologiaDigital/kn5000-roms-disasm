@@ -2157,7 +2157,7 @@ Wordwrap_MeasureWidth:
 	push	xwa
 	ld	xwa, (xsp+10)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xwa, (xsp+6)
 	ld	bc, (xsp+4)
@@ -4802,12 +4802,12 @@ MainSvariIni:
 	ldb_d8	a, (PART_SELECT)
 	extz	wa
 	ld	bc, 0:i3
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	ld	(xiz+3), l
 	ldb_d8	a, (PART_SELECT)
 	extz	wa
 	ldw	bc, 32
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	ld	(xiz+4), l
 	ld	(xiz+2), (PART_SELECT)
 	ld	xwa, xiz
@@ -4839,10 +4839,10 @@ MainRvariIni:
 	inc	2, xsp
 	ld	xiz, xhl
 	ld	xwa, 163840
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	(xiz+3), l
 	ld	xwa, 163841
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	(xiz+4), l
 	ld	(xiz+2), 72
 	ld	xwa, xiz
@@ -4876,12 +4876,12 @@ MainGetSndGrpName:
 	ldb_d8	a, (PART_SELECT)
 	extz	wa
 	ld	bc, 0:i3
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	ld	(xsp+7), l
 	ldb_d8	a, (PART_SELECT)
 	extz	wa
 	ldw	bc, 32
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	lda	xwa, (xsp+4)
 	ld	(xwa+4), l
 	ld	(xwa+2), (PART_SELECT)
@@ -4953,10 +4953,10 @@ MainGetRhyGrpName:
 	inc	2, xsp
 	ld	xiz, xhl
 	ld	xwa, 163840
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	(xsp+7), l
 	ld	xwa, 163841
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	lda	xwa, (xsp+4)
 	ld	(xwa+4), l
 	ld	(xwa+2), 72
@@ -5104,7 +5104,7 @@ MainPmGet_HandleBankDisplay:
 
 	ld xwa, 0x300
 
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 
 	ld xbc, (xsp + 2)
 
@@ -5184,7 +5184,7 @@ MainSysCtrl_Entry2_PartInit:
 	call Part_InitFromPreset
 	jr t, MainSysControl_PostDispatchFinalize
 MainSysCtrl_Entry3_Misc:
-	call	TmFlash_Return_LoadReg
+	call	SendPartDataBlock_DoGetError
 	jr	MainSysControl_PostDispatchFinalize
 MainSysCtrl_Entry4_CopyBitmaps:
 	call Display_CopyAndRenderBitmaps
@@ -5334,12 +5334,12 @@ AcFreeSplit_ValueChanged:
 	pushw	AcFreeSplit_ValueChanged_Str_Blank10@lo16
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	AcFreeSplit_SendConfirmEvent
 AcFreeSplit_LookupNoteLabel:
 	ld	xwa, 16769
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	exts	xhl
 	divs	hl, 12
 	sla	hl, 2
@@ -5347,7 +5347,7 @@ AcFreeSplit_LookupNoteLabel:
 	ld	xwa, (xbc+hl)
 	push	xwa
 	ld	xwa, 16769
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	exts	xhl
 	divs	hl, 12
 	ld	wa, qhl
@@ -5371,19 +5371,19 @@ AcFreeSplit_CheckSecondKey:
 	cp	xwa, 16769
 	jr	nz, UI_AccChordBoxProc_Return
 	ld	xwa, 16768
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 0:i3
 	jr	z, AcFreeSplit_LookupSecondNote
 	pushw	AcFreeSplit_CheckSecondKey_Str_Blank10@hi16
 	pushw	AcFreeSplit_CheckSecondKey_Str_Blank10@lo16
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	AcFreeSplit_SendSecondConfirm
 AcFreeSplit_LookupSecondNote:
 	ld	xwa, 16769
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	exts	xhl
 	divs	hl, 12
 	sla	hl, 2
@@ -5391,7 +5391,7 @@ AcFreeSplit_LookupSecondNote:
 	ld	xwa, (xbc+hl)
 	push	xwa
 	ld	xwa, 16769
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	exts	xhl
 	divs	hl, 12
 	ld	wa, qhl
@@ -5488,7 +5488,7 @@ AcTranspose_ValueChanged:
 	pushw	AcTranspose_ValueChanged_Str_Blank4@hi16
 	pushw	AcTranspose_ValueChanged_Str_Blank4@lo16
 	push	xbc
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	ChordProc_SendRefreshEvent
 AcTranspose_FormatLabel:

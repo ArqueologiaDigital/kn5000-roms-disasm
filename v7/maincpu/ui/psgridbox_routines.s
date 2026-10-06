@@ -1013,7 +1013,7 @@ PsGridBox_Scroll_CopyStr:
 	push	xwa
 	ld	xwa, (xsp+330)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jrl	PsGridBox_ReturnZero
 PsGridBoxProc_OnSetSelectedCel:

@@ -356,7 +356,7 @@ HamaList_HandleSelect:
 	push	xwa
 	ld	xwa, (xhl+42)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, 0:i3
 HamaList_Return:

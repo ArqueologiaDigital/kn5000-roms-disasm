@@ -35,7 +35,7 @@ JumpInsert_DispatchBody:
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	JumpInsert_Return
@@ -74,7 +74,7 @@ FilePriorityFunc:
 	push	xwa
 	ld	xwa, (xde+10)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	FilePriority_Return	; -> 0xF94D27
@@ -704,7 +704,7 @@ PsFileNameBox_HandleConfirm:
 	push XWA
 	lda xwa, (xsp + 0x16)
 	push XWA
-	call Free_Compare2
+	call Strcpy
 	inc 8,XSP
 	ld XHL,(XSP+0x0a)
 	ld XBC,(XHL+0x2a)
@@ -805,7 +805,7 @@ PsFileNameBox_Confirm_MultiItem:
 	push	xwa
 	lda	xwa, (xsp+22)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xwa, (xsp+10)
 	ld	xix, (xwa+42)

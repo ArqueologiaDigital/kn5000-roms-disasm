@@ -662,19 +662,19 @@ DSPCfg_CopyEntryValues_Entry:
 	ret
 SndParam_SyncDisplayBitmap:
 	ld	xwa, 0:i3
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	(0x8dd0:16), l
 	ld	xwa, 0x102
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	(0x8dd2:16), l
 	ld	xwa, 0x103
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	(0x8dd4:16), l
 	ld	xwa, 0x300
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	(0x8dd6:16), l
 	ld	xwa, 0x4006
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	(0x8dd8:16), l
 	pushw	0x620
 	pushw	0x0
@@ -707,17 +707,17 @@ SoundParam_NotifyMultipleChanges:
 	extz	bc
 	ld	xwa, 0:i3
 	ld	de, 0:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	ld	c, (0x8dd2:16)
 	extz	bc
 	ld	xwa, 0x102
 	ld	de, 0:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	ld	c, (0x8dd4:16)
 	extz	bc
 	ld	xwa, 0x103
 	ld	de, 0:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	call	BitMapOut_DetectChanges
 	jr	ToneGen_DiffScanAndUpdate
 ToneGen_DiffScanAndUpdate:

@@ -12,13 +12,10 @@
 ; scripts/tools/midi_lane_v7_from_v10.py): every line below was derived
 ; from the v10 line emitting the same bytes at v10 = v7 + 0x7D1, with v7's
 ; own bytes decoded and re-encoded.  Addresses quoted in carried-over
-; headers are v10's.  Labels marked `v7 NAME DISPLACED` are the old v7
-; names, kept because another v7 file references them; see that note.
+; headers are v10's.  The old v7 names that other files kept 0x41A away from
+; their code (`v7 NAME DISPLACED`) were moved to it on 2026-10-06:
+; scripts/tools/fix_v7_displaced_names.py --audit checks every name here.
 ;
-; v7 NAME DISPLACED: `MidiPkt_ExtractAndPack` sits where v10 has no label (v10 0xFDA11E).
-; The v7 code v10 calls `MidiPkt_ExtractAndPack` is 0x41A earlier, at v7 0xFD9533.
-; Kept because another v7 file references this address by this name.
-MidiPkt_ExtractAndPack:
 ; The first bytes of this file are the TAIL of an instruction whose head
 ; is the last bytes of the previous file: the v7 file boundary sits 0x41A
 ; bytes off the v10 one, so it cuts an instruction.
@@ -55,10 +52,6 @@ MidiPkt_DispatchViaTable_4DA6:
 	lda	xde, (MidiCtl_Handlers:24)
 	exts xbc
 	add xbc, xde
-; v7 NAME DISPLACED: `MidiPkt_ExtractAndPack_StoreShifted` (0xFD9999) falls inside the line above in the
-; correct framing (v10 0xFDA16A).  Kept as an alias because another v7
-; file references this address by this name.
-	.set MidiPkt_ExtractAndPack_StoreShifted, MidiPkt_DispatchViaTable_4DA6 + 43
 	ld xhl, (xbc)
 	call (xhl)
 	pop xiz
@@ -93,10 +86,6 @@ MidiPkt_DispatchViaTable_4DAE:
 	ld a, (xde)
 	and a, c
 	ld (xde), a
-; v7 NAME DISPLACED: `MidiPkt_BuildControl` sits where v10 has no label (v10 0xFDA1BA).
-; The v7 code v10 calls `MidiPkt_BuildControl` is 0x41A earlier, at v7 0xFD95CF.
-; Kept because another v7 file references this address by this name.
-MidiPkt_BuildControl:
 	cp a, 0:i3
 	jr	z, MidiPkt_DispatchViaTable_4DAE_Done
 	ld xwa, xiz
@@ -263,9 +252,9 @@ MidiPkt_EnqueueExtended_Data:
 	ld	xwa, (xiz+4)
 	ld	a, (xwa+11)
 	and	a, 15
-	jr	z, MidiPkt_EnqueueExtended_Data_Skip3
+	jr	z, MidiPkt_EnqueueExtended_Data_Skip
 	.byte 0xd9, 0xff	; srl a,bc -- the backend cannot spell this form
-MidiPkt_EnqueueExtended_Data_Skip3:
+MidiPkt_EnqueueExtended_Data_Skip:
 	lda	xwa, (xsp+4)
 	ld	(xwa), c
 	and	c, 15
@@ -283,7 +272,7 @@ MidiPkt_EnqueueExtended_Data_Epilogue:
 	pop	xiz
 	inc	4, xsp
 	ret
-SeqAlt_DescriptorBlock_Data_Helper:
+MidiPkt_EnqueueControl_335C:
 	dec 4, xsp
 	push xiz
 	ld xiz, xwa
@@ -315,9 +304,9 @@ SeqAlt_DescriptorBlock_Data_Helper:
 	ld xbc, (xiz + 4)
 	ld c, (xbc + 8)
 	and c, (xde + 2)
-	jr	z, MidiPkt_EnqueueExtended_Data_Skip
+	jr	z, MidiPkt_EnqueueControl_335C_ZeroData
 	ld (xwa), 0x7f
-MidiPkt_EnqueueExtended_Data_Skip:
+MidiPkt_EnqueueControl_335C_ZeroData:
 	ld c, (xwa)
 	and c, 0xf
 	ld (xwa + 1), c
@@ -334,7 +323,7 @@ MidiPkt_EnqueueControl_335C_Return:
 	pop xiz
 	inc 4, xsp
 	ret
-SeqAlt_DescriptorBlock_Data_Helper2:
+MidiPkt_EnqueueControl_3358:
 	dec 6, xsp
 	push xiz
 	ld xiz, xwa
@@ -388,13 +377,13 @@ SeqAlt_DescriptorBlock_Data_Helper2:
 	ld (xde), c
 	ld c, (xwa)
 	bit 7, c
-	jr	z, MidiPkt_EnqueueExtended_Data_Skip2
+	jr	z, MidiPkt_EnqueueControl_3358_SplitNibbles
 	res 7, c
 	ld (xwa), c
 	ld c, (xde)
 	set 7, c
 	ld (xde), c
-MidiPkt_EnqueueExtended_Data_Skip2:
+MidiPkt_EnqueueControl_3358_SplitNibbles:
 	ld c, (xwa)
 	and c, 0xf
 	ld (xwa + 1), c
@@ -417,7 +406,7 @@ MidiPkt_EnqueueControl_3358_Return:
 	pop xiz
 	inc 6, xsp
 	ret
-VocalistPage2OKFunc_Helper2_Helper:
+MidiPkt_EnqueueControl_335E:
 	lda xsp, (xsp - 14)
 	push xiz
 	ld xiz, xwa
@@ -687,10 +676,6 @@ MidiPkt_CheckGateCondition_Second:
 	cp a, 0:i3
 	jr	z, MidiPkt_CheckGateCondition_Pass
 	extz wa
-; v7 NAME DISPLACED: `MidiPkt_EnqueueControl_335C` sits where v10 has no label (v10 0xFDA7A3).
-; The v7 code v10 calls `MidiPkt_EnqueueControl_335C` is 0x41A earlier, at v7 0xFD9BB8.
-; Kept because another v7 file references this address by this name.
-MidiPkt_EnqueueControl_335C:
 	muls wa, 0x6
 	lda	xbc, (MidiPkt_CheckGateCondition_Second_Data:24)
 	lda	xbc, (xbc+wa)
@@ -731,10 +716,6 @@ MidiPkt_DispatchViaTable_4DCE:
 MidiPkt_DispatchData_Chan4:
 	ld	(0xbc60:16), 4
 	jr	MidiPkt_DispatchData_Chan6_Join2
-; v7 NAME DISPLACED: `MidiPkt_EnqueueControl_335C_ZeroData` sits where v10 has `MidiPkt_DispatchData_Chan3` (v10 0xFDA800).
-; The v7 code v10 calls `MidiPkt_EnqueueControl_335C_ZeroData` is 0x41A earlier, at v7 0xFD9C15.
-; Kept because another v7 file references this address by this name.
-MidiPkt_EnqueueControl_335C_ZeroData:
 MidiPkt_DispatchData_Chan3:
 	ld	(0xbc60:16), 3
 	jr	MidiPkt_DispatchData_Chan6_Join2
@@ -756,10 +737,6 @@ MidiPkt_DispatchData_Chan6_Join:
 	push	xix
 	push	xiz
 	call	AccWrap_PlayModeDispatch
-; v7 NAME DISPLACED: `MidiPkt_EnqueueControl_3358` (0xFDA058) falls inside the line above in the
-; correct framing (v10 0xFDA829).  Kept as an alias because another v7
-; file references this address by this name.
-	.set MidiPkt_EnqueueControl_3358, MidiPkt_DispatchData_Chan6_Join + 6
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -828,10 +805,6 @@ MidiPkt_SysExValidator_Data_Skip3:
 	ldw	wa, 145
 	ld	bc, 3:i3
 	call	AssswbWr
-; v7 NAME DISPLACED: `MidiPkt_EnqueueControl_3358_SplitNibbles` (0xFDA0FF) falls inside the line above in the
-; correct framing (v10 0xFDA8D0).  Kept as an alias because another v7
-; file references this address by this name.
-	.set MidiPkt_EnqueueControl_3358_SplitNibbles, MidiPkt_SysExValidator_Data_Skip3 + 28
 	push	xiz
 	call	SwbtWr_ReinitBothBanks
 	pop	xiz
@@ -858,10 +831,6 @@ MidiPkt_SysExProcessor_Data_Skip3:
 	set	7, (0x905d:16)
 	ld	e, (xbc)
 	res	2, e
-; v7 NAME DISPLACED: `MidiPkt_EnqueueControl_335E` (0xFDA137) falls inside the line above in the
-; correct framing (v10 0xFDA908).  Kept as an alias because another v7
-; file references this address by this name.
-	.set MidiPkt_EnqueueControl_335E, MidiPkt_SysExProcessor_Data_Skip3 + 18
 	ld	(xbc), e
 	extz	de
 	pushw	4
@@ -889,16 +858,16 @@ MidiPkt_SysExBulkTransfer_Data:
 	jp	t, (xix+hl)
 MidiPkt_SendBankSelect_Send_Code:
 	jr	MidiPkt_SysExBulkTransfer_Data_Join
-MidiPkt_SendBankSelect_Send_Case2:
+MidiPkt_SysExBulkTransfer_Data_Case2:
 	jrl	MidiPkt_SysExBulkTransfer_Data_Join3
-MidiPkt_SendBankSelect_Send_Case3:
+MidiPkt_SysExBulkTransfer_Data_Case3:
 	jrl	MidiPkt_SysExBulkTransfer_Data_Join4
-MidiPkt_SendBankSelect_Send_Case4:
-	jrl	MidiPkt_SysExBulkTransfer_Data_Helper2_Join
-MidiPkt_SendBankSelect_Send_Case5:
-	jrl	MidiPkt_SysExBulkTransfer_Data_Helper2_Join2
-MidiPkt_SendBankSelect_Send_Case6:
-	calr	MidiPkt_SendBankSelect_Helper
+MidiPkt_SysExBulkTransfer_Data_Case4:
+	jrl	SysEx_ApplyToSlot4B_Data
+MidiPkt_SysExBulkTransfer_Data_Case5:
+	jrl	SysEx_ApplyToSlot49_Data
+MidiPkt_SysExBulkTransfer_Data_Case6:
+	calr	SysEx_ApplyToSlot49_Format_Data
 	ret
 MidiPkt_SysExBulkTransfer_Data_Helper:
 	lda	xde, (0x95a8:16)
@@ -969,17 +938,17 @@ MidiPkt_SysExBulkTransfer_Data_Join:
 	ldto_berp	a, 251
 	extz	wa
 	cp	l, 0:i3
-	jr	z, MidiPkt_SysExBulkTransfer_Data_Helper2_Skip5
+	jr	z, MidiPkt_SysExBulkTransfer_Data_Helper2_Skip
 	pushw	0
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	ldto_berp	a, 251
 	extz	wa
 	pushw	0
 	ldw	bc, 32
 	ldw	de, 120
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	ld	xiy, SysExBulk_FrameTemplate0
 	lda	xix, (xsp+10)
 	ldiw
@@ -1004,17 +973,17 @@ MidiPkt_SysExBulkTransfer_Data_Join:
 	ldto_berp	c, 251
 	ld	(xwa), c
 	jr	MidiPkt_SysExBulkTransfer_Data_Join2
-MidiPkt_SysExBulkTransfer_Data_Helper2_Skip5:
+MidiPkt_SysExBulkTransfer_Data_Helper2_Skip:
 	pushw	0
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	ldto_berp	a, 251
 	extz	wa
 	pushw	0
 	ldw	bc, 32
 	ld	de, 0:i3
-	call	UIState_CheckAndRenderBitmap_Helper
+	call	SndParam_NotifyAndReturn
 	ld	xiy, SysExBulk_FrameTemplate3
 	lda	xix, (xsp+10)
 	ldiw
@@ -1113,7 +1082,7 @@ SysEx_ClampVoiceIndex8_DoLookup:
 	lda	xbc, (SysEx4B_VoiceIndexMap8:24)
 	ld	l, (xbc+wa)
 	ret
-MidiPkt_SysExBulkTransfer_Data_Helper2_Join:
+SysEx_ApplyToSlot4B_Data:
 	dec	2, xsp
 	push	xiz
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
@@ -1170,7 +1139,7 @@ SysEx_ClampVoiceIndex128_DoLookup:
 	lda	xbc, (SysEx4B_LevelCurve128:24)
 	ld	l, (xbc+wa)
 	ret
-MidiPkt_SysExBulkTransfer_Data_Helper2_Join2:
+SysEx_ApplyToSlot49_Data:
 	dec	2, xsp
 	push	xiz
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
@@ -1228,7 +1197,7 @@ SysEx_ClampVoiceIndex8_49_DoLookup:
 	lda	xbc, (SysEx49_VoiceIndexMap8:24)
 	ld	l, (xbc+wa)
 	ret
-MidiPkt_SendBankSelect_Helper:
+SysEx_ApplyToSlot49_Format_Data:
 	dec	2, xsp
 	push	xiz
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
@@ -1298,9 +1267,9 @@ SysEx_DispatchByChannel:
 	add	wa, wa
 	lda	xix, (SysEx4B_ChannelSwitch:24)
 	ld	wa, (xix+wa)
-	lda	xix, (SysEx_DispatchByChannel_Code:24)
+	lda	xix, (SysEx_ChannelHandler_4B_Data:24)
 	jp	t, (xix+wa)
-SysEx_DispatchByChannel_Code:
+SysEx_ChannelHandler_4B_Data:
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, SysEx4B_ChannelWords0
@@ -1355,9 +1324,9 @@ SysEx_DispatchByChannel_49:
 	add	wa, wa
 	lda	xix, (SysEx49_ChannelSwitch:24)
 	ld	wa, (xix+wa)
-	lda	xix, (SysEx_DispatchByChannel_49_Code:24)
+	lda	xix, (SysEx_ChannelHandler_49_Data:24)
 	jp	t, (xix+wa)
-SysEx_DispatchByChannel_49_Code:
+SysEx_ChannelHandler_49_Data:
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, SysEx49_ChannelWords0
@@ -1399,7 +1368,7 @@ SysEx_DispatchByChannel_49_Case7:
 SysEx_DispatchByChannel_49_Entry:
 	ld	hl, (xwa+de)
 	ret
-SMF_ProcessSysExBlock_Helper:
+SysEx_ValidateRolandHeader:
 	cp	c, 10
 	ret	ugt
 	cp	(xwa+), 240
@@ -1417,11 +1386,11 @@ SMF_ProcessSysExBlock_Helper:
 	cp	(xwa+), 1
 	ret	nz
 	cp	c, 0:i3
-	jr	nz, SysEx_DispatchByChannel_49_Entry_Code_Skip
+	jr	nz, SysEx_ValidateRolandHeader_NonZeroChan
 	lda	xbc, (0xf180:24)
 	add	xbc, 0x2e0
-	jr	SysEx_DispatchByChannel_49_Entry_Code_Join
-SysEx_DispatchByChannel_49_Entry_Code_Skip:
+	jr	SysEx_ValidateRolandHeader_Dispatch
+SysEx_ValidateRolandHeader_NonZeroChan:
 	dec	1, c
 	extz	bc
 	sla	bc, 11
@@ -1430,33 +1399,33 @@ SysEx_DispatchByChannel_49_Entry_Code_Skip:
 	lda	xbc, (SEQ_SONG_SLOTS:24)
 	add	xbc, xde
 	add	xbc, 0x2e0
-SysEx_DispatchByChannel_49_Entry_Code_Join:
+SysEx_ValidateRolandHeader_Dispatch:
 	ld	e, (xwa+)
 	cp	e, 58
-	jr	z, SysEx_DispatchByChannel_49_Entry_Code_Skip4
+	jr	z, SysEx_ValidateRolandHeader_Cmd3A
 	cp	e, 56
-	jr	z, SysEx_DispatchByChannel_49_Entry_Code_Skip3
+	jr	z, SysEx_ValidateRolandHeader_Cmd38
 	cp	e, 51
-	jr	z, SysEx_DispatchByChannel_49_Entry_Code_Skip2
+	jr	z, SysEx_ValidateRolandHeader_Cmd33
 	cp	e, 48
 	ret	nz
 	ld	a, (xwa)
 	extz	wa
-	jr	SysEx_DispatchByChannel_49_Entry_Code_Join2
-SysEx_DispatchByChannel_49_Entry_Code_Skip2:
+	jr	SysEx_ApplyVoiceParam_4B
+SysEx_ValidateRolandHeader_Cmd33:
 	ld	a, (xwa)
 	extz	wa
-	jrl	SysEx_DispatchByChannel_49_Entry_Code_Join3
-SysEx_DispatchByChannel_49_Entry_Code_Skip3:
+	jrl	SysEx_ApplyVoiceParam_4B_128
+SysEx_ValidateRolandHeader_Cmd38:
 	ld	a, (xwa)
 	extz	wa
-	jrl	SoundMode_ApplyVoiceParams_Helper
-SysEx_DispatchByChannel_49_Entry_Code_Skip4:
+	jrl	SysEx_ApplyVoiceParam_49
+SysEx_ValidateRolandHeader_Cmd3A:
 	ld	a, (xwa)
 	extz	wa
 	calr	SysEx_ApplyVoiceParam_49_128
 	ret
-SysEx_DispatchByChannel_49_Entry_Code_Join2:
+SysEx_ApplyVoiceParam_4B:
 	dec 8, xsp
 	push xiz
 	ld (xsp + 6), xbc
@@ -1473,34 +1442,34 @@ SysEx_DispatchByChannel_49_Entry_Code_Join2:
 	ld xde, (xsp + 6)
 	call	DSPCfg_WriteParamSimple
 	cp hl, 0:i3
-	jr	lt, SysEx_DispatchByChannel_49_Entry_Code_Epilogue
+	jr	lt, SysEx_ApplyVoiceParam_4B_Return
 	lda xwa, (0xfc8e:16)
 	cp xwa, (xsp + 6)
-	jr	z, SysEx_DispatchByChannel_49_Entry_Code_Skip5
+	jr	z, SysEx_ApplyVoiceParam_4B_ReadSubParams
 	ld a, (xwa)
 	ld (xsp + 4), a
 	ld a, (xsp + 10)
 	extz wa
 	calr	SysEx_ClampVoiceIndex8
 	ld (0xfc8e:16), l
-SysEx_DispatchByChannel_49_Entry_Code_Skip5:
+SysEx_ApplyVoiceParam_4B_ReadSubParams:
 	ld xwa, 0x4b04
 	call	DSPCfg_ReadParam_Map0
 	ldfr_werp HL, 0xfa
 	cpiw_erp 0xfa, 0
-	jr	ge, SysEx_DispatchByChannel_49_Entry_Code_Skip7
+	jr	ge, SysEx_ApplyVoiceParam_4B_IterateSlots
 	lda xbc, (0xfc8e:16)
 	cp xbc, (xsp + 6)
-	jr	z, SysEx_DispatchByChannel_49_Entry_Code_Skip6
+	jr	z, SysEx_ApplyVoiceParam_4B_SkipRestore
 	ld a, (xsp + 4)
 	ld (xbc), a
-SysEx_DispatchByChannel_49_Entry_Code_Skip6:
-	jr	SysEx_DispatchByChannel_49_Entry_Code_Epilogue
-SysEx_DispatchByChannel_49_Entry_Code_Skip7:
+SysEx_ApplyVoiceParam_4B_SkipRestore:
+	jr	SysEx_ApplyVoiceParam_4B_Return
+SysEx_ApplyVoiceParam_4B_IterateSlots:
 	ld iz, 0:i3
 	cpiw_erp 0xfa, 0
-	jr	le, SysEx_DispatchByChannel_49_Entry_Code_Skip9
-SysEx_DispatchByChannel_49_Entry_Code_Loop:
+	jr	le, SysEx_ApplyVoiceParam_4B_RestoreSlotId
+SysEx_ApplyVoiceParam_4B_SlotLoop:
 	ld a, (xsp + 10)
 	extz wa
 	ldto_berp C, 0xf8
@@ -1508,27 +1477,27 @@ SysEx_DispatchByChannel_49_Entry_Code_Loop:
 	calr	SysEx_DispatchByChannel_49
 	ld bc, hl
 	cp bc, 0xd8f0
-	jr	z, SysEx_DispatchByChannel_49_Entry_Code_Skip8
+	jr	z, SysEx_ApplyVoiceParam_4B_SlotNext
 	ld wa, iz
 	exts xwa
 	add xwa, 0x4b10
 	ld xde, (xsp + 6)
 	call	DSPCfg_WriteParamSimple
-SysEx_DispatchByChannel_49_Entry_Code_Skip8:
+SysEx_ApplyVoiceParam_4B_SlotNext:
 	inc 1, iz
 	cpw_erp IZ, 0xfa
-	jr	lt, SysEx_DispatchByChannel_49_Entry_Code_Loop
-SysEx_DispatchByChannel_49_Entry_Code_Skip9:
+	jr	lt, SysEx_ApplyVoiceParam_4B_SlotLoop
+SysEx_ApplyVoiceParam_4B_RestoreSlotId:
 	lda xbc, (0xfc8e:16)
 	cp xbc, (xsp + 6)
-	jr	z, SysEx_DispatchByChannel_49_Entry_Code_Epilogue
+	jr	z, SysEx_ApplyVoiceParam_4B_Return
 	ld a, (xsp + 4)
 	ld (xbc), a
-SysEx_DispatchByChannel_49_Entry_Code_Epilogue:
+SysEx_ApplyVoiceParam_4B_Return:
 	pop xiz
 	inc 8, xsp
 	ret
-SysEx_DispatchByChannel_49_Entry_Code_Join3:
+SysEx_ApplyVoiceParam_4B_128:
 	dec 8, xsp
 	push xiz
 	ld (xsp + 6), xbc

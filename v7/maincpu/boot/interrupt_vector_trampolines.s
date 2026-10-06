@@ -13,35 +13,35 @@
 ; (every line re-assembled to the v7 bytes; the 41 + 292 byte romslices and the
 ; partial decode between them are gone).  The two v7 labels are real entries
 ; and keep their v7 names because 18 and 8 other v7 files call them by those:
-;   AcApcToggleProc_Helper      0xFCCC66, 343 calls = v10 SndParam_LookupReadOnly
-;   DkMdlyPly_CheckState_Helper 0xFCCD26,  73 calls = v10 SndParam_LookupViaEncode
+;   SndParam_LookupReadOnly      0xFCCC66, 343 calls = v10 SndParam_LookupReadOnly
+;   SndParam_LookupViaEncode 0xFCCD26,  73 calls = v10 SndParam_LookupViaEncode
 ; The first 41 bytes are v10's SndParam_Lkp2_CallType1 .. SndParam_WrapNotify2
 ; (v10 0xFCD40E-0xFCD436).  Six local labels of the old decode were dropped
 ; (notes below mark where).
 
 ; (was .incbin "includes/romslices/v7_block_interrupt_vector_trampolines_head.bin")
-interrupt_vector_trampolines_Skip:
+SndParam_Lkp2_CallType1:
 	ld	wa, (xsp + 10)
 	calr	Audio_ResetAfterPayloadError_Helper_Helper2
-	jr	interrupt_vector_trampolines_Join
-interrupt_vector_trampolines_Skip2:
+	jr	SndParam_Lkp2_Epilogue
+SndParam_Lkp2_NotFound:
 	ldw	(xsp + 4), 0xffff
-interrupt_vector_trampolines_Join:
+SndParam_Lkp2_Epilogue:
 	ld	hl, (xsp + 4)
 	pop	xiz
 	lda	xsp, (xsp + 10)
 	ret
-KeyScan_Disable_Helper:
+SndParam_WrapNotify2:
 	pushw	iz
 	ld	iz, de
 	calr	UIState_CheckAndRenderBitmap_Helper_Helper
 	ld	xwa, xhl
 	ld	bc, iz
 	ld	de, (xsp+6)
-	calr	MainTitle_PrepareAndDispatch_Helper
+	calr	SndParam_LookupByKey
 	popw	iz
 	retd	2
-AcApcToggleProc_Helper:
+SndParam_LookupReadOnly:
 	dec	6, xsp
 	push	xiz
 	ldw	(xsp + 4), 0xffff
@@ -68,32 +68,32 @@ AcApcToggleProc_Helper:
 	ld	xbc, 0x7ff
 	call	DivMod32
 	ld	ix, hl
-	jr	AcApcToggleProc_Helper_Join2
+	jr	SndParam_RO_ProbeEntry
 ; (v7 label .Lc_fcccb4 stood here; dropped, see the file header)
-AcApcToggleProc_Helper_Loop:
+SndParam_RO_ProbeCheck:
 	ld	bc, 0:i3
 	cp	xiz, xde
-	jr	z, AcApcToggleProc_Helper_Skip
+	jr	z, SndParam_RO_MatchFound
 	ldw	bc, 0xffff
-	jr	AcApcToggleProc_Helper_Join
+	jr	SndParam_RO_ProbeAdvance
 ; (v7 label .Lc_fcccbf stood here; dropped, see the file header)
-AcApcToggleProc_Helper_Skip:
+SndParam_RO_MatchFound:
 	cp	bc, 0xffff
-	jr	z, AcApcToggleProc_Helper_Join
+	jr	z, SndParam_RO_ProbeAdvance
 	ld	xwa, (xwa + 4)
 	ld	(xsp + 6), xwa
 ; (v7 label .Lc_fccccb stood here; dropped, see the file header)
-AcApcToggleProc_Helper_Join:
+SndParam_RO_ProbeAdvance:
 	inc	1, hl
 	cp	hl, 0x7ff
-	jr	ugt, AcApcToggleProc_Helper_Skip2
+	jr	ugt, SndParam_RO_Dispatch
 	ld	wa, ix
 	inc	3, wa
 	extz	xwa
 	div	wa, 0x7ff
 	ldto_werp	IX, 0xe2
 ; (v7 label .Lc_fccce0 stood here; dropped, see the file header)
-AcApcToggleProc_Helper_Join2:
+SndParam_RO_ProbeEntry:
 	ld	bc, ix
 	extz	xbc
 	sll	xbc, 3
@@ -101,15 +101,15 @@ AcApcToggleProc_Helper_Join2:
 	add	xwa, xbc
 	ld	xde, (xwa)
 	cp	xde, SNDPARAM_HASH_EMPTY_KEY
-	jr	nz, AcApcToggleProc_Helper_Loop
+	jr	nz, SndParam_RO_ProbeCheck
 ; (v7 label .Lc_fcccf8 stood here; dropped, see the file header)
-AcApcToggleProc_Helper_Skip2:
+SndParam_RO_Dispatch:
 	ld	xwa, (xsp + 6)
 	or	xwa, xwa
-	jr	z, AcApcToggleProc_Helper_Skip3
+	jr	z, SndParam_RO_Epilogue
 	ld	a, (xwa + 12)
 	cp	a, 7:i3
-	jr	nc, AcApcToggleProc_Helper_Skip3
+	jr	nc, SndParam_RO_Epilogue
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (SndParam_ReadHandlers:24)
@@ -119,17 +119,17 @@ AcApcToggleProc_Helper_Skip2:
 	call	(xhl)
 	ld	(xsp + 4), hl
 ; (v7 label .Lc_fccd1f stood here; dropped, see the file header)
-AcApcToggleProc_Helper_Skip3:
+SndParam_RO_Epilogue:
 	ld	hl, (xsp + 4)
 	pop	xiz
 	inc	6, xsp
 	ret
 ; (was .incbin "includes/romslices/v7_block_interrupt_vector_trampolines_tail.bin")
-DkMdlyPly_CheckState_Helper:
+SndParam_LookupViaEncode:
 	calr	UIState_CheckAndRenderBitmap_Helper_Helper
 	ld	xwa, xhl
-	jrl	AcApcToggleProc_Helper
-GroupBoxProc_StartSSFPresentation_Helper:
+	jrl	SndParam_LookupReadOnly
+SndParam_ResolveWidget:
 	lda	xsp, (xsp - 22)
 	push	xiz
 	ld	(xsp + 14), xde
@@ -197,7 +197,7 @@ GroupBoxProc_StartSSFPresentation_Helper:
 	add	xhl, xwa
 	ld	xde, (xhl)
 	or	xde, xde
-	jrl	z, EmptyRoutine_03_Skip2
+	jrl	z, SndParam_RW_NoEntry
 	ld	xix, (xde)
 	ldw	hl, 0xffff
 	ld	xwa, xix
@@ -205,26 +205,26 @@ GroupBoxProc_StartSSFPresentation_Helper:
 	ld	xbc, xiz
 	srl	xbc, 8
 	cp	xbc, xwa
-	jr	nz, DkMdlyPly_CheckState_Helper_Skip2
+	jr	nz, SndParam_RW_CheckFirstMatch
 	ld	xwa, xiz
 	srl	xwa, 16
 	cp	xwa, 0xb1
-	jr	z, DkMdlyPly_CheckState_Helper_Skip
+	jr	z, SndParam_RW_ExactMatch
 	ld	xwa, xix
 	and	xwa, 0xff
 	and	xwa, xiz
 	and	xwa, 0xff
-	jr	z, DkMdlyPly_CheckState_Helper_Skip2
-DkMdlyPly_CheckState_Helper_Skip:
+	jr	z, SndParam_RW_CheckFirstMatch
+SndParam_RW_ExactMatch:
 	ld	hl, 0:i3
 	jr	SndParam_RW_FoundCallback
-DkMdlyPly_CheckState_Helper_Skip2:
+SndParam_RW_CheckFirstMatch:
 	cp	hl, 0xffff
 	jr	nz, SndParam_RW_FoundCallback
 	ld	xwa, (xde + 8)
 	or	xwa, xwa
-	jr	z, EmptyRoutine_03_Skip2
-DkMdlyPly_CheckState_Helper_Loop:
+	jr	z, SndParam_RW_NoEntry
+SndParam_RW_ChainNext:
 	ld	xde, (xde + 8)
 	ld	xix, xiz
 	ld	xiy, (xde)
@@ -236,6 +236,6 @@ DkMdlyPly_CheckState_Helper_Loop:
 	ld	xwa, xix
 	srl	xwa, 16
 	cp	xwa, 0xb1
-	jr	z, EmptyRoutine_03_Skip
+	jr	z, SndParam_RW_ChainExactMatch
 	ld	xwa, xiy
 	.byte	0xe8, 0xcc, 0xff, 0x00

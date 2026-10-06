@@ -132,7 +132,7 @@ SeqTimer_PostTempoUpdate:
 	ld	e, 72:opc
 	ld	d, 8:opc
 	ld	w, 255:opc
-	call	SysEx_ApplyVoiceParam_49
+	call	SwbtWr_QueuePostEvent
 	popw	wa
 	ld	(64610:16), wa
 	call	SeqTimer_UpdateTempoReg
@@ -977,7 +977,7 @@ CDlikeExit_CheckPlaybackType:
 	ld (0xf19e:16), wa
 PlayMode_ResetAndSchedule:
 	ld	(3380:16), 0
-	call	PerfMode_Handler_EvtB_Helper2_Helper11
+	call	Audio_CheckSubsystemReady
 	ret
 SongBank_SwitchAndUpdateTempo:
 	ld (0x00ffe3:24), a
@@ -1053,7 +1053,7 @@ SongBank_SendBassEvent:
 	call	SwbtWr_ReinitBothBanks
 	ld	(4596:16), 1
 	call	BitMapOut_RenderDisplay
-	call	PerfMode_Handler_EvtB_Helper2_Helper11
+	call	Audio_CheckSubsystemReady
 	ret
 SqTrAs_Setup:
 	ld xiy, 0xcce
@@ -1625,7 +1625,7 @@ DkMdlyPly_HandleResult:
 	lda	xbc, (DkMdlyPly_HandleResult_Data:24)
 	ld	wa, (xbc+wa)
 	ldw	bc, 1025
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	ld	iz, hl
 	ld	wa, (xsp+4)
 	calr	DkMdlyPly_SendAudioCmd
@@ -2145,7 +2145,7 @@ NameGetFuncCall_Dispatch:
 	pushw	62080
 	pushw	0
 	pushw	6888
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xwa, (6888:16)
 	ld	(xwa+16), 0
 	push	xwa
@@ -2211,7 +2211,7 @@ NameGetFuncCall_OnGetSmfSongName:
 	push	xhl
 	pushw	0
 	pushw	7304
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xsp, (xsp+10)
 	lda	xwa, (7304:16)
 	ld	(xwa+20), 0
@@ -2252,7 +2252,7 @@ NameGetFuncCall_OnGetDocSongName:
 	push	xhl
 	pushw	0
 	pushw	7326
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xsp, (xsp+10)
 	lda	xwa, (7326:16)
 	ld	(xwa+12), 0
@@ -2292,7 +2292,7 @@ NameGetFuncCall_OnGetPdSongName:
 	push	xhl
 	pushw	0
 	pushw	7340
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xwa, (7340:16)
 	ld	(xwa+20), 0
@@ -2317,13 +2317,13 @@ NameGetFuncCall_OnGetLyricsSongName:
 	push	xhl
 	pushw	0
 	pushw	7370
-	call	Free_Compare2
+	call	Strcpy
 	pushw	20
 	pushw	0
 	pushw	7370
 	pushw	2
 	pushw	4174
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xsp, (xsp+18)
 	lda	xwa, (135246:24)
 	ld	(xwa+20), 0
@@ -2348,7 +2348,7 @@ NameGetFuncCall_OnGetComposerName:
 	push	xhl
 	pushw	0
 	pushw	7370
-	call	Free_Compare2
+	call	Strcpy
 	pushw	59
 	pushw	0
 	pushw	7370
@@ -2361,7 +2361,7 @@ NameGetFuncCall_OnGetComposerName:
 	pushw	28
 	push	xhl
 	push	xwa
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xsp, (xsp+10)
 	ld	(135296:24), 0
 	jr	NameGetFuncCall_Join
@@ -2412,7 +2412,7 @@ CDlikeSwTtl_ShowSongTitle:
 	push	xhl
 	pushw 0
 	pushw 7198
-	call	CmpNamingCheck_Helper
+	call	Strncpy
 	lda	xsp, (xsp+10)
 	lda	xbc, (7198:16)
 	ld	(xbc+12), 0
@@ -2435,7 +2435,7 @@ CDlikeSwTtl_ShowDocTitle:
 	push xhl
 	pushw 0
 	pushw 7212
-	call CmpNamingCheck_Helper
+	call Strncpy
 	lda xsp, (xsp+10)
 	lda_d16 xbc, (7212)
 	ld (xbc+12), 0
@@ -2458,7 +2458,7 @@ CDlikeSwTtl_ShowPdTitle:
 	push xhl
 	pushw 0
 	pushw 7226
-	call CmpNamingCheck_Helper
+	call Strncpy
 	lda xsp, (xsp+10)
 	lda_d16 xbc, (7226)
 	ld (xbc+20), 0

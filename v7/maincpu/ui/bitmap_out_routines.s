@@ -133,12 +133,12 @@ BitMapOut_ByteData_RenderB:
 	ld	a, (PART_SELECT:16)
 	extz	wa
 	ld	bc, 0:i3
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	ld	(xsp+3), l
 	ld	a, (PART_SELECT:16)
 	extz	wa
 	ldw	bc, 32
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	lda	xwa, (xsp)
 	ld	(xwa+4), l
 	ld (xwa+2), (PART_SELECT)
@@ -186,12 +186,12 @@ BitMapOut_ByteData_RenderD:
 	ld	a, (PART_SELECT:16)
 	extz	wa
 	ld	bc, 0:i3
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	ld	(xsp+3), l
 	ld	a, (PART_SELECT:16)
 	extz	wa
 	ldw	bc, 32
-	call	DkMdlyPly_CheckState_Helper
+	call	SndParam_LookupViaEncode
 	lda	xwa, (xsp)
 	ld	(xwa+4), l
 	ld (xwa+2), (PART_SELECT)	; (at +3) differs from v10 here
@@ -288,7 +288,7 @@ BitMapOut_DecrementTimer:
 	cp	a, 0:i3
 	ret	nz
 	ld	xwa, 3:i3
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	de, hl
 	pushw	255
 	ldw	wa, 112
@@ -331,7 +331,7 @@ BitMapOut_ByteData_TransitionSeq_Skip2:
 	ldw wa, 96
 	call	CtrlPanel_SetIndicatorBit
 	ld	xwa, 192
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	nz, BitMapOut_ByteData_TransitionSeq_Skip3
 	ld	xwa, 4294967295
@@ -367,7 +367,7 @@ BitMapOut_ByteData_PresetCopy:
 	cp a, 0:i3
 	jr z, BitMapOut_ByteData_PresetCopy_Join
 	ld xwa, 769
-	call AcApcToggleProc_Helper
+	call SndParam_LookupReadOnly
 	ldto_berp a, 251
 	extz wa
 	cp hl, 0:i3
@@ -630,7 +630,7 @@ PanelMemory_Recall_Slot:
 	bit	1, c
 	jr	nz, PanelMemory_Recall_KeepStyle
 	ld	xwa, 0x302
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld	a, (xsp)
 	extz	wa
 	cp	hl, 1:i3
@@ -659,7 +659,7 @@ PanelMemory_Recall_Finish:
 	call	nz, (BitMapOut_DispatchIOChanges:24)
 PanelMemory_Recall_CheckActive:
 	ld	xwa, 0x302
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
 	jr	nz, PanelMemory_Recall_NoSlot
 	bit	6, (0xfd9e:16)
@@ -3284,7 +3284,7 @@ BitMapOut_ByteData_DisplayUpdate:
 	cp	a, 0:i3
 	jr	z, BitMapOut_ByteData_DisplayUpdate_Skip
 	ld	xwa, 768
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp	l, 0:i3
 	jr	z, BitMapOut_ByteData_DisplayUpdate_Skip
 	dec	1, l
@@ -3554,10 +3554,10 @@ BitMapOut_ApplyPatch_Done:
 BitMapOut_ApplyPatch_Return:
 	push QIZ
 	ld XWA,0x00028000
-	call AcApcToggleProc_Helper
+	call SndParam_LookupReadOnly
 	ldfr_berp l, 251
 	ld xwa, 163841
-	call AcApcToggleProc_Helper
+	call SndParam_LookupReadOnly
 	lda_d16 xbc, (36942)
 	ldto_berp a, 251
 	ld (xbc), a

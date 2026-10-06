@@ -1373,7 +1373,7 @@ SeqEvtTick_ProcessTimers:
 	calr SeqEvt_ProcessTimedEvents
 	call RhythmBuf_ProcessEvents
 	call SeqEvt_ProcessBuffer
-	call MIDI_SendChannelPressure
+	call MIDI_OutputFlush
 	call SysEx_ParseAndDispatch
 	cp (0x0474:16), 0x55
 	jr z, SeqEvtTick_Return

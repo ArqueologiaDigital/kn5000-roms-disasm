@@ -51,7 +51,7 @@ SeqPlay_FinishFloppyLoadAndStart:
 	call SeqPlay_CheckStartConditions
 	call SeqPlay_InitChannelParams
 	ldw (0xf19c:16), 0x0000
-	call PerfMode_Handler_EvtB_Helper2_Helper11
+	call Audio_CheckSubsystemReady
 SeqPlay_ReadyStateTransition:
 	call SeqStep_PlaybackNop
 	ret
@@ -2714,7 +2714,7 @@ MidiNoteOn_NonDrumLookupA:
 	ld	xix, 6711
 	ld	wa, (xix+hl)
 	ld	c, w
-	call	MidiNoteOn_SetupVoiceA_Code_Helper
+	call	SndParam_LookupByPartAndNote
 	ld	a, (4012:16)
 	add	a, l
 	pop	xde
@@ -3134,7 +3134,7 @@ MidiPgmChg_Mode2_SetupA:
 	pop XIX
 	call VoiceChannel_StoreVoiceIdx
 	ld XWA,0x00001a57
-	call MidiPgmChg_Mode0_SetupA_Code_Helper
+	call SndParam_LookupOscEnvelope
 	cpw (0x1a5f:16), 0x0009
 	jr z, MidiPgmChg_Mode2_ApplyEnvelopeA
 	ld XHL,0x00001a37
@@ -3431,7 +3431,7 @@ MidiNoteOn_NonDrumLookupB:
 	ld	xix, 6711
 	ld	wa, (xix+hl)
 	ld	c, w
-	call	MidiNoteOn_SetupVoiceA_Code_Helper
+	call	SndParam_LookupByPartAndNote
 	ld	a, (4012:16)
 	add	a, l
 	pop	xde
@@ -3858,7 +3858,7 @@ MidiPgmChg_Mode2_SetupB:
 	ld (0x1a5c:16), l
 	call VoiceChannel_StoreVoiceIdx
 	ld XWA,0x00001a57
-	call MidiPgmChg_Mode0_SetupA_Code_Helper
+	call SndParam_LookupOscEnvelope
 	cpw (0x1a5f:16), 0x0009
 	jr z, MidiPgmChg_Mode2_ApplyEnvelopeB
 	ld XHL,0x00001a37
@@ -4798,7 +4798,7 @@ VoiceParam_ByMode_Mode2:
 	push XIY
 	call VoiceChannel_StoreVoiceIdx
 	ld XWA,0x00001a57
-	call MidiPgmChg_Mode0_SetupA_Code_Helper
+	call SndParam_LookupOscEnvelope
 	cpw (0x1a5f:16), 0x0009
 	jr z, VoiceParam_ByMode_Mode2_Apply
 	ld XHL,0x00001a37

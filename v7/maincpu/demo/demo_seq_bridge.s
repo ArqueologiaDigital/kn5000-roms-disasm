@@ -38,7 +38,7 @@ MiddleFuncCall_OnSongNameSet:
 	push	xde
 	pushw	0
 	pushw	4441
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	push	xde
 	push	xhl
@@ -117,7 +117,7 @@ MiddleFuncCall_OnTrAsPartDec:
 	pop	xde
 	jr	SqTrSel_CaseC
 MiddleFuncCall_OnAmdCall:
-	call	PerfMode_Handler_EvtB_Helper2_Helper11
+	call	Audio_CheckSubsystemReady
 	jr	SqTrSel_CaseC
 MiddleFuncCall_OnDirectPlayMute:
 	calr	DisplayMode_RefreshState

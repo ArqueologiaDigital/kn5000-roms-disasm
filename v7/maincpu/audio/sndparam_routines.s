@@ -30,13 +30,11 @@
 ; same number as NakaData_RomEnd, which is why the probes used to spell it that way.
 	.equ SNDPARAM_HASH_EMPTY_KEY, 0x00FFFFFF
 
-SndParam_ProbeCheckMatch:
 	.byte 0xe8
 	ld	xwa, (xsp + 14)
 	ld	(xwa), hl
 	ld	c, (xiz + 6)
 	cpl	c
-SndParam_ProbeMatchFound:
 	ld	xwa, (xsp + 22)
 	and	(xwa + 3), c
 	jr	SndParam_RW_Success
@@ -261,17 +259,14 @@ SndParam_DMA_ExtractFields:
 	ld	bc, wa
 	ld	xwa, (xsp + 18)
 	ld	(xwa), bc
-SndParam_RO_ProbeCheck:
 	ld	xbc, xiz
 	and	xbc, 0x3ff
 	ld	xwa, (xsp + 14)
-SndParam_RO_MatchFound:
 	ld	(xwa), bc
 	ldw	(xsp + 4), 0x0
 SndParam_DMA_Zone2Check:
 	ld	xbc, (xsp + 22)
 	ld	xwa, (xbc)
-SndParam_RO_ProbeAdvance:
 	cp	xwa, 0x18000
 	jr	c, SndParam_DMA_Epilogue
 	ld	xwa, (xbc)
@@ -787,8 +782,7 @@ SndParam_UpdateEntry_Data_Skip:
 	ld	(xix), a
 SndParam_UpdateEntry_Data_Return:
 	ret
-; v10 name for this address: SndParam_RegisterMultiField_Data -- not a label here: v7 keeps that name at 0xFCD9E4 for ui_widgets/widget_dispatch.s
-SndParam_RegisterType4_Handler:
+SndParam_RegisterMultiField_Data:
 	lda	xsp, (xsp-10)
 	push	xiz
 	ld	(xsp+12), de
@@ -1238,8 +1232,6 @@ SndParam_RegisterLinked2_Data_Join:
 	pop	xiz
 	lda	xsp, (xsp+10)
 	ret
-; SndParam_RegisterMultiField_Data is kept at this address only for ui_widgets/widget_dispatch.s; v10's SndParam_RegisterMultiField_Data is the code at 0xFCD5CA
-SndParam_RegisterMultiField_Data:
 SndParam_RegisterSimple_Data:
 	dec	6, xsp
 	push	xiz
@@ -2284,7 +2276,7 @@ SndParam_BatchUpdate_Data:
 	ldib_erp	249, 0
 	ldib_erp	251, 0
 	ld	xwa, 8705
-	calr	AcApcToggleProc_Helper
+	calr	SndParam_LookupReadOnly
 	ld	wa, (xsp+20)
 	ld	d, a
 	lda	xix, (0x96fc:16)

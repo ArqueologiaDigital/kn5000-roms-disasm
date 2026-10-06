@@ -66,3 +66,14 @@ midi/midipkt_routines.s MidiPkt_ExtractAndPack 0xfd994d -> 0xfd9533 refs 3 there
 midi/midipkt_routines.s MidiPkt_EnqueueControl_335C 0xfd9fd2 -> 0xfd9bb8 refs 5 there: ['SeqAlt_DescriptorBlock_Data_Helper']
 ```
 Reproduce: the snippet that wrote this list is `drift41a.py` beside this README.
+
+## Resolved 2026-10-06
+
+`scripts/tools/fix_v7_displaced_names.py` moved every name of v7 0xFCC000-0xFF2000 to the v7 code v10
+gives that name, using a measured v7 <-> v10 map (12-byte sequences unique in both ROMs, in runs of one
+delta) instead of a per-name search.  The table above was the part of the drift that other files
+referenced; the same band also held ~360 derived names built on the displaced ones
+(`MidiPkt_ArpConfigChain_Data_Helper18_Helper`, `AudioDispatch_CheckStereoMode_Code_Skip26`, ...), which
+took v10's names site by site.  `drift41a.py` above now prints nothing, and
+`python3 scripts/tools/fix_v7_displaced_names.py --audit` reports 0 names in the band away from v10's
+code of them.

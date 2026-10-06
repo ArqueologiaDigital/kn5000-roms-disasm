@@ -4006,7 +4006,7 @@ DrawString_DeferredPath:
 	ld xwa, (xsp+8)
 	push xwa
 	push xbc
-	call Free_Compare2
+	call Strcpy
 	inc 8, xsp
 	ld xwa, (xsp+28)
 	ld (xiz+20), xwa

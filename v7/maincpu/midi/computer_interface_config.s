@@ -76,7 +76,7 @@ CmptCnctDrawConnectionDiagram:
 	pushw	MdCmptCnctFunc_LocalInit_Strings@hi16
 	pushw	MdCmptCnctFunc_LocalInit_Strings@lo16
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xwa, (xsp+4)
 	pushw	108
@@ -87,7 +87,7 @@ CmptCnct_DrawDiagram1:
 	pushw	CmptCnct_DrawDiagram1_Str_KN_as_master@hi16
 	pushw	CmptCnct_DrawDiagram1_Str_KN_as_master@lo16
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xwa, (xsp+4)
 	pushw	108
@@ -98,7 +98,7 @@ CmptCnct_DrawDiagram2:
 	pushw	CmptCnct_DrawDiagram2_Str_KN_as_slave@hi16
 	pushw	CmptCnct_DrawDiagram2_Str_KN_as_slave@lo16
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xwa, (xsp+4)
 	pushw	108
@@ -109,7 +109,7 @@ CmptCnct_DrawDiagramDefault:
 	pushw	CmptCnct_DrawDiagramDefault_Str_Error@hi16
 	pushw	CmptCnct_DrawDiagramDefault_Str_Error@lo16
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	lda	xwa, (xsp+4)
 	pushw	108
@@ -181,7 +181,7 @@ PcgMode_CopyStrEntry:
 	push xbc
 
 PcgMode_CallStrcpy:
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	MdPcgMode_Epilogue
@@ -245,7 +245,7 @@ DrumType_CopyStrEntry:
 	push xbc
 
 DrumType_CallStrcpy:
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	MdDrumType_Epilogue
@@ -289,7 +289,7 @@ SetupLoadOptionJumpTable:
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	MdSetupLoad_Epilogue

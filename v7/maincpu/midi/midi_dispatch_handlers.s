@@ -14,8 +14,9 @@
 ; scripts/tools/midi_lane_v7_from_v10.py): every line below was derived
 ; from the v10 line emitting the same bytes at v10 = v7 + 0x7D1, with v7's
 ; own bytes decoded and re-encoded.  Addresses quoted in carried-over
-; headers are v10's.  Labels marked `v7 NAME DISPLACED` are the old v7
-; names, kept because another v7 file references them; see that note.
+; headers are v10's.  The old v7 names that other files kept 0x41A away from
+; their code (`v7 NAME DISPLACED`) were moved to it on 2026-10-06:
+; scripts/tools/fix_v7_displaced_names.py --audit checks every name here.
 ;
 	inc	1, b
 	ld	(0x33ed:16), b
@@ -56,10 +57,6 @@ MidiCC_RxCC64_Sustain:
 	sll	wa, 1
 	add	hl, wa
 	ld	xix, MidiCC_PartTargets_CC64_Sustain
-; v7 NAME DISPLACED: `MidiSerial_StatusTable` (0xFCF64D) falls inside the line above in the
-; correct framing (v10 0xFCFE1E).  Kept as an alias because another v7
-; file references this address by this name.
-	.set MidiSerial_StatusTable, MidiCC_RxCC64_Sustain + 19
 	ld	bc, (xix+hl)
 	cp c, 255
 	jr	z, MidiCC_RxCC64_Sustain_Return
@@ -268,10 +265,6 @@ MidiCC_RxCC91_Reverb:
 	ld	(0x95ac:16), a
 	ld	(0x95a8:16), bc
 	ld	(0x95aa:16), de
-; v7 NAME DISPLACED: `MidiCC_Handler_BitManipulation` sits where v10 has no label (v10 0xFD008E).
-; The v7 code v10 calls `MidiCC_Handler_BitManipulation` is 0x41A earlier, at v7 0xFCF4A3.
-; Kept because another v7 file references this address by this name.
-MidiCC_Handler_BitManipulation:
 	cp	c, 96
 	jr	z, MidiCC_RxCC91_Reverb_Skip
 	call	MidiCC_Handler_BitManipulation_Code_Helper6
@@ -604,10 +597,6 @@ MidiRx_ChannelPressure:
 	jr	z, MidiRx_ChannelPressure_Return
 	sll	a, 1
 	ld	xix, MidiCP_PartTargets
-; v7 NAME DISPLACED: `MidiCC_VoiceParam_8` (0xFCFC5B) falls inside the line above in the
-; correct framing (v10 0xFD042C).  Kept as an alias because another v7
-; file references this address by this name.
-	.set MidiCC_VoiceParam_8, MidiRx_ChannelPressure + 22
 	ld	bc, (xix+a)
 	cp c, 255
 	jr	z, MidiRx_ChannelPressure_Return
@@ -720,8 +709,6 @@ UIState_DisplayUpdate_BitmapHandler_Skip4:
 	cp	(0x95d2:16), 32
 	jr	nz, UIState_DisplayUpdate_BitmapHandler_Loop
 	ret
-; v7 NAME DISPLACED: `MIDI_DispatchCC` sits where v10 has `MIDI_DispatchCC` (v10 0xFD055E).
-; Kept because another v7 file references this address by this name.
 MIDI_DispatchCC:
 	bit	0, (0xb74b:16)
 	jr	nz, MidiCC_DispatchCleanupRet
@@ -810,7 +797,7 @@ PanelEvt_DispatchTable:
 	.long MidiCC_NullHandlerBlock
 	.long MidiCC_NullHandlerBlock
 	.long PanelEvt_Handler_3_ValueCheck
-	.long PanelEvt_DispatchTable_Target4
+	.long PanelEvt_Handler_4_DualValueCheck
 	.long PanelEvt_Handler_5_ValueCheck
 	.long PanelEvt_Handler_6_NullStub
 	.long PanelEvt_Handler_7_ValueCheck
@@ -1029,6 +1016,7 @@ PanelEvt_Dispatch6Entry:
 ; not MidiCC_NullHandlerBlock / PanelEvt_Handler_0_NoteOnParam follow the table,
 ; each with the value map it reads.  Previously spelled as `swi 7 / popw bc /
 ; ei 253 / jrl ule, -772 ...` with the handlers misframed behind it.
+PanelEvt_Dispatch6_TableAndHandlers:
 	.byte 0xff
 PanelEvt_Dispatch6_Handlers:
 	.long PanelEvt_Handler_0_NoteOnParam
@@ -1181,6 +1169,7 @@ PanelEvt_Dispatch11Entry:
 	; 12 entries reach 0xFD09DB, which is also the value of the last entry --
 	; the table is followed immediately by the code it points at.
 	; one pad byte; entry 0 of the table is at +1
+PanelEvt_Dispatch11_TableAndHandlers:
 	.byte 0xff
 PanelEvt_Dispatch11_Handlers:
 	.long MidiCC_NullHandlerBlock
@@ -1465,10 +1454,6 @@ MidiCC_ChannelDispatch_Func13:
 	jr	ugt, MidiCC_ChannelDispatch_Ctrl0_Return4
 	ld	xix, MidiCC_ChannelDispatch_Func13_Data
 	extz	hl
-; v7 NAME DISPLACED: `PanelEvt_Dispatch6_TableAndHandlers` (0xFD04BF) falls inside the line above in the
-; correct framing (v10 0xFD0C90).  Kept as an alias because another v7
-; file references this address by this name.
-	.set PanelEvt_Dispatch6_TableAndHandlers, MidiCC_ChannelDispatch_Func13 + 15
 	sll	l, 2
 	ld	xix, (xix+hl)
 	cp	xix, 0xffffffff
@@ -1588,10 +1573,6 @@ MidiCC_ChannelDispatch_DualSend:
 	jr	nz, FileData_DispatchExit
 MidiCC_DualSend_SetupParams:
 	ld	xiy, 0x95a0
-; v7 NAME DISPLACED: `PanelEvt_Dispatch11_TableAndHandlers` (0xFD05F3) falls inside the line above in the
-; correct framing (v10 0xFD0DC4).  Kept as an alias because another v7
-; file references this address by this name.
-	.set PanelEvt_Dispatch11_TableAndHandlers, MidiCC_DualSend_SetupParams + 4
 	ldw bc, 0x300
 	ld (xiy + 3), bc
 	and a, 0xf
@@ -1707,7 +1688,7 @@ Periodic_TimestampCompare_Done:
 ; CC7->2 CC10->4 CC11->3 CC32->25 CC38->33 CC64->0 CC80->16 CC82->17
 ; CC83->18 CC91->7 CC93->5 CC94->6 CC100->35 CC101->34 CC120->41 CC121->40.
 ; No controller maps to functions 8-15 in this table.
-MidiRx_ControlChange_Data:
+MidiCC_ChannelMappingData:
 	.byte 0x18, 0x01, 0xff, 0xff, 0xff, 0xff, 0x20, 0x02, 0xff, 0xff, 0x04, 0x03, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0x19, 0xff, 0xff, 0xff, 0xff, 0xff, 0x21, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
@@ -1897,10 +1878,6 @@ MidiCC_PartTargets_CC94_Celeste:
 	.byte 0x08, 0x04, 0x40, 0x09, 0x04, 0x40, 0x0a, 0x04, 0x40, 0x0b, 0x04, 0x40
 	.byte 0x0c, 0x04, 0x40, 0x0d, 0x04, 0x40, 0x0e, 0x04, 0x40, 0xff, 0xff, 0xff
 	.byte 0x10, 0x04, 0x40, 0x11, 0x04, 0x40, 0x12, 0x04, 0x40, 0x13, 0x04, 0x40
-; v7 NAME DISPLACED: `MidiCC_ChannelMappingData` (0xFD0AB0) falls inside the line above in the
-; correct framing (v10 0xFD1281).  Kept as an alias because another v7
-; file references this address by this name.
-	.set MidiCC_ChannelMappingData, MidiCC_PartTargets_CC94_Celeste + 58
 	.byte 0xff, 0xff, 0xff, 0x15, 0x04, 0x40, 0xff, 0xff, 0xff, 0x17, 0x04, 0x40
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
@@ -2054,7 +2031,7 @@ MidiCC_PartTargets_BankSelect:
 	.short 0x0008, 0x0009, 0x000a, 0x000b, 0x000c, 0x000d, 0x000e, 0x000f
 	.short 0x0010, 0x0011, 0x0012, 0x0013, 0x0014, 0x0015, 0x00ff, 0x0017
 	.short 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff
-PanelEvt_DispatchTable_Target4:
+PanelEvt_Handler_4_DualValueCheck:
 	bit	3, (0x95b3:16)
 	jr	z, PanelEvt_Handler_4_DualValueCheck_Skip2
 	ld	l, (0x95b0:16)
@@ -2363,10 +2340,6 @@ PanelEvt_Handler_0_NoteOnParam_Data:
 	.long 0x0000fbcb, 0x0000fbe5, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
-; v7 NAME DISPLACED: `PanelEvt_Handler_4_DualValueCheck` (0xFD1330) falls inside the line above in the
-; correct framing (v10 0xFD1B01).  Kept as an alias because another v7
-; file references this address by this name.
-	.set PanelEvt_Handler_4_DualValueCheck, MidiCC_FunctionToCCNumber + 163
 PanelEvt_Handler_3_ValueCheck_Data:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
@@ -6610,8 +6583,6 @@ DataBuf_CopyBulkBitfields_Large_Helper3_Epilogue:
 	popw	iz
 	inc	6, xsp
 	ret
-; v7 NAME DISPLACED: `DataBuf_InitSlotFromPreset` sits where v10 has `DataBuf_InitSlotFromPreset` (v10 0xFD53AA).
-; Kept because another v7 file references this address by this name.
 DataBuf_InitSlotFromPreset:
 	pushw iz
 	ld iz, wa
@@ -6693,8 +6664,6 @@ SndParam_TableDispatch_Memset:
 	call	Memset
 	inc 8, xsp
 	ret
-; v7 NAME DISPLACED: `SndParam_ApplyAndSync` sits where v10 has `SndParam_ApplyAndSync` (v10 0xFD5476).
-; Kept because another v7 file references this address by this name.
 SndParam_ApplyAndSync:
 	pushw_erp 0xfa
 	ld	a, (0xb750:16)
@@ -6719,7 +6688,7 @@ SndParam_ReadAndApply:
 	ld xwa, 0xc0
 	ld bc, 0:i3
 	ld de, 1:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	push xde
 	push xhl
 	push xix
@@ -6772,7 +6741,7 @@ SndParam_ApplyAllBlocks:
 	push xiz
 	call	SoundParam_NotifyMultipleChanges
 	call	SwbtWr_ReinitBothBanks
-	call	SysEx_ValidateRolandHeader_Cmd33
+	call	SwbtWr_CallProcessAll
 	call	SwbtWr_ReinitBothBanks
 	pop xiz
 	pop xix
@@ -7099,7 +7068,7 @@ MidiSysEx_SendAllParams:
 	dec 2, xsp
 	push xiz
 	ld xwa, 0x2203
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp hl, 0:i3
 	jrl	nz, MidiSysEx_PopIzAndReturn
 	pushw 0xe
@@ -7111,7 +7080,7 @@ MidiSysEx_SendAllParams:
 	call	GET_COMPUTER_INTERFACE_SELECTION
 	ld (xsp + 4), l
 	ld xwa, 0x2d03
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp hl, 0:i3
 	jr	z, MidiSysEx_SendReverbParam
 	pushw 0xe
@@ -7121,7 +7090,7 @@ MidiSysEx_SendAllParams:
 	call	Mem_Copy
 	lda xsp, (xsp + 10)
 	ld xwa, 0x2d00
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld (xiz + 4), l
 	ld (xiz + 9), 0x20
 	ld (xiz + 12), 0x3
@@ -7139,7 +7108,7 @@ MidiSysEx_SendParamViaCOMM:
 	call	sendCOMM
 MidiSysEx_SendReverbParam:
 	ld xwa, 0x2d01
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp hl, 0:i3
 	jr	z, MidiSysEx_SendProgramChange
 	pushw 0xe
@@ -7151,7 +7120,7 @@ MidiSysEx_SendReverbParam:
 	ld	(xiz+4), (0xb756)
 	ld (xiz + 9), 0x11
 	ld xwa, 0x2d00
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld (xiz + 12), l
 	cp (xsp + 4), 0x0
 	jr	nz, MidiSysEx_SendReverbViaCOMM
@@ -7183,7 +7152,7 @@ MidiSysEx_SendReverbFixup:
 	ld	(0xb756), (xiz+12)
 MidiSysEx_SendProgramChange:
 	ld xwa, 0x2d03
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp hl, 0:i3
 	jr	z, MidiSysEx_SendControlChange1
 	pushw 0x2
@@ -7193,13 +7162,13 @@ MidiSysEx_SendProgramChange:
 	call	Mem_Copy
 	lda xsp, (xsp + 10)
 	ld xwa, 0x2d00
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp hl, 0xf
 	jr	gt, MidiSysEx_SendPCRegValue
 	or (xiz), l
 MidiSysEx_SendPCRegValue:
 	ld xwa, 0x2d02
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld (xiz + 1), l
 	cp (xsp + 4), 0x0
 	jr	nz, MidiSysEx_SendPCViaCOMM
@@ -7215,7 +7184,7 @@ MidiSysEx_SendPCViaCOMM:
 	call	sendCOMM
 MidiSysEx_SendControlChange1:
 	ld xwa, 0x2d05
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp hl, 0:i3
 	jr	z, MidiSysEx_SendControlChange2
 	pushw 0x3
@@ -7225,13 +7194,13 @@ MidiSysEx_SendControlChange1:
 	call	Mem_Copy
 	lda xsp, (xsp + 10)
 	ld xwa, 0x2d00
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp hl, 0xf
 	jr	gt, MidiSysEx_SendCC1RegValue
 	or (xiz), l
 MidiSysEx_SendCC1RegValue:
 	ld xwa, 0x2d04
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld (xiz + 2), l
 	cp (xsp + 4), 0x0
 	jr	nz, MidiSysEx_SendCC1ViaCOMM
@@ -7247,7 +7216,7 @@ MidiSysEx_SendCC1ViaCOMM:
 	call	sendCOMM
 MidiSysEx_SendControlChange2:
 	ld xwa, 0x2d07
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp hl, 0:i3
 	jr	z, MidiSysEx_CheckDelayAndSend
 	pushw 0x3
@@ -7257,13 +7226,13 @@ MidiSysEx_SendControlChange2:
 	call	Mem_Copy
 	lda xsp, (xsp + 10)
 	ld xwa, 0x2d00
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp hl, 0xf
 	jr	gt, MidiSysEx_SendCC2RegValue
 	or (xiz), l
 MidiSysEx_SendCC2RegValue:
 	ld xwa, 0x2d06
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	add hl, 0x3c
 	ld (xiz + 2), l
 	cp (xsp + 4), 0x0
@@ -7286,7 +7255,7 @@ MidiSysEx_CheckDelayAndSend:
 	call	TaskSched_DelayTicks
 MidiSysEx_SendAfterDelay:
 	ld xwa, 0x2d09
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp hl, 0:i3
 	jr	z, MidiSysEx_SendBankData1
 	pushw 0xe
@@ -7296,11 +7265,11 @@ MidiSysEx_SendAfterDelay:
 	call	Mem_Copy
 	lda xsp, (xsp + 10)
 	ld xwa, 0x2d00
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld (xiz + 4), l
 	ld (xiz + 9), 0x20
 	ld xwa, 0x2d08
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld (xiz + 12), l
 	cp (xsp + 4), 0x0
 	jr	nz, MidiSysEx_SendAfterDelayViaCOMM
@@ -7316,7 +7285,7 @@ MidiSysEx_SendAfterDelayViaCOMM:
 	call	sendCOMM
 MidiSysEx_SendBankData1:
 	ld xwa, 0x2d0b
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp hl, 0:i3
 	jr	z, MidiSysEx_SendBankData2
 	pushw 0xe
@@ -7326,7 +7295,7 @@ MidiSysEx_SendBankData1:
 	call	Mem_Copy
 	lda xsp, (xsp + 10)
 	ld xwa, 0x2d00
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld (xiz + 4), l
 	ld (xiz + 9), 0x16
 	ld (xiz + 12), 0x0
@@ -7345,7 +7314,7 @@ MidiSysEx_SendBank1ViaCOMM:
 MidiSysEx_SendBank1Param2:
 	ld (xiz + 9), 0x17
 	ld xwa, 0x2d0a
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld (xiz + 12), l
 	cp (xsp + 4), 0x0
 	jr	nz, MidiSysEx_SendBank1P2ViaCOMM
@@ -7361,7 +7330,7 @@ MidiSysEx_SendBank1P2ViaCOMM:
 	call	sendCOMM
 MidiSysEx_SendBankData2:
 	ld xwa, 0x2d0f
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp hl, 0:i3
 	jr	z, MidiSysEx_SendBankData3
 	pushw 0xe
@@ -7371,11 +7340,11 @@ MidiSysEx_SendBankData2:
 	call	Mem_Copy
 	lda xsp, (xsp + 10)
 	ld xwa, 0x2d00
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld (xiz + 4), l
 	ld (xiz + 9), 0x28
 	ld xwa, 0x2d0e
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld (xiz + 12), l
 	cp (xsp + 4), 0x0
 	jr	nz, MidiSysEx_SendBank2ViaCOMM
@@ -7392,7 +7361,7 @@ MidiSysEx_SendBank2ViaCOMM:
 MidiSysEx_SendBank2Param2:
 	ld (xiz + 9), 0x29
 	ld xwa, 0x2d0d
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld (xiz + 12), l
 	cp (xsp + 4), 0x0
 	jr	nz, MidiSysEx_SendBank2P2ViaCOMM
@@ -7408,7 +7377,7 @@ MidiSysEx_SendBank2P2ViaCOMM:
 	call	sendCOMM
 MidiSysEx_SendBankData3:
 	ld xwa, 0x2d13
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	cp hl, 0:i3
 	jr	z, MidiSysEx_FreeAndReturn
 	pushw 0xe
@@ -7418,11 +7387,11 @@ MidiSysEx_SendBankData3:
 	call	Mem_Copy
 	lda xsp, (xsp + 10)
 	ld xwa, 0x2d00
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld (xiz + 4), l
 	ld (xiz + 9), 0x1b
 	ld xwa, 0x2d12
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld (xiz + 12), l
 	cp (xsp + 4), 0x0
 	jr	nz, MidiSysEx_SendBank3ViaCOMM
@@ -7439,7 +7408,7 @@ MidiSysEx_SendBank3ViaCOMM:
 MidiSysEx_SendBank3Param2:
 	ld (xiz + 9), 0x1c
 	ld xwa, 0x2d11
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld (xiz + 12), l
 	cp (xsp + 4), 0x0
 	jr	nz, MidiSysEx_SendBank3P2ViaCOMM
@@ -7483,7 +7452,7 @@ MidiSysEx_SendPartChanLoop:
 	ld (xiz+4), a
 	ld (xiz+9), 0x12
 	ld xwa, 0x00002d00
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	ld (xiz+0x0c), l
 	push xiz
 	pushw	14
@@ -7499,8 +7468,6 @@ MidiSysEx_SendPartChan_Done:
 	pop xiz
 	inc 2, xsp
 	ret
-; v7 NAME DISPLACED: `MidiSysEx_CopyParamToBuffer` sits where v10 has `MidiSysEx_CopyParamToBuffer` (v10 0xFD5C3A).
-; Kept because another v7 file references this address by this name.
 	; --- Routine 2: sla+lda helper, push args + call FF0D99 (32 bytes) ---
 MidiSysEx_CopyParamToBuffer:
 	extz wa
@@ -7520,7 +7487,7 @@ MidiPkt_SendControlPair:
 	ld (xbc), a
 	ld (xbc + 1), w
 	ld xwa, xbc
-	call	VocalistPage2OKFunc_Helper2_Helper
+	call	MidiPkt_EnqueueControl_335E
 	ret
 MidiStream_RefreshDisplay:
 	push xde
@@ -8989,7 +8956,7 @@ ArpQueue_ProcessAndSort_Data_Loop:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	cp	(xwa+4), 0
 	ret	nz
-	call	ArpQueue_ProcessAndSort_Data_Helper4
+	call	MidiSeq_PartConfigure_Data
 	calr	ArpQueue_ProcessAndSort_Data_Helper
 	calr	ArpQueue_ProcessAndSort_Data_Helper2
 	calr	ArpQueue_ProcessAndSort_Data_Helper3
@@ -9196,7 +9163,7 @@ SeqVoice_StoreEntryDone:
 	ld xhl, (xsp)
 	inc 4, xsp
 	ret
-MidiPkt_ArpConfigChain_Data_Helper18_Helper:
+SeqVoice_DispatchProcess_Data:
 	lda	xsp, (xsp-12)
 	push	xiz
 	ld	xiz, (MIDISEQ_ACTIVE_BLOCK_PTR:16)
@@ -9256,7 +9223,7 @@ SeqVoice_DispatchProcess_Data_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+12)
 	ret
-MidiPkt_ArpConfigChain_Data_Helper18_Helper2:
+MidiPkt_ArpExtHandler_G_Helper:
 	push	xiz
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 12
@@ -9289,7 +9256,7 @@ MidiPkt_ArpConfigChain_Data_Helper18_Helper2:
 	ld	(xwa+8), xiz
 	pop	xiz
 	ret
-MidiSeq_ApplyPendingParams_Helper:
+MidiSeq_ClearSyncFlag_Helper:
 	dec	4, xsp
 	push	xiz
 	ld	xiz, xwa
@@ -9308,24 +9275,24 @@ MidiSeq_ApplyPendingParams_Helper:
 	ld	wa, 1:i3
 	calr	AccWrap_ReturnZero
 	cp	hl, 0xffff
-	jr	z, MidiSeq_ApplyPendingParams_Helper_Skip
+	jr	z, SeqVoice_DispatchProcess_Data_Skip3
 	ld	xwa, 0x72aa
 	add	(xiz+8), xwa
-MidiSeq_ApplyPendingParams_Helper_Skip:
+SeqVoice_DispatchProcess_Data_Skip3:
 	ld	wa, 3:i3
 	calr	AccWrap_ReturnZero
 	cp	hl, 0xffff
-	jr	z, MidiSeq_ApplyPendingParams_Helper_Skip2
+	jr	z, SeqVoice_DispatchProcess_Data_Skip4
 	calr	SeqVoice_DispatchProcess_Data_Helper
 	add	(xiz+8), xhl
-MidiSeq_ApplyPendingParams_Helper_Skip2:
+SeqVoice_DispatchProcess_Data_Skip4:
 	ld	xwa, (xiz+8)
 	add	xwa, (xiz)
 	ld	(xiz+4), xwa
 	pop	xiz
 	inc	4, xsp
 	ret
-MidiSeq_ApplyPendingParams_Helper2:
+MidiSeq_ClearSyncFlag_Helper2:
 	lda	xde, (0xf980:16)
 	ld	(xwa), xde
 	lda	xbc, (0xffbe:16)
@@ -9338,7 +9305,7 @@ MidiSeq_ApplyPendingParams_Helper2:
 	ld	(xwa+4), xhl
 	ld	(xwa+8), xde
 	ret
-MidiPkt_ArpConfigChain_Data_Helper2_Helper:
+MidiPkt_ArpPopReturn_Helper:
 	lda	xde, (0xf980:16)
 	ld	(xwa), xde
 	lda	xbc, (0xffbe:16)
@@ -9349,7 +9316,7 @@ MidiPkt_ArpConfigChain_Data_Helper2_Helper:
 	ld	(xwa+4), xhl
 	ld	(xwa+8), xbc
 	ret
-MidiPkt_ArpConfigChain_Data_Helper3_Helper:
+MidiPkt_ArpPopReturn_Helper2:
 	lda	xbc, (0x1ed350:24)
 	ld	(xwa), xbc
 	add	xbc, 0x12cb0
@@ -9357,7 +9324,7 @@ MidiPkt_ArpConfigChain_Data_Helper3_Helper:
 	ld	xbc, 0x12cb0
 	ld	(xwa+8), xbc
 	ret
-MidiSeq_ApplyPendingParams_Helper3:
+MidiSeq_ClearSyncFlag_Helper3:
 	lda	xbc, (0x1e0000:24)
 	ld	(xwa), xbc
 	ld	xbc, 0x72aa
@@ -9366,7 +9333,7 @@ MidiSeq_ApplyPendingParams_Helper3:
 	lda	xbc, (xbc+0x72aa)
 	ld	(xwa+4), xbc
 	ret
-MidiPkt_ArpConfigChain_Data_Helper5_Helper:
+MidiPkt_ArpPopReturn_Helper3:
 	lda	xbc, (0x1e0000:24)
 	ld	(xwa), xbc
 	ld	xbc, 16
@@ -9375,7 +9342,7 @@ MidiPkt_ArpConfigChain_Data_Helper5_Helper:
 	lda	xbc, (xbc+16)
 	ld	(xwa+4), xbc
 	ret
-MidiPkt_ArpConfigChain_Data_Helper6_Helper:
+MidiPkt_ArpPopReturn_Helper4:
 	lda	xbc, (0x1e0000:24)
 	add	xbc, 16
 	ld	(xwa), xbc
@@ -9385,7 +9352,7 @@ MidiPkt_ArpConfigChain_Data_Helper6_Helper:
 	lda	xbc, (xbc+0x729a)
 	ld	(xwa+4), xbc
 	ret
-MidiSeq_ApplyPendingParams_Helper4:
+MidiSeq_ClearSyncFlag_Helper4:
 	push	xiz
 	ld	xiz, xwa
 	lda	xwa, (RHYTHM_PATTERN_BUF_A:24)
@@ -9404,7 +9371,7 @@ MidiSeq_ApplyPendingParams_Helper4:
 SeqVoice_DispatchProcess_Data_Epilogue2:
 	pop	xiz
 	ret
-MidiPkt_ArpConfigChain_Data_Helper8_Helper:
+MidiPkt_ArpPopReturn_Helper5:
 	lda	xde, (RHYTHM_PATTERN_BUF_A:24)
 	ld	(xwa), xde
 	lda	xbc, (0x94860:24)
@@ -9413,7 +9380,7 @@ MidiPkt_ArpConfigChain_Data_Helper8_Helper:
 	ld	(xwa+4), xde
 	ld	(xwa+8), xbc
 	ret
-MidiPkt_ArpConfigChain_Data_Helper9_Helper:
+MidiPkt_ArpPopReturn_Helper6:
 	lda	xde, (0x94860:24)
 	ld	(xwa), xde
 	lda	xbc, (0x95bc0:24)
@@ -9422,7 +9389,7 @@ MidiPkt_ArpConfigChain_Data_Helper9_Helper:
 	ld	(xwa+4), xde
 	ld	(xwa+8), xbc
 	ret
-MidiPkt_ArpConfigChain_Data_Helper10_Helper:
+MidiPkt_ArpPopReturn_Helper7:
 	push	xiz
 	ld	xiz, xwa
 	lda	xwa, (0x95bc0:24)
@@ -9449,7 +9416,7 @@ MidiPkt_ArpConfigChain_Data_Helper10_Helper:
 SeqVoice_DispatchProcess_Data_Epilogue3:
 	pop	xiz
 	ret
-MidiSeq_ApplyPendingParams_Helper5:
+MidiSeq_ClearSyncFlag_Helper5:
 	push	xiz
 	ld	xiz, xwa
 	lda	xwa, (0xf180:16)
@@ -9470,7 +9437,7 @@ MidiSeq_ApplyPendingParams_Helper5:
 SeqVoice_DispatchProcess_Data_Epilogue4:
 	pop	xiz
 	ret
-MidiPkt_ArpConfigChain_Data_Helper11_Helper:
+MidiPkt_ArpPopReturn_Helper8:
 	lda	xbc, (0xf180:16)
 	ld	(xwa), xbc
 	lda	xbc, (xbc+2048)
@@ -9478,7 +9445,7 @@ MidiPkt_ArpConfigChain_Data_Helper11_Helper:
 	ld	xbc, 0x800
 	ld	(xwa+8), xbc
 	ret
-MidiPkt_ArpConfigChain_Data_Helper12_Helper:
+MidiPkt_ArpPopReturn_Helper9:
 	lda	xbc, (SEQ_SONG_SLOTS:24)
 	ld	(xwa), xbc
 	lda	xbc, (xbc+20480)
@@ -9486,7 +9453,7 @@ MidiPkt_ArpConfigChain_Data_Helper12_Helper:
 	ld	xbc, 0x5000
 	ld	(xwa+8), xbc
 	ret
-MidiPkt_ArpConfigChain_Data_Helper13_Helper:
+MidiPkt_ArpPopReturn_Helper10:
 	push	xiz
 	ld	xiz, xwa
 	lda	xwa, (0xb0000:24)
@@ -9508,7 +9475,7 @@ SeqVoice_DispatchProcess_Data_Epilogue5:
 	ret
 	ret
 	ret
-MidiSeq_ApplyPendingParams_Helper6:
+MidiSeq_ClearSyncFlag_Helper6:
 	push	xiz
 	ld	xiz, xwa
 	lda	xwa, (0x1e8800:24)
@@ -9527,7 +9494,7 @@ MidiSeq_ApplyPendingParams_Helper6:
 SeqVoice_DispatchProcess_Data_Epilogue6:
 	pop	xiz
 	ret
-MidiPkt_ArpConfigChain_Data_Helper15_Helper:
+MidiPkt_ArpPopReturn_Helper11:
 	lda	xde, (0x1e8800:24)
 	ld	(xwa), xde
 	lda	xbc, (0x1e8820:24)
@@ -9537,7 +9504,7 @@ MidiPkt_ArpConfigChain_Data_Helper15_Helper:
 	ld	(xwa+4), xhl
 	ld	(xwa+8), xbc
 	ret
-MidiPkt_ArpConfigChain_Data_Helper16_Helper:
+MidiPkt_ArpPopReturn_Helper12:
 	lda	xde, (0x1e8820:24)
 	ld	(xwa), xde
 	lda	xbc, (0x1e8b00:24)
@@ -9547,7 +9514,7 @@ MidiPkt_ArpConfigChain_Data_Helper16_Helper:
 	ld	(xwa+4), xhl
 	ld	(xwa+8), xbc
 	ret
-MidiPkt_ArpConfigChain_Data_Helper17_Helper:
+MidiPkt_ArpPopReturn_Helper13:
 	push	xiz
 	ld	xiz, xwa
 	lda	xwa, (0x1e8b00:24)
@@ -9620,10 +9587,6 @@ MidiChan_CheckFlags:
 	ei 6
 	ld a, (1063:16)
 	and a, 0x2c
-; v7 NAME DISPLACED: `SeqVoice_DispatchProcess_Data` (0xFD68D6) falls inside the line above in the
-; correct framing (v10 0xFD70A7).  Kept as an alias because another v7
-; file references this address by this name.
-	.set SeqVoice_DispatchProcess_Data, MidiChan_CheckFlags + 8
 	jr	z, MidiChan_EnableAndReturn
 	call	SeqBuf2_InitWithInterrupts
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
@@ -9861,6 +9824,7 @@ Part_LookupTableEntry:
 Part_LookupReturnZero:
 	ld l, 0x0:opc
 	ret
+Part_ProcessEntry_Data:
 	ld	xhl, xwa
 	ld	wa, bc
 	dec	1, bc
@@ -9874,7 +9838,7 @@ Part_LookupTableEntry_Loop:
 	cp	wa, 0:i3
 	jr	nz, Part_LookupTableEntry_Loop
 	ret
-SndParam_LookupAndDispatch_Code_Helper:
+Param_SignExtendReturn_Helper3_Helper:
 	inc	1, xwa
 	ld	l, 0:opc
 	dec	1, bc
@@ -9892,14 +9856,14 @@ Part_LookupTableEntry_Skip:
 	neg	l
 	res	7, l
 	ret
-SndParam_LookupAndDispatch_Code_Helper2:
+Param_SignExtendReturn_Helper3_Helper2:
 	calr	ArpQueue_Enqueue
 	ld	xwa, (0xbbc0:16)
 	calr	SeqOut_FlushWithChunking
 	jp	ArpQueue_SwapBuffers
 	ret
 	ret
-MidiPkt_ArpConfigChain_Data_Helper18_Helper3:
+MidiTable_DispatchHelper_Helper:
 	ret
 MidiChan_ClearAllStates:
 	ld	(0xbc64:16), 0
@@ -10165,48 +10129,48 @@ MidiSeq_ApplyParams_Lower:
 MidiSeq_ClearSyncFlag:
 	res	6, (0xbc80:16)
 	ret
-ArpQueue_ProcessAndSort_Data_Helper4:
+MidiSeq_PartConfigure_Data:
 	ret
 	ldw	wa, 238
 	jp	SoundCtrl_SendCommand
-MidiCtrl_SendControlPacket_Helper:
+SysEx_SendDispatch_Helper:
 	set	3, (0xbc7c:16)
 	; v7 bytes do not decode as v10's `push_f`
 	ld	xwa, 0xbc20
 	; v7 bytes do not decode as v10's `ld	(xix-68), 0`
-	call	MidiSeq_ApplyPendingParams_Helper
-	calr	MidiSeq_ApplyPendingParams_Helper7
+	call	MidiSeq_ClearSyncFlag_Helper
+	calr	MidiPkt_ArpConfigChain_Data
 	res	3, (0xbc7c:16)
 	; v7 bytes do not decode as v10's `push_f`
 	; v7 bytes; v10 has: .byte 0xbd, 0xb3
 	ret
-MidiCtrl_SendControlPacket_Helper2:
+SysEx_ResetAndReturn_Helper:
 	ld	xwa, 0xbc20
-	call	MidiSeq_ApplyPendingParams_Helper4
+	call	MidiSeq_ClearSyncFlag_Helper4
 	jrl	MidiPkt_ArpConfigChain_Data_Helper7
-MidiCtrl_SendControlPacket_Helper3:
+SysEx_ResetAndReturn_Helper2:
 	ld	xwa, 0xbc20
-	call	MidiSeq_ApplyPendingParams_Helper5
+	call	MidiSeq_ClearSyncFlag_Helper5
 	jrl	MidiPkt_ArpConfigChain_Data_Join
-MidiCtrl_SendControlPacket_Helper4:
+SysEx_ResetAndReturn_Helper3:
 	ld	xwa, 0xbc20
-	call	MidiSeq_ApplyPendingParams_Helper3
+	call	MidiSeq_ClearSyncFlag_Helper3
 	jrl	MidiPkt_ArpConfigChain_Data_Helper4
-MidiCtrl_SendControlPacket_Helper5:
+SysEx_ResetAndReturn_Helper4:
 	ld	xwa, 0xbc20
-	call	MidiSeq_ApplyPendingParams_Helper2
+	call	MidiSeq_ClearSyncFlag_Helper2
 	jrl	MidiPkt_ArpConfigChain_Data_Helper
-MidiCtrl_SendControlPacket_Helper6:
+SysEx_ResetAndReturn_Helper5:
 	ret
-MidiCtrl_SendControlPacket_Helper7:
+SysEx_ResetAndReturn_Helper6:
 	ld	xwa, 0xbc20
-	call	MidiSeq_ApplyPendingParams_Helper6
+	call	MidiSeq_ClearSyncFlag_Helper6
 	jrl	MidiPkt_ArpConfigChain_Data_Helper14
 MidiPkt_ArpMultiPass:
 	pushw_erp 0xfa
 	res	7, (0xbc7c:16)
 	ldib_erp 0xfb, 0
-MidiPkt_ArpMultiPass_Loop:
+MidiPkt_ArpPassLoop:
 	ld	xwa, SysEx_Msg_35BC
 	ld bc, 7:i3
 	call	SeqBuf_FlushNoteOffs
@@ -10219,7 +10183,7 @@ MidiPkt_ArpMultiPass_Loop:
 	jr	z, MidiPkt_ArpPassDone
 	inc1b_erp 0xfb
 	cpib_erp 0xfb, 3
-	jr	c, MidiPkt_ArpMultiPass_Loop
+	jr	c, MidiPkt_ArpPassLoop
 MidiPkt_ArpPassDone:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	cpib_erp 0xfb, 3
@@ -10246,10 +10210,6 @@ MidiPkt_ArpSecondLoop:
 	ld bc, 7:i3
 	call	SeqBuf_FlushNoteOffs
 	set	2, (0xbc7c:16)
-; v7 NAME DISPLACED: `Part_ProcessEntry_Data` (0xFD6F17) falls inside the line above in the
-; correct framing (v10 0xFD76E8).  Kept as an alias because another v7
-; file references this address by this name.
-	.set Part_ProcessEntry_Data, MidiPkt_ArpSecondLoop + 14
 	call	SeqAlt_ProcessAndFinalize
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld bc, 0:i3
@@ -10265,7 +10225,7 @@ MidiPkt_ArpSecondLoopNext:
 MidiPkt_ArpPopReturn:
 	popw_erp 0xfa
 	ret
-MidiSeq_ApplyPendingParams_Helper7:
+MidiPkt_ArpConfigChain_Data:
 	calr	MidiPkt_ArpConfigChain_Data_Helper
 	calr	MidiPkt_ArpConfigChain_Data_Helper4
 	calr	MidiPkt_ArpConfigChain_Data_Helper14
@@ -10286,7 +10246,7 @@ MidiPkt_ArpConfigChain_Data_Helper2:
 	ld	de, 1:i3
 	call	MIDI_ReadChannelParam
 	ld	xwa, 0xbc30
-	call	MidiPkt_ArpConfigChain_Data_Helper2_Helper
+	call	MidiPkt_ArpPopReturn_Helper
 	ld	xwa, SysEx_TechMsg_35E2
 	ldw	bc, 12
 	call	SeqBuf_FlushNoteOffs
@@ -10303,7 +10263,7 @@ MidiPkt_ArpConfigChain_Data_Helper3:
 	ld	de, 2:i3
 	call	MIDI_ReadChannelParam
 	ld	xwa, 0xbc30
-	call	MidiPkt_ArpConfigChain_Data_Helper3_Helper
+	call	MidiPkt_ArpPopReturn_Helper2
 	ld	xwa, SysEx_TechMsg_35EE
 	ldw	bc, 12
 	call	SeqBuf_FlushNoteOffs
@@ -10329,7 +10289,7 @@ MidiPkt_ArpConfigChain_Data_Helper5:
 	ld	de, 4:i3
 	call	MIDI_ReadChannelParam
 	ld	xwa, 0xbc30
-	call	MidiPkt_ArpConfigChain_Data_Helper5_Helper
+	call	MidiPkt_ArpPopReturn_Helper3
 	ld	xwa, SysEx_TechMsg_35FA
 	ldw	bc, 12
 	call	SeqBuf_FlushNoteOffs
@@ -10346,7 +10306,7 @@ MidiPkt_ArpConfigChain_Data_Helper6:
 	ld	de, 5:i3
 	call	MIDI_ReadChannelParam
 	ld	xwa, 0xbc30
-	call	MidiPkt_ArpConfigChain_Data_Helper6_Helper
+	call	MidiPkt_ArpPopReturn_Helper4
 	ld	xwa, SysEx_TechMsg_3606
 	ldw	bc, 12
 	call	SeqBuf_FlushNoteOffs
@@ -10373,7 +10333,7 @@ MidiPkt_ArpConfigChain_Data_Helper8:
 	ld	de, 7:i3
 	call	MIDI_ReadChannelParam
 	ld	xwa, 0xbc30
-	call	MidiPkt_ArpConfigChain_Data_Helper8_Helper
+	call	MidiPkt_ArpPopReturn_Helper5
 	ld	xwa, SysEx_TechMsg_3612
 	ldw	bc, 12
 	call	SeqBuf_FlushNoteOffs
@@ -10390,7 +10350,7 @@ MidiPkt_ArpConfigChain_Data_Helper9:
 	ldw	de, 8
 	call	MIDI_ReadChannelParam
 	ld	xwa, 0xbc30
-	call	MidiPkt_ArpConfigChain_Data_Helper9_Helper
+	call	MidiPkt_ArpPopReturn_Helper6
 	ld	xwa, SysEx_TechMsg_361E
 	ldw	bc, 12
 	call	SeqBuf_FlushNoteOffs
@@ -10407,7 +10367,7 @@ MidiPkt_ArpConfigChain_Data_Helper10:
 	ldw	de, 9
 	call	MIDI_ReadChannelParam
 	ld	xwa, 0xbc30
-	call	MidiPkt_ArpConfigChain_Data_Helper10_Helper
+	call	MidiPkt_ArpPopReturn_Helper7
 	ld	xwa, SysEx_TechMsg_362A
 	ldw	bc, 9
 	call	SeqBuf_FlushNoteOffs
@@ -10435,7 +10395,7 @@ MidiPkt_ArpConfigChain_Data_Helper11:
 	ldw	de, 11
 	call	MIDI_ReadChannelParam
 	ld	xwa, 0xbc30
-	call	MidiPkt_ArpConfigChain_Data_Helper11_Helper
+	call	MidiPkt_ArpPopReturn_Helper8
 	ld	xwa, SysEx_TechMsg_3634
 	ldw	bc, 12
 	call	SeqBuf_FlushNoteOffs
@@ -10452,7 +10412,7 @@ MidiPkt_ArpConfigChain_Data_Helper12:
 	ldw	de, 12
 	call	MIDI_ReadChannelParam
 	ld	xwa, 0xbc30
-	call	MidiPkt_ArpConfigChain_Data_Helper12_Helper
+	call	MidiPkt_ArpPopReturn_Helper9
 	ld	xwa, SysEx_TechMsg_3640
 	ldw	bc, 12
 	call	SeqBuf_FlushNoteOffs
@@ -10469,7 +10429,7 @@ MidiPkt_ArpConfigChain_Data_Helper13:
 	ldw	de, 13
 	call	MIDI_ReadChannelParam
 	ld	xwa, 0xbc30
-	call	MidiPkt_ArpConfigChain_Data_Helper13_Helper
+	call	MidiPkt_ArpPopReturn_Helper10
 	ld	xwa, SysEx_TechMsg_364C
 	ldw	bc, 9
 	call	SeqBuf_FlushNoteOffs
@@ -10495,7 +10455,7 @@ MidiPkt_ArpConfigChain_Data_Helper15:
 	ldw	de, 18
 	call	MIDI_ReadChannelParam
 	ld	xwa, 0xbc30
-	call	MidiPkt_ArpConfigChain_Data_Helper15_Helper
+	call	MidiPkt_ArpPopReturn_Helper11
 	ld	xwa, SysEx_TechMsg_3656
 	ldw	bc, 12
 	call	SeqBuf_FlushNoteOffs
@@ -10512,7 +10472,7 @@ MidiPkt_ArpConfigChain_Data_Helper16:
 	ldw	de, 19
 	call	MIDI_ReadChannelParam
 	ld	xwa, 0xbc30
-	call	MidiPkt_ArpConfigChain_Data_Helper16_Helper
+	call	MidiPkt_ArpPopReturn_Helper12
 	ld	xwa, SysEx_TechMsg_3662
 	ldw	bc, 12
 	call	SeqBuf_FlushNoteOffs
@@ -10529,14 +10489,10 @@ MidiPkt_ArpConfigChain_Data_Helper17:
 	ldw	de, 20
 	call	MIDI_ReadChannelParam
 	ld	xwa, 0xbc30
-	call	MidiPkt_ArpConfigChain_Data_Helper17_Helper
+	call	MidiPkt_ArpPopReturn_Helper13
 	ld	xwa, SysEx_TechMsg_366E
 	ldw	bc, 9
 	call	SeqBuf_FlushNoteOffs
-; v7 NAME DISPLACED: `MidiSeq_PartConfigure_Data` (0xFD7258) falls inside the line above in the
-; correct framing (v10 0xFD7A29).  Kept as an alias because another v7
-; file references this address by this name.
-	.set MidiSeq_PartConfigure_Data, MidiPkt_ArpConfigChain_Data_Helper17 + 46
 	call	ArpQueue_Pack21BitValue
 	call	ArpQueue_ProcessAndSort_Data
 	ret
@@ -10553,7 +10509,7 @@ MidiPkt_ArpConfigChain_Data_Helper18:
 	call	SeqBuf_FlushNoteOffs
 	call	MidiStream_PrevBankCheck
 	ret
-MidiCtrl_SendControlPacket_Helper8:
+SysEx_SendDispatch_Helper2:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 4:i3
 	call	SeqData_ReadFieldByIndex
@@ -10571,10 +10527,6 @@ MidiCtrl_SendControlPacket_Helper8:
 	ld	xwa, SysEx_Msg_35AC
 	ld	bc, 5:i3
 	jr	MidiPkt_ArpConfigChain_Data_Join2
-; v7 NAME DISPLACED: `MidiPkt_ArpPassLoop` (0xFD72BC) falls inside the line above in the
-; correct framing (v10 0xFD7A8D).  Kept as an alias because another v7
-; file references this address by this name.
-	.set MidiPkt_ArpPassLoop, MidiPkt_ArpConfigChain_Data_Helper18 + 89
 MidiPkt_ArpConfigChain_Data_Skip:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 4:i3
@@ -10598,7 +10550,7 @@ MidiPkt_ArpChordHandler:
 	set	4, (0xbc7c:16)
 	call	MidiChan_ClearAllStates
 	jr	ArpChord_DispatchAndLoop
-MidiPkt_ArpConfigChain_Data_Helper18_Loop:
+ArpChord_CheckPlaybackDone:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 4:i3
 	call	SeqData_ReadFieldByIndex
@@ -10609,9 +10561,9 @@ MidiPkt_ArpConfigChain_Data_Helper18_Loop:
 ArpChord_ProcessAndDispatch:
 	call	SeqAlt_ProcessAndFinalize
 ArpChord_DispatchAndLoop:
-	calr	MidiPkt_ArpConfigChain_Data_Helper18_Helper4
+	calr	MidiTable_DispatchHelper
 	bit	4, (0xbc7c:16)
-	jr	nz, MidiPkt_ArpConfigChain_Data_Helper18_Loop
+	jr	nz, ArpChord_CheckPlaybackDone
 ArpChord_FinalizePass:
 	calr	MidiPkt_ArpChordHandler_Helper
 	call	MidiSeq_PartLookup_Data
@@ -10620,13 +10572,13 @@ ArpChord_ClearBitAndReturn:
 	ret
 ; MIDI table dispatch helper
 	; --- Helper 1: table dispatch via (XBC+WA) with guard checks (58 bytes) ---
-MidiPkt_ArpConfigChain_Data_Helper18_Helper4:
+MidiTable_DispatchHelper:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 4:i3
 	call	SeqData_ReadFieldByIndex
 	cp	l, 0:i3
 	ret nz
-	call	ArpQueue_ProcessAndSort_Data_Helper4
+	call	MidiSeq_PartConfigure_Data
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	cp (xwa), 0x27
 	ret nc
@@ -10636,16 +10588,12 @@ MidiPkt_ArpConfigChain_Data_Helper18_Helper4:
 	lda	xbc, (SeqChan_CommandHandlers:24)
 	ld	xhl, (xbc+wa)
 	call	(xhl)
-	calr	MidiPkt_ArpConfigChain_Data_Helper18_Helper5
+	calr	MidiTable_FlushArpNotes
 	call	MidiSeq_UpdateAllParams
-; v7 NAME DISPLACED: `MidiPkt_ArpConfigChain_Data` (0xFD7356) falls inside the line above in the
-; correct framing (v10 0xFD7B27).  Kept as an alias because another v7
-; file references this address by this name.
-	.set MidiPkt_ArpConfigChain_Data, ArpChord_ClearBitAndReturn + 55
-	call	MidiPkt_ArpConfigChain_Data_Helper18_Helper3
+	call	MidiTable_DispatchHelper_Helper
 	ret
 	; --- Helper 2: conditional A-based 3-way pointer selection (56 bytes) ---
-MidiPkt_ArpConfigChain_Data_Helper18_Helper5:
+MidiTable_FlushArpNotes:
 	bit	7, (0xbc7c:16)
 	ret z
 	call	ArpQueue_SwapBuffers
@@ -10658,11 +10606,11 @@ MidiPkt_ArpConfigChain_Data_Helper18_Helper5:
 	jr	MidiTable_CallFlush
 MidiTable_CheckSpecialSlot:
 	cp a, 0x16
-	jr	nz, MidiPkt_ArpConfigChain_Data_Helper18_Skip
+	jr	nz, MidiTable_UseDefaultBuf
 	ld xwa, SysEx_Msg_35B2
 	ld	bc, 5:i3
 	jr	MidiTable_CallFlush
-MidiPkt_ArpConfigChain_Data_Helper18_Skip:
+MidiTable_UseDefaultBuf:
 	ld xwa, SysEx_Msg_359A
 	ld	bc, 5:i3
 MidiTable_CallFlush:
@@ -10677,8 +10625,9 @@ MidiPkt_InitSingleField_Data:
 	call	SeqBuf_FlushNoteOffs
 	ret
 	; --- Two-path: 3x field extraction or single store (73 bytes) ---
+MidiPkt_HandleCmdCode01:
 	cp	(0xbc84:16), 1
-	jr	nz, MidiPkt_ArpConfigChain_Data_Helper18_Skip2
+	jr	nz, MidiPkt_SetSlot18
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 6:i3
 	call	SeqData_ReadFieldByIndex
@@ -10694,11 +10643,12 @@ MidiPkt_InitSingleField_Data:
 	set	7, (0xbc7c:16)
 	ld	(0xbc84:16), 2
 	ret
-MidiPkt_ArpConfigChain_Data_Helper18_Skip2:
+MidiPkt_SetSlot18:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld (xwa+4), 0x18
 	res	4, (0xbc7c:16)
 	ret
+MidiPkt_ArpExtHandler_A:
 	ld	xwa, (MIDISEQ_SPARE_BUF_PTR:16)
 	ld	bc, 3:i3
 	call	SeqData_ReadFieldByIndex
@@ -10706,10 +10656,10 @@ MidiPkt_ArpConfigChain_Data_Helper18_Skip2:
 	jr	nz, MidiPkt_ArpExtHandler_A_Skip
 	call	MidiChan_TimerDispatch_Data
 	ld	xwa, 0xbc40
-	call	MidiSeq_ApplyPendingParams_Helper2
+	call	MidiSeq_ClearSyncFlag_Helper2
 	ld	xwa, 0xbc50
-	call	MidiPkt_ArpConfigChain_Data_Helper2_Helper
-	jrl	MidiPkt_ArpConfigChain_Data_Helper18_Join
+	call	MidiPkt_ArpPopReturn_Helper
+	jrl	SeqChan_StepCmd_Field1to2
 MidiPkt_ArpExtHandler_A_Skip:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 4:i3
@@ -10722,94 +10672,100 @@ MidiPkt_ArpExtHandler_B_Data:
 	cp	l, 2:i3
 	jr	nz, MidiPkt_ArpExtHandler_B_Data_Skip
 	ld	xwa, 0xbc50
-	call	MidiPkt_ArpConfigChain_Data_Helper3_Helper
+	call	MidiPkt_ArpPopReturn_Helper2
 	jrl	SeqChan_StepCmd_Field2to3
 MidiPkt_ArpExtHandler_B_Data_Skip:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 4:i3
 	ldw	de, 25
 	jp	MIDI_ReadChannelParam
+MidiPkt_ArpExtHandler_C_Data:
 	ld	xwa, (MIDISEQ_SPARE_BUF_PTR:16)
 	ld	bc, 3:i3
 	call	SeqData_ReadFieldByIndex
 	cp	l, 0:i3
 	jr	nz, MidiPkt_ArpExtHandler_C_Data_Skip
 	ld	xwa, 0xbc40
-	call	MidiSeq_ApplyPendingParams_Helper3
+	call	MidiSeq_ClearSyncFlag_Helper3
 	ld	xwa, 0xbc50
-	call	MidiPkt_ArpConfigChain_Data_Helper5_Helper
+	call	MidiPkt_ArpPopReturn_Helper3
 	jrl	SeqChan_StepCmd_Field4to5
 MidiPkt_ArpExtHandler_C_Data_Skip:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 4:i3
 	ldw	de, 26
 	jp	MIDI_ReadChannelParam
+MidiPkt_ArpExtHandler_D_Data:
 	ld	xwa, (MIDISEQ_SPARE_BUF_PTR:16)
 	ld	bc, 3:i3
 	call	SeqData_ReadFieldByIndex
 	cp	l, 5:i3
 	jr	nz, MidiPkt_ArpExtHandler_D_Data_Skip
 	ld	xwa, 0xbc50
-	call	MidiPkt_ArpConfigChain_Data_Helper6_Helper
+	call	MidiPkt_ArpPopReturn_Helper4
 	jrl	SeqChan_StepCmd_Field5to6
 MidiPkt_ArpExtHandler_D_Data_Skip:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 4:i3
 	ldw	de, 25
 	jp	MIDI_ReadChannelParam
+MidiPkt_ArpExtHandler_E_Data:
 	ld	xwa, (MIDISEQ_SPARE_BUF_PTR:16)
 	ld	bc, 3:i3
 	call	SeqData_ReadFieldByIndex
 	cp	l, 0:i3
 	jr	nz, MidiPkt_ArpExtHandler_E_Data_Skip
-	call	MidiPkt_ArpConfigChain_Data_Helper18_Helper6
+	call	MidiPkt_ArpExtHandler_A_Helper
 	ld	xwa, 0xbc40
-	call	MidiSeq_ApplyPendingParams_Helper4
+	call	MidiSeq_ClearSyncFlag_Helper4
 	ld	xwa, 0xbc50
-	call	MidiPkt_ArpConfigChain_Data_Helper8_Helper
+	call	MidiPkt_ArpPopReturn_Helper5
 	jrl	SeqChan_StepCmd_Field6_Data
 MidiPkt_ArpExtHandler_E_Data_Skip:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 4:i3
 	ldw	de, 27
 	jp	MIDI_ReadChannelParam
+MidiPkt_ArpExtHandler_F_Data:
 	ld	xwa, (MIDISEQ_SPARE_BUF_PTR:16)
 	ld	bc, 3:i3
 	call	SeqData_ReadFieldByIndex
 	cp	l, 8
 	jr	nz, MidiPkt_ArpExtHandler_F_Data_Skip
 	ld	xwa, 0xbc50
-	call	MidiPkt_ArpConfigChain_Data_Helper9_Helper
+	call	MidiPkt_ArpPopReturn_Helper6
 	jrl	SeqChan_StepCmd_Field8to9
 MidiPkt_ArpExtHandler_F_Data_Skip:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 4:i3
 	ldw	de, 27
 	jp	MIDI_ReadChannelParam
+MidiPkt_ArpExtHandler_G:
 	ld	xwa, (MIDISEQ_SPARE_BUF_PTR:16)
 	ld	bc, 3:i3
 	call	SeqData_ReadFieldByIndex
 	cp	l, 9
 	jr	nz, MidiPkt_ArpExtHandler_G_Skip
 	ld	xwa, 0xbc50
-	call	MidiPkt_ArpConfigChain_Data_Helper10_Helper
-	call	MidiPkt_ArpConfigChain_Data_Helper18_Helper2
+	call	MidiPkt_ArpPopReturn_Helper7
+	call	MidiPkt_ArpExtHandler_G_Helper
 	jrl	SeqChan_StepCmd_Field9to10
 MidiPkt_ArpExtHandler_G_Skip:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 4:i3
 	ldw	de, 27
 	jp	MIDI_ReadChannelParam
+MidiPkt_ArpExtHandler_H_Data:
 	ld	xwa, (MIDISEQ_SPARE_BUF_PTR:16)
 	ld	bc, 3:i3
 	call	SeqData_ReadFieldByIndex
 	cp	l, 0:i3
 	jr	nz, MidiPkt_ArpExtHandler_H_Data_Skip
-	call	MidiPkt_ArpConfigChain_Data_Helper18_Helper7
+	call	MidiPkt_ArpExtHandler_G_Helper2
 	ld	xwa, 0xbc40
-	call	MidiSeq_ApplyPendingParams_Helper6
+	call	MidiSeq_ClearSyncFlag_Helper6
 	ld	xwa, 0xbc50
-	call	MidiPkt_ArpConfigChain_Data_Helper15_Helper
+	call	MidiPkt_ArpPopReturn_Helper11
 	jrl	SeqChan_StepCmd_Field10_Data
 MidiPkt_ArpExtHandler_H_Data_Skip:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
@@ -10823,7 +10779,7 @@ MidiPkt_ArpExtHandler_I_Data:
 	cp	l, 19
 	jr	nz, MidiPkt_ArpExtHandler_I_Data_Skip
 	ld	xwa, 0xbc50
-	call	MidiPkt_ArpConfigChain_Data_Helper16_Helper
+	call	MidiPkt_ArpPopReturn_Helper12
 	jrl	SeqChan_StepCmd_Field13_Data
 MidiPkt_ArpExtHandler_I_Data_Skip:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
@@ -10837,8 +10793,8 @@ MidiPkt_ArpExtHandler_J:
 	cp	l, 20
 	jr	nz, MidiPkt_ArpExtHandler_J_Skip
 	ld	xwa, 0xbc50
-	call	MidiPkt_ArpConfigChain_Data_Helper17_Helper
-	call	MidiPkt_ArpConfigChain_Data_Helper18_Helper2
+	call	MidiPkt_ArpPopReturn_Helper13
+	call	MidiPkt_ArpExtHandler_G_Helper
 	jrl	SeqChan_StepCmd_Field20to21
 MidiPkt_ArpExtHandler_J_Skip:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
@@ -10852,9 +10808,9 @@ MidiPkt_ArpExtHandler_K:
 	cp	l, 0:i3
 	jr	nz, MidiPkt_ArpExtHandler_K_Skip
 	ld	xwa, 0xbc40
-	call	MidiSeq_ApplyPendingParams_Helper5
+	call	MidiSeq_ClearSyncFlag_Helper5
 	ld	xwa, 0xbc50
-	call	MidiPkt_ArpConfigChain_Data_Helper11_Helper
+	call	MidiPkt_ArpPopReturn_Helper8
 	jrl	SeqChan_StepCmd_Field11_Data
 MidiPkt_ArpExtHandler_K_Skip:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
@@ -10868,7 +10824,7 @@ MidiPkt_ArpExtHandler_L:
 	cp	l, 12
 	jr	nz, MidiPkt_ArpExtHandler_L_Skip
 	ld	xwa, 0xbc50
-	call	MidiPkt_ArpConfigChain_Data_Helper12_Helper
+	call	MidiPkt_ArpPopReturn_Helper9
 	jrl	SeqChan_StepCmd_Field12_Data
 MidiPkt_ArpExtHandler_L_Skip:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
@@ -10882,8 +10838,8 @@ MidiPkt_ArpExtHandler_M_Data:
 	cp	l, 13
 	jr	nz, MidiPkt_ArpExtHandler_M_Data_Skip
 	ld	xwa, 0xbc50
-	call	MidiPkt_ArpConfigChain_Data_Helper13_Helper
-	call	MidiPkt_ArpConfigChain_Data_Helper18_Helper2
+	call	MidiPkt_ArpPopReturn_Helper10
+	call	MidiPkt_ArpExtHandler_G_Helper
 	jrl	SeqChan_StepCmd_Field13Write
 MidiPkt_ArpExtHandler_M_Data_Skip:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
@@ -10911,12 +10867,12 @@ SeqChan_ProcessStepCmd:
 	ld	bc, 4:i3
 	ldw	de, 19
 	jp	MIDI_ReadChannelParam
-MidiPkt_ArpConfigChain_Data_Helper18_Join:
+SeqChan_StepCmd_Field1to2:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 3:i3
 	ld	de, 1:i3
 	call	MIDI_ReadChannelParam
-	call	MidiPkt_ArpConfigChain_Data_Helper18_Helper
+	call	SeqVoice_DispatchProcess_Data
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 15
 	call	SeqData_ReadFieldByIndex
@@ -10932,7 +10888,7 @@ SeqChan_StepCmd_Field2to3:
 	ld	bc, 3:i3
 	ld	de, 2:i3
 	call	MIDI_ReadChannelParam
-	call	MidiPkt_ArpConfigChain_Data_Helper18_Helper
+	call	SeqVoice_DispatchProcess_Data
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 15
 	call	SeqData_ReadFieldByIndex
@@ -10948,7 +10904,7 @@ SeqChan_StepCmd_Field4to5:
 	ld	bc, 3:i3
 	ld	de, 4:i3
 	call	MIDI_ReadChannelParam
-	call	MidiPkt_ArpConfigChain_Data_Helper18_Helper
+	call	SeqVoice_DispatchProcess_Data
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 15
 	call	SeqData_ReadFieldByIndex
@@ -10964,16 +10920,12 @@ SeqChan_StepCmd_Field5to6:
 	ld	bc, 3:i3
 	ld	de, 5:i3
 	call	MIDI_ReadChannelParam
-	call	MidiPkt_ArpConfigChain_Data_Helper18_Helper
+	call	SeqVoice_DispatchProcess_Data
 	call	TmFlash_BulkTransferToSubCPU
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 15
 	call	SeqData_ReadFieldByIndex
 	cp	l, 0:i3
-; v7 NAME DISPLACED: `ArpChord_CheckPlaybackDone` (0xFD7711) falls inside the line above in the
-; correct framing (v10 0xFD7EE2).  Kept as an alias because another v7
-; file references this address by this name.
-	.set ArpChord_CheckPlaybackDone, SeqChan_StepCmd_Field5to6 + 32
 	ret	nz
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 3:i3
@@ -10985,15 +10937,11 @@ SeqChan_StepCmd_Field6_Data:
 	ld	bc, 3:i3
 	ld	de, 7:i3
 	call	MIDI_ReadChannelParam
-	call	MidiPkt_ArpConfigChain_Data_Helper18_Helper
+	call	SeqVoice_DispatchProcess_Data
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 15
 	call	SeqData_ReadFieldByIndex
 	cp	l, 0:i3
-; v7 NAME DISPLACED: `MidiTable_DispatchHelper` sits where v10 has no label (v10 0xFD7F0F).
-; The v7 code v10 calls `MidiTable_DispatchHelper` is 0x41A earlier, at v7 0xFD7324.
-; Kept because another v7 file references this address by this name.
-MidiTable_DispatchHelper:
 	ret	nz
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 3:i3
@@ -11005,7 +10953,7 @@ SeqChan_StepCmd_Field8to9:
 	ld	bc, 3:i3
 	ldw	de, 8
 	call	MIDI_ReadChannelParam
-	call	MidiPkt_ArpConfigChain_Data_Helper18_Helper
+	call	SeqVoice_DispatchProcess_Data
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 15
 	call	SeqData_ReadFieldByIndex
@@ -11015,17 +10963,13 @@ SeqChan_StepCmd_Field8to9:
 	ld	bc, 3:i3
 	ldw	de, 9
 	call	MIDI_ReadChannelParam
-; v7 NAME DISPLACED: `MidiTable_FlushArpNotes` (0xFD7778) falls inside the line above in the
-; correct framing (v10 0xFD7F49).  Kept as an alias because another v7
-; file references this address by this name.
-	.set MidiTable_FlushArpNotes, SeqChan_StepCmd_Field8to9 + 42
 	ret
 SeqChan_StepCmd_Field9to10:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 3:i3
 	ldw	de, 9
 	call	MIDI_ReadChannelParam
-	call	MidiPkt_ArpConfigChain_Data_Helper18_Helper
+	call	SeqVoice_DispatchProcess_Data
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 15
 	call	SeqData_ReadFieldByIndex
@@ -11034,10 +10978,6 @@ SeqChan_StepCmd_Field9to10:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 3:i3
 	ldw	de, 10
-; v7 NAME DISPLACED: `MidiTable_UseDefaultBuf` (0xFD77A4) falls inside the line above in the
-; correct framing (v10 0xFD7F75).  Kept as an alias because another v7
-; file references this address by this name.
-	.set MidiTable_UseDefaultBuf, SeqChan_StepCmd_Field9to10 + 40
 	call	MIDI_ReadChannelParam
 	ret
 SeqChan_StepCmd_Field10_Data:
@@ -11045,15 +10985,11 @@ SeqChan_StepCmd_Field10_Data:
 	ld	bc, 3:i3
 	ldw	de, 18
 	call	MIDI_ReadChannelParam
-	call	MidiPkt_ArpConfigChain_Data_Helper18_Helper
+	call	SeqVoice_DispatchProcess_Data
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 15
 	call	SeqData_ReadFieldByIndex
 	cp	l, 0:i3
-; v7 NAME DISPLACED: `MidiPkt_HandleCmdCode01` sits where v10 has no label (v10 0xFD7F99).
-; The v7 code v10 calls `MidiPkt_HandleCmdCode01` is 0x41A earlier, at v7 0xFD73AE.
-; Kept because another v7 file references this address by this name.
-MidiPkt_HandleCmdCode01:
 	ret	nz
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 3:i3
@@ -11065,7 +11001,7 @@ SeqChan_StepCmd_Field13_Data:
 	ld	bc, 3:i3
 	ldw	de, 19
 	call	MIDI_ReadChannelParam
-	call	MidiPkt_ArpConfigChain_Data_Helper18_Helper
+	call	SeqVoice_DispatchProcess_Data
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 15
 	call	SeqData_ReadFieldByIndex
@@ -11075,21 +11011,13 @@ SeqChan_StepCmd_Field13_Data:
 	ld	bc, 3:i3
 	ldw	de, 20
 	call	MIDI_ReadChannelParam
-; v7 NAME DISPLACED: `MidiPkt_SetSlot18` (0xFD7804) falls inside the line above in the
-; correct framing (v10 0xFD7FD5).  Kept as an alias because another v7
-; file references this address by this name.
-	.set MidiPkt_SetSlot18, SeqChan_StepCmd_Field13_Data + 44
 	ret
 SeqChan_StepCmd_Field20to21:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 3:i3
 	ldw	de, 20
 	call	MIDI_ReadChannelParam
-; v7 NAME DISPLACED: `MidiPkt_ArpExtHandler_A` (0xFD7811) falls inside the line above in the
-; correct framing (v10 0xFD7FE2).  Kept as an alias because another v7
-; file references this address by this name.
-	.set MidiPkt_ArpExtHandler_A, SeqChan_StepCmd_Field20to21 + 11
-	call	MidiPkt_ArpConfigChain_Data_Helper18_Helper
+	call	SeqVoice_DispatchProcess_Data
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ldw	bc, 15
 	call	SeqData_ReadFieldByIndex
@@ -11118,10 +11046,6 @@ SeqChan_StepCmd_Field11_Data:
 	ld	bc, 3:i3
 	ldw	de, 12
 	call	MIDI_ReadChannelParam
-; v7 NAME DISPLACED: `MidiPkt_ArpExtHandler_C_Data` sits where v10 has no label (v10 0xFD803D).
-; The v7 code v10 calls `MidiPkt_ArpExtHandler_C_Data` is 0x41A earlier, at v7 0xFD7452.
-; Kept because another v7 file references this address by this name.
-MidiPkt_ArpExtHandler_C_Data:
 	ret
 SeqChan_StepCmd_Field12_Data:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
@@ -11138,10 +11062,6 @@ SeqChan_StepCmd_Field12_Data:
 	cp	l, 0:i3
 	ret	nz
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
-; v7 NAME DISPLACED: `MidiPkt_ArpExtHandler_D_Data` sits where v10 has no label (v10 0xFD806D).
-; The v7 code v10 calls `MidiPkt_ArpExtHandler_D_Data` is 0x41A earlier, at v7 0xFD7482.
-; Kept because another v7 file references this address by this name.
-MidiPkt_ArpExtHandler_D_Data:
 	ld	bc, 3:i3
 	ldw	de, 13
 	call	MIDI_ReadChannelParam
@@ -11157,10 +11077,6 @@ SeqChan_StepCmd_Field13Write:
 	cp hl, 0xffff
 	call	nz, (0xfd64bc:24)
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
-; v7 NAME DISPLACED: `MidiPkt_ArpExtHandler_E_Data` (0xFD78C3) falls inside the line above in the
-; correct framing (v10 0xFD8094).  Kept as an alias because another v7
-; file references this address by this name.
-	.set MidiPkt_ArpExtHandler_E_Data, SeqChan_StepCmd_Field13Write + 29
 	; --- Section 2: reload XWA, setup BC, call, check L ---
 	ldw bc, 0x000f
 	call	SeqData_ReadFieldByIndex
@@ -11184,10 +11100,6 @@ SeqChan_DispatchByType_Data:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (SeqChan_WriteFieldHandlers:24)
-; v7 NAME DISPLACED: `MidiPkt_ArpExtHandler_F_Data` sits where v10 has no label (v10 0xFD80C8).
-; The v7 code v10 calls `MidiPkt_ArpExtHandler_F_Data` is 0x41A earlier, at v7 0xFD74DD.
-; Kept because another v7 file references this address by this name.
-MidiPkt_ArpExtHandler_F_Data:
 	ld	xhl, (xbc+wa)
 	call	(xhl)
 	res	7, (0xbc80:16)
@@ -11203,10 +11115,6 @@ SeqChan_WriteField_Data_A:
 	ld	de, 0:i3
 	call	MIDI_ReadChannelParam
 	set	7, (0xbc7e:16)
-; v7 NAME DISPLACED: `MidiPkt_ArpExtHandler_G` (0xFD791F) falls inside the line above in the
-; correct framing (v10 0xFD80F0).  Kept as an alias because another v7
-; file references this address by this name.
-	.set MidiPkt_ArpExtHandler_G, SeqChan_WriteField_Data_A + 15
 	ret
 SeqChan_WriteField_Data_B:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
@@ -11226,10 +11134,6 @@ SeqChan_WriteField_Data_D:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 3:i3
 	ld	de, 0:i3
-; v7 NAME DISPLACED: `MidiPkt_ArpExtHandler_H_Data` sits where v10 has no label (v10 0xFD811C).
-; The v7 code v10 calls `MidiPkt_ArpExtHandler_H_Data` is 0x41A earlier, at v7 0xFD7531.
-; Kept because another v7 file references this address by this name.
-MidiPkt_ArpExtHandler_H_Data:
 	call	MIDI_ReadChannelParam
 	set	4, (0xbc7e:16)
 	ret
@@ -11243,6 +11147,7 @@ SeqChan_WriteField_Data_E:
 	set	2, (0xbc7e:16)
 	ret
 ; MIDI SysEx processing block with dispatch
+MidiSysEx_ProcessBlock:
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 3:i3
 	ld	de, 0:i3
@@ -11287,7 +11192,7 @@ MidiSysEx_ProcessBlock_Helper3:
 	push	xix
 	push	xiz
 	call	SwbtWr_ReinitOutputBank
-	call	SysEx_ValidateRolandHeader_Cmd33
+	call	SwbtWr_CallProcessAll
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -11391,10 +11296,6 @@ MidiSysEx_ProcessBlock_Join:
 	push	xix
 	push	xiz
 	call	Voice_InitBankDataSafe_Alt1
-; v7 NAME DISPLACED: `SeqChan_StepCmd_Field1to2` sits where v10 has no label (v10 0xFD8258).
-; The v7 code v10 calls `SeqChan_StepCmd_Field1to2` is 0x41A earlier, at v7 0xFD766D.
-; Kept because another v7 file references this address by this name.
-SeqChan_StepCmd_Field1to2:
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -11427,13 +11328,13 @@ MidiSysEx_ProcessBlock_Helper11:
 	call	(xhl)
 	ret
 	ret
-	jp	MidiSysEx_ProcessBlock_Helper11_Join
+	jp	SeqChan_UnhandledCmd_Join
 	jp	SeqChan_UnhandledCmd_Join2
-	jp	MidiSysEx_ProcessBlock_Helper11_Join3
+	jp	SeqChan_UnhandledCmd_Join3
 	jp	SeqChan_UnhandledCmd_Join4
 	ret
 	jp	SeqChan_UnhandledCmd_Join5
-MidiSysEx_ProcessBlock_Helper11_Join:
+SeqChan_UnhandledCmd_Join:
 	set	4, (0x905d:16)
 	push	xde
 	push	xhl
@@ -11454,14 +11355,14 @@ SeqChan_UnhandledCmd_Join2:
 	push	xhl
 	push	xix
 	push	xiz
-	call	TmFlash_Return_LoadReg
+	call	SendPartDataBlock_DoGetError
 	call	MIDI_PitchBendData_Block
 	pop	xiz
 	pop	xix
 	pop	xhl
 	pop	xde
 	ret
-MidiPkt_ArpConfigChain_Data_Helper18_Helper6:
+MidiPkt_ArpExtHandler_A_Helper:
 	push	xde
 	push	xhl
 	push	xix
@@ -11473,7 +11374,7 @@ MidiPkt_ArpConfigChain_Data_Helper18_Helper6:
 	pop	xhl
 	pop	xde
 	ret
-MidiSysEx_ProcessBlock_Helper11_Join3:
+SeqChan_UnhandledCmd_Join3:
 	push	xde
 	push	xhl
 	push	xix
@@ -11497,7 +11398,7 @@ SeqChan_UnhandledCmd_Join4:
 	pop	xhl
 	pop	xde
 	ret
-MidiPkt_ArpConfigChain_Data_Helper18_Helper7:
+MidiPkt_ArpExtHandler_G_Helper2:
 	push	xde
 	push	xhl
 	push	xix
@@ -11679,10 +11580,10 @@ SoundMode_RetStub_D:
 SoundMode_ApplyVoiceParams:
 	ld wa, 2:i3
 	ld xbc, 0xf980
-	call	SoundMode_ApplyVoiceParams_Helper
+	call	SysEx_ApplyVoiceParam_49
 	ld wa, 4:i3
 	ld xbc, 0xf980
-	call	SysEx_DispatchByChannel_49_Entry_Code_Join2
+	call	SysEx_ApplyVoiceParam_4B
 	lda	xbc, (0x90f1:16)
 	ld xwa, xbc
 	lda xbc, (xbc + 31)
@@ -11716,10 +11617,6 @@ SoundMode_SysExConfig_Data:
 	ld	(MIDI_MSG_STATUS:16), 72
 	ld	(MIDI_MSG_DATA1:16), 8
 	ld	(MIDI_MSG_DATA2:16), l
-; v7 NAME DISPLACED: `MidiSysEx_ProcessBlock` (0xFD7D80) falls inside the line above in the
-; correct framing (v10 0xFD8551).  Kept as an alias because another v7
-; file references this address by this name.
-	.set MidiSysEx_ProcessBlock, SoundMode_SysExConfig_Data + 47
 	ld	(MIDI_MSG_DATA3:16), 255
 	push	xde
 	push	xhl
@@ -11813,7 +11710,7 @@ SoundMode_FullRenderUpdate:
 	calr	TGReg_WriteCC8_Chorus
 	calr	TGReg_WriteCC9_Variation
 	calr	TGReg_WriteCC10_KeyShift
-	calr	SoundMode_FullRenderUpdate_Helper
+	calr	TGReg_WriteCC11_PartMode
 	calr	SoundMode_SetReverbType
 	calr	VoiceData_ZeroFillAll
 	calr	SoundParam_ApplyBit15Toggle
@@ -11839,11 +11736,11 @@ SoundMode_NotifyActiveVoices:
 	ld xwa, 0x2201
 	ld bc, 1:i3
 	ld de, 0:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 	ld xwa, 0x2205
 	ld bc, 1:i3
 	ld de, 0:i3
-	call	Audio_ResetAfterPayloadError_Helper
+	call	SoundParam_NotifyChange
 SoundMode_RenderPopRegs:
 	pop xiz
 	pop xix
@@ -11875,7 +11772,7 @@ SoundMode_AlternateRender:
 	calr	TGReg_WriteCC8_Chorus
 	calr	TGReg_WriteCC9_Variation
 	calr	TGReg_WriteCC10_KeyShift
-	calr	SoundMode_FullRenderUpdate_Helper
+	calr	TGReg_WriteCC11_PartMode
 	calr	VoiceData_ZeroFillAll
 	calr	SoundParam_ApplyBit15Toggle
 	calr	SoundMode_ApplyVoiceParams
@@ -11966,7 +11863,7 @@ SoundMode_ProcessToneAndParams:
 	call	BitMapOut_GetRenderMode_CheckBit3
 	call	SoundParam_NotifyMultipleChanges
 	call	SwbtWr_ReinitOutputBank
-	call	SysEx_ValidateRolandHeader_Cmd33
+	call	SwbtWr_CallProcessAll
 	ld wa, 3:i3
 	call	BitMapOut_GetRenderMode_Return
 	set	4, (0x905d:16)
@@ -11976,7 +11873,7 @@ SoundMode_ProcessToneAndParams:
 	pop xix
 	pop xhl
 	pop xde
-	calr	MidiCtrl_FullReconfigure_Helper
+	calr	SwbtWr_InitAndWrite_CC_B1
 	calr	SwbtWr_WriteLoop_CC_B1_Ret
 	calr	SwbtWr_InitAndWrite_CC_B2
 	calr	SwbtWr_InitAndWriteAllBlocks
@@ -12210,7 +12107,7 @@ TGReg_WriteCC10_Check:
 	jr	ule, TGReg_WriteCC10_Body
 	inc 4, xsp
 	ret
-SoundMode_FullRenderUpdate_Helper:
+TGReg_WriteCC11_PartMode:
 	dec 4, xsp
 	lda xwa, (xsp)
 	ld (xwa + 1), 0xb
@@ -12275,12 +12172,12 @@ VoiceData_ZeroFillOuter:
 	dec 1, d
 	cp e, 0:i3
 	jr	z, VoiceData_ZeroFillNext
-VoiceData_ZeroFillAll_Loop:
+VoiceData_ZeroFillInner:
 	ld (xhl+), 0x00
 	ld e, d
 	dec 1, d
 	cp e, 0:i3
-	jr	nz, VoiceData_ZeroFillAll_Loop
+	jr	nz, VoiceData_ZeroFillInner
 VoiceData_ZeroFillNext:
 	inc 4, xwa
 	cp xwa, xbc
@@ -12320,11 +12217,11 @@ TGReg_WriteCC12_Check:
 	jr	ule, TGReg_WriteCC12_Body
 	inc 4, xsp
 	ret
-MidiCtrl_FullReconfigure_Helper:
+SwbtWr_InitAndWrite_CC_B1:
 	ld	(MIDI_MSG_STATUS:16), 177
 	ld	(MIDI_MSG_DATA2:16), 0
 	ld	(MIDI_MSG_DATA1:16), 0
-TGReg_WriteCC12_Assign_Loop:
+SwbtWr_WriteLoop_CC_B1:
 	ld	(MIDI_MSG_DATA3:16), 64
 	push xde
 	push xhl
@@ -12339,7 +12236,7 @@ TGReg_WriteCC12_Assign_Loop:
 	inc 1, a
 	ld	(MIDI_MSG_DATA1:16), a
 	cp a, 0xf
-	jr	ule, TGReg_WriteCC12_Assign_Loop
+	jr	ule, SwbtWr_WriteLoop_CC_B1
 	ret
 SwbtWr_WriteLoop_CC_B1_Ret:
 	ret
@@ -12347,7 +12244,7 @@ SwbtWr_InitAndWrite_CC_B2:
 	ld	(MIDI_MSG_STATUS:16), 178
 	ld	(MIDI_MSG_DATA2:16), 0
 	ld	(MIDI_MSG_DATA1:16), 0
-SwbtWr_InitAndWrite_CC_B2_Loop:
+SwbtWr_WriteLoop_CC_B2:
 	ld	(MIDI_MSG_DATA3:16), 127
 	push xde
 	push xhl
@@ -12362,7 +12259,7 @@ SwbtWr_InitAndWrite_CC_B2_Loop:
 	inc 1, a
 	ld	(MIDI_MSG_DATA1:16), a
 	cp a, 0xf
-	jr	ule, SwbtWr_InitAndWrite_CC_B2_Loop
+	jr	ule, SwbtWr_WriteLoop_CC_B2
 	ret
 SwbtWr_InitAndWriteAllBlocks:
 	ld	(MIDI_MSG_STATUS:16), 179
@@ -12530,7 +12427,7 @@ VoiceSync_PopReturn:
 	popw iz
 	ret
 SwbtWr_ResetAllChannels:
-	calr	MidiCtrl_FullReconfigure_Helper
+	calr	SwbtWr_InitAndWrite_CC_B1
 	calr	SwbtWr_WriteLoop_CC_B1_Ret
 	calr	SwbtWr_InitAndWrite_CC_B2
 	calr	SwbtWr_InitAndWriteAllBlocks
@@ -12562,30 +12459,30 @@ SysEx_InitiateSend:
 	jp	t, (xix+wa)
 ; SysEx send dispatch
 SysEx_SendDispatch:
-	call	MidiCtrl_SendControlPacket_Helper
+	call	SysEx_SendDispatch_Helper
 SysEx_InitiateSend_Join:
-	call	MidiCtrl_SendControlPacket_Helper8
+	call	SysEx_SendDispatch_Helper2
 	call	MidiSeq_PartLookup_Data
 SysEx_ResetAndReturn:
 	ld	(0xbc7c:16), 0
 	jp	SoundMode_ResetAllParams
 SysEx_DispatchCalls_Data:
-	call	MidiCtrl_SendControlPacket_Helper2
+	call	SysEx_ResetAndReturn_Helper
 	jr	SysEx_InitiateSend_Join
 SysEx_InitiateSend_Case2:
-	call	MidiCtrl_SendControlPacket_Helper3
+	call	SysEx_ResetAndReturn_Helper2
 	jr	SysEx_InitiateSend_Join
 SysEx_InitiateSend_Case3:
-	call	MidiCtrl_SendControlPacket_Helper4
+	call	SysEx_ResetAndReturn_Helper3
 	jr	SysEx_InitiateSend_Join
 SysEx_InitiateSend_Case4:
-	call	MidiCtrl_SendControlPacket_Helper5
+	call	SysEx_ResetAndReturn_Helper4
 	jr	SysEx_InitiateSend_Join
 SysEx_InitiateSend_Case5:
-	call	MidiCtrl_SendControlPacket_Helper6
+	call	SysEx_ResetAndReturn_Helper5
 	jr	SysEx_InitiateSend_Join
 SysEx_InitiateSend_Case6:
-	call	MidiCtrl_SendControlPacket_Helper7
+	call	SysEx_ResetAndReturn_Helper6
 	jr	SysEx_InitiateSend_Join
 	ret
 SysEx_ParseAndDispatch:
@@ -12662,10 +12559,6 @@ SeqData_DispatchHandler:
 	sla hl, 2
 	lda	xbc, (SeqData_Handlers:24)
 	ld	xhl, (xbc+hl)
-; v7 NAME DISPLACED: `TGReg_WriteCC11_PartMode` (0xFD861A) falls inside the line above in the
-; correct framing (v10 0xFD8DEB).  Kept as an alias because another v7
-; file references this address by this name.
-	.set TGReg_WriteCC11_PartMode, SeqData_DispatchHandler + 55
 	call (xhl)
 SeqData_DispatchLoop:
 	call	MidiPkt_SendBankSelect
@@ -12683,14 +12576,14 @@ SeqData_DispatchLoop_Done:
 	ld wa, 0:i3
 	call	AccWrap_ReturnZero
 	cp hl, 0xffff
-	jr	z, VoiceData_ZeroFillInner
+	jr	z, ArpQueue_Flush_Return
 	bit	0, (0xb74b:16)
-	jr	nz, VoiceData_ZeroFillInner
+	jr	nz, ArpQueue_Flush_Return
 	cp	(CURRENT_TITLE:16), 87
-	jr	z, VoiceData_ZeroFillInner
+	jr	z, ArpQueue_Flush_Return
 	ld a, (0xfd50:16)
 	and a, 0x14
-	jr	nz, VoiceData_ZeroFillInner
+	jr	nz, ArpQueue_Flush_Return
 	ld	xwa, SysEx_Msg_35CC
 	ld bc, 3:i3
 	call	SeqBuf_FlushNoteOffs
@@ -12717,10 +12610,7 @@ SeqData_FormatOutput_Loop:
 	ld	xwa, (0xbbc0:16)
 	call	SeqOut_FlushTimedBuffer
 	call	ArpQueue_SwapBuffers
-; v7 NAME DISPLACED: `VoiceData_ZeroFillInner` sits where v10 has `VoiceData_ZeroFillInner` (v10 0xFD8E7F).
-; The v7 code v10 calls `VoiceData_ZeroFillInner` is 0x41A earlier, at v7 0xFD8294.
-; Kept because another v7 file references this address by this name.
-VoiceData_ZeroFillInner:
+ArpQueue_Flush_Return:
 	inc 4, xsp
 	ret
 	; --- Input validation and dispatch (106 bytes, 2 functions) ---
@@ -12763,10 +12653,6 @@ SeqData_FormatOutput_CaseB:
 	push xix
 	push xiz
 	call	MidiStream_JumpStubData
-; v7 NAME DISPLACED: `SwbtWr_InitAndWrite_CC_B1` (0xFD8711) falls inside the line above in the
-; correct framing (v10 0xFD8EE2).  Kept as an alias because another v7
-; file references this address by this name.
-	.set SwbtWr_InitAndWrite_CC_B1, SeqData_FormatOutput_CaseB + 13
 	call	SwbtWr_ReinitOutputBank
 	pop xiz
 	pop xix
@@ -12776,19 +12662,15 @@ SeqData_FormatOutput_CaseB:
 SeqData_FormatOutput_CaseC:
 	bit	4, (0xfd50:16)
 	ret	nz
-; v7 NAME DISPLACED: `SwbtWr_WriteLoop_CC_B1` (0xFD8720) falls inside the line above in the
-; correct framing (v10 0xFD8EF1).  Kept as an alias because another v7
-; file references this address by this name.
-	.set SwbtWr_WriteLoop_CC_B1, SeqData_FormatOutput_CaseC + 5
 	ld	xwa, (MIDISEQ_ACTIVE_BLOCK_PTR:16)
 	lda	xwa, (xwa+14)
-	jp	SndParam_LookupAndDispatch_Code_Join
+	jp	Param_SignExtendReturn_Join7
 SeqData_FormatOutput_Default:
 	bit	4, (0xfd50:16)
 	ret	nz
 	ld	xwa, (MIDISEQ_ACTIVE_BLOCK_PTR:16)
 	lda	xwa, (xwa+14)
-	call	SeqData_FormatOutput_CaseB_Helper
+	call	SeqData_FormatOutput_Default_Helper
 	cp	hl, 0:i3
 	ret	z
 	ld	xwa, SysEx_Msg_35AC
@@ -12796,10 +12678,6 @@ SeqData_FormatOutput_Default:
 	call	ArpQueue_Enqueue
 	ld	xwa, (0xbbc0:16)
 	call	SeqOut_FlushTimedBuffer
-; v7 NAME DISPLACED: `SwbtWr_WriteLoop_CC_B2` (0xFD8751) falls inside the line above in the
-; correct framing (v10 0xFD8F22).  Kept as an alias because another v7
-; file references this address by this name.
-	.set SwbtWr_WriteLoop_CC_B2, SeqData_FormatOutput_Default + 37
 	call	ArpQueue_SwapBuffers
 	ret
 SeqData_FormatOutput_Data:
@@ -13216,6 +13094,7 @@ SeqAlt_PopIzSkip4Ret2:
 	pop xiz
 	inc 4, xsp
 	ret
+SeqAlt_DescriptorBlock_Data:
 	dec	6, xsp
 	push	xiz
 	ld	xiz, xwa
@@ -13552,7 +13431,7 @@ SeqAlt_NibbleSearch_Epilogue3:
 	ret
 	ld	xwa, (MIDISEQ_ACTIVE_BLOCK_PTR:16)
 	lda	xwa, (xwa+14)
-	call	SeqAlt_ApplyDescriptor_TypeB_Helper
+	call	SeqAlt_PopIzSkip4Ret2_Helper
 	cp	hl, 0:i3
 	ret	z
 	ld	xwa, SysEx_Msg_35AC
@@ -13631,10 +13510,6 @@ SeqAlt_ApplyDescriptor_WithAssSwb:
 	ld (xsp + 6), xwa
 	ld	xwa, (MIDISEQ_ACTIVE_BLOCK_PTR:16)
 	call	MIDI_PackNibbleParam
-; v7 NAME DISPLACED: `SeqAlt_DescriptorBlock_Data` sits where v10 has no label (v10 0xFD9753).
-; The v7 code v10 calls `SeqAlt_DescriptorBlock_Data` is 0x41A earlier, at v7 0xFD8B68.
-; Kept because another v7 file references this address by this name.
-SeqAlt_DescriptorBlock_Data:
 	ldfr_berp L, 0xfb
 	lda xbc, (xsp + 2)
 	lda xde, (xbc + 1)
@@ -13911,6 +13786,7 @@ VoiceParam_LoopExit:
 	ret
 VoiceParam_MultiMode_StubRet:
 	ret
+VoiceParam_AssSwb_MultiBlock_Data:
 	bit	4, (0xfd50:16)
 	ret	nz
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
@@ -13928,21 +13804,21 @@ VoiceParam_MultiMode_StubRet:
 	lda	xix, (VoiceParam_MultiMode_StubRet_Code:24)
 	jp	t, (xix+hl)
 VoiceParam_MultiMode_StubRet_Code:
-	jr	SeqAlt_DescriptorBlock_Data_Join
-VoiceParam_MultiModeDispatch_Case2:
-	jr	SeqAlt_DescriptorBlock_Data_Join2
-VoiceParam_MultiModeDispatch_Case3:
-	jrl	SeqAlt_DescriptorBlock_Data_Join3
-VoiceParam_MultiModeDispatch_Case4:
-	jrl	SeqAlt_DescriptorBlock_Data_Return
-VoiceParam_MultiModeDispatch_Case5:
-	jrl	SeqAlt_DescriptorBlock_Data_Join4
-VoiceParam_MultiModeDispatch_Case6:
-	jrl	SeqAlt_DescriptorBlock_Data_Join5
-VoiceParam_MultiModeDispatch_Case7:
-	calr	SeqAlt_DescriptorBlock_Data_Helper3
+	jr	VoiceParam_AssSwb_MultiBlock_Data_Join
+VoiceParam_AssSwb_MultiBlock_Data_Case2:
+	jr	VoiceParam_AssSwb_MultiBlock_Data_Join2
+VoiceParam_AssSwb_MultiBlock_Data_Case3:
+	jrl	VoiceParam_AssSwb_MultiBlock_Data_Join3
+VoiceParam_AssSwb_MultiBlock_Data_Case4:
+	jrl	VoiceParam_AssSwb_MultiBlock_Data_Return
+VoiceParam_AssSwb_MultiBlock_Data_Case5:
+	jrl	VoiceParam_AssSwb_MultiBlock_Data_Join4
+VoiceParam_AssSwb_MultiBlock_Data_Case6:
+	jrl	VoiceParam_AssSwb_MultiBlock_Data_Join5
+VoiceParam_AssSwb_MultiBlock_Data_Case7:
+	calr	VoiceParam_AssSwb_MultiBlock_Data_Helper
 	ret
-SeqAlt_DescriptorBlock_Data_Join:
+VoiceParam_AssSwb_MultiBlock_Data_Join:
 	push	qiz
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 2:i3
@@ -13975,7 +13851,7 @@ SeqAlt_DescriptorBlock_Data_Join:
 VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue:
 	pop	qiz
 	ret
-SeqAlt_DescriptorBlock_Data_Join2:
+VoiceParam_AssSwb_MultiBlock_Data_Join2:
 	push	qiz
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 2:i3
@@ -14008,7 +13884,7 @@ SeqAlt_DescriptorBlock_Data_Join2:
 VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue2:
 	pop	qiz
 	ret
-SeqAlt_DescriptorBlock_Data_Join3:
+VoiceParam_AssSwb_MultiBlock_Data_Join3:
 	push	qiz
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 2:i3
@@ -14041,9 +13917,9 @@ SeqAlt_DescriptorBlock_Data_Join3:
 VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue3:
 	pop	qiz
 	ret
-SeqAlt_DescriptorBlock_Data_Return:
+VoiceParam_AssSwb_MultiBlock_Data_Return:
 	ret
-SeqAlt_DescriptorBlock_Data_Join4:
+VoiceParam_AssSwb_MultiBlock_Data_Join4:
 	push	qiz
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 2:i3
@@ -14076,7 +13952,7 @@ SeqAlt_DescriptorBlock_Data_Join4:
 VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue4:
 	pop	qiz
 	ret
-SeqAlt_DescriptorBlock_Data_Join5:
+VoiceParam_AssSwb_MultiBlock_Data_Join5:
 	push	qiz
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 2:i3
@@ -14109,7 +13985,7 @@ SeqAlt_DescriptorBlock_Data_Join5:
 VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue5:
 	pop	qiz
 	ret
-SeqAlt_DescriptorBlock_Data_Helper3:
+VoiceParam_AssSwb_MultiBlock_Data_Helper:
 	push	qiz
 	ld	xwa, (MIDISEQ_ACTIVE_BUF_PTR:16)
 	ld	bc, 2:i3
@@ -14144,10 +14020,11 @@ VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue6:
 	ret
 VoiceParam_MultiBlock_Ret:
 	ret
+VoiceParam_MultiBlock_Epilogue_Data:
 	lda	xsp, (xsp-12)
 	ld	c, (xwa+14)
 	cp	c, 1:i3
-	jr	nc, SeqAlt_DescriptorBlock_Data_Epilogue
+	jr	nc, VoiceParam_AssSwb_MultiBlock_Data_Epilogue
 	extz	bc
 	muls	bc, 6
 	lda	xde, (SeqAlt_PopIzSkip4Ret2_Data:24)
@@ -14166,9 +14043,10 @@ VoiceParam_MultiBlock_Ret:
 	ld	(xbc+4), xwa
 	ld	xwa, xbc
 	calr	MidiPkt_EnqueueControl_3354
-SeqAlt_DescriptorBlock_Data_Epilogue:
+VoiceParam_AssSwb_MultiBlock_Data_Epilogue:
 	lda	xsp, (xsp+12)
 	ret
+VoiceParam_LookupAndEnqueue:
 	lda	xsp, (xsp-12)
 	push	xiz
 	ld	xiz, xwa
@@ -14203,6 +14081,7 @@ SeqAlt_DescriptorBlock_Data_Epilogue:
 ; =============================================================================
 
 	; --- Stack-frame: XIZ struct field extraction + packed lookup (96 bytes) ---
+MidiPkt_ExtractAndPack:
 	lda	xsp, (xsp-16)
 	push	xiz
 	ld	xiz, xwa
@@ -14229,9 +14108,9 @@ SeqAlt_DescriptorBlock_Data_Epilogue:
 	extz	de
 	ld	a, (xiz+11)
 	and	a, 15
-	jr	z, SeqAlt_DescriptorBlock_Data_Skip
+	jr	z, MidiPkt_ExtractAndPack_StoreShifted
 	.byte 0xda, 0xfe	; sll a,de -- the backend cannot spell this form
-SeqAlt_DescriptorBlock_Data_Skip:
+MidiPkt_ExtractAndPack_StoreShifted:
 	ld	(xbc+4), de
 	lda	xwa, (xsp+6)
 	ld	(xwa), xbc
@@ -14263,7 +14142,7 @@ MidiPkt_BuildDirect:
 	lda xwa, (xsp + 4)
 	ld (xwa), xbc
 	ld (xwa + 4), xiz
-	calr	SeqAlt_DescriptorBlock_Data_Helper
+	calr	MidiPkt_EnqueueControl_335C
 	pop xiz
 	lda xsp, (xsp + 12)
 	ret
@@ -14275,6 +14154,7 @@ MidiPkt_BuildDirect:
 ;    lookup (0xfd822d), copies channel from (xiz+8).
 ; 2) Simple packet: same status byte construction but data byte 2 = 0.
 ; Output: 4-byte packet pointer + source struct pointer stored to (XWA).
+MidiPkt_BuildControl:
 	lda	xsp, (xsp-12)
 	push	xiz
 	ld	xiz, xwa
@@ -14324,11 +14204,7 @@ MidiPkt_BuildDirect:
 	lda	xwa, (xsp+4)
 	ld	(xwa), xbc
 	ld	(xwa+4), xiz
-	calr	SeqAlt_DescriptorBlock_Data_Helper2
-; v7 NAME DISPLACED: `VoiceParam_AssSwb_MultiBlock_Data` (0xFD9655) falls inside the line above in the
-; correct framing (v10 0xFD9E26).  Kept as an alias because another v7
-; file references this address by this name.
-	.set VoiceParam_AssSwb_MultiBlock_Data, MidiPkt_BuildDirect + 194
+	calr	MidiPkt_EnqueueControl_3358
 	pop	xiz
 	lda	xsp, (xsp+12)
 	ret
@@ -14513,11 +14389,9 @@ MidiPkt_BuildZeroData:
 	lda xwa, (xsp)
 	ld (xwa), xde
 	ld (xwa + 4), xbc
-	calr	SeqAlt_DescriptorBlock_Data_Helper2
+	calr	MidiPkt_EnqueueControl_3358
 	lda xsp, (xsp + 12)
 	ret
-; v7 NAME DISPLACED: `MidiPkt_ProcessEventQueue` sits where v10 has `MidiPkt_ProcessEventQueue` (v10 0xFDA01A).
-; Kept because another v7 file references this address by this name.
 MidiPkt_ProcessEventQueue:
 	push xiz
 	bit 4, (0xfd50:16)
@@ -14577,10 +14451,6 @@ MidiPkt_DispatchViaTable_4D6A:
 	add xbc, xde
 	ld xhl, (xbc)
 	call (xhl)
-; v7 NAME DISPLACED: `VoiceParam_MultiBlock_Epilogue_Data` sits where v10 has no label (v10 0xFDA09F).
-; The v7 code v10 calls `VoiceParam_MultiBlock_Epilogue_Data` is 0x41A earlier, at v7 0xFD94B4.
-; Kept because another v7 file references this address by this name.
-VoiceParam_MultiBlock_Epilogue_Data:
 	pop xiz
 	inc 8, xsp
 	ret
@@ -14613,10 +14483,6 @@ MidiPkt_DispatchViaTable_4D8E:
 	ld xiz, xwa
 	ld xwa, xiz
 	ld	xbc, MidiCtl_MatchList2
-; v7 NAME DISPLACED: `VoiceParam_LookupAndEnqueue` (0xFD9911) falls inside the line above in the
-; correct framing (v10 0xFDA0E2).  Kept as an alias because another v7
-; file references this address by this name.
-	.set VoiceParam_LookupAndEnqueue, MidiPkt_DispatchViaTable_4D8E + 11
 	calr	MidiPkt_MatchParamInTable
 	lda xwa, (xsp + 4)
 	lda xbc, (xwa + 4)

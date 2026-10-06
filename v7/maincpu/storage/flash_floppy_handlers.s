@@ -6587,7 +6587,7 @@ CmpBndRng_DefaultString:
 
 CmpBndRng_CallStrcpy:
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	CmpBndRng_PopIzRet
@@ -6898,7 +6898,7 @@ CmpSetP1_GridCheck_Case2:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	CmpSetP1_ReturnZeroJmp
 CmpSetP1_GridCheck_Case3:
@@ -7361,7 +7361,7 @@ AcApcToggle_SetParam83:
 	ld xwa, 0x28083
 
 AcApcToggle_ReadSndParam:
-	call	AcApcToggleProc_Helper
+	call	SndParam_LookupReadOnly
 	lda	xbc, (xiz+34)
 	ld	xwa, (xbc)
 	cp	hl, 0:i3
@@ -7397,7 +7397,7 @@ AcApcToggle_HandleLswMsg:
 	or XWA,XWA
 	jr nz, EventHandler_Return
 	ld XWA,0x00028081
-	call AcApcToggleProc_Helper
+	call SndParam_LookupReadOnly
 	ld XWA,(XSP+0x08)
 	cpw (XWA+0x04), 0x0001
 	jr nz, AcApcToggle_SendZero
@@ -7558,7 +7558,7 @@ AcApcMdBox_HandleTitleDisp:
 	st_erpb_rr a, 0xf8
 	extz IZ
 	ld XWA,0x00028080
-	call AcApcToggleProc_Helper
+	call SndParam_LookupReadOnly
 	cp HL,IZ
 	jr z, AcS2cMem_ReturnZeroJmp
 	ld XWA,0x00028080
@@ -8031,7 +8031,7 @@ S2cGrid_GetViewAndCopy:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	FdcFormat_ReturnZeroJmp
 FdcFormat_GridCheck_Case2:

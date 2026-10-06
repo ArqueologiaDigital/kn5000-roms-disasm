@@ -229,7 +229,7 @@ PcgOutGrid_CopyStrCommon:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	jr	PcgOutGrid_ReturnZero
 AcPcgOutGridBoxProc_OnLswData:	; cases 29360156, 29360157
@@ -552,7 +552,7 @@ PcgOutGridCheckJumpTable_Entry_Code_Skip2:
 	pushw	PcgOutGridCheckJumpTable_Entry2_Str_Dash_Dash_Dash@hi16
 	pushw	PcgOutGridCheckJumpTable_Entry2_Str_Dash_Dash_Dash@lo16
 	push	xhl
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -564,7 +564,7 @@ PcgOutGridCheckJumpTable_Entry_Code_Skip2:
 	pushw	PcgOutGridCheckJumpTable_Entry2_Str_OFF@lo16
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -613,7 +613,7 @@ PcgOutGridCheckJumpTable_Entry_Code_Skip4:
 	pushw	PcgOutGridCheckJumpTable_Entry2_Str_Dash_Dash_Dash_2@hi16
 	pushw	PcgOutGridCheckJumpTable_Entry2_Str_Dash_Dash_Dash_2@lo16
 	push	xhl
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -625,7 +625,7 @@ PcgOutGridCheckJumpTable_Entry_Code_Skip4:
 	pushw	PcgOutGridCheckJumpTable_Entry2_Str_OFF_2@lo16
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -637,7 +637,7 @@ PcgOutGridCheckJumpTable_Entry_Code_Skip4:
 	pushw	PcgOutGridCheckJumpTable_Entry2_Str_OFF_3@lo16
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -746,7 +746,7 @@ PcgOutCheck_SendPreset2:
 	pushw	PcgOutCheck_SendPreset2_Str_Dash_Dash_Dash@hi16
 	pushw	PcgOutCheck_SendPreset2_Str_Dash_Dash_Dash@lo16
 	push	xbc
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -758,7 +758,7 @@ PcgOutCheck_SendPreset2:
 	pushw	PcgOutCheck_SendPreset2_Str_OFF@lo16
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -805,7 +805,7 @@ PcgOutCheck_SendPreset3:
 	pushw	PcgOutCheck_SendPreset3_Str_Dash_Dash_Dash@hi16
 	pushw	PcgOutCheck_SendPreset3_Str_Dash_Dash_Dash@lo16
 	push	xbc
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -817,7 +817,7 @@ PcgOutCheck_SendPreset3:
 	pushw	PcgOutCheck_SendPreset3_Str_OFF@lo16
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -829,7 +829,7 @@ PcgOutCheck_SendPreset3:
 	pushw	PcgOutCheck_SendPreset3_Str_OFF_2@lo16
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	Free_Compare2
+	call	Strcpy
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
