@@ -1424,30 +1424,31 @@ SeqChan_WriteFieldHandlers:
 MidiSysEx_BlockTemplate:
 	.byte 0x88, 0x00, 0x18, 0x00, 0x00, 0x00
 ; 22 x u32 routine pointers; MidiSysEx_ProcessBlock_Helper11 (0xFD827D): `lda xbc,(<this>); ld xhl, (xbc+wa); call (xhl)` -- entries point 0-4 bytes apart into one run of short entry points at 0xFD829B.
+; Index: byte +3 of the spare MIDI-sequence buffer (MIDISEQ_SPARE_BUF_PTR), 0..21; each stub is labelled for its destination (scripts/tools/label_sysex_block_ops.py).
 ; Extent: to the next object's base (loaded by its own reader).
 MidiSysEx_BlockHandlers:
-	.long MidiSysEx_ProcessBlock_Helper11 + 30	; no label at this target yet
-	.long MidiSysEx_ProcessBlock_Helper11 + 31	; no label at this target yet
-	.long MidiSysEx_ProcessBlock_Helper11 + 31	; no label at this target yet
-	.long MidiSysEx_ProcessBlock_Helper11 + 31	; no label at this target yet
-	.long MidiSysEx_ProcessBlock_Helper11 + 35	; no label at this target yet
-	.long MidiSysEx_ProcessBlock_Helper11 + 35	; no label at this target yet
-	.long MidiSysEx_ProcessBlock_Helper11 + 35	; no label at this target yet
-	.long MidiSysEx_ProcessBlock_Helper11 + 39	; no label at this target yet
-	.long MidiSysEx_ProcessBlock_Helper11 + 39	; no label at this target yet
-	.long MidiSysEx_ProcessBlock_Helper11 + 39	; no label at this target yet
-	.long MidiSysEx_ProcessBlock_Helper11 + 39	; no label at this target yet
-	.long MidiSysEx_ProcessBlock_Helper11 + 43	; no label at this target yet
-	.long MidiSysEx_ProcessBlock_Helper11 + 43	; no label at this target yet
-	.long MidiSysEx_ProcessBlock_Helper11 + 43	; no label at this target yet
-	.long MidiSysEx_ProcessBlock_Helper11 + 43	; no label at this target yet
-	.long MidiSysEx_ProcessBlock_Helper11 + 47	; no label at this target yet
-	.long MidiSysEx_ProcessBlock_Helper11 + 47	; no label at this target yet
-	.long MidiSysEx_ProcessBlock_Helper11 + 47	; no label at this target yet
-	.long MidiSysEx_ProcessBlock_Helper11 + 48	; no label at this target yet
-	.long MidiSysEx_ProcessBlock_Helper11 + 48	; no label at this target yet
-	.long MidiSysEx_ProcessBlock_Helper11 + 48	; no label at this target yet
-	.long MidiSysEx_ProcessBlock_Helper11 + 48	; no label at this target yet
+	.long MidiSysEx_BlockOp_Ret
+	.long MidiSysEx_BlockOp_ToParseStream
+	.long MidiSysEx_BlockOp_ToParseStream
+	.long MidiSysEx_BlockOp_ToParseStream
+	.long MidiSysEx_BlockOp_ToPartDataAndBend
+	.long MidiSysEx_BlockOp_ToPartDataAndBend
+	.long MidiSysEx_BlockOp_ToPartDataAndBend
+	.long MidiSysEx_BlockOp_ToAccDemoInit
+	.long MidiSysEx_BlockOp_ToAccDemoInit
+	.long MidiSysEx_BlockOp_ToAccDemoInit
+	.long MidiSysEx_BlockOp_ToAccDemoInit
+	.long MidiSysEx_BlockOp_ToCallHandler
+	.long MidiSysEx_BlockOp_ToCallHandler
+	.long MidiSysEx_BlockOp_ToCallHandler
+	.long MidiSysEx_BlockOp_ToCallHandler
+	.long MidiSysEx_BlockOp_Ret2
+	.long MidiSysEx_BlockOp_Ret2
+	.long MidiSysEx_BlockOp_Ret2
+	.long MidiSysEx_BlockOp_ToVoiceBankInit
+	.long MidiSysEx_BlockOp_ToVoiceBankInit
+	.long MidiSysEx_BlockOp_ToVoiceBankInit
+	.long MidiSysEx_BlockOp_ToVoiceBankInit
 ; 16-byte template: MidiChan_InitSoundRegisters (0xFD8484) copies it into its frame (`ld xiy,<this>; ld xix,<ram>; ldw bc,8; ldirw`, four times).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 MidiChan_ZeroRegTemplate:

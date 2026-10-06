@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 53,104
-#   semantic names ........... 52,351 (98.6%)
+#   symbols .................. 53,111
+#   semantic names ........... 52,358 (98.6%)
 #   positional names ......... 753
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -49049,6 +49049,13 @@ SeqChan_UnhandledCmd_0x03 00FD8264
 MidiPkt_ArpChordHandler_Helper 00FD8265
 SeqChan_UnhandledCmd_0x12 00FD8273
 MidiSysEx_ProcessBlock_Helper11 00FD827D
+MidiSysEx_BlockOp_Ret 00FD829B
+MidiSysEx_BlockOp_ToParseStream 00FD829C
+MidiSysEx_BlockOp_ToPartDataAndBend 00FD82A0
+MidiSysEx_BlockOp_ToAccDemoInit 00FD82A4
+MidiSysEx_BlockOp_ToCallHandler 00FD82A8
+MidiSysEx_BlockOp_Ret2 00FD82AC
+MidiSysEx_BlockOp_ToVoiceBankInit 00FD82AD
 SeqChan_UnhandledCmd_Join 00FD82B1
 SeqChan_UnhandledCmd_Join2 00FD82D1
 MidiPkt_ArpExtHandler_A_Helper 00FD82E2

@@ -12166,12 +12166,19 @@ MidiSysEx_ProcessBlock_Helper11:
 	ld	xhl, (xbc+wa)
 	call	(xhl)
 	ret
+MidiSysEx_BlockOp_Ret:
 	ret
+MidiSysEx_BlockOp_ToParseStream:
 	jp	SeqChan_UnhandledCmd_Join
+MidiSysEx_BlockOp_ToPartDataAndBend:
 	jp	SeqChan_UnhandledCmd_Join2
+MidiSysEx_BlockOp_ToAccDemoInit:
 	jp	SeqChan_UnhandledCmd_Join3
+MidiSysEx_BlockOp_ToCallHandler:
 	jp	SeqChan_UnhandledCmd_Join4
+MidiSysEx_BlockOp_Ret2:
 	ret
+MidiSysEx_BlockOp_ToVoiceBankInit:
 	jp	SeqChan_UnhandledCmd_Join5
 SeqChan_UnhandledCmd_Join:
 	set	4, (0x90f9:16)
