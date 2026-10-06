@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 53,250
-#   semantic names ........... 52,498 (98.6%)
+#   symbols .................. 53,244
+#   semantic names ........... 52,492 (98.6%)
 #   positional names ......... 752
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -5968,12 +5968,6 @@ AccStyle_SlotOrderA 00E4C16A
 AccStyle_SlotOrderB 00E4C188
 AccompSeq_StyleDataTable 00E4C1A6
 AccompSeq_Streams 00E4CB66
-TechnichordParam_Block1 00E5002D
-TechnichordParam_Block2 00E5006E
-TechnichordParam_Block3 00E500BE
-TechnichordParam_Block4 00E500CE
-TechnichordParam_Block5 00E500FE
-NakaData_TechnichordParams 00E50117
 MidiMenu_ApFunctionTable 00E55210
 MidiMenu_ApFunctionNameTable 00E55304
 NakaInst_EmptyFuncName 00E553F8

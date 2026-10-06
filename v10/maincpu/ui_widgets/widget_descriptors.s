@@ -6848,13 +6848,7 @@ AccompSeq_StyleDataTable:
 ; AccompSeq_Stream_00_a .. AccompSeq_Stream_77_b.
 ; -----------------------------------------------------------------------------
 AccompSeq_Streams:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1BD06, 0x34C7
-TechnichordParam_Block1:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1F1CD, 0x41
-TechnichordParam_Block2:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1F20E, 0x50
-TechnichordParam_Block3:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1F25E, 0x10
-TechnichordParam_Block4:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1F26E, 0x30
-TechnichordParam_Block5:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1F29E, 0x19
-NakaData_TechnichordParams:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1F2B7, 0x50F9
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1BD06, 0x86AA	; all 103 streams, to 0x243B0
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] MidiMenu_ApFunctionTable
 ; MidiMenu_ApFunctionTable (ROM 0xe55210) -- 60 procedure addresses and

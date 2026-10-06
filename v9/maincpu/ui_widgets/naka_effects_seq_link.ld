@@ -20,7 +20,6 @@ HelpFlashFunc = 0x00F477DA;
 HelpLangChkMain = 0x00F47756;
 HelpModeFunc = 0x00F46FDC;
 HelpTitleFunc = 0x00F46FF6;
-NakaData_TechnichordParams = 0x00E50117;
 NakaData_DescriptorZero = 0x00E600DF;
 NakaData_Tables2Pad1 = 0x00E70015;
 NakaData_Tables2Pad2 = 0x00E7001E;

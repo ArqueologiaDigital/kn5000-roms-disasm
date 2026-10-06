@@ -21,7 +21,6 @@ extern const char HelpFlashFunc;
 extern const char HelpLangChkMain;
 extern const char HelpModeFunc;
 extern const char HelpTitleFunc;
-extern const char NakaData_TechnichordParams;
 extern const char NakaData_DescriptorZero;
 extern const char NakaData_Tables2Pad1;
 extern const char NakaData_Tables2Pad2;
