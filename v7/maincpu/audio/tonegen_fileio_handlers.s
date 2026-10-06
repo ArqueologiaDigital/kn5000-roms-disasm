@@ -879,33 +879,38 @@ ToneGen_FileIO_RestoreFromBackup:
 	call	SwbtWr_NullRet
 	res	5, (0x8dda:16)
 	ret
-ToneGen_FlashVerify:
-	lda	xhl, (ToneGen_FlashVerify_Str_HK:24)
+; Compare the first 3 bytes of Custom Data Flash 0x3D3000 with SndParamBank_DefaultHeader ("HK "); on any
+; difference fall into SndParamBank_WriteFlashDefaults.
+SndParamBank_CheckFlash:
+	lda	xhl, (SndParamBank_DefaultHeader:24)
 	ld	xde, 0x3d3000
 	ld	bc, 0:i3
-ToneGen_FlashVerifyLoop:
+SndParamBank_CheckFlash_Loop:
 	ld	A, (xhl+)
 	cp	A, (xde+)
-	jr	nz, ToneGen_FlashWriteAll
+	jr	nz, SndParamBank_WriteFlashDefaults
 	inc	1, bc
 	cp	bc, 3:i3
-	jr	c, ToneGen_FlashVerifyLoop
+	jr	c, SndParamBank_CheckFlash_Loop
 	ret
-ToneGen_FlashWriteAll:
+; FlashWrite the factory defaults of the sound-parameter banks: header + bank 0 (0xFA bytes) to 0x3D3000,
+; SndParamBank_Default1 / _Default2 (0xEA each) to 0x3D3110 / 0x3D3210, then the 0x50-byte option block,
+; assembled in a Malloc'd buffer from the five SndParamBank_OptionDefault_NN pieces, to 0x3D3400.
+SndParamBank_WriteFlashDefaults:
 	push	xiz
 	ld	xwa, 0x3d3000
 	push	xwa
 	ld	wa, 1:i3
-	ld	xbc, ToneGen_FlashVerify_Str_HK
+	ld	xbc, SndParamBank_DefaultHeader
 	ldw	de, 0xfa
 	call	FlashWrite
-	lda	xbc, (ToneGen_FlashWriteAll_Data:24)
+	lda	xbc, (SndParamBank_Default1:24)
 	ld	xwa, 0x3d3110
 	push	xwa
 	ld	wa, 1:i3
 	ldw	de, 0xea
 	call	FlashWrite
-	lda	xbc, (ToneGen_FlashWriteAll_Data_2:24)
+	lda	xbc, (SndParamBank_Default2:24)
 	ld	xwa, 0x3d3210
 	push	xwa
 	ld	wa, 1:i3
@@ -916,38 +921,38 @@ ToneGen_FlashWriteAll:
 	inc	2, xsp
 	ld	xiz, xhl
 	or	xiz, xiz
-	jr	z, ToneGen_FlashWriteDone
+	jr	z, SndParamBank_WriteFlashDefaults_Return
 	pushw	0x0
 	pushw	0x50
 	push	xiz
 	call	Memset
 	pushw	0x2
-	pushw	ToneGen_FlashWriteAll_Data_3@hi16
-	pushw	ToneGen_FlashWriteAll_Data_3@lo16
+	pushw	SndParamBank_OptionDefault_00@hi16
+	pushw	SndParamBank_OptionDefault_00@lo16
 	push	xiz
 	call	Mem_Copy
 	pushw	0xc
-	pushw	ToneGen_FlashWriteAll_Data_5@hi16
-	pushw	ToneGen_FlashWriteAll_Data_5@lo16
+	pushw	SndParamBank_OptionDefault_10@hi16
+	pushw	SndParamBank_OptionDefault_10@lo16
 	lda	xwa, (xiz + 16)
 	push	xwa
 	call	Mem_Copy
 	lda	xsp, (xsp + 28)
 	pushw	0x4
-	pushw	ToneGen_FlashWriteAll_Data_6@hi16
-	pushw	ToneGen_FlashWriteAll_Data_6@lo16
+	pushw	SndParamBank_OptionDefault_20@hi16
+	pushw	SndParamBank_OptionDefault_20@lo16
 	lda	xwa, (xiz + 32)
 	push	xwa
 	call	Mem_Copy
 	pushw	0x4
-	pushw	ToneGen_FlashWriteAll_Data_4@hi16
-	pushw	ToneGen_FlashWriteAll_Data_4@lo16
+	pushw	SndParamBank_OptionDefault_30@hi16
+	pushw	SndParamBank_OptionDefault_30@lo16
 	lda	xwa, (xiz + 48)
 	push	xwa
 	call	Mem_Copy
 	pushw	0x6
-	pushw	ToneGen_FlashWriteAll_Data_7@hi16
-	pushw	ToneGen_FlashWriteAll_Data_7@lo16
+	pushw	SndParamBank_OptionDefault_40@hi16
+	pushw	SndParamBank_OptionDefault_40@lo16
 	lda	xwa, (xiz + 64)
 	push	xwa
 	call	Mem_Copy
@@ -961,17 +966,19 @@ ToneGen_FlashWriteAll:
 	push	xiz
 	call	Free
 	inc	4, xsp
-ToneGen_FlashWriteDone:
+SndParamBank_WriteFlashDefaults_Return:
 	pop	xiz
 	ret
-ToneGen_FlashReadAndRestore:
+; Factory reset (Boot_HandleFactoryReset): rebuild the 0x50-byte option block at 0x3D3400 from the
+; SndParamBank_OptionDefault_NN pieces, keeping the flash's own first 2 bytes, then Gfx_ClearFrameBuffers.
+SndParamBank_RestoreOptionBlock:
 	push	xiz
 	pushw	0x50
 	call	Malloc
 	inc	2, xsp
 	ld	xiz, xhl
 	or	xiz, xiz
-	jr	z, DSPCfg_Param_CaseA
+	jr	z, SndParamBank_RestoreOptionBlock_Return
 	pushw	0x0
 	pushw	0x50
 	push	xiz
@@ -982,27 +989,27 @@ ToneGen_FlashReadAndRestore:
 	push	xiz
 	call	Mem_Copy
 	pushw	0xc
-	pushw	ToneGen_FlashWriteAll_Data_5@hi16
-	pushw	ToneGen_FlashWriteAll_Data_5@lo16
+	pushw	SndParamBank_OptionDefault_10@hi16
+	pushw	SndParamBank_OptionDefault_10@lo16
 	lda	xwa, (xiz + 16)
 	push	xwa
 	call	Mem_Copy
 	lda	xsp, (xsp + 28)
 	pushw	0x4
-	pushw	ToneGen_FlashWriteAll_Data_6@hi16
-	pushw	ToneGen_FlashWriteAll_Data_6@lo16
+	pushw	SndParamBank_OptionDefault_20@hi16
+	pushw	SndParamBank_OptionDefault_20@lo16
 	lda	xwa, (xiz + 32)
 	push	xwa
 	call	Mem_Copy
 	pushw	0x4
-	pushw	ToneGen_FlashWriteAll_Data_4@hi16
-	pushw	ToneGen_FlashWriteAll_Data_4@lo16
+	pushw	SndParamBank_OptionDefault_30@hi16
+	pushw	SndParamBank_OptionDefault_30@lo16
 	lda	xwa, (xiz + 48)
 	push	xwa
 	call	Mem_Copy
 	pushw	0x6
-	pushw	ToneGen_FlashWriteAll_Data_7@hi16
-	pushw	ToneGen_FlashWriteAll_Data_7@lo16
+	pushw	SndParamBank_OptionDefault_40@hi16
+	pushw	SndParamBank_OptionDefault_40@lo16
 	lda	xwa, (xiz + 64)
 	push	xwa
 	call	Mem_Copy
@@ -1017,12 +1024,12 @@ ToneGen_FlashReadAndRestore:
 	call	Free
 	inc	4, xsp
 	call	Gfx_ClearFrameBuffers
-; DSP config parameter handler A
-DSPCfg_Param_CaseA:
+SndParamBank_RestoreOptionBlock_Return:
 	pop	xiz
 	ret
-; DSP config parameter handler B
-DSPCfg_Param_CaseB:
+; Copy the five fields of the option block (0x3D3400 +0x00/+0x10/+0x20/+0x30/+0x40; 2, 12, 4, 4, 6 bytes)
+; to RAM 0x340E4 / 0x340E6 / 0x340F2 / 0x340F6 / 0x340FA.
+SndParamBank_LoadOptionBlock:
 	pushw	0x2
 	ld	xwa, 0x3d3400
 	push	xwa

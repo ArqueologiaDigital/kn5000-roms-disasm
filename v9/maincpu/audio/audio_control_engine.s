@@ -3946,8 +3946,8 @@ AudioInit_FillLoop:
 	ld (xwa+), 0x50
 	cp xwa, xbc
 	jr ule, AudioInit_FillLoop
-	call ToneGen_FlashVerify
-	jp DSPCfg_Param_CaseB
+	call SndParamBank_CheckFlash
+	jp SndParamBank_LoadOptionBlock
 
 Audio_ResetAfterPayloadError:
 	call SubCPU_Payload_GetErrorFlag

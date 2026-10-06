@@ -1578,7 +1578,7 @@ Boot_HandleFactoryReset:
 	cp a, 1:i3		; Combo code == 1 (Initial Setting)?
 	ret nz			; No -> not requesting reset, return
 	; --- Factory Reset: clear all DRAM and SRAM ---
-	call ToneGen_FlashReadAndRestore
+	call SndParamBank_RestoreOptionBlock
 	ei 7
 	calr Boot_ClearAllInterruptEnables	; Clear all interrupt enables
 	ld xbc, 0x400

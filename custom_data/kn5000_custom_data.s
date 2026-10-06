@@ -1646,11 +1646,11 @@ CustomData_LCD_Wallpaper:
 ;     in ROM (NakaInst_SoundConfig_LookupTable_0x8A + 234*n); 0x1B / 0x1C /
 ;     0x1D return 0x3D3010 / 0x3D3110 / 0x3D3210 -- three user banks here;
 ;   SndParam_CopyPreset: FlashWrite 0xEA bytes to bank 0 / 1 / 2;
-;   ToneGen_FlashVerify / ToneGen_FlashWriteAll: when the 3 bytes at 0x3D3000
+;   SndParamBank_CheckFlash / SndParamBank_WriteFlashDefaults: when the 3 bytes at 0x3D3000
 ;     differ from the ROM default (0xED933A), write the defaults: 0xFA bytes
 ;     (header + bank 0) from 0xED933A, banks 1-2 from 0xED9434 / 0xED951E,
 ;     and a 0x50-byte block at 0x3D3400 (read back by
-;     ToneGen_FlashReadAndRestore).
+;     SndParamBank_RestoreOptionBlock).
 ; ============================================================
 CustomData_SndParamBanks:
 	; 1,104 live bytes then 2,992 bytes of erased flash.
@@ -1668,6 +1668,10 @@ CustomData_SndParamBanks:
 	; here 0xFD50-0xFD5C).  This dump's header + bank 0 differ
 	; from the ROM default at 0xED933A in 14 of 0xFA bytes (values only):
 	; user-edited.
+	; (2026-10-06) SndParam_ApplyBaseBlock does not mask: it writes
+	; addr[0] = (addr[0] & 0xF8) | b4 and addr[1] = b5 (payload bytes 12-13
+	; of a part record).  The ROM defaults and the 25 ROM presets are typed
+	; in C: sndparam_bank_retype.py, technics-docs custom-data-flash.md.
 	.byte 0x48, 0x4b, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x03	; +0x0000  HK .............
 	.byte 0xc2, 0xf9, 0x00, 0x00, 0x00, 0x00, 0xdc, 0xf9, 0x00, 0x00, 0x00, 0x03, 0xf6, 0xf9, 0x00, 0x00	; +0x0010  ................
 	.byte 0x00, 0x01, 0x10, 0xfa, 0x00, 0x00, 0x00, 0x02, 0x2a, 0xfa, 0x00, 0x00, 0x00, 0x04, 0x44, 0xfa	; +0x0020  ........*.....D.

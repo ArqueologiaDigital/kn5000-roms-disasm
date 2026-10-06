@@ -7421,8 +7421,8 @@ SndParam_AllocAndCopyPreset:
 	cp (xsp + 4), 0x3
 	jrl nc, SoundData_FreeSoundPtr
 	pushw 0xea
-	pushw SndParam_AllocAndCopyPreset_Data@hi16
-	pushw SndParam_AllocAndCopyPreset_Data@lo16
+	pushw SndParam_PresetBanks@hi16
+	pushw SndParam_PresetBanks@lo16
 	push xiz
 	call Mem_Copy
 	lda xsp, (xsp + 10)
@@ -7503,7 +7503,7 @@ SndParam_GetBlockPointer:
 	jr nc, SndParam_GetBlockPointer_Extended
 	extz wa
 	muls wa, 0xea
-	lda xbc, (SndParam_AllocAndCopyPreset_Data:24)
+	lda xbc, (SndParam_PresetBanks:24)
 	lda	xhl, (xbc+wa)
 	ret
 

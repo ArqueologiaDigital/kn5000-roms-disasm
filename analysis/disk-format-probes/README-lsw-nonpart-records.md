@@ -141,7 +141,7 @@ validation (`PanelTlv_Rule_ZeroByte`); see the corrected grammar in `README-lsw-
 
 * **Part-record field `+0x0C` is the MIDI channel.** The three "power-on default" blobs the
   firmware burns into flash (`0x00ED933A → 0x3D3000`, `0x00ED9434 → 0x3D3110`,
-  `0x00ED951E → 0x3D3210`; written by `ToneGen_FlashWriteAll`) are 6-byte records
+  `0x00ED951E → 0x3D3210`; written by `SndParamBank_WriteFlashDefaults`) are 6-byte records
   `(u16 addr, u16 0, u8 a, u8 b)` — for the tag-`0x80` stretch `a` reproduces that record's
   descriptor masks exactly (`7F 0C 1C C5 … 3F …`), so `b` is the value. Their first 22
   records all target `payload+0x0C` of a part record: tags `0x00..0x0F` get `0..15` and tags

@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 52,945
-#   semantic names ........... 52,110 (98.4%)
+#   symbols .................. 52,946
+#   semantic names ........... 52,111 (98.4%)
 #   positional names ......... 835
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -12846,14 +12846,15 @@ PanelTlv_Block1_Layout 00ED91AC
 PanelTlv_ResetMasks 00ED92D8
 PanelTlv_CompanionPartTags 00ED92F2
 PanelTlv_ApplyFieldRule_CaseOffsets 00ED930A
-ToneGen_FlashWriteAll_Data_3 00ED931C
-ToneGen_FlashWriteAll_Data_4 00ED9320
-ToneGen_FlashWriteAll_Data_5 00ED9324
-ToneGen_FlashWriteAll_Data_6 00ED9330
-ToneGen_FlashWriteAll_Data_7 00ED9334
-ToneGen_FlashVerify_Str_HK 00ED933A
-ToneGen_FlashWriteAll_Data 00ED9434
-ToneGen_FlashWriteAll_Data_2 00ED951E
+SndParamBank_OptionDefault_00 00ED931C
+SndParamBank_OptionDefault_30 00ED9320
+SndParamBank_OptionDefault_10 00ED9324
+SndParamBank_OptionDefault_20 00ED9330
+SndParamBank_OptionDefault_40 00ED9334
+SndParamBank_DefaultHeader 00ED933A
+SndParamBank_Default0 00ED934A
+SndParamBank_Default1 00ED9434
+SndParamBank_Default2 00ED951E
 CtrlPanel_IndicatorJumpTable_Data 00ED9608
 Audio_DispatchCommand_Data 00ED961A
 PanelDisplay_DispatchByMode_Data 00ED962C
@@ -14007,7 +14008,7 @@ DSPCfg_ConfigureVoiceSlotA_Data 00EE159C
 DSPCfg_ConfigureVoiceSlotB_Data 00EE15AC
 DSPCfg_VoiceSlotB_MapAndWrite_Data 00EE15BC
 DSPCfg_VoiceSlotB_ExtractData_Data 00EE15CC
-SndParam_AllocAndCopyPreset_Data 00EE15FE
+SndParam_PresetBanks 00EE15FE
 MidiSysEx_SendAllParams_Data 00EE2CD8
 MidiSysEx_SendControlChange1_Data 00EE2CE6
 MidiSysEx_SendProgramChange_Data 00EE2CEA
@@ -46131,13 +46132,13 @@ ToneGen_DiffOuterNext 00FC4B59
 ToneGen_DiffScanCheckEnd 00FC4B5B
 ToneGen_FileIO_SaveAndSync 00FC4B81
 ToneGen_FileIO_RestoreFromBackup 00FC4BCE
-ToneGen_FlashVerify 00FC4C03
-ToneGen_FlashVerifyLoop 00FC4C0F
-ToneGen_FlashWriteAll 00FC4C1E
-ToneGen_FlashWriteDone 00FC4CE5
-ToneGen_FlashReadAndRestore 00FC4CE7
-DSPCfg_Param_CaseA 00FC4D76
-DSPCfg_Param_CaseB 00FC4D78
+SndParamBank_CheckFlash 00FC4C03
+SndParamBank_CheckFlash_Loop 00FC4C0F
+SndParamBank_WriteFlashDefaults 00FC4C1E
+SndParamBank_WriteFlashDefaults_Return 00FC4CE5
+SndParamBank_RestoreOptionBlock 00FC4CE7
+SndParamBank_RestoreOptionBlock_Return 00FC4D76
+SndParamBank_LoadOptionBlock 00FC4D78
 CtrlPanel_IndicatorJumpTable 00FC4DDE
 DSPCfg_Param_CaseC 00FC4E00
 CtrlPanel_IndicatorJumpTable_Case4 00FC4E01

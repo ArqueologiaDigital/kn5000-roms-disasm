@@ -14,7 +14,6 @@ extern const char Audio_CopyStateFromROM;
 extern const char Audio_NullHandler_A;
 extern const char Audio_NullHandler_B;
 extern const char Audio_NullHandler_C;
-extern const char DataBuf_Data_FormatDispatch;
 extern const char Encoder_AlignByte;
 extern const char Encoder_MarkInvalid;
 extern const char Encoder_PassthroughIdentity;
@@ -209,6 +208,21 @@ typedef struct __attribute__((packed)) {
     uint32_t exit;              /* +26 a */
     uint32_t window;            /* +30 r */
 } naka_cls_IvScreen_t;
+
+/* Sound-parameter bank entries (6 bytes; a bank is 23 base + 16 masked entries = 234 bytes, address 0 =
+ * unused).  The same types are defined in sound_config_lookup.c (the 25 ROM presets) and
+ * naka_extension_device.c (the three flash defaults); scripts/converters/sndparam_bank_retype.py. */
+typedef struct __attribute__((packed)) {
+    uint32_t address;    /* a part record's payload byte 12 in live-panel RAM */
+    uint8_t  low_bits;   /* SndParam_ApplyBaseBlock: address[0] = (address[0] & 0xF8) | low_bits */
+    uint8_t  next_byte;  /*                          address[1] = next_byte (payload byte 13) */
+} snd_param_base_entry_t;
+
+typedef struct __attribute__((packed)) {
+    uint32_t address;    /* a live-panel RAM byte */
+    uint8_t  mask;       /* SndParam_ApplyMaskBlock: *address = (*address & ~mask) | value */
+    uint8_t  value;
+} snd_param_mask_entry_t;
 
 /* -- Panel TLV schema (+0x230E..+0x2B0C; scripts/converters/panel_tlv_schema_retype.py) --
  * The live panel (RAM 0xF9A0 = block 0, 0xFD60 = block 1) and each of the 80 panel memories (RAM
@@ -1110,243 +1124,19 @@ typedef struct __attribute__((packed)) {
     uint16_t field_2b62;
     uint16_t field_2b64;
     uint8_t pad_146[8];  /* zero padding */
-    char Hk_str[4];
-    uint8_t pad_147[10];  /* zero padding */
-    uint16_t field_2b7c;
-    uint16_t field_2b7e;
-    uint8_t pad_148[4];  /* zero padding */
-    uint16_t field_2b84;
-    uint8_t pad_149[3];  /* zero padding */
-    uint32_t ptr_2b89;
-    uint8_t pad_150[2];  /* zero padding */
-    uint32_t ptr_2b8f;
-    uint8_t pad_151[2];  /* zero padding */
-    uint32_t ptr_2b95;
-    uint8_t pad_152[2];  /* zero padding */
-    uint32_t ptr_2b9b;
-    uint8_t pad_153[2];  /* zero padding */
-    uint32_t ptr_2ba1;
-    uint8_t pad_154[2];  /* zero padding */
-    uint32_t ptr_2ba7;
-    uint8_t pad_155[2];  /* zero padding */
-    uint32_t ptr_2bad;
-    uint8_t pad_156[2];  /* zero padding */
-    uint32_t ptr_2bb3;
-    uint8_t pad_157[2];  /* zero padding */
-    uint32_t ptr_2bb9;
-    uint8_t pad_158[2];  /* zero padding */
-    uint32_t ptr_2bbf;
-    uint8_t pad_159[2];  /* zero padding */
-    uint32_t ptr_2bc5;
-    uint8_t pad_160[2];  /* zero padding */
-    uint32_t ptr_2bcb;
-    uint8_t pad_161[2];  /* zero padding */
-    uint32_t ptr_2bd1;
-    uint8_t pad_162[2];  /* zero padding */
-    uint32_t ptr_2bd7;
-    uint8_t pad_163[2];  /* zero padding */
-    uint32_t ptr_2bdd;
-    uint8_t pad_164[2];  /* zero padding */
-    uint32_t ptr_2be3;
-    uint8_t pad_165[2];  /* zero padding */
-    uint32_t ptr_2be9;
-    uint8_t pad_166[2];  /* zero padding */
-    uint32_t ptr_2bef;
-    uint8_t pad_167[2];  /* zero padding */
-    uint32_t ptr_2bf5;
-    uint8_t pad_168[2];  /* zero padding */
-    uint32_t ptr_2bfb;
-    uint8_t pad_169[2];  /* zero padding */
-    uint32_t ptr_2c01;
-    uint8_t pad_170[2];  /* zero padding */
-    uint32_t ptr_2c07;
-    uint16_t field_2c0b;
-    uint32_t ptr_2c0d;
-    uint16_t field_2c11;
-    uint32_t ptr_2c13;
-    uint16_t field_2c17;
-    uint32_t DataBuf_Data_FormatDispatch_ptr;
-    uint16_t field_2c1d;
-    uint32_t ptr_2c1f;
-    char str_509[2];
-    uint32_t ptr_2c25;
-    uint16_t field_2c29;
-    uint32_t ptr_2c2b;
-    uint16_t field_2c2f;
-    uint32_t ptr_2c31;
-    char str_510[2];
-    uint32_t ptr_2c37;
-    uint16_t field_2c3b;
-    uint32_t ptr_2c3d;
-    uint16_t field_2c41;
-    uint32_t ptr_2c43;
-    uint16_t field_2c47;
-    uint32_t ptr_2c49;
-    char str_511[2];
-    uint32_t ptr_2c4f;
-    char str_512[2];
-    char P_str[2];
-    uint8_t pad_171[3];  /* zero padding */
-    uint16_t field_2c5a;
-    uint8_t pad_172[4];  /* zero padding */
-    uint16_t field_2c60;
-    uint8_t pad_173[6];  /* zero padding */
-    uint16_t field_2c68;
-    uint8_t pad_174[4];  /* zero padding */
-    uint16_t field_2c6e;
-    uint8_t pad_175[3];  /* zero padding */
-    uint32_t ptr_2c73;
-    uint8_t pad_176[2];  /* zero padding */
-    uint32_t ptr_2c79;
-    uint8_t pad_177[2];  /* zero padding */
-    uint32_t ptr_2c7f;
-    uint8_t pad_178[2];  /* zero padding */
-    uint32_t ptr_2c85;
-    uint8_t pad_179[2];  /* zero padding */
-    uint32_t ptr_2c8b;
-    uint8_t pad_180[2];  /* zero padding */
-    uint32_t ptr_2c91;
-    uint8_t pad_181[2];  /* zero padding */
-    uint32_t ptr_2c97;
-    uint8_t pad_182[2];  /* zero padding */
-    uint32_t ptr_2c9d;
-    uint8_t pad_183[2];  /* zero padding */
-    uint32_t ptr_2ca3;
-    uint8_t pad_184[2];  /* zero padding */
-    uint32_t ptr_2ca9;
-    uint8_t pad_185[2];  /* zero padding */
-    uint32_t ptr_2caf;
-    uint8_t pad_186[2];  /* zero padding */
-    uint32_t ptr_2cb5;
-    uint8_t pad_187[2];  /* zero padding */
-    uint32_t ptr_2cbb;
-    uint8_t pad_188[2];  /* zero padding */
-    uint32_t ptr_2cc1;
-    uint8_t pad_189[2];  /* zero padding */
-    uint32_t ptr_2cc7;
-    uint8_t pad_190[2];  /* zero padding */
-    uint32_t ptr_2ccd;
-    uint8_t pad_191[2];  /* zero padding */
-    uint32_t ptr_2cd3;
-    uint8_t pad_192[2];  /* zero padding */
-    uint32_t ptr_2cd9;
-    uint8_t pad_193[2];  /* zero padding */
-    uint32_t ptr_2cdf;
-    uint8_t pad_194[2];  /* zero padding */
-    uint32_t ptr_2ce5;
-    uint8_t pad_195[2];  /* zero padding */
-    uint32_t ptr_2ceb;
-    uint8_t pad_196[2];  /* zero padding */
-    uint32_t ptr_2cf1;
-    uint16_t field_2cf5;
-    uint32_t ptr_2cf7;
-    uint16_t field_2cfb;
-    uint32_t ptr_2cfd;
-    uint16_t field_2d01;
-    uint32_t ptr_2d03;
-    uint16_t field_2d07;
-    uint32_t ptr_2d09;
-    char str_514[2];
-    uint32_t ptr_2d0f;
-    uint16_t field_2d13;
-    uint32_t ptr_2d15;
-    uint16_t field_2d19;
-    uint32_t ptr_2d1b;
-    char str_515[2];
-    uint32_t ptr_2d21;
-    uint16_t field_2d25;
-    uint32_t ptr_2d27;
-    uint16_t field_2d2b;
-    uint32_t ptr_2d2d;
-    uint16_t field_2d31;
-    uint32_t ptr_2d33;
-    char str_516[2];
-    uint32_t ptr_2d39;
-    char str_517[2];
-    char P_str_2[2];
-    uint8_t pad_197[3];  /* zero padding */
-    uint16_t field_2d44;
-    uint8_t pad_198[4];  /* zero padding */
-    uint16_t field_2d4a;
-    uint8_t pad_199[6];  /* zero padding */
-    uint16_t field_2d52;
-    uint8_t pad_200[4];  /* zero padding */
-    uint16_t field_2d58;
-    uint8_t pad_201[3];  /* zero padding */
-    uint32_t ptr_2d5d;
-    uint8_t pad_202[2];  /* zero padding */
-    uint32_t ptr_2d63;
-    uint8_t pad_203[2];  /* zero padding */
-    uint32_t ptr_2d69;
-    uint8_t pad_204[2];  /* zero padding */
-    uint32_t ptr_2d6f;
-    uint8_t pad_205[2];  /* zero padding */
-    uint32_t ptr_2d75;
-    uint8_t pad_206[2];  /* zero padding */
-    uint32_t ptr_2d7b;
-    uint8_t pad_207[2];  /* zero padding */
-    uint32_t ptr_2d81;
-    uint8_t pad_208[2];  /* zero padding */
-    uint32_t ptr_2d87;
-    uint8_t pad_209[2];  /* zero padding */
-    uint32_t ptr_2d8d;
-    uint8_t pad_210[2];  /* zero padding */
-    uint32_t ptr_2d93;
-    uint8_t pad_211[2];  /* zero padding */
-    uint32_t ptr_2d99;
-    uint8_t pad_212[2];  /* zero padding */
-    uint32_t ptr_2d9f;
-    uint8_t pad_213[2];  /* zero padding */
-    uint32_t ptr_2da5;
-    uint8_t pad_214[2];  /* zero padding */
-    uint32_t ptr_2dab;
-    uint8_t pad_215[2];  /* zero padding */
-    uint32_t ptr_2db1;
-    uint8_t pad_216[2];  /* zero padding */
-    uint32_t ptr_2db7;
-    uint8_t pad_217[2];  /* zero padding */
-    uint32_t ptr_2dbd;
-    uint8_t pad_218[2];  /* zero padding */
-    uint32_t ptr_2dc3;
-    uint8_t pad_219[2];  /* zero padding */
-    uint32_t ptr_2dc9;
-    uint8_t pad_220[2];  /* zero padding */
-    uint32_t ptr_2dcf;
-    uint8_t pad_221[2];  /* zero padding */
-    uint32_t ptr_2dd5;
-    uint8_t pad_222[2];  /* zero padding */
-    uint32_t ptr_2ddb;
-    uint16_t field_2ddf;
-    uint32_t ptr_2de1;
-    uint16_t field_2de5;
-    uint32_t ptr_2de7;
-    uint16_t field_2deb;
-    uint32_t ptr_2ded;
-    uint16_t field_2df1;
-    uint32_t ptr_2df3;
-    char str_519[2];
-    uint32_t ptr_2df9;
-    uint16_t field_2dfd;
-    uint32_t ptr_2dff;
-    uint16_t field_2e03;
-    uint32_t ptr_2e05;
-    char str_520[2];
-    uint32_t ptr_2e0b;
-    uint16_t field_2e0f;
-    uint32_t ptr_2e11;
-    uint16_t field_2e15;
-    uint32_t ptr_2e17;
-    uint16_t field_2e1b;
-    uint32_t ptr_2e1d;
-    char str_521[2];
-    uint32_t ptr_2e23;
-    char str_522[2];
-    char P_str_3[2];
-    uint8_t pad_223[3];  /* zero padding */
-    uint16_t field_2e2e;
-    uint8_t pad_224[4];  /* zero padding */
-    uint16_t field_2e34;
-    uint8_t pad_225[14];  /* zero padding */
+    /* SndParamBank_DefaultHeader: the 16-byte header of the Custom Data Flash banks (0x3D3000), whose first 3 bytes SndParamBank_CheckFlash compares; SndParamBank_WriteFlashDefaults writes it and bank 0 (0xFA bytes) when they differ */
+    char SndParamBank_DefaultSignature[3];
+    uint8_t SndParamBank_DefaultHeaderTail[13];
+    /* SndParamBank_Default0: the factory default of user bank 0 (Custom Data Flash 0x3D3010, block 0x1B of SndParam_GetBlockPointer) */
+    snd_param_base_entry_t SndParamBank_Default0_Base[23];
+    snd_param_mask_entry_t SndParamBank_Default0_Masked[16];
+    /* SndParamBank_Default1: the factory default of user bank 1 (Custom Data Flash 0x3D3110, block 0x1C of SndParam_GetBlockPointer) */
+    snd_param_base_entry_t SndParamBank_Default1_Base[23];
+    snd_param_mask_entry_t SndParamBank_Default1_Masked[16];
+    /* SndParamBank_Default2: the factory default of user bank 2 (Custom Data Flash 0x3D3210, block 0x1D of SndParam_GetBlockPointer) */
+    snd_param_base_entry_t SndParamBank_Default2_Base[23];
+    snd_param_mask_entry_t SndParamBank_Default2_Masked[16];
+    uint8_t bytes_2e3c[8];
     uint16_t field_2e44;
     uint16_t field_2e46;
     char str_524[2];
@@ -6382,479 +6172,148 @@ const naka_extension_device_t naka_extension_device_data
 
     .pad_146 = { 0 },
 
-    .Hk_str = "HK ",
-
-    .pad_147 = { 0 },
-
-    .field_2b7c = 0x0301,
-
-    .field_2b7e = 0xF9C2,
-
-    .pad_148 = { 0 },
-
-    .field_2b84 = 0xF9DC,
-
-    .pad_149 = { 0 },
-
-    .ptr_2b89 = 0x00F9F601,
-
-    .pad_150 = { 0 },
-
-    .ptr_2b8f = 0x00FA1002,
-
-    .pad_151 = { 0 },
-
-    .ptr_2b95 = 0x00FA2A03,
-
-    .pad_152 = { 0 },
-
-    .ptr_2b9b = 0x00FA4404,
-
-    .pad_153 = { 0 },
-
-    .ptr_2ba1 = 0x00FA5E05,
-
-    .pad_154 = { 0 },
-
-    .ptr_2ba7 = 0x00FA7806,
-
-    .pad_155 = { 0 },
-
-    .ptr_2bad = 0x00FA9207,
-
-    .pad_156 = { 0 },
-
-    .ptr_2bb3 = 0x00FAAC08,
-
-    .pad_157 = { 0 },
-
-    .ptr_2bb9 = 0x00FAC609,
-
-    .pad_158 = { 0 },
-
-    .ptr_2bbf = 0x00FAE00A,
-
-    .pad_159 = { 0 },
-
-    .ptr_2bc5 = 0x00FAFA0B,
-
-    .pad_160 = { 0 },
-
-    .ptr_2bcb = 0x00FB140C,
-
-    .pad_161 = { 0 },
-
-    .ptr_2bd1 = 0x00FB2E0D,
-
-    .pad_162 = { 0 },
-
-    .ptr_2bd7 = 0x00FB480E,
-
-    .pad_163 = { 0 },
-
-    .ptr_2bdd = 0x00FC180F,
-
-    .pad_164 = { 0 },
-
-    .ptr_2be3 = 0x00FB62C0,
-
-    .pad_165 = { 0 },
-
-    .ptr_2be9 = 0x00FB7CC0,
-
-    .pad_166 = { 0 },
-
-    .ptr_2bef = 0x00FB96C0,
-
-    .pad_167 = { 0 },
-
-    .ptr_2bf5 = 0x00FBB0C0,
-
-    .pad_168 = { 0 },
-
-    .ptr_2bfb = 0x00FBCAC0,
-
-    .pad_169 = { 0 },
-
-    .ptr_2c01 = 0x00FBE4C0,
-
-    .pad_170 = { 0 },
-
-    .ptr_2c07 = 0x00FD50C0,
-
-    .field_2c0b = 0x7F00,
-
-    .ptr_2c0d = 0x00FD5100,
-
-    .field_2c11 = 0x0C00,
-
-    .ptr_2c13 = 0x00FD520C,
-
-    .field_2c17 = 0x1C00,
-
-    .DataBuf_Data_FormatDispatch_ptr = NAKA_ADDR(DataBuf_Data_FormatDispatch),
-
-    .field_2c1d = 0xC500,
-
-    .ptr_2c1f = 0x00FD5445,
-
-    .str_509 = ALIGNED_STRING(""),
-
-    .ptr_2c25 = 0x00FD5500,
-
-    .field_2c29 = 0x3F00,
-
-    .ptr_2c2b = 0x00FD5620,
-
-    .field_2c2f = 0xFE00,
-
-    .ptr_2c31 = 0x00FD57FE,
-
-    .str_510 = ALIGNED_STRING(""),
-
-    .ptr_2c37 = 0x00FD58FF,
-
-    .field_2c3b = 0xBF00,
-
-    .ptr_2c3d = 0x00FD59BF,
-
-    .field_2c41 = 0x6100,
-
-    .ptr_2c43 = 0x00FD5A01,
-
-    .field_2c47 = 0x0300,
-
-    .ptr_2c49 = 0x00FD5B00,
-
-    .str_511 = ALIGNED_STRING(""),
-
-    .ptr_2c4f = 0x00FD5C00,
-
-    .str_512 = ALIGNED_STRING(""),
-
-    .P_str = "P",
-
-    .pad_171 = { 0 },
-
-    .field_2c5a = 0x0203,
-
-    .pad_172 = { 0 },
-
-    .field_2c60 = 0x3C7F,
-
-    .pad_173 = { 0 },
-
-    .field_2c68 = 0xF9C2,
-
-    .pad_174 = { 0 },
-
-    .field_2c6e = 0xF9DC,
-
-    .pad_175 = { 0 },
-
-    .ptr_2c73 = 0x00F9F601,
-
-    .pad_176 = { 0 },
-
-    .ptr_2c79 = 0x00FA1002,
-
-    .pad_177 = { 0 },
-
-    .ptr_2c7f = 0x00FA2A03,
-
-    .pad_178 = { 0 },
-
-    .ptr_2c85 = 0x00FA4404,
-
-    .pad_179 = { 0 },
-
-    .ptr_2c8b = 0x00FA5E05,
-
-    .pad_180 = { 0 },
-
-    .ptr_2c91 = 0x00FA7806,
-
-    .pad_181 = { 0 },
-
-    .ptr_2c97 = 0x00FA9207,
-
-    .pad_182 = { 0 },
-
-    .ptr_2c9d = 0x00FAAC08,
-
-    .pad_183 = { 0 },
-
-    .ptr_2ca3 = 0x00FAC609,
-
-    .pad_184 = { 0 },
-
-    .ptr_2ca9 = 0x00FAE00A,
-
-    .pad_185 = { 0 },
-
-    .ptr_2caf = 0x00FAFA0B,
-
-    .pad_186 = { 0 },
-
-    .ptr_2cb5 = 0x00FB140C,
-
-    .pad_187 = { 0 },
-
-    .ptr_2cbb = 0x00FB2E0D,
-
-    .pad_188 = { 0 },
-
-    .ptr_2cc1 = 0x00FB480E,
-
-    .pad_189 = { 0 },
-
-    .ptr_2cc7 = 0x00FC180F,
-
-    .pad_190 = { 0 },
-
-    .ptr_2ccd = 0x00FB62C0,
-
-    .pad_191 = { 0 },
-
-    .ptr_2cd3 = 0x00FB7CC0,
-
-    .pad_192 = { 0 },
-
-    .ptr_2cd9 = 0x00FB96C0,
-
-    .pad_193 = { 0 },
-
-    .ptr_2cdf = 0x00FBB0C0,
-
-    .pad_194 = { 0 },
-
-    .ptr_2ce5 = 0x00FBCAC0,
-
-    .pad_195 = { 0 },
-
-    .ptr_2ceb = 0x00FBE4C0,
-
-    .pad_196 = { 0 },
-
-    .ptr_2cf1 = 0x00FD50C0,
-
-    .field_2cf5 = 0x7F00,
-
-    .ptr_2cf7 = 0x00FD5101,
-
-    .field_2cfb = 0x0C00,
-
-    .ptr_2cfd = 0x00FD5204,
-
-    .field_2d01 = 0x1C00,
-
-    .ptr_2d03 = 0x00FD530C,
-
-    .field_2d07 = 0xC500,
-
-    .ptr_2d09 = 0x00FD5441,
-
-    .str_514 = ALIGNED_STRING(""),
-
-    .ptr_2d0f = 0x00FD5500,
-
-    .field_2d13 = 0x3F00,
-
-    .ptr_2d15 = 0x00FD5606,
-
-    .field_2d19 = 0xFE00,
-
-    .ptr_2d1b = 0x00FD57FE,
-
-    .str_515 = ALIGNED_STRING(""),
-
-    .ptr_2d21 = 0x00FD58FF,
-
-    .field_2d25 = 0xBF00,
-
-    .ptr_2d27 = 0x00FD59BF,
-
-    .field_2d2b = 0x6100,
-
-    .ptr_2d2d = 0x00FD5A01,
-
-    .field_2d31 = 0x0300,
-
-    .ptr_2d33 = 0x00FD5B00,
-
-    .str_516 = ALIGNED_STRING(""),
-
-    .ptr_2d39 = 0x00FD5C00,
-
-    .str_517 = ALIGNED_STRING(""),
-
-    .P_str_2 = "P",
-
-    .pad_197 = { 0 },
-
-    .field_2d44 = 0x0203,
-
-    .pad_198 = { 0 },
-
-    .field_2d4a = 0x3C7F,
-
-    .pad_199 = { 0 },
-
-    .field_2d52 = 0xF9C2,
-
-    .pad_200 = { 0 },
-
-    .field_2d58 = 0xF9DC,
-
-    .pad_201 = { 0 },
-
-    .ptr_2d5d = 0x00F9F601,
-
-    .pad_202 = { 0 },
-
-    .ptr_2d63 = 0x00FA1002,
-
-    .pad_203 = { 0 },
-
-    .ptr_2d69 = 0x00FA2A03,
-
-    .pad_204 = { 0 },
-
-    .ptr_2d6f = 0x00FA4404,
-
-    .pad_205 = { 0 },
-
-    .ptr_2d75 = 0x00FA5E05,
-
-    .pad_206 = { 0 },
-
-    .ptr_2d7b = 0x00FA7806,
-
-    .pad_207 = { 0 },
-
-    .ptr_2d81 = 0x00FA9207,
-
-    .pad_208 = { 0 },
-
-    .ptr_2d87 = 0x00FAAC08,
-
-    .pad_209 = { 0 },
-
-    .ptr_2d8d = 0x00FAC60F,
-
-    .pad_210 = { 0 },
-
-    .ptr_2d93 = 0x00FAE00A,
-
-    .pad_211 = { 0 },
-
-    .ptr_2d99 = 0x00FAFA0B,
-
-    .pad_212 = { 0 },
-
-    .ptr_2d9f = 0x00FB140C,
-
-    .pad_213 = { 0 },
-
-    .ptr_2da5 = 0x00FB2E0D,
-
-    .pad_214 = { 0 },
-
-    .ptr_2dab = 0x00FB480E,
-
-    .pad_215 = { 0 },
-
-    .ptr_2db1 = 0x00FC1809,
-
-    .pad_216 = { 0 },
-
-    .ptr_2db7 = 0x00FB62C0,
-
-    .pad_217 = { 0 },
-
-    .ptr_2dbd = 0x00FB7CC0,
-
-    .pad_218 = { 0 },
-
-    .ptr_2dc3 = 0x00FB96C0,
-
-    .pad_219 = { 0 },
-
-    .ptr_2dc9 = 0x00FBB0C0,
-
-    .pad_220 = { 0 },
-
-    .ptr_2dcf = 0x00FBCAC0,
-
-    .pad_221 = { 0 },
-
-    .ptr_2dd5 = 0x00FBE4C0,
-
-    .pad_222 = { 0 },
-
-    .ptr_2ddb = 0x00FD50C0,
-
-    .field_2ddf = 0x7F00,
-
-    .ptr_2de1 = 0x00FD5103,
-
-    .field_2de5 = 0x0C00,
-
-    .ptr_2de7 = 0x00FD5204,
-
-    .field_2deb = 0x1C00,
-
-    .ptr_2ded = 0x00FD531C,
-
-    .field_2df1 = 0xC500,
-
-    .ptr_2df3 = 0x00FD5441,
-
-    .str_519 = ALIGNED_STRING(""),
-
-    .ptr_2df9 = 0x00FD5500,
-
-    .field_2dfd = 0x3F00,
-
-    .ptr_2dff = 0x00FD5606,
-
-    .field_2e03 = 0xFE00,
-
-    .ptr_2e05 = 0x00FD57FE,
-
-    .str_520 = ALIGNED_STRING(""),
-
-    .ptr_2e0b = 0x00FD58FF,
-
-    .field_2e0f = 0xBF00,
-
-    .ptr_2e11 = 0x00FD59BF,
-
-    .field_2e15 = 0x6100,
-
-    .ptr_2e17 = 0x00FD5A01,
-
-    .field_2e1b = 0x0300,
-
-    .ptr_2e1d = 0x00FD5B00,
-
-    .str_521 = ALIGNED_STRING(""),
-
-    .ptr_2e23 = 0x00FD5C00,
-
-    .str_522 = ALIGNED_STRING(""),
-
-    .P_str_3 = "P",
-
-    .pad_223 = { 0 },
-
-    .field_2e2e = 0x0203,
-
-    .pad_224 = { 0 },
-
-    .field_2e34 = 0x3C7F,
-
-    .pad_225 = { 0 },
+    .SndParamBank_DefaultSignature = "HK ",
+
+    .SndParamBank_DefaultHeaderTail = {
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x03,
+    },
+
+    .SndParamBank_Default0_Base = {
+        { 0xF9C2, 0, 0x00 },  /* tag 0x00 payload byte 12 (low 3 bits) and the next byte */
+        { 0xF9DC, 0, 0x01 },  /* tag 0x01 payload byte 12 (low 3 bits) and the next byte */
+        { 0xF9F6, 0, 0x02 },  /* tag 0x02 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFA10, 0, 0x03 },  /* tag 0x03 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFA2A, 0, 0x04 },  /* tag 0x04 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFA44, 0, 0x05 },  /* tag 0x05 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFA5E, 0, 0x06 },  /* tag 0x06 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFA78, 0, 0x07 },  /* tag 0x07 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFA92, 0, 0x08 },  /* tag 0x08 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFAAC, 0, 0x09 },  /* tag 0x09 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFAC6, 0, 0x0A },  /* tag 0x0A payload byte 12 (low 3 bits) and the next byte */
+        { 0xFAE0, 0, 0x0B },  /* tag 0x0B payload byte 12 (low 3 bits) and the next byte */
+        { 0xFAFA, 0, 0x0C },  /* tag 0x0C payload byte 12 (low 3 bits) and the next byte */
+        { 0xFB14, 0, 0x0D },  /* tag 0x0D payload byte 12 (low 3 bits) and the next byte */
+        { 0xFB2E, 0, 0x0E },  /* tag 0x0E payload byte 12 (low 3 bits) and the next byte */
+        { 0xFB48, 0, 0x0F },  /* tag 0x0F payload byte 12 (low 3 bits) and the next byte */
+        { 0xFC18, 0, 0xC0 },  /* tag 0x19 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFB62, 0, 0xC0 },  /* tag 0x10 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFB7C, 0, 0xC0 },  /* tag 0x11 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFB96, 0, 0xC0 },  /* tag 0x12 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFBB0, 0, 0xC0 },  /* tag 0x13 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFBCA, 0, 0xC0 },  /* tag 0x14 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFBE4, 0, 0xC0 },  /* tag 0x15 payload byte 12 (low 3 bits) and the next byte */
+    },
+
+    .SndParamBank_Default0_Masked = {
+        { 0xFD50, 0x7F, 0x00 },  /* tag 0x80 payload byte 0 */
+        { 0xFD51, 0x0C, 0x0C },  /* tag 0x80 payload byte 1 */
+        { 0xFD52, 0x1C, 0x04 },  /* tag 0x80 payload byte 2 */
+        { 0xFD53, 0xC5, 0x45 },  /* tag 0x80 payload byte 3 */
+        { 0xFD54, 0xFF, 0x00 },  /* tag 0x80 payload byte 4 */
+        { 0xFD55, 0x3F, 0x20 },  /* tag 0x80 payload byte 5 */
+        { 0xFD56, 0xFE, 0xFE },  /* tag 0x80 payload byte 6 */
+        { 0xFD57, 0xFF, 0xFF },  /* tag 0x80 payload byte 7 */
+        { 0xFD58, 0xBF, 0xBF },  /* tag 0x80 payload byte 8 */
+        { 0xFD59, 0x61, 0x01 },  /* tag 0x80 payload byte 9 */
+        { 0xFD5A, 0x03, 0x00 },  /* tag 0x80 payload byte 10 */
+        { 0xFD5B, 0xFF, 0x00 },  /* tag 0x80 payload byte 11 */
+        { 0xFD5C, 0xFF, 0x50 },  /* tag 0x80 payload byte 12 */
+        { 0x0000, 0x03, 0x02 },  /* unused */
+        { 0x0000, 0x7F, 0x3C },  /* unused */
+        { 0x0000, 0x00, 0x00 },  /* unused */
+    },
+
+    .SndParamBank_Default1_Base = {
+        { 0xF9C2, 0, 0x00 },  /* tag 0x00 payload byte 12 (low 3 bits) and the next byte */
+        { 0xF9DC, 0, 0x01 },  /* tag 0x01 payload byte 12 (low 3 bits) and the next byte */
+        { 0xF9F6, 0, 0x02 },  /* tag 0x02 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFA10, 0, 0x03 },  /* tag 0x03 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFA2A, 0, 0x04 },  /* tag 0x04 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFA44, 0, 0x05 },  /* tag 0x05 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFA5E, 0, 0x06 },  /* tag 0x06 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFA78, 0, 0x07 },  /* tag 0x07 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFA92, 0, 0x08 },  /* tag 0x08 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFAAC, 0, 0x09 },  /* tag 0x09 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFAC6, 0, 0x0A },  /* tag 0x0A payload byte 12 (low 3 bits) and the next byte */
+        { 0xFAE0, 0, 0x0B },  /* tag 0x0B payload byte 12 (low 3 bits) and the next byte */
+        { 0xFAFA, 0, 0x0C },  /* tag 0x0C payload byte 12 (low 3 bits) and the next byte */
+        { 0xFB14, 0, 0x0D },  /* tag 0x0D payload byte 12 (low 3 bits) and the next byte */
+        { 0xFB2E, 0, 0x0E },  /* tag 0x0E payload byte 12 (low 3 bits) and the next byte */
+        { 0xFB48, 0, 0x0F },  /* tag 0x0F payload byte 12 (low 3 bits) and the next byte */
+        { 0xFC18, 0, 0xC0 },  /* tag 0x19 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFB62, 0, 0xC0 },  /* tag 0x10 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFB7C, 0, 0xC0 },  /* tag 0x11 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFB96, 0, 0xC0 },  /* tag 0x12 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFBB0, 0, 0xC0 },  /* tag 0x13 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFBCA, 0, 0xC0 },  /* tag 0x14 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFBE4, 0, 0xC0 },  /* tag 0x15 payload byte 12 (low 3 bits) and the next byte */
+    },
+
+    .SndParamBank_Default1_Masked = {
+        { 0xFD50, 0x7F, 0x01 },  /* tag 0x80 payload byte 0 */
+        { 0xFD51, 0x0C, 0x04 },  /* tag 0x80 payload byte 1 */
+        { 0xFD52, 0x1C, 0x0C },  /* tag 0x80 payload byte 2 */
+        { 0xFD53, 0xC5, 0x41 },  /* tag 0x80 payload byte 3 */
+        { 0xFD54, 0xFF, 0x00 },  /* tag 0x80 payload byte 4 */
+        { 0xFD55, 0x3F, 0x06 },  /* tag 0x80 payload byte 5 */
+        { 0xFD56, 0xFE, 0xFE },  /* tag 0x80 payload byte 6 */
+        { 0xFD57, 0xFF, 0xFF },  /* tag 0x80 payload byte 7 */
+        { 0xFD58, 0xBF, 0xBF },  /* tag 0x80 payload byte 8 */
+        { 0xFD59, 0x61, 0x01 },  /* tag 0x80 payload byte 9 */
+        { 0xFD5A, 0x03, 0x00 },  /* tag 0x80 payload byte 10 */
+        { 0xFD5B, 0xFF, 0x00 },  /* tag 0x80 payload byte 11 */
+        { 0xFD5C, 0xFF, 0x50 },  /* tag 0x80 payload byte 12 */
+        { 0x0000, 0x03, 0x02 },  /* unused */
+        { 0x0000, 0x7F, 0x3C },  /* unused */
+        { 0x0000, 0x00, 0x00 },  /* unused */
+    },
+
+    .SndParamBank_Default2_Base = {
+        { 0xF9C2, 0, 0x00 },  /* tag 0x00 payload byte 12 (low 3 bits) and the next byte */
+        { 0xF9DC, 0, 0x01 },  /* tag 0x01 payload byte 12 (low 3 bits) and the next byte */
+        { 0xF9F6, 0, 0x02 },  /* tag 0x02 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFA10, 0, 0x03 },  /* tag 0x03 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFA2A, 0, 0x04 },  /* tag 0x04 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFA44, 0, 0x05 },  /* tag 0x05 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFA5E, 0, 0x06 },  /* tag 0x06 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFA78, 0, 0x07 },  /* tag 0x07 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFA92, 0, 0x08 },  /* tag 0x08 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFAAC, 0, 0x0F },  /* tag 0x09 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFAC6, 0, 0x0A },  /* tag 0x0A payload byte 12 (low 3 bits) and the next byte */
+        { 0xFAE0, 0, 0x0B },  /* tag 0x0B payload byte 12 (low 3 bits) and the next byte */
+        { 0xFAFA, 0, 0x0C },  /* tag 0x0C payload byte 12 (low 3 bits) and the next byte */
+        { 0xFB14, 0, 0x0D },  /* tag 0x0D payload byte 12 (low 3 bits) and the next byte */
+        { 0xFB2E, 0, 0x0E },  /* tag 0x0E payload byte 12 (low 3 bits) and the next byte */
+        { 0xFB48, 0, 0x09 },  /* tag 0x0F payload byte 12 (low 3 bits) and the next byte */
+        { 0xFC18, 0, 0xC0 },  /* tag 0x19 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFB62, 0, 0xC0 },  /* tag 0x10 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFB7C, 0, 0xC0 },  /* tag 0x11 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFB96, 0, 0xC0 },  /* tag 0x12 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFBB0, 0, 0xC0 },  /* tag 0x13 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFBCA, 0, 0xC0 },  /* tag 0x14 payload byte 12 (low 3 bits) and the next byte */
+        { 0xFBE4, 0, 0xC0 },  /* tag 0x15 payload byte 12 (low 3 bits) and the next byte */
+    },
+
+    .SndParamBank_Default2_Masked = {
+        { 0xFD50, 0x7F, 0x03 },  /* tag 0x80 payload byte 0 */
+        { 0xFD51, 0x0C, 0x04 },  /* tag 0x80 payload byte 1 */
+        { 0xFD52, 0x1C, 0x1C },  /* tag 0x80 payload byte 2 */
+        { 0xFD53, 0xC5, 0x41 },  /* tag 0x80 payload byte 3 */
+        { 0xFD54, 0xFF, 0x00 },  /* tag 0x80 payload byte 4 */
+        { 0xFD55, 0x3F, 0x06 },  /* tag 0x80 payload byte 5 */
+        { 0xFD56, 0xFE, 0xFE },  /* tag 0x80 payload byte 6 */
+        { 0xFD57, 0xFF, 0xFF },  /* tag 0x80 payload byte 7 */
+        { 0xFD58, 0xBF, 0xBF },  /* tag 0x80 payload byte 8 */
+        { 0xFD59, 0x61, 0x01 },  /* tag 0x80 payload byte 9 */
+        { 0xFD5A, 0x03, 0x00 },  /* tag 0x80 payload byte 10 */
+        { 0xFD5B, 0xFF, 0x00 },  /* tag 0x80 payload byte 11 */
+        { 0xFD5C, 0xFF, 0x50 },  /* tag 0x80 payload byte 12 */
+        { 0x0000, 0x03, 0x02 },  /* unused */
+        { 0x0000, 0x7F, 0x3C },  /* unused */
+        { 0x0000, 0x00, 0x00 },  /* unused */
+    },
+
+    .bytes_2e3c = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
 
     .field_2e44 = 0x0001,
 

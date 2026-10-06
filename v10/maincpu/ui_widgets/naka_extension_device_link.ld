@@ -13,7 +13,6 @@ Audio_CopyStateFromROM = 0x00FC6972;
 Audio_NullHandler_A = 0x00FC6994;
 Audio_NullHandler_B = 0x00FC6995;
 Audio_NullHandler_C = 0x00FC6996;
-DataBuf_Data_FormatDispatch = 0x00FD5304;
 Encoder_AlignByte = 0x00FC5760;
 Encoder_MarkInvalid = 0x00FC5757;
 Encoder_PassthroughIdentity = 0x00FC6DE9;

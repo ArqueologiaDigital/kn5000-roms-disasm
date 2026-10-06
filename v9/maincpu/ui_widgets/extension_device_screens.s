@@ -935,30 +935,27 @@ PanelTlv_ApplyFieldRule_CaseOffsets:
 	.short	PanelTlv_ApplyFieldRule_Case6 - PanelTlv_ApplyFieldRule_Case0
 	.short	PanelTlv_ApplyFieldRule_Case7 - PanelTlv_ApplyFieldRule_Case0
 	.short	PanelTlv_ApplyFieldRule_Case8 - PanelTlv_ApplyFieldRule_Case0
-ToneGen_FlashWriteAll_Data_3:	.incbin "includes/generated/naka_extension_device.bin", 0x2B50, 0x4
-ToneGen_FlashWriteAll_Data_4:	.incbin "includes/generated/naka_extension_device.bin", 0x2B54, 0x4
-ToneGen_FlashWriteAll_Data_5:	.incbin "includes/generated/naka_extension_device.bin", 0x2B58, 0xC
-ToneGen_FlashWriteAll_Data_6:	.incbin "includes/generated/naka_extension_device.bin", 0x2B64, 0x4
-ToneGen_FlashWriteAll_Data_7:	.incbin "includes/generated/naka_extension_device.bin", 0x2B68, 0x6
-; [nakarest] naka_extension_device+0x2b6e  +0x2b6e..+0x2c68 (0xed933a, 250 B)
-; [nakarest] purpose not established: layout of 250 B at 0xed933a not derived; readers below
-; [nakarest] Readers: source references ToneGen_FlashVerify (audio/tonegen_fileio_handlers.s:
-; [nakarest] `lda xhl, (ToneGen_FlashVerify_Str_HK:24)`), ToneGen_FlashWriteAll
-; [nakarest] (audio/tonegen_fileio_handlers.s: `ld xbc, ToneGen_FlashVerify_Str_HK`).
-ToneGen_FlashVerify_Str_HK:	.incbin "includes/generated/naka_extension_device.bin", 0x2B6E, 0x4	; "HK "
-	.incbin "includes/generated/naka_extension_device.bin", 0x2B72, 0xF6	; 246 bytes after ToneGen_FlashVerify_Str_HK's string; unnamed (they sat under its label until 2026-10-03)
-; [nakarest] naka_extension_device+0x2c68  +0x2c68..+0x2d52 (0xed9434, 234 B)
-; [nakarest] purpose not established: layout of 234 B at 0xed9434 not derived; readers below
-; [nakarest] Readers: source references ToneGen_FlashWriteAll (audio/tonegen_fileio_handlers.s:
-; [nakarest] `lda xbc, (ToneGen_FlashWriteAll_Data:24)`).
-ToneGen_FlashWriteAll_Data:
-	.incbin "includes/generated/naka_extension_device.bin", 0x2C68, 0xEA
-; [nakarest] naka_extension_device+0x2d52  +0x2d52..+0x2e3c (0xed951e, 234 B)
-; [nakarest] purpose not established: layout of 234 B at 0xed951e not derived; readers below
-; [nakarest] Readers: source references ToneGen_FlashWriteAll (audio/tonegen_fileio_handlers.s:
-; [nakarest] `lda xbc, (ToneGen_FlashWriteAll_Data_2:24)`).
-ToneGen_FlashWriteAll_Data_2:
-	.incbin "includes/generated/naka_extension_device.bin", 0x2D52, 0xEA
+; SndParamBank_OptionDefault_NN -- the defaults of the five fields of the 0x50-byte block at Custom Data Flash
+; 0x3D3400 (+0x00 2 B -- this slice is 4 B, of which the first 2 are copied --, +0x10 12 B, +0x20 4 B, +0x30 4 B,
+; +0x40 6 B).  SndParamBank_WriteFlashDefaults builds the block from them; SndParamBank_RestoreOptionBlock (factory
+; reset) rebuilds it keeping the flash's own +0x00; SndParamBank_LoadOptionBlock copies the five fields to RAM
+; 0x340E4, 0x340E6, 0x340F2, 0x340F6, 0x340FA, read by the ParaLoadOpt_* dialog (midi/param_load_routines.s)
+; and demo/file_demo_proc.s -- hence "option".
+SndParamBank_OptionDefault_00:	.incbin "includes/generated/naka_extension_device.bin", 0x2B50, 0x4
+SndParamBank_OptionDefault_30:	.incbin "includes/generated/naka_extension_device.bin", 0x2B54, 0x4
+SndParamBank_OptionDefault_10:	.incbin "includes/generated/naka_extension_device.bin", 0x2B58, 0xC
+SndParamBank_OptionDefault_20:	.incbin "includes/generated/naka_extension_device.bin", 0x2B64, 0x4
+SndParamBank_OptionDefault_40:	.incbin "includes/generated/naka_extension_device.bin", 0x2B68, 0x6
+; SndParamBank_DefaultHeader..SndParamBank_Default2 -- the factory defaults of the sound-parameter user banks
+; in Custom Data Flash 0x3D3000 (header "HK " + 13 bytes, then three 234-byte banks of 23 base + 16 masked
+; entries {u32 RAM address, u8, u8}).  SndParamBank_CheckFlash compares the first 3 bytes with flash; when they
+; differ, SndParamBank_WriteFlashDefaults writes header + bank 0 (0xFA bytes) to 0x3D3000 and banks 1, 2 to
+; 0x3D3110, 0x3D3210.  Typed in ui_widgets/naka_extension_device.c (snd_param_base_entry_t /
+; snd_param_mask_entry_t); see technics-docs custom-data-flash.md.
+SndParamBank_DefaultHeader:	.incbin "includes/generated/naka_extension_device.bin", 0x2B6E, 0x10
+SndParamBank_Default0:		.incbin "includes/generated/naka_extension_device.bin", 0x2B7E, 0xEA
+SndParamBank_Default1:		.incbin "includes/generated/naka_extension_device.bin", 0x2C68, 0xEA
+SndParamBank_Default2:		.incbin "includes/generated/naka_extension_device.bin", 0x2D52, 0xEA
 ; [nakarest] naka_extension_device+0x2e3c  +0x2e3c..+0x2e4e (0xed9608, 18 B)
 ; [nakarest] purpose not established: layout of 18 B at 0xed9608 not derived; readers below
 ; [nakarest] Readers: source references CtrlPanel_IndicatorJumpTable
