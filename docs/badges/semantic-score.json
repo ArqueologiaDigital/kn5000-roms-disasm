@@ -1,31 +1,31 @@
 {
  "date": "2026-10-06",
- "head": "59c9c652",
+ "head": "20e172c6",
  "dirty": false,
  "rules": 2,
- "entry_snapshot": "docs/coverage/dispatch-census-2026-10-06-16.json",
- "entry_snapshot_head": "57ab372a",
+ "entry_snapshot": "docs/coverage/dispatch-census-2026-10-06-17.json",
+ "entry_snapshot_head": "3dfa13cf",
  "score": {
-  "kn5000": 85.75,
+  "kn5000": 85.81,
   "wsa1": 89.54,
-  "all": 85.53
+  "all": 85.58
  },
  "components": {
   "kn5000": {
    "bytes": {
-    "num": 9252069,
+    "num": 9252119,
     "den": 10289152,
     "pct": 89.92
    },
    "names": {
-    "num": 130842,
-    "den": 145863,
+    "num": 130839,
+    "den": 145860,
     "pct": 89.7
    },
    "entry": {
-    "num": 2201,
+    "num": 2206,
     "den": 2231,
-    "pct": 98.66
+    "pct": 98.88
    },
    "fields": {
     "num": 58111,
@@ -57,19 +57,19 @@
   },
   "all": {
    "bytes": {
-    "num": 11238369,
+    "num": 11238419,
     "den": 12386304,
     "pct": 90.73
    },
    "names": {
-    "num": 145153,
-    "den": 164854,
+    "num": 145150,
+    "den": 164851,
     "pct": 88.05
    },
    "entry": {
-    "num": 2952,
+    "num": 2957,
     "den": 2993,
-    "pct": 98.63
+    "pct": 98.8
    },
    "fields": {
     "num": 58111,
@@ -81,49 +81,49 @@
  "images": {
   "v10": {
    "names": {
-    "semantic": 39609,
+    "semantic": 39608,
     "continuation": 8742,
     "generic": 4147,
     "positional": 751
    },
    "bytes": [
-    1789503,
+    1789521,
     2097152
    ],
    "entry": [
-    694,
+    696,
     702
    ]
   },
   "v9": {
    "names": {
-    "semantic": 39609,
+    "semantic": 39608,
     "continuation": 8738,
     "generic": 4140,
     "positional": 752
    },
    "bytes": [
-    1788897,
+    1788915,
     2097152
    ],
    "entry": [
-    694,
+    696,
     702
    ]
   },
   "v7": {
    "names": {
-    "semantic": 39520,
+    "semantic": 39519,
     "continuation": 8411,
     "generic": 4171,
     "positional": 835
    },
    "bytes": [
-    1782642,
+    1782656,
     2097152
    ],
    "entry": [
-    687,
+    688,
     701
    ]
   },
