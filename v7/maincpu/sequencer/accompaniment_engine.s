@@ -33456,7 +33456,7 @@ AccDraw_Secondary_Helper15:
 	ld	(xwa+6), l
 	ld	l, (xiy)
 	ld	(xwa+7), l
-	call	DrawText_LayoutAndRender
+	call	SeGfx_StaticOp06_CellTextFont0
 	popw	bc
 	popw	de
 	pop	xix
@@ -33493,7 +33493,7 @@ AccDraw_Secondary_Skip5:
 	ld	a, 5:opc
 	push	xwa
 	ld	xwa, 14630
-	call	AccDraw_Secondary_Helper19
+	call	SeGfx_StaticOp05_FillBoxMode1
 	pop	xwa
 	ret
 AccDraw_Secondary_Helper17:
@@ -33547,7 +33547,7 @@ AccScreen_UpdateBeatDisplay:
 	ld XIY,AccScreen_DrawTempoDisplay_Data_2
 	push XWA
 	ld XWA,XIY
-	call DrawText_LayoutAndRender
+	call SeGfx_StaticOp06_CellTextFont0
 	pop XWA
 	cp (0x367b:16), 0x63
 	jr ugt, AccScreen_BeatDisplay_Large

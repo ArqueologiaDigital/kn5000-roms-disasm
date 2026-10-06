@@ -1,0 +1,81 @@
+dispatch-table census, 2026-10-06, measured at 57ab372a (+ uncommitted changes)
+tool: scripts/analysis/dispatch_table_census/ (rules in census.py's docstring)
+
+image      framed  used  NOT   newT newT(x) spellT |   U U-NOT U-newT null | D-unres
+v10           677   672    5     18       0      2 |  25     3      2    3 |       0
+v9            677   672    5     18       0      2 |  25     3      2    3 |       0
+v7            674   666    8     18       0     11 |  27     6      1    4 |       0
+v142           43    43    0      0       0      0 |   0     0      0    0 |       0
+subboot         2     2    0      0       0      0 |   0     0      0    0 |       0
+tabledata      13    13    0      0       0      0 |   0     0      0    0 |       0
+customdata      0     0    0      0       0      0 |   0     0      0    0 |       0
+hdae5000       68    68    0      0       0      0 |   0     0      0    0 |       0
+prom_a        424   421    3     12       0      1 |   0     0      0    0 |       0
+prom_b        291   284    7     44     179      1 |   0     0      0    0 |       0
+prom_c         47    46    1      5       0      0 |   0     0      0    0 |       0
+D-unres: `jp t, (xR+rr)` dispatch sites whose base, table or bound the D detector could not read
+
+distinct new-entry-point targets by blocking class (framed tables, all owners):
+  v10        {'dataother': 1, 'nolabel': 17}
+  v9         {'dataother': 1, 'nolabel': 17}
+  v7         {'databyte': 2, 'nolabel': 16}
+  v142       {}
+  subboot    {}
+  tabledata  {}
+  customdata {}
+  hdae5000   {}
+  prom_a     {'midinsn': 11, 'nolabel': 1}
+  prom_b     {'databyte': 8, 'dataother': 1, 'midinsn': 140, 'nolabel': 70, 'text': 4}
+  prom_c     {'midinsn': 5}
+
+
+== v10: top not-used tables
+  A 0xEE2EBE MidiSysEx_BlockHandlers                      entries=22   ptrs=22   unusedT=7    {'nolabel': 22}  ui_widgets/widget_dispatch.s:1371
+  A 0xE4A044 TimeSig_ProcTable                            entries=24   ptrs=24   unusedT=6    {'nolabel/num': 15}  ui_widgets/widget_descriptors.s:5875
+  A 0xEAAFA4 GraphicsRender_Start_PtrTable                entries=12   ptrs=12   unusedT=4    {'nolabel/num': 4}  ui_widgets/disk_warning_strings.s:1277
+  D 0xE1E36C SndArgGridCheck_Data                         entries=7    ptrs=7    unusedT=2    {'numeric': 7}  audio/sound_editor_ui.s:18747
+  J 0xF5C573 AccStyle_JumpTable2                          entries=6    ptrs=6    unusedT=1    {'dataother': 1}  sequencer/accompaniment_engine.s:10868
+
+== v9: top not-used tables
+  A 0xEE2EBE MidiSysEx_BlockHandlers                      entries=22   ptrs=22   unusedT=7    {'nolabel': 22}  ui_widgets/widget_dispatch.s:1425
+  A 0xE4A044 TimeSig_ProcTable                            entries=24   ptrs=24   unusedT=6    {'nolabel/num': 15}  ui_widgets/widget_descriptors.s:5875
+  A 0xEAAFA4 GraphicsRender_Start_PtrTable                entries=12   ptrs=12   unusedT=4    {'nolabel/num': 4}  ui_widgets/disk_warning_strings.s:1277
+  D 0xE1E36C SndArgGridCheck_Data                         entries=7    ptrs=7    unusedT=2    {'numeric': 7}  audio/sound_editor_ui.s:18985
+  J 0xF5C573 AccStyle_JumpTable2                          entries=6    ptrs=6    unusedT=1    {'dataother': 1}  sequencer/accompaniment_engine.s:10868
+
+== v7: top not-used tables
+  D 0xE00178 HANDLE_UPDATE_OFFSETS                        entries=8    ptrs=8    unusedT=7    {'numeric': 8}  boot/system_handlers.s:7845
+  A 0xEE2EBE MidiSysEx_BlockHandlers                      entries=22   ptrs=22   unusedT=7    {'nolabel': 22}  ui_widgets/widget_dispatch.s:1427
+  A 0xEAAFA4 GraphicsRender_Start_PtrTable                entries=12   ptrs=12   unusedT=4    {'nolabel/num': 4}  ui_widgets/disk_warning_strings.s:1131
+  A 0xEE2D6C SeqChan_CommandHandlers                      entries=39   ptrs=39   unusedT=4    {'nolabel': 4}  ui_widgets/widget_dispatch.s:1331
+  D 0xE4C0A2 MspRecTtlFunc_CaseTable                      entries=7    ptrs=7    unusedT=3    {'numeric': 6, 'databyte/num': 1}  sequencer/accompaniment_engine.s:32522
+  D 0xE1E36C SndArgGridCheck_Data                         entries=7    ptrs=7    unusedT=2    {'numeric': 7}  audio/sound_editor_ui.s:19129
+  A 0xE4A064 TimeSig_ProcTable                            entries=5    ptrs=5    unusedT=1    {'nolabel/num': 1}  ui_widgets/widget_descriptors.s:5875
+  J 0xF5C154 AccStyle_Entry                               entries=5    ptrs=5    unusedT=1    {'databyte': 1}  sequencer/accompaniment_engine.s:10490
+
+== v142: top not-used tables
+
+== subboot: top not-used tables
+
+== tabledata: top not-used tables
+
+== customdata: top not-used tables
+
+== hdae5000: top not-used tables
+
+== prom_a: top not-used tables
+  A 0xF8E77C AddrTable_F8E77C                             entries=8    ptrs=8    unusedT=6    {'midinsn/num': 3, 'numeric': 2, 'midinsn': 2}  prom_a/wsa1_prom_a.s:25805
+  J 0xFAA000 ParamModule_PhaseVector_StaleCopy            entries=5    ptrs=5    unusedT=5    {'midinsn': 4, 'nolabel': 1}  prom_a/wsa1_prom_a.s:77951
+  A 0xF8E7A9 AddrTable_F8E7A9                             entries=9    ptrs=9    unusedT=3    {'midinsn/num': 2, 'numeric': 3}  prom_a/wsa1_prom_a.s:25820
+
+== prom_b: top not-used tables
+  A 0xF014EE PtrArray_F014EE                              entries=196  ptrs=185  unusedT=134  {'nolabel/num': 48, 'midinsn/num': 135, 'numeric': 1}  prom_b/wsa1_prom_b.s:4683
+  A 0xF00762 PtrTable_F00762                              entries=39   ptrs=37   unusedT=22   {'midinsn/num': 31, 'nolabel/num': 6}  prom_b/wsa1_prom_b.s:3109
+  A 0xF0EE6C OldBuild_ValueGlyph_Table                    entries=29   ptrs=29   unusedT=19   {'midinsn': 14, 'nolabel': 5}  prom_b/wsa1_prom_b.s:28670
+  J 0xF40000 prom_b routine directory                     entries=2002 ptrs=2002 unusedT=19   {'midinsn/num': 5, 'nolabel/num': 1, 'text': 4, 'databyte': 8, 'dataother': 1}  prom_b/wsa1_prom_b.s
+  A 0xF00C4E PtrArray_F00C4E                              entries=21   ptrs=21   unusedT=18   {'midinsn/num': 11, 'nolabel/num': 7}  prom_b/wsa1_prom_b.s:3560
+  A 0xF0ED50 OldBuild_DLHandlerTables_Tail                entries=39   ptrs=39   unusedT=12   {'midinsn': 17, 'nolabel': 4}  prom_b/wsa1_prom_b.s:28572
+  A 0xF00340 PtrTable_F00340                              entries=35   ptrs=33   unusedT=1    {'midinsn/num': 7}  prom_b/wsa1_prom_b.s:2732
+
+== prom_c: top not-used tables
+  J 0xFFF0D1 UNREFERENCED_TRAMPOLINES                     entries=5    ptrs=5    unusedT=5    {'midinsn': 5}  prom_c/boot/reset_and_vectors.s:233

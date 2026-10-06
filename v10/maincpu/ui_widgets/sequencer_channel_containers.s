@@ -215,10 +215,10 @@ MidiPart_ConfigNameTable:
 ; [nakarest] purpose not established: layout of 912 B at 0xeeefc0 not derived; readers below
 ; [nakarest] Readers: work-RAM image: Boot_InitWorkRAM copies these bytes to RAM
 ; [nakarest] 0x3ec1c..0x3efac (its ld xde/xhl/xbc + ldir blocks), where they are read by
-; [nakarest] DrawText_LayoutAndRender_Variant1_Helper3 (kn5000_v10_program.s: `ld a,
+; [nakarest] DrawRect (kn5000_v10_program.s: `ld a,
 ; [nakarest] (257960:24)`), GroupBox_HandleCursorNav (ui/ui_control_panel.s: `cpw (0x3ef50:24),
-; [nakarest] 0`), Voice_FactoryPresetData_Code_Epilogue2 (kn5000_v10_program.s: `ld (257962:24),
-; [nakarest] c`), Voice_FactoryPresetData_Code_Skip10 (kn5000_v10_program.s: `ld c,
+; [nakarest] 0`), DrawRect_Return (kn5000_v10_program.s: `ld (257962:24),
+; [nakarest] c`), DrawRect_Deferred (kn5000_v10_program.s: `ld c,
 ; [nakarest] (257960:24)`), 1 more.
 Naka_DrawbarSlider_Resources:
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0xF48, 0x390

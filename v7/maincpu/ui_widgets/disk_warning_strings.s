@@ -1082,51 +1082,51 @@ GraphicsRender_ByteData_Data:
 ; [nakarest] Readers: source references GraphicsRender_ByteData_Loop3
 ; [nakarest] (display/graphics_text_vga.s: `.long Pad_AfterStr_No`).
 Pad_AfterStr_No:	.incbin "includes/generated/naka_disk_warning.bin", 0x2248, 0x20
-; [nakarest] naka_disk_warning+0x2268  +0x2268..+0x22f8 (0xeaaf14, 144 B)
-; [nakarest] purpose not established: layout of 144 B at 0xeaaf14 not derived; readers below
-; [nakarest] Readers: source references GraphicsRender_ProcessEntries
-; [nakarest] (display/graphics_text_vga.s: `ld xiy, GraphicsRender_ProcessEntries_PtrTable`).
+; GraphicsRender_ProcessEntries_PtrTable -- 36 x u32, the handler of each static display-list record op
+; ({u8 op, u8 len, payload}; the sd_* macros of audio/sound_editor_ui.s).  GraphicsRender_ProcessEntries
+; calls [op] with the record.  Lines 00-02, dotted lines 11/12/15, dotted box 13, box 09, shadowed boxes
+; 22 / 0A, highlight fill 05, bitmap 03, text at a cell 06/07/08/20 (fonts 0/1/2/6) or a pixel 17/1C (fonts
+; 3/4), design box 23; GraphicsRender_RetStub = no such op (scripts/tools/label_segfx_ops.py).
 GraphicsRender_ProcessEntries_PtrTable:
-	.long	SeGfx_StaticOp00_FromBuf_Helper
-	.long	0x00fb15f1
-	.long	SeGfx_StaticOp02_FromBuf_Helper
-	.long	SeGfx_StaticOp03_BlitAtCell_Helper
+	.long	SeGfx_StaticOp00_Line
+	.long	SeGfx_StaticOp01_Line
+	.long	SeGfx_StaticOp02_Line
+	.long	SeGfx_StaticOp03_Bitmap
 	.long	GraphicsRender_RetStub
-	.long	AccDraw_Secondary_Helper19
-	.long	DrawText_LayoutAndRender
-	.long	DrawText_LayoutAndRender_Variant1
-	.long	0x00fb1377
-	.long	SeGfx_StaticOp09_FromBuf_Helper
-	.long	0x00fb16ed
+	.long	SeGfx_StaticOp05_FillBoxMode1
+	.long	SeGfx_StaticOp06_CellTextFont0
+	.long	SeGfx_StaticOp07_CellTextFont1
+	.long	SeGfx_StaticOp08_CellTextFont2
+	.long	SeGfx_StaticOp09_Box
+	.long	SeGfx_StaticOp0A_ShadowBox2
 	.long	GraphicsRender_RetStub
 	.long	GraphicsRender_RetStub
 	.long	GraphicsRender_RetStub
 	.long	ColorBlit_ComputeRectAndBlit
 	.long	GraphicsRender_RetStub
 	.long	GraphicsRender_RetStub
-	.long	0x00fb1645
-	.long	0x00fb166f
-	.long	0x00fb17ce
+	.long	SeGfx_StaticOp11_DottedLine
+	.long	SeGfx_StaticOp12_DottedLine
+	.long	SeGfx_StaticOp13_DottedBox
 	.long	GraphicsRender_RetStub
-	.long	SeGfx_StaticOp15_FromBuf_Helper
+	.long	SeGfx_StaticOp15_DottedLine
 	.long	GraphicsRender_RetStub
-	.long	0x00fb1412
+	.long	SeGfx_StaticOp17_PixelTextFont3
 	.long	GraphicsRender_RetStub
 	.long	GraphicsRender_RetStub
 	.long	GraphicsRender_RetStub
 	.long	ColorBlit_ByteData
-	.long	0x00fb149f
+	.long	SeGfx_StaticOp1C_PixelTextFont4
 	.long	GraphicsRender_RetStub
 	.long	GraphicsRender_RetStub
 	.long	GraphicsRender_RetStub
-	.long	0x00fb152c
+	.long	SeGfx_StaticOp20_CellTextFont6
 	.long	GraphicsRender_RetStub
-	.long	0x00fb186b
-	.long	0x00fb193b
-; [nakarest] naka_disk_warning+0x22f8  +0x22f8..+0x2328 (0xeaafa4, 48 B)
-; [nakarest] purpose not established: layout of 48 B at 0xeaafa4 not derived; readers below
-; [nakarest] Readers: source references GraphicsRender_Start (display/graphics_text_vga.s: `ld
-; [nakarest] xiy, GraphicsRender_Start_PtrTable`).
+	.long	SeGfx_StaticOp22_ShadowBox1
+	.long	SeGfx_StaticOp23_DesignBox
+; GraphicsRender_Start_PtrTable -- 12 x u32, the handler of each bound display record op (a value read from
+; RAM: the sdb_* macros of audio/sound_editor_ui.s); GraphicsRender_Start calls [op].  Ops 08-0B are not
+; named: their record layouts are not derived yet.
 GraphicsRender_Start_PtrTable:
 	.long	DrawFunc_Init
 	.long	GraphicsRender_RetStub
@@ -1142,31 +1142,31 @@ GraphicsRender_Start_PtrTable:
 	.long	0x00fb1f39
 ; [nakarest] naka_disk_warning+0x2328  +0x2328..+0x2330 (0xeaafd4, 8 B)
 ; [nakarest] purpose not established: layout of 8 B at 0xeaafd4 not derived; readers below
-; [nakarest] Readers: source references DrawText_LayoutAndRender (display/graphics_text_vga.s:
+; [nakarest] Readers: source references SeGfx_StaticOp06_CellTextFont0 (display/graphics_text_vga.s:
 ; [nakarest] `ld xiy, DrawText_LayoutAndRender_Data`).
 DrawText_LayoutAndRender_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x2328, 0x8
 ; [nakarest] naka_disk_warning+0x2330  +0x2330..+0x2338 (0xeaafdc, 8 B)
 ; [nakarest] purpose not established: layout of 8 B at 0xeaafdc not derived; readers below
-; [nakarest] Readers: source references DrawText_LayoutAndRender_Variant1
+; [nakarest] Readers: source references SeGfx_StaticOp07_CellTextFont1
 ; [nakarest] (display/graphics_text_vga.s: `ld xiy, DrawText_LayoutAndRender_Variant1_Data`).
 DrawText_LayoutAndRender_Variant1_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x2330, 0x8
 ; [nakarest] naka_disk_warning+0x2338  +0x2338..+0x2340 (0xeaafe4, 8 B)
 ; [nakarest] purpose not established: layout of 8 B at 0xeaafe4 not derived; readers below
-; [nakarest] Readers: source references DrawText_LayoutAndRender_Variant1
+; [nakarest] Readers: source references SeGfx_StaticOp07_CellTextFont1
 ; [nakarest] (display/graphics_text_vga.s: `ld xiy, DrawText_LayoutAndRender_Variant1_Data_2`).
 DrawText_LayoutAndRender_Variant1_Data_2:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x2338, 0x8
 ; [nakarest] naka_disk_warning+0x2340  +0x2340..+0x2348 (0xeaafec, 8 B)
 ; [nakarest] purpose not established: layout of 8 B at 0xeaafec not derived; readers below
-; [nakarest] Readers: source references DrawText_LayoutAndRender_Variant1
+; [nakarest] Readers: source references SeGfx_StaticOp07_CellTextFont1
 ; [nakarest] (display/graphics_text_vga.s: `ld xiy, DrawText_LayoutAndRender_Variant1_Data_3`).
 DrawText_LayoutAndRender_Variant1_Data_3:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x2340, 0x8
 ; [nakarest] naka_disk_warning+0x2348  +0x2348..+0x2350 (0xeaaff4, 8 B)
 ; [nakarest] purpose not established: layout of 8 B at 0xeaaff4 not derived; readers below
-; [nakarest] Readers: source references DrawText_LayoutAndRender_Variant1
+; [nakarest] Readers: source references SeGfx_StaticOp07_CellTextFont1
 ; [nakarest] (display/graphics_text_vga.s: `ld xiy, DrawText_LayoutAndRender_Variant1_Data_4`).
 DrawText_LayoutAndRender_Variant1_Data_4:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x2348, 0x8

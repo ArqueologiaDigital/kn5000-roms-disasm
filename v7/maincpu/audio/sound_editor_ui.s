@@ -7725,6 +7725,11 @@ SeMenu_NameEditor_Init:
 ;       and draw according to it; ops 06 and 0A instead print the 16-bit word at
 ;       RAM[u16 +2] (no mask or shift) at cell u16 +7, style u8 +6, format
 ;       %1d/%2d/%3d chosen by u8 +9 (06) or u8 +0B (0A); op 01 is a null handler.
+; The handlers are named by op and by what they draw (scripts/tools/label_segfx_ops.py): lines 00-02,
+; dotted lines 11/12/15, dotted box 13, box 09 (DrawRect: the clipped outline), boxes with a 1- / 2-pixel
+; drop shadow 22 / 0A, highlight fill 05 (ColorBlit in mode 1), bitmap 03, text at a cell 06/07/08/20 and
+; at a pixel 17/1C, which differ only in the font they pass (0/1/2/6, 3/4: table_data/fonts.s).  Every
+; text handler and DrawRect clip to the full screen (0,0)-(319,239).
 ; List wrappers take the first record in XIY and the end (exclusive) in XIX.
 ; Single-record wrappers take the record in XIY, or -- the *_FromBuf ones -- use
 ; the RAM record buffer at 0x0006CA that the caller has just filled (fields +2..
@@ -7766,7 +7771,7 @@ SeGfx_StaticOp00_FromBuf:
 	ld	(COLORBLIT_MODE:24), 0
 	push xwa
 	ld xwa, 0x000006ca
-	call SeGfx_StaticOp00_FromBuf_Helper
+	call SeGfx_StaticOp00_Line
 	pop xwa
 	ret
 SeGfx_StaticOp02_FromBuf:
@@ -7774,7 +7779,7 @@ SeGfx_StaticOp02_FromBuf:
 	ld	(COLORBLIT_MODE:24), 0
 	push xwa
 	ld xwa, 0x000006ca
-	call SeGfx_StaticOp02_FromBuf_Helper
+	call SeGfx_StaticOp02_Line
 	pop xwa
 	ret
 SeGfx_StaticOp03_BlitAtCell:
@@ -7786,7 +7791,7 @@ SeGfx_StaticOp03_BlitAtCell:
 	ld	(1746:16), bc
 	ld	(1748:16), hl
 	ld xwa, 0x000006ca
-	call SeGfx_StaticOp03_BlitAtCell_Helper
+	call SeGfx_StaticOp03_Bitmap
 	pop xwa
 	ret
 SeGfx_StaticOp05_FromBuf:
@@ -7794,21 +7799,21 @@ SeGfx_StaticOp05_FromBuf:
 	ld	(COLORBLIT_MODE:24), 0
 	push xwa
 	ld xwa, 0x000006ca
-	call AccDraw_Secondary_Helper19
+	call SeGfx_StaticOp05_FillBoxMode1
 	pop xwa
 	ret
 SeGfx_StaticOp06_Text:
 	; --- Wrapper function 8: push xwa, ld xwa=xiy, call, pop, ret ---
 	push xwa
 	ld xwa, xiy
-	call DrawText_LayoutAndRender
+	call SeGfx_StaticOp06_CellTextFont0
 	pop xwa
 	ret
 SeGfx_StaticOp07_Text:
 	; --- Wrapper function 9 ---
 	push xwa
 	ld xwa, xiy
-	call DrawText_LayoutAndRender_Variant1
+	call SeGfx_StaticOp07_CellTextFont1
 	pop xwa
 	ret
 SeGfx_StaticOp09_FromBuf:
@@ -7816,7 +7821,7 @@ SeGfx_StaticOp09_FromBuf:
 	ld	(COLORBLIT_MODE:24), 0
 	push xwa
 	ld xwa, 0x000006ca
-	call SeGfx_StaticOp09_FromBuf_Helper
+	call SeGfx_StaticOp09_Box
 	pop xwa
 	ret
 SeGfx_StaticOp0E:
@@ -7831,7 +7836,7 @@ SeGfx_StaticOp15_FromBuf:
 	ld	(COLORBLIT_MODE:24), 0
 	push xwa
 	ld xwa, 0x000006ca
-	call SeGfx_StaticOp15_FromBuf_Helper
+	call SeGfx_StaticOp15_DottedLine
 	pop xwa
 	ret
 SeGfx_StaticOp1B_FromBuf:

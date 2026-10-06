@@ -35,16 +35,14 @@ extern const char DrawFunc_Init;
 extern const char DrawFunc_Init_Variant1;
 extern const char DrawText_ExtLayout_Variant1;
 extern const char DrawText_ExtendedLayout;
-extern const char DrawText_LayoutAndRender;
-extern const char DrawText_LayoutAndRender_Variant1;
 extern const char FunctionProc;
 extern const char GraphicsRender_RetStub;
 extern const char GridCheck;
-extern const char NakaData_RomEnd;
 extern const char LanguageCheck;
 extern const char LswEditCheck;
 extern const char MainFunctionProc;
 extern const char ModeProc;
+extern const char NakaData_RomEnd;
 extern const char Naka_PresentationRootState;
 extern const char NamingCheck;
 extern const char ObjectProc;
@@ -64,6 +62,26 @@ extern const char ResIconProc;
 extern const char ResMethodProc;
 extern const char ResNameProc;
 extern const char ResStringProc;
+extern const char SeGfx_BoundOp06_Helper;
+extern const char SeGfx_StaticOp00_Line;
+extern const char SeGfx_StaticOp01_Line;
+extern const char SeGfx_StaticOp02_Line;
+extern const char SeGfx_StaticOp03_Bitmap;
+extern const char SeGfx_StaticOp05_FillBoxMode1;
+extern const char SeGfx_StaticOp06_CellTextFont0;
+extern const char SeGfx_StaticOp07_CellTextFont1;
+extern const char SeGfx_StaticOp08_CellTextFont2;
+extern const char SeGfx_StaticOp09_Box;
+extern const char SeGfx_StaticOp0A_ShadowBox2;
+extern const char SeGfx_StaticOp11_DottedLine;
+extern const char SeGfx_StaticOp12_DottedLine;
+extern const char SeGfx_StaticOp13_DottedBox;
+extern const char SeGfx_StaticOp15_DottedLine;
+extern const char SeGfx_StaticOp17_PixelTextFont3;
+extern const char SeGfx_StaticOp1C_PixelTextFont4;
+extern const char SeGfx_StaticOp20_CellTextFont6;
+extern const char SeGfx_StaticOp22_ShadowBox1;
+extern const char SeGfx_StaticOp23_DesignBox;
 extern const char SupportClassProc;
 extern const char TitleProc;
 extern const char UserBitmapCheck;
@@ -6697,49 +6715,49 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .ptrs_22 = {
         0x00F9FAFB,
-        0x00FB19D4,
-        0x00FB19FE,
-        0x00FB1A28,
-        0x00FB1CFF,
+        NAKA_ADDR(SeGfx_StaticOp00_Line),
+        NAKA_ADDR(SeGfx_StaticOp01_Line),
+        NAKA_ADDR(SeGfx_StaticOp02_Line),
+        NAKA_ADDR(SeGfx_StaticOp03_Bitmap),
         NAKA_ADDR(GraphicsRender_RetStub),
-        0x00FB1DB3,
-        NAKA_ADDR(DrawText_LayoutAndRender),
-        NAKA_ADDR(DrawText_LayoutAndRender_Variant1),
-        0x00FB1784,
-        0x00FB1AD0,
-        0x00FB1AFA,
+        NAKA_ADDR(SeGfx_StaticOp05_FillBoxMode1),
+        NAKA_ADDR(SeGfx_StaticOp06_CellTextFont0),
+        NAKA_ADDR(SeGfx_StaticOp07_CellTextFont1),
+        NAKA_ADDR(SeGfx_StaticOp08_CellTextFont2),
+        NAKA_ADDR(SeGfx_StaticOp09_Box),
+        NAKA_ADDR(SeGfx_StaticOp0A_ShadowBox2),
         NAKA_ADDR(GraphicsRender_RetStub),
         NAKA_ADDR(GraphicsRender_RetStub),
         NAKA_ADDR(GraphicsRender_RetStub),
         NAKA_ADDR(ColorBlit_ComputeRectAndBlit),
         NAKA_ADDR(GraphicsRender_RetStub),
         NAKA_ADDR(GraphicsRender_RetStub),
-        0x00FB1A52,
-        0x00FB1A7C,
-        0x00FB1BDB,
+        NAKA_ADDR(SeGfx_StaticOp11_DottedLine),
+        NAKA_ADDR(SeGfx_StaticOp12_DottedLine),
+        NAKA_ADDR(SeGfx_StaticOp13_DottedBox),
         NAKA_ADDR(GraphicsRender_RetStub),
-        0x00FB1AA6,
+        NAKA_ADDR(SeGfx_StaticOp15_DottedLine),
         NAKA_ADDR(GraphicsRender_RetStub),
-        0x00FB181F,
+        NAKA_ADDR(SeGfx_StaticOp17_PixelTextFont3),
         NAKA_ADDR(GraphicsRender_RetStub),
         NAKA_ADDR(GraphicsRender_RetStub),
         NAKA_ADDR(GraphicsRender_RetStub),
         NAKA_ADDR(ColorBlit_ByteData),
-        0x00FB18AC,
+        NAKA_ADDR(SeGfx_StaticOp1C_PixelTextFont4),
         NAKA_ADDR(GraphicsRender_RetStub),
         NAKA_ADDR(GraphicsRender_RetStub),
         NAKA_ADDR(GraphicsRender_RetStub),
-        0x00FB1939,
+        NAKA_ADDR(SeGfx_StaticOp20_CellTextFont6),
         NAKA_ADDR(GraphicsRender_RetStub),
-        0x00FB1C78,
-        0x00FB1D48,
+        NAKA_ADDR(SeGfx_StaticOp22_ShadowBox1),
+        NAKA_ADDR(SeGfx_StaticOp23_DesignBox),
         NAKA_ADDR(DrawFunc_Init),
         NAKA_ADDR(GraphicsRender_RetStub),
         NAKA_ADDR(DrawText_ExtendedLayout),
         NAKA_ADDR(ColorBlit_WithPaletteSave),
         NAKA_ADDR(ColorBlit_Variant_ByteData),
         NAKA_ADDR(DrawFunc_Init_Variant1),
-        0x00FB2201,
+        NAKA_ADDR(SeGfx_BoundOp06_Helper),
         NAKA_ADDR(DrawText_ExtLayout_Variant1),
         0x00FB25A3,
         0x00FB22A3,

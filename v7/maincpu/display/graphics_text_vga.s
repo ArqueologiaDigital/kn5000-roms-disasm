@@ -321,7 +321,7 @@ GraphicsRender_Start_Done:
 	lda xsp, (xsp + 54)
 	ret
 
-DrawText_LayoutAndRender:
+SeGfx_StaticOp06_CellTextFont0:
 	lda xsp, (xsp-274)
 	push xiz
 	ld xiy, DrawText_LayoutAndRender_Data
@@ -383,7 +383,7 @@ DrawText_NullTerminate:
 	lda xsp, (xsp+274)
 	ret
 
-DrawText_LayoutAndRender_Variant1:
+SeGfx_StaticOp07_CellTextFont1:
 	lda xsp, (xsp-274)
 	push	xiz
 	ld	xiy, DrawText_LayoutAndRender_Variant1_Data
@@ -442,6 +442,7 @@ DrawText_LayoutAndRender_Variant1_Skip:
 	pop	xiz
 	lda	xsp, (xsp+274)
 	ret
+SeGfx_StaticOp08_CellTextFont2:
 	lda xsp, (xsp-274)
 	push	xiz
 	ld	xiy, DrawText_LayoutAndRender_Variant1_Data_2
@@ -500,6 +501,7 @@ DrawText_LayoutAndRender_Variant1_Skip2:
 	pop	xiz
 	lda	xsp, (xsp+274)
 	ret
+SeGfx_StaticOp17_PixelTextFont3:
 	lda xsp, (xsp-274)
 	push	xiz
 	ld	xiy, DrawText_LayoutAndRender_Variant1_Data_3
@@ -553,6 +555,7 @@ DrawText_LayoutAndRender_Variant1_Skip3:
 	pop	xiz
 	lda	xsp, (xsp+274)
 	ret
+SeGfx_StaticOp1C_PixelTextFont4:
 	lda xsp, (xsp-274)
 	push	xiz
 	ld	xiy, DrawText_LayoutAndRender_Variant1_Data_4
@@ -606,6 +609,7 @@ DrawText_LayoutAndRender_Variant1_Skip4:
 	pop	xiz
 	lda	xsp, (xsp+274)
 	ret
+SeGfx_StaticOp20_CellTextFont6:
 	lda xsp, (xsp-274)
 	push	xiz
 	ld	xiy, DrawText_LayoutAndRender_Variant1_Data_5
@@ -664,7 +668,7 @@ DrawText_LayoutAndRender_Variant1_Skip5:
 	pop	xiz
 	lda	xsp, (xsp+274)
 	ret
-SeGfx_StaticOp00_FromBuf_Helper:
+SeGfx_StaticOp00_Line:
 	dec	8, xsp
 	ld	xde, xwa
 	lda	xwa, (xsp+4)
@@ -681,6 +685,7 @@ SeGfx_StaticOp00_FromBuf_Helper:
 	calr	DrawLineWithMode
 	inc	8, xsp
 	ret
+SeGfx_StaticOp01_Line:
 	dec	8, xsp
 	ld	xde, xwa
 	lda	xwa, (xsp+4)
@@ -697,7 +702,7 @@ SeGfx_StaticOp00_FromBuf_Helper:
 	calr	DrawLineWithMode
 	inc	8, xsp
 	ret
-SeGfx_StaticOp02_FromBuf_Helper:
+SeGfx_StaticOp02_Line:
 	dec	8, xsp
 	ld	xde, xwa
 	lda	xwa, (xsp+4)
@@ -714,6 +719,7 @@ SeGfx_StaticOp02_FromBuf_Helper:
 	calr	DrawLineWithMode
 	inc	8, xsp
 	ret
+SeGfx_StaticOp11_DottedLine:
 	dec	8, xsp
 	ld	xde, xwa
 	lda	xwa, (xsp+4)
@@ -730,6 +736,7 @@ SeGfx_StaticOp02_FromBuf_Helper:
 	calr	DrawDottedLineWithMode
 	inc	8, xsp
 	ret
+SeGfx_StaticOp12_DottedLine:
 	dec	8, xsp
 	ld	xde, xwa
 	lda	xwa, (xsp+4)
@@ -746,7 +753,7 @@ SeGfx_StaticOp02_FromBuf_Helper:
 	calr	DrawDottedLineWithMode
 	inc	8, xsp
 	ret
-SeGfx_StaticOp15_FromBuf_Helper:
+SeGfx_StaticOp15_DottedLine:
 	dec	8, xsp
 	ld	xde, xwa
 	lda	xwa, (xsp+4)
@@ -763,7 +770,7 @@ SeGfx_StaticOp15_FromBuf_Helper:
 	calr	DrawDottedLineWithMode
 	inc	8, xsp
 	ret
-SeGfx_StaticOp09_FromBuf_Helper:
+SeGfx_StaticOp09_Box:
 	dec	8, xsp
 	lda	xbc, (xsp)
 	ld	de, (xwa+2)
@@ -777,9 +784,10 @@ SeGfx_StaticOp09_FromBuf_Helper:
 	ld	de, (0x03efa4:24)
 	ld	xwa, xbc
 	ld	bc, de
-	calr	DrawText_LayoutAndRender_Variant1_Helper
+	calr	DrawRect
 	inc	8, xsp
 	ret
+SeGfx_StaticOp0A_ShadowBox2:
 	lda	xsp, (xsp-16)
 	push	xiz
 	ld	xiz, xwa
@@ -793,7 +801,7 @@ SeGfx_StaticOp09_FromBuf_Helper:
 	ld	bc, (xiz+8)
 	ld	(xwa+6), bc
 	ld	bc, (0x03efa4:24)
-	calr	DrawText_LayoutAndRender_Variant1_Helper
+	calr	DrawRect
 	lda	xwa, (xsp+8)
 	lda	xde, (xiz+6)
 	ld	bc, (xde)
@@ -865,6 +873,7 @@ SeGfx_StaticOp09_FromBuf_Helper:
 	pop	xiz
 	lda	xsp, (xsp+16)
 	ret
+SeGfx_StaticOp13_DottedBox:
 	dec	8, xsp
 	push	xiz
 	ld	xiz, xwa
@@ -923,6 +932,7 @@ SeGfx_StaticOp09_FromBuf_Helper:
 	pop	xiz
 	inc	8, xsp
 	ret
+SeGfx_StaticOp22_ShadowBox1:
 	lda	xsp, (xsp-16)
 	push	xiz
 	ld	xiz, xwa
@@ -936,7 +946,7 @@ SeGfx_StaticOp09_FromBuf_Helper:
 	ld	bc, (xiz+8)
 	ld	(xwa+6), bc
 	ld	bc, (0x03efa4:24)
-	calr	DrawText_LayoutAndRender_Variant1_Helper
+	calr	DrawRect
 	lda	xwa, (xsp+8)
 	lda	xde, (xiz+6)
 	ld	bc, (xde)
@@ -974,7 +984,7 @@ SeGfx_StaticOp09_FromBuf_Helper:
 	pop	xiz
 	lda	xsp, (xsp+16)
 	ret
-SeGfx_StaticOp03_BlitAtCell_Helper:
+SeGfx_StaticOp03_Bitmap:
 	dec	8, xsp
 	lda	xhl, (xsp)
 	lda	xde, (xhl+2)
@@ -1003,6 +1013,7 @@ SeGfx_StaticOp03_BlitAtCell_Helper:
 	calr	ColorBlit2_LargeCodeBlock
 	inc	8, xsp
 	ret
+SeGfx_StaticOp23_DesignBox:
 	lda	xsp, (xsp-12)
 	pushw	iz
 	lda	xhl, (xsp+10)
@@ -1045,7 +1056,7 @@ SeGfx_StaticOp03_BlitAtCell_Helper:
 	popw	iz
 	lda	xsp, (xsp+12)
 	ret
-AccDraw_Secondary_Helper19:
+SeGfx_StaticOp05_FillBoxMode1:
 	dec	8, xsp
 	push	qiz
 	lda	xbc, (xsp+2)

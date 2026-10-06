@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 52,926
-#   semantic names ........... 52,091 (98.4%)
+#   symbols .................. 52,937
+#   semantic names ........... 52,102 (98.4%)
 #   positional names ......... 835
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -44159,33 +44159,33 @@ DrawDottedLineWithMode_Impl_Skip24 00FB0740
 DrawDottedLineWithMode_Impl_Skip25 00FB0745
 DrawDottedLineWithMode_Impl_Skip26 00FB0755
 DrawDottedLineWithMode_Impl_Skip27 00FB0759
-Voice_FactoryPresetData_Code_Skip 00FB0769
-Voice_FactoryPresetData_Code_Join 00FB076B
-Voice_FactoryPresetData_Code_Join6 00FB076E
-Voice_FactoryPresetData_Code_Skip15 00FB0793
-Voice_FactoryPresetData_Code_Loop 00FB07DE
-Voice_FactoryPresetData_Code_Skip2 00FB07EB
-Voice_FactoryPresetData_Code_Skip3 00FB084D
-Voice_FactoryPresetData_Code_Skip4 00FB0881
-Voice_FactoryPresetData_Code_Skip5 00FB0886
-Voice_FactoryPresetData_Code_Skip6 00FB089B
-Voice_FactoryPresetData_Code_Skip7 00FB089F
-Voice_FactoryPresetData_Code_Skip8 00FB08B4
-Voice_FactoryPresetData_Code_Join2 00FB08B6
-Voice_FactoryPresetData_Code_Join3 00FB08B9
-Voice_FactoryPresetData_Code_Join4 00FB08DD
-Voice_FactoryPresetData_Code_Epilogue2 00FB0902
-DrawText_LayoutAndRender_Variant1_Helper 00FB0907
-Voice_FactoryPresetData_Code_Skip9 00FB0933
-Voice_FactoryPresetData_Code_Epilogue 00FB095C
-Voice_FactoryPresetData_Code 00FB0960
-Voice_FactoryPresetData_Code_Helper 00FB097F
-Voice_FactoryPresetData_Code_Skip10 00FB099E
-Voice_FactoryPresetData_Code_Skip11 00FB09AB
-Voice_FactoryPresetData_Code_Skip12 00FB09BB
-Voice_FactoryPresetData_Code_Skip13 00FB09CB
-Voice_FactoryPresetData_Code_Skip14 00FB09F6
-Voice_FactoryPresetData_Code_Join5 00FB0A64
+DrawDottedLineWithMode_Impl_Skip28 00FB0769
+DrawDottedLineWithMode_Impl_Join7 00FB076B
+DrawDottedLineWithMode_Impl_Join8 00FB076E
+DrawDottedLineWithMode_Impl_Skip29 00FB0793
+DrawDottedLineWithMode_Impl_Loop2 00FB07DE
+DrawDottedLineWithMode_Impl_Skip30 00FB07EB
+DrawDottedLineWithMode_Impl_Skip31 00FB084D
+DrawDottedLineWithMode_Impl_Skip32 00FB0881
+DrawDottedLineWithMode_Impl_Skip33 00FB0886
+DrawDottedLineWithMode_Impl_Skip34 00FB089B
+DrawDottedLineWithMode_Impl_Skip35 00FB089F
+DrawDottedLineWithMode_Impl_Skip36 00FB08B4
+DrawDottedLineWithMode_Impl_Join9 00FB08B6
+DrawDottedLineWithMode_Impl_Join10 00FB08B9
+DrawDottedLineWithMode_Impl_Join11 00FB08DD
+DrawDottedLineWithMode_Impl_Epilogue 00FB0902
+DrawRect 00FB0907
+DrawRect_Deferred 00FB0933
+DrawRect_Return 00FB095C
+DrawRect_CallbackBlock 00FB0960
+DrawRect_Impl 00FB097F
+DrawRect_Impl_CheckX0 00FB099E
+DrawRect_Impl_CheckX1 00FB09AB
+DrawRect_Impl_CheckY1 00FB09BB
+DrawRect_Impl_Clipped 00FB09CB
+DrawRect_Impl_FourSides 00FB09F6
+DrawRect_Impl_LastSide 00FB0A64
 DrawText_QueueOrDirect 00FB0A72
 DrawText_QueueDeferred 00FB0AB2
 DrawText_PopAndReturn 00FB0B1D
@@ -44274,26 +44274,37 @@ GraphicsRender_Start 00FB11E9
 GraphicsRender_Start_EntryLoop 00FB1204
 VoiceMidi_AltEventHandler 00FB1218
 GraphicsRender_Start_Done 00FB123C
-DrawText_LayoutAndRender 00FB1241
+SeGfx_StaticOp06_CellTextFont0 00FB1241
 DrawText_CopyCharLoop 00FB1291
 DrawText_NullTerminate 00FB12AF
-DrawText_LayoutAndRender_Variant1 00FB12DC
+SeGfx_StaticOp07_CellTextFont1 00FB12DC
 DrawText_LayoutAndRender_Variant1_Loop2 00FB132C
 DrawText_LayoutAndRender_Variant1_Skip 00FB134A
+SeGfx_StaticOp08_CellTextFont2 00FB1377
 DrawText_LayoutAndRender_Variant1_Loop3 00FB13C7
 DrawText_LayoutAndRender_Variant1_Skip2 00FB13E5
+SeGfx_StaticOp17_PixelTextFont3 00FB1412
 DrawText_LayoutAndRender_Variant1_Loop4 00FB1454
 DrawText_LayoutAndRender_Variant1_Skip3 00FB1472
+SeGfx_StaticOp1C_PixelTextFont4 00FB149F
 DrawText_LayoutAndRender_Variant1_Loop 00FB14E1
 DrawText_LayoutAndRender_Variant1_Skip4 00FB14FF
+SeGfx_StaticOp20_CellTextFont6 00FB152C
 DrawText_LayoutAndRender_Variant1_Loop5 00FB157C
 DrawText_LayoutAndRender_Variant1_Skip5 00FB159A
-SeGfx_StaticOp00_FromBuf_Helper 00FB15C7
-SeGfx_StaticOp02_FromBuf_Helper 00FB161B
-SeGfx_StaticOp15_FromBuf_Helper 00FB1699
-SeGfx_StaticOp09_FromBuf_Helper 00FB16C3
-SeGfx_StaticOp03_BlitAtCell_Helper 00FB18F2
-AccDraw_Secondary_Helper19 00FB19A6
+SeGfx_StaticOp00_Line 00FB15C7
+SeGfx_StaticOp01_Line 00FB15F1
+SeGfx_StaticOp02_Line 00FB161B
+SeGfx_StaticOp11_DottedLine 00FB1645
+SeGfx_StaticOp12_DottedLine 00FB166F
+SeGfx_StaticOp15_DottedLine 00FB1699
+SeGfx_StaticOp09_Box 00FB16C3
+SeGfx_StaticOp0A_ShadowBox2 00FB16ED
+SeGfx_StaticOp13_DottedBox 00FB17CE
+SeGfx_StaticOp22_ShadowBox1 00FB186B
+SeGfx_StaticOp03_Bitmap 00FB18F2
+SeGfx_StaticOp23_DesignBox 00FB193B
+SeGfx_StaticOp05_FillBoxMode1 00FB19A6
 ColorBlit_ComputeRectAndBlit 00FB19ED
 ColorBlit_ByteData 00FB1A33
 DrawText_ExtendedLayout 00FB1A5D

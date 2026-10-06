@@ -9677,7 +9677,7 @@ DrawDottedLineWithMode_Impl_Join2:
 	jr	nz, DrawDottedLineWithMode_Impl_Skip5
 	ld	xwa, (xsp+8)
 	or	xwa, xwa
-	jrl	z, Voice_FactoryPresetData_Code_Epilogue
+	jrl	z, DrawDottedLineWithMode_Impl_Epilogue
 DrawDottedLineWithMode_Impl_Skip5:
 	ld	xwa, (xsp+56)
 	ld	xiy, xwa
@@ -9691,7 +9691,7 @@ DrawDottedLineWithMode_Impl_Skip5:
 	ld	(xsp+20), xwa
 	ld	xwa, (xsp+8)
 	cp	xwa, 0
-	jrl	lt, Voice_FactoryPresetData_Code_Join4
+	jrl	lt, DrawDottedLineWithMode_Impl_Join11
 DrawDottedLineWithMode_Impl_Loop:
 	cp	(xsp+24), 3
 	jr	ule, DrawDottedLineWithMode_Impl_Skip6
@@ -9809,7 +9809,7 @@ DrawDottedLineWithMode_Impl_Join4:
 	ld	xwa, (xsp+20)
 	cp	xwa, (xsp+8)
 	jrl	le, DrawDottedLineWithMode_Impl_Loop
-	jrl	Voice_FactoryPresetData_Code_Join4
+	jrl	DrawDottedLineWithMode_Impl_Join11
 DrawDottedLineWithMode_Impl_Skip13:
 	ld	xwa, (xsp+8)
 	or	xwa, xwa
@@ -9818,7 +9818,7 @@ DrawDottedLineWithMode_Impl_Skip13:
 	ld	(xsp+20), xwa
 	ld	xwa, (xsp+4)
 	cp	xwa, 0
-	jrl	lt, Voice_FactoryPresetData_Code_Join4
+	jrl	lt, DrawDottedLineWithMode_Impl_Join11
 DrawDottedLineWithMode_Impl_Entry:
 	cp	(xsp+24), 3
 	jr	ule, DrawDottedLineWithMode_Impl_Skip14
@@ -9936,13 +9936,13 @@ DrawDottedLineWithMode_Impl_Join6:
 	ld	xwa, (xsp+20)
 	cp	xwa, (xsp+4)
 	jrl	le, DrawDottedLineWithMode_Impl_Entry
-	jrl	Voice_FactoryPresetData_Code_Join4
+	jrl	DrawDottedLineWithMode_Impl_Join11
 DrawDottedLineWithMode_Impl_Skip21:
 	lda	xwa, (xsp+46)
 	ld	(xsp+34), xwa
 	ld	xwa, (xsp+8)
 	cp	xwa, (xsp+4)
-	jrl	le, Voice_FactoryPresetData_Code_Skip2
+	jrl	le, DrawDottedLineWithMode_Impl_Skip29
 	ld	xwa, (xsp+4)
 	sla	xwa, 16
 	ld	xbc, (xsp+8)
@@ -9965,16 +9965,16 @@ DrawDottedLineWithMode_Impl_Skip21:
 	ld	(xsp+20), xwa
 	ld	xwa, (xsp+8)
 	cp	xwa, 0
-	jrl	lt, Voice_FactoryPresetData_Code_Join4
+	jrl	lt, DrawDottedLineWithMode_Impl_Join11
 ; ColorBlit2_LargeCodeBlock_Entry2: previous name of this label, kept only because it is still referenced by kn5000_v10_program.s (owned by another lane)
 ColorBlit2_LargeCodeBlock_Entry2:
 	cp	(xsp+24), 3
 	jr	ule, DrawDottedLineWithMode_Impl_Skip22
 	ld	(xsp+24), 0
-	jrl	Voice_FactoryPresetData_Code_Join6
+	jrl	DrawDottedLineWithMode_Impl_Join8
 DrawDottedLineWithMode_Impl_Skip22:
 	cp	(xsp+24), 1
-	jrl	ugt, Voice_FactoryPresetData_Code_Join
+	jrl	ugt, DrawDottedLineWithMode_Impl_Join7
 	ld	a, (COLORBLIT_MODE_ACTIVE:24)
 	ldfr_berp	a, 240	; ld ixl, a
 	ld	wa, (xbc+2)
@@ -9989,7 +9989,7 @@ DrawDottedLineWithMode_Impl_Skip22:
 	cpib_erp	240, 1	; cp ixl, 1
 	jr	z, DrawDottedLineWithMode_Impl_Skip25
 	cpib_erp	240, 0	; cp ixl, 0
-	jrl	nz, Voice_FactoryPresetData_Code_Join
+	jrl	nz, DrawDottedLineWithMode_Impl_Join7
 	ld	xiz, xbc
 	ld	iy, (xsp+50)
 	ld	wa, (xbc)
@@ -10010,7 +10010,7 @@ DrawDottedLineWithMode_Impl_Skip22:
 	extz	wa
 	cp	wa, de
 	jr	nz, DrawDottedLineWithMode_Impl_Skip24
-	jr	Voice_FactoryPresetData_Code_Join
+	jr	DrawDottedLineWithMode_Impl_Join7
 DrawDottedLineWithMode_Impl_Skip23:
 	ld	xiy, (0x030452:24)
 	ld	de, (xiz)
@@ -10032,10 +10032,10 @@ DrawDottedLineWithMode_Impl_Skip23:
 	ld	a, (xix)
 	and	a, 0x80
 	cp	a, e
-	jr	z, Voice_FactoryPresetData_Code_Join
+	jr	z, DrawDottedLineWithMode_Impl_Join7
 DrawDottedLineWithMode_Impl_Skip24:
 	xor	(xix), 0x60
-	jr	Voice_FactoryPresetData_Code_Join
+	jr	DrawDottedLineWithMode_Impl_Join7
 DrawDottedLineWithMode_Impl_Skip25:
 	ld	wa, (xbc)
 	exts	xwa
@@ -10044,9 +10044,9 @@ DrawDottedLineWithMode_Impl_Skip25:
 	bit	7, (xde)
 	jr	z, DrawDottedLineWithMode_Impl_Skip26
 	res	5, (xde)
-	jr	Voice_FactoryPresetData_Code_Join
+	jr	DrawDottedLineWithMode_Impl_Join7
 DrawDottedLineWithMode_Impl_Skip26:
 	set	5, (xde)
-	jr	Voice_FactoryPresetData_Code_Join
+	jr	DrawDottedLineWithMode_Impl_Join7
 DrawDottedLineWithMode_Impl_Skip27:
 	ld	wa, (xbc)

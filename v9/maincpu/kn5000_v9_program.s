@@ -2311,14 +2311,14 @@ Voice_FactoryPresetData:
 	add	xwa, xhl
 	add	xde, xwa
 	bitm	7, (xde)
-	jr	z, Voice_FactoryPresetData_Code_Skip
+	jr	z, DrawDottedLineWithMode_Impl_Skip28
 	resm	6, (xde)
-	jr	Voice_FactoryPresetData_Code_Join
-Voice_FactoryPresetData_Code_Skip:
+	jr	DrawDottedLineWithMode_Impl_Join7
+DrawDottedLineWithMode_Impl_Skip28:
 	setm	6, (xde)
-Voice_FactoryPresetData_Code_Join:
+DrawDottedLineWithMode_Impl_Join7:
 	incm8	1, (xsp+24)
-Voice_FactoryPresetData_Code_Join6:
+DrawDottedLineWithMode_Impl_Join8:
 	ld	xwa, (xsp+12)
 	add	(xsp+4), xwa
 	ld	xwa, (xsp+4)
@@ -2331,8 +2331,8 @@ Voice_FactoryPresetData_Code_Join6:
 	ld	xwa, (xsp+20)
 	cp	xwa, (xsp+8)
 	jrl	le, ColorBlit2_LargeCodeBlock_Entry2
-	jrl	Voice_FactoryPresetData_Code_Join4
-Voice_FactoryPresetData_Code_Skip2:
+	jrl	DrawDottedLineWithMode_Impl_Join11
+DrawDottedLineWithMode_Impl_Skip29:
 	ld	xwa, (xsp+8)
 	sla	xwa, 16
 	ld	xbc, (xsp+4)
@@ -2357,15 +2357,15 @@ Voice_FactoryPresetData_Code_Skip2:
 	ld	(xsp+20), xwa
 	ld	xwa, (xsp+4)
 	cp	xwa, 0
-	jrl	lt, Voice_FactoryPresetData_Code_Join4
-Voice_FactoryPresetData_Code_Loop:
+	jrl	lt, DrawDottedLineWithMode_Impl_Join11
+DrawDottedLineWithMode_Impl_Loop2:
 	cp	(xsp+24), 3
-	jr	ule, Voice_FactoryPresetData_Code_Skip3
+	jr	ule, DrawDottedLineWithMode_Impl_Skip30
 	ld	(xsp+24), 0
-	jrl	Voice_FactoryPresetData_Code_Join3
-Voice_FactoryPresetData_Code_Skip3:
+	jrl	DrawDottedLineWithMode_Impl_Join10
+DrawDottedLineWithMode_Impl_Skip30:
 	cp	(xsp+24), 1
-	jrl	ugt, Voice_FactoryPresetData_Code_Join2
+	jrl	ugt, DrawDottedLineWithMode_Impl_Join9
 	ld	l, (COLORBLIT_MODE_ACTIVE:24)
 	ld	xwa, (xsp+34)
 	ld	wa, (xwa)
@@ -2375,11 +2375,11 @@ Voice_FactoryPresetData_Code_Skip3:
 	add	xde, xwa
 	sll	xde, 6
 	cp	l, 2:i3
-	jrl	z, Voice_FactoryPresetData_Code_Skip8
+	jrl	z, DrawDottedLineWithMode_Impl_Skip35
 	cp	l, 1:i3
-	jr	z, Voice_FactoryPresetData_Code_Skip6
+	jr	z, DrawDottedLineWithMode_Impl_Skip33
 	cp	l, 0:i3
-	jrl	nz, Voice_FactoryPresetData_Code_Join2
+	jrl	nz, DrawDottedLineWithMode_Impl_Join9
 	ld	xhl, xbc
 	ld	iy, (xsp+50)
 	ld	wa, (xbc)
@@ -2388,7 +2388,7 @@ Voice_FactoryPresetData_Code_Skip3:
 	lda	xix, (OFFSCREEN_BUFFER_1:24)
 	add	xix, xwa
 	cpw	(xsp+50), 245
-	jr	z, Voice_FactoryPresetData_Code_Skip4
+	jr	z, DrawDottedLineWithMode_Impl_Skip31
 	andmi8	(xix), 96
 	ld	wa, iy
 	and	wa, 159
@@ -2399,9 +2399,9 @@ Voice_FactoryPresetData_Code_Skip3:
 	and	a, 128
 	extz	wa
 	cp	wa, de
-	jr	nz, Voice_FactoryPresetData_Code_Skip5
-	jr	Voice_FactoryPresetData_Code_Join2
-Voice_FactoryPresetData_Code_Skip4:
+	jr	nz, DrawDottedLineWithMode_Impl_Skip32
+	jr	DrawDottedLineWithMode_Impl_Join9
+DrawDottedLineWithMode_Impl_Skip31:
 	ld	xiy, (197714:24)
 	ld	de, (xhl)
 	exts	xde
@@ -2422,38 +2422,38 @@ Voice_FactoryPresetData_Code_Skip4:
 	ld	a, (xix)
 	and	a, 128
 	cp	a, e
-	jr	z, Voice_FactoryPresetData_Code_Join2
-Voice_FactoryPresetData_Code_Skip5:
+	jr	z, DrawDottedLineWithMode_Impl_Join9
+DrawDottedLineWithMode_Impl_Skip32:
 	xormi8	(xix), 96
-	jr	Voice_FactoryPresetData_Code_Join2
-Voice_FactoryPresetData_Code_Skip6:
+	jr	DrawDottedLineWithMode_Impl_Join9
+DrawDottedLineWithMode_Impl_Skip33:
 	ld	wa, (xbc)
 	exts	xwa
 	add	xwa, xde
 	lda	xde, (OFFSCREEN_BUFFER_1:24)
 	add	xde, xwa
 	bitm	7, (xde)
-	jr	z, Voice_FactoryPresetData_Code_Skip7
+	jr	z, DrawDottedLineWithMode_Impl_Skip34
 	resm	5, (xde)
-	jr	Voice_FactoryPresetData_Code_Join2
-Voice_FactoryPresetData_Code_Skip7:
+	jr	DrawDottedLineWithMode_Impl_Join9
+DrawDottedLineWithMode_Impl_Skip34:
 	setm	5, (xde)
-	jr	Voice_FactoryPresetData_Code_Join2
-Voice_FactoryPresetData_Code_Skip8:
+	jr	DrawDottedLineWithMode_Impl_Join9
+DrawDottedLineWithMode_Impl_Skip35:
 	ld	wa, (xbc)
 	exts	xwa
 	add	xwa, xde
 	lda	xde, (OFFSCREEN_BUFFER_1:24)
 	add	xde, xwa
 	bitm	7, (xde)
-	jr	z, Voice_FactoryPresetData_Code_Skip9
+	jr	z, DrawDottedLineWithMode_Impl_Skip36
 	resm	6, (xde)
-	jr	Voice_FactoryPresetData_Code_Join2
-Voice_FactoryPresetData_Code_Skip9:
+	jr	DrawDottedLineWithMode_Impl_Join9
+DrawDottedLineWithMode_Impl_Skip36:
 	setm	6, (xde)
-Voice_FactoryPresetData_Code_Join2:
+DrawDottedLineWithMode_Impl_Join9:
 	incm8	1, (xsp+24)
-Voice_FactoryPresetData_Code_Join3:
+DrawDottedLineWithMode_Impl_Join10:
 	ld	xwa, (xsp+16)
 	add	(xsp+8), xwa
 	ld	xde, (xsp+8)
@@ -2466,8 +2466,8 @@ Voice_FactoryPresetData_Code_Join3:
 	add	(xsp+20), xwa
 	ld	xwa, (xsp+20)
 	cp	xwa, (xsp+4)
-	jrl	le, Voice_FactoryPresetData_Code_Loop
-Voice_FactoryPresetData_Code_Join4:
+	jrl	le, DrawDottedLineWithMode_Impl_Loop2
+DrawDottedLineWithMode_Impl_Join11:
 	lda	xwa, (xsp+38)
 	ld	xbc, (xsp+30)
 	ld	bc, (xbc)
@@ -2482,31 +2482,31 @@ Voice_FactoryPresetData_Code_Join4:
 	ld	bc, (xbc)
 	ld	(xwa+6), bc
 	calr	SetChangeRect
-Voice_FactoryPresetData_Code_Epilogue:
+DrawDottedLineWithMode_Impl_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+56)
 	ret
-DrawText_LayoutAndRender_Variant1_Helper3:
+DrawRect:
 	dec	2, xsp
 	push	xiz
 	ld	(xsp+4), bc
 	ld	xiz, xwa
 	calr	IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cp	hl, 0:i3
-	jr	z, Voice_FactoryPresetData_Code_Skip10
+	jr	z, DrawRect_Deferred
 	ld	a, (COLORBLIT_MODE:24)
 	ld	(COLORBLIT_MODE_ACTIVE:24), a
 	cpw	(197710:24), 0
-	jr	z, Voice_FactoryPresetData_Code_Epilogue2
+	jr	z, DrawRect_Return
 	ld	xwa, xiz
 	ld	bc, (xsp+4)
-	calr	Voice_FactoryPresetData_Code_Helper2
-	jr	Voice_FactoryPresetData_Code_Epilogue2
-Voice_FactoryPresetData_Code_Skip10:
+	calr	DrawRect_Impl
+	jr	DrawRect_Return
+DrawRect_Deferred:
 	ldw	wa, 16
 	calr	DrawQueue_Alloc
 	ld	xwa, xhl
-	lda	xbc, (Voice_FactoryPresetData_Code:24)
+	lda	xbc, (DrawRect_CallbackBlock:24)
 	ld	(xwa), xbc
 	ld	xiy, xiz
 	lda	xix, (xwa+4)
@@ -2517,11 +2517,11 @@ Voice_FactoryPresetData_Code_Skip10:
 	ld	c, (COLORBLIT_MODE:24)
 	ld	(xwa+14), c
 	calr	DrawRing_Post
-Voice_FactoryPresetData_Code_Epilogue2:
+DrawRect_Return:
 	pop	xiz
 	inc	2, xsp
 	ret
-Voice_FactoryPresetData_Code:
+DrawRect_CallbackBlock:
 	ld	xbc, xwa
 	lda	xwa, (xbc+4)
 	ld	de, (xbc+12)
@@ -2530,9 +2530,9 @@ Voice_FactoryPresetData_Code:
 	cpw	(197710:24), 0
 	ret	z
 	ld	bc, de
-	calr	Voice_FactoryPresetData_Code_Helper2
+	calr	DrawRect_Impl
 	ret
-Voice_FactoryPresetData_Code_Helper2:
+DrawRect_Impl:
 	lda	xsp, (xsp-18)
 	pushw	iz
 	ld	(xsp+14), bc
@@ -2541,27 +2541,27 @@ Voice_FactoryPresetData_Code_Helper2:
 	inc	2, xwa
 	ld	(xsp+2), xwa
 	cpw	(xwa), 0
-	jr	ge, Voice_FactoryPresetData_Code_Skip11
+	jr	ge, DrawRect_Impl_CheckX0
 	ld	xwa, (xsp+2)
 	ldw	(xwa), 0
-Voice_FactoryPresetData_Code_Skip11:
+DrawRect_Impl_CheckX0:
 	ld	xwa, (xsp+16)
 	cpw	(xwa), 0
-	jr	ge, Voice_FactoryPresetData_Code_Skip12
+	jr	ge, DrawRect_Impl_CheckX1
 	ldw	(xwa), 0
-Voice_FactoryPresetData_Code_Skip12:
+DrawRect_Impl_CheckX1:
 	ld	xwa, (xsp+16)
 	lda	xhl, (xwa+4)
 	cpw	(xhl), 320
-	jr	lt, Voice_FactoryPresetData_Code_Skip13
+	jr	lt, DrawRect_Impl_CheckY1
 	ldw	(xhl), 319
-Voice_FactoryPresetData_Code_Skip13:
+DrawRect_Impl_CheckY1:
 	ld	xwa, (xsp+16)
 	lda	xix, (xwa+6)
 	cpw	(xix), 240
-	jr	lt, Voice_FactoryPresetData_Code_Skip14
+	jr	lt, DrawRect_Impl_Clipped
 	ldw	(xix), 239
-Voice_FactoryPresetData_Code_Skip14:
+DrawRect_Impl_Clipped:
 	ld	de, (xix)
 	ld	xwa, (xsp+2)
 	ld	iz, (xwa)
@@ -2570,7 +2570,7 @@ Voice_FactoryPresetData_Code_Skip14:
 	lda	xiy, (xbc+2)
 	ld	(xwa+2), iz
 	cp	de, iz
-	jr	nz, Voice_FactoryPresetData_Code_Skip15
+	jr	nz, DrawRect_Impl_FourSides
 	ld	xde, (xsp+16)
 	ld	de, (xde)
 	ld	(xwa), de
@@ -2579,8 +2579,8 @@ Voice_FactoryPresetData_Code_Skip14:
 	ld	de, (xix)
 	ld	(xiy), de
 	ld	de, (xsp+14)
-	jr	Voice_FactoryPresetData_Code_Join5
-Voice_FactoryPresetData_Code_Skip15:
+	jr	DrawRect_Impl_LastSide
+DrawRect_Impl_FourSides:
 	ld	xde, (xsp+16)
 	ld	de, (xde)
 	ld	(xwa), de
@@ -2623,7 +2623,7 @@ Voice_FactoryPresetData_Code_Skip15:
 	ld	de, (xde)
 	ld	(xbc), de
 	ld	de, (xsp+14)
-Voice_FactoryPresetData_Code_Join5:
+DrawRect_Impl_LastSide:
 	calr	DrawLineWithMode_Impl
 	ld	xwa, (xsp+16)
 	calr	SetChangeRect
