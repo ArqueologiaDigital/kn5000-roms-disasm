@@ -4939,8 +4939,7 @@ FDemoText_RenderTextLine_Data:
 ; [nakarest] Presentation_RootEntry +0x1a0b2..+0x1a0ca: 0x013F, 0x00EF (319, 239), then two empty
 ; [nakarest] strings each padded with 0xFF, then "<PRESENTATION>" -- the ROM bytes.  Readers: source
 ; [nakarest] references StrInstantStart (ui_widgets/naka_screen_dispatch.s: `.long
-; [nakarest] Presentation_RootEntry`); 1 data word in SndArgGridCheck_Data (at 0xe1e372), which is
-; [nakarest] read by SndArgGridCheck (audio/sound_editor_ui.s: `add xwa, SndArgGridCheck_Data`); 2
+; [nakarest] Presentation_RootEntry`); 2
 ; [nakarest] data words in AcWelcomScreenProc_Data (at 0xe9e268, 0xe9e328), which is read by
 ; [nakarest] AcWelcomScreenProc (ui/drawbar_panel_ui.s: `ld xwa, AcWelcomScreenProc_Data`); 2 data
 ; [nakarest] words in AcWelcomScreenProc_Data_2 (at 0xe9eb20, 0xe9ebe0), which is read by

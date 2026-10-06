@@ -2373,10 +2373,18 @@ AcSndArgGridBoxProc_Data_2:
 	.short	AcSndArgGrid_ForwardToBase - AcSndArgGrid_Init
 	.short	AcSndArgGridBoxProc_OnLswData - AcSndArgGrid_Init
 	.short	AcSndArgGrid_ForwardToParent - AcSndArgGrid_Init
-SndArgGridCheck_Data:	.byte	0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00
-	.long Presentation_RootEntry
-	.zero 4
+; SndArgGridCheck's switch on (event - EVT_INDEXSW_UP), 0..6: s16 offsets from
+; SndArgGridCheck_JumpTableFallthrough (`lda xix, (<base>:24); jp t, (xix+wa)`).  Only EVT_INDEX_SELECT
+; has a case; the fallthrough also returns.  (The 0x00EA at entry 4 was once spelled `.long
+; Presentation_RootEntry`, whose address is 0xEA0000.)
+SndArgGridCheck_Data:
+	.short	SndArgGridCheck_JumpTableFallthrough - SndArgGridCheck_JumpTableFallthrough	; EVT_INDEXSW_UP
+	.short	SndArgGridCheck_JumpTableFallthrough - SndArgGridCheck_JumpTableFallthrough	; EVT_INDEXSW_DOWN
+	.short	SndArgGridCheck_JumpTableFallthrough - SndArgGridCheck_JumpTableFallthrough	; EVT_INDEXSW_UP_AIC
+	.short	SndArgGridCheck_JumpTableFallthrough - SndArgGridCheck_JumpTableFallthrough	; EVT_INDEXSW_DOWN_AIC
+	.short	SndArgGridCheck_Return - SndArgGridCheck_JumpTableFallthrough		; EVT_INDEX_SELECT
+	.short	SndArgGridCheck_JumpTableFallthrough - SndArgGridCheck_JumpTableFallthrough	; EVT_LSW_DATA
+	.short	SndArgGridCheck_JumpTableFallthrough - SndArgGridCheck_JumpTableFallthrough	; EVT_RAM_DATA
 
 SLOT_NAME_PTRS:	; Pointer table for rhythm slot names
 	.long SLOT_NAME_MEMORY_A

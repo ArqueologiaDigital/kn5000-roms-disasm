@@ -11526,8 +11526,7 @@ AccStyle_InitVRAM:
 	ret
 
 AccStyle_SC0ByteSelect:
-	.long Pad_AfterBitmap_Dredt0k_2
-	rcf
+	ld (0xe3e0:16), 0x10
 	ld	a, (0x338e:16)
 	and	a, 31
 	jr	nz, AccStyle_SC0ByteSelect_Code_Skip

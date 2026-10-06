@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 52,937
-#   semantic names ........... 52,102 (98.4%)
+#   symbols .................. 52,936
+#   semantic names ........... 52,101 (98.4%)
 #   positional names ......... 835
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -5744,7 +5744,6 @@ Bitmap_Ntedt0k 00E34E78
 Bitmap_Ntedt0d 00E35668
 Bitmap_Dredt0k 00E3CD78
 Pad_AfterBitmap_Dredt0k 00E3DEF1
-Pad_AfterBitmap_Dredt0k_2 00E3E0F1
 Pad_BeforeBitmap_Dredt0d 00E3E2F2
 Bitmap_Dredt0d 00E3F660
 Pad_NakaExternal_Block2 00E40031

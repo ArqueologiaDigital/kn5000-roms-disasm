@@ -3779,8 +3779,7 @@ Bitmap_Ntedt0d:
 ; -----------------------------------------------------------------------------
 Bitmap_Dredt0k:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0xBF18, 0x1179
-Pad_AfterBitmap_Dredt0k:	.incbin "includes/generated/naka_widget_descriptors.bin", 0xD091, 0x200
-Pad_AfterBitmap_Dredt0k_2:	.incbin "includes/generated/naka_widget_descriptors.bin", 0xD291, 0x201
+Pad_AfterBitmap_Dredt0k:	.incbin "includes/generated/naka_widget_descriptors.bin", 0xD091, 0x401
 Pad_BeforeBitmap_Dredt0d:	.incbin "includes/generated/naka_widget_descriptors.bin", 0xD492, 0x136E
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Bitmap_Dredt0d
