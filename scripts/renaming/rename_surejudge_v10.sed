@@ -1,0 +1,19 @@
+# rename_surejudge_v10.sed -- written by scripts/renaming/gen_surejudge_names.py
+s/\bEqualizer_CmdDispatch_Case27263130\b/SureJudge_OnTitleSqtrkclr/g
+s/\bEqualizer_CmdDispatch_Case27263131\b/SureJudge_OnTitleSqtrkmrg/g
+s/\bEqualizer_CmdDispatch_Case27263132\b/SureJudge_OnTitleSqqtz/g
+s/\bEqualizer_CmdDispatch_Case27263133\b/SureJudge_OnTitleSqtrns/g
+s/\bEqualizer_CmdDispatch_Case27263134\b/SureJudge_OnTitleSqvelocng/g
+s/\bEqualizer_CmdDispatch_Case27263135\b/SureJudge_OnTitleSqnotecng/g
+s/\bEqualizer_CmdDispatch_Case27263136\b/SureJudge_OnTitleSqadvdly/g
+s/\bEqualizer_CmdDispatch_Case27263137\b/SureJudge_OnTitleSqmers/g
+s/\bEqualizer_CmdDispatch_Case27263138\b/SureJudge_OnTitleSqmcp/g
+s/\bEqualizer_CmdDispatch_Case27263139\b/SureJudge_OnTitleSqmdel/g
+s/\bEqualizer_CmdDispatch_Case27263140\b/SureJudge_OnTitleSqmins/g
+s/\bEqualizer_CmdDispatch_CaseTable\b/SureJudge_ShowSureDisp_CaseTable/g
+s/\bParamCmd_SendAndReturnZero\b/SureJudge_SendShowEvent/g
+s/\bEqualizer_CmdDispatch\b/SureJudge_ShowSureDisp/g
+s/\bEqualizer_FormatValue\b/MainExeFunc_ReturnZero/g
+s/\bParamCmd_ReturnZero\b/SureJudge_ReturnZero/g
+s/\bEqualizer_CmdCase0\b/SureJudge_OnTitleSqsngclr/g
+s/\bEqualizer_CmdCase1\b/SureJudge_OnTitleSqsngcp/g

@@ -15948,117 +15948,115 @@ Equalizer_PopIzRet:
 
 MainExeFunc:
 	cp xbc, EVT_SW_IN
-	jr nz, Equalizer_FormatValue
+	jr nz, MainExeFunc_ReturnZero
 	ld xwa, NAKA_MAINFUNC_MainExeCall
 	call MainPostEvent
 
-; Equalizer format param value
-Equalizer_FormatValue:
+MainExeFunc_ReturnZero:
 	ld xhl, 0:i3
 	ret
 
 SureJudgeFunc:
 	cp xbc, EVT_SW_IN
-	jrl nz, ParamCmd_ReturnZero
+	jrl nz, SureJudge_ReturnZero
 	cp (0x0340ea:24), 0x00
-	jr nz, Equalizer_CmdDispatch
+	jr nz, SureJudge_ShowSureDisp
 	ld xwa, NAKA_MAINFUNC_MainExeCall
 	call MainPostEvent
-	jrl ParamCmd_ReturnZero
+	jrl SureJudge_ReturnZero
 
-; Equalizer command dispatch
-Equalizer_CmdDispatch:
+; SureJudgeFunc with RAM 0x0340EA != 0: show the "are you sure?" widget (<page>SureDisp) of the
+; sequencer edit page that is the current title (GetTitleNow); other titles return 0.
+SureJudge_ShowSureDisp:
 	ld wa, 0:i3
 	call SetDialEnable
 	call GetTitleNow
 	ld xwa, xhl
 	cp xhl, TITLE_SQSNGCP
-	jr z, Equalizer_CmdCase1
+	jr z, SureJudge_OnTitleSqsngcp
 	cp xhl, TITLE_SQSNGCLR
-	jr z, Equalizer_CmdCase0
+	jr z, SureJudge_OnTitleSqsngclr
 	sub xwa, TITLE_SQTRKCLR
 	cp xwa, 0x0
-	jrl lt, ParamCmd_ReturnZero
+	jrl lt, SureJudge_ReturnZero
 	cp xwa, 0xe
-	jrl gt, ParamCmd_ReturnZero
+	jrl gt, SureJudge_ReturnZero
 	add xwa, xwa
-	add xwa, Equalizer_CmdDispatch_CaseTable
+	add xwa, SureJudge_ShowSureDisp_CaseTable
 	ld wa, (xwa)
-	lda xix, (Equalizer_CmdCase0:24)
+	lda xix, (SureJudge_OnTitleSqsngclr:24)
 	jp	t, (xix+wa)
 
-; Equalizer command case 0
-Equalizer_CmdCase0:
+SureJudge_OnTitleSqsngclr:
 	ld xwa, 0x900009
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
-	jrl ParamCmd_SendAndReturnZero
+	jrl SureJudge_SendShowEvent
 
-; Equalizer command case 1
-Equalizer_CmdCase1:
+SureJudge_OnTitleSqsngcp:
 	ld xwa, 0x91000b
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
-	jrl ParamCmd_SendAndReturnZero
-Equalizer_CmdDispatch_Case27263130:
+	jrl SureJudge_SendShowEvent
+SureJudge_OnTitleSqtrkclr:
 	ld xwa, 0x9a0006
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
-	jrl ParamCmd_SendAndReturnZero
-Equalizer_CmdDispatch_Case27263131:
+	jrl SureJudge_SendShowEvent
+SureJudge_OnTitleSqtrkmrg:
 	ld xwa, 0x9b000f
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
-	jr ParamCmd_SendAndReturnZero
-Equalizer_CmdDispatch_Case27263132:
+	jr SureJudge_SendShowEvent
+SureJudge_OnTitleSqqtz:
 	ld xwa, 0x9c000e
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
-	jr ParamCmd_SendAndReturnZero
-Equalizer_CmdDispatch_Case27263133:
+	jr SureJudge_SendShowEvent
+SureJudge_OnTitleSqtrns:
 	ld xwa, 0x9d000a
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
-	jr ParamCmd_SendAndReturnZero
-Equalizer_CmdDispatch_Case27263134:
+	jr SureJudge_SendShowEvent
+SureJudge_OnTitleSqvelocng:
 	ld xwa, 0x9e000a
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
-	jr ParamCmd_SendAndReturnZero
-Equalizer_CmdDispatch_Case27263135:
+	jr SureJudge_SendShowEvent
+SureJudge_OnTitleSqnotecng:
 	ld xwa, 0x9f0012
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
-	jr ParamCmd_SendAndReturnZero
-Equalizer_CmdDispatch_Case27263136:
+	jr SureJudge_SendShowEvent
+SureJudge_OnTitleSqadvdly:
 	ld xwa, 0xa0000a
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
-	jr ParamCmd_SendAndReturnZero
-Equalizer_CmdDispatch_Case27263138:
+	jr SureJudge_SendShowEvent
+SureJudge_OnTitleSqmcp:
 	ld xwa, 0xa20009
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
-	jr ParamCmd_SendAndReturnZero
-Equalizer_CmdDispatch_Case27263139:
+	jr SureJudge_SendShowEvent
+SureJudge_OnTitleSqmdel:
 	ld xwa, 0xa30009
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
-	jr ParamCmd_SendAndReturnZero
-Equalizer_CmdDispatch_Case27263140:
+	jr SureJudge_SendShowEvent
+SureJudge_OnTitleSqmins:
 	ld xwa, 0xa40009
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
-	jr ParamCmd_SendAndReturnZero
-Equalizer_CmdDispatch_Case27263137:
+	jr SureJudge_SendShowEvent
+SureJudge_OnTitleSqmers:
 	ld xwa, 0xa1000a
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 
-ParamCmd_SendAndReturnZero:
+SureJudge_SendShowEvent:
 	call SendEvent
 
-ParamCmd_ReturnZero:
+SureJudge_ReturnZero:
 	ld xhl, 0:i3
 	ret
 

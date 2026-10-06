@@ -1648,11 +1648,11 @@ typedef struct __attribute__((packed)) {
      * --------------------------------------------------------------------- */
     uint16_t EqualizerCngFunc_CaseTable[9];
     /* ---------------------------------------------------------------------
-     * Equalizer_CmdDispatch_CaseTable -- jump table of a compiled `switch`
-     * in Equalizer_CmdDispatch (v10/v9 0xF359FC, v7 0xF359D2) (`add xwa,
-     * Equalizer_CmdDispatch_CaseTable`): 15 u16 case offsets from Equalizer_CmdCase0.
+     * SureJudge_ShowSureDisp_CaseTable -- jump table of a compiled `switch`
+     * in SureJudge_ShowSureDisp (v10/v9 0xF359FC, v7 0xF359D2) (`add xwa,
+     * SureJudge_ShowSureDisp_CaseTable`): 15 u16 case offsets from SureJudge_OnTitleSqsngclr.
      * --------------------------------------------------------------------- */
-    uint16_t Equalizer_CmdDispatch_CaseTable[15];
+    uint16_t SureJudge_ShowSureDisp_CaseTable[15];
     /* ---------------------------------------------------------------------
      * DspParamFmt_NegativeFmt -- " -%3d": DspParamFmt_Signed prints a
      * negative value's magnitude with it.
@@ -5803,7 +5803,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
         0x0165,
     },
 
-    .Equalizer_CmdDispatch_CaseTable = {
+    .SureJudge_ShowSureDisp_CaseTable = {
         0x001E, 0x002D, 0x003B, 0x0049, 0x0057, 0x0065, 0x0073, 0x00AB,
         0x0081, 0x008F, 0x009D, 0x00BB, 0x00BB, 0x00BB, 0x000F,
     },

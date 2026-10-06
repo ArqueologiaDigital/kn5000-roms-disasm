@@ -3344,30 +3344,30 @@ EqualizerCngFunc_CaseTable:
 	.short	EqualizerCngFunc_OnGetEq7Str - Equalizer_DispatchA
 	.short	EqualizerCngFunc_OnGetTtlNow - Equalizer_DispatchA
 ; -----------------------------------------------------------------------------
-; [naka_s_headers] Equalizer_CmdDispatch_CaseTable
-; Equalizer_CmdDispatch_CaseTable -- jump table of a compiled `switch`
-; in Equalizer_CmdDispatch (v10/v9 0xf359fc, v7 0xf359d2) (`add xwa,
-; Equalizer_CmdDispatch_CaseTable`): 15 u16 case offsets from Equalizer_CmdCase0.
+; [naka_s_headers] SureJudge_ShowSureDisp_CaseTable
+; SureJudge_ShowSureDisp_CaseTable -- jump table of a compiled `switch`
+; in SureJudge_ShowSureDisp (v10/v9 0xf359fc, v7 0xf359d2) (`add xwa,
+; SureJudge_ShowSureDisp_CaseTable`): 15 u16 case offsets from SureJudge_OnTitleSqsngclr.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
-; Equalizer_CmdDispatch_CaseTable[15].
+; SureJudge_ShowSureDisp_CaseTable[15].
 ; -----------------------------------------------------------------------------
-Equalizer_CmdDispatch_CaseTable:
-	.short	Equalizer_CmdDispatch_Case27263130 - Equalizer_CmdCase0
-	.short	Equalizer_CmdDispatch_Case27263131 - Equalizer_CmdCase0
-	.short	Equalizer_CmdDispatch_Case27263132 - Equalizer_CmdCase0
-	.short	Equalizer_CmdDispatch_Case27263133 - Equalizer_CmdCase0
-	.short	Equalizer_CmdDispatch_Case27263134 - Equalizer_CmdCase0
-	.short	Equalizer_CmdDispatch_Case27263135 - Equalizer_CmdCase0
-	.short	Equalizer_CmdDispatch_Case27263136 - Equalizer_CmdCase0
-	.short	Equalizer_CmdDispatch_Case27263137 - Equalizer_CmdCase0
-	.short	Equalizer_CmdDispatch_Case27263138 - Equalizer_CmdCase0
-	.short	Equalizer_CmdDispatch_Case27263139 - Equalizer_CmdCase0
-	.short	Equalizer_CmdDispatch_Case27263140 - Equalizer_CmdCase0
-	.short	ParamCmd_ReturnZero - Equalizer_CmdCase0
-	.short	ParamCmd_ReturnZero - Equalizer_CmdCase0
-	.short	ParamCmd_ReturnZero - Equalizer_CmdCase0
-	.short	Equalizer_CmdCase1 - Equalizer_CmdCase0
+SureJudge_ShowSureDisp_CaseTable:
+	.short	SureJudge_OnTitleSqtrkclr - SureJudge_OnTitleSqsngclr
+	.short	SureJudge_OnTitleSqtrkmrg - SureJudge_OnTitleSqsngclr
+	.short	SureJudge_OnTitleSqqtz - SureJudge_OnTitleSqsngclr
+	.short	SureJudge_OnTitleSqtrns - SureJudge_OnTitleSqsngclr
+	.short	SureJudge_OnTitleSqvelocng - SureJudge_OnTitleSqsngclr
+	.short	SureJudge_OnTitleSqnotecng - SureJudge_OnTitleSqsngclr
+	.short	SureJudge_OnTitleSqadvdly - SureJudge_OnTitleSqsngclr
+	.short	SureJudge_OnTitleSqmers - SureJudge_OnTitleSqsngclr
+	.short	SureJudge_OnTitleSqmcp - SureJudge_OnTitleSqsngclr
+	.short	SureJudge_OnTitleSqmdel - SureJudge_OnTitleSqsngclr
+	.short	SureJudge_OnTitleSqmins - SureJudge_OnTitleSqsngclr
+	.short	SureJudge_ReturnZero - SureJudge_OnTitleSqsngclr
+	.short	SureJudge_ReturnZero - SureJudge_OnTitleSqsngclr
+	.short	SureJudge_ReturnZero - SureJudge_OnTitleSqsngclr
+	.short	SureJudge_OnTitleSqsngcp - SureJudge_OnTitleSqsngclr
 ; -----------------------------------------------------------------------------
 ; DspParamFmt_NegativeFmt -- " -%3d": DspParamFmt_Signed prints a negative value's
 ; magnitude with it (ids 0x0B RESONANCE, 0x18/0x19 FEEDBACK L/R, 0x39 FEEDBACK).
