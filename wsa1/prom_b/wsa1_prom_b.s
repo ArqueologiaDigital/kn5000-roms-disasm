@@ -115396,7 +115396,7 @@ PaintAllDrawbars_Join2:
 Paint_DrawbarScreenValues:
 	pushw	hl	; F53823  push HL
 	m_cp_mi8 MB16, 0x289e, 0x00	; F53824  cp (0x289e),0x00
-	jr	nz, PaintAllDrawbars_Entry	; F53829  jr NZ,0xf53884
+	jr	nz, Paint_DrawbarScreenValues_SettingPage	; F53829  jr NZ,0xf53884
 	ld	(LCD_CurrentLayer:16), 1	; F5382B  ld (0x2540),0x01
 	ld	h, (10390:16)	; F53830  ld H,(0x2896)
 	ld	c, h	; F53834  ld C,H
@@ -115434,10 +115434,16 @@ PaintAllDrawbars_Join5:
 	inc	8, xsp	; F53880  inc 0,XSP
 	jr	PaintAllDrawbars_Join6	; F53882  jr T,0xf538ab
 
-; --- 0xF53884-0xF53898  data (21 bytes) ---
-PaintAllDrawbars_Entry:
-	.byte 0xf1, 0x40, 0x25, 0x00, 0x00, 0xc1, 0x90, 0x28, 0x23, 0xf1, 0x40, 0x26, 0x43, 0xc1, 0x91, 0x28   ; F53884  .@%....(#.@&C..(
-	.byte 0x23, 0xf1, 0x41, 0x26, 0x43   ; F53894  #.A&C
+; Re-typed 2026-10-06 (was: --- 0xF53884-0xF53898  data (21 bytes) ---): the setting-page arm of
+;   Paint_DrawbarScreenValues, which branches here when (0x289E) != 0.  The bytes are `ld (0x2540),0` and two
+;   `ld C,(m) / ld (m'),C` copies of (0x2890)/(0x2891) to UI_DrawScratch, the copy that routine's header
+;   describes; the display list that follows prints them.
+Paint_DrawbarScreenValues_SettingPage:
+	ld	(LCD_CurrentLayer:16), 0	; F53884  ld (0x2540),0x00
+	ld	c, (10384:16)	; F53889  ld C,(0x2890)
+	ld	(UI_DrawScratch:16), c	; F5388D  ld (0x2640),C
+	ld	c, (10385:16)	; F53891  ld C,(0x2891)
+	ld	(UI_DrawScratch+1:16), c	; F53895  ld (0x2641),C
 	lda	xbc, (DLTableB_SignedNibble:24)	; F53899  lda XBC,0xf546a4
 	push	xbc	; F5389E  push XBC
 	lda	xwa, (DL_DrawbarParamValues:24)	; F5389F  lda XWA,0xf54668

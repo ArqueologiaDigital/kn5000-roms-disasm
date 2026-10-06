@@ -5323,4 +5323,5 @@ RENAMES = [
     ("DL_F05063", "SoundEditFilterKeyFollow_PaintKeyboardAndValues_DL"),
     ("DL_F351A7", "CycleRecordScreen_DrawValues_DL"),
     ("sub_F47F69", "CycleRecord_CheckIsRecordTrack_Copy"),
+    ("PaintAllDrawbars_Entry", "Paint_DrawbarScreenValues_SettingPage"),
 ]
