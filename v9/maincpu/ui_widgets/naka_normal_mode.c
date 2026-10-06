@@ -353,7 +353,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0486;
     uint8_t pad_53[2];  /* zero padding */
     uint16_t field_048a;
-    uint32_t ptr_048c;
+    uint32_t NakaStr_SoundPresetBone_ptr;
 } naka_normal_mode_t;
 
 #define SELF(field) \
@@ -789,7 +789,7 @@ const naka_normal_mode_t naka_normal_mode_data
 
     .field_048a = 0x007F,
 
-    .ptr_048c = NAKA_ADDR(NakaStr_SoundPresetBone),
+    .NakaStr_SoundPresetBone_ptr = NAKA_ADDR(NakaStr_SoundPresetBone),
 
 };
 

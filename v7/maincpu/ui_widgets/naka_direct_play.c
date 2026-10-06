@@ -1325,8 +1325,8 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1000;
     uint16_t field_1002;
     uint8_t pad_174[4];  /* zero padding */
-    uint32_t ptr_1008;
-    uint32_t ptr_100c;
+    uint32_t RT1_str_2_ptr;
+    uint32_t RT1_str_ptr;
     uint16_t field_1010;
     uint16_t field_1012;
     uint16_t field_1014;
@@ -1379,8 +1379,8 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1258;
     uint16_t field_125a;
     uint8_t pad_198[4];  /* zero padding */
-    uint32_t ptr_1260;
-    uint32_t ptr_1264;
+    uint32_t RT1_str_4_ptr;
+    uint32_t RT1_str_3_ptr;
     uint16_t field_1268;
     uint16_t field_126a;
     uint16_t field_126c;
@@ -1431,7 +1431,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1422;
     uint16_t field_1424;
     uint16_t field_1426;
-    uint32_t ptr_1428;
+    uint32_t MIC_str_8_ptr;
     uint8_t pad_220[4];  /* zero padding */
     char MIC_str_8[4];
     /* element 7 of Viewable slot 0x76: IvFixWin (class id 0x0160004A) */
@@ -1471,7 +1471,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_15fc;
     char r_str[2];
     char str_217[2];
-    uint32_t ptr_1602;
+    uint32_t SeqByteBlock_EffectsSeqData_ptr;
     uint8_t pad_241[2];  /* zero padding */
     uint16_t field_1608;
     uint8_t pad_242[4];  /* zero padding */
@@ -1480,7 +1480,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1612;
     uint16_t field_1614;
     uint16_t field_1616;
-    uint32_t ptr_1618;
+    uint32_t MIXER_str_7_ptr;
     uint8_t pad_244[4];  /* zero padding */
     char MIXER_str_7[6];
     /* element 13 of Viewable slot 0x78: Window (class id 0x01600035) */
@@ -1550,7 +1550,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1a0c;
     char r_str_2[2];
     char str_263[2];
-    uint32_t ptr_1a12;
+    uint32_t SeqByteBlock_EffectsSeqData_ptr_2;
     uint8_t pad_262[2];  /* zero padding */
     uint16_t field_1a18;
     uint8_t pad_263[4];  /* zero padding */
@@ -1559,7 +1559,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1a22;
     uint16_t field_1a24;
     uint16_t field_1a26;
-    uint32_t ptr_1a28;
+    uint32_t MIXER_str_8_ptr;
     uint8_t pad_265[4];  /* zero padding */
     char MIXER_str_8[6];
     /* element 0 of Viewable slot 0x89 "SqTrSel": TtlScreen (class id 0x01600034) */
@@ -1863,7 +1863,7 @@ typedef struct __attribute__((packed)) {
     naka_dispatch_t w119;  /* 0x45 */
     uint8_t pad_482[2];  /* zero padding */
     uint32_t ptr_2fd2;
-    uint32_t ptr_2fd6;
+    uint32_t NakaWidget_Perf3RhythmSel_StrOn_ptr;
 } naka_direct_play_t;
 
 #define SELF(field) \
@@ -3567,9 +3567,9 @@ const naka_direct_play_t naka_direct_play_data
 
     .pad_174 = { 0 },
 
-    .ptr_1008 = SELF(RT1_str_2),
+    .RT1_str_2_ptr = SELF(RT1_str_2),
 
-    .ptr_100c = SELF(RT1_str),
+    .RT1_str_ptr = SELF(RT1_str),
 
     .field_1010 = 0xDD74,
 
@@ -3826,9 +3826,9 @@ const naka_direct_play_t naka_direct_play_data
 
     .pad_198 = { 0 },
 
-    .ptr_1260 = SELF(RT1_str_4),
+    .RT1_str_4_ptr = SELF(RT1_str_4),
 
-    .ptr_1264 = SELF(RT1_str_3),
+    .RT1_str_3_ptr = SELF(RT1_str_3),
 
     .field_1268 = 0xDD82,
 
@@ -4037,7 +4037,7 @@ const naka_direct_play_t naka_direct_play_data
 
     .field_1426 = 0x0003,
 
-    .ptr_1428 = SELF(MIC_str_8),
+    .MIC_str_8_ptr = SELF(MIC_str_8),
 
     .pad_220 = { 0 },
 
@@ -4246,7 +4246,7 @@ const naka_direct_play_t naka_direct_play_data
 
     .str_217 = "9",
 
-    .ptr_1602 = NAKA_ADDR(SeqByteBlock_EffectsSeqData),
+    .SeqByteBlock_EffectsSeqData_ptr = NAKA_ADDR(SeqByteBlock_EffectsSeqData),
 
     .pad_241 = { 0 },
 
@@ -4264,7 +4264,7 @@ const naka_direct_play_t naka_direct_play_data
 
     .field_1616 = 0x0003,
 
-    .ptr_1618 = SELF(MIXER_str_7),
+    .MIXER_str_7_ptr = SELF(MIXER_str_7),
 
     .pad_244 = { 0 },
 
@@ -4685,7 +4685,7 @@ const naka_direct_play_t naka_direct_play_data
 
     .str_263 = "9",
 
-    .ptr_1a12 = NAKA_ADDR(SeqByteBlock_EffectsSeqData),
+    .SeqByteBlock_EffectsSeqData_ptr_2 = NAKA_ADDR(SeqByteBlock_EffectsSeqData),
 
     .pad_262 = { 0 },
 
@@ -4703,7 +4703,7 @@ const naka_direct_play_t naka_direct_play_data
 
     .field_1a26 = 0x0003,
 
-    .ptr_1a28 = SELF(MIXER_str_8),
+    .MIXER_str_8_ptr = SELF(MIXER_str_8),
 
     .pad_265 = { 0 },
 
@@ -6808,7 +6808,7 @@ const naka_direct_play_t naka_direct_play_data
 
     .ptr_2fd2 = 0x00E24066,
 
-    .ptr_2fd6 = NAKA_ADDR(NakaWidget_Perf3RhythmSel_StrOn),
+    .NakaWidget_Perf3RhythmSel_StrOn_ptr = NAKA_ADDR(NakaWidget_Perf3RhythmSel_StrOn),
 
 };
 

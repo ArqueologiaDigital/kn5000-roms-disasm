@@ -1601,14 +1601,14 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1ae0;
     uint16_t field_1ae2;
     uint8_t pad_234[4];  /* zero padding */
-    uint32_t ptr_1ae8;
+    uint32_t Naka_PresentationRootState_ptr;
     uint16_t field_1aec;
     uint8_t pad_235[2];  /* zero padding */
     uint16_t field_1af0;
     uint16_t field_1af2;
     uint16_t field_1af4;
     uint16_t field_1af6;
-    uint32_t ptr_1af8;
+    uint32_t TechniChord_str_2_ptr;
     uint16_t field_1afc;
     uint8_t pad_236[2];  /* zero padding */
     char TechniChord_str_2[14];
@@ -1699,14 +1699,14 @@ typedef struct __attribute__((packed)) {
     uint16_t field_20c4;
     uint16_t field_20c6;
     uint8_t pad_287[4];  /* zero padding */
-    uint32_t ptr_20cc;
+    uint32_t Naka_PresentationRootState_ptr_2;
     uint16_t field_20d0;
     uint8_t pad_288[2];  /* zero padding */
     uint16_t field_20d4;
     uint16_t field_20d6;
     uint16_t field_20d8;
     uint16_t field_20da;
-    uint32_t ptr_20dc;
+    uint32_t FeaturePresentation_str_ptr;
     uint16_t field_20e0;
     uint8_t pad_289[2];  /* zero padding */
     char FeaturePresentation_str[22];
@@ -1770,11 +1770,11 @@ typedef struct __attribute__((packed)) {
     uint16_t field_2478;
     uint16_t field_247a;
     uint16_t field_247c;
-    uint32_t ptr_247e;
+    uint32_t NakaData_DescriptorPad1_ptr;
     char str_423[2];
     uint16_t field_2484;
     char P_str[2];
-    uint32_t ptr_2488;
+    uint32_t TONE_str_ptr;
     uint8_t pad_313[4];  /* zero padding */
     uint16_t field_2490;
     char TONE_str[6];
@@ -5042,7 +5042,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .pad_234 = { 0 },
 
-    .ptr_1ae8 = NAKA_ADDR(Naka_PresentationRootState),
+    .Naka_PresentationRootState_ptr = NAKA_ADDR(Naka_PresentationRootState),
 
     .field_1aec = 0x00F8,
 
@@ -5056,7 +5056,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .field_1af6 = 0x0003,
 
-    .ptr_1af8 = SELF(TechniChord_str_2),
+    .TechniChord_str_2_ptr = SELF(TechniChord_str_2),
 
     .field_1afc = 0x0018,
 
@@ -5647,7 +5647,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .pad_287 = { 0 },
 
-    .ptr_20cc = NAKA_ADDR(Naka_PresentationRootState),
+    .Naka_PresentationRootState_ptr_2 = NAKA_ADDR(Naka_PresentationRootState),
 
     .field_20d0 = 0x00FC,
 
@@ -5661,7 +5661,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .field_20da = 0x0003,
 
-    .ptr_20dc = SELF(FeaturePresentation_str),
+    .FeaturePresentation_str_ptr = SELF(FeaturePresentation_str),
 
     .field_20e0 = 0x00AB,
 
@@ -6022,7 +6022,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .field_247c = 0x0006,
 
-    .ptr_247e = NAKA_ADDR(NakaData_DescriptorPad1),
+    .NakaData_DescriptorPad1_ptr = NAKA_ADDR(NakaData_DescriptorPad1),
 
     .str_423 = ">",
 
@@ -6030,7 +6030,7 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .P_str = "P",
 
-    .ptr_2488 = SELF(TONE_str),
+    .TONE_str_ptr = SELF(TONE_str),
 
     .pad_313 = { 0 },
 

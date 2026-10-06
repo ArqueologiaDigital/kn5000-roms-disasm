@@ -138,7 +138,7 @@ typedef struct __attribute__((packed)) {
     char iduToshi_str[10];
     char iduMurai_str[10];
     char iduRoot_str[8];
-    uint32_t ptr_001c;
+    uint32_t True_str_ptr;
     uint16_t field_0020;
     uint8_t pad_0[2];  /* zero padding */
     uint32_t ptrs_0[4];  /* 4 pointers */
@@ -168,85 +168,85 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0087;
     uint16_t field_0089;
     uint8_t pad_8[5];  /* zero padding */
-    uint32_t ptr_0090;
+    uint32_t PT_Part2_str_ptr;
     uint16_t field_0094;
     uint8_t pad_9[2];  /* zero padding */
-    uint32_t ptr_0098;
+    uint32_t PT_Part3_str_ptr;
     uint16_t field_009c;
     uint8_t pad_10[2];  /* zero padding */
-    uint32_t ptr_00a0;
+    uint32_t PT_Part4_str_ptr;
     uint16_t field_00a4;
     uint8_t pad_11[2];  /* zero padding */
-    uint32_t ptr_00a8;
+    uint32_t PT_Part5_str_ptr;
     uint16_t field_00ac;
     uint8_t pad_12[2];  /* zero padding */
-    uint32_t ptr_00b0;
+    uint32_t PT_Part6_str_ptr;
     uint16_t field_00b4;
     uint8_t pad_13[2];  /* zero padding */
-    uint32_t ptr_00b8;
+    uint32_t PT_Part7_str_ptr;
     uint16_t field_00bc;
     uint8_t pad_14[2];  /* zero padding */
-    uint32_t ptr_00c0;
+    uint32_t PT_Part8_str_ptr;
     uint16_t field_00c4;
     uint8_t pad_15[2];  /* zero padding */
-    uint32_t ptr_00c8;
+    uint32_t PT_Part9_str_ptr;
     uint16_t field_00cc;
     uint8_t pad_16[2];  /* zero padding */
-    uint32_t ptr_00d0;
+    uint32_t PT_Part10_str_ptr;
     uint16_t field_00d4;
     uint8_t pad_17[2];  /* zero padding */
-    uint32_t ptr_00d8;
+    uint32_t PT_Part11_str_ptr;
     uint16_t field_00dc;
     uint8_t pad_18[2];  /* zero padding */
-    uint32_t ptr_00e0;
+    uint32_t PT_Part12_str_ptr;
     uint16_t field_00e4;
     uint8_t pad_19[2];  /* zero padding */
-    uint32_t ptr_00e8;
+    uint32_t PT_Part13_str_ptr;
     uint16_t field_00ec;
     uint8_t pad_20[2];  /* zero padding */
-    uint32_t ptr_00f0;
+    uint32_t PT_Part14_str_ptr;
     uint16_t field_00f4;
     uint8_t pad_21[2];  /* zero padding */
-    uint32_t ptr_00f8;
+    uint32_t PT_Part15_str_ptr;
     uint16_t field_00fc;
     uint8_t pad_22[2];  /* zero padding */
-    uint32_t ptr_0100;
+    uint32_t PT_Part16_str_ptr;
     uint16_t field_0104;
     uint8_t pad_23[2];  /* zero padding */
-    uint32_t ptr_0108;
+    uint32_t PT_Accomp1_str_ptr;
     uint16_t field_010c;
     uint8_t pad_24[2];  /* zero padding */
-    uint32_t ptr_0110;
+    uint32_t PT_Accomp2_str_ptr;
     uint16_t field_0114;
     uint8_t pad_25[2];  /* zero padding */
-    uint32_t ptr_0118;
+    uint32_t PT_Accomp3_str_ptr;
     uint16_t field_011c;
     uint8_t pad_26[2];  /* zero padding */
-    uint32_t ptr_0120;
+    uint32_t PT_Bass_str_ptr;
     uint16_t field_0124;
     uint8_t pad_27[2];  /* zero padding */
-    uint32_t ptr_0128;
+    uint32_t PT_Drum_str_ptr;
     uint16_t field_012c;
     uint8_t pad_28[2];  /* zero padding */
-    uint32_t ptr_0130;
+    uint32_t PT_Chord_str_ptr;
     uint16_t field_0134;
     uint8_t pad_29[2];  /* zero padding */
-    uint32_t ptr_0138;
+    uint32_t PT_RootBass_str_ptr;
     uint16_t field_013c;
     uint8_t pad_30[2];  /* zero padding */
-    uint32_t ptr_0140;
+    uint32_t PT_Msp1_str_ptr;
     uint16_t field_0144;
     uint8_t pad_31[2];  /* zero padding */
-    uint32_t ptr_0148;
+    uint32_t PT_Msp2_str_ptr;
     uint16_t field_014c;
     uint8_t pad_32[2];  /* zero padding */
-    uint32_t ptr_0150;
+    uint32_t PT_Control_str_ptr;
     uint16_t field_0154;
     uint8_t pad_33[2];  /* zero padding */
-    uint32_t ptr_0158;
+    uint32_t PT_Metronome_str_ptr;
     uint16_t field_015c;
     uint8_t pad_34[2];  /* zero padding */
-    uint32_t ptr_0160;
+    uint32_t PT_Microphone_str_ptr;
     uint16_t field_0164;
     uint8_t pad_35[2];  /* zero padding */
     uint32_t ptr_0168;
@@ -287,22 +287,22 @@ typedef struct __attribute__((packed)) {
     uint32_t ptrs_1[3];  /* 3 pointers */
     uint16_t field_02b6;
     uint8_t pad_38[2];  /* zero padding */
-    uint32_t ptr_02ba;
+    uint32_t TR_Track3_str_ptr;
     uint16_t field_02be;
     uint8_t pad_39[2];  /* zero padding */
-    uint32_t ptr_02c2;
+    uint32_t TR_Track4_str_ptr;
     uint16_t field_02c6;
     uint8_t pad_40[2];  /* zero padding */
-    uint32_t ptr_02ca;
+    uint32_t TR_Track5_str_ptr;
     uint16_t field_02ce;
     uint8_t pad_41[2];  /* zero padding */
-    uint32_t ptr_02d2;
+    uint32_t TR_Track6_str_ptr;
     uint16_t field_02d6;
     uint8_t pad_42[2];  /* zero padding */
-    uint32_t ptr_02da;
+    uint32_t TR_Track7_str_ptr;
     uint16_t field_02de;
     uint8_t pad_43[2];  /* zero padding */
-    uint32_t ptr_02e2;
+    uint32_t TR_Track8_str_ptr;
     uint16_t field_02e6;
     uint8_t pad_44[2];  /* zero padding */
     uint32_t ptr_02ea;
@@ -363,31 +363,31 @@ typedef struct __attribute__((packed)) {
     uint32_t ptrs_2[3];  /* 3 pointers */
     uint16_t field_03fe;
     uint8_t pad_55[2];  /* zero padding */
-    uint32_t ptr_0402;
+    uint32_t IT_Hold_str_ptr;
     uint16_t field_0406;
     uint8_t pad_56[2];  /* zero padding */
-    uint32_t ptr_040a;
+    uint32_t IT_1Sec_str_ptr;
     uint16_t field_040e;
     uint8_t pad_57[2];  /* zero padding */
-    uint32_t ptr_0412;
+    uint32_t IT_2Sec_str_ptr;
     uint16_t field_0416;
     uint8_t pad_58[2];  /* zero padding */
-    uint32_t ptr_041a;
+    uint32_t IT_3Sec_str_ptr;
     uint16_t field_041e;
     uint8_t pad_59[2];  /* zero padding */
-    uint32_t ptr_0422;
+    uint32_t IT_4Sec_str_ptr;
     uint16_t field_0426;
     uint8_t pad_60[2];  /* zero padding */
-    uint32_t ptr_042a;
+    uint32_t IT_5Sec_str_ptr;
     uint16_t field_042e;
     uint8_t pad_61[2];  /* zero padding */
-    uint32_t ptr_0432;
+    uint32_t IT_6Sec_str_ptr;
     uint16_t field_0436;
     uint8_t pad_62[2];  /* zero padding */
-    uint32_t ptr_043a;
+    uint32_t IT_7Sec_str_ptr;
     uint16_t field_043e;
     uint8_t pad_63[2];  /* zero padding */
-    uint32_t ptr_0442;
+    uint32_t IT_8Sec_str_ptr;
     uint16_t field_0446;
     uint8_t pad_64[2];  /* zero padding */
     uint32_t ptr_044a;
@@ -413,223 +413,223 @@ typedef struct __attribute__((packed)) {
     char IT_Hold_str[8];
     char IT_Default_str[12];
     char IT_Off_str[8];
-    uint32_t ptr_04d2;
+    uint32_t swordProc_ptr;
     uint8_t pad_68[2];  /* zero padding */
     uint16_t field_04d8;
-    uint32_t ptr_04da;
-    uint32_t ptr_04de;
+    uint32_t NakaProp_FontEntry0_ptr;
+    uint32_t uwordProc_ptr;
     uint8_t pad_69[2];  /* zero padding */
     uint16_t field_04e4;
     uint32_t ptr_04e6;
-    uint32_t ptr_04ea;
+    uint32_t ucharProc_ptr;
     uint8_t pad_70[2];  /* zero padding */
     uint16_t field_04f0;
-    uint32_t ptr_04f2;
-    uint32_t ptr_04f6;
+    uint32_t NakaProp_FontEntry1_ptr;
+    uint32_t scharProc_ptr;
     uint8_t pad_71[2];  /* zero padding */
     uint16_t field_04fc;
     uint32_t ptr_04fe;
-    uint32_t ptr_0502;
+    uint32_t slongProc_ptr;
     uint8_t pad_72[2];  /* zero padding */
     uint16_t field_0508;
-    uint32_t ptr_050a;
-    uint32_t ptr_050e;
+    uint32_t NakaProp_FontEntry2_ptr;
+    uint32_t ulongProc_ptr;
     uint8_t pad_73[2];  /* zero padding */
     uint16_t field_0514;
     uint32_t ptr_0516;
-    uint32_t ptr_051a;
+    uint32_t boolProc_ptr;
     uint16_t field_051e;
     uint16_t field_0520;
-    uint32_t ptr_0522;
-    uint32_t ptr_0526;
+    uint32_t NakaInst_False_ptr;
+    uint32_t ObjectIDProc_ptr;
     uint8_t pad_74[2];  /* zero padding */
     uint16_t field_052c;
     uint32_t ptr_052e;
-    uint32_t ptr_0532;
+    uint32_t pFuncProc_ptr;
     uint8_t pad_75[2];  /* zero padding */
     uint16_t field_0538;
-    uint32_t ptr_053a;
-    uint32_t ptr_053e;
+    uint32_t NakaProp_BoolEntry1_ptr;
+    uint32_t pProcProc_ptr;
     uint8_t pad_76[2];  /* zero padding */
     uint16_t field_0544;
     uint32_t ptr_0546;
-    uint32_t ptr_054a;
+    uint32_t pPropProc_ptr;
     uint8_t pad_77[2];  /* zero padding */
     uint16_t field_0550;
-    uint32_t ptr_0552;
-    uint32_t ptr_0556;
+    uint32_t NakaProp_BoolEntry2_ptr;
+    uint32_t pStringProc_ptr;
     uint8_t pad_78[2];  /* zero padding */
     uint16_t field_055c;
     uint32_t ptr_055e;
-    uint32_t ptr_0562;
+    uint32_t ClassIDProc_ptr;
     uint8_t pad_79[2];  /* zero padding */
     uint16_t field_0568;
-    uint32_t ptr_056a;
-    uint32_t ptr_056e;
+    uint32_t NakaProp_BoolEntry3_ptr;
+    uint32_t ScreenIDProc_ptr;
     uint8_t pad_80[2];  /* zero padding */
     uint16_t field_0574;
     uint32_t ptr_0576;
-    uint32_t ptr_057a;
+    uint32_t EventIDProc_ptr;
     uint8_t pad_81[2];  /* zero padding */
     uint16_t field_0580;
-    uint32_t ptr_0582;
-    uint32_t ptr_0586;
+    uint32_t NakaProp_BoolEntry4_ptr;
+    uint32_t RECTWProc_ptr;
     uint8_t pad_82[2];  /* zero padding */
     uint16_t field_058c;
     uint32_t ptr_058e;
-    uint32_t ptr_0592;
+    uint32_t RectX1Proc_ptr;
     uint8_t pad_83[2];  /* zero padding */
     uint16_t field_0598;
-    uint32_t ptr_059a;
-    uint32_t ptr_059e;
+    uint32_t NakaProp_BoolEntry5_ptr;
+    uint32_t RectY1Proc_ptr;
     uint8_t pad_84[2];  /* zero padding */
     uint16_t field_05a4;
     uint32_t ptr_05a6;
-    uint32_t ptr_05aa;
+    uint32_t RectX2Proc_ptr;
     uint8_t pad_85[2];  /* zero padding */
     uint16_t field_05b0;
-    uint32_t ptr_05b2;
-    uint32_t ptr_05b6;
+    uint32_t NakaProp_BoolEntry6_ptr;
+    uint32_t RectY2Proc_ptr;
     uint8_t pad_86[2];  /* zero padding */
     uint16_t field_05bc;
     uint32_t ptr_05be;
-    uint32_t ptr_05c2;
+    uint32_t POINTWProc_ptr;
     uint8_t pad_87[2];  /* zero padding */
     uint16_t field_05c8;
-    uint32_t ptr_05ca;
-    uint32_t ptr_05ce;
+    uint32_t NakaProp_BoolEntry7_ptr;
+    uint32_t PointXProc_ptr;
     uint8_t pad_88[2];  /* zero padding */
     uint16_t field_05d4;
     uint32_t ptr_05d6;
-    uint32_t ptr_05da;
+    uint32_t PointYProc_ptr;
     uint8_t pad_89[2];  /* zero padding */
     uint16_t field_05e0;
-    uint32_t ptr_05e2;
-    uint32_t ptr_05e6;
+    uint32_t NakaProp_BoolEntry8_ptr;
+    uint32_t StringProc_ptr;
     uint8_t pad_90[2];  /* zero padding */
     uint16_t field_05ec;
     uint32_t ptr_05ee;
-    uint32_t ptr_05f2;
+    uint32_t NameProc_ptr;
     uint8_t pad_91[2];  /* zero padding */
     uint16_t field_05f8;
-    uint32_t ptr_05fa;
-    uint32_t ptr_05fe;
+    uint32_t NakaProp_CFlagEntry_ptr;
+    uint32_t ConstFlagProc_ptr;
     uint16_t field_0602;
     uint16_t field_0604;
     uint32_t ptr_0606;
-    uint32_t ptr_060a;
+    uint32_t ViewIDProc_ptr;
     uint8_t pad_92[2];  /* zero padding */
     uint16_t field_0610;
-    uint32_t ptr_0612;
-    uint32_t ptr_0616;
+    uint32_t NakaProp_VisFlag_Header_ptr;
+    uint32_t uwordProc_ptr_2;
     uint8_t pad_93[2];  /* zero padding */
     uint16_t field_061c;
     uint32_t ptr_061e;
-    uint32_t ptr_0622;
+    uint32_t ViewFlagProc_ptr;
     uint16_t field_0626;
     uint16_t field_0628;
-    uint32_t ptr_062a;
-    uint32_t ptr_062e;
+    uint32_t NakaProp_VisFlag_Chain_ptr;
+    uint32_t ColorIDProc_ptr;
     uint16_t field_0632;
     uint16_t field_0634;
     uint32_t ptr_0636;
-    uint32_t ptr_063a;
+    uint32_t BorderIDProc_ptr;
     uint16_t field_063e;
     uint16_t field_0640;
-    uint32_t ptr_0642;
-    uint32_t ptr_0646;
+    uint32_t NakaProp_BorderDefs_ptr;
+    uint32_t ModeIDProc_ptr;
     uint8_t pad_94[2];  /* zero padding */
     uint16_t field_064c;
     uint32_t ptr_064e;
-    uint32_t ptr_0652;
+    uint32_t TitleIDProc_ptr;
     uint8_t pad_95[2];  /* zero padding */
     uint16_t field_0658;
-    uint32_t ptr_065a;
-    uint32_t ptr_065e;
+    uint32_t NakaProp_Align_Header_ptr;
+    uint32_t IconIDProc_ptr;
     uint8_t pad_96[2];  /* zero padding */
     uint16_t field_0664;
     uint32_t ptr_0666;
-    uint32_t ptr_066a;
+    uint32_t FontIDProc_ptr;
     uint8_t pad_97[2];  /* zero padding */
     uint16_t field_0670;
-    uint32_t ptr_0672;
-    uint32_t ptr_0676;
+    uint32_t NakaProp_Align_PtrEntry_ptr;
+    uint32_t AlignmentIDProc_ptr;
     uint16_t field_067a;
     uint16_t field_067c;
     uint32_t ptr_067e;
-    uint32_t ptr_0682;
+    uint32_t EditSwIDProc_ptr;
     uint16_t field_0686;
     uint16_t field_0688;
-    uint32_t ptr_068a;
-    uint32_t ptr_068e;
+    uint32_t NakaProp_EditSwitch_Chain_ptr;
+    uint32_t EditSwStyleIDProc_ptr;
     uint16_t field_0692;
     uint16_t field_0694;
     uint32_t ptr_0696;
-    uint32_t ptr_069a;
+    uint32_t LineModeIDProc_ptr;
     uint16_t field_069e;
     uint16_t field_06a0;
-    uint32_t ptr_06a2;
-    uint32_t ptr_06a6;
+    uint32_t NakaInst_LM_RightDown_ptr;
+    uint32_t FrameIDProc_ptr;
     uint16_t field_06aa;
     uint16_t field_06ac;
     uint32_t ptr_06ae;
-    uint32_t ptr_06b2;
+    uint32_t BitmapIDProc_ptr;
     uint8_t pad_98[2];  /* zero padding */
     uint16_t field_06b8;
-    uint32_t ptr_06ba;
-    uint32_t ptr_06be;
+    uint32_t NakaProp_Frame_Header_ptr;
+    uint32_t ApFuncIDProc_ptr;
     uint8_t pad_99[2];  /* zero padding */
     uint16_t field_06c4;
     uint32_t ptr_06c6;
-    uint32_t ptr_06ca;
+    uint32_t MainFuncIDProc_ptr;
     uint8_t pad_100[2];  /* zero padding */
     uint16_t field_06d0;
-    uint32_t ptr_06d2;
-    uint32_t ptr_06d6;
+    uint32_t NakaProp_Frame_Chain_ptr;
+    uint32_t UserIDProc_ptr;
     uint16_t field_06da;
     uint16_t field_06dc;
     uint32_t ptr_06de;
-    uint32_t ptr_06e2;
+    uint32_t pBoolProc_ptr;
     uint16_t field_06e6;
     uint16_t field_06e8;
-    uint32_t ptr_06ea;
-    uint32_t ptr_06ee;
+    uint32_t True_str_ptr_ptr;
+    uint32_t pSwordProc_ptr;
     uint8_t pad_101[2];  /* zero padding */
     uint16_t field_06f4;
     uint32_t ptr_06f6;
-    uint32_t ptr_06fa;
+    uint32_t pUwordProc_ptr;
     uint8_t pad_102[2];  /* zero padding */
     uint16_t field_0700;
     uint32_t ptr_0702;
-    uint32_t ptr_0706;
+    uint32_t pScharProc_ptr;
     uint8_t pad_103[2];  /* zero padding */
     uint16_t field_070c;
     uint32_t ptr_070e;
-    uint32_t ptr_0712;
+    uint32_t pUcharProc_ptr;
     uint8_t pad_104[2];  /* zero padding */
     uint16_t field_0718;
     uint32_t ptr_071a;
-    uint32_t ptr_071e;
+    uint32_t pSlongProc_ptr;
     uint8_t pad_105[2];  /* zero padding */
     uint16_t field_0724;
     uint32_t ptr_0726;
-    uint32_t ptr_072a;
+    uint32_t pUlongProc_ptr;
     uint8_t pad_106[2];  /* zero padding */
     uint16_t field_0730;
     uint32_t ptr_0732;
-    uint32_t ptr_0736;
+    uint32_t WindowIDProc_ptr;
     uint8_t pad_107[2];  /* zero padding */
     uint16_t field_073c;
     uint32_t ptr_073e;
-    uint32_t ptr_0742;
+    uint32_t PartIDProc_ptr;
     uint16_t field_0746;
     uint16_t field_0748;
     uint32_t ptr_074a;
-    uint32_t ptr_074e;
+    uint32_t TrackIDProc_ptr;
     uint16_t field_0752;
     uint16_t field_0754;
     uint32_t ptr_0756;
-    uint32_t ptr_075a;
+    uint32_t IntTimeIDProc_ptr;
     uint16_t field_075e;
     uint16_t field_0760;
     uint32_t ptrs_3[4];  /* 4 pointers */
@@ -3514,7 +3514,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .iduRoot_str = "iduRoot",
 
-    .ptr_001c = SELF(True_str),
+    .True_str_ptr = SELF(True_str),
 
     .field_0020 = 0x0001,
 
@@ -3579,163 +3579,163 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .pad_8 = { 0 },
 
-    .ptr_0090 = SELF(PT_Part2_str),
+    .PT_Part2_str_ptr = SELF(PT_Part2_str),
 
     .field_0094 = 0x0001,
 
     .pad_9 = { 0 },
 
-    .ptr_0098 = SELF(PT_Part3_str),
+    .PT_Part3_str_ptr = SELF(PT_Part3_str),
 
     .field_009c = 0x0002,
 
     .pad_10 = { 0 },
 
-    .ptr_00a0 = SELF(PT_Part4_str),
+    .PT_Part4_str_ptr = SELF(PT_Part4_str),
 
     .field_00a4 = 0x0003,
 
     .pad_11 = { 0 },
 
-    .ptr_00a8 = SELF(PT_Part5_str),
+    .PT_Part5_str_ptr = SELF(PT_Part5_str),
 
     .field_00ac = 0x0004,
 
     .pad_12 = { 0 },
 
-    .ptr_00b0 = SELF(PT_Part6_str),
+    .PT_Part6_str_ptr = SELF(PT_Part6_str),
 
     .field_00b4 = 0x0005,
 
     .pad_13 = { 0 },
 
-    .ptr_00b8 = SELF(PT_Part7_str),
+    .PT_Part7_str_ptr = SELF(PT_Part7_str),
 
     .field_00bc = 0x0006,
 
     .pad_14 = { 0 },
 
-    .ptr_00c0 = SELF(PT_Part8_str),
+    .PT_Part8_str_ptr = SELF(PT_Part8_str),
 
     .field_00c4 = 0x0007,
 
     .pad_15 = { 0 },
 
-    .ptr_00c8 = SELF(PT_Part9_str),
+    .PT_Part9_str_ptr = SELF(PT_Part9_str),
 
     .field_00cc = 0x0008,
 
     .pad_16 = { 0 },
 
-    .ptr_00d0 = SELF(PT_Part10_str),
+    .PT_Part10_str_ptr = SELF(PT_Part10_str),
 
     .field_00d4 = 0x0009,
 
     .pad_17 = { 0 },
 
-    .ptr_00d8 = SELF(PT_Part11_str),
+    .PT_Part11_str_ptr = SELF(PT_Part11_str),
 
     .field_00dc = 0x000a,
 
     .pad_18 = { 0 },
 
-    .ptr_00e0 = SELF(PT_Part12_str),
+    .PT_Part12_str_ptr = SELF(PT_Part12_str),
 
     .field_00e4 = 0x000b,
 
     .pad_19 = { 0 },
 
-    .ptr_00e8 = SELF(PT_Part13_str),
+    .PT_Part13_str_ptr = SELF(PT_Part13_str),
 
     .field_00ec = 0x000c,
 
     .pad_20 = { 0 },
 
-    .ptr_00f0 = SELF(PT_Part14_str),
+    .PT_Part14_str_ptr = SELF(PT_Part14_str),
 
     .field_00f4 = 0x000d,
 
     .pad_21 = { 0 },
 
-    .ptr_00f8 = SELF(PT_Part15_str),
+    .PT_Part15_str_ptr = SELF(PT_Part15_str),
 
     .field_00fc = 0x000e,
 
     .pad_22 = { 0 },
 
-    .ptr_0100 = SELF(PT_Part16_str),
+    .PT_Part16_str_ptr = SELF(PT_Part16_str),
 
     .field_0104 = 0x000f,
 
     .pad_23 = { 0 },
 
-    .ptr_0108 = SELF(PT_Accomp1_str),
+    .PT_Accomp1_str_ptr = SELF(PT_Accomp1_str),
 
     .field_010c = 0x0010,
 
     .pad_24 = { 0 },
 
-    .ptr_0110 = SELF(PT_Accomp2_str),
+    .PT_Accomp2_str_ptr = SELF(PT_Accomp2_str),
 
     .field_0114 = 0x0011,
 
     .pad_25 = { 0 },
 
-    .ptr_0118 = SELF(PT_Accomp3_str),
+    .PT_Accomp3_str_ptr = SELF(PT_Accomp3_str),
 
     .field_011c = 0x0012,
 
     .pad_26 = { 0 },
 
-    .ptr_0120 = SELF(PT_Bass_str),
+    .PT_Bass_str_ptr = SELF(PT_Bass_str),
 
     .field_0124 = 0x0013,
 
     .pad_27 = { 0 },
 
-    .ptr_0128 = SELF(PT_Drum_str),
+    .PT_Drum_str_ptr = SELF(PT_Drum_str),
 
     .field_012c = 0x0014,
 
     .pad_28 = { 0 },
 
-    .ptr_0130 = SELF(PT_Chord_str),
+    .PT_Chord_str_ptr = SELF(PT_Chord_str),
 
     .field_0134 = 0x0015,
 
     .pad_29 = { 0 },
 
-    .ptr_0138 = SELF(PT_RootBass_str),
+    .PT_RootBass_str_ptr = SELF(PT_RootBass_str),
 
     .field_013c = 0x0016,
 
     .pad_30 = { 0 },
 
-    .ptr_0140 = SELF(PT_Msp1_str),
+    .PT_Msp1_str_ptr = SELF(PT_Msp1_str),
 
     .field_0144 = 0x0017,
 
     .pad_31 = { 0 },
 
-    .ptr_0148 = SELF(PT_Msp2_str),
+    .PT_Msp2_str_ptr = SELF(PT_Msp2_str),
 
     .field_014c = 0x0018,
 
     .pad_32 = { 0 },
 
-    .ptr_0150 = SELF(PT_Control_str),
+    .PT_Control_str_ptr = SELF(PT_Control_str),
 
     .field_0154 = 0x0019,
 
     .pad_33 = { 0 },
 
-    .ptr_0158 = SELF(PT_Metronome_str),
+    .PT_Metronome_str_ptr = SELF(PT_Metronome_str),
 
     .field_015c = 0x001a,
 
     .pad_34 = { 0 },
 
-    .ptr_0160 = SELF(PT_Microphone_str),
+    .PT_Microphone_str_ptr = SELF(PT_Microphone_str),
 
     .field_0164 = 0x001b,
 
@@ -3821,37 +3821,37 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .pad_38 = { 0 },
 
-    .ptr_02ba = SELF(TR_Track3_str),
+    .TR_Track3_str_ptr = SELF(TR_Track3_str),
 
     .field_02be = 0x0002,
 
     .pad_39 = { 0 },
 
-    .ptr_02c2 = SELF(TR_Track4_str),
+    .TR_Track4_str_ptr = SELF(TR_Track4_str),
 
     .field_02c6 = 0x0003,
 
     .pad_40 = { 0 },
 
-    .ptr_02ca = SELF(TR_Track5_str),
+    .TR_Track5_str_ptr = SELF(TR_Track5_str),
 
     .field_02ce = 0x0004,
 
     .pad_41 = { 0 },
 
-    .ptr_02d2 = SELF(TR_Track6_str),
+    .TR_Track6_str_ptr = SELF(TR_Track6_str),
 
     .field_02d6 = 0x0005,
 
     .pad_42 = { 0 },
 
-    .ptr_02da = SELF(TR_Track7_str),
+    .TR_Track7_str_ptr = SELF(TR_Track7_str),
 
     .field_02de = 0x0006,
 
     .pad_43 = { 0 },
 
-    .ptr_02e2 = SELF(TR_Track8_str),
+    .TR_Track8_str_ptr = SELF(TR_Track8_str),
 
     .field_02e6 = 0x0007,
 
@@ -3977,55 +3977,55 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .pad_55 = { 0 },
 
-    .ptr_0402 = SELF(IT_Hold_str),
+    .IT_Hold_str_ptr = SELF(IT_Hold_str),
 
     .field_0406 = 0x0002,
 
     .pad_56 = { 0 },
 
-    .ptr_040a = SELF(IT_1Sec_str),
+    .IT_1Sec_str_ptr = SELF(IT_1Sec_str),
 
     .field_040e = 0x0003,
 
     .pad_57 = { 0 },
 
-    .ptr_0412 = SELF(IT_2Sec_str),
+    .IT_2Sec_str_ptr = SELF(IT_2Sec_str),
 
     .field_0416 = 0x0004,
 
     .pad_58 = { 0 },
 
-    .ptr_041a = SELF(IT_3Sec_str),
+    .IT_3Sec_str_ptr = SELF(IT_3Sec_str),
 
     .field_041e = 0x0005,
 
     .pad_59 = { 0 },
 
-    .ptr_0422 = SELF(IT_4Sec_str),
+    .IT_4Sec_str_ptr = SELF(IT_4Sec_str),
 
     .field_0426 = 0x0006,
 
     .pad_60 = { 0 },
 
-    .ptr_042a = SELF(IT_5Sec_str),
+    .IT_5Sec_str_ptr = SELF(IT_5Sec_str),
 
     .field_042e = 0x0007,
 
     .pad_61 = { 0 },
 
-    .ptr_0432 = SELF(IT_6Sec_str),
+    .IT_6Sec_str_ptr = SELF(IT_6Sec_str),
 
     .field_0436 = 0x0008,
 
     .pad_62 = { 0 },
 
-    .ptr_043a = SELF(IT_7Sec_str),
+    .IT_7Sec_str_ptr = SELF(IT_7Sec_str),
 
     .field_043e = 0x0009,
 
     .pad_63 = { 0 },
 
-    .ptr_0442 = SELF(IT_8Sec_str),
+    .IT_8Sec_str_ptr = SELF(IT_8Sec_str),
 
     .field_0446 = 0x000a,
 
@@ -4077,15 +4077,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .IT_Off_str = ALIGNED_STRING("IT_Off"),
 
-    .ptr_04d2 = NAKA_ADDR(swordProc),
+    .swordProc_ptr = NAKA_ADDR(swordProc),
 
     .pad_68 = { 0 },
 
     .field_04d8 = 0x0002,
 
-    .ptr_04da = NAKA_ADDR(NakaProp_FontEntry0),
+    .NakaProp_FontEntry0_ptr = NAKA_ADDR(NakaProp_FontEntry0),
 
-    .ptr_04de = NAKA_ADDR(uwordProc),
+    .uwordProc_ptr = NAKA_ADDR(uwordProc),
 
     .pad_69 = { 0 },
 
@@ -4093,15 +4093,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_04e6 = 0x00eb67e8,
 
-    .ptr_04ea = NAKA_ADDR(ucharProc),
+    .ucharProc_ptr = NAKA_ADDR(ucharProc),
 
     .pad_70 = { 0 },
 
     .field_04f0 = 0x0001,
 
-    .ptr_04f2 = NAKA_ADDR(NakaProp_FontEntry1),
+    .NakaProp_FontEntry1_ptr = NAKA_ADDR(NakaProp_FontEntry1),
 
-    .ptr_04f6 = NAKA_ADDR(scharProc),
+    .scharProc_ptr = NAKA_ADDR(scharProc),
 
     .pad_71 = { 0 },
 
@@ -4109,15 +4109,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_04fe = 0x00eb67fc,
 
-    .ptr_0502 = NAKA_ADDR(slongProc),
+    .slongProc_ptr = NAKA_ADDR(slongProc),
 
     .pad_72 = { 0 },
 
     .field_0508 = 0x0004,
 
-    .ptr_050a = NAKA_ADDR(NakaProp_FontEntry2),
+    .NakaProp_FontEntry2_ptr = NAKA_ADDR(NakaProp_FontEntry2),
 
-    .ptr_050e = NAKA_ADDR(ulongProc),
+    .ulongProc_ptr = NAKA_ADDR(ulongProc),
 
     .pad_73 = { 0 },
 
@@ -4125,15 +4125,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_0516 = 0x00eb6810,
 
-    .ptr_051a = NAKA_ADDR(boolProc),
+    .boolProc_ptr = NAKA_ADDR(boolProc),
 
     .field_051e = 0x0002,
 
     .field_0520 = 0x0002,
 
-    .ptr_0522 = NAKA_ADDR(NakaInst_False),
+    .NakaInst_False_ptr = NAKA_ADDR(NakaInst_False),
 
-    .ptr_0526 = NAKA_ADDR(ObjectIDProc),
+    .ObjectIDProc_ptr = NAKA_ADDR(ObjectIDProc),
 
     .pad_74 = { 0 },
 
@@ -4141,15 +4141,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_052e = 0x00eb6840,
 
-    .ptr_0532 = NAKA_ADDR(pFuncProc),
+    .pFuncProc_ptr = NAKA_ADDR(pFuncProc),
 
     .pad_75 = { 0 },
 
     .field_0538 = 0x0004,
 
-    .ptr_053a = NAKA_ADDR(NakaProp_BoolEntry1),
+    .NakaProp_BoolEntry1_ptr = NAKA_ADDR(NakaProp_BoolEntry1),
 
-    .ptr_053e = NAKA_ADDR(pProcProc),
+    .pProcProc_ptr = NAKA_ADDR(pProcProc),
 
     .pad_76 = { 0 },
 
@@ -4157,15 +4157,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_0546 = 0x00eb6854,
 
-    .ptr_054a = NAKA_ADDR(pPropProc),
+    .pPropProc_ptr = NAKA_ADDR(pPropProc),
 
     .pad_77 = { 0 },
 
     .field_0550 = 0x0004,
 
-    .ptr_0552 = NAKA_ADDR(NakaProp_BoolEntry2),
+    .NakaProp_BoolEntry2_ptr = NAKA_ADDR(NakaProp_BoolEntry2),
 
-    .ptr_0556 = NAKA_ADDR(pStringProc),
+    .pStringProc_ptr = NAKA_ADDR(pStringProc),
 
     .pad_78 = { 0 },
 
@@ -4173,15 +4173,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_055e = 0x00eb6868,
 
-    .ptr_0562 = NAKA_ADDR(ClassIDProc),
+    .ClassIDProc_ptr = NAKA_ADDR(ClassIDProc),
 
     .pad_79 = { 0 },
 
     .field_0568 = 0x0004,
 
-    .ptr_056a = NAKA_ADDR(NakaProp_BoolEntry3),
+    .NakaProp_BoolEntry3_ptr = NAKA_ADDR(NakaProp_BoolEntry3),
 
-    .ptr_056e = NAKA_ADDR(ScreenIDProc),
+    .ScreenIDProc_ptr = NAKA_ADDR(ScreenIDProc),
 
     .pad_80 = { 0 },
 
@@ -4189,15 +4189,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_0576 = 0x00eb687c,
 
-    .ptr_057a = NAKA_ADDR(EventIDProc),
+    .EventIDProc_ptr = NAKA_ADDR(EventIDProc),
 
     .pad_81 = { 0 },
 
     .field_0580 = 0x0004,
 
-    .ptr_0582 = NAKA_ADDR(NakaProp_BoolEntry4),
+    .NakaProp_BoolEntry4_ptr = NAKA_ADDR(NakaProp_BoolEntry4),
 
-    .ptr_0586 = NAKA_ADDR(RECTWProc),
+    .RECTWProc_ptr = NAKA_ADDR(RECTWProc),
 
     .pad_82 = { 0 },
 
@@ -4205,15 +4205,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_058e = 0x00eb6890,
 
-    .ptr_0592 = NAKA_ADDR(RectX1Proc),
+    .RectX1Proc_ptr = NAKA_ADDR(RectX1Proc),
 
     .pad_83 = { 0 },
 
     .field_0598 = 0x0002,
 
-    .ptr_059a = NAKA_ADDR(NakaProp_BoolEntry5),
+    .NakaProp_BoolEntry5_ptr = NAKA_ADDR(NakaProp_BoolEntry5),
 
-    .ptr_059e = NAKA_ADDR(RectY1Proc),
+    .RectY1Proc_ptr = NAKA_ADDR(RectY1Proc),
 
     .pad_84 = { 0 },
 
@@ -4221,15 +4221,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_05a6 = 0x00eb68a4,
 
-    .ptr_05aa = NAKA_ADDR(RectX2Proc),
+    .RectX2Proc_ptr = NAKA_ADDR(RectX2Proc),
 
     .pad_85 = { 0 },
 
     .field_05b0 = 0x0002,
 
-    .ptr_05b2 = NAKA_ADDR(NakaProp_BoolEntry6),
+    .NakaProp_BoolEntry6_ptr = NAKA_ADDR(NakaProp_BoolEntry6),
 
-    .ptr_05b6 = NAKA_ADDR(RectY2Proc),
+    .RectY2Proc_ptr = NAKA_ADDR(RectY2Proc),
 
     .pad_86 = { 0 },
 
@@ -4237,15 +4237,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_05be = 0x00eb68b8,
 
-    .ptr_05c2 = NAKA_ADDR(POINTWProc),
+    .POINTWProc_ptr = NAKA_ADDR(POINTWProc),
 
     .pad_87 = { 0 },
 
     .field_05c8 = 0x0004,
 
-    .ptr_05ca = NAKA_ADDR(NakaProp_BoolEntry7),
+    .NakaProp_BoolEntry7_ptr = NAKA_ADDR(NakaProp_BoolEntry7),
 
-    .ptr_05ce = NAKA_ADDR(PointXProc),
+    .PointXProc_ptr = NAKA_ADDR(PointXProc),
 
     .pad_88 = { 0 },
 
@@ -4253,15 +4253,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_05d6 = 0x00eb68cc,
 
-    .ptr_05da = NAKA_ADDR(PointYProc),
+    .PointYProc_ptr = NAKA_ADDR(PointYProc),
 
     .pad_89 = { 0 },
 
     .field_05e0 = 0x0002,
 
-    .ptr_05e2 = NAKA_ADDR(NakaProp_BoolEntry8),
+    .NakaProp_BoolEntry8_ptr = NAKA_ADDR(NakaProp_BoolEntry8),
 
-    .ptr_05e6 = NAKA_ADDR(StringProc),
+    .StringProc_ptr = NAKA_ADDR(StringProc),
 
     .pad_90 = { 0 },
 
@@ -4269,15 +4269,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_05ee = 0x00eb68e0,
 
-    .ptr_05f2 = NAKA_ADDR(NameProc),
+    .NameProc_ptr = NAKA_ADDR(NameProc),
 
     .pad_91 = { 0 },
 
     .field_05f8 = 0x0004,
 
-    .ptr_05fa = NAKA_ADDR(NakaProp_CFlagEntry),
+    .NakaProp_CFlagEntry_ptr = NAKA_ADDR(NakaProp_CFlagEntry),
 
-    .ptr_05fe = NAKA_ADDR(ConstFlagProc),
+    .ConstFlagProc_ptr = NAKA_ADDR(ConstFlagProc),
 
     .field_0602 = 0x0002,
 
@@ -4285,15 +4285,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_0606 = 0x00eb68f4,
 
-    .ptr_060a = NAKA_ADDR(ViewIDProc),
+    .ViewIDProc_ptr = NAKA_ADDR(ViewIDProc),
 
     .pad_92 = { 0 },
 
     .field_0610 = 0x0002,
 
-    .ptr_0612 = NAKA_ADDR(NakaProp_VisFlag_Header),
+    .NakaProp_VisFlag_Header_ptr = NAKA_ADDR(NakaProp_VisFlag_Header),
 
-    .ptr_0616 = NAKA_ADDR(uwordProc),
+    .uwordProc_ptr_2 = NAKA_ADDR(uwordProc),
 
     .pad_93 = { 0 },
 
@@ -4301,15 +4301,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_061e = 0x00eb67e8,
 
-    .ptr_0622 = NAKA_ADDR(ViewFlagProc),
+    .ViewFlagProc_ptr = NAKA_ADDR(ViewFlagProc),
 
     .field_0626 = 0x0006,
 
     .field_0628 = 0x0002,
 
-    .ptr_062a = NAKA_ADDR(NakaProp_VisFlag_Chain),
+    .NakaProp_VisFlag_Chain_ptr = NAKA_ADDR(NakaProp_VisFlag_Chain),
 
-    .ptr_062e = NAKA_ADDR(ColorIDProc),
+    .ColorIDProc_ptr = NAKA_ADDR(ColorIDProc),
 
     .field_0632 = 0x001d,
 
@@ -4317,15 +4317,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_0636 = 0x00eb69aa,
 
-    .ptr_063a = NAKA_ADDR(BorderIDProc),
+    .BorderIDProc_ptr = NAKA_ADDR(BorderIDProc),
 
     .field_063e = 0x0014,
 
     .field_0640 = 0x0002,
 
-    .ptr_0642 = NAKA_ADDR(NakaProp_BorderDefs),
+    .NakaProp_BorderDefs_ptr = NAKA_ADDR(NakaProp_BorderDefs),
 
-    .ptr_0646 = NAKA_ADDR(ModeIDProc),
+    .ModeIDProc_ptr = NAKA_ADDR(ModeIDProc),
 
     .pad_94 = { 0 },
 
@@ -4333,15 +4333,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_064e = 0x00eb6d62,
 
-    .ptr_0652 = NAKA_ADDR(TitleIDProc),
+    .TitleIDProc_ptr = NAKA_ADDR(TitleIDProc),
 
     .pad_95 = { 0 },
 
     .field_0658 = 0x0004,
 
-    .ptr_065a = NAKA_ADDR(NakaProp_Align_Header),
+    .NakaProp_Align_Header_ptr = NAKA_ADDR(NakaProp_Align_Header),
 
-    .ptr_065e = NAKA_ADDR(IconIDProc),
+    .IconIDProc_ptr = NAKA_ADDR(IconIDProc),
 
     .pad_96 = { 0 },
 
@@ -4349,15 +4349,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_0666 = 0x00eb6d76,
 
-    .ptr_066a = NAKA_ADDR(FontIDProc),
+    .FontIDProc_ptr = NAKA_ADDR(FontIDProc),
 
     .pad_97 = { 0 },
 
     .field_0670 = 0x0004,
 
-    .ptr_0672 = NAKA_ADDR(NakaProp_Align_PtrEntry),
+    .NakaProp_Align_PtrEntry_ptr = NAKA_ADDR(NakaProp_Align_PtrEntry),
 
-    .ptr_0676 = NAKA_ADDR(AlignmentIDProc),
+    .AlignmentIDProc_ptr = NAKA_ADDR(AlignmentIDProc),
 
     .field_067a = 0x0003,
 
@@ -4365,15 +4365,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_067e = 0x00eb6d8a,
 
-    .ptr_0682 = NAKA_ADDR(EditSwIDProc),
+    .EditSwIDProc_ptr = NAKA_ADDR(EditSwIDProc),
 
     .field_0686 = 0x0014,
 
     .field_0688 = 0x0002,
 
-    .ptr_068a = NAKA_ADDR(NakaProp_EditSwitch_Chain),
+    .NakaProp_EditSwitch_Chain_ptr = NAKA_ADDR(NakaProp_EditSwitch_Chain),
 
-    .ptr_068e = NAKA_ADDR(EditSwStyleIDProc),
+    .EditSwStyleIDProc_ptr = NAKA_ADDR(EditSwStyleIDProc),
 
     .field_0692 = 0x0011,
 
@@ -4381,15 +4381,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_0696 = 0x00eb6f54,
 
-    .ptr_069a = NAKA_ADDR(LineModeIDProc),
+    .LineModeIDProc_ptr = NAKA_ADDR(LineModeIDProc),
 
     .field_069e = 0x0002,
 
     .field_06a0 = 0x0001,
 
-    .ptr_06a2 = NAKA_ADDR(NakaInst_LM_RightDown),
+    .NakaInst_LM_RightDown_ptr = NAKA_ADDR(NakaInst_LM_RightDown),
 
-    .ptr_06a6 = NAKA_ADDR(FrameIDProc),
+    .FrameIDProc_ptr = NAKA_ADDR(FrameIDProc),
 
     .field_06aa = 0x0002,
 
@@ -4397,15 +4397,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_06ae = 0x00eb70ae,
 
-    .ptr_06b2 = NAKA_ADDR(BitmapIDProc),
+    .BitmapIDProc_ptr = NAKA_ADDR(BitmapIDProc),
 
     .pad_98 = { 0 },
 
     .field_06b8 = 0x0004,
 
-    .ptr_06ba = NAKA_ADDR(NakaProp_Frame_Header),
+    .NakaProp_Frame_Header_ptr = NAKA_ADDR(NakaProp_Frame_Header),
 
-    .ptr_06be = NAKA_ADDR(ApFuncIDProc),
+    .ApFuncIDProc_ptr = NAKA_ADDR(ApFuncIDProc),
 
     .pad_99 = { 0 },
 
@@ -4413,15 +4413,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_06c6 = 0x00eb70e4,
 
-    .ptr_06ca = NAKA_ADDR(MainFuncIDProc),
+    .MainFuncIDProc_ptr = NAKA_ADDR(MainFuncIDProc),
 
     .pad_100 = { 0 },
 
     .field_06d0 = 0x0004,
 
-    .ptr_06d2 = NAKA_ADDR(NakaProp_Frame_Chain),
+    .NakaProp_Frame_Chain_ptr = NAKA_ADDR(NakaProp_Frame_Chain),
 
-    .ptr_06d6 = NAKA_ADDR(UserIDProc),
+    .UserIDProc_ptr = NAKA_ADDR(UserIDProc),
 
     .field_06da = 0x000d,
 
@@ -4429,15 +4429,15 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_06de = 0x00eb70f8,
 
-    .ptr_06e2 = NAKA_ADDR(pBoolProc),
+    .pBoolProc_ptr = NAKA_ADDR(pBoolProc),
 
     .field_06e6 = 0x0002,
 
     .field_06e8 = 0x0004,
 
-    .ptr_06ea = SELF(ptr_001c),
+    .True_str_ptr_ptr = SELF(True_str_ptr),
 
-    .ptr_06ee = NAKA_ADDR(pSwordProc),
+    .pSwordProc_ptr = NAKA_ADDR(pSwordProc),
 
     .pad_101 = { 0 },
 
@@ -4445,7 +4445,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_06f6 = SELF(ptr_0042),
 
-    .ptr_06fa = NAKA_ADDR(pUwordProc),
+    .pUwordProc_ptr = NAKA_ADDR(pUwordProc),
 
     .pad_102 = { 0 },
 
@@ -4453,7 +4453,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_0702 = 0x00eb720a,
 
-    .ptr_0706 = NAKA_ADDR(pScharProc),
+    .pScharProc_ptr = NAKA_ADDR(pScharProc),
 
     .pad_103 = { 0 },
 
@@ -4461,7 +4461,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_070e = 0x00eb7214,
 
-    .ptr_0712 = NAKA_ADDR(pUcharProc),
+    .pUcharProc_ptr = NAKA_ADDR(pUcharProc),
 
     .pad_104 = { 0 },
 
@@ -4469,7 +4469,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_071a = 0x00eb721e,
 
-    .ptr_071e = NAKA_ADDR(pSlongProc),
+    .pSlongProc_ptr = NAKA_ADDR(pSlongProc),
 
     .pad_105 = { 0 },
 
@@ -4477,7 +4477,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_0726 = 0x00eb7228,
 
-    .ptr_072a = NAKA_ADDR(pUlongProc),
+    .pUlongProc_ptr = NAKA_ADDR(pUlongProc),
 
     .pad_106 = { 0 },
 
@@ -4485,7 +4485,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_0732 = 0x00eb7232,
 
-    .ptr_0736 = NAKA_ADDR(WindowIDProc),
+    .WindowIDProc_ptr = NAKA_ADDR(WindowIDProc),
 
     .pad_107 = { 0 },
 
@@ -4493,7 +4493,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_073e = 0x00eb723c,
 
-    .ptr_0742 = NAKA_ADDR(PartIDProc),
+    .PartIDProc_ptr = NAKA_ADDR(PartIDProc),
 
     .field_0746 = 0x001d,
 
@@ -4501,7 +4501,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_074a = 0x00eb7246,
 
-    .ptr_074e = NAKA_ADDR(TrackIDProc),
+    .TrackIDProc_ptr = NAKA_ADDR(TrackIDProc),
 
     .field_0752 = 0x0011,
 
@@ -4509,7 +4509,7 @@ const naka_style_bitmaps_t naka_style_bitmaps_data
 
     .ptr_0756 = SELF(ptrs_1),
 
-    .ptr_075a = NAKA_ADDR(IntTimeIDProc),
+    .IntTimeIDProc_ptr = NAKA_ADDR(IntTimeIDProc),
 
     .field_075e = 0x000d,
 

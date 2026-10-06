@@ -3485,7 +3485,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_8e4e;
     uint16_t field_8e50;
     uint16_t field_8e52;
-    uint32_t ptr_8e54;
+    uint32_t NakaData_DescriptorZero_ptr;
     uint16_t field_8e58;
     char q_str[2];
     char p_str[2];
@@ -17141,7 +17141,7 @@ const naka_effects_seq_t naka_effects_seq_data
 
     .field_8e52 = 0x00D8,
 
-    .ptr_8e54 = NAKA_ADDR(NakaData_DescriptorZero),
+    .NakaData_DescriptorZero_ptr = NAKA_ADDR(NakaData_DescriptorZero),
 
     .field_8e58 = 0x00E6,
 

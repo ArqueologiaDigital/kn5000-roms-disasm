@@ -854,7 +854,7 @@ typedef struct __attribute__((packed)) {
     char str_368[2];
     char str_369[2];
     char TEST2_str[6];
-    uint32_t ptr_1f6a;
+    uint32_t TEST3_str_ptr;
     uint32_t ptr_1f6e;
     char str_371[2];
     char TEST3_str[6];
@@ -943,7 +943,7 @@ typedef struct __attribute__((packed)) {
     char str_452[2];
     char str_453[2];
     char TEST6_str[6];
-    uint32_t ptr_21a2;
+    uint32_t EXT_str_ptr;
     uint32_t ptr_21a6;
     char str_455[2];
     char EXT_str[4];
@@ -1298,7 +1298,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_258e;
     uint16_t field_2590;
     uint16_t field_2592;
-    uint32_t ptr_2594;
+    uint32_t NakaData_FileScreenDispatch_ptr;
     uint16_t field_2598;
     uint16_t field_259a;
     uint16_t field_259c;
@@ -1649,7 +1649,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_2864;
     uint8_t pad_72[2];  /* zero padding */
     uint32_t ptr_2868;
-    uint32_t ptr_286c;
+    uint32_t NakaData_StyleBitmapPad_ptr;
     uint8_t pad_73[2];  /* zero padding */
     uint32_t ptr_2872;
     uint32_t ptr_2876;
@@ -2012,7 +2012,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_2c11;
     uint32_t ptr_2c13;
     uint16_t field_2c17;
-    uint32_t ptr_2c19;
+    uint32_t DataBuf_Data_FormatDispatch_ptr;
     uint16_t field_2c1d;
     uint32_t ptr_2c1f;
     char str_509[2];
@@ -2219,13 +2219,13 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_2e76;
     uint16_t field_2e7a;
     uint16_t field_2e7c;
-    uint32_t ptr_2e7e;
+    uint32_t Encoder_AlignByte_ptr;
     uint16_t field_2e82;
     uint16_t field_2e84;
     uint32_t ptr_2e86;
     uint16_t field_2e8a;
     uint16_t field_2e8c;
-    uint32_t ptr_2e8e;
+    uint32_t Encoder_AlignByte_ptr_2;
     char H_str_4[2];
     uint16_t field_2e94;
     uint32_t ptr_2e96;
@@ -2249,13 +2249,13 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_2ec6;
     uint16_t field_2eca;
     uint16_t field_2ecc;
-    uint32_t ptr_2ece;
+    uint32_t Encoder_AlignByte_ptr_3;
     uint16_t field_2ed2;
     uint16_t field_2ed4;
     uint32_t ptr_2ed6;
     uint16_t field_2eda;
     uint16_t field_2edc;
-    uint32_t ptr_2ede;
+    uint32_t Encoder_AlignByte_ptr_4;
     uint16_t field_2ee2;
     uint16_t field_2ee4;
     uint32_t ptr_2ee6;
@@ -2276,7 +2276,7 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_2f0e;
     uint16_t field_2f12;
     uint16_t field_2f14;
-    uint32_t ptr_2f16;
+    uint32_t Encoder_AlignByte_ptr_5;
     uint16_t field_2f1a;
     uint16_t field_2f1c;
     uint32_t ptr_2f1e;
@@ -2288,7 +2288,7 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_2f2e;
     uint16_t field_2f32;
     uint16_t field_2f34;
-    uint32_t ptr_2f36;
+    uint32_t Encoder_AlignByte_ptr_6;
     uint16_t field_2f3a;
     uint16_t field_2f3c;
     uint32_t ptr_2f3e;
@@ -2303,13 +2303,13 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_2f56;
     uint16_t field_2f5a;
     uint16_t field_2f5c;
-    uint32_t ptr_2f5e;
+    uint32_t Encoder_AlignByte_ptr_7;
     uint16_t field_2f62;
     uint16_t field_2f64;
     uint32_t ptr_2f66;
     uint16_t field_2f6a;
     uint16_t field_2f6c;
-    uint32_t ptr_2f6e;
+    uint32_t Encoder_AlignByte_ptr_8;
     uint16_t field_2f72;
     uint16_t field_2f74;
     uint32_t ptr_2f76;
@@ -2324,37 +2324,37 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_2f8e;
     uint16_t field_2f92;
     uint16_t field_2f94;
-    uint32_t ptr_2f96;
+    uint32_t Encoder_AlignByte_ptr_9;
     uint16_t field_2f9a;
     uint16_t field_2f9c;
     uint32_t ptr_2f9e;
     uint16_t field_2fa2;
     uint16_t field_2fa4;
-    uint32_t ptr_2fa6;
+    uint32_t Encoder_AlignByte_ptr_10;
     uint16_t field_2faa;
     uint16_t field_2fac;
     uint32_t ptr_2fae;
     uint16_t field_2fb2;
     uint16_t field_2fb4;
-    uint32_t ptr_2fb6;
+    uint32_t Encoder_AlignByte_ptr_11;
     uint16_t field_2fba;
     uint16_t field_2fbc;
     uint32_t ptr_2fbe;
     uint16_t field_2fc2;
     uint16_t field_2fc4;
-    uint32_t ptr_2fc6;
+    uint32_t Encoder_AlignByte_ptr_12;
     char H_str_5[2];
     char str_537[2];
     uint32_t ptr_2fce;
     uint16_t field_2fd2;
     uint16_t field_2fd4;
-    uint32_t ptr_2fd6;
+    uint32_t Encoder_AlignByte_ptr_13;
     uint16_t field_2fda;
     char str_538[2];
     uint32_t ptr_2fde;
     uint16_t field_2fe2;
     uint16_t field_2fe4;
-    uint32_t ptr_2fe6;
+    uint32_t Encoder_AlignByte_ptr_14;
     uint16_t field_2fea;
     uint16_t field_2fec;
     uint32_t ptr_2fee;
@@ -2381,7 +2381,7 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_3026;
     uint16_t field_302a;
     uint16_t field_302c;
-    uint32_t ptr_302e;
+    uint32_t Encoder_AlignByte_ptr_15;
     uint16_t field_3032;
     uint16_t field_3034;
     uint32_t ptr_3036;
@@ -2408,7 +2408,7 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_306e;
     uint16_t field_3072;
     uint16_t field_3074;
-    uint32_t ptr_3076;
+    uint32_t Encoder_AlignByte_ptr_16;
     uint16_t field_307a;
     uint16_t field_307c;
     uint32_t ptr_307e;
@@ -2432,7 +2432,7 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_30ae;
     uint16_t field_30b2;
     uint16_t field_30b4;
-    uint32_t ptr_30b6;
+    uint32_t Encoder_AlignByte_ptr_17;
     uint16_t field_30ba;
     uint16_t field_30bc;
     uint32_t ptr_30be;
@@ -2456,7 +2456,7 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_30ee;
     uint16_t field_30f2;
     uint16_t field_30f4;
-    uint32_t ptr_30f6;
+    uint32_t Encoder_AlignByte_ptr_18;
     uint16_t field_30fa;
     uint16_t field_30fc;
     uint32_t ptr_30fe;
@@ -2483,7 +2483,7 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_3136;
     uint16_t field_313a;
     uint16_t field_313c;
-    uint32_t ptr_313e;
+    uint32_t Encoder_AlignByte_ptr_19;
     uint16_t field_3142;
     uint16_t field_3144;
     uint32_t ptr_3146;
@@ -2510,7 +2510,7 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_317e;
     uint16_t field_3182;
     uint16_t field_3184;
-    uint32_t ptr_3186;
+    uint32_t Encoder_AlignByte_ptr_20;
     uint16_t field_318a;
     uint16_t field_318c;
     uint32_t ptr_318e;
@@ -2519,13 +2519,13 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_3196;
     uint16_t field_319a;
     uint16_t field_319c;
-    uint32_t ptr_319e;
+    uint32_t Encoder_AlignByte_ptr_21;
     uint16_t field_31a2;
     uint16_t field_31a4;
     uint32_t ptr_31a6;
     uint16_t field_31aa;
     uint16_t field_31ac;
-    uint32_t ptr_31ae;
+    uint32_t Encoder_AlignByte_ptr_22;
     uint8_t pad_228[3];  /* zero padding */
     uint16_t field_31b5;
     uint16_t field_31b7;
@@ -2721,13 +2721,13 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_3336;
     uint16_t field_333a;
     uint16_t field_333c;
-    uint32_t ptr_333e;
+    uint32_t Encoder_AlignByte_ptr_23;
     uint16_t field_3342;
     uint16_t field_3344;
     uint32_t ptr_3346;
     uint16_t field_334a;
     uint16_t field_334c;
-    uint32_t ptr_334e;
+    uint32_t Encoder_AlignByte_ptr_24;
     uint16_t field_3352;
     uint16_t field_3354;
     uint32_t ptr_3356;
@@ -2742,55 +2742,55 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_336e;
     uint16_t field_3372;
     uint16_t field_3374;
-    uint32_t ptr_3376;
+    uint32_t Encoder_AlignByte_ptr_25;
     uint16_t field_337a;
     uint16_t field_337c;
     uint32_t ptr_337e;
     uint16_t field_3382;
     uint16_t field_3384;
-    uint32_t ptr_3386;
+    uint32_t Encoder_AlignByte_ptr_26;
     uint16_t field_338a;
     char str_555[2];
     uint32_t ptr_338e;
     uint16_t field_3392;
     uint16_t field_3394;
-    uint32_t ptr_3396;
+    uint32_t Encoder_AlignByte_ptr_27;
     uint16_t field_339a;
     uint16_t field_339c;
     uint32_t ptr_339e;
     uint16_t field_33a2;
     uint16_t field_33a4;
-    uint32_t ptr_33a6;
+    uint32_t Encoder_AlignByte_ptr_28;
     uint16_t field_33aa;
     uint16_t field_33ac;
-    uint32_t ptr_33ae;
+    uint32_t FileIO_BytecodeData_ptr;
     uint16_t field_33b2;
     uint16_t field_33b4;
-    uint32_t ptr_33b6;
+    uint32_t Encoder_AlignByte_ptr_29;
     uint16_t field_33ba;
     char str_556[2];
     uint32_t ptr_33be;
     uint16_t field_33c2;
     uint16_t field_33c4;
-    uint32_t ptr_33c6;
+    uint32_t Encoder_AlignByte_ptr_30;
     uint16_t field_33ca;
     char str_557[2];
     uint32_t ptr_33ce;
     uint16_t field_33d2;
     uint16_t field_33d4;
-    uint32_t ptr_33d6;
+    uint32_t Encoder_AlignByte_ptr_31;
     uint16_t field_33da;
     uint16_t field_33dc;
     uint32_t ptr_33de;
     uint16_t field_33e2;
     uint16_t field_33e4;
-    uint32_t ptr_33e6;
+    uint32_t Encoder_AlignByte_ptr_32;
     uint16_t field_33ea;
     uint16_t field_33ec;
     uint32_t ptr_33ee;
     uint16_t field_33f2;
     uint16_t field_33f4;
-    uint32_t ptr_33f6;
+    uint32_t Encoder_AlignByte_ptr_33;
     uint16_t field_33fa;
     uint16_t field_33fc;
     uint32_t ptr_33fe;
@@ -2799,7 +2799,7 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_3406;
     uint16_t field_340a;
     uint16_t field_340c;
-    uint32_t ptr_340e;
+    uint32_t Encoder_AlignByte_ptr_34;
     uint16_t field_3412;
     uint16_t field_3414;
     uint32_t ptr_3416;
@@ -2814,13 +2814,13 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_342e;
     uint16_t field_3432;
     uint16_t field_3434;
-    uint32_t ptr_3436;
+    uint32_t Encoder_AlignByte_ptr_35;
     uint16_t field_343a;
     uint16_t field_343c;
-    uint32_t ptr_343e;
+    uint32_t FileIO_BytecodeData_ptr_2;
     uint16_t field_3442;
     uint16_t field_3444;
-    uint32_t ptr_3446;
+    uint32_t Encoder_AlignByte_ptr_36;
     uint16_t field_344a;
     uint16_t field_344c;
     uint32_t ptrs_26[69];  /* 69 pointers */
@@ -6218,7 +6218,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .TEST2_str = "TEST2",
 
-    .ptr_1f6a = SELF(TEST3_str),
+    .TEST3_str_ptr = SELF(TEST3_str),
 
     .ptr_1f6e = SELF(str_371),
 
@@ -6481,7 +6481,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .TEST6_str = "TEST6",
 
-    .ptr_21a2 = SELF(EXT_str),
+    .EXT_str_ptr = SELF(EXT_str),
 
     .ptr_21a6 = SELF(str_455),
 
@@ -7191,7 +7191,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_2592 = 0xEF03,
 
-    .ptr_2594 = NAKA_ADDR(NakaData_FileScreenDispatch),
+    .NakaData_FileScreenDispatch_ptr = NAKA_ADDR(NakaData_FileScreenDispatch),
 
     .field_2598 = 0x4704,
 
@@ -7893,7 +7893,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .ptr_2868 = SELF(field_2376),
 
-    .ptr_286c = NAKA_ADDR(NakaData_StyleBitmapPad),
+    .NakaData_StyleBitmapPad_ptr = NAKA_ADDR(NakaData_StyleBitmapPad),
 
     .pad_73 = { 0 },
 
@@ -8619,7 +8619,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_2c17 = 0x1C00,
 
-    .ptr_2c19 = NAKA_ADDR(DataBuf_Data_FormatDispatch),
+    .DataBuf_Data_FormatDispatch_ptr = NAKA_ADDR(DataBuf_Data_FormatDispatch),
 
     .field_2c1d = 0xC500,
 
@@ -9033,7 +9033,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_2e7c = NAKA_NONE,
 
-    .ptr_2e7e = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr = NAKA_ADDR(Encoder_AlignByte),
 
     .field_2e82 = 0x13A8,
 
@@ -9045,7 +9045,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_2e8c = NAKA_NONE,
 
-    .ptr_2e8e = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_2 = NAKA_ADDR(Encoder_AlignByte),
 
     .H_str_4 = "H",
 
@@ -9093,7 +9093,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_2ecc = NAKA_NONE,
 
-    .ptr_2ece = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_3 = NAKA_ADDR(Encoder_AlignByte),
 
     .field_2ed2 = 0x13A8,
 
@@ -9105,7 +9105,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_2edc = NAKA_NONE,
 
-    .ptr_2ede = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_4 = NAKA_ADDR(Encoder_AlignByte),
 
     .field_2ee2 = 0x0548,
 
@@ -9147,7 +9147,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_2f14 = NAKA_NONE,
 
-    .ptr_2f16 = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_5 = NAKA_ADDR(Encoder_AlignByte),
 
     .field_2f1a = 0x13A8,
 
@@ -9171,7 +9171,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_2f34 = NAKA_NONE,
 
-    .ptr_2f36 = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_6 = NAKA_ADDR(Encoder_AlignByte),
 
     .field_2f3a = 0x20A9,
 
@@ -9201,7 +9201,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_2f5c = NAKA_NONE,
 
-    .ptr_2f5e = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_7 = NAKA_ADDR(Encoder_AlignByte),
 
     .field_2f62 = 0x13A8,
 
@@ -9213,7 +9213,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_2f6c = NAKA_NONE,
 
-    .ptr_2f6e = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_8 = NAKA_ADDR(Encoder_AlignByte),
 
     .field_2f72 = 0x0748,
 
@@ -9243,7 +9243,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_2f94 = NAKA_NONE,
 
-    .ptr_2f96 = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_9 = NAKA_ADDR(Encoder_AlignByte),
 
     .field_2f9a = 0x13A8,
 
@@ -9255,7 +9255,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_2fa4 = NAKA_NONE,
 
-    .ptr_2fa6 = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_10 = NAKA_ADDR(Encoder_AlignByte),
 
     .field_2faa = 0x09A8,
 
@@ -9267,7 +9267,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_2fb4 = NAKA_NONE,
 
-    .ptr_2fb6 = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_11 = NAKA_ADDR(Encoder_AlignByte),
 
     .field_2fba = 0x13A8,
 
@@ -9279,7 +9279,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_2fc4 = NAKA_NONE,
 
-    .ptr_2fc6 = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_12 = NAKA_ADDR(Encoder_AlignByte),
 
     .H_str_5 = "H",
 
@@ -9291,7 +9291,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_2fd4 = NAKA_NONE,
 
-    .ptr_2fd6 = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_13 = NAKA_ADDR(Encoder_AlignByte),
 
     .field_2fda = 0x13A8,
 
@@ -9303,7 +9303,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_2fe4 = NAKA_NONE,
 
-    .ptr_2fe6 = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_14 = NAKA_ADDR(Encoder_AlignByte),
 
     .field_2fea = 0x0CA9,
 
@@ -9357,7 +9357,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_302c = NAKA_NONE,
 
-    .ptr_302e = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_15 = NAKA_ADDR(Encoder_AlignByte),
 
     .field_3032 = 0x0CA9,
 
@@ -9411,7 +9411,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_3074 = NAKA_NONE,
 
-    .ptr_3076 = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_16 = NAKA_ADDR(Encoder_AlignByte),
 
     .field_307a = 0x0AA9,
 
@@ -9459,7 +9459,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_30b4 = NAKA_NONE,
 
-    .ptr_30b6 = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_17 = NAKA_ADDR(Encoder_AlignByte),
 
     .field_30ba = 0x0CA9,
 
@@ -9507,7 +9507,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_30f4 = NAKA_NONE,
 
-    .ptr_30f6 = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_18 = NAKA_ADDR(Encoder_AlignByte),
 
     .field_30fa = 0x09A9,
 
@@ -9561,7 +9561,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_313c = NAKA_NONE,
 
-    .ptr_313e = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_19 = NAKA_ADDR(Encoder_AlignByte),
 
     .field_3142 = 0x09A9,
 
@@ -9615,7 +9615,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_3184 = NAKA_NONE,
 
-    .ptr_3186 = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_20 = NAKA_ADDR(Encoder_AlignByte),
 
     .field_318a = 0x0EA9,
 
@@ -9633,7 +9633,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_319c = NAKA_NONE,
 
-    .ptr_319e = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_21 = NAKA_ADDR(Encoder_AlignByte),
 
     .field_31a2 = 0x13A8,
 
@@ -9645,7 +9645,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_31ac = NAKA_NONE,
 
-    .ptr_31ae = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_22 = NAKA_ADDR(Encoder_AlignByte),
 
     .pad_228 = { 0 },
 
@@ -10037,7 +10037,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_333c = NAKA_NONE,
 
-    .ptr_333e = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_23 = NAKA_ADDR(Encoder_AlignByte),
 
     .field_3342 = 0x13A8,
 
@@ -10049,7 +10049,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_334c = NAKA_NONE,
 
-    .ptr_334e = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_24 = NAKA_ADDR(Encoder_AlignByte),
 
     .field_3352 = 0x20A9,
 
@@ -10079,7 +10079,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_3374 = NAKA_NONE,
 
-    .ptr_3376 = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_25 = NAKA_ADDR(Encoder_AlignByte),
 
     .field_337a = 0x13A8,
 
@@ -10091,7 +10091,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_3384 = NAKA_NONE,
 
-    .ptr_3386 = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_26 = NAKA_ADDR(Encoder_AlignByte),
 
     .field_338a = 0x00B1,
 
@@ -10103,7 +10103,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_3394 = NAKA_NONE,
 
-    .ptr_3396 = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_27 = NAKA_ADDR(Encoder_AlignByte),
 
     .field_339a = 0x00B2,
 
@@ -10115,19 +10115,19 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_33a4 = NAKA_NONE,
 
-    .ptr_33a6 = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_28 = NAKA_ADDR(Encoder_AlignByte),
 
     .field_33aa = 0x00B0,
 
     .field_33ac = 0x7F00,
 
-    .ptr_33ae = NAKA_ADDR(FileIO_BytecodeData),
+    .FileIO_BytecodeData_ptr = NAKA_ADDR(FileIO_BytecodeData),
 
     .field_33b2 = NAKA_NONE,
 
     .field_33b4 = NAKA_NONE,
 
-    .ptr_33b6 = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_29 = NAKA_ADDR(Encoder_AlignByte),
 
     .field_33ba = 0x21A9,
 
@@ -10139,7 +10139,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_33c4 = NAKA_NONE,
 
-    .ptr_33c6 = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_30 = NAKA_ADDR(Encoder_AlignByte),
 
     .field_33ca = 0x13A8,
 
@@ -10151,7 +10151,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_33d4 = NAKA_NONE,
 
-    .ptr_33d6 = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_31 = NAKA_ADDR(Encoder_AlignByte),
 
     .field_33da = 0x01B0,
 
@@ -10163,7 +10163,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_33e4 = NAKA_NONE,
 
-    .ptr_33e6 = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_32 = NAKA_ADDR(Encoder_AlignByte),
 
     .field_33ea = 0x00B4,
 
@@ -10175,7 +10175,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_33f4 = NAKA_NONE,
 
-    .ptr_33f6 = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_33 = NAKA_ADDR(Encoder_AlignByte),
 
     .field_33fa = 0x32A9,
 
@@ -10193,7 +10193,7 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_340c = NAKA_NONE,
 
-    .ptr_340e = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_34 = NAKA_ADDR(Encoder_AlignByte),
 
     .field_3412 = 0x34A9,
 
@@ -10223,19 +10223,19 @@ const naka_extension_device_t naka_extension_device_data
 
     .field_3434 = NAKA_NONE,
 
-    .ptr_3436 = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_35 = NAKA_ADDR(Encoder_AlignByte),
 
     .field_343a = 0x41A8,
 
     .field_343c = 0x0100,
 
-    .ptr_343e = NAKA_ADDR(FileIO_BytecodeData),
+    .FileIO_BytecodeData_ptr_2 = NAKA_ADDR(FileIO_BytecodeData),
 
     .field_3442 = NAKA_NONE,
 
     .field_3444 = NAKA_NONE,
 
-    .ptr_3446 = NAKA_ADDR(Encoder_AlignByte),
+    .Encoder_AlignByte_ptr_36 = NAKA_ADDR(Encoder_AlignByte),
 
     .field_344a = NAKA_NONE,
 

@@ -259,7 +259,7 @@ typedef struct __attribute__((packed)) {
     naka_container_t w0;  /* NAKA_TYPE_CONTAINER */
     uint8_t pad_0[7];  /* zero padding */
     uint16_t field_0031;
-    uint32_t ptr_0033;
+    uint32_t NakaData_RomEnd_ptr;
     uint16_t field_0037;
     uint8_t pad_1[11];  /* zero padding */
     uint16_t field_0044;
@@ -439,7 +439,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0238;
     uint16_t field_023a;
     uint8_t pad_44[4];  /* zero padding */
-    uint32_t ptr_0240;
+    uint32_t Naka_ReverbScreen_EmptyStr_ptr;
     uint16_t field_0244;
     uint16_t field_0246;
     uint16_t field_0248;
@@ -768,7 +768,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_0719;
     uint16_t field_071b;
     char str_3[2];
-    uint32_t ptr_071f;
+    uint32_t NakaData_RomEnd_ptr_2;
     uint8_t pad_103[5];  /* zero padding */
     uint16_t field_0728;
     uint16_t field_072a;
@@ -1537,8 +1537,8 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1262;
     char str_8[2];
     uint8_t pad_238[4];  /* zero padding */
-    uint32_t ptr_126a;
-    uint32_t ptr_126e;
+    uint32_t NakaStr_Bank_ptr;
+    uint32_t NakaStr_Single_ptr;
     uint16_t field_1272;
     uint16_t field_1274;
     uint16_t field_1276;
@@ -1659,8 +1659,8 @@ typedef struct __attribute__((packed)) {
     uint8_t pad_271[4];  /* zero padding */
     naka_dispatch_t w11;  /* 0x4E */
     uint8_t pad_272[2];  /* zero padding */
-    uint32_t ptr_14d2;
-    uint32_t ptr_14d6;
+    uint32_t NakaDbg_LowerCaseChars2_ptr;
+    uint32_t NakaDbg_LowerCaseChars_ptr;
     uint16_t field_14da;
     uint16_t field_14dc;
     uint16_t field_14de;
@@ -1987,7 +1987,7 @@ typedef struct __attribute__((packed)) {
     char str_12[2];
     uint16_t field_18b5;
     uint16_t field_18b7;
-    uint32_t ptr_18b9;
+    uint32_t NakaData_RomEnd_ptr_3;
     uint8_t pad_291[3];  /* zero padding */
     uint16_t field_18c0;
     uint16_t field_18c2;
@@ -2163,7 +2163,7 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_1a6d;
     uint16_t field_1a71;
     uint16_t field_1a73;
-    uint32_t ptr_1a75;
+    uint32_t NakaData_RomEnd_ptr_4;
     uint8_t pad_306[3];  /* zero padding */
     uint16_t field_1a7c;
     uint8_t pad_307[3];  /* zero padding */
@@ -2618,7 +2618,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1e6e;
     char str_123[2];
     uint16_t field_1e72;
-    uint32_t ptr_1e74;
+    uint32_t NakaData_RomEnd_ptr_5;
     uint16_t field_1e78;
     uint16_t field_1e7a;
     uint16_t field_1e7c;
@@ -2722,7 +2722,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_0031 = NAKA_NONE,
 
-    .ptr_0033 = NAKA_ADDR(NakaData_RomEnd),
+    .NakaData_RomEnd_ptr = NAKA_ADDR(NakaData_RomEnd),
 
     .field_0037 = 0x0100,
 
@@ -3098,7 +3098,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .pad_44 = { 0 },
 
-    .ptr_0240 = NAKA_ADDR(Naka_ReverbScreen_EmptyStr),
+    .Naka_ReverbScreen_EmptyStr_ptr = NAKA_ADDR(Naka_ReverbScreen_EmptyStr),
 
     .field_0244 = NAKA_NONE,
 
@@ -3898,7 +3898,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .str_3 = ALIGNED_STRING(""),
 
-    .ptr_071f = NAKA_ADDR(NakaData_RomEnd),
+    .NakaData_RomEnd_ptr_2 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_103 = { 0 },
 
@@ -5649,9 +5649,9 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .pad_238 = { 0 },
 
-    .ptr_126a = NAKA_ADDR(NakaStr_Bank),
+    .NakaStr_Bank_ptr = NAKA_ADDR(NakaStr_Bank),
 
-    .ptr_126e = NAKA_ADDR(NakaStr_Single),
+    .NakaStr_Single_ptr = NAKA_ADDR(NakaStr_Single),
 
     .field_1272 = 0xED1C,
 
@@ -5974,9 +5974,9 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .pad_272 = { 0 },
 
-    .ptr_14d2 = NAKA_ADDR(NakaDbg_LowerCaseChars2),
+    .NakaDbg_LowerCaseChars2_ptr = NAKA_ADDR(NakaDbg_LowerCaseChars2),
 
-    .ptr_14d6 = NAKA_ADDR(NakaDbg_LowerCaseChars),
+    .NakaDbg_LowerCaseChars_ptr = NAKA_ADDR(NakaDbg_LowerCaseChars),
 
     .field_14da = 0xF0D0,
 
@@ -6708,7 +6708,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_18b7 = NAKA_NONE,
 
-    .ptr_18b9 = NAKA_ADDR(NakaData_RomEnd),
+    .NakaData_RomEnd_ptr_3 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_291 = { 0 },
 
@@ -7060,7 +7060,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_1a73 = NAKA_NONE,
 
-    .ptr_1a75 = NAKA_ADDR(NakaData_RomEnd),
+    .NakaData_RomEnd_ptr_4 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_306 = { 0 },
 
@@ -7970,7 +7970,7 @@ const naka_sequencer_channels_t naka_sequencer_channels_data
 
     .field_1e72 = 0x00FF,
 
-    .ptr_1e74 = NAKA_ADDR(NakaData_RomEnd),
+    .NakaData_RomEnd_ptr_5 = NAKA_ADDR(NakaData_RomEnd),
 
     .field_1e78 = 0x0120,
 

@@ -1551,13 +1551,13 @@ typedef struct __attribute__((packed)) {
     uint16_t field_243c;
     uint16_t field_243e;
     uint8_t pad_189[4];  /* zero padding */
-    uint32_t ptr_2444;
+    uint32_t Naka_PresentationRootState_ptr;
     uint16_t field_2448;
     uint8_t pad_190[4];  /* zero padding */
     uint16_t field_244e;
     uint16_t field_2450;
     uint16_t field_2452;
-    uint32_t ptr_2454;
+    uint32_t NAMING_str_ptr;
     uint16_t field_2458;
     uint8_t pad_191[2];  /* zero padding */
     char NAMING_str[8];
@@ -1581,7 +1581,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_2546;
     uint16_t field_2548;
     uint8_t pad_198[4];  /* zero padding */
-    uint32_t ptr_254e;
+    uint32_t Naka_PresentationRootState_ptr_2;
     uint16_t field_2552;
     uint16_t field_2554;
     uint8_t pad_199[2];  /* zero padding */
@@ -4909,7 +4909,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
 
     .pad_189 = { 0 },
 
-    .ptr_2444 = NAKA_ADDR(Naka_PresentationRootState),
+    .Naka_PresentationRootState_ptr = NAKA_ADDR(Naka_PresentationRootState),
 
     .field_2448 = 0x00FF,
 
@@ -4921,7 +4921,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
 
     .field_2452 = 0x0003,
 
-    .ptr_2454 = SELF(NAMING_str),
+    .NAMING_str_ptr = SELF(NAMING_str),
 
     .field_2458 = 0x0099,
 
@@ -5032,7 +5032,7 @@ const naka_ctrl_menu_body_t naka_ctrl_menu_body_data
 
     .pad_198 = { 0 },
 
-    .ptr_254e = NAKA_ADDR(Naka_PresentationRootState),
+    .Naka_PresentationRootState_ptr_2 = NAKA_ADDR(Naka_PresentationRootState),
 
     .field_2552 = 0x00FF,
 

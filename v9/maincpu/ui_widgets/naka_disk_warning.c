@@ -148,8 +148,8 @@ typedef struct __attribute__((packed)) {
     char str_43[2];
     uint16_t field_0a48;
     uint8_t pad_0[2];  /* zero padding */
-    uint32_t ptr_0a4c;
-    uint32_t ptr_0a50;
+    uint32_t Technics_str_ptr;
+    uint32_t Smf_str_ptr;
     char Smf_str[12];
     char Technics_str[12];
     uint32_t ptrs_6[6];  /* 6 pointers */
@@ -359,7 +359,7 @@ typedef struct __attribute__((packed)) {
     char h_str[2];
     char s_str[2];
     uint16_t field_0d82;
-    uint32_t ptr_0d84;
+    uint32_t Data_WidgetNamesCharMapBlock_ptr;
     char G_str[2];
     char str_90[2];
     uint16_t field_0d8c;
@@ -716,9 +716,9 @@ typedef struct __attribute__((packed)) {
     uint16_t field_131c;
     uint16_t field_131e;
     uint8_t pad_86[4];  /* zero padding */
-    uint32_t ptr_1324;
+    uint32_t NakaData_RomEnd_ptr;
     uint8_t pad_87[3];  /* zero padding */
-    uint32_t ptr_132b;
+    uint32_t NakaData_RomEnd_ptr_2;
     uint8_t pad_88[3];  /* zero padding */
     uint16_t field_1332;
     uint16_t field_1334;
@@ -935,12 +935,12 @@ typedef struct __attribute__((packed)) {
     char str_257[2];
     char str_258[4];
     char d_str_3[2];
-    uint32_t ptr_15d6;
-    uint32_t ptr_15da;
+    uint32_t PASSIVE_str_ptr;
+    uint32_t Active_str_ptr;
     char Active_str[8];
     char PASSIVE_str[8];
     uint32_t ptr_15ee;
-    uint32_t ptr_15f2;
+    uint32_t On_str_ptr;
     char On_str[4];
     char OFF_str[4];
     char str_264[2];
@@ -958,8 +958,8 @@ typedef struct __attribute__((packed)) {
     char str_274[2];
     uint16_t field_161e;
     uint8_t pad_106[2];  /* zero padding */
-    uint32_t ptr_1622;
-    uint32_t ptr_1626;
+    uint32_t FALSE_str_ptr;
+    uint32_t True_str_ptr;
     char True_str[6];
     char FALSE_str[6];
     char ON_str[4];
@@ -1954,7 +1954,7 @@ typedef struct __attribute__((packed)) {
     char str_513[4];
     char str_514[4];
     uint8_t pad_217[4];  /* zero padding */
-    uint32_t ptr_2490;
+    uint32_t Naka_PresentationRootState_ptr;
     char str_515[4];
     char str_516[4];
     char str_517[4];
@@ -1962,17 +1962,17 @@ typedef struct __attribute__((packed)) {
     char str_519[4];
     char str_520[4];
     uint8_t pad_218[4];  /* zero padding */
-    uint32_t ptr_24b0;
+    uint32_t Naka_PresentationRootState_ptr_2;
     char str_521[4];
     char str_522[4];
     char str_523[4];
     uint8_t pad_219[4];  /* zero padding */
-    uint32_t ptr_24c4;
+    uint32_t Naka_PresentationRootState_ptr_3;
     char str_524[4];
     char str_525[4];
     char str_526[4];
     uint8_t pad_220[4];  /* zero padding */
-    uint32_t ptr_24d8;
+    uint32_t Naka_PresentationRootState_ptr_4;
     char str_527[4];
     char str_528[4];
     char str_529[4];
@@ -1980,7 +1980,7 @@ typedef struct __attribute__((packed)) {
     char str_531[4];
     char str_532[4];
     uint8_t pad_221[4];  /* zero padding */
-    uint32_t ptr_24f8;
+    uint32_t Naka_PresentationRootState_ptr_5;
     char str_533[4];
     char str_534[4];
     char str_535[4];
@@ -2201,7 +2201,7 @@ typedef struct __attribute__((packed)) {
     char TrashBmp_str[10];
     uint32_t ptr_31e8;
     char str_586[2];
-    uint32_t ptr_31ee;
+    uint32_t func_str_ptr;
     uint32_t ptr_31f2;
     char str_587[2];
     char func_str[6];
@@ -2255,11 +2255,11 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_333e;
     char str_623[2];
     char data_str_4[6];
-    uint32_t ptr_334a;
+    uint32_t name_str_6_ptr;
     uint32_t ptr_334e;
     char str_625[2];
     char name_str_6[6];
-    uint32_t ptr_335a;
+    uint32_t name_str_7_ptr;
     uint32_t ptr_335e;
     char str_627[2];
     char name_str_7[6];
@@ -2267,7 +2267,7 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_336e;
     char str_629[2];
     char data_str_5[6];
-    uint32_t ptr_337a;
+    uint32_t name_str_8_ptr;
     uint32_t ptr_337e;
     char str_631[2];
     char name_str_8[6];
@@ -2306,15 +2306,15 @@ typedef struct __attribute__((packed)) {
     char fontcolor_str_2[10];
     char font_str_2[6];
     char caption_str[8];
-    uint32_t ptr_34a6;
+    uint32_t figures_str_ptr;
     uint32_t ptr_34aa;
     char str_662[2];
     char figures_str[8];
-    uint32_t ptr_34b8;
+    uint32_t func_str_3_ptr;
     uint32_t ptr_34bc;
     char str_664[2];
     char func_str_3[6];
-    uint32_t ptr_34c8;
+    uint32_t onoff_str_ptr;
     uint32_t ptr_34cc;
     char str_666[2];
     char onoff_str[6];
@@ -2352,7 +2352,7 @@ typedef struct __attribute__((packed)) {
     char align_str_4[6];
     char fontcolor_str_4[10];
     char font_str_4[6];
-    uint32_t ptr_35ea;
+    uint32_t style_str_ptr;
     uint32_t ptr_35ee;
     char str_696[2];
     char style_str[6];
@@ -2360,11 +2360,11 @@ typedef struct __attribute__((packed)) {
     char str_698[2];
     char func_str_6[6];
     char style_str_2[6];
-    uint32_t ptr_3614;
+    uint32_t editsw2_str_ptr;
     uint32_t ptr_3618;
     char str_701[2];
     char editsw2_str[8];
-    uint32_t ptr_3626;
+    uint32_t style_str_3_ptr;
     uint32_t ptr_362a;
     char str_703[2];
     char style_str_3[6];
@@ -2372,7 +2372,7 @@ typedef struct __attribute__((packed)) {
     char str_705[2];
     char func_str_7[6];
     char style_str_4[6];
-    uint32_t ptr_3650;
+    uint32_t page_str_ptr;
     uint32_t ptr_3654;
     char str_708[2];
     char page_str[6];
@@ -2393,11 +2393,11 @@ typedef struct __attribute__((packed)) {
     char str_720[2];
     char window_str[8];
     char page_str_2[6];
-    uint32_t ptr_36dc;
+    uint32_t func_str_8_ptr;
     uint32_t ptr_36e0;
     char str_723[2];
     char func_str_8[6];
-    uint32_t ptr_36ec;
+    uint32_t part_str_ptr;
     uint32_t ptr_36f0;
     char str_725[2];
     char part_str[6];
@@ -2406,11 +2406,11 @@ typedef struct __attribute__((packed)) {
     char fontcolor_str_5[10];
     char font_str_6[6];
     char str_str_2[4];
-    uint32_t ptr_3722;
+    uint32_t bmp_str_ptr;
     uint32_t ptr_3726;
     char str_731[2];
     char bmp_str[4];
-    uint32_t ptr_3730;
+    uint32_t icon_str_2_ptr;
     uint32_t ptr_3734;
     char str_733[2];
     char icon_str_2[6];
@@ -2513,11 +2513,11 @@ typedef struct __attribute__((packed)) {
     char str_809[2];
     char data_str_9[6];
     char func_str_10[6];
-    uint32_t ptr_39fc;
+    uint32_t func_str_11_ptr;
     uint32_t ptr_3a00;
     char str_812[2];
     char func_str_11[6];
-    uint32_t ptr_3a0c;
+    uint32_t editsw2_str_2_ptr;
     uint32_t ptr_3a10;
     char str_814[2];
     char editsw2_str_2[8];
@@ -2525,25 +2525,25 @@ typedef struct __attribute__((packed)) {
     char str_816[2];
     uint32_t ptr_3a24;
     char str_817[2];
-    uint32_t ptr_3a2a;
+    uint32_t mode_str_3_ptr;
     uint32_t ptr_3a2e;
     char str_818[2];
     char mode_str_3[6];
-    uint32_t ptr_3a3a;
+    uint32_t screen_str_2_ptr;
     uint32_t ptr_3a3e;
     char str_820[2];
     char screen_str_2[8];
-    uint32_t ptr_3a4c;
+    uint32_t window_str_4_ptr;
     uint32_t ptr_3a50;
     char str_822[2];
     char window_str_4[8];
     uint32_t ptr_3a5e;
     char str_824[2];
-    uint32_t ptr_3a64;
+    uint32_t cursor_str_ptr;
     uint32_t ptr_3a68;
     char str_825[2];
     char cursor_str[8];
-    uint32_t ptr_3a76;
+    uint32_t func_str_12_ptr;
     uint32_t ptr_3a7a;
     char str_827[2];
     char func_str_12[6];
@@ -2567,7 +2567,7 @@ typedef struct __attribute__((packed)) {
     uint32_t ptr_3b06;
     char str_842[2];
     char str_str_10[4];
-    uint32_t ptr_3b10;
+    uint32_t func_str_14_ptr;
     uint32_t ptr_3b14;
     char str_844[2];
     char func_str_14[6];
@@ -2600,7 +2600,7 @@ typedef struct __attribute__((packed)) {
     char func_str_15[6];
     char fixedrow_str[10];
     char fixedcol_str[10];
-    uint32_t ptr_3c20;
+    uint32_t page_str_3_ptr;
     uint32_t ptr_3c24;
     char str_871[2];
     char page_str_3[6];
@@ -2618,11 +2618,11 @@ typedef struct __attribute__((packed)) {
     char str_880[2];
     uint32_t ptr_3c72;
     char str_881[2];
-    uint32_t ptr_3c78;
+    uint32_t adr_str_ptr;
     uint32_t ptr_3c7c;
     char str_882[2];
     char adr_str[4];
-    uint32_t ptr_3c86;
+    uint32_t time_str_ptr;
     uint32_t ptr_3c8a;
     char str_884[2];
     char time_str[6];
@@ -2636,7 +2636,7 @@ typedef struct __attribute__((packed)) {
     char str_889[2];
     uint32_t ptr_3cae;
     char str_890[2];
-    uint32_t ptr_3cb4;
+    uint32_t func_str_16_ptr;
     uint32_t ptr_3cb8;
     char str_891[2];
     char func_str_16[6];
@@ -2646,7 +2646,7 @@ typedef struct __attribute__((packed)) {
     char alignment_str_3[10];
     char fontcolor_str_11[10];
     char font_str_12[6];
-    uint32_t ptr_3cfa;
+    uint32_t func_str_17_ptr;
     uint32_t ptr_3cfe;
     char str_898[2];
     char func_str_17[6];
@@ -2654,7 +2654,7 @@ typedef struct __attribute__((packed)) {
     char str_900[2];
     uint32_t ptr_3d10;
     char str_901[2];
-    uint32_t ptr_3d16;
+    uint32_t func_str_18_ptr;
     uint32_t ptr_3d1a;
     char str_902[2];
     char func_str_18[6];
@@ -2662,7 +2662,7 @@ typedef struct __attribute__((packed)) {
     char str_904[2];
     uint32_t ptr_3d2c;
     char str_905[2];
-    uint32_t ptr_3d32;
+    uint32_t file_str_ptr;
     uint32_t ptr_3d36;
     char str_906[2];
     char file_str[6];
@@ -2894,9 +2894,9 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .pad_0 = { 0 },
 
-    .ptr_0a4c = SELF(Technics_str),
+    .Technics_str_ptr = SELF(Technics_str),
 
-    .ptr_0a50 = SELF(Smf_str),
+    .Smf_str_ptr = SELF(Smf_str),
 
     .Smf_str = ALIGNED_STRING("   SMF    "),
 
@@ -3333,7 +3333,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .field_0d82 = 0x00BF,
 
-    .ptr_0d84 = NAKA_ADDR(Data_WidgetNamesCharMapBlock),
+    .Data_WidgetNamesCharMapBlock_ptr = NAKA_ADDR(Data_WidgetNamesCharMapBlock),
 
     .G_str = "G",
 
@@ -4184,11 +4184,11 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .pad_86 = { 0 },
 
-    .ptr_1324 = NAKA_ADDR(NakaData_RomEnd),
+    .NakaData_RomEnd_ptr = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_87 = { 0 },
 
-    .ptr_132b = NAKA_ADDR(NakaData_RomEnd),
+    .NakaData_RomEnd_ptr_2 = NAKA_ADDR(NakaData_RomEnd),
 
     .pad_88 = { 0 },
 
@@ -4622,9 +4622,9 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .d_str_3 = "d",
 
-    .ptr_15d6 = SELF(PASSIVE_str),
+    .PASSIVE_str_ptr = SELF(PASSIVE_str),
 
-    .ptr_15da = SELF(Active_str),
+    .Active_str_ptr = SELF(Active_str),
 
     .Active_str = "ACTIVE ",
 
@@ -4632,7 +4632,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .ptr_15ee = SELF(OFF_str),
 
-    .ptr_15f2 = SELF(On_str),
+    .On_str_ptr = SELF(On_str),
 
     .On_str = "ON ",
 
@@ -4668,9 +4668,9 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .pad_106 = { 0 },
 
-    .ptr_1622 = SELF(FALSE_str),
+    .FALSE_str_ptr = SELF(FALSE_str),
 
-    .ptr_1626 = SELF(True_str),
+    .True_str_ptr = SELF(True_str),
 
     .True_str = "TRUE ",
 
@@ -6812,7 +6812,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .pad_217 = { 0 },
 
-    .ptr_2490 = NAKA_ADDR(Naka_PresentationRootState),
+    .Naka_PresentationRootState_ptr = NAKA_ADDR(Naka_PresentationRootState),
 
     .str_515 = "%1d",
 
@@ -6828,7 +6828,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .pad_218 = { 0 },
 
-    .ptr_24b0 = NAKA_ADDR(Naka_PresentationRootState),
+    .Naka_PresentationRootState_ptr_2 = NAKA_ADDR(Naka_PresentationRootState),
 
     .str_521 = "%1d",
 
@@ -6838,7 +6838,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .pad_219 = { 0 },
 
-    .ptr_24c4 = NAKA_ADDR(Naka_PresentationRootState),
+    .Naka_PresentationRootState_ptr_3 = NAKA_ADDR(Naka_PresentationRootState),
 
     .str_524 = "%1d",
 
@@ -6848,7 +6848,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .pad_220 = { 0 },
 
-    .ptr_24d8 = NAKA_ADDR(Naka_PresentationRootState),
+    .Naka_PresentationRootState_ptr_4 = NAKA_ADDR(Naka_PresentationRootState),
 
     .str_527 = "%1d",
 
@@ -6864,7 +6864,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .pad_221 = { 0 },
 
-    .ptr_24f8 = NAKA_ADDR(Naka_PresentationRootState),
+    .Naka_PresentationRootState_ptr_5 = NAKA_ADDR(Naka_PresentationRootState),
 
     .str_533 = "%1d",
 
@@ -7847,7 +7847,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_586 = ALIGNED_STRING(""),
 
-    .ptr_31ee = SELF(func_str),
+    .func_str_ptr = SELF(func_str),
 
     .ptr_31f2 = SELF(str_587),
 
@@ -7985,7 +7985,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .data_str_4 = ALIGNED_STRING("data"),
 
-    .ptr_334a = SELF(name_str_6),
+    .name_str_6_ptr = SELF(name_str_6),
 
     .ptr_334e = SELF(str_625),
 
@@ -7993,7 +7993,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .name_str_6 = ALIGNED_STRING("name"),
 
-    .ptr_335a = SELF(name_str_7),
+    .name_str_7_ptr = SELF(name_str_7),
 
     .ptr_335e = SELF(str_627),
 
@@ -8009,7 +8009,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .data_str_5 = ALIGNED_STRING("data"),
 
-    .ptr_337a = SELF(name_str_8),
+    .name_str_8_ptr = SELF(name_str_8),
 
     .ptr_337e = SELF(str_631),
 
@@ -8120,7 +8120,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .caption_str = "caption",
 
-    .ptr_34a6 = SELF(figures_str),
+    .figures_str_ptr = SELF(figures_str),
 
     .ptr_34aa = SELF(str_662),
 
@@ -8128,7 +8128,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .figures_str = "figures",
 
-    .ptr_34b8 = SELF(func_str_3),
+    .func_str_3_ptr = SELF(func_str_3),
 
     .ptr_34bc = SELF(str_664),
 
@@ -8136,7 +8136,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .func_str_3 = ALIGNED_STRING("func"),
 
-    .ptr_34c8 = SELF(onoff_str),
+    .onoff_str_ptr = SELF(onoff_str),
 
     .ptr_34cc = SELF(str_666),
 
@@ -8246,7 +8246,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .font_str_4 = ALIGNED_STRING("font"),
 
-    .ptr_35ea = SELF(style_str),
+    .style_str_ptr = SELF(style_str),
 
     .ptr_35ee = SELF(str_696),
 
@@ -8266,7 +8266,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .style_str_2 = "style",
 
-    .ptr_3614 = SELF(editsw2_str),
+    .editsw2_str_ptr = SELF(editsw2_str),
 
     .ptr_3618 = SELF(str_701),
 
@@ -8274,7 +8274,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .editsw2_str = "editsw2",
 
-    .ptr_3626 = SELF(style_str_3),
+    .style_str_3_ptr = SELF(style_str_3),
 
     .ptr_362a = SELF(str_703),
 
@@ -8294,7 +8294,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .style_str_4 = "style",
 
-    .ptr_3650 = SELF(page_str),
+    .page_str_ptr = SELF(page_str),
 
     .ptr_3654 = SELF(str_708),
 
@@ -8351,7 +8351,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .page_str_2 = ALIGNED_STRING("page"),
 
-    .ptr_36dc = SELF(func_str_8),
+    .func_str_8_ptr = SELF(func_str_8),
 
     .ptr_36e0 = SELF(str_723),
 
@@ -8359,7 +8359,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .func_str_8 = ALIGNED_STRING("func"),
 
-    .ptr_36ec = SELF(part_str),
+    .part_str_ptr = SELF(part_str),
 
     .ptr_36f0 = SELF(str_725),
 
@@ -8382,7 +8382,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_str_2 = "str",
 
-    .ptr_3722 = SELF(bmp_str),
+    .bmp_str_ptr = SELF(bmp_str),
 
     .ptr_3726 = SELF(str_731),
 
@@ -8390,7 +8390,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .bmp_str = "bmp",
 
-    .ptr_3730 = SELF(icon_str_2),
+    .icon_str_2_ptr = SELF(icon_str_2),
 
     .ptr_3734 = SELF(str_733),
 
@@ -8689,7 +8689,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .func_str_10 = ALIGNED_STRING("func"),
 
-    .ptr_39fc = SELF(func_str_11),
+    .func_str_11_ptr = SELF(func_str_11),
 
     .ptr_3a00 = SELF(str_812),
 
@@ -8697,7 +8697,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .func_str_11 = ALIGNED_STRING("func"),
 
-    .ptr_3a0c = SELF(editsw2_str_2),
+    .editsw2_str_2_ptr = SELF(editsw2_str_2),
 
     .ptr_3a10 = SELF(str_814),
 
@@ -8713,7 +8713,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_817 = ALIGNED_STRING(""),
 
-    .ptr_3a2a = SELF(mode_str_3),
+    .mode_str_3_ptr = SELF(mode_str_3),
 
     .ptr_3a2e = SELF(str_818),
 
@@ -8721,7 +8721,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .mode_str_3 = ALIGNED_STRING("mode"),
 
-    .ptr_3a3a = SELF(screen_str_2),
+    .screen_str_2_ptr = SELF(screen_str_2),
 
     .ptr_3a3e = SELF(str_820),
 
@@ -8729,7 +8729,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .screen_str_2 = ALIGNED_STRING("screen"),
 
-    .ptr_3a4c = SELF(window_str_4),
+    .window_str_4_ptr = SELF(window_str_4),
 
     .ptr_3a50 = SELF(str_822),
 
@@ -8741,7 +8741,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_824 = ALIGNED_STRING(""),
 
-    .ptr_3a64 = SELF(cursor_str),
+    .cursor_str_ptr = SELF(cursor_str),
 
     .ptr_3a68 = SELF(str_825),
 
@@ -8749,7 +8749,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .cursor_str = ALIGNED_STRING("cursor"),
 
-    .ptr_3a76 = SELF(func_str_12),
+    .func_str_12_ptr = SELF(func_str_12),
 
     .ptr_3a7a = SELF(str_827),
 
@@ -8813,7 +8813,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_str_10 = "str",
 
-    .ptr_3b10 = SELF(func_str_14),
+    .func_str_14_ptr = SELF(func_str_14),
 
     .ptr_3b14 = SELF(str_844),
 
@@ -8908,7 +8908,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .fixedcol_str = ALIGNED_STRING("fixedcol"),
 
-    .ptr_3c20 = SELF(page_str_3),
+    .page_str_3_ptr = SELF(page_str_3),
 
     .ptr_3c24 = SELF(str_871),
 
@@ -8950,7 +8950,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_881 = ALIGNED_STRING(""),
 
-    .ptr_3c78 = SELF(adr_str),
+    .adr_str_ptr = SELF(adr_str),
 
     .ptr_3c7c = SELF(str_882),
 
@@ -8958,7 +8958,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .adr_str = "adr",
 
-    .ptr_3c86 = SELF(time_str),
+    .time_str_ptr = SELF(time_str),
 
     .ptr_3c8a = SELF(str_884),
 
@@ -8986,7 +8986,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_890 = ALIGNED_STRING(""),
 
-    .ptr_3cb4 = SELF(func_str_16),
+    .func_str_16_ptr = SELF(func_str_16),
 
     .ptr_3cb8 = SELF(str_891),
 
@@ -9012,7 +9012,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .font_str_12 = ALIGNED_STRING("font"),
 
-    .ptr_3cfa = SELF(func_str_17),
+    .func_str_17_ptr = SELF(func_str_17),
 
     .ptr_3cfe = SELF(str_898),
 
@@ -9028,7 +9028,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_901 = ALIGNED_STRING(""),
 
-    .ptr_3d16 = SELF(func_str_18),
+    .func_str_18_ptr = SELF(func_str_18),
 
     .ptr_3d1a = SELF(str_902),
 
@@ -9044,7 +9044,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .str_905 = ALIGNED_STRING(""),
 
-    .ptr_3d32 = SELF(file_str),
+    .file_str_ptr = SELF(file_str),
 
     .ptr_3d36 = SELF(str_906),
 
@@ -9054,7 +9054,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .classdef_160_0 = { .proc = NAKA_ADDR(ObjectProc), .parent = 0xFFFFFFFF, .allsize = 2, .selfsize = 0, .name = 0x00EADA8A, .propdata = 0x00EADA88, .propname = SELF(ptr_31e8) },
 
-    .classdef_160_1 = { .proc = NAKA_ADDR(FunctionProc), .parent = 0x01600000, .allsize = 4, .selfsize = 4, .name = 0x00EADA7E, .propdata = 0x00EADA7C, .propname = SELF(ptr_31ee) },
+    .classdef_160_1 = { .proc = NAKA_ADDR(FunctionProc), .parent = 0x01600000, .allsize = 4, .selfsize = 4, .name = 0x00EADA7E, .propdata = 0x00EADA7C, .propname = SELF(func_str_ptr) },
 
     .classdef_160_2 = { .proc = NAKA_ADDR(ApFunctionProc), .parent = 0x01600001, .allsize = 4, .selfsize = 0, .name = 0x00EADA70, .propdata = 0x00EADA6E, .propname = SELF(ptr_31fe) },
 
@@ -9076,13 +9076,13 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .classdef_160_11 = { .proc = NAKA_ADDR(ResFontProc), .parent = 0x01600000, .allsize = 2, .selfsize = 2, .name = 0x00EAD9F8, .propdata = 0x00EAD9F6, .propname = SELF(ptr_333a) },
 
-    .classdef_160_12 = { .proc = NAKA_ADDR(ResEventProc), .parent = 0x01600000, .allsize = 4, .selfsize = 4, .name = 0x00EAD9EC, .propdata = 0x00EAD9EA, .propname = SELF(ptr_334a) },
+    .classdef_160_12 = { .proc = NAKA_ADDR(ResEventProc), .parent = 0x01600000, .allsize = 4, .selfsize = 4, .name = 0x00EAD9EC, .propdata = 0x00EAD9EA, .propname = SELF(name_str_6_ptr) },
 
-    .classdef_160_13 = { .proc = NAKA_ADDR(ResMethodProc), .parent = 0x01600000, .allsize = 4, .selfsize = 4, .name = 0x00EAD9E0, .propdata = 0x00EAD9DE, .propname = SELF(ptr_335a) },
+    .classdef_160_13 = { .proc = NAKA_ADDR(ResMethodProc), .parent = 0x01600000, .allsize = 4, .selfsize = 4, .name = 0x00EAD9E0, .propdata = 0x00EAD9DE, .propname = SELF(name_str_7_ptr) },
 
     .classdef_160_14 = { .proc = NAKA_ADDR(ResStringProc), .parent = 0x01600000, .allsize = 2, .selfsize = 2, .name = 0x00EAD9D4, .propdata = 0x00EAD9D2, .propname = SELF(ptr_336a) },
 
-    .classdef_160_15 = { .proc = NAKA_ADDR(ResNameProc), .parent = 0x01600000, .allsize = 4, .selfsize = 4, .name = 0x00EAD9CA, .propdata = 0x00EAD9C8, .propname = SELF(ptr_337a) },
+    .classdef_160_15 = { .proc = NAKA_ADDR(ResNameProc), .parent = 0x01600000, .allsize = 4, .selfsize = 4, .name = 0x00EAD9CA, .propdata = 0x00EAD9C8, .propname = SELF(name_str_8_ptr) },
 
     .classdef_160_16 = { .proc = NAKA_ADDR(ViewableProc), .parent = 0x01600000, .allsize = 22, .selfsize = 22, .name = 0x00EAD9BE, .propdata = 0x00EAD9B6, .propname = SELF(ptrs_31) },
 
@@ -9096,11 +9096,11 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .classdef_160_21 = { .proc = NAKA_ADDR(PsEditBoxProc), .parent = 0x01600011, .allsize = 50, .selfsize = 22, .name = 0x00EAD978, .propdata = 0x00EAD96E, .propname = SELF(ptrs_35) },
 
-    .classdef_160_22 = { .proc = NAKA_ADDR(PsNumEditBoxProc), .parent = 0x01600015, .allsize = 52, .selfsize = 2, .name = 0x00EAD960, .propdata = 0x00EAD95E, .propname = SELF(ptr_34a6) },
+    .classdef_160_22 = { .proc = NAKA_ADDR(PsNumEditBoxProc), .parent = 0x01600015, .allsize = 52, .selfsize = 2, .name = 0x00EAD960, .propdata = 0x00EAD95E, .propname = SELF(figures_str_ptr) },
 
-    .classdef_160_23 = { .proc = NAKA_ADDR(PsTblEditBoxProc), .parent = 0x01600015, .allsize = 54, .selfsize = 4, .name = 0x00EAD950, .propdata = 0x00EAD94E, .propname = SELF(ptr_34b8) },
+    .classdef_160_23 = { .proc = NAKA_ADDR(PsTblEditBoxProc), .parent = 0x01600015, .allsize = 54, .selfsize = 4, .name = 0x00EAD950, .propdata = 0x00EAD94E, .propname = SELF(func_str_3_ptr) },
 
-    .classdef_160_24 = { .proc = NAKA_ADDR(AcOnOffBoxProc), .parent = 0x01600015, .allsize = 54, .selfsize = 4, .name = 0x00EAD942, .propdata = 0x00EAD940, .propname = SELF(ptr_34c8) },
+    .classdef_160_24 = { .proc = NAKA_ADDR(AcOnOffBoxProc), .parent = 0x01600015, .allsize = 54, .selfsize = 4, .name = 0x00EAD942, .propdata = 0x00EAD940, .propname = SELF(onoff_str_ptr) },
 
     .classdef_160_25 = { .proc = NAKA_ADDR(AcNumEditBoxProc), .parent = 0x01600015, .allsize = 64, .selfsize = 14, .name = 0x00EAD932, .propdata = 0x00EAD92A, .propname = SELF(ptrs_36) },
 

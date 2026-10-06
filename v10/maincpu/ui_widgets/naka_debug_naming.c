@@ -731,16 +731,16 @@ typedef struct __attribute__((packed)) {
     uint16_t field_3e2d;
     uint16_t field_3e2f;
     uint8_t pad_104[5];  /* zero padding */
-    uint32_t ptr_3e36;
+    uint32_t VF_Invisible_str_ptr;
     uint16_t field_3e3a;
     uint8_t pad_105[2];  /* zero padding */
-    uint32_t ptr_3e3e;
+    uint32_t VF_Fixed_str_ptr;
     uint16_t field_3e42;
     uint8_t pad_106[2];  /* zero padding */
-    uint32_t ptr_3e46;
+    uint32_t VF_Change_str_ptr;
     uint16_t field_3e4a;
     uint8_t pad_107[2];  /* zero padding */
-    uint32_t ptr_3e4e;
+    uint32_t VF_Const_str_ptr;
     uint16_t field_3e52;
     uint8_t pad_108[2];  /* zero padding */
     uint32_t ptr_3e56;
@@ -758,79 +758,79 @@ typedef struct __attribute__((packed)) {
     uint32_t ptrs_7[3];  /* 3 pointers */
     uint16_t field_3eb8;
     uint8_t pad_111[2];  /* zero padding */
-    uint32_t ptr_3ebc;
+    uint32_t CL_Green_str_ptr;
     uint16_t field_3ec0;
     uint8_t pad_112[2];  /* zero padding */
-    uint32_t ptr_3ec4;
+    uint32_t CL_Olive_str_ptr;
     uint16_t field_3ec8;
     uint8_t pad_113[2];  /* zero padding */
-    uint32_t ptr_3ecc;
+    uint32_t CL_Navy_str_ptr;
     uint16_t field_3ed0;
     uint8_t pad_114[2];  /* zero padding */
-    uint32_t ptr_3ed4;
+    uint32_t CL_Purple_str_ptr;
     uint16_t field_3ed8;
     uint8_t pad_115[2];  /* zero padding */
-    uint32_t ptr_3edc;
+    uint32_t CL_Teal_str_ptr;
     uint16_t field_3ee0;
     uint8_t pad_116[2];  /* zero padding */
-    uint32_t ptr_3ee4;
+    uint32_t CL_DarkGray_str_ptr;
     uint16_t field_3ee8;
     uint8_t pad_117[2];  /* zero padding */
-    uint32_t ptr_3eec;
+    uint32_t CL_Gray_str_ptr;
     uint16_t field_3ef0;
     uint8_t pad_118[2];  /* zero padding */
-    uint32_t ptr_3ef4;
+    uint32_t CL_Silver_str_ptr;
     uint16_t field_3ef8;
     uint8_t pad_119[2];  /* zero padding */
-    uint32_t ptr_3efc;
+    uint32_t CL_Red_str_ptr;
     uint16_t field_3f00;
     uint8_t pad_120[2];  /* zero padding */
-    uint32_t ptr_3f04;
+    uint32_t CL_Lime_str_ptr;
     uint16_t field_3f08;
     uint8_t pad_121[2];  /* zero padding */
-    uint32_t ptr_3f0c;
+    uint32_t CL_Yellow_str_ptr;
     uint16_t field_3f10;
     uint8_t pad_122[2];  /* zero padding */
-    uint32_t ptr_3f14;
+    uint32_t CL_Blue_str_ptr;
     uint16_t field_3f18;
     uint8_t pad_123[2];  /* zero padding */
-    uint32_t ptr_3f1c;
+    uint32_t CL_Fuchsia_str_ptr;
     uint16_t field_3f20;
     uint8_t pad_124[2];  /* zero padding */
-    uint32_t ptr_3f24;
+    uint32_t CL_Aqua_str_ptr;
     uint16_t field_3f28;
     uint8_t pad_125[2];  /* zero padding */
-    uint32_t ptr_3f2c;
+    uint32_t CL_Orange_str_ptr;
     uint16_t field_3f30;
     uint8_t pad_126[2];  /* zero padding */
-    uint32_t ptr_3f34;
+    uint32_t CL_FireRed_str_ptr;
     uint16_t field_3f38;
     uint8_t pad_127[2];  /* zero padding */
-    uint32_t ptr_3f3c;
+    uint32_t CL_DarkYellow_str_ptr;
     uint16_t field_3f40;
     uint8_t pad_128[2];  /* zero padding */
-    uint32_t ptr_3f44;
+    uint32_t CL_LightGreen_str_ptr;
     uint16_t field_3f48;
     uint8_t pad_129[2];  /* zero padding */
-    uint32_t ptr_3f4c;
+    uint32_t CL_White_str_ptr;
     uint16_t field_3f50;
     uint8_t pad_130[2];  /* zero padding */
-    uint32_t ptr_3f54;
+    uint32_t CL_IconBack_str_ptr;
     uint16_t field_3f58;
     uint8_t pad_131[2];  /* zero padding */
-    uint32_t ptr_3f5c;
+    uint32_t CL_Text_str_ptr;
     uint16_t field_3f60;
     uint8_t pad_132[2];  /* zero padding */
-    uint32_t ptr_3f64;
+    uint32_t CL_Selected_str_ptr;
     uint16_t field_3f68;
     uint8_t pad_133[2];  /* zero padding */
-    uint32_t ptr_3f6c;
+    uint32_t CL_PageBack_str_ptr;
     uint16_t field_3f70;
     uint8_t pad_134[2];  /* zero padding */
-    uint32_t ptr_3f74;
+    uint32_t CL_EditSw_str_ptr;
     uint16_t field_3f78;
     uint8_t pad_135[2];  /* zero padding */
-    uint32_t ptr_3f7c;
+    uint32_t CL_Transparent_str_ptr;
     uint16_t field_3f80;
     uint8_t pad_136[2];  /* zero padding */
     uint32_t ptr_3f84;
@@ -875,49 +875,49 @@ typedef struct __attribute__((packed)) {
     uint32_t ptrs_8[3];  /* 3 pointers */
     uint16_t field_40de;
     uint8_t pad_140[2];  /* zero padding */
-    uint32_t ptr_40e2;
+    uint32_t BD_Single2_str_ptr;
     uint16_t field_40e6;
     uint8_t pad_141[2];  /* zero padding */
-    uint32_t ptr_40ea;
+    uint32_t BD_Double1_str_ptr;
     uint16_t field_40ee;
     uint8_t pad_142[2];  /* zero padding */
-    uint32_t ptr_40f2;
+    uint32_t BD_Shadow1_str_ptr;
     uint16_t field_40f6;
     uint8_t pad_143[2];  /* zero padding */
-    uint32_t ptr_40fa;
+    uint32_t BD_Shadow2_str_ptr;
     uint16_t field_40fe;
     uint8_t pad_144[2];  /* zero padding */
-    uint32_t ptr_4102;
+    uint32_t BD_Round0_str_ptr;
     uint16_t field_4106;
     uint8_t pad_145[2];  /* zero padding */
-    uint32_t ptr_410a;
+    uint32_t BD_Round1_str_ptr;
     uint16_t field_410e;
     uint8_t pad_146[3];  /* zero padding */
     uint16_t field_4113;
     uint16_t field_4115;
     uint8_t pad_147[3];  /* zero padding */
-    uint32_t ptr_411a;
+    uint32_t BD_Round5_str_ptr;
     uint16_t field_411e;
     uint8_t pad_148[2];  /* zero padding */
-    uint32_t ptr_4122;
+    uint32_t BD_Round9_str_ptr;
     uint16_t field_4126;
     uint8_t pad_149[2];  /* zero padding */
-    uint32_t ptr_412a;
+    uint32_t BD_Round14_str_ptr;
     uint16_t field_412e;
     uint8_t pad_150[2];  /* zero padding */
-    uint32_t ptr_4132;
+    uint32_t BD_3D_UP1_str_ptr;
     uint16_t field_4136;
     uint8_t pad_151[2];  /* zero padding */
-    uint32_t ptr_413a;
+    uint32_t BD_3D_UP2_str_ptr;
     uint16_t field_413e;
     uint8_t pad_152[2];  /* zero padding */
-    uint32_t ptr_4142;
+    uint32_t BD_3D_DOWN1_str_ptr;
     uint16_t field_4146;
     uint8_t pad_153[2];  /* zero padding */
-    uint32_t ptr_414a;
+    uint32_t BD_3D_DOWN2_str_ptr;
     uint16_t field_414e;
     uint8_t pad_154[2];  /* zero padding */
-    uint32_t ptr_4152;
+    uint32_t BD_EditSwitch_str_ptr;
     uint16_t field_4156;
     uint8_t pad_155[2];  /* zero padding */
     uint32_t ptr_415a;
@@ -968,7 +968,7 @@ typedef struct __attribute__((packed)) {
     uint16_t field_428b;
     uint16_t field_428d;
     uint8_t pad_164[5];  /* zero padding */
-    uint32_t ptr_4294;
+    uint32_t AL_LeftJustify_str_ptr;
     uint16_t field_4298;
     uint8_t pad_165[2];  /* zero padding */
     uint32_t ptr_429c;
@@ -983,55 +983,55 @@ typedef struct __attribute__((packed)) {
     uint32_t ptrs_9[3];  /* 3 pointers */
     uint16_t field_42e4;
     uint8_t pad_168[2];  /* zero padding */
-    uint32_t ptr_42e8;
+    uint32_t ES_Bottom3_str_ptr;
     uint16_t field_42ec;
     uint8_t pad_169[2];  /* zero padding */
-    uint32_t ptr_42f0;
+    uint32_t ES_Bottom4_str_ptr;
     uint16_t field_42f4;
     uint8_t pad_170[2];  /* zero padding */
-    uint32_t ptr_42f8;
+    uint32_t ES_Bottom5_str_ptr;
     uint16_t field_42fc;
     uint8_t pad_171[2];  /* zero padding */
-    uint32_t ptr_4300;
+    uint32_t ES_Bottom6_str_ptr;
     uint16_t field_4304;
     uint8_t pad_172[3];  /* zero padding */
     uint16_t field_4309;
     uint16_t field_430b;
     uint8_t pad_173[3];  /* zero padding */
-    uint32_t ptr_4310;
+    uint32_t ES_Bottom8_str_ptr;
     uint16_t field_4314;
     uint8_t pad_174[2];  /* zero padding */
-    uint32_t ptr_4318;
+    uint32_t ES_Left1_str_ptr;
     uint16_t field_431c;
     uint8_t pad_175[2];  /* zero padding */
-    uint32_t ptr_4320;
+    uint32_t ES_Left2_str_ptr;
     uint16_t field_4324;
     uint8_t pad_176[2];  /* zero padding */
-    uint32_t ptr_4328;
+    uint32_t ES_Left3_str_ptr;
     uint16_t field_432c;
     uint8_t pad_177[2];  /* zero padding */
-    uint32_t ptr_4330;
+    uint32_t ES_Left4_str_ptr;
     uint16_t field_4334;
     uint8_t pad_178[2];  /* zero padding */
-    uint32_t ptr_4338;
+    uint32_t ES_Left5_str_ptr;
     uint16_t field_433c;
     uint8_t pad_179[2];  /* zero padding */
-    uint32_t ptr_4340;
+    uint32_t ES_Right1_str_ptr;
     uint16_t field_4344;
     uint8_t pad_180[2];  /* zero padding */
-    uint32_t ptr_4348;
+    uint32_t ES_Right2_str_ptr;
     uint16_t field_434c;
     uint8_t pad_181[2];  /* zero padding */
-    uint32_t ptr_4350;
+    uint32_t ES_Right3_str_ptr;
     uint16_t field_4354;
     uint8_t pad_182[2];  /* zero padding */
-    uint32_t ptr_4358;
+    uint32_t ES_Right4_str_ptr;
     uint16_t field_435c;
     uint8_t pad_183[2];  /* zero padding */
-    uint32_t ptr_4360;
+    uint32_t ES_Right5_str_ptr;
     uint16_t field_4364;
     uint8_t pad_184[2];  /* zero padding */
-    uint32_t ptr_4368;
+    uint32_t ES_Exit_str_ptr;
     uint16_t field_436c;
     uint8_t pad_185[2];  /* zero padding */
     uint32_t ptr_4370;
@@ -1063,46 +1063,46 @@ typedef struct __attribute__((packed)) {
     uint32_t ptrs_10[3];  /* 3 pointers */
     uint16_t field_4462;
     uint8_t pad_188[2];  /* zero padding */
-    uint32_t ptr_4466;
+    uint32_t SS_Down_str_ptr;
     uint16_t field_446a;
     uint8_t pad_189[2];  /* zero padding */
-    uint32_t ptr_446e;
+    uint32_t SS_UpDown_str_ptr;
     uint16_t field_4472;
     uint8_t pad_190[2];  /* zero padding */
-    uint32_t ptr_4476;
+    uint32_t SS_On_str_ptr;
     uint16_t field_447a;
     uint8_t pad_191[2];  /* zero padding */
-    uint32_t ptr_447e;
+    uint32_t SS_Off_str_ptr;
     uint16_t field_4482;
     uint8_t pad_192[2];  /* zero padding */
-    uint32_t ptr_4486;
+    uint32_t SS_OK_str_ptr;
     uint16_t field_448a;
     uint8_t pad_193[2];  /* zero padding */
-    uint32_t ptr_448e;
+    uint32_t SS_Left_str_ptr;
     uint16_t field_4492;
     uint8_t pad_194[2];  /* zero padding */
-    uint32_t ptr_4496;
+    uint32_t SS_Right_str_ptr;
     uint16_t field_449a;
     uint8_t pad_195[2];  /* zero padding */
-    uint32_t ptr_449e;
+    uint32_t SS_Yes_str_ptr;
     uint16_t field_44a2;
     uint8_t pad_196[2];  /* zero padding */
-    uint32_t ptr_44a6;
+    uint32_t SS_No_str_ptr;
     uint16_t field_44aa;
     uint8_t pad_197[2];  /* zero padding */
-    uint32_t ptr_44ae;
+    uint32_t SS_OnOff_str_ptr;
     uint16_t field_44b2;
     uint8_t pad_198[2];  /* zero padding */
-    uint32_t ptr_44b6;
+    uint32_t SS_Up2_str_ptr;
     uint16_t field_44ba;
     uint8_t pad_199[2];  /* zero padding */
-    uint32_t ptr_44be;
+    uint32_t SS_Down2_str_ptr;
     uint16_t field_44c2;
     uint8_t pad_200[2];  /* zero padding */
-    uint32_t ptr_44c6;
+    uint32_t SS_UpDown2_str_ptr;
     uint16_t field_44ca;
     uint8_t pad_201[2];  /* zero padding */
-    uint32_t ptr_44ce;
+    uint32_t SS_Left2_str_ptr;
     uint16_t field_44d2;
     uint8_t pad_202[2];  /* zero padding */
     uint32_t ptr_44d6;
@@ -1159,37 +1159,37 @@ typedef struct __attribute__((packed)) {
     uint16_t field_45f9;
     uint16_t field_45fb;
     uint8_t pad_213[5];  /* zero padding */
-    uint32_t ptr_4602;
+    uint32_t NakaInst_iduMurai_ptr;
     uint16_t field_4606;
     uint8_t pad_214[2];  /* zero padding */
-    uint32_t ptr_460a;
+    uint32_t NakaData_StyleBitmaps_ptr;
     uint16_t field_460e;
     uint8_t pad_215[2];  /* zero padding */
-    uint32_t ptr_4612;
+    uint32_t iduEast_str_ptr;
     uint16_t field_4616;
     uint8_t pad_216[2];  /* zero padding */
-    uint32_t ptr_461a;
+    uint32_t iduSuna_str_ptr;
     uint16_t field_461e;
     uint8_t pad_217[2];  /* zero padding */
-    uint32_t ptr_4622;
+    uint32_t iduCheap_str_ptr;
     uint16_t field_4626;
     uint8_t pad_218[2];  /* zero padding */
-    uint32_t ptr_462a;
+    uint32_t iduScoop_str_ptr;
     uint16_t field_462e;
     uint8_t pad_219[2];  /* zero padding */
-    uint32_t ptr_4632;
+    uint32_t iduYoko_str_ptr;
     uint16_t field_4636;
     uint8_t pad_220[2];  /* zero padding */
-    uint32_t ptr_463a;
+    uint32_t iduKubo_str_ptr;
     uint16_t field_463e;
     uint8_t pad_221[2];  /* zero padding */
-    uint32_t ptr_4642;
+    uint32_t iduHama_str_ptr;
     uint16_t field_4646;
     uint8_t pad_222[2];  /* zero padding */
-    uint32_t ptr_464a;
+    uint32_t iduKSS_str_ptr;
     uint16_t field_464e;
     uint8_t pad_223[2];  /* zero padding */
-    uint32_t ptr_4652;
+    uint32_t iduNaka_str_ptr;
     uint16_t field_4656;
     uint8_t pad_224[2];  /* zero padding */
     uint32_t ptr_465a;
@@ -5723,25 +5723,25 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .pad_104 = { 0 },
 
-    .ptr_3e36 = SELF(VF_Invisible_str),
+    .VF_Invisible_str_ptr = SELF(VF_Invisible_str),
 
     .field_3e3a = 0x0001,
 
     .pad_105 = { 0 },
 
-    .ptr_3e3e = SELF(VF_Fixed_str),
+    .VF_Fixed_str_ptr = SELF(VF_Fixed_str),
 
     .field_3e42 = 0x0002,
 
     .pad_106 = { 0 },
 
-    .ptr_3e46 = SELF(VF_Change_str),
+    .VF_Change_str_ptr = SELF(VF_Change_str),
 
     .field_3e4a = 0x0004,
 
     .pad_107 = { 0 },
 
-    .ptr_3e4e = SELF(VF_Const_str),
+    .VF_Const_str_ptr = SELF(VF_Const_str),
 
     .field_3e52 = 0x0008,
 
@@ -5781,151 +5781,151 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .pad_111 = { 0 },
 
-    .ptr_3ebc = SELF(CL_Green_str),
+    .CL_Green_str_ptr = SELF(CL_Green_str),
 
     .field_3ec0 = 0x0002,
 
     .pad_112 = { 0 },
 
-    .ptr_3ec4 = SELF(CL_Olive_str),
+    .CL_Olive_str_ptr = SELF(CL_Olive_str),
 
     .field_3ec8 = 0x0003,
 
     .pad_113 = { 0 },
 
-    .ptr_3ecc = SELF(CL_Navy_str),
+    .CL_Navy_str_ptr = SELF(CL_Navy_str),
 
     .field_3ed0 = 0x0004,
 
     .pad_114 = { 0 },
 
-    .ptr_3ed4 = SELF(CL_Purple_str),
+    .CL_Purple_str_ptr = SELF(CL_Purple_str),
 
     .field_3ed8 = 0x0005,
 
     .pad_115 = { 0 },
 
-    .ptr_3edc = SELF(CL_Teal_str),
+    .CL_Teal_str_ptr = SELF(CL_Teal_str),
 
     .field_3ee0 = 0x0006,
 
     .pad_116 = { 0 },
 
-    .ptr_3ee4 = SELF(CL_DarkGray_str),
+    .CL_DarkGray_str_ptr = SELF(CL_DarkGray_str),
 
     .field_3ee8 = 0x0008,
 
     .pad_117 = { 0 },
 
-    .ptr_3eec = SELF(CL_Gray_str),
+    .CL_Gray_str_ptr = SELF(CL_Gray_str),
 
     .field_3ef0 = 0x00F8,
 
     .pad_118 = { 0 },
 
-    .ptr_3ef4 = SELF(CL_Silver_str),
+    .CL_Silver_str_ptr = SELF(CL_Silver_str),
 
     .field_3ef8 = 0x0007,
 
     .pad_119 = { 0 },
 
-    .ptr_3efc = SELF(CL_Red_str),
+    .CL_Red_str_ptr = SELF(CL_Red_str),
 
     .field_3f00 = 0x00F9,
 
     .pad_120 = { 0 },
 
-    .ptr_3f04 = SELF(CL_Lime_str),
+    .CL_Lime_str_ptr = SELF(CL_Lime_str),
 
     .field_3f08 = 0x00FA,
 
     .pad_121 = { 0 },
 
-    .ptr_3f0c = SELF(CL_Yellow_str),
+    .CL_Yellow_str_ptr = SELF(CL_Yellow_str),
 
     .field_3f10 = 0x00FB,
 
     .pad_122 = { 0 },
 
-    .ptr_3f14 = SELF(CL_Blue_str),
+    .CL_Blue_str_ptr = SELF(CL_Blue_str),
 
     .field_3f18 = 0x00FC,
 
     .pad_123 = { 0 },
 
-    .ptr_3f1c = SELF(CL_Fuchsia_str),
+    .CL_Fuchsia_str_ptr = SELF(CL_Fuchsia_str),
 
     .field_3f20 = 0x00FD,
 
     .pad_124 = { 0 },
 
-    .ptr_3f24 = SELF(CL_Aqua_str),
+    .CL_Aqua_str_ptr = SELF(CL_Aqua_str),
 
     .field_3f28 = 0x00FE,
 
     .pad_125 = { 0 },
 
-    .ptr_3f2c = SELF(CL_Orange_str),
+    .CL_Orange_str_ptr = SELF(CL_Orange_str),
 
     .field_3f30 = 0x0009,
 
     .pad_126 = { 0 },
 
-    .ptr_3f34 = SELF(CL_FireRed_str),
+    .CL_FireRed_str_ptr = SELF(CL_FireRed_str),
 
     .field_3f38 = 0x000A,
 
     .pad_127 = { 0 },
 
-    .ptr_3f3c = SELF(CL_DarkYellow_str),
+    .CL_DarkYellow_str_ptr = SELF(CL_DarkYellow_str),
 
     .field_3f40 = 0x000C,
 
     .pad_128 = { 0 },
 
-    .ptr_3f44 = SELF(CL_LightGreen_str),
+    .CL_LightGreen_str_ptr = SELF(CL_LightGreen_str),
 
     .field_3f48 = 0x000D,
 
     .pad_129 = { 0 },
 
-    .ptr_3f4c = SELF(CL_White_str),
+    .CL_White_str_ptr = SELF(CL_White_str),
 
     .field_3f50 = 0x00FF,
 
     .pad_130 = { 0 },
 
-    .ptr_3f54 = SELF(CL_IconBack_str),
+    .CL_IconBack_str_ptr = SELF(CL_IconBack_str),
 
     .field_3f58 = 0x00F0,
 
     .pad_131 = { 0 },
 
-    .ptr_3f5c = SELF(CL_Text_str),
+    .CL_Text_str_ptr = SELF(CL_Text_str),
 
     .field_3f60 = 0x00F1,
 
     .pad_132 = { 0 },
 
-    .ptr_3f64 = SELF(CL_Selected_str),
+    .CL_Selected_str_ptr = SELF(CL_Selected_str),
 
     .field_3f68 = 0x00F2,
 
     .pad_133 = { 0 },
 
-    .ptr_3f6c = SELF(CL_PageBack_str),
+    .CL_PageBack_str_ptr = SELF(CL_PageBack_str),
 
     .field_3f70 = 0x00F3,
 
     .pad_134 = { 0 },
 
-    .ptr_3f74 = SELF(CL_EditSw_str),
+    .CL_EditSw_str_ptr = SELF(CL_EditSw_str),
 
     .field_3f78 = 0x00F4,
 
     .pad_135 = { 0 },
 
-    .ptr_3f7c = SELF(CL_Transparent_str),
+    .CL_Transparent_str_ptr = SELF(CL_Transparent_str),
 
     .field_3f80 = 0x00F7,
 
@@ -6019,37 +6019,37 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .pad_140 = { 0 },
 
-    .ptr_40e2 = SELF(BD_Single2_str),
+    .BD_Single2_str_ptr = SELF(BD_Single2_str),
 
     .field_40e6 = 0x0002,
 
     .pad_141 = { 0 },
 
-    .ptr_40ea = SELF(BD_Double1_str),
+    .BD_Double1_str_ptr = SELF(BD_Double1_str),
 
     .field_40ee = 0x0003,
 
     .pad_142 = { 0 },
 
-    .ptr_40f2 = SELF(BD_Shadow1_str),
+    .BD_Shadow1_str_ptr = SELF(BD_Shadow1_str),
 
     .field_40f6 = 0x0004,
 
     .pad_143 = { 0 },
 
-    .ptr_40fa = SELF(BD_Shadow2_str),
+    .BD_Shadow2_str_ptr = SELF(BD_Shadow2_str),
 
     .field_40fe = 0x0005,
 
     .pad_144 = { 0 },
 
-    .ptr_4102 = SELF(BD_Round0_str),
+    .BD_Round0_str_ptr = SELF(BD_Round0_str),
 
     .field_4106 = 0x0006,
 
     .pad_145 = { 0 },
 
-    .ptr_410a = SELF(BD_Round1_str),
+    .BD_Round1_str_ptr = SELF(BD_Round1_str),
 
     .field_410e = 0x0007,
 
@@ -6061,49 +6061,49 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .pad_147 = { 0 },
 
-    .ptr_411a = SELF(BD_Round5_str),
+    .BD_Round5_str_ptr = SELF(BD_Round5_str),
 
     .field_411e = 0x0009,
 
     .pad_148 = { 0 },
 
-    .ptr_4122 = SELF(BD_Round9_str),
+    .BD_Round9_str_ptr = SELF(BD_Round9_str),
 
     .field_4126 = 0x000A,
 
     .pad_149 = { 0 },
 
-    .ptr_412a = SELF(BD_Round14_str),
+    .BD_Round14_str_ptr = SELF(BD_Round14_str),
 
     .field_412e = 0x000B,
 
     .pad_150 = { 0 },
 
-    .ptr_4132 = SELF(BD_3D_UP1_str),
+    .BD_3D_UP1_str_ptr = SELF(BD_3D_UP1_str),
 
     .field_4136 = 0x00C0,
 
     .pad_151 = { 0 },
 
-    .ptr_413a = SELF(BD_3D_UP2_str),
+    .BD_3D_UP2_str_ptr = SELF(BD_3D_UP2_str),
 
     .field_413e = 0x00C1,
 
     .pad_152 = { 0 },
 
-    .ptr_4142 = SELF(BD_3D_DOWN1_str),
+    .BD_3D_DOWN1_str_ptr = SELF(BD_3D_DOWN1_str),
 
     .field_4146 = 0x00C2,
 
     .pad_153 = { 0 },
 
-    .ptr_414a = SELF(BD_3D_DOWN2_str),
+    .BD_3D_DOWN2_str_ptr = SELF(BD_3D_DOWN2_str),
 
     .field_414e = 0x00C3,
 
     .pad_154 = { 0 },
 
-    .ptr_4152 = SELF(BD_EditSwitch_str),
+    .BD_EditSwitch_str_ptr = SELF(BD_EditSwitch_str),
 
     .field_4156 = 0x00C9,
 
@@ -6205,7 +6205,7 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .pad_164 = { 0 },
 
-    .ptr_4294 = SELF(AL_LeftJustify_str),
+    .AL_LeftJustify_str_ptr = SELF(AL_LeftJustify_str),
 
     .field_4298 = 0x0001,
 
@@ -6239,25 +6239,25 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .pad_168 = { 0 },
 
-    .ptr_42e8 = SELF(ES_Bottom3_str),
+    .ES_Bottom3_str_ptr = SELF(ES_Bottom3_str),
 
     .field_42ec = 0x0002,
 
     .pad_169 = { 0 },
 
-    .ptr_42f0 = SELF(ES_Bottom4_str),
+    .ES_Bottom4_str_ptr = SELF(ES_Bottom4_str),
 
     .field_42f4 = 0x0003,
 
     .pad_170 = { 0 },
 
-    .ptr_42f8 = SELF(ES_Bottom5_str),
+    .ES_Bottom5_str_ptr = SELF(ES_Bottom5_str),
 
     .field_42fc = 0x0004,
 
     .pad_171 = { 0 },
 
-    .ptr_4300 = SELF(ES_Bottom6_str),
+    .ES_Bottom6_str_ptr = SELF(ES_Bottom6_str),
 
     .field_4304 = 0x0005,
 
@@ -6269,73 +6269,73 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .pad_173 = { 0 },
 
-    .ptr_4310 = SELF(ES_Bottom8_str),
+    .ES_Bottom8_str_ptr = SELF(ES_Bottom8_str),
 
     .field_4314 = 0x0007,
 
     .pad_174 = { 0 },
 
-    .ptr_4318 = SELF(ES_Left1_str),
+    .ES_Left1_str_ptr = SELF(ES_Left1_str),
 
     .field_431c = 0x0088,
 
     .pad_175 = { 0 },
 
-    .ptr_4320 = SELF(ES_Left2_str),
+    .ES_Left2_str_ptr = SELF(ES_Left2_str),
 
     .field_4324 = 0x0089,
 
     .pad_176 = { 0 },
 
-    .ptr_4328 = SELF(ES_Left3_str),
+    .ES_Left3_str_ptr = SELF(ES_Left3_str),
 
     .field_432c = 0x008A,
 
     .pad_177 = { 0 },
 
-    .ptr_4330 = SELF(ES_Left4_str),
+    .ES_Left4_str_ptr = SELF(ES_Left4_str),
 
     .field_4334 = 0x008B,
 
     .pad_178 = { 0 },
 
-    .ptr_4338 = SELF(ES_Left5_str),
+    .ES_Left5_str_ptr = SELF(ES_Left5_str),
 
     .field_433c = 0x008C,
 
     .pad_179 = { 0 },
 
-    .ptr_4340 = SELF(ES_Right1_str),
+    .ES_Right1_str_ptr = SELF(ES_Right1_str),
 
     .field_4344 = 0x0008,
 
     .pad_180 = { 0 },
 
-    .ptr_4348 = SELF(ES_Right2_str),
+    .ES_Right2_str_ptr = SELF(ES_Right2_str),
 
     .field_434c = 0x0009,
 
     .pad_181 = { 0 },
 
-    .ptr_4350 = SELF(ES_Right3_str),
+    .ES_Right3_str_ptr = SELF(ES_Right3_str),
 
     .field_4354 = 0x000A,
 
     .pad_182 = { 0 },
 
-    .ptr_4358 = SELF(ES_Right4_str),
+    .ES_Right4_str_ptr = SELF(ES_Right4_str),
 
     .field_435c = 0x000B,
 
     .pad_183 = { 0 },
 
-    .ptr_4360 = SELF(ES_Right5_str),
+    .ES_Right5_str_ptr = SELF(ES_Right5_str),
 
     .field_4364 = 0x000C,
 
     .pad_184 = { 0 },
 
-    .ptr_4368 = SELF(ES_Exit_str),
+    .ES_Exit_str_ptr = SELF(ES_Exit_str),
 
     .field_436c = 0x000F,
 
@@ -6403,85 +6403,85 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .pad_188 = { 0 },
 
-    .ptr_4466 = SELF(SS_Down_str),
+    .SS_Down_str_ptr = SELF(SS_Down_str),
 
     .field_446a = 0x0002,
 
     .pad_189 = { 0 },
 
-    .ptr_446e = SELF(SS_UpDown_str),
+    .SS_UpDown_str_ptr = SELF(SS_UpDown_str),
 
     .field_4472 = 0x0003,
 
     .pad_190 = { 0 },
 
-    .ptr_4476 = SELF(SS_On_str),
+    .SS_On_str_ptr = SELF(SS_On_str),
 
     .field_447a = 0x0004,
 
     .pad_191 = { 0 },
 
-    .ptr_447e = SELF(SS_Off_str),
+    .SS_Off_str_ptr = SELF(SS_Off_str),
 
     .field_4482 = 0x0005,
 
     .pad_192 = { 0 },
 
-    .ptr_4486 = SELF(SS_OK_str),
+    .SS_OK_str_ptr = SELF(SS_OK_str),
 
     .field_448a = 0x0006,
 
     .pad_193 = { 0 },
 
-    .ptr_448e = SELF(SS_Left_str),
+    .SS_Left_str_ptr = SELF(SS_Left_str),
 
     .field_4492 = 0x0007,
 
     .pad_194 = { 0 },
 
-    .ptr_4496 = SELF(SS_Right_str),
+    .SS_Right_str_ptr = SELF(SS_Right_str),
 
     .field_449a = 0x0008,
 
     .pad_195 = { 0 },
 
-    .ptr_449e = SELF(SS_Yes_str),
+    .SS_Yes_str_ptr = SELF(SS_Yes_str),
 
     .field_44a2 = 0x0009,
 
     .pad_196 = { 0 },
 
-    .ptr_44a6 = SELF(SS_No_str),
+    .SS_No_str_ptr = SELF(SS_No_str),
 
     .field_44aa = 0x000A,
 
     .pad_197 = { 0 },
 
-    .ptr_44ae = SELF(SS_OnOff_str),
+    .SS_OnOff_str_ptr = SELF(SS_OnOff_str),
 
     .field_44b2 = 0x000B,
 
     .pad_198 = { 0 },
 
-    .ptr_44b6 = SELF(SS_Up2_str),
+    .SS_Up2_str_ptr = SELF(SS_Up2_str),
 
     .field_44ba = 0x000C,
 
     .pad_199 = { 0 },
 
-    .ptr_44be = SELF(SS_Down2_str),
+    .SS_Down2_str_ptr = SELF(SS_Down2_str),
 
     .field_44c2 = 0x000D,
 
     .pad_200 = { 0 },
 
-    .ptr_44c6 = SELF(SS_UpDown2_str),
+    .SS_UpDown2_str_ptr = SELF(SS_UpDown2_str),
 
     .field_44ca = 0x000E,
 
     .pad_201 = { 0 },
 
-    .ptr_44ce = SELF(SS_Left2_str),
+    .SS_Left2_str_ptr = SELF(SS_Left2_str),
 
     .field_44d2 = 0x000F,
 
@@ -6599,67 +6599,67 @@ const naka_debug_naming_t naka_debug_naming_data
 
     .pad_213 = { 0 },
 
-    .ptr_4602 = NAKA_ADDR(NakaInst_iduMurai),
+    .NakaInst_iduMurai_ptr = NAKA_ADDR(NakaInst_iduMurai),
 
     .field_4606 = 0x0001,
 
     .pad_214 = { 0 },
 
-    .ptr_460a = NAKA_ADDR(NakaData_StyleBitmaps),
+    .NakaData_StyleBitmaps_ptr = NAKA_ADDR(NakaData_StyleBitmaps),
 
     .field_460e = 0x0002,
 
     .pad_215 = { 0 },
 
-    .ptr_4612 = SELF(iduEast_str),
+    .iduEast_str_ptr = SELF(iduEast_str),
 
     .field_4616 = 0x0003,
 
     .pad_216 = { 0 },
 
-    .ptr_461a = SELF(iduSuna_str),
+    .iduSuna_str_ptr = SELF(iduSuna_str),
 
     .field_461e = 0x0004,
 
     .pad_217 = { 0 },
 
-    .ptr_4622 = SELF(iduCheap_str),
+    .iduCheap_str_ptr = SELF(iduCheap_str),
 
     .field_4626 = 0x0005,
 
     .pad_218 = { 0 },
 
-    .ptr_462a = SELF(iduScoop_str),
+    .iduScoop_str_ptr = SELF(iduScoop_str),
 
     .field_462e = 0x0006,
 
     .pad_219 = { 0 },
 
-    .ptr_4632 = SELF(iduYoko_str),
+    .iduYoko_str_ptr = SELF(iduYoko_str),
 
     .field_4636 = 0x0007,
 
     .pad_220 = { 0 },
 
-    .ptr_463a = SELF(iduKubo_str),
+    .iduKubo_str_ptr = SELF(iduKubo_str),
 
     .field_463e = 0x0008,
 
     .pad_221 = { 0 },
 
-    .ptr_4642 = SELF(iduHama_str),
+    .iduHama_str_ptr = SELF(iduHama_str),
 
     .field_4646 = 0x0009,
 
     .pad_222 = { 0 },
 
-    .ptr_464a = SELF(iduKSS_str),
+    .iduKSS_str_ptr = SELF(iduKSS_str),
 
     .field_464e = 0x000A,
 
     .pad_223 = { 0 },
 
-    .ptr_4652 = SELF(iduNaka_str),
+    .iduNaka_str_ptr = SELF(iduNaka_str),
 
     .field_4656 = 0x000B,
 

@@ -2069,7 +2069,7 @@ typedef struct __attribute__((packed)) {
     naka_cls_AcLanguageText_t v7E_e6;
     /* element 7 of Viewable slot 0x7E: AcLanguageText (class id 0x01600066) */
     naka_cls_AcLanguageText_t v7E_e7;
-    uint32_t ptr_53ea;
+    uint32_t DiskMenu_ptr;
     uint32_t ptr_53ee;
     uint16_t field_53f2;
     uint16_t field_53f4;
@@ -11390,7 +11390,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
         .func = 0x01250001,
     },
 
-    .ptr_53ea = SELF(DiskMenu),
+    .DiskMenu_ptr = SELF(DiskMenu),
 
     .ptr_53ee = SELF(v60_e1),
 

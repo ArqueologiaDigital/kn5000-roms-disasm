@@ -1917,8 +1917,8 @@ typedef struct __attribute__((packed)) {
     char KeyD_str_2[10];
     char KeyC_str[10];
     char KeyC_str_2[10];
-    uint32_t ptr_17ed0;
-    uint32_t ptr_17ed4;
+    uint32_t TOTAL_str_ptr;
+    uint32_t SOUND_str_ptr;
     char SOUND_str[6];
     char TOTAL_str[6];
     char str_775[6];
@@ -2153,17 +2153,17 @@ typedef struct __attribute__((packed)) {
     uint16_t field_19208;
     uint16_t field_1920a;
     uint8_t pad_1999[2];  /* zero padding */
-    uint32_t ptr_1920e;
+    uint32_t SOUND_str_2_ptr;
     uint16_t field_19212;
     uint16_t field_19214;
     uint16_t field_19216;
     uint8_t pad_2000[2];  /* zero padding */
-    uint32_t ptr_1921a;
+    uint32_t PAN_str_ptr;
     uint16_t field_1921e;
     uint16_t field_19220;
     uint16_t field_19222;
     uint16_t field_19224;
-    uint32_t ptr_19226;
+    uint32_t VOLUME_str_ptr;
     char str_1132[2];
     uint16_t field_1922c;
     uint8_t pad_2001[4];  /* zero padding */
@@ -2172,22 +2172,22 @@ typedef struct __attribute__((packed)) {
     uint16_t field_19238;
     uint16_t field_1923a;
     uint16_t field_1923c;
-    uint32_t ptr_1923e;
+    uint32_t REVERB_str_ptr;
     uint16_t field_19242;
     uint16_t field_19244;
     uint16_t field_19246;
     uint8_t pad_2002[2];  /* zero padding */
-    uint32_t ptr_1924a;
+    uint32_t DspEff_str_ptr;
     uint16_t field_1924e;
     uint16_t field_19250;
     uint16_t field_19252;
     uint8_t pad_2003[2];  /* zero padding */
-    uint32_t ptr_19256;
+    uint32_t DigitalEff_str_ptr;
     uint16_t field_1925a;
     uint16_t field_1925c;
     uint16_t field_1925e;
     uint8_t pad_2004[2];  /* zero padding */
-    uint32_t ptr_19262;
+    uint32_t KeyShift_str_ptr;
     char str_1133[2];
     uint16_t field_19268;
     uint8_t pad_2005[4];  /* zero padding */
@@ -2202,11 +2202,11 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1928c;
     uint8_t pad_2008[2];  /* zero padding */
     uint16_t field_19290;
-    uint32_t ptr_19292;
+    uint32_t MIDI_str_ptr;
     uint8_t pad_2009[2];  /* zero padding */
     uint16_t field_19298;
     uint8_t pad_2010[4];  /* zero padding */
-    uint32_t ptr_1929e;
+    uint32_t LOCAL_str_ptr;
     char str_1136[2];
     uint16_t field_192a4;
     uint8_t pad_2011[4];  /* zero padding */
@@ -2378,17 +2378,17 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1967c;
     uint16_t field_1967e;
     uint8_t pad_2014[2];  /* zero padding */
-    uint32_t ptr_19682;
+    uint32_t SOUND_str_3_ptr;
     uint16_t field_19686;
     uint16_t field_19688;
     uint16_t field_1968a;
     uint8_t pad_2015[2];  /* zero padding */
-    uint32_t ptr_1968e;
+    uint32_t PAN_str_2_ptr;
     uint16_t field_19692;
     uint16_t field_19694;
     uint16_t field_19696;
     uint16_t field_19698;
-    uint32_t ptr_1969a;
+    uint32_t VOLUME_str_2_ptr;
     char str_1263[2];
     uint16_t field_196a0;
     uint8_t pad_2016[4];  /* zero padding */
@@ -2397,22 +2397,22 @@ typedef struct __attribute__((packed)) {
     uint16_t field_196ac;
     uint16_t field_196ae;
     uint16_t field_196b0;
-    uint32_t ptr_196b2;
+    uint32_t REVERB_str_2_ptr;
     uint16_t field_196b6;
     uint16_t field_196b8;
     uint16_t field_196ba;
     uint8_t pad_2017[2];  /* zero padding */
-    uint32_t ptr_196be;
+    uint32_t DspEff_str_2_ptr;
     uint16_t field_196c2;
     uint16_t field_196c4;
     uint16_t field_196c6;
     uint8_t pad_2018[2];  /* zero padding */
-    uint32_t ptr_196ca;
+    uint32_t DigitalEff_str_2_ptr;
     uint16_t field_196ce;
     uint16_t field_196d0;
     uint16_t field_196d2;
     uint8_t pad_2019[2];  /* zero padding */
-    uint32_t ptr_196d6;
+    uint32_t KeyShift_str_2_ptr;
     char str_1264[2];
     uint16_t field_196dc;
     uint8_t pad_2020[4];  /* zero padding */
@@ -2427,11 +2427,11 @@ typedef struct __attribute__((packed)) {
     uint16_t field_19700;
     uint8_t pad_2023[2];  /* zero padding */
     uint16_t field_19704;
-    uint32_t ptr_19706;
+    uint32_t MIDI_str_2_ptr;
     uint8_t pad_2024[2];  /* zero padding */
     uint16_t field_1970c;
     uint8_t pad_2025[4];  /* zero padding */
-    uint32_t ptr_19712;
+    uint32_t LOCAL_str_2_ptr;
     char str_1267[2];
     uint16_t field_19718;
     uint8_t pad_2026[4];  /* zero padding */
@@ -2483,17 +2483,17 @@ typedef struct __attribute__((packed)) {
     uint16_t field_197c0;
     uint16_t field_197c2;
     uint8_t pad_2029[2];  /* zero padding */
-    uint32_t ptr_197c6;
+    uint32_t SOUND_str_4_ptr;
     uint16_t field_197ca;
     uint16_t field_197cc;
     uint16_t field_197ce;
     uint8_t pad_2030[2];  /* zero padding */
-    uint32_t ptr_197d2;
+    uint32_t PAN_str_3_ptr;
     uint16_t field_197d6;
     uint16_t field_197d8;
     uint16_t field_197da;
     uint16_t field_197dc;
-    uint32_t ptr_197de;
+    uint32_t VOLUME_str_3_ptr;
     char str_1284[2];
     uint16_t field_197e4;
     uint8_t pad_2031[4];  /* zero padding */
@@ -2502,22 +2502,22 @@ typedef struct __attribute__((packed)) {
     uint16_t field_197f0;
     uint16_t field_197f2;
     uint16_t field_197f4;
-    uint32_t ptr_197f6;
+    uint32_t REVERB_str_3_ptr;
     uint16_t field_197fa;
     uint16_t field_197fc;
     uint16_t field_197fe;
     uint8_t pad_2032[2];  /* zero padding */
-    uint32_t ptr_19802;
+    uint32_t DspEff_str_3_ptr;
     uint16_t field_19806;
     uint16_t field_19808;
     uint16_t field_1980a;
     uint8_t pad_2033[2];  /* zero padding */
-    uint32_t ptr_1980e;
+    uint32_t DigitalEff_str_3_ptr;
     uint16_t field_19812;
     uint16_t field_19814;
     uint16_t field_19816;
     uint8_t pad_2034[2];  /* zero padding */
-    uint32_t ptr_1981a;
+    uint32_t KeyShift_str_3_ptr;
     char str_1285[2];
     uint16_t field_19820;
     uint8_t pad_2035[4];  /* zero padding */
@@ -2532,11 +2532,11 @@ typedef struct __attribute__((packed)) {
     uint16_t field_19844;
     uint8_t pad_2038[2];  /* zero padding */
     uint16_t field_19848;
-    uint32_t ptr_1984a;
+    uint32_t MIDI_str_3_ptr;
     uint8_t pad_2039[2];  /* zero padding */
     uint16_t field_19850;
     uint8_t pad_2040[4];  /* zero padding */
-    uint32_t ptr_19856;
+    uint32_t LOCAL_str_3_ptr;
     char str_1288[2];
     uint16_t field_1985c;
     uint8_t pad_2041[4];  /* zero padding */
@@ -2699,7 +2699,7 @@ typedef struct __attribute__((packed)) {
     uint8_t pad_2052[2];  /* zero padding */
     uint16_t field_19a66;
     uint16_t field_19a68;
-    uint32_t ptr_19a6a;
+    uint32_t ChordTypeStr_Flat9_Flat13_ptr;
     uint16_t field_19a6e;
     uint16_t field_19a70;
     uint16_t field_19a72;
@@ -2805,7 +2805,7 @@ typedef struct __attribute__((packed)) {
     uint8_t pad_2068[65];  /* zero padding */
     uint16_t field_1a0ad;
     uint8_t pad_2069[3];  /* zero padding */
-    uint32_t ptr_1a0b2;
+    uint32_t Naka_PresentationRootState_ptr;
     char str_1373[2];
     char str_1374[2];
     char Presentation_str_2[16];
@@ -2883,28 +2883,28 @@ typedef struct __attribute__((packed)) {
     uint16_t field_1a1b0;
     uint16_t field_1a1b2;
     uint16_t field_1a1b4;
-    uint32_t ptr_1a1b6;
+    uint32_t HK_str_3_ptr;
     uint16_t field_1a1ba;
     uint16_t field_1a1bc;
-    uint32_t ptr_1a1be;
+    uint32_t HK_str_2_ptr;
     uint8_t pad_2072[2];  /* zero padding */
     uint16_t field_1a1c4;
     uint32_t ptr_1a1c6;
     uint16_t field_1a1ca;
     uint16_t field_1a1cc;
-    uint32_t ptr_1a1ce;
+    uint32_t H_str_3_ptr;
     uint8_t pad_2073[2];  /* zero padding */
     uint16_t field_1a1d4;
-    uint32_t ptr_1a1d6;
+    uint32_t Kn5000SoundRam_str_ptr;
     uint8_t pad_2074[2];  /* zero padding */
     uint16_t field_1a1dc;
-    uint32_t ptr_1a1de;
+    uint32_t H_str_2_ptr;
     uint8_t pad_2075[2];  /* zero padding */
     uint16_t field_1a1e4;
-    uint32_t ptr_1a1e6;
+    uint32_t H_str_ptr;
     uint8_t pad_2076[2];  /* zero padding */
     uint16_t field_1a1ec;
-    uint32_t ptr_1a1ee;
+    uint32_t HK_str_ptr;
     uint8_t pad_2077[2];  /* zero padding */
     uint16_t field_1a1f4;
     char HK_str[4];
@@ -2942,21 +2942,21 @@ typedef struct __attribute__((packed)) {
     char rb_str_16[4];
     char rb_str_17[4];
     uint16_t field_1a272;
-    uint32_t ptr_1a274;
+    uint32_t FileIO_LoadRegion4_VRAM_ptr;
     uint8_t pad_2078[2];  /* zero padding */
-    uint32_t ptr_1a27a;
+    uint32_t FileIO_LoadRegion0_VRAM_ptr;
     uint16_t field_1a27e;
-    uint32_t ptr_1a280;
+    uint32_t FileIO_LoadRegion1_VRAM_ptr;
     uint16_t field_1a284;
-    uint32_t ptr_1a286;
+    uint32_t FileIO_LoadRegion5_VRAM_ptr;
     uint16_t field_1a28a;
-    uint32_t ptr_1a28c;
+    uint32_t FileIO_LoadRegion3_ExtMem_ptr;
     uint16_t field_1a290;
-    uint32_t ptr_1a292;
+    uint32_t FileIO_LoadRegion2_ExtMem_ptr;
     uint16_t field_1a296;
-    uint32_t ptr_1a298;
+    uint32_t FileIO_LoadRegion6_Simple_ptr;
     uint16_t field_1a29c;
-    uint32_t ptr_1a29e;
+    uint32_t FileIO_LoadRegion7_Flash_ptr;
     char wb_str[4];
     char wb_str_2[4];
     char wb_str_3[4];
@@ -2966,21 +2966,21 @@ typedef struct __attribute__((packed)) {
     char wb_str_7[4];
     char wb_str_8[4];
     uint8_t pad_2079[2];  /* zero padding */
-    uint32_t ptr_1a2c4;
+    uint32_t FileIO_SaveRegion0_VRAM_ptr;
     uint16_t field_1a2c8;
-    uint32_t ptr_1a2ca;
+    uint32_t FileIO_SaveRegion1_VRAM_ptr;
     uint16_t field_1a2ce;
-    uint32_t ptr_1a2d0;
+    uint32_t FileIO_SaveRegion5_VRAM_ptr;
     uint16_t field_1a2d4;
-    uint32_t ptr_1a2d6;
+    uint32_t FileIO_SaveRegion3_ExtMem_ptr;
     uint16_t field_1a2da;
-    uint32_t ptr_1a2dc;
+    uint32_t FileIO_SaveRegion4_VRAM_ptr;
     uint16_t field_1a2e0;
-    uint32_t ptr_1a2e2;
+    uint32_t FileIO_SaveRegion2_ExtMem_ptr;
     uint16_t field_1a2e6;
-    uint32_t ptr_1a2e8;
+    uint32_t FileIO_SaveRegion6_Simple_ptr;
     uint16_t field_1a2ec;
-    uint32_t ptr_1a2ee;
+    uint32_t FileIO_SaveRegion7_Flash_ptr;
     char rb_str_18[4];
     char wb_str_9[4];
     char wb_str_10[4];
@@ -3292,7 +3292,7 @@ typedef struct __attribute__((packed)) {
     char main_func_str_2[10];
     char offwin_str[8];
     char onwin_str[6];
-    uint32_t ptr_1ae3e;
+    uint32_t main_func_str_3_ptr;
     uint32_t ptr_1ae42;
     char str_1631[2];
     char main_func_str_3[10];
@@ -3305,11 +3305,11 @@ typedef struct __attribute__((packed)) {
     char paintok_str_3[8];
     char main_func_str_5[10];
     char font_str_2[6];
-    uint32_t ptr_1ae9c;
+    uint32_t index_str_ptr;
     uint32_t ptr_1aea0;
     char str_1640[2];
     char index_str[6];
-    uint32_t ptr_1aeac;
+    uint32_t main_func_str_6_ptr;
     uint32_t ptr_1aeb0;
     char str_1642[2];
     char main_func_str_6[10];
@@ -3344,7 +3344,7 @@ typedef struct __attribute__((packed)) {
     char interval_str_2[10];
     char index_max_str_2[10];
     char index_min_str_2[10];
-    uint32_t ptr_1afea;
+    uint32_t win_str_ptr;
     uint32_t ptr_1afee;
     char str_1670[2];
     char win_str[4];
@@ -10388,9 +10388,9 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .KeyC_str_2 = ALIGNED_STRING("[KEY=C ]"),
 
-    .ptr_17ed0 = SELF(TOTAL_str),
+    .TOTAL_str_ptr = SELF(TOTAL_str),
 
-    .ptr_17ed4 = SELF(SOUND_str),
+    .SOUND_str_ptr = SELF(SOUND_str),
 
     .SOUND_str = "SOUND",
 
@@ -10969,7 +10969,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_1999 = { 0 },
 
-    .ptr_1920e = SELF(SOUND_str_2),
+    .SOUND_str_2_ptr = SELF(SOUND_str_2),
 
     .field_19212 = 0x000E,
 
@@ -10979,7 +10979,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2000 = { 0 },
 
-    .ptr_1921a = SELF(PAN_str),
+    .PAN_str_ptr = SELF(PAN_str),
 
     .field_1921e = 0x000F,
 
@@ -10989,7 +10989,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_19224 = 0x0001,
 
-    .ptr_19226 = SELF(VOLUME_str),
+    .VOLUME_str_ptr = SELF(VOLUME_str),
 
     .str_1132 = " ",
 
@@ -11007,7 +11007,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_1923c = 0x0001,
 
-    .ptr_1923e = SELF(REVERB_str),
+    .REVERB_str_ptr = SELF(REVERB_str),
 
     .field_19242 = 0x000C,
 
@@ -11017,7 +11017,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2002 = { 0 },
 
-    .ptr_1924a = SELF(DspEff_str),
+    .DspEff_str_ptr = SELF(DspEff_str),
 
     .field_1924e = 0x0003,
 
@@ -11027,7 +11027,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2003 = { 0 },
 
-    .ptr_19256 = SELF(DigitalEff_str),
+    .DigitalEff_str_ptr = SELF(DigitalEff_str),
 
     .field_1925a = 0x0009,
 
@@ -11037,7 +11037,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2004 = { 0 },
 
-    .ptr_19262 = SELF(KeyShift_str),
+    .KeyShift_str_ptr = SELF(KeyShift_str),
 
     .str_1133 = " ",
 
@@ -11067,7 +11067,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_19290 = 0x0001,
 
-    .ptr_19292 = SELF(MIDI_str),
+    .MIDI_str_ptr = SELF(MIDI_str),
 
     .pad_2009 = { 0 },
 
@@ -11075,7 +11075,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2010 = { 0 },
 
-    .ptr_1929e = SELF(LOCAL_str),
+    .LOCAL_str_ptr = SELF(LOCAL_str),
 
     .str_1136 = " ",
 
@@ -11424,7 +11424,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2014 = { 0 },
 
-    .ptr_19682 = SELF(SOUND_str_3),
+    .SOUND_str_3_ptr = SELF(SOUND_str_3),
 
     .field_19686 = 0x000E,
 
@@ -11434,7 +11434,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2015 = { 0 },
 
-    .ptr_1968e = SELF(PAN_str_2),
+    .PAN_str_2_ptr = SELF(PAN_str_2),
 
     .field_19692 = 0x000F,
 
@@ -11444,7 +11444,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_19698 = 0x0001,
 
-    .ptr_1969a = SELF(VOLUME_str_2),
+    .VOLUME_str_2_ptr = SELF(VOLUME_str_2),
 
     .str_1263 = " ",
 
@@ -11462,7 +11462,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_196b0 = 0x0001,
 
-    .ptr_196b2 = SELF(REVERB_str_2),
+    .REVERB_str_2_ptr = SELF(REVERB_str_2),
 
     .field_196b6 = 0x000C,
 
@@ -11472,7 +11472,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2017 = { 0 },
 
-    .ptr_196be = SELF(DspEff_str_2),
+    .DspEff_str_2_ptr = SELF(DspEff_str_2),
 
     .field_196c2 = 0x0003,
 
@@ -11482,7 +11482,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2018 = { 0 },
 
-    .ptr_196ca = SELF(DigitalEff_str_2),
+    .DigitalEff_str_2_ptr = SELF(DigitalEff_str_2),
 
     .field_196ce = 0x0009,
 
@@ -11492,7 +11492,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2019 = { 0 },
 
-    .ptr_196d6 = SELF(KeyShift_str_2),
+    .KeyShift_str_2_ptr = SELF(KeyShift_str_2),
 
     .str_1264 = " ",
 
@@ -11522,7 +11522,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_19704 = 0x0001,
 
-    .ptr_19706 = SELF(MIDI_str_2),
+    .MIDI_str_2_ptr = SELF(MIDI_str_2),
 
     .pad_2024 = { 0 },
 
@@ -11530,7 +11530,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2025 = { 0 },
 
-    .ptr_19712 = SELF(LOCAL_str_2),
+    .LOCAL_str_2_ptr = SELF(LOCAL_str_2),
 
     .str_1267 = " ",
 
@@ -11639,7 +11639,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2029 = { 0 },
 
-    .ptr_197c6 = SELF(SOUND_str_4),
+    .SOUND_str_4_ptr = SELF(SOUND_str_4),
 
     .field_197ca = 0x000E,
 
@@ -11649,7 +11649,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2030 = { 0 },
 
-    .ptr_197d2 = SELF(PAN_str_3),
+    .PAN_str_3_ptr = SELF(PAN_str_3),
 
     .field_197d6 = 0x000F,
 
@@ -11659,7 +11659,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_197dc = 0x0001,
 
-    .ptr_197de = SELF(VOLUME_str_3),
+    .VOLUME_str_3_ptr = SELF(VOLUME_str_3),
 
     .str_1284 = " ",
 
@@ -11677,7 +11677,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_197f4 = 0x0001,
 
-    .ptr_197f6 = SELF(REVERB_str_3),
+    .REVERB_str_3_ptr = SELF(REVERB_str_3),
 
     .field_197fa = 0x000C,
 
@@ -11687,7 +11687,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2032 = { 0 },
 
-    .ptr_19802 = SELF(DspEff_str_3),
+    .DspEff_str_3_ptr = SELF(DspEff_str_3),
 
     .field_19806 = 0x0003,
 
@@ -11697,7 +11697,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2033 = { 0 },
 
-    .ptr_1980e = SELF(DigitalEff_str_3),
+    .DigitalEff_str_3_ptr = SELF(DigitalEff_str_3),
 
     .field_19812 = 0x0009,
 
@@ -11707,7 +11707,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2034 = { 0 },
 
-    .ptr_1981a = SELF(KeyShift_str_3),
+    .KeyShift_str_3_ptr = SELF(KeyShift_str_3),
 
     .str_1285 = " ",
 
@@ -11737,7 +11737,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_19848 = 0x0001,
 
-    .ptr_1984a = SELF(MIDI_str_3),
+    .MIDI_str_3_ptr = SELF(MIDI_str_3),
 
     .pad_2039 = { 0 },
 
@@ -11745,7 +11745,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2040 = { 0 },
 
-    .ptr_19856 = SELF(LOCAL_str_3),
+    .LOCAL_str_3_ptr = SELF(LOCAL_str_3),
 
     .str_1288 = " ",
 
@@ -12088,7 +12088,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_19a68 = 0x0128,
 
-    .ptr_19a6a = NAKA_ADDR(ChordTypeStr_Flat9_Flat13),
+    .ChordTypeStr_Flat9_Flat13_ptr = NAKA_ADDR(ChordTypeStr_Flat9_Flat13),
 
     .field_19a6e = 0x001D,
 
@@ -12366,7 +12366,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2069 = { 0 },
 
-    .ptr_1a0b2 = NAKA_ADDR(Naka_PresentationRootState),
+    .Naka_PresentationRootState_ptr = NAKA_ADDR(Naka_PresentationRootState),
 
     .str_1373 = ALIGNED_STRING(""),
 
@@ -12522,13 +12522,13 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_1a1b4 = 0x0908,
 
-    .ptr_1a1b6 = SELF(HK_str_3),
+    .HK_str_3_ptr = SELF(HK_str_3),
 
     .field_1a1ba = 0x0004,
 
     .field_1a1bc = 0x0002,
 
-    .ptr_1a1be = SELF(HK_str_2),
+    .HK_str_2_ptr = SELF(HK_str_2),
 
     .pad_2072 = { 0 },
 
@@ -12540,31 +12540,31 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_1a1cc = 0x0002,
 
-    .ptr_1a1ce = SELF(H_str_3),
+    .H_str_3_ptr = SELF(H_str_3),
 
     .pad_2073 = { 0 },
 
     .field_1a1d4 = 0x0003,
 
-    .ptr_1a1d6 = SELF(Kn5000SoundRam_str),
+    .Kn5000SoundRam_str_ptr = SELF(Kn5000SoundRam_str),
 
     .pad_2074 = { 0 },
 
     .field_1a1dc = 0x0010,
 
-    .ptr_1a1de = SELF(H_str_2),
+    .H_str_2_ptr = SELF(H_str_2),
 
     .pad_2075 = { 0 },
 
     .field_1a1e4 = 0x0003,
 
-    .ptr_1a1e6 = SELF(H_str),
+    .H_str_ptr = SELF(H_str),
 
     .pad_2076 = { 0 },
 
     .field_1a1ec = 0x0003,
 
-    .ptr_1a1ee = SELF(HK_str),
+    .HK_str_ptr = SELF(HK_str),
 
     .pad_2077 = { 0 },
 
@@ -12640,35 +12640,35 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .field_1a272 = 0x0004,
 
-    .ptr_1a274 = NAKA_ADDR(FileIO_LoadRegion4_VRAM),
+    .FileIO_LoadRegion4_VRAM_ptr = NAKA_ADDR(FileIO_LoadRegion4_VRAM),
 
     .pad_2078 = { 0 },
 
-    .ptr_1a27a = NAKA_ADDR(FileIO_LoadRegion0_VRAM),
+    .FileIO_LoadRegion0_VRAM_ptr = NAKA_ADDR(FileIO_LoadRegion0_VRAM),
 
     .field_1a27e = 0x0001,
 
-    .ptr_1a280 = NAKA_ADDR(FileIO_LoadRegion1_VRAM),
+    .FileIO_LoadRegion1_VRAM_ptr = NAKA_ADDR(FileIO_LoadRegion1_VRAM),
 
     .field_1a284 = 0x0005,
 
-    .ptr_1a286 = NAKA_ADDR(FileIO_LoadRegion5_VRAM),
+    .FileIO_LoadRegion5_VRAM_ptr = NAKA_ADDR(FileIO_LoadRegion5_VRAM),
 
     .field_1a28a = 0x0003,
 
-    .ptr_1a28c = NAKA_ADDR(FileIO_LoadRegion3_ExtMem),
+    .FileIO_LoadRegion3_ExtMem_ptr = NAKA_ADDR(FileIO_LoadRegion3_ExtMem),
 
     .field_1a290 = 0x0002,
 
-    .ptr_1a292 = NAKA_ADDR(FileIO_LoadRegion2_ExtMem),
+    .FileIO_LoadRegion2_ExtMem_ptr = NAKA_ADDR(FileIO_LoadRegion2_ExtMem),
 
     .field_1a296 = 0x0006,
 
-    .ptr_1a298 = NAKA_ADDR(FileIO_LoadRegion6_Simple),
+    .FileIO_LoadRegion6_Simple_ptr = NAKA_ADDR(FileIO_LoadRegion6_Simple),
 
     .field_1a29c = 0x0007,
 
-    .ptr_1a29e = NAKA_ADDR(FileIO_LoadRegion7_Flash),
+    .FileIO_LoadRegion7_Flash_ptr = NAKA_ADDR(FileIO_LoadRegion7_Flash),
 
     .wb_str = ALIGNED_STRING("wb"),
 
@@ -12688,35 +12688,35 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .pad_2079 = { 0 },
 
-    .ptr_1a2c4 = NAKA_ADDR(FileIO_SaveRegion0_VRAM),
+    .FileIO_SaveRegion0_VRAM_ptr = NAKA_ADDR(FileIO_SaveRegion0_VRAM),
 
     .field_1a2c8 = 0x0001,
 
-    .ptr_1a2ca = NAKA_ADDR(FileIO_SaveRegion1_VRAM),
+    .FileIO_SaveRegion1_VRAM_ptr = NAKA_ADDR(FileIO_SaveRegion1_VRAM),
 
     .field_1a2ce = 0x0005,
 
-    .ptr_1a2d0 = NAKA_ADDR(FileIO_SaveRegion5_VRAM),
+    .FileIO_SaveRegion5_VRAM_ptr = NAKA_ADDR(FileIO_SaveRegion5_VRAM),
 
     .field_1a2d4 = 0x0003,
 
-    .ptr_1a2d6 = NAKA_ADDR(FileIO_SaveRegion3_ExtMem),
+    .FileIO_SaveRegion3_ExtMem_ptr = NAKA_ADDR(FileIO_SaveRegion3_ExtMem),
 
     .field_1a2da = 0x0004,
 
-    .ptr_1a2dc = NAKA_ADDR(FileIO_SaveRegion4_VRAM),
+    .FileIO_SaveRegion4_VRAM_ptr = NAKA_ADDR(FileIO_SaveRegion4_VRAM),
 
     .field_1a2e0 = 0x0002,
 
-    .ptr_1a2e2 = NAKA_ADDR(FileIO_SaveRegion2_ExtMem),
+    .FileIO_SaveRegion2_ExtMem_ptr = NAKA_ADDR(FileIO_SaveRegion2_ExtMem),
 
     .field_1a2e6 = 0x0006,
 
-    .ptr_1a2e8 = NAKA_ADDR(FileIO_SaveRegion6_Simple),
+    .FileIO_SaveRegion6_Simple_ptr = NAKA_ADDR(FileIO_SaveRegion6_Simple),
 
     .field_1a2ec = 0x0007,
 
-    .ptr_1a2ee = NAKA_ADDR(FileIO_SaveRegion7_Flash),
+    .FileIO_SaveRegion7_Flash_ptr = NAKA_ADDR(FileIO_SaveRegion7_Flash),
 
     .rb_str_18 = ALIGNED_STRING("rb"),
 
@@ -13524,7 +13524,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .onwin_str = "onwin",
 
-    .ptr_1ae3e = SELF(main_func_str_3),
+    .main_func_str_3_ptr = SELF(main_func_str_3),
 
     .ptr_1ae42 = SELF(str_1631),
 
@@ -13559,7 +13559,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .font_str_2 = ALIGNED_STRING("font"),
 
-    .ptr_1ae9c = SELF(index_str),
+    .index_str_ptr = SELF(index_str),
 
     .ptr_1aea0 = SELF(str_1640),
 
@@ -13567,7 +13567,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .index_str = "index",
 
-    .ptr_1aeac = SELF(main_func_str_6),
+    .main_func_str_6_ptr = SELF(main_func_str_6),
 
     .ptr_1aeb0 = SELF(str_1642),
 
@@ -13668,7 +13668,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .index_min_str_2 = "index_min",
 
-    .ptr_1afea = SELF(win_str),
+    .win_str_ptr = SELF(win_str),
 
     .ptr_1afee = SELF(str_1670),
 
@@ -13680,15 +13680,15 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .classdef_165_1 = { .proc = NAKA_ADDR(PsWindowToggleProc), .parent = 0x01600026, .allsize = 52, .selfsize = 12, .name = SELF(PsWindowToggle_name), .propdata = SELF(PsWindowToggle_code), .propname = SELF(ptrs_276) },
 
-    .classdef_165_2 = { .proc = NAKA_ADDR(AcTtlJgBoxProc), .parent = 0x0160003D, .allsize = 54, .selfsize = 4, .name = SELF(AcTtlJgBox_name), .propdata = SELF(AcTtlJgBox_code), .propname = SELF(ptr_1ae3e) },
+    .classdef_165_2 = { .proc = NAKA_ADDR(AcTtlJgBoxProc), .parent = 0x0160003D, .allsize = 54, .selfsize = 4, .name = SELF(AcTtlJgBox_name), .propdata = SELF(AcTtlJgBox_code), .propname = SELF(main_func_str_3_ptr) },
 
     .classdef_165_3 = { .proc = NAKA_ADDR(AcParaStrBoxProc), .parent = 0x01600012, .allsize = 44, .selfsize = 8, .name = SELF(AcParaStrBox_name), .propdata = SELF(AcParaStrBox_code), .propname = SELF(ptrs_277) },
 
     .classdef_165_4 = { .proc = NAKA_ADDR(AcFileSfxBoxProc), .parent = 0x01600010, .allsize = 34, .selfsize = 12, .name = SELF(AcFileSfxBox_name), .propdata = SELF(AcFileSfxBox_code), .propname = SELF(ptrs_278) },
 
-    .classdef_165_5 = { .proc = NAKA_ADDR(AcMonoIndexToggleProc), .parent = 0x01600026, .allsize = 42, .selfsize = 2, .name = SELF(AcMonoIndexToggle_name), .propdata = SELF(AcMonoIndexToggle_code), .propname = SELF(ptr_1ae9c) },
+    .classdef_165_5 = { .proc = NAKA_ADDR(AcMonoIndexToggleProc), .parent = 0x01600026, .allsize = 42, .selfsize = 2, .name = SELF(AcMonoIndexToggle_name), .propdata = SELF(AcMonoIndexToggle_code), .propname = SELF(index_str_ptr) },
 
-    .classdef_165_6 = { .proc = NAKA_ADDR(IvOneShotTimerProc), .parent = 0x01600027, .allsize = 26, .selfsize = 4, .name = SELF(IvOneShotTimer_name), .propdata = SELF(IvOneShotTimer_code), .propname = SELF(ptr_1aeac) },
+    .classdef_165_6 = { .proc = NAKA_ADDR(IvOneShotTimerProc), .parent = 0x01600027, .allsize = 26, .selfsize = 4, .name = SELF(IvOneShotTimer_name), .propdata = SELF(IvOneShotTimer_code), .propname = SELF(main_func_str_6_ptr) },
 
     .classdef_165_7 = { .proc = NAKA_ADDR(VwScreenTitleProc), .parent = 0x01600011, .allsize = 38, .selfsize = 10, .name = SELF(classdef_165_0_name_3), .propdata = SELF(w71_name), .propname = SELF(ptrs_279) },
 
@@ -13700,7 +13700,7 @@ const naka_technichord_strings_t naka_technichord_strings_data
 
     .classdef_165_11 = { .proc = NAKA_ADDR(IvIndexSwDelayProc), .parent = 0x01600027, .allsize = 30, .selfsize = 8, .name = SELF(classdef_165_0_name), .propdata = SELF(classdef_165_0_propdata), .propname = SELF(ptrs_283) },
 
-    .classdef_165_12 = { .proc = NAKA_ADDR(IvWaitWinCtlProc), .parent = 0x01600027, .allsize = 26, .selfsize = 4, .name = SELF(IvWaitWinCtl_name), .propdata = SELF(IvWaitWinCtl_code), .propname = SELF(ptr_1afea) },
+    .classdef_165_12 = { .proc = NAKA_ADDR(IvWaitWinCtlProc), .parent = 0x01600027, .allsize = 26, .selfsize = 4, .name = SELF(IvWaitWinCtl_name), .propdata = SELF(IvWaitWinCtl_code), .propname = SELF(win_str_ptr) },
 
     .classrun_165_x1B130 = 0x00000000,
 

@@ -18,7 +18,9 @@ QUESTION IT ANSWERS / WHAT IT DOES
        "TcBigBandBrass") -> <text>_str;
     4. any other str_N whose text has words -> its first (up to four) words in CamelCase + _str, at most 32
        characters ("Bass Port Speaker" -> BassPortSpeaker_str).  Empty strings and single symbols keep
-       their names.
+       their names;
+    5. a ptr_XXXX member initialised with NAKA_ADDR(Name) or SELF(member) -> <Name>_ptr / <member's name>_ptr
+       (a derivative name: "the pointer to X"); one aimed at a placeholder member keeps its name.
   Only member names change, never a type, size or order, so every compiled blob must stay byte-identical
   (`make all`).  Comments are kept; the position stays in the element comments.
 
@@ -110,6 +112,20 @@ def plan_file(text):
         while nm in used:
             nm, k = "%s_%d" % (base, k), k + 1
         ren[s] = nm
+        used.add(nm)
+    # 5. a ptr_XXXX member that holds NAKA_ADDR(Name) or SELF(member) -> <Name or member's name>_ptr
+    for m in re.finditer(r'\n\s+\.(ptr_[0-9a-f]+)\s*=\s*(?:NAKA_ADDR\((\w+)\)|SELF\((\w+)\))\s*,', text):
+        p, ext, own = m.group(1), m.group(2), m.group(3)
+        if p in ren:
+            continue
+        target = ext if ext else ren.get(own, own)
+        if placeholder_field(target):
+            continue
+        base = "%s_ptr" % target
+        nm, k = base, 2
+        while nm in used:
+            nm, k = "%s_%d" % (base, k), k + 1
+        ren[p] = nm
         used.add(nm)
     return ren
 
