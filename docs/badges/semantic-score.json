@@ -1,14 +1,14 @@
 {
  "date": "2026-10-06",
- "head": "e5d9553e",
- "dirty": true,
+ "head": "bd6c1947",
+ "dirty": false,
  "rules": 2,
  "entry_snapshot": "docs/coverage/dispatch-census-2026-10-06-07.json",
  "entry_snapshot_head": "f77e08ef",
  "score": {
   "kn5000": 79.15,
-  "wsa1": 88.23,
-  "all": 79.34
+  "wsa1": 88.62,
+  "all": 79.37
  },
  "components": {
   "kn5000": {
@@ -40,9 +40,9 @@
     "pct": 94.43
    },
    "names": {
-    "num": 13618,
+    "num": 13842,
     "den": 18991,
-    "pct": 71.71
+    "pct": 72.89
    },
    "entry": {
     "num": 751,
@@ -62,9 +62,9 @@
     "pct": 90.56
    },
    "names": {
-    "num": 142383,
+    "num": 142607,
     "den": 163762,
-    "pct": 86.95
+    "pct": 87.08
    },
    "entry": {
     "num": 2733,
@@ -237,9 +237,9 @@
   },
   "prom_c": {
    "names": {
-    "semantic": 1083,
+    "semantic": 1307,
     "continuation": 4906,
-    "positional": 721,
+    "positional": 497,
     "generic": 4
    },
    "bytes": [
