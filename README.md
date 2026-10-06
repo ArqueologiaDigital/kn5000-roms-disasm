@@ -30,7 +30,8 @@ badges above measure understanding instead, over every ROM of both models. They 
 - **bytes understood**: bytes whose purpose the source states with evidence: code, documented data and
   verified filler (`scripts/analysis/data_range_census.py`).
 - **semantic names**: linked symbols whose name says what the thing is. Names that only restate an
-  address (`sub_F4A2B0`) or a position (`Foo_Helper7`, `Foo_Case5`) do not count.
+  address (`sub_F4A2B0`) or a position (`Foo_Helper7`, `Foo_Case5`) do not count. Local branch labels
+  (`Foo_Skip2`, prom_c's `Foo__F9A123`) are not rated, so each routine counts once.
 - **jump tables resolved**: jump/call tables whose every entry lands on a labelled instruction, spelled
   symbolically (the committed dispatch census, `docs/coverage/`).
 - **C fields named**: C struct members with a meaningful name rather than an index (`str_3`,

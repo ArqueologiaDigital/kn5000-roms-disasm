@@ -10,8 +10,12 @@ QUESTION IT ANSWERS
   bytes   L1  bytes whose purpose the source states with evidence: (CODE + DATA-KNOWN-A + FILLER) / all bytes.
               Source: scripts/analysis/data_range_census.py --json (its "strict" figure).
   names   L2  symbols in the linked ELFs (.text, all 12 images) with a semantic name / all rated symbols.
-              Rated = semantic + generic + positional.  Not rated: continuation labels of a named parent
-              (_Skip/_Join/_Loop/_Return/...).
+              Rated = semantic + generic + positional.  Not rated: local branch labels, in every style the
+              trees use -- _Skip/_Join/_Loop/_Return/..., and prom_c's Parent__F9A123 / Parent__loop -- whatever
+              their parent is called, so a routine is rated once, by its own name, not once per branch inside
+              it.  This is wave7_documentation_metrics.py's rule ("an internal branch target is not a
+              documentation debt"); rules 1 (the first release) still rated them, under an unnamed parent as
+              positional.
               Positional: l2_symbol_reference.py's rule, the name restates an address (_0xHEX, _A1B2..., LABEL_,
               sub_, loc_, unk_).
               Generic: the name says only "a piece of X" (_Helper7, _Data_3, _Code, _Block2, _Case5,
@@ -74,7 +78,9 @@ C_TREES = {
     "wsa1": ["wsa1"],
 }
 POSITIONAL = [re.compile(p) for p in (r'_0x[0-9A-Fa-f]+$', r'_[0-9A-F]{4,}$', r'^LABEL_', r'^(loc|sub|unk)_', r'^\.L')]
-CONTINUATION = re.compile(r'_(Skip|Join|Loop|Return|Epilogue|Done|Next|Exit|Cont|End|Default)\d*$')
+CONTINUATION = re.compile(r'_(Skip|Join|Loop|Return|Epilogue|Done|Next|Exit|Cont|End|Default|Resume|Nop)\d*$'
+                          r'|__[0-9A-Fa-f]{4,6}$|__[a-z]\w*$')
+RULES = 2       # 1: first release; 2 (2026-10-06): local branch labels are not rated whatever their parent
 GENERIC = re.compile(r'_(Helper|Data|Code|Block|Branch|Stub|Part|Case|Entry|Sub|Thunk|Wrapper|Body|Chunk|Tail|Frag'
                      r'|Fragment)\d*(_\d+)*$|_Switch\d+_Case\d+$')
 GENERIC_WORDS = {"field", "unk", "unknown", "pad", "padding", "reserved", "res", "str", "ptr", "ptrs", "entry",
@@ -106,10 +112,10 @@ def names(key):
         if len(f) != 3 or f[1] not in "tT":
             continue
         n = f[2]
-        if any(p.search(n) for p in POSITIONAL):
-            c["positional"] += 1
-        elif CONTINUATION.search(n):
+        if CONTINUATION.search(n):
             c["continuation"] += 1
+        elif any(p.search(n) for p in POSITIONAL):
+            c["positional"] += 1
         elif GENERIC.search(n):
             c["generic"] += 1
         else:
@@ -234,17 +240,17 @@ def main():
     for k in ("bytes", "names", "entry", "fields"):
         p = pct(*comp["all"][k])
         open(os.path.join(OUT, "semantic-%s.svg" % k), "w").write(badge(LABEL[k], "%.1f%%" % p, colour(p)))
-    json.dump(dict(date=day, head=head, dirty=dirty, entry_snapshot=snap, entry_snapshot_head=snap_head,
+    json.dump(dict(date=day, head=head, dirty=dirty, rules=RULES, entry_snapshot=snap, entry_snapshot_head=snap_head,
                    score={m: round(v, 2) for m, v in score.items()},
                    components={m: {k: dict(num=v[0], den=v[1], pct=round(pct(*v), 2) if v[1] else None)
                                    for k, v in c.items()} for m, c in comp.items()},
                    images=detail), open(os.path.join(OUT, "semantic-score.json"), "w"), indent=1)
     hist = os.path.join(OUT, "semantic-score-history.csv")
     rows = list(csv.reader(open(hist))) if os.path.exists(hist) else []
-    hdr = ["date", "commit", "score", "kn5000", "wsa1", "bytes", "names", "entry", "fields"]
-    rows = [r for r in rows[1:] if r and r[1] != head] if rows else []
+    hdr = ["date", "commit", "score", "kn5000", "wsa1", "bytes", "names", "entry", "fields", "rules"]
+    rows = [r + ["1"] * (len(hdr) - len(r)) for r in rows[1:] if r and r[1] != head] if rows else []
     rows.append([day, head, "%.2f" % score["all"], "%.2f" % score["kn5000"], "%.2f" % score["wsa1"]] +
-                ["%.2f" % pct(*comp["all"][k]) for k in ("bytes", "names", "entry", "fields")])
+                ["%.2f" % pct(*comp["all"][k]) for k in ("bytes", "names", "entry", "fields")] + [str(RULES)])
     w = csv.writer(open(hist, "w", newline=""))
     w.writerow(hdr)
     w.writerows(rows)
