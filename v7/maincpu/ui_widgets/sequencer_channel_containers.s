@@ -8,8 +8,7 @@
 ; [nakarest] LoadAndRunXapr_Entry (factory_test/test_init.s: `ld (253188:24), 1`),
 ; [nakarest] LoadXaprInit_Entry (factory_test/test_init.s: `ld (253188:24), 1`),
 ; [nakarest] TrAsSureLangCheck (sequencer/sequencer_ui.s: `lda xhl, (253688:24)`).
-NakaData_SeqChannels:
-	.incbin "includes/generated/naka_sequencer_channels.bin", 0x0, 0x6A0
+NakaData_SeqChannels:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x0, 0x6A0
 ; [nakarest] Naka_DrawbarOrgan_Screens  +0x6a0..+0x7a8 (0xeee718, 264 B)
 ; [nakarest] purpose not established: layout of 264 B at 0xeee718 not derived; readers below
 ; [nakarest] Readers: work-RAM image: Boot_InitWorkRAM copies these bytes to RAM
@@ -19,16 +18,14 @@ NakaData_SeqChannels:
 ; [nakarest] FileOpen_DeviceSearchLoop (sequencer/smf_event_processor.s: `cp wa, (254942:24)`),
 ; [nakarest] FileOpen_MatchDevice (sequencer/smf_event_processor.s: `lda xwa, (254908:24)`), 2
 ; [nakarest] more.
-Naka_DrawbarOrgan_Screens:
-	.incbin "includes/generated/naka_sequencer_channels.bin", 0x6A0, 0xFA
+Naka_DrawbarOrgan_Screens:		.incbin "includes/generated/naka_sequencer_channels.bin", 0x6A0, 0xFA
 Pad_AfterNaka_DrawbarOrgan_Screens:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x79A, 0xE
 ; [nakarest] SeqCh_FeatureDemoCallbackData  +0x7a8..+0x888 (0xeee820, 224 B)
 ; [nakarest] purpose not established: layout of 224 B at 0xeee820 not derived; readers below
 ; [nakarest] Readers: work-RAM image: Boot_InitWorkRAM copies these bytes to RAM
 ; [nakarest] 0x3e47c..0x3e55c (its ld xde/xhl/xbc + ldir blocks); no literal RAM reference into
 ; [nakarest] that copy was found.
-SeqCh_FeatureDemoCallbackData:
-	.incbin "includes/generated/naka_sequencer_channels.bin", 0x7A8, 0xE0
+SeqCh_FeatureDemoCallbackData:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x7A8, 0xE0
 ; [nakarest] SeqCh_SystemHandlerData  +0x888..+0xc48 (0xeee900, 960 B)
 ; [nakarest] purpose not established: layout of 960 B at 0xeee900 not derived; readers below
 ; [nakarest] Readers: 2 data words in HDAE5000_Init_BytecodeBlock (at 0xef4b1d, 0xef4b1a); 1
@@ -44,8 +41,7 @@ SeqCh_FeatureDemoCallbackData:
 ; [nakarest] 0x3e674`), NakaMenuItem_Mixer (ui_widgets/naka_sound_technichord_dispatch.s: `.long
 ; [nakarest] 0x3e670`), NakaMenuItem_PartSetting (ui_widgets/naka_sound_technichord_dispatch.s:
 ; [nakarest] `.long 0x3e66e`), 4 more.
-SeqCh_SystemHandlerData:
-	.incbin "includes/generated/naka_sequencer_channels.bin", 0x888, 0x3C0
+SeqCh_SystemHandlerData:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x888, 0x3C0
 ; [nakarest] MixerPart_NamePtrTable  +0xc48..+0xccc (0xeeecc0, 132 B)
 ; [nakarest] purpose not established: layout of 132 B at 0xeeecc0 not derived; readers below
 ; [nakarest] Readers: work-RAM image: Boot_InitWorkRAM copies these bytes to RAM
@@ -54,8 +50,7 @@ SeqCh_SystemHandlerData:
 ; [nakarest] AcLswPartEdit_ShowHide (ui/drawbar_panel_ui.s: `ld de, (256414:24)`),
 ; [nakarest] AcLswPartPan_Match (ui/drawbar_panel_ui.s: `ld de, (256414:24)`),
 ; [nakarest] AcLswPartPan_ShowHide (ui/drawbar_panel_ui.s: `ld de, (256414:24)`), 4 more.
-MixerPart_NamePtrTable:
-	.incbin "includes/generated/naka_sequencer_channels.bin", 0xC48, 0x84
+MixerPart_NamePtrTable:	.incbin "includes/generated/naka_sequencer_channels.bin", 0xC48, 0x84
 ; [nakarest] Naka_DrawbarControl_Table  +0xccc..+0xd00 (0xeeed44, 52 B)
 ; [nakarest] purpose not established: layout of 52 B at 0xeeed44 not derived; readers below
 ; [nakarest] Readers: work-RAM image: Boot_InitWorkRAM copies these bytes to RAM
@@ -212,8 +207,7 @@ MidiPart_ConfigNameTable:
 ; [nakarest] AccDraw_Secondary_Return2 (sequencer/accompaniment_engine.s: `ld (257960:24), 0`),
 ; [nakarest] AccDraw_Secondary_Return3 (sequencer/accompaniment_engine.s: `ld (257960:24), 0`),
 ; [nakarest] 42 more.
-Naka_DrawbarSlider_Resources:
-	.incbin "includes/generated/naka_sequencer_channels.bin", 0xF48, 0x390
+Naka_DrawbarSlider_Resources:	.incbin "includes/generated/naka_sequencer_channels.bin", 0xF48, 0x390
 ; [nakarest] Naka_DrawbarDisplay_Table1  +0x12d8..+0x1358 (0xeef350, 128 B)
 ; [nakarest] purpose not established: layout of 128 B at 0xeef350 not derived; readers below
 ; [nakarest] Readers: work-RAM image: Boot_InitWorkRAM copies these bytes to RAM
@@ -221,15 +215,13 @@ Naka_DrawbarSlider_Resources:
 ; [nakarest] FontIDProc (ui/ui_widget_defs.s: `ld xbc, 0x3efac`), SliderH_CalcRange
 ; [nakarest] (ui/ui_widget_defs.s: `ld xbc, 0x3efac`), SliderH_ReturnAlt (ui/ui_widget_defs.s:
 ; [nakarest] `ld xwa, 0x3efac`).
-Naka_DrawbarDisplay_Table1:
-	.incbin "includes/generated/naka_sequencer_channels.bin", 0x12D8, 0x80
+Naka_DrawbarDisplay_Table1:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x12D8, 0x80
 ; [nakarest] Naka_DrawbarDisplay_Table2  +0x1358..+0x1510 (0xeef3d0, 440 B)
 ; [nakarest] purpose not established: layout of 440 B at 0xeef3d0 not derived; readers below
 ; [nakarest] Readers: work-RAM image: Boot_InitWorkRAM copies these bytes to RAM
 ; [nakarest] 0x3f02c..0x3f1e4 (its ld xde/xhl/xbc + ldir blocks); no literal RAM reference into
 ; [nakarest] that copy was found.
-Naka_DrawbarDisplay_Table2:
-	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1358, 0x1B8
+Naka_DrawbarDisplay_Table2:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1358, 0x1B8
 ; [nakarest] Naka_DrawbarReg_Table: despite the name, entries 0-11 are the WALLPAPER PALETTE
 ; [nakarest] table: pointers to NakaColor_Palette2, 1, 6, 5, 4, 3, 10, 9, 8, 7, Blank, Blank
 ; [nakarest] (debug_naming_panel_sim.s).  This blob lies wholly inside the work-RAM initial
@@ -320,7 +312,6 @@ Boot_InitWorkRAM_ROMCopy2_Start_Data:	.incbin "includes/generated/naka_sequencer
 ; [nakarest] Readers: work-RAM image: Boot_InitWorkRAM copies these bytes to RAM
 ; [nakarest] 0x0e34c..0x0e7aa (its ld xde/xhl/xbc + ldir blocks); no literal RAM reference into
 ; [nakarest] that copy was found.
-Palette_8bit_RGBA_2_Data:
-	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1A78, 0x45E
+Palette_8bit_RGBA_2_Data:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1A78, 0x45E
 
 ; External label offsets within the binary blob above.

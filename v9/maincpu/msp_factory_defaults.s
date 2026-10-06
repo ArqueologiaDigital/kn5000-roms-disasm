@@ -60,5 +60,4 @@
 ; AccompSeq_ProcessNoteOn8; which byte is note, velocity or length is decided
 ; there and is not traced here, so msp_factory_defaults.c leaves them unnamed.
 
-MSP_FACTORY_DEFAULTS:
-	.incbin "includes/generated/msp_factory_defaults.bin"
+MSP_FACTORY_DEFAULTS:	.incbin "includes/generated/msp_factory_defaults.bin"

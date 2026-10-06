@@ -940,13 +940,11 @@ BitMapOut_CopyExtTable_Loop:
 
 
 
-BitMapOut_CopyExtTable_Check:
-	.incbin "includes/romslices/v7_block_bitmapout_copyexttable_check.bin", 0, 0xb5
+BitMapOut_CopyExtTable_Check:	.incbin "includes/romslices/v7_block_bitmapout_copyexttable_check.bin", 0, 0xb5
 ; wa = slot: copy it over the live panel, then put back from the backup (RAM 0x3C8E4) tag 0x48 payload bytes
 ; 0, 1 (style number) and 7, the low 3 bits of byte 4, and tag 0x72 payload bytes 8-10 -- the current style
 ; survives the recall.
-PanelMemory_RecallKeepStyle:
-	.incbin "includes/romslices/v7_block_bitmapout_copyexttable_check.bin", 0xb5, 134
+PanelMemory_RecallKeepStyle:	.incbin "includes/romslices/v7_block_bitmapout_copyexttable_check.bin", 0xb5, 134
 ; === end v7 block ===
 ; wa = slot: Mem_Copy PanelMemory_SlotAddresses[wa] (960 bytes) over the live panel at RAM 0xF9A0.
 PanelMemory_CopySlotToLivePanel:

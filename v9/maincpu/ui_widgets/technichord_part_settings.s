@@ -150,8 +150,7 @@
 ; [nakarest] NakaInst_TECHNI_CHORD  +0x0..+0xe (0xe81cce, 14 B)
 ; [nakarest] 1 text the records point at (Viewable slot 0x2 (table 0xe85470, 20 entries,
 ; [nakarest] InitializeMurai)): "TECHNI-CHORD" (AcTitleMenu.str of element 19).
-NakaInst_TECHNI_CHORD:
-	.incbin "includes/generated/naka_technichord_part.bin", 0x0, 0xE
+NakaInst_TECHNI_CHORD:	.incbin "includes/generated/naka_technichord_part.bin", 0x0, 0xE
 ; [nakarest] naka_technichord_part+0xe  +0xe..+0x1064 (0xe81cdc, 4182 B)
 ; [nakarest] widget records, elements 0-83 of Viewable slot 0x3 (table 0xe854c4, 84 entries,
 ; [nakarest] InitializeMurai) ("Sdpart"): TtlScreen (42 B), AcIndexEditSw (40 B) x10, Line (26
@@ -261,8 +260,7 @@ NakaWidget_Sdmtune_3_AcIndexWideES:	.incbin "includes/generated/naka_technichord
 ; [nakarest] Continues widget record, element 3 of Viewable slot 0x4 (table 0xe85618, 4 entries,
 ; [nakarest] InitializeMurai) ("Sdmtune"): AcIndexWideES (42 B) (starts 0xe82dda, 4 of its 42
 ; [nakarest] bytes are here or later).
-Naka_KeyScaling_NavTrail:
-	.incbin "includes/generated/naka_technichord_part.bin", 0x1132, 0x4
+Naka_KeyScaling_NavTrail:	.incbin "includes/generated/naka_technichord_part.bin", 0x1132, 0x4
 ; [nakarest] naka_technichord_part+0x1136  +0x1136..+0x1996 (0xe82e04, 2144 B)
 ; [nakarest] widget records, elements 0-53 of Viewable slot 0x5 (table 0xe8562c, 54 entries,
 ; [nakarest] InitializeMurai) ("Sdscltyp"): TtlScreen (42 B), AcWindowPage (36 B), IvPageControl

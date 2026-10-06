@@ -465,8 +465,7 @@
 ; [nakarest] Naka_ReverbScreen_EmptyStr  +0x0..+0x2 (0xe27fa4, 2 B)
 ; [nakarest] purpose not established: layout of 2 B at 0xe27fa4 not derived; readers below
 ; [nakarest] Readers: 1 data word in NakaData_SeqChannels (at 0xeee2b8).
-Naka_ReverbScreen_EmptyStr:
-	.incbin "includes/generated/naka_effects_seq.bin", 0x0, 0x2
+Naka_ReverbScreen_EmptyStr:	.incbin "includes/generated/naka_effects_seq.bin", 0x0, 0x2
 ; [nakarest] naka_effects_seq+0x2  +0x2..+0x1bc (0xe27fa6, 442 B)
 ; [nakarest] widget records, elements 0-11 of Viewable slot 0xa (table 0xe2e624, 12 entries,
 ; [nakarest] InitializeKubo): TtlScreen (42 B), AcIndexWideES (42 B) x3, Label (32 B) x4,
@@ -1321,8 +1320,7 @@ NakaWidget_EnterTainerScr_2_Label:			.incbin "includes/generated/naka_effects_se
 ; [nakarest] InitializeKubo)): "ITEM" (Label.str of element 9); "VALUE" (Label.str of element
 ; [nakarest] 10); "MUTE KEYS:OFF" (AcFuncToggle.stroff of element 12); "MUTE KEYS:ON "
 ; [nakarest] (AcFuncToggle.stron of element 12); ....
-NakaInst_FADE_IN_OUT_SETTING:
-	.incbin "includes/generated/naka_effects_seq.bin", 0x5BF2, 0x24
+NakaInst_FADE_IN_OUT_SETTING:			.incbin "includes/generated/naka_effects_seq.bin", 0x5BF2, 0x24
 NakaWidget_EnterTainerScr_7_AcIndexWideES:	.incbin "includes/generated/naka_effects_seq.bin", 0x5C16, 0x2A
 NakaWidget_EnterTainerScr_8_AcIndexWideES:	.incbin "includes/generated/naka_effects_seq.bin", 0x5C40, 0x2A
 NakaWidget_EnterTainerScr_9_Label:		.incbin "includes/generated/naka_effects_seq.bin", 0x5C6A, 0x26
@@ -2379,39 +2377,33 @@ Kubo_ResNameTable_3E7:	.incbin "includes/generated/naka_effects_seq.bin", 0x80FA
 ; [nakarest] Continues the table itself: ResName slot 0x3e7 (table 0xe3009e, 61 entries,
 ; [nakarest] InitializeKubo), 61 entry pointers x 4 bytes (starts 0xe3009e, 210 of its 244 bytes
 ; [nakarest] are here or later).
-Naka_Help_563_E300C0:
-	.incbin "includes/generated/naka_effects_seq.bin", 0x811C, 0x7
+Naka_Help_563_E300C0:	.incbin "includes/generated/naka_effects_seq.bin", 0x811C, 0x7
 ; [nakarest] Naka_Help_564_E300C7  +0x8123..+0x8128 (0xe300c7, 5 B)
 ; [nakarest] Continues the table itself: ResName slot 0x3e7 (table 0xe3009e, 61 entries,
 ; [nakarest] InitializeKubo), 61 entry pointers x 4 bytes (starts 0xe3009e, 203 of its 244 bytes
 ; [nakarest] are here or later).
-Naka_Help_564_E300C7:
-	.incbin "includes/generated/naka_effects_seq.bin", 0x8123, 0x5
+Naka_Help_564_E300C7:	.incbin "includes/generated/naka_effects_seq.bin", 0x8123, 0x5
 ; [nakarest] Naka_Help_565_E300CC  +0x8128..+0x813f (0xe300cc, 23 B)
 ; [nakarest] Continues the table itself: ResName slot 0x3e7 (table 0xe3009e, 61 entries,
 ; [nakarest] InitializeKubo), 61 entry pointers x 4 bytes (starts 0xe3009e, 198 of its 244 bytes
 ; [nakarest] are here or later).
-Naka_Help_565_E300CC:
-	.incbin "includes/generated/naka_effects_seq.bin", 0x8128, 0x17
+Naka_Help_565_E300CC:	.incbin "includes/generated/naka_effects_seq.bin", 0x8128, 0x17
 ; [nakarest] Naka_Help_566_E300E3  +0x813f..+0x8148 (0xe300e3, 9 B)
 ; [nakarest] Continues the table itself: ResName slot 0x3e7 (table 0xe3009e, 61 entries,
 ; [nakarest] InitializeKubo), 61 entry pointers x 4 bytes (starts 0xe3009e, 175 of its 244 bytes
 ; [nakarest] are here or later).
-Naka_Help_566_E300E3:
-	.incbin "includes/generated/naka_effects_seq.bin", 0x813F, 0x9
+Naka_Help_566_E300E3:	.incbin "includes/generated/naka_effects_seq.bin", 0x813F, 0x9
 ; [nakarest] Naka_Help_567_E300EC  +0x8148..+0x816f (0xe300ec, 39 B)
 ; [nakarest] Continues the table itself: ResName slot 0x3e7 (table 0xe3009e, 61 entries,
 ; [nakarest] InitializeKubo), 61 entry pointers x 4 bytes (starts 0xe3009e, 166 of its 244 bytes
 ; [nakarest] are here or later).
-Naka_Help_567_E300EC:
-	.incbin "includes/generated/naka_effects_seq.bin", 0x8148, 0x27
+Naka_Help_567_E300EC:	.incbin "includes/generated/naka_effects_seq.bin", 0x8148, 0x27
 ; [nakarest] Naka_Help_569_E30113  +0x816f..+0x81f4 (0xe30113, 133 B)
 ; [nakarest] 6 B at 0xe30192: the end marker of ResName slot 0x3e7 (table 0xe3009e, 61 entries, InitializeKubo) -- entry 61, a pointer to the empty string right after it ("", 00 ff), as every ResName table ends.
 ; [nakarest] Continues the table itself: ResName slot 0x3e7 (table 0xe3009e, 61 entries,
 ; [nakarest] InitializeKubo), 61 entry pointers x 4 bytes (starts 0xe3009e, 127 of its 244 bytes
 ; [nakarest] are here or later).
-Naka_Help_569_E30113:
-	.incbin "includes/generated/naka_effects_seq.bin", 0x816F, 0x85
+Naka_Help_569_E30113:	.incbin "includes/generated/naka_effects_seq.bin", 0x816F, 0x85
 ; [nakarest] naka_effects_seq+0x81f4  +0x81f4..+0x8578 (0xe30198, 900 B)
 ; [nakarest] name strings, entries 0-60 of ResName slot 0x3e7 (table 0xe3009e, 61 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0xe7): "", "HelpLang4P4", "",
@@ -2582,8 +2574,7 @@ FuncName_ApEditSyori:		.incbin "includes/generated/naka_effects_seq.bin", 0x898E
 ; [nakarest] purpose not established: layout of 8 B at 0xe3093e not derived; readers below
 ; [nakarest] Readers: source references EntertainerGridCheck (sequencer/sequencer_ui.s: `ld xiy,
 ; [nakarest] EntertainerGridCheck_Data`).
-EntertainerGridCheck_Data:
-	.incbin "includes/generated/naka_effects_seq.bin", 0x899A, 0x8
+EntertainerGridCheck_Data:	.incbin "includes/generated/naka_effects_seq.bin", 0x899A, 0x8
 ; [nakarest] naka_effects_seq+0x89a2  +0x89a2..+0x8b86 (0xe30946, 484 B)
 ; [nakarest] Text (484 B at 0xe30946), first string
 ; [nakarest] "~43~2d~32~44~a0~bc~44~2d~32~45~a0~bc~45~2d~32~46"; no registered NAKA table points
@@ -2591,8 +2582,7 @@ EntertainerGridCheck_Data:
 ; [nakarest] (sequencer/sequencer_ui.s: `lda xbc, (NoteEdit_FormatTempoString_Data:24)`),
 ; [nakarest] Sqedt_ParamDispatch_Join6 (sequencer/sequencer_ui.s: `lda xde,
 ; [nakarest] (NoteEdit_FormatTempoString_Data:24)`).
-NoteEdit_FormatTempoString_Data:
-	.incbin "includes/generated/naka_effects_seq.bin", 0x89A2, 0x1E4
+NoteEdit_FormatTempoString_Data:	.incbin "includes/generated/naka_effects_seq.bin", 0x89A2, 0x1E4
 ; [nakarest] naka_effects_seq+0x8b86  +0x8b86..+0x8e22 (0xe30b2a, 668 B)
 ; [nakarest] Text (668 B at 0xe30b2a), first string
 ; [nakarest] "20~46~9e~32~47~32~20~41~a0~32~41~32~20~42~a0~32~"; no registered NAKA table points
@@ -2605,13 +2595,11 @@ Str_42a03242322043:	.incbin "includes/generated/naka_effects_seq.bin", 0x8BAD, 0
 ; [nakarest] purpose not established: layout of 56 B at 0xe30dc6 not derived; readers below
 ; [nakarest] Readers: source references Equalizer_DispatchA (sequencer/sequencer_ui.s: `lda xde,
 ; [nakarest] (Equalizer_DispatchA_Data:24)`).
-Equalizer_DispatchA_Data:
-	.incbin "includes/generated/naka_effects_seq.bin", 0x8E22, 0x38
+Equalizer_DispatchA_Data:	.incbin "includes/generated/naka_effects_seq.bin", 0x8E22, 0x38
 ; [nakarest] naka_effects_seq+0x8e5a  +0x8e5a..+0x8ebc (0xe30dfe, 98 B)
 ; [nakarest] Text (98 B at 0xe30dfe), first string "q"; no registered NAKA table points into it;
 ; [nakarest] reached through source references Equalizer_DispatchA (sequencer/sequencer_ui.s:
 ; [nakarest] `lda xbc, (Equalizer_DispatchA_Data_2:24)`).
-Equalizer_DispatchA_Data_2:
-	.incbin "includes/generated/naka_effects_seq.bin", 0x8E5A, 0x62
+Equalizer_DispatchA_Data_2:	.incbin "includes/generated/naka_effects_seq.bin", 0x8E5A, 0x62
 
 ; External label offsets within the binary blob above.

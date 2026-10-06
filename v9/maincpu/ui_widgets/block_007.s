@@ -40,8 +40,7 @@
 
 ; [nakarest] NakaData_Block007  +0x0..+0x14 (0xe55a36, 20 B)
 ; [nakarest] purpose not established: 20 B at 0xe55a36 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
-NakaData_Block007:
-	.incbin "includes/generated/naka_block_007.bin", 0x0, 0x14
+NakaData_Block007:	.incbin "includes/generated/naka_block_007.bin", 0x0, 0x14
 ; [nakarest] naka_block_007+0x14  +0x14..+0x14c (0xe55a4a, 312 B)
 ; [nakarest] class definition entries 4-15 of Class slot 0x163 (table 0xe559ea, 16 entries,
 ; [nakarest] InitializeEast) (24 bytes each: proc, parent, allsize, selfsize, name, propdata,

@@ -47,103 +47,83 @@
 ; [nakarest] NakaInst_TEST6FUNC  +0x0..+0xa (0xed333c, 10 B)
 ; [nakarest] name string, entry 19 of MainFunction slot 0x442 (table 0xed32e6, 20 entries,
 ; [nakarest] InitializeToshi) (names for MainFunction slot 0x142): "TEST6FUNC".
-NakaInst_TEST6FUNC:
-	.incbin "includes/generated/naka_normal_mode.bin", 0x0, 0xA
+NakaInst_TEST6FUNC:	.incbin "includes/generated/naka_normal_mode.bin", 0x0, 0xA
 ; [nakarest] NakaInst_TEST4FUNC  +0xa..+0x14 (0xed3346, 10 B)
 ; [nakarest] name string, entry 18 of MainFunction slot 0x442 (table 0xed32e6, 20 entries,
 ; [nakarest] InitializeToshi) (names for MainFunction slot 0x142): "TEST4FUNC".
-NakaInst_TEST4FUNC:
-	.incbin "includes/generated/naka_normal_mode.bin", 0xA, 0xA
+NakaInst_TEST4FUNC:	.incbin "includes/generated/naka_normal_mode.bin", 0xA, 0xA
 ; [nakarest] NakaInst_TEST3FUNC  +0x14..+0x1e (0xed3350, 10 B)
 ; [nakarest] name string, entry 17 of MainFunction slot 0x442 (table 0xed32e6, 20 entries,
 ; [nakarest] InitializeToshi) (names for MainFunction slot 0x142): "TEST3FUNC".
-NakaInst_TEST3FUNC:
-	.incbin "includes/generated/naka_normal_mode.bin", 0x14, 0xA
+NakaInst_TEST3FUNC:	.incbin "includes/generated/naka_normal_mode.bin", 0x14, 0xA
 ; [nakarest] NakaInst_TEST2FUNC  +0x1e..+0x28 (0xed335a, 10 B)
 ; [nakarest] name string, entry 16 of MainFunction slot 0x442 (table 0xed32e6, 20 entries,
 ; [nakarest] InitializeToshi) (names for MainFunction slot 0x142): "TEST2FUNC".
-NakaInst_TEST2FUNC:
-	.incbin "includes/generated/naka_normal_mode.bin", 0x1E, 0xA
+NakaInst_TEST2FUNC:	.incbin "includes/generated/naka_normal_mode.bin", 0x1E, 0xA
 ; [nakarest] NakaInst_MainWallSetFlashFunc  +0x28..+0x3e (0xed3364, 22 B)
 ; [nakarest] name string, entry 15 of MainFunction slot 0x442 (table 0xed32e6, 20 entries,
 ; [nakarest] InitializeToshi) (names for MainFunction slot 0x142): "MainWallSetFlashFunc".
-NakaInst_MainWallSetFlashFunc:
-	.incbin "includes/generated/naka_normal_mode.bin", 0x28, 0x16
+NakaInst_MainWallSetFlashFunc:	.incbin "includes/generated/naka_normal_mode.bin", 0x28, 0x16
 ; [nakarest] NakaInst_MainTimeFlashFunc  +0x3e..+0x50 (0xed337a, 18 B)
 ; [nakarest] name string, entry 14 of MainFunction slot 0x442 (table 0xed32e6, 20 entries,
 ; [nakarest] InitializeToshi) (names for MainFunction slot 0x142): "MainTimeFlashFunc".
-NakaInst_MainTimeFlashFunc:
-	.incbin "includes/generated/naka_normal_mode.bin", 0x3E, 0x12
+NakaInst_MainTimeFlashFunc:	.incbin "includes/generated/naka_normal_mode.bin", 0x3E, 0x12
 ; [nakarest] NakaInst_MainMssSetUp  +0x50..+0x5e (0xed338c, 14 B)
 ; [nakarest] name string, entry 13 of MainFunction slot 0x442 (table 0xed32e6, 20 entries,
 ; [nakarest] InitializeToshi) (names for MainFunction slot 0x142): "MainMssSetUp".
-NakaInst_MainMssSetUp:
-	.incbin "includes/generated/naka_normal_mode.bin", 0x50, 0xE
+NakaInst_MainMssSetUp:	.incbin "includes/generated/naka_normal_mode.bin", 0x50, 0xE
 ; [nakarest] NakaInst_FswAsIniFunc  +0x5e..+0x6c (0xed339a, 14 B)
 ; [nakarest] name string, entry 12 of MainFunction slot 0x442 (table 0xed32e6, 20 entries,
 ; [nakarest] InitializeToshi) (names for MainFunction slot 0x142): "FswAsIniFunc".
-NakaInst_FswAsIniFunc:
-	.incbin "includes/generated/naka_normal_mode.bin", 0x5E, 0xE
+NakaInst_FswAsIniFunc:	.incbin "includes/generated/naka_normal_mode.bin", 0x5E, 0xE
 ; [nakarest] NakaInst_CntIniFunc  +0x6c..+0x78 (0xed33a8, 12 B)
 ; [nakarest] name string, entry 11 of MainFunction slot 0x442 (table 0xed32e6, 20 entries,
 ; [nakarest] InitializeToshi) (names for MainFunction slot 0x142): "CntIniFunc".
-NakaInst_CntIniFunc:
-	.incbin "includes/generated/naka_normal_mode.bin", 0x6C, 0xC
+NakaInst_CntIniFunc:	.incbin "includes/generated/naka_normal_mode.bin", 0x6C, 0xC
 ; [nakarest] NakaInst_MainSysControl  +0x78..+0x88 (0xed33b4, 16 B)
 ; [nakarest] name string, entry 10 of MainFunction slot 0x442 (table 0xed32e6, 20 entries,
 ; [nakarest] InitializeToshi) (names for MainFunction slot 0x142): "MainSysControl".
-NakaInst_MainSysControl:
-	.incbin "includes/generated/naka_normal_mode.bin", 0x78, 0x10
+NakaInst_MainSysControl:	.incbin "includes/generated/naka_normal_mode.bin", 0x78, 0x10
 ; [nakarest] NakaInst_OneTchFUNC  +0x88..+0x94 (0xed33c4, 12 B)
 ; [nakarest] name string, entry 9 of MainFunction slot 0x442 (table 0xed32e6, 20 entries,
 ; [nakarest] InitializeToshi) (names for MainFunction slot 0x142): "OneTchFUNC".
-NakaInst_OneTchFUNC:
-	.incbin "includes/generated/naka_normal_mode.bin", 0x88, 0xC
+NakaInst_OneTchFUNC:	.incbin "includes/generated/naka_normal_mode.bin", 0x88, 0xC
 ; [nakarest] NakaInst_MainPmGet  +0x94..+0x9e (0xed33d0, 10 B)
 ; [nakarest] name string, entry 8 of MainFunction slot 0x442 (table 0xed32e6, 20 entries,
 ; [nakarest] InitializeToshi) (names for MainFunction slot 0x142): "MainPmGet".
-NakaInst_MainPmGet:
-	.incbin "includes/generated/naka_normal_mode.bin", 0x94, 0xA
+NakaInst_MainPmGet:	.incbin "includes/generated/naka_normal_mode.bin", 0x94, 0xA
 ; [nakarest] NakaInst_MainChordPre  +0x9e..+0xac (0xed33da, 14 B)
 ; [nakarest] name string, entry 7 of MainFunction slot 0x442 (table 0xed32e6, 20 entries,
 ; [nakarest] InitializeToshi) (names for MainFunction slot 0x142): "MainChordPre".
-NakaInst_MainChordPre:
-	.incbin "includes/generated/naka_normal_mode.bin", 0x9E, 0xE
+NakaInst_MainChordPre:	.incbin "includes/generated/naka_normal_mode.bin", 0x9E, 0xE
 ; [nakarest] NakaInst_MainGetRhyGrpName  +0xac..+0xbe (0xed33e8, 18 B)
 ; [nakarest] name string, entry 6 of MainFunction slot 0x442 (table 0xed32e6, 20 entries,
 ; [nakarest] InitializeToshi) (names for MainFunction slot 0x142): "MainGetRhyGrpName".
-NakaInst_MainGetRhyGrpName:
-	.incbin "includes/generated/naka_normal_mode.bin", 0xAC, 0x12
+NakaInst_MainGetRhyGrpName:	.incbin "includes/generated/naka_normal_mode.bin", 0xAC, 0x12
 ; [nakarest] NakaInst_MainGetSndGrpName  +0xbe..+0xd0 (0xed33fa, 18 B)
 ; [nakarest] name string, entry 5 of MainFunction slot 0x442 (table 0xed32e6, 20 entries,
 ; [nakarest] InitializeToshi) (names for MainFunction slot 0x142): "MainGetSndGrpName".
-NakaInst_MainGetSndGrpName:
-	.incbin "includes/generated/naka_normal_mode.bin", 0xBE, 0x12
+NakaInst_MainGetSndGrpName:	.incbin "includes/generated/naka_normal_mode.bin", 0xBE, 0x12
 ; [nakarest] NakaInst_MainGetRhyName  +0xd0..+0xe0 (0xed340c, 16 B)
 ; [nakarest] name string, entry 4 of MainFunction slot 0x442 (table 0xed32e6, 20 entries,
 ; [nakarest] InitializeToshi) (names for MainFunction slot 0x142): "MainGetRhyName".
-NakaInst_MainGetRhyName:
-	.incbin "includes/generated/naka_normal_mode.bin", 0xD0, 0x10
+NakaInst_MainGetRhyName:	.incbin "includes/generated/naka_normal_mode.bin", 0xD0, 0x10
 ; [nakarest] NakaInst_MainRvariIni  +0xe0..+0xee (0xed341c, 14 B)
 ; [nakarest] name string, entry 3 of MainFunction slot 0x442 (table 0xed32e6, 20 entries,
 ; [nakarest] InitializeToshi) (names for MainFunction slot 0x142): "MainRvariIni".
-NakaInst_MainRvariIni:
-	.incbin "includes/generated/naka_normal_mode.bin", 0xE0, 0xE
+NakaInst_MainRvariIni:	.incbin "includes/generated/naka_normal_mode.bin", 0xE0, 0xE
 ; [nakarest] NakaInst_MainGetSndName  +0xee..+0xfe (0xed342a, 16 B)
 ; [nakarest] name string, entry 2 of MainFunction slot 0x442 (table 0xed32e6, 20 entries,
 ; [nakarest] InitializeToshi) (names for MainFunction slot 0x142): "MainGetSndName".
-NakaInst_MainGetSndName:
-	.incbin "includes/generated/naka_normal_mode.bin", 0xEE, 0x10
+NakaInst_MainGetSndName:	.incbin "includes/generated/naka_normal_mode.bin", 0xEE, 0x10
 ; [nakarest] NakaInst_MainSvariIni  +0xfe..+0x10c (0xed343a, 14 B)
 ; [nakarest] name string, entry 1 of MainFunction slot 0x442 (table 0xed32e6, 20 entries,
 ; [nakarest] InitializeToshi) (names for MainFunction slot 0x142): "MainSvariIni".
-NakaInst_MainSvariIni:
-	.incbin "includes/generated/naka_normal_mode.bin", 0xFE, 0xE
+NakaInst_MainSvariIni:	.incbin "includes/generated/naka_normal_mode.bin", 0xFE, 0xE
 ; [nakarest] NakaInst_MainVariSet  +0x10c..+0x118 (0xed3448, 12 B)
 ; [nakarest] name string, entry 0 of MainFunction slot 0x442 (table 0xed32e6, 20 entries,
 ; [nakarest] InitializeToshi) (names for MainFunction slot 0x142): "MainVariSet".
-NakaInst_MainVariSet:
-	.incbin "includes/generated/naka_normal_mode.bin", 0x10C, 0xC
+NakaInst_MainVariSet:	.incbin "includes/generated/naka_normal_mode.bin", 0x10C, 0xC
 ; [nakarest] naka_normal_mode+0x118  +0x118..+0x490 (0xed3454, 888 B)
 ; [nakarest] widget records, elements 0-24 of Viewable slot 0x1 (table 0xed77ce, 63 entries,
 ; [nakarest] InitializeToshi) ("Normal"): TtlScreen (42 B), NormScreen (42 B), AcTempoBox (36

@@ -46,130 +46,104 @@
 ; [nakarest] NakaNode_Accomp7_Widget01  +0x0..+0x24 (0xe1a73e, 36 B)
 ; [nakarest] widget record, element 1 of Viewable slot 0xc8 (table 0xe1b9ae, 27 entries,
 ; [nakarest] InitializeSuna) ("MspBkslScreen"): AcWindowPage (36 B).
-NakaNode_Accomp7_Widget01:
-	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x0, 0x24
+NakaNode_Accomp7_Widget01:	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x0, 0x24
 ; [nakarest] NakaNode_Accomp7_Widget02  +0x24..+0x40 (0xe1a762, 28 B)
 ; [nakarest] widget record, element 2 of Viewable slot 0xc8 (table 0xe1b9ae, 27 entries,
 ; [nakarest] InitializeSuna) ("MspBkslScreen"): IvPageControl (28 B).
-NakaNode_Accomp7_Widget02:
-	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x24, 0x1C
+NakaNode_Accomp7_Widget02:	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x24, 0x1C
 ; [nakarest] NakaNode_Accomp7_Widget03  +0x40..+0x5c (0xe1a77e, 28 B)
 ; [nakarest] widget record, element 3 of Viewable slot 0xc8 (table 0xe1b9ae, 27 entries,
 ; [nakarest] InitializeSuna) ("MspBkslScreen"): IvPageControl (28 B).
-NakaNode_Accomp7_Widget03:
-	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x40, 0x1C
+NakaNode_Accomp7_Widget03:	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x40, 0x1C
 ; [nakarest] NakaNode_Accomp7_Widget04  +0x5c..+0x76 (0xe1a79a, 26 B)
 ; [nakarest] widget record, element 4 of Viewable slot 0xc8 (table 0xe1b9ae, 27 entries,
 ; [nakarest] InitializeSuna) ("MspBkslScreen"): IvShowHide (26 B).
-NakaNode_Accomp7_Widget04:
-	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x5C, 0x1A
+NakaNode_Accomp7_Widget04:	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x5C, 0x1A
 ; [nakarest] NakaNode_Accomp7_Widget05  +0x76..+0x8e (0xe1a7b4, 24 B)
 ; [nakarest] widget record, element 5 of Viewable slot 0xc8 (table 0xe1b9ae, 27 entries,
 ; [nakarest] InitializeSuna) ("MspBkslScreen"): IvIntVari (24 B).
-NakaNode_Accomp7_Widget05:
-	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x76, 0x18
+NakaNode_Accomp7_Widget05:	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x76, 0x18
 ; [nakarest] NakaNode_Accomp7_Widget06  +0x8e..+0xb2 (0xe1a7cc, 36 B)
 ; [nakarest] widget record, element 6 of Viewable slot 0xc8 (table 0xe1b9ae, 27 entries,
 ; [nakarest] InitializeSuna) ("MspBkslScreen"): Window (36 B).
-NakaNode_Accomp7_Widget06:
-	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x8E, 0x24
+NakaNode_Accomp7_Widget06:	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x8E, 0x24
 ; [nakarest] NakaNode_Accomp7_Widget07  +0xb2..+0xde (0xe1a7f0, 44 B)
 ; [nakarest] widget record, element 7 of Viewable slot 0xc8 (table 0xe1b9ae, 27 entries,
 ; [nakarest] InitializeSuna) ("MspBkslScreen"): VwVariBox (44 B).
-NakaNode_Accomp7_Widget07:
-	.incbin "includes/generated/naka_accomp7_widgets.bin", 0xB2, 0x2C
+NakaNode_Accomp7_Widget07:	.incbin "includes/generated/naka_accomp7_widgets.bin", 0xB2, 0x2C
 ; [nakarest] NakaNode_Accomp7_Widget08  +0xde..+0x10a (0xe1a81c, 44 B)
 ; [nakarest] widget record, element 8 of Viewable slot 0xc8 (table 0xe1b9ae, 27 entries,
 ; [nakarest] InitializeSuna) ("MspBkslScreen"): VwVariBox (44 B).
-NakaNode_Accomp7_Widget08:
-	.incbin "includes/generated/naka_accomp7_widgets.bin", 0xDE, 0x2C
+NakaNode_Accomp7_Widget08:	.incbin "includes/generated/naka_accomp7_widgets.bin", 0xDE, 0x2C
 ; [nakarest] NakaNode_Accomp7_Widget09  +0x10a..+0x136 (0xe1a848, 44 B)
 ; [nakarest] widget record, element 9 of Viewable slot 0xc8 (table 0xe1b9ae, 27 entries,
 ; [nakarest] InitializeSuna) ("MspBkslScreen"): VwVariBox (44 B).
-NakaNode_Accomp7_Widget09:
-	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x10A, 0x2C
+NakaNode_Accomp7_Widget09:	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x10A, 0x2C
 ; [nakarest] NakaNode_Accomp7_Widget10  +0x136..+0x162 (0xe1a874, 44 B)
 ; [nakarest] widget record, element 10 of Viewable slot 0xc8 (table 0xe1b9ae, 27 entries,
 ; [nakarest] InitializeSuna) ("MspBkslScreen"): VwVariBox (44 B).
-NakaNode_Accomp7_Widget10:
-	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x136, 0x2C
+NakaNode_Accomp7_Widget10:	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x136, 0x2C
 ; [nakarest] NakaNode_Accomp7_Widget11  +0x162..+0x18e (0xe1a8a0, 44 B)
 ; [nakarest] widget record, element 11 of Viewable slot 0xc8 (table 0xe1b9ae, 27 entries,
 ; [nakarest] InitializeSuna) ("MspBkslScreen"): VwVariBox (44 B).
-NakaNode_Accomp7_Widget11:
-	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x162, 0x2C
+NakaNode_Accomp7_Widget11:	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x162, 0x2C
 ; [nakarest] NakaNode_Accomp7_Widget12  +0x18e..+0x1ba (0xe1a8cc, 44 B)
 ; [nakarest] widget record, element 12 of Viewable slot 0xc8 (table 0xe1b9ae, 27 entries,
 ; [nakarest] InitializeSuna) ("MspBkslScreen"): VwVariBox (44 B).
-NakaNode_Accomp7_Widget12:
-	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x18E, 0x2C
+NakaNode_Accomp7_Widget12:	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x18E, 0x2C
 ; [nakarest] NakaNode_Accomp7_Widget13  +0x1ba..+0x1e6 (0xe1a8f8, 44 B)
 ; [nakarest] widget record, element 13 of Viewable slot 0xc8 (table 0xe1b9ae, 27 entries,
 ; [nakarest] InitializeSuna) ("MspBkslScreen"): VwVariBox (44 B).
-NakaNode_Accomp7_Widget13:
-	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x1BA, 0x2C
+NakaNode_Accomp7_Widget13:	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x1BA, 0x2C
 ; [nakarest] NakaNode_Accomp7_Widget14  +0x1e6..+0x212 (0xe1a924, 44 B)
 ; [nakarest] widget record, element 14 of Viewable slot 0xc8 (table 0xe1b9ae, 27 entries,
 ; [nakarest] InitializeSuna) ("MspBkslScreen"): VwVariBox (44 B).
-NakaNode_Accomp7_Widget14:
-	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x1E6, 0x2C
+NakaNode_Accomp7_Widget14:	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x1E6, 0x2C
 ; [nakarest] NakaNode_Accomp7_Widget15  +0x212..+0x23e (0xe1a950, 44 B)
 ; [nakarest] widget record, element 15 of Viewable slot 0xc8 (table 0xe1b9ae, 27 entries,
 ; [nakarest] InitializeSuna) ("MspBkslScreen"): VwVariBox (44 B).
-NakaNode_Accomp7_Widget15:
-	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x212, 0x2C
+NakaNode_Accomp7_Widget15:	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x212, 0x2C
 ; [nakarest] NakaNode_Accomp7_Widget16  +0x23e..+0x26a (0xe1a97c, 44 B)
 ; [nakarest] widget record, element 16 of Viewable slot 0xc8 (table 0xe1b9ae, 27 entries,
 ; [nakarest] InitializeSuna) ("MspBkslScreen"): VwVariBox (44 B).
-NakaNode_Accomp7_Widget16:
-	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x23E, 0x2C
+NakaNode_Accomp7_Widget16:	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x23E, 0x2C
 ; [nakarest] NakaNode_Accomp7_Widget17  +0x26a..+0x28e (0xe1a9a8, 36 B)
 ; [nakarest] widget record, element 17 of Viewable slot 0xc8 (table 0xe1b9ae, 27 entries,
 ; [nakarest] InitializeSuna) ("MspBkslScreen"): Window (36 B).
-NakaNode_Accomp7_Widget17:
-	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x26A, 0x24
+NakaNode_Accomp7_Widget17:	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x26A, 0x24
 ; [nakarest] NakaNode_Accomp7_Widget18  +0x28e..+0x2ba (0xe1a9cc, 44 B)
 ; [nakarest] widget record, element 18 of Viewable slot 0xc8 (table 0xe1b9ae, 27 entries,
 ; [nakarest] InitializeSuna) ("MspBkslScreen"): VwVariBox (44 B).
-NakaNode_Accomp7_Widget18:
-	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x28E, 0x2C
+NakaNode_Accomp7_Widget18:	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x28E, 0x2C
 ; [nakarest] NakaNode_Accomp7_Widget19  +0x2ba..+0x2e6 (0xe1a9f8, 44 B)
 ; [nakarest] widget record, element 19 of Viewable slot 0xc8 (table 0xe1b9ae, 27 entries,
 ; [nakarest] InitializeSuna) ("MspBkslScreen"): VwVariBox (44 B).
-NakaNode_Accomp7_Widget19:
-	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x2BA, 0x2C
+NakaNode_Accomp7_Widget19:	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x2BA, 0x2C
 ; [nakarest] NakaNode_Accomp7_Widget20  +0x2e6..+0x312 (0xe1aa24, 44 B)
 ; [nakarest] widget record, element 20 of Viewable slot 0xc8 (table 0xe1b9ae, 27 entries,
 ; [nakarest] InitializeSuna) ("MspBkslScreen"): VwVariBox (44 B).
-NakaNode_Accomp7_Widget20:
-	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x2E6, 0x2C
+NakaNode_Accomp7_Widget20:	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x2E6, 0x2C
 ; [nakarest] NakaNode_Accomp7_Widget21  +0x312..+0x33e (0xe1aa50, 44 B)
 ; [nakarest] widget record, element 21 of Viewable slot 0xc8 (table 0xe1b9ae, 27 entries,
 ; [nakarest] InitializeSuna) ("MspBkslScreen"): VwVariBox (44 B).
-NakaNode_Accomp7_Widget21:
-	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x312, 0x2C
+NakaNode_Accomp7_Widget21:	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x312, 0x2C
 ; [nakarest] NakaNode_Accomp7_Widget22  +0x33e..+0x36a (0xe1aa7c, 44 B)
 ; [nakarest] widget record, element 22 of Viewable slot 0xc8 (table 0xe1b9ae, 27 entries,
 ; [nakarest] InitializeSuna) ("MspBkslScreen"): VwVariBox (44 B).
-NakaNode_Accomp7_Widget22:
-	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x33E, 0x2C
+NakaNode_Accomp7_Widget22:	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x33E, 0x2C
 ; [nakarest] NakaNode_Accomp7_Widget23  +0x36a..+0x396 (0xe1aaa8, 44 B)
 ; [nakarest] widget record, element 23 of Viewable slot 0xc8 (table 0xe1b9ae, 27 entries,
 ; [nakarest] InitializeSuna) ("MspBkslScreen"): VwVariBox (44 B).
-NakaNode_Accomp7_Widget23:
-	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x36A, 0x2C
+NakaNode_Accomp7_Widget23:	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x36A, 0x2C
 ; [nakarest] NakaNode_Accomp7_Widget24  +0x396..+0x3c2 (0xe1aad4, 44 B)
 ; [nakarest] widget record, element 24 of Viewable slot 0xc8 (table 0xe1b9ae, 27 entries,
 ; [nakarest] InitializeSuna) ("MspBkslScreen"): VwVariBox (44 B).
-NakaNode_Accomp7_Widget24:
-	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x396, 0x2C
+NakaNode_Accomp7_Widget24:	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x396, 0x2C
 ; [nakarest] NakaNode_Accomp7_Widget25  +0x3c2..+0x3ee (0xe1ab00, 44 B)
 ; [nakarest] widget record, element 25 of Viewable slot 0xc8 (table 0xe1b9ae, 27 entries,
 ; [nakarest] InitializeSuna) ("MspBkslScreen"): VwVariBox (44 B).
-NakaNode_Accomp7_Widget25:
-	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x3C2, 0x2C
+NakaNode_Accomp7_Widget25:	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x3C2, 0x2C
 ; [nakarest] NakaNode_Accomp7_Widget26  +0x3ee..+0x41a (0xe1ab2c, 44 B)
 ; [nakarest] widget record, element 26 of Viewable slot 0xc8 (table 0xe1b9ae, 27 entries,
 ; [nakarest] InitializeSuna) ("MspBkslScreen"): VwVariBox (44 B).
-NakaNode_Accomp7_Widget26:
-	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x3EE, 0x2C
+NakaNode_Accomp7_Widget26:	.incbin "includes/generated/naka_accomp7_widgets.bin", 0x3EE, 0x2C

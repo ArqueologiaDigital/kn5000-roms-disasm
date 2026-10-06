@@ -13435,8 +13435,7 @@ SeScreenData_0x1F75:
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_drumkit_display.c)
 ; reader (se_screendata_model.py): bound record list(s) from here, read by GraphicsRender_Start;
 ; evidence: SeMenu_BankEdit_LoopHelper
-SeScreenData_0x1F80:
-	.incbin "includes/generated/se_drumkit_display.bin", 0x0, 0x28
+SeScreenData_0x1F80:			.incbin "includes/generated/se_drumkit_display.bin", 0x0, 0x28
 SeMenu_BankEdit_LoopHelper_Data:	.incbin "includes/generated/se_drumkit_display.bin", 0x28, 0x96
 SeMenu_BankEdit_LoopHelper_Data_2:	.incbin "includes/generated/se_drumkit_display.bin", 0xBE, 0x8
 SeMenu_BankEdit_LoopHelper_Data_3:	.incbin "includes/generated/se_drumkit_display.bin", 0xC6, 0x4B
@@ -15028,8 +15027,7 @@ SeScreenData_0x41EA:
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_sel3.c)
 ; reader (se_screendata_model.py): bound record list(s) from here, read by GraphicsRender_Start;
 ; evidence: SeMenu_EqEdit_Init, SeMenu_EqEdit_DrawInit
-SeScreenData_0x4222:
-	.incbin "includes/generated/se_setup_sel3.bin"
+SeScreenData_0x4222:	.incbin "includes/generated/se_setup_sel3.bin"
 ; string table, 4-char cells, indexed by a bound record's value (field +7 of
 ; a bound op 02/07 record; value at most 2 by the record's mask; the table holds 2 cells)
 ; evidence: bound op02 record at SeScreenData_0x4222

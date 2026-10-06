@@ -63,8 +63,7 @@
 ; [nakarest] 0xe1344e, 478 entries, InitializeNaka)): "" (TtlScreen.title of element 0);
 ; [nakarest] "FTBMP01" (VwUserBitmapByName.file of element 1); "" (TtlScreen.title of element
 ; [nakarest] 2); "200 Preset" (Label.str of element 5); ....
-NAKA_PerfReg_Container_Root:
-	.incbin "includes/generated/naka_perf_style.bin", 0x0, 0x2C
+NAKA_PerfReg_Container_Root:		.incbin "includes/generated/naka_perf_style.bin", 0x0, 0x2C
 NakaWidget_ftdemobmptop:		.incbin "includes/generated/naka_perf_style.bin", 0x2C, 0x22
 NakaWidget_ftdemo02:			.incbin "includes/generated/naka_perf_style.bin", 0x4E, 0x2C
 NakaWidget_ftdemo01_3_Box:		.incbin "includes/generated/naka_perf_style.bin", 0x7A, 0x1A
@@ -547,13 +546,11 @@ NakaWidget_ftdemo01_477_Label:		.incbin "includes/generated/naka_perf_style.bin"
 ; [nakarest] NAKA_UIObjectTable  +0x4ada..+0x5256 (0xe1344e, 1916 B)
 ; [nakarest] the table itself: Viewable slot 0xfd (table 0xe1344e, 478 entries, InitializeNaka),
 ; [nakarest] 478 entry pointers x 4 bytes.
-NAKA_UIObjectTable:
-	.incbin "includes/generated/naka_perf_style.bin", 0x4ADA, 0x77C
+NAKA_UIObjectTable:	.incbin "includes/generated/naka_perf_style.bin", 0x4ADA, 0x77C
 ; [nakarest] naka_perf_style+0x5256  +0x5256..+0x59d4 (0xe13bca, 1918 B)
 ; [nakarest] the table itself: ResName slot 0x3fd (table 0xe13bca, 478 entries, InitializeNaka),
 ; [nakarest] 478 entry pointers x 4 bytes.
-Naka_ResNameTable_3FD:
-	.incbin "includes/generated/naka_perf_style.bin", 0x5256, 0x77E
+Naka_ResNameTable_3FD:	.incbin "includes/generated/naka_perf_style.bin", 0x5256, 0x77E
 ; [nakarest] naka_perf_style+0x59d4  +0x59d4..+0x5eb0 (0xe14348, 1244 B)
 ; [nakarest] name strings, entries 0-477 of ResName slot 0x3fd (table 0xe13bca, 478 entries,
 ; [nakarest] InitializeNaka) (names for Viewable slot 0xfd): "", "", "", "", "", "", ....
@@ -562,13 +559,11 @@ InitializeNaka_Str_TT_FDMSP:	.incbin "includes/generated/naka_perf_style.bin", 0
 ; [nakarest] naka_perf_style+0x5eb0  +0x5eb0..+0x5eb4 (0xe14824, 4 B)
 ; [nakarest] the table itself: MainFunction slot 0x14b (table 0xe14824, 0 entries,
 ; [nakarest] InitializeNaka), 0 entry pointers x 4 bytes.
-Naka_MainFunctionTable_14B:
-	.incbin "includes/generated/naka_perf_style.bin", 0x5EB0, 0x4
+Naka_MainFunctionTable_14B:	.incbin "includes/generated/naka_perf_style.bin", 0x5EB0, 0x4
 ; [nakarest] naka_perf_style+0x5eb4  +0x5eb4..+0x5eba (0xe14828, 6 B)
 ; [nakarest] the table itself: MainFunction slot 0x44b (table 0xe14828, 0 entries,
 ; [nakarest] InitializeNaka), 0 entry pointers x 4 bytes.
-Naka_MainFunctionTable_44B:
-	.incbin "includes/generated/naka_perf_style.bin", 0x5EB4, 0x6
+Naka_MainFunctionTable_44B:	.incbin "includes/generated/naka_perf_style.bin", 0x5EB4, 0x6
 ; [nakarest] naka_perf_style+0x5eba  +0x5eba..+0x5f2c (0xe1482e, 114 B)
 ; [nakarest] A table of 6 pointers into this piece (114 B at 0xe1482e), then text; entry 0
 ; [nakarest] points at "Bass Port Speaker"; no registered NAKA table points into it; reached
@@ -680,13 +675,11 @@ NAKA_InitDataBlock_PtrTable_18:	.incbin "includes/generated/naka_perf_style.bin"
 ; [nakarest] purpose not established: layout of 256 B at 0xe15a20 not derived; readers below
 ; [nakarest] Readers: source references NoteEvent_LoadSoundGenParams
 ; [nakarest] (storage/flash_floppy_handlers.s: `ld xiy, NoteEvent_LoadSoundGenParams_Data`).
-NoteEvent_LoadSoundGenParams_Data:
-	.incbin "includes/generated/naka_perf_style.bin", 0x70AC, 0x100
+NoteEvent_LoadSoundGenParams_Data:	.incbin "includes/generated/naka_perf_style.bin", 0x70AC, 0x100
 ; [nakarest] naka_perf_style+0x71ac  +0x71ac..+0x71ec (0xe15b20, 64 B)
 ; [nakarest] purpose not established: layout of 64 B at 0xe15b20 not derived; readers below
 ; [nakarest] Readers: source references NoteEvent_LoadSoundGenParams
 ; [nakarest] (storage/flash_floppy_handlers.s: `ld xiy, NoteEvent_LoadSoundGenParams_Data_2`).
-NoteEvent_LoadSoundGenParams_Data_2:
-	.incbin "includes/generated/naka_perf_style.bin", 0x71AC, 0x40
+NoteEvent_LoadSoundGenParams_Data_2:	.incbin "includes/generated/naka_perf_style.bin", 0x71AC, 0x40
 ; NAKA_UIObjectTable is at offset 0x4ada within the binary blob above.
 ; Referenced from flash_floppy_handlers.s (RegisterObjectTable call).

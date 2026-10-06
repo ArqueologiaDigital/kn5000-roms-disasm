@@ -91,8 +91,7 @@ GUI_FormatStrings:		.include "includes/gui_format_strings.s"
 ; -----------------------------------------------------------------------------
 ; purpose not established.
 ; tried: `lda`/`ld` of a 24- or 32-bit immediate, and any little-endian 24-bit copy of an address from 0x120 B before this slice to its end, anywhere in the ROM: none found
-GUI_DisplayStructData:
-	.incbin "includes/generated/gui_display_struct_data.bin", 0x0, 0x6
+GUI_DisplayStructData:	.incbin "includes/generated/gui_display_struct_data.bin", 0x0, 0x6
 NakaWidget_sefillpq1:	.incbin "includes/generated/gui_display_struct_data.bin", 0x6, 0x22
 NakaWidget_sefilhpq1:	.incbin "includes/generated/gui_display_struct_data.bin", 0x28, 0x22
 NakaWidget_sefill241:	.incbin "includes/generated/gui_display_struct_data.bin", 0x4A, 0x22
@@ -253,8 +252,7 @@ GUI_DisplayStructData_0x750:
 	.incbin "includes/generated/gui_display_struct_data.bin", 0x7d4, 0x4
 ; parameter block of object 0x446 (class 0x01600003, proc MainFunctionProc), registered by InitializeScoop+0x14A
 ; (+10 data field of a RegisterObjectTable descriptor, registry 0x27ED2 + 14*index); the slice runs to the next boundary, 768 B; the proc's read length was not measured
-GUI_DisplayStructData_0x7D8:
-	.incbin "includes/generated/gui_display_struct_data.bin", 0x7D8, 0x300
+GUI_DisplayStructData_0x7D8:	.incbin "includes/generated/gui_display_struct_data.bin", 0x7D8, 0x300
 ; ---------------------------------------------------------------------------------------------------------------
 ; Sound-editor title method tables: SeXxxTitleFunc copies its 16-byte table to the stack and calls DirmdEmulator
 ; (audio/presentation_sound_nav.s) with the event, which calls one of the four methods through DirmdEmulator_CaseTable:
@@ -739,32 +737,25 @@ SeFilLfo1TitleFunc_SwitchHandlers:
 	.long SeMenu_BitShift_Stub
 ; the rest of the code-pointer table at SeFilLfo1TitleFunc_SwitchHandlers, from entry 14 on;
 ; the table runs across this boundary (file slice)
-GUI_DisplayStructData_0x1100:
-	.incbin "includes/generated/gui_display_struct_data.bin", 0x1100, 0x10
+GUI_DisplayStructData_0x1100:	.incbin "includes/generated/gui_display_struct_data.bin", 0x1100, 0x10
 ; data read by SeMenu_ApplyPartEdit_Join17+0x13 (0xF08A33)
 ; evidence: `lda xde, (this)` then `ld E,(XDE+WA) / mul L,0x1c`
-GUI_DisplayStructData_0x1110:
-	.incbin "includes/generated/gui_display_struct_data.bin", 0x1110, 0xD
+GUI_DisplayStructData_0x1110:	.incbin "includes/generated/gui_display_struct_data.bin", 0x1110, 0xD
 ; data read by SeMenu_AltUpdate_Step3Plus_Helper+0x20 (0xF08CB8)
 ; evidence: `lda xbc, (this)` then `ld WA,(XBC+WA) / ld (XSP),WA`
-GUI_DisplayStructData_0x111D:
-	.incbin "includes/generated/gui_display_struct_data.bin", 0x111D, 0xC
+GUI_DisplayStructData_0x111D:	.incbin "includes/generated/gui_display_struct_data.bin", 0x111D, 0xC
 ; data read by SeMenu_SetupPartDisplay_End_Skip9+0x2 (0xF074E3)
 ; evidence: `lda xde, (this)` then `ld A,(XDE+WA) / ld (XBC),A`
-GUI_DisplayStructData_0x1129:
-	.incbin "includes/generated/gui_display_struct_data.bin", 0x1129, 0x61
+GUI_DisplayStructData_0x1129:	.incbin "includes/generated/gui_display_struct_data.bin", 0x1129, 0x61
 ; data read by SeMenu_CopyWriteUpdate_Step3_Code_3_Helper8+0xC (0xF074FC)
 ; evidence: `lda xde, (this)` then `ld A,(XDE+WA) / ld (XBC),A`
-GUI_DisplayStructData_0x118A:
-	.incbin "includes/generated/gui_display_struct_data.bin", 0x118A, 0x82
+GUI_DisplayStructData_0x118A:	.incbin "includes/generated/gui_display_struct_data.bin", 0x118A, 0x82
 ; object named by 1 line(s) of code outside this file; what that code does with it:
 ; evidence: audio/semenu_routines.s:6593 `ld xiy, GUI_DisplayStructData_0x120C`
-GUI_DisplayStructData_0x120C:
-	.incbin "includes/generated/gui_display_struct_data.bin", 0x120C, 0x3
+GUI_DisplayStructData_0x120C:	.incbin "includes/generated/gui_display_struct_data.bin", 0x120C, 0x3
 ; object named by 1 line(s) of code outside this file; what that code does with it:
 ; evidence: audio/semenu_routines.s:6598 `ld xiy, GUI_DisplayStructData_0x120F`
-GUI_DisplayStructData_0x120F:
-	.incbin "includes/generated/gui_display_struct_data.bin", 0x120F, 0x13
+GUI_DisplayStructData_0x120F:	.incbin "includes/generated/gui_display_struct_data.bin", 0x120F, 0x13
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SePitPit1TitleFunc_DispatchSwitch+0x1E (0xF09AEE) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 SePitPit1TitleFunc_SwitchHandlers:
@@ -851,12 +842,10 @@ SePitLfo1TitleFunc_SwitchHandlers:
 	.long 0
 ; data read by SeMenu_RefreshPartDisplay_Epilogue4+0x171 (0xF09CF6)
 ; evidence: `lda xde, (this)` then `ld A,(XDE+WA) / ld (XBC),A`
-GUI_DisplayStructData_0x1342:
-	.incbin "includes/generated/gui_display_struct_data.bin", 0x1342, 0x20
+GUI_DisplayStructData_0x1342:	.incbin "includes/generated/gui_display_struct_data.bin", 0x1342, 0x20
 ; data read by SeMenu_RefreshPartDisplay_Epilogue4+0x1A9 (0xF09D2E)
 ; evidence: `lda xbc, (this)` then `ld C,(XBC+WA) / ld (XSP+0x0e),C`
-GUI_DisplayStructData_0x1362:
-	.incbin "includes/generated/gui_display_struct_data.bin", 0x1362, 0xD
+GUI_DisplayStructData_0x1362:	.incbin "includes/generated/gui_display_struct_data.bin", 0x1362, 0xD
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SeCtr2TitleFunc_DispatchSwitch+0x1E (0xF0BD4D) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 SeCtr2TitleFunc_SwitchHandlers:
@@ -901,12 +890,10 @@ SeCtr3TitleFunc_SwitchHandlers:
 	.long 0
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SeMenu_CopyWriteUpdate_Skip5+0x16 (0xF0BFAC) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
-GUI_DisplayStructData_0x13FF:
-	.incbin "includes/generated/gui_display_struct_data.bin", 0x13FF, 0x2A
+GUI_DisplayStructData_0x13FF:	.incbin "includes/generated/gui_display_struct_data.bin", 0x13FF, 0x2A
 ; the rest of the code-pointer table at GUI_DisplayStructData_0x13FF, from entry 10 byte 2 on;
 ; the table runs across this boundary (label of the next source)
-ToneGen_ParamTable:
-	.incbin "includes/generated/tonegen_param_table.bin", 0x0, 0x1E
+ToneGen_ParamTable:	.incbin "includes/generated/tonegen_param_table.bin", 0x0, 0x1E
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SeTonTon1TitleFunc_DispatchSwitch+0x1E (0xF0C6F7) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 SeTonTon1TitleFunc_SwitchHandlers:
@@ -1056,12 +1043,10 @@ SeWrtMemTitleFunc_SwitchHandlers:
 	.long 0
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: Scoop_SoundEditorData_Helper12+0x1E (0xF0D7B8) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
-ToneGen_ParamTable_0x216:
-	.incbin "includes/generated/tonegen_param_table.bin", 0x216, 0x48
+ToneGen_ParamTable_0x216:	.incbin "includes/generated/tonegen_param_table.bin", 0x216, 0x48
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SeDigEffTitleFunc_DispatchSwitch+0x38 (0xF0D800) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
-ToneGen_ParamTable_0x25E:
-	.incbin "includes/generated/tonegen_param_table.bin", 0x25E, 0x48
+ToneGen_ParamTable_0x25E:	.incbin "includes/generated/tonegen_param_table.bin", 0x25E, 0x48
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
 ; evidence: SeCopyTitleFunc_DispatchSwitch+0x1E (0xF0D75C) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 SeCopyTitleFunc_SwitchHandlers:
@@ -1160,12 +1145,10 @@ ToneGen_ParamTable_0x326:
 	.incbin "includes/generated/tonegen_param_table.bin", 0x3a6, 0x1
 ; parameter block of object 0x12b (class 0x01600002, proc ApFunctionProc), registered by InitializeNaka+0x91
 ; (+10 data field of a RegisterObjectTable descriptor, registry 0x27ED2 + 14*index); the slice runs to the next boundary, 76 B; the proc's read length was not measured
-ToneGen_ParamTable_0x3A7:
-	.incbin "includes/generated/tonegen_param_table.bin", 0x3A7, 0x4C
+ToneGen_ParamTable_0x3A7:	.incbin "includes/generated/tonegen_param_table.bin", 0x3A7, 0x4C
 ; parameter block of object 0x42b (class 0x01600002, proc ApFunctionProc), registered by InitializeNaka+0xB6
 ; (+10 data field of a RegisterObjectTable descriptor, registry 0x27ED2 + 14*index); the slice runs to the next boundary, 330 B; the proc's read length was not measured
-ToneGen_ParamTable_0x3F3:
-	.incbin "includes/generated/tonegen_param_table.bin", 0x3F3, 0x14A
+ToneGen_ParamTable_0x3F3:	.incbin "includes/generated/tonegen_param_table.bin", 0x3F3, 0x14A
 ; parameter block of object 0x16b (class 0x01600004, proc ClassProc), registered by InitializeNaka+0x1C
 ; (+10 data field of a RegisterObjectTable descriptor, registry 0x27ED2 + 14*index); the slice runs to the next boundary, 26 B; the proc's read length was not measured
 ToneGen_ParamTable_0x53D:	.incbin "includes/generated/tonegen_param_table.bin", 0x53D, 0x18
@@ -1180,12 +1163,10 @@ ToneGen_ParamTable_0x55D:	.incbin "includes/generated/tonegen_param_table.bin", 
 Naka_ResMethodCount_1EB:	.incbin "includes/generated/tonegen_param_table.bin", 0x561, 0x2
 ; parameter block of object 0x10b (class 0x01600001, proc FunctionProc), registered by InitializeNaka+0xDB
 ; (+10 data field of a RegisterObjectTable descriptor, registry 0x27ED2 + 14*index); the slice runs to the next boundary, 4 B; the proc's read length was not measured
-ToneGen_ParamTable_0x563:
-	.incbin "includes/generated/tonegen_param_table.bin", 0x563, 0x4
+ToneGen_ParamTable_0x563:	.incbin "includes/generated/tonegen_param_table.bin", 0x563, 0x4
 ; parameter block of object 0x40b (class 0x01600001, proc FunctionProc), registered by InitializeNaka+0x100
 ; (+10 data field of a RegisterObjectTable descriptor, registry 0x27ED2 + 14*index); the slice runs to the next boundary, 6 B; the proc's read length was not measured
-ToneGen_ParamTable_0x567:
-	.incbin "includes/generated/tonegen_param_table.bin", 0x567, 0x6
+ToneGen_ParamTable_0x567:	.incbin "includes/generated/tonegen_param_table.bin", 0x567, 0x6
 
 ; =============================================================================
 ; NAKA UI Descriptor Blocks (ROM E0E974-EEF587)
@@ -2291,8 +2272,7 @@ Voice_AllocSize_Done:
 	calr CountAvailableVoiceSlots
 	ret
 
-Voice_FactoryPresetData:
-	.incbin "includes/generated/voice_factory_presets.bin"
+Voice_FactoryPresetData:	.incbin "includes/generated/voice_factory_presets.bin"
 
 ; F6F60F:
 	.zero 32

@@ -22,8 +22,7 @@ NakaWidget_Perf3RhythmSel_StrOff:	.incbin "includes/generated/naka_widget_tables
 ; Typed in naka_widget_tables_1.c as uint8_t
 ; NakaHdr_Perf2MeasureBoxData[26].
 ; -----------------------------------------------------------------------------
-NakaHdr_Perf2MeasureBoxData:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x18, 0x1A
+NakaHdr_Perf2MeasureBoxData:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x18, 0x1A
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] NakaHdr_Perf2FileListData
 ; NakaHdr_Perf2FileListData -- widget record, entry 11 of
@@ -35,8 +34,7 @@ NakaHdr_Perf2MeasureBoxData:
 ; Typed in naka_widget_tables_1.c as uint8_t
 ; NakaHdr_Perf2FileListData[36].
 ; -----------------------------------------------------------------------------
-NakaHdr_Perf2FileListData:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x32, 0x24
+NakaHdr_Perf2FileListData:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x32, 0x24
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ViewTable_06F
 ; Yoko_ViewTable_06F -- object table: InitializeYoko (v10/v9 0xf29e6d,
@@ -59,8 +57,7 @@ NakaWidgetPtrTbl_SmfDp:	.incbin "includes/generated/naka_widget_tables_1.bin", 0
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ViewTable_070[13].
 ; -----------------------------------------------------------------------------
-Yoko_ViewTable_070:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x106, 0x34
+Yoko_ViewTable_070:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x106, 0x34
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ViewTable_071
 ; Yoko_ViewTable_071 -- object table: InitializeYoko (v10/v9 0xf29e6d,
@@ -71,8 +68,7 @@ Yoko_ViewTable_070:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ViewTable_071[12].
 ; -----------------------------------------------------------------------------
-Yoko_ViewTable_071:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x13A, 0x30
+Yoko_ViewTable_071:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x13A, 0x30
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ViewTable_072
 ; Yoko_ViewTable_072 -- object table: InitializeYoko (v10/v9 0xf29e6d,
@@ -83,8 +79,7 @@ Yoko_ViewTable_071:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ViewTable_072[8].
 ; -----------------------------------------------------------------------------
-Yoko_ViewTable_072:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x16A, 0x20
+Yoko_ViewTable_072:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x16A, 0x20
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ViewTable_073
 ; Yoko_ViewTable_073 -- object table: InitializeYoko (v10/v9 0xf29e6d,
@@ -95,8 +90,7 @@ Yoko_ViewTable_072:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ViewTable_073[17].
 ; -----------------------------------------------------------------------------
-Yoko_ViewTable_073:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x18A, 0x44
+Yoko_ViewTable_073:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x18A, 0x44
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ViewTable_074
 ; Yoko_ViewTable_074 -- object table: InitializeYoko (v10/v9 0xf29e6d,
@@ -107,8 +101,7 @@ Yoko_ViewTable_073:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ViewTable_074[16].
 ; -----------------------------------------------------------------------------
-Yoko_ViewTable_074:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x1CE, 0x40
+Yoko_ViewTable_074:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x1CE, 0x40
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ViewTable_075
 ; Yoko_ViewTable_075 -- object table: InitializeYoko (v10/v9 0xf29e6d,
@@ -119,8 +112,7 @@ Yoko_ViewTable_074:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ViewTable_075[14].
 ; -----------------------------------------------------------------------------
-Yoko_ViewTable_075:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x20E, 0x38
+Yoko_ViewTable_075:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x20E, 0x38
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ViewTable_076
 ; Yoko_ViewTable_076 -- object table: InitializeYoko (v10/v9 0xf29e6d,
@@ -131,8 +123,7 @@ Yoko_ViewTable_075:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ViewTable_076[9].
 ; -----------------------------------------------------------------------------
-Yoko_ViewTable_076:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x246, 0x24
+Yoko_ViewTable_076:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x246, 0x24
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ViewTable_078
 ; Yoko_ViewTable_078 -- object table: InitializeYoko (v10/v9 0xf29e6d,
@@ -143,8 +134,7 @@ Yoko_ViewTable_076:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ViewTable_078[31].
 ; -----------------------------------------------------------------------------
-Yoko_ViewTable_078:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x26A, 0x7C
+Yoko_ViewTable_078:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x26A, 0x7C
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ViewTable_07A
 ; Yoko_ViewTable_07A -- object table: InitializeYoko (v10/v9 0xf29e6d,
@@ -155,8 +145,7 @@ Yoko_ViewTable_078:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ViewTable_07A[13].
 ; -----------------------------------------------------------------------------
-Yoko_ViewTable_07A:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2E6, 0x34
+Yoko_ViewTable_07A:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2E6, 0x34
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ViewTable_089
 ; Yoko_ViewTable_089 -- object table: InitializeYoko (v10/v9 0xf29e6d,
@@ -167,8 +156,7 @@ Yoko_ViewTable_07A:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ViewTable_089[6].
 ; -----------------------------------------------------------------------------
-Yoko_ViewTable_089:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x31A, 0x18
+Yoko_ViewTable_089:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x31A, 0x18
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ViewTable_08A
 ; Yoko_ViewTable_08A -- object table: InitializeYoko (v10/v9 0xf29e6d,
@@ -179,8 +167,7 @@ Yoko_ViewTable_089:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ViewTable_08A[2].
 ; -----------------------------------------------------------------------------
-Yoko_ViewTable_08A:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x332, 0x8
+Yoko_ViewTable_08A:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x332, 0x8
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ViewTable_08B
 ; Yoko_ViewTable_08B -- object table: InitializeYoko (v10/v9 0xf29e6d,
@@ -191,8 +178,7 @@ Yoko_ViewTable_08A:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ViewTable_08B[23].
 ; -----------------------------------------------------------------------------
-Yoko_ViewTable_08B:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x33A, 0x5C
+Yoko_ViewTable_08B:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x33A, 0x5C
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ViewTable_08C
 ; Yoko_ViewTable_08C -- object table: InitializeYoko (v10/v9 0xf29e6d,
@@ -203,8 +189,7 @@ Yoko_ViewTable_08B:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ViewTable_08C[29].
 ; -----------------------------------------------------------------------------
-Yoko_ViewTable_08C:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x396, 0x74
+Yoko_ViewTable_08C:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x396, 0x74
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ViewTable_08E
 ; Yoko_ViewTable_08E -- object table: InitializeYoko (v10/v9 0xf29e6d,
@@ -215,8 +200,7 @@ Yoko_ViewTable_08C:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ViewTable_08E[6].
 ; -----------------------------------------------------------------------------
-Yoko_ViewTable_08E:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x40A, 0x18
+Yoko_ViewTable_08E:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x40A, 0x18
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ViewTable_08F
 ; Yoko_ViewTable_08F -- object table: InitializeYoko (v10/v9 0xf29e6d,
@@ -227,8 +211,7 @@ Yoko_ViewTable_08E:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ViewTable_08F[7].
 ; -----------------------------------------------------------------------------
-Yoko_ViewTable_08F:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x422, 0x1C
+Yoko_ViewTable_08F:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x422, 0x1C
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ViewTable_092
 ; Yoko_ViewTable_092 -- object table: InitializeYoko (v10/v9 0xf29e6d,
@@ -239,8 +222,7 @@ Yoko_ViewTable_08F:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ViewTable_092[5].
 ; -----------------------------------------------------------------------------
-Yoko_ViewTable_092:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x43E, 0x14
+Yoko_ViewTable_092:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x43E, 0x14
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ViewTable_0A7
 ; Yoko_ViewTable_0A7 -- object table: InitializeYoko (v10/v9 0xf29e6d,
@@ -251,8 +233,7 @@ Yoko_ViewTable_092:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ViewTable_0A7[1].
 ; -----------------------------------------------------------------------------
-Yoko_ViewTable_0A7:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x452, 0x4
+Yoko_ViewTable_0A7:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x452, 0x4
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ViewTable_0A9
 ; Yoko_ViewTable_0A9 -- object table: InitializeYoko (v10/v9 0xf29e6d,
@@ -263,8 +244,7 @@ Yoko_ViewTable_0A7:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ViewTable_0A9[7].
 ; -----------------------------------------------------------------------------
-Yoko_ViewTable_0A9:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x456, 0x1C
+Yoko_ViewTable_0A9:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x456, 0x1C
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ViewTable_0E0
 ; Yoko_ViewTable_0E0 -- object table: InitializeYoko (v10/v9 0xf29e6d,
@@ -275,8 +255,7 @@ Yoko_ViewTable_0A9:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ViewTable_0E0[5].
 ; -----------------------------------------------------------------------------
-Yoko_ViewTable_0E0:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x472, 0x14
+Yoko_ViewTable_0E0:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x472, 0x14
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ViewTable_0E1
 ; Yoko_ViewTable_0E1 -- object table: InitializeYoko (v10/v9 0xf29e6d,
@@ -287,8 +266,7 @@ Yoko_ViewTable_0E0:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ViewTable_0E1[13].
 ; -----------------------------------------------------------------------------
-Yoko_ViewTable_0E1:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x486, 0x34
+Yoko_ViewTable_0E1:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x486, 0x34
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ViewTable_0E2
 ; Yoko_ViewTable_0E2 -- object table: InitializeYoko (v10/v9 0xf29e6d,
@@ -299,8 +277,7 @@ Yoko_ViewTable_0E1:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ViewTable_0E2[13].
 ; -----------------------------------------------------------------------------
-Yoko_ViewTable_0E2:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x4BA, 0x34
+Yoko_ViewTable_0E2:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x4BA, 0x34
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ViewTable_0E3
 ; Yoko_ViewTable_0E3 -- object table: InitializeYoko (v10/v9 0xf29e6d,
@@ -311,8 +288,7 @@ Yoko_ViewTable_0E2:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ViewTable_0E3[13].
 ; -----------------------------------------------------------------------------
-Yoko_ViewTable_0E3:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x4EE, 0x34
+Yoko_ViewTable_0E3:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x4EE, 0x34
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNameTable_36F
 ; Yoko_ResNameTable_36F -- object table: InitializeYoko (v10/v9
@@ -323,8 +299,7 @@ Yoko_ViewTable_0E3:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ResNameTable_36F[44].
 ; -----------------------------------------------------------------------------
-Yoko_ResNameTable_36F:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x522, 0xB0
+Yoko_ResNameTable_36F:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x522, 0xB0
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNames_36F
 ; Yoko_ResNames_36F -- the strings Yoko_ResNameTable_36F points at: 44
@@ -332,8 +307,7 @@ Yoko_ResNameTable_36F:
 ;
 ; Typed in naka_widget_tables_1.c as char Yoko_ResNames_36F[160].
 ; -----------------------------------------------------------------------------
-Yoko_ResNames_36F:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x5D2, 0xA0
+Yoko_ResNames_36F:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x5D2, 0xA0
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNameTable_370
 ; Yoko_ResNameTable_370 -- object table: InitializeYoko (v10/v9
@@ -344,8 +318,7 @@ Yoko_ResNames_36F:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ResNameTable_370[13].
 ; -----------------------------------------------------------------------------
-Yoko_ResNameTable_370:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x672, 0x34
+Yoko_ResNameTable_370:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x672, 0x34
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNames_370
 ; Yoko_ResNames_370 -- the strings Yoko_ResNameTable_370 points at: 13
@@ -353,8 +326,7 @@ Yoko_ResNameTable_370:
 ;
 ; Typed in naka_widget_tables_1.c as char Yoko_ResNames_370[50].
 ; -----------------------------------------------------------------------------
-Yoko_ResNames_370:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x6A6, 0x32
+Yoko_ResNames_370:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x6A6, 0x32
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNameTable_371
 ; Yoko_ResNameTable_371 -- object table: InitializeYoko (v10/v9
@@ -365,8 +337,7 @@ Yoko_ResNames_370:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ResNameTable_371[12].
 ; -----------------------------------------------------------------------------
-Yoko_ResNameTable_371:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x6D8, 0x30
+Yoko_ResNameTable_371:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x6D8, 0x30
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNames_371
 ; Yoko_ResNames_371 -- the strings Yoko_ResNameTable_371 points at: 12
@@ -374,8 +345,7 @@ Yoko_ResNameTable_371:
 ;
 ; Typed in naka_widget_tables_1.c as char Yoko_ResNames_371[42].
 ; -----------------------------------------------------------------------------
-Yoko_ResNames_371:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x708, 0x2A
+Yoko_ResNames_371:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x708, 0x2A
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNameTable_372
 ; Yoko_ResNameTable_372 -- object table: InitializeYoko (v10/v9
@@ -386,8 +356,7 @@ Yoko_ResNames_371:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ResNameTable_372[8].
 ; -----------------------------------------------------------------------------
-Yoko_ResNameTable_372:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x732, 0x20
+Yoko_ResNameTable_372:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x732, 0x20
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNames_372
 ; Yoko_ResNames_372 -- the strings Yoko_ResNameTable_372 points at: 8
@@ -395,8 +364,7 @@ Yoko_ResNameTable_372:
 ;
 ; Typed in naka_widget_tables_1.c as char Yoko_ResNames_372[34].
 ; -----------------------------------------------------------------------------
-Yoko_ResNames_372:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x752, 0x22
+Yoko_ResNames_372:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x752, 0x22
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNameTable_373
 ; Yoko_ResNameTable_373 -- object table: InitializeYoko (v10/v9
@@ -407,8 +375,7 @@ Yoko_ResNames_372:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ResNameTable_373[17].
 ; -----------------------------------------------------------------------------
-Yoko_ResNameTable_373:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x774, 0x44
+Yoko_ResNameTable_373:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x774, 0x44
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNames_373
 ; Yoko_ResNames_373 -- the strings Yoko_ResNameTable_373 points at: 17
@@ -416,8 +383,7 @@ Yoko_ResNameTable_373:
 ;
 ; Typed in naka_widget_tables_1.c as char Yoko_ResNames_373[54].
 ; -----------------------------------------------------------------------------
-Yoko_ResNames_373:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x7B8, 0x36
+Yoko_ResNames_373:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x7B8, 0x36
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNameTable_374
 ; Yoko_ResNameTable_374 -- object table: InitializeYoko (v10/v9
@@ -428,8 +394,7 @@ Yoko_ResNames_373:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ResNameTable_374[16].
 ; -----------------------------------------------------------------------------
-Yoko_ResNameTable_374:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x7EE, 0x40
+Yoko_ResNameTable_374:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x7EE, 0x40
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNames_374
 ; Yoko_ResNames_374 -- the strings Yoko_ResNameTable_374 points at: 16
@@ -437,8 +402,7 @@ Yoko_ResNameTable_374:
 ;
 ; Typed in naka_widget_tables_1.c as char Yoko_ResNames_374[72].
 ; -----------------------------------------------------------------------------
-Yoko_ResNames_374:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x82E, 0x48
+Yoko_ResNames_374:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x82E, 0x48
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNameTable_375
 ; Yoko_ResNameTable_375 -- object table: InitializeYoko (v10/v9
@@ -449,8 +413,7 @@ Yoko_ResNames_374:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ResNameTable_375[14].
 ; -----------------------------------------------------------------------------
-Yoko_ResNameTable_375:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x876, 0x38
+Yoko_ResNameTable_375:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x876, 0x38
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNames_375
 ; Yoko_ResNames_375 -- the strings Yoko_ResNameTable_375 points at: 14
@@ -458,8 +421,7 @@ Yoko_ResNameTable_375:
 ;
 ; Typed in naka_widget_tables_1.c as char Yoko_ResNames_375[54].
 ; -----------------------------------------------------------------------------
-Yoko_ResNames_375:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x8AE, 0x36
+Yoko_ResNames_375:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x8AE, 0x36
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNameTable_376
 ; Yoko_ResNameTable_376 -- object table: InitializeYoko (v10/v9
@@ -470,8 +432,7 @@ Yoko_ResNames_375:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ResNameTable_376[9].
 ; -----------------------------------------------------------------------------
-Yoko_ResNameTable_376:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x8E4, 0x24
+Yoko_ResNameTable_376:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x8E4, 0x24
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNames_376
 ; Yoko_ResNames_376 -- the strings Yoko_ResNameTable_376 points at: 9
@@ -479,8 +440,7 @@ Yoko_ResNameTable_376:
 ;
 ; Typed in naka_widget_tables_1.c as char Yoko_ResNames_376[30].
 ; -----------------------------------------------------------------------------
-Yoko_ResNames_376:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x908, 0x1E
+Yoko_ResNames_376:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x908, 0x1E
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNameTable_378
 ; Yoko_ResNameTable_378 -- object table: InitializeYoko (v10/v9
@@ -491,8 +451,7 @@ Yoko_ResNames_376:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ResNameTable_378[31].
 ; -----------------------------------------------------------------------------
-Yoko_ResNameTable_378:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x926, 0x7C
+Yoko_ResNameTable_378:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x926, 0x7C
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNames_378
 ; Yoko_ResNames_378 -- the strings Yoko_ResNameTable_378 points at: 31
@@ -500,8 +459,7 @@ Yoko_ResNameTable_378:
 ;
 ; Typed in naka_widget_tables_1.c as char Yoko_ResNames_378[70].
 ; -----------------------------------------------------------------------------
-Yoko_ResNames_378:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x9A2, 0x46
+Yoko_ResNames_378:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x9A2, 0x46
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNameTable_37A
 ; Yoko_ResNameTable_37A -- object table: InitializeYoko (v10/v9
@@ -512,8 +470,7 @@ Yoko_ResNames_378:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ResNameTable_37A[13].
 ; -----------------------------------------------------------------------------
-Yoko_ResNameTable_37A:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x9E8, 0x34
+Yoko_ResNameTable_37A:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x9E8, 0x34
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNames_37A
 ; Yoko_ResNames_37A -- the strings Yoko_ResNameTable_37A points at: 13
@@ -521,8 +478,7 @@ Yoko_ResNameTable_37A:
 ;
 ; Typed in naka_widget_tables_1.c as char Yoko_ResNames_37A[34].
 ; -----------------------------------------------------------------------------
-Yoko_ResNames_37A:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0xA1C, 0x22
+Yoko_ResNames_37A:	.incbin "includes/generated/naka_widget_tables_1.bin", 0xA1C, 0x22
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNameTable_389
 ; Yoko_ResNameTable_389 -- object table: InitializeYoko (v10/v9
@@ -533,8 +489,7 @@ Yoko_ResNames_37A:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ResNameTable_389[6].
 ; -----------------------------------------------------------------------------
-Yoko_ResNameTable_389:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0xA3E, 0x18
+Yoko_ResNameTable_389:	.incbin "includes/generated/naka_widget_tables_1.bin", 0xA3E, 0x18
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNames_389
 ; Yoko_ResNames_389 -- the strings Yoko_ResNameTable_389 points at: 6
@@ -542,8 +497,7 @@ Yoko_ResNameTable_389:
 ;
 ; Typed in naka_widget_tables_1.c as char Yoko_ResNames_389[18].
 ; -----------------------------------------------------------------------------
-Yoko_ResNames_389:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0xA56, 0x12
+Yoko_ResNames_389:	.incbin "includes/generated/naka_widget_tables_1.bin", 0xA56, 0x12
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNameTable_38A
 ; Yoko_ResNameTable_38A -- object table: InitializeYoko (v10/v9
@@ -554,8 +508,7 @@ Yoko_ResNames_389:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ResNameTable_38A[2].
 ; -----------------------------------------------------------------------------
-Yoko_ResNameTable_38A:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0xA68, 0x8
+Yoko_ResNameTable_38A:	.incbin "includes/generated/naka_widget_tables_1.bin", 0xA68, 0x8
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNames_38A
 ; Yoko_ResNames_38A -- the strings Yoko_ResNameTable_38A points at: 2
@@ -563,8 +516,7 @@ Yoko_ResNameTable_38A:
 ;
 ; Typed in naka_widget_tables_1.c as char Yoko_ResNames_38A[4].
 ; -----------------------------------------------------------------------------
-Yoko_ResNames_38A:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0xA70, 0x4
+Yoko_ResNames_38A:	.incbin "includes/generated/naka_widget_tables_1.bin", 0xA70, 0x4
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNameTable_38B
 ; Yoko_ResNameTable_38B -- object table: InitializeYoko (v10/v9
@@ -575,8 +527,7 @@ Yoko_ResNames_38A:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ResNameTable_38B[23].
 ; -----------------------------------------------------------------------------
-Yoko_ResNameTable_38B:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0xA74, 0x5C
+Yoko_ResNameTable_38B:	.incbin "includes/generated/naka_widget_tables_1.bin", 0xA74, 0x5C
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNames_38B
 ; Yoko_ResNames_38B -- the strings Yoko_ResNameTable_38B points at: 23
@@ -584,8 +535,7 @@ Yoko_ResNameTable_38B:
 ;
 ; Typed in naka_widget_tables_1.c as char Yoko_ResNames_38B[90].
 ; -----------------------------------------------------------------------------
-Yoko_ResNames_38B:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0xAD0, 0x5A
+Yoko_ResNames_38B:	.incbin "includes/generated/naka_widget_tables_1.bin", 0xAD0, 0x5A
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNameTable_38C
 ; Yoko_ResNameTable_38C -- object table: InitializeYoko (v10/v9
@@ -596,8 +546,7 @@ Yoko_ResNames_38B:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ResNameTable_38C[29].
 ; -----------------------------------------------------------------------------
-Yoko_ResNameTable_38C:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0xB2A, 0x74
+Yoko_ResNameTable_38C:	.incbin "includes/generated/naka_widget_tables_1.bin", 0xB2A, 0x74
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNames_38C
 ; Yoko_ResNames_38C -- the strings Yoko_ResNameTable_38C points at: 29
@@ -605,8 +554,7 @@ Yoko_ResNameTable_38C:
 ;
 ; Typed in naka_widget_tables_1.c as char Yoko_ResNames_38C[124].
 ; -----------------------------------------------------------------------------
-Yoko_ResNames_38C:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0xB9E, 0x7C
+Yoko_ResNames_38C:	.incbin "includes/generated/naka_widget_tables_1.bin", 0xB9E, 0x7C
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNameTable_38E
 ; Yoko_ResNameTable_38E -- object table: InitializeYoko (v10/v9
@@ -617,8 +565,7 @@ Yoko_ResNames_38C:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ResNameTable_38E[6].
 ; -----------------------------------------------------------------------------
-Yoko_ResNameTable_38E:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0xC1A, 0x18
+Yoko_ResNameTable_38E:	.incbin "includes/generated/naka_widget_tables_1.bin", 0xC1A, 0x18
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNames_38E
 ; Yoko_ResNames_38E -- the strings Yoko_ResNameTable_38E points at: 6
@@ -626,8 +573,7 @@ Yoko_ResNameTable_38E:
 ;
 ; Typed in naka_widget_tables_1.c as char Yoko_ResNames_38E[20].
 ; -----------------------------------------------------------------------------
-Yoko_ResNames_38E:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0xC32, 0x14
+Yoko_ResNames_38E:	.incbin "includes/generated/naka_widget_tables_1.bin", 0xC32, 0x14
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNameTable_38F
 ; Yoko_ResNameTable_38F -- object table: InitializeYoko (v10/v9
@@ -638,8 +584,7 @@ Yoko_ResNames_38E:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ResNameTable_38F[7].
 ; -----------------------------------------------------------------------------
-Yoko_ResNameTable_38F:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0xC46, 0x1C
+Yoko_ResNameTable_38F:	.incbin "includes/generated/naka_widget_tables_1.bin", 0xC46, 0x1C
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNames_38F
 ; Yoko_ResNames_38F -- the strings Yoko_ResNameTable_38F points at: 7
@@ -647,8 +592,7 @@ Yoko_ResNameTable_38F:
 ;
 ; Typed in naka_widget_tables_1.c as char Yoko_ResNames_38F[22].
 ; -----------------------------------------------------------------------------
-Yoko_ResNames_38F:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0xC62, 0x16
+Yoko_ResNames_38F:	.incbin "includes/generated/naka_widget_tables_1.bin", 0xC62, 0x16
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNameTable_392
 ; Yoko_ResNameTable_392 -- object table: InitializeYoko (v10/v9
@@ -659,8 +603,7 @@ Yoko_ResNames_38F:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ResNameTable_392[5].
 ; -----------------------------------------------------------------------------
-Yoko_ResNameTable_392:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0xC78, 0x14
+Yoko_ResNameTable_392:	.incbin "includes/generated/naka_widget_tables_1.bin", 0xC78, 0x14
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNames_392
 ; Yoko_ResNames_392 -- the strings Yoko_ResNameTable_392 points at: 5
@@ -668,8 +611,7 @@ Yoko_ResNameTable_392:
 ;
 ; Typed in naka_widget_tables_1.c as char Yoko_ResNames_392[22].
 ; -----------------------------------------------------------------------------
-Yoko_ResNames_392:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0xC8C, 0x16
+Yoko_ResNames_392:	.incbin "includes/generated/naka_widget_tables_1.bin", 0xC8C, 0x16
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNameTable_3A7
 ; Yoko_ResNameTable_3A7 -- object table: InitializeYoko (v10/v9
@@ -680,8 +622,7 @@ Yoko_ResNames_392:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ResNameTable_3A7[1].
 ; -----------------------------------------------------------------------------
-Yoko_ResNameTable_3A7:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0xCA2, 0x4
+Yoko_ResNameTable_3A7:	.incbin "includes/generated/naka_widget_tables_1.bin", 0xCA2, 0x4
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNames_3A7
 ; Yoko_ResNames_3A7 -- the strings Yoko_ResNameTable_3A7 points at: 1
@@ -689,8 +630,7 @@ Yoko_ResNameTable_3A7:
 ;
 ; Typed in naka_widget_tables_1.c as char Yoko_ResNames_3A7[2].
 ; -----------------------------------------------------------------------------
-Yoko_ResNames_3A7:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0xCA6, 0x2
+Yoko_ResNames_3A7:	.incbin "includes/generated/naka_widget_tables_1.bin", 0xCA6, 0x2
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNameTable_3A9
 ; Yoko_ResNameTable_3A9 -- object table: InitializeYoko (v10/v9
@@ -701,8 +641,7 @@ Yoko_ResNames_3A7:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ResNameTable_3A9[7].
 ; -----------------------------------------------------------------------------
-Yoko_ResNameTable_3A9:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0xCA8, 0x1C
+Yoko_ResNameTable_3A9:	.incbin "includes/generated/naka_widget_tables_1.bin", 0xCA8, 0x1C
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNames_3A9
 ; Yoko_ResNames_3A9 -- the strings Yoko_ResNameTable_3A9 points at: 7
@@ -710,8 +649,7 @@ Yoko_ResNameTable_3A9:
 ;
 ; Typed in naka_widget_tables_1.c as char Yoko_ResNames_3A9[24].
 ; -----------------------------------------------------------------------------
-Yoko_ResNames_3A9:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0xCC4, 0x18
+Yoko_ResNames_3A9:	.incbin "includes/generated/naka_widget_tables_1.bin", 0xCC4, 0x18
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNameTable_3E0
 ; Yoko_ResNameTable_3E0 -- object table: InitializeYoko (v10/v9
@@ -722,8 +660,7 @@ Yoko_ResNames_3A9:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ResNameTable_3E0[5].
 ; -----------------------------------------------------------------------------
-Yoko_ResNameTable_3E0:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0xCDC, 0x14
+Yoko_ResNameTable_3E0:	.incbin "includes/generated/naka_widget_tables_1.bin", 0xCDC, 0x14
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNames_3E0
 ; Yoko_ResNames_3E0 -- the strings Yoko_ResNameTable_3E0 points at: 5
@@ -731,8 +668,7 @@ Yoko_ResNameTable_3E0:
 ;
 ; Typed in naka_widget_tables_1.c as char Yoko_ResNames_3E0[18].
 ; -----------------------------------------------------------------------------
-Yoko_ResNames_3E0:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0xCF0, 0x12
+Yoko_ResNames_3E0:	.incbin "includes/generated/naka_widget_tables_1.bin", 0xCF0, 0x12
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNameTable_3E1
 ; Yoko_ResNameTable_3E1 -- object table: InitializeYoko (v10/v9
@@ -743,8 +679,7 @@ Yoko_ResNames_3E0:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ResNameTable_3E1[13].
 ; -----------------------------------------------------------------------------
-Yoko_ResNameTable_3E1:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0xD02, 0x34
+Yoko_ResNameTable_3E1:	.incbin "includes/generated/naka_widget_tables_1.bin", 0xD02, 0x34
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNames_3E1
 ; Yoko_ResNames_3E1 -- the strings Yoko_ResNameTable_3E1 points at: 13
@@ -752,8 +687,7 @@ Yoko_ResNameTable_3E1:
 ;
 ; Typed in naka_widget_tables_1.c as char Yoko_ResNames_3E1[90].
 ; -----------------------------------------------------------------------------
-Yoko_ResNames_3E1:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0xD36, 0x5A
+Yoko_ResNames_3E1:	.incbin "includes/generated/naka_widget_tables_1.bin", 0xD36, 0x5A
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNameTable_3E2
 ; Yoko_ResNameTable_3E2 -- object table: InitializeYoko (v10/v9
@@ -764,8 +698,7 @@ Yoko_ResNames_3E1:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ResNameTable_3E2[13].
 ; -----------------------------------------------------------------------------
-Yoko_ResNameTable_3E2:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0xD90, 0x34
+Yoko_ResNameTable_3E2:	.incbin "includes/generated/naka_widget_tables_1.bin", 0xD90, 0x34
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNames_3E2
 ; Yoko_ResNames_3E2 -- the strings Yoko_ResNameTable_3E2 points at: 13
@@ -773,8 +706,7 @@ Yoko_ResNameTable_3E2:
 ;
 ; Typed in naka_widget_tables_1.c as char Yoko_ResNames_3E2[94].
 ; -----------------------------------------------------------------------------
-Yoko_ResNames_3E2:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0xDC4, 0x5E
+Yoko_ResNames_3E2:	.incbin "includes/generated/naka_widget_tables_1.bin", 0xDC4, 0x5E
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNameTable_3E3
 ; Yoko_ResNameTable_3E3 -- object table: InitializeYoko (v10/v9
@@ -785,8 +717,7 @@ Yoko_ResNames_3E2:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t Yoko_ResNameTable_3E3[13].
 ; -----------------------------------------------------------------------------
-Yoko_ResNameTable_3E3:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0xE22, 0x34
+Yoko_ResNameTable_3E3:	.incbin "includes/generated/naka_widget_tables_1.bin", 0xE22, 0x34
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNames_3E3
 ; Yoko_ResNames_3E3 -- the strings Yoko_ResNameTable_3E3 points at: 13
@@ -794,8 +725,7 @@ Yoko_ResNameTable_3E3:
 ;
 ; Typed in naka_widget_tables_1.c as char Yoko_ResNames_3E3[100].
 ; -----------------------------------------------------------------------------
-Yoko_ResNames_3E3:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0xE56, 0x64
+Yoko_ResNames_3E3:	.incbin "includes/generated/naka_widget_tables_1.bin", 0xE56, 0x64
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNames_3E3_Strings
 ; Yoko_ResNames_3E3_Strings -- 306 bytes of NUL-terminated strings after
@@ -888,8 +818,7 @@ Yoko_MainFuncTable_147:
 ; Typed in naka_widget_tables_1.c as uint32_t
 ; Yoko_MainFuncNameTable_447[32].
 ; -----------------------------------------------------------------------------
-Yoko_MainFuncNameTable_447:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x106C, 0x80
+Yoko_MainFuncNameTable_447:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x106C, 0x80
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_MainFuncNames_447
 ; Yoko_MainFuncNames_447 -- the strings Yoko_MainFuncNameTable_447
@@ -898,8 +827,7 @@ Yoko_MainFuncNameTable_447:
 ;
 ; Typed in naka_widget_tables_1.c as char Yoko_MainFuncNames_447[502].
 ; -----------------------------------------------------------------------------
-Yoko_MainFuncNames_447:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x10EC, 0x1F6
+Yoko_MainFuncNames_447:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x10EC, 0x1F6
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] PartSelLangCheck_Strings
 ; PartSelLangCheck_Strings -- the 6 strings PartSelLangCheck_PtrTable
@@ -907,8 +835,7 @@ Yoko_MainFuncNames_447:
 ;
 ; Typed in naka_widget_tables_1.c as char PartSelLangCheck_Strings[620].
 ; -----------------------------------------------------------------------------
-PartSelLangCheck_Strings:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x12E2, 0x26C
+PartSelLangCheck_Strings:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x12E2, 0x26C
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AfterLangCheck_Strings
 ; AfterLangCheck_Strings -- the 6 strings AfterLangCheck_PtrTable points
@@ -916,8 +843,7 @@ PartSelLangCheck_Strings:
 ;
 ; Typed in naka_widget_tables_1.c as char AfterLangCheck_Strings[378].
 ; -----------------------------------------------------------------------------
-AfterLangCheck_Strings:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x154E, 0x17A
+AfterLangCheck_Strings:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x154E, 0x17A
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsPreLangCheck_Strings
 ; TrAsPreLangCheck_Strings -- the 6 strings TrAsPreLangCheck_PtrTable
@@ -925,8 +851,7 @@ AfterLangCheck_Strings:
 ;
 ; Typed in naka_widget_tables_1.c as char TrAsPreLangCheck_Strings[358].
 ; -----------------------------------------------------------------------------
-TrAsPreLangCheck_Strings:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x16C8, 0x166
+TrAsPreLangCheck_Strings:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x16C8, 0x166
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AtentionLangCheck_Strings
 ; AtentionLangCheck_Strings -- the 6 strings AtentionLangCheck_PtrTable
@@ -934,8 +859,7 @@ TrAsPreLangCheck_Strings:
 ;
 ; Typed in naka_widget_tables_1.c as char AtentionLangCheck_Strings[70].
 ; -----------------------------------------------------------------------------
-AtentionLangCheck_Strings:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x182E, 0x46
+AtentionLangCheck_Strings:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x182E, 0x46
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AreYouSureLangCheck_Strings
 ; AreYouSureLangCheck_Strings -- the 6 strings
@@ -945,8 +869,7 @@ AtentionLangCheck_Strings:
 ; Typed in naka_widget_tables_1.c as char
 ; AreYouSureLangCheck_Strings[104].
 ; -----------------------------------------------------------------------------
-AreYouSureLangCheck_Strings:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x1874, 0x68
+AreYouSureLangCheck_Strings:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x1874, 0x68
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] GmOnSureLangCheck_Strings
 ; GmOnSureLangCheck_Strings -- the 6 strings GmOnSureLangCheck_PtrTable
@@ -955,8 +878,7 @@ AreYouSureLangCheck_Strings:
 ; Typed in naka_widget_tables_1.c as char
 ; GmOnSureLangCheck_Strings[596].
 ; -----------------------------------------------------------------------------
-GmOnSureLangCheck_Strings:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x18DC, 0x254
+GmOnSureLangCheck_Strings:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x18DC, 0x254
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] GmOffSureLangCheck_Strings
 ; GmOffSureLangCheck_Strings -- the 6 strings
@@ -966,8 +888,7 @@ GmOnSureLangCheck_Strings:
 ; Typed in naka_widget_tables_1.c as char
 ; GmOffSureLangCheck_Strings[714].
 ; -----------------------------------------------------------------------------
-GmOffSureLangCheck_Strings:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x1B30, 0x2CA
+GmOffSureLangCheck_Strings:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x1B30, 0x2CA
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsSureLangCheck_PtrTable
 ; TrAsSureLangCheck_PtrTable -- 6 u32 addresses, read by
@@ -977,8 +898,7 @@ GmOffSureLangCheck_Strings:
 ; Typed in naka_widget_tables_1.c as uint32_t
 ; TrAsSureLangCheck_PtrTable[6].
 ; -----------------------------------------------------------------------------
-TrAsSureLangCheck_PtrTable:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x1DFA, 0x18
+TrAsSureLangCheck_PtrTable:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x1DFA, 0x18
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsSureLangCheck_Strings
 ; TrAsSureLangCheck_Strings -- the 6 strings TrAsSureLangCheck_PtrTable
@@ -987,8 +907,7 @@ TrAsSureLangCheck_PtrTable:
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsSureLangCheck_Strings[528].
 ; -----------------------------------------------------------------------------
-TrAsSureLangCheck_Strings:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x1E12, 0x210
+TrAsSureLangCheck_Strings:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x1E12, 0x210
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] PartSelLangCheck_PtrTable
 ; PartSelLangCheck_PtrTable -- 6 u32 addresses, read by PartSelLangCheck
@@ -998,8 +917,7 @@ TrAsSureLangCheck_Strings:
 ; Typed in naka_widget_tables_1.c as uint32_t
 ; PartSelLangCheck_PtrTable[6].
 ; -----------------------------------------------------------------------------
-PartSelLangCheck_PtrTable:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2022, 0x18
+PartSelLangCheck_PtrTable:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2022, 0x18
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AfterLangCheck_PtrTable
 ; AfterLangCheck_PtrTable -- 6 u32 addresses, read by AfterLangCheck
@@ -1009,8 +927,7 @@ PartSelLangCheck_PtrTable:
 ; Typed in naka_widget_tables_1.c as uint32_t
 ; AfterLangCheck_PtrTable[6].
 ; -----------------------------------------------------------------------------
-AfterLangCheck_PtrTable:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x203A, 0x18
+AfterLangCheck_PtrTable:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x203A, 0x18
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsPreLangCheck_PtrTable
 ; TrAsPreLangCheck_PtrTable -- 6 u32 addresses, read by TrAsPreLangCheck
@@ -1020,8 +937,7 @@ AfterLangCheck_PtrTable:
 ; Typed in naka_widget_tables_1.c as uint32_t
 ; TrAsPreLangCheck_PtrTable[6].
 ; -----------------------------------------------------------------------------
-TrAsPreLangCheck_PtrTable:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2052, 0x18
+TrAsPreLangCheck_PtrTable:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2052, 0x18
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AtentionLangCheck_PtrTable
 ; AtentionLangCheck_PtrTable -- 6 u32 addresses, read by
@@ -1031,8 +947,7 @@ TrAsPreLangCheck_PtrTable:
 ; Typed in naka_widget_tables_1.c as uint32_t
 ; AtentionLangCheck_PtrTable[6].
 ; -----------------------------------------------------------------------------
-AtentionLangCheck_PtrTable:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x206A, 0x18
+AtentionLangCheck_PtrTable:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x206A, 0x18
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AreYouSureLangCheck_PtrTable
 ; AreYouSureLangCheck_PtrTable -- 6 u32 addresses, read by
@@ -1042,8 +957,7 @@ AtentionLangCheck_PtrTable:
 ; Typed in naka_widget_tables_1.c as uint32_t
 ; AreYouSureLangCheck_PtrTable[6].
 ; -----------------------------------------------------------------------------
-AreYouSureLangCheck_PtrTable:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2082, 0x18
+AreYouSureLangCheck_PtrTable:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2082, 0x18
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] GmOnSureLangCheck_PtrTable
 ; GmOnSureLangCheck_PtrTable -- 6 u32 addresses, read by
@@ -1053,8 +967,7 @@ AreYouSureLangCheck_PtrTable:
 ; Typed in naka_widget_tables_1.c as uint32_t
 ; GmOnSureLangCheck_PtrTable[6].
 ; -----------------------------------------------------------------------------
-GmOnSureLangCheck_PtrTable:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x209A, 0x18
+GmOnSureLangCheck_PtrTable:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x209A, 0x18
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] GmOffSureLangCheck_PtrTable
 ; GmOffSureLangCheck_PtrTable -- 6 u32 addresses, read by
@@ -1064,8 +977,7 @@ GmOnSureLangCheck_PtrTable:
 ; Typed in naka_widget_tables_1.c as uint32_t
 ; GmOffSureLangCheck_PtrTable[6].
 ; -----------------------------------------------------------------------------
-GmOffSureLangCheck_PtrTable:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x20B2, 0x18
+GmOffSureLangCheck_PtrTable:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x20B2, 0x18
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsSureLangCheck_PtrTable_2
 ; TrAsSureLangCheck_PtrTable_2 -- 20 u32 addresses, read by
@@ -1075,8 +987,7 @@ GmOffSureLangCheck_PtrTable:
 ; Typed in naka_widget_tables_1.c as uint32_t
 ; TrAsSureLangCheck_PtrTable_2[20].
 ; -----------------------------------------------------------------------------
-TrAsSureLangCheck_PtrTable_2:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x20CA, 0x50
+TrAsSureLangCheck_PtrTable_2:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x20CA, 0x50
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsSureLangCheck_Strings_2
 ; TrAsSureLangCheck_Strings_2 -- the 20 strings
@@ -1086,8 +997,7 @@ TrAsSureLangCheck_PtrTable_2:
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsSureLangCheck_Strings_2[138].
 ; -----------------------------------------------------------------------------
-TrAsSureLangCheck_Strings_2:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x211A, 0x8A
+TrAsSureLangCheck_Strings_2:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x211A, 0x8A
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] NakaT1_Str021A4
 ; NakaT1_Str021A4 -- 208 bytes of NUL-terminated strings after the
@@ -1118,8 +1028,7 @@ IvNamingExit_CopyString_Str_ExMD:		.incbin "includes/generated/naka_widget_table
 ; Typed in naka_widget_tables_1.c as uint32_t
 ; TrAsGridChk_Part1_SendAudio_PtrTable[20].
 ; -----------------------------------------------------------------------------
-TrAsGridChk_Part1_SendAudio_PtrTable:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2274, 0x50
+TrAsGridChk_Part1_SendAudio_PtrTable:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2274, 0x50
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsGridChk_Part1_SendAudio_Strings
 ; TrAsGridChk_Part1_SendAudio_Strings -- the 20 strings
@@ -1129,8 +1038,7 @@ TrAsGridChk_Part1_SendAudio_PtrTable:
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsGridChk_Part1_SendAudio_Strings[200].
 ; -----------------------------------------------------------------------------
-TrAsGridChk_Part1_SendAudio_Strings:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x22C4, 0xC8
+TrAsGridChk_Part1_SendAudio_Strings:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x22C4, 0xC8
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsGrid_GetDirectionLabel_Str
 ; TrAsGrid_GetDirectionLabel_Str -- NUL-terminated string(s), 44 bytes,
@@ -1140,8 +1048,7 @@ TrAsGridChk_Part1_SendAudio_Strings:
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsGrid_GetDirectionLabel_Str[44].
 ; -----------------------------------------------------------------------------
-TrAsGrid_GetDirectionLabel_Str:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x238C, 0x2C
+TrAsGrid_GetDirectionLabel_Str:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x238C, 0x2C
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsGrid_DirectionLabel2_Str
 ; TrAsGrid_DirectionLabel2_Str -- NUL-terminated string(s), 44 bytes,
@@ -1151,8 +1058,7 @@ TrAsGrid_GetDirectionLabel_Str:
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsGrid_DirectionLabel2_Str[44].
 ; -----------------------------------------------------------------------------
-TrAsGrid_DirectionLabel2_Str:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x23B8, 0x2C
+TrAsGrid_DirectionLabel2_Str:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x23B8, 0x2C
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AcTrAsGridBoxProc_CaseTable
 ; AcTrAsGridBoxProc_CaseTable -- jump table of a compiled `switch` in
@@ -1181,8 +1087,7 @@ AcTrAsGridBoxProc_CaseTable:
 ; Typed in naka_widget_tables_1.c as uint8_t
 ; TrAsGrid_LookupTable_Table[32].
 ; -----------------------------------------------------------------------------
-TrAsGrid_LookupTable_Table:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x23F2, 0x20
+TrAsGrid_LookupTable_Table:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x23F2, 0x20
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsGrid_ByteData1_Table
 ; TrAsGrid_ByteData1_Table -- read by TrAsGrid_StepListValue (v10/v9
@@ -1193,8 +1098,7 @@ TrAsGrid_LookupTable_Table:
 ; Typed in naka_widget_tables_1.c as uint8_t
 ; TrAsGrid_ByteData1_Table[20].
 ; -----------------------------------------------------------------------------
-TrAsGrid_ByteData1_Table:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2412, 0x14
+TrAsGrid_ByteData1_Table:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2412, 0x14
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsGrid_ByteData1_Table_2
 ; TrAsGrid_ByteData1_Table_2 -- read by TrAsGrid_StepListValue (v10/v9
@@ -1205,8 +1109,7 @@ TrAsGrid_ByteData1_Table:
 ; Typed in naka_widget_tables_1.c as uint8_t
 ; TrAsGrid_ByteData1_Table_2[20].
 ; -----------------------------------------------------------------------------
-TrAsGrid_ByteData1_Table_2:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2426, 0x14
+TrAsGrid_ByteData1_Table_2:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2426, 0x14
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsGridChk_Part2_Start_Str
 ; TrAsGridChk_Part2_Start_Str -- NUL-terminated string(s), 4 bytes, used
@@ -1216,8 +1119,7 @@ TrAsGrid_ByteData1_Table_2:
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsGridChk_Part2_Start_Str[4].
 ; -----------------------------------------------------------------------------
-TrAsGridChk_Part2_Start_Str:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x243A, 0x4
+TrAsGridChk_Part2_Start_Str:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x243A, 0x4
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsGridChk_Part2_Start_Str_2
 ; TrAsGridChk_Part2_Start_Str_2 -- NUL-terminated string(s), 4 bytes,
@@ -1227,8 +1129,7 @@ TrAsGridChk_Part2_Start_Str:
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsGridChk_Part2_Start_Str_2[4].
 ; -----------------------------------------------------------------------------
-TrAsGridChk_Part2_Start_Str_2:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x243E, 0x4
+TrAsGridChk_Part2_Start_Str_2:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x243E, 0x4
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsGridChk_Part2_PushCmd_Str
 ; TrAsGridChk_Part2_PushCmd_Str -- NUL-terminated string(s), 4 bytes,
@@ -1238,8 +1139,7 @@ TrAsGridChk_Part2_Start_Str_2:
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsGridChk_Part2_PushCmd_Str[4].
 ; -----------------------------------------------------------------------------
-TrAsGridChk_Part2_PushCmd_Str:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2442, 0x4
+TrAsGridChk_Part2_PushCmd_Str:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2442, 0x4
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsGridChk_Part2_PushCmd_Str_2
 ; TrAsGridChk_Part2_PushCmd_Str_2 -- NUL-terminated string(s), 4 bytes,
@@ -1249,8 +1149,7 @@ TrAsGridChk_Part2_PushCmd_Str:
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsGridChk_Part2_PushCmd_Str_2[4].
 ; -----------------------------------------------------------------------------
-TrAsGridChk_Part2_PushCmd_Str_2:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2446, 0x4
+TrAsGridChk_Part2_PushCmd_Str_2:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2446, 0x4
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsGridChk_Part2_UpDir_Str
 ; TrAsGridChk_Part2_UpDir_Str -- NUL-terminated string(s), 4 bytes, used
@@ -1260,8 +1159,7 @@ TrAsGridChk_Part2_PushCmd_Str_2:
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsGridChk_Part2_UpDir_Str[4].
 ; -----------------------------------------------------------------------------
-TrAsGridChk_Part2_UpDir_Str:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x244A, 0x4
+TrAsGridChk_Part2_UpDir_Str:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x244A, 0x4
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsGridChk_Part2_UpDir_Str_2
 ; TrAsGridChk_Part2_UpDir_Str_2 -- NUL-terminated string(s), 4 bytes,
@@ -1271,8 +1169,7 @@ TrAsGridChk_Part2_UpDir_Str:
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsGridChk_Part2_UpDir_Str_2[4].
 ; -----------------------------------------------------------------------------
-TrAsGridChk_Part2_UpDir_Str_2:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x244E, 0x4
+TrAsGridChk_Part2_UpDir_Str_2:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x244E, 0x4
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsGridChk_Part2_UpPushCmd_Str
 ; TrAsGridChk_Part2_UpPushCmd_Str -- NUL-terminated string(s), 4 bytes,
@@ -1282,8 +1179,7 @@ TrAsGridChk_Part2_UpDir_Str_2:
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsGridChk_Part2_UpPushCmd_Str[4].
 ; -----------------------------------------------------------------------------
-TrAsGridChk_Part2_UpPushCmd_Str:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2452, 0x4
+TrAsGridChk_Part2_UpPushCmd_Str:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2452, 0x4
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsGridChk_Part2_UpCheckType0_Str
 ; TrAsGridChk_Part2_UpCheckType0_Str -- NUL-terminated string(s), 4
@@ -1293,8 +1189,7 @@ TrAsGridChk_Part2_UpPushCmd_Str:
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsGridChk_Part2_UpCheckType0_Str[4].
 ; -----------------------------------------------------------------------------
-TrAsGridChk_Part2_UpCheckType0_Str:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2456, 0x4
+TrAsGridChk_Part2_UpCheckType0_Str:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2456, 0x4
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsGridChk_Part3_Start_Str
 ; TrAsGridChk_Part3_Start_Str -- NUL-terminated string(s), 4 bytes, used
@@ -1304,8 +1199,7 @@ TrAsGridChk_Part2_UpCheckType0_Str:
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsGridChk_Part3_Start_Str[4].
 ; -----------------------------------------------------------------------------
-TrAsGridChk_Part3_Start_Str:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x245A, 0x4
+TrAsGridChk_Part3_Start_Str:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x245A, 0x4
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsGridChk_Part3_Start_Str_2
 ; TrAsGridChk_Part3_Start_Str_2 -- NUL-terminated string(s), 4 bytes,
@@ -1315,8 +1209,7 @@ TrAsGridChk_Part3_Start_Str:
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsGridChk_Part3_Start_Str_2[4].
 ; -----------------------------------------------------------------------------
-TrAsGridChk_Part3_Start_Str_2:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x245E, 0x4
+TrAsGridChk_Part3_Start_Str_2:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x245E, 0x4
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsGridChk_Part3_PushCmd_Str
 ; TrAsGridChk_Part3_PushCmd_Str -- NUL-terminated string(s), 4 bytes,
@@ -1326,8 +1219,7 @@ TrAsGridChk_Part3_Start_Str_2:
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsGridChk_Part3_PushCmd_Str[4].
 ; -----------------------------------------------------------------------------
-TrAsGridChk_Part3_PushCmd_Str:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2462, 0x4
+TrAsGridChk_Part3_PushCmd_Str:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2462, 0x4
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsGridChk_Part3_PushCmd_Str_2
 ; TrAsGridChk_Part3_PushCmd_Str_2 -- NUL-terminated string(s), 4 bytes,
@@ -1337,8 +1229,7 @@ TrAsGridChk_Part3_PushCmd_Str:
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsGridChk_Part3_PushCmd_Str_2[4].
 ; -----------------------------------------------------------------------------
-TrAsGridChk_Part3_PushCmd_Str_2:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2466, 0x4
+TrAsGridChk_Part3_PushCmd_Str_2:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2466, 0x4
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsGridChk_Part3_UpDir_Str
 ; TrAsGridChk_Part3_UpDir_Str -- NUL-terminated string(s), 4 bytes, used
@@ -1348,8 +1239,7 @@ TrAsGridChk_Part3_PushCmd_Str_2:
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsGridChk_Part3_UpDir_Str[4].
 ; -----------------------------------------------------------------------------
-TrAsGridChk_Part3_UpDir_Str:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x246A, 0x4
+TrAsGridChk_Part3_UpDir_Str:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x246A, 0x4
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsGridChk_Part3_UpDir_Str_2
 ; TrAsGridChk_Part3_UpDir_Str_2 -- NUL-terminated string(s), 4 bytes,
@@ -1359,8 +1249,7 @@ TrAsGridChk_Part3_UpDir_Str:
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsGridChk_Part3_UpDir_Str_2[4].
 ; -----------------------------------------------------------------------------
-TrAsGridChk_Part3_UpDir_Str_2:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x246E, 0x4
+TrAsGridChk_Part3_UpDir_Str_2:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x246E, 0x4
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsGridChk_Part3_UpPushCmd_Str
 ; TrAsGridChk_Part3_UpPushCmd_Str -- NUL-terminated string(s), 4 bytes,
@@ -1370,8 +1259,7 @@ TrAsGridChk_Part3_UpDir_Str_2:
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsGridChk_Part3_UpPushCmd_Str[4].
 ; -----------------------------------------------------------------------------
-TrAsGridChk_Part3_UpPushCmd_Str:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2472, 0x4
+TrAsGridChk_Part3_UpPushCmd_Str:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2472, 0x4
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsGridChk_Part3_UpCheckType0_Str
 ; TrAsGridChk_Part3_UpCheckType0_Str -- NUL-terminated string(s), 4
@@ -1381,8 +1269,7 @@ TrAsGridChk_Part3_UpPushCmd_Str:
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsGridChk_Part3_UpCheckType0_Str[4].
 ; -----------------------------------------------------------------------------
-TrAsGridChk_Part3_UpCheckType0_Str:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2476, 0x4
+TrAsGridChk_Part3_UpCheckType0_Str:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2476, 0x4
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsGridCheck_CaseTable
 ; TrAsGridCheck_CaseTable -- jump table of a compiled `switch` in
@@ -1411,8 +1298,7 @@ TrAsGridCheck_CaseTable:
 ; Typed in naka_widget_tables_1.c as uint8_t
 ; VoiceConfig_LookupByScreenType_Table[6].
 ; -----------------------------------------------------------------------------
-VoiceConfig_LookupByScreenType_Table:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2488, 0x6
+VoiceConfig_LookupByScreenType_Table:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2488, 0x6
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] VoiceConfig_LoadTableA_Table
 ; VoiceConfig_LoadTableA_Table -- read by VoiceConfig_LoadTableA (v10/v9
@@ -1423,8 +1309,7 @@ VoiceConfig_LookupByScreenType_Table:
 ; Typed in naka_widget_tables_1.c as uint8_t
 ; VoiceConfig_LoadTableA_Table[6].
 ; -----------------------------------------------------------------------------
-VoiceConfig_LoadTableA_Table:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x248E, 0x6
+VoiceConfig_LoadTableA_Table:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x248E, 0x6
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] VoiceConfig_LoadTableB_Table
 ; VoiceConfig_LoadTableB_Table -- read by VoiceConfig_LoadTableB (v10/v9
@@ -1447,8 +1332,7 @@ AcCurSongName_HandleEventF_Str_Blank22:	.incbin "includes/generated/naka_widget_
 ; Typed in naka_widget_tables_1.c as uint32_t
 ; MuteChSel_Dispatch_PtrTable[16].
 ; -----------------------------------------------------------------------------
-MuteChSel_Dispatch_PtrTable:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x24BA, 0x40
+MuteChSel_Dispatch_PtrTable:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x24BA, 0x40
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] MuteChSel_Dispatch_Strings
 ; MuteChSel_Dispatch_Strings -- the 16 strings
@@ -1458,8 +1342,7 @@ MuteChSel_Dispatch_PtrTable:
 ; Typed in naka_widget_tables_1.c as char
 ; MuteChSel_Dispatch_Strings[96].
 ; -----------------------------------------------------------------------------
-MuteChSel_Dispatch_Strings:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x24FA, 0x60
+MuteChSel_Dispatch_Strings:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x24FA, 0x60
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SmfMuteChSelFunc_CaseTable
 ; SmfMuteChSelFunc_CaseTable -- jump table of a compiled `switch` in
@@ -1490,8 +1373,7 @@ SmfMuteChSelFunc_CaseTable:
 ; Typed in naka_widget_tables_1.c as uint32_t
 ; SqTrAsPsSong_Dispatch_PtrTable[11].
 ; -----------------------------------------------------------------------------
-SqTrAsPsSong_Dispatch_PtrTable:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x256E, 0x2C
+SqTrAsPsSong_Dispatch_PtrTable:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x256E, 0x2C
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqTrAsPsSong_Dispatch_Strings
 ; SqTrAsPsSong_Dispatch_Strings -- the 11 strings
@@ -1501,8 +1383,7 @@ SqTrAsPsSong_Dispatch_PtrTable:
 ; Typed in naka_widget_tables_1.c as char
 ; SqTrAsPsSong_Dispatch_Strings[110].
 ; -----------------------------------------------------------------------------
-SqTrAsPsSong_Dispatch_Strings:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x259A, 0x6E
+SqTrAsPsSong_Dispatch_Strings:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x259A, 0x6E
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqTrAsPsSongFunc_CaseTable
 ; SqTrAsPsSongFunc_CaseTable -- jump table of a compiled `switch` in
@@ -1532,8 +1413,7 @@ SqTrAsPsSongFunc_CaseTable:
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t SqAftSetFunc_PtrTable[2].
 ; -----------------------------------------------------------------------------
-SqAftSetFunc_PtrTable:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x261C, 0x8
+SqAftSetFunc_PtrTable:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x261C, 0x8
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqAftSetFunc_Strings
 ; SqAftSetFunc_Strings -- the 2 strings SqAftSetFunc_PtrTable points at
@@ -1541,8 +1421,7 @@ SqAftSetFunc_PtrTable:
 ;
 ; Typed in naka_widget_tables_1.c as char SqAftSetFunc_Strings[12].
 ; -----------------------------------------------------------------------------
-SqAftSetFunc_Strings:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2624, 0xC
+SqAftSetFunc_Strings:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2624, 0xC
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqAftSet_LookupTableEntry_Table
 ; SqAftSet_LookupTableEntry_Table -- read by SqAftSet_LookupTableEntry
@@ -1553,8 +1432,7 @@ SqAftSetFunc_Strings:
 ; Typed in naka_widget_tables_1.c as uint8_t
 ; SqAftSet_LookupTableEntry_Table[32].
 ; -----------------------------------------------------------------------------
-SqAftSet_LookupTableEntry_Table:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2630, 0x20
+SqAftSet_LookupTableEntry_Table:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2630, 0x20
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] MuteChSet_Dispatch_PtrTable
 ; MuteChSet_Dispatch_PtrTable -- 16 u32 addresses, read by
@@ -1564,8 +1442,7 @@ SqAftSet_LookupTableEntry_Table:
 ; Typed in naka_widget_tables_1.c as uint32_t
 ; MuteChSet_Dispatch_PtrTable[16].
 ; -----------------------------------------------------------------------------
-MuteChSet_Dispatch_PtrTable:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2650, 0x40
+MuteChSet_Dispatch_PtrTable:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2650, 0x40
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] MuteChSet_Dispatch_Strings
 ; MuteChSet_Dispatch_Strings -- the 16 strings
@@ -1575,8 +1452,7 @@ MuteChSet_Dispatch_PtrTable:
 ; Typed in naka_widget_tables_1.c as char
 ; MuteChSet_Dispatch_Strings[128].
 ; -----------------------------------------------------------------------------
-MuteChSet_Dispatch_Strings:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2690, 0x80
+MuteChSet_Dispatch_Strings:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2690, 0x80
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] MuteChSetFunc_CaseTable
 ; MuteChSetFunc_CaseTable -- jump table of a compiled `switch` in
@@ -1607,8 +1483,7 @@ MuteChSetFunc_CaseTable:
 ; Typed in naka_widget_tables_1.c as char
 ; AcDemoMedley_HandleScrollEvent_Str[12].
 ; -----------------------------------------------------------------------------
-AcDemoMedley_HandleScrollEvent_Str:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2724, 0xC
+AcDemoMedley_HandleScrollEvent_Str:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2724, 0xC
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AcDemoMedley_HandleScrollEvent_Str_2
 ; AcDemoMedley_HandleScrollEvent_Str_2 -- NUL-terminated string(s), 12
@@ -1618,8 +1493,7 @@ AcDemoMedley_HandleScrollEvent_Str:
 ; Typed in naka_widget_tables_1.c as char
 ; AcDemoMedley_HandleScrollEvent_Str_2[12].
 ; -----------------------------------------------------------------------------
-AcDemoMedley_HandleScrollEvent_Str_2:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2730, 0xC
+AcDemoMedley_HandleScrollEvent_Str_2:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2730, 0xC
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] MedleyDisp_Blank
 ; MedleyDisp_Blank -- NUL-terminated string(s), 12 bytes, used by
@@ -1628,8 +1502,7 @@ AcDemoMedley_HandleScrollEvent_Str_2:
 ;
 ; Typed in naka_widget_tables_1.c as char MedleyDisp_Blank[12].
 ; -----------------------------------------------------------------------------
-MedleyDisp_Blank:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x273C, 0xC
+MedleyDisp_Blank:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x273C, 0xC
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] DemoMedDsp_Dispatch_Str
 ; DemoMedDsp_Dispatch_Str -- NUL-terminated string(s), 12 bytes, used by
@@ -1638,8 +1511,7 @@ MedleyDisp_Blank:
 ;
 ; Typed in naka_widget_tables_1.c as char DemoMedDsp_Dispatch_Str[12].
 ; -----------------------------------------------------------------------------
-DemoMedDsp_Dispatch_Str:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2748, 0xC
+DemoMedDsp_Dispatch_Str:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2748, 0xC
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] DemoMedDspCheck_CaseTable
 ; DemoMedDspCheck_CaseTable -- jump table of a compiled `switch` in
@@ -1668,8 +1540,7 @@ DemoMedDspCheck_CaseTable:
 ;
 ; Typed in naka_widget_tables_1.c as char PlayModeStr_Play[6].
 ; -----------------------------------------------------------------------------
-PlayModeStr_Play:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2768, 0x6
+PlayModeStr_Play:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2768, 0x6
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] DPPlayDsp_Dispatch_Str
 ; DPPlayDsp_Dispatch_Str -- NUL-terminated string(s), 6 bytes, used by
@@ -1678,8 +1549,7 @@ PlayModeStr_Play:
 ;
 ; Typed in naka_widget_tables_1.c as char DPPlayDsp_Dispatch_Str[6].
 ; -----------------------------------------------------------------------------
-DPPlayDsp_Dispatch_Str:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x276E, 0x6
+DPPlayDsp_Dispatch_Str:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x276E, 0x6
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] DPPlayDspCheck_CaseTable
 ; DPPlayDspCheck_CaseTable -- jump table of a compiled `switch` in
@@ -1708,8 +1578,7 @@ DPPlayDspCheck_CaseTable:
 ;
 ; Typed in naka_widget_tables_1.c as char PlayModeStr_Pause[6].
 ; -----------------------------------------------------------------------------
-PlayModeStr_Pause:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2788, 0x6
+PlayModeStr_Pause:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2788, 0x6
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] DPPauseDsp_Dispatch_Str
 ; DPPauseDsp_Dispatch_Str -- NUL-terminated string(s), 6 bytes, used by
@@ -1718,8 +1587,7 @@ PlayModeStr_Pause:
 ;
 ; Typed in naka_widget_tables_1.c as char DPPauseDsp_Dispatch_Str[6].
 ; -----------------------------------------------------------------------------
-DPPauseDsp_Dispatch_Str:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x278E, 0x6
+DPPauseDsp_Dispatch_Str:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x278E, 0x6
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] DPPauseDspCheck_CaseTable
 ; DPPauseDspCheck_CaseTable -- jump table of a compiled `switch` in
@@ -1751,8 +1619,7 @@ DPPauseDspCheck_CaseTable:
 ; Readers (claims_lint.py unread-claims, 2026-10-02): IvExitTrSel_CopyString (0xF2D242, pushw far
 ;   pointer)
 ; -----------------------------------------------------------------------------
-DPPauseDspCheck_CaseTable_Strings:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x27A8, 0x6
+DPPauseDspCheck_CaseTable_Strings:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x27A8, 0x6
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Kubo_ApFuncTable_128
 ; Kubo_ApFuncTable_128 -- object table: InitializeKubo (v10/v9 0xf2d2c4,
@@ -1849,8 +1716,7 @@ Kubo_ApFuncTable_128:
 ; Typed in naka_widget_tables_1.c as uint32_t
 ; Kubo_ApFuncNameTable_428[74].
 ; -----------------------------------------------------------------------------
-Kubo_ApFuncNameTable_428:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x28D6, 0x128
+Kubo_ApFuncNameTable_428:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x28D6, 0x128
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Kubo_ApFuncNames_428
 ; Kubo_ApFuncNames_428 -- the strings Kubo_ApFuncNameTable_428 points
@@ -1858,8 +1724,7 @@ Kubo_ApFuncNameTable_428:
 ;
 ; Typed in naka_widget_tables_1.c as char Kubo_ApFuncNames_428[1146].
 ; -----------------------------------------------------------------------------
-Kubo_ApFuncNames_428:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x29FE, 0x47A
+Kubo_ApFuncNames_428:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x29FE, 0x47A
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ClassProps_EffectBox
 ; ClassProps_EffectBox -- property names of class EffectBox (descriptor
@@ -1870,8 +1735,7 @@ Kubo_ApFuncNames_428:
 ; Typed in naka_widget_tables_1.c as uint32_t ClassProps_EffectBox[5]
 ; and char ClassProps_EffectBox_Names[].
 ; -----------------------------------------------------------------------------
-ClassProps_EffectBox:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2E78, 0x30
+ClassProps_EffectBox:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2E78, 0x30
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ClassProps_EqualizerBox
 ; ClassProps_EqualizerBox -- property names of class EqualizerBox
@@ -1882,8 +1746,7 @@ ClassProps_EffectBox:
 ; Typed in naka_widget_tables_1.c as uint32_t ClassProps_EqualizerBox[3]
 ; and char ClassProps_EqualizerBox_Names[].
 ; -----------------------------------------------------------------------------
-ClassProps_EqualizerBox:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2EA8, 0x1C
+ClassProps_EqualizerBox:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2EA8, 0x1C
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ClassProps_SqedtVal
 ; ClassProps_SqedtVal -- property names of class SqedtVal (descriptor 2
@@ -1894,8 +1757,7 @@ ClassProps_EqualizerBox:
 ; Typed in naka_widget_tables_1.c as uint32_t ClassProps_SqedtVal[5] and
 ; char ClassProps_SqedtVal_Names[].
 ; -----------------------------------------------------------------------------
-ClassProps_SqedtVal:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2EC4, 0x34
+ClassProps_SqedtVal:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2EC4, 0x34
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ClassProps_SqedtVal2
 ; ClassProps_SqedtVal2 -- property names of class SqedtVal2 (descriptor
@@ -1906,8 +1768,7 @@ ClassProps_SqedtVal:
 ; Typed in naka_widget_tables_1.c as uint32_t ClassProps_SqedtVal2[4]
 ; and char ClassProps_SqedtVal2_Names[].
 ; -----------------------------------------------------------------------------
-ClassProps_SqedtVal2:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2EF8, 0x28
+ClassProps_SqedtVal2:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2EF8, 0x28
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ClassProps_SqedtFix
 ; ClassProps_SqedtFix -- property names of class SqedtFix (descriptor 4
@@ -1918,8 +1779,7 @@ ClassProps_SqedtVal2:
 ; Typed in naka_widget_tables_1.c as uint32_t ClassProps_SqedtFix[4] and
 ; char ClassProps_SqedtFix_Names[].
 ; -----------------------------------------------------------------------------
-ClassProps_SqedtFix:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2F20, 0x2A
+ClassProps_SqedtFix:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2F20, 0x2A
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ClassProps_IvSongCopyExit
 ; ClassProps_IvSongCopyExit -- property names of class IvSongCopyExit
@@ -1931,8 +1791,7 @@ ClassProps_SqedtFix:
 ; ClassProps_IvSongCopyExit[1] and char
 ; ClassProps_IvSongCopyExit_Names[].
 ; -----------------------------------------------------------------------------
-ClassProps_IvSongCopyExit:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2F4A, 0x6
+ClassProps_IvSongCopyExit:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2F4A, 0x6
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ClassProps_SqplyVal
 ; ClassProps_SqplyVal -- property names of class SqplyVal (descriptor 6
@@ -1943,8 +1802,7 @@ ClassProps_IvSongCopyExit:
 ; Typed in naka_widget_tables_1.c as uint32_t ClassProps_SqplyVal[5] and
 ; char ClassProps_SqplyVal_Names[].
 ; -----------------------------------------------------------------------------
-ClassProps_SqplyVal:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2F50, 0x34
+ClassProps_SqplyVal:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2F50, 0x34
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ClassProps_SqedtVal3
 ; ClassProps_SqedtVal3 -- property names of class SqedtVal3 (descriptor
@@ -1955,8 +1813,7 @@ ClassProps_SqplyVal:
 ; Typed in naka_widget_tables_1.c as uint32_t ClassProps_SqedtVal3[4]
 ; and char ClassProps_SqedtVal3_Names[].
 ; -----------------------------------------------------------------------------
-ClassProps_SqedtVal3:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2F84, 0x28
+ClassProps_SqedtVal3:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2F84, 0x28
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ClassProps_AccIll
 ; ClassProps_AccIll -- property names of class AccIll (descriptor 8 of
@@ -1967,8 +1824,7 @@ ClassProps_SqedtVal3:
 ; Typed in naka_widget_tables_1.c as uint32_t ClassProps_AccIll[5] and
 ; char ClassProps_AccIll_Names[].
 ; -----------------------------------------------------------------------------
-ClassProps_AccIll:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2FAC, 0x34
+ClassProps_AccIll:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2FAC, 0x34
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ClassProps_AcEntertainerGridBox
 ; ClassProps_AcEntertainerGridBox -- property names of class
@@ -1981,8 +1837,7 @@ ClassProps_AccIll:
 ; ClassProps_AcEntertainerGridBox[4] and char
 ; ClassProps_AcEntertainerGridBox_Names[].
 ; -----------------------------------------------------------------------------
-ClassProps_AcEntertainerGridBox:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2FE0, 0x2C
+ClassProps_AcEntertainerGridBox:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2FE0, 0x2C
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ClassProps_SngSel
 ; ClassProps_SngSel -- property names of class SngSel (descriptor 10 of
@@ -1993,8 +1848,7 @@ ClassProps_AcEntertainerGridBox:
 ; Typed in naka_widget_tables_1.c as uint32_t ClassProps_SngSel[6] and
 ; char ClassProps_SngSel_Names[].
 ; -----------------------------------------------------------------------------
-ClassProps_SngSel:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x300C, 0x3E
+ClassProps_SngSel:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x300C, 0x3E
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ClassProps_SngSel2
 ; ClassProps_SngSel2 -- property names of class SngSel2 (descriptor 11
@@ -2005,8 +1859,7 @@ ClassProps_SngSel:
 ; Typed in naka_widget_tables_1.c as uint32_t ClassProps_SngSel2[1] and
 ; char ClassProps_SngSel2_Names[].
 ; -----------------------------------------------------------------------------
-ClassProps_SngSel2:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x304A, 0x6
+ClassProps_SngSel2:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x304A, 0x6
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ClassProps_NoteEditBox
 ; ClassProps_NoteEditBox -- property names of class NoteEditBox
@@ -2017,8 +1870,7 @@ ClassProps_SngSel2:
 ; Typed in naka_widget_tables_1.c as uint32_t ClassProps_NoteEditBox[3]
 ; and char ClassProps_NoteEditBox_Names[].
 ; -----------------------------------------------------------------------------
-ClassProps_NoteEditBox:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x3050, 0x1C
+ClassProps_NoteEditBox:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x3050, 0x1C
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ClassProps_EqOnOffFuncToggle
 ; ClassProps_EqOnOffFuncToggle -- property names of class
@@ -2030,8 +1882,7 @@ ClassProps_NoteEditBox:
 ; ClassProps_EqOnOffFuncToggle[1] and char
 ; ClassProps_EqOnOffFuncToggle_Names[].
 ; -----------------------------------------------------------------------------
-ClassProps_EqOnOffFuncToggle:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x306C, 0x6
+ClassProps_EqOnOffFuncToggle:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x306C, 0x6
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ClassProps_MsgToTtl
 ; ClassProps_MsgToTtl -- property names of class MsgToTtl (descriptor 14
@@ -2042,8 +1893,7 @@ ClassProps_EqOnOffFuncToggle:
 ; Typed in naka_widget_tables_1.c as uint32_t ClassProps_MsgToTtl[1] and
 ; char ClassProps_MsgToTtl_Names[].
 ; -----------------------------------------------------------------------------
-ClassProps_MsgToTtl:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x3072, 0x6
+ClassProps_MsgToTtl:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x3072, 0x6
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ClassProps_AcIndexWideToggle
 ; ClassProps_AcIndexWideToggle -- property names of class
@@ -2056,9 +1906,8 @@ ClassProps_MsgToTtl:
 ; ClassProps_AcIndexWideToggle[4] and char
 ; ClassProps_AcIndexWideToggle_Names[].
 ; -----------------------------------------------------------------------------
-ClassProps_AcIndexWideToggle:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x3078, 0x1C
-NakaFld_TabIndexFunc:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x3094, 0x6
+ClassProps_AcIndexWideToggle:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x3078, 0x1C
+NakaFld_TabIndexFunc:		.incbin "includes/generated/naka_widget_tables_1.bin", 0x3094, 0x6
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ClassProps_IvPlayExit
 ; ClassProps_IvPlayExit -- property names of class IvPlayExit
@@ -2069,8 +1918,7 @@ NakaFld_TabIndexFunc:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x3
 ; Typed in naka_widget_tables_1.c as uint32_t ClassProps_IvPlayExit[2]
 ; and char ClassProps_IvPlayExit_Names[].
 ; -----------------------------------------------------------------------------
-ClassProps_IvPlayExit:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x309A, 0x10
+ClassProps_IvPlayExit:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x309A, 0x10
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ClassProps_HelpTtl
 ; ClassProps_HelpTtl -- property names of class HelpTtl (descriptor 17
@@ -2081,8 +1929,7 @@ ClassProps_IvPlayExit:
 ; Typed in naka_widget_tables_1.c as uint32_t ClassProps_HelpTtl[6] and
 ; char ClassProps_HelpTtl_Names[].
 ; -----------------------------------------------------------------------------
-ClassProps_HelpTtl:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x30AA, 0x3C
+ClassProps_HelpTtl:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x30AA, 0x3C
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ClassProps_IvPnlWrExit
 ; ClassProps_IvPnlWrExit -- property names of class IvPnlWrExit
@@ -2093,8 +1940,7 @@ ClassProps_HelpTtl:
 ; Typed in naka_widget_tables_1.c as uint32_t ClassProps_IvPnlWrExit[1]
 ; and char ClassProps_IvPnlWrExit_Names[].
 ; -----------------------------------------------------------------------------
-ClassProps_IvPnlWrExit:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x30E6, 0x6
+ClassProps_IvPnlWrExit:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x30E6, 0x6
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ClassProps_IvSdrev
 ; ClassProps_IvSdrev -- property names of class IvSdrev (descriptor 19
@@ -2105,8 +1951,7 @@ ClassProps_IvPnlWrExit:
 ; Typed in naka_widget_tables_1.c as uint32_t ClassProps_IvSdrev[1] and
 ; char ClassProps_IvSdrev_Names[].
 ; -----------------------------------------------------------------------------
-ClassProps_IvSdrev:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x30EC, 0x6
+ClassProps_IvSdrev:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x30EC, 0x6
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ClassProps_IvSddsp
 ; ClassProps_IvSddsp -- property names of class IvSddsp (descriptor 20
@@ -2117,8 +1962,7 @@ ClassProps_IvSdrev:
 ; Typed in naka_widget_tables_1.c as uint32_t ClassProps_IvSddsp[1] and
 ; char ClassProps_IvSddsp_Names[].
 ; -----------------------------------------------------------------------------
-ClassProps_IvSddsp:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x30F2, 0x6
+ClassProps_IvSddsp:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x30F2, 0x6
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ClassProps_IvSdacc
 ; ClassProps_IvSdacc -- property names of class IvSdacc (descriptor 21
@@ -2129,8 +1973,7 @@ ClassProps_IvSddsp:
 ; Typed in naka_widget_tables_1.c as uint32_t ClassProps_IvSdacc[1] and
 ; char ClassProps_IvSdacc_Names[].
 ; -----------------------------------------------------------------------------
-ClassProps_IvSdacc:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x30F8, 0x6
+ClassProps_IvSdacc:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x30F8, 0x6
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ClassProps_IvPunchExit
 ; ClassProps_IvPunchExit -- property names of class IvPunchExit
@@ -2141,8 +1984,7 @@ ClassProps_IvSdacc:
 ; Typed in naka_widget_tables_1.c as uint32_t ClassProps_IvPunchExit[1]
 ; and char ClassProps_IvPunchExit_Names[].
 ; -----------------------------------------------------------------------------
-ClassProps_IvPunchExit:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x30FE, 0x6
+ClassProps_IvPunchExit:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x30FE, 0x6
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ClassProps_IvAutoPunchExit
 ; ClassProps_IvAutoPunchExit -- property names of class IvAutoPunchExit
@@ -2154,8 +1996,7 @@ ClassProps_IvPunchExit:
 ; ClassProps_IvAutoPunchExit[1] and char
 ; ClassProps_IvAutoPunchExit_Names[].
 ; -----------------------------------------------------------------------------
-ClassProps_IvAutoPunchExit:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x3104, 0x6
+ClassProps_IvAutoPunchExit:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x3104, 0x6
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ClassProps_AcPanicEditSw
 ; ClassProps_AcPanicEditSw -- property names of class AcPanicEditSw
@@ -2166,8 +2007,7 @@ ClassProps_IvAutoPunchExit:
 ; Typed in naka_widget_tables_1.c as uint32_t
 ; ClassProps_AcPanicEditSw[3] and char ClassProps_AcPanicEditSw_Names[].
 ; -----------------------------------------------------------------------------
-ClassProps_AcPanicEditSw:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x310A, 0x1A
+ClassProps_AcPanicEditSw:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x310A, 0x1A
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ClassProps_IvRealRecExit
 ; ClassProps_IvRealRecExit -- property names of class IvRealRecExit
@@ -2178,8 +2018,7 @@ ClassProps_AcPanicEditSw:
 ; Typed in naka_widget_tables_1.c as uint32_t
 ; ClassProps_IvRealRecExit[1] and char ClassProps_IvRealRecExit_Names[].
 ; -----------------------------------------------------------------------------
-ClassProps_IvRealRecExit:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x3124, 0x6
+ClassProps_IvRealRecExit:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x3124, 0x6
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Kubo_ClassTable_168
 ; Kubo_ClassTable_168 -- class table: InitializeKubo (v10/v9 0xf2d2c4,
@@ -2193,8 +2032,7 @@ ClassProps_IvRealRecExit:
 ; Typed in naka_widget_tables_1.c as naka_class_t
 ; Kubo_ClassTable_168[12].
 ; -----------------------------------------------------------------------------
-Kubo_ClassTable_168:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x312A, 0x120
+Kubo_ClassTable_168:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x312A, 0x120
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Kubo_ClassTable_168_Desc12Head
 ; Kubo_ClassTable_168_Desc12Head -- the first u32 (proc) of descriptor
@@ -2203,7 +2041,6 @@ Kubo_ClassTable_168:
 ; Typed in naka_widget_tables_1.c as uint32_t
 ; Kubo_ClassTable_168_Desc12Head[1].
 ; -----------------------------------------------------------------------------
-Kubo_ClassTable_168_Desc12Head:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x324A, 0x4
+Kubo_ClassTable_168_Desc12Head:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x324A, 0x4
 
 ; External label offsets within the binary blob above.

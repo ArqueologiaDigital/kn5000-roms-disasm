@@ -7760,8 +7760,7 @@ AccAutoPlay_Configure_Final:
 	.byte 0xf1, 0xfc, 0x33, 0xc8, 0x6e, 0x19, 0xf1, 0xfd
 	.byte 0x33, 0xc8, 0x66, 0x13, 0xf1, 0xd1, 0x33, 0xcf
 	.byte 0x66, 0x03, 0x1e, 0x07, 0x01
-AccAutoPlay_Configure_Done:
-	.incbin "includes/romslices/v7_transplant_AccAutoPlay_Configure_Done.bin"
+AccAutoPlay_Configure_Done:	.incbin "includes/romslices/v7_transplant_AccAutoPlay_Configure_Done.bin"
 AccAutoPlay_Configure_Return2:
 	ret
 	nop
@@ -13237,8 +13236,7 @@ AccStyle_TableDataEntry_Helper:
 AccPatch_ClearModeFlag:
 	ld	(13625:16), 0
 	ret
-Not_sure_maybe_SOFT_VERSION_related:
-	.incbin "includes/romslices/v7_transplant_Not_sure_maybe_SOFT_VERSION_related.bin"
+Not_sure_maybe_SOFT_VERSION_related:	.incbin "includes/romslices/v7_transplant_Not_sure_maybe_SOFT_VERSION_related.bin"
 AccPatch_CheckAndInitDemo:
 	ld xiy, RHYTHM_PATTERN_BUF_A
 	add xiy, 0xe
@@ -14240,8 +14238,7 @@ AccPatch_WriteRhythmInit:
 AccPatch_WriteRhythm_Done:
 	ret
 
-AccPatch_ChannelToParamTable:
-	.incbin "includes/romslices/v7_transplant_AccPatch_ChannelToParamTable.bin"
+AccPatch_ChannelToParamTable:	.incbin "includes/romslices/v7_transplant_AccPatch_ChannelToParamTable.bin"
 AccPatch_WriteRhythmParams:
 	calr AccPatch_FetchVolumeForChannel
 	push_a
@@ -23809,8 +23806,7 @@ RhythmFillIn_LookupAndApply:
 	call	AudioInit_SelectAndDispatch
 	call	AudioMode_ResetVoiceState
 	ret
-RhythmFillIn_PatternTable:
-	.incbin "includes/romslices/v7_transplant_RhythmFillIn_PatternTable_head.bin"
+RhythmFillIn_PatternTable:	.incbin "includes/romslices/v7_transplant_RhythmFillIn_PatternTable_head.bin"
 RhythmFillIn_PatternTable_Sub:
 	push XIZ
 	call RhythmFillIn_PatternTable_Code_Helper
@@ -33070,8 +33066,7 @@ CmpStepTitleFunc:
 	lda xsp, (xsp + 16)
 	ret
 
-CmpStep_DataBlock:
-	.incbin "includes/romslices/v7_transplant_CmpStep_DataBlock.bin"
+CmpStep_DataBlock:	.incbin "includes/romslices/v7_transplant_CmpStep_DataBlock.bin"
 AccAudio_LockAcquire:
 	ldw wa, 0x8
 	jp Audio_Lock_Acquire
@@ -33848,8 +33843,7 @@ AccScreen_DataBlock_Data_6:	.byte	0x04, 0x0b, 0x1d, 0x39, 0x03, 0x00, 0x0e, 0x6f
 	.byte 0x21, 0x00, 0x09, 0x00, 0xb9, 0x1a, 0x1f, 0x00, 0x16, 0x00	; |!.........|
 
 ; accomp_section_widget: 15 bytes (compiled from C)
-AccScreen_DrawMeasureDetail_Data:
-	.incbin "includes/generated/accomp_section_widget.bin"
+AccScreen_DrawMeasureDetail_Data:	.incbin "includes/generated/accomp_section_widget.bin"
 
 ; Accompaniment variation/section data: 120 bytes
 ; ** RE-FRAMED 2026-08-30 (lane B4). Was `ld xhl,0x52544e4f` and friends -- the
@@ -33864,8 +33858,7 @@ AccScreen_DrawMeasureDetail_Data:
 	.ascii "CONTROL AFTER TOUCH="
 
 ; accomp_part_widget: 15 bytes (compiled from C)
-AccScreen_DrawMeas_Variant3_Data:
-	.incbin "includes/generated/accomp_part_widget.bin"
+AccScreen_DrawMeas_Variant3_Data:	.incbin "includes/generated/accomp_part_widget.bin"
 
 ; Gap: 6 bytes
 ; ** RE-FRAMED 2026-08-30 (lane B4). The descriptor above (already .incbin)
@@ -33874,8 +33867,7 @@ AccScreen_DrawMeas_Variant3_Data:
 	.ascii " ON"
 
 ; accomp_display_full: 287 bytes (compiled from C)
-AccScreen_DrawMeas_Other_Data:
-	.incbin "includes/generated/accomp_display_full.bin", 0x0, 0xA
+AccScreen_DrawMeas_Other_Data:		.incbin "includes/generated/accomp_display_full.bin", 0x0, 0xA
 AccScreen_DrawTempoDisplay_Data:	.incbin "includes/generated/accomp_display_full.bin", 0xA, 0x1E
 AccScreen_DrawTempoDisplay_Data_2:	.incbin "includes/generated/accomp_display_full.bin", 0x28, 0x8
 AccScreen_UpdateBeatDisplay_Data:	.incbin "includes/generated/accomp_display_full.bin", 0x30, 0xA

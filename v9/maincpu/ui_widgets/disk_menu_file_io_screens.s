@@ -242,68 +242,55 @@
 ; [nakarest] NakaInst_IvWaitWinCtlProc  +0x0..+0x12 (0xea13cc, 18 B)
 ; [nakarest] name string, entry 12 of Function slot 0x405 (table 0xea1392, 13 entries,
 ; [nakarest] InitializeCheap) (names for Function slot 0x105): "IvWaitWinCtlProc".
-NakaInst_IvWaitWinCtlProc:
-	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x0, 0x12
+NakaInst_IvWaitWinCtlProc:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x0, 0x12
 ; [nakarest] NakaInst_IvIndexSwDelayProc  +0x12..+0x26 (0xea13de, 20 B)
 ; [nakarest] name string, entry 11 of Function slot 0x405 (table 0xea1392, 13 entries,
 ; [nakarest] InitializeCheap) (names for Function slot 0x105): "IvIndexSwDelayProc".
-NakaInst_IvIndexSwDelayProc:
-	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x12, 0x14
+NakaInst_IvIndexSwDelayProc:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x12, 0x14
 ; [nakarest] NakaInst_AcRotStrBoxProc  +0x26..+0x36 (0xea13f2, 16 B)
 ; [nakarest] name string, entry 10 of Function slot 0x405 (table 0xea1392, 13 entries,
 ; [nakarest] InitializeCheap) (names for Function slot 0x105): "AcRotStrBoxProc".
-NakaInst_AcRotStrBoxProc:
-	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x26, 0x10
+NakaInst_AcRotStrBoxProc:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x26, 0x10
 ; [nakarest] NakaInst_IvIndexSwCtrlProc  +0x36..+0x48 (0xea1402, 18 B)
 ; [nakarest] name string, entry 9 of Function slot 0x405 (table 0xea1392, 13 entries,
 ; [nakarest] InitializeCheap) (names for Function slot 0x105): "IvIndexSwCtrlProc".
-NakaInst_IvIndexSwCtrlProc:
-	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x36, 0x12
+NakaInst_IvIndexSwCtrlProc:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x36, 0x12
 ; [nakarest] NakaInst_ArrowProc  +0x48..+0x52 (0xea1414, 10 B)
 ; [nakarest] name string, entry 8 of Function slot 0x405 (table 0xea1392, 13 entries,
 ; [nakarest] InitializeCheap) (names for Function slot 0x105): "ArrowProc".
-NakaInst_ArrowProc:
-	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x48, 0xA
+NakaInst_ArrowProc:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x48, 0xA
 ; [nakarest] NakaInst_VwScreenTitleProc  +0x52..+0x64 (0xea141e, 18 B)
 ; [nakarest] name string, entry 7 of Function slot 0x405 (table 0xea1392, 13 entries,
 ; [nakarest] InitializeCheap) (names for Function slot 0x105): "VwScreenTitleProc".
-NakaInst_VwScreenTitleProc:
-	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x52, 0x12
+NakaInst_VwScreenTitleProc:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x52, 0x12
 ; [nakarest] NakaInst_IvOneShotTimerProc  +0x64..+0x78 (0xea1430, 20 B)
 ; [nakarest] name string, entry 6 of Function slot 0x405 (table 0xea1392, 13 entries,
 ; [nakarest] InitializeCheap) (names for Function slot 0x105): "IvOneShotTimerProc".
-NakaInst_IvOneShotTimerProc:
-	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x64, 0x14
+NakaInst_IvOneShotTimerProc:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x64, 0x14
 ; [nakarest] NakaInst_AcMonoIndexToggleProc  +0x78..+0x8e (0xea1444, 22 B)
 ; [nakarest] name string, entry 5 of Function slot 0x405 (table 0xea1392, 13 entries,
 ; [nakarest] InitializeCheap) (names for Function slot 0x105): "AcMonoIndexToggleProc".
-NakaInst_AcMonoIndexToggleProc:
-	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x78, 0x16
+NakaInst_AcMonoIndexToggleProc:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x78, 0x16
 ; [nakarest] NakaInst_AcFileSfxBoxProc  +0x8e..+0xa0 (0xea145a, 18 B)
 ; [nakarest] name string, entry 4 of Function slot 0x405 (table 0xea1392, 13 entries,
 ; [nakarest] InitializeCheap) (names for Function slot 0x105): "AcFileSfxBoxProc".
-NakaInst_AcFileSfxBoxProc:
-	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x8E, 0x12
+NakaInst_AcFileSfxBoxProc:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x8E, 0x12
 ; [nakarest] NakaInst_AcParaStrBoxProc  +0xa0..+0xb2 (0xea146c, 18 B)
 ; [nakarest] name string, entry 3 of Function slot 0x405 (table 0xea1392, 13 entries,
 ; [nakarest] InitializeCheap) (names for Function slot 0x105): "AcParaStrBoxProc".
-NakaInst_AcParaStrBoxProc:
-	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0xA0, 0x12
+NakaInst_AcParaStrBoxProc:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0xA0, 0x12
 ; [nakarest] NakaInst_AcTtlJgBoxProc  +0xb2..+0xc2 (0xea147e, 16 B)
 ; [nakarest] name string, entry 2 of Function slot 0x405 (table 0xea1392, 13 entries,
 ; [nakarest] InitializeCheap) (names for Function slot 0x105): "AcTtlJgBoxProc".
-NakaInst_AcTtlJgBoxProc:
-	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0xB2, 0x10
+NakaInst_AcTtlJgBoxProc:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0xB2, 0x10
 ; [nakarest] NakaInst_PsWindowToggleProc  +0xc2..+0xd6 (0xea148e, 20 B)
 ; [nakarest] name string, entry 1 of Function slot 0x405 (table 0xea1392, 13 entries,
 ; [nakarest] InitializeCheap) (names for Function slot 0x105): "PsWindowToggleProc".
-NakaInst_PsWindowToggleProc:
-	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0xC2, 0x14
+NakaInst_PsWindowToggleProc:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0xC2, 0x14
 ; [nakarest] NakaInst_PsFileNameBoxProc  +0xd6..+0xe8 (0xea14a2, 18 B)
 ; [nakarest] name string, entry 0 of Function slot 0x405 (table 0xea1392, 13 entries,
 ; [nakarest] InitializeCheap) (names for Function slot 0x105): "PsFileNameBoxProc".
-NakaInst_PsFileNameBoxProc:
-	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0xD6, 0x12
+NakaInst_PsFileNameBoxProc:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0xD6, 0x12
 ; [nakarest] naka_disk_menu_file_io+0xe8  +0xe8..+0xd76 (0xea14b4, 3214 B)
 ; [nakarest] widget records, elements 0-1, 3-73 of Viewable slot 0x60 (table 0xea67b6, 74
 ; [nakarest] entries, InitializeCheap) ("DiskMenu"): TtlScreen (42 B) x6, AcTitleMenu (54 B) x3,
@@ -1368,8 +1355,7 @@ Cheap_ResNameTable_37B:	.incbin "includes/generated/naka_disk_menu_file_io.bin",
 ; [nakarest] name strings, entries 0-42 of ResName slot 0x37b (table 0xea7b92, 94 entries,
 ; [nakarest] InitializeCheap) (names for Viewable slot 0x7b): "WaitWinCtlSmf", "", "", "", "",
 ; [nakarest] "", ....
-NakaInst_WaitWinCtlSmf:
-	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6A34, 0x98
+NakaInst_WaitWinCtlSmf:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6A34, 0x98
 ; [nakarest] naka_disk_menu_file_io+0x6acc  +0x6acc..+0x6ad2 (0xea7e98, 6 B)
 ; [nakarest] the table itself: ResName slot 0x37c (table 0xea7e98, 0 entries, InitializeCheap),
 ; [nakarest] 0 entry pointers x 4 bytes.

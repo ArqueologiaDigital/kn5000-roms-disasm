@@ -3758,480 +3758,361 @@ CompIface_PortByte_F5:
 ; DSP effect data: range block of the 41 effect numbers with no DSP record list
 ; (0, 7, 11, 12, 13, 14 ...): 2 x {min,max,param_id} = 12 bytes, though those effects'
 ; count bytes (0xEE5FE0+n) say 5; range-table entries 0,7,11,12,13,14,28,29 ...
-ToneKit_NullParams:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x0, 0xC
+ToneKit_NullParams:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x0, 0xC
 ; DSP effect data: parameter ranges of 32 DISTORTION:
 ; 5 x {min,max,param_id}; range-table entry(ies) 32 (base 0xEE6044).
-ToneKit_ParamBlock_000:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xC, 0x1E
+ToneKit_ParamBlock_000:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xC, 0x1E
 ; DSP effect data: parameter ranges of 33 OVERDRIVE:
 ; 5 x {min,max,param_id}; range-table entry(ies) 33 (base 0xEE6044).
-ToneKit_ParamBlock_001:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x2A, 0x1E
+ToneKit_ParamBlock_001:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x2A, 0x1E
 ; DSP effect data: parameter ranges of 34 FUZZ:
 ; 5 x {min,max,param_id}; range-table entry(ies) 34 (base 0xEE6044).
-ToneKit_ParamBlock_002:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x48, 0x1E
+ToneKit_ParamBlock_002:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x48, 0x1E
 ; DSP effect data: parameter ranges of 35 EXCITER:
 ; 7 x {min,max,param_id}; range-table entry(ies) 35 (base 0xEE6044).
-ToneKit_ParamBlock_003:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x66, 0x2A
+ToneKit_ParamBlock_003:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x66, 0x2A
 ; DSP effect data: parameter ranges of 39 PARAMETRIC EQ:
 ; 17 x {min,max,param_id}; range-table entry(ies) 39 (base 0xEE6044).
-ToneKit_ParamBlock_004:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x90, 0x66
+ToneKit_ParamBlock_004:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x90, 0x66
 ; DSP effect data: parameter ranges of 1 CHORUS:
 ; 5 x {min,max,param_id}; range-table entry(ies) 1 (base 0xEE6044).
-ToneKit_ParamBlock_005:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xF6, 0x1E
+ToneKit_ParamBlock_005:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xF6, 0x1E
 ; DSP effect data: parameter ranges of 2 MODULATED CHORUS:
 ; 7 x {min,max,param_id}; range-table entry(ies) 2 (base 0xEE6044).
-ToneKit_ParamBlock_006:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x114, 0x2A
+ToneKit_ParamBlock_006:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x114, 0x2A
 ; DSP effect data: parameter ranges of 3 ENHANCER:
 ; 7 x {min,max,param_id}; range-table entry(ies) 3 (base 0xEE6044).
-ToneKit_ParamBlock_007:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x13E, 0x2A
+ToneKit_ParamBlock_007:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x13E, 0x2A
 ; DSP effect data: parameter ranges of 4 FLANGER:
 ; 8 x {min,max,param_id}; range-table entry(ies) 4 (base 0xEE6044).
-ToneKit_ParamBlock_008:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x168, 0x30
+ToneKit_ParamBlock_008:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x168, 0x30
 ; DSP effect data: parameter ranges of 5 PHASER:
 ; 8 x {min,max,param_id}; range-table entry(ies) 5 (base 0xEE6044).
-ToneKit_ParamBlock_009:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x198, 0x30
+ToneKit_ParamBlock_009:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x198, 0x30
 ; DSP effect data: parameter ranges of 15 ROCK ROTARY:
 ; 16 x {min,max,param_id}; range-table entry(ies) 15 (base 0xEE6044).
-ToneKit_ParamBlock_010:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x1C8, 0x60
+ToneKit_ParamBlock_010:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x1C8, 0x60
 ; DSP effect data: parameter ranges of 48 AUTO PAN:
 ; 6 x {min,max,param_id}; range-table entry(ies) 48 (base 0xEE6044).
-ToneKit_ParamBlock_011:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x228, 0x24
+ToneKit_ParamBlock_011:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x228, 0x24
 ; DSP effect data: parameter ranges of 50 VIBRATO:
 ; 6 x {min,max,param_id}; range-table entry(ies) 50 (base 0xEE6044).
-ToneKit_ParamBlock_012:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x24C, 0x24
+ToneKit_ParamBlock_012:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x24C, 0x24
 ; DSP effect data: parameter ranges of 52 AUTO WAH:
 ; 5 x {min,max,param_id}; range-table entry(ies) 52 (base 0xEE6044).
-ToneKit_ParamBlock_013:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x270, 0x1E
+ToneKit_ParamBlock_013:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x270, 0x1E
 ; DSP effect data: parameter ranges of 53 ROTARY SPEAKER:
 ; 16 x {min,max,param_id}; range-table entry(ies) 53 (base 0xEE6044).
-ToneKit_ParamBlock_014:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x28E, 0x60
+ToneKit_ParamBlock_014:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x28E, 0x60
 ; DSP effect data: parameter ranges of 54 RING MODULATOR:
 ; 5 x {min,max,param_id}; range-table entry(ies) 54 (base 0xEE6044).
-ToneKit_ParamBlock_015:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x2EE, 0x1E
+ToneKit_ParamBlock_015:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x2EE, 0x1E
 ; DSP effect data: parameter ranges of 37 SLOW ATTACKER:
 ; 5 x {min,max,param_id}; range-table entry(ies) 37 (base 0xEE6044).
-ToneKit_ParamBlock_016:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x30C, 0x1E
+ToneKit_ParamBlock_016:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x30C, 0x1E
 ; DSP effect data: parameter ranges of 8 GATED REVERB:
 ; 6 x {min,max,param_id}; range-table entry(ies) 8 (base 0xEE6044).
-ToneKit_ParamBlock_017:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x32A, 0x24
+ToneKit_ParamBlock_017:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x32A, 0x24
 ; DSP effect data: parameter ranges of 6 ENSEMBLE:
 ; 5 x {min,max,param_id}; range-table entry(ies) 6 (base 0xEE6044).
-ToneKit_ParamBlock_018:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x34E, 0x1E
+ToneKit_ParamBlock_018:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x34E, 0x1E
 ; DSP effect data: parameter ranges of 36 COMPRESSOR:
 ; 6 x {min,max,param_id}; range-table entry(ies) 36 (base 0xEE6044).
-ToneKit_ParamBlock_019:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x36C, 0x24
+ToneKit_ParamBlock_019:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x36C, 0x24
 ; DSP effect data: parameter ranges of 56 MIX UP:
 ; 8 x {min,max,param_id}; range-table entry(ies) 56 (base 0xEE6044).
-ToneKit_ParamBlock_020:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x390, 0x30
+ToneKit_ParamBlock_020:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x390, 0x30
 ; DSP effect data: parameter ranges of 9 SINGLE DELAY:
 ; 7 x {min,max,param_id}; range-table entry(ies) 9 (base 0xEE6044).
-ToneKit_ParamBlock_021:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x3C0, 0x2A
+ToneKit_ParamBlock_021:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x3C0, 0x2A
 ; DSP effect data: parameter ranges of 10 MULTI TAP DELAY:
 ; 12 x {min,max,param_id}; range-table entry(ies) 10 (base 0xEE6044).
-ToneKit_ParamBlock_022:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x3EA, 0x48
+ToneKit_ParamBlock_022:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x3EA, 0x48
 ; DSP effect data: parameter ranges of 64 S.DELAY+CHORUS:
 ; 11 x {min,max,param_id}; range-table entry(ies) 64 (base 0xEE6044).
-ToneKit_ParamBlock_023:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x432, 0x42
+ToneKit_ParamBlock_023:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x432, 0x42
 ; DSP effect data: parameter ranges of 65 S.DELAY+S.DELAY:
 ; 12 x {min,max,param_id}; range-table entry(ies) 65 (base 0xEE6044).
-ToneKit_ParamBlock_024:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x474, 0x48
+ToneKit_ParamBlock_024:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x474, 0x48
 ; DSP effect data: parameter ranges of 66 S.DELAY+FLANGER:
 ; 14 x {min,max,param_id}; range-table entry(ies) 66 (base 0xEE6044).
-ToneKit_ParamBlock_025:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x4BC, 0x54
+ToneKit_ParamBlock_025:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x4BC, 0x54
 ; DSP effect data: parameter ranges of 67 S.DELAY+VIBRATO:
 ; 11 x {min,max,param_id}; range-table entry(ies) 67 (base 0xEE6044).
-ToneKit_ParamBlock_026:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x510, 0x42
+ToneKit_ParamBlock_026:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x510, 0x42
 ; DSP effect data: parameter ranges of 68 S.DELAY+PHASER:
 ; 14 x {min,max,param_id}; range-table entry(ies) 68 (base 0xEE6044).
-ToneKit_ParamBlock_027:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x552, 0x54
+ToneKit_ParamBlock_027:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x552, 0x54
 ; DSP effect data: parameter ranges of 70 AUTO WAH+S.DELAY:
 ; 10 x {min,max,param_id}; range-table entry(ies) 70 (base 0xEE6044).
-ToneKit_ParamBlock_028:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x5A6, 0x3C
+ToneKit_ParamBlock_028:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x5A6, 0x3C
 ; DSP effect data: parameter ranges of 16 ROOM REVERB 1:
 ; 5 x {min,max,param_id}; range-table entry(ies) 16 (base 0xEE6044).
-ToneKit_ParamBlock_029:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x5E2, 0x1E
+ToneKit_ParamBlock_029:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x5E2, 0x1E
 ; DSP effect data: parameter ranges of 17 ROOM REVERB 2:
 ; 5 x {min,max,param_id}; range-table entry(ies) 17 (base 0xEE6044).
-ToneKit_ParamBlock_030:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x600, 0x1E
+ToneKit_ParamBlock_030:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x600, 0x1E
 ; DSP effect data: parameter ranges of 18 PLATE REVERB 1:
 ; 5 x {min,max,param_id}; range-table entry(ies) 18 (base 0xEE6044).
-ToneKit_ParamBlock_031:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x61E, 0x1E
+ToneKit_ParamBlock_031:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x61E, 0x1E
 ; DSP effect data: parameter ranges of 19 PLATE REVERB 2:
 ; 5 x {min,max,param_id}; range-table entry(ies) 19 (base 0xEE6044).
-ToneKit_ParamBlock_032:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x63C, 0x1E
+ToneKit_ParamBlock_032:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x63C, 0x1E
 ; DSP effect data: parameter ranges of 20 CONCERT REVERB 1:
 ; 5 x {min,max,param_id}; range-table entry(ies) 20 (base 0xEE6044).
-ToneKit_ParamBlock_033:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x65A, 0x1E
+ToneKit_ParamBlock_033:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x65A, 0x1E
 ; DSP effect data: parameter ranges of 21 CONCERT REVERB 2:
 ; 5 x {min,max,param_id}; range-table entry(ies) 21 (base 0xEE6044).
-ToneKit_ParamBlock_034:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x678, 0x1E
+ToneKit_ParamBlock_034:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x678, 0x1E
 ; DSP effect data: parameter ranges of 22 DARK REVERB 1:
 ; 5 x {min,max,param_id}; range-table entry(ies) 22 (base 0xEE6044).
-ToneKit_ParamBlock_035:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x696, 0x1E
+ToneKit_ParamBlock_035:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x696, 0x1E
 ; DSP effect data: parameter ranges of 23 DARK REVERB 2:
 ; 5 x {min,max,param_id}; range-table entry(ies) 23 (base 0xEE6044).
-ToneKit_ParamBlock_036:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x6B4, 0x1E
+ToneKit_ParamBlock_036:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x6B4, 0x1E
 ; DSP effect data: parameter ranges of 24 BRIGHT REVERB 1:
 ; 5 x {min,max,param_id}; range-table entry(ies) 24 (base 0xEE6044).
-ToneKit_ParamBlock_037:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x6D2, 0x1E
+ToneKit_ParamBlock_037:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x6D2, 0x1E
 ; DSP effect data: parameter ranges of 25 BRIGHT REVERB 2:
 ; 5 x {min,max,param_id}; range-table entry(ies) 25 (base 0xEE6044).
-ToneKit_ParamBlock_038:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x6F0, 0x1E
+ToneKit_ParamBlock_038:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x6F0, 0x1E
 ; DSP effect data: parameter ranges of 26 WAVE REVERB 1:
 ; 5 x {min,max,param_id}; range-table entry(ies) 26 (base 0xEE6044).
-ToneKit_ParamBlock_039:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x70E, 0x1E
+ToneKit_ParamBlock_039:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x70E, 0x1E
 ; DSP effect data: parameter ranges of 27 WAVE REVERB 2:
 ; 5 x {min,max,param_id}; range-table entry(ies) 27 (base 0xEE6044).
-ToneKit_ParamBlock_040:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x72C, 0x1E
+ToneKit_ParamBlock_040:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x72C, 0x1E
 ; DSP effect data: parameter ranges of 71 PEQ+CHORUS:
 ; 9 x {min,max,param_id}; range-table entry(ies) 71 (base 0xEE6044).
-ToneKit_ParamBlock_041:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x74A, 0x36
+ToneKit_ParamBlock_041:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x74A, 0x36
 ; DSP effect data: parameter ranges of 72 PEQ+S.DELAY:
 ; 10 x {min,max,param_id}; range-table entry(ies) 72 (base 0xEE6044).
-ToneKit_ParamBlock_042:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x780, 0x3C
+ToneKit_ParamBlock_042:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x780, 0x3C
 ; DSP effect data: parameter ranges of 73 PEQ+FLANGER:
 ; 12 x {min,max,param_id}; range-table entry(ies) 73 (base 0xEE6044).
-ToneKit_ParamBlock_043:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x7BC, 0x48
+ToneKit_ParamBlock_043:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x7BC, 0x48
 ; DSP effect data: parameter ranges of 74 PEQ+VIBRATO:
 ; 9 x {min,max,param_id}; range-table entry(ies) 74 (base 0xEE6044).
-ToneKit_ParamBlock_044:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x804, 0x36
+ToneKit_ParamBlock_044:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x804, 0x36
 ; DSP effect data: parameter ranges of 75 PEQ+COMPRESSOR:
 ; 9 x {min,max,param_id}; range-table entry(ies) 75 (base 0xEE6044).
-ToneKit_ParamBlock_045:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x83A, 0x36
+ToneKit_ParamBlock_045:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x83A, 0x36
 ; DSP effect data: parameter ranges of 96 PEQ+COMPR+DIST:
 ; 12 x {min,max,param_id}; range-table entry(ies) 96 (base 0xEE6044).
-ToneKit_ParamBlock_046:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x870, 0x48
+ToneKit_ParamBlock_046:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x870, 0x48
 ; DSP effect data: parameter ranges of 97 PEQ+COMPR+OVERDR:
 ; 12 x {min,max,param_id}; range-table entry(ies) 97 (base 0xEE6044).
-ToneKit_ParamBlock_047:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x8B8, 0x48
+ToneKit_ParamBlock_047:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x8B8, 0x48
 ; DSP effect data: parameter ranges of 98 PEQ+DIST+DELAY:
 ; 13 x {min,max,param_id}; range-table entry(ies) 98 (base 0xEE6044).
-ToneKit_ParamBlock_048:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x900, 0x4E
+ToneKit_ParamBlock_048:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x900, 0x4E
 ; DSP effect data: parameter ranges of 99 PEQ+OVERDR+DELAY:
 ; 13 x {min,max,param_id}; range-table entry(ies) 99 (base 0xEE6044).
-ToneKit_ParamBlock_049:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x94E, 0x4E
+ToneKit_ParamBlock_049:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x94E, 0x4E
 ; DSP effect data: parameter ranges of 57 STANDARD:
 ; 2 x {min,max,param_id}; range-table entry(ies) 57 (base 0xEE6044).
-ToneKit_ParamBlock_050:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x99C, 0xC
+ToneKit_ParamBlock_050:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x99C, 0xC
 ; DSP effect data: parameter ranges of 58 PERCUSSIVE:
 ; 2 x {min,max,param_id}; range-table entry(ies) 58 (base 0xEE6044).
-ToneKit_ParamBlock_051:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x9A8, 0xC
+ToneKit_ParamBlock_051:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x9A8, 0xC
 ; DSP effect data: parameter ranges of 59 SYMPHONIC:
 ; 2 x {min,max,param_id}; range-table entry(ies) 59 (base 0xEE6044).
-ToneKit_ParamBlock_052:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x9B4, 0xC
+ToneKit_ParamBlock_052:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x9B4, 0xC
 ; DSP effect data: parameter ranges of 60 DEEP SPACE:
 ; 2 x {min,max,param_id}; range-table entry(ies) 60 (base 0xEE6044).
-ToneKit_ParamBlock_053:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x9C0, 0xC
+ToneKit_ParamBlock_053:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x9C0, 0xC
 ; DSP effect data: parameter ranges of 88 ROOM:
 ; 5 x {min,max,param_id}; range-table entry(ies) 88 (base 0xEE6044).
-ToneKit_ParamBlock_054:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x9CC, 0x1E
+ToneKit_ParamBlock_054:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x9CC, 0x1E
 ; DSP effect data: parameter ranges of 89 KARAOKE:
 ; 5 x {min,max,param_id}; range-table entry(ies) 89 (base 0xEE6044).
-ToneKit_ParamBlock_055:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x9EA, 0x1E
+ToneKit_ParamBlock_055:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x9EA, 0x1E
 ; DSP effect data: parameter ranges of 90 BATH ROOM:
 ; 5 x {min,max,param_id}; range-table entry(ies) 90 (base 0xEE6044).
-ToneKit_ParamBlock_056:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xA08, 0x1E
+ToneKit_ParamBlock_056:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xA08, 0x1E
 ; DSP effect data: parameter ranges of 91 STAGE:
 ; 5 x {min,max,param_id}; range-table entry(ies) 91 (base 0xEE6044).
-ToneKit_ParamBlock_057:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xA26, 0x1E
+ToneKit_ParamBlock_057:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xA26, 0x1E
 ; DSP effect data: parameter ranges of 79 GEQ:
 ; 9 x {min,max,param_id}; range-table entry(ies) 79 (base 0xEE6044).
-ToneKit_ParamBlock_058:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xA44, 0x36
+ToneKit_ParamBlock_058:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xA44, 0x36
 ; DSP effect data: 24-byte settings block of 41 effect numbers (0, 7, 11, 12, 13, 14 ...):
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 0,7,11,12,13,14,28,29 ....
-ToneKit_DefaultParams:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xA7A, 0x18
+ToneKit_DefaultParams:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xA7A, 0x18
 ; DSP effect data: 24-byte settings block of 32 DISTORTION:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 32.
-NakaInst_PFTK:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xA92, 0x18
+NakaInst_PFTK:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xA92, 0x18
 ; DSP effect data: 24-byte settings block of 33 OVERDRIVE:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 33.
-ToneKit_ParamBlock_059:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xAAA, 0x18
+ToneKit_ParamBlock_059:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xAAA, 0x18
 ; DSP effect data: 24-byte settings block of 34 FUZZ:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 34.
-ToneKit_ParamBlock_060:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xAC2, 0x18
+ToneKit_ParamBlock_060:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xAC2, 0x18
 ; DSP effect data: 24-byte settings block of 35 EXCITER:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 35.
-ToneKit_ParamBlock_061:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xADA, 0x18
+ToneKit_ParamBlock_061:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xADA, 0x18
 ; DSP effect data: 24-byte settings block of 39 PARAMETRIC EQ:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 39.
-ToneKit_ParamBlock_062:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xAF2, 0x18
+ToneKit_ParamBlock_062:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xAF2, 0x18
 ; DSP effect data: 24-byte settings block of 1 CHORUS:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 1.
-ToneKit_ParamBlock_063:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xB0A, 0x18
+ToneKit_ParamBlock_063:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xB0A, 0x18
 ; DSP effect data: 24-byte settings block of 2 MODULATED CHORUS:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 2.
-ToneKit_ParamBlock_064:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xB22, 0x18
+ToneKit_ParamBlock_064:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xB22, 0x18
 ; DSP effect data: 24-byte settings block of 3 ENHANCER:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 3.
-ToneKit_ParamBlock_065:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xB3A, 0x18
+ToneKit_ParamBlock_065:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xB3A, 0x18
 ; DSP effect data: 24-byte settings block of 4 FLANGER:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 4.
-ToneKit_ParamBlock_066:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xB52, 0x18
+ToneKit_ParamBlock_066:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xB52, 0x18
 ; DSP effect data: 24-byte settings block of 5 PHASER:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 5.
-ToneKit_ParamBlock_067:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xB6A, 0x18
+ToneKit_ParamBlock_067:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xB6A, 0x18
 ; DSP effect data: 24-byte settings block of 15 ROCK ROTARY:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 15.
-ToneKit_ParamBlock_068:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xB82, 0x18
+ToneKit_ParamBlock_068:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xB82, 0x18
 ; DSP effect data: 24-byte settings block of 48 AUTO PAN:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 48.
-ToneKit_ParamBlock_069:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xB9A, 0x18
+ToneKit_ParamBlock_069:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xB9A, 0x18
 ; DSP effect data: 24-byte settings block of 50 VIBRATO:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 50.
-ToneKit_ParamBlock_070:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xBB2, 0x18
+ToneKit_ParamBlock_070:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xBB2, 0x18
 ; DSP effect data: 24-byte settings block of 52 AUTO WAH:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 52.
-ToneKit_ParamBlock_071:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xBCA, 0x18
+ToneKit_ParamBlock_071:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xBCA, 0x18
 ; DSP effect data: 24-byte settings block of 53 ROTARY SPEAKER:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 53.
-ToneKit_ParamBlock_072:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xBE2, 0x18
+ToneKit_ParamBlock_072:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xBE2, 0x18
 ; DSP effect data: 24-byte settings block of 54 RING MODULATOR:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 54.
-ToneKit_ParamBlock_073:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xBFA, 0x18
+ToneKit_ParamBlock_073:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xBFA, 0x18
 ; DSP effect data: 24-byte settings block of 37 SLOW ATTACKER:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 37.
-ToneKit_ParamBlock_074:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xC12, 0x18
+ToneKit_ParamBlock_074:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xC12, 0x18
 ; DSP effect data: 24-byte settings block of 8 GATED REVERB:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 8.
-ToneKit_ParamBlock_075:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xC2A, 0x18
+ToneKit_ParamBlock_075:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xC2A, 0x18
 ; DSP effect data: 24-byte settings block of 6 ENSEMBLE:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 6.
-ToneKit_ParamBlock_076:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xC42, 0x18
+ToneKit_ParamBlock_076:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xC42, 0x18
 ; DSP effect data: 24-byte settings block of 36 COMPRESSOR:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 36.
-ToneKit_ParamBlock_077:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xC5A, 0x18
+ToneKit_ParamBlock_077:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xC5A, 0x18
 ; DSP effect data: 24-byte settings block of 56 MIX UP:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 56.
-ToneKit_ParamBlock_078:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xC72, 0x18
+ToneKit_ParamBlock_078:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xC72, 0x18
 ; DSP effect data: 24-byte settings block of 9 SINGLE DELAY:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 9.
-ToneKit_ParamBlock_079:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xC8A, 0x18
+ToneKit_ParamBlock_079:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xC8A, 0x18
 ; DSP effect data: 24-byte settings block of 10 MULTI TAP DELAY:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 10.
-ToneKit_ParamBlock_080:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xCA2, 0x18
+ToneKit_ParamBlock_080:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xCA2, 0x18
 ; DSP effect data: 24-byte settings block of 64 S.DELAY+CHORUS:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 64.
-ToneKit_ParamBlock_081:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xCBA, 0x18
+ToneKit_ParamBlock_081:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xCBA, 0x18
 ; DSP effect data: 24-byte settings block of 65 S.DELAY+S.DELAY:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 65.
-ToneKit_ParamBlock_082:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xCD2, 0x18
+ToneKit_ParamBlock_082:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xCD2, 0x18
 ; DSP effect data: 24-byte settings block of 66 S.DELAY+FLANGER:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 66.
-ToneKit_ParamBlock_083:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xCEA, 0x18
+ToneKit_ParamBlock_083:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xCEA, 0x18
 ; DSP effect data: 24-byte settings block of 67 S.DELAY+VIBRATO:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 67.
-ToneKit_ParamBlock_084:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xD02, 0x18
+ToneKit_ParamBlock_084:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xD02, 0x18
 ; DSP effect data: 24-byte settings block of 68 S.DELAY+PHASER:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 68.
-ToneKit_ParamBlock_085:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xD1A, 0x18
+ToneKit_ParamBlock_085:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xD1A, 0x18
 ; DSP effect data: 24-byte settings block of 70 AUTO WAH+S.DELAY:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 70.
-ToneKit_ParamBlock_086:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xD32, 0x18
+ToneKit_ParamBlock_086:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xD32, 0x18
 ; DSP effect data: 24-byte settings block of 16 ROOM REVERB 1:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 16.
-ToneKit_ParamBlock_087:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xD4A, 0x18
+ToneKit_ParamBlock_087:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xD4A, 0x18
 ; DSP effect data: 24-byte settings block of 17 ROOM REVERB 2:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 17.
-ToneKit_ParamBlock_088:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xD62, 0x18
+ToneKit_ParamBlock_088:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xD62, 0x18
 ; DSP effect data: 24-byte settings block of 18 PLATE REVERB 1:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 18.
-ToneKit_ParamBlock_089:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xD7A, 0x18
+ToneKit_ParamBlock_089:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xD7A, 0x18
 ; DSP effect data: 24-byte settings block of 19 PLATE REVERB 2:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 19.
-ToneKit_ParamBlock_090:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xD92, 0x18
+ToneKit_ParamBlock_090:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xD92, 0x18
 ; DSP effect data: 24-byte settings block of 20 CONCERT REVERB 1:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 20.
-ToneKit_ParamBlock_091:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xDAA, 0x18
+ToneKit_ParamBlock_091:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xDAA, 0x18
 ; DSP effect data: 24-byte settings block of 21 CONCERT REVERB 2:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 21.
-ToneKit_ParamBlock_092:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xDC2, 0x18
+ToneKit_ParamBlock_092:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xDC2, 0x18
 ; DSP effect data: 24-byte settings block of 22 DARK REVERB 1:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 22.
-ToneKit_ParamBlock_093:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xDDA, 0x18
+ToneKit_ParamBlock_093:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xDDA, 0x18
 ; DSP effect data: 24-byte settings block of 23 DARK REVERB 2:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 23.
-ToneKit_ParamBlock_094:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xDF2, 0x18
+ToneKit_ParamBlock_094:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xDF2, 0x18
 ; DSP effect data: 24-byte settings block of 24 BRIGHT REVERB 1:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 24.
-ToneKit_ParamBlock_095:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xE0A, 0x18
+ToneKit_ParamBlock_095:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xE0A, 0x18
 ; DSP effect data: 24-byte settings block of 25 BRIGHT REVERB 2:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 25.
-ToneKit_ParamBlock_096:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xE22, 0x18
+ToneKit_ParamBlock_096:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xE22, 0x18
 ; DSP effect data: 24-byte settings block of 26 WAVE REVERB 1:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 26.
-ToneKit_ParamBlock_097:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xE3A, 0x18
+ToneKit_ParamBlock_097:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xE3A, 0x18
 ; DSP effect data: 24-byte settings block of 27 WAVE REVERB 2:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 27.
-ToneKit_ParamBlock_098:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xE52, 0x18
+ToneKit_ParamBlock_098:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xE52, 0x18
 ; DSP effect data: 24-byte settings block of 71 PEQ+CHORUS:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 71.
-ToneKit_ParamBlock_099:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xE6A, 0x18
+ToneKit_ParamBlock_099:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xE6A, 0x18
 ; DSP effect data: 24-byte settings block of 72 PEQ+S.DELAY:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 72.
-ToneKit_ParamBlock_100:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xE82, 0x18
+ToneKit_ParamBlock_100:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xE82, 0x18
 ; DSP effect data: 24-byte settings block of 73 PEQ+FLANGER:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 73.
-ToneKit_ParamBlock_101:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xE9A, 0x18
+ToneKit_ParamBlock_101:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xE9A, 0x18
 ; DSP effect data: 24-byte settings block of 74 PEQ+VIBRATO:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 74.
-ToneKit_ParamBlock_102:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xEB2, 0x18
+ToneKit_ParamBlock_102:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xEB2, 0x18
 ; DSP effect data: 24-byte settings block of 75 PEQ+COMPRESSOR:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 75.
-ToneKit_ParamBlock_103:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xECA, 0x18
+ToneKit_ParamBlock_103:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xECA, 0x18
 ; DSP effect data: 24-byte settings block of 96 PEQ+COMPR+DIST:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 96.
-ToneKit_ParamBlock_104:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xEE2, 0x18
+ToneKit_ParamBlock_104:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xEE2, 0x18
 ; DSP effect data: 24-byte settings block of 97 PEQ+COMPR+OVERDR:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 97.
-ToneKit_ParamBlock_105:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xEFA, 0x18
+ToneKit_ParamBlock_105:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xEFA, 0x18
 ; DSP effect data: 24-byte settings block of 98 PEQ+DIST+DELAY:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 98.
-ToneKit_ParamBlock_106:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xF12, 0x18
+ToneKit_ParamBlock_106:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xF12, 0x18
 ; DSP effect data: 24-byte settings block of 99 PEQ+OVERDR+DELAY:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 99.
-ToneKit_ParamBlock_107:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xF2A, 0x18
+ToneKit_ParamBlock_107:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xF2A, 0x18
 ; DSP effect data: 24-byte settings block of 57 STANDARD:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 57.
-ToneKit_ParamBlock_108:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xF42, 0x18
+ToneKit_ParamBlock_108:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xF42, 0x18
 ; DSP effect data: 24-byte settings block of 58 PERCUSSIVE:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 58.
-ToneKit_ParamBlock_109:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xF5A, 0x18
+ToneKit_ParamBlock_109:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xF5A, 0x18
 ; DSP effect data: 24-byte settings block of 59 SYMPHONIC:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 59.
-ToneKit_ParamBlock_110:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xF72, 0x18
+ToneKit_ParamBlock_110:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xF72, 0x18
 ; DSP effect data: 24-byte settings block of 60 DEEP SPACE:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 60.
-ToneKit_ParamBlock_111:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xF8A, 0x18
+ToneKit_ParamBlock_111:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xF8A, 0x18
 ; DSP effect data: 24-byte settings block of 88 ROOM:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 88.
-ToneKit_ParamBlock_112:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xFA2, 0x18
+ToneKit_ParamBlock_112:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xFA2, 0x18
 ; DSP effect data: 24-byte settings block of 89 KARAOKE:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 89.
-ToneKit_ParamBlock_113:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xFBA, 0x18
+ToneKit_ParamBlock_113:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xFBA, 0x18
 ; DSP effect data: 24-byte settings block of 90 BATH ROOM:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 90.
-ToneKit_ParamBlock_114:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xFD2, 0x18
+ToneKit_ParamBlock_114:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xFD2, 0x18
 ; DSP effect data: 24-byte settings block of 91 STAGE:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 91.
-ToneKit_ParamBlock_115:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0xFEA, 0x18
+ToneKit_ParamBlock_115:	.incbin "includes/generated/tonekit_param_blocks.bin", 0xFEA, 0x18
 ; DSP effect data: 24-byte settings block of 79 GEQ:
 ; +0 = effect number, +1.. parameter bytes; DspFxSettingsPtrTable entry(ies) 79.
 ; The C slice named ToneKit_ParamBlock_116 is 0x80 bytes: its +0x18..+0x7B

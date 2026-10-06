@@ -203,83 +203,67 @@
 ; [nakarest] NakaInst_AcMidiPartGridBoxProc  +0x0..+0x16 (0xe55e38, 22 B)
 ; [nakarest] name string, entry 15 of Function slot 0x403 (table 0xe55df2, 16 entries,
 ; [nakarest] InitializeEast) (names for Function slot 0x103): "AcMidiPartGridBoxProc".
-NakaInst_AcMidiPartGridBoxProc:
-	.incbin "includes/generated/naka_midi_reverb.bin", 0x0, 0x16
+NakaInst_AcMidiPartGridBoxProc:	.incbin "includes/generated/naka_midi_reverb.bin", 0x0, 0x16
 ; [nakarest] NakaInst_AcCtlMsgGridBoxProc  +0x16..+0x2a (0xe55e4e, 20 B)
 ; [nakarest] name string, entry 14 of Function slot 0x403 (table 0xe55df2, 16 entries,
 ; [nakarest] InitializeEast) (names for Function slot 0x103): "AcCtlMsgGridBoxProc".
-NakaInst_AcCtlMsgGridBoxProc:
-	.incbin "includes/generated/naka_midi_reverb.bin", 0x16, 0x14
+NakaInst_AcCtlMsgGridBoxProc:	.incbin "includes/generated/naka_midi_reverb.bin", 0x16, 0x14
 ; [nakarest] NakaInst_AcPmemOutRGridBoxProc  +0x2a..+0x40 (0xe55e62, 22 B)
 ; [nakarest] name string, entry 13 of Function slot 0x403 (table 0xe55df2, 16 entries,
 ; [nakarest] InitializeEast) (names for Function slot 0x103): "AcPmemOutRGridBoxProc".
-NakaInst_AcPmemOutRGridBoxProc:
-	.incbin "includes/generated/naka_midi_reverb.bin", 0x2A, 0x16
+NakaInst_AcPmemOutRGridBoxProc:	.incbin "includes/generated/naka_midi_reverb.bin", 0x2A, 0x16
 ; [nakarest] NakaInst_AcPmemOutLGridBoxProc  +0x40..+0x56 (0xe55e78, 22 B)
 ; [nakarest] name string, entry 12 of Function slot 0x403 (table 0xe55df2, 16 entries,
 ; [nakarest] InitializeEast) (names for Function slot 0x103): "AcPmemOutLGridBoxProc".
-NakaInst_AcPmemOutLGridBoxProc:
-	.incbin "includes/generated/naka_midi_reverb.bin", 0x40, 0x16
+NakaInst_AcPmemOutLGridBoxProc:	.incbin "includes/generated/naka_midi_reverb.bin", 0x40, 0x16
 ; [nakarest] NakaInst_AcPcgOutGridBoxProc  +0x56..+0x6a (0xe55e8e, 20 B)
 ; [nakarest] name string, entry 11 of Function slot 0x403 (table 0xe55df2, 16 entries,
 ; [nakarest] InitializeEast) (names for Function slot 0x103): "AcPcgOutGridBoxProc".
-NakaInst_AcPcgOutGridBoxProc:
-	.incbin "includes/generated/naka_midi_reverb.bin", 0x56, 0x14
+NakaInst_AcPcgOutGridBoxProc:	.incbin "includes/generated/naka_midi_reverb.bin", 0x56, 0x14
 ; [nakarest] NakaInst_AcParaLoadOptGridBoxProc  +0x6a..+0x84 (0xe55ea2, 26 B)
 ; [nakarest] name string, entry 10 of Function slot 0x403 (table 0xe55df2, 16 entries,
 ; [nakarest] InitializeEast) (names for Function slot 0x103): "AcParaLoadOptGridBoxProc".
-NakaInst_AcParaLoadOptGridBoxProc:
-	.incbin "includes/generated/naka_midi_reverb.bin", 0x6A, 0x1A
+NakaInst_AcParaLoadOptGridBoxProc:	.incbin "includes/generated/naka_midi_reverb.bin", 0x6A, 0x1A
 ; [nakarest] NakaInst_AcInOutGridBoxProc  +0x84..+0x98 (0xe55ebc, 20 B)
 ; [nakarest] name string, entry 9 of Function slot 0x403 (table 0xe55df2, 16 entries,
 ; [nakarest] InitializeEast) (names for Function slot 0x103): "AcInOutGridBoxProc".
-NakaInst_AcInOutGridBoxProc:
-	.incbin "includes/generated/naka_midi_reverb.bin", 0x84, 0x14
+NakaInst_AcInOutGridBoxProc:	.incbin "includes/generated/naka_midi_reverb.bin", 0x84, 0x14
 ; [nakarest] NakaInst_AcVocalGridBoxProc  +0x98..+0xac (0xe55ed0, 20 B)
 ; [nakarest] name string, entry 8 of Function slot 0x403 (table 0xe55df2, 16 entries,
 ; [nakarest] InitializeEast) (names for Function slot 0x103): "AcVocalGridBoxProc".
-NakaInst_AcVocalGridBoxProc:
-	.incbin "includes/generated/naka_midi_reverb.bin", 0x98, 0x14
+NakaInst_AcVocalGridBoxProc:	.incbin "includes/generated/naka_midi_reverb.bin", 0x98, 0x14
 ; [nakarest] NakaInst_AcFadeSetGridBoxProc  +0xac..+0xc2 (0xe55ee4, 22 B)
 ; [nakarest] name string, entry 7 of Function slot 0x403 (table 0xe55df2, 16 entries,
 ; [nakarest] InitializeEast) (names for Function slot 0x103): "AcFadeSetGridBoxProc".
-NakaInst_AcFadeSetGridBoxProc:
-	.incbin "includes/generated/naka_midi_reverb.bin", 0xAC, 0x16
+NakaInst_AcFadeSetGridBoxProc:	.incbin "includes/generated/naka_midi_reverb.bin", 0xAC, 0x16
 ; [nakarest] NakaInst_AcLswFuncEditBoxProc  +0xc2..+0xd8 (0xe55efa, 22 B)
 ; [nakarest] name string, entry 6 of Function slot 0x403 (table 0xe55df2, 16 entries,
 ; [nakarest] InitializeEast) (names for Function slot 0x103): "AcLswFuncEditBoxProc".
-NakaInst_AcLswFuncEditBoxProc:
-	.incbin "includes/generated/naka_midi_reverb.bin", 0xC2, 0x16
+NakaInst_AcLswFuncEditBoxProc:	.incbin "includes/generated/naka_midi_reverb.bin", 0xC2, 0x16
 ; [nakarest] NakaInst_AcLswFuncBoxProc  +0xd8..+0xea (0xe55f10, 18 B)
 ; [nakarest] name string, entry 5 of Function slot 0x403 (table 0xe55df2, 16 entries,
 ; [nakarest] InitializeEast) (names for Function slot 0x103): "AcLswFuncBoxProc".
-NakaInst_AcLswFuncBoxProc:
-	.incbin "includes/generated/naka_midi_reverb.bin", 0xD8, 0x12
+NakaInst_AcLswFuncBoxProc:	.incbin "includes/generated/naka_midi_reverb.bin", 0xD8, 0x12
 ; [nakarest] NakaInst_AcGMOnOffBoxProc  +0xea..+0xfc (0xe55f22, 18 B)
 ; [nakarest] name string, entry 4 of Function slot 0x403 (table 0xe55df2, 16 entries,
 ; [nakarest] InitializeEast) (names for Function slot 0x103): "AcGMOnOffBoxProc".
-NakaInst_AcGMOnOffBoxProc:
-	.incbin "includes/generated/naka_midi_reverb.bin", 0xEA, 0x12
+NakaInst_AcGMOnOffBoxProc:	.incbin "includes/generated/naka_midi_reverb.bin", 0xEA, 0x12
 ; [nakarest] NakaInst_AcSendEditSwProc  +0xfc..+0x10e (0xe55f34, 18 B)
 ; [nakarest] name string, entry 3 of Function slot 0x403 (table 0xe55df2, 16 entries,
 ; [nakarest] InitializeEast) (names for Function slot 0x103): "AcSendEditSwProc".
-NakaInst_AcSendEditSwProc:
-	.incbin "includes/generated/naka_midi_reverb.bin", 0xFC, 0x12
+NakaInst_AcSendEditSwProc:	.incbin "includes/generated/naka_midi_reverb.bin", 0xFC, 0x12
 ; [nakarest] NakaInst_IvMpstPageControlProc  +0x10e..+0x124 (0xe55f46, 22 B)
 ; [nakarest] name string, entry 2 of Function slot 0x403 (table 0xe55df2, 16 entries,
 ; [nakarest] InitializeEast) (names for Function slot 0x103): "IvMpstPageControlProc".
-NakaInst_IvMpstPageControlProc:
-	.incbin "includes/generated/naka_midi_reverb.bin", 0x10E, 0x16
+NakaInst_IvMpstPageControlProc:	.incbin "includes/generated/naka_midi_reverb.bin", 0x10E, 0x16
 ; [nakarest] NakaInst_PsHarmOnOffBoxProc  +0x124..+0x138 (0xe55f5c, 20 B)
 ; [nakarest] name string, entry 1 of Function slot 0x403 (table 0xe55df2, 16 entries,
 ; [nakarest] InitializeEast) (names for Function slot 0x103): "PsHarmOnOffBoxProc".
-NakaInst_PsHarmOnOffBoxProc:
-	.incbin "includes/generated/naka_midi_reverb.bin", 0x124, 0x14
+NakaInst_PsHarmOnOffBoxProc:	.incbin "includes/generated/naka_midi_reverb.bin", 0x124, 0x14
 ; [nakarest] NakaInst_AcVocalistListBoxProc  +0x138..+0x14e (0xe55f70, 22 B)
 ; [nakarest] name string, entry 0 of Function slot 0x403 (table 0xe55df2, 16 entries,
 ; [nakarest] InitializeEast) (names for Function slot 0x103): "AcVocalistListBoxProc".
-NakaInst_AcVocalistListBoxProc:
-	.incbin "includes/generated/naka_midi_reverb.bin", 0x138, 0x16
+NakaInst_AcVocalistListBoxProc:	.incbin "includes/generated/naka_midi_reverb.bin", 0x138, 0x16
 ; [nakarest] naka_midi_reverb+0x14e  +0x14e..+0x274 (0xe55f86, 294 B)
 ; [nakarest] widget records, elements 0-3 of Viewable slot 0x9 (table 0xe59c5a, 4 entries,
 ; [nakarest] InitializeEast) ("ReverbEqualizerMenu"): TtlScreen (42 B), AcTitleMenu (54 B) x3. 4
@@ -499,8 +483,7 @@ NakaWidget_MpstSlaveWithoutList:	.incbin "includes/generated/naka_midi_reverb.bi
 ; [nakarest] "WITHOUT APC" (Label.str of element 14); "WITH APC" (Label.str of element 16);
 ; [nakarest] "KN5000" (Label.str of element 18); "Organ 1 ~95|Organ 2 ~95|Or" (AcListBox.list of
 ; [nakarest] element 21); ....
-NakaInst_95_Bass_Pedals_95_Ext_Sequencer_95:
-	.incbin "includes/generated/naka_midi_reverb.bin", 0x1A28, 0x36
+NakaInst_95_Bass_Pedals_95_Ext_Sequencer_95:	.incbin "includes/generated/naka_midi_reverb.bin", 0x1A28, 0x36
 NakaWidget_MidiPresets_13_AcFuncWideES:		.incbin "includes/generated/naka_midi_reverb.bin", 0x1A5E, 0x14
 NakaInst_MidiPresetConfig:			.incbin "includes/generated/naka_midi_reverb.bin", 0x1A72, 0x1A
 NakaWidget_MidiPresets_14_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x1A8C, 0x2C

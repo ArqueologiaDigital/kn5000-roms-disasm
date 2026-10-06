@@ -66,8 +66,7 @@
 
 ; [nakarest] NakaData_SoundMenuDrawbar  +0x0..+0x14 (0xe80fe2, 20 B)
 ; [nakarest] bytes 4-23 of class definition 31 (AcFdemoScreen) of Class slot 0x161 (table 0xe80cf6, 37 entries, InitializeMurai): its parent, allsize, selfsize, name, propdata and propname; its proc word, bytes 0-3, ends the slice before.
-NakaData_SoundMenuDrawbar:
-	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x0, 0x14
+NakaData_SoundMenuDrawbar:	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x0, 0x14
 ; [nakarest] naka_sound_menu_drawbar+0x14  +0x14..+0xa4 (0xe80ff6, 144 B)
 ; [nakarest] class definition entries 32-36 of Class slot 0x161 (table 0xe80cf6, 37 entries,
 ; [nakarest] InitializeMurai) (24 bytes each: proc, parent, allsize, selfsize, name, propdata,
@@ -383,8 +382,7 @@ Murai_ResEventTable_1C1:	.incbin "includes/generated/naka_sound_menu_drawbar.bin
 ; [nakarest] Continues the table itself: ResEvent slot 0x1c1 (table 0xe812e4, 10 entries,
 ; [nakarest] InitializeMurai), 10 entry pointers x 4 bytes (starts 0xe812e4, 36 of its 40 bytes
 ; [nakarest] are here or later).
-Naka_EventDispatch_Table:
-	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x306, 0x28
+Naka_EventDispatch_Table:	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x306, 0x28
 ; [nakarest] naka_sound_menu_drawbar+0x32e  +0x32e..+0x3c2 (0xe81310, 148 B)
 ; [nakarest] name strings, entries 0-9 of ResEvent slot 0x1c1 (table 0xe812e4, 10 entries,
 ; [nakarest] InitializeMurai): "EV_MPVERSION", "EV_TONEMODE", "EV_EXECPRESENTATION",
@@ -398,8 +396,7 @@ Murai_ResEventCount_1C1:	.incbin "includes/generated/naka_sound_menu_drawbar.bin
 ; [nakarest] Naka_Event_Table3  +0x3c4..+0x404 (0xe813a6, 64 B)
 ; [nakarest] the table itself: ResMethod slot 0x1e1 (table 0xe813a6, 15 entries,
 ; [nakarest] InitializeMurai), 15 entry pointers x 4 bytes.
-Naka_Event_Table3:
-	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x3C4, 0x40
+Naka_Event_Table3:	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x3C4, 0x40
 ; [nakarest] naka_sound_menu_drawbar+0x404  +0x404..+0x510 (0xe813e6, 268 B)
 ; [nakarest] name strings, entries 0-14 of ResMethod slot 0x1e1 (table 0xe813a6, 15 entries,
 ; [nakarest] InitializeMurai): "MT_GetToneMode", "MT_ExitPresentation", "MT_InitPresentation",
@@ -423,13 +420,11 @@ Murai_FunctionTable_401:	.incbin "includes/generated/naka_sound_menu_drawbar.bin
 ; [nakarest] Continues the table itself: Function slot 0x401 (table 0xe8158c, 37 entries,
 ; [nakarest] InitializeMurai), 37 entry pointers x 4 bytes (starts 0xe8158c, 144 of its 148
 ; [nakarest] bytes are here or later).
-Naka_Event_Table2:
-	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x5AE, 0x94
+Naka_Event_Table2:	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x5AE, 0x94
 ; [nakarest] NakaInst_EmptyString  +0x642..+0x644 (0xe81624, 2 B)
 ; [nakarest] purpose not established: layout of 2 B at 0xe81624 not derived; readers below
 ; [nakarest] Readers: 1 data word in Naka_Event_Table2 (at 0xe81620).
-NakaInst_EmptyString:
-	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x642, 0x2
+NakaInst_EmptyString:	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x642, 0x2
 ; [nakarest] naka_sound_menu_drawbar+0x644  +0x644..+0x8c0 (0xe81626, 636 B)
 ; [nakarest] name strings, entries 1-36 of Function slot 0x401 (table 0xe8158c, 37 entries,
 ; [nakarest] InitializeMurai) (names for Function slot 0x101): "IvMPverProc",
@@ -439,21 +434,17 @@ NakaInst_EmptyString:
 ; [nakarest] NakaInst_IvSdpartProc  +0x8c0..+0x8ce (0xe818a2, 14 B)
 ; [nakarest] name string, entry 0 of Function slot 0x401 (table 0xe8158c, 37 entries,
 ; [nakarest] InitializeMurai) (names for Function slot 0x101): "IvSdpartProc".
-NakaInst_IvSdpartProc:
-	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x8C0, 0xE
+NakaInst_IvSdpartProc:	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x8C0, 0xE
 ; [nakarest] NakaContainer_SoundMenu_Root  +0x8ce..+0x8f8 (0xe818b0, 42 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0x2 (table 0xe85470, 20 entries,
 ; [nakarest] InitializeMurai) ("Sdmenu"): TtlScreen (42 B).
-NakaContainer_SoundMenu_Root:
-	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x8CE, 0x2A
+NakaContainer_SoundMenu_Root:	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x8CE, 0x2A
 ; [nakarest] NakaDesc_SOUND_MENU  +0x8f8..+0x904 (0xe818da, 12 B)
 ; [nakarest] 1 text the records point at (Viewable slot 0x2 (table 0xe85470, 20 entries,
 ; [nakarest] InitializeMurai)): "SOUND MENU" (TtlScreen.title of element 0).
-NakaDesc_SOUND_MENU:
-	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x8F8, 0xC
+NakaDesc_SOUND_MENU:	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x8F8, 0xC
 ; [nakarest] NakaWidget_SdmenuPage  +0x904..+0x90a (0xe818e6, 6 B)
 ; [nakarest] widget record, element 1 of Viewable slot 0x2 (table 0xe85470, 20 entries,
 ; [nakarest] InitializeMurai) ("Sdmenu"): AcWindowPage (36 B).
-NakaWidget_SdmenuPage:
-	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x904, 0x6
+NakaWidget_SdmenuPage:	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x904, 0x6
 ; External label offsets within the binary blob above.

@@ -17,12 +17,11 @@ RESOURCE_INFO_HANDLER_OFFSETS:
 	.short ResInfo_GetTableDataInfo - RESOURCE_INFO_HANDLERS
 
 ; SepaOut configuration data (826 bytes, compiled from sepaout_config.c)
-SepaOut_Config_0:
-	.incbin "includes/generated/sepaout_config.bin", 0x0, 0x4
-SetSepaOutMode_Data:				.incbin "includes/generated/sepaout_config.bin", 0x4, 0x4
-SetSepaOutMode_Data_2:				.incbin "includes/generated/sepaout_config.bin", 0x8, 0x4
-SetSepaOutMode_Data_3:				.incbin "includes/generated/sepaout_config.bin", 0xC, 0x4
-SetSepaOutMode_Data_4:				.incbin "includes/generated/sepaout_config.bin", 0x10, 0x4
+SepaOut_Config_0:	.incbin "includes/generated/sepaout_config.bin", 0x0, 0x4
+SetSepaOutMode_Data:	.incbin "includes/generated/sepaout_config.bin", 0x4, 0x4
+SetSepaOutMode_Data_2:	.incbin "includes/generated/sepaout_config.bin", 0x8, 0x4
+SetSepaOutMode_Data_3:	.incbin "includes/generated/sepaout_config.bin", 0xC, 0x4
+SetSepaOutMode_Data_4:	.incbin "includes/generated/sepaout_config.bin", 0x10, 0x4
 SqSngSelTtlFunc_CaseTable:
 	.short	SqTrAs_CondCheck - SqTrAs_CondCheck
 	.short	SqSngSelTtlFunc_Case3 - SqTrAs_CondCheck

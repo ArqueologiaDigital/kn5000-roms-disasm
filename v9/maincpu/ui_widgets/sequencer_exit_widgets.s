@@ -40,8 +40,7 @@
 
 ; [nakarest] NakaData_SequencerExit  +0x0..+0x14 (0xe272a4, 20 B)
 ; [nakarest] bytes 4-23 of class definition 12 (NoteEditBox) of Class slot 0x168 (table 0xe27180, 26 entries, InitializeKubo): its parent, allsize, selfsize, name, propdata and propname; its proc word, bytes 0-3, ends the slice before.
-NakaData_SequencerExit:
-	.incbin "includes/generated/naka_sequencer_exit.bin", 0x0, 0x14
+NakaData_SequencerExit:	.incbin "includes/generated/naka_sequencer_exit.bin", 0x0, 0x14
 ; [nakarest] naka_sequencer_exit+0x14  +0x14..+0x164 (0xe272b8, 336 B)
 ; [nakarest] class definition entries 13-25 of Class slot 0x168 (table 0xe27180, 26 entries,
 ; [nakarest] InitializeKubo) (24 bytes each: proc, parent, allsize, selfsize, name, propdata,
@@ -51,8 +50,7 @@ NakaData_SequencerExit:
 ; [nakarest] NakaInst_IvRealRecExit  +0x164..+0x166 (0xe27408, 2 B)
 ; [nakarest] propdata strings (the +16 field signature) of class 25 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): IvRealRecExit "".
-NakaInst_IvRealRecExit:
-	.incbin "includes/generated/naka_sequencer_exit.bin", 0x164, 0x2
+NakaInst_IvRealRecExit:	.incbin "includes/generated/naka_sequencer_exit.bin", 0x164, 0x2
 ; [nakarest] naka_sequencer_exit+0x166  +0x166..+0x174 (0xe2740a, 14 B)
 ; [nakarest] class-name strings (the +12 name) of classes 25 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): IvRealRecExit.
@@ -60,8 +58,7 @@ NakaInst_IvRealRecExit:
 ; [nakarest] NakaInst_AcPanicEditSw  +0x174..+0x178 (0xe27418, 4 B)
 ; [nakarest] propdata strings (the +16 field signature) of class 24 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): AcPanicEditSw "fj".
-NakaInst_AcPanicEditSw:
-	.incbin "includes/generated/naka_sequencer_exit.bin", 0x174, 0x4
+NakaInst_AcPanicEditSw:	.incbin "includes/generated/naka_sequencer_exit.bin", 0x174, 0x4
 ; [nakarest] naka_sequencer_exit+0x178  +0x178..+0x186 (0xe2741c, 14 B)
 ; [nakarest] class-name strings (the +12 name) of classes 24 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): AcPanicEditSw.
@@ -69,8 +66,7 @@ NakaInst_AcPanicEditSw:
 ; [nakarest] NakaInst_IvAutoPunchExit  +0x186..+0x188 (0xe2742a, 2 B)
 ; [nakarest] propdata strings (the +16 field signature) of class 23 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): IvAutoPunchExit "".
-NakaInst_IvAutoPunchExit:
-	.incbin "includes/generated/naka_sequencer_exit.bin", 0x186, 0x2
+NakaInst_IvAutoPunchExit:	.incbin "includes/generated/naka_sequencer_exit.bin", 0x186, 0x2
 ; [nakarest] naka_sequencer_exit+0x188  +0x188..+0x198 (0xe2742c, 16 B)
 ; [nakarest] class-name strings (the +12 name) of classes 23 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): IvAutoPunchExit.
@@ -78,8 +74,7 @@ NakaInst_IvAutoPunchExit:
 ; [nakarest] NakaInst_IvPunchExit  +0x198..+0x19a (0xe2743c, 2 B)
 ; [nakarest] propdata strings (the +16 field signature) of class 22 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): IvPunchExit "".
-NakaInst_IvPunchExit:
-	.incbin "includes/generated/naka_sequencer_exit.bin", 0x198, 0x2
+NakaInst_IvPunchExit:	.incbin "includes/generated/naka_sequencer_exit.bin", 0x198, 0x2
 ; [nakarest] naka_sequencer_exit+0x19a  +0x19a..+0x1a6 (0xe2743e, 12 B)
 ; [nakarest] class-name strings (the +12 name) of classes 22 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): IvPunchExit.
@@ -87,8 +82,7 @@ NakaInst_IvPunchExit:
 ; [nakarest] NakaInst_IvSdacc  +0x1a6..+0x1a8 (0xe2744a, 2 B)
 ; [nakarest] propdata strings (the +16 field signature) of class 21 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): IvSdacc "".
-NakaInst_IvSdacc:
-	.incbin "includes/generated/naka_sequencer_exit.bin", 0x1A6, 0x2
+NakaInst_IvSdacc:	.incbin "includes/generated/naka_sequencer_exit.bin", 0x1A6, 0x2
 ; [nakarest] naka_sequencer_exit+0x1a8  +0x1a8..+0x1b0 (0xe2744c, 8 B)
 ; [nakarest] class-name strings (the +12 name) of classes 21 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): IvSdacc.
@@ -96,8 +90,7 @@ NakaInst_IvSdacc:
 ; [nakarest] NakaInst_IvSddsp  +0x1b0..+0x1b2 (0xe27454, 2 B)
 ; [nakarest] propdata strings (the +16 field signature) of class 20 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): IvSddsp "".
-NakaInst_IvSddsp:
-	.incbin "includes/generated/naka_sequencer_exit.bin", 0x1B0, 0x2
+NakaInst_IvSddsp:	.incbin "includes/generated/naka_sequencer_exit.bin", 0x1B0, 0x2
 ; [nakarest] naka_sequencer_exit+0x1b2  +0x1b2..+0x1ba (0xe27456, 8 B)
 ; [nakarest] class-name strings (the +12 name) of classes 20 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): IvSddsp.
@@ -105,8 +98,7 @@ NakaInst_IvSddsp:
 ; [nakarest] NakaInst_IvSdrev  +0x1ba..+0x1bc (0xe2745e, 2 B)
 ; [nakarest] propdata strings (the +16 field signature) of class 19 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): IvSdrev "".
-NakaInst_IvSdrev:
-	.incbin "includes/generated/naka_sequencer_exit.bin", 0x1BA, 0x2
+NakaInst_IvSdrev:	.incbin "includes/generated/naka_sequencer_exit.bin", 0x1BA, 0x2
 ; [nakarest] naka_sequencer_exit+0x1bc  +0x1bc..+0x1c4 (0xe27460, 8 B)
 ; [nakarest] class-name strings (the +12 name) of classes 19 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): IvSdrev.
@@ -114,8 +106,7 @@ NakaInst_IvSdrev:
 ; [nakarest] NakaInst_IvPnlWrExit  +0x1c4..+0x1c6 (0xe27468, 2 B)
 ; [nakarest] propdata strings (the +16 field signature) of class 18 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): IvPnlWrExit "".
-NakaInst_IvPnlWrExit:
-	.incbin "includes/generated/naka_sequencer_exit.bin", 0x1C4, 0x2
+NakaInst_IvPnlWrExit:	.incbin "includes/generated/naka_sequencer_exit.bin", 0x1C4, 0x2
 ; [nakarest] naka_sequencer_exit+0x1c6  +0x1c6..+0x1d2 (0xe2746a, 12 B)
 ; [nakarest] class-name strings (the +12 name) of classes 18 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): IvPnlWrExit.
@@ -123,8 +114,7 @@ NakaInst_IvPnlWrExit:
 ; [nakarest] NakaInst_HelpTtl  +0x1d2..+0x1d8 (0xe27476, 6 B)
 ; [nakarest] propdata strings (the +16 field signature) of class 17 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): HelpTtl "^^cGj".
-NakaInst_HelpTtl:
-	.incbin "includes/generated/naka_sequencer_exit.bin", 0x1D2, 0x6
+NakaInst_HelpTtl:	.incbin "includes/generated/naka_sequencer_exit.bin", 0x1D2, 0x6
 ; [nakarest] naka_sequencer_exit+0x1d8  +0x1d8..+0x1e0 (0xe2747c, 8 B)
 ; [nakarest] class-name strings (the +12 name) of classes 17 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): HelpTtl.
@@ -132,8 +122,7 @@ NakaInst_HelpTtl:
 ; [nakarest] NakaInst_IvPlayExit  +0x1e0..+0x1e2 (0xe27484, 2 B)
 ; [nakarest] propdata strings (the +16 field signature) of class 16 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): IvPlayExit "`".
-NakaInst_IvPlayExit:
-	.incbin "includes/generated/naka_sequencer_exit.bin", 0x1E0, 0x2
+NakaInst_IvPlayExit:	.incbin "includes/generated/naka_sequencer_exit.bin", 0x1E0, 0x2
 ; [nakarest] naka_sequencer_exit+0x1e2  +0x1e2..+0x1ee (0xe27486, 12 B)
 ; [nakarest] class-name strings (the +12 name) of classes 16 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): IvPlayExit.
@@ -141,8 +130,7 @@ NakaInst_IvPlayExit:
 ; [nakarest] NakaInst_AcIndexWideToggle  +0x1ee..+0x1f2 (0xe27492, 4 B)
 ; [nakarest] propdata strings (the +16 field signature) of class 15 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): AcIndexWideToggle "AAj".
-NakaInst_AcIndexWideToggle:
-	.incbin "includes/generated/naka_sequencer_exit.bin", 0x1EE, 0x4
+NakaInst_AcIndexWideToggle:	.incbin "includes/generated/naka_sequencer_exit.bin", 0x1EE, 0x4
 ; [nakarest] naka_sequencer_exit+0x1f2  +0x1f2..+0x204 (0xe27496, 18 B)
 ; [nakarest] class-name strings (the +12 name) of classes 15 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): AcIndexWideToggle.
@@ -150,8 +138,7 @@ NakaInst_AcIndexWideToggle:
 ; [nakarest] NakaInst_MsgToTtl  +0x204..+0x206 (0xe274a8, 2 B)
 ; [nakarest] propdata strings (the +16 field signature) of class 14 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): MsgToTtl "".
-NakaInst_MsgToTtl:
-	.incbin "includes/generated/naka_sequencer_exit.bin", 0x204, 0x2
+NakaInst_MsgToTtl:	.incbin "includes/generated/naka_sequencer_exit.bin", 0x204, 0x2
 ; [nakarest] naka_sequencer_exit+0x206  +0x206..+0x210 (0xe274aa, 10 B)
 ; [nakarest] class-name strings (the +12 name) of classes 14 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): MsgToTtl.
@@ -159,8 +146,7 @@ NakaInst_MsgToTtl:
 ; [nakarest] NakaInst_EqOnOffFuncToggle  +0x210..+0x212 (0xe274b4, 2 B)
 ; [nakarest] propdata strings (the +16 field signature) of class 13 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): EqOnOffFuncToggle "".
-NakaInst_EqOnOffFuncToggle:
-	.incbin "includes/generated/naka_sequencer_exit.bin", 0x210, 0x2
+NakaInst_EqOnOffFuncToggle:	.incbin "includes/generated/naka_sequencer_exit.bin", 0x210, 0x2
 ; [nakarest] naka_sequencer_exit+0x212  +0x212..+0x224 (0xe274b6, 18 B)
 ; [nakarest] class-name strings (the +12 name) of classes 13 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): EqOnOffFuncToggle.
@@ -168,8 +154,7 @@ NakaInst_EqOnOffFuncToggle:
 ; [nakarest] NakaInst_NoteEditBox  +0x224..+0x228 (0xe274c8, 4 B)
 ; [nakarest] propdata strings (the +16 field signature) of class 12 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): NoteEditBox "jC".
-NakaInst_NoteEditBox:
-	.incbin "includes/generated/naka_sequencer_exit.bin", 0x224, 0x4
+NakaInst_NoteEditBox:	.incbin "includes/generated/naka_sequencer_exit.bin", 0x224, 0x4
 ; [nakarest] naka_sequencer_exit+0x228  +0x228..+0x234 (0xe274cc, 12 B)
 ; [nakarest] class-name strings (the +12 name) of classes 12 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): NoteEditBox.
@@ -177,8 +162,7 @@ NakaInst_NoteEditBox:
 ; [nakarest] NakaInst_SngSel2  +0x234..+0x236 (0xe274d8, 2 B)
 ; [nakarest] propdata strings (the +16 field signature) of class 11 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): SngSel2 "".
-NakaInst_SngSel2:
-	.incbin "includes/generated/naka_sequencer_exit.bin", 0x234, 0x2
+NakaInst_SngSel2:	.incbin "includes/generated/naka_sequencer_exit.bin", 0x234, 0x2
 ; [nakarest] naka_sequencer_exit+0x236  +0x236..+0x23e (0xe274da, 8 B)
 ; [nakarest] class-name strings (the +12 name) of classes 11 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): SngSel2.
@@ -186,8 +170,7 @@ NakaInst_SngSel2:
 ; [nakarest] NakaInst_SngSel  +0x23e..+0x244 (0xe274e2, 6 B)
 ; [nakarest] propdata strings (the +16 field signature) of class 10 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): SngSel "c^^jC".
-NakaInst_SngSel:
-	.incbin "includes/generated/naka_sequencer_exit.bin", 0x23E, 0x6
+NakaInst_SngSel:	.incbin "includes/generated/naka_sequencer_exit.bin", 0x23E, 0x6
 ; [nakarest] naka_sequencer_exit+0x244  +0x244..+0x24c (0xe274e8, 8 B)
 ; [nakarest] class-name strings (the +12 name) of classes 10 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): SngSel.
@@ -195,8 +178,7 @@ NakaInst_SngSel:
 ; [nakarest] NakaInst_AcEntertainerGridBox  +0x24c..+0x250 (0xe274f0, 4 B)
 ; [nakarest] propdata strings (the +16 field signature) of class 9 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): AcEntertainerGridBox "XXj".
-NakaInst_AcEntertainerGridBox:
-	.incbin "includes/generated/naka_sequencer_exit.bin", 0x24C, 0x4
+NakaInst_AcEntertainerGridBox:	.incbin "includes/generated/naka_sequencer_exit.bin", 0x24C, 0x4
 ; [nakarest] naka_sequencer_exit+0x250  +0x250..+0x266 (0xe274f4, 22 B)
 ; [nakarest] class-name strings (the +12 name) of classes 9 of Class slot 0x168 (table 0xe27180,
 ; [nakarest] 26 entries, InitializeKubo): AcEntertainerGridBox.
@@ -204,8 +186,7 @@ NakaInst_AcEntertainerGridBox:
 ; [nakarest] NakaInst_AccIll  +0x266..+0x26c (0xe2750a, 6 B)
 ; [nakarest] propdata strings (the +16 field signature) of class 8 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): AccIll "^^jC".
-NakaInst_AccIll:
-	.incbin "includes/generated/naka_sequencer_exit.bin", 0x266, 0x6
+NakaInst_AccIll:	.incbin "includes/generated/naka_sequencer_exit.bin", 0x266, 0x6
 ; [nakarest] naka_sequencer_exit+0x26c  +0x26c..+0x274 (0xe27510, 8 B)
 ; [nakarest] class-name strings (the +12 name) of classes 8 of Class slot 0x168 (table 0xe27180,
 ; [nakarest] 26 entries, InitializeKubo): AccIll.
@@ -213,8 +194,7 @@ NakaInst_AccIll:
 ; [nakarest] NakaInst_SqedtVal3  +0x274..+0x278 (0xe27518, 4 B)
 ; [nakarest] propdata strings (the +16 field signature) of class 7 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): SqedtVal3 "^^j".
-NakaInst_SqedtVal3:
-	.incbin "includes/generated/naka_sequencer_exit.bin", 0x274, 0x4
+NakaInst_SqedtVal3:	.incbin "includes/generated/naka_sequencer_exit.bin", 0x274, 0x4
 ; [nakarest] naka_sequencer_exit+0x278  +0x278..+0x282 (0xe2751c, 10 B)
 ; [nakarest] class-name strings (the +12 name) of classes 7 of Class slot 0x168 (table 0xe27180,
 ; [nakarest] 26 entries, InitializeKubo): SqedtVal3.
@@ -222,8 +202,7 @@ NakaInst_SqedtVal3:
 ; [nakarest] NakaInst_SqplyVal  +0x282..+0x288 (0xe27526, 6 B)
 ; [nakarest] propdata strings (the +16 field signature) of class 6 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): SqplyVal "^^jC".
-NakaInst_SqplyVal:
-	.incbin "includes/generated/naka_sequencer_exit.bin", 0x282, 0x6
+NakaInst_SqplyVal:	.incbin "includes/generated/naka_sequencer_exit.bin", 0x282, 0x6
 ; [nakarest] naka_sequencer_exit+0x288  +0x288..+0x292 (0xe2752c, 10 B)
 ; [nakarest] class-name strings (the +12 name) of classes 6 of Class slot 0x168 (table 0xe27180,
 ; [nakarest] 26 entries, InitializeKubo): SqplyVal.
@@ -231,8 +210,7 @@ NakaInst_SqplyVal:
 ; [nakarest] NakaInst_IvSongCopyExit  +0x292..+0x294 (0xe27536, 2 B)
 ; [nakarest] propdata strings (the +16 field signature) of class 5 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): IvSongCopyExit "".
-NakaInst_IvSongCopyExit:
-	.incbin "includes/generated/naka_sequencer_exit.bin", 0x292, 0x2
+NakaInst_IvSongCopyExit:	.incbin "includes/generated/naka_sequencer_exit.bin", 0x292, 0x2
 ; [nakarest] naka_sequencer_exit+0x294  +0x294..+0x2a4 (0xe27538, 16 B)
 ; [nakarest] class-name strings (the +12 name) of classes 5 of Class slot 0x168 (table 0xe27180,
 ; [nakarest] 26 entries, InitializeKubo): IvSongCopyExit.
@@ -240,8 +218,7 @@ NakaInst_IvSongCopyExit:
 ; [nakarest] NakaInst_SqedtFix  +0x2a4..+0x2a8 (0xe27548, 4 B)
 ; [nakarest] propdata strings (the +16 field signature) of class 4 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): SqedtFix "^^_".
-NakaInst_SqedtFix:
-	.incbin "includes/generated/naka_sequencer_exit.bin", 0x2A4, 0x4
+NakaInst_SqedtFix:	.incbin "includes/generated/naka_sequencer_exit.bin", 0x2A4, 0x4
 ; [nakarest] naka_sequencer_exit+0x2a8  +0x2a8..+0x2b2 (0xe2754c, 10 B)
 ; [nakarest] class-name strings (the +12 name) of classes 4 of Class slot 0x168 (table 0xe27180,
 ; [nakarest] 26 entries, InitializeKubo): SqedtFix.
@@ -249,6 +226,5 @@ NakaInst_SqedtFix:
 ; [nakarest] NakaInst_SqedtVal2_End  +0x2b2..+0x2b4 (0xe27556, 2 B)
 ; [nakarest] propdata strings (the +16 field signature) of class 3 of Class slot 0x168 (table
 ; [nakarest] 0xe27180, 26 entries, InitializeKubo): SqedtVal2 "^^j".
-NakaInst_SqedtVal2_End:
-	.incbin "includes/generated/naka_sequencer_exit.bin", 0x2B2, 0x2
+NakaInst_SqedtVal2_End:	.incbin "includes/generated/naka_sequencer_exit.bin", 0x2B2, 0x2
 ; External label offsets within the binary blob above.

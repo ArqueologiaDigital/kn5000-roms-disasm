@@ -356,8 +356,7 @@
 ; [nakarest] widget record, element 13 of Viewable slot 0xf4 (table 0xed7c62, 14 entries,
 ; [nakarest] InitializeToshi): TtlScreen (42 B). 1 text the records point at (Viewable slot 0xf4
 ; [nakarest] (table 0xed7c62, 14 entries, InitializeToshi)): "" (TtlScreen.title of element 13).
-NakaInst_ExtDevice_Screens:
-	.incbin "includes/generated/naka_extension_device.bin", 0x0, 0x2C
+NakaInst_ExtDevice_Screens:	.incbin "includes/generated/naka_extension_device.bin", 0x0, 0x2C
 ; [nakarest] naka_extension_device+0x2c  +0x2c..+0x41a (0xed67f8, 1006 B)
 ; [nakarest] widget records, elements 0-22 of Viewable slot 0xf5 (table 0xed7c9e, 23 entries,
 ; [nakarest] InitializeToshi) ("TEST2"): TtlScreen (42 B), TextBox (40 B), Label (32 B) x13,
@@ -1054,23 +1053,19 @@ PanelInput_PedalRecordDefaults:			.incbin "includes/generated/naka_extension_dev
 ; [nakarest] Readers: source references SystemConfig_PointerTable (ui_widgets/widget_dispatch.s:
 ; [nakarest] `.long EffectMode_DispatchTable`); 1 data word in SystemConfig_PointerTable (at
 ; [nakarest] 0xee8ca2).
-EffectMode_DispatchTable:
-	.incbin "includes/generated/naka_extension_device.bin", 0x3860, 0x10
+EffectMode_DispatchTable:	.incbin "includes/generated/naka_extension_device.bin", 0x3860, 0x10
 ; PanelInput_EventIndexByHeader -- 128 x u8: [(h & 0xC0) >> 1 | (h & 0x1F)] of a control-panel packet
 ; header h -> the panel event index (0-10 left segments for headers 0xC0-0xCA, 11-21 right for
 ; 0x00-0x0A, 22-24 headers 0xD1-0xD3, 25 the data wheel 0xD7; 0x1F = none).  Read by
 ; PanelInput_EventIndexOfHeader (audio/audio_control_engine.s).  Typed in
 ; ui_widgets/naka_extension_device.c (scripts/converters/naka_byte_tables_retype.py).
-PanelInput_EventIndexByHeader:
-	.incbin "includes/generated/naka_extension_device.bin", 0x3870, 0x80
+PanelInput_EventIndexByHeader:	.incbin "includes/generated/naka_extension_device.bin", 0x3870, 0x80
 ; [nakarest] ENCODER_HANDLER_TABLE  +0x38f0..+0x3970 (0xeda0bc, 128 B)
 ; [nakarest] purpose not established: layout of 128 B at 0xeda0bc not derived; readers below
 ; [nakarest] Readers: source references CPanel_EncoderDispatch (midi/midi_encoder_routines.s:
 ; [nakarest] `lda xde, (ENCODER_HANDLER_TABLE:24)`).
-ENCODER_HANDLER_TABLE:
-	.incbin "includes/generated/naka_extension_device.bin", 0x38F0, 0x80
+ENCODER_HANDLER_TABLE:	.incbin "includes/generated/naka_extension_device.bin", 0x38F0, 0x80
 ; [nakarest] ENCODER_LUT_MODWHEEL  +0x3970..+0x3994 (0xeda13c, 36 B)
 ; [nakarest] 36 B at 0xeda13c: split since into the labelled pieces below; code or data uses ENCODER_LUT_MODWHEEL.
-ENCODER_LUT_MODWHEEL:
-	.incbin "includes/generated/naka_extension_device.bin", 0x3970, 0x24
+ENCODER_LUT_MODWHEEL:	.incbin "includes/generated/naka_extension_device.bin", 0x3970, 0x24
 ; External label offsets within the binary blob above.

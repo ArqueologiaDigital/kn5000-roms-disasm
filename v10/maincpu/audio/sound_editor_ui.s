@@ -12098,8 +12098,7 @@ SeBitmap_EnvCurve6:
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_waveform.c)
 ; reader (se_screendata_model.py): static record list(s) from here, read by GraphicsRender_ProcessEntries;
 ; evidence: SeMenu_PresetManager_Save
-SeScreenData_0x0558:
-	.incbin "includes/generated/se_setup_waveform.bin", 0x0, 0xA
+SeScreenData_0x0558:			.incbin "includes/generated/se_setup_waveform.bin", 0x0, 0xA
 SeMenu_WaveformSelect_Apply_Data:	.incbin "includes/generated/se_setup_waveform.bin", 0xA, 0xC4
 ; --- comments carried over from the lines this .incbin replaced; the byte-exact C descriptor
 ;     supersedes their verdicts but not the record of them: ---
@@ -12696,8 +12695,7 @@ SeScreenData_0x0D4E:
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_params_full.c)
 ; reader (se_screendata_model.py): static record list(s) from here, read by GraphicsRender_ProcessEntries;
 ; evidence: SeMenu_PresetBrowser_Navigate
-SeScreenData_0x0D5E:
-	.incbin "includes/generated/se_setup_params_full.bin", 0x0, 0xB0
+SeScreenData_0x0D5E:			.incbin "includes/generated/se_setup_params_full.bin", 0x0, 0xB0
 SeMenu_PresetBrowser_Navigate_Data:	.incbin "includes/generated/se_setup_params_full.bin", 0xB0, 0x23
 SeMenu_PresetBrowser_Init_Data:		.incbin "includes/generated/se_setup_params_full.bin", 0xD3, 0x104
 ; --- comments carried over from the lines this .incbin replaced; the byte-exact C descriptor
@@ -12762,8 +12760,7 @@ SeScreenData_0x1089:
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_labels.c)
 ; reader (se_screendata_model.py): static record list(s) from here, read by GraphicsRender_ProcessEntries;
 ; evidence: SeMenu_CompareAndApply_Data4
-SeScreenData_0x113B:
-	.incbin "includes/generated/se_setup_labels.bin", 0x0, 0x5
+SeScreenData_0x113B:			.incbin "includes/generated/se_setup_labels.bin", 0x0, 0x5
 SeMenu_ShowConfirmDialog_Sub_Data:	.incbin "includes/generated/se_setup_labels.bin", 0x5, 0xA
 SeMenu_ShowConfirmDialog_Sub_Data_2:	.incbin "includes/generated/se_setup_labels.bin", 0xF, 0xA
 SeMenu_ShowConfirmDialog_Sub_Data_3:	.incbin "includes/generated/se_setup_labels.bin", 0x19, 0x16
@@ -12967,8 +12964,7 @@ SeScreenData_0x1682:
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_nav_full.c)
 ; reader (se_screendata_model.py): static record list(s) from here, read by GraphicsRender_ProcessEntries;
 ; evidence: SeMenu_Utility_FormatNumber
-SeScreenData_0x173B:
-	.incbin "includes/generated/se_setup_nav_full.bin", 0x0, 0x23
+SeScreenData_0x173B:			.incbin "includes/generated/se_setup_nav_full.bin", 0x0, 0x23
 SeMenu_Utility_FormatNumber_Data_2:	.incbin "includes/generated/se_setup_nav_full.bin", 0x23, 0x22
 SeMenu_Utility_CompareBlock_Data:	.incbin "includes/generated/se_setup_nav_full.bin", 0x45, 0xB
 SeMenu_Utility_CompareBlock_Data_2:	.incbin "includes/generated/se_setup_nav_full.bin", 0x50, 0xD5
@@ -12994,8 +12990,7 @@ SeScreenData_0x18D8:
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_ctrl_list.c)
 ; reader (se_screendata_model.py): static record list(s) from here, read by GraphicsRender_ProcessEntries;
 ; evidence: SeMenu_Utility_CompareBlock
-SeScreenData_0x18ED:
-	.incbin "includes/generated/se_setup_ctrl_list.bin", 0x0, 0x14
+SeScreenData_0x18ED:			.incbin "includes/generated/se_setup_ctrl_list.bin", 0x0, 0x14
 SeMenu_Utility_CompareBlock_Data_3:	.incbin "includes/generated/se_setup_ctrl_list.bin", 0x14, 0x6E
 	sd_quad	0x22, 66, 76, 233, 131
 	sd_quad	0x09, 77, 205, 240, 233
@@ -13231,8 +13226,7 @@ SeScreenData_0x1EF7:
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_sel1.c)
 ; reader (se_screendata_model.py): static record list(s) from here, read by GraphicsRender_ProcessEntries;
 ; evidence: SeMenu_PatchEdit_SetupPath
-SeScreenData_0x1F43:
-	.incbin "includes/generated/se_setup_sel1.bin"
+SeScreenData_0x1F43:	.incbin "includes/generated/se_setup_sel1.bin"
 	; 0xF12B53: five 8-byte cells
 	; |..I.3.e.|
 	; |..I.3.e.|
@@ -13258,8 +13252,7 @@ SeScreenData_0x1F75:
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_drumkit_display.c)
 ; reader (se_screendata_model.py): bound record list(s) from here, read by GraphicsRender_Start;
 ; evidence: SeMenu_BankEdit_LoopHelper
-SeScreenData_0x1F80:
-	.incbin "includes/generated/se_drumkit_display.bin", 0x0, 0x28
+SeScreenData_0x1F80:			.incbin "includes/generated/se_drumkit_display.bin", 0x0, 0x28
 SeMenu_BankEdit_LoopHelper_Data:	.incbin "includes/generated/se_drumkit_display.bin", 0x28, 0x96
 SeMenu_BankEdit_LoopHelper_Data_2:	.incbin "includes/generated/se_drumkit_display.bin", 0xBE, 0x8
 SeMenu_BankEdit_LoopHelper_Data_3:	.incbin "includes/generated/se_drumkit_display.bin", 0xC6, 0x4B
@@ -13276,8 +13269,7 @@ SeScreenData_0x20C9:
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_sel2.c)
 ; reader (se_screendata_model.py): static record list(s) from here, read by GraphicsRender_ProcessEntries;
 ; evidence: SeMenu_BankEdit_SetupPath
-SeScreenData_0x20FB:
-	.incbin "includes/generated/se_setup_sel2.bin"
+SeScreenData_0x20FB:	.incbin "includes/generated/se_setup_sel2.bin"
 	; head of the next record, split off at se_setup_sel2's proven end
 	; tail of the record before se_screen_f12d33, split off at its proven boundary
 ; box table: {x1, y1, x2, y2} u16 per entry, indexed by a bound op 03/04/08
@@ -13291,8 +13283,7 @@ SeScreenData_0x2105:
 	.short	61, 166, 252, 180
 ; se_screen_f12d33: 15 bytes -- screen layout data, base 0xF12D33
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_screen_f12d33.c)
-SeScreenData_0x212D:
-	.incbin "includes/generated/se_screen_f12d33.bin"
+SeScreenData_0x212D:	.incbin "includes/generated/se_screen_f12d33.bin"
 ; string table, 6-char cells, indexed by a bound record's value (field +7 of
 ; a bound op 02/07 record; value at most 8 by the record's mask; the table holds 6 cells; values >= 6 would read past it)
 ; evidence: bound op02 record at SeScreenData_0x212D
@@ -14314,8 +14305,7 @@ SeScreenData_0x30EC:
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_rhythm.c)
 ; reader (se_screendata_model.py): static record list(s) from here, read by GraphicsRender_ProcessEntries;
 ; evidence: SeMenu_PresetInit_Main
-SeScreenData_0x336C:
-	.incbin "includes/generated/se_setup_rhythm.bin"
+SeScreenData_0x336C:	.incbin "includes/generated/se_setup_rhythm.bin"
 	; head of the next record, split off at se_setup_rhythm's proven end
 	sd_quad	0x22, 11, 56, 230, 202
 	sd_quad	0x22, 242, 154, 289, 202
@@ -14340,8 +14330,7 @@ SeScreenData_0x336C:
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_screen_f140ef.c)
 ; reader (se_screendata_model.py): static record list(s) from here, read by GraphicsRender_ProcessEntries;
 ; evidence: SeMenu_FxEdit_Init, SeMenu_FxEdit_DataBlock1
-SeScreenData_0x34E9:
-	.incbin "includes/generated/se_screen_f140ef.bin", 0x0, 0xA
+SeScreenData_0x34E9:		.incbin "includes/generated/se_screen_f140ef.bin", 0x0, 0xA
 SeMenu_FxEdit_Init_Data:	.incbin "includes/generated/se_screen_f140ef.bin", 0xA, 0x70
 SeMenu_FxEdit_Init_Data_2:	.incbin "includes/generated/se_screen_f140ef.bin", 0x7A, 0x3A
 	; head of the next record, split off at se_screen_f140ef's proven end
@@ -14636,8 +14625,7 @@ SeScreenData_0x3BDB:
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_ctrl_full.c)
 ; reader (se_screendata_model.py): static record list(s) from here, read by GraphicsRender_ProcessEntries;
 ; evidence: SeMenu_EqEdit_SetupHelper1
-SeScreenData_0x3C03:
-	.incbin "includes/generated/se_setup_ctrl_full.bin", 0x0, 0x2F
+SeScreenData_0x3C03:			.incbin "includes/generated/se_setup_ctrl_full.bin", 0x0, 0x2F
 SeMenu_EqEdit_SetupHelper1_Data:	.incbin "includes/generated/se_setup_ctrl_full.bin", 0x2F, 0x5
 SeMenu_FilterEdit_DataBlock5_Data:	.incbin "includes/generated/se_setup_ctrl_full.bin", 0x34, 0x73
 	; head of the next record, split off at se_setup_ctrl_full's proven end
@@ -14772,8 +14760,7 @@ SeScreenData_0x3E8C:
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_sel_rects.c)
 ; reader (se_screendata_model.py): static record list(s) from here, read by GraphicsRender_ProcessEntries;
 ; evidence: SeMenu_EqEdit_SetupPath
-SeScreenData_0x41CC:
-	.incbin "includes/generated/se_setup_sel_rects.bin"
+SeScreenData_0x41CC:	.incbin "includes/generated/se_setup_sel_rects.bin"
 	; head of the next record, split off at se_setup_sel_rects's proven end
 ; box table: {x1, y1, x2, y2} u16 per entry, indexed by a bound op 03/04/08
 ; record's value (pointer field +7; value at most 8 by the record's mask; the table holds 7 cells; values >= 7 would read past it)
@@ -14790,8 +14777,7 @@ SeScreenData_0x41EA:
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_sel3.c)
 ; reader (se_screendata_model.py): bound record list(s) from here, read by GraphicsRender_Start;
 ; evidence: SeMenu_EqEdit_Init, SeMenu_EqEdit_DrawInit
-SeScreenData_0x4222:
-	.incbin "includes/generated/se_setup_sel3.bin"
+SeScreenData_0x4222:	.incbin "includes/generated/se_setup_sel3.bin"
 ; string table, 4-char cells, indexed by a bound record's value (field +7 of
 ; a bound op 02/07 record; value at most 2 by the record's mask; the table holds 2 cells)
 ; evidence: bound op02 record at SeScreenData_0x4222
