@@ -30432,12 +30432,11 @@ CmpNcpTtl_Dispatch_Code_Skip13:
 	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
-	.byte 0x3a	; v10 does not spell this byte either
-	.byte 0x3b	; v10 does not spell this byte either
-	.byte 0x3c	; v10 does not spell this byte either
-	.byte 0x3e	; v10 does not spell this byte either
-	.byte 0x20	; v10 does not spell this byte either
-	.byte 0x80	; v10 does not spell this byte either
+	push	xde	; four pushes and `ld w, 0x80`, spelled as six .byte lines until 2026-10-06
+	push	xhl
+	push	xix
+	push	xiz
+	ld	w, 0x80:opc
 	call	DrumVoice_Handler7_Data_3_Sub
 	pop	xiz
 	pop	xix
@@ -30609,10 +30608,7 @@ CmpNcpTtl_Dispatch_Code_Skip12:
 CmpNcpTtl_Dispatch_Code_Join2:
 	call	ApDeliveryEvent
 	jr	CmEsy_ReturnZero
-	.byte 0xf1	; v10 does not spell this byte either
-	.byte 0x35	; v10 does not spell this byte either
-	.byte 0x34	; v10 does not spell this byte either
-	.byte 0xb8	; v10 does not spell this byte either
+	set	0, (0x3435:16)	; was four .byte lines
 CmEsy_ReturnZero:
 	ld xhl, 0:i3
 	ret

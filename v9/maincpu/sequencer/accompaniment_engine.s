@@ -31464,7 +31464,11 @@ CmpNcpTtl_Dispatch_Code_Skip13:
 	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
-	.ascii ":;<> €"
+	push	xde	; four pushes and `ld w, 0x80`, spelled as .ascii ":;<> \x80" until 2026-10-06
+	push	xhl
+	push	xix
+	push	xiz
+	ld	w, 0x80:opc
 	call	DrumVoice_Handler7_Data_3_Sub
 	pop	xiz
 	pop	xix
@@ -31622,7 +31626,7 @@ CmpNcpTtl_Dispatch_Code_Skip11:
 CmpNcpTtl_Dispatch_Code_Join2:
 	call	ApDeliveryEvent
 	jr	CmEsy_ReturnZero
-	.byte 0xf1, 0xd1, 0x34, 0xb8
+	set	0, (0x34d1:16)	; was .byte 0xf1, 0xd1, 0x34, 0xb8
 
 CmEsy_ReturnZero:
 	ld xhl, 0:i3

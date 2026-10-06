@@ -1158,7 +1158,7 @@ PanelDisplay_DispatchByMode_Loop4:
 	cp	bc, 4:i3
 	jr	c, PanelDisplay_DispatchByMode_Loop4
 	jr	t, DSPCfg_Param_Default
-	.asciz	"B@4="
+	ld	xde, 0x3d3440	; was .asciz "B@4="
 	lda	xhl, (0x0340fa:24)
 	ld	bc, 0:i3
 PanelDisplay_DispatchByMode_Loop5:
