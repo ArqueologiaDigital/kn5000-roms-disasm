@@ -592,31 +592,25 @@ IvShowHideProc_Str_Show:				.incbin "includes/generated/naka_disk_warning.bin", 
 AcPmemName_Confirm_Str_PMEM_Fmt2d_Fmtd_Fmt16s:		.incbin "includes/generated/naka_disk_warning.bin", 0x1720, 0x12	; "PMEM:%2d-%d %16s"
 AcPmemName_Confirm_ZeroIndex_Str_PMEM_Fmt2d_Fmt16s:	.incbin "includes/generated/naka_disk_warning.bin", 0x1732, 0x10	; "PMEM:%2d-  %16s"
 AcPmemName_Confirm_EmptySlot_Str_PMEM_Fmt2d:		.incbin "includes/generated/naka_disk_warning.bin", 0x1742, 0x1C	; "PMEM:%2d-                  "
-; [nakarest] naka_disk_warning+0x175e  +0x175e..+0x1860 (0xeaa40a, 258 B)
-; [nakarest] purpose not established: layout of 258 B at 0xeaa40a not derived; readers below
-; [nakarest] Readers: source references AcMixerVol_Paint (ui/ui_widget_defs.s: `ld xhl,
-; [nakarest] AcMixerVol_Paint_PtrTable`).
-AcMixerVol_Paint_PtrTable:	.incbin "includes/generated/naka_disk_warning.bin", 0x175E, 0x102	; 28 x 32-bit pointer
-; [nakarest] naka_disk_warning+0x1860  +0x1860..+0x1864 (0xeaa50c, 4 B)
-; [nakarest] purpose not established: layout of 4 B at 0xeaa50c not derived; readers below
-; [nakarest] Readers: source references AcMixerVol_Confirm (ui/ui_widget_defs.s: `ld
-; [nakarest] XWA,AcMixerVol_Confirm_Data`), AcMixerVol_FastScroll (ui/ui_widget_defs.s: `ld xde,
-; [nakarest] AcMixerVol_Confirm_Data`), AcMixerVol_FastScroll_Increment (ui/ui_widget_defs.s: `ld xde,
-; [nakarest] AcMixerVol_Confirm_Data`), AcMixerVol_OK (ui/ui_widget_defs.s: `ld XBC,AcMixerVol_Confirm_Data`), 3 more.
-AcMixerVol_Confirm_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x1860, 0x4
-; [nakarest] naka_disk_warning+0x1864  +0x1864..+0x1978 (0xeaa510, 276 B)
-; [nakarest] purpose not established: layout of 276 B at 0xeaa510 not derived; readers below
-; [nakarest] Readers: source references AcMixerVol_Confirm (ui/ui_widget_defs.s: `lda xwa,
-; [nakarest] (AcMixerVol_Confirm_Data_2:24)`), AcMixerVol_OK (ui/ui_widget_defs.s: `lda xwa,
-; [nakarest] (AcMixerVol_Confirm_Data_2:24)`).
-AcMixerVol_Confirm_Data_2:	.incbin "includes/generated/naka_disk_warning.bin", 0x1864, 0x114
+; AcMixerVol_ChannelNamePtrs -- 28 pointers to the mixer channel names (RT1 RT2 LEFT PT4..PT16 ACP1..3 BASS
+; DRUM CHRD RTBS MSP MSP CTRL METR MIC), parallel to AcMixerVol_Channels; read by AcMixerVol_Paint.  The
+; strings follow the table.
+AcMixerVol_ChannelNamePtrs:	.incbin "includes/generated/naka_disk_warning.bin", 0x175E, 0x102	; 28 x 32-bit pointer
+; AcMixerVol_Channels -- 28 mixer channels x {u32 volume_key, u32 mute_key, u16 lsw_word}, indexed by the
+; AcMixerVol widget's +28 word (10 * index).  AcMixerVol_DrawChannel (EVT_PARA_DRAW) prints the volume and draws
+; "MUTE" when SndParam_LookupReadOnly(mute_key) is 1; the switch arms pass (key, lsw_word) to MainLswPut /
+; MainLswAdd.  Channels 0-22 are part tags 0-22 (keys 0x8000 + 0x400*T + 0x07 / + 0x08), so part field k = 0x08
+; is the MUTE flag.  Channel names: AcMixerVol_ChannelNamePtrs.  Typed in ui_widgets/naka_disk_warning.c
+; (scripts/converters/mixer_channel_table_retype.py).
+AcMixerVol_Channels:	.incbin "includes/generated/naka_disk_warning.bin", 0x1860, 0x118
+	.set AcMixerVol_Channels_MuteKey, AcMixerVol_Channels + 4	; the mute_key column
 ; [nakarest] naka_disk_warning+0x1978  +0x1978..+0x1a0e (0xeaa624, 150 B)
 ; [nakarest] purpose not established: layout of 150 B at 0xeaa624 not derived; readers below
 ; [nakarest] Readers: source references AcMixerVol_PartSelect_DrawIcon (ui/ui_widget_defs.s:
 ; [nakarest] `lda xde, (AcMixerVol_PartSelect_DrawIcon_Data:24)`).
 AcMixerVol_PartSelect_DrawIcon_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x1978, 0x8C
-AcMixerVol_Confirm_Str_Fmt3d:		.incbin "includes/generated/naka_disk_warning.bin", 0x1A04, 0x4	; "%3d"
-AcMixerVol_Confirm_Str_MUTE:		.incbin "includes/generated/naka_disk_warning.bin", 0x1A08, 0x6	; "MUTE"
+AcMixerVol_DrawChannel_Str_Fmt3d:		.incbin "includes/generated/naka_disk_warning.bin", 0x1A04, 0x4	; "%3d"
+AcMixerVol_DrawChannel_Str_MUTE:		.incbin "includes/generated/naka_disk_warning.bin", 0x1A08, 0x6	; "MUTE"
 ; [nakarest] naka_disk_warning+0x1a0e  +0x1a0e..+0x1a4e (0xeaa6ba, 64 B)
 ; [nakarest] Text (64 B at 0xeaa6ba), first string "Debug Time!"; no registered NAKA table
 ; [nakarest] points into it; reached through source references DbMemo_Paint

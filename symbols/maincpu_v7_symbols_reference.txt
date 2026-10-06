@@ -9424,12 +9424,12 @@ IvShowHideProc_Str_Show 00EAA3C6
 AcPmemName_Confirm_Str_PMEM_Fmt2d_Fmtd_Fmt16s 00EAA3CC
 AcPmemName_Confirm_ZeroIndex_Str_PMEM_Fmt2d_Fmt16s 00EAA3DE
 AcPmemName_Confirm_EmptySlot_Str_PMEM_Fmt2d 00EAA3EE
-AcMixerVol_Paint_PtrTable 00EAA40A
-AcMixerVol_Confirm_Data 00EAA50C
-AcMixerVol_Confirm_Data_2 00EAA510
+AcMixerVol_ChannelNamePtrs 00EAA40A
+AcMixerVol_Channels 00EAA50C
+AcMixerVol_Channels_MuteKey 00EAA510
 AcMixerVol_PartSelect_DrawIcon_Data 00EAA624
-AcMixerVol_Confirm_Str_Fmt3d 00EAA6B0
-AcMixerVol_Confirm_Str_MUTE 00EAA6B4
+AcMixerVol_DrawChannel_Str_Fmt3d 00EAA6B0
+AcMixerVol_DrawChannel_Str_MUTE 00EAA6B4
 DbMemo_Paint_Str_Debug_Time 00EAA6BA
 DbMemDump_Confirm_RowLoop_Str_Fmt2X_Fmt4X 00EAA6C6
 DbMemDump_Confirm_RowLoop_Str_Fmt2X_Fmt2X_Fmt2X_Fmt2X_Fmt2X 00EAA6D2
@@ -12991,7 +12991,7 @@ SndParamRun_EDC7FA 00EDC7FA
 SndParam_Part00_Sound 00EDC80C
 SndParam_Part00_Modulation 00EDC81E
 SndParam_Part00_Volume 00EDC830
-MidiChParam_Entry_089 00EDC842
+SndParam_Part00_Mute 00EDC842
 SndParam_Part00_Pan 00EDC854
 SndParam_Part00_Expression 00EDC866
 SndParam_Part00_Bank 00EDC878
@@ -13029,7 +13029,7 @@ VoiceParamEx_Entry_006 00EDCA6A
 SndParam_Part01_Sound 00EDCA7C
 SndParam_Part01_Modulation 00EDCA8E
 SndParam_Part01_Volume 00EDCAA0
-VoiceParamEx_Entry_010 00EDCAB2
+SndParam_Part01_Mute 00EDCAB2
 SndParam_Part01_Pan 00EDCAC4
 SndParam_Part01_Expression 00EDCAD6
 SndParam_Part01_Bank 00EDCAE8
@@ -13062,7 +13062,7 @@ VoiceParamEx_Entry_039 00EDCCBC
 SndParam_Part02_Sound 00EDCCCE
 SndParam_Part02_Modulation 00EDCCE0
 SndParam_Part02_Volume 00EDCCF2
-VoiceParamEx_Entry_043 00EDCD04
+SndParam_Part02_Mute 00EDCD04
 SndParam_Part02_Pan 00EDCD16
 SndParam_Part02_Expression 00EDCD28
 SndParam_Part02_Bank 00EDCD3A
@@ -13095,7 +13095,7 @@ VoiceParamEx_Entry_072 00EDCF0E
 SndParam_Part03_Sound 00EDCF20
 SndParam_Part03_Modulation 00EDCF32
 SndParam_Part03_Volume 00EDCF44
-VoiceParamEx_Entry_076 00EDCF56
+SndParam_Part03_Mute 00EDCF56
 SndParam_Part03_Pan 00EDCF68
 SndParam_Part03_Expression 00EDCF7A
 SndParam_Part03_Bank 00EDCF8C
@@ -13112,7 +13112,7 @@ PartParam_Entry_004 00EDD040
 SndParam_Part04_Sound 00EDD052
 SndParam_Part04_Modulation 00EDD064
 SndParam_Part04_Volume 00EDD076
-PartParam_Entry_008 00EDD088
+SndParam_Part04_Mute 00EDD088
 SndParam_Part04_Pan 00EDD09A
 SndParam_Part04_Expression 00EDD0AC
 SndParam_Part04_Bank 00EDD0BE
@@ -13129,7 +13129,7 @@ PartParam_Entry_021 00EDD172
 SndParam_Part05_Sound 00EDD184
 SndParam_Part05_Modulation 00EDD196
 SndParam_Part05_Volume 00EDD1A8
-PartParam_Entry_025 00EDD1BA
+SndParam_Part05_Mute 00EDD1BA
 SndParam_Part05_Pan 00EDD1CC
 SndParam_Part05_Expression 00EDD1DE
 SndParam_Part05_Bank 00EDD1F0
@@ -13146,7 +13146,7 @@ PartParam_Entry_038 00EDD2A4
 SndParam_Part06_Sound 00EDD2B6
 SndParam_Part06_Modulation 00EDD2C8
 SndParam_Part06_Volume 00EDD2DA
-PartParam_Entry_042 00EDD2EC
+SndParam_Part06_Mute 00EDD2EC
 SndParam_Part06_Pan 00EDD2FE
 SndParam_Part06_Expression 00EDD310
 SndParam_Part06_Bank 00EDD322
@@ -13163,7 +13163,7 @@ PartParam_Entry_055 00EDD3D6
 SndParam_Part07_Sound 00EDD3E8
 SndParam_Part07_Modulation 00EDD3FA
 SndParam_Part07_Volume 00EDD40C
-PartParam_Entry_059 00EDD41E
+SndParam_Part07_Mute 00EDD41E
 SndParam_Part07_Pan 00EDD430
 SndParam_Part07_Expression 00EDD442
 SndParam_Part07_Bank 00EDD454
@@ -13180,7 +13180,7 @@ PartParam_Entry_072 00EDD508
 SndParam_Part08_Sound 00EDD51A
 SndParam_Part08_Modulation 00EDD52C
 SndParam_Part08_Volume 00EDD53E
-PartParam_Entry_076 00EDD550
+SndParam_Part08_Mute 00EDD550
 SndParam_Part08_Pan 00EDD562
 SndParam_Part08_Expression 00EDD574
 SndParam_Part08_Bank 00EDD586
@@ -13197,7 +13197,7 @@ PartParam_Entry_089 00EDD63A
 SndParam_Part09_Sound 00EDD64C
 SndParam_Part09_Modulation 00EDD65E
 SndParam_Part09_Volume 00EDD670
-PartParam_Entry_093 00EDD682
+SndParam_Part09_Mute 00EDD682
 SndParam_Part09_Pan 00EDD694
 SndParam_Part09_Expression 00EDD6A6
 SndParam_Part09_Bank 00EDD6B8
@@ -13214,7 +13214,7 @@ PartParam_Entry_106 00EDD76C
 SndParam_Part0A_Sound 00EDD77E
 SndParam_Part0A_Modulation 00EDD790
 SndParam_Part0A_Volume 00EDD7A2
-PartParam_Entry_110 00EDD7B4
+SndParam_Part0A_Mute 00EDD7B4
 SndParam_Part0A_Pan 00EDD7C6
 SndParam_Part0A_Expression 00EDD7D8
 SndParam_Part0A_Bank 00EDD7EA
@@ -13231,7 +13231,7 @@ PartParam_Entry_123 00EDD89E
 SndParam_Part0B_Sound 00EDD8B0
 SndParam_Part0B_Modulation 00EDD8C2
 SndParam_Part0B_Volume 00EDD8D4
-PartParam_Entry_127 00EDD8E6
+SndParam_Part0B_Mute 00EDD8E6
 SndParam_Part0B_Pan 00EDD8F8
 SndParam_Part0B_Expression 00EDD90A
 SndParam_Part0B_Bank 00EDD91C
@@ -13248,7 +13248,7 @@ PartParam_Entry_140 00EDD9D0
 SndParam_Part0C_Sound 00EDD9E2
 SndParam_Part0C_Modulation 00EDD9F4
 SndParam_Part0C_Volume 00EDDA06
-PartParam_Entry_144 00EDDA18
+SndParam_Part0C_Mute 00EDDA18
 SndParam_Part0C_Pan 00EDDA2A
 SndParam_Part0C_Expression 00EDDA3C
 SndParam_Part0C_Bank 00EDDA4E
@@ -13265,7 +13265,7 @@ PartParam_Entry_157 00EDDB02
 SndParam_Part0D_Sound 00EDDB14
 SndParam_Part0D_Modulation 00EDDB26
 SndParam_Part0D_Volume 00EDDB38
-PartParam_Entry_161 00EDDB4A
+SndParam_Part0D_Mute 00EDDB4A
 SndParam_Part0D_Pan 00EDDB5C
 SndParam_Part0D_Expression 00EDDB6E
 SndParam_Part0D_Bank 00EDDB80
@@ -13282,7 +13282,7 @@ PartParam_Entry_174 00EDDC34
 SndParam_Part0E_Sound 00EDDC46
 SndParam_Part0E_Modulation 00EDDC58
 SndParam_Part0E_Volume 00EDDC6A
-PartParam_Entry_178 00EDDC7C
+SndParam_Part0E_Mute 00EDDC7C
 SndParam_Part0E_Pan 00EDDC8E
 SndParam_Part0E_Expression 00EDDCA0
 SndParam_Part0E_Bank 00EDDCB2
@@ -13299,7 +13299,7 @@ PartParam_Entry_191 00EDDD66
 SndParam_Part0F_Sound 00EDDD78
 SndParam_Part0F_Modulation 00EDDD8A
 SndParam_Part0F_Volume 00EDDD9C
-PartParam_Entry_195 00EDDDAE
+SndParam_Part0F_Mute 00EDDDAE
 SndParam_Part0F_Pan 00EDDDC0
 SndParam_Part0F_Expression 00EDDDD2
 SndParam_Part0F_Bank 00EDDDE4
@@ -13316,7 +13316,7 @@ PartParam_Entry_208 00EDDE98
 SndParam_Part10_Sound 00EDDEAA
 SndParam_Part10_Modulation 00EDDEBC
 SndParam_Part10_Volume 00EDDECE
-PartParam_Entry_212 00EDDEE0
+SndParam_Part10_Mute 00EDDEE0
 SndParam_Part10_Pan 00EDDEF2
 SndParam_Part10_Expression 00EDDF04
 SndParam_Part10_Bank 00EDDF16
@@ -13333,7 +13333,7 @@ PartParam_Entry_225 00EDDFCA
 SndParam_Part11_Sound 00EDDFDC
 SndParam_Part11_Modulation 00EDDFEE
 SndParam_Part11_Volume 00EDE000
-ExtPartParam_Entry_229 00EDE012
+SndParam_Part11_Mute 00EDE012
 SndParam_Part11_Pan 00EDE024
 SndParam_Part11_Expression 00EDE036
 SndParam_Part11_Bank 00EDE048
@@ -13350,7 +13350,7 @@ ExtPartParam_Entry_242 00EDE0FC
 SndParam_Part12_Sound 00EDE10E
 SndParam_Part12_Modulation 00EDE120
 SndParam_Part12_Volume 00EDE132
-ExtPartParam_Entry_246 00EDE144
+SndParam_Part12_Mute 00EDE144
 SndParam_Part12_Pan 00EDE156
 SndParam_Part12_Expression 00EDE168
 SndParam_Part12_Bank 00EDE17A
@@ -13367,7 +13367,7 @@ ExtPartParam_Entry_259 00EDE22E
 SndParam_Part13_Sound 00EDE240
 SndParam_Part13_Modulation 00EDE252
 SndParam_Part13_Volume 00EDE264
-ExtPartParam_Entry_263 00EDE276
+SndParam_Part13_Mute 00EDE276
 SndParam_Part13_Pan 00EDE288
 SndParam_Part13_Expression 00EDE29A
 SndParam_Part13_Bank 00EDE2AC
@@ -13384,7 +13384,7 @@ ExtPartParam_Entry_276 00EDE360
 SndParam_Part14_Sound 00EDE372
 SndParam_Part14_Modulation 00EDE384
 SndParam_Part14_Volume 00EDE396
-ExtPartParam_Entry_280 00EDE3A8
+SndParam_Part14_Mute 00EDE3A8
 SndParam_Part14_Pan 00EDE3BA
 SndParam_Part14_Expression 00EDE3CC
 SndParam_Part14_Bank 00EDE3DE
@@ -13401,7 +13401,7 @@ ExtPartParam_Entry_293 00EDE492
 SndParam_Part15_Sound 00EDE4A4
 SndParam_Part15_Modulation 00EDE4B6
 SndParam_Part15_Volume 00EDE4C8
-ExtPartParam_Entry_297 00EDE4DA
+SndParam_Part15_Mute 00EDE4DA
 SndParam_Part15_Pan 00EDE4EC
 SndParam_Part15_Expression 00EDE4FE
 SndParam_Part15_Bank 00EDE510
@@ -13418,7 +13418,7 @@ ExtPartParam_Entry_310 00EDE5C4
 SndParam_Part16_Sound 00EDE5D6
 SndParam_Part16_Modulation 00EDE5E8
 SndParam_Part16_Volume 00EDE5FA
-ExtPartParam_Entry_314 00EDE60C
+SndParam_Part16_Mute 00EDE60C
 SndParam_Part16_Pan 00EDE61E
 SndParam_Part16_Expression 00EDE630
 SndParam_Part16_Bank 00EDE642
@@ -13435,7 +13435,7 @@ ExtPartParam_Entry_327 00EDE6F6
 SndParam_Part17_Sound 00EDE708
 SndParam_Part17_Modulation 00EDE71A
 SndParam_Part17_Volume 00EDE72C
-ExtPartParam_Entry_331 00EDE73E
+SndParam_Part17_Mute 00EDE73E
 SndParam_Part17_Pan 00EDE750
 SndParam_Part17_Expression 00EDE762
 SndParam_Part17_Bank 00EDE774
@@ -13452,7 +13452,7 @@ ExtPartParam_Entry_344 00EDE828
 SndParam_Part18_Sound 00EDE83A
 SndParam_Part18_Modulation 00EDE84C
 SndParam_Part18_Volume 00EDE85E
-ExtPartParam_Entry_348 00EDE870
+SndParam_Part18_Mute 00EDE870
 SndParam_Part18_Pan 00EDE882
 SndParam_Part18_Expression 00EDE894
 SndParam_Part18_Bank 00EDE8A6
@@ -42051,7 +42051,7 @@ AcMixerVol_Close 00FA240F
 AcMixerVol_ShowHide 00FA241A
 AcMixerVol_ForwardVwBox 00FA2423
 AcMixerVol_Paint 00FA2429
-AcMixerVol_Confirm 00FA24CA
+AcMixerVol_DrawChannel 00FA24CA
 AcMixerVol_PartSelect 00FA260B
 AcMixerVol_PartSelect_Ch1A 00FA262C
 AcMixerVol_PartSelect_Default 00FA2639

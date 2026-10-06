@@ -163,9 +163,39 @@ all 25 parts carry the same `(byte, mask)` per `k`, asserted by `scripts/renamin
 
 **[INFERENCE, with the evidence above]** The controller reading is not stated by the firmware; it is the one
 reading under which the constants are not arbitrary: eight of them land on the very byte or bit the controller of
-that number governs, and two of those are confirmed by the panel buttons that set them. `k = 0x08` (`+3`, `80`),
-`0x78`, `0x80`-`0x82` and `0x1B0`/`0x1B2` are not named. The drawbar keys `0x280`-`0x288` of parts 0-2 are the nine
+that number governs, and two of those are confirmed by the panel buttons that set them. `k = 0x08` (`+3`, `80`)
+is the part's MUTE flag (section 6, 2026-10-06). `0x78`, `0x80`-`0x82` and `0x1B0`/`0x1B2` are not named. The drawbar keys `0x280`-`0x288` of parts 0-2 are the nine
 footages of section 2. `gen_sndparam_desc_names.py` names those descriptors `SndParam_Part<TT>_<Field>`.
+
+## 6. `k = 0x08` is the part MUTE flag, and the part tags in mixer order (2026-10-06)
+
+The mixer-volume widget (`AcMixerVolProc`, `ui/ui_widget_defs.s`) has a 28-entry channel table, `AcMixerVol_Channels`
+(`naka_disk_warning` `+0x1860`, typed as `mixer_channel_t` by `scripts/converters/mixer_channel_table_retype.py`).
+Each entry is `{u32 volume_key, u32 mute_key, u16 lsw_word}`, indexed by the widget's `+28` word. Its EVT_PARA_DRAW arm,
+`AcMixerVol_DrawChannel`, does two things:
+
+* it prints `SndParam_LookupReadOnly(volume_key)` as `"%3d"` and places the fader bitmap from it;
+* it draws `"MUTE"` (reversed) when `SndParam_LookupReadOnly(mute_key)` is 1.
+
+For channels 0-22 the script asserts `volume_key = 0x8000 + 0x400*T + 0x07` and `mute_key = 0x8000 + 0x400*T + 0x08`
+with `T` = the channel, in v10, v9 and v7. So the `k = 0x08` descriptor of every part, which edits bit 7 of the same
+byte as the volume (`+3`, mask `0x80` against `0x7F`), is the value the mixer shows as MUTE. **[PROVEN for the
+display; that the sound engine silences the part on it is not read here.]**
+
+The parallel name table `AcMixerVol_ChannelNamePtrs` labels the channels, which gives the part tags their panel
+names:
+
+| tag `T` | 0 | 1 | 2 | 3-15 | 16-18 | 19 | 20 | 21 | 22 |
+|---|---|---|---|---|---|---|---|---|---|
+| mixer name | RT1 | RT2 | LEFT | PT4-PT16 | ACP1-ACP3 | BASS | DRUM | CHRD | RTBS |
+
+Channels 23-27 are not parts: MSP and MSP again (keys `0x28801` / `0x2880B`), CTRL (`0xE407` / `0xE408`, tag `0x19`
+of the same law, outside the part id block), METR (`0xE807` / `0xE808`) and MIC (`0x4141` / `0x4142`). Their
+`lsw_word` is 4 except METR and MIC (3). `lsw_word` goes to `MainLswPut` / `MainLswAdd` as DE, which stores it at
+`+6` of the 12-byte EVT_LSW_PUT packet for `MainPmanControl`; what it selects is not read here.
+
+`gen_sndparam_desc_names.py` now names the 25 `k = 0x08` descriptors `SndParam_Part<TT>_Mute`.
+
 
 ## PROVEN vs INFERRED
 

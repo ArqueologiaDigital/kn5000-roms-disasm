@@ -267,7 +267,7 @@ SndParam_RegisterLoop_Data:
 	.long SndParam_Part00_Sound
 	.long SndParam_Part00_Modulation
 	.long SndParam_Part00_Volume
-	.long MidiChParam_Entry_089
+	.long SndParam_Part00_Mute
 	.long SndParam_Part00_Pan
 	.long SndParam_Part00_Expression
 	.long SndParam_Part00_Bank
@@ -300,7 +300,7 @@ SndParam_RegisterLoop_Data:
 	.long SndParam_Part01_Sound
 	.long SndParam_Part01_Modulation
 	.long SndParam_Part01_Volume
-	.long VoiceParamEx_Entry_010
+	.long SndParam_Part01_Mute
 	.long SndParam_Part01_Pan
 	.long SndParam_Part01_Expression
 	.long SndParam_Part01_Bank
@@ -333,7 +333,7 @@ SndParam_RegisterLoop_Data:
 	.long SndParam_Part02_Sound
 	.long SndParam_Part02_Modulation
 	.long SndParam_Part02_Volume
-	.long VoiceParamEx_Entry_043
+	.long SndParam_Part02_Mute
 	.long SndParam_Part02_Pan
 	.long SndParam_Part02_Expression
 	.long SndParam_Part02_Bank
@@ -366,7 +366,7 @@ SndParam_RegisterLoop_Data:
 	.long SndParam_Part03_Sound
 	.long SndParam_Part03_Modulation
 	.long SndParam_Part03_Volume
-	.long VoiceParamEx_Entry_076
+	.long SndParam_Part03_Mute
 	.long SndParam_Part03_Pan
 	.long SndParam_Part03_Expression
 	.long SndParam_Part03_Bank
@@ -383,7 +383,7 @@ SndParam_RegisterLoop_Data:
 	.long SndParam_Part04_Sound
 	.long SndParam_Part04_Modulation
 	.long SndParam_Part04_Volume
-	.long PartParam_Entry_008
+	.long SndParam_Part04_Mute
 	.long SndParam_Part04_Pan
 	.long SndParam_Part04_Expression
 	.long SndParam_Part04_Bank
@@ -400,7 +400,7 @@ SndParam_RegisterLoop_Data:
 	.long SndParam_Part05_Sound
 	.long SndParam_Part05_Modulation
 	.long SndParam_Part05_Volume
-	.long PartParam_Entry_025
+	.long SndParam_Part05_Mute
 	.long SndParam_Part05_Pan
 	.long SndParam_Part05_Expression
 	.long SndParam_Part05_Bank
@@ -417,7 +417,7 @@ SndParam_RegisterLoop_Data:
 	.long SndParam_Part06_Sound
 	.long SndParam_Part06_Modulation
 	.long SndParam_Part06_Volume
-	.long PartParam_Entry_042
+	.long SndParam_Part06_Mute
 	.long SndParam_Part06_Pan
 	.long SndParam_Part06_Expression
 	.long SndParam_Part06_Bank
@@ -434,7 +434,7 @@ SndParam_RegisterLoop_Data:
 	.long SndParam_Part07_Sound
 	.long SndParam_Part07_Modulation
 	.long SndParam_Part07_Volume
-	.long PartParam_Entry_059
+	.long SndParam_Part07_Mute
 	.long SndParam_Part07_Pan
 	.long SndParam_Part07_Expression
 	.long SndParam_Part07_Bank
@@ -451,7 +451,7 @@ SndParam_RegisterLoop_Data:
 	.long SndParam_Part08_Sound
 	.long SndParam_Part08_Modulation
 	.long SndParam_Part08_Volume
-	.long PartParam_Entry_076
+	.long SndParam_Part08_Mute
 	.long SndParam_Part08_Pan
 	.long SndParam_Part08_Expression
 	.long SndParam_Part08_Bank
@@ -468,7 +468,7 @@ SndParam_RegisterLoop_Data:
 	.long SndParam_Part09_Sound
 	.long SndParam_Part09_Modulation
 	.long SndParam_Part09_Volume
-	.long PartParam_Entry_093
+	.long SndParam_Part09_Mute
 	.long SndParam_Part09_Pan
 	.long SndParam_Part09_Expression
 	.long SndParam_Part09_Bank
@@ -485,7 +485,7 @@ SndParam_RegisterLoop_Data:
 	.long SndParam_Part0A_Sound
 	.long SndParam_Part0A_Modulation
 	.long SndParam_Part0A_Volume
-	.long PartParam_Entry_110
+	.long SndParam_Part0A_Mute
 	.long SndParam_Part0A_Pan
 	.long SndParam_Part0A_Expression
 	.long SndParam_Part0A_Bank
@@ -502,7 +502,7 @@ SndParam_RegisterLoop_Data:
 	.long SndParam_Part0B_Sound
 	.long SndParam_Part0B_Modulation
 	.long SndParam_Part0B_Volume
-	.long PartParam_Entry_127
+	.long SndParam_Part0B_Mute
 	.long SndParam_Part0B_Pan
 	.long SndParam_Part0B_Expression
 	.long SndParam_Part0B_Bank
@@ -519,7 +519,7 @@ SndParam_RegisterLoop_Data:
 	.long SndParam_Part0C_Sound
 	.long SndParam_Part0C_Modulation
 	.long SndParam_Part0C_Volume
-	.long PartParam_Entry_144
+	.long SndParam_Part0C_Mute
 	.long SndParam_Part0C_Pan
 	.long SndParam_Part0C_Expression
 	.long SndParam_Part0C_Bank
@@ -536,7 +536,7 @@ SndParam_RegisterLoop_Data:
 	.long SndParam_Part0D_Sound
 	.long SndParam_Part0D_Modulation
 	.long SndParam_Part0D_Volume
-	.long PartParam_Entry_161
+	.long SndParam_Part0D_Mute
 	.long SndParam_Part0D_Pan
 	.long SndParam_Part0D_Expression
 	.long SndParam_Part0D_Bank
@@ -553,7 +553,7 @@ SndParam_RegisterLoop_Data:
 	.long SndParam_Part0E_Sound
 	.long SndParam_Part0E_Modulation
 	.long SndParam_Part0E_Volume
-	.long PartParam_Entry_178
+	.long SndParam_Part0E_Mute
 	.long SndParam_Part0E_Pan
 	.long SndParam_Part0E_Expression
 	.long SndParam_Part0E_Bank
@@ -570,7 +570,7 @@ SndParam_RegisterLoop_Data:
 	.long SndParam_Part0F_Sound
 	.long SndParam_Part0F_Modulation
 	.long SndParam_Part0F_Volume
-	.long PartParam_Entry_195
+	.long SndParam_Part0F_Mute
 	.long SndParam_Part0F_Pan
 	.long SndParam_Part0F_Expression
 	.long SndParam_Part0F_Bank
@@ -587,7 +587,7 @@ SndParam_RegisterLoop_Data:
 	.long SndParam_Part10_Sound
 	.long SndParam_Part10_Modulation
 	.long SndParam_Part10_Volume
-	.long PartParam_Entry_212
+	.long SndParam_Part10_Mute
 	.long SndParam_Part10_Pan
 	.long SndParam_Part10_Expression
 	.long SndParam_Part10_Bank
@@ -604,7 +604,7 @@ SndParam_RegisterLoop_Data:
 	.long SndParam_Part11_Sound
 	.long SndParam_Part11_Modulation
 	.long SndParam_Part11_Volume
-	.long ExtPartParam_Entry_229
+	.long SndParam_Part11_Mute
 	.long SndParam_Part11_Pan
 	.long SndParam_Part11_Expression
 	.long SndParam_Part11_Bank
@@ -621,7 +621,7 @@ SndParam_RegisterLoop_Data:
 	.long SndParam_Part12_Sound
 	.long SndParam_Part12_Modulation
 	.long SndParam_Part12_Volume
-	.long ExtPartParam_Entry_246
+	.long SndParam_Part12_Mute
 	.long SndParam_Part12_Pan
 	.long SndParam_Part12_Expression
 	.long SndParam_Part12_Bank
@@ -638,7 +638,7 @@ SndParam_RegisterLoop_Data:
 	.long SndParam_Part13_Sound
 	.long SndParam_Part13_Modulation
 	.long SndParam_Part13_Volume
-	.long ExtPartParam_Entry_263
+	.long SndParam_Part13_Mute
 	.long SndParam_Part13_Pan
 	.long SndParam_Part13_Expression
 	.long SndParam_Part13_Bank
@@ -655,7 +655,7 @@ SndParam_RegisterLoop_Data:
 	.long SndParam_Part14_Sound
 	.long SndParam_Part14_Modulation
 	.long SndParam_Part14_Volume
-	.long ExtPartParam_Entry_280
+	.long SndParam_Part14_Mute
 	.long SndParam_Part14_Pan
 	.long SndParam_Part14_Expression
 	.long SndParam_Part14_Bank
@@ -672,7 +672,7 @@ SndParam_RegisterLoop_Data:
 	.long SndParam_Part15_Sound
 	.long SndParam_Part15_Modulation
 	.long SndParam_Part15_Volume
-	.long ExtPartParam_Entry_297
+	.long SndParam_Part15_Mute
 	.long SndParam_Part15_Pan
 	.long SndParam_Part15_Expression
 	.long SndParam_Part15_Bank
@@ -689,7 +689,7 @@ SndParam_RegisterLoop_Data:
 	.long SndParam_Part16_Sound
 	.long SndParam_Part16_Modulation
 	.long SndParam_Part16_Volume
-	.long ExtPartParam_Entry_314
+	.long SndParam_Part16_Mute
 	.long SndParam_Part16_Pan
 	.long SndParam_Part16_Expression
 	.long SndParam_Part16_Bank
@@ -706,7 +706,7 @@ SndParam_RegisterLoop_Data:
 	.long SndParam_Part17_Sound
 	.long SndParam_Part17_Modulation
 	.long SndParam_Part17_Volume
-	.long ExtPartParam_Entry_331
+	.long SndParam_Part17_Mute
 	.long SndParam_Part17_Pan
 	.long SndParam_Part17_Expression
 	.long SndParam_Part17_Bank
@@ -723,7 +723,7 @@ SndParam_RegisterLoop_Data:
 	.long SndParam_Part18_Sound
 	.long SndParam_Part18_Modulation
 	.long SndParam_Part18_Volume
-	.long ExtPartParam_Entry_348
+	.long SndParam_Part18_Mute
 	.long SndParam_Part18_Pan
 	.long SndParam_Part18_Expression
 	.long SndParam_Part18_Bank

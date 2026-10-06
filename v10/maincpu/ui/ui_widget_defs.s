@@ -6248,7 +6248,7 @@ AcMixerVolProc:
 	cp xwa, EVT_SOUND_SW_NO
 	jrl z, AcMixerVol_PartSelect
 	cp xwa, EVT_PARA_DRAW
-	jrl z, AcMixerVol_Confirm
+	jrl z, AcMixerVol_DrawChannel
 	cp xwa, EVT_DRAW
 	jr z, AcMixerVol_Paint
 	cp xwa, EVT_REPAINT
@@ -6318,7 +6318,7 @@ AcMixerVol_Paint:
 	ld de, (xde + 28)
 	extz xde
 	sll xde, 2
-	ld xhl, AcMixerVol_Paint_PtrTable
+	ld xhl, AcMixerVol_ChannelNamePtrs
 	add xhl, xde
 	ld xde, (xhl)
 	ld xhl, 3:i3
@@ -6337,7 +6337,7 @@ AcMixerVol_Paint:
 	ld xbc, EVT_GET_SOUND_SW_NO
 	jrl UIList_SendEvent
 
-AcMixerVol_Confirm:
+AcMixerVol_DrawChannel:
 	ld xwa, (xsp + 44)
 	ld xbc, (xsp + 40)
 	ld xde, (xsp + 36)
@@ -6352,7 +6352,7 @@ AcMixerVol_Confirm:
 	sll xbc, 2
 	add xbc, xwa
 	add xbc, xbc
-	ld xwa, AcMixerVol_Confirm_Data
+	ld xwa, AcMixerVol_Channels
 	add xwa, xbc
 	ld xwa, (xwa)
 	call SndParam_LookupReadOnly
@@ -6364,7 +6364,7 @@ AcMixerVol_Confirm:
 	sll xbc, 2
 	add xbc, xwa
 	add xbc, xbc
-	lda xwa, (AcMixerVol_Confirm_Data_2:24)
+	lda xwa, (AcMixerVol_Channels_MuteKey:24)
 	add xwa, xbc
 	ld xwa, (xwa)
 	call SndParam_LookupReadOnly
@@ -6385,8 +6385,8 @@ AcMixerVol_Confirm:
 	inc 4, wa
 	ld (xbc + 2), wa
 	pushw	(xsp+4)
-	pushw AcMixerVol_Confirm_Str_Fmt3d@hi16
-	pushw AcMixerVol_Confirm_Str_Fmt3d@lo16
+	pushw AcMixerVol_DrawChannel_Str_Fmt3d@hi16
+	pushw AcMixerVol_DrawChannel_Str_Fmt3d@lo16
 	lda xwa, (xsp + 24)
 	push xwa
 	call Sprintf_Locked
@@ -6445,7 +6445,7 @@ AcMixerVol_Confirm:
 	pushw 0x00
 	pushw 0x0
 	pushw 0x1
-	ld xde, AcMixerVol_Confirm_Str_MUTE
+	ld xde, AcMixerVol_DrawChannel_Str_MUTE
 	call DrawStringReverse
 	jrl UIList_ReturnZeroJmp
 
@@ -6510,7 +6510,7 @@ AcMixerVol_ValueChange:
 	sll xwa, 2
 	add xwa, xde
 	add xwa, xwa
-	ld xbc, AcMixerVol_Confirm_Data
+	ld xbc, AcMixerVol_Channels
 	add xbc, xwa
 	ld xhl, (xsp + 36)
 	ld xwa, (xhl)
@@ -6562,7 +6562,7 @@ AcMixerVol_OK:
 	sll xbc, 2
 	add xbc, xwa
 	add xbc, xbc
-	lda xwa, (AcMixerVol_Confirm_Data_2:24)
+	lda xwa, (AcMixerVol_Channels_MuteKey:24)
 	add xwa, xbc
 	ld xwa, (xwa)
 	call SndParam_LookupReadOnly
@@ -6577,7 +6577,7 @@ AcMixerVol_OK:
 	sll xwa, 2
 	add xwa, xbc
 	add xwa, xwa
-	ld xbc, AcMixerVol_Confirm_Data
+	ld xbc, AcMixerVol_Channels
 	add xbc, xwa
 	ld xwa, (xbc + 4)
 	ld de, (xbc + 8)
@@ -6595,7 +6595,7 @@ AcMixerVol_OK_Mute:
 	sll xwa, 2
 	add xwa, xbc
 	add xwa, xwa
-	ld xbc, AcMixerVol_Confirm_Data
+	ld xbc, AcMixerVol_Channels
 	add xbc, xwa
 	ld de, (xbc + 8)
 	ld xwa, (xsp + 36)
@@ -6646,7 +6646,7 @@ AcMixerVol_FastScroll:
 	ld xwa, (xsp + 36)
 	bit 7, wa
 	jr z, AcMixerVol_FastScroll_Increment
-	ld xde, AcMixerVol_Confirm_Data
+	ld xde, AcMixerVol_Channels
 	add xde, xbc
 	ld xwa, (xde)
 	ld de, (xde + 8)
@@ -6654,7 +6654,7 @@ AcMixerVol_FastScroll:
 	jr AcMixerVol_FastScroll_Apply
 
 AcMixerVol_FastScroll_Increment:
-	ld xde, AcMixerVol_Confirm_Data
+	ld xde, AcMixerVol_Channels
 	add xde, xbc
 	ld xwa, (xde)
 	ld de, (xde + 8)
@@ -6699,7 +6699,7 @@ AcMixerVol_Reset:
 	sll xwa, 2
 	add xwa, xbc
 	add xwa, xwa
-	ld xbc, AcMixerVol_Confirm_Data
+	ld xbc, AcMixerVol_Channels
 	add xbc, xwa
 	ld xwa, (xbc + 4)
 	ld de, (xbc + 8)

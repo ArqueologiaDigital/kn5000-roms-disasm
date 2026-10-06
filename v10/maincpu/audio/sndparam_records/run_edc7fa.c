@@ -47,7 +47,7 @@ const sndparam_descriptor_t run_edc7fa[9]
       .codec             = 0, /* SndParam_EncodeFieldDirect_Data / SndParam_DecodeField_Data */
       .write_accessor    = 0, /* SndParam_ReturnInvalid */
       .unknown_0x11 = 0xFF },
-    /* [  4] 0xEDC842  MidiChParam_Entry_089 */
+    /* [  4] 0xEDC842  SndParam_Part00_Mute */
     { .key = 0x00008008, .bank_index = 0x00, .bank_offset = 0x03,
       .mask = 0x80, .clamp_min = 0x00, .clamp_max = 0x01, .shift = 0x07, .xor_value = 0x00,
       .aux_index = 0xFF,

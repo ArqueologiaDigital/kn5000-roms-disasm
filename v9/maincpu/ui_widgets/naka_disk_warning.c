@@ -109,6 +109,13 @@ typedef struct __attribute__((packed)) {
     uint32_t propname;    /* +20 L  field-name pointer block */
 } naka_classdef_t;
 
+/* AcMixerVol_Channels' record: one mixer channel (scripts/converters/mixer_channel_table_retype.py). */
+typedef struct __attribute__((packed)) {
+    uint32_t volume_key;   /* +0 SndParam key of the channel volume (part k = 0x07) */
+    uint32_t mute_key;     /* +4 SndParam key of its mute flag (part k = 0x08); 1 = MUTE */
+    uint16_t lsw_word;     /* +8 passed as DE to MainLswPut / MainLswAdd (+6 of the LSW packet) */
+} mixer_channel_t;
+
 typedef struct __attribute__((packed)) {
     char txt_Etes_vous_su[12];
     char str_0[4];
@@ -1048,7 +1055,7 @@ typedef struct __attribute__((packed)) {
     char Pmem_str[18];
     char Pmem_str_2[16];
     char Pmem_str_3[28];
-    uint32_t ptrs_15[28];  /* 28 pointers */
+    uint32_t AcMixerVol_ChannelNamePtrs[28];  /* 28 pointers */
     char MIC_str[4];
     char METR_str[6];
     char CTRL_str[6];
@@ -1077,146 +1084,9 @@ typedef struct __attribute__((packed)) {
     char LEFT_str[6];
     char RT2_str[4];
     char RT1_str[4];
-    uint16_t field_1860;
-    uint8_t pad_109[2];  /* zero padding */
-    uint16_t field_1864;
-    uint8_t pad_110[2];  /* zero padding */
-    uint16_t field_1868;
-    uint16_t field_186a;
-    uint8_t pad_111[2];  /* zero padding */
-    uint16_t field_186e;
-    uint8_t pad_112[2];  /* zero padding */
-    uint16_t field_1872;
-    uint16_t field_1874;
-    uint8_t pad_113[2];  /* zero padding */
-    uint16_t field_1878;
-    uint8_t pad_114[2];  /* zero padding */
-    uint16_t field_187c;
-    uint16_t field_187e;
-    uint8_t pad_115[2];  /* zero padding */
-    uint16_t field_1882;
-    uint8_t pad_116[2];  /* zero padding */
-    uint16_t field_1886;
-    uint16_t field_1888;
-    uint8_t pad_117[2];  /* zero padding */
-    uint16_t field_188c;
-    uint8_t pad_118[2];  /* zero padding */
-    uint16_t field_1890;
-    uint16_t field_1892;
-    uint8_t pad_119[2];  /* zero padding */
-    uint16_t field_1896;
-    uint8_t pad_120[2];  /* zero padding */
-    uint16_t field_189a;
-    uint16_t field_189c;
-    uint8_t pad_121[2];  /* zero padding */
-    uint16_t field_18a0;
-    uint8_t pad_122[2];  /* zero padding */
-    uint16_t field_18a4;
-    uint16_t field_18a6;
-    uint8_t pad_123[2];  /* zero padding */
-    uint16_t field_18aa;
-    uint8_t pad_124[2];  /* zero padding */
-    uint16_t field_18ae;
-    uint16_t field_18b0;
-    uint8_t pad_125[2];  /* zero padding */
-    uint16_t field_18b4;
-    uint8_t pad_126[2];  /* zero padding */
-    uint16_t field_18b8;
-    uint16_t field_18ba;
-    uint8_t pad_127[2];  /* zero padding */
-    uint16_t field_18be;
-    uint8_t pad_128[2];  /* zero padding */
-    uint16_t field_18c2;
-    uint16_t field_18c4;
-    uint8_t pad_129[2];  /* zero padding */
-    uint16_t field_18c8;
-    uint8_t pad_130[2];  /* zero padding */
-    uint16_t field_18cc;
-    uint16_t field_18ce;
-    uint8_t pad_131[2];  /* zero padding */
-    uint16_t field_18d2;
-    uint8_t pad_132[2];  /* zero padding */
-    uint16_t field_18d6;
-    uint16_t field_18d8;
-    uint8_t pad_133[2];  /* zero padding */
-    uint16_t field_18dc;
-    uint8_t pad_134[2];  /* zero padding */
-    uint16_t field_18e0;
-    uint16_t field_18e2;
-    uint8_t pad_135[2];  /* zero padding */
-    uint16_t field_18e6;
-    uint8_t pad_136[2];  /* zero padding */
-    uint16_t field_18ea;
-    uint16_t field_18ec;
-    uint8_t pad_137[2];  /* zero padding */
-    uint16_t field_18f0;
-    uint8_t pad_138[2];  /* zero padding */
-    uint16_t field_18f4;
-    uint16_t field_18f6;
-    uint8_t pad_139[2];  /* zero padding */
-    uint16_t field_18fa;
-    uint8_t pad_140[2];  /* zero padding */
-    uint16_t field_18fe;
-    uint16_t field_1900;
-    uint8_t pad_141[2];  /* zero padding */
-    uint16_t field_1904;
-    uint8_t pad_142[2];  /* zero padding */
-    uint16_t field_1908;
-    uint16_t field_190a;
-    uint8_t pad_143[2];  /* zero padding */
-    uint16_t field_190e;
-    uint8_t pad_144[2];  /* zero padding */
-    uint16_t field_1912;
-    uint16_t field_1914;
-    uint8_t pad_145[2];  /* zero padding */
-    uint16_t field_1918;
-    uint8_t pad_146[2];  /* zero padding */
-    uint16_t field_191c;
-    uint16_t field_191e;
-    uint8_t pad_147[2];  /* zero padding */
-    uint16_t field_1922;
-    uint8_t pad_148[2];  /* zero padding */
-    uint16_t field_1926;
-    uint16_t field_1928;
-    uint8_t pad_149[2];  /* zero padding */
-    uint16_t field_192c;
-    uint8_t pad_150[2];  /* zero padding */
-    uint16_t field_1930;
-    uint16_t field_1932;
-    uint8_t pad_151[2];  /* zero padding */
-    uint16_t field_1936;
-    uint8_t pad_152[2];  /* zero padding */
-    uint16_t field_193a;
-    uint16_t field_193c;
-    uint8_t pad_153[2];  /* zero padding */
-    uint16_t field_1940;
-    uint8_t pad_154[2];  /* zero padding */
-    uint16_t field_1944;
-    uint16_t field_1946;
-    uint16_t field_1948;
-    uint16_t field_194a;
-    uint16_t field_194c;
-    uint16_t field_194e;
-    uint16_t field_1950;
-    uint16_t field_1952;
-    uint16_t field_1954;
-    uint16_t field_1956;
-    uint16_t field_1958;
-    uint16_t field_195a;
-    uint8_t pad_155[2];  /* zero padding */
-    uint16_t field_195e;
-    uint8_t pad_156[2];  /* zero padding */
-    uint16_t field_1962;
-    uint16_t field_1964;
-    uint8_t pad_157[2];  /* zero padding */
-    uint16_t field_1968;
-    uint8_t pad_158[2];  /* zero padding */
-    uint16_t field_196c;
-    char AA_str[3];
-    uint16_t field_1971;
-    char A_str_4[2];
-    uint16_t field_1975;
-    uint16_t field_1977;
+    /* AcMixerVol_Channels: [mixer channel] = {volume_key, mute_key, lsw_word}; channel names in AcMixerVol_ChannelNamePtrs.  Part tags 0-22 = channels 0-22. */
+    mixer_channel_t AcMixerVol_Channels[28];
+    uint8_t field_1978;
     uint8_t pad_159[3];  /* zero padding */
     uint16_t field_197c;
     uint8_t pad_160[2];  /* zero padding */
@@ -1256,7 +1126,7 @@ typedef struct __attribute__((packed)) {
     uint8_t pad_177[2];  /* zero padding */
     char str_353[2];
     uint8_t pad_178[62];  /* zero padding */
-    char AcMixerVol_Confirm_Str_Fmt3d[4];
+    char AcMixerVol_DrawChannel_Str_Fmt3d[4];
     char MUTE_str[6];
     char DebugTime_str[12];
     char XX_str[12];
@@ -4447,7 +4317,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .Pmem_str_3 = "PMEM:%2d-                  ",
 
-    .ptrs_15 = {
+    .AcMixerVol_ChannelNamePtrs = {
         SELF(RT1_str),
         SELF(RT2_str),
         SELF(LEFT_str),
@@ -4534,285 +4404,38 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .RT1_str = "RT1",
 
-    .field_1860 = 0x8007,
-
-    .pad_109 = { 0 },
-
-    .field_1864 = 0x8008,
-
-    .pad_110 = { 0 },
-
-    .field_1868 = 0x0004,
-
-    .field_186a = 0x8407,
-
-    .pad_111 = { 0 },
-
-    .field_186e = 0x8408,
-
-    .pad_112 = { 0 },
-
-    .field_1872 = 0x0004,
-
-    .field_1874 = 0x8807,
-
-    .pad_113 = { 0 },
-
-    .field_1878 = 0x8808,
-
-    .pad_114 = { 0 },
-
-    .field_187c = 0x0004,
-
-    .field_187e = 0x8C07,
-
-    .pad_115 = { 0 },
-
-    .field_1882 = 0x8C08,
-
-    .pad_116 = { 0 },
-
-    .field_1886 = 0x0004,
-
-    .field_1888 = 0x9007,
-
-    .pad_117 = { 0 },
-
-    .field_188c = 0x9008,
-
-    .pad_118 = { 0 },
-
-    .field_1890 = 0x0004,
-
-    .field_1892 = 0x9407,
-
-    .pad_119 = { 0 },
-
-    .field_1896 = 0x9408,
-
-    .pad_120 = { 0 },
-
-    .field_189a = 0x0004,
-
-    .field_189c = 0x9807,
-
-    .pad_121 = { 0 },
-
-    .field_18a0 = 0x9808,
-
-    .pad_122 = { 0 },
-
-    .field_18a4 = 0x0004,
-
-    .field_18a6 = 0x9C07,
-
-    .pad_123 = { 0 },
-
-    .field_18aa = 0x9C08,
-
-    .pad_124 = { 0 },
-
-    .field_18ae = 0x0004,
-
-    .field_18b0 = 0xA007,
-
-    .pad_125 = { 0 },
-
-    .field_18b4 = 0xA008,
-
-    .pad_126 = { 0 },
-
-    .field_18b8 = 0x0004,
-
-    .field_18ba = 0xA407,
-
-    .pad_127 = { 0 },
-
-    .field_18be = 0xA408,
-
-    .pad_128 = { 0 },
-
-    .field_18c2 = 0x0004,
-
-    .field_18c4 = 0xA807,
-
-    .pad_129 = { 0 },
-
-    .field_18c8 = 0xA808,
-
-    .pad_130 = { 0 },
-
-    .field_18cc = 0x0004,
-
-    .field_18ce = 0xAC07,
-
-    .pad_131 = { 0 },
-
-    .field_18d2 = 0xAC08,
-
-    .pad_132 = { 0 },
-
-    .field_18d6 = 0x0004,
-
-    .field_18d8 = 0xB007,
-
-    .pad_133 = { 0 },
-
-    .field_18dc = 0xB008,
-
-    .pad_134 = { 0 },
-
-    .field_18e0 = 0x0004,
-
-    .field_18e2 = 0xB407,
-
-    .pad_135 = { 0 },
-
-    .field_18e6 = 0xB408,
-
-    .pad_136 = { 0 },
-
-    .field_18ea = 0x0004,
-
-    .field_18ec = 0xB807,
-
-    .pad_137 = { 0 },
-
-    .field_18f0 = 0xB808,
-
-    .pad_138 = { 0 },
-
-    .field_18f4 = 0x0004,
-
-    .field_18f6 = 0xBC07,
-
-    .pad_139 = { 0 },
-
-    .field_18fa = 0xBC08,
-
-    .pad_140 = { 0 },
-
-    .field_18fe = 0x0004,
-
-    .field_1900 = 0xC007,
-
-    .pad_141 = { 0 },
-
-    .field_1904 = 0xC008,
-
-    .pad_142 = { 0 },
-
-    .field_1908 = 0x0004,
-
-    .field_190a = 0xC407,
-
-    .pad_143 = { 0 },
-
-    .field_190e = 0xC408,
-
-    .pad_144 = { 0 },
-
-    .field_1912 = 0x0004,
-
-    .field_1914 = 0xC807,
-
-    .pad_145 = { 0 },
-
-    .field_1918 = 0xC808,
-
-    .pad_146 = { 0 },
-
-    .field_191c = 0x0004,
-
-    .field_191e = 0xCC07,
-
-    .pad_147 = { 0 },
-
-    .field_1922 = 0xCC08,
-
-    .pad_148 = { 0 },
-
-    .field_1926 = 0x0004,
-
-    .field_1928 = 0xD007,
-
-    .pad_149 = { 0 },
-
-    .field_192c = 0xD008,
-
-    .pad_150 = { 0 },
-
-    .field_1930 = 0x0004,
-
-    .field_1932 = 0xD407,
-
-    .pad_151 = { 0 },
-
-    .field_1936 = 0xD408,
-
-    .pad_152 = { 0 },
-
-    .field_193a = 0x0004,
-
-    .field_193c = 0xD807,
-
-    .pad_153 = { 0 },
-
-    .field_1940 = 0xD808,
-
-    .pad_154 = { 0 },
-
-    .field_1944 = 0x0004,
-
-    .field_1946 = 0x8801,
-
-    .field_1948 = 0x0002,
-
-    .field_194a = 0x880B,
-
-    .field_194c = 0x0002,
-
-    .field_194e = 0x0004,
-
-    .field_1950 = 0x8801,
-
-    .field_1952 = 0x0002,
-
-    .field_1954 = 0x880B,
-
-    .field_1956 = 0x0002,
-
-    .field_1958 = 0x0004,
-
-    .field_195a = 0xE407,
-
-    .pad_155 = { 0 },
-
-    .field_195e = 0xE408,
-
-    .pad_156 = { 0 },
-
-    .field_1962 = 0x0004,
-
-    .field_1964 = 0xE807,
-
-    .pad_157 = { 0 },
-
-    .field_1968 = 0xE808,
-
-    .pad_158 = { 0 },
-
-    .field_196c = 0x0003,
-
-    .AA_str = ALIGNED_STRING("AA"),
-
-    .field_1971 = 0x4200,
-
-    .A_str_4 = "A",
-
-    .field_1975 = 0x0300,
-
-    .field_1977 = 0x1700,
+    .AcMixerVol_Channels = {
+        { 0x00008007, 0x00008008, 4 },  /*  0 RT1 */
+        { 0x00008407, 0x00008408, 4 },  /*  1 RT2 */
+        { 0x00008807, 0x00008808, 4 },  /*  2 LEFT */
+        { 0x00008C07, 0x00008C08, 4 },  /*  3 PT4 */
+        { 0x00009007, 0x00009008, 4 },  /*  4 PT5 */
+        { 0x00009407, 0x00009408, 4 },  /*  5 PT6 */
+        { 0x00009807, 0x00009808, 4 },  /*  6 PT7 */
+        { 0x00009C07, 0x00009C08, 4 },  /*  7 PT8 */
+        { 0x0000A007, 0x0000A008, 4 },  /*  8 PT9 */
+        { 0x0000A407, 0x0000A408, 4 },  /*  9 PT10 */
+        { 0x0000A807, 0x0000A808, 4 },  /* 10 PT11 */
+        { 0x0000AC07, 0x0000AC08, 4 },  /* 11 PT12 */
+        { 0x0000B007, 0x0000B008, 4 },  /* 12 PT13 */
+        { 0x0000B407, 0x0000B408, 4 },  /* 13 PT14 */
+        { 0x0000B807, 0x0000B808, 4 },  /* 14 PT15 */
+        { 0x0000BC07, 0x0000BC08, 4 },  /* 15 PT16 */
+        { 0x0000C007, 0x0000C008, 4 },  /* 16 ACP1 */
+        { 0x0000C407, 0x0000C408, 4 },  /* 17 ACP2 */
+        { 0x0000C807, 0x0000C808, 4 },  /* 18 ACP3 */
+        { 0x0000CC07, 0x0000CC08, 4 },  /* 19 BASS */
+        { 0x0000D007, 0x0000D008, 4 },  /* 20 DRUM */
+        { 0x0000D407, 0x0000D408, 4 },  /* 21 CHRD */
+        { 0x0000D807, 0x0000D808, 4 },  /* 22 RTBS */
+        { 0x00028801, 0x0002880B, 4 },  /* 23 MSP */
+        { 0x00028801, 0x0002880B, 4 },  /* 24 MSP */
+        { 0x0000E407, 0x0000E408, 4 },  /* 25 CTRL */
+        { 0x0000E807, 0x0000E808, 3 },  /* 26 METR */
+        { 0x00004141, 0x00004142, 3 },  /* 27 MIC */
+    },
+
+    .field_1978 = 0x17,
 
     .pad_159 = { 0 },
 
@@ -4892,7 +4515,7 @@ const naka_disk_warning_t naka_disk_warning_data
 
     .pad_178 = { 0 },
 
-    .AcMixerVol_Confirm_Str_Fmt3d = "%3d",
+    .AcMixerVol_DrawChannel_Str_Fmt3d = "%3d",
 
     .MUTE_str = ALIGNED_STRING("MUTE"),
 
