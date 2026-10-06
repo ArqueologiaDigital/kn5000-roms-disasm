@@ -51,7 +51,7 @@ SPAN 1  0xF286CC +45  ->  0xF286A2-0xF286F8, 3 records + 3 string tables
     The framed opcode-07 record at 0xF28468 carries `.long 0x00F28522`,
     width 3 and mask 0x7F: its table is 128 x 3 = 384 B and ends at
     0xF286A1. `Data_F28522` was declared 426 B -- 42 too many. The far end
-    is DL_F286F9, an established list start. The 87 bytes between tile as
+    is ModeScreen_PaintDirtyFields2_DL1, an established list start. The 87 bytes between tile as
     17 + 24 + 17 + 6 + 17 + 6 with no slack, each record's +7 pointing at
     the byte immediately after itself.
     (Lane promB5 reported this as "one byte too long", measuring against the
@@ -70,7 +70,7 @@ SPAN 3  0xF34350 +17  ->  0xF3434C-0xF34360, 1 opcode-02 record + its table
     prom_b 0xF55CA6 and 0xF55D57 do `ld XIY,0x00f3434c` and reach
     T_F417F8 -> 0xF31B21, the opcode-02 handler, with that XIY. The record
     is therefore 15 bytes and its +7 table starts at 0xF3435B. The far end
-    is DL_F34361, whose start is `ld XIY,0x00f34361` at 0xF55D45.
+    is RealtimeRecordScreen_DrawValues_DL, whose start is `ld XIY,0x00f34361` at 0xF55D45.
 
 SPAN 4  0xF3A443 +30  ->  0xF3A43E-0xF3A460, 1 opcode-08 record + its table
     prom_b 0xF7E775 does `ld XIY,0x00f3a43e` / `call 0xf41820`, and
@@ -221,7 +221,7 @@ def block1(d):
 ;   * LEFT -- the framed opcode-07 record at 0xF28468 carries
 ;     `.long 0x00F28522`, `BC = 3` (bytes per entry) and mask 0x7F, so the
 ;     string table it names is 128 x 3 = 384 bytes and ENDS at 0xF286A1.
-;   * RIGHT -- DL_F286F9 is an established display-list start (prom_a call
+;   * RIGHT -- ModeScreen_PaintDirtyFields2_DL1 is an established display-list start (prom_a call
 ;     site 0xF90FBB, notes/prom_b_dl_call_shapes.py).
 ; In between, each record's own +7 pointer lands on the byte immediately
 ; after that record, and (mask >> shift) + 1 entries of the +0x0B width
@@ -309,7 +309,7 @@ def block3(d):
            "; handler itself -- with that XIY (via SeqScreen_DrawCountInMeasure).  So this address is",
            "; a record start on the firmware's own say-so, and the handler fixes the",
            "; extent at 15 bytes.  Its +7 lands on 0xF3435B, the byte right after it.",
-           "; THE END IS NAMED BY CODE TOO: DL_F34361 is `ld XIY,0x00f34361` at",
+           "; THE END IS NAMED BY CODE TOO: RealtimeRecordScreen_DrawValues_DL is `ld XIY,0x00f34361` at",
            "; prom_b 0xF55D45, so the table is exactly 2 entries of 3 bytes.",
            "; Verify: python3 notes/gen_prom_b_res3xx_spans.py --selftest",
            "; ------------------------------------------------------------------",
@@ -317,7 +317,7 @@ def block3(d):
     out += emit_record(d, 0xF3434C, "string table")
     out.append("")
     out += emit_ascii_table(d, 0xF3435B, 2, 3, "DLTable_F3435B", 0xF3434C,
-                            "2 entries is the\n; EXTENT (6 / 3), bounded by DL_F34361; the record's mask 0xFF would\n; allow up to 256.")
+                            "2 entries is the\n; EXTENT (6 / 3), bounded by RealtimeRecordScreen_DrawValues_DL; the record's mask 0xFF would\n; allow up to 256.")
     out.append("")
 
     old = ("Data_F3434C:\n"
@@ -345,7 +345,7 @@ def block4(d):
            "; sites, so the array is exactly 3 entries.",
            "; Verify: python3 notes/gen_prom_b_res3xx_spans.py --selftest",
            "; ------------------------------------------------------------------",
-           "DL_F3A43E:"]
+           "TrackAssignPresets_MoveFieldHighlight_DL:"]
     out += emit_record(d, 0xF3A43E, "array of 8-byte entries, indexed by the value")
     out.append("")
     out += emit_word_table(d, 0xF3A449, 3, 4, "DLTable_F3A449", 0xF3A43E,
@@ -387,7 +387,7 @@ def block5(d):
            "; interpreter-A call at 0xF7E8C3, i.e. the exclusive end of Paint_TrackLabels9To16_DL.",
            "; Verify: python3 notes/gen_prom_b_res3xx_spans.py --selftest",
            "; ------------------------------------------------------------------",
-           "DL_F3B651:"]
+           "TrackAssign_PaintTrackGroup_DL:"]
     out += emit_record(d, 0xF3B651, None)
     out.append("")
 
@@ -453,7 +453,7 @@ def selftest():
         (0xF7E64C, LD_XIX, 0xF3A433, "0xF3A433 is a list end elsewhere"),
         (0xF55CA6, LD_XIY, 0xF3434C, "span 3 record start"),
         (0xF55D57, LD_XIY, 0xF3434C, "span 3 record start (2nd site)"),
-        (0xF55D45, LD_XIY, 0xF34361, "span 3 far end DL_F34361"),
+        (0xF55D45, LD_XIY, 0xF34361, "span 3 far end RealtimeRecordScreen_DrawValues_DL"),
         (0xF5D488, LD_XIY, 0xF32A36, "span 2 pointer array is loaded by code"),
         (0xF7EE71, LD_XIY, 0xF3A461, "span 4 far end DL_F3A461"),
     ]:
@@ -479,7 +479,7 @@ def selftest():
         chk((r["mask"] >> r["shift"]) + 1 == exp_n,
             "0x%06X (mask>>shift)+1 = %d entries" % (a, exp_n))
         a = r["ptr"] + exp_n * 3
-    chk(a == 0xF286F9, "span 1 tiles exactly onto DL_F286F9 (no slack)")
+    chk(a == 0xF286F9, "span 1 tiles exactly onto ModeScreen_PaintDirtyFields2_DL1 (no slack)")
 
     # ---- span 2 ----
     chk(u32(d, 0xF32A3A) == 0xF329FA and u32(d, 0xF32A3E) == 0xF329FA,
@@ -496,7 +496,7 @@ def selftest():
     chk(r["op"] == 0x02 and r["adv"] == 15, "0xF3434C is op 02, advance 15")
     chk(r["ptr"] == 0xF3434C + 15 == 0xF3435B, "its +7 -> the byte right after it")
     chk(r["width"] == 3 and 0xF3435B + 2 * 3 == 0xF34361,
-        "2 entries of 3 bytes reach exactly DL_F34361")
+        "2 entries of 3 bytes reach exactly RealtimeRecordScreen_DrawValues_DL")
     chk(d[0xF3435B - BASE:0xF34361 - BASE] == b" -1 -2", 'the table reads " -1 -2"')
 
     # ---- span 4 ----

@@ -117,7 +117,7 @@ SPANS = [
     dict(name="span2", incbin=(0x03A0E9, 0xE6), first=0xF3A0E4,
          objs=[("rec", 0xF3A0E4), ("tab", 0xF3A0EF, 16, 6), ("tab", 0xF3A14F, 16, 8)],
          end=0xF3A1CF,
-         anchor="DL_F3A1CF, a converted display-list span header; and the "
+         anchor="TrackGrid_DrawPartLabels_DL, a converted display-list span header; and the "
                 "6-byte array's end 0xF3A14F is named by the already-converted "
                 "records at 0xF3A0D9, 0xF39000 and 0xF3900B"),
     dict(name="span3", incbin=(0x03C47E, 0x57), first=0xF3C37D,

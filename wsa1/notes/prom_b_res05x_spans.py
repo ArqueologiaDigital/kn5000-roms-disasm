@@ -248,7 +248,7 @@ def region_F05792(d, say):
     """0xF0574D-0xF057BF -- 2-byte strtab + 3-byte strtab + op-1B + rect array.
 
     Anchor (start): the reader at 0xF5D15A runs the list 0xF0564B..0xF0574D, so
-      0xF0574D is the first byte after a display list; and DL_F338F6 is an
+      0xF0574D is the first byte after a display list; and SoundEditModelingDriverWaveform_PaintRows_DL2 is an
       interpreter-B op 02 whose +0x07 operand is 0x00F0574D with +0x0B = 2
       BYTES PER ENTRY.  The reader states both the base and the stride.
     Anchor (end): the reader at 0xF5D168/0xF5D2F0 runs 0xF057C0..0xF057E3
@@ -452,7 +452,7 @@ def blocks(d):
         ";   walk's, not the object's\".  They were right, and this is the",
         ";   correction they asked for.",
         "; ------------------------------------------------------------------",
-        "DL_F03F77:",
+        "SoundEditAmp_PaintHeader_DL:",
         "Data_F03F77:",
     ]
     recs, _ = tile(d, 0xF03F77, 0xF0402E)
@@ -493,7 +493,7 @@ def blocks(d):
         ";   4-item list whose selector is 1-based.",
     ]
     L += render_rects(d, 0xF04CE8, 5)
-    L += ["DL_F04D10:"]
+    L += ["SoundEditFilter_PaintModeField_DL2:"]
     L += render_op02(d, 0xF04D10, "string table")
     L += [
         "DLTable_F04D1F:\t; 6 entries of 6 bytes -- the filter-mode names",
@@ -714,7 +714,7 @@ CORRECTIONS = {
 
 def splice(d, say):
     src = open(SRC, encoding="latin-1").read()
-    if "DL_F03F77:" in src:
+    if "SoundEditAmp_PaintHeader_DL:" in src:
         say("  already spliced; nothing to do")
         return True
     before = len(src)

@@ -596,7 +596,7 @@
 	.set IndexMap_F1966F,                         0x00F1966F
 	.set DL_F196EF,                               0x00F196EF
 	.set IndexMap_F19705,                         0x00F19705
-	.set DL_F19745,                               0x00F19745
+	.set CombiEdit_TakePartIndex_DL,                               0x00F19745
 	.set DL_Rd1Rd2Ud1Ud2Ed1,                      0x00F19754
 	.set DL_F19772,                               0x00F19772
 	.set CombiEditSound_PaintLevelsPage_DL3,                               0x00F19781
@@ -799,26 +799,26 @@
 	.set C0mbinati0nM0de_RepaintPage1Fields_DL,                               0x00F286A2
 	.set DL_F286CB,                               0x00F286CB
 	.set DL_F286E2,                               0x00F286E2
-	.set DL_F286F9,                               0x00F286F9
+	.set ModeScreen_PaintDirtyFields2_DL1,                               0x00F286F9
 	.set DLTable_F28725,                          0x00F28725
 	.set DLTable_F287C1,                          0x00F287C1
-	.set DL_F28802,                               0x00F28802
-	.set DL_F2880C,                               0x00F2880C
-	.set DL_F28816,                               0x00F28816
-	.set DL_F28820,                               0x00F28820
+	.set ModeScreen_PaintDirtyFields2_DL2,                               0x00F28802
+	.set ModeScreen_PaintDirtyFields2_DL6,                               0x00F2880C
+	.set ModeScreen_PaintDirtyFields2_DL10,                               0x00F28816
+	.set ModeScreen_PaintDirtyFields2_DL3,                               0x00F28820
 	.set Data_F2882B,                             0x00F2882B
-	.set DL_F2885B,                               0x00F2885B
+	.set ModeScreen_PaintDirtyFields2_DL7,                               0x00F2885B
 	.set Data_F28866,                             0x00F28866
-	.set DL_F28896,                               0x00F28896
+	.set ModeScreen_PaintDirtyFields2_DL11,                               0x00F28896
 	.set Data_F288A1,                             0x00F288A1
-	.set DL_F288D1,                               0x00F288D1
-	.set DL_F288E0,                               0x00F288E0
-	.set DL_F288EF,                               0x00F288EF
-	.set DL_F288FE,                               0x00F288FE
-	.set DL_F2890D,                               0x00F2890D
-	.set DL_F2891C,                               0x00F2891C
-	.set DL_F2892B,                               0x00F2892B
-	.set DL_F28930,                               0x00F28930
+	.set ModeScreen_PaintDirtyFields2_DL4,                               0x00F288D1
+	.set ModeScreen_PaintDirtyFields2_DL5,                               0x00F288E0
+	.set ModeScreen_PaintDirtyFields2_DL8,                               0x00F288EF
+	.set ModeScreen_PaintDirtyFields2_DL9,                               0x00F288FE
+	.set ModeScreen_PaintDirtyFields2_DL12,                               0x00F2890D
+	.set ModeScreen_PaintDirtyFields2_DL13,                               0x00F2891C
+	.set ModeScreen_DrawGmModeGlyph_DL2,                               0x00F2892B
+	.set ModeScreen_DrawGmModeGlyph_DL1,                               0x00F28930
 	.set Paint_C0mbinati0nM0dePage1_DL1,                               0x00F28938
 	.set Paint_C0mbinati0nM0dePage1_DL2,                               0x00F28DF3
 	.set Paint_C0mbinati0nM0dePage1_DL3,                               0x00F28E1B
@@ -32824,7 +32824,7 @@ ModeScreen_PaintDirtyFields2:
 	m_cp_mi8 MB8, Variant_Flag, 0x02                             ; F90FB0  c0 c4 3f 02
 	jr z, .LF90FCB                                       ; F90FB4  66 15
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F90FB6  f1 40 25 00 01
-	ld XIY,DL_F286F9                                     ; F90FBB  45 f9 86 f2 00
+	ld XIY,ModeScreen_PaintDirtyFields2_DL1                                     ; F90FBB  45 f9 86 f2 00
 	ld XIX,DLTable_F28725                                ; F90FC0  44 25 87 f2 00
 	call T_DisplayListB_Run                              ; F90FC5  1d f4 17 f4
 	jr .LF90FCB                                          ; F90FC9  68 00
@@ -32834,8 +32834,8 @@ ModeScreen_PaintDirtyFields2:
 	m_cp_mi8 MB8, Variant_Flag, 0x02                             ; F90FD1  c0 c4 3f 02
 	jr z, .LF9104B                                       ; F90FD5  66 74
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F90FD7  f1 40 25 00 01
-	ld XIY,DL_F28802                                     ; F90FDC  45 02 88 f2 00
-	ld XIX,DL_F2880C                                     ; F90FE1  44 0c 88 f2 00
+	ld XIY,ModeScreen_PaintDirtyFields2_DL2                                     ; F90FDC  45 02 88 f2 00
+	ld XIX,ModeScreen_PaintDirtyFields2_DL6                                     ; F90FE1  44 0c 88 f2 00
 	call T_DisplayList_Run                               ; F90FE6  1d f0 17 f4
 	call PartRecord_GetSecondHalfPtr                                        ; F90FEA  1d 4d 45 f9
 	ld A,(XIY+0x19)                                      ; F90FEE  8d 19 21
@@ -32846,7 +32846,7 @@ ModeScreen_PaintDirtyFields2:
 .LF90FFA:
 	ld (UI_DrawScratch:16), a                                   ; F90FFA  f1 40 26 41
 	push XIY                                             ; F90FFE  3d
-	ld XIY,DL_F28820                                     ; F90FFF  45 20 88 f2 00
+	ld XIY,ModeScreen_PaintDirtyFields2_DL3                                     ; F90FFF  45 20 88 f2 00
 	ld XIX,Data_F2882B                                   ; F91004  44 2b 88 f2 00
 	call T_DisplayListB_Run                              ; F91009  1d f4 17 f4
 	pop XIY                                              ; F9100D  5d
@@ -32857,14 +32857,14 @@ ModeScreen_PaintDirtyFields2:
 	push XIY                                             ; F9101E  3d
 	ld A,(XIY)                                           ; F9101F  85 21
 	call T_UiText_CopyLabel13_To_22F0                                        ; F91021  1d 30 33 f4
-	ld XIY,DL_F288D1                                     ; F91025  45 d1 88 f2 00
-	ld XIX,DL_F288E0                                     ; F9102A  44 e0 88 f2 00
+	ld XIY,ModeScreen_PaintDirtyFields2_DL4                                     ; F91025  45 d1 88 f2 00
+	ld XIX,ModeScreen_PaintDirtyFields2_DL5                                     ; F9102A  44 e0 88 f2 00
 	call T_DisplayListB_Run                              ; F9102F  1d f4 17 f4
 	pop XIY                                              ; F91033  5d
 	ld A,(XIY+0x01)                                      ; F91034  8d 01 21
 	call T_UiText_CopyLabel13_To_22F0                                        ; F91037  1d 30 33 f4
-	ld XIY,DL_F288E0                                     ; F9103B  45 e0 88 f2 00
-	ld XIX,DL_F288EF                                     ; F91040  44 ef 88 f2 00
+	ld XIY,ModeScreen_PaintDirtyFields2_DL5                                     ; F9103B  45 e0 88 f2 00
+	ld XIX,ModeScreen_PaintDirtyFields2_DL8                                     ; F91040  44 ef 88 f2 00
 	call T_DisplayListB_Run                              ; F91045  1d f4 17 f4
 	jr .LF9104B                                          ; F91049  68 00
 .LF9104B:
@@ -32873,8 +32873,8 @@ ModeScreen_PaintDirtyFields2:
 	m_cp_mi8 MB8, Variant_Flag, 0x02                             ; F91052  c0 c4 3f 02
 	jr z, .LF910CC                                       ; F91056  66 74
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F91058  f1 40 25 00 01
-	ld XIY,DL_F2880C                                     ; F9105D  45 0c 88 f2 00
-	ld XIX,DL_F28816                                     ; F91062  44 16 88 f2 00
+	ld XIY,ModeScreen_PaintDirtyFields2_DL6                                     ; F9105D  45 0c 88 f2 00
+	ld XIX,ModeScreen_PaintDirtyFields2_DL10                                     ; F91062  44 16 88 f2 00
 	call T_DisplayList_Run                               ; F91067  1d f0 17 f4
 	call PartRecord_GetSecondHalfPtr                                        ; F9106B  1d 4d 45 f9
 	ld A,(XIY+0x1a)                                      ; F9106F  8d 1a 21
@@ -32885,7 +32885,7 @@ ModeScreen_PaintDirtyFields2:
 .LF9107B:
 	ld (UI_DrawScratch:16), a                                   ; F9107B  f1 40 26 41
 	push XIY                                             ; F9107F  3d
-	ld XIY,DL_F2885B                                     ; F91080  45 5b 88 f2 00
+	ld XIY,ModeScreen_PaintDirtyFields2_DL7                                     ; F91080  45 5b 88 f2 00
 	ld XIX,Data_F28866                                   ; F91085  44 66 88 f2 00
 	call T_DisplayListB_Run                              ; F9108A  1d f4 17 f4
 	pop XIY                                              ; F9108E  5d
@@ -32896,20 +32896,20 @@ ModeScreen_PaintDirtyFields2:
 	push XIY                                             ; F9109F  3d
 	ld A,(XIY)                                           ; F910A0  85 21
 	call T_UiText_CopyLabel13_To_22F0                                        ; F910A2  1d 30 33 f4
-	ld XIY,DL_F288EF                                     ; F910A6  45 ef 88 f2 00
-	ld XIX,DL_F288FE                                     ; F910AB  44 fe 88 f2 00
+	ld XIY,ModeScreen_PaintDirtyFields2_DL8                                     ; F910A6  45 ef 88 f2 00
+	ld XIX,ModeScreen_PaintDirtyFields2_DL9                                     ; F910AB  44 fe 88 f2 00
 	call T_DisplayListB_Run                              ; F910B0  1d f4 17 f4
 	pop XIY                                              ; F910B4  5d
 	ld A,(XIY+0x01)                                      ; F910B5  8d 01 21
 	call T_UiText_CopyLabel13_To_22F0                                        ; F910B8  1d 30 33 f4
-	ld XIY,DL_F288FE                                     ; F910BC  45 fe 88 f2 00
-	ld XIX,DL_F2890D                                     ; F910C1  44 0d 89 f2 00
+	ld XIY,ModeScreen_PaintDirtyFields2_DL9                                     ; F910BC  45 fe 88 f2 00
+	ld XIX,ModeScreen_PaintDirtyFields2_DL12                                     ; F910C1  44 0d 89 f2 00
 	call T_DisplayListB_Run                              ; F910C6  1d f4 17 f4
 	jr .LF9113E                                          ; F910CA  68 72
 .LF910CC:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; F910CC  f1 40 25 00 01
-	ld XIY,DL_F28816                                     ; F910D1  45 16 88 f2 00
-	ld XIX,DL_F28820                                     ; F910D6  44 20 88 f2 00
+	ld XIY,ModeScreen_PaintDirtyFields2_DL10                                     ; F910D1  45 16 88 f2 00
+	ld XIX,ModeScreen_PaintDirtyFields2_DL3                                     ; F910D6  44 20 88 f2 00
 	call T_DisplayList_Run                               ; F910DB  1d f0 17 f4
 	call PartRecord_GetSecondHalfPtr                                        ; F910DF  1d 4d 45 f9
 	ld A,(XIY+0x1a)                                      ; F910E3  8d 1a 21
@@ -32920,7 +32920,7 @@ ModeScreen_PaintDirtyFields2:
 .LF910EF:
 	ld (UI_DrawScratch:16), a                                   ; F910EF  f1 40 26 41
 	push XIY                                             ; F910F3  3d
-	ld XIY,DL_F28896                                     ; F910F4  45 96 88 f2 00
+	ld XIY,ModeScreen_PaintDirtyFields2_DL11                                     ; F910F4  45 96 88 f2 00
 	ld XIX,Data_F288A1                                   ; F910F9  44 a1 88 f2 00
 	call T_DisplayListB_Run                              ; F910FE  1d f4 17 f4
 	pop XIY                                              ; F91102  5d
@@ -32931,14 +32931,14 @@ ModeScreen_PaintDirtyFields2:
 	push XIY                                             ; F91113  3d
 	ld A,(XIY)                                           ; F91114  85 21
 	call T_UiText_CopyLabel13_To_22F0                                        ; F91116  1d 30 33 f4
-	ld XIY,DL_F2890D                                     ; F9111A  45 0d 89 f2 00
-	ld XIX,DL_F2891C                                     ; F9111F  44 1c 89 f2 00
+	ld XIY,ModeScreen_PaintDirtyFields2_DL12                                     ; F9111A  45 0d 89 f2 00
+	ld XIX,ModeScreen_PaintDirtyFields2_DL13                                     ; F9111F  44 1c 89 f2 00
 	call T_DisplayListB_Run                              ; F91124  1d f4 17 f4
 	pop XIY                                              ; F91128  5d
 	ld A,(XIY+0x01)                                      ; F91129  8d 01 21
 	call T_UiText_CopyLabel13_To_22F0                                        ; F9112C  1d 30 33 f4
-	ld XIY,DL_F2891C                                     ; F91130  45 1c 89 f2 00
-	ld XIX,DL_F2892B                                     ; F91135  44 2b 89 f2 00
+	ld XIY,ModeScreen_PaintDirtyFields2_DL13                                     ; F91130  45 1c 89 f2 00
+	ld XIX,ModeScreen_DrawGmModeGlyph_DL2                                     ; F91135  44 2b 89 f2 00
 	call T_DisplayListB_Run                              ; F9113A  1d f4 17 f4
 .LF9113E:
 	ret                                                  ; F9113E  0e
@@ -33013,20 +33013,20 @@ Paint_Drawbar:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-; ModeScreen_DrawGmModeGlyph: On layer 0: GM mode ((0x7F4D) bit 2) set -> DL_F2892B, glyph 0x1E at 0x0DB1; clear ->
-;   DL_F28930, the op-0E record over the same 3x24 cell. Called by Paint_SoundMode and Paint_C0mbinati0nM0dePage1.
+; ModeScreen_DrawGmModeGlyph: On layer 0: GM mode ((0x7F4D) bit 2) set -> ModeScreen_DrawGmModeGlyph_DL2, glyph 0x1E at 0x0DB1; clear ->
+;   ModeScreen_DrawGmModeGlyph_DL1, the op-0E record over the same 3x24 cell. Called by Paint_SoundMode and Paint_C0mbinati0nM0dePage1.
 ;   Basis: callers + body (+ the GM-mode bit in two notes). (notes/naming-pilot-2026-10-06/proposals_wave2_e.json)
 ModeScreen_DrawGmModeGlyph:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; F911B6  f1 40 25 00 00
 	m_bit 2, MD16, 0x7f4d                                ; F911BB  f1 4d 7f ca
 	jr nz, .LF911D1                                      ; F911BF  6e 10
-	ld XIY,DL_F28930                                     ; F911C1  45 30 89 f2 00
+	ld XIY,ModeScreen_DrawGmModeGlyph_DL1                                     ; F911C1  45 30 89 f2 00
 	ld XIX,Paint_C0mbinati0nM0dePage1_DL1                                     ; F911C6  44 38 89 f2 00
 	call T_DisplayList_Run                               ; F911CB  1d f0 17 f4
 	jr .LF911DF                                          ; F911CF  68 0e
 .LF911D1:
-	ld XIY,DL_F2892B                                     ; F911D1  45 2b 89 f2 00
-	ld XIX,DL_F28930                                     ; F911D6  44 30 89 f2 00
+	ld XIY,ModeScreen_DrawGmModeGlyph_DL2                                     ; F911D1  45 2b 89 f2 00
+	ld XIX,ModeScreen_DrawGmModeGlyph_DL1                                     ; F911D6  44 30 89 f2 00
 	call T_DisplayList_Run                               ; F911DB  1d f0 17 f4
 .LF911DF:
 	ret                                                  ; F911DF  0e
@@ -61674,14 +61674,14 @@ Initial_CancelConfirm_ExitKey:
 ; Framing that as instructions passes the byte gate and is still wrong.
 ; Labels are sub_XXXXXX by design: this round is COVERAGE, naming is a later goal.
 ; This text was assembled and byte-compared with the ROM before printing.
-; Initial_RedrawSelectionHighlight: INITIAL screen, layer 1: erases the item area (DisplayList_FA2FAF: SWI7 service
+; Initial_RedrawSelectionHighlight: INITIAL screen, layer 1: erases the item area (Initial_RedrawSelectionHighlight_DL: SWI7 service
 ;   0x1B over (0x4F,0x5D)-(0xC9,0xDE)) and fills the box of item Initial_SelectedItem (DisplayList_FA2F64:
 ;   interpreter-B op 03, 8-byte boxes OperandTable_FA2F6F, service 0x05). Posted as the repaint by
 ;   Initial_SelectPreviousItem / Initial_SelectNextItem when the selection moved. Basis: callers + body + display
 ;   lists. (notes/naming-pilot-2026-10-06/proposals_wave3_i.json)
 Initial_RedrawSelectionHighlight:
 	ld (LCD_CurrentLayer:16), 0x01                                 ; FA15CC  f1 40 25 00 01
-	lda xbc, (DisplayList_FA2FAF:24)                     ; FA15D1  f2 af 2f fa 31
+	lda xbc, (Initial_RedrawSelectionHighlight_DL:24)                     ; FA15D1  f2 af 2f fa 31
 	push XBC                                             ; FA15D6  39
 	call T_DisplayList_RunOne_Stack                      ; FA15D7  1d 08 2e f4
 	lda xbc, (DisplayList_FA2F64:24)                     ; FA15DB  f2 64 2f fa 31
@@ -65123,7 +65123,7 @@ OperandTable_FA2F6F:
 	.byte 0x67, 0x00, 0xa9, 0x00, 0x99, 0x00, 0xb8, 0x00, 0x67, 0x00, 0xbc, 0x00, 0xb1, 0x00, 0xcb, 0x00  ; FA2F8F
 	.byte 0x67, 0x00, 0xcf, 0x00, 0xb1, 0x00, 0xde, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00  ; FA2F9F
 ; ---------------------------------------------------------------------
-; DisplayList_FA2FAF -- 10 bytes, kind=display_list
+; Initial_RedrawSelectionHighlight_DL -- 10 bytes, kind=display_list
 ;
 ; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
 ; asserted by its own --selftest): call site
@@ -65133,7 +65133,8 @@ OperandTable_FA2F6F:
 ; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
 ; and notes/prom_a_fa1404_identify.py --fine for the full object list.
 ; ---------------------------------------------------------------------
-DisplayList_FA2FAF:
+Initial_RedrawSelectionHighlight_DL:
+; drawn (start operand) by Initial_RedrawSelectionHighlight -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x1b, 0x0a, 0x4f, 0x00, 0x5d, 0x00, 0xc9, 0x00, 0xde, 0x00          ; FA2FAF
 ; ---------------------------------------------------------------------
 ; DL_InitialUsingInitialSettingWill -- 118 bytes, kind=display_list
@@ -106286,7 +106287,7 @@ CombiEdit_TakePartIndex:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FBCD50  f1 40 25 00 00
 	lda xbc, (UI_DrawScratch:16)                                ; FBCD55  f1 40 26 31
 	ld (xiz-4), xbc                                      ; FBCD59  be fc 61
-	lda xwa, (DL_F19745:24)                              ; FBCD5C  f2 45 97 f1 30
+	lda xwa, (CombiEdit_TakePartIndex_DL:24)                              ; FBCD5C  f2 45 97 f1 30
 	push XWA                                             ; FBCD61  38
 	call T_DisplayListB_RunOne_Stack                     ; FBCD62  1d 0c 2e f4
 	pushw 0x1b                                           ; FBCD66  0b 1b 00
@@ -184942,20 +184943,21 @@ DrumEdit_EraseEditArea_DL:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-; EditScreen_EraseVelocityCell: Layer 0, DisplayList_FEF831: EraseRect (0x78, 0xB2)-(0x80, 0xC0), the cell the
+; EditScreen_EraseVelocityCell: Layer 0, EditScreen_EraseVelocityCell_DL: EraseRect (0x78, 0xB2)-(0x80, 0xC0), the cell the
 ;   velocity value is then drawn into; the velocity twin of EditScreen_EraseLengthCell ((0xA0, 0xB2)-(0xC8, 0xC0)).
 ;   Called by EditScreen_DrawEventVelocity's shared tail (DrumEdit_EraseEditArea only names its address as a display-
 ;   list XIX operand). Basis: caller + body + twin. (notes/naming-pilot-2026-10-06/proposals_wave3_j.json)
 EditScreen_EraseVelocityCell:
 	ld (LCD_CurrentLayer:16), 0x00                                 ; FEF81D  f1 40 25 00 00
-	ld XIY,DisplayList_FEF831                                    ; FEF822  45 31 f8 fe 00
+	ld XIY,EditScreen_EraseVelocityCell_DL                                    ; FEF822  45 31 f8 fe 00
 	ld XIX,EditScreen_EraseLengthCell                                    ; FEF827  44 3b f8 fe 00
 	call T_DisplayList_Run                               ; FEF82C  1d f0 17 f4
 	ret                                                  ; FEF830  0e
 
-; DisplayList_FEF831 -- 1 record(s), 10 bytes.  Run by interpreter A (0xF31A09)
+; EditScreen_EraseVelocityCell_DL -- 1 record(s), 10 bytes.  Run by interpreter A (0xF31A09)
 ; The length bytes walk from 0xFEF831 and land exactly on 0xFEF83B.
-DisplayList_FEF831:
+EditScreen_EraseVelocityCell_DL:
+; drawn (start operand) by EditScreen_EraseVelocityCell -- derivative name (notes/wsa1_display_list_drawer_names.py)
 	.byte 0x1B, 0x0A                               ; FEF831  op 1B, 10 bytes, handler 0xF31A75
 	.byte 0x78, 0x00, 0xB2, 0x00, 0x80, 0x00, 0xC0, 0x00  ; FEF833
 ; EditScreen_EraseLengthCell -- a display-list painter whose SCREEN IS NOT ESTABLISHED
